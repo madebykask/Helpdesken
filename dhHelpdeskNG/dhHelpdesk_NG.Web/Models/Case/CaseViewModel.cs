@@ -46,6 +46,16 @@ namespace DH.Helpdesk.Web.Models.Case
         public List<CustomMailTemplate> MailTemplates { get; set; }
     }
 
+    public class CaseLogFilesViewModel
+    {
+        public string LogId { get; set; } 
+        public bool UseVirtualDirectory { get; set; }
+        public int CaseNumber { get; set; }
+        public CaseFilesUrlBuilder FilesUrlBuilder { get; set; }
+        public List<LogFileModel> Files { get; set; }
+        public bool IsExternal { get; set; }
+    }
+
     public class CaseLogInputFilesAttachmentViewModel
     {
         public bool IsExternalNote { get; set; }
@@ -54,7 +64,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public bool IsReadonly { get; set; }
         public string Caption { get; set; }
         public string LogFileNames { get; set; }
-        public FilesModel LogFilesModel { get; set; }
+        public CaseLogFilesViewModel LogFilesModel { get; set; }
     }
 
     public class CaseInputViewModel
@@ -69,26 +79,26 @@ namespace DH.Helpdesk.Web.Models.Case
         {
             var filesNames = LogFileNames;
 
-            var filesModel = LogFilesModel;
-            if (restrictFilesByLogNoteType && LogFilesModel != null)
-            {
-                filesModel = new FilesModel()
-                {
-                    Id = LogFilesModel.Id,
-                    VirtualDirectory = LogFilesModel.VirtualDirectory,
-                    Files = isExternal ? LogFilesModel?.Files : LogInternalFilesModel?.Files
-                };
-            }
+            var filesModel = isExternal ? LogFilesModel : LogInternalFilesModel;
 
-            return new CaseLogInputFilesAttachmentViewModel()
+            return new CaseLogInputFilesAttachmentViewModel
             {
                 IsExternalNote = isExternal,
                 Caption = caption,
-                LogFilesModel = filesModel,
                 FieldStyles = fieldStyles,
                 IsReadonly = isReadonly,
                 AllowFileAttach = allowFileAttach, 
-                LogFileNames = filesNames
+                LogFileNames = filesNames,
+
+                LogFilesModel = filesModel != null ? new CaseLogFilesViewModel
+                {
+                    LogId = filesModel?.Id,
+                    CaseNumber = Convert.ToInt32(CaseNumber),
+                    UseVirtualDirectory = filesModel.VirtualDirectory,
+                    FilesUrlBuilder = CaseFilesUrlBuilder,
+                    Files = filesModel.Files,
+                    IsExternal = isExternal
+                } : new CaseLogFilesViewModel()
             };
         }
 
@@ -105,7 +115,6 @@ namespace DH.Helpdesk.Web.Models.Case
             };
             ExternalInvoices = new List<ExternalInvoiceModel>();
             SelectedWorkflowStep = 0;
-            CaseAttachedExFiles = new List<CaseAttachedExFileModel>();
             CaseLock = new CaseLockModel();
         }
 
@@ -289,7 +298,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public List<CustomMailTemplate> MailTemplates { get; set; }
         
         public FilesModel LogFilesModel { get; set; }
-
+        
         public FilesModel LogInternalFilesModel { get; set; }
 
         public CaseFilesModel CaseFilesModel { get; set; }
@@ -299,9 +308,6 @@ namespace DH.Helpdesk.Web.Models.Case
         public string LogFileNames { get; set; }
 
         public string SavedFiles { get; set; }
-
-        public List<CaseAttachedExFileModel> CaseAttachedExFiles { get; set; }
-
         
         /// <summary>
         /// Gets or sets the case owner default working group.

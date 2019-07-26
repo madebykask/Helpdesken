@@ -1514,25 +1514,19 @@ function CaseInitForm(opt) {
         });
     };
 
-    var getLogFiles= function (isInternal) {
+    var getLogFiles = function (isInternal) {
         const params = {
             id: $('#LogKey').val(),
             now: Date.now(),
             caseId: $("#case__Id").val(),
-            logType: twoAttachmentsMode === true? isInternal ? 1 : 0 : -1 //pass -1 if two attachment feature is disabled
+            isInternalLog: isInternal === true
         };
-
         $.get('/Cases/LogFiles', $.param(params), function (data) {
-            var $divOutput;
-            if (twoAttachmentsMode === true) {
-                $divOutput = isInternal ? $('div.internalLog-files') : $('div.externalLog-files');
-            } else {
-                $divOutput = $('#divCaseLogFiles');
-            }
+            var $divOutput = isInternal === true ? $('div.internalLog-files') : $('div.externalLog-files');
             $divOutput.html(data);
-            $(document).trigger("OnUploadedCaseLogFileRendered", []); //TODO: check usages - internal/external log!
-            //todo: fix internal/external log!
-            bindDeleteLogFileBehaviorToDeleteButtons();
+            $(document).trigger("OnUploadedCaseLogFileRendered", []); 
+            
+            bindDeleteLogFileBehaviorToDeleteButtons(isInternal);
         });
     };
 
@@ -1585,14 +1579,14 @@ function CaseInitForm(opt) {
     //a[href='#upload_clipboard_file_popup']
     $("a.uploadLogFileFromClipboardBtn").on('click', function (e) {
 
-        const inInternal = $(this).data('logtype') === 'internalLog';
+        const isInternal = $(this).data('logtype') === 'internalLog';
         
         var opt = {
             fileKey: $('#LogKey').val(),
-            refreshCallback: function () { getLogFiles(inInternal); },
+            refreshCallback: function () { getLogFiles(isInternal); },
             submitUrl: '/Cases/UploadLogFile',
             uploadParams: {
-                logType: inInternal ? 1 : 0 //TODO: replace with constants
+                isInternalLog: isInternal === true
             }
         };
         clipboardFileUpload = new ClipboardFileUpload(opt);
@@ -1689,7 +1683,7 @@ function CaseInitForm(opt) {
             // pass addition params
             multipart_params: {
                 id: $('#LogKey').val(),
-                logType: isInternalLog ? 1 : 0
+                isInternalLog: isInternalLog === true
             },
             filters: {
                 max_file_size: '30mb',
@@ -1702,7 +1696,7 @@ function CaseInitForm(opt) {
 
                 UploadFile: function (up, file) {
                     //log('[UploadFile]', file);
-                    const $logFileNames = isInternalLog ? $('.internalLog-files').find('#LogFileNames') : $('#LogFileNames');
+                    const $logFileNames = isInternalLog ? $('#LogFileNamesInternal') : $('#LogFileNames');
                     var strFiles = $logFileNames.val(); 
                     var allFileNames = strFiles.split('|');
 

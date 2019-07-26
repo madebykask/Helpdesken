@@ -33,30 +33,27 @@
     {
         <div>
             <p>
-                @if (Model.CaseFiles.VirtualDirectory)
+                @if (l.CaseId.HasValue)
                 {
-                    if (l.CaseId.HasValue)
+                    <a target="_blank" class="isExisted" href="@BuildCaseFileLinkVD(l.FileName)"><i class="icon- attachedFile"></i>@l.FileName</a>
+                }
+                else
+                {
+                    if (l.LogId.HasValue)
                     {
-                        <a target="_blank" class="isExisted" href="@BuildCaseFileLinkVD(l.FileName)"><i class="icon- attachedFile"></i>@l.FileName</a>
+                        <a target="_blank" class="isExisted" href="@BuildLogFileLinkVD(l.LogId.Value, l.FileName, l.LogType)"><i class="icon- attachedFile"></i> @l.FileName</a>
                     }
                     else
                     {
-                        if (l.LogId.HasValue)
+                        if (Model.CaseFiles.VirtualDirectory)
                         {
-                            <a target="_blank" class="isExisted" href="@BuildLogFileLinkVD(l.LogId.Value, l.FileName, l.LogType)"><i class="icon- attachedFile"></i> @l.FileName</a>
+                            <a target="_blank" class="isExisted" href="@BuildLogFileLinkVD(currentLog.Id, l.FileName, l.LogType)"
+                                data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(l))"><i class="@(GetFileIcon(l))"></i> @l.FileName</a>
                         }
                         else
                         {
-                             if (Model.CaseFiles.VirtualDirectory)
-                             {
-                                 <a target="_blank" class="isExisted" href="@BuildLogFileLinkVD(currentLog.Id, l.FileName, l.LogType)"
-                                    data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(l))"><i class="@(GetFileIcon(l))"></i> @l.FileName</a>
-                             }
-                             else
-                             {
-                                 <a target="_blank" class="isExisted"  href="@Url.Action("DownloadLogFile", new { id = currentLog.Id, fileName = l.FileName })"
-                                    data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(l))"><i class="@(GetFileIcon(l))"></i> @l.FileName</a>
-                             }
+                            <a target="_blank" class="isExisted"  href="@Url.Action("DownloadLogFile", new { id = currentLog.Id, fileName = l.FileName, logType = (int)l.LogType })"
+                                data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(l))"><i class="@(GetFileIcon(l))"></i> @l.FileName</a>
                         }
                     }
                 }

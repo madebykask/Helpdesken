@@ -416,7 +416,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             var temporaryLogFiles = _userTempFilesStorage.FindFiles(caseKey, ModuleName.Log);
             var temporaryLogInternalFiles = _userTempFilesStorage.FindFiles(caseKey, ModuleName.LogInternal);
-            var temporaryExLogFiles = _logFileService.GetExistingFileNamesByCaseId(currentCase.Id);
+            var temporaryExLogFiles = _logFileService.GetExistingFileNamesByCaseId(currentCase.Id); // gets all attached existing files
             var logFileCount = temporaryLogFiles.Count + temporaryExLogFiles.Count + temporaryLogInternalFiles.Count;
 
             // SAVE LOG

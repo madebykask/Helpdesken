@@ -18,18 +18,18 @@ namespace DH.Helpdesk.Services.Services
         byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName, LogFileType logType = LogFileType.External);
         List<string> FindFileNamesByLogId(int logId, LogFileType logType = LogFileType.External);
         List<KeyValuePair<int,string>> FindFileNamesByCaseId(int caseId);
-        void DeleteByLogIdAndFileName(int logId, string basePath, string fileName);
+        void DeleteByLogIdAndFileName(int logId, string basePath, string fileName, LogFileType logType = LogFileType.External);
         void AddFile(CaseLogFileDto fileDto);
         void AddFiles(List<CaseLogFileDto> fileDtos, List<LogExistingFileModel> temporaryExLogFiles = null, int? currentLogId = null);
         void MoveLogFiles(int caseId, string fromBasePath, string toBasePath);
+        List<LogExistingFileModel> GetExistingFileNamesByCaseId(int caseId, bool isInternalLog);
         List<LogExistingFileModel> GetExistingFileNamesByCaseId(int caseId);
-        bool SaveAttachedExistingLogFiles(IEnumerable<LogExistingFileModel> allFiles, int caseId);
+        bool SaveAttachedExistingLogFiles(IEnumerable<LogExistingFileModel> allFiles, int caseId, bool isInternalLog);
         void DeleteByFileIdAndFileName(int fileId, string trim);
         void DeleteExistingById(int logId);
         void ClearExistingAttachedFiles(int caseId);
-        List<LogFileModel> GetLogFileNamesByLogId(int logId, bool includeInternal = true);
-        List<LogFileModel> GetLogFilesByCaseId(int caseId);
-        byte[] GetCaseFileContentByIdAndFileName(int caseId, string basePath, string name);
+        List<LogFileModel> GetLogFileNamesByLogId(int logId, bool includeInternal);
+        List<LogFileModel> GetLogFilesByCaseId(int caseId, bool includeInternal);
     }
 
     public class LogFileService : ILogFileService
@@ -71,12 +71,7 @@ namespace DH.Helpdesk.Services.Services
 
         public byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName, LogFileType logType = LogFileType.External)
         {
-            return _logFileRepository.GetFileContentByIdAndFileName(logId, basePath, fileName);
-        }
-
-        public byte[] GetCaseFileContentByIdAndFileName(int caseId, string basePath, string fileName)
-        {
-            return _logFileRepository.GetCaseFileContentByIdAndFileName(caseId, basePath, fileName);
+            return _logFileRepository.GetFileContentByIdAndFileName(logId, basePath, fileName, logType);
         }
 
         public List<string> FindFileNamesByLogId(int logId, LogFileType logType = LogFileType.External)
@@ -89,7 +84,7 @@ namespace DH.Helpdesk.Services.Services
             return _logFileRepository.FindFileNamesByCaseId(caseId);
         }
 
-        public void DeleteByLogIdAndFileName(int logId, string basePath, string fileName)
+        public void DeleteByLogIdAndFileName(int logId, string basePath, string fileName, LogFileType logType = LogFileType.External)
         {
             _logFileRepository.DeleteByLogIdAndFileName(logId, basePath, fileName);
         }
@@ -123,24 +118,37 @@ namespace DH.Helpdesk.Services.Services
 
         public List<LogExistingFileModel> GetExistingFileNamesByCaseId(int caseId)
         {
+            var files = GetExistingFileNamesByCaseIdInner(caseId);
+            return files;
+        }
+
+        public List<LogExistingFileModel> GetExistingFileNamesByCaseId(int caseId, bool isInternalLog)
+        {
+            var files = GetExistingFileNamesByCaseIdInner(caseId);
+            return files.Where(f => f.IsInternalLogNote == isInternalLog).ToList();
+        }
+
+        private List<LogExistingFileModel> GetExistingFileNamesByCaseIdInner(int caseId)
+        {
             var files = _logFileRepository.GetExistingFileNamesByCaseId(caseId);
 
-            var caseFiles = files.Where(x => !x.Log_Id.HasValue).Select(x => new LogExistingFileModel
+            var caseFiles = files.Where(f => !f.Log_Id.HasValue).Select(x => new LogExistingFileModel
             {
                 Id = x.Id,
                 Name = x.FileName,
                 CaseId = x.Case_Id,
                 IsExistCaseFile = true
-
             }).ToList();
 
-            var logFiles = files.Where(x => x.Log_Id.HasValue).Select(x => new LogExistingFileModel
+            var logFiles = files.Where(x => x.Log_Id.HasValue).Select(f => new LogExistingFileModel
             {
-                Id = x.Id,
-                Name = x.FileName,
-                CaseId = x.Case_Id,
+                Id = f.Id,
+                Name = f.FileName,
+                CaseId = f.Case_Id,
                 IsExistLogFile = true,
-                LogId = x.Log_Id
+                LogId = f.Log_Id,
+                LogType = f.LogType,
+                IsInternalLogNote = f.IsInternalLogNote
             }).ToList();
 
             var allFiles = caseFiles;
@@ -148,18 +156,21 @@ namespace DH.Helpdesk.Services.Services
 
             return allFiles;
         }
-
-        public bool SaveAttachedExistingLogFiles(IEnumerable<LogExistingFileModel> allFiles, int caseId)
+        
+        public bool SaveAttachedExistingLogFiles(IEnumerable<LogExistingFileModel> allFiles, int caseId, bool isInternalLog)
         {
             var logExistingFiles = allFiles.Select(x => new LogFileExisting
             {
                 Case_Id = x.CaseId,
                 CreatedDate = DateTime.Now,
                 FileName = x.Name,
-                Log_Id = x.LogId
+                Log_Id = x.LogId,
+                LogType = x.LogType,
+                IsInternalLogNote = isInternalLog
             }).ToList();
-            var exFiles = _logFileRepository.GetExistingFileNamesByCaseId(caseId).Select(x => x.FileName).ToList();
-            var filesToAdd = logExistingFiles.Where(x => !exFiles.Contains(x.FileName)).ToList();
+
+            var exFiles = _logFileRepository.GetExistingFileNamesByCaseId(caseId, isInternalLog).Select(x => x.FileName).ToList();
+            var filesToAdd = logExistingFiles.Where(x => !exFiles.Contains(x.FileName, StringComparer.OrdinalIgnoreCase)).ToList();
             
             return _logFileRepository.SaveAttachedExistingLogFiles(filesToAdd);
         }
@@ -179,7 +190,7 @@ namespace DH.Helpdesk.Services.Services
             _logFileRepository.ClearExistingAttachedFiles(caseId);
         }
 
-        public List<LogFileModel> GetLogFileNamesByLogId(int logId, bool includeInternal = true)
+        public List<LogFileModel> GetLogFileNamesByLogId(int logId, bool includeInternal = false)
         {
             var files = _logFileRepository.GetLogFilesByLogId(logId, includeInternal);
             var exFiles = files.Select(x => new LogFileModel
@@ -190,19 +201,19 @@ namespace DH.Helpdesk.Services.Services
                 IsExistLogFile = x.ParentLog_Id.HasValue,
                 ObjId = x.IsCaseFile.GetValueOrDefault(false) ? x.Log.Case_Id : x.ParentLog_Id,
                 LogType = x.LogType
-                
             }).ToList();
             return exFiles;
         }
 
-        public List<LogFileModel> GetLogFilesByCaseId(int caseId)
+        public List<LogFileModel> GetLogFilesByCaseId(int caseId, bool includeInternal)
         {
-            var files = _logFileRepository.GetLogFilesByCaseId(caseId);
+            var files = _logFileRepository.GetLogFilesByCaseId(caseId, includeInternal);
             return files.Where(x => !x.IsCaseFile.HasValue && !x.ParentLog_Id.HasValue).Select(x => new LogFileModel
             {
                 Id = x.Id,
                 Name = x.FileName,
-                ObjId = x.Log_Id
+                ObjId = x.Log_Id,
+                LogType = x.LogType
             }).ToList();
         }
 

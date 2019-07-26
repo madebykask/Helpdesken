@@ -10,15 +10,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public FilesModel(string id, List<LogFileModel> files, bool virtualDirectory)
         {
             Id = id;
-            Files = files.Select(x => new LogFileModel
-            {
-                Name = x.Name,
-                Id = x.Id,
-                IsExistLogFile = x.IsExistLogFile,
-                IsExistCaseFile = x.IsExistCaseFile,
-                ObjId = x.ObjId
-            }).ToList();
-
+            Files = files?.ToList() ?? new List<LogFileModel>();
             VirtualDirectory = virtualDirectory;
         }
 

@@ -1,17 +1,13 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
-@using System.Web.Optimization
 @using System.Linq;
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Common.Constants
 @using DH.Helpdesk.Common.Enums.Cases
 @using DH.Helpdesk.Common.Enums.Settings
-@using DH.Helpdesk.Common.Extensions.Integer
 @using DH.Helpdesk.Domain.Invoice
-@using DH.Helpdesk.Web
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Common.Extensions.Boolean
 @using DH.Helpdesk.Web.Common.Enums.Case
-@using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
 @Scripts.Render("~/bundles/Cases/_CaseLogInput")
@@ -28,19 +24,6 @@
     var translation = Translation.GetForJS("Till");
     var btnToLabel = translation.First().ToString().ToUpper() + translation.Substring(1);
 }
-
-<script type="text/javascript">
-    // _caseLogFiles params
-    dhHelpdesk.caseLog =
-    {
-        deleteLogFileConfirmMessage: '@Translation.GetForJS("Är du säker på att du vill ta bort bifogad fil")' + '?',
-        deleteCaseFileExtraInvoiceMessage: '@Translation.GetForJS("Obs! Den tas även bort från order")',
-        okText: '@Translation.GetForJS("OK")',
-        cancelText: '@Translation.GetForJS("Avbryt")',
-        yesText: '@Translation.GetForJS("Ja")',
-        noText: '@Translation.GetForJS("Nej")'
-    };
-</script>
 
 <div class="section-block">
     <h4 style="@Model.displayLogInfoHtml()">
@@ -257,7 +240,7 @@
 
                 <!-- INTERNAL LOG NOTE Attachments: -->
                 @* TODO: check log edit mode - should be hidden. Add field styles!!! *@
-                @if (Model.EnableTwoAttachments && Model.CaseLog.Id == 0 && !Model.newLog)
+                @if (Model.EnableTwoAttachments)
                 {
                     @Html.Partial("_CaseLogInputFilesAttachment",
                         Model.CreateLogInputFilesAttachmentViewModel(
@@ -383,15 +366,13 @@
                             }
                         </td>
                     </tr>
-                                    }
-                                    @* }*@
-                                </table>
-        @* TODO: move to dialogs section ? Should be unique? *@
-        <div id="attached_files_view">
-            @Html.Partial("ModalDialogs/_CaseAttachExistFile", Model)
-        </div>
-
-
+                }
+                @* }*@
+            </table>
+            @* TODO: move to dialogs section ? Should be unique? *@
+            <div id="attached_files_view">
+                @Html.Partial("ModalDialogs/_CaseAttachExistFile")
+            </div>
         </div>
     </div>
 </div>

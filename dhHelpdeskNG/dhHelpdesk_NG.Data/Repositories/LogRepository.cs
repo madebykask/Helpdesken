@@ -84,12 +84,13 @@ namespace DH.Helpdesk.Dal.Repositories
         byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName, LogFileType logType = LogFileType.External);
         List<string> FindFileNamesByLogId(int logId, LogFileType logType = LogFileType.External);
         List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId);
-        List<LogFile> GetLogFilesByCaseId(int caseId);
+        List<LogFile> GetLogFilesByCaseId(int caseId, bool includeInternal);
         List<LogFile> GetLogFilesByLogId(int logId, bool includeInternal = true);
         List<LogFile> GetReferencedFiles(int logId);
-        void DeleteByLogIdAndFileName(int logId, string basePath, string fileName);
+        void DeleteByLogIdAndFileName(int logId, string basePath, string fileName, LogFileType logType = LogFileType.External);
         void MoveLogFiles(int caseId, string fromBasePath, string toBasePath);
         List<LogFileExisting> GetExistingFileNamesByCaseId(int caseId);
+        List<LogFileExisting> GetExistingFileNamesByCaseId(int caseId, bool isInternalLogNote);
         bool SaveAttachedExistingLogFiles(IEnumerable<LogFileExisting> logExistingFiles);
         void DeleteByFileIdAndFileName(int fileId, string filename);
         void DeleteExistingById(int filename);
@@ -125,6 +126,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return _filesStorage.GetFileContent(ModuleName.Cases, Convert.ToInt32(caseNumber), basePath, fileName);
         }
 
+        //todo: check usages!!
         public List<string> FindFileNamesByLogId(int logId, LogFileType logType = LogFileType.External)
         {
             return DataContext.LogFiles.Where(f => f.Log_Id == logId && f.LogType == logType).Select(f => f.FileName).ToList();
@@ -143,15 +145,15 @@ namespace DH.Helpdesk.Dal.Repositories
             return ret;            
         }
 
-        public List<LogFile> GetLogFilesByCaseId(int caseId)
+        public List<LogFile> GetLogFilesByCaseId(int caseId, bool includeInternal)
         {
-            var caseFiles = DataContext.Logs.Where(l => l.Case_Id == caseId).SelectMany(l => l.LogFiles).ToList();
-            return caseFiles;
+            var caseFiles = DataContext.Logs.Where(l => l.Case_Id == caseId).SelectMany(l => l.LogFiles);
+            return caseFiles.Where(f => includeInternal || f.LogType == LogFileType.External).ToList();
         }
 
         public List<LogFile> GetLogFilesByLogId(int logId, bool includeInternal = true)
         {
-            var logFiles = DataContext.LogFiles.Where(f => f.Log_Id == logId && includeInternal || f.LogType == LogFileType.External).ToList();
+            var logFiles = DataContext.LogFiles.Where(f => f.Log_Id == logId && (includeInternal || f.LogType == LogFileType.External)).ToList();
             return logFiles;
         }
 
@@ -160,24 +162,34 @@ namespace DH.Helpdesk.Dal.Repositories
             return DataContext.LogFiles.Where(l => l.ParentLog_Id == logId).ToList();
         }
 
-        public void DeleteByLogIdAndFileName(int logId, string basePath, string fileName)
+        public void DeleteByLogIdAndFileName(int logId, string basePath, string fileName, LogFileType logType = LogFileType.External)
         {
-            var lf = this.DataContext.LogFiles.Single(f => f.Log_Id == logId && f.FileName == fileName.Trim());
-            this.DataContext.LogFiles.Remove(lf);
-            this.Commit();
-            this._filesStorage.DeleteFile(ModuleName.Log, logId, basePath, fileName);
+            var lf = DataContext.LogFiles.Single(f => f.Log_Id == logId && f.FileName == fileName.Trim());
+            DataContext.LogFiles.Remove(lf);
+            Commit();
+
+            var logSubFolder = logType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
+            _filesStorage.DeleteFile(logSubFolder, logId, basePath, fileName);
         }
 
         public void MoveLogFiles(int caseId, string fromBasePath, string toBasePath)
         {
-            var logFiles = this.DataContext.LogFiles.Where(f => f.Log.Case_Id == caseId).Select(f=> f.Log_Id).Distinct().ToList();
-            foreach (var logId in logFiles)
-                _filesStorage.MoveDirectory(ModuleName.Log, logId.ToString(), fromBasePath, toBasePath);
+            var logFiles = DataContext.LogFiles.Where(f => f.Log.Case_Id == caseId).Select(f => new {  f.Log_Id, f.LogType}).Distinct().ToList();
+            foreach (var logFile in logFiles)
+            {
+                var logSubFolder = logFile.LogType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
+                _filesStorage.MoveDirectory(logSubFolder, logFile.Log_Id.ToString(), fromBasePath, toBasePath);
+            }
         }
 
         public List<LogFileExisting> GetExistingFileNamesByCaseId(int caseId)
         {
             return DataContext.LogFilesExisting.Where(f => f.Case_Id == caseId).ToList();
+        }
+
+        public List<LogFileExisting> GetExistingFileNamesByCaseId(int caseId, bool isInternalLogNote)
+        {
+            return DataContext.LogFilesExisting.Where(f => f.Case_Id == caseId && f.IsInternalLogNote == isInternalLogNote).ToList();
         }
 
         public bool SaveAttachedExistingLogFiles(IEnumerable<LogFileExisting> logExistingFiles)
@@ -195,7 +207,6 @@ namespace DH.Helpdesk.Dal.Repositories
                 DataContext.LogFiles.Remove(file);
                 DataContext.SaveChanges();
             }
-
         }
 
         public void DeleteExistingById(int logId)

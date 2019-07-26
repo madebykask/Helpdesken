@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DH.Helpdesk.Common.Enums.Logs;
 
 namespace DH.Helpdesk.Domain
 {
@@ -12,5 +9,7 @@ namespace DH.Helpdesk.Domain
         public int Case_Id { get; set; }
         public string FileName { get; set; }
         public DateTime CreatedDate { get; set; }
+        public LogFileType LogType { get; set; }
+        public bool IsInternalLogNote { get; set; }
     }
 }

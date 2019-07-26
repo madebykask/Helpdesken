@@ -12,9 +12,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             string filename,
             int referenceId,
             bool isCaseFile)
-            : this(null, basePath, filename, DateTime.UtcNow, referenceId)
+            : base(basePath, filename, referenceId, isCaseFile)
         {
-            IsCaseFile = isCaseFile;
         }
 
         public CaseLogFileDto(

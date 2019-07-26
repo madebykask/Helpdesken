@@ -427,7 +427,7 @@ namespace DH.Helpdesk.Services.Services
             }
 
             // delete log files
-            var logFiles = _logFileRepository.GetLogFilesByCaseId(id);
+            var logFiles = _logFileRepository.GetLogFilesByCaseId(id, true);
 
             if (logFiles != null)
             {

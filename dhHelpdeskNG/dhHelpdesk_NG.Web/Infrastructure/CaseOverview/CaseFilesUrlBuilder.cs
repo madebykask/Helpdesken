@@ -7,7 +7,10 @@ namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
     public class CaseFilesUrlBuilder
     {
         private readonly string _virtualDirPath; 
-        private readonly string _absolutePath; 
+        private readonly string _absolutePath;
+
+        public string VirtualDirPath => _virtualDirPath;
+        public string AbsolutePath => _absolutePath;
 
         #region ctor()
 

@@ -119,6 +119,34 @@ select cus.CustomerId, 'tblLog.Filename_Internal', 0, 0, 0, 0, '', null, 0, 0
 from cus
 GO
 
+RAISERROR ('Add LogType to tblLogFileExisting', 10, 1) WITH NOWAIT
+GO
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		     where syscolumns.name = N'LogType' and sysobjects.name = N'tblLogFileExisting')
+BEGIN
+    
+    -- delete existing records from table (its temp table)
+    DELETE FROM tblLogFileExisting
+    
+    ALTER TABLE tblLogFileExisting 
+    ADD LogType int not null      
+END
+GO
+
+RAISERROR ('Add IsInternalLogNote to tblLogFileExisting', 10, 1) WITH NOWAIT
+GO
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		     where syscolumns.name = N'IsInternalLogNote' and sysobjects.name = N'tblLogFileExisting')
+BEGIN
+
+    -- delete existing records from table (its temp table)
+    DELETE FROM tblLogFileExisting 
+
+    ALTER TABLE tblLogFileExisting 
+    ADD IsInternalLogNote bit not null        
+END
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.43'
 GO

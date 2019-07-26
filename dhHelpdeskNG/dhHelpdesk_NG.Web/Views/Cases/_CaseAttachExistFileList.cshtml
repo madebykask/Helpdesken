@@ -1,0 +1,24 @@
+﻿@model IEnumerable<DH.Helpdesk.Web.Models.Case.CaseAttachedExFileModel>
+
+@if (Model != null && Model.Any())
+{
+    <table id="table_attached_files" class="table-striped table-bordered table-hover" style="width: 100%">
+        @foreach (var file in Model)
+        {
+            <tr>
+                <td style="padding: 3px;">
+                    <div class="checkbox commun">
+                        <input type="hidden" id="isCaseFile" value="@file.IsCaseFile.ToString()"/>
+                        <input type="hidden" id="file_logType" value="@((int)file.LogType)" />
+                        @if (!file.IsCaseFile)
+                        {
+                            <input type="hidden" id="file_logId" value="@file.LogId"/>
+                        }
+                        <input type="checkbox" value="@file.Id"/>
+                        <span class="lbl">@file.FileName</span>
+                    </div>
+                </td>
+            </tr>
+        }
+    </table>
+}

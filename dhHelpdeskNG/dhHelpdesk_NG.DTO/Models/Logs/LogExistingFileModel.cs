@@ -12,5 +12,6 @@ namespace DH.Helpdesk.BusinessData.Models.Logs
         public int? LogId { get; set; }
         public int CaseId { get; set; }
         public LogFileType LogType { get; set; }
+        public bool IsInternalLogNote { get; set; }
     }
 }

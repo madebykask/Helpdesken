@@ -1,80 +1,98 @@
-﻿@using DH.Helpdesk.Common.Tools
-@model DH.Helpdesk.BusinessData.Models.Case.FilesModel     
+﻿@using DH.Helpdesk.Common.Enums.Logs
+@using DH.Helpdesk.Common.Extensions.Integer
+@using DH.Helpdesk.Common.Tools
+@model DH.Helpdesk.Web.Models.Case.CaseLogFilesViewModel
+
+@functions
+{
+    string BuildCaseFileLinkVD(string fileName)
+    {
+        return Model.FilesUrlBuilder.BuildCaseFileLinkVD(Model.CaseNumber, fileName);
+    }
+
+    string BuildLogFileLinkVD(int logId, string fileName, LogFileType logType)
+    {
+        return Model.FilesUrlBuilder.BuildLogFileLinkVD(logId, fileName, logType);
+    }
+
+    string GetFileIcon(LogFileType logType)
+    {
+        return logType == LogFileType.External ? "fa sm-fa fa-file-o" : "fa sm-fa fa-file";
+    }
+
+    string GetLogTypeText(LogFileType logType)
+    {
+        return logType == LogFileType.External ? Translation.GetCoreTextTranslation("External log file") : Translation.GetCoreTextTranslation("Internal log file");
+    }
+}
+<script type="text/javascript">
+    dhHelpdesk.caseLog =
+    {
+        deleteLogFileConfirmMessage: '@Translation.GetForJS("Är du säker på att du vill ta bort bifogad fil")' + '?',
+        deleteCaseFileExtraInvoiceMessage: '@Translation.GetForJS("Obs! Den tas även bort från order")',
+        okText: '@Translation.GetForJS("OK")',
+        cancelText: '@Translation.GetForJS("Avbryt")',
+        yesText: '@Translation.GetForJS("Ja")',
+        noText: '@Translation.GetForJS("Nej")'
+    };
+</script>
 
 @if (Model != null)
 {    
-    <table id="log_files_table" class="table table-striped">
+    <table id="log_files_table" class="table table-striped" data-logType="@(Model.IsExternal ? "externalLog" : "internalLog")">
         <tbody>
             @if (Model.Files != null)
             {
                 var i = 0;
-                foreach (var filename in Model.Files)
+                foreach (var fileModel in Model.Files)
                 {
-                    <tr data-field="caseLogFile" data-field-id="@Model.Id" data-field-name="@filename.Name">
+                    <tr data-field="caseLogFile" data-field-id="@Model.LogId" data-field-name="@fileModel.Name">
                         <td>
-                            <input type="hidden" id="logfile_id" value="@filename.Id" />
-                            @if (Model.VirtualDirectory)
+                            <input type="hidden" id="logfile_id" value="@fileModel.Id" />
+                            @if (fileModel.IsExistCaseFile && fileModel.ObjId.HasValue)
                             {
-                                if (filename.IsExistCaseFile && filename.ObjId.HasValue)
-                                {
-                                    <a target="_blank" class="isExisted" href="@Html.Action("CaseFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", filename.ObjId}, {"fileName", filename.Name}})"><i class="icon- attachedFile"></i>@filename.Name</a>
-                                }
-                                else
-                                {
-                                    if (filename.IsExistLogFile && filename.ObjId.HasValue)
-                                    {
-                                        <a target="_blank" class="isExisted" href="@Html.Action("LogFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", filename.ObjId}, {"fileName", filename.Name}})"><i class="icon- attachedFile"></i> @filename.Name</a>
-                                    }
-                                    else
-                                    {
-                                        <a target="_blank" href="@Html.Action("LogFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", Model.Id}, {"fileName", filename.Name}})"><i class="icon-file"></i> @filename.Name</a>
-                                    }
-                                }
+                                <a target="_blank" class="isExisted" href="@BuildCaseFileLinkVD(fileModel.Name)"><i class="icon- attachedFile"></i>@fileModel.Name</a>
                             }
                             else
                             {
-                                if (filename.IsExistCaseFile && filename.ObjId.HasValue)
+                                if (fileModel.IsExistLogFile && fileModel.ObjId.HasValue)
                                 {
-                                    <a target="_blank" class="isExisted" href="@Html.Action("CaseFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", filename.ObjId}, {"fileName", filename.Name}})">
-                                        <i class="icon- attachedFile"></i>@filename.Name
-                                    </a>
+                                    <a target="_blank" class="isExisted" href="@BuildLogFileLinkVD(fileModel.ObjId.Value, fileModel.Name, fileModel.LogType)"><i class="icon- attachedFile"></i> @fileModel.Name</a>
                                 }
                                 else
                                 {
-                                    if (filename.IsExistLogFile && filename.ObjId.HasValue)
+                                    if (Model.UseVirtualDirectory)
                                     {
-                                        <a target="_blank" class="isExisted" href="@Html.Action("LogFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", filename.ObjId}, {"fileName", filename.Name}})"><i class="icon- attachedFile"></i> @filename.Name</a>
+                                        <a target="_blank" href="@BuildLogFileLinkVD(Model.LogId.ToInt(), fileModel.Name, fileModel.LogType)"
+                                           data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(fileModel.LogType))"><i class="@(GetFileIcon(fileModel.LogType))"></i> @fileModel.Name</a>
                                     }
                                     else
                                     {
-                                        <a href="@Url.Action("DownloadLogFile", new RouteValueDictionary {{"id", Model.Id}, {"fileName", filename.Name}})"><i class="icon-file"></i> @filename.Name</a>
+                                        <a href="@Url.Action("DownloadLogFile", new RouteValueDictionary {{"id", Model.LogId}, {"fileName", fileModel.Name}, {"logType", (int)fileModel.LogType} })"
+                                           data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(fileModel.LogType))"><i class="@(GetFileIcon(fileModel.LogType))"></i> @fileModel.Name</a>
                                     }
                                 }
                             }
                         </td>
                         <td>
                             @* TODO: fix this, set deleteattachedfilepermission to true if usergroupid is administrator *@
-                            @if (!GuidHelper.IsGuid(Model.Id) && (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1 || SessionFacade.CurrentUser.UserGroupId == 4))
-                            {                            
-                                <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.GetCoreTextTranslation("Ta bort")">
-                                    <i class="icon-remove"></i>
-                                </a>
-                            }else
+                            @if (!GuidHelper.IsGuid(Model.LogId) && (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1 || SessionFacade.CurrentUser.UserGroupId == 4))
                             {
-                               if (GuidHelper.IsGuid(Model.Id))
+                                <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.GetCoreTextTranslation("Ta bort")"><i class="icon-remove"></i></a>
+                            }
+                            else
+                            {
+                                if (GuidHelper.IsGuid(Model.LogId))
                                 {
-                                   <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.GetCoreTextTranslation("Ta bort")">
-                                    <i class="icon-remove"></i>
-                                </a>
-                               }
+                                    <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.GetCoreTextTranslation("Ta bort")"><i class="icon-remove"></i></a>
+                                }
                             }
                         </td>
                     </tr>
-                            i++;
+                    i++;
                 }
-            }    
+            }
         </tbody>
-    </table>     
+    </table>
 }    
-
 @Scripts.Render("~/bundles/cases/_caseLogFiles")
