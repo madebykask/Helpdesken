@@ -81,7 +81,6 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface ILogFileRepository : IRepository<LogFile>
     {
         LogFile GetDetails(int id);
-        LogFileContent GetFileContent(int logFileId, string basePath);
         byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
         List<string> FindFileNamesByLogId(int logId, LogFileType logType = LogFileType.External);
         List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId);
@@ -112,25 +111,6 @@ namespace DH.Helpdesk.Dal.Repositories
         public LogFile GetDetails(int id)
         {
             return Table.FirstOrDefault(f => f.Id == id);
-        }
-
-    public LogFileContent GetFileContent(int logFileId, string basePath)
-        {
-            var logFile = Table.FirstOrDefault(f => f.Id == logFileId);
-            if (logFile == null)
-                return null;
-
-            var content = _filesStorage.GetFileContent(ModuleName.Log, logFile.Log_Id, basePath, logFile.FileName);
-            if (content == null)
-                return null;
-
-            return new LogFileContent()
-            {
-                Id = logFile.Id,
-                LogId = logFile.Log_Id,
-                FileName = logFile.FileName,
-                Content = content
-            };
         }
 
         public byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName)

@@ -308,7 +308,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return this.RedirectToAction("index", "mailtemplate", new { customerId = customerId });
         }
 
-        public MvcHtmlString MailTemplateFieldIdentifierRow(int customerId, string mailTemplateRowName, string ExtraLabel, string EMailIdentifier)
+        public MvcHtmlString MailTemplateFieldIdentifierRow(int customerId, string mailTemplateRowName, string extraLabel, string eMailIdentifier)
         {
             //Super quick fix TODO: FIX... Im sorry
             if (mailTemplateRowName == "tblLog_Text_External")
@@ -320,43 +320,43 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 mailTemplateRowName = "tblLog.Text_Internal";
             }
 
-            var cfs = this._caseFieldSettingService.GetAllCaseFieldSettings().Where(x => x.Name == mailTemplateRowName && x.Customer_Id == customerId && x.ShowOnStartPage == 1);
+            var cfs = this._caseFieldSettingService.GetCaseFieldSettingsByName(customerId, mailTemplateRowName).FirstOrDefault(x => x.ShowOnStartPage == 1);
             
-            if (cfs.Any())
+            if (cfs != null)
             {
-                var cfsl = this._caseFieldSettingService.GetCaseFieldSettingLanguage(cfs.FirstOrDefault().Id, SessionFacade.CurrentLanguageId);
-                if (!(cfsl == null))
+                var cfsl = this._caseFieldSettingService.GetCaseFieldSettingLanguage(cfs.Id, SessionFacade.CurrentLanguageId);
+                if (cfsl != null)
                 {
-                    if (ExtraLabel != null)
+                    if (extraLabel != null)
                     {
-                        ExtraLabel = Translation.Get(ExtraLabel, Enums.TranslationSource.TextTranslation, customerId);
-                        ExtraLabel = ":" + ExtraLabel;
+                        extraLabel = Translation.Get(extraLabel, Enums.TranslationSource.TextTranslation, customerId);
+                        extraLabel = ":" + extraLabel;
                     }
-                    if (cfsl.Label == null || cfsl.Label == "")
+                    if (string.IsNullOrEmpty(cfsl.Label))
                     {
                         cfsl.Label = Translation.Get(mailTemplateRowName, Enums.TranslationSource.CaseTranslation, customerId);
 
                         if (cfsl.Label == "tblLog.Text_External")
                         {
-                            cfsl.Label = Translation.Get("Extern notering", Enums.TranslationSource.TextTranslation);
+                            cfsl.Label = Translation.GetCoreTextTranslation("Extern notering");
                         }
                         else if (cfsl.Label == "tblLog.Text_Internal")
                         {
-                            cfsl.Label = Translation.Get("Intern notering", Enums.TranslationSource.TextTranslation);
+                            cfsl.Label = Translation.GetCoreTextTranslation("Intern notering");
                         }
                     }
 
-                    var emailIdentifier = cfs.FirstOrDefault().EMailIdentifier;
-                    if (EMailIdentifier != null)
+                    var emailIdentifier = cfs.EMailIdentifier;
+                    if (eMailIdentifier != null)
                     {
-                        emailIdentifier = EMailIdentifier;
+                        emailIdentifier = eMailIdentifier;
                     }
 
                     string row = "";
                     row = "<tr>"
                         + "<td>"
                         + cfsl.Label
-                        + ExtraLabel
+                        + extraLabel
                         + "</td>"
                         + "<td>"
                         + emailIdentifier

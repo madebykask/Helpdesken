@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Dal.Enums;
@@ -27,17 +29,20 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ILogFileService _logFileService;
         private readonly ICaseFileService _caseFileService;
         private readonly ITemporaryFilesCache _userTemporaryFilesStorage;
+        private readonly ICaseFieldSettingService _caseFieldSettingService;
 
 
         public CaseLogFilesController(
             ILogFileService logFileService,
             ICaseFileService caseFileService,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
-            ISettingsLogic settingsLogic)
+            ISettingsLogic settingsLogic, 
+            ICaseFieldSettingService caseFieldSettingService)
         {
             _caseFileService = caseFileService;
             _logFileService = logFileService;
             _settingsLogic = settingsLogic;
+            _caseFieldSettingService = caseFieldSettingService;
             _userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
         }
 
@@ -58,7 +63,15 @@ namespace DH.Helpdesk.WebApi.Controllers
             }
             else
             {
-                var logFile = _logFileService.GetFileContentById(fileId, basePath);
+                if (fileInfo.LogType == LogFileType.Internal)
+                {
+                    var setting = _caseFieldSettingService.GetCaseFieldSettingsByName(cid,
+                            GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal.ToString().Replace("tblLog_", "tblLog."))
+                        .FirstOrDefault(x => x.IsActive);
+                    if (setting == null)
+                        return Task.FromResult(Forbidden("Not allowed to view file."));
+                } 
+                var logFile = _logFileService.GetFileContentById(fileId, basePath, fileInfo.LogType);
                 content = logFile.Content;
             }
 

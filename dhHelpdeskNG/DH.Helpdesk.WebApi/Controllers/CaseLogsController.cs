@@ -29,28 +29,16 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IUserService _userService;
         private readonly ILogService _caseLogService;
         private readonly IMapper _mapper;
-        private readonly ISettingsLogic _settingsLogic;
-        private readonly ILogFileService _logFileService;
-        private readonly ICaseFileService _caseFileService;
-        private readonly ITemporaryFilesCache _userTemporaryFilesStorage;
 
 
         public CaseLogsController(
             IUserService userService, 
             ILogService caseLogService, 
-            ILogFileService logFileService,
-            ICaseFileService caseFileService,
-            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
-            IMapper mapper, 
-            ISettingsLogic settingsLogic)
+            IMapper mapper)
         {
-            _caseFileService = caseFileService;
-            _logFileService = logFileService;
             _userService = userService;
             _caseLogService = caseLogService;
             _mapper = mapper;
-            _settingsLogic = settingsLogic;
-            _userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
         }
 
         [HttpGet]
