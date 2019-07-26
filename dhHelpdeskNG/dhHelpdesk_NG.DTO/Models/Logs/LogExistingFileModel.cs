@@ -1,4 +1,6 @@
 ﻿
+using DH.Helpdesk.Common.Enums.Logs;
+
 namespace DH.Helpdesk.BusinessData.Models.Logs
 {
     public class LogExistingFileModel
@@ -9,5 +11,6 @@ namespace DH.Helpdesk.BusinessData.Models.Logs
         public bool IsExistLogFile { get; set; }
         public int? LogId { get; set; }
         public int CaseId { get; set; }
+        public LogFileType LogType { get; set; }
     }
 }

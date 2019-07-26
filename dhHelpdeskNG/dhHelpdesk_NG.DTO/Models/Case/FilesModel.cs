@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using DH.Helpdesk.Common.Enums.Logs;
 
 namespace DH.Helpdesk.BusinessData.Models.Case
 {
@@ -37,5 +38,6 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public bool IsExternal { get; set; }
         //CaseId for case files, LogId for log files
         public int? ObjId { get; set; }
+        public LogFileType LogType { get; set; }
     }
 }

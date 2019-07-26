@@ -81,11 +81,11 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface ILogFileRepository : IRepository<LogFile>
     {
         LogFile GetDetails(int id);
-        byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
+        byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName, LogFileType logType = LogFileType.External);
         List<string> FindFileNamesByLogId(int logId, LogFileType logType = LogFileType.External);
         List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId);
         List<LogFile> GetLogFilesByCaseId(int caseId);
-        List<LogFile> GetLogFilesByLogId(int logId);
+        List<LogFile> GetLogFilesByLogId(int logId, bool includeInternal = true);
         List<LogFile> GetReferencedFiles(int logId);
         void DeleteByLogIdAndFileName(int logId, string basePath, string fileName);
         void MoveLogFiles(int caseId, string fromBasePath, string toBasePath);
@@ -113,20 +113,21 @@ namespace DH.Helpdesk.Dal.Repositories
             return Table.FirstOrDefault(f => f.Id == id);
         }
 
-        public byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName)
+        public byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName, LogFileType logType = LogFileType.External)
         {
-            return this._filesStorage.GetFileContent(ModuleName.Log, logId, basePath, fileName);
+            var logFolder = logType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
+            return _filesStorage.GetFileContent(logFolder, logId, basePath, fileName);
         }
 
         public byte[] GetCaseFileContentByIdAndFileName(int caseId, string basePath, string fileName)
         {
             var caseNumber = DataContext.Cases.Single(x => x.Id == caseId).CaseNumber;
-            return this._filesStorage.GetFileContent(ModuleName.Cases, Convert.ToInt32(caseNumber), basePath, fileName);
+            return _filesStorage.GetFileContent(ModuleName.Cases, Convert.ToInt32(caseNumber), basePath, fileName);
         }
 
         public List<string> FindFileNamesByLogId(int logId, LogFileType logType = LogFileType.External)
         {
-            return DataContext.LogFiles.Where(f => f.Log_Id == logId).Select(f => f.FileName).ToList();
+            return DataContext.LogFiles.Where(f => f.Log_Id == logId && f.LogType == logType).Select(f => f.FileName).ToList();
         }
 
         public List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId)
@@ -144,17 +145,14 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public List<LogFile> GetLogFilesByCaseId(int caseId)
         {
-            return (from f in this.DataContext.LogFiles
-                    join l in this.DataContext.Logs on f.Log_Id equals l.Id
-                    where l.Case_Id == caseId
-                    select f).ToList();             
+            var caseFiles = DataContext.Logs.Where(l => l.Case_Id == caseId).SelectMany(l => l.LogFiles).ToList();
+            return caseFiles;
         }
 
-        public List<LogFile> GetLogFilesByLogId(int logId)
+        public List<LogFile> GetLogFilesByLogId(int logId, bool includeInternal = true)
         {
-            return (from f in this.DataContext.LogFiles
-                    where f.Log_Id == logId
-                    select f).ToList();
+            var logFiles = DataContext.LogFiles.Where(f => f.Log_Id == logId && includeInternal || f.LogType == LogFileType.External).ToList();
+            return logFiles;
         }
 
         public List<LogFile> GetReferencedFiles(int logId)

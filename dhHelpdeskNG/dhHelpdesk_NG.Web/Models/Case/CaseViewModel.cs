@@ -76,7 +76,7 @@ namespace DH.Helpdesk.Web.Models.Case
                 {
                     Id = LogFilesModel.Id,
                     VirtualDirectory = LogFilesModel.VirtualDirectory,
-                    Files = LogFilesModel.Files?.Where(f => f.IsExternal == isExternal).Select(f => f).ToList()
+                    Files = isExternal ? LogFilesModel?.Files : LogInternalFilesModel?.Files
                 };
             }
 
@@ -87,7 +87,7 @@ namespace DH.Helpdesk.Web.Models.Case
                 LogFilesModel = filesModel,
                 FieldStyles = fieldStyles,
                 IsReadonly = isReadonly,
-                AllowFileAttach = allowFileAttach, //todo: conditions shoud be checked for all modes (old, external, internal)
+                AllowFileAttach = allowFileAttach, 
                 LogFileNames = filesNames
             };
         }
@@ -289,6 +289,8 @@ namespace DH.Helpdesk.Web.Models.Case
         public List<CustomMailTemplate> MailTemplates { get; set; }
         
         public FilesModel LogFilesModel { get; set; }
+
+        public FilesModel LogInternalFilesModel { get; set; }
 
         public CaseFilesModel CaseFilesModel { get; set; }
 

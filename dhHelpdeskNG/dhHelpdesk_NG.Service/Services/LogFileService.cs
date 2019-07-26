@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Services.Services
     {
         LogFile GetFileDetails(int logFileId);
         LogFileContent GetFileContentById(int logFileId, string basePath, LogFileType logFileType);
-        byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName);
+        byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName, LogFileType logType = LogFileType.External);
         List<string> FindFileNamesByLogId(int logId, LogFileType logType = LogFileType.External);
         List<KeyValuePair<int,string>> FindFileNamesByCaseId(int caseId);
         void DeleteByLogIdAndFileName(int logId, string basePath, string fileName);
@@ -27,7 +27,7 @@ namespace DH.Helpdesk.Services.Services
         void DeleteByFileIdAndFileName(int fileId, string trim);
         void DeleteExistingById(int logId);
         void ClearExistingAttachedFiles(int caseId);
-        List<LogFileModel> GetLogFileNamesByLogId(int logId);
+        List<LogFileModel> GetLogFileNamesByLogId(int logId, bool includeInternal = true);
         List<LogFileModel> GetLogFilesByCaseId(int caseId);
         byte[] GetCaseFileContentByIdAndFileName(int caseId, string basePath, string name);
     }
@@ -69,7 +69,7 @@ namespace DH.Helpdesk.Services.Services
             };
         }
 
-        public byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName)
+        public byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName, LogFileType logType = LogFileType.External)
         {
             return _logFileRepository.GetFileContentByIdAndFileName(logId, basePath, fileName);
         }
@@ -109,7 +109,8 @@ namespace DH.Helpdesk.Services.Services
                     FileName = x.Name,
                     Log_Id = currentLogId.Value,
                     IsCaseFile = x.IsExistCaseFile,
-                    ParentLog_Id = x.LogId
+                    ParentLog_Id = x.LogId,
+                    LogType = x.LogType
                 }).ToList();
                 _logFileRepository.AddExistLogFiles(logExFiles);
             }
@@ -178,16 +179,18 @@ namespace DH.Helpdesk.Services.Services
             _logFileRepository.ClearExistingAttachedFiles(caseId);
         }
 
-        public List<LogFileModel> GetLogFileNamesByLogId(int logId)
+        public List<LogFileModel> GetLogFileNamesByLogId(int logId, bool includeInternal = true)
         {
-            var files = _logFileRepository.GetLogFilesByLogId(logId);
+            var files = _logFileRepository.GetLogFilesByLogId(logId, includeInternal);
             var exFiles = files.Select(x => new LogFileModel
             {
                 Id = x.Id,
                 Name = x.FileName,
                 IsExistCaseFile = x.IsCaseFile.GetValueOrDefault(false),
                 IsExistLogFile = x.ParentLog_Id.HasValue,
-                ObjId = x.IsCaseFile.GetValueOrDefault(false) ? x.Log.Case_Id : x.ParentLog_Id
+                ObjId = x.IsCaseFile.GetValueOrDefault(false) ? x.Log.Case_Id : x.ParentLog_Id,
+                LogType = x.LogType
+                
             }).ToList();
             return exFiles;
         }

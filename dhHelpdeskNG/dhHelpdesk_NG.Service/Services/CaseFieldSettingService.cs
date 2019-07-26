@@ -16,6 +16,7 @@ namespace DH.Helpdesk.Services.Services
         IList<CaseListToCase> ListToShowOnCasePage(int customerId, int languageId);
         IList<CaseFieldSetting> GetAllCaseFieldSettings();
         IList<CaseFieldSetting> GetCaseFieldSettingsByName(int customerId, string name);
+        CaseFieldSetting GetCaseFieldSetting(int customerId, string fieldId);
         IList<CaseFieldSetting> GetCaseFieldSettings(int customerId, int? languageId = null);
         Task<IList<CaseFieldSetting>> GetCaseFieldSettingsAsync(int customerId, int? languageId = null);
         IList<CaseFieldSetting> GetCustomerEnabledCaseFieldSettings(int customerId);
@@ -59,6 +60,11 @@ namespace DH.Helpdesk.Services.Services
         public IList<CaseFieldSetting> GetAllCaseFieldSettings()
         {
             return this._caseFieldSettingRepository.GetAll().ToList();
+        }
+
+        public CaseFieldSetting GetCaseFieldSetting(int customerId, string fieldId)
+        {
+            return _caseFieldSettingRepository.GetMany(f => f.Name == fieldId).FirstOrDefault();
         }
 
         /// <summary>
