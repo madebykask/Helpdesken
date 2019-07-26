@@ -16,10 +16,10 @@
         return Model.FilesUrlBuilder.BuildLogFileLinkVD(logId,  fileName, logType);
     }
 
-    //string GetFileIcon(LogFileOverview logFileOverview)
-    //{
-    //    var icon = "";
-    //}
+    string GetFileIcon(LogFileOverview logFile)
+    {
+        return logFile.LogType == LogFileType.External ? "fa sm-fa fa-file-o" : "fa sm-fa fa-file";
+    }
 }
 
 @if (currentLog.LogFiles != null)
@@ -42,7 +42,7 @@
                         }
                         else
                         {
-                            <a target="_blank" class="isExisted" href="@BuildLogFileLinkVD(currentLog.Id, l.FileName, l.LogType)"><i class="icon-file"></i> @l.FileName</a>
+                            <a target="_blank" class="isExisted" href="@BuildLogFileLinkVD(currentLog.Id, l.FileName, l.LogType)"><i class="@(GetFileIcon(l))"></i> @l.FileName</a>
                         }
                     }
                 }
@@ -60,7 +60,7 @@
                         }
                         else
                         {
-                            <a target="_blank" class="isExisted" href="@Url.Action("DownloadLogFile", new { id = currentLog.Id, fileName = l.FileName })"><i class="icon-file"></i> @l.FileName</a>
+                            <a target="_blank" class="isExisted" href="@Url.Action("DownloadLogFile", new { id = currentLog.Id, fileName = l.FileName })"><i class="@(GetFileIcon(l))"></i> @l.FileName</a>
                         }
                     }
                 }
