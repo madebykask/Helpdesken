@@ -1450,7 +1450,10 @@ namespace DH.Helpdesk.Web.Controllers
                     m.finishingCauses = _finishingCauseService.GetFinishingCausesWithChilds(customerId);
                     m.case_ = _caseService.GetCaseById(m.CaseLog.CaseId);
                     m.IsCaseReopened = isCaseReopened;
-                    var useVD = !string.IsNullOrEmpty(_masterDataService.GetVirtualDirectoryPath(customerId));
+
+                    var virtualDirPath = _masterDataService.GetVirtualDirectoryPath(customerId);
+                    var useVD = !string.IsNullOrEmpty(virtualDirPath);
+                    m.CaseFilesUrlBuilder = new CaseFilesUrlBuilder(virtualDirPath, RequestExtension.GetAbsoluteUrl());
 
                     //prepare log files
                     m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
@@ -1466,9 +1469,6 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         m.LogInternalFilesModel = new FilesModel(id.ToString(), logFiles.Where(f => f.LogType == LogFileType.Internal).ToList(), useVD);
                     }
-
-                    var virtualDirPath = _masterDataService.GetVirtualDirectoryPath(customerId);
-                    m.CaseFilesUrlBuilder = new CaseFilesUrlBuilder(virtualDirPath, RequestExtension.GetAbsoluteUrl());
                     
                     const bool isAddEmpty = true;
                     var responsibleUsersAvailable = _userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
@@ -4763,7 +4763,7 @@ namespace DH.Helpdesk.Web.Controllers
             m.EnableTwoAttachments = customerFieldSettings.getCaseSettingsValue(TranslationCaseFields.tblLog_Filename_Internal.ToString())?.IsActive ?? false; 
             m.ActiveTab = activeTab;
             
-            var virtualDirPath = _masterDataService.GetVirtualDirectoryPath(case_.Customer_Id); 
+            var virtualDirPath = _masterDataService.GetVirtualDirectoryPath(customerId); 
             m.CaseFilesUrlBuilder = new CaseFilesUrlBuilder(virtualDirPath, RequestExtension.GetAbsoluteUrl());
 
             // Computer user categories
@@ -4880,7 +4880,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 m.Logs = _logService.GetCaseLogOverviews(caseId, m.CaseInternalLogAccess);
                 
-                var useVd = !string.IsNullOrEmpty(_masterDataService.GetVirtualDirectoryPath(customerId));
+                var useVd = !string.IsNullOrEmpty(virtualDirPath);
 
                 var canDelete = (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1);
                 m.SavedFiles = canDelete ? string.Empty : m.CaseFileNames;

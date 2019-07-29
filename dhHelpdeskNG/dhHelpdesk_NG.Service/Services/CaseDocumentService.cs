@@ -429,7 +429,7 @@ namespace DH.Helpdesk.Services.Services
                     {
                         conditionKey = conditionKey.Replace("extendedcase_", "");
 
-                        var extData = _case.CaseExtendedCaseDatas.FirstOrDefault();
+                        var extData = _case.CaseExtendedCaseDatas?.FirstOrDefault();
                         if (extData != null)
                         {
                             var extDataId = extData.ExtendedCaseData_Id;
