@@ -7,6 +7,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseLogs
     public class CaseLogData
     {
         public int Id { get; set; }
+        public int CaseId { get; set; }
         public int? UserId { get; set; }
         public string UserFirstName { get; set; }
         public string UserSurName { get; set; }
@@ -14,6 +15,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseLogs
         public string InternalText { get; set; }
         public string ExternalText { get; set; }
         public DateTime LogDate { get; set; }
+        public DateTime RegTime { get; set; }
 
         public IList<EmailLogData> EmailLogs { get; set; }
         public IList<LogFileData> Files { get; set; }

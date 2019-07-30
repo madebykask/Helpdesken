@@ -82,8 +82,9 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         LogFile GetDetails(int id);
         byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName, LogFileType logType = LogFileType.External);
-        List<string> FindFileNamesByLogId(int logId, LogFileType logType = LogFileType.External);
-        List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId);
+        List<string> FindFileNamesByLogId(int logId);
+        List<string> FindFileNamesByLogId(int logId, LogFileType logType);
+        List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId, LogFileType logFileType);
         List<LogFile> GetLogFilesByCaseId(int caseId, bool includeInternal);
         List<LogFile> GetLogFilesByLogId(int logId, bool includeInternal = true);
         List<LogFile> GetReferencedFiles(int logId);
@@ -126,23 +127,26 @@ namespace DH.Helpdesk.Dal.Repositories
             return _filesStorage.GetFileContent(ModuleName.Cases, Convert.ToInt32(caseNumber), basePath, fileName);
         }
 
-        //todo: check usages!!
-        public List<string> FindFileNamesByLogId(int logId, LogFileType logType = LogFileType.External)
+        public List<string> FindFileNamesByLogId(int logId)
+        {
+            return DataContext.LogFiles.Where(f => f.Log_Id == logId).Select(f => f.FileName).ToList();
+        }
+
+        public List<string> FindFileNamesByLogId(int logId, LogFileType logType)
         {
             return DataContext.LogFiles.Where(f => f.Log_Id == logId && f.LogType == logType).Select(f => f.FileName).ToList();
         }
 
-        public List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId)
+        public List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId, LogFileType logFileType)
         {
-            var ret = new List<KeyValuePair<int, string>>();
-            var logs = this.DataContext.LogFiles.Where(f => f.Log.Case_Id == caseId).ToList();
+            var logFiles = 
+                DataContext.Logs.Where(l => l.Case_Id == caseId)
+                    .SelectMany(l => l.LogFiles)
+                    .Where(f => f.LogType == logFileType)
+                    .Select(f => new KeyValuePair<int, string>(f.Log_Id, f.FileName))
+                    .ToList();
 
-            foreach (var log in logs)
-            {
-                ret.Add(new KeyValuePair<int, string>(log.Log_Id, log.FileName));
-            }
-
-            return ret;            
+            return logFiles;
         }
 
         public List<LogFile> GetLogFilesByCaseId(int caseId, bool includeInternal)

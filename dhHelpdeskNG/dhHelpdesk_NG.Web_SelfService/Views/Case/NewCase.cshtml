@@ -823,30 +823,13 @@
                                             </div>
                                         </div>
                                     }
-
-                                    @if (Model.AttachmentPlacement == 0 && Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+                                    @if (Model.AttachmentPlacement == 0 & Model.FieldSettings.Any(f => f.Name.Equals(GlobalEnums.TranslationCaseFields.Filename.ToString())))
                                     {
-                                        <div class="form-group row @GlobalEnums.TranslationCaseFields.Filename.ToString()">
-                                            <label class="col-md-3">@CaseFieldCaption(GlobalEnums.TranslationCaseFields.Filename, false)</label>
-                                            <div class="col-md-4">
-                                                <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default hasAttribute" data-toggle="modal" 
-                                                   standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add")</a>
-
-                                                <a id="addCaseFileFromClipBoard" role="button" class="btn btn-default hasAttribute" 
-                                                   standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard")</a>
-                                                <table id="NewCasefiles_table" class="table table-striped">
-                                                    <tbody>
-                                                        @if (Model.NewCase.CaseFiles == null)
-                                                        {
-                                                            <tr>
-                                                                <td><div id="no_uploaded_files_label"></div></td>
-                                                            </tr>
-
-                                                        }
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
+                                        @Html.Partial("_FilesAttachButtons", new ViewDataDictionary(ViewData)
+                                        {
+                                            {"fieldCaption", CaseFieldCaption(GlobalEnums.TranslationCaseFields.Filename, false) },
+                                            {"hasFiles", Model.NewCase.CaseFiles != null && Model.NewCase.CaseFiles.Any()}
+                                        })
                                     }
                                     <div class="form-group row">
                                         <label class="col-md-3"></label>
@@ -859,31 +842,15 @@
             </div>
 
         </div>
-        @if (Model.AttachmentPlacement == 1 && Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+        @if (Model.AttachmentPlacement == 1 && Model.FieldSettings.Any(f => f.Name.Equals(GlobalEnums.TranslationCaseFields.Filename.ToString())))
         {
             <div id="attachment-tab" class="tab-pane" style="overflow:hidden;">
                 <div class="container-fluid dh-container">
-
-                    <div class="form-group row @GlobalEnums.TranslationCaseFields.Filename.ToString()">
-                        <div class="col-md-12">
-                            <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default hasAttribute" data-toggle="modal" 
-                               standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add")</a>
-
-                            <a id="addCaseFileFromClipBoard" role="button" class="btn btn-default hasAttribute" 
-                               standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard")</a>
-                            
-                            <table id="NewCasefiles_table" class="table table-striped">
-                                <tbody>
-                                    @if (Model.NewCase.CaseFiles == null)
-                                    {
-                                        <tr>
-                                            <td><div id="no_uploaded_files_label"></div></td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    @Html.Partial("_FilesAttachButtons", new ViewDataDictionary(ViewData)
+                    {
+                        {"fieldCaption", null },
+                        {"hasFiles", Model.NewCase.CaseFiles != null && Model.NewCase.CaseFiles.Any()}
+                    })
                 </div>
             </div>
         }
@@ -896,7 +863,7 @@
 }
 
 @section Dialogs {
-    @Html.Partial("ModalDialogs/_UploadFilePopup", "NewCase_upload_files_popup")
+    @Html.Partial("ModalDialogs/_UploadFilePopup", "upload_files_popup")
     @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")
 
     <div id="case_urgent_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true" style="display: none">
@@ -958,7 +925,7 @@
             //Save case
             $('.save-button').on('click', function (e) {
                 e.preventDefault();
-                
+
                 saveNewCase();
             });
 

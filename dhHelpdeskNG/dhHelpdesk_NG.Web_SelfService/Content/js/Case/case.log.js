@@ -6,13 +6,13 @@
 $(function () {
 
     (function ($) {
-
         var params = window.caseLogsParameters;
         window.selfService = window.selfService || {};
         window.selfService.caseLog = window.selfService.caseLog || new CaseLog(params);
         
         var uploadLogFileUrl = params.uploadLogFileUrl;
         var logFileKey = params.logFileKey;
+        var caseId = params.caseId || 0;
         var fileAlreadyExistsMsg = params.fileAlreadyExistsMsg;
         
         var alreadyExistFileIds = [];
@@ -24,7 +24,12 @@ $(function () {
         $fileUploader.pluploadQueue({
             runtimes: 'html5,html4',
             url: uploadLogFileUrl,
-            multipart_params: { Id: logFileKey, myTime: Date.now() },
+            // request params
+            multipart_params: {
+                Id: logFileKey,
+                caseId: caseId,
+                myTime: Date.now()
+            },
             max_file_size: '10mb',
 
             init: {
@@ -83,6 +88,25 @@ $(function () {
             }
         });
 
+        /*********** Paste image from clipboard (Log) ************/
+        $("#addLogFileFromClipboard").on('click', function (e) {
+            e.preventDefault();
+            var opt = {
+                refreshCallback: function (res) {
+                    selfService.caseLog.reloadLogFiles();
+                },
+                fileKey: logFileKey,
+                submitUrl: uploadLogFileUrl,
+                uploadParams: {
+                    caseId: caseId
+                }
+            };
+            var clipboardFileUpload = new ClipboardFileUpload(opt);
+            clipboardFileUpload.show();
+            return false;
+        });
+        /*****************************************************/
+
         function CaseLog(params) {
 
             var logFileKey = params.logFileKey;
@@ -121,9 +145,9 @@ $(function () {
                 var self = this;
                 var data = {
                     id: logFileKey,
-                    myTime: Date.now()
+                    myTime: Date.now(),
+                    caseId: caseId
                 };
-
                 $.get(getLogFilesUrl, $.param(data), function (files) {
                     refreshLogFilesTable(self._elements.logFilesTable, files);
                 });
@@ -204,12 +228,12 @@ $(function () {
                 var fileMarkup = '';
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
+                    var urlQsParams = (downloadLogFileParamUrl || '').length ? downloadLogFileParamUrl + '&fileName=' + encodeURIComponent(file) : 'fileName=' + encodeURIComponent(file);
                     var row =
                         '<tr>' +
-                            '   <td><i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href="' + downloadLogFileUrl + '?' + downloadLogFileParamUrl + 'fileName=' + file + '">' + file + '</a></td>' +
+                            '   <td><i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href="' + downloadLogFileUrl + '?' + urlQsParams + '">' + file + '</a></td>' +
                             '   <td class="del"><a id="delete_file_button_' + i + '" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove"></span></a></td>' +
                         '</tr>';
-
                     fileMarkup += row;
                 }
 
@@ -228,7 +252,8 @@ $(function () {
                         {
                             id: logFileKey,
                             fileName: fileName,
-                            myTime: Date.now()
+                            myTime: Date.now(),
+                            caseId: caseId
                         },
                         function () {
                             $(pressedDeleteFileButton).parents('tr:first').remove();
@@ -251,24 +276,7 @@ $(function () {
                 }
             }
         }; //CaseLog
-
-        /*********** Paste image from clipboard (Log) ************/
-        $("#addLogFileFromClipboard").on('click', function (e) {
-            e.preventDefault();
-            var opt = {
-                refreshCallback: function(res) {
-                    selfService.caseLog.reloadLogFiles();
-                },
-                fileKey: logFileKey,
-                submitUrl: uploadLogFileUrl
-            };
-            var clipboardFileUpload = new ClipboardFileUpload(opt);
-            clipboardFileUpload.reset(true);
-            clipboardFileUpload.show();
-            clipboardFileUpload.init();
-            return false;
-        });
-        /*****************************************************/
+        
     })($);
 
     //UI handlers

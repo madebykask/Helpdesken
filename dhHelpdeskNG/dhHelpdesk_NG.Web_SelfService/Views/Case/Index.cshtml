@@ -163,7 +163,7 @@
         if (Model.ApplicationType == ApplicationType.LineManager || 
            (Model.ApplicationType == ApplicationType.SelfService && Model.ShowCommunicationForSelfService)) 
         {
-             @Html.Partial("_Communication", Model.CaseLogModel)
+             @Html.Partial("_Communication", Model.CaseLogsModel)
         }
 
         @Html.Partial("ModalDialogs/_UploadFilePopup", "Log_upload_files_popup")

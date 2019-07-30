@@ -208,6 +208,12 @@ namespace DH.Helpdesk.Services.Services
             return customerId;
         }
 
+        public Customer GetCaseCustomer(int caseId)
+        {
+            var customerId = _caseRepository.GetCaseCustomerId(caseId);
+            return _customerService.GetCustomer(customerId);
+        }
+
         public Case GetDetachedCaseById(int id)
         {
             return _caseRepository.GetDetachedCaseById(id);

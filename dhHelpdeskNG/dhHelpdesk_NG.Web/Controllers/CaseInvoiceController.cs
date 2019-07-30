@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Web.Common.Tools.Files;
+﻿using DH.Helpdesk.Common.Enums.Logs;
+using DH.Helpdesk.Web.Common.Tools.Files;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -183,7 +184,8 @@ namespace DH.Helpdesk.Web.Controllers
                     if (!GuidHelper.IsGuid(id))
                     {
                         var savedLogFiles = new List<KeyValuePair<int, string>>();
-                        savedLogFiles = this.logFileService.FindFileNamesByCaseId(int.Parse(id));
+                        var caseId = int.Parse(id);
+                        savedLogFiles = this.logFileService.FindFileNamesByCaseId(caseId, LogFileType.External);
 
                         foreach (var logFile in savedLogFiles)
                         {
@@ -197,7 +199,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                             try
                             {
-                                fileContent = this.logFileService.GetFileContentByIdAndFileName(logFile.Key, basePath, logFile.Value);
+                                fileContent = this.logFileService.GetFileContentByIdAndFileName(logFile.Key, basePath, logFile.Value, LogFileType.External);
                             }
                             catch (Exception)
                             {

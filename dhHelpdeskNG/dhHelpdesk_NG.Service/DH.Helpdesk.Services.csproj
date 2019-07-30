@@ -210,6 +210,7 @@
     <Compile Include="BusinessLogic\Mappers\Accounts\MapperData\AccountSettingsMapperForProcessing.cs" />
     <Compile Include="BusinessLogic\Mappers\BulletinBoards\BulletinBoardMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Calendars\CalendarMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Cases\CaseLogDataMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Cases\CasesMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Cases\CaseOverviewMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Cases\CaseSettingsMapper.cs" />

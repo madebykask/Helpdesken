@@ -49,7 +49,7 @@
         getLogFilesUrl: '@Url.Action("GetLogFiles", "Case")',
         deleteLogFileUrl: '@Url.Action("DeleteLogFile")',
         downloadLogFileUrl: '@Url.Action("DownloadLogFile")',
-        downloadLogFileParamUrl: '@(!string.IsNullOrEmpty(Model.LogFileGuid) ? "id=" + Model.LogFileGuid + "&" : string.Empty)',
+        downloadLogFileParamUrl: '@Model.BuildCaseLogDownloadUrlParams()',
         saveLogMessageUrl: '@Url.Action("_CaseLogNote", "Case")',
         fileAlreadyExistsMsg: '@Html.Raw(Translation.Get("File already exists", Enums.TranslationSource.TextTranslation))',
         logMandatoryText: '@Translation.Get("Comment is required!")',
@@ -170,7 +170,7 @@
     }
 
     function openCaseFilesPopUp(message) {
-        $("a[href='#NewCase_upload_files_popup']").trigger("click");
+        $("a[href='#upload_files_popup']").trigger("click");
     }
 
     */
@@ -179,7 +179,6 @@
 @*@section Styles {
     <link href="@Url.Content("~/Content/css/ex-case-mobile.css")" rel="stylesheet" type="text/css" />
 }*@
-
 
 @if (Model.ShowCaseActionsPanelOnTop)
 {
@@ -388,14 +387,14 @@
         {
             <div id="attachment-tab" class="tab-pane" style="overflow: hidden;">
                 <div>
-                    @*///* This copied code from NewCase.cshtml */
-                        TODO: Make partial or shared code *@
-
                     <div class="col-md-12" style="margin-top: 20px; margin-bottom: 0px !important;">
                         @if (Model.CaseId == 0)
                         {
-                            <a href="#NewCase_upload_files_popup" id="" role="button" class="btn btn-default hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add")</a>
-                            <a id="addCaseFileFromClipBoard" role="button" class="btn btn-default hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard")</a>
+                            <a href="#upload_files_popup" id="" role="button" class="btn btn-default hasAttribute" data-toggle="modal" 
+                               standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add")</a>
+
+                            <a id="addCaseFileFromClipboard" role="button" class="btn btn-default hasAttribute" 
+                               standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard")</a>
                         }
                         <table id="NewCasefiles_table" class="table table-striped" style="margin-top: 10px;">
                             <tbody>
@@ -422,9 +421,9 @@
     @*/* only on new for now.. */*@
     @if (Model.AttachmentPlacement == 1 &&
          Model.CaseId == 0 &&
-         Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+         Model.CaseDataModel.FieldSettings.Any(f => f.Name.Equals(GlobalEnums.TranslationCaseFields.Filename.ToString())))
     {
-        @Html.Partial("ModalDialogs/_UploadFilePopup", "NewCase_upload_files_popup")
+        @Html.Partial("ModalDialogs/_UploadFilePopup", "upload_files_popup")
         isClipboardPopupRequired = true;
     }
 </div>
@@ -463,7 +462,7 @@
          (Model.ApplicationType == ApplicationType.LineManager ||
           Model.ApplicationType == ApplicationType.SelfService && Model.ShowCommunicationForSelfservice))
     {
-        @Html.Partial("_Communication", Model.CaseLogModel, new ViewDataDictionary(ViewData) { { "readonly", Model.CaseDataModel.IsFinished } })
+        @Html.Partial("_Communication", Model.CaseLogsModel, new ViewDataDictionary(ViewData) { { "readonly", Model.CaseDataModel.IsFinished } })
         if (ViewBag.IsAttachementsAllowed)
         {
              @Html.Partial("ModalDialogs/_UploadFilePopup", "Log_upload_files_popup")
@@ -473,7 +472,7 @@
 
     @if (Model.CaseDataModel.IsFinished)
     {
-        @Html.Partial("ModalDialogs/_CaseLogNotePopup", Model.CaseLogModel)
+        @Html.Partial("ModalDialogs/_CaseLogNotePopup", Model.CaseLogsModel)
     }
     
     @if (isClipboardPopupRequired)
@@ -483,5 +482,3 @@
     @Scripts.Render("~/Content/js/Case/log")
 
 }
-
-

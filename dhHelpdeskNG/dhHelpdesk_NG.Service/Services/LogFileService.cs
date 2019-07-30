@@ -15,10 +15,11 @@ namespace DH.Helpdesk.Services.Services
     {
         LogFile GetFileDetails(int logFileId);
         LogFileContent GetFileContentById(int logFileId, string basePath, LogFileType logFileType);
-        byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName, LogFileType logType = LogFileType.External);
-        List<string> FindFileNamesByLogId(int logId, LogFileType logType = LogFileType.External);
-        List<KeyValuePair<int,string>> FindFileNamesByCaseId(int caseId);
-        void DeleteByLogIdAndFileName(int logId, string basePath, string fileName, LogFileType logType = LogFileType.External);
+        byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName, LogFileType logType);
+        List<string> FindFileNamesByLogId(int logId);
+        List<string> FindFileNamesByLogId(int logId, LogFileType logType);
+        List<KeyValuePair<int,string>> FindFileNamesByCaseId(int caseId, LogFileType logType);
+        void DeleteByLogIdAndFileName(int logId, string basePath, string fileName, LogFileType logType);
         void AddFile(CaseLogFileDto fileDto);
         void AddFiles(List<CaseLogFileDto> fileDtos, List<LogExistingFileModel> temporaryExLogFiles = null, int? currentLogId = null);
         void MoveLogFiles(int caseId, string fromBasePath, string toBasePath);
@@ -69,22 +70,27 @@ namespace DH.Helpdesk.Services.Services
             };
         }
 
-        public byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName, LogFileType logType = LogFileType.External)
+        public byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName, LogFileType logType)
         {
             return _logFileRepository.GetFileContentByIdAndFileName(logId, basePath, fileName, logType);
         }
 
-        public List<string> FindFileNamesByLogId(int logId, LogFileType logType = LogFileType.External)
+        public List<string> FindFileNamesByLogId(int logId)
         {
             return _logFileRepository.FindFileNamesByLogId(logId);
         }
 
-        public List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId)
+        public List<string> FindFileNamesByLogId(int logId, LogFileType logType)
         {
-            return _logFileRepository.FindFileNamesByCaseId(caseId);
+            return _logFileRepository.FindFileNamesByLogId(logId, logType);
         }
 
-        public void DeleteByLogIdAndFileName(int logId, string basePath, string fileName, LogFileType logType = LogFileType.External)
+        public List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId, LogFileType logType)
+        {
+            return _logFileRepository.FindFileNamesByCaseId(caseId, logType);
+        }
+
+        public void DeleteByLogIdAndFileName(int logId, string basePath, string fileName, LogFileType logType)
         {
             _logFileRepository.DeleteByLogIdAndFileName(logId, basePath, fileName);
         }
@@ -137,7 +143,8 @@ namespace DH.Helpdesk.Services.Services
                 Id = x.Id,
                 Name = x.FileName,
                 CaseId = x.Case_Id,
-                IsExistCaseFile = true
+                IsExistCaseFile = true,
+                IsExistLogFile = false
             }).ToList();
 
             var logFiles = files.Where(x => x.Log_Id.HasValue).Select(f => new LogExistingFileModel
@@ -146,6 +153,7 @@ namespace DH.Helpdesk.Services.Services
                 Name = f.FileName,
                 CaseId = f.Case_Id,
                 IsExistLogFile = true,
+                IsExistCaseFile = false,
                 LogId = f.Log_Id,
                 LogType = f.LogType,
                 IsInternalLogNote = f.IsInternalLogNote
@@ -230,11 +238,12 @@ namespace DH.Helpdesk.Services.Services
             _logFileRepository.Add(file);
             _logFileRepository.Commit();
 
-            if (fileDto.IsCaseFile) //todo: ?
+            if (fileDto.IsCaseFile) 
             {
             }
 
-            _filesStorage.SaveFile(fileDto.Content, fileDto.BasePath, fileDto.FileName, fileDto.LogType == LogFileType.Internal ? ModuleName.LogInternal : ModuleName.Log, fileDto.ReferenceId);
+            var logFolder = fileDto.LogType == LogFileType.Internal ? ModuleName.LogInternal : ModuleName.Log;
+            _filesStorage.SaveFile(fileDto.Content, fileDto.BasePath, fileDto.FileName, logFolder, fileDto.ReferenceId);
         }
 
     }

@@ -1120,6 +1120,7 @@ namespace DH.Helpdesk.Web.Controllers
             return string.IsNullOrEmpty(backUrl) ? this.Redirect(Url.Action("index", "cases", new { customerId = customerId })) : this.Redirect(backUrl);
         }
 
+        //TODO: REVIEW 
         [HttpPost]
         public RedirectToRouteResult DeleteLog(int id, int caseId)
         {
@@ -1416,7 +1417,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var internalFileFieldSetting =
                 caseFieldSettings == null 
-                ? _caseFieldSettingService.GetCaseFieldSetting(customerId, TranslationCaseFields.tblLog_Text_Internal.ToString())
+                ? _caseFieldSettingService.GetCaseFieldSetting(customerId, TranslationCaseFields.tblLog_Filename_Internal.ToString().getCaseFieldName())
                 : caseFieldSettings.getCaseSettingsValue(TranslationCaseFields.tblLog_Filename_Internal.ToString());
 
             var isTwoAttachmentsModeEnabled = internalFileFieldSetting?.IsActive ?? false;
@@ -2349,17 +2350,17 @@ namespace DH.Helpdesk.Web.Controllers
                     
                     if (log != null)
                     {
-                        var c = _caseService.GetCaseById(log.CaseId);
-                        var basePath = _masterDataService.GetFilePath(c.Customer_Id);
+                        var case_ = _caseService.GetCaseById(log.CaseId);
+                        var basePath = _masterDataService.GetFilePath(case_.Customer_Id);
                     
                         _logFileService.DeleteByLogIdAndFileName( int.Parse(id), basePath, fileName.Trim(), logType);
 
                         IDictionary<string, string> errors;
                         var adUser = SessionFacade.CurrentUserIdentity.UserId; //global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                        if (c != null)
+                        if (case_ != null)
                         {
                             var extraField = new ExtraFieldCaseHistory { LogFile = StringTags.Delete + fileName.Trim() };
-                            _caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
+                            _caseService.SaveCaseHistory(case_, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
                         }
                     }
                 }

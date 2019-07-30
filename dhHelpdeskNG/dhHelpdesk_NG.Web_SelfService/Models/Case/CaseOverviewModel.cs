@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
 using DH.Helpdesk.Common.Enums;
@@ -60,7 +61,7 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
         public string LogFileGuid { get; set; }
 
-        public CaseLogModel CaseLogModel { get; set; }
+        public CaseLogsModel CaseLogsModel { get; set; }
 
         public ClosedCaseAlertModel ClosedCaseAlertModel { get; set; }
 
@@ -79,6 +80,21 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public CaseControlsPanelModel CreateCaseControlsPanelModel(int position = 1)
         {
             return new CaseControlsPanelModel(position, false);
+        }
+
+        public string BuildCaseLogDownloadUrlParams()
+        {
+            var urlParams = new List<string>();
+            if (!string.IsNullOrEmpty(LogFileGuid))
+            {
+                urlParams.Add($"id={LogFileGuid}");
+            }
+
+            if (CaseId > 0)
+            {
+                urlParams.Add($"caseId={CaseId}");
+            }
+            return urlParams.Any() ? string.Join("&", urlParams) : string.Empty;
         }
 
         #endregion

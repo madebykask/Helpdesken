@@ -21,16 +21,6 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             string basePath,
             string filename,
             DateTime createdDate,
-            int referenceId)
-            : this(content, basePath, filename, createdDate, referenceId, null, LogFileType.External)
-        {
-        }
-
-        public CaseLogFileDto(
-            byte[] content,
-            string basePath,
-            string filename,
-            DateTime createdDate,
             int referenceId,
             int? userId,
             LogFileType logType)

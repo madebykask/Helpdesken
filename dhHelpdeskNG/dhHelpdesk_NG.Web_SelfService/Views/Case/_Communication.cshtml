@@ -1,12 +1,14 @@
 ﻿@using DH.Helpdesk.BusinessData.OldComponents
-@model DH.Helpdesk.SelfService.Models.Case.CaseLogModel
+@using DH.Helpdesk.SelfService.Models.Case
+@model CaseLogsModel
 
 @{
     var expand = string.Empty;
+    CaseLogModel lastMsg = null;
     if (Model.CaseLogs != null && Model.CaseLogs.Count > 0)
     {
-        var lastMsg = Model.GetLastLogForExternalPage();
-        if (lastMsg != null && lastMsg.User_Id != null)
+        lastMsg = Model.GetLastLog();
+        if (lastMsg != null && lastMsg.UserId != null)
         {
             expand = "expand";
         }
@@ -20,8 +22,7 @@
     <div class="mapButtonside mapButton">
         @if (Model.CaseLogs != null && Model.CaseLogs.Count > 0)
         {
-            var lastMessage = Model.GetLastLogForExternalPage();
-            if (lastMessage != null && string.IsNullOrEmpty(lastMessage.RegUser))
+            if (lastMsg != null && string.IsNullOrEmpty(lastMsg.RegUserName))
             {
                 <div class="mapText" title="@Translation.Get("Communicate")">
                     <span class="glyphicon glyphicon-comment"></span>

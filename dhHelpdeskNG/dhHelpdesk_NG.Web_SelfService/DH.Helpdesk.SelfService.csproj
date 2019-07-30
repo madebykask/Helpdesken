@@ -381,7 +381,7 @@
     <Compile Include="Models\Case\CaseControlsPanelModel.cs" />
     <Compile Include="Models\Case\CaseFieldSettingJSModel.cs" />
     <Compile Include="Models\Case\CaseOverviewModel.cs" />
-    <Compile Include="Models\Case\CaseLogModel.cs" />
+    <Compile Include="Models\Case\CaseLogsModel.cs" />
     <Compile Include="Models\Case\ClosedCaseAlertModel.cs" />
     <Compile Include="Models\Case\ExtendedCaseModel.cs" />
     <Compile Include="Models\Case\NewCaseModel.cs" />
@@ -836,6 +836,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\Case\ModalDialogs\_UploadFilePopup.cshtml" />
+    <Content Include="Views\Case\_FilesAttachButtons.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DH.Helpdesk.Web.Common\DH.Helpdesk.Web.Common.csproj">

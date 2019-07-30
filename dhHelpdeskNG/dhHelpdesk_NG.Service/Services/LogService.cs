@@ -18,6 +18,7 @@ using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.NewInfrastructure;
 using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Domain;
+using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
 using LinqLib.Operators;
 
 namespace DH.Helpdesk.Services.Services
@@ -37,7 +38,11 @@ namespace DH.Helpdesk.Services.Services
         Guid Delete(int id, string basePath);
 
         IList<LogOverview> GetCaseLogOverviews(int caseId, bool includeInternalLogs = false);
+
+        //TODO: remove! replace with CaseLogData!
         IList<Log> GetLogsByCaseId(int caseId);
+
+        IList<CaseLogData> GetLogsByCaseId(int caseId, bool includeInternalLogs = false);
         Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false);
     }
 
@@ -105,7 +110,8 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (var f in logFiles)
                 {
-                    _filesStorage.DeleteFile(ModuleName.Log, f.Log_Id, basePath, f.FileName);
+                    var subFolder = f.LogType == LogFileType.Internal ? ModuleName.LogInternal : ModuleName.Log;
+                    _filesStorage.DeleteFile(subFolder, f.Log_Id, basePath, f.FileName);
                     _logFileRepository.Delete(f);
                 }
                 _logFileRepository.Commit();
@@ -157,52 +163,18 @@ namespace DH.Helpdesk.Services.Services
             return result.OrderByDescending(l => l.LogDate).ToList();
         }
 
+        public IList<CaseLogData> GetLogsByCaseId(int caseId, bool includeInternalLogs = false)
+        {
+            var caseLogsEntities = GetCaseLogsQueryable(caseId, includeInternalLogs).ToList();
+            var caseLogs = caseLogsEntities.MapToCaseLogData(includeInternalLogs);
+            return caseLogs;
+        }
+
         public async Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false)
         {
             var caseLogsEntities = await GetCaseLogsQueryable(caseId, includeInternalLogs).ToListAsync();
-            
-            var caseLogs =
-                (from data in caseLogsEntities
-                 let log = data.Log
-                 orderby log.LogDate descending 
-                 select new CaseLogData
-                 {
-                     Id = log.Id,
-                     UserId = log.User_Id,
-                     UserFirstName = log.User?.FirstName,
-                     UserSurName = log.User?.SurName,
-                     LogDate = log.LogDate,
-                     RegUserName = log.RegUser,
-                     InternalText = includeInternalLogs ? log.Text_Internal : string.Empty, //empty internal if exist
-                     ExternalText = log.Text_External,
 
-                     EmailLogs = 
-                        data.EmailLogs?.Where(t => t != null && t.Id > 0).Select(t => new EmailLogData()
-                        {
-                            Id = t.Id ?? 0,
-                            MailId = t.MailId ?? 0,
-                            Email = t.EmailAddress.ToLower()
-                        })
-                        .OrderBy(s => s.Email)
-                        .Distinct()
-                        .ToList() ?? new List<EmailLogData>(),
-
-                     Files =
-                         data.LogFiles?.Where(f => f != null && f.Id > 0).Select(f => new LogFileData()
-                         {
-                              Id = f.Id.Value,
-                              LogId = f.LogId ?? 0,
-                              FileName = f.FileName,
-                              CaseId = f.CaseId,
-                              LogType = f.LogType ?? 0
-                              
-                         }).ToList() ?? new List<LogFileData>(),
-
-                     Mail2Tickets =
-                         data.Mail2Tickets?.Where(m => m.Id != null && m.Id > 0).Select(m => new Mail2TicketData(m.Id.Value, m.Type, m.EMailAddress, m.EMailSubject)).ToList() ?? new List<Mail2TicketData>()
-
-                 }).ToList();
-
+            var caseLogs = caseLogsEntities.MapToCaseLogData(includeInternalLogs);
             return caseLogs;
         }
 

@@ -159,6 +159,7 @@ namespace DH.Helpdesk.Services.Services
         int GetCaseQuickOpen(UserOverview user, string searchFor);
         void SendProblemLogEmail(Case cs, CaseMailSetting caseMailSetting, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, bool isClosedCaseSending);
         int GetCaseCustomerId(int caseId);
+        Customer GetCaseCustomer(int caseId);
         Task<List<CaseHistoryMapperData>> GetCaseHistoriesAsync(int caseId);
         Task<CustomerCasesStatus> GetCustomerCasesStatusAsync(int customerId, int userId);
         Task<Case> GetDetachedCaseByIdAsync(int id);

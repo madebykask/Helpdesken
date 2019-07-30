@@ -359,7 +359,7 @@
         PluploadTranslation($("#case_languageId").val());
         var lastInitiatorSearchKey = '';
 
-        var $fileUploader = $('#NewCase_upload_files_popup').find('#file_uploader');
+        var $fileUploader = $('#upload_files_popup').find('#file_uploader');
 
         $fileUploader.pluploadQueue({
             runtimes: 'html5,html4',
@@ -405,12 +405,12 @@
             }
         });
 
-        $('#NewCase_upload_files_popup').on('shown.bs.modal', function () {
+        $('#upload_files_popup').on('shown.bs.modal', function () {
             //refresh required to make file open dlg work correctly 
             $fileUploader.pluploadQueue().refresh();
         });
 
-        $('#NewCase_upload_files_popup').on('hidden.bs.modal', function () {
+        $('#upload_files_popup').on('hidden.bs.modal', function () {
             if ($fileUploader && $fileUploader.length) {
                 if ($fileUploader.pluploadQueue().files.length > 0) {
                     if ($fileUploader.pluploadQueue().state == plupload.UPLOADING)
@@ -774,7 +774,7 @@
         }
 
         /*********** Paste image from clipboard (Case) ************/
-        $("#addCaseFileFromClipBoard").on('click', function (e) {
+        $("#addCaseFileFromClipboard").on('click', function (e) {
             e.preventDefault();
             var opt = {
                 refreshCallback: refreshCaseFiles,
@@ -782,9 +782,7 @@
                 submitUrl: uploadCaseFileUrl
             };
             var clipboardFileUpload = new ClipboardFileUpload(opt);
-            clipboardFileUpload.reset(true);
             clipboardFileUpload.show();
-            clipboardFileUpload.init();
 
             return false;
         });
