@@ -362,6 +362,7 @@
     <Compile Include="Models\Logs\Output\EmailLogOverview.cs" />
     <Compile Include="Models\Mail2Tickets\Output\Mail2TicketOverview.cs" />
     <Compile Include="Models\MailTemplates\CustomMailTemplateLanguage.cs" />
+    <Compile Include="Models\MailTemplates\MailFile.cs" />
     <Compile Include="Models\Modules\Output\ModulesOverview.cs" />
     <Compile Include="Models\OperationLog\Output\OperationLogObjectOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\AccountInfoFieldSettingsOverview.cs" />

@@ -6,8 +6,10 @@ using DH.Helpdesk.BusinessData.Enums.Users;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Email;
 using DH.Helpdesk.BusinessData.Models.Feedback;
+using DH.Helpdesk.BusinessData.Models.MailTemplates;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Extensions.Lists;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Domain;
@@ -57,10 +59,10 @@ namespace DH.Helpdesk.Services.Services
             var fields = GetCaseFieldsForEmail(newCase, log, cms, string.Empty, 0, userTimeZone);
 
             // if logfiles should be attached to the mail 
-            List<string> files = null;
+            List<MailFile> files = null;
             if (logFiles != null && logFiles.Any() && log != null)
             {
-                files = PrepareAttachedCaseFiles(logFiles, basePath);
+                files = PrepareAttachedFiles(logFiles, basePath);
             }
 
             // sub state should not generate email to notifier
@@ -486,12 +488,11 @@ namespace DH.Helpdesk.Services.Services
             var cs = _caseRepository.GetDetachedCaseById(c.Id);
             var customerSetting = _settingService.GetCustomerSetting(cs.Customer_Id);
             
-            List<string> files = null;
             var fields = GetCaseFieldsForEmail(cs, caseLog, cms, string.Empty, 0, userTimeZone);
 
             if (isClosedCaseSending)
             {
-                SendCaseClosedEmail(c, cms, caseHistoryId, userTimeZone, caseLog, files, customerSetting, true);
+                SendCaseClosedEmail(c, cms, caseHistoryId, userTimeZone, caseLog, null, customerSetting, true);
             }
             else
             {
@@ -555,9 +556,11 @@ namespace DH.Helpdesk.Services.Services
                 }
 
                 // if logfiles should be attached to the mail 
-                List<string> files = null;
+                List<MailFile> files = null;
                 if (logFiles != null && log != null && logFiles.Count > 0)
-                    files = logFiles.Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, log.Id, basePath, f.FileName)).ToList();
+                {
+                    files = PrepareAttachedFiles(logFiles, basePath);
+                }
 
                 // Inform notifier about external lognote
                 if (!string.IsNullOrEmpty(performerUserEmail) &&
@@ -606,7 +609,7 @@ namespace DH.Helpdesk.Services.Services
 
         #region Private Methods
 
-        private void SendPriorityMailSpecial(Case newCase, CaseLog log, CaseMailSetting cms, List<string> files, string helpdeskMailFromAdress, int caseHistoryId, Setting customerSetting, MailSMTPSetting smtpInfo, TimeZoneInfo userTimeZone)
+        private void SendPriorityMailSpecial(Case newCase, CaseLog log, CaseMailSetting cms, List<MailFile> files, string helpdeskMailFromAdress, int caseHistoryId, Setting customerSetting, MailSMTPSetting smtpInfo, TimeZoneInfo userTimeZone)
         {
             if (newCase.Priority.MailID_Change.HasValue && !string.IsNullOrEmpty(newCase.Priority.EMailList))
             {
@@ -630,7 +633,7 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        private void SendCaseClosedEmail(Case newCase, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog log, List<string> files, Setting customerSetting,
+        private void SendCaseClosedEmail(Case newCase, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog log, List<MailFile> files, Setting customerSetting,
             bool isProblemSend = false, bool dontSendMailToNotfier = false, string helpdeskMailFromAdress = null)
         {
             var mailTemplateId = (int)GlobalEnums.MailTemplates.ClosedCase;
@@ -718,7 +721,7 @@ namespace DH.Helpdesk.Services.Services
             string senderEmail,
             IList<string> emailList,
             TimeZoneInfo userTimeZone,
-            List<string> files = null,
+            List<MailFile> files = null,
             int stateHelper = 1,
             bool highPriority = false)
         {
@@ -741,7 +744,7 @@ namespace DH.Helpdesk.Services.Services
             string senderEmail,
             IList<string> emailList,
             TimeZoneInfo userTimeZone,
-            List<string> files = null,
+            List<MailFile> files = null,
             int stateHelper = 1,
             List<string> filterFieldsEmails = null,
             bool highPriority = false)
@@ -1003,21 +1006,29 @@ namespace DH.Helpdesk.Services.Services
 
             return smtpInfo;
         }
-
-        private List<string> PrepareAttachedCaseFiles(IList<CaseLogFileDto> logFiles, string basePath)
+        
+        private List<MailFile> PrepareAttachedFiles(IList<CaseLogFileDto> logFiles, string basePath)
         {
-            List<string> files = null;
+            List<MailFile> files = null;
             if (logFiles != null && logFiles.Any())
             {
                 var caseFiles =
                     logFiles.Where(x => x.IsCaseFile)
-                        .Select(x => _filesStorage.ComposeFilePath(ModuleName.Cases, x.ReferenceId, basePath, x.FileName))
-                        .ToList();
+                        .Select(x => new MailFile()
+                        {
+                            FileName = x.FileName,
+                            FilePath = _filesStorage.ComposeFilePath(ModuleName.Cases, x.ReferenceId, basePath, x.FileName),
+                            IsInternal = false
+                        }).ToList();
 
                 files =
                     logFiles.Where(x => !x.IsCaseFile)
-                        .Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, f.ReferenceId, basePath, f.FileName))
-                        .ToList();
+                        .Select(f => new MailFile()
+                        {
+                            FileName = f.FileName,
+                            FilePath = _filesStorage.ComposeFilePath(f.LogType == LogFileType.Internal ? ModuleName.LogInternal : ModuleName.Log, f.ReferenceId, basePath, f.FileName),
+                            IsInternal = f.LogType == LogFileType.Internal
+                        }).ToList();
 
                 files.AddRange(caseFiles);
             }

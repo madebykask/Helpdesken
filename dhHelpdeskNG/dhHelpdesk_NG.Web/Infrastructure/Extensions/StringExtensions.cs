@@ -373,9 +373,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             {
                 return MvcHtmlString.Create(str);
             }
-
-            return MvcHtmlString.Create(str.Replace(Environment.NewLine, "<br />")
-                .Replace("\n","<br />"));
+            return MvcHtmlString.Create(str.Replace(Environment.NewLine, "<br />").Replace("\n","<br />"));
         }
 
         public static int[] GetIntValues(this string str)
@@ -399,7 +397,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 return s;
 
             var encodedString = HttpUtility.HtmlEncode(s);
-            return encodedString.Replace(Environment.NewLine, "<br />");
+            return encodedString.Replace(Environment.NewLine, "<br />").Replace("\n", "<br />");
         }
     }
 }

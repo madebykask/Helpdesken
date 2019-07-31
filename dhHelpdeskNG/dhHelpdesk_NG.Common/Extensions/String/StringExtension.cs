@@ -369,7 +369,6 @@ namespace DH.Helpdesk.Common.Extensions.String
             return string.IsNullOrEmpty(value)? elseValue : value;
         }
 
-
         /// <summary>
         /// Removes \r and \n from string and Trims
         /// </summary>

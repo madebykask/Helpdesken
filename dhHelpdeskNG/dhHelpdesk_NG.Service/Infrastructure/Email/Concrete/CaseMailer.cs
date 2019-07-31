@@ -11,10 +11,10 @@ using System.Configuration;
 using System.Linq;
 using DH.Helpdesk.BusinessData.Enums.Email;
 using DH.Helpdesk.BusinessData.Models.Email;
+using DH.Helpdesk.BusinessData.Models.MailTemplates;
 
 namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 {
-
     public sealed class CaseMailer : ICaseMailer
     {
         private readonly IEmailLogRepository _emailLogRepository;
@@ -53,7 +53,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             bool dontSendMailToNotfier,
             Case newCase,
             string helpdeskMailFromAdress,
-            List<string> files,
+            List<MailFile> files,
             MailSenders mailSenders,
             bool isCreatingCase,
             bool caseMailSetting_DontSendMail,
@@ -178,7 +178,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             bool dontSendMailToNotfier,
             Case newCase,
             string helpdeskMailFromAdress,
-            List<string> files,
+            List<MailFile> files,
             string absoluterUrl)
         {
             if (log == null || log.Id <= 0 ||
@@ -276,7 +276,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             CaseLog log,
             Case newCase,
             string helpdeskMailFromAdress,
-            List<string> files, string absoluterUrl,
+            List<MailFile> files,
+            string absoluterUrl,
             MailSenders mailSenders)
         {
             if (log == null || log.Id <= 0 || 

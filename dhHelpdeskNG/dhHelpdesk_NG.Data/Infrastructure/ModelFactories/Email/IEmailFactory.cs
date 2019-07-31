@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email
+﻿using DH.Helpdesk.BusinessData.Models.MailTemplates;
+
+namespace DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email
 {
     using System.Collections.Generic;
 
@@ -15,7 +17,7 @@
             List<Field> fields,
             string mailMessageId,
             bool isHighPriority,
-            List<string> files);
+            List<MailFile> files);
 
         EmailLog CreatEmailLog(
             int caseHistoryId, 

@@ -1410,7 +1410,8 @@ namespace DH.Helpdesk.Services.Services
 
             if (templateId > 0 && emailList.Any())
             {
-                var files = PrepareAttachedCaseFiles(logFiles, basePath);
+                var files = PrepareAttachedFiles(logFiles, basePath);
+
                 SendTemplateEmail(templateId,
                     currentCase,
                     log,

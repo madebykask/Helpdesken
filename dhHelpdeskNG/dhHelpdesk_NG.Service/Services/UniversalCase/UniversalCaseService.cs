@@ -238,13 +238,13 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             {
                 auxModel.UserTimeZone = TimeZoneInfo.Local;
             }
-			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(curCustomer.TimeZoneId);
+            var timeZone = TimeZoneInfo.FindSystemTimeZoneById(curCustomer.TimeZoneId);
 
-			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                                             _holidayService,
                                             curCustomer.WorkingDayStart,
                                             curCustomer.WorkingDayEnd,
-											timeZone);
+                                            timeZone);
 
             int[] deptIds = null;
             if (caseModel.Department_Id.HasValue)

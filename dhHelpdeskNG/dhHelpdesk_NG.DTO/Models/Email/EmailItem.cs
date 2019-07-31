@@ -1,10 +1,10 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Email
+﻿using System.Collections.Generic;
+using DH.Helpdesk.BusinessData.Models.MailTemplates;
+using DH.Helpdesk.Common.ValidationAttributes;
+using DH.Helpdesk.Domain;
+
+namespace DH.Helpdesk.BusinessData.Models.Email
 {
-    using System.Collections.Generic;
-
-    using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Domain;
-
     public sealed class EmailItem
     {
         public EmailItem(
@@ -15,7 +15,7 @@
             List<Field> fields,
             string mailMessageId,
             bool isHighPriority,
-            List<string> files)
+            List<MailFile> files)
         {
             this.Files = files;
             this.IsHighPriority = isHighPriority;
@@ -32,7 +32,7 @@
             this.Fields = new List<Field>();
             this.IsHighPriority = false;
             this.MailMessageId = string.Empty;
-            this.Files = new List<string>();
+            this.Files = new List<MailFile>();
         }
 
         [NotNullAndEmpty]
@@ -56,6 +56,6 @@
         public bool IsHighPriority { get; private set; }
 
         [NotNull]
-        public List<string> Files { get; private set; }
+        public List<MailFile> Files { get; private set; }
     }
 }

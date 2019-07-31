@@ -3620,21 +3620,27 @@ namespace DH.Helpdesk.Web.Controllers
             #region Save Logs
 
             // save log
-            var temporaryLogFiles = _userTemporaryFilesStorage.FindFiles(caseLog.LogGuid.ToString(), ModuleName.Log);
-            var temporaryLogInternalFiles = _userTemporaryFilesStorage.FindFiles(caseLog.LogGuid.ToString(), ModuleName.LogInternal);
-
-            var temporaryExLogFiles = _logFileService.GetExistingFileNamesByCaseId(case_.Id);
-            var logFileCount = temporaryLogFiles.Count + temporaryExLogFiles.Count + temporaryLogInternalFiles.Count;
             caseLog.CaseId = case_.Id;
             caseLog.CaseHistoryId = caseHistoryId;
 
+            var temporaryLogInternalFiles = new List<WebTemporaryFile>();
+            var temporaryLogFiles = _userTemporaryFilesStorage.FindFiles(caseLog.LogGuid.ToString(), ModuleName.Log);
+            var temporaryExLogFiles = _logFileService.GetExistingFileNamesByCaseId(case_.Id);
+            
             /* #58573 Check that user have access to write to InternalLogNote */
-            bool caseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
-            if (!caseInternalLogAccess)
+            bool hasInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
+            if (hasInternalLogAccess)
             {
+                // read internal log files if any
+                temporaryLogInternalFiles = _userTemporaryFilesStorage.FindFiles(caseLog.LogGuid.ToString(), ModuleName.LogInternal);
+            }
+            else
+            {
+                // clear out internal log if no access
                 m.caseLog.TextInternal = null;
             }
 
+            var logFileCount = temporaryLogFiles.Count + temporaryExLogFiles.Count + temporaryLogInternalFiles.Count;
             var orginalInternalLog = caseLog.TextInternal;
 
             if (caseLog.SendLogToParentChildLog.HasValue && 
@@ -3695,7 +3701,8 @@ namespace DH.Helpdesk.Web.Controllers
                     new CaseLogFileDto(basePath, 
                         x.Name, 
                         x.IsExistCaseFile ? Convert.ToInt32(case_.CaseNumber) : x.LogId.Value, 
-                        x.IsExistCaseFile)).ToList();
+                        x.IsExistCaseFile))
+                .ToList();
             allLogFiles.AddRange(newLogFiles);
             
             #endregion

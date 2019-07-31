@@ -1101,6 +1101,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             return PartialView(model);
         }
 
+        //TODO: should be moved to CaseService!
         private void SaveLogMessage(int caseId, string extraNote, string logFileGuid) 
         { 
             IDictionary<string, string> errors;            
@@ -1108,7 +1109,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var customer = _customerService.GetCustomer(currentCase.Customer_Id);
             var cs = _settingService.GetCustomerSetting(customer.Id);
             var caseIsActivated = false;
-            var isInternLogUsed = customer.UseInternalLogNoteOnExternalPage.ToBool();
+            var useInternalLog = customer.UseInternalLogNoteOnExternalPage.ToBool();
             var appSettings = ConfigurationService.AppSettings;
 
             // save case history
@@ -1131,9 +1132,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                 departmentIds = new int[] { currentCase.Department_Id.Value };
 
             var timeZone = TimeZoneInfo.FindSystemTimeZoneById(customer.TimeZoneId);
-
+            
+            //todo: should be injected via DI
             var workTimeCalcFactory = new WorkTimeCalculatorFactory(
-                ManualDependencyResolver.Get<IHolidayService>(),
+                ManualDependencyResolver.Get<IHolidayService>(), 
                 customer.WorkingDayStart,
                 customer.WorkingDayEnd,
                 timeZone);
@@ -1141,11 +1143,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             var utcNow = DateTime.UtcNow;
             var workTimeCalc = workTimeCalcFactory.Build(currentCase.RegTime, utcNow, departmentIds);
 
-            var possibleWorktime = workTimeCalc.CalculateWorkTime(
-                currentCase.RegTime,
-                utcNow,
-                currentCase.Department_Id);
-
+            var possibleWorktime = 
+                workTimeCalc.CalculateWorkTime(currentCase.RegTime, utcNow, currentCase.Department_Id);
 
             int externalTimeToAdd = 0;
 
@@ -1160,10 +1159,9 @@ namespace DH.Helpdesk.SelfService.Controllers
 
                 if (casestatesecundary.IncludeInCaseStatistics == 0)
                 {
-                    externalTimeToAdd = workTimeCalc.CalculateWorkTime(
-                        currentCase.ChangeTime,
-                        utcNow,
-                        currentCase.Department_Id);
+                    externalTimeToAdd = 
+                        workTimeCalc.CalculateWorkTime(currentCase.ChangeTime, utcNow, currentCase.Department_Id);
+
                     currentCase.ExternalTime += externalTimeToAdd;
                 }
             }
@@ -1189,9 +1187,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                 CaseHistoryId = caseHistoryId,
                 CaseId = caseId,
                 LogGuid = Guid.NewGuid(),
-                TextExternal = !isInternLogUsed ? extraNote.Replace("\n","\r\n") : string.Empty,
+                TextExternal = !useInternalLog ? extraNote.Replace("\n","\r\n") : string.Empty,
                 UserId = null,
-                TextInternal = isInternLogUsed ? extraNote.Replace("\n", "\r\n") : string.Empty,
+                TextInternal = useInternalLog ? extraNote.Replace("\n", "\r\n") : string.Empty,
                 WorkingTime = 0,
                 EquipmentPrice = 0,
                 Price = 0,
@@ -1250,7 +1248,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 var logSubFolder = ModuleName.Log;
                 var logFileType = LogFileType.External;
 
-                if (IsTwoAttachmentsModeEnabled(customer.Id) && isInternLogUsed)
+                if (IsTwoAttachmentsModeEnabled(customer.Id) && useInternalLog)
                 {
                     logSubFolder = ModuleName.LogInternal;
                     logFileType = LogFileType.Internal;

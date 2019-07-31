@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.MailTemplates;
 using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Services.Infrastructure.Email
@@ -14,7 +15,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email
                 bool dontSendMailToNotfier,
                 Case newCase,
                 string helpdeskMailFromAdress,
-                List<string> files,
+                List<MailFile> files,
                 MailSenders mailSenders,
                 bool isCreatingCase,
                 bool caseMailSetting_DontSendMail,
@@ -28,7 +29,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email
                 bool dontSendMailToNotfier,
                 Case newCase,
                 string helpdeskMailFromAdress,
-                List<string> files,
+                List<MailFile> files,
                 string absoluterUrl);
 
         void InformAboutInternalLogIfNeeded(
@@ -37,7 +38,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email
                 CaseLog log,
                 Case newCase,
                 string helpdeskMailFromAdress,
-                List<string> files,
+                List<MailFile> files,
                 string absoluterUrl,
                 MailSenders mailSenders);
     }

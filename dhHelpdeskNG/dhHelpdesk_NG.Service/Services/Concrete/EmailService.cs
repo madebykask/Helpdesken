@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using DH.Helpdesk.BusinessData.Enums.Email;
+using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Domain;
 using log4net;
 
@@ -18,10 +19,10 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
     public sealed class EmailService : IEmailService
     {
-        private ILog _logger = LogManager.GetLogger(typeof(EmailService));
+        private readonly ILog _logger = LogManager.GetLogger(typeof(EmailService));
 
-        private readonly string _EMAIL_SEND_MESSAGE = "Email has been sent!";
-        private readonly int _MAX_NUMBER_SENDING_EMAIL = 3;
+        const string EMAIL_SEND_MESSAGE = "Email has been sent!";
+        const int MAX_NUMBER_SENDING_EMAIL = 3;
 
         public EmailResponse SendEmail(MailAddress from, List<MailAddress> recipients, Mail mail, EmailSettings emailsettings)
         {
@@ -69,8 +70,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                         IsBodyHtml = true
                     };
                     smtpClient.Send(mailMessage);
-                    res = new EmailResponse(sendTime, emailsettings.Response.ResponseMessage + " | " + _EMAIL_SEND_MESSAGE,
-                        emailsettings.Response.NumberOfTry);
+                    res = new EmailResponse(sendTime, emailsettings.Response.ResponseMessage + " | " + EMAIL_SEND_MESSAGE, emailsettings.Response.NumberOfTry);
                 }
                 catch (Exception ex)
                 {
@@ -91,7 +91,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
             }
 
-            if (res.NumberOfTry != emailsettings.Response.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)
+            if (res.NumberOfTry != emailsettings.Response.NumberOfTry && res.NumberOfTry <= MAX_NUMBER_SENDING_EMAIL)
             {
                 emailsettings.Response.NumberOfTry = res.NumberOfTry;
                 res = this.SendEmail(from, recipient, mail, emailsettings);
@@ -124,11 +124,11 @@ namespace DH.Helpdesk.Services.Services.Concrete
             string to,
             string subject,
             string body,
-            List<DH.Helpdesk.Domain.Field> fields,
+            List<Field> fields,
             EmailSettings emailsettings,
             string mailMessageId = "",
             bool highPriority = false,
-            List<string> files = null,
+            List<MailFile> files = null,
             string siteSelfService = "",
             string siteHelpdesk = "",
             EmailType emailType = EmailType.ToMail)
@@ -170,7 +170,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                         if (msg.To.Count > 0 || msg.Bcc.Count > 0 || msg.CC.Count > 0)
                         {
                             _smtpClient.Send(msg);
-                            res = new EmailResponse(sendTime, emailsettings.Response.ResponseMessage + " | " + _EMAIL_SEND_MESSAGE, res.NumberOfTry);
+                            res = new EmailResponse(sendTime, emailsettings.Response.ResponseMessage + " | " + EMAIL_SEND_MESSAGE, res.NumberOfTry);
                         }
                     }
                 }
@@ -193,7 +193,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 Thread.CurrentThread.CurrentUICulture = oldCI;
             }
 
-            if (res.NumberOfTry != emailsettings.Response.NumberOfTry && res.NumberOfTry <= _MAX_NUMBER_SENDING_EMAIL)
+            if (res.NumberOfTry != emailsettings.Response.NumberOfTry && res.NumberOfTry <= MAX_NUMBER_SENDING_EMAIL)
             {
                 emailsettings.Response.NumberOfTry = res.NumberOfTry;
                 res = this.SendEmail(from, to, subject, body, fields, emailsettings, mailMessageId, highPriority, files);
@@ -208,23 +208,18 @@ namespace DH.Helpdesk.Services.Services.Concrete
             string to,
             string subject,
             string body,
-            List<DH.Helpdesk.Domain.Field> fields,
+            List<Field> fields,
             EmailSettings emailsettings,
             string mailMessageId = "",
             bool highPriority = false,
-            List<string> files = null,
+            List<MailFile> files = null,
             string siteSelfService = "",
             string siteHelpdesk = "",
             EmailType emailType = EmailType.ToMail)
         {
-            if (emailsettings.BatchEmail)
-            {
-                return EnqueueEmail(el, from, to, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType);
-            }
-            else
-            {
-                return SendEmail(from, to, subject, body, fields, emailsettings, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType);
-            }
+            return emailsettings.BatchEmail 
+                ? EnqueueEmail(el, from, to, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType) 
+                : SendEmail(from, to, subject, body, fields, emailsettings, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType);
         }
 
         private MailMessage GetMailMessage(
@@ -232,10 +227,10 @@ namespace DH.Helpdesk.Services.Services.Concrete
             string to,
             string subject,
             string body,
-            List<DH.Helpdesk.Domain.Field> fields,
+            List<Field> fields,
             string mailMessageId = "",
             bool highPriority = false,
-            List<string> files = null,
+            List<MailFile> files = null,
             string siteSelfService = "",
             string siteHelpdesk = "",
             EmailType emailType = EmailType.ToMail
@@ -248,6 +243,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
             if (!string.IsNullOrWhiteSpace(mailMessageId))
                 msg.Headers.Add("Message-ID", mailMessageId);
+
             if (highPriority)
                 msg.Priority = MailPriority.High;
 
@@ -273,20 +269,27 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 }
             }
 
-            bool attachFiles = false;
+            var attachFiles = false;
             if (body.Contains("[#14]"))
             {
                 attachFiles = true;
                 body = body.Replace("[#14]", string.Empty);
             }
 
+            var attachInternalFiles = false;
+            if (body.Contains("[#12]"))
+            {
+                attachInternalFiles = true;
+                body = body.Replace("[#12]", string.Empty);
+            }
+
             if (body.Contains("[/#98]"))
             {
-                int count = Regex.Matches(body, "/#98").Count;
+                var count = Regex.Matches(body, "/#98").Count;
 
-                string str1 = "[#98]";
-                string str2 = "[/#98]";
-                string LinkText = "";
+                var str1 = "[#98]";
+                var str2 = "[/#98]";
+                var LinkText = "";
 
                 for (int i = 1; i <= count; i++)
                 {
@@ -301,9 +304,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
                     regex = new Regex(Regex.Escape("[#98]"));
                     body = regex.Replace(body, urlSelfService, 1);
-
                 }
-
             }
             else
             {
@@ -311,12 +312,10 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
                 if (fields != null)
                 {
-
                     foreach (var field in fields)
                         if (field.Key == "[#98]")
                             field.StringValue = urlSelfService;
                 }
-                
             }
 
             if (body.Contains("[/#99]"))
@@ -370,19 +369,35 @@ namespace DH.Helpdesk.Services.Services.Concrete
             //body
             _logger.Warn($"Email: {msg.Subject} | {msg.Body}");
 
-            // för log filer 
-            if (files != null && attachFiles)
+            // attach files
+            if (attachFiles && files != null)
             {
-                foreach (var f in files)
-                {
-                    if (System.IO.File.Exists(f))
-                        msg.Attachments.Add(new Attachment(f));
-                }
+                var externalFiles = files.Where(f => !f.IsInternal).ToList();
+                AttachFiles(msg, externalFiles);
+            }
+
+            if (attachInternalFiles && files != null)
+            {
+                var internalFiles = files.Where(f => f.IsInternal).ToList();
+                AttachFiles(msg, internalFiles);
             }
 
             return msg;
         }
 
+        private void AttachFiles(MailMessage msg, IList<MailFile> files)
+        {
+            if (files != null && files.Any())
+            {
+                foreach (var f in files)
+                {
+                    if (System.IO.File.Exists(f.FilePath))
+                    {
+                        msg.Attachments.Add(new Attachment(f.FilePath));
+                    }
+                }
+            }
+        }
 
         private EmailResponse EnqueueEmail(
                 EmailLog el,
@@ -390,10 +405,10 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 string to,
                 string subject,
                 string body,
-                List<DH.Helpdesk.Domain.Field> fields,
+                List<Field> fields,
                 string mailMessageId = "",
                 bool highPriority = false,
-                List<string> files = null,
+                List<MailFile> files = null,
                 string siteSelfService = "",
                 string siteHelpdesk = "",
                 EmailType emailType = EmailType.ToMail
@@ -407,15 +422,15 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
                 el.Body = msg.Body;
                 el.Subject = msg.Subject;
-                el.Cc = String.Join(",", msg.CC.Select(x => x.Address));
-                el.Bcc = String.Join(",", msg.Bcc.Select(x => x.Address));
+                el.Cc = string.Join(",", msg.CC.Select(x => x.Address));
+                el.Bcc = string.Join(",", msg.Bcc.Select(x => x.Address));
                 el.HighPriority = highPriority;
-                el.Files = files != null ? String.Join(",", files) : "";
+                el.Files = files != null ? string.Join(",", files) : "";
                 el.From = msg.From.Address;
                 el.SendStatus = EmailSendStatus.Pending;
                 el.Attempts = 0;
 
-        res.ResponseMessage = "Enqueued";
+                res.ResponseMessage = "Enqueued";
             }
             catch (Exception ex)
             {

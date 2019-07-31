@@ -1,11 +1,13 @@
-﻿namespace DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email.Concrete
+﻿using DH.Helpdesk.BusinessData.Models.MailTemplates;
+
+namespace DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email.Concrete
 {
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Email;
     using DH.Helpdesk.Domain;
 
-    public sealed class EmailFactory : DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email.IEmailFactory
+    public sealed class EmailFactory : IEmailFactory
     {
         public EmailItem CreateEmailItem(
             string fromAddress,
@@ -15,12 +17,10 @@
             List<Field> fields,
             string mailMessageId,
             bool isHighPriority,
-            List<string> files)
+            List<MailFile> files)
         {
             if (files == null)
-            {
-                files = new List<string>();
-            }
+                files = new List<MailFile>();
 
             var instance = new EmailItem(
                             fromAddress,
