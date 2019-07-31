@@ -450,7 +450,7 @@ namespace DH.Helpdesk.Dal.Repositories
 									   select r2.Price).DefaultIfEmpty(0).Sum();
 					r.LogData = (from r2 in r.Logs
 								 orderby r2.LogDate descending
-								 select r2).LastOrDefault();
+								 select r2).FirstOrDefault();
 
 				}
 			}
