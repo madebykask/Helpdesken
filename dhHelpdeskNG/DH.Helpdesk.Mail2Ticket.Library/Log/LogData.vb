@@ -141,20 +141,27 @@ Public Class LogData
         End Try
     End Sub
 
-    Public Sub saveFileInfo(ByVal iLog_Id As Integer, ByVal sFileName As String)
+    Public Sub saveFileInfo(ByVal iLog_Id As Integer, ByVal sFileName As String, ByVal bIsInternal As Boolean)
         Dim sSQL As String
 
         Try
-            ' Skapa nytt ärende
-            sSQL = "INSERT INTO tblLogFile(Log_Id, FileName) " & _
-                    "VALUES (" & iLog_Id & ", " & getDBStringPrefix() & "'" & Replace(sFileName, "'", "''") & "')"
+            Dim sFileNameNormalized = Replace(sFileName, "'", "''")
+            Dim iLogType = If(bIsInternal, 1, 0)
+
+            ' Skapa nytt arende
+            sSQL = "INSERT INTO tblLogFile(Log_Id, FileName, LogType) " & _
+                   "VALUES (@logId, @fileName, @logType)"
 
             'If giDBType = 0 Then
-            executeSQL(gsConnectionString, sSQL)
+            Dim parameters As New List(Of SqlParameter) From {
+                    DbHelper.createDbParameter("@logId", iLog_Id),
+                    DbHelper.createDbParameter("@fileName", sFileNameNormalized, False, DbType.String, 200),
+                    DbHelper.createDbParameter("@logType", iLogType)
+            }
+            DbHelper.executeNonQuery(gsConnectionString, sSQL, CommandType.Text, parameters.ToArray())
             'Else
             '    executeSQLOracle(gsConnectionString, sSQL)
             'End If
-
         Catch ex As Exception
             Throw ex
         End Try

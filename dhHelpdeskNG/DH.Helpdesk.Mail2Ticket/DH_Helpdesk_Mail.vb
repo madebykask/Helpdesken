@@ -872,57 +872,34 @@ Module DH_Helpdesk_Mail
 
                                     iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, objCase.Persons_EMail)
 
-                                    ' Logga händelsen
-                                    If gsInternalLogIdentifier <> "" Then
-
-                                        If InStr(sFromEMailAddress, gsInternalLogIdentifier) > 0 Or InStr(sToEMailAddress, gsInternalLogIdentifier) > 0 Then
-                                            ' Lägg in som intern loggpost
-                                            iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
-                                        Else
-                                            If iMailID = MailTemplates.AssignedCaseToUser Or iMailID = MailTemplates.InternalLogNote Or _
-                                               iMailID = MailTemplates.AssignedCaseToWorkinggroup Or iMailID = MailTemplates.CaseIsUpdated Then
-                                                iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
-                                            Else
-                                                If objCustomer.DefaultEmailLogDestination = 1 And iMailID = 0 Then
-                                                    iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
-                                                Else
-                                                    iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", sBodyText, 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
-                                                End If
-
-                                            End If
-
-                                        End If
+                                    Dim isInternalLogUsed as Boolean = CheckInternalLogConditions(iMailID, objCustomer, sFromEMailAddress, sToEMailAddress)
+                                    
+                                    ' Save Logs (Logga händelsen)
+                                    If isInternalLogUsed Then
+                                        ' Save as Internal Log (Lägg in som intern loggpost)
+                                        iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
                                     Else
-                                        If iMailID = MailTemplates.AssignedCaseToUser Or iMailID = MailTemplates.InternalLogNote Or _
-                                           iMailID = MailTemplates.AssignedCaseToWorkinggroup Or iMailID = MailTemplates.CaseIsUpdated Then
-                                            ' Svar på skicka intern loggpost eller om handläggaren svarar
-                                            iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
-                                        Else
-                                            If objCustomer.DefaultEmailLogDestination = 1 And iMailID = 0 Then
-                                                iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
-                                            Else
-                                                iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", sBodyText, 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
-                                            End If
-
-                                        End If
-
+                                        iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", sBodyText, 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
                                     End If
 
-                                    Dim sHTMLFileName As String = createHtmlFileFromMail(message, objCustomer.PhysicalFilePath & "\L" & iLog_Id, objCase.Casenumber)
+                                    Dim isTwoAttachmentsActive as Boolean = CheckIfTwoAttachmentsModeEnabled(objCaseData, objCustomer.Id)
+                                    Dim bIsInternalLogFile = isInternalLogUsed AndAlso isTwoAttachmentsActive
+                                    Dim logSubFolderPrefix = If(bIsInternalLogFile, "LL", "L") ' LL - Internal log subfolder, L - external log subfolder
 
-                                    If sHTMLFileName <> "" Then
+                                    Dim sHTMLFileName As String = createHtmlFileFromMail(message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
+                                    If Not IsNullOrEmpty(sHTMLFileName) Then
                                         iHTMLFile = 1
 
                                         ' Lägg in i databasen
-                                        objLogData.saveFileInfo(iLog_Id, "html/" & sHTMLFileName)
+                                        objLogData.saveFileInfo(iLog_Id, "html/" & sHTMLFileName, bIsInternalLogFile)
                                     End If
 
                                     ' Process attached log files 
-                                    attachedFiles = ProcessMessageAttachments(message, iHTMLFile, objCustomer, iLog_Id.ToString(), "L", iPop3DebugLevel)
+                                    attachedFiles = ProcessMessageAttachments(message, iHTMLFile, objCustomer, iLog_Id.ToString(), logSubFolderPrefix, iPop3DebugLevel)
                                     If (attachedFiles.Any())
                                         For Each attachedFile As String In attachedFiles
                                             Dim sFileName = Path.GetFileName(attachedFile)
-                                            objLogData.saveFileInfo(iLog_Id, sFileName)
+                                            objLogData.saveFileInfo(iLog_Id, sFileName, bIsInternalLogFile)
                                         Next
                                     End If
 
@@ -1025,6 +1002,32 @@ Module DH_Helpdesk_Mail
             Throw
         End Try
     End Function
+
+    Private Function CheckIfTwoAttachmentsModeEnabled(objCaseData as CaseData, iCustomerID As Integer) As Boolean
+        Dim sFieldName = "tblLog.FileName_Internal"
+        Dim res = objCaseData.CheckCaseField(iCustomerID, sFieldName)
+        Return res
+    End Function
+
+    Private Function CheckInternalLogConditions(iMailID As Int32, objCustomer As Customer, sFromEmail as String, sToEmail As String) 
+
+        If Not IsNullOrEmpty(gsInternalLogIdentifier) AndAlso (InStr(sFromEmail, gsInternalLogIdentifier) > 0 OrElse InStr(sToEmail, gsInternalLogIdentifier) > 0) Then
+            Return True
+        End If
+
+        If objCustomer.DefaultEmailLogDestination = 1 AndAlso iMailID = 0  Then
+            Return True
+        End If
+
+        IF iMailID = MailTemplates.AssignedCaseToUser OrElse iMailID = MailTemplates.InternalLogNote OrElse _
+           iMailID = MailTemplates.AssignedCaseToWorkinggroup OrElse iMailID = MailTemplates.CaseIsUpdated Then
+            Return True
+        End If
+
+        Return False
+
+    End Function
+
 
     Function BuildFilePath(ParamArray args() As String) As String
         Dim filePath As String = ""

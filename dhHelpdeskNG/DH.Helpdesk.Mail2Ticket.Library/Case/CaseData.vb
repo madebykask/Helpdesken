@@ -1215,6 +1215,17 @@ Public Class CaseData
         End Try
     End Sub
 
+    Public Function CheckCaseField(iCustomerId as Integer, sFieldName As String) as Boolean
+        Dim sCmd as String = "SELECT Show FROM dbo.tblCaseFieldSettings WHERE CaseField = @fieldName AND Customer_Id = @customerId"
+        Dim cmdParams as New List(Of SqlParameter) From {
+                DbHelper.createDbParameter("customerId", iCustomerId),
+                DbHelper.createDbParameter("fieldName", sFieldName)
+        }
+
+        Dim res = DbHelper.executeScalarQuery(Of Integer)(gsConnectionString, sCmd, CommandType.Text, cmdParams.ToArray())
+        Return res = 1
+    End Function
+
     Public Function LeadTimeMinutes(ByVal Startdate As DateTime, ByVal Enddate As DateTime, ByVal WorkingDayStart As Integer, ByVal WorkingDayEnd As Integer, ByVal HolidayHeader_Id As Integer) As Integer
         Dim iLeadTime As Integer = 0
         Dim iLeadTimeMinutes As Integer = 0
