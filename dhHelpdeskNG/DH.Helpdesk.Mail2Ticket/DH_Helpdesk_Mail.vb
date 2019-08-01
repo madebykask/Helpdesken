@@ -425,7 +425,7 @@ Module DH_Helpdesk_Mail
                                     message.Silent = True
                                 End If
 
-                                Dim attachedFiles As List(Of String) = New List(Of String)()
+                                Dim attachedFiles As List(Of MailFile) = New List(Of MailFile)()
 
                                 Dim uniqueMessageId As String = ""
                                 If message.MessageId IsNot Nothing Then
@@ -680,11 +680,14 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     'Attached files processing for Case
-                                    attachedFiles = ProcessMessageAttachments(message, iHTMLFile, objCustomer, objCase.Casenumber.ToString(), Nothing, iPop3DebugLevel)
-                                    If (attachedFiles.Any())
-                                        For Each attachedFile As String In attachedFiles
-                                            Dim sFileName = Path.GetFileName(attachedFile)
+                                    Dim caseFiles as List(Of String) = ProcessMessageAttachments(message, iHTMLFile, objCustomer, objCase.Casenumber.ToString(), Nothing, iPop3DebugLevel)
+                                    If (caseFiles IsNot Nothing AndAlso caseFiles.Any())
+                                        For Each caseFilePath As String In caseFiles
+                                            Dim sFileName = Path.GetFileName(caseFilePath)
                                             objCaseData.saveFileInfo(objCase.Id, sFileName)
+                                            
+                                            'Add to files to attach list
+                                            attachedFiles.Add(New MailFile(sFileName, caseFilePath, False))
                                         Next
                                     End If
 
@@ -883,7 +886,7 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     Dim isTwoAttachmentsActive as Boolean = CheckIfTwoAttachmentsModeEnabled(objCaseData, objCustomer.Id)
-                                    Dim bIsInternalLogFile = isInternalLogUsed AndAlso isTwoAttachmentsActive
+                                    Dim bIsInternalLogFile = isInternalLogUsed AndAlso isTwoAttachmentsActive ' Mark file as internal only 2attachments is enabled
                                     Dim logSubFolderPrefix = If(bIsInternalLogFile, "LL", "L") ' LL - Internal log subfolder, L - external log subfolder
 
                                     Dim sHTMLFileName As String = createHtmlFileFromMail(message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
@@ -895,11 +898,14 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     ' Process attached log files 
-                                    attachedFiles = ProcessMessageAttachments(message, iHTMLFile, objCustomer, iLog_Id.ToString(), logSubFolderPrefix, iPop3DebugLevel)
-                                    If (attachedFiles.Any())
-                                        For Each attachedFile As String In attachedFiles
-                                            Dim sFileName = Path.GetFileName(attachedFile)
+                                    Dim logFiles As List(Of String) = ProcessMessageAttachments(message, iHTMLFile, objCustomer, iLog_Id.ToString(), logSubFolderPrefix, iPop3DebugLevel)
+                                    If (logFiles IsNot Nothing AndAlso logFiles.Any())
+                                        For Each logFilePath As String In logFiles
+                                            Dim sFileName = Path.GetFileName(logFilePath)
                                             objLogData.saveFileInfo(iLog_Id, sFileName, bIsInternalLogFile)
+                                            
+                                            'add file to files attachment list
+                                            attachedFiles.Add(New MailFile(sFileName, logFilePath, bIsInternalLogFile))
                                         Next
                                     End If
 
@@ -911,7 +917,9 @@ Module DH_Helpdesk_Mail
                                             Dim objMail As New Mail
                                             Dim objLog As New Log
 
-                                            objLog.Text_External = sBodyText
+                                            ' Set appropriate log text property
+                                            objLog.Text_External = If (Not isInternalLogUsed, sBodyText, String.Empty)
+                                            objLog.Text_Internal = If (isInternalLogUsed, sBodyText, String.Empty)
 
                                             sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                             sSendTime = Date.Now()
@@ -931,7 +939,9 @@ Module DH_Helpdesk_Mail
                                             Dim objMail As New Mail
                                             Dim objLog As New Log
 
-                                            objLog.Text_External = sBodyText
+                                            ' Set appropriate log text property
+                                            objLog.Text_External = If (Not isInternalLogUsed, sBodyText, String.Empty)
+                                            objLog.Text_Internal = If (isInternalLogUsed, sBodyText, String.Empty)
 
                                             sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                             sSendTime = Date.Now()

@@ -277,10 +277,10 @@ namespace DH.Helpdesk.Services.Services.Concrete
             }
 
             var attachInternalFiles = false;
-            if (body.Contains("[#12]"))
+            if (body.Contains("[#30]"))
             {
                 attachInternalFiles = true;
-                body = body.Replace("[#12]", string.Empty);
+                body = body.Replace("[#30]", string.Empty);
             }
 
             if (body.Contains("[/#98]"))

@@ -102,6 +102,15 @@ BEGIN
 END
 GO
 
+RAISERROR ('Adding Default value constraint for tblLogFile.LogType column.', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT * FROM sys.objects WHERE type = 'D' AND name = 'DF_tblLogFile_LogType')
+BEGIN
+    ALTER TABLE tblLogFile 
+    ADD CONSTRAINT DF_tblLogFile_LogType DEFAULT(0) FOR LogType
+END
+GO 
+
+
 RAISERROR ('Adding tblLog.Filename_Internal case field setting to tblCaseFieldSettings', 10, 1) WITH NOWAIT
 ;WITH cus as 
 (select fs1.Customer_Id as CustomerId

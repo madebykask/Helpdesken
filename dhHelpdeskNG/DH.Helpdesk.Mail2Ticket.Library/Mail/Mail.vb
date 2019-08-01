@@ -1,4 +1,3 @@
-Imports System.IO
 Imports System.Linq
 Imports System.Net.Mail
 Imports DH.Helpdesk.Dal.Infrastructure
@@ -16,7 +15,7 @@ Public Class Mail
                              sMessageId As String, 
                              sEMailLogGUID As String, 
                              connectionString As String,
-                             Optional files As List(Of String) = Nothing
+                             Optional files As List(Of MailFile) = Nothing
                              ) As String
         ' Skicka mail
         Dim sSubject As String
@@ -98,10 +97,17 @@ Public Class Mail
             End If
 
             '[#14]
-            Dim bAttachFiles = False
+            Dim bAttachExternalFiles = False
             If (sBody.Contains("[#14]"))
-                bAttachFiles = True
+                bAttachExternalFiles = True
                 sBody = sBody.Replace("[#14]", string.Empty)
+            End If
+
+            '[#30] - Internal Log files (2attachments mode)
+            Dim bAttachInternalFiles = False
+            If (sBody.Contains("[#30]"))
+                bAttachInternalFiles = True
+                sBody = sBody.Replace("[#30]", string.Empty)
             End If
 
             '[#15]
@@ -238,11 +244,11 @@ Public Class Mail
 
             sBody = sBody.Replace(vbCrLf, "<br>")
 
-            'Prepare files to Attach
-            Dim filesToAttach as List(Of String) = Nothing
-            If (bAttachFiles AndAlso files IsNot Nothing AndAlso files.Any())
-                filesToAttach = New List(Of String)
-                For Each attachedFile as String in files
+            Dim filesToAttach as List(Of String) = New List(Of String)
+
+            'Prepare files to attach. Check internal/external flag
+            If files IsNot Nothing AndAlso files.Any() AndAlso (bAttachExternalFiles OrElse bAttachInternalFiles)
+                For Each attachedFile As String in files.Where(Function(f) bAttachExternalFiles AndAlso f.IsInternal = False OrElse bAttachInternalFiles AndAlso f.IsInternal = True).Select(Function(f) f.FilePath).ToList()
                     filesToAttach.Add(attachedFile)
                 Next
             End If

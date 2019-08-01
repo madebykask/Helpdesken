@@ -125,6 +125,7 @@
     <Compile Include="MailTemplate\MailTemplate.vb" />
     <Compile Include="MailTemplate\MailTemplateData.vb" />
     <Compile Include="Mail\Mail.vb" />
+    <Compile Include="Mail\MailFile.vb" />
     <Compile Include="MGlobal.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

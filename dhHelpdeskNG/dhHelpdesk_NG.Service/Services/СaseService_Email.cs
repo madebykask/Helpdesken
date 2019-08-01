@@ -356,12 +356,12 @@ namespace DH.Helpdesk.Services.Services
 
             #region Send email when product area is set
 
+            var productAreaMailTemplateId = newCase?.ProductArea?.MailTemplate?.MailID ?? 0;
+
             if (!isClosingCase && !isCreatingCase && !informNotifierHasBeenSent
                 && oldCase.ProductAreaSetDate == null && newCase.RegistrationSource == 3
-                && !cms.DontSendMailToNotifier &&
-                newCase.ProductArea.MailTemplate != null &&
-                newCase.ProductArea.MailTemplate.MailID > 0 &&
-                !string.IsNullOrEmpty(newCase.PersonsEmail))
+                && !cms.DontSendMailToNotifier && productAreaMailTemplateId > 0 
+                && !string.IsNullOrEmpty(newCase.PersonsEmail))
             {
                 var mailTemplateId = newCase.ProductArea.MailTemplate.MailID;
                 if (mailTemplateId > 0)
