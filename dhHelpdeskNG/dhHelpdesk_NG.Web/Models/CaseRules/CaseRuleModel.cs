@@ -457,6 +457,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public BasicSingleItemField LogFile { get; set; }
 
+        public BasicSingleItemField LogFileInternal { get; set; }
+
         public BasicSingleItemField FinishingDate { get; set; }
 
         public BasicMultiItemField ClosingReason { get; set; }

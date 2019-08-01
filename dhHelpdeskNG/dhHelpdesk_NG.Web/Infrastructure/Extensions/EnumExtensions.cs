@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using DH.Helpdesk.BusinessData.Models.Shared;
 
 namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
@@ -18,10 +19,17 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return Convert.ToInt32(enumeration);
         }
 
-        public static SelectList ToSelectList(this Enum enumeration)
+        public static IList<ItemOverview> ToItemOverviewList(this Enum enumeration)
         {
             var list = (from Enum d in Enum.GetValues(enumeration.GetType())
-                        select new { ID = Convert.ToInt32(d), Name = Translation.Get(d.ToString()) }).ToList();
+                        select new ItemOverview(d.ToString(), Convert.ToInt32(d).ToString())).ToList();
+            return list;
+        }
+
+        public static SelectList ToSelectList(this Enum enumeration, Func<string, string> translateFn)
+        {
+            var list = (from Enum d in Enum.GetValues(enumeration.GetType())
+                        select new { ID = Convert.ToInt32(d), Name = Translation.GetCoreTextTranslation(d.ToString()) }).ToList();
             return new SelectList(list, "ID", "Name");
         }
 
@@ -35,7 +43,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         {
             var list =
                 (from Enum d in Enum.GetValues(enumeration.GetType())
-                 select new { ID = Convert.ToInt32(d), Name = Translation.Get(d.ToString()) }).ToList();
+                 select new { ID = Convert.ToInt32(d), Name = Translation.GetCoreTextTranslation(d.ToString()) }).ToList();
             return new SelectList(list, "ID", "Name", selected);
         }
 
