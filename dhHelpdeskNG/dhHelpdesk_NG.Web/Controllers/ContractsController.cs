@@ -400,7 +400,7 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = s.Name
                 }).ToList(),
 
-                ResponsibleUsers = _userService.GetUsers(customer.Id).Select(u => new SelectListItem()
+                ResponsibleUsers = _userService.GetAvailablePerformersOrUserId(customer.Id).Select(u => new SelectListItem()
                 {
                     Value = u.Id.ToString(),
                     Text = $"{u.SurName} {u.FirstName}"

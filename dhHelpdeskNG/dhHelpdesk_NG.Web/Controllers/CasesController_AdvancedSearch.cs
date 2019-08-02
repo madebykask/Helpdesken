@@ -270,14 +270,8 @@ namespace DH.Helpdesk.Web.Controllers
             };
 
             // Case #53981
-            var userSearch = new UserSearch()
-            {
-                CustomerId = cusId,
-                StatusId = 3
-            };
-
             fd.AvailablePerformersList =
-                _userService.SearchSortAndGenerateUsers(userSearch).MapToCustomSelectList(fd.caseSearchFilter.UserPerformer, fd.customerSetting);
+                _userService.GetAllPerformers(cusId).MapToCustomSelectList(fd.caseSearchFilter.UserPerformer, fd.customerSetting);
 
             if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserPerformer))
             {

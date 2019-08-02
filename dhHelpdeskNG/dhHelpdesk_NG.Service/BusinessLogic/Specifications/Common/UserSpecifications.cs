@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Common
+﻿using DH.Helpdesk.Common.Enums;
+
+namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Common
 {
     using System.Linq;
 
@@ -19,10 +21,9 @@
 
             //return query;
 
-
-
             query = query.GetByCustomer(customerId)
-                        .GetActiveUsers(customerId);
+                        .GetActiveUsers(customerId)
+                        .Where(u => u.Performer == 1 && u.UserGroup_Id > UserGroups.User);
 
             return query;
         } 

@@ -176,8 +176,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 
                 var orderTypesInRow = this.GetChildrenInRow(orderTypes, true).ToList();
 
-                var administrators = administratorRep.GetAll()
-                                    .GetAdministrators(customerId);
+                var administrators = administratorRep.GetAll().GetAdministrators(customerId);
 
                 var statuses = statusRep.GetAll()
                                     .GetOrderStatuses(customerId);

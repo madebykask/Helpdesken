@@ -184,7 +184,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var filter = new UserSearch { CustomerId = customerId, SearchUs = searchUs, StatusId = statusId };
             if (this.Session["UserSearch"] == null && filter.SearchUs == null)
             {
-                model.Users = this._userService.GetUsers().OrderBy(x => x.UserID).ToList();
+                model.Users = this._userService.GetAllUsers().OrderBy(x => x.UserID).ToList();
                 model.Sorting = new UserSort { FieldName = fieldName, IsAsc = !isAsc };
                 //model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
             }

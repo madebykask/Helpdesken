@@ -26,99 +26,99 @@
             IWorkingGroupService workingGroupService)
             : base (masterDataService)
         {
-            this._caseTypeService = caseTypeService;
-            this._userService = userService;
-            this._customerService = customerService;
-            this._workingGroupService = workingGroupService;
+            _caseTypeService = caseTypeService;
+            _userService = userService;
+            _customerService = customerService;
+            _workingGroupService = workingGroupService;
         }
 
         public JsonResult SetShowOnlyActiveCaseTypesInAdmin(bool value)
         {
             SessionFacade.ShowOnlyActiveCaseTypesInAdmin = value;
-            return this.Json(new { result = "success" });
+            return Json(new { result = "success" });
         }
 
         public ActionResult Index(int customerId)
         {
-            var customer = this._customerService.GetCustomer(customerId);
-            var caseTypes = this._caseTypeService.GetCaseTypes(customer.Id);
+            var customer = _customerService.GetCustomer(customerId);
+            var caseTypes = _caseTypeService.GetCaseTypes(customer.Id);
 
             var model = new CaseTypeIndexViewModel { CaseTypes = caseTypes, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveCaseTypesInAdmin };
 
-            return this.View(model);
+            return View(model);
         }
 
         public ActionResult New(int? parentId, int customerId)
         {
-            var customer = this._customerService.GetCustomer(customerId);
+            var customer = _customerService.GetCustomer(customerId);
 
             if (parentId.HasValue)
             {
-                if (this._caseTypeService.GetCaseType(parentId.Value) == null)
+                if (_caseTypeService.GetCaseType(parentId.Value) == null)
                     return new HttpNotFoundResult("No parent case type found...");
             }
 
             var caseType = new CaseType { Customer_Id = customer.Id, Parent_CaseType_Id = parentId, IsActive = 1};
             caseType.Selectable = 1;
-            var model = this.CreateInputViewModel(caseType, customer);
+            var model = CreateInputViewModel(caseType, customer);
 
-            return this.View(model);
+            return View(model);
         }
 
         [HttpPost]
         public ActionResult New(CaseType caseType)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._caseTypeService.SaveCaseType(caseType, out errors);
+            _caseTypeService.SaveCaseType(caseType, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("index", "casetype", new { customerid = caseType.Customer_Id });
+                return RedirectToAction("index", "casetype", new { customerid = caseType.Customer_Id });
 
-            var customer = this._customerService.GetCustomer(caseType.Customer_Id);
-            var model = this.CreateInputViewModel(caseType, customer);
+            var customer = _customerService.GetCustomer(caseType.Customer_Id);
+            var model = CreateInputViewModel(caseType, customer);
 
-            return this.View(model);
+            return View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var caseType = this._caseTypeService.GetCaseType(id);
+            var caseType = _caseTypeService.GetCaseType(id);
 
             if (caseType == null)
                 return new HttpNotFoundResult("No case type found...");
             
-            var customer = this._customerService.GetCustomer(caseType.Customer_Id);
-            var model = this.CreateInputViewModel(caseType, customer);
+            var customer = _customerService.GetCustomer(caseType.Customer_Id);
+            var model = CreateInputViewModel(caseType, customer);
 
-            return this.View(model);
+            return View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(CaseType caseType)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._caseTypeService.SaveCaseType(caseType, out errors);
+            _caseTypeService.SaveCaseType(caseType, out errors);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("index", "casetype", new { customerid = caseType.Customer_Id });
+                return RedirectToAction("index", "casetype", new { customerid = caseType.Customer_Id });
 
-            var customer = this._customerService.GetCustomer(caseType.Customer_Id);
-            var model = this.CreateInputViewModel(caseType, customer);
+            var customer = _customerService.GetCustomer(caseType.Customer_Id);
+            var model = CreateInputViewModel(caseType, customer);
 
-            return this.View(model);
+            return View(model);
         }
 
         public ActionResult Delete(int id)
         {
 
-            var caseType = this._caseTypeService.GetCaseType(id);
+            var caseType = _caseTypeService.GetCaseType(id);
 
-            if (this._caseTypeService.DeleteCaseType(id) == DeleteMessage.Success)
-                return this.RedirectToAction("index", "casetype", new { customerId = caseType.Customer_Id });
+            if (_caseTypeService.DeleteCaseType(id) == DeleteMessage.Success)
+                return RedirectToAction("index", "casetype", new { customerId = caseType.Customer_Id });
             else
             {
-                this.TempData.Add("Error", "");
-                return this.RedirectToAction("edit", "casetype", new { area = "admin", id = caseType.Id, customerId = caseType.Customer_Id });
+                TempData.Add("Error", "");
+                return RedirectToAction("edit", "casetype", new { area = "admin", id = caseType.Id, customerId = caseType.Customer_Id });
             }
 
         }
@@ -132,12 +132,12 @@
                 CanAddSubCaseType = (parentCount < MaxCaseTpyeLevels),
                 CaseType = caseType,
                 Customer = customer,
-                SystemOwners = this._userService.GetAdministrators(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                SystemOwners = _userService.GetAdministrators(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.SurName + " " + x.FirstName,
                     Value = x.Id.ToString()
                 }).ToList(),
-                WorkingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customer.Id, true)
+                WorkingGroups = _workingGroupService.GetAllWorkingGroupsForCustomer(customer.Id, true)
             };
 
             return model;
@@ -145,10 +145,7 @@
 
         private int GetCaseTypeParentsCount(CaseType caseType)
         {
-            if (caseType.ParentCaseType == null)
-                return 1;
-            else
-                return GetCaseTypeParentsCount(caseType.ParentCaseType) + 1;
+            return caseType.ParentCaseType == null ? 1 : GetCaseTypeParentsCount(caseType.ParentCaseType) + 1;
         }
 
         public JsonResult ChangeWorkingGroupFilterUser(int? id, int customerId)
@@ -157,47 +154,35 @@
             var customerSettings = GetCustomerSettings(customerId);
             if (customerSettings.DontConnectUserToWorkingGroup == 0 && id > 0)
             {
-                performersList = this._userService.GetAvailablePerformersForWorkingGroup(customerId, id);
+                performersList = _userService.GetAvailablePerformersForWorkingGroup(customerId, id);
             }
             else
             {
-                performersList = this._userService.GetAvailablePerformersOrUserId(customerId);
+                performersList = _userService.GetAvailablePerformersOrUserId(customerId);
             }
 
             if (customerSettings.IsUserFirstLastNameRepresentation == 1)
             {
                 return
-                    this.Json(
-                        new
+                    Json(new
+                    {
+                        list = performersList.OrderBy(it => it.FirstName).ThenBy(it => it.SurName).Select(it => new IdName
                         {
-                            list =
-                                    performersList.OrderBy(it => it.FirstName)
-                                        .ThenBy(it => it.SurName)
-                                        .Select(
-                                            it =>
-                                            new IdName
-                                            {
-                                                id = it.Id,
-                                                name = string.Format("{0} {1}", it.FirstName, it.SurName)
-                                            })
-                        });
+                            id = it.Id,
+                            name = $"{it.FirstName} {it.SurName}".Trim()
+                        })
+                    });
             }
 
             return
-                this.Json(
-                    new
+                Json(new
+                {
+                    list = performersList.OrderBy(it => it.SurName).ThenBy(it => it.FirstName).Select(it => new IdName
                     {
-                        list =
-                                performersList.OrderBy(it => it.SurName)
-                                    .ThenBy(it => it.FirstName)
-                                    .Select(
-                                        it =>
-                                        new IdName
-                                        {
-                                            id = it.Id,
-                                            name = string.Format("{0} {1}", it.SurName, it.FirstName)
-                                        })
-                    });
+                        id = it.Id,
+                        name = $"{it.SurName} {it.FirstName}".Trim()
+                    })
+                });
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case;
-using DH.Helpdesk.BusinessData.Models.Customer.Input;
 using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Extensions.Integer;
@@ -437,7 +436,7 @@ namespace DH.Helpdesk.Services.Services
         {
             var query =
                 _userRepository.GetUsers(customerId)
-                    .Where(e => e.IsActive == 1 && (e.Performer == 1 || (userId.HasValue && e.Id == userId)))
+                    .Where(e => e.IsActive == 1 && (e.UserGroup_Id > UserGroups.User && e.Performer == 1 || (userId.HasValue && e.Id == userId)))
                     .OrderBy(e => e.SurName)
                     .ThenBy(e => e.FirstName);
 
@@ -449,7 +448,8 @@ namespace DH.Helpdesk.Services.Services
         {
             return
                 _userRepository.GetUsers(customerId)
-                    .Where(e => e.Performer == 1 || (userId.HasValue && e.Id == userId)).OrderBy(e => e.SurName)
+                    .Where(e => e.Performer == 1 && e.UserGroup_Id > UserGroups.User || (userId.HasValue && e.Id == userId))
+                    .OrderBy(e => e.SurName)
                     .ToList();
         }
 
@@ -457,7 +457,7 @@ namespace DH.Helpdesk.Services.Services
         {
             return
                 _userRepository.GetUsers(customerId)
-                    .Where(e => e.Performer == 1)
+                    .Where(e => e.Performer == 1 && e.UserGroup_Id > UserGroups.User)
                     .ToList();
         }
 
@@ -467,11 +467,11 @@ namespace DH.Helpdesk.Services.Services
             {
                 var query = 
                     _userRepository.GetUsersForWorkingGroupQuery(workingGroup.Value, customerId, true) 
-                        .Where(it => it.IsActive == 1 && it.Performer == 1); 
+                        .Where(it => it.IsActive == 1 && it.Performer == 1 && it.UserGroup_Id > UserGroups.User); 
 
                 return MapToCustomerUserInfo(query).ToList(); //todo: check working group flag
             }
-            return this.GetAvailablePerformersOrUserId(customerId);
+            return GetAvailablePerformersOrUserId(customerId);
         }
 
         public IList<User> SearchSortAndGenerateUsers(UserSearch searchUsers)
@@ -689,8 +689,8 @@ namespace DH.Helpdesk.Services.Services
                 errors.Add("User permissions", _translator.Translate("There are wrong permissions for this user group."));
             }
 
-            var hasDublicate = this.GetUsers()
-                            .Any(u => u.UserID.EqualWith(user.UserID) && u.Id != user.Id);
+            var userId = user.UserID.ToLower().Trim();
+            var hasDublicate = _userRepository.GetMany(u => u.UserID.ToLower() == userId && u.Id != user.Id).Any();
             if (hasDublicate)
             {
                 errors.Add("User.UserID", "Det här användarnamnet är upptaget. Var vänlig använd något annat.");

@@ -353,7 +353,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IList<User> GetUsersForUserSettingList(UserSearch searchUser)
         {
-
             var query = from u in this.DataContext.Users
                         join cu in this.DataContext.CustomerUsers on u.Id equals cu.User_Id into cuGroup
                         from cuOJ in cuGroup.DefaultIfEmpty()
