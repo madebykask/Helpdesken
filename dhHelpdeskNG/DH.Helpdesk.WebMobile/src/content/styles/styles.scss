@@ -315,6 +315,21 @@ a {
     }
 }
 
+.cases-overview {
+  .mbsc-ios.mbsc-card.mbsc-form{ margin: 10px 10px; }
+  .mbsc-lv-item-ic {  left:5px!important; } 
+  .mbsc-lv-item-ic-left:before, 
+  .mbsc-lv-item-ic-left:after { left:14px!important; }
+  .mbsc-card.mbsc-form { border-radius: 0;}
+  .mbsc-lv-item.mbsc-lv-item-ic-left { padding-left: 35px!important; }
+  .mbsc-lv-cont { font-size:14px; } 
+  .mbsc-card-content { padding-bottom: 10px}
+  .mbsc-card-header { padding: 0.5em }
+  .urgent {
+    color: red;
+  }
+}
+
 .header {
     color:$font-header-color;
     background: $primary-color;

@@ -176,6 +176,7 @@ $mbsc-ios-dark: #47494A !default;
     $empty-color: lighten($text, 43%);
     $btn-cont-background: darken($background, 3%);
     $background-contrast: #000;
+    $snackbar-button: hsl(hue($button), saturation($button), max(lightness($button), 80%));
   }
 
   // Dark background 
@@ -217,6 +218,7 @@ $mbsc-ios-dark: #47494A !default;
     $empty-color: $text;
     $btn-cont-background: lighten($background-limited, 8%);
     $background-contrast: #fff;
+    $snackbar-button: $button;
   }
 
   // Light button 
@@ -224,7 +226,6 @@ $mbsc-ios-dark: #47494A !default;
     $button-contrast: #000;
     $cal-text: lighten(saturate($button, 5%), 42%);
     $form-selection: lighten(saturate($accent, 15%), 3%);
-    $snackbar-button: hsl(hue($button), saturation($button), max(lightness($button), 80%));
   }
 
   // Dark button 
@@ -232,7 +233,6 @@ $mbsc-ios-dark: #47494A !default;
     $button-contrast: #fff;
     $cal-text: adjust-hue(lighten(desaturate($button, 42%), 35%), 3%);
     $form-selection: darken(desaturate($accent, 15%), 3%);
-    $snackbar-button: $button;
   }
 
   // Light button 
@@ -1108,9 +1108,9 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     @font-face {
         font-family: 'icons_mobiscroll';
         src: 
-        url($mbsc-font-path + 'icons_mobiscroll.woff?uizvuw') format('woff'),
+        url($mbsc-font-path + 'icons_mobiscroll.woff?xhnplr') format('woff'),
         url($mbsc-font-path + 'icons_mobiscroll.woff') format('woff'),
-        url($mbsc-font-path + 'icons_mobiscroll.ttf?uizvuw') format('truetype');
+        url($mbsc-font-path + 'icons_mobiscroll.ttf?xhnplr') format('truetype');
         font-weight: normal;
         font-style: normal;
     }
@@ -1198,10 +1198,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea17";
 } 
 .mbsc-ic-fa-align-right::before {
-    content: "\ea19";
+    content: "\ea18";
 } 
 .mbsc-ic-fa-amazon::before {
-    content: "\ea18";
+    content: "\ea19";
 } 
 .mbsc-ic-fa-ambulance::before {
     content: "\ea1a";
@@ -1213,10 +1213,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea1c";
 } 
 .mbsc-ic-fa-android::before {
-    content: "\ea1d";
+    content: "\ea1e";
 } 
 .mbsc-ic-fa-angellist::before {
-    content: "\ea1e";
+    content: "\ea1d";
 } 
 .mbsc-ic-fa-angle-double-down::before {
     content: "\ea1f";
@@ -1255,28 +1255,28 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea2a";
 } 
 .mbsc-ic-fa-arrow-circle-left::before {
-    content: "\ea2c";
-} 
-.mbsc-ic-fa-arrow-circle-o-down::before {
     content: "\ea2b";
 } 
-.mbsc-ic-fa-arrow-circle-o-left::before {
-    content: "\ea2f";
+.mbsc-ic-fa-arrow-circle-o-down::before {
+    content: "\ea2c";
 } 
-.mbsc-ic-fa-arrow-circle-o-right::before {
+.mbsc-ic-fa-arrow-circle-o-left::before {
     content: "\ea2d";
 } 
-.mbsc-ic-fa-arrow-circle-o-up::before {
+.mbsc-ic-fa-arrow-circle-o-right::before {
     content: "\ea2e";
 } 
+.mbsc-ic-fa-arrow-circle-o-up::before {
+    content: "\ea2f";
+} 
 .mbsc-ic-fa-arrow-circle-right::before {
-    content: "\ea31";
+    content: "\ea30";
 } 
 .mbsc-ic-fa-arrow-circle-up::before {
-    content: "\ea32";
+    content: "\ea31";
 } 
 .mbsc-ic-fa-arrow-down::before {
-    content: "\ea30";
+    content: "\ea32";
 } 
 .mbsc-ic-fa-arrow-left::before {
     content: "\ea33";
@@ -1285,10 +1285,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea34";
 } 
 .mbsc-ic-fa-arrow-up::before {
-    content: "\ea36";
+    content: "\ea35";
 } 
 .mbsc-ic-fa-arrows-alt::before {
-    content: "\ea35";
+    content: "\ea36";
 } 
 .mbsc-ic-fa-arrows-h::before {
     content: "\ea37";
@@ -1306,10 +1306,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea3b";
 } 
 .mbsc-ic-fa-at::before {
-    content: "\ea3c";
+    content: "\ea3d";
 } 
 .mbsc-ic-fa-audio-description::before {
-    content: "\ea3d";
+    content: "\ea3c";
 } 
 .mbsc-ic-fa-automobile::before {
     content: "\ea3e";
@@ -1378,16 +1378,16 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea53";
 } 
 .mbsc-ic-fa-bell-slash-o::before {
-    content: "\ea54";
-} 
-.mbsc-ic-fa-bell-slash::before {
     content: "\ea55";
 } 
+.mbsc-ic-fa-bell-slash::before {
+    content: "\ea54";
+} 
 .mbsc-ic-fa-bell::before {
-    content: "\ea57";
+    content: "\ea56";
 } 
 .mbsc-ic-fa-bicycle::before {
-    content: "\ea56";
+    content: "\ea57";
 } 
 .mbsc-ic-fa-binoculars::before {
     content: "\ea58";
@@ -1402,13 +1402,13 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea5b";
 } 
 .mbsc-ic-fa-bitcoin::before {
-    content: "\ea5d";
-} 
-.mbsc-ic-fa-black-tie::before {
     content: "\ea5c";
 } 
-.mbsc-ic-fa-blind::before {
+.mbsc-ic-fa-black-tie::before {
     content: "\ea5e";
+} 
+.mbsc-ic-fa-blind::before {
+    content: "\ea5d";
 } 
 .mbsc-ic-fa-bluetooth-b::before {
     content: "\ea5f";
@@ -1429,10 +1429,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea64";
 } 
 .mbsc-ic-fa-bookmark-o::before {
-    content: "\ea65";
+    content: "\ea66";
 } 
 .mbsc-ic-fa-bookmark::before {
-    content: "\ea66";
+    content: "\ea65";
 } 
 .mbsc-ic-fa-braille::before {
     content: "\ea67";
@@ -1471,10 +1471,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea72";
 } 
 .mbsc-ic-fa-calendar-minus-o::before {
-    content: "\ea74";
+    content: "\ea73";
 } 
 .mbsc-ic-fa-calendar-o::before {
-    content: "\ea73";
+    content: "\ea74";
 } 
 .mbsc-ic-fa-calendar-plus-o::before {
     content: "\ea75";
@@ -1561,10 +1561,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea90";
 } 
 .mbsc-ic-fa-check-circle::before {
-    content: "\ea91";
+    content: "\ea92";
 } 
 .mbsc-ic-fa-check-square-o::before {
-    content: "\ea92";
+    content: "\ea91";
 } 
 .mbsc-ic-fa-check-square::before {
     content: "\ea93";
@@ -1600,16 +1600,16 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea9d";
 } 
 .mbsc-ic-fa-chrome::before {
-    content: "\ea9e";
-} 
-.mbsc-ic-fa-circle-o-notch::before {
     content: "\ea9f";
 } 
+.mbsc-ic-fa-circle-o-notch::before {
+    content: "\ea9e";
+} 
 .mbsc-ic-fa-circle-o::before {
-    content: "\eaa0";
+    content: "\eaa1";
 } 
 .mbsc-ic-fa-circle-thin::before {
-    content: "\eaa1";
+    content: "\eaa0";
 } 
 .mbsc-ic-fa-circle::before {
     content: "\eaa2";
@@ -1648,10 +1648,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eaad";
 } 
 .mbsc-ic-fa-codiepie::before {
-    content: "\eaaf";
+    content: "\eaae";
 } 
 .mbsc-ic-fa-coffee::before {
-    content: "\eaae";
+    content: "\eaaf";
 } 
 .mbsc-ic-fa-cog::before {
     content: "\eab0";
@@ -1771,10 +1771,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ead6";
 } 
 .mbsc-ic-fa-drivers-license-o::before {
-    content: "\ead7";
+    content: "\ead8";
 } 
 .mbsc-ic-fa-drivers-license::before {
-    content: "\ead8";
+    content: "\ead7";
 } 
 .mbsc-ic-fa-dropbox::before {
     content: "\ead9";
@@ -1846,16 +1846,16 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eaef";
 } 
 .mbsc-ic-fa-expand::before {
-    content: "\eaf1";
-} 
-.mbsc-ic-fa-expeditedssl::before {
     content: "\eaf0";
 } 
+.mbsc-ic-fa-expeditedssl::before {
+    content: "\eaf1";
+} 
 .mbsc-ic-fa-external-link-square::before {
-    content: "\eaf3";
+    content: "\eaf2";
 } 
 .mbsc-ic-fa-external-link::before {
-    content: "\eaf2";
+    content: "\eaf3";
 } 
 .mbsc-ic-fa-eye-slash::before {
     content: "\eaf4";
@@ -1864,10 +1864,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eaf5";
 } 
 .mbsc-ic-fa-eyedropper::before {
-    content: "\eaf6";
+    content: "\eaf7";
 } 
 .mbsc-ic-fa-fa::before {
-    content: "\eaf7";
+    content: "\eaf6";
 } 
 .mbsc-ic-fa-facebook-official::before {
     content: "\eaf8";
@@ -2074,10 +2074,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eb3b";
 } 
 .mbsc-ic-fa-globe::before {
-    content: "\eb3c";
+    content: "\eb3d";
 } 
 .mbsc-ic-fa-google-plus-circle::before {
-    content: "\eb3d";
+    content: "\eb3c";
 } 
 .mbsc-ic-fa-google-plus-square::before {
     content: "\eb3e";
@@ -2095,10 +2095,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eb42";
 } 
 .mbsc-ic-fa-grav::before {
-    content: "\eb44";
+    content: "\eb43";
 } 
 .mbsc-ic-fa-group::before {
-    content: "\eb43";
+    content: "\eb44";
 } 
 .mbsc-ic-fa-h-square::before {
     content: "\eb45";
@@ -2134,16 +2134,16 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eb4f";
 } 
 .mbsc-ic-fa-hand-scissors-o::before {
-    content: "\eb50";
-} 
-.mbsc-ic-fa-hand-spock-o::before {
     content: "\eb51";
 } 
+.mbsc-ic-fa-hand-spock-o::before {
+    content: "\eb50";
+} 
 .mbsc-ic-fa-handshake-o::before {
-    content: "\eb53";
+    content: "\eb52";
 } 
 .mbsc-ic-fa-hashtag::before {
-    content: "\eb52";
+    content: "\eb53";
 } 
 .mbsc-ic-fa-hdd-o::before {
     content: "\eb54";
@@ -2179,10 +2179,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eb5e";
 } 
 .mbsc-ic-fa-hourglass-3::before {
-    content: "\eb60";
+    content: "\eb5f";
 } 
 .mbsc-ic-fa-hourglass-o::before {
-    content: "\eb5f";
+    content: "\eb60";
 } 
 .mbsc-ic-fa-hourglass::before {
     content: "\eb61";
@@ -2263,10 +2263,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eb7a";
 } 
 .mbsc-ic-fa-lastfm-square::before {
-    content: "\eb7c";
+    content: "\eb7b";
 } 
 .mbsc-ic-fa-lastfm::before {
-    content: "\eb7b";
+    content: "\eb7c";
 } 
 .mbsc-ic-fa-leaf::before {
     content: "\eb7d";
@@ -2320,13 +2320,13 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eb8d";
 } 
 .mbsc-ic-fa-location-arrow::before {
-    content: "\eb90";
-} 
-.mbsc-ic-fa-lock::before {
     content: "\eb8e";
 } 
-.mbsc-ic-fa-long-arrow-down::before {
+.mbsc-ic-fa-lock::before {
     content: "\eb8f";
+} 
+.mbsc-ic-fa-long-arrow-down::before {
+    content: "\eb90";
 } 
 .mbsc-ic-fa-long-arrow-left::before {
     content: "\eb91";
@@ -2359,10 +2359,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eb9a";
 } 
 .mbsc-ic-fa-map-marker::before {
-    content: "\eb9b";
+    content: "\eb9c";
 } 
 .mbsc-ic-fa-map-o::before {
-    content: "\eb9c";
+    content: "\eb9b";
 } 
 .mbsc-ic-fa-map-pin::before {
     content: "\eb9d";
@@ -2374,13 +2374,13 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eb9f";
 } 
 .mbsc-ic-fa-mars-double::before {
-    content: "\eba0";
+    content: "\eba2";
 } 
 .mbsc-ic-fa-mars-stroke-h::before {
-    content: "\eba1";
+    content: "\eba0";
 } 
 .mbsc-ic-fa-mars-stroke-v::before {
-    content: "\eba2";
+    content: "\eba1";
 } 
 .mbsc-ic-fa-mars-stroke::before {
     content: "\eba3";
@@ -2404,10 +2404,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eba9";
 } 
 .mbsc-ic-fa-meh-o::before {
-    content: "\ebab";
+    content: "\ebaa";
 } 
 .mbsc-ic-fa-mercury::before {
-    content: "\ebaa";
+    content: "\ebab";
 } 
 .mbsc-ic-fa-microchip::before {
     content: "\ebac";
@@ -2497,10 +2497,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ebc8";
 } 
 .mbsc-ic-fa-paper-plane::before {
-    content: "\ebca";
+    content: "\ebc9";
 } 
 .mbsc-ic-fa-paperclip::before {
-    content: "\ebc9";
+    content: "\ebca";
 } 
 .mbsc-ic-fa-paragraph::before {
     content: "\ebcb";
@@ -2545,10 +2545,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ebd8";
 } 
 .mbsc-ic-fa-pied-piper-alt::before {
-    content: "\ebda";
+    content: "\ebd9";
 } 
 .mbsc-ic-fa-pied-piper-pp::before {
-    content: "\ebd9";
+    content: "\ebda";
 } 
 .mbsc-ic-fa-pied-piper::before {
     content: "\ebdb";
@@ -2722,10 +2722,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ec13";
 } 
 .mbsc-ic-fa-share-alt::before {
-    content: "\ec15";
+    content: "\ec14";
 } 
 .mbsc-ic-fa-share-square-o::before {
-    content: "\ec14";
+    content: "\ec15";
 } 
 .mbsc-ic-fa-share-square::before {
     content: "\ec16";
@@ -3163,10 +3163,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eca6";
 } 
 .mbsc-ic-fa-viadeo-square::before {
-    content: "\eca8";
+    content: "\eca7";
 } 
 .mbsc-ic-fa-viadeo::before {
-    content: "\eca7";
+    content: "\eca8";
 } 
 .mbsc-ic-fa-video-camera::before {
     content: "\eca9";
@@ -4769,6 +4769,12 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     -webkit-transform-origin: top right;
     transform-origin: top right;
   }
+
+  /* file type */
+  .mbsc-input-wrap .mbsc-control[type="file"] {
+    position: absolute;
+    opacity: 0;
+  }
 }
 
 
@@ -5590,8 +5596,8 @@ $mbsc-mobiscroll-dark: #47494A !default;
   @else {
     $border: lighten($background, 17%);
     $empty-color: $text;
-    $input-disabled: darken($background, 17%);
-    $handle: darken($background, 7%);
+    $input-disabled: lighten($background, 17%);
+    $handle: lighten($background, 7%);
     $btn-disabled: lighten($background, 8%);
     $switch: lighten($background, 14%);
     $btn-light: $background;
@@ -6454,7 +6460,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
 
       &.mbsc-input .mbsc-label {
-        top: .166667em;
+        top: -.166667em;
         z-index: 1;
         padding: 0 .333334em;
       }
@@ -11330,7 +11336,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
 
       .mbsc-segmented .mbsc-segmented-item input.mbsc-active + .mbsc-segmented-content {
-        background: rgba(18, 114, 220, .3);
+        background: rgba($accent, .3);
         color: $form-selection;
       }
 
@@ -11680,6 +11686,12 @@ $mbsc-mobiscroll-dark: #47494A !default;
     font-size: .875em;
     font-weight: normal;
     z-index: 2;
+  }
+
+  // Angular + Bootstrap compatibility
+  .mbsc-segmented-item label {
+    display: block;
+    margin: 0;
   }
 
   .mbsc-segmented input:disabled ~ .mbsc-segmented-item .mbsc-segmented-content,
@@ -13347,7 +13359,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
 
       .mbsc-btn-flat.mbsc-btn.mbsc-active {
-        background: rgba(78, 204, 196, .3)
+        background: rgba($accent, .3)
       }
 
       .mbsc-btn-flat:disabled {
@@ -14363,12 +14375,19 @@ $mbsc-mobiscroll-dark: #47494A !default;
     height: 100%;
   }
 
+  // Needed by IE and iOS9
+  .mbsc-scv,
+  .mbsc-scv-item {
+    -webkit-flex: 0 0 auto;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+  }
+
   .mbsc-scv.mbsc-comp {
     padding: 0;
     margin: 0 auto;
     list-style: none;
     line-height: normal;
-    -webkit-flex-shrink: 0; // Needed by iOS9
     -webkit-backface-visibility: hidden;
     -webkit-transform: translate3d(0, 0, 0);
   }
@@ -14387,7 +14406,6 @@ $mbsc-mobiscroll-dark: #47494A !default;
     justify-content: center;
     box-sizing: border-box;
   }
-
 
   /* Liquid layout */
 

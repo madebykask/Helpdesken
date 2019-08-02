@@ -133,7 +133,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     customerSettings.WorkingDayStart,
                     customerSettings.WorkingDayEnd,
                     userTimeZone,
-                    ApplicationTypes.Helpdesk,
+                    ApplicationTypes.HelpdeskMobile,
                     userOverview.ShowSolutionTime,
                     out remainingTimeData,
                     out aggregateData,
@@ -158,7 +158,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     customerSettings.WorkingDayStart,
                     customerSettings.WorkingDayEnd,
                     userTimeZone,
-                    ApplicationTypes.Helpdesk,
+                    ApplicationTypes.HelpdeskMobile,
                     userOverview.ShowSolutionTime,
                     out remainingTimeData,
                     out aggregateData);

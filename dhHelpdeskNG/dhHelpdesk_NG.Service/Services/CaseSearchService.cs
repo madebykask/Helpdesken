@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Globalization;
 using DH.Helpdesk.BusinessData.Enums.Case;
+using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 using DH.Helpdesk.BusinessData.Models.Case.CaseIntLog;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.Email;
@@ -272,13 +273,18 @@ namespace DH.Helpdesk.Services.Services
             var searchInfo = context.s;
             var secSortOrder = string.Empty;
             int workingHours = context.WorkingHours;
-            
+
+            var fieldNames = userCaseSettings.Select(c => c.Name).ToList();
+            if (context.applicationType.ToLower() == ApplicationTypes.HelpdeskMobile)
+            {
+                fieldNames = GetMobileCaseOverviewFieldNames();
+            }
 
             var productAreas =
                 _productAreaRepository.GetMany(x => x.Customer_Id == searchFilter.CustomerId).OrderBy(x => x.Name).ToList();
 
             var caseTypes = _caseTypeRepository.GetCaseTypeOverviews(searchFilter.CustomerId).ToArray();
-            var displayLeftTime = userCaseSettings.Any(it => it.Name == TimeLeftColumn);
+            var displayLeftTime = fieldNames.Any(n => n == TimeLeftColumn);
 
             var searchResult = new SearchResult<CaseSearchResult>();
             remainingTime = new CaseRemainingTimeData();
@@ -404,7 +410,7 @@ namespace DH.Helpdesk.Services.Services
                                              context.applicationType.ToLower() == ApplicationTypes.SelfService);
                         row.Ignored = false;
 
-                        foreach (var c in userCaseSettings)
+                        foreach (var fieldName in fieldNames)
                         {
                             Field field = null;
                             for (var i = 0; i < dr.FieldCount; i++)
@@ -412,7 +418,7 @@ namespace DH.Helpdesk.Services.Services
                                 if (dr.IsDBNull(i))
                                     continue;
 
-                                if (string.Equals(dr.GetName(i), GetCaseFieldName(c.Name), StringComparison.OrdinalIgnoreCase))
+                                if (string.Equals(dr.GetName(i), GetCaseFieldName(fieldName), StringComparison.OrdinalIgnoreCase))
                                 {
                                     if (!dr.IsDBNull(i))
                                     {
@@ -426,7 +432,7 @@ namespace DH.Helpdesk.Services.Services
                                         var value = GetDatareaderValue(
                                             dr,
                                             i,
-                                            c.Name,
+                                            fieldName,
                                             customerSetting,
                                             productAreas,
                                             timeLeft,
@@ -446,7 +452,7 @@ namespace DH.Helpdesk.Services.Services
 
                                         field = new Field
                                         {
-                                            Key = c.Name,
+                                            Key = fieldName,
                                             Id = baseId,
                                             StringValue = value,
                                             TranslateThis = translateField,
@@ -455,7 +461,7 @@ namespace DH.Helpdesk.Services.Services
                                             FieldType = fieldType
                                         };
 
-                                        if (string.Equals(searchInfo.SortBy, c.Name, StringComparison.OrdinalIgnoreCase))
+                                        if (string.Equals(searchInfo.SortBy, fieldName, StringComparison.OrdinalIgnoreCase))
                                         {
                                             sortOrder = value;
                                         }
@@ -524,6 +530,23 @@ namespace DH.Helpdesk.Services.Services
             }
 
             return searchResult;
+        }
+
+        private static List<string> GetMobileCaseOverviewFieldNames()
+        {
+            return new List<string>
+            {
+                CaseInfoFields.Case,
+                CaseInfoFields.ChangeDate,
+                CaseInfoFields.Caption,
+                OtherFields.Priority,
+                //OtherFields.State,
+                OtherFields.SubState,
+                OtherFields.Administrator,
+                OtherFields.WorkingGroup,
+                OtherFields.WatchDate,
+                TimeLeftColumn
+            };
         }
 
         private static string GetDatareaderValue(

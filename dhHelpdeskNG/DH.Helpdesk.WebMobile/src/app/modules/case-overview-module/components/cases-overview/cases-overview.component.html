@@ -24,11 +24,52 @@
       </form>
   </div>
 </mbsc-form>
-<div class="stickToBottom">
+<div class="cases-overview stickToBottom">
     <mbsc-listview #listview [options]="listviewSettings" [hidden]="isLoading" (onItemTap)="onItemTap($event)">
         <mbsc-listview-item *ngFor="let case of cases; trackBy: trackByFn" >
-            <div class="row ellipsis">{{ (case.columns | getByKey: 'Caption') || '&nbsp;' }}</div>
-            <div class="secondary">{{ (case.columns | getByKey: 'CaseNumber') || '&nbsp;' }} {{ (case.columns | getByKey: 'RegTime' | dateFormat) || '&nbsp;' }}</div>
+            <mbsc-card [class.unread]="case.isUnread">
+              <mbsc-card-header>
+                <mbsc-card-subtitle class="mbsc-txt-s" >
+                  <div class="mbsc-grid mbsc-margin mbsc-txt-muted mbsc-bold mbsc-txt-s">
+                    <div class="mbsc-row mbsc-no-padding">
+                      <div class="mbsc-col-6 case-number"><i class="mbsc-ic mbsc-ic-fa-hashtag"></i>
+                          {{ (case.columns | getByKey: 'CaseNumber') || '&nbsp;' }}
+                      </div>
+                      <div class="mbsc-col-6 time">
+                          <span><i class="mbsc-ic mbsc-ic-fa-clock-o"></i> {{ (case.columns | getByKey: 'ChangeTime' | dateTimeFormat) || '&nbsp;'}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </mbsc-card-subtitle>
+              </mbsc-card-header>
+              <mbsc-card-content>
+                  <div class="mbsc-grid">
+                      <div class="mbsc-row">
+                          <div class="mbsc-col mbsc-bold ellipsis">
+                              {{ (case.columns | getByKey: 'Caption') || '&nbsp;' }}
+                          </div>
+                      </div>
+                      <div class="mbsc-row">
+                          <div class="mbsc-col">
+                              <div><i class="mbsc-ic mbsc-ic-fa-user"></i>{{ (case.columns | getByKey: 'Performer_User_Id') || '&nbsp;' }}</div>
+                              <div><i class="mbsc-ic mbsc-ic-fa-group"></i>{{ (case.columns | getByKey: 'WorkingGroup_Id') || '&nbsp;' }}</div>
+                          </div>
+                      </div>
+                      <div class="mbsc-row">
+                          <div class="mbsc-col">
+                              <div><i class="mbsc-ic mbsc-ic-fa-exclamation"></i>{{ (case.columns | getByKey: 'Priority_Id') || '&nbsp;' }}</div>
+                              <div><i class="mbsc-ic mbsc-ic-fa-exchange"></i>{{ (case.columns | getByKey: 'StateSecondary_Id') || '&nbsp;' }}</div>
+                              <div><i class="mbsc-ic mbsc-ic-fa-calendar"></i>{{ (case.columns | getByKey: 'WatchDate' | dateFormat) || '&nbsp;' }}</div>
+                          </div>
+                          <div class="mbsc-col-sm-auto mbsc-txt-s hours" [class.urgent]="case.isUrgent" *ngIf="(case.columns | getByKey: '_temporary_LeadTime') != ''">
+                            {{ (case.columns | getByKey: '_temporary_LeadTime') || '&nbsp;'}}h
+                          </div>
+                      </div>
+                  </div>
+<!--                 <div class="row ellipsis"></div>
+                <div class="secondary">{{ (case.columns | getByKey: 'CaseNumber') || '&nbsp;' }} {{ (case.columns | getByKey: 'RegTime' | dateFormat) || '&nbsp;' }}</div>
+ -->              </mbsc-card-content>
+            </mbsc-card>
         </mbsc-listview-item>
     </mbsc-listview>
     <mbsc-form #loading class="md-load-btn md-btn-isLoading">

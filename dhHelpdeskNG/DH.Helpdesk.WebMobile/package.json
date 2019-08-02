@@ -1,6 +1,6 @@
 {
     "name": "web-mobile",
-    "version": "0.4.2",
+    "version": "0.4.3",
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
@@ -39,7 +39,7 @@
         "rxjs-compat": "^6.5.1",
         "uuid": "^3.3.2",
         "zone.js": "^0.8.29",
-        "@mobiscroll/angular": "file:./src/lib/mobiscroll-package/mobiscroll-angular-4.7.2.tgz"
+        "@mobiscroll/angular": "file:./src/lib/mobiscroll-package/mobiscroll-angular-4.7.3.tgz"
     },
     "devDependencies": {
         "@angular-builders/custom-webpack": "^7.3.1",
