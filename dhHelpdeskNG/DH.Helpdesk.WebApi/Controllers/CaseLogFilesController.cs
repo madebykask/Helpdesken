@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using AutoMapper;
-using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Extensions.String;
@@ -30,7 +26,6 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICaseFileService _caseFileService;
         private readonly ITemporaryFilesCache _userTemporaryFilesStorage;
         private readonly ICaseFieldSettingService _caseFieldSettingService;
-
 
         public CaseLogFilesController(
             ILogFileService logFileService,
@@ -119,14 +114,13 @@ namespace DH.Helpdesk.WebApi.Controllers
         [HttpDelete]
         [Route("{caseKey}/templogfile")]
         [SkipCustomerAuthorization] //skip check for new case
-        public IHttpActionResult DeleteTempLogFile([FromUri]string caseKey, [FromUri]string fileName)
+        public IHttpActionResult DeleteTempLogFile([FromUri]string caseKey, [FromUri]string fileName, [FromUri]LogFileType type)
         {
-            //todo: make async
-            //todo: check if UriDecode is required for fileName
             var fileNameSafe = (fileName ?? string.Empty).Trim();
             if (!string.IsNullOrEmpty(fileNameSafe))
             {
-                _userTemporaryFilesStorage.DeleteFile(fileNameSafe, caseKey, ModuleName.Log);
+                var moduleName = type == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
+                _userTemporaryFilesStorage.DeleteFile(fileNameSafe, caseKey, moduleName);
             }
             return Ok(true);
         }

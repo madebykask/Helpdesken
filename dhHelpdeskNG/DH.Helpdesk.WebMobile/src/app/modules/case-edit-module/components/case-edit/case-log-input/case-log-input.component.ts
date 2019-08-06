@@ -45,7 +45,7 @@ export class CaseLogInputComponent implements OnInit {
       color: 'red',
       icon: 'fa-trash',
       confirm: true,
-      action: this.onFileDelete.bind(this, LogFileType.External)
+      action: (event, inst) => this.onFileDelete(event, LogFileType.External)
     }]
   };
 
@@ -57,7 +57,7 @@ export class CaseLogInputComponent implements OnInit {
       color: 'red',
       icon: 'fa-trash',
       confirm: true,
-      action: this.onFileDelete.bind(this, LogFileType.Internal)
+      action:  (event, inst) => this.onFileDelete(event, LogFileType.Internal)
     }]
   };
 
@@ -180,7 +180,7 @@ export class CaseLogInputComponent implements OnInit {
     const fileName = this.getFiles(type)[index];
 
     // todo:add delete confirmation
-    this.caseLogApiService.deleteTempLogFile(this.caseKey, fileName).pipe(
+    this.caseLogApiService.deleteTempLogFile(this.caseKey, fileName, type).pipe(
       take(1)
     ).subscribe(res => {
       if (res) {

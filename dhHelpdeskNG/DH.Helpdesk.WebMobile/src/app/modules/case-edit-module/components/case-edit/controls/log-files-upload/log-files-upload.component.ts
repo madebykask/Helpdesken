@@ -14,8 +14,8 @@ import { LogFileType } from 'src/app/modules/shared-module/constants/logFileType
 })
 export class LogFilesUploadComponent {
 
-  @Input('caseKey') caseKey: string;
-  @Input('type') type: LogFileType;
+  @Input() caseKey: string;
+  @Input() type: LogFileType;
   @Output() fileUploaded: EventEmitter<FileUploadArgs> = new EventEmitter<FileUploadArgs>();
 
   fileUploader = new FileUploader({});
@@ -79,7 +79,5 @@ export class LogFilesUploadComponent {
 }
 
 export class FileUploadArgs {
-  constructor(public file: string, public type: LogFileType) {
-
-  }
+  constructor(public file: string, public type: LogFileType) {}
 }

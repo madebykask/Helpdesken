@@ -24,7 +24,7 @@ export class CaseFilesUploadComponent {
     stages: [{
       percent: -25,
       color: 'red',
-      text: 'Delete', // todo: translate
+      text: 'Delete',
       confirm: true,
       action: (event, inst) => {
         const itemIndex = +event.index;
@@ -97,7 +97,6 @@ export class CaseFilesUploadComponent {
   }
 
   private processFileUploadDelete(fileItem: FileItem) {
-    //todo: check different upload states handling!!! (queued, ready, uploading, error, canceled)
     if (fileItem.isUploading) {
       fileItem.cancel();
     }
