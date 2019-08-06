@@ -228,7 +228,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
   private caclucatePageSize(): number {
     const headerSize = 53;
-    const caseElemSize = 60; // TODO: get real height from UI
+    const caseElemSize = 130; // TODO: get real height from UI
     const windowHeight = window.innerHeight;
     const defaultPageSize = 2;
     const size = ((windowHeight - headerSize) / caseElemSize) + 1 || defaultPageSize;

@@ -44,8 +44,8 @@
                 <mbsc-card-subtitle class="mbsc-txt-s" >
                   <div class="mbsc-grid mbsc-margin mbsc-txt-muted mbsc-bold mbsc-txt-s">
                     <div class="mbsc-row mbsc-no-padding">
-                      <div class="mbsc-col-6 case-number"><i class="mbsc-ic mbsc-ic-fa-hashtag"></i>
-                          {{ (case.columns | getByKey: 'CaseNumber') || '&nbsp;' }}
+                      <div class="mbsc-col-6 case-number">
+                          #{{ (case.columns | getByKey: 'CaseNumber') || '&nbsp;' }}
                       </div>
                       <div class="mbsc-col-6 time">
                           <span><i class="mbsc-ic mbsc-ic-fa-clock-o"></i> {{ (case.columns | getByKey: 'ChangeTime' | dateTimeFormat) || '&nbsp;'}}</span>
