@@ -54,6 +54,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public CaseFilesUrlBuilder FilesUrlBuilder { get; set; }
         public List<LogFileModel> Files { get; set; }
         public bool IsExternal { get; set; }
+        public bool IsTwoAttachmentsMode { get; set; }
     }
 
     public class CaseLogInputFilesAttachmentViewModel
@@ -75,7 +76,7 @@ namespace DH.Helpdesk.Web.Models.Case
             string fieldStyles, 
             bool allowFileAttach,
             bool isReadonly, 
-            bool restrictFilesByLogNoteType)
+            bool isTwoAttachmentMode)
         {
             var filesNames = LogFileNames;
 
@@ -97,7 +98,8 @@ namespace DH.Helpdesk.Web.Models.Case
                     UseVirtualDirectory = filesModel.VirtualDirectory,
                     FilesUrlBuilder = CaseFilesUrlBuilder,
                     Files = filesModel.Files,
-                    IsExternal = isExternal
+                    IsExternal = isExternal,
+                    IsTwoAttachmentsMode = isTwoAttachmentMode,
                 } : new CaseLogFilesViewModel()
             };
         }
@@ -138,6 +140,7 @@ namespace DH.Helpdesk.Web.Models.Case
                 CustomerSettings = CustomerSettings,
                 CaseSolutionSettingModels = CaseSolutionSettingModels,
                 FilesUrlBuilder = CaseFilesUrlBuilder,
+                IsTwoAttachmentsMode = EnableTwoAttachments,
 
                 // Invoices fields
                 ShowInvoiceFields = ShowInvoiceFields,

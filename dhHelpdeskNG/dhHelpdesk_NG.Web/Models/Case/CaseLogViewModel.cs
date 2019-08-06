@@ -29,12 +29,12 @@ namespace DH.Helpdesk.Web.Models.Case
         
         public int ShowExternalInvoiceFields { get; set; }
         public List<ExternalInvoiceModel> ExternalInvoices { get; set; }
-
+        public bool IsTwoAttachmentsMode { get; set; }
         public CaseFilesUrlBuilder FilesUrlBuilder { get; set; }
 
         public LogNoteFilesViewModel CreateFilesViewModel(LogOverview log)
         {
-            return new LogNoteFilesViewModel(CaseNumber, log, CaseFiles, FilesUrlBuilder);
+            return new LogNoteFilesViewModel(CaseNumber, log, CaseFiles, FilesUrlBuilder, IsTwoAttachmentsMode);
         }
 
         public LogNoteEmailsViewModel CreateEmailsViewModel(LogOverview log)
@@ -49,13 +49,15 @@ namespace DH.Helpdesk.Web.Models.Case
         public LogOverview CurrentLog { get; }
         public CaseFilesModel CaseFiles { get; set; }
         public CaseFilesUrlBuilder FilesUrlBuilder { get; }
+        public bool IsTwoAttachmentsMode { get; set; }
 
-        public LogNoteFilesViewModel(int caseNumber, LogOverview log, CaseFilesModel caseFiles, CaseFilesUrlBuilder filesUrlBuilder)
+        public LogNoteFilesViewModel(int caseNumber, LogOverview log, CaseFilesModel caseFiles, CaseFilesUrlBuilder filesUrlBuilder, bool isTwoAttachmentsMode)
         {
             CaseNumber = caseNumber;
             CurrentLog = log;
             CaseFiles = caseFiles;
             FilesUrlBuilder = filesUrlBuilder;
+            IsTwoAttachmentsMode = isTwoAttachmentsMode;
         }
     }
 

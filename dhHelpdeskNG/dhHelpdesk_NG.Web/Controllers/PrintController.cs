@@ -7,6 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using DH.Helpdesk.BusinessData.Enums.Admin.Users;
+using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+using DH.Helpdesk.Services.BusinessLogic.Admin.Users.Concrete;
+using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
+
 namespace DH.Helpdesk.Web.Controllers
 {
     using System.Globalization;
@@ -117,6 +122,8 @@ namespace DH.Helpdesk.Web.Controllers
         /// </summary>
         private readonly IFinishingCauseService finishingCauseService;
 
+        private IUserPermissionsChecker userPermissionsChecker;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PrintController"/> class.
         /// </summary>
@@ -176,7 +183,8 @@ namespace DH.Helpdesk.Web.Controllers
             IProblemService problemService, 
             IChangeService changeService, 
             ISettingService settingService, 
-            IFinishingCauseService finishingCauseService)
+            IFinishingCauseService finishingCauseService,
+            IUserPermissionsChecker userPermissionsChecker)
             : base(masterDataService)
         {
             this.caseService = caseService;
@@ -197,6 +205,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.changeService = changeService;
             this.settingService = settingService;
             this.finishingCauseService = finishingCauseService;
+            this.userPermissionsChecker = userPermissionsChecker;
         }
 
         /// <summary>
@@ -231,12 +240,20 @@ namespace DH.Helpdesk.Web.Controllers
                     selectedOU.Name = selectedOU.Parent.Name + " - " + selectedOU.Name;
             }
             caseModel.Ou = selectedOU; //ous.FirstOrDefault(o => caseModel.OuId == o.Id);
-            caseModel.Logs = this.logService.GetCaseLogOverviews(caseId);
 
             if (caseModel.UserId.HasValue)
             {
                 caseModel.User = this.userService.GetUserOverview(caseModel.UserId.Value);
             }
+
+            var hasInternalLogAccess =
+                userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
+
+            var isTwoAttachmentsMode =
+                fields.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal.ToString())?.IsActive ?? false;
+            
+            caseModel.Logs = 
+                logService.GetCaseLogOverviews(caseId, hasInternalLogAccess, hasInternalLogAccess && isTwoAttachmentsMode);
 
             var caseType = this.caseTypeService.GetCaseType(caseModel.CaseTypeId);
             if (caseType != null)

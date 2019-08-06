@@ -37,12 +37,12 @@ namespace DH.Helpdesk.Services.Services
         void AddChildCaseLogToParentCase(int caseId, CaseLog parentCaseLog);
         Guid Delete(int id, string basePath);
 
-        IList<LogOverview> GetCaseLogOverviews(int caseId, bool includeInternalLogs = false);
+        IList<LogOverview> GetCaseLogOverviews(int caseId, bool includeInternalLogs = false, bool includeInternalFiles = false);
 
         //TODO: remove! replace with CaseLogData!
         IList<Log> GetLogsByCaseId(int caseId);
 
-        IList<CaseLogData> GetLogsByCaseId(int caseId, bool includeInternalLogs = false);
+        IList<CaseLogData> GetLogsByCaseId(int caseId, bool includeInternalLogs, bool includeInternalFiles);
         Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false);
     }
 
@@ -132,7 +132,7 @@ namespace DH.Helpdesk.Services.Services
             return l.LogGUID;
         }
         
-        public IList<LogOverview> GetCaseLogOverviews(int caseId, bool includeInternalLogs = false)
+        public IList<LogOverview> GetCaseLogOverviews(int caseId, bool includeInternalLogs = false, bool includeInternalFiles = false)
         {
             var result = new List<LogOverview>();
             var caseLogsEntities = GetCaseLogsQueryable(caseId, includeInternalLogs).ToList();
@@ -163,9 +163,9 @@ namespace DH.Helpdesk.Services.Services
             return result.OrderByDescending(l => l.LogDate).ToList();
         }
 
-        public IList<CaseLogData> GetLogsByCaseId(int caseId, bool includeInternalLogs = false)
+        public IList<CaseLogData> GetLogsByCaseId(int caseId, bool includeInternalLogs, bool includeInternalFiles)
         {
-            var caseLogsEntities = GetCaseLogsQueryable(caseId, includeInternalLogs).ToList();
+            var caseLogsEntities = GetCaseLogsQueryable(caseId, includeInternalLogs, includeInternalFiles).ToList();
             var caseLogs = caseLogsEntities.MapToCaseLogData(includeInternalLogs);
             return caseLogs;
         }
@@ -178,7 +178,7 @@ namespace DH.Helpdesk.Services.Services
             return caseLogs;
         }
 
-        private IQueryable<LogMapperData> GetCaseLogsQueryable(int caseId, bool includeInternalLogs = true)
+        private IQueryable<LogMapperData> GetCaseLogsQueryable(int caseId, bool includeInternalLogs = true, bool includeInternalFiles = false)
         {
             var caseLogsQuery = _logRepository.GetCaseLogs(caseId);
 
@@ -213,7 +213,7 @@ namespace DH.Helpdesk.Services.Services
                         }).ToList(),
 
                 LogFiles = 
-                    l.LogFiles.DefaultIfEmpty().Where(f => includeInternalLogs || f.LogType == LogFileType.External).Select(t => new LogFileMapperData
+                    l.LogFiles.DefaultIfEmpty().Where(f => includeInternalLogs && includeInternalFiles || f.LogType == LogFileType.External).Select(t => new LogFileMapperData
                     {
                         Id = t.Id,
                         FileName = t.FileName,

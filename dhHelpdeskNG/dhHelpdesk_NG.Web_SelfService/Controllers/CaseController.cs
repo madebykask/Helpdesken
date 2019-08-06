@@ -1446,7 +1446,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             var caseLogModels = new List<CaseLogModel>();
             if (caseId > 0)
             {
-                var caseLogs = _logService.GetLogsByCaseId(caseId.Value, useInternalLogs).OrderByDescending(l => l.RegTime).ToList();
+                var caseLogs = 
+                    _logService.GetLogsByCaseId(caseId.Value, useInternalLogs, isTwoAttachmentsMode && useInternalLogs).OrderByDescending(l => l.RegTime).ToList();
 
                 var logsFilter =
                     useInternalLogs

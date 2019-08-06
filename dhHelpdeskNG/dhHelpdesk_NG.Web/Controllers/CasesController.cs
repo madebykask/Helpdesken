@@ -1460,10 +1460,11 @@ namespace DH.Helpdesk.Web.Controllers
                     m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
                     m.EnableTwoAttachments = m.caseFieldSettings.getCaseSettingsValue(TranslationCaseFields.tblLog_Filename_Internal.ToString())?.IsActive ?? false;
                     
+                    //get all log files
                     var logFiles = _logFileService.GetLogFileNamesByLogId(id, true);
 
                     m.LogFilesModel = 
-                        new FilesModel(id.ToString(), m.EnableTwoAttachments ? logFiles.Where(f => f.LogType == LogFileType.External).ToList() : logFiles, useVD);
+                        new FilesModel(id.ToString(), logFiles.Where(f => f.LogType == LogFileType.External).ToList(), useVD);
                     
                     var includeInternalFiles = CheckInternalLogFilesAccess(customerId, SessionFacade.CurrentUser, m.caseFieldSettings);
                     if (includeInternalFiles)
@@ -2495,7 +2496,7 @@ namespace DH.Helpdesk.Web.Controllers
             var currentUser = SessionFacade.CurrentUser;
             if (isInternalLog &&
                 !CheckInternalLogFilesAccess(customerId, currentUser))
-                return new HttpUnauthorizedResult("You are not authorized to access intenral log files");
+                return new HttpUnauthorizedResult("You are not authorized to access internal log files");
 
             //todo: check log type access
             var canDelete = SessionFacade.CurrentUser.DeleteAttachedFilePermission.ToBool();
@@ -4886,7 +4887,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 #region Existing case model initialization actions
 
-                m.Logs = _logService.GetCaseLogOverviews(caseId, m.CaseInternalLogAccess);
+                m.Logs = _logService.GetCaseLogOverviews(caseId, m.CaseInternalLogAccess, m.CaseInternalLogAccess && m.CaseInternalLogAccess);
                 
                 var useVd = !string.IsNullOrEmpty(virtualDirPath);
 

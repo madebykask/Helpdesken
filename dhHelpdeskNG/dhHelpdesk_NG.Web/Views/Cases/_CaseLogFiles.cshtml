@@ -17,12 +17,20 @@
 
     string GetFileIcon(LogFileType logType)
     {
-        return logType == LogFileType.External ? "fa sm-fa fa-file-o" : "fa sm-fa fa-file";
+        if (Model.IsTwoAttachmentsMode)
+        {
+            return logType == LogFileType.External ? "fa sm-fa fa-file-o" : "fa sm-fa fa-file";    
+        }
+        return "icon-file";
     }
 
     string GetLogTypeText(LogFileType logType)
     {
-        return logType == LogFileType.External ? Translation.GetCoreTextTranslation("External log file") : Translation.GetCoreTextTranslation("Internal log file");
+        if (Model.IsTwoAttachmentsMode)
+        {
+            return logType == LogFileType.External ? Translation.GetCoreTextTranslation("External log file") : Translation.GetCoreTextTranslation("Internal log file");
+        }
+        return string.Empty;
     }
 }
 <script type="text/javascript">
