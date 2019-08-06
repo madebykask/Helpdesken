@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { defaultIfEmpty, take, catchError, map } from 'rxjs/operators';
-import { throwError, forkJoin, EMPTY, Observable } from 'rxjs';
+import { throwError, forkJoin, EMPTY, Observable, from, of } from 'rxjs';
 import { CaseApiService } from '../api/case/case-api.service';
 import { BundleCaseOptionsService } from 'src/app/modules/case-edit-module/services/case-organization/bundle-case-options.service';
 import { CaseOptionsFilterModel, BundleOptionsFilter, CaseOptions } from 'src/app/modules/shared-module/models';
@@ -12,6 +12,7 @@ import { CaseActionsDataService } from './case-actions-data.service';
 import { CaseHistoryApiService } from '../api/case/case-history-api.service';
 import { CaseTemplateApiService } from 'src/app/services/api/caseTemplate/case-template-api.service';
 import { CaseModelBuilder } from '../../models/case/case-model-builder';
+import { CaseSortFieldModel } from '../model/case-sort-field.model';
 
 @Injectable({ providedIn: 'root' })
 export class CaseService {

@@ -274,6 +274,11 @@ a {
     .mbsc-ic-fa-filter {
       margin-left:15px;
     }
+
+    .mbsc-ic-fa-sort { 
+      margin-left:10px;
+    }
+
     .selected .mbsc-ms-item.mbsc-menu-item-ic {
       //border: solid 1px #fff;
       border-radius: 4px 4px;
@@ -298,8 +303,7 @@ a {
                     }
                 }
             }
-            .center {
-                text-align: center;
+            .caption {                
                 margin: auto;
             }
             .bold {

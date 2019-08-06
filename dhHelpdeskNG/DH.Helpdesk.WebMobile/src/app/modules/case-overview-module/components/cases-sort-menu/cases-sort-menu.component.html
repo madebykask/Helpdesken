@@ -1,0 +1,6 @@
+<mbsc-hamburger-nav [options]="menuOptions" [class.selected]="isSortingApplied">
+  <mbsc-nav-item *ngFor="let item of menuItems; trackBy:trackByFn" 
+      [id]="item.id"
+      [selected]="item.selected"
+      (click)="applySorting(item)"><div><i [attr.class]="getMenuItemIcon(item)"></i> {{ item.text }}</div></mbsc-nav-item>
+</mbsc-hamburger-nav>

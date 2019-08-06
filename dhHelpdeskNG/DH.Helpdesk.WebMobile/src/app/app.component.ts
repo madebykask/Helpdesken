@@ -86,7 +86,6 @@ export class AppComponent implements OnInit, OnDestroy {
       take(1)
     ).subscribe((filters: FavoriteFilterModel[]) => {
       this.appStore.set(AppStoreKeys.FavoriteFilters, filters);
-      //console.log('>>> appState: filters has been loaded');
     });
   }
 

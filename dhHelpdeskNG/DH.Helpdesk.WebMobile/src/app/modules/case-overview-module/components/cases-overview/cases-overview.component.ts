@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { finalize, take } from 'rxjs/operators';
+import { finalize, take, distinctUntilChanged, takeUntil, filter, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { MbscForm, MbscListview } from '@mobiscroll/angular';
-import { Subject } from 'rxjs';
-import { PagingConstants } from 'src/app/modules/shared-module/constants';
+import { Subject, forkJoin, throwError } from 'rxjs';
+import { PagingConstants, SortOrder } from 'src/app/modules/shared-module/constants';
 import { CasesOverviewFilter } from '../../models/cases-overview/cases-overview-filter.model';
 import { CaseOverviewItem } from '../../models/cases-overview/cases-overview-item.model';
 import { CasesOverviewService } from '../../services/cases-overview';
@@ -14,6 +13,10 @@ import { TranslateService } from '@ngx-translate/core';
 import { CaseRouteReuseStrategy } from 'src/app/helpers/case-route-resolver.stategy';
 import { SearchFilterService } from '../../services/cases-overview/search-filter.service';
 import { AppStore, AppStoreKeys } from 'src/app/store';
+import { FavoriteFilterModel } from '../../models/cases-overview/favorite-filter.model';
+import { CaseSortFieldModel } from 'src/app/modules/case-edit-module/services/model/case-sort-field.model';
+import { LocalStorageService } from 'src/app/services/local-storage';
+import { CaseSearchStateModel } from 'src/app/modules/shared-module/models/cases-overview/case-search-state.model';
 
 @Component({
   selector: 'app-cases-overview',
@@ -22,22 +25,25 @@ import { AppStore, AppStoreKeys } from 'src/app/store';
 })
 export class CasesOverviewComponent implements OnInit, OnDestroy {
   @ViewChild('searchInput') searchInput: any;
-  @ViewChild('loading') loadingElem: MbscForm;
-  @ViewChild('listview') listView: MbscListview;
 
   private selectedFilterId: number;
   private filter: CasesOverviewFilter;
   private destroy$ = new Subject();
   private defaultHeaderText = this.ngxTranslateService.instant('Ärendeöversikt');
   private pageSize = 10;
+  private DefaultSortField = 'RegTime';
+  private DefaultSortOrder = SortOrder.SortDesc;
 
-  stateFilterId = 0;
   headerText: string;
   DateTime: DateTime;
   showSearchPanel = false;
   filtersForm: FormGroup;
   cases: CaseOverviewItem[] = [];
   isLoading = false;
+  favoriteFilters: FavoriteFilterModel[] = null;
+  selectedSortFieldId: string;
+  selectedSortFieldOrder: string;
+  caseSortFields: CaseSortFieldModel[];
 
   listviewSettings: any = {
     enhance: false,
@@ -56,6 +62,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
               private formBuilder: FormBuilder,
               private router: Router,
               private appStore: AppStore,
+              private localStorageService: LocalStorageService,
               private searchFilterService: SearchFilterService,
               private ngxTranslateService: TranslateService) {
   }
@@ -66,41 +73,93 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
       freeSearch: ['']
     });
 
-    this.pageSize = this.caclucatePageSize();
+    //set default values
     this.headerText = this.defaultHeaderText;
+    this.selectedFilterId = CaseStandardSearchFilters.AllCases;
+    this.pageSize = this.caclucatePageSize();
+    this.selectedSortFieldId = this.DefaultSortField;
+    this.selectedSortFieldOrder = this.DefaultSortOrder;
 
-    // run search based on local store filter value
-    this.runInitialSearch();
+    const filtersLoaded$ = new Subject<FavoriteFilterModel[]>();
+
+    // get case sort fields
+    const sortFields$ = this.casesOverviewService.getCaseSortingFields();
+
+    // run initial search after filter state (sorting, filters) is fully loaded
+    forkJoin(sortFields$, filtersLoaded$).pipe(
+      take(1),
+      catchError(err => throwError(err))
+    ).subscribe(([sortFields, favFilters]: [CaseSortFieldModel[], FavoriteFilterModel[]]) => {
+        // load sort state
+        const searchState = this.localStorageService.getCaseSearchState();
+        if (searchState) {
+          if (searchState.sortField) {
+            this.selectedSortFieldId = searchState.sortField || this.DefaultSortField;
+            this.selectedSortFieldOrder = searchState.sortOrder || this.DefaultSortOrder;
+          }
+          // filter state if any
+          const stateFilterId = searchState && searchState.filterId ? +searchState.filterId : +CaseStandardSearchFilters.AllCases;
+          if (!isNaN(stateFilterId) && stateFilterId !== +CaseStandardSearchFilters.AllCases) {
+            const ff = favFilters.find(f => f.id === stateFilterId);
+            if (ff) {
+              this.headerText = ff.name;
+              this.selectedFilterId = stateFilterId;
+            }
+          }
+        }
+
+        //set binding properties
+        this.caseSortFields = sortFields;
+        this.favoriteFilters = favFilters;
+
+        // run cases search
+        this.runNewSearch();
+    });
+
+     // get search filters from app store (loaded on app.component init)
+     this.appStore.select<FavoriteFilterModel[]>(AppStoreKeys.FavoriteFilters).pipe(
+      takeUntil(this.destroy$),
+      distinctUntilChanged(),
+      filter(m => m && m.length > 0)
+    ).subscribe((favFilters: FavoriteFilterModel[]) => {
+        // trigger filters load is complete
+        filtersLoaded$.next(favFilters);
+        filtersLoaded$.complete();
+    });
 
     //clear case page snapshots in reuse strategy
     CaseRouteReuseStrategy.deleteSnaphots();
   }
 
-  private runInitialSearch() {
-    //get filterId from local storage
-    const filterId = this.searchFilterService.getFilterIdFromState();
-
-    if (filterId !== CaseStandardSearchFilters.AllCases) {
-      // verify if state filterId is valid and reset if not. We do this in ctor be onInit to ensure correct filterId for cases-filter presentation component.
-      console.log('>> caseOverview: reading filters from state');
-      const favoriteFilter = this.appStore.state.favFilters.filter(f => f.id === filterId);
-      if (favoriteFilter && favoriteFilter.length) {
-        this.headerText = favoriteFilter[0].name;
-        this.stateFilterId = filterId;
-        this.selectedFilterId = filterId;
-      }
-      this.searchFilterService.saveFilterIdToState(this.stateFilterId);
-    }
-
-    // run cases search
-    this.runNewSearch();
-  }
-
   processFilterChanged(filterChangeArg) {
     this.selectedFilterId = +filterChangeArg.filterId;
     this.headerText = filterChangeArg.filterName ? filterChangeArg.filterName : this.defaultHeaderText;
-    this.searchFilterService.saveFilterIdToState(this.selectedFilterId);
+    this.saveSearchState();
+
+    // run new search
     this.runNewSearch();
+  }
+
+  processSortingChanged(sortArgs) {
+    if (sortArgs && sortArgs.sortField) {
+      this.selectedSortFieldId = sortArgs.sortField;
+      this.selectedSortFieldOrder = sortArgs.sortOrder;
+      this.saveSearchState();
+
+      // run new search
+      this.runNewSearch();
+    }
+  }
+
+  private saveSearchState() {
+    let state = this.localStorageService.getCaseSearchState();
+    if (state === null) {
+      state = new CaseSearchStateModel();
+    }
+    state.filterId = this.selectedFilterId;
+    state.sortField = this.selectedSortFieldId;
+    state.sortOrder = this.selectedSortFieldOrder;
+    this.localStorageService.setCaseSearchState(state);
   }
 
   applyFilterAndSearch() {
@@ -152,8 +211,8 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     this.filter.InitiatorSearchScope = 0; // TODO: use enum instead
     this.filter.PageSize =  this.pageSize || PagingConstants.pageSize;
     this.filter.Page = PagingConstants.page;
-    this.filter.Ascending = false;
-    this.filter.OrderBy = 'CaseNumber'; // TODO - remove hardcode
+    this.filter.Ascending = this.selectedSortFieldOrder === SortOrder.SortAsc;
+    this.filter.OrderBy = this.selectedSortFieldId;
     this.filter.SearchInMyCasesOnly = this.selectedFilterId === +CaseStandardSearchFilters.MyCases;
     this.filter.CaseProgress = CaseProgressFilter.CasesInProgress;
 

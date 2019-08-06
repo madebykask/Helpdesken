@@ -5,6 +5,7 @@ import { LocalStorageService } from 'src/app/services/local-storage';
 import { CaseEditOutputModel } from '../../../models/case/case-edit-output.model';
 import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/httpServiceBase';
 import { QueryParamsOptions } from 'src/app/modules/shared-module/services/api/query-params-options';
+import { CaseSortFieldModel } from '../../model/case-sort-field.model';
 
 @Injectable({ providedIn: 'root' })
 export class CaseApiService extends HttpApiServiceBase {
@@ -33,5 +34,4 @@ export class CaseApiService extends HttpApiServiceBase {
   getNewCase(templateId: number): Observable<Array<any>> {
     return this.getJson<Array<any>>(this.buildResourseUrl(`/api/case/new/${templateId}`, null, true, true));
   }
-
 }

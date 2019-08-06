@@ -1,26 +1,38 @@
 <mbsc-form class="case-overview-header">
   <div class="mbsc-form-group">
       <form [formGroup]="filtersForm" novalidate (ngSubmit)="applyFilterAndSearch()" action=".">
-              <div class="mbsc-grid mbsc-grid-sm">
-                  <div class="mbsc-row" *ngIf="showSearchPanel">
-                      <div class="mbsc-col">
-                          <mbsc-input #searchInput type="search" formControlName="freeSearch" 
-                              icon="fa-search" placeholder="{{'Sök' | translate }}" input-style="box"></mbsc-input>
-                      </div>
-                      <div class="mbsc-col-sm-auto">
-                          <a [ngClass]="{'inactive':isLoading}" (click)="cancelSearch()" translate>Avbryt</a>
-                      </div>
-                  </div>
-                  <div class="mbsc-row" *ngIf="!showSearchPanel">
-                      <div class="mbsc-col-sm-auto nopadding">
-                          <cases-filter [initialFilterId]="stateFilterId" (filterChanged)="processFilterChanged($event)"></cases-filter>
-                      </div>
-                      <div class="mbsc-col center bold">{{ headerText }}</div>
-                      <div class="mbsc-col-sm-auto">
-                          <div class="mbsc-ic mbsc-ic-fa-search" (click)="showSearchPanel=true"></div>
-                      </div>
-                  </div>
-              </div>
+        <div class="mbsc-grid mbsc-grid-sm">
+            <div class="mbsc-row" *ngIf="showSearchPanel">
+                <div class="mbsc-col">
+                  <mbsc-input #searchInput type="search" formControlName="freeSearch" 
+                      icon="fa-search" placeholder="{{'Sök' | translate }}" input-style="box"></mbsc-input>
+                </div>
+                <div class="mbsc-col-sm-auto">
+                  <a [class.inactive]="isLoading" (click)="cancelSearch()" translate>Avbryt</a>
+                </div>
+            </div>
+            <div class="mbsc-row" *ngIf="!showSearchPanel">
+                <div class="mbsc-col-sm-auto nopadding">
+                  <ng-container *ngIf="favoriteFilters !== null && favoriteFilters.length">
+                      <cases-filter  [initialFilterId]="selectedFilterId" 
+                        [favoriteFilters]="favoriteFilters" 
+                        (filterChanged)="processFilterChanged($event)"></cases-filter>
+                  </ng-container>
+                </div>
+                <div class="mbsc-col-sm-auto nopadding">
+                  <ng-container *ngIf="caseSortFields && caseSortFields.length">
+                      <cases-sort-menu [selectedSortField]="selectedSortFieldId" 
+                        [selectedSortFieldOrder]="selectedSortFieldOrder" 
+                        [sortFields]="caseSortFields"
+                        (sortingChanged)="processSortingChanged($event)"></cases-sort-menu>
+                  </ng-container>                  
+                </div>
+                <div class="mbsc-col caption bold">{{ headerText }}</div>
+                <div class="mbsc-col-sm-auto">
+                    <div class="mbsc-ic mbsc-ic-fa-search" (click)="showSearchPanel=true"></div>
+                </div>
+            </div>
+        </div>
       </form>
   </div>
 </mbsc-form>

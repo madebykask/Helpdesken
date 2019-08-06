@@ -2,11 +2,10 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { FilterMenuItemModel } from '../../models/cases-overview/filter-menu-item-model';
 import { FavoriteFilterModel } from '../../models/cases-overview/favorite-filter.model';
-import { takeUntil, distinctUntilChanged, filter } from 'rxjs/operators';
-import { AppStore, AppStoreKeys } from 'src/app/store';
 import { Subject } from 'rxjs';
 import { CaseStandardSearchFilters } from '../../models/cases-overview/enums';
 
+//presentation component
 @Component({
   selector: 'cases-filter',
   templateUrl: './cases-filter.component.html',
@@ -14,6 +13,7 @@ import { CaseStandardSearchFilters } from '../../models/cases-overview/enums';
 })
 export class CasesFilterComponent implements OnInit {
 
+  @Input() favoriteFilters: FavoriteFilterModel[] = [];
   @Input() initialFilterId = 0;
   @Output() filterChanged: EventEmitter<any> = new EventEmitter<any>();
 
@@ -35,27 +35,16 @@ export class CasesFilterComponent implements OnInit {
     return this.menuItems.some(x => x.selected);
   }
 
-  private favoriteFilters: FavoriteFilterModel[] = [];
   private filterId = 0;
   private destroy$ = new Subject<any>();
 
-  constructor(private appStore: AppStore,
-              private translateService: TranslateService) {
+  constructor(private translateService: TranslateService) {
   }
 
   ngOnInit() {
     //console.log('>> casesFilter: ngOnInit');
     this.filterId = this.initialFilterId;
-
-    // loading filters from app store state
-    this.appStore.select<FavoriteFilterModel[]>(AppStoreKeys.FavoriteFilters).pipe(
-      takeUntil(this.destroy$),
-      distinctUntilChanged(),
-      filter(Boolean) // aka new Boolean(val) to filter null values
-    ).subscribe((filters: FavoriteFilterModel[]) => {
-      this.favoriteFilters = filters || [];
-      this.initFilterMenu();
-    });
+    this.initFilterMenu();
   }
 
   private initFilterMenu() {
@@ -67,9 +56,8 @@ export class CasesFilterComponent implements OnInit {
         : [];
   }
 
-  applyFilter(selectedFilterId: number) {
+  applyFilter(selectedItem: FilterMenuItemModel) {
     // update menu item
-    const selectedItem = this.findItem(selectedFilterId);
     selectedItem.selected = !selectedItem.selected;
 
     if (selectedItem && selectedItem.selected) {
@@ -86,14 +74,6 @@ export class CasesFilterComponent implements OnInit {
     } else {
       this.filterChanged.emit({ filterId: +CaseStandardSearchFilters.AllCases, filterName: null });
     }
-  }
-
-  private findItem(itemId: number) {
-    const res = this.menuItems.filter(x => x.id === itemId);
-    if (res && res.length) {
-      return res[0];
-    }
-    return null;
   }
 
   trackByFn(index, item) {

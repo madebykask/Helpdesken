@@ -8,9 +8,10 @@ import { CaseOverviewRoutingModule } from './case-overview-routing.module';
 import { GetByKeyPipe } from './pipes/filter-case-overview.pipe';
 import { CasesOverviewComponent } from './components/cases-overview/cases-overview.component';
 import { CasesFilterComponent } from './components/cases-filter/cases-filter.component';
+import { CasesSortMenuComponent } from './components/cases-sort-menu/cases-sort-menu.component';
 
 @NgModule({
-  declarations: [ CasesOverviewComponent, GetByKeyPipe, CasesFilterComponent ],
+  declarations: [ CasesOverviewComponent, GetByKeyPipe, CasesFilterComponent, CasesSortMenuComponent ],
   imports: [
     CommonModule,
     MbscModule,

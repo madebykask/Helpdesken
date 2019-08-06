@@ -9,6 +9,7 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Paging;
 using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.BusinessData.Models.Shared.Output;
+using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
@@ -19,9 +20,9 @@ using DH.Helpdesk.Web.Common.Models.CaseSearch;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Extensions.Lists;
-using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Models.CasesOverview;
 using DH.Helpdesk.WebApi.Infrastructure.Authentication;
+using DH.Helpdesk.WebApi.Logic.Case;
 using DH.Helpdesk.WebApi.Models.Output;
 
 namespace DH.Helpdesk.WebApi.Controllers
@@ -36,15 +37,18 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IUserService _userSerivice;
         private readonly ICustomerService _customerService;
         private readonly ICaseService _caseService;
+        private readonly ICaseTranslationService _caseTranslationService;
 
         public CasesOverviewController(ICaseSearchService caseSearchService,
             ICaseService caseService,
             ICustomerUserService customerUserService,
             ICaseSettingsService caseSettingService,
             ICaseFieldSettingService caseFieldSettingService,
+            ICaseTranslationService caseTranslationService,
             IUserService userSerivice,
             ICustomerService customerService)
         {
+            _caseTranslationService = caseTranslationService;
             _caseService = caseService;
             _caseSearchService = caseSearchService;
             _customerUserService = customerUserService;
@@ -52,6 +56,31 @@ namespace DH.Helpdesk.WebApi.Controllers
             _caseFieldSettingService = caseFieldSettingService;
             _userSerivice = userSerivice;
             _customerService = customerService;
+        }
+
+        [HttpGet]
+        [Route("sortingfields")]
+        public async Task<IList<CaseSortFieldModel>> GetSortingFields([FromUri]int langId, [FromUri]int cid)
+        {
+            var sortingFields = new List<GlobalEnums.TranslationCaseFields>()
+            {
+                GlobalEnums.TranslationCaseFields.CaseNumber,
+                GlobalEnums.TranslationCaseFields.RegTime,
+                GlobalEnums.TranslationCaseFields.Performer_User_Id,
+                GlobalEnums.TranslationCaseFields.WorkingGroup_Id,
+                GlobalEnums.TranslationCaseFields.Priority_Id,
+                GlobalEnums.TranslationCaseFields.StateSecondary_Id,
+                GlobalEnums.TranslationCaseFields.WatchDate
+            };
+
+            var caseFieldTranslations = await _caseFieldSettingService.GetCustomerCaseTranslationsAsync(cid);
+
+            var res = 
+                sortingFields.Select(f => new CaseSortFieldModel(_caseTranslationService.GetFieldLabel(f, langId, cid, caseFieldTranslations), f.ToString()))
+                .OrderBy(f => f.Text)
+                .ToList();
+
+            return res;
         }
 
         [HttpGet]
@@ -95,8 +124,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 CaseSearchFilter = filter,
                 Search = new Search()
                 {
-                    SortBy = "CaseNumber",
-                    Ascending = true
+                    SortBy = GlobalEnums.TranslationCaseFields.RegTime.ToString(),
+                    Ascending = false
                 }
             };
 
