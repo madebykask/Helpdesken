@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/catch';
 import { LogService } from './log.service';
 import { UuidGenerator } from '../utils/uuid-generator';
 import { WindowWrapper } from '../shared/window-wrapper';
 import { ClientLogEntryModel, ClientLogLevel } from '../models/client-log.model';
 import { ClientLogApiService } from './data/client-log-api.service';
 import { AlertsService } from './alerts.service';
-import { Alert, AlertType } from '../shared/alert-types';
 
 @Injectable()
 export class ErrorHandlingService {
-    
+
     constructor(
         private clientLogApiService: ClientLogApiService,
         private logService: LogService,
@@ -19,9 +17,9 @@ export class ErrorHandlingService {
     }
 
     // handles unknown error (system)
-    handleError(err: any, errorMsg: string = '') {
+    handleError(err: any, errorMsg = '') {
 
-        //prepare log text
+        // prepare log text
         let log = errorMsg || 'Unknown Error.';
 
         if (err) {
@@ -30,7 +28,7 @@ export class ErrorHandlingService {
 
         this.logService.error(log);
 
-        //send error to server
+        // send error to server
         let logEntry = new ClientLogEntryModel();
         logEntry.UniqueId = UuidGenerator.createUuid();
         logEntry.Level = ClientLogLevel.Error;
@@ -51,7 +49,7 @@ export class ErrorHandlingService {
         this.alertsService.error(alertMsg);
     }
 
-    //handles user error
+    // handles user error
     handleUserError(userMsg: string) {
 
         let errorMsg = userMsg || 'Unknown Error. ';
@@ -62,17 +60,17 @@ export class ErrorHandlingService {
         this.alertsService.error(`${errorMsg}`);
     }
 
-    //handles warning
+    // handles warning
     handleWarning(userMsg: string) {
 
         this.logService.warning(userMsg);
 
         // raise error alert to display user error message on ui 
-        //this.alertsService.warning(`${userMsg}`);
+        // this.alertsService.warning(`${userMsg}`);
     }
 
     private buildErrorAlertMessage(errorId:string) : string {
-        let str: string =
+        const str =
             `Sorry, an error occurred while processing your request. Please provide Error Id to the support team.
              ErrorId: ${errorId}`;
         return str;

@@ -1,5 +1,5 @@
-﻿import { Injectable, Inject, forwardRef } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
+import { Injectable, Inject, forwardRef } from '@angular/core';
+import { Observable } from 'rxjs';
 import { AppConfig } from '../../shared/app-config/app-config';
 import { ExtendedHttpService} from './extended-http.service'
 import { ClientLogEntryModel } from '../../models/client-log.model';
@@ -17,6 +17,3 @@ export class ClientLogApiService {
         return this.httpService.postJsonNoContent(url, logEntry);
     }
 }
-
-
-

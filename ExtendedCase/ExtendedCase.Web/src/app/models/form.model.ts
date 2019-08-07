@@ -1,21 +1,18 @@
-﻿import { FormArray, FormGroup, FormControl } from '@angular/forms';
+﻿import { FormGroup, FormControl } from '@angular/forms';
 import { ProxyModel } from './proxy.model';
-import {
-    TabTemplateModel, FormTemplateModel, SectionTemplateModel, BaseControlTemplateModel
-} from '../models/template.model';
-import { UuidGenerator } from '../utils/uuid-generator'
+import { TabTemplateModel, FormTemplateModel, SectionTemplateModel, BaseControlTemplateModel } from '../models/template.model';
 import { IMap } from '../shared/common-types'
 import { FormFieldPathModel } from './form-field-path.model';
 import { FormFieldsIterator } from '../models/form-fields-iterator';
 import { ValidateOn } from '../shared/validation-types';
-//import { FormStateModel, FormStateItem, FormItemPath } from './form-state.model';
+// import { FormStateModel, FormStateItem, FormItemPath } from './form-state.model';
 
 export class FormModel {
     tabs: { [id: string]: TabModel; };
     proxyModel: ProxyModel;
     dataSources: { [id: string]: CustomDataSourceModel };
     template: FormTemplateModel;
-    //formState: FormStateModel;
+    // formState: FormStateModel;
 
     constructor(template:FormTemplateModel) {
         this.template = template;
@@ -44,10 +41,11 @@ export class FormModel {
     }
 
     findFormField(fieldPath: FormFieldPathModel): FieldModelBase {
-        let fieldModel:FieldModelBase = undefined;
+        let fieldModel: FieldModelBase = undefined;
 
         try {
-            fieldModel = this.tabs[fieldPath.tabId].sections[fieldPath.sectionId].instances[fieldPath.sectionInstanceIndex].fields[fieldPath.fieldId];
+            fieldModel =
+                this.tabs[fieldPath.tabId].sections[fieldPath.sectionId].instances[fieldPath.sectionInstanceIndex].fields[fieldPath.fieldId];
         } catch (err) {
             console.error(`Failed to find form field: ${JSON.stringify(fieldPath)}`);
         }
@@ -135,7 +133,7 @@ export class SectionInstanceModel {
 
     hidden: boolean;
     disabled: boolean;
-    sectionEnableStateSelection: boolean; 
+    sectionEnableStateSelection: boolean;
     dataSources: { [id: string]: CustomDataSourceModel };
 
     constructor(instanceId: number, section: SectionModel) {
@@ -174,7 +172,7 @@ export abstract class FieldModelBase {
     items: ItemModel[];
     warnings: string[];
 
-    //state fields
+    // state fields
     private _originalValue: any;
     private _lastValue: any;
     private _previousValue: any;
@@ -182,10 +180,10 @@ export abstract class FieldModelBase {
     private _originalAdditionalData = '';
     private _additionalData = '';
     private _prevAdditionalData = '';
-    
+
     template: BaseControlTemplateModel;
     sectionInstance: SectionInstanceModel;
-    
+
     constructor(id: string, template: BaseControlTemplateModel, sectionInstance: SectionInstanceModel) {
         this.id = id;
         this.template = template;
@@ -242,7 +240,7 @@ export abstract class FieldModelBase {
     }
 
     setControlValue(value: any): void {
-        this.setLastValue(value); 
+        this.setLastValue(value);
         this.changeControlValue(value);
     }
 
@@ -289,7 +287,7 @@ export abstract class FieldModelBase {
         return `${fieldPath.tabId}_${fieldPath.sectionId}_${fieldPath.sectionInstanceIndex}_${this.id}`;
     }
 
-    abstract get isReview():boolean; 
+    abstract get isReview(): boolean;
 }
 
 export class SingleControlFieldModel extends FieldModelBase {
@@ -298,7 +296,7 @@ export class SingleControlFieldModel extends FieldModelBase {
     constructor(id: string, template: BaseControlTemplateModel, sectionInstance: SectionInstanceModel) {
         super(id, template, sectionInstance);
     }
-    
+
     getControlGroup(): FormControl {
         return this.control;
     }
@@ -323,7 +321,7 @@ export class MultiValueSingleControlFieldModel extends SingleControlFieldModel {
 }
 
 export class MultiControlFieldModel extends FieldModelBase {
-    
+
     controls: FormGroup;
 
     constructor(id: string, template: BaseControlTemplateModel, sectionInstance: SectionInstanceModel) {
@@ -361,9 +359,9 @@ export class ItemModel {
 
 export class FormControlType {
 
-    //constructor() { // removed oto use in html
+    // constructor() { // removed oto use in html
     //    throw new Error('Cannot new this class');
-    //}
+    // }
 
     static CheckboxList = 'checkbox-list';
     static Search = 'search';
@@ -383,5 +381,5 @@ export class FormControlType {
     static AltNumber = 'altnumber';
     static Html = 'html';
 
-    type = FormControlType;//workaroud to  use in html template
+    type = FormControlType;// workaroud to  use in html template
 }

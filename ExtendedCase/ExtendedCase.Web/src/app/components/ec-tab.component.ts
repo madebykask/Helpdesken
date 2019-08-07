@@ -1,9 +1,8 @@
-﻿import { Component, Input, OnInit, DoCheck, OnChanges, ChangeDetectorRef, ChangeDetectionStrategy, } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, Input } from '@angular/core';
 import { ComponentCommService } from '../services/component-comm.service';
 import { FormModel, TabModel } from '../models/form.model';
 import { TabTemplateModel, SectionTemplateModel, SectionType } from '../models/template.model';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'ec-tab',
@@ -24,22 +23,20 @@ export class ExtendedCaseTabComponent {
         //changeDetector.detach();
     }
 
-
     isReviewSection(section: SectionTemplateModel) {
         return section.type === SectionType.review;
     }
-    
+
     getColumnSequence(): number[] {
         let seq: number[] = [];
-        for (let i = 0; i < this.tabTemplate.columnCount; i++)
+        for (let i = 0; i < this.tabTemplate.columnCount; i++) {
             seq.push(i);
-
+        }
         return seq;
     }
 
     getColumnCssClass(): string {
         let css = '';
-
         switch (this.tabTemplate.columnCount) {
             case 1:
                 css = 'col-md-12';
@@ -54,7 +51,6 @@ export class ExtendedCaseTabComponent {
                 css = 'col-md-3';
                 break;
         }
-
         return css;
     }
 

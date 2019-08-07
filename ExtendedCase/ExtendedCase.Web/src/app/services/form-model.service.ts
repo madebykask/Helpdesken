@@ -1,8 +1,13 @@
-﻿import { Injectable } from '@angular/core';
-import { FormArray, FormGroup, FormControl, FormBuilder } from '@angular/forms';
-import { TabModel, SectionModel, SectionInstanceModel, FieldModelBase, FormModel, SingleControlFieldModel, MultiValueSingleControlFieldModel, MultiControlFieldModel, ItemModel, CustomDataSourceModel, FormControlType } from '../models/form.model';
+
+import { debounceTime } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { FormArray, FormGroup, FormControl } from '@angular/forms';
+import { TabModel, SectionModel, SectionInstanceModel, FieldModelBase,
+         FormModel, SingleControlFieldModel, MultiValueSingleControlFieldModel,
+         MultiControlFieldModel, ItemModel, CustomDataSourceModel, FormControlType } from '../models/form.model';
 import { ControlValueChangedParams, ComponentCommService } from './component-comm.service';
-import { FormTemplateModel, TabTemplateModel, BaseControlTemplateModel, DataSourceItemTemplateModel, CustomStaticDataSourceTemplateModel, SectionTemplateModel, SectionType } from '../models/template.model';
+import { FormTemplateModel, TabTemplateModel, BaseControlTemplateModel, DataSourceItemTemplateModel,
+         CustomStaticDataSourceTemplateModel, SectionTemplateModel, SectionType } from '../models/template.model';
 import { ProxyModelService } from './proxy-model.service';
 import { ProxyModel, FormInfo } from '../models/proxy.model';
 import { ErrorHandlingService } from './error-handling.service';
@@ -37,11 +42,11 @@ export class FormModelService {
 
             tab.sections.forEach((section: SectionTemplateModel) => {
 
-                //do not create form model for review sections
+                // do not create form model for review sections
                 if (section.type !== SectionType.review) {
                     let sectionModel = this.createSectionModel(section, tab, tabModel, proxyModel);
                     tabModel.sections[section.id] = sectionModel;
-                    tabGroup[section.id] = sectionModel.group;    
+                    tabGroup[section.id] = sectionModel.group;
                 }
             });
 
@@ -49,44 +54,44 @@ export class FormModelService {
             tabs[tab.id] = tabModel;
         });
 
-         //init custom datasource data model
+         // init custom datasource data model
         let dataSourceTemplateModels = templateModel.dataSources || [];
-        for (let templateModel of dataSourceTemplateModels) {
-            dataSourceModels[templateModel.id] = new CustomDataSourceModel(templateModel.id);    
-            //set data immedeiately if its a statis data source!
-            if (templateModel instanceof CustomStaticDataSourceTemplateModel) {
-                dataSourceModels[templateModel.id].setData(templateModel.data);
-            } 
-            
+        for (let dsTemplateModel of dataSourceTemplateModels) {
+            dataSourceModels[dsTemplateModel.id] = new CustomDataSourceModel(dsTemplateModel.id);
+            // set data immedeiately if its a statis data source!
+            if (dsTemplateModel instanceof CustomStaticDataSourceTemplateModel) {
+                dataSourceModels[dsTemplateModel.id].setData(dsTemplateModel.data);
+            }
+
             // add accessor property to the proxyModel.dataSources
             this.proxyModelService.createDataSourceProperty(
                 proxyModel,
-                templateModel.id,
-                dataSourceModels[templateModel.id]);
+                dsTemplateModel.id,
+                dataSourceModels[dsTemplateModel.id]);
         }
 
         this.logService.debug('Form model has been built successfully');
         return formModel;
     }
 
-    private createSectionModel(sectionTpl: SectionTemplateModel, tabTpl: TabTemplateModel, tabModel: TabModel, proxyModel: ProxyModel) : SectionModel {
-        
-        let sectionModel = new SectionModel(sectionTpl.id, sectionTpl, tabModel);
+    private createSectionModel(sectionTpl: SectionTemplateModel, tabTpl: TabTemplateModel,
+        tabModel: TabModel, proxyModel: ProxyModel): SectionModel {
 
+        let sectionModel = new SectionModel(sectionTpl.id, sectionTpl, tabModel);
         sectionModel.instances = [];
 
-        // 1. create initial section instance 
+        // 1. create initial section instance
         let firstSection = this.createSectionInstanceModel(sectionTpl, sectionModel, proxyModel);
         sectionModel.instances.push(firstSection);
 
-        //2. add first section instance group to form array of the section model form 
+        // 2. add first section instance group to form array of the section model form
         let instancesFormArray = new FormArray([firstSection.group]);
         sectionModel.group = new FormGroup({ instances: instancesFormArray });
 
         return sectionModel;
     }
 
-    addSectionInstance(sectionTpl : SectionTemplateModel, sectionModel: SectionModel, proxyModel: ProxyModel) : SectionInstanceModel {
+    addSectionInstance(sectionTpl: SectionTemplateModel, sectionModel: SectionModel, proxyModel: ProxyModel): SectionInstanceModel {
         let sectionInstance = this.createSectionInstanceModel(sectionTpl, sectionModel, proxyModel);
         let formArray = <FormArray>sectionModel.group.get('instances');
         formArray.push(sectionInstance.group);
@@ -96,28 +101,30 @@ export class FormModelService {
     }
 
     removeSectionInstance(sectionInstance: SectionInstanceModel, formModel: FormModel): boolean {
-        if (!sectionInstance)
+        if (!sectionInstance) {
             return false;
+        }
 
         let sectionModel = sectionInstance.section;
         let instancesCount = sectionModel.instances.length;
 
-        //remove from section model collection
+        // remove from section model collection
         sectionModel.instances =
             sectionModel.instances.filter((item: SectionInstanceModel) => item.id !== sectionInstance.id);
 
-        //delete from formArray - sectionModel.group["instances"]
+        // delete from formArray - sectionModel.group["instances"]
         let formArray = <FormArray>sectionModel.group.get('instances');
         if (formArray) {
             let index = formArray.controls.indexOf(sectionInstance.group);
-            if (index !== -1)
+            if (index !== -1) {
                 formArray.removeAt(index);
+            }
         }
 
-        //delete from proxy model
+        // delete from proxy model
         this.proxyModelService.removeSectionInstance(sectionInstance, formModel.proxyModel);
 
-        //remove link to parent
+        // remove link to parent
         sectionInstance.section = null;
         return sectionModel.instances.length !== instancesCount;
     }
@@ -130,12 +137,12 @@ export class FormModelService {
         let newInstanceId = sectionModel.getNextInstanceId();
         let sectionInstance = new SectionInstanceModel(newInstanceId, sectionModel);
 
-        //create customer datasource models at section instance level!
+        // create customer datasource models at section instance level!
         let dataSourceModels: { [id: string]: CustomDataSourceModel } = {};
-        
+
         if (sectionTpl.dataSources && sectionTpl.dataSources.length > 0) {
             for (let dsTemplate of sectionTpl.dataSources) {
-                dataSourceModels[dsTemplate.id] = new CustomDataSourceModel(dsTemplate.id);    
+                dataSourceModels[dsTemplate.id] = new CustomDataSourceModel(dsTemplate.id);
             }
         }
 
@@ -146,14 +153,14 @@ export class FormModelService {
         }
 
         let groups: any = {};
-        
+
         sectionTpl.controls.forEach((control: BaseControlTemplateModel) => {
-            
-            var fieldModel = this.createField(control, sectionInstance);
+
+            let fieldModel = this.createField(control, sectionInstance);
 
             sectionInstance.fields[control.id] = fieldModel;
             groups[control.id] = fieldModel.getControlGroup();
-            
+
             this.proxyModelService.createProxyModelProperty(
                 proxyModel,
                 sectionTpl.tab,
@@ -174,7 +181,6 @@ export class FormModelService {
         fieldModel.items = fieldModel.preFilteredItems = this.getFieldItemsArray(controlTemplateModel);
 
         this.createControlsForMultiControl(fieldModel, controlTemplateModel);
-
         return fieldModel;
     }
 
@@ -191,11 +197,12 @@ export class FormModelService {
         fieldModel.controls = new FormGroup(formGroupItems);
 
         // subscribe to Form Model change
-        fieldModel.controls.valueChanges
-            .debounceTime(100)
-            .subscribe((value: any) => {
-                this.componentCommService.announceControlValueChanged(new ControlValueChangedParams(controlTemplateModel, fieldModel.controls, value, fieldModel));
-            });
+        fieldModel.controls.valueChanges.pipe(
+            debounceTime(100)
+        ).subscribe((value: any) => {
+            this.componentCommService.announceControlValueChanged(
+                new ControlValueChangedParams(controlTemplateModel, fieldModel.controls, value, fieldModel));
+        });
     }
 
     private createField(controlTpl: BaseControlTemplateModel, sectionInstance: SectionInstanceModel): FieldModelBase {
@@ -203,27 +210,27 @@ export class FormModelService {
 
         if (controlTpl.controlType === FormControlType.CheckboxList) {
             fieldModel = this.createMultiControlField(controlTpl, sectionInstance);
-        }
-        else{
+        } else {
             fieldModel = this.createSingleControlField(controlTpl, sectionInstance);
         }
         fieldModel.isRequired = controlTpl.isRequired;
-
         return fieldModel;
     }
 
     getSectionFields(section: SectionInstanceModel, fieldIds?: string[], includeHtmlFields = true): FieldModelBase[] {
-        let fields: FieldModelBase[] = [];    
+        let fields: FieldModelBase[] = [];
         if (section && section.fields) {
             for (let fieldId of Object.keys(section.fields)) {
                 if (!fieldIds || fieldIds.indexOf(fieldId) !== -1) {
-                    if (!includeHtmlFields && section.fields[fieldId].template.controlType === FormControlType.Html)
+                    if (!includeHtmlFields && section.fields[fieldId].template.controlType === FormControlType.Html) {
                         continue;
+                    }
                     let fieldModel = section.fields[fieldId];
-                    if (fieldModel)
-                        fields.push(fieldModel);    
+                    if (fieldModel) {
+                        fields.push(fieldModel);
+                    }
                 }
-            }    
+            }
         }
         return fields;
     }
@@ -234,13 +241,13 @@ export class FormModelService {
             (controlTpl.controlType === FormControlType.Multiselect)
                 ? new MultiValueSingleControlFieldModel(controlTpl.id, controlTpl, sectionInstance)
                 : new SingleControlFieldModel(controlTpl.id, controlTpl, sectionInstance);
-        
+
         fieldModel.items = fieldModel.preFilteredItems = this.getFieldItemsArray(controlTpl);
 
         fieldModel.control = new FormControl('');
         // subscribe to Form Model change
-        fieldModel.control.valueChanges
-            .debounceTime(100)
+        fieldModel.control.valueChanges.pipe(
+            debounceTime(100))
             .subscribe((value: any) => {
                 this.componentCommService.announceControlValueChanged(new ControlValueChangedParams(controlTpl, fieldModel.control, value, fieldModel));
             });
@@ -252,9 +259,10 @@ export class FormModelService {
         let items: ItemModel[] = null;
         if (control.hasOwnProperty('dataSource') && control.dataSource instanceof Array) {
             let ds = <Array<DataSourceItemTemplateModel>>control.dataSource;
-            if (ds)
+            if (ds) {
                 items =
                     ds.map((dataSourceItem: DataSourceItemTemplateModel) => new ItemModel(dataSourceItem.value, dataSourceItem.text));
+            }
         }
         return items;
     }

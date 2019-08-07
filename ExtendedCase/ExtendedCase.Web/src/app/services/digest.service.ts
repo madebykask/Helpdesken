@@ -1,11 +1,11 @@
-﻿import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs/Rx';
+import { throwError, forkJoin, of, Observable, Subject } from 'rxjs';
+import { mergeMap, catchError } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 import { DigestUpdateLog, DigestResult } from '../models/digest.model';
 import { ControlValueChangedParams } from './component-comm.service';
 import { FormTemplateModel, TabTemplateModel, BaseControlTemplateModel,
     CustomQueryDataSourceTemplateModel,  OptionsDataSourceTemplateModel, ControlCustomDataSourceTemplateModel,
     ControlSectionDataSourceTemplateModel, SectionType, IDataSourceParameter} from '../models/template.model';
-
 import { TabModel, FormModel, SectionModel, SectionInstanceModel, SingleControlFieldModel, FieldModelBase } from '../models/form.model';
 import { FormModelService } from './form-model.service';
 import { TemplateService } from './template.service';
@@ -16,7 +16,7 @@ import { ProxyModel, ProxySectionInstance, ProxyControl } from '../models/proxy.
 import { UuidGenerator } from '../utils/uuid-generator'
 import * as commonMethods from '../utils/common-methods';
 import { ErrorHandlingService } from './error-handling.service';
-import { LogService } from './log.service' 
+import { LogService } from './log.service'
 import { SubscriptionManager } from '../shared/subscription-manager';
 import { ChangedFieldItem } from '../shared/common-types';
 import { KeyedCollection } from '../shared/keyed-collection';
@@ -70,7 +70,7 @@ export class DigestService {
                 this.logService,
                 false);
 
-         //process new section fields
+         // process new section fields
         if (isNewFields) {
             process.setNewFields(changedFields.map(item => item.fieldPath));
         }
@@ -141,7 +141,7 @@ class DigestProcess {
     private processingCompleteSubject: Subject<DigestResult>;
     private subscriptionManager = new SubscriptionManager();
     private newFields: FormFieldPathModel[] = [];
-    
+
     constructor(private templateModel: FormTemplateModel,
         private formModel: FormModel,
         private params: ControlValueChangedParams,
@@ -167,36 +167,36 @@ class DigestProcess {
     runDigestProcess(): Observable<DigestResult> {
         if (this.params && this.params.control.noDigest) {
             this.logDebug('digest not started, control has noDigest');
-            return Observable.of(new DigestResult(true, this.digestUpdateLog));
+            return of(new DigestResult(true, this.digestUpdateLog));
         }
 
         setTimeout(() => { // run cycle after return to avoid subject next() before any subscription;
             this.runCycle(true);
-        }, 0); 
+        }, 0);
 
         return this.processingCompleteSubject.asObservable();
     }
-    
-    private runCycle(firstRun:boolean) {
+
+    private runCycle(firstRun: boolean) {
         if (this.digestCounter >= this.digestMaxCount) {
             this.logWarning(`Digest failed to complete in ${this.digestCounter} cycles`);
         }
 
         if (this.runCyclesCount > 0) {
             // clean parameters change log on each subsequent run
-            this.parametersUpdateLog.clear();    
+            this.parametersUpdateLog.clear();
         }
 
         this.runCyclesCount += 1;
         this.logDebug(`@@@ Running new digest cycle: ${this.runCyclesCount}`);
 
-        //reset initial flags if recursive call
+        // reset initial flags if recursive call
         if (firstRun === false) {
             this.forceLoadDataSources = false;
             this.newFields = [];
         }
 
-        //process params only on the firstRun
+        // process params only on the firstRun
         if (this.params && firstRun) {
             this.saveUpdateLog(this.params.formModel.getFieldPath(), null, this.params.value);
         }
@@ -205,28 +205,28 @@ class DigestProcess {
 
         this.processElements(firstRun);
 
-        //chain processings of data sources
+        // chain processings of data sources
         this.subscriptionManager.addSingle('processCustomDataSources',
-            this.processCustomDataSources()
-                .catch((error: any) => {
+            this.processCustomDataSources().pipe(
+                catchError((error: any) => {
                     console.error(error);
-                    return Observable.throw(error);
-                })
-                .flatMap((x: boolean[]) => {
+                    return throwError(error);
+                }),
+                mergeMap((x: boolean[]) => {
                     this.logService.infoFormatted('processCustomDataSources results: {0}', x);
                     if (x.indexOf(true) > -1) {
                         hasChanges = true;
                     }
 
                     return this.processControlsDataSources();
-                })
+                }),)
                 .subscribe((x: boolean[]) => {
                     this.logService.infoFormatted('processControlsDataSources results: {0}', x);
                     if (x.indexOf(true) > -1) {
                             hasChanges = true;
                         }
 
-                        //run if there were any changes 
+                        // run if there were any changes
                         if (hasChanges) {
                             this.logInfo('datasources returned hasChanges: true, run cycle()');
                             this.runCycle(false);
@@ -260,7 +260,7 @@ class DigestProcess {
     private saveUpdateLog(fieldPath: FormFieldPathModel, oldValue: any, newValue: any) {
         this.parametersUpdateLog.add(fieldPath, oldValue, newValue);
         this.digestUpdateLog.add(fieldPath, oldValue, newValue);
-        this.logDebug(`Digest update log changed: Path=${fieldPath.buildFormFieldPath()}, OldValue = ${oldValue}, NewValue = ${newValue}`);        
+        this.logDebug(`Digest update log changed: Path=${fieldPath.buildFormFieldPath()}, OldValue = ${oldValue}, NewValue = ${newValue}`);
     }
 
     private processElements(firstRun: boolean) {
@@ -278,17 +278,17 @@ class DigestProcess {
 
             for (let tabId of Object.keys(this.formModel.tabs)) {
                 let tabModel = this.formModel.tabs[tabId];
-                
+
                 modelChanged = this.processTabBindings(tabModel);
 
-                //sections
+                // sections
                 for (let sectionId of Object.keys(tabModel.sections)) {
                     let sectionModel = tabModel.sections[sectionId];
 
                     let isSectionChanged = this.processSectionBindings(sectionModel);
                     modelChanged = isSectionChanged ? true : modelChanged;
 
-                    //process sectionInstances controls
+                    // process sectionInstances controls
                     let sectionInstanceIndex = -1;
                     for (let sectionInstance of sectionModel.instances) {
                         sectionInstanceIndex++;
@@ -305,7 +305,7 @@ class DigestProcess {
 
                             modelChanged = isControlChanged ? true : modelChanged;
                         }
-                        
+
                         this.updateReviewSectionVisibility(sectionInstance);
                     }
                 }
@@ -316,8 +316,8 @@ class DigestProcess {
                     lastRun = true;
                     this.logDebug('Run last digest iteration.');
                     continue;
-                } 
-                break; //exit loop if it was last run and model was not changed
+                }
+                break; // exit loop if it was last run and model was not changed
             } else {
                 lastRun = false;
             }
@@ -327,10 +327,10 @@ class DigestProcess {
 
         let sectionModel = sectionInstance.section;
         let sectionTemplate = sectionModel.template;
-        
+
         if (sectionTemplate.hasReview() && sectionTemplate.type !== SectionType.review) {
 
-            //set up review control visibility: hide if both values are empty
+            // set up review control visibility: hide if both values are empty
             let allHidden = true;
             for (let fieldKey of Object.keys(sectionInstance.fields)) {
 
@@ -339,8 +339,9 @@ class DigestProcess {
                 let isHidden = fieldModel.hidden || (commonMethods.isUndefinedNullOrEmpty(values[0]) && commonMethods.isUndefinedNullOrEmpty(values[1]));
                 fieldModel.hidden = isHidden;
 
-                if (!fieldModel.hidden) 
+                if (!fieldModel.hidden) {
                   allHidden = false;
+                }
             }
             sectionInstance.hidden = allHidden;
         }
@@ -366,7 +367,7 @@ class DigestProcess {
             disabledValue = tab.disabledBinding.call(this.formModel.proxyModel.tabs[tab.id], this.formModel.proxyModel, this.digestUpdateLog);
         }
 
-        //check if disabled value changed
+        // check if disabled value changed
         if (tabModel.disabled !== disabledValue) {
             this.logService.debugFormatted('disabledBinding changed for tab: ' + tab.id);
             tabModel.disabled = disabledValue;
@@ -392,7 +393,7 @@ class DigestProcess {
             if (sectionModel.hidden !== isHidden) {
                 sectionModel.hidden = isHidden;
 
-                //set hidden for all section instances
+                // set hidden for all section instances
                 for (let sectionInstance of sectionModel.instances) {
                     sectionInstance.hidden = isHidden;
                 }
@@ -402,7 +403,7 @@ class DigestProcess {
         }
 
         {
-            //set tab disableBinding as default value
+            // set tab disableBinding as default value
             let isDisabled = this.formModel.tabs[tab.id].disabled;
 
             if (!isDisabled && section.disabledBinding instanceof Function) {
@@ -415,13 +416,13 @@ class DigestProcess {
                 modelChanged = true;
             }
 
-            //process section instances
+            // process section instances
             for (let sectionInstance of sectionModel.instances) {
                 let sectionInstanceDisabled = isDisabled;
 
                 let changedByUser = false;
 
-                //check user selection only if a template has enableAction set
+                // check user selection only if a template has enableAction set
                 if (!sectionInstanceDisabled && section.enableAction) {
                     sectionInstanceDisabled = !sectionInstance.sectionEnableStateSelection;
                     changedByUser = sectionInstance.disabled !== sectionInstanceDisabled;
@@ -434,7 +435,7 @@ class DigestProcess {
 
                     if (sectionInstance.disabled) {
                         const changedItems =
-                            this.formControlsManagerService.resetDisabledSectionState(sectionInstance, changedByUser); 
+                            this.formControlsManagerService.resetDisabledSectionState(sectionInstance, changedByUser);
 
                         if (changedItems && changedItems.length) {
                             this.logService.debugFormatted('[~]Disabled section fields: {0}', changedItems);
@@ -444,7 +445,7 @@ class DigestProcess {
                         }
                     }
 
-                    //keep user selection in sync with disabled binding - reset to false only if disabled but true is to be set only by clicking checkbox on ui
+                    // keep user selection in sync with disabled binding - reset to false only if disabled but true is to be set only by clicking checkbox on ui
                     if (section.enableAction && sectionInstance.disabled) {
                         sectionInstance.sectionEnableStateSelection = false;
                     }
@@ -474,11 +475,11 @@ class DigestProcess {
             let res2 = this.processHiddenBinding(proxyControl, controlTpl, sectionInstance);
             let res3 = this.processDisabledBinding(proxyControl, controlTpl, sectionInstance);
             this.logService.debugFormatted('processControlBindings result : {0}, {1}, {1}', res1, res2, res3);
-            
+
             modelChanged = res1 || res2 || res3;
 
-            //run setControlDataSourceOptions only for datasources with static data. In other cases setControlDataSourceOptions is
-            //called later after data is recieved.
+            // run setControlDataSourceOptions only for datasources with static data. In other cases setControlDataSourceOptions is
+            // called later after data is recieved.
             if (controlTpl.dataSourceFilterBinding instanceof Function && controlTpl.dataSource instanceof Array) {
                 let hasChanged =
                     this.formControlsManagerService.setControlDataSourceOptions(
@@ -491,12 +492,14 @@ class DigestProcess {
             }
         }
 
-        if (modelChanged)
+        if (modelChanged) {
             this.logInfo(`processControlBindings: modelChanged in control ${controlTpl.id}`);
+        }
 
-        //ignore model changes for review controls
-        if (fieldModel.isReview)
+        // ignore model changes for review controls
+        if (fieldModel.isReview) {
             return false;
+        }
 
         return modelChanged;
     }
@@ -507,7 +510,7 @@ class DigestProcess {
         if (controlTemplate.valueBinding instanceof Function) {
             let fieldModel = sectionInstance.fields[controlTemplate.id];
             this.logDebug(`exec valueBinding() for ${controlTemplate.id}`);
-       
+
             // todo: valueBinding is implemented only for SingleControl?
             if (fieldModel instanceof SingleControlFieldModel) {
 
@@ -537,15 +540,15 @@ class DigestProcess {
                     // ignore review control changes
                     if (!fieldModel.isReview) {
                         this.logDebug(`valueBinding() returned a different value. Change control value to new. ControlId: ${controlTemplate.id}, NewValue: ${JSON.stringify(newValue)}`);
-                        this.saveUpdateLog(fieldPath, fieldModel.control.value, newValue);    
+                        this.saveUpdateLog(fieldPath, fieldModel.control.value, newValue);
                         hasChanged = true;
                     }
-                    
+
                     this.formModelService.setFieldValue(fieldModel, newValue);
                 }
             }
         }
-        
+
         return hasChanged;
     }
 
@@ -559,7 +562,7 @@ class DigestProcess {
             isDisabled = controlTemplate.disabledBinding.call(proxyControl, this.formModel.proxyModel, this.digestUpdateLog);
         }
 
-        //enable/disable controls
+        // enable/disable controls
         hasChanged = this.formModelService.setDisabled(fieldModel, isDisabled);
         return hasChanged;
     }
@@ -600,8 +603,9 @@ class DigestProcess {
                             dsTemplate.parameters,
                             this.formModel.proxyModel);
 
-                    if (result$)
+                    if (result$) {
                         dsObservation.push(result$);
+                    }
                 }
             }
         }
@@ -609,13 +613,13 @@ class DigestProcess {
         // some sections instance also may have custom dataSources
         this.processSectionsDataSources(dsObservation);
 
-        //return at least one to proceed with other processings... false means there were no changes 
+        // return at least one to proceed with other processings... false means there were no changes
         if (dsObservation.length === 0) {
-            return Observable.of([false]);
+            return of([false]);
         }
 
-        //wait for all observables to complete
-        let res = Observable.forkJoin(dsObservation);
+        // wait for all observables to complete
+        let res = forkJoin(dsObservation);
         this.logInfo('processCustomDataSources: end');
         return res;
     }
@@ -634,7 +638,7 @@ class DigestProcess {
         sectionInstanceIndex: number,
         dsObservation: Observable<boolean>[]) {
         let sectionTemplate = sectionInstance.section.template;
-        
+
         if (sectionTemplate.dataSources && sectionTemplate.dataSources.length) {
             this.logInfo(`processing sectionInstance dataSources. sectionInstance: '${sectionTemplate.id}[${sectionInstanceIndex}]'`);
             for (let dsTemplate of sectionTemplate.dataSources) {
@@ -645,18 +649,19 @@ class DigestProcess {
                         this.checkIfParameterHasChanged(parameters) ||
                         this.checkIfNewSectionInstance(sectionInstance, sectionInstanceIndex);
 
-                    //todo: check if section instance has been added!
+                    // todo: check if section instance has been added!
                     if (requiresUpdate) {
                         this.logInfo(`Load sectionInstance dataSource. sectionInstance: '${sectionTemplate.id}[${sectionInstanceIndex}]', dataSource: '${dsTemplate.id}'.`);
 
                         let result$ =
                             this.processCustomDataSource(sectionInstance, dsTemplate.id, parameters, this.formModel.proxyModel);
 
-                        if (result$)
+                        if (result$) {
                             dsObservation.push(result$);
+                        }
                     }
                 }
-            }    
+            }
         }
     }
 
@@ -674,8 +679,9 @@ class DigestProcess {
                         field.sectionInstanceIndex === sectionInstanceIndex);
         }
 
-        if (isNewSection)
+        if (isNewSection) {
             this.logService.debugFormatted('checkIfNewSectionInstance: section intance {0}[{1}] is a new instance.', sectionId, sectionId);
+        }
 
         return isNewSection;
     }
@@ -688,16 +694,16 @@ class DigestProcess {
 
         this.logInfo(`processCustomDataSource: dataSource '${dataSourceId}.`);
         let result$ =
-            this.dataSourcesLoaderService.loadCustomQueryDataSourceData(proxyModel, dataSourceId, parameters)
-                .catch((err: any) => {
+            this.dataSourcesLoaderService.loadCustomQueryDataSourceData(proxyModel, dataSourceId, parameters).pipe(
+                catchError((err: any) => {
                     this.errorHandlingService.handleError(err, `Unknown error on executing custom datasource '${dataSourceId}'`);
-                    return Observable.of(false);
-                })
-                .flatMap((data: any) => {
+                    return of(false);
+                }),
+                mergeMap((data: any) => {
                     dataSourcesOwner.dataSources[dataSourceId].setData(data);
                     this.logInfo(`Custom data source '${dataSourceId}' has been loaded successfully.`);
-                    return Observable.of(true);
-                });
+                    return of(true);
+                }),);
 
         return result$;
     }
@@ -708,7 +714,7 @@ class DigestProcess {
 
         let fieldsIterator = this.formModel.createFieldsIterator();
 
-        //iterate over all fields and refresh fields data sources
+        // iterate over all fields and refresh fields data sources
         fieldsIterator.forEach((fieldModel, fieldPath) => {
 
             let sectionInstanceIndex = fieldPath.sectionInstanceIndex;
@@ -716,9 +722,9 @@ class DigestProcess {
             let controlDataSource = controlTpl.dataSource;
             let result$: Observable<boolean> = null;
 
-            //options datasource handling
+            // options datasource handling
             if (controlDataSource && controlDataSource instanceof OptionsDataSourceTemplateModel) {
-                
+
                 let dsParameters = this.templateService.expandParametersForSection(sectionInstanceIndex, controlDataSource.parameters);
                 let dependsOnFields = this.templateService.expandFieldsForSection(sectionInstanceIndex, controlDataSource.dependsOn);
 
@@ -728,16 +734,17 @@ class DigestProcess {
 
                 if (requiresUpdate) {
                     this.logInfo(`processControlsDataSources: updating options control dataSource. ControlId: ${controlTpl.id}, DataSourceTemplate: ${controlDataSource.id}, paramChanged: ${requiresUpdate}, forceLoadDataSources: ${this.forceLoadDataSources}`);
-                    result$ = this.formControlsManagerService.refreshOptionsDataSource(this.formModel, controlDataSource, fieldModel, controlTpl, this.digestUpdateLog);
+                    result$ =
+                        this.formControlsManagerService.refreshOptionsDataSource(this.formModel, controlDataSource, fieldModel, controlTpl, this.digestUpdateLog);
                 }
             }
 
-            //custom datasource handling
+            // custom datasource handling
             else if (controlDataSource && controlDataSource instanceof ControlCustomDataSourceTemplateModel) {
                 let requiresUpdate = this.checkIfControlDataSourceUpdateRequired(fieldPath);
                 if (requiresUpdate === false) {
 
-                    //check if parameters in referenced custom datasource (template) has been changed - exist in parametersUpdateLog
+                    // check if parameters in referenced custom datasource (template) has been changed - exist in parametersUpdateLog
                     let dsTemplate = this.templateService.findCustomDataSourceTemplateById(this.formModel.template.dataSources, controlDataSource.id);
                     if (dsTemplate && dsTemplate.parameters) {
                         requiresUpdate = this.checkIfParameterHasChanged(dsTemplate.parameters);
@@ -748,7 +755,7 @@ class DigestProcess {
                     this.logInfo(`processControlsDataSources updating custom control dataSource. ControlId: ${controlTpl.id}, DataSourceTemplate: ${controlDataSource.id}, paramChanged: ${requiresUpdate}, forceLoadDataSources: ${this.forceLoadDataSources}`);
                     result$ = this.formControlsManagerService.refreshControlCustomDataSource(this.formModel, controlDataSource, fieldModel, controlTpl, this.digestUpdateLog);
                 }
-            } 
+            }
             else if (controlDataSource && controlDataSource instanceof ControlSectionDataSourceTemplateModel) {
 
                 let sectionInstance = fieldModel.sectionInstance;
@@ -757,7 +764,7 @@ class DigestProcess {
                 if (requiresUpdate === false) {
 
                     let sectionTemplate = sectionInstance.section.template;
-                    //check if parameters in referenced custom datasource (template) has been changed - exist in parametersUpdateLog
+                    // check if parameters in referenced custom datasource (template) has been changed - exist in parametersUpdateLog
                     let dsTemplate = this.templateService.findCustomDataSourceTemplateById(sectionTemplate.dataSources, controlDataSource.id);
                     if (dsTemplate && dsTemplate.parameters) {
                         let sectionParameters = this.templateService.expandParametersForSection(fieldPath.sectionInstanceIndex, dsTemplate.parameters);
@@ -771,24 +778,26 @@ class DigestProcess {
                 }
             }
 
-            if (result$)
+            if (result$) {
                 dsObservation.push(result$);
+            }
         });
-        
+
 
         if (dsObservation.length === 0) {
-            return Observable.of([false]);
+            return of([false]);
         }
 
-        let res = Observable.forkJoin(dsObservation);
+        let res = forkJoin(dsObservation);
         this.logDebug('processControlsDataSources: end');
         return res;
     }
 
     private checkIfControlDataSourceUpdateRequired(fieldPath: FormFieldPathModel): boolean {
 
-        if (typeof this.forceLoadDataSources === 'boolean' && this.forceLoadDataSources)
+        if (typeof this.forceLoadDataSources === 'boolean' && this.forceLoadDataSources) {
             return true;
+        }
 
         // check if field is from new section instance fields
         if (this.newFields && this.newFields.length) {
@@ -806,15 +815,14 @@ class DigestProcess {
             parameters.findIndex((paramTemplate: IDataSourceParameter) => {
                     let fieldPath = FormFieldPathModel.parse(paramTemplate.field);
                     return this.parametersUpdateLog.containsPath(fieldPath)
-                        //todo: check if required
+                        // todo: check if required
                         /*|| this.parametersUpdateLog.contains(paramTemplate.field)*/;
                 }) > -1;
-        
         return hasChanged;
     }
 
     private checkIfDataSourceDependsOn(parameters: Array<string>): boolean {
-        if (parameters == null || parameters.length === 0) return false;
+        if (parameters == null || parameters.length === 0) { return false; }
 
         return parameters.findIndex((path: string) => {
             let fieldPath = FormFieldPathModel.parse(path);
@@ -823,8 +831,7 @@ class DigestProcess {
 
     }
 
-    //Digest Logging
-
+    // Digest Logging
     private logDebug(msg: string) {
         let s = this.prepareLogMessage(msg);
         this.logService.debug(s);

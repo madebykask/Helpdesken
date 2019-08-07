@@ -1,11 +1,9 @@
 ﻿import { Injectable } from '@angular/core';
 import { ProxyModelBuilder } from './proxy-model-builder';
 import { TabTemplateModel, SectionTemplateModel, BaseControlTemplateModel } from '../models/template.model';
-import { FieldModelBase, TabModel, SectionModel, SectionInstanceModel, SingleControlFieldModel, MultiValueSingleControlFieldModel, MultiControlFieldModel, CustomDataSourceModel, ItemModel, FormControlType } from '../models/form.model';
-import { ProxyModel, ProxyTab, ProxySection, ProxySectionInstance, ProxyControl } from '../models/proxy.model';
+import { FieldModelBase, TabModel, SectionModel, SectionInstanceModel, CustomDataSourceModel } from '../models/form.model';
+import { ProxyModel, ProxySection, ProxySectionInstance } from '../models/proxy.model';
 import { FieldValueModel } from '../models/form-data.model'
-import * as commonMethods from '../utils/common-methods';
-import { IMap } from '../shared/common-types'
 import { IKeyedCollection } from '../shared/keyed-collection'
 
 @Injectable()
@@ -31,14 +29,15 @@ export class ProxyModelService {
 
     createCaseData(
         proxyModel: ProxyModel,
-        fieldsValues: IKeyedCollection<FieldValueModel>) : void {
+        fieldsValues: IKeyedCollection<FieldValueModel>): void {
 
-        //reset previous values
+        // reset previous values
         proxyModel.caseData = {};
-        if (!fieldsValues)
+        if (!fieldsValues) {
             return;
+        }
 
-        fieldsValues.getKeys().forEach((key:string) => {
+        fieldsValues.getKeys().forEach((key: string) => {
             let fieldValue: FieldValueModel = fieldsValues.getItem(key);
             if (!proxyModel.caseData.hasOwnProperty(key)) {
                 Object.defineProperty(proxyModel.caseData,
@@ -85,13 +84,13 @@ export class ProxyModelService {
         // find or create section instance proxy
         let proxySectionInstance = proxySection.instances.find((inst: any) => inst.uniqueId === sectionInstance.id);
         if (!proxySectionInstance) {
-            proxySectionInstance = this.pmb.createSectionInstanceProxy(proxyModel, control, fieldModel, sectionInstance);    
-            
-            //add new instance to proxy collection
+            proxySectionInstance = this.pmb.createSectionInstanceProxy(proxyModel, control, fieldModel, sectionInstance);
+
+            // add new instance to proxy collection
             proxySection.instances.push(proxySectionInstance);
         }
-        
-        //create control proxy
+
+        // create control proxy
         proxySectionInstance.controls[control.id] = this.pmb.createFieldModelProxy(control, fieldModel, proxySectionInstance);
     }
 
@@ -101,9 +100,9 @@ export class ProxyModelService {
 
         let sectionModelProxy = <ProxySection>proxyModel.tabs[tab.id].sections[section.id];
         if (sectionModelProxy) {
-            //remove from instances collection
+            // remove from instances collection
             sectionModelProxy.instances =
-                sectionModelProxy.instances.filter((item:ProxySectionInstance) => item.uniqueId !== sectionInstance.id);
+                sectionModelProxy.instances.filter((item: ProxySectionInstance) => item.uniqueId !== sectionInstance.id);
         }
     }
 }

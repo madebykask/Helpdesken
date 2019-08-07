@@ -1,15 +1,12 @@
-﻿import { Component, Input, ChangeDetectorRef, ChangeDetectionStrategy, OnChanges, OnInit, AfterViewInit, ViewChildren, QueryList, OnDestroy, DoCheck } from '@angular/core';
-import { TabTemplateModel, SectionTemplateModel, SectionType, BaseControlTemplateModel } from '../models/template.model';
-import { FormModelService } from '../services/form-model.service';
-import { ProxyModel, ProxySectionInstance } from '../models/proxy.model'
-import { FormModel, TabModel, SectionModel, SectionInstanceModel, FieldModelBase, FormControlType } from '../models/form.model';
+import { Component, Input, ChangeDetectorRef, ChangeDetectionStrategy, OnChanges, OnInit,
+         AfterViewInit, ViewChildren, QueryList, OnDestroy} from '@angular/core';
+import { SectionTemplateModel } from '../models/template.model';
+import { ProxyModel } from '../models/proxy.model'
+import { FormModel, SectionModel, SectionInstanceModel } from '../models/form.model';
 import { ComponentCommService } from '../services/component-comm.service';
-
-import { ExtendedCaseReviewComponentEx } from '../components/controls/ec-review-ex.component';
 import { ExtendedCaseReviewSectionInstanceComponent } from './ec-review-section-instance.component';
 import { SubscriptionManager } from '../shared/subscription-manager';
 import { DigestResult } from '../models/digest.model';
-import { Subscription } from 'rxjs/Rx';
 import { LogService } from '../services/log.service';
 
 @Component({
@@ -26,26 +23,24 @@ export class ExtendedCaseReviewSectionComponent implements OnChanges, OnInit, Af
 
     @ViewChildren(ExtendedCaseReviewSectionInstanceComponent)
     reviewSectionChildComponents: QueryList<ExtendedCaseReviewSectionInstanceComponent>;
-    
+
     private reviewSectionModel: SectionModel;
     private subscriptionManager: SubscriptionManager;
 
     constructor(private changeDetector: ChangeDetectorRef,
         private componentCommService: ComponentCommService,
-        private formModelService: FormModelService,
-        
         private logService: LogService) {
 
-        // this was done for a reason since multiple instances of ExtendedCaseReviewSectionComponent may unsubscribe 
+        // this was done for a reason since multiple instances of ExtendedCaseReviewSectionComponent may unsubscribe
         // previous subscription if shared (injected) between instances of the same class
-        this.subscriptionManager = new SubscriptionManager(); 
+        this.subscriptionManager = new SubscriptionManager();
     }
 
     get reviewSectionInstances(): SectionInstanceModel[] {
         return this.reviewSectionModel.instances;
     }
 
-    get proxyModel():ProxyModel {
+    get proxyModel(): ProxyModel {
         return this.formModel.proxyModel;
     }
 
@@ -54,9 +49,8 @@ export class ExtendedCaseReviewSectionComponent implements OnChanges, OnInit, Af
         let sectionPath = this.sectionTemplate.reviewSectionId;
         this.reviewSectionModel = this.findSourceSectionModel(sectionPath);
     }
-    
-    ngOnInit() {
 
+    ngOnInit() {
         //this.logService.debug('ReviewSection: OnInit called.');
         let self = this;
 
@@ -73,7 +67,7 @@ export class ExtendedCaseReviewSectionComponent implements OnChanges, OnInit, Af
     ngOnDestroy(): void {
         this.subscriptionManager.removeAll();
     }
-    
+
     private updateChildComponents(digestResult: DigestResult) {
         if (this.reviewSectionChildComponents && this.reviewSectionChildComponents.length) {
             //this.logService.debug(`@@@ section.updateChildReviewControls: updating review section (${this.reviewSectionModel.id}) instances. Length: ${this.reviewSectionChildComponents.length}`);

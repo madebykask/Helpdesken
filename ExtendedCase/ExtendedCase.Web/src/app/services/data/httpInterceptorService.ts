@@ -1,8 +1,11 @@
-﻿import { Injectable } from '@angular/core';
+
+import { throwError,  Observable } from 'rxjs';
+
+import {catchError} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpHandler, HttpRequest, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
+
+
 
 //@Injectable()
 //export class HttpBase extends HttpClient {
@@ -41,14 +44,14 @@ import 'rxjs/add/observable/throw';
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(req).catch(err => {
+        return next.handle(req).pipe(catchError(err => {
             if (err instanceof HttpErrorResponse) {
                 switch (err.status) {
                     case 404:
                         console.log('404 error.');
                 }
             }
-            return Observable.throw(err);
-        });
+            return throwError(err);
+        }));
     }
 }

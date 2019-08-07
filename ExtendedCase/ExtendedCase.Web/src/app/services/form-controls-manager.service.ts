@@ -1,5 +1,7 @@
+import { throwError, forkJoin, of, Observable } from 'rxjs';
+
+import {catchError, mergeMap, map, take} from 'rxjs/operators';
 import { Injectable, Inject, forwardRef } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
 import { ProxyModel, ProxyControl } from '../models/proxy.model';
 
 import * as moment from 'moment';
@@ -544,25 +546,26 @@ export class FormControlsManagerService {
 
         for (let dsTemplate of templateModel.dataSources) {
             if (dsTemplate instanceof CustomQueryDataSourceTemplateModel) {
-
                 this.logService.infoFormatted('processCustomDataSources for dsTemplateId = {0}', dsTemplate.id);
-                let result$ = this.dataSourcesLoaderService.loadCustomQueryDataSourceData(formModel.proxyModel, dsTemplate.id, dsTemplate.parameters)
-                    .flatMap((data: any) => {
-                        formModel.dataSources[dsTemplate.id].setData(data);
-                        this.logService.infoFormatted('Custom data source ({0}) has been loaded successfully.', dsTemplate.id);
-                        return Observable.of(true);
-                    });
+                let result$ =
+                    this.dataSourcesLoaderService.loadCustomQueryDataSourceData(formModel.proxyModel, dsTemplate.id, dsTemplate.parameters).pipe(
+                        take(1),
+                        map((data: any) => {
+                            formModel.dataSources[dsTemplate.id].setData(data);
+                            this.logService.infoFormatted('Custom data source ({0}) has been loaded successfully.', dsTemplate.id);
+                            return true;
+                    }));
                 dsObservation.push(result$);
             }
         }
 
         // return at least one to proceed with other processings... false means there were no changes
         if (dsObservation.length === 0) {
-            return Observable.of([false]);
+            return of([false]);
         }
 
         // wait for all observables to complete
-        let res = Observable.forkJoin(dsObservation);
+        let res = forkJoin(dsObservation);
         return res;
     }
 
@@ -602,14 +605,14 @@ export class FormControlsManagerService {
                 controlTemplateModel,
                 digestUpdateLog);
         } else {
-            refreshComplete$ = Observable.of(this.setControlDataSourceOptions(formModel.proxyModel,
+            refreshComplete$ = of(this.setControlDataSourceOptions(formModel.proxyModel,
                 fieldModel,
                 controlTemplateModel,
                 digestUpdateLog));
         }
 
         if (!refreshComplete$) {
-            return Observable.of(false);
+            return of(false);
         }
         return refreshComplete$;
     }
@@ -678,11 +681,11 @@ export class FormControlsManagerService {
                 fieldModel.preFilteredItems = options;
                 let isChanged = this.setControlDataSourceOptions(proxyModel, fieldModel, controlTemplateModel, digestUpdateLog);
                 this.logService.infoFormatted('refreshControlCustomDataSource: loaded. control {0} value changed - {1}', controlTemplateModel.id, isChanged);
-                return Observable.of(isChanged);
+                return of(isChanged);
             }
         }
 
-        return Observable.of(false);
+        return of(false);
     }
 
     refreshOptionsDataSource(
@@ -698,20 +701,20 @@ export class FormControlsManagerService {
         let dsParameters = this.templateService
             .expandParametersForSection(fieldPathModel.sectionInstanceIndex, dataSourceTemplate.parameters);
 
-        return this.dataSourcesLoaderService.loadOptionsDataSourceData(formModel.proxyModel, dataSourceTemplate.id, dsParameters)
-            .catch((e: any) => {
+        return this.dataSourcesLoaderService.loadOptionsDataSourceData(formModel.proxyModel, dataSourceTemplate.id, dsParameters).pipe(
+            catchError((e: any) => {
                 let errMsg = 'Failed to load options dataSource: ' + dataSourceTemplate.id;
                 this.errorHandlingService.handleError(e, errMsg);
-                return Observable.throw({ id: dataSourceTemplate.id });
-            })
-            .flatMap((data: any) => {
+                return throwError({ id: dataSourceTemplate.id });
+            }),
+            mergeMap((data: any) => {
                 fieldModel.preFilteredItems = data.map((dataItem: any) => new ItemModel(dataItem.Value, dataItem.Text));
                 this.logService.infoFormatted('refreshOptionsDataSource: success! options data loaded from {0}.', dataSourceTemplate.id);
 
                 let isChanged = this.setControlDataSourceOptions(formModel.proxyModel, fieldModel, controlTemplateModel, digestUpdateLog);
                 this.logService.infoFormatted('refreshOptionsDataSource: control {0} value changed - {1}', controlTemplateModel.id, isChanged);
-                return Observable.of(isChanged);
-            });
+                return throwError(isChanged);
+            }),);
     }
 
     setControlDataSourceOptions(proxyModel: ProxyModel, fieldModel: FieldModelBase,

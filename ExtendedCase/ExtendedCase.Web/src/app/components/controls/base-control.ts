@@ -1,9 +1,9 @@
-﻿import { Input, ChangeDetectorRef } from '@angular/core';
-import { ValidateOn } from '../../shared/validation-types';
+
+import { merge, Subscription } from 'rxjs';
+import { Input, ChangeDetectorRef } from '@angular/core';
 import { BaseControlTemplateModel } from '../../models/template.model';
 import { FieldModelBase } from '../../models/form.model';
 import { ComponentCommService } from '../../services/component-comm.service';
-import { Observable, Subscription } from 'rxjs/Rx';
 
 export class BaseControl {
     @Input() fieldTemplate: BaseControlTemplateModel;
@@ -12,11 +12,10 @@ export class BaseControl {
     private subscription: Subscription;
 
     constructor(protected componentCommService: ComponentCommService, changeDetector: ChangeDetectorRef = null) {
-        const obs$ = Observable.merge(this.componentCommService.validationModeChange$,
-            this.componentCommService.digestCompletedSubject$);
+        const obs$ = merge(this.componentCommService.validationModeChange$, this.componentCommService.digestCompletedSubject$);
         this.subscription = obs$.subscribe(() => {
             this.isRequiredLabel = this.getLabel();
-            if (changeDetector) changeDetector.markForCheck();
+            if (changeDetector) { changeDetector.markForCheck(); }
         });
     }
 
@@ -27,6 +26,6 @@ export class BaseControl {
     }
 
     protected ngOnDestroy() {
-        if (this.subscription != null) this.subscription.unsubscribe();
+        if (this.subscription != null) { this.subscription.unsubscribe(); }
     }
 }

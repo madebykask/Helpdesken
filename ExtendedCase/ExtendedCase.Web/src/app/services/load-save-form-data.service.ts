@@ -1,21 +1,11 @@
-import { Injectable, Inject } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
-import { FormControl } from '@angular/forms';
-import { IMap } from '../shared/common-types';
+import { of, Observable } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 import { IKeyedCollection } from '../shared/keyed-collection';
-
-import {
-    FormTemplateModel, TabTemplateModel, SectionTemplateModel, BaseControlTemplateModel,
-    CustomQueryDataSourceTemplateModel, CustomStaticDataSourceTemplateModel, OptionsDataSourceTemplateModel, ControlCustomDataSourceTemplateModel,
-    DataSourceParameterTemplateModel, IWithDataSourceParameters, IDataSourceParameter
-} from '../models/template.model';
-
-import { FormModel, SectionModel, SingleControlFieldModel, MultiControlFieldModel, FieldModelBase, ItemModel, CustomDataSourceModel } from '../models/form.model';
-import { DataSourceService } from './data/data-source.service';
 import { FormDataService } from './data/form-data.service';
-import { FormModelService } from './form-model.service';
 import { LogService } from './log.service';
-import { FormDataModel, FormDataSaveModel, FormDataSaveResult, FormFieldValueModel, FieldValueModel, FieldProperties } from '../models/form-data.model';
+import { FormDataModel, FormDataSaveModel, FormDataSaveResult, FormFieldValueModel, FieldValueModel,
+    FieldProperties } from '../models/form-data.model';
 import { FormStateModel, FormStateItem, FormStateKeys } from '../models/form-state.model';
 
 @Injectable()
@@ -29,19 +19,19 @@ export class LoadSaveFormDataService {
     loadFormData(extendedCaseId: string, helpdeskCaseId: number, authToken: string): Observable<FormDataModel> {
         let authTokenLogValue = authToken && authToken.length > 0 ? authToken.slice(0,5) : 'empty';
         this.logService.debugFormatted('loadSavedData: loading form saved data. extendedCaseGuid: {0}, helpdeskCaseId:{1}, Authtoken: {2}.', extendedCaseId, helpdeskCaseId, authTokenLogValue);
-        
-        return this.formDataService.getFormDataById(extendedCaseId, helpdeskCaseId, authToken)
-            .flatMap(x => {
+
+        return this.formDataService.getFormDataById(extendedCaseId, helpdeskCaseId, authToken).pipe(
+            mergeMap(x => {
                 let formDataModel: FormDataModel = this.createFormDataModel(x);
-                return Observable.of(formDataModel);
-            });
+                return of(formDataModel);
+            }));
     }
-    
+
     saveFormData(
         formData: FormDataModel,
         helpdeskCaseId: number,
         authToken: string): Observable<FormDataSaveResult>{
-        
+
         let saveData: FormDataSaveModel = {
             UniqueId: formData.ExtendedCaseGuid,
             HelpdeskCaseId: helpdeskCaseId,
@@ -64,8 +54,9 @@ export class LoadSaveFormDataService {
 
         if (data.Id !== undefined) {
             let id = parseInt(data.Id);
-            if (!isNaN(id))
+            if (!isNaN(id)) {
                 formData.Id = id;
+            }
         }
 
         formData.ExtendedCaseGuid = data.ExtendedCaseGuid || '';
@@ -73,16 +64,18 @@ export class LoadSaveFormDataService {
 
         if (data.Data !== undefined) {
 
-            if (data.Data.ExtendedCaseFieldsValues)
+            if (data.Data.ExtendedCaseFieldsValues) {
                 (<Array<any>>data.Data.ExtendedCaseFieldsValues)
                     .forEach((item: FormFieldValueModel) => formData.ExtendedCaseFieldsValues.add(item.FieldId, this.createFieldValueModel(item)));
+            }
 
-            if (data.Data.CaseFieldsValues)
+            if (data.Data.CaseFieldsValues) {
                 (<Array<any>>data.Data.CaseFieldsValues)
                     .forEach((item: FormFieldValueModel) => formData.CaseFieldsValues.add(item.FieldId, this.createFieldValueModel(item)));
+            }
         }
 
-        // init form state 
+        // init form state
         if (data.FormState && data.FormState.length) {
             let formStateItems = data.FormState.map((el: any) => this.mapToFormStateItem(el));
             formData.formState = new FormStateModel(formStateItems);
@@ -106,7 +99,7 @@ export class LoadSaveFormDataService {
     }
 
     private mapToFormFieldModel(fieldValues: IKeyedCollection<FieldValueModel>) : FormFieldValueModel[] {
-    
+
         return fieldValues.getKeys().map(fieldId => {
             let fieldValue = fieldValues.getItem(fieldId);
             let fieldProperties = new FieldProperties(fieldValue.Pristine);

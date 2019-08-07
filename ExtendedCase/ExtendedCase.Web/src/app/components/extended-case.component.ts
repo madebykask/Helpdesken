@@ -1,21 +1,16 @@
-﻿import { Inject, Component, ChangeDetectorRef, NgZone, ViewChild } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+﻿
+import { of, Observable, Subject } from 'rxjs';
+import { catchError, first, switchMap, take} from 'rxjs/operators';
+import { Inject, Component, ChangeDetectorRef, NgZone, ViewChild } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { FormTemplateModel, TabTemplateModel } from '../models/template.model';
 import { TemplateService } from '../services/template.service';
 import { ProxyModelService } from '../services/proxy-model.service';
 import { ProxyModelBuilder } from '../services/proxy-model-builder';
 import { FormModelService } from '../services/form-model.service';
-
 import {Form} from '../models/form-public.model'
-
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/map';
-
 import { MetaDataService } from '../services/data/meta-data.service';
 import { DataSourceService } from '../services/data/data-source.service';
-
 import {
     ComponentCommService, ControlValueChangedParams, PopulateSectionParams, EnableSectionParams,
     AddSectionInstanceParams, DeleteSectionInstanceParams
@@ -168,7 +163,7 @@ export class ExtendedCaseComponent {
         this.openCase(options.caseValues/*this.commonMethods.clone(options.caseValues)*/);
 
         // return promise result
-        return this.caseLoadCompleteSubject.first().toPromise();
+        return this.caseLoadCompleteSubject.pipe(first()).toPromise();
     }
 
     getTabStyle(tabTemplate: TabTemplateModel): string {
@@ -230,18 +225,19 @@ export class ExtendedCaseComponent {
         // update form state
         this.formStateService.updateFormState(this.formModel, this.formData.formState);
 
-        return this.loadSaveFormDataService.saveFormData(this.formData, caseId, authToken)
-            .catch(err => {
+        return this.loadSaveFormDataService.saveFormData(this.formData, caseId, authToken).pipe(
+            take(1),
+            catchError(err => {
                 return new Promise((resolve, reject) => {
                     return reject({ error: `Unknown error. ${err.Message}` });
                 });
-            })
-            .flatMap(r => {
+            }),
+            switchMap(r => {
                 this.formModel.acceptChanges();
                 let result = this.processFormDataSaveResult(<FormDataSaveResult>r);
-                return Observable.of(result);
+                return of(result);
             })
-            .toPromise();
+        ).toPromise();
     }
 
     trackById(index: any, item: TabTemplateModel) {
