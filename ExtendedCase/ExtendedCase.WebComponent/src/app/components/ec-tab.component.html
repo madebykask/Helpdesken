@@ -1,0 +1,18 @@
+﻿<div class="row">
+    <form [formGroup]="tabModel.group" novalidate>
+        <div *ngFor="let column of getColumnSequence(); trackBy: trackColumnByFn" [class]="getColumnCssClass()">
+            <ng-container *ngFor="let section of tabTemplate.sections; trackBy: trackById">
+
+                <ec-section *ngIf="section.column === column && !isReviewSection(section)"
+                            [sectionTemplate]="section"
+                            [sectionModel]="tabModel.sections[section.id]" 
+                            [attr.name]="section.id"></ec-section>
+
+                <ec-review-section *ngIf="section.column === column && isReviewSection(section)"
+                                   [formModel]="formModel"
+                                   [sectionTemplate]="section"
+                                   [sectionModel]="tabModel.sections[section.id]"></ec-review-section>
+            </ng-container>
+        </div>
+    </form>
+</div>

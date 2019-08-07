@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+	<base href="/">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+        <link  href="/ecvendor.dd792595516ef8d9261f.css" rel="stylesheet"></link>   
+        <link  href="/ecapp.dd792595516ef8d9261f.css" rel="stylesheet"></link>
+        <script src="/ecpolyfills.dd792595516ef8d9261f.js"></script>
+</head>
+<body>
+<!--<iframe id="extendedCaseFrame" src="http://localhost:8099/?formId=1&languageId=1" width="100%" scrolling="no"></iframe>-->
+
+<extended-case></extended-case>
+<script src="/ecvendor.dd792595516ef8d9261f.js"></script>
+<script src="/ecapp.dd792595516ef8d9261f.js"></script>
+
+<br />
+<div>
+    <button type="button" onclick="saveFormData()">Save</button>
+</div>
+<br />
+<!-- test validation: validation buttons test -->
+<div>
+    <button type="button" class="btn btn-success" onclick="loadForm()">Load Form</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="reloadForm()">Reload Form</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="getCaseValues()">Get Case Values</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="setNextStep()">Set Next Step</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="setPrevStep()">Set Prev Step</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="validateExtendedCase(false)">Validate onSave</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="validateExtendedCase(true)">Validate onNext</button>
+</div>
+<br />
+
+<script type="text/javascript">
+	  window.loadExtendedCase = function (options) {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.loadForm(options);
+          });
+      }
+	  
+    function loadForm() {
+        window.loadExtendedCase({ formParameters: { formId: 1, languageId: 1 }, caseValues: { caseField1: { Value: '2'}, test: { Value: 'val' } } });
+    }
+        
+    function reloadForm() {
+        var formParameters = document.getElementById("extendedCaseFrame").contentWindow.getFormParameters();
+        formParameters.languageId = 1;
+        document.getElementById("extendedCaseFrame").contentWindow.loadExtendedCase({ formParameters: formParameters, caseValues: { caseField1: { Value: '2'} } });
+    }
+        
+    function getCaseValues() {
+        var vals = document.getElementById("extendedCaseFrame").contentWindow.getCaseValues();
+        console.log(vals);
+    }
+        
+    function setNextStep() {
+        document.getElementById("extendedCaseFrame").contentWindow.setNextStep(5, true);
+    }
+
+    function setPrevStep() {
+        document.getElementById("extendedCaseFrame").contentWindow.setNextStep(0, false);
+    }
+
+        
+    function saveFormData() {
+        var promise = document.getElementById("extendedCaseFrame").contentWindow.saveExtendedCase(false);
+        promise.then(onSaveSuccess, onSaveError);
+    }
+
+    function validateExtendedCase(isOnNext) {
+        var errors = document.getElementById("extendedCaseFrame").contentWindow.validateExtendedCase(isOnNext || false);
+        if (errors) alert(JSON.stringify(errors));// validation failed
+    }
+
+    function onSaveSuccess(result) {
+        console.log('Success. Result: ' + result.extendedCaseGuid);
+    }
+
+    function onSaveError(err) {
+        var errorMsg = err.error || 'Unknown error';
+        console.error('Error. ' + errorMsg);
+    }
+
+</script>
+
+</body>
+</html>

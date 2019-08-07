@@ -1,0 +1,18 @@
+﻿<ng-container [formGroup]="form" *ngIf="!fieldModel.hidden">
+    <div class="col-md-6 control-label" *ngIf="fieldTemplate.isLabelHtml" >
+        <span [innerHtml]="fieldTemplate.label"></span>
+        <span [class.required-invalid]="fieldModel.control.invalid">{{ isRequiredLabel }}</span>
+    </div>
+    <label class="col-md-6 control-label" *ngIf="!fieldTemplate.isLabelHtml">
+        {{ fieldTemplate.label }}<span [class.required-invalid]="fieldModel.control.invalid">{{ isRequiredLabel }}</span>
+    </label>
+    <div class="col-md-6">
+        <div class="checkbox" [class.ng-invalid]="fieldModel.control.invalid === true">
+            <label [attr.for]="fieldModel.getUiPath()">
+                <input type="checkbox" [formControlName]="fieldTemplate.id" [name]="fieldTemplate.id" [id]="fieldModel.getUiPath()"> Option 1
+            </label>
+        </div>
+        <validation-error [control]="fieldModel.control"></validation-error>
+        <validation-warnings [warnings]="fieldModel.warnings"></validation-warnings>
+    </div>
+</ng-container>

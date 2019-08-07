@@ -1,0 +1,14 @@
+﻿<div [style.display]="fieldModel.hidden?'none':'inherit'">
+    <div class="col-md-3">
+        <span [innerHtml] ="fieldTemplate.label"></span>
+    </div>
+    <div class="col-md-3">
+        <span>{{ getValue1() }}</span>
+    </div>
+    <div class="col-md-5">
+        <span>{{ getValue2() }}</span>
+    </div>
+    <div class="col-md-1">
+        <button type="button" [id]="fieldModel.getUiPath()" class="btn" ngxClipboard [cbContent]="getValue1()">Copy</button>
+    </div>
+</div>
