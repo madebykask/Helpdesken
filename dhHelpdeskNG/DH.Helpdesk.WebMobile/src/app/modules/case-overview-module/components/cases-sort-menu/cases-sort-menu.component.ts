@@ -75,7 +75,7 @@ export class CasesSortMenuComponent implements OnInit {
       this.sortingChanged.emit({ sortField: menuItem.fieldId, sortOrder: menuItem.sortOrder });
   }
 
-  trackFn(item: CasesSortMenuItemModel): number {
+  trackByFn(item: CasesSortMenuItemModel): number {
     return item.id;
   }
 
