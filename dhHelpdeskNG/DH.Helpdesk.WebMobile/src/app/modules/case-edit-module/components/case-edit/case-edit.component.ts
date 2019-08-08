@@ -168,7 +168,7 @@ export class CaseEditComponent {
                   catchError((e) => throwError(e)),
               );
 
-      forkJoin(caseSections$, caseData$, caseLock$).pipe(
+      forkJoin([caseSections$, caseData$, caseLock$]).pipe(
           take(1),
           finalize(() => this.isLoaded = true),
           catchError((e) => throwError(e))
@@ -293,7 +293,7 @@ export class CaseEditComponent {
           catchError((e) => throwError(e)),
       );
 
-      forkJoin(caseSections$, caseData$).pipe(
+      forkJoin([caseSections$, caseData$]).pipe(
           take(1),
           finalize(() => this.isLoaded = true),
           catchError((e) => throwError(e))

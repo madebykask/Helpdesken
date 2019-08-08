@@ -14,7 +14,7 @@ export class CommonFileViewer implements AfterViewInit {
   @Input() fileName: string;
   @Input() fileData: Blob;
 
-  @ViewChild('frame') frameElement: ElementRef<HTMLIFrameElement>;
+  @ViewChild('frame', { static: false }) frameElement: ElementRef<HTMLIFrameElement>;
 
   constructor(private windowWrapper: WindowWrapper) {
   }

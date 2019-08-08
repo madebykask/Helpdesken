@@ -2,8 +2,7 @@ import { CaseFieldsNames } from '../../constants';
 import { CaseFormGroup } from './case-form-group';
 
 export class NotifierFormFieldsSetter {
-  constructor(
-    private isRegarding: boolean, private form: CaseFormGroup) {
+  constructor(private isRegarding: boolean, private form: CaseFormGroup) {
   }
   setRegion(val) {
     this.setSafe(CaseFieldsNames.RegionId, val);

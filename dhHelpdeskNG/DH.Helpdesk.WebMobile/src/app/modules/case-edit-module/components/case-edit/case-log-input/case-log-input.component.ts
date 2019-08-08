@@ -21,7 +21,7 @@ export class CaseLogInputComponent implements OnInit {
   @Input() caseData: CaseEditInputModel;
   @Input() accessMode: CaseAccessMode;
 
-  @ViewChild('sendMailToNotifierControl') sendMailToNotifierControl: MbscSwitch;
+  @ViewChild('sendMailToNotifierControl', { static: false }) sendMailToNotifierControl: MbscSwitch;
 
   logFileType = LogFileType;
 

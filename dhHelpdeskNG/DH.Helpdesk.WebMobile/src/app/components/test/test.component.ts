@@ -20,7 +20,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class TestComponent implements OnInit {
 
-  @ViewChild('sendEmailsCheck') sendEmailsCheck: MbscSwitch;
+  @ViewChild('sendEmailsCheck', { static: false }) sendEmailsCheck: MbscSwitch;
 
   get userData() {
     const currentUser = this.localStorage.getCurrentUser();

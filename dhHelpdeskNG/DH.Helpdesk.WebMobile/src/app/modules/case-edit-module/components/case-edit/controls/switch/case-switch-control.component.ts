@@ -8,7 +8,7 @@ import { takeUntil } from 'rxjs/operators';
     styleUrls: ['./case-switch-control.component.scss']
   })
   export class CaseSwitchComponent extends BaseControl<boolean> {
-    @ViewChild('control') control: any;
+    @ViewChild('control', { static: false }) control: any;
     @Input() description = '';
     @Input() disabled = false;
 

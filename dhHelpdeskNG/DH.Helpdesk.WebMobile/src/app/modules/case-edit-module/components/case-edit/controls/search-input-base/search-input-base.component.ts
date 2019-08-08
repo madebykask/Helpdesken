@@ -13,8 +13,8 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
     super();
   }
 
-  @ViewChild('searchInput') searchInput: any; // MbscInputBase | MbscTextArea | MbscInputBase
-  @ViewChild('select') select: MbscSelect;
+  @ViewChild('searchInput', { static: false }) searchInput: any; // MbscInputBase | MbscTextArea | MbscInputBase
+  @ViewChild('select', { static: false }) select: MbscSelect;
 
   @Input() disabled = false;
 

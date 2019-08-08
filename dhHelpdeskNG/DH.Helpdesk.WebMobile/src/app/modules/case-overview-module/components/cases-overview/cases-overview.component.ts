@@ -24,7 +24,7 @@ import { CaseSearchStateModel } from 'src/app/modules/shared-module/models/cases
   styleUrls: ['./cases-overview.component.scss']
 })
 export class CasesOverviewComponent implements OnInit, OnDestroy {
-  @ViewChild('searchInput') searchInput: any;
+  @ViewChild('searchInput', { static: false }) searchInput: any;
 
   private selectedFilterId: number;
   private filter: CasesOverviewFilter;

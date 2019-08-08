@@ -19,7 +19,7 @@ export class FooterComponent implements OnInit  {
 
   canCreateCases$ = new BehaviorSubject<boolean>(false);
 
-  @ViewChild('languages') languagesCtrl: MbscSelect;
+  @ViewChild('languages', { static: false }) languagesCtrl: MbscSelect;
 
   private destroy$ = new Subject<any>();
 

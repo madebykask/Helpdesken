@@ -9,7 +9,7 @@ import { takeUntil } from 'rxjs/operators';
     styleUrls: ['./case-textarea-control.component.scss']
   })
   export class CaseTextareaComponent extends BaseControl<string> implements OnInit, AfterViewInit, OnDestroy {
-    @ViewChild('input') control: MbscTextarea;
+    @ViewChild('input', { static: false }) control: MbscTextarea;
     @Input() disabled = false;
 
     constructor(private elem: ElementRef, private renderer: Renderer2) {

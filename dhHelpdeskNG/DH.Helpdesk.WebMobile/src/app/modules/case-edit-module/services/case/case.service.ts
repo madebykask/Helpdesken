@@ -3,7 +3,8 @@ import { defaultIfEmpty, take, catchError, map } from 'rxjs/operators';
 import { throwError, forkJoin, EMPTY, Observable, from, of } from 'rxjs';
 import { CaseApiService } from '../api/case/case-api.service';
 import { BundleCaseOptionsService } from 'src/app/modules/case-edit-module/services/case-organization/bundle-case-options.service';
-import { CaseOptionsFilterModel, BundleOptionsFilter, CaseOptions } from 'src/app/modules/shared-module/models';
+import { CaseOptionsFilterModel, BundleOptionsFilter, CaseOptions, OptionItem,
+        BundledCaseOptions, MultiLevelOptionItem } from 'src/app/modules/shared-module/models';
 import { CaseEditInputModel, CaseSectionInputModel, CaseAction } from '../../models';
 import { CaseOrganizationService } from '../case-organization/case-organization.service';
 import { CaseLogApiService } from '../api/case/case-log-api.service';
@@ -12,7 +13,6 @@ import { CaseActionsDataService } from './case-actions-data.service';
 import { CaseHistoryApiService } from '../api/case/case-history-api.service';
 import { CaseTemplateApiService } from 'src/app/services/api/caseTemplate/case-template-api.service';
 import { CaseModelBuilder } from '../../models/case/case-model-builder';
-import { CaseSortFieldModel } from '../model/case-sort-field.model';
 
 @Injectable({ providedIn: 'root' })
 export class CaseService {
@@ -49,7 +49,7 @@ export class CaseService {
     const caseLogs$ = this.getCaseLogsData(caseId);
     const caseHistory$ = this.getCaseHistoryData(caseId);
 
-    return forkJoin(caseLogs$, caseHistory$).pipe(
+    return forkJoin([caseLogs$, caseHistory$]).pipe(
       map(([caseLogsData, caseHistoryData]) => {
         return this.caseActionsDataService.process(caseLogsData, caseHistoryData);
       }));
@@ -124,7 +124,11 @@ export class CaseService {
     return forkJoin(params).pipe(
       take(1),
       map(([bundledOptions, regions, departments, oUs, isAboutDepartments, isAboutOUs, caseTypes,
-        productAreas, categories, closingReasons, perfomers, workingGroups, stateSecondaries]) => {
+        productAreas, categories, closingReasons, perfomers, workingGroups, stateSecondaries] :
+        [BundledCaseOptions, OptionItem[], OptionItem[], OptionItem[], OptionItem[], OptionItem[],
+         MultiLevelOptionItem[], MultiLevelOptionItem[], MultiLevelOptionItem[], MultiLevelOptionItem[],
+        OptionItem[], OptionItem[], OptionItem[]]) => {
+
         const options = new CaseOptions();
 
         if (regions != null) {
