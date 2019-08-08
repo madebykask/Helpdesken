@@ -10,7 +10,7 @@ module.exports = {
     entry: {
         ecapp: './src/main.ts',
         ecpolyfills: './src/polyfills.ts',
-        ecvendor: './src/vendor.ts'
+        // ecvendor: './src/vendor.ts'
     },
     //output: {
     //    filename: './dist/[name].js',
@@ -113,10 +113,5 @@ module.exports = {
             jQuery: 'jquery',
             $: 'jquery'
         }),
-
-
-      new Webpack.optimize.CommonsChunkPlugin({
-          name: ['ecapp', 'ecvendor', 'ecpolyfills']
-      })
     ]
 };

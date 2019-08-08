@@ -5,6 +5,10 @@ import 'reflect-metadata';
 import '@webcomponents/custom-elements/custom-elements.min';
 import '@webcomponents/custom-elements/src/native-shim.js'
 import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js';
+/* required for attachShadow or createShadowDom for IE(no CSS encapsulation) */
+// import '@webcomponents/webcomponentsjs/webcomponents-bundle.js'
+/* required for attachShadow for IE(no CSS encapsulation) */
+// import '@webcomponents/shadydom' 
 declare var ENV: any; // // to avoid compiler error. Using global variable from js.
 
 declare var require: any;

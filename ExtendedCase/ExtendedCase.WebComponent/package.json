@@ -48,6 +48,7 @@
     "@angular/tsc-wrapped": "^0.5.2",
     "@angular/upgrade": "^6.1.0",
     "@webcomponents/custom-elements": "^1.2.4",
+    "@webcomponents/shadydom": "^1.6.0",
     "@webcomponents/webcomponentsjs": "^2.2.10",
     "bootstrap": "^3.3.7",
     "components-font-awesome": "^4.7.0",

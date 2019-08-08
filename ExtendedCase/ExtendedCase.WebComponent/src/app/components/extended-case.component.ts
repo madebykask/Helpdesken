@@ -47,12 +47,14 @@ import { ViewEncapsulation } from '@angular/compiler/src/core';
 @Component({
     /* selector: 'extended-case', */
     templateUrl: './extended-case.component.html',
-    styleUrls: ['../../../node_modules/bootstrap/dist/css/bootstrap.min.css' , '../../styles/css/site.scss'],
+    styleUrls: ['../../styles/css/bootstrap.scss' , '../../styles/css/site.scss'],
     providers: [
         MetaDataService, TemplateService, ComponentCommService, ProxyModelService, DigestService, FormModelService, ValidatorsService,
         LoadSaveFormDataService, DataSourcesLoaderService, DataSourceService, FormDataService, StorageService,
         QueryParamsService, FormControlsManagerService, ProxyModelBuilder, FormStateService],
-    encapsulation: ViewEncapsulation.Native
+    /* Emulated is used - IE, Edge doesn't support ShadowDom even with polyfills
+    If ShadowDow or Native is used - remove :host ::ng-deep from bootstrap scss */
+    encapsulation: ViewEncapsulation.Emulated
 })
 export class ExtendedCaseComponent {
     formParameters: FormParametersModel; // parameters initially received from query string, possible to change from parent window
