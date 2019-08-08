@@ -54,7 +54,7 @@ import { createCustomElement } from '@angular/elements';
 
 import { DynamicModule } from 'ng-dynamic-component';
 
-import './styles/css/site.scss';
+//import './styles/css/site.scss';
 import { routes } from './routes';
 import { RouterModule } from '@angular/router';
 

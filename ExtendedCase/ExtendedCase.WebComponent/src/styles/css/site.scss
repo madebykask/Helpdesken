@@ -1,5 +1,12 @@
 ﻿$invalid-color: #cc5965;
 
+:host {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  margin: 0;
+}
+
 body {
     .version {
         color: #fff

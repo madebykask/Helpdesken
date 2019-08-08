@@ -42,14 +42,17 @@ import { ErrorHandlingService } from '../services/error-handling.service';
 import { ProgressComponent } from './shared/progress.component';
 import * as moment from 'moment';
 import { IAppConfig } from '../shared/app-config/app-config.interface';
+import { ViewEncapsulation } from '@angular/compiler/src/core';
 
 @Component({
     /* selector: 'extended-case', */
     templateUrl: './extended-case.component.html',
+    styleUrls: ['../../../node_modules/bootstrap/dist/css/bootstrap.min.css' , '../../styles/css/site.scss'],
     providers: [
         MetaDataService, TemplateService, ComponentCommService, ProxyModelService, DigestService, FormModelService, ValidatorsService,
         LoadSaveFormDataService, DataSourcesLoaderService, DataSourceService, FormDataService, StorageService,
-        QueryParamsService, FormControlsManagerService, ProxyModelBuilder, FormStateService]
+        QueryParamsService, FormControlsManagerService, ProxyModelBuilder, FormStateService],
+    encapsulation: ViewEncapsulation.Native
 })
 export class ExtendedCaseComponent {
     formParameters: FormParametersModel; // parameters initially received from query string, possible to change from parent window

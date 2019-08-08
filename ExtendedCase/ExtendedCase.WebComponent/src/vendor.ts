@@ -12,7 +12,7 @@
 //import 'jquery';
 ////import 'bootstrap';
 //import 'moment'
-import '../node_modules/bootstrap/dist/css/bootstrap.css'
+//import '../node_modules/bootstrap/dist/css/bootstrap.css'
 ////import 'components-font-awesome';
 //import 'ngx-bootstrap';
 ////import 'ng-select';

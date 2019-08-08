@@ -61,20 +61,24 @@ module.exports = {
             },
              { //this rule will only be used for any vendors
                  test: /\.css$/,
-                 use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader?sourceMap' }),
+                 use: ['css-to-string-loader', 'css-loader'],
                  include: Helpers.root('node_modules')
              },
             {
                 test: /\.css$/,
                 exclude: [ Helpers.root('src', 'app'), Helpers.root('node_modules') ],
-                use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader?sourceMap' })
+                use: ExtractTextPlugin.extract({ fallback: 'raw-loader', use: ['css-to-string-loader', 'css-loader'] })
             },
             {
                 test: /\.css$/,
                 include: Helpers.root('src', 'app'),
-                use: 'raw-loader'
+                use: ['css-to-string-loader', 'css-loader']
             },
             {
+              test: /\.scss$/,
+              use: ['css-to-string-loader', 'css-loader', 'sass-loader']
+            }
+            /* {
                 test: /\.scss$/,
                 include: Helpers.root('src', 'styles', 'css'),
                 use: ExtractTextPlugin.extract({
@@ -84,7 +88,7 @@ module.exports = {
                       { loader: 'sass-loader?sourceMap' }
                     ]
                 })
-            }
+            } */
 
         ]
     },
