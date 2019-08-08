@@ -19,8 +19,6 @@ export class FooterComponent implements OnInit  {
 
   canCreateCases$ = new BehaviorSubject<boolean>(false);
 
-  @ViewChild('languages', { static: false }) languagesCtrl: MbscSelect;
-
   private destroy$ = new Subject<any>();
 
   bottomMenuSettings: MbscNavOptions = {
@@ -47,10 +45,6 @@ export class FooterComponent implements OnInit  {
         this.canCreateCases$.next(templates && templates.length > 0);
       });
     }
-
-    // apply translations
-    // this.languagesCtrl.setText = this.ngxTranslateService.instant("Välj");
-    // this.languagesCtrl.cancelText  = this.ngxTranslateService.instant("Avbryt");
   }
 
   openLanguages() {

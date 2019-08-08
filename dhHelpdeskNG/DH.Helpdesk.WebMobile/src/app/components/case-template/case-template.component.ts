@@ -19,8 +19,6 @@ export class CaseTemplateComponent implements OnInit, OnDestroy {
     private appStore: AppStore) {
   }
 
-  @ViewChild('templatesListView', { static: false }) templatesList: MbscListview;
-
   templatesListSettings: MbscListviewOptions = {
     enhance: true,
     swipe: false

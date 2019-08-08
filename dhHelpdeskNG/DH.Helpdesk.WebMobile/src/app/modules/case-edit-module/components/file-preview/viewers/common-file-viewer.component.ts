@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, Input, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, Input, AfterViewInit, OnInit } from '@angular/core';
 import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrapper';
 
 @Component({
@@ -9,17 +9,17 @@ import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrap
     </div>
   `
 })
-export class CommonFileViewer implements AfterViewInit {
+export class CommonFileViewer implements OnInit {
 
   @Input() fileName: string;
   @Input() fileData: Blob;
 
-  @ViewChild('frame', { static: false }) frameElement: ElementRef<HTMLIFrameElement>;
+  @ViewChild('frame', { static: true }) frameElement: ElementRef<HTMLIFrameElement>;
 
   constructor(private windowWrapper: WindowWrapper) {
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     if (this.fileData && this.frameElement) {
       this.frameElement.nativeElement.src =
           this.windowWrapper.nativeWindow.URL.createObjectURL(this.fileData);

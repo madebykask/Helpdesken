@@ -8,7 +8,7 @@ import { takeUntil } from 'rxjs/operators';
     styleUrls: ['./case-textbox-control.component.scss']
   })
   export class CaseTextboxComponent extends BaseControl<string> {
-    @ViewChild('input', { static: false }) control: any;
+    @ViewChild('input', { static: true }) control: any;
     @Input() disabled = false;
 
     constructor(private elem: ElementRef, private renderer: Renderer2) {

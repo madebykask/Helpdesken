@@ -24,9 +24,6 @@ export class CaseFilesControlComponent {
   @Input() caseKey: string;
   @Input() accessMode: CaseAccessMode;
 
-  @ViewChild('fileList', { static: false }) fileList: MbscListview;
-  @ViewChild(CaseFilesUploadComponent, { static: false }) caseFilesComponent: CaseFilesUploadComponent;
-
   fileListSettings: MbscListviewOptions = {
     enhance: true,
     swipe: false

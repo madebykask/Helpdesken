@@ -13,8 +13,8 @@ import { CommunicationService, CaseFieldValueChangedEvent, Channels } from 'src/
     styleUrls: ['./case-multi-dropdown-control.component.scss']
   })
   export class CaseMultiDropdownComponent extends BaseControl<number> {
-    @ViewChild('textbox', { static: false }) textbox: any;
-    @ViewChild('select', { static: false }) select: MbscSelect;
+    @ViewChild('textbox', { static: true }) textbox: any;
+    @ViewChild('select', { static: true }) select: MbscSelect;
     @Input() dataSource: BehaviorSubject<MultiLevelOptionItem[]>;
     @Input() disabled = false;
 
