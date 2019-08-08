@@ -1,3 +1,4 @@
+//remember to update tsconfig.aot.ts!
 {
   "compilerOptions": {
     "target": "es5",
@@ -26,6 +27,7 @@
   "exclude": [
     "node_modules",
     "**/*-aot.ts",
+    "**/*.aot.ts",
     "dist*"
   ]
 }

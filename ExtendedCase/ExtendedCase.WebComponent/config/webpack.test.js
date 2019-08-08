@@ -1,9 +1,10 @@
-﻿var Webpack = require('webpack');
-var WebpackMerge = require('webpack-merge');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var CommonConfig = require('./webpack.common.js');
-var Helpers = require('./helpers.js');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+﻿const Webpack = require('webpack');
+const WebpackMerge = require('webpack-merge');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const cssnano = require('cssnano');
+const TerserPlugin = require('terser-webpack-plugin');
+const CommonConfig = require('./webpack.common.js');
+const Helpers = require('./helpers.js');
 const packageJSON = require('../package.json');
 
 // Parse version at the top of your webpack.config
@@ -14,15 +15,44 @@ let CONSTANTS = {
   BASEAPIURL: 'ExtendedCaseApi'
 }
 
-module.exports = WebpackMerge.smart(CommonConfig,
-    {
-        devtool: 'source-map',
+const outputDir = 'dist-test';
+
+module.exports = WebpackMerge.smart(CommonConfig({ env: CONSTANTS.MODE,  outputDir: outputDir }), 
+{        
+        devtool: 'source-map', //todo: check other options for prod
         output: {
-            path: Helpers.root('dist-test'),
+            path: Helpers.root(outputDir),
             publicPath: '/' + CONSTANTS.BASEURL + '/',
             filename: '[name].[hash].js',
             chunkFilename: '[id].[hash].chunk.js'
         },
+        
+        optimization: {
+            minimize: true,
+            minimizer: [
+                // webpack 4 does minification by default in production mode
+                new TerserPlugin({
+                    parallel: true,
+                    terserOptions: {
+                      ecma: 6,
+                      output: {
+                        comments: false,
+                      },
+                    },
+                  }),
+
+                new OptimizeCSSAssetsPlugin({
+                    cssProcessor: cssnano,
+                    cssProcessorOptions: {
+                        discardComments: {
+                            removeAll: true
+                        }
+                    },
+                    canPrint: false
+                })
+            ]
+        },
+
         module: {
             rules: [
                 {
@@ -35,17 +65,11 @@ module.exports = WebpackMerge.smart(CommonConfig,
                             publicPath: CONSTANTS.BASEURL +'/'
                         }
                     }],
-                    exclude: [Helpers.root('dist'), Helpers.root('dist-test')]
+                    exclude: [Helpers.root(outputDir)]
                 }
             ]
         },
         plugins: [
-            new Webpack.optimize.UglifyJsPlugin({
-                compress: { warnings: false },
-                sourceMap: true,
-                test: /(?:(vendor|polyfills|app)[\.\d\w]*\.js)+/i
-            }),
-            new ExtractTextPlugin('[name].[hash].css'),
             new Webpack.DefinePlugin({
                 ENV: JSON.stringify(CONSTANTS.MODE),
                 AppSettings: JSON.stringify({

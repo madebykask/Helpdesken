@@ -1,35 +1,27 @@
-﻿var Webpack = require('webpack');
-var WebpackMerge = require('webpack-merge');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var CommonConfig = require('./webpack.common.js');
-var Helpers = require('./helpers.js');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+﻿const Webpack = require('webpack');
+const WebpackMerge = require('webpack-merge');
+const CommonConfig = require('./webpack.common.js');
+const Helpers = require('./helpers.js');
 const packageJSON = require('../package.json');
 
 // Parse version at the top of your webpack.config
 let CONSTANTS = {
     VERSION: JSON.stringify(packageJSON.version),
     MODE: 'test'
-  }
-  
+} 
+const outputDir = 'wwwroot';
 
-module.exports = WebpackMerge(CommonConfig,
-    {
+module.exports = WebpackMerge(CommonConfig({ env: CONSTANTS.MODE, outputDir: outputDir }), 
+    {     
         devtool: 'source-map',
         output: {
-            path: Helpers.root('dist'),
+            path: Helpers.root(outputDir),
             publicPath: '/',
             filename: '[name].[hash].js',
             chunkFilename: '[id].[hash].chunk.js'
         },
+
         plugins: [
-            new Webpack.optimize.UglifyJsPlugin({
-                compress: { warnings: false },
-                sourceMap: true,
-                //comments: false,
-                test: /(?:(vendor|polyfills|app)[\.\d\w]*\.js)+/i
-            }),
-            new ExtractTextPlugin('[name].[hash].css'),
             new Webpack.DefinePlugin({
                 ENV: JSON.stringify(CONSTANTS.MODE),
                 AppSettings: JSON.stringify({
