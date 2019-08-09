@@ -214,7 +214,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DH.Helpdesk.Mail2Ticket.Library\DH.Helpdesk.Mail2Ticket.Library.vbproj">
       <Project>{300807ad-e3da-4bf5-93fc-2503d617edc1}</Project>
-      <Name>DH.Helpdesk.Mail2Ticket.Library</Name>
+      <Name>DH.Helpdesk.Library</Name>
     </ProjectReference>
     <ProjectReference Include="..\DH.Helpdesk.Models\DH.Helpdesk.Models.csproj">
       <Project>{de589388-2e9b-44c3-bcb7-9d4d051391de}</Project>

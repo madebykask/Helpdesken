@@ -9,8 +9,8 @@
     <OutputType>Library</OutputType>
     <StartupObject>
     </StartupObject>
-    <RootNamespace>DH.Helpdesk.Mail2Ticket.Library</RootNamespace>
-    <AssemblyName>DH.Helpdesk.Mail2Ticket.Library</AssemblyName>
+    <RootNamespace>DH.Helpdesk.Library</RootNamespace>
+    <AssemblyName>DH.Helpdesk.Library</AssemblyName>
     <MyType>Windows</MyType>
     <SccProjectName>
     </SccProjectName>
@@ -34,7 +34,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>DH.Helpdesk.Mail2Ticket.Library.xml</DocumentationFile>
+    <DocumentationFile>DH.Helpdesk.Library.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <RegisterForComInterop>false</RegisterForComInterop>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,7 +46,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>DH.Helpdesk.Mail2Ticket.Library.xml</DocumentationFile>
+    <DocumentationFile>DH.Helpdesk.Library.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <RegisterForComInterop>false</RegisterForComInterop>
     <Prefer32Bit>false</Prefer32Bit>
@@ -54,7 +54,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DhDev|AnyCPU'">
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\DhDev\</OutputPath>
-    <DocumentationFile>DH.Helpdesk.Mail2Ticket.Library.xml</DocumentationFile>
+    <DocumentationFile>DH.Helpdesk.Library.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <DebugType>pdbonly</DebugType>

@@ -1,4 +1,4 @@
-Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
+Imports DH.Helpdesk.Library.SharedFunctions
 
 Public Class TextTranslationData
     Public Function getTextTranslation(ByVal sText As String, ByVal iLanguage_Id As Integer) As String

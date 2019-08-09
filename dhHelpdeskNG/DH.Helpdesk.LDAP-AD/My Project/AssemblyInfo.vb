@@ -8,15 +8,17 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("DH.Helpdesk.Library")>
-<Assembly: AssemblyDescription("")>
-<Assembly: AssemblyProduct("DH.Helpdesk.Library")>
+<Assembly: AssemblyTitle("LDAPSyncAD")> 
+<Assembly: AssemblyDescription("")> 
+<Assembly: AssemblyCompany("")> 
+<Assembly: AssemblyProduct("LDAPSyncAD")> 
+<Assembly: AssemblyCopyright("Copyright ©  2008")> 
 <Assembly: AssemblyTrademark("")> 
 
-<Assembly: ComVisible(False)> 
+<Assembly: ComVisible(True)> 
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("649ab365-138e-4ddf-bcea-f81f5fbb5116")>
+<Assembly: Guid("30a56229-467c-4051-87c4-a6d6c8b1b168")> 
 
 ' Version information for an assembly consists of the following four values:
 '
@@ -28,3 +30,6 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
+
+<Assembly: AssemblyVersion("1.0.0.0")> 
+<Assembly: AssemblyFileVersion("1.0.0.0")> 

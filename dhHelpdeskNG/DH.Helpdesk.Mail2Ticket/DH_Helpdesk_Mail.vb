@@ -1,11 +1,11 @@
 ﻿Imports System.Configuration
 Imports System.Data.SqlClient
-Imports DH.Helpdesk.Mail2Ticket.Library
+Imports DH.Helpdesk.Library
 Imports Rebex.Net
 Imports System.IO
 Imports System.Linq
 Imports System.Text
-Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
+Imports DH.Helpdesk.Library.SharedFunctions
 Imports System.Text.RegularExpressions
 Imports Rebex.Mail
 Imports Rebex.Mime

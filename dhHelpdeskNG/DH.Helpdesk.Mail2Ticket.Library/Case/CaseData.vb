@@ -4,7 +4,7 @@ Imports DH.Helpdesk.BusinessData.Models.WorktimeCalculator
 Imports DH.Helpdesk.Dal.Infrastructure
 Imports DH.Helpdesk.Dal.Repositories
 'Imports System.Data.Odbc
-Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
+Imports DH.Helpdesk.Library.SharedFunctions
 Imports DH.Helpdesk.Services.Infrastructure
 Imports DH.Helpdesk.Services.Services
 Imports DH.Helpdesk.Services.Utils

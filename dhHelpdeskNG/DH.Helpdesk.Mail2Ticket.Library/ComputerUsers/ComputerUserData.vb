@@ -1,4 +1,4 @@
-Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
+Imports DH.Helpdesk.Library.SharedFunctions
 Imports System.Net
 Imports System.IO
 

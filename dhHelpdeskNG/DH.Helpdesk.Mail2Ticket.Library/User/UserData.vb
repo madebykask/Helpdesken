@@ -1,4 +1,4 @@
-Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
+Imports DH.Helpdesk.Library.SharedFunctions
 
 Public Class UserData
     Public Function getUserById(ByVal Id As Integer) As User

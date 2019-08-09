@@ -3,7 +3,7 @@ Imports System.Net.Mail
 Imports DH.Helpdesk.Dal.Infrastructure
 Imports DH.Helpdesk.Dal.Repositories
 Imports DH.Helpdesk.Domain
-Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
+Imports DH.Helpdesk.Library.SharedFunctions
 
 Public Class Mail
     Public Function sendMail(objCase As CCase, 

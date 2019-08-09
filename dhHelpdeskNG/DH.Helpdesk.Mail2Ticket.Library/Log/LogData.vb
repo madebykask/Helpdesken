@@ -1,5 +1,5 @@
 Imports System.Data.SqlClient
-Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
+Imports DH.Helpdesk.Library.SharedFunctions
 
 Public Class LogData
     Public Function createLog(Case_Id As Integer, EMail As String, InternalLogText As String, ExternalLogText As String, _

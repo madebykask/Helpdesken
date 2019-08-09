@@ -1,4 +1,4 @@
-﻿Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
+﻿Imports DH.Helpdesk.Library.SharedFunctions
 
 Public Class AccountData
     Public Function getAccountByCaseNumber(ByVal sCaseNumber As String) As Account

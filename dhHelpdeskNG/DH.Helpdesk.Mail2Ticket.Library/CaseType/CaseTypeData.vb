@@ -1,4 +1,4 @@
-﻿Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
+﻿Imports DH.Helpdesk.Library.SharedFunctions
 
 Public Class CaseTypeData
     Public Function getCaseTypeById(ByVal iId As Integer) As CaseType

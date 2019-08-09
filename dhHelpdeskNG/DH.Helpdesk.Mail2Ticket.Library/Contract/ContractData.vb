@@ -1,5 +1,5 @@
 ﻿Imports System.Data.SqlClient
-Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
+Imports DH.Helpdesk.Library.SharedFunctions
 
 Public Class ContractData
     Public Function getContractsForNoticeOfRemoval() As Collection

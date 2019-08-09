@@ -1,4 +1,4 @@
-﻿Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
+﻿Imports DH.Helpdesk.Library.SharedFunctions
 
 Public Class QuestionnaireData
     Public Function getQuestionnaires() As Collection

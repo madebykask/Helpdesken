@@ -20,7 +20,7 @@ namespace DH.Helpdesk.Tests.Mail2Ticket
             foreach (var pattern in subjectPatterns)
             {
                 var caseNumber =
-                    DH.Helpdesk.Mail2Ticket.Library.SharedFunctions.extractCaseNumberFromSubject(emailSubject, pattern);
+                    DH.Helpdesk.Library.SharedFunctions.extractCaseNumberFromSubject(emailSubject, pattern);
                 Assert.AreEqual(caseNumber, 0);
             }
 
@@ -30,7 +30,7 @@ namespace DH.Helpdesk.Tests.Mail2Ticket
             foreach (var pattern in subjectPatterns)
             {
                 var caseNumber =
-                    DH.Helpdesk.Mail2Ticket.Library.SharedFunctions.extractCaseNumberFromSubject(emailSubject, pattern);
+                    DH.Helpdesk.Library.SharedFunctions.extractCaseNumberFromSubject(emailSubject, pattern);
                 Assert.AreEqual(caseNumber, 7853);
             }
         }
@@ -75,7 +75,7 @@ namespace DH.Helpdesk.Tests.Mail2Ticket
             foreach (var input in inputs)
             {
                 var answer =
-                    DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
+                    DH.Helpdesk.Library.SharedFunctions
                         .extractAnswerFromBody(input, emailSeparatorPattern) ?? string.Empty;
                 Assert.AreEqual(answer, "Svarar från mobilen\r\n");
             }
@@ -95,7 +95,7 @@ namespace DH.Helpdesk.Tests.Mail2Ticket
             var emailSeparatorPattern =
                 @"^.* <?(([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}))>? (.*)\s?[0-9]{1,2}:[0-9]{1,2}:\r?$";
 
-            var res = DH.Helpdesk.Mail2Ticket.Library.SharedFunctions.extractAnswerFromBody(input, emailSeparatorPattern) ?? string.Empty;
+            var res = DH.Helpdesk.Library.SharedFunctions.extractAnswerFromBody(input, emailSeparatorPattern) ?? string.Empty;
             Assert.AreEqual(res, "guten Morgen\r\n");
         }
     }
