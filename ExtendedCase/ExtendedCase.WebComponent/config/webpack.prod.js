@@ -2,6 +2,7 @@
 var WebpackMerge = require('webpack-merge');
 var CommonConfig = require('./webpack.common.js');
 var Helpers = require('./helpers.js');
+const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const cssnano = require('cssnano');
 //const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
@@ -10,7 +11,7 @@ const outputDir = 'wwwroot';
 
 module.exports = WebpackMerge(CommonConfig({ env: 'prod',  outputDir: outputDir }), 
 {    
-    devtool: 'source-map', //todo: check other options for prod
+    devtool: 'source-map', 
 
     output: {
         path: Helpers.root(outputDir),
@@ -23,6 +24,7 @@ module.exports = WebpackMerge(CommonConfig({ env: 'prod',  outputDir: outputDir 
         minimizer: [
             new TerserPlugin({
                 parallel: true,
+                sourceMap: true,
                 terserOptions: {
                   ecma: 6,
                   output: {

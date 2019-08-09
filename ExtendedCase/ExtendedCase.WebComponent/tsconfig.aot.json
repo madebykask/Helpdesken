@@ -29,12 +29,12 @@
         "**/*.d.ts",
         "**/*.ngfactory.ts", // Do not forget to exclude ngfactory
         "**/*.shim.ts"
-    ],
+    ],                                                          
 
      // Required if Compile options are not given into AOTPlugin
     "angularCompilerOptions": {
       "genDir": "./aot",
       "entryModule": "./src/app.module#AppModule",
-      "skipMetadataEmit": true
+      "skipMetadataEmit": true      
     }
   }

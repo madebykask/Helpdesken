@@ -2,6 +2,8 @@
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
+const CopyPlugin = require('copy-webpack-plugin');
+const StatsPlugin = require('stats-webpack-plugin');
 const Helpers = require('./helpers.js');
 
 module.exports = args => {
@@ -60,7 +62,7 @@ module.exports = args => {
                     test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
                     use: 'url-loader?limit=10000&minetype=application/octet-stream',
                 }, {
-                    test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+                    test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,                    
                     use: 'file-loader',
                 }, {
                     test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
@@ -86,7 +88,7 @@ module.exports = args => {
                     ]
                 }, {
                     test: /\.scss$/,
-                    include: [ Helpers.root('src', 'app'),Helpers.root('src', 'styles', 'css')],
+                    include: [ Helpers.root('src', 'app'), Helpers.root('src', 'styles', 'css')],
                     use: [
                         'css-to-string-loader', 
                         { loader: 'css-loader', options: { sourceMap: isDevMode } },
@@ -101,15 +103,15 @@ module.exports = args => {
                 verbose: true
             }),
 
-            //new CopyWebpackPlugin([{ from: 'src/styles/images/*', to: 'img/[name].[ext]' }]),
-            //new CopyWebpackPlugin([{ from: 'src/styles/fonts/*', to: 'fonts/[name].[ext]' }]),
+            new CopyPlugin([{ from: 'src/styles/images/*', to: 'img/[name].[ext]' }]),
+            new CopyPlugin([{ from: 'src/styles/fonts/*', to: 'fonts/[name].[ext]' }]),
 
             //new Webpack.LoaderOptionsPlugin({
             //    debug: true
             //}),
 
             new MiniCssExtractPlugin({
-                filename:  '[name].[hash].css',
+                filename: '[name].[hash].css',
                 chunkFilename: '[id].[hash].css' 
             }),
             
@@ -130,8 +132,10 @@ module.exports = args => {
             new Webpack.ProvidePlugin({
                 jQuery: 'jquery',
                 $: 'jquery'
-            })
+            }),
         
+            new StatsPlugin('stats.json', 'verbose'),
+
             //obsolete in webpack 4 - replaced with optimization.splitChunks settings.
             //new Webpack.optimize.CommonsChunkPlugin({ -
             //    name: ['ecapp', 'ecvendor', 'ecpolyfills']

@@ -15,11 +15,11 @@ export class ExtendedCaseReviewComponent {
     @Input() fieldModel: SingleControlFieldModel;
     @Input() form: FormGroup;
 
-    @ViewChild('valueSpan') valueSpan: ElementRef;
-    
+    @ViewChild('valueSpan', {static: false}) valueSpan: ElementRef;
+
     constructor(private windowWrapper: WindowWrapper) {
     }
-    
+
     getValue1() {
         return this.fieldModel.control.value && this.fieldModel.control.value.length > 0 ? this.fieldModel.control.value[0] : '';
     }

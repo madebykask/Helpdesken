@@ -18,7 +18,7 @@ export class ExtendedCaseReviewComponentEx implements OnChanges {
     @Input() reviewFieldModel: FieldModelBase;
     @Input() proxyModel: ProxyModel;
 
-    @ViewChild('valueSpan') valueSpan: ElementRef;
+    @ViewChild('valueSpan', {static: true}) valueSpan: ElementRef;
 
     value1: any;
     value2: any;
@@ -46,10 +46,12 @@ export class ExtendedCaseReviewComponentEx implements OnChanges {
 
     setVisibility() {
         if (this.reviewFieldModel.hidden ||
-            (cm.isUndefinedNullOrEmpty(this.value1) && cm.isUndefinedNullOrEmpty(this.value2)))
+            (cm.isUndefinedNullOrEmpty(this.value1) && cm.isUndefinedNullOrEmpty(this.value2))) {
             this.isHidden = true;
-        else
+        }
+        else {
             this.isHidden = false;
+        }
     }
 
     getLabel() {

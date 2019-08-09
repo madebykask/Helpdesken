@@ -19,7 +19,7 @@ const outputDir = 'dist-test';
 
 module.exports = WebpackMerge.smart(CommonConfig({ env: CONSTANTS.MODE,  outputDir: outputDir }), 
 {        
-        devtool: 'source-map', //todo: check other options for prod
+        devtool: 'source-map',
         output: {
             path: Helpers.root(outputDir),
             publicPath: '/' + CONSTANTS.BASEURL + '/',
@@ -33,6 +33,7 @@ module.exports = WebpackMerge.smart(CommonConfig({ env: CONSTANTS.MODE,  outputD
                 // webpack 4 does minification by default in production mode
                 new TerserPlugin({
                     parallel: true,
+                    sourceMap: true,
                     terserOptions: {
                       ecma: 6,
                       output: {

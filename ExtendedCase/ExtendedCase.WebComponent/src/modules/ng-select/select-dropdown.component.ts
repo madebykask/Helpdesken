@@ -33,8 +33,8 @@ implements AfterViewInit, OnChanges, OnInit {
     @Output() singleFilterInput = new EventEmitter<string>();
     @Output() singleFilterKeydown = new EventEmitter<any>();
 
-    @ViewChild('filterInput') filterInput: any;
-    @ViewChild('optionsList') optionsList: any;
+    @ViewChild('filterInput', { static: false }) filterInput: any;
+    @ViewChild('optionsList', { static: false }) optionsList: any;
 
     disabledColor: string = '#fff';
     disabledTextColor: string = '9e9e9e';

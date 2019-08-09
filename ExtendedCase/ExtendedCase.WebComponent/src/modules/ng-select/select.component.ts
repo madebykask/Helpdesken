@@ -52,11 +52,11 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit 
     @Output() blur = new EventEmitter<null>();
     @Output() noOptionsFound = new EventEmitter<string>();
 
-    @ViewChild('selection') selectionSpan: ElementRef;
-    @ViewChild('dropdown') dropdown: SelectDropdownComponent;
-    @ViewChild('filterInput') filterInput: ElementRef;
+    @ViewChild('selection', {static: false}) selectionSpan: ElementRef;
+    @ViewChild('dropdown', {static: false}) dropdown: SelectDropdownComponent;
+    @ViewChild('filterInput', {static: false}) filterInput: ElementRef;
 
-    @ContentChild('optionTemplate') optionTemplate: TemplateRef<any>;
+    @ContentChild('optionTemplate', { static: false }) optionTemplate: TemplateRef<any>;
 
     private _value: Array<any> = [];
     private optionList: OptionList = new OptionList([]);

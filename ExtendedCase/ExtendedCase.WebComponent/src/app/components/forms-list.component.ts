@@ -21,12 +21,11 @@ export class ExtendedCaseFormsListComponent implements OnInit {
     selectedFormId: number;
 
     modalRef: BsModalRef;
-    @ViewChild('code_template') codeTemplate: TemplateRef<any>;
+    @ViewChild('code_template', { static: false }) codeTemplate: TemplateRef<any>;
 
     private items: Array<ItemModel>;
     private form: FormGroup;
     private codeSource = '';
-    
 
     constructor(private readonly metaDataService: MetaDataService, private readonly windowWrapper: WindowWrapper,
         private readonly modalService: BsModalService) {

@@ -1,5 +1,6 @@
 ﻿import { NgModule, ErrorHandler, Injector } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpInterceptorService } from './app/services/data/httpInterceptorService';
@@ -59,7 +60,7 @@ import { routes } from './routes';
 import { RouterModule } from '@angular/router';
 
 @NgModule({
-    imports: [BrowserModule, HttpClientModule, FormsModule, ReactiveFormsModule,
+    imports: [BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule, ReactiveFormsModule,
         DatepickerModule.forRoot(),
         TypeaheadModule.forRoot(),
         TabsModule.forRoot(),

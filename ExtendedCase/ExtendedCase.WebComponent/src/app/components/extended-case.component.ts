@@ -57,6 +57,8 @@ import { ViewEncapsulation } from '@angular/compiler/src/core';
     encapsulation: ViewEncapsulation.Emulated
 })
 export class ExtendedCaseComponent {
+    @ViewChild(ProgressComponent, {static: false}) private progressComponent: ProgressComponent;
+
     formParameters: FormParametersModel; // parameters initially received from query string, possible to change from parent window
     dbModel = new Array<any>(); // db data
     templateModel: FormTemplateModel; // parsed template model
@@ -70,7 +72,6 @@ export class ExtendedCaseComponent {
     private subscriptionManager = new SubscriptionManager();
     private caseLoadCompleteSubject: Subject<any> = new Subject<any>();
     private initialData: ICaseInitialData;
-    @ViewChild(ProgressComponent) private progressComponent: ProgressComponent;
 
     constructor(
         private templateService: TemplateService,
