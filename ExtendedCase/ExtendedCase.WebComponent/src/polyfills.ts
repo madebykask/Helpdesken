@@ -1,5 +1,5 @@
 ﻿// import 'core-js/es6/reflect';
-import 'core-js/client/core';
+import 'core-js/es';
 import 'zone.js/dist/zone';
 import 'reflect-metadata';
 import '@webcomponents/custom-elements/custom-elements.min';
@@ -9,6 +9,11 @@ import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js';
 // import '@webcomponents/webcomponentsjs/webcomponents-bundle.js'
 /* required for attachShadow for IE(no CSS encapsulation) */
 // import '@webcomponents/shadydom' 
+
+/* if (!Element.prototype.matches) {
+  Element.prototype.matches = (<any>Element.prototype).msMatchesSelector ||
+    Element.prototype.webkitMatchesSelector;
+} */
 declare var ENV: any; // // to avoid compiler error. Using global variable from js.
 
 declare var require: any;

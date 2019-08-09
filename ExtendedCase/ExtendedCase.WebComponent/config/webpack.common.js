@@ -10,11 +10,12 @@ module.exports = args => {
     console.log(">>> args: " + JSON.stringify(args));
 
     const outputDir = args.outputDir;
-    const isDevMode = args.env === 'dev';
+    const isDevMode = args.env === 'dev' || args.env === 'dev-test';
     const tsconfigFile = isDevMode ? './tsconfig.json' : './tsconfig.aot.json';
     console.log('>>> tsconfigFile: %s', tsconfigFile);
 
     return {
+        node: {process: false }, //keep it fo ie11 issue: https://github.com/angular/angular/issues/24769
         mode: isDevMode ? 'development' : 'production', // webpack4 required
         entry: {
             ecapp: isDevMode ? './src/main.ts' : './src/main.aot.ts',
