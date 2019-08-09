@@ -700,15 +700,21 @@ export class ExtendedCaseComponent {
     ///////////////////////////////////////////////////////////////////////////// Playground below
 
     private toggleProgress = false;
+
     test(): void {
+        // this.toggleProgress = !this.toggleProgress;
 
-        this.toggleProgress = !this.toggleProgress;
+        // if (this.toggleProgress) {
+        //     this.progressComponent.show();
+        // } else {
+        //     this.progressComponent.hide();
+        // }
 
-        if (this.toggleProgress) {
-            this.progressComponent.show();
-        } else {
-            this.progressComponent.hide();
-        }
+        let f = this.formModel.tabs['tab1'].sections['sec1'].instances[0].fields['select1'];
+        f.items = [{ value: '1', text: '11' }, { value: '2', text: '22' }, { value: '3', text: '33' }];
+
+        f.setControlValue('1');
+
 
         /*let promise = new Promise((resolve, reject) => {
             setTimeout(() => {

@@ -80,15 +80,13 @@ module.exports = args => {
                     ],
                     exclude: [Helpers.root('dist'), Helpers.root('dist-test')]
                 }, {
-                    test: /\.css$/,
-                    include: Helpers.root('src', 'app'),
+                    test: /\.css$/,                    
                     use: [
                         'css-to-string-loader',
                         { loader: 'css-loader', options: { sourceMap: isDevMode } }
                     ]
                 }, {
                     test: /\.scss$/,
-                    include: [ Helpers.root('src', 'app'), Helpers.root('src', 'styles', 'css')],
                     use: [
                         'css-to-string-loader', 
                         { loader: 'css-loader', options: { sourceMap: isDevMode } },
