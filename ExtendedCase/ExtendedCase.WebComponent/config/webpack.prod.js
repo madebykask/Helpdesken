@@ -7,7 +7,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const cssnano = require('cssnano');
 //const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 
-const outputDir = 'wwwroot';
+const outputDir = 'dist';
 
 module.exports = WebpackMerge(CommonConfig({ env: 'prod',  outputDir: outputDir }), 
 {    

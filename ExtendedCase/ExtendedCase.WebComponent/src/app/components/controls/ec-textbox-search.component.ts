@@ -5,7 +5,7 @@ import { Component, Input, OnInit, OnChanges, OnDestroy, ChangeDetectionStrategy
 import { FormGroup } from '@angular/forms';
 import { SingleControlFieldModel } from '../../models/form.model';
 import { ComponentCommService, ControlDataSourceChangeParams } from '../../services/component-comm.service';
-import { TypeaheadMatch } from 'ngx-bootstrap'
+import { TypeaheadMatch } from 'ngx-bootstrap/typeahead'
 import { FormControlsManagerService } from '../../services/form-controls-manager.service';
 import { LogService } from '../../services/log.service';
 import { ItemModel } from '../../models/form.model';

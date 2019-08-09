@@ -1,5 +1,8 @@
 ﻿const Webpack = require('webpack');
 const WebpackMerge = require('webpack-merge');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const cssnano = require('cssnano');
+const TerserPlugin = require('terser-webpack-plugin');
 const CommonConfig = require('./webpack.common.js');
 const Helpers = require('./helpers.js');
 const packageJSON = require('../package.json');
@@ -9,7 +12,8 @@ let CONSTANTS = {
     VERSION: JSON.stringify(packageJSON.version),
     MODE: 'test'
 } 
-const outputDir = 'wwwroot';
+
+const outputDir = 'dist';
 
 module.exports = WebpackMerge(CommonConfig({ env: CONSTANTS.MODE, outputDir: outputDir }), 
     {     
@@ -19,6 +23,35 @@ module.exports = WebpackMerge(CommonConfig({ env: CONSTANTS.MODE, outputDir: out
             publicPath: '/',
             filename: '[name].[hash].js',
             chunkFilename: '[id].[hash].chunk.js'
+        },
+
+        optimization: {
+            minimize: true,
+            minimizer: [
+                // webpack 4 does minification by default in production mode
+                new TerserPlugin({
+                    parallel: true,
+                    sourceMap: true,
+                    terserOptions: {
+                      ie8: false,
+                      keep_fnames: true,
+                      ecma: 6,
+                      output: {
+                        comments: false,
+                      },
+                    },
+                  }),
+
+                new OptimizeCSSAssetsPlugin({
+                    cssProcessor: cssnano,
+                    cssProcessorOptions: {
+                        discardComments: {
+                            removeAll: true
+                        }
+                    },
+                    canPrint: false
+                })
+            ]
         },
 
         plugins: [

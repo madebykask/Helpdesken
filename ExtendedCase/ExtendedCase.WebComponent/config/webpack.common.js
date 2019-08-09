@@ -25,6 +25,10 @@ module.exports = args => {
             extensions: ['.ts', '.js']
         },
 
+        node: {
+            process: false
+        },
+
         //todo: new webpack4 settings instead of CommonsChunkPlugin: https://webpack.js.org/plugins/split-chunks-plugin/
          optimization: {
             runtimeChunk: false,
@@ -108,10 +112,10 @@ module.exports = args => {
             //    debug: true
             //}),
 
-            new MiniCssExtractPlugin({
+            /*new MiniCssExtractPlugin({
                 filename: '[name].[hash].css',
                 chunkFilename: '[id].[hash].css' 
-            }),
+            }),*/
             
             new AngularCompilerPlugin({
                 tsConfigPath: tsconfigFile,

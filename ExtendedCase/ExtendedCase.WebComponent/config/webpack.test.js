@@ -35,6 +35,8 @@ module.exports = WebpackMerge.smart(CommonConfig({ env: CONSTANTS.MODE,  outputD
                     parallel: true,
                     sourceMap: true,
                     terserOptions: {
+                      ie8: false,
+                      keep_fnames: true,
                       ecma: 6,
                       output: {
                         comments: false,
