@@ -31,6 +31,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             return new UserSettingsModelOutput
             {
                 Id = UserId,
+                UserGuid = userSettings.UserGUID?.ToString(),
+                UserRole = userSettings.UserGroupId,
                 CustomerId = userSettings.CustomerId,
                 LanguageId = userSettings.LanguageId,
                 //note: windows and iana time zones sometimes changes. if unknown timezone is found, update nodatime lib or use other approach.

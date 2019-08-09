@@ -11,6 +11,8 @@ export class UserAuthenticationData {
 export class UserData {
   id: number;
   name: string;
+  userGuid: string;
+  userRole: number;
   selectedCustomerId: number;
   selectedLanguageId: number;
   userTimeZone?: string;

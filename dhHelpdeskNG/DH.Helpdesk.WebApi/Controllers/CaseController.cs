@@ -5,13 +5,13 @@ using System.Web.Http;
 using AutoMapper;
 using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Models.Case;
-using DH.Helpdesk.BusinessData.Models.Customer.Input;
 using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Models.Case.Field;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
 using DH.Helpdesk.WebApi.Logic.Case;
+using DH.Helpdesk.WebApi.Models.Case;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -125,6 +125,11 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             _caseService.MarkAsRead(caseId);
 
+            var stateSecondaryId = currentCase?.StateSecondary_Id ?? 0;
+
+            model.ExtendedCaseData =
+                GetExtendedCaseModel(cid, currentCase.Id, 0, stateSecondaryId, userOverview.UserGUID.ToString());
+            
             return model;
         }
 
@@ -160,17 +165,46 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             _caseFieldsCreator.CreateInitiatorSection(cid, customerUserSetting, caseFieldSettings, caseTemplateSettings, null, caseTemplate, langId,
                 caseFieldTranslations, model, customerDefaults);
+
             _caseFieldsCreator.CreateRegardingSection(cid, caseFieldSettings, caseTemplateSettings, null, caseTemplate, langId, caseFieldTranslations, model);
+
             _caseFieldsCreator.CreateComputerInfoSection(cid, caseFieldSettings, caseTemplateSettings, null, caseTemplate, langId, caseFieldTranslations, model);
+
             _caseFieldsCreator.CreateCaseInfoSection(cid, caseFieldSettings, caseTemplateSettings, null, caseTemplate, langId, caseFieldTranslations,
                 model, customerUserSetting, customerDefaults);
+
             _caseFieldsCreator.CreateCaseManagementSection(cid, userOverview, caseFieldSettings, caseTemplateSettings, null, caseTemplate, langId,
                 caseFieldTranslations, model, customerUserSetting, customerSettings, customerDefaults);
+
             _caseFieldsCreator.CreateCommunicationSection(cid, userOverview, caseFieldSettings, caseTemplateSettings, null, caseTemplate, langId,
                 caseFieldTranslations, model, customerSettings);
 
-            model.EditMode = Web.Common.Enums.Case.AccessMode.FullAccess;
+            model.EditMode = Web.Common.Enums.Case.AccessMode.FullAccess; //todo: check mode calculation
+
+            var stateSecondaryId = caseTemplate?.StateSecondary_Id ?? 0;
+
+            model.ExtendedCaseData =
+                GetExtendedCaseModel(cid, 0, caseTemplate?.Id ?? 0, stateSecondaryId, userOverview.UserGUID.ToString());
+
             return Ok(model);
+        }
+
+        private ExtendedCaseModel GetExtendedCaseModel(int customerId, int caseId, int caseSolutionId, int stateSecondaryId, string userGuid)
+        {
+            ExtendedCaseModel model = null;
+
+            var exCaseData = 
+                _caseService.GetCaseExtendedCaseForm(caseSolutionId, customerId, caseId, userGuid, stateSecondaryId);
+
+            if (exCaseData != null)
+            {
+                model = new ExtendedCaseModel
+                {
+                    ExtendedCaseFormId = exCaseData.ExtendedCaseFormId,
+                    ExtendedCaseGuid = exCaseData.ExtendedCaseGuid
+                };
+            }
+            return model;
         }
     }
 }

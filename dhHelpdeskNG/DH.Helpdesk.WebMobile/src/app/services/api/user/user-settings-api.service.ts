@@ -32,6 +32,12 @@ export class UserSettingsApiService extends HttpApiServiceBase {
             if (data.id) {
               user.currentData.id = data.id;
             }
+            if (data.userRole) {
+              user.currentData.userRole = +data.userRole;
+            }
+            if (data.userGuid) {
+              user.currentData.userGuid = data.userGuid;
+            }
             if (data.customerId) {
               user.currentData.selectedCustomerId = data.customerId;
             }// TODO: if no customer;

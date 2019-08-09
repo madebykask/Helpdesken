@@ -16,7 +16,7 @@ namespace DH.Helpdesk.Models.Case
         public Guid CaseGuid { get; set; }
         public CaseSolutionInfo CaseSolution { get; set; }
         public AccessMode EditMode { get; set; }
-        
+        public ExtendedCaseModel ExtendedCaseData { get; set; }
 
         //public List<CustomMailTemplate> MailTemplates { get; set; }
         //public List<CaseFile> CaseFiles { get; set; }
@@ -29,6 +29,5 @@ namespace DH.Helpdesk.Models.Case
         //public virtual List<Mail2Ticket> Mail2Tickets { get; set; }
         //public virtual ICollection<Case_ExtendedCaseEntity> CaseExtendedCaseDatas { get; set; }
         //public virtual ICollection<Case_CaseSection_ExtendedCase> CaseSectionExtendedCaseDatas { get; set; }
-
     }
 }
