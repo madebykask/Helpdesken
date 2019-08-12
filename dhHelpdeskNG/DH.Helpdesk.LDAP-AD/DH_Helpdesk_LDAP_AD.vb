@@ -36,6 +36,7 @@ Module DH_Helpdesk_LDAP_AD
         'Process SqlClientMetaDataCollectionNames Arguements
         If aArguments IsNot Nothing AndAlso aArguments.Length > 0 Then
             'Override arfs with values from command line
+            mode = GetCmdArgOrDefault(aArguments, 0, mode)
             sConnectionstring = GetCmdArgOrDefault(aArguments, 1, sConnectionstring)
             iSyncById = GetCmdArgOrDefaultInt(aArguments, 2, iSyncById)
             sLogPath = GetCmdArgOrDefault(aArguments, 3, gsLogPath)
