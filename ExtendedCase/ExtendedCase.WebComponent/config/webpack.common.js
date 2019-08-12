@@ -1,8 +1,8 @@
 ﻿const Webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
-const CopyPlugin = require('copy-webpack-plugin');
+//const CopyPlugin = require('copy-webpack-plugin');
 const StatsPlugin = require('stats-webpack-plugin');
 const Helpers = require('./helpers.js');
 
@@ -16,35 +16,34 @@ module.exports = args => {
 
     return {
         node: {process: false }, //keep it fo ie11 issue: https://github.com/angular/angular/issues/24769
+        
         mode: isDevMode ? 'development' : 'production', // webpack4 required
+        
         entry: {
             ecapp: isDevMode ? './src/main.ts' : './src/main.aot.ts',
             ecpolyfills: './src/polyfills.ts',
             //ecvendor: './src/vendor.ts'
         },
+
         resolve: {
             extensions: ['.ts', '.js']
-        },
-
-        node: {
-            process: false
         },
 
         //todo: new webpack4 settings instead of CommonsChunkPlugin: https://webpack.js.org/plugins/split-chunks-plugin/
          optimization: {
             runtimeChunk: false,
             noEmitOnErrors: true,
-            splitChunks: {
-                cacheGroups: {
-                 default: false,
-                 commons: {
-                    test: /[\\/]node_modules[\\/]/,
-                    name: 'ecvendor',
-                    chunks: 'all',
-                    minChunks: 2
-                  },
-                }
-            },
+            //splitChunks: {
+            //    cacheGroups: {
+            //     default: false,
+            //     commons: {
+            //        test: /[\\/]node_modules[\\/]/,
+            //        name: 'ecvendor',
+            //        chunks: 'all',
+            //        minChunks: 2
+            //      },
+            //    }
+            //},
         },
 
         module: {
@@ -58,17 +57,15 @@ module.exports = args => {
                     use: 'html-loader',
                     exclude: [Helpers.root('dist'), Helpers.root('dist-test')]
                 }, {
-                    test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-                    use: 'url-loader?limit=10000&minetype=application/font-woff',
-                }, {
-                    test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-                    use: 'url-loader?limit=10000&minetype=application/font-woff2',
-                }, {
-                    test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                    use: 'url-loader?limit=10000&minetype=application/octet-stream',
-                }, {
-                    test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,                    
-                    use: 'file-loader',
+                    test: /\.(woff|woff2|eot|ttf|otf)(\?v=\d+\.\d+\.\d+)?$/,
+                    use: {
+                        loader:'url-loader',
+                        options: {
+                            name: '[name].[ext]',
+                            limit: 8192,
+                            outputPath: '/fonts/'
+                        }
+                    }
                 }, {
                     test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
                     use: 'url-loader?limit=10000&minetype=image/svg+xml',
@@ -79,13 +76,13 @@ module.exports = args => {
                             loader: 'file-loader',
                             options: {
                                 name: '[name].[ext]?v=[hash]',
-                                outputPath: 'img/'
+                                outputPath: '/img/'
                             }
                         }
                     ],
                     exclude: [Helpers.root('dist'), Helpers.root('dist-test')]
                 }, {
-                    test: /\.css$/,                    
+                    test: /\.css$/,
                     use: [
                         'css-to-string-loader',
                         { loader: 'css-loader', options: { sourceMap: isDevMode } }
@@ -106,17 +103,20 @@ module.exports = args => {
                 verbose: true
             }),
 
-            new CopyPlugin([{ from: 'src/styles/images/*', to: 'img/[name].[ext]' }]),
-            new CopyPlugin([{ from: 'src/styles/fonts/*', to: 'fonts/[name].[ext]' }]),
+            // will be extracted and copied from css
+            //new CopyPlugin([{ from: 'src/styles/images/*', to: 'img/[name].[ext]' }]),
+            //new CopyPlugin([{ from: 'src/styles/fonts/*', to: 'fonts/[name].[ext]' }]),
 
             //new Webpack.LoaderOptionsPlugin({
             //    debug: true
             //}),
 
+            // no css to reference at the moment
             /*new MiniCssExtractPlugin({
                 filename: '[name].[hash].css',
                 chunkFilename: '[id].[hash].css' 
-            }),*/
+            }),
+            */
             
             new AngularCompilerPlugin({
                 tsConfigPath: tsconfigFile,
@@ -139,10 +139,19 @@ module.exports = args => {
         
             new StatsPlugin('stats.json', 'verbose'),
 
-            //obsolete in webpack 4 - replaced with optimization.splitChunks settings.
-            //new Webpack.optimize.CommonsChunkPlugin({ -
-            //    name: ['ecapp', 'ecvendor', 'ecpolyfills']
-            //})
+            new HtmlWebpackPlugin({
+                title: 'Extended case element',
+                template: "./public/test.ejs",
+                filename: "./test.html",
+                inject: false,
+                chunks: ['ecapp', 'ecpolyfills'],
+                head: {
+                    js: ['ecpolyfills']
+                },
+                body: {
+                    js: ['ecapp']
+                }
+            }),
         ]
     }
 };

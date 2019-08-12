@@ -53,12 +53,13 @@ import { ClientLogApiService } from './app/services/data/client-log-api.service'
 import { ClipboardModule } from 'ngx-clipboard';
 
 import { createCustomElement } from '@angular/elements';
-
 import { DynamicModule } from 'ng-dynamic-component';
 
 //import './styles/css/site.scss';
 import { routes } from './routes';
 import { RouterModule } from '@angular/router';
+import { ExtendedCaseElementComponent } from './app/components/extended-case-element.component';
+
 
 @NgModule({
     imports: [BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule, ReactiveFormsModule,
@@ -74,7 +75,7 @@ import { RouterModule } from '@angular/router';
             ExtendedCaseMultiselectComponent, ExtendedCaseDateComponent, ExtendedCaseCheckboxListComponent,
             ExtendedCaseCheckboxComponent, ExtendedCaseRadioComponent, ExtendedCaseReviewComponent, ExtendedCaseHtmlComponent])
         ],
-    declarations: [ ExtendedCaseComponent, ExtendedCaseFormsListComponent, ExtendedCaseTabComponent,
+    declarations: [ExtendedCaseElementComponent, ExtendedCaseComponent, ExtendedCaseFormsListComponent, ExtendedCaseTabComponent,
         ExtendedCaseSectionComponent, ExtendedCaseReviewSectionComponent,
         ExtendedCaseTextBoxComponent, ExtendedCaseLabelComponent, ExtendedCaseTextBoxSearchComponent,
         ExtendedCaseTextAreaComponent, ExtendedCaseCheckboxComponent, ExtendedCaseDateComponent,
@@ -82,8 +83,8 @@ import { RouterModule } from '@angular/router';
         ExtendedCaseCheckboxListComponent, ExtendedCaseMultiselectComponent, ExtendedCaseReviewComponent,
         ExtendedCaseReviewComponentEx, ExtendedCaseReviewSectionInstanceComponent, ExtendedCaseHtmlComponent, ValidationErrorComponent,
         ValidationWarningComponent, Mask, TrimValueAccessor, ToNGSelectOptions, AlertsFilter, SafeHtml, SafeStyle,
-        ExtendedUnknowControlComponent ],
-        entryComponents: [ExtendedCaseComponent],
+        ExtendedUnknowControlComponent],
+        entryComponents: [ExtendedCaseElementComponent, ExtendedCaseComponent],
     providers: [
         {
             provide: HTTP_INTERCEPTORS,
@@ -103,9 +104,13 @@ import { RouterModule } from '@angular/router';
     ]
 })
 export class AppModule {
-  constructor(injector: Injector) {
-    const custom = createCustomElement(ExtendedCaseComponent, {injector: injector});
-    customElements.define('extended-case', custom);
+
+  constructor(private injector: Injector) { }
+
+  ngDoBootstrap() {
+    // register extended case component as web element
+    const custom = createCustomElement(ExtendedCaseElementComponent, { injector: this.injector});
+    customElements.define('extended-case-element', custom);
   }
-  ngDoBootstrap() {}
+
 };

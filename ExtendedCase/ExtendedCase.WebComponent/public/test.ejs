@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>    
+    <base href="<%= htmlWebpackPlugin.options.baseUrl %>">
+    <meta charset="utf-8" />
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+    <% for (var chunk in htmlWebpackPlugin.options.head.css) { %>
+        <link  href="<%= htmlWebpackPlugin.files.chunks[htmlWebpackPlugin.options.head.css[chunk]].css %>" rel="stylesheet"></link>
+    <% } %>
+    <% for (var customCss in htmlWebpackPlugin.options.head.customCss) { %>
+        <link  href="<%= htmlWebpackPlugin.options.head.customCss[customCss] %>" rel="stylesheet"></link>
+    <% } %>
+    <% for (var chunk in htmlWebpackPlugin.options.head.js) { %>
+        <script src="<%= htmlWebpackPlugin.files.chunks[htmlWebpackPlugin.options.head.js[chunk]].entry %>"></script>
+    <% } %>
+</head>
+<body>
+
+<!-- extended case web element -->
+<extended-case-element></extended-case-element>
+
+<br />
+<div>
+    <button type="button" onclick="saveFormData()">Save</button>
+</div>
+<br />
+<!-- test validation: validation buttons test -->
+<div>
+    <button type="button" class="btn btn-success" onclick="loadForm()">Load Form</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="reloadForm()">Reload Form</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="getCaseValues()">Get Case Values</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="setNextStep()">Set Next Step</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="setPrevStep()">Set Prev Step</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="validateExtendedCase(false)">Validate onSave</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="validateExtendedCase(true)">Validate onNext</button>
+    <button type="button" class="btn btn-success" onclick="test()">Test</button>
+</div>
+<br />
+
+<script type="text/javascript">
+	  window.loadExtendedCase = function (options) {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.loadForm(options);
+          });
+      }
+      
+      function test() {
+          window.extendedCaseComponentRef.zone.run(function () {
+                return window.extendedCaseComponentRef.component.test();
+          });
+      }
+	  
+    function loadForm() {
+        const component = document.querySelector('extended-case-element');
+        if (component) {
+          var state = {
+            formParameters: {
+              formId: 2, 
+              extendedCaseGuid: '595D56C0-1C21-4CC1-94FB-E8674740DB47',
+              userGuid: '9005F3D3-D62B-4F54-85B3-63A8EFB80782',
+              languageId: 1,
+              currentUser: 'admin',
+              isCaseLocked: 0,
+              
+              //assignment parameters:
+              customerId: 1,
+              userRole: 4,
+              caseStatus: 0
+            }, 
+            caseValues: { 
+              caseField1: '2', 
+              reportedby: '8',
+              test: 'val'  
+            } 
+         };
+
+         component.addEventListener('formLoadSuccess', function(event) {
+            console.log('Form has been loaded successfully');
+            alert('Form has been loaded successfully');
+         });
+
+         component.addEventListener('formLoadError', function(event) {
+            console.log('Form failed to load. Error: %s', event);
+            alert('Form failed to load');
+         });
+
+         //load component
+         component.loadForm = state;
+         
+        }
+    }
+        
+    function reloadForm() {
+        var formParameters = document.getElementById("extendedCaseFrame").contentWindow.getFormParameters();
+        formParameters.languageId = 1;
+        document.getElementById("extendedCaseFrame").contentWindow.loadExtendedCase({ formParameters: formParameters, caseValues: { caseField1: { Value: '2'} } });
+    }
+        
+    function getCaseValues() {
+        var vals = document.getElementById("extendedCaseFrame").contentWindow.getCaseValues();
+        console.log(vals);
+    }
+        
+    function setNextStep() {
+        document.getElementById("extendedCaseFrame").contentWindow.setNextStep(5, true);
+    }
+
+    function setPrevStep() {
+        document.getElementById("extendedCaseFrame").contentWindow.setNextStep(0, false);
+    }
+
+        
+    function saveFormData() {
+        var promise = document.getElementById("extendedCaseFrame").contentWindow.saveExtendedCase(false);
+        promise.then(onSaveSuccess, onSaveError);
+    }
+
+    function validateExtendedCase(isOnNext) {
+        var errors = document.getElementById("extendedCaseFrame").contentWindow.validateExtendedCase(isOnNext || false);
+        if (errors) alert(JSON.stringify(errors));// validation failed
+    }
+
+    function onSaveSuccess(result) {
+        console.log('Success. Result: ' + result.extendedCaseGuid);
+    }
+
+    function onSaveError(err) {
+        var errorMsg = err.error || 'Unknown error';
+        console.error('Error. ' + errorMsg);
+    }
+
+</script>
+
+<% for (var chunk in htmlWebpackPlugin.options.body.js) { %>
+    <script src="<%= htmlWebpackPlugin.files.chunks[htmlWebpackPlugin.options.body.js[chunk]].entry %>"></script>
+<% } %>
+
+</body>
+</html>

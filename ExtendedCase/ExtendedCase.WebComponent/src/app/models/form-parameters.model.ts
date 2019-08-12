@@ -1,16 +1,19 @@
-﻿export class FormParametersModel {    
+﻿export class FormParametersModel {
     extendedCaseGuid: string;
     formId: number;
     languageId: number;
     assignmentParameters: FormAssignmentParameters;
-    caseId:number;
+    caseId: number;
     userGuid: string;
-    currentUser:string;
+    currentUser: string;
     isCaseLocked: boolean;
-    applicationType:string;
+    applicationType: string;
 }
 
 export class FormAssignmentParameters {
-    constructor(public userRole: string, public caseStatus: number, public customerId: number) {
+    constructor(
+        public userRole: string,
+        public caseStatus: number,
+        public customerId: number) {
     }
 }

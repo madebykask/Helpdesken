@@ -42,19 +42,14 @@ import { ErrorHandlingService } from '../services/error-handling.service';
 import { ProgressComponent } from './shared/progress.component';
 import * as moment from 'moment';
 import { IAppConfig } from '../shared/app-config/app-config.interface';
-import { ViewEncapsulation } from '@angular/compiler/src/core';
 
 @Component({
-    /* selector: 'extended-case', */
+    selector: 'extended-case',
     templateUrl: './extended-case.component.html',
-    styleUrls: ['../../styles/css/bootstrap.scss' , '../../styles/css/site.scss'],
     providers: [
         MetaDataService, TemplateService, ComponentCommService, ProxyModelService, DigestService, FormModelService, ValidatorsService,
         LoadSaveFormDataService, DataSourcesLoaderService, DataSourceService, FormDataService, StorageService,
-        QueryParamsService, FormControlsManagerService, ProxyModelBuilder, FormStateService],
-    /* Emulated is used - IE, Edge doesn't support ShadowDom even with polyfills
-    If ShadowDow or Native is used - remove :host ::ng-deep from bootstrap scss */
-    encapsulation: ViewEncapsulation.Emulated
+        QueryParamsService, FormControlsManagerService, ProxyModelBuilder, FormStateService]
 })
 export class ExtendedCaseComponent {
     @ViewChild(ProgressComponent, {static: false}) private progressComponent: ProgressComponent;

@@ -89,7 +89,7 @@
     "stats": "webpack-bundle-analyzer dist/stats.json",
     "build-test": "webpack --env.mode=test",
     "build-test-local": "webpack --env.mode=dev.test",
-    "build-dev": "webpack --env.mode=dev",
+    "build-dev": "webpack --env.mode=dev --verbose",
     "bundle-report": "webpack-bundle-analyzer dist/stats.json -m static"
   }
 }

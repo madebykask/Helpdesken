@@ -1,5 +1,4 @@
 ﻿import { IKeyedCollection, KeyedCollection} from '../shared/keyed-collection'
-import { IMap } from '../shared/common-types'
 import { FormStateModel } from './form-state.model';
 import { FormStateItem } from './form-state.model';
 
@@ -25,7 +24,8 @@ export class FormDataSaveModel {
 
 export class FieldValueModel {
 
-    constructor(public Value: string,
+    constructor(
+        public Value: string,
         public SecondaryValue?: string,
         public Pristine: boolean = true) {
     }
@@ -33,7 +33,8 @@ export class FieldValueModel {
 
 export class FormFieldValueModel {
 
-    constructor(public FieldId: string,
+    constructor(
+        public FieldId: string,
         public Value: string,
         public SecondaryValue: string,
         public Properties: FieldProperties) {
