@@ -230,13 +230,12 @@ export class ExtendedCaseComponent {
             take(1),
             catchError(err => {
                 return new Promise((resolve, reject) => {
-                    return reject({ error: `Unknown error. ${err.Message}` });
+                    return reject(new Error(`Unknown error. ${err.Message}`));
                 });
             }),
             switchMap(r => {
                 this.formModel.acceptChanges();
-                let result = this.processFormDataSaveResult(<FormDataSaveResult>r);
-                return of(result);
+                return this.processFormDataSaveResult(<FormDataSaveResult>r);
             })
         ).toPromise();
     }

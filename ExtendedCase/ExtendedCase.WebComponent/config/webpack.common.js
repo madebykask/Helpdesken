@@ -63,7 +63,8 @@ module.exports = args => {
                         options: {
                             name: '[name].[ext]',
                             limit: 8192,
-                            outputPath: '/fonts/'
+                            outputPath: '/fonts/',
+                            publicPath: '/fonts'
                         }
                     }
                 }, {
@@ -76,7 +77,8 @@ module.exports = args => {
                             loader: 'file-loader',
                             options: {
                                 name: '[name].[ext]?v=[hash]',
-                                outputPath: '/img/'
+                                outputPath: '/img/',
+                                publicPath: '/img'
                             }
                         }
                     ],

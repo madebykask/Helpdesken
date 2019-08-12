@@ -28,7 +28,55 @@
 </div>
 <br />
 <!-- test validation: validation buttons test -->
-<div>
+<div id="form">    
+    <form>
+            <div class="form-group">
+                <label for="extendedCaseFormId">FormId:</label>
+                <input id="extendedCaseFormId" type="text" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="extendedCaseGuid">ExtendedCase Guid:</label>
+                <input id="extendedCaseGuid" type="text" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="extendedCaseFormId">FormId:</label>
+                <input id="extendedCaseFormId" type="text" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="customerId">CustomerId:</label>
+                <input id="customerId" type="text" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="langId">Language:</label>
+                <input id="langId" type="text" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="userId">UserId:</label>
+                <input id="userId" type="text" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="userRole">UserRole:</label>
+                <input id="userRole" type="text" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="caseStatus">CaseStatus:</label>
+                <input id="caseStatus" type="text" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="userGuid">User Guid:</label>
+                <input id="userGuid" type="text" class="form-control" />
+            </div>
+
+
+    </form>
     <button type="button" class="btn btn-success" onclick="loadForm()">Load Form</button>&nbsp;
     <button type="button" class="btn btn-success" onclick="reloadForm()">Reload Form</button>&nbsp;
     <button type="button" class="btn btn-success" onclick="getCaseValues()">Get Case Values</button>&nbsp;
@@ -41,57 +89,90 @@
 <br />
 
 <script type="text/javascript">
-	  window.loadExtendedCase = function (options) {
-          return window.extendedCaseComponentRef.zone.run(function () {
-              return window.extendedCaseComponentRef.component.loadForm(options);
-          });
-      }
       
-      function test() {
-          window.extendedCaseComponentRef.zone.run(function () {
-                return window.extendedCaseComponentRef.component.test();
-          });
-      }
-	  
-    function loadForm() {
-        const component = document.querySelector('extended-case-element');
-        if (component) {
-          var state = {
-            formParameters: {
-              formId: 2, 
-              extendedCaseGuid: '595D56C0-1C21-4CC1-94FB-E8674740DB47',
-              userGuid: '9005F3D3-D62B-4F54-85B3-63A8EFB80782',
-              languageId: 1,
-              currentUser: 'admin',
-              isCaseLocked: 0,
-              
-              //assignment parameters:
-              customerId: 1,
-              userRole: 4,
-              caseStatus: 0
-            }, 
-            caseValues: { 
-              caseField1: '2', 
-              reportedby: '8',
-              test: 'val'  
-            } 
-         };
+    var _component = null;
 
-         component.addEventListener('formLoadSuccess', function(event) {
+    function getComponent() {
+        if (_component === null) {
+            _component = document.querySelector('extended-case-element');
+        }
+       return _component;
+    }
+
+    function loadForm() {
+        const component = getComponent();
+        
+        var state = {
+        formParameters: {
+            formId: 2, 
+            extendedCaseGuid: '595D56C0-1C21-4CC1-94FB-E8674740DB47',
+            userGuid: '9005F3D3-D62B-4F54-85B3-63A8EFB80782',
+            languageId: 1,
+            currentUser: 'admin',
+            isCaseLocked: 0,
+            
+            //assignment parameters:
+            customerId: 1,
+            userRole: 4,
+            caseStatus: 0
+        }, 
+        caseValues: { 
+            caseField1: '2', 
+            reportedby: '8',
+            test: 'val'  
+        } 
+        };
+
+        subscribeEvents(component);
+
+        //load component
+        component.loadForm = state;        
+    }
+
+    function subscribeEvents(component) {
+
+        component.addEventListener('formLoadSuccess', function(event) {
             console.log('Form has been loaded successfully');
             alert('Form has been loaded successfully');
-         });
+        });
 
-         component.addEventListener('formLoadError', function(event) {
-            console.log('Form failed to load. Error: %s', event);
+        component.addEventListener('formLoadError', function(event) {
+            console.log('Form failed to load. Error: %s', event.detail);
             alert('Form failed to load');
-         });
+        });
 
-         //load component
-         component.loadForm = state;
-         
-        }
+        component.addEventListener('formSaveSuccess', function(event) {
+            console.log('Form saved. Guid: ', event.detail.data.toString());
+            alert('Form saved!');
+        });
+
+        component.addEventListener('formSaveError', function(event) {
+            console.log('Form failed to save. Error: %s', event.detail);
+            alert('Failed to save form');        
+        });
+
+        
+        component.addEventListener('validationComplete', function(event) {
+            console.log('Form has been validated: %s', JSON.stringify(event.detail.data));
+            alert('Form has been validated');
+        });
+
+        component.addEventListener('formParametersRead', function(event) {
+            console.log('FormParameters has been read: %s', JSON.stringify(event.detail.data));
+            alert('FormParameters has been read');
+        });
+
+        component.addEventListener('caseValuesRead', function(event) {            
+            console.log('Case values has been read: %s', JSON.stringify(event.detail.data));
+            alert('Case values has been read');
+        });
     }
+
+    //function test() {
+    //    window.extendedCaseComponentRef.zone.run(function () {
+    //        return window.extendedCaseComponentRef.component.test();
+    //    });
+    //}
         
     function reloadForm() {
         var formParameters = document.getElementById("extendedCaseFrame").contentWindow.getFormParameters();
@@ -100,27 +181,38 @@
     }
         
     function getCaseValues() {
-        var vals = document.getElementById("extendedCaseFrame").contentWindow.getCaseValues();
-        console.log(vals);
+        const component = getComponent();
+        component.getCaseValues = 'sss'; // any value to call setter function
+        
+        //var vals = document.getElementById("extendedCaseFrame").contentWindow.getCaseValues();
+        //console.log(vals);
     }
         
     function setNextStep() {
-        document.getElementById("extendedCaseFrame").contentWindow.setNextStep(5, true);
+        const component = getComponent();
+        component.setNextStep = {step: 5, isNextValidation: true};
+        //document.getElementById("extendedCaseFrame").contentWindow.setNextStep(5, true);
     }
 
     function setPrevStep() {
-        document.getElementById("extendedCaseFrame").contentWindow.setNextStep(0, false);
+        const component = getComponent();
+        component.setNextStep = {step: 0, isNextValidation: false};
+        //document.getElementById("extendedCaseFrame").contentWindow.setNextStep(0, false);
     }
 
-        
     function saveFormData() {
-        var promise = document.getElementById("extendedCaseFrame").contentWindow.saveExtendedCase(false);
-        promise.then(onSaveSuccess, onSaveError);
+        const component = getComponent();
+        component.saveForm = false; //raises saveComplete event
+        //var promise = document.getElementById("extendedCaseFrame").contentWindow.saveExtendedCase(false);
+        //promise.then(onSaveSuccess, onSaveError);
     }
 
     function validateExtendedCase(isOnNext) {
-        var errors = document.getElementById("extendedCaseFrame").contentWindow.validateExtendedCase(isOnNext || false);
-        if (errors) alert(JSON.stringify(errors));// validation failed
+        //debugger;
+        const component = getComponent();
+        component.validateForm = isOnNext || false; // raises an event
+        //var errors = document.getElementById("extendedCaseFrame").contentWindow.validateExtendedCase(isOnNext || false);
+        //if (errors) alert(JSON.stringify(errors));// validation failed
     }
 
     function onSaveSuccess(result) {
@@ -131,7 +223,6 @@
         var errorMsg = err.error || 'Unknown error';
         console.error('Error. ' + errorMsg);
     }
-
 </script>
 
 <% for (var chunk in htmlWebpackPlugin.options.body.js) { %>
