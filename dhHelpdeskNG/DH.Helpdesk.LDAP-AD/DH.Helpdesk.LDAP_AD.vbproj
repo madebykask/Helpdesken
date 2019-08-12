@@ -103,6 +103,7 @@
   <ItemGroup>
     <None Include="DH_Helpdesk_LDAP_AD.config.template">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="app.config" />
     <None Include="DH_Helpdesk_LDAP_AD.bat.template">
@@ -120,7 +121,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DH.Helpdesk.Mail2Ticket.Library\DH.Helpdesk.Mail2Ticket.Library.vbproj">
+    <ProjectReference Include="..\DH.Helpdesk.Library\DH.Helpdesk.Library.vbproj">
       <Project>{300807ad-e3da-4bf5-93fc-2503d617edc1}</Project>
       <Name>DH.Helpdesk.Library</Name>
     </ProjectReference>
