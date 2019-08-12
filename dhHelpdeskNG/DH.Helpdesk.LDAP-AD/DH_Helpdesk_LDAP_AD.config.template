@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <configuration>
   <appSettings>
-    <add key="SecureConnectionString" value="False" />
-    <add key="Mode" value="1" />
-    <add key="SyncById" value="1" />
+    <add key="SecureConnectionString" value="#{SecureConnectionString}" />
+    <add key="Mode" value="#{WorkingMode}" />
+    <add key="SyncById" value="#{SyncById}" />
   </appSettings>
 
   <connectionStrings>
