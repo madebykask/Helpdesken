@@ -35,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.TaskScheduler",
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DH.Helpdesk.Mail2Ticket", "DH.Helpdesk.Mail2Ticket\DH.Helpdesk.Mail2Ticket.vbproj", "{2C7C24FC-D3E7-4A07-AF74-2392D5484A0A}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DH.Helpdesk.Library", "DH.Helpdesk.Mail2Ticket.Library\DH.Helpdesk.Mail2Ticket.Library.vbproj", "{300807AD-E3DA-4BF5-93FC-2503D617EDC1}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DH.Helpdesk.Library", "DH.Helpdesk.Library\DH.Helpdesk.Library.vbproj", "{300807AD-E3DA-4BF5-93FC-2503D617EDC1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.TestConsole", "DH.Helpdesk.TestConsole\DH.Helpdesk.TestConsole.csproj", "{F1A69926-A9B2-4FA1-A1F9-1258B650D991}"
 EndProject
