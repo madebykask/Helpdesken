@@ -240,13 +240,13 @@
 
                 <!-- INTERNAL LOG NOTE Attachments: -->
                 @* TODO: check log edit mode - should be hidden. Add field styles!!! *@
-                @if (Model.EnableTwoAttachments)
+                @if (Model.EnableTwoAttachments && Model.CaseInternalLogAccess)
                 {
                     @Html.Partial("_CaseLogInputFilesAttachment",
                         Model.CreateLogInputFilesAttachmentViewModel(
                             false,// internal
-                            CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal, "Bifogad fil").ToHtmlString(),
-                            Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Filename, CaseSolutionFields.LogFileName_Internal),
+                            CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal, "Intern bifogad fil").ToHtmlString(),
+                            Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal, CaseSolutionFields.LogFileName_Internal),
                             Model.CaseLog.Id == 0 && !Model.newLog, 
                             Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote),
                             Model.EnableTwoAttachments))

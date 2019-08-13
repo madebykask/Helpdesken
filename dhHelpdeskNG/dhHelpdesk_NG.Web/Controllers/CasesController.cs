@@ -4887,7 +4887,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 #region Existing case model initialization actions
 
-                m.Logs = _logService.GetCaseLogOverviews(caseId, m.CaseInternalLogAccess, m.CaseInternalLogAccess && m.CaseInternalLogAccess);
+                m.Logs = _logService.GetCaseLogOverviews(caseId, m.CaseInternalLogAccess, m.EnableTwoAttachments && m.CaseInternalLogAccess);
                 
                 var useVd = !string.IsNullOrEmpty(virtualDirPath);
 

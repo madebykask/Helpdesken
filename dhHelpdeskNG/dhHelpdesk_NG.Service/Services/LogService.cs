@@ -135,7 +135,7 @@ namespace DH.Helpdesk.Services.Services
         public IList<LogOverview> GetCaseLogOverviews(int caseId, bool includeInternalLogs = false, bool includeInternalFiles = false)
         {
             var result = new List<LogOverview>();
-            var caseLogsEntities = GetCaseLogsQueryable(caseId, includeInternalLogs).ToList();
+            var caseLogsEntities = GetCaseLogsQueryable(caseId, includeInternalLogs, includeInternalFiles).ToList();
             var caseLogs = caseLogsEntities.Select(_logToLogOverviewMapper.Map).ToList();
 
             result.AddRange(caseLogs);
