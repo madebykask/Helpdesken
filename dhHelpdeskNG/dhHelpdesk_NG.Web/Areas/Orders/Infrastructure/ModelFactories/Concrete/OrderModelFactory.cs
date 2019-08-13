@@ -131,9 +131,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 options.OrderTypeName,
                 status)
             {
-                Administrators =
-                    CreateSelectListField(settings.Administrator, options.Administrators,
-                        fields.AdministratorId.ToString()),
+                Administrators = CreateSelectListField(settings.Administrator, options.Administrators, fields.AdministratorId.ToString()),
                 Domains = CreateSelectListField(settings.Domain, options.Domains, fields.DomainId.ToString()),
                 Header = settings.Header
             };

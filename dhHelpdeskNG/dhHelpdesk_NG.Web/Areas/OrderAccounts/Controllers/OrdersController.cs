@@ -174,25 +174,29 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Controllers
         [HttpGet]
         public ViewResult New(int activityTypeForEdit)
         {
-            AccountFieldsSettingsForModelEdit settings =
+            var settings =
                 this.orderAccountSettingsProxyService.GetFieldsSettingsForModelEdit(
                     activityTypeForEdit,
                     OperationContext);
-            AccountOptionsResponse options = this.orderAccountProxyService.GetOptions(
-                activityTypeForEdit,
-                OperationContext);
-            IdAndNameOverview activity =
+
+            var options = 
+                this.orderAccountProxyService.GetOptions(
+                    activityTypeForEdit,
+                    OperationContext);
+
+            var activity =
                 this.orderAccountProxyService.GetAccountActivityItemOverview(activityTypeForEdit);
 
-            HeadersFieldSettings headers =
+            var headers =
                 this.orderAccountSettingsProxyService.GetHeadersFieldSettings(activityTypeForEdit);
 
-            AccountModel viewModel = this.orderModelMapper.BuildViewModel(
-                activityTypeForEdit,
-                options,
-                settings,
-                SessionFacade.CurrentUser,
-                headers);
+            var viewModel = 
+                this.orderModelMapper.BuildViewModel(
+                    activityTypeForEdit,
+                    options,
+                    settings,
+                    SessionFacade.CurrentUser,
+                    headers);
             viewModel.ActivityName = activity.Name;
 
             return this.View("New", viewModel);

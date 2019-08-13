@@ -2,6 +2,7 @@
 using DH.Helpdesk.BusinessData.Models.Orders.Index.OrderOverview;
 using DH.Helpdesk.BusinessData.Models.Shared.Input;
 using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
+using DH.Helpdesk.Services.BusinessLogic.Specifications.User;
 
 namespace DH.Helpdesk.Services.Services.Concrete.Orders
 {
@@ -768,14 +769,14 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             var programsRep = uow.GetRepository<Program>();
 
             var statuses = statusesRep.GetAll().GetByCustomer(customerId).OrderBy(x => x.SortOrder);
-            var administrators = administratorsRep.GetAll().GetByCustomer(customerId).GetActiveUsers(customerId);
+            var administrators = administratorsRep.GetAll().GetByCustomer(customerId).GetActiveUsers(customerId).GetPerformers();
             var domains = domainsRep.GetAll().GetByCustomer(customerId);
             var departments = departmentsRep.GetAll().GetActiveByCustomer(customerId);
             var units = ousRep.GetAll();
             var properties = propertiesRep.GetAll().GetByOrderType(orderTypeId);
             var deliveryDepartments = departmentsRep.GetAll().GetActiveByCustomer(customerId);
             var deliveryOuIds = ousRep.GetAll();
-            var administratorsWithEmails = administratorsRep.GetAll().GetActiveUsers(customerId).Where(x => x.Performer == 1 && x.Email != string.Empty);
+            var administratorsWithEmails = administratorsRep.GetAll().GetAdministratorsWithEmails(customerId);
             var orderType = orderTypeId.HasValue ? orderTypeRep.GetAll().GetById(orderTypeId.Value) : null;
             var orderTypeName = orderType != null ? orderType.MapToName() : null;
             var orderTypeDesc = orderType?.MapToDescription();

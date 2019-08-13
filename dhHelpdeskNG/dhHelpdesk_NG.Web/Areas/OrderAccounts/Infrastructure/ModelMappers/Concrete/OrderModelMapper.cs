@@ -81,16 +81,15 @@ namespace DH.Helpdesk.Web.Areas.OrderAccounts.Infrastructure.ModelMappers.Concre
             var delivery = MapDeliveryInformation(options, settings);
             var program = MapProgram(options, settings);
 
-            string guid = Guid.NewGuid().ToString();
+            var guid = Guid.NewGuid().ToString();
             var other = MapOther(options, settings, guid);
 
             return new AccountModel(order, user, account, contact, delivery, program, other)
-                       {
-                           ActivityTypeId =
-                               activityId,
-                           Headers = headers,
-                           Guid = guid
-                       };
+            {
+                ActivityTypeId = activityId,
+                Headers = headers,
+                Guid = guid
+            };
         }
 
         private static Orderer MapOrderer(
