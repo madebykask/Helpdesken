@@ -10,6 +10,8 @@
 
         public const string AttachedFile = "tblLog.Filename";
 
+        public const string AttachedFileInternal = "tblLog.Filename_Internal";
+
         public const string FinishingDescription = "FinishingDescription";
 
         public const string FinishingDate = "FinishingDate";
