@@ -323,7 +323,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             var appSettings = ConfigurationService.AppSettings;
             ViewBag.ShowCommunicationForSelfService = appSettings.ShowCommunicationForSelfService;
             ViewBag.caseEmailGuid = id.Is<Guid>() ? Guid.Parse(id).ToString() : "";
-            ViewBag.IsAttachementsAllowed = CheckFieldExists(caseReceipt.FieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString());
 
             return View(caseReceipt);
         }
@@ -617,7 +616,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (globalSettings.MultiCustomersSearch.ToBool() && !caseId.IsNew())
             {
                 //override current customer when openning a case from another customer in multicustomer search mode
-                customer = _caseService.GetCaseCustomer(cusId);
+                customer = _customerService.GetCustomer(cusId);
                 //SessionFacade.CurrentCustomer = customer;
             }
             
@@ -682,8 +681,6 @@ namespace DH.Helpdesk.SelfService.Controllers
                 ErrorGenerator.MakeError(lastError);
                 return null;
             }
-            
-            ViewBag.IsAttachementsAllowed = CheckFieldExists(caseModel.FieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString());
 
             var model = new ExtendedCaseViewModel
             {
@@ -827,7 +824,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
                 else if (caseId > 0)
                 {
-                    customerId = _caseService.GetCaseCustomerId(model.CustomerId);
+                    customerId = _caseService.GetCaseCustomerId(caseId);
                 }
 
                 if (caseId > 0)
@@ -866,7 +863,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             model.CaseDataModel.FieldSettings = 
                 _caseFieldSettingService.ListToShowOnCasePage(model.CustomerId, model.LanguageId).Where(c => c.ShowExternal == 1).ToList();
 
-            ViewBag.IsAttachementsAllowed = CheckFieldExists(model.CaseDataModel.FieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString());
+            model.CaseLogsModel = GetCaseLogsModel(caseId);
 
             return View("ExtendedCase", model);
         }
@@ -1420,12 +1417,6 @@ namespace DH.Helpdesk.SelfService.Controllers
         public PartialViewResult Communication(int caseId)
         {
             var model = GetCaseLogsModel(caseId);
-            
-            var customerId = _caseService.GetCaseCustomerId(caseId);
-            var fieldName = GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString().GetCaseFieldName();
-            var fieldSetting = _caseFieldSettingService.GetCaseFieldSetting(customerId, fieldName);
-            ViewBag.IsAttachementsAllowed = fieldSetting?.ShowExternal.ToBool() ?? false; 
-
             return PartialView("_Communication", model);
         }
 
@@ -1442,7 +1433,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var customer = caseId.HasValue && caseId > 0 ? _caseService.GetCaseCustomer(caseId.Value) : SessionFacade.CurrentCustomer;
             var isTwoAttachmentsMode = IsTwoAttachmentsModeEnabled(customer.Id);
             var useInternalLogs = customer.UseInternalLogNoteOnExternalPage.ToBool();
-
+            
             var caseLogModels = new List<CaseLogModel>();
             if (caseId > 0)
             {
@@ -1480,11 +1471,24 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }).ToList();
             }
             
+            bool allowAttachments;
+            if (useInternalLogs)
+            {
+                allowAttachments = isTwoAttachmentsMode;
+            }
+            else
+            {
+                var fieldName = GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString().GetCaseFieldName();
+                allowAttachments = _caseFieldSettingService.GetCaseFieldSetting(customer.Id, fieldName)?.ShowExternal.ToBool() ?? false;
+            }
+            
+
             var model = new CaseLogsModel(
                             caseId ?? 0,
                             caseLogModels,
                             SessionFacade.CurrentSystemUser,
-                            customer.UseInternalLogNoteOnExternalPage.ToBool());
+                            useInternalLogs,
+                            allowAttachments);
             return model;
         }
 

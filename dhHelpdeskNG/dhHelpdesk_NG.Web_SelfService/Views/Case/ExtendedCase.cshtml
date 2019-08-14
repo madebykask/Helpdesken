@@ -463,7 +463,7 @@
           Model.ApplicationType == ApplicationType.SelfService && Model.ShowCommunicationForSelfservice))
     {
         @Html.Partial("_Communication", Model.CaseLogsModel, new ViewDataDictionary(ViewData) { { "readonly", Model.CaseDataModel.IsFinished } })
-        if (ViewBag.IsAttachementsAllowed)
+        if (Model.CaseLogsModel.IsAttachmentsAllowed)
         {
              @Html.Partial("ModalDialogs/_UploadFilePopup", "Log_upload_files_popup")
              isClipboardPopupRequired = true;

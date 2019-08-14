@@ -544,7 +544,7 @@
                                     <textarea id="logNote" class="col-md-12" style="height: 100px; margin-bottom: 10px;"></textarea>
                                 </div>
                             </div>
-                            @if (Model.FieldSettings.GetField(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()) != null)
+                            @if (Model.CaseLogsModel.IsAttachmentsAllowed)
                             {
                                 <div class="form-group row">
                                     <label class="col-md-3">@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Filename.ToString(), @SessionFacade.CurrentCustomerID)</label>

@@ -43,8 +43,6 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
         public List<string> CaseFieldGroups { get; set; }
 
-        public List<Log> CaseLogs { get; set; }
-
         public IList<Region> Regions { get; set; }
 
         public IList<System> Systems { get; set; }

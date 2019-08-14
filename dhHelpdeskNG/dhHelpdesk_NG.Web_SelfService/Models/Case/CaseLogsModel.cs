@@ -14,19 +14,21 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public CaseLogsModel(int caseId, 
             List<CaseLogModel> caseLogs, 
             string currentUser, 
-            bool showInteralLog = false) 
+            bool showInteralLog,
+            bool isAttachmentsAllowed) 
         {
             CaseId = caseId;
             CurrentUser = currentUser;
             CaseLogs = caseLogs;
             ShowInternalLogNotes = showInteralLog;
+            IsAttachmentsAllowed = isAttachmentsAllowed;
         }
 
         public int CaseId { get; }
         public string CurrentUser { get;  }
         public List<CaseLogModel> CaseLogs { get; }
         public bool ShowInternalLogNotes { get; }
-        
+        public bool IsAttachmentsAllowed { get; set; }
         public CaseLogModel GetLastLog()
         {
             var log = CaseLogs.OrderByDescending(l => l.RegTime).FirstOrDefault();

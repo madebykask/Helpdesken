@@ -52,7 +52,7 @@
                             </div>
                         </div>
                         <div class="form-group col-md-10">
-                            @if (ViewBag.IsAttachementsAllowed)
+                            @if (Model.IsAttachmentsAllowed)
                             {
                                 <label>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Filename.ToString(), @SessionFacade.CurrentCustomerID)</label>
                                 <div class="form-group">
