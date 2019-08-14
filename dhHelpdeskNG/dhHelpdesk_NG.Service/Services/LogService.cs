@@ -43,7 +43,7 @@ namespace DH.Helpdesk.Services.Services
         IList<Log> GetLogsByCaseId(int caseId);
 
         IList<CaseLogData> GetLogsByCaseId(int caseId, bool includeInternalLogs, bool includeInternalFiles);
-        Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false);
+        Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false, bool includeInternalFiles = false);
     }
 
     public class LogService : ILogService
@@ -170,9 +170,9 @@ namespace DH.Helpdesk.Services.Services
             return caseLogs;
         }
 
-        public async Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false)
+        public async Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false, bool includeInternalFiles = false)
         {
-            var caseLogsEntities = await GetCaseLogsQueryable(caseId, includeInternalLogs).ToListAsync();
+            var caseLogsEntities = await GetCaseLogsQueryable(caseId, includeInternalLogs, includeInternalFiles).ToListAsync();
 
             var caseLogs = caseLogsEntities.MapToCaseLogData(includeInternalLogs);
             return caseLogs;
