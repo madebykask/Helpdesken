@@ -1,5 +1,7 @@
-﻿using DH.Helpdesk.BusinessData.Enums.MailTemplates;
+﻿using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+using DH.Helpdesk.BusinessData.Enums.MailTemplates;
 using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Web.Common.Constants.Case;
 using DH.Helpdesk.Web.Models.Questionnaire.Output;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
@@ -310,21 +312,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         public MvcHtmlString MailTemplateFieldIdentifierRow(int customerId, string mailTemplateRowName, string extraLabel, string eMailIdentifier)
         {
-            //Super quick fix TODO: FIX... Im sorry
-            if (mailTemplateRowName == "tblLog_Text_External")
-            {
-                mailTemplateRowName = "tblLog.Text_External";
-            }
-            else if (mailTemplateRowName == "tblLog_Text_Internal")
-            {
-                mailTemplateRowName = "tblLog.Text_Internal";
-            }
-
-            var cfs = this._caseFieldSettingService.GetCaseFieldSettingsByName(customerId, mailTemplateRowName).FirstOrDefault(x => x.ShowOnStartPage == 1);
+            var fieldName = mailTemplateRowName.getCaseFieldName();
+            var cfs = _caseFieldSettingService.GetCaseFieldSettingsByName(customerId, fieldName).FirstOrDefault(x => x.ShowOnStartPage == 1);
             
             if (cfs != null)
             {
-                var cfsl = this._caseFieldSettingService.GetCaseFieldSettingLanguage(cfs.Id, SessionFacade.CurrentLanguageId);
+                var cfsl = _caseFieldSettingService.GetCaseFieldSettingLanguage(cfs.Id, SessionFacade.CurrentLanguageId);
                 if (cfsl != null)
                 {
                     if (extraLabel != null)
@@ -336,7 +329,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     {
                         cfsl.Label = Translation.Get(mailTemplateRowName, Enums.TranslationSource.CaseTranslation, customerId);
 
-                        if (cfsl.Label == "tblLog.Text_External")
+                        if (cfsl.Label ==  "tblLog.Text_External")
                         {
                             cfsl.Label = Translation.GetCoreTextTranslation("Extern notering");
                         }
