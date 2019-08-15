@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
 using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Models.Case.Logs;
 using DH.Helpdesk.Services.Services;
@@ -48,39 +50,50 @@ namespace DH.Helpdesk.WebApi.Controllers
             var fieldName = _caseFieldSettingsHelper.GetFieldName(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal.ToString());
             var isTwoAttachmentsMode = _caseFieldSettingService.GetCaseFieldSetting(cid, fieldName)?.ShowExternal.ToBool() ?? false;
 
-
+            var includeInternalFiles = includeInternalLogs && isTwoAttachmentsMode;
             var logEntities = 
-                await _caseLogService.GetLogsByCaseIdAsync(caseId, includeInternalLogs, includeInternalLogs && isTwoAttachmentsMode).ConfigureAwait(false);
+                await _caseLogService.GetLogsByCaseIdAsync(caseId, includeInternalLogs, includeInternalFiles).ConfigureAwait(false);
 
-            var model = MapLogsToModel(logEntities);
+            var model = MapLogsToModel(logEntities, includeInternalFiles);
             return Ok(model);
         }
         
-        private IList<CaseLogOutputModel> MapLogsToModel(IList<CaseLogData> logs)
+        private IList<CaseLogOutputModel> MapLogsToModel(IList<CaseLogData> logs, bool isTwoAttachmentMode)
         {
             var items = new List<CaseLogOutputModel>();
 
             foreach (var log in logs)
             {
-                //create two external and internal items out of one if has both properties
-                if (!string.IsNullOrEmpty(log.ExternalText) && !string.IsNullOrEmpty(log.InternalText))
-                {
-                    var internalText = log.InternalText;
+                var internalText = log.InternalText;
+                var files = log.Files ?? new List<LogFileData>();
+                var internalFiles = files.Where(f => f.LogType == LogFileType.Internal).ToList();
+                var externalFiles = files.Where(f => f.LogType == LogFileType.External).ToList();
 
+                //create two external and internal items out of one if has both properties
+                if (!string.IsNullOrEmpty(log.ExternalText) && !string.IsNullOrEmpty(log.InternalText) || 
+                    (isTwoAttachmentMode && internalFiles.Any() && externalFiles.Any()))
+                {
                     //create external log item
                     log.InternalText = null;
+                    log.Files = externalFiles;
                     var itemModel = CreateCaseLogOutputModel(log);
                     items.Add(itemModel);
 
                     //create internal
                     log.ExternalText = null;
                     log.InternalText = internalText;
-
+                    log.Files = isTwoAttachmentMode ? internalFiles : null;
                     itemModel = CreateCaseLogOutputModel(log);
                     items.Add(itemModel);
                 }
                 else
                 {
+                    //check if internal log files should be included for internal log only if 2 attachments mode is enabled
+                    var isInternalLog = !string.IsNullOrEmpty(log.InternalText);
+                    if (isInternalLog && isTwoAttachmentMode)
+                    {
+                        log.Files = files.Where(f => f.LogType == LogFileType.Internal).ToList();
+                    }
                     var itemModel = CreateCaseLogOutputModel(log);
                     items.Add(itemModel);
                 }
