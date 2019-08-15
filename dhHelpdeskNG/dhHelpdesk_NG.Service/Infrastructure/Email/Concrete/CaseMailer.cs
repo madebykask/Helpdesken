@@ -135,6 +135,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                 curMail,
                                 mailMessageId);
 
+                        notifierEmailLog.Log_Id = log.Id;
+
                         var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + notifierEmailLog.EmailLogGUID.ToString();
                         var mailResponse = EmailResponse.GetEmptyEmailResponse();
                         var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
@@ -237,6 +239,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                         (int)GlobalEnums.MailTemplates.InformNotifier,
                         defaultWorkingGroup.EMail,
                         mailMessageId);
+
+                defaultWorkingGroupEmailLog.Log_Id = log.Id;
 
                 var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"] + defaultWorkingGroupEmailLog.EmailLogGUID;
                 var siteHelpdesk = absoluterUrl + "Cases/edit/" + newCase.Id;
@@ -349,6 +353,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                 (int)GlobalEnums.MailTemplates.InternalLogNote, 
                                 item.EmailAdress, 
                                 _emailService.GetMailMessageId(helpdeskMailFromAdress));
+
+                        internalEmailLog.Log_Id = log.Id;
 
                         var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"] + internalEmailLog.EmailLogGUID;
                         var siteHelpdesk = absoluterUrl + "Cases/edit/" + newCase.Id;

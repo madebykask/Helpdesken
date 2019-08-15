@@ -418,6 +418,9 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
             try
             {
+                var externalFiles = files?.Where(f => !f.IsInternal).Select(f => f.FilePath).ToList();
+                var internalFiles = files?.Where(f => f.IsInternal).Select(f => f.FilePath).ToList();
+                
                 var msg = GetMailMessage(from, to, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType);
 
                 el.Body = msg.Body;
@@ -425,7 +428,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 el.Cc = string.Join(",", msg.CC.Select(x => x.Address));
                 el.Bcc = string.Join(",", msg.Bcc.Select(x => x.Address));
                 el.HighPriority = highPriority;
-                el.Files = files != null ? string.Join(",", files) : "";
+                el.Files = externalFiles != null && externalFiles.Any() ? string.Join(",", externalFiles) : "";
+                el.FilesInternal = internalFiles != null && internalFiles.Any() ? string.Join(",", internalFiles) : "";
                 el.From = msg.From.Address;
                 el.SendStatus = EmailSendStatus.Pending;
                 el.Attempts = 0;

@@ -34,6 +34,7 @@ namespace DH.Helpdesk.Domain
         public string Bcc { get; set; }
         public bool HighPriority { get; set; }
         public string Files { get; set; }
+        public string FilesInternal { get; set; }
         public string From { get; set; }
         public EmailSendStatus SendStatus { get; set; }
         public DateTime? LastAttempt { get; set; }
@@ -44,8 +45,8 @@ namespace DH.Helpdesk.Domain
         
         public void SetResponse(DateTime? sendTime, string resopnseMessage)
         {
-            this.SendTime = sendTime;
-            this.ResponseMessage = resopnseMessage;
+            SendTime = sendTime;
+            ResponseMessage = resopnseMessage;
         }
     }
 }
