@@ -87,8 +87,8 @@
                 StartPage = overview.StartPage,
                 DocumentPermission = overview.DocumentPermission,
                 InventoryPermission = overview.InventoryAdminPermission,
-				InventoryViewPermission = overview.InventoryViewPermission,
-				ContractPermission = overview.ContractPermission,
+                InventoryViewPermission = overview.InventoryViewPermission,
+                ContractPermission = overview.ContractPermission,
                 CaseUnlockPermission = overview.CaseUnlockPermission,
                 CaseInternalLogPermission = overview.CaseInternalLogPermission,
                 InvoiceTimePermission = overview.InvoiceTimePermission
@@ -122,8 +122,8 @@
                 user.BulletinBoardPermission,
                 user.DocumentPermission,
                 user.InventoryPermission,
-				user.InventoryViewPermission,
-				user.ContractPermission,
+                user.InventoryViewPermission,
+                user.ContractPermission,
                 user.SetPriorityPermission,
                 user.InvoicePermission,
                 user.DataSecurityPermission,
@@ -151,13 +151,14 @@
                                     IQueryable<Setting> customerSettings,
                                     IEntityToBusinessModelMapper<Setting, CustomerSettings> mapper)
         {
-            var entities = (from cu in customerUsers
-                            join c in customers on cu.Customer_Id equals c.Id
-                            join u in users on cu.User_Id equals u.Id
-                            join cs in customerSettings on cu.Customer_Id equals cs.Customer_Id
-                            select cs)
-                            .ToList();
+            var query =
+                from cu in customerUsers
+                join c in customers on cu.Customer_Id equals c.Id
+                join u in users on cu.User_Id equals u.Id
+                join cs in customerSettings on cu.Customer_Id equals cs.Customer_Id
+                select  cs;
 
+            var entities = query.ToList();
             return entities.Select(mapper.Map).ToList();
         }
 

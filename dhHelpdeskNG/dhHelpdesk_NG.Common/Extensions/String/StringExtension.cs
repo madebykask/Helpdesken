@@ -237,12 +237,14 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "system_id": str = "System"; break;
                     case "tbllog_charge": str = "Charge"; break;
                     case "tbllog_filename": str = "Log Attached file"; break;
+                    case "tbllog.filename": str = "Log Attached file"; break;
+                    case "tbllog_filename_internal": str = "Internal attached file"; break;
+                    case "tbllog.filename_internal": str = "Internal attached file"; break;
+                    case "tbllog.text_external": str = "External log note"; break;
                     case "tbllog_text_external": str = "External log note"; break;
+                    case "tbllog.text_internal": str = "Internal log note"; break;
                     case "tbllog_text_internal": str = "Internal log note"; break;
                     case "tbllog.charge": str = "Charge"; break;
-                    case "tbllog.filename": str = "Log Attached file"; break;
-                    case "tbllog.text_external": str = "External log note"; break;
-                    case "tbllog.text_internal": str = "Internal log note"; break;
                     case "urgency_id": str = "Urgent degree"; break;
                     case "user_id": str = "Registered by"; break;
                     case "usercode": str = "Orderer Code"; break;
