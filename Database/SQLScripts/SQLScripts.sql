@@ -156,6 +156,19 @@ BEGIN
 END
 GO
 
+RAISERROR ('Altering tblSettings, making index service field larger', 10, 1) WITH NOWAIT
+ALTER TABLE [dbo].[tblSettings]	
+ALTER COLUMN [FileIndexingServerName] [nvarchar](200) NULL
+ALTER TABLE [dbo].[tblSettings]	
+ALTER COLUMN [FileIndexingCatalogName] [nvarchar](200) NULL
+
+RAISERROR ('Adding toggle for usage of deprecated Indexing Service, used to search case related files. If inactive Windows Search is used instead', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM tblFeatureToggle FT WHERE FT.StrongName = 'FILE_SEARCH_IDX_SERVICE')
+BEGIN
+	INSERT INTO tblFeatureToggle(Active, ChangeDate, [Description], StrongName)
+	SELECT 0, GETDATE(), 'Toogle for activating old Indexing Service usage (deprecated). No Support in 2008+', 'FILE_SEARCH_IDX_SERVICE'
+END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.43'
 GO

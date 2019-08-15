@@ -18,6 +18,7 @@
     <add name="DSN" connectionString="Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword};" />
   </connectionStrings>
   <appSettings>
+    <add key="WindowsSearchProvider" value="provider=Search.CollatorDSO.1;EXTENDED PROPERTIES='Application=Windows';"/>
     <add key="webpages:Version" value="3.0.0.0" />
     <add key="webpages:Enabled" value="false" />
     <add key="PreserveLoginUrl" value="true" />

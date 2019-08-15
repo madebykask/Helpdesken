@@ -24,18 +24,25 @@ namespace DH.Helpdesk.Dal.Repositories
         private readonly ICaseTypeRepository _caseTypeRepository;
         private readonly IDepartmentRepository _departmentRepository;
         private readonly IDbQueryExecutorFactory _queryExecutorFactory;
+		private readonly IFeatureToggleRepository _featureToggleRepository;
+		private readonly IFileIndexingRepository _fileIndexingRepository;
 
-        public CaseSearchRepository(
+		public CaseSearchRepository(
                 ICustomerUserRepository customerUserRepository,
                 ICaseTypeRepository caseTypeRepository,
                 IDepartmentRepository departmentRepository,
-                IDbQueryExecutorFactory queryExecutorFactory)
+                IDbQueryExecutorFactory queryExecutorFactory,
+				IFeatureToggleRepository featureToggleRepository,
+				IFileIndexingRepository fileIndexingRepository)
         {
             _customerUserRepository = customerUserRepository;
             _caseTypeRepository = caseTypeRepository;
             _departmentRepository = departmentRepository;
             _queryExecutorFactory = queryExecutorFactory;
-        }
+			_featureToggleRepository = featureToggleRepository;
+			_fileIndexingRepository = fileIndexingRepository;
+
+		}
 
         public DataTable Search(CaseSearchContext context)
         { 
@@ -77,7 +84,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var queryBuilderContext = BuildSearchQueryContext(context);
 
             //build search query
-            var searchQueryBuilder = new CaseSearchQueryBuilder();
+            var searchQueryBuilder = new CaseSearchQueryBuilder(_fileIndexingRepository);
             var sql = searchQueryBuilder.BuildCaseSearchSql(queryBuilderContext, countOnly);
             return sql;
         }

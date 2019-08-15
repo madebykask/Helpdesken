@@ -21,10 +21,12 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         private bool _useFts = false;
         private readonly Regex _fullTextExpression;
+		private IFileIndexingRepository _fileIndexingRepository;
 
-        public CaseSearchQueryBuilder()
+		public CaseSearchQueryBuilder(IFileIndexingRepository fileIndexingRepository)
         {
-            _fullTextExpression = new Regex("(?:\"([^\"]*)\")|([^\\s]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+			_fileIndexingRepository = fileIndexingRepository;
+			_fullTextExpression = new Regex("(?:\"([^\"]*)\")|([^\\s]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
         #region Tables Fields Constants
@@ -143,9 +145,10 @@ namespace DH.Helpdesk.Dal.Repositories
             Tables.Department.DepartmentName
         };
 
-        #endregion
 
-        public string BuildCaseSearchSql(SearchQueryBuildContext ctx, bool countOnly = false)
+		#endregion
+
+		public string BuildCaseSearchSql(SearchQueryBuildContext ctx, bool countOnly = false)
         {
             _useFts = ctx.UseFullTextSearch;
 
@@ -1362,7 +1365,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 return new Tuple<string, string>(caseNumbers, logIds);
             else
             {
-                var caseNumeralInfo = FileIndexingRepository.GetCaseNumeralInfoBy(indexingServerName, catalogName, searchText);
+                var caseNumeralInfo = _fileIndexingRepository.GetCaseNumeralInfoBy(indexingServerName, catalogName, searchText);
 
                 if (caseNumeralInfo.Item1.Any())
                     caseNumbers = string.Join(",", caseNumeralInfo.Item1.ToArray());
