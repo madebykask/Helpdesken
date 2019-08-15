@@ -40,73 +40,26 @@ namespace DH.Helpdesk.Dal.Repositories
            
 			var fileSearchIdxToggle = _featureToggleRepository.GetByStrongName(FeatureToggleTypes.FILE_SEARCH_IDX_SERVICE.ToString());
 
+			if (ConfigurationManager.ConnectionStrings["HelpdeskIndexingService"] != null)
+				if (!string.IsNullOrEmpty(ConfigurationManager.ConnectionStrings["HelpdeskIndexingService"].ConnectionString))
+					_INDEXING_SERVICE_PROVIDER_CONNECTION_STRING = ConfigurationManager.ConnectionStrings["HelpdeskIndexingService"].ConnectionString;
 
 			var caseNumbers = new List<int>();
 			var logIds = new List<int>();
 
-			// Legacy indexing service should be used
+			// Check if legacy indexing service should be used
 			if (fileSearchIdxToggle != null && fileSearchIdxToggle.Active)
 			{
-				if (ConfigurationManager.ConnectionStrings["HelpdeskIndexingService"] != null)
-					if (!string.IsNullOrEmpty(ConfigurationManager.ConnectionStrings["HelpdeskIndexingService"].ConnectionString))
-						_INDEXING_SERVICE_PROVIDER_CONNECTION_STRING = ConfigurationManager.ConnectionStrings["HelpdeskIndexingService"].ConnectionString;
-
-				var query = string.Format("SELECT path, filename{0}scope() " +
-										  "WHERE FREETEXT(Contents,'%{1}%')",
-										   _FROM_CLAUSE, searchText.SafeForSqlInject());
-
-				var indexQuery = GetIndexQueryText(serverName, catalogName, query);
-				using (var con = new OleDbConnection(_INDEXING_SERVICE_PROVIDER_CONNECTION_STRING))
-				{
-					using (IDbCommand cmd = con.CreateCommand())
-					{
-						try
-						{
-							con.Open();
-							cmd.Connection = con;
-							cmd.CommandType = CommandType.Text;
-							cmd.CommandText = indexQuery;
-							using (var dr = cmd.ExecuteReader())
-							{
-								if (dr != null)
-								{
-									while (dr.Read())
-									{
-										var fullPath = dr["path"].ToString();
-										bool isLog = false;
-										int number = -1;
-
-										RetrieveNumber(fullPath, out number, out isLog);
-										if (number != -1)
-											if (isLog)
-												logIds.Add(number);
-											else
-												caseNumbers.Add(number);
-									}
-								}
-								dr.Close();
-							}
-						}
-						catch (Exception ex)
-						{
-							DataLogRepository.SaveLog("Error: " + ex.Message, DataLogTypes.GENERAL);
-						}
-						finally
-						{
-							con.Close();
-						}
-					}
-				}
+				// Deprecated: remove when sure not used any more
+				GetFilesUsingIndexingService(serverName, catalogName, searchText, _INDEXING_SERVICE_PROVIDER_CONNECTION_STRING, caseNumbers, logIds);
 			}
 			else
 			{
 				try
 				{
-					var provider = ConfigurationManager.AppSettings["WindowsSearchProvider"];
-
 					var serverPrefix = serverName == null ? "" : serverName + ".";
 					var query = $"SELECT System.ItemName, System.ItemFolderPathDisplay FROM {serverPrefix}SystemIndex WHERE CONTAINS(*, '*{searchText.SafeForSqlInject()}*', 1033) RANK BY COERCION(Absolute, 1) AND SCOPE='file:{catalogName}'";
-					var adapter = new OleDbDataAdapter(query, provider);
+					var adapter = new OleDbDataAdapter(query, _INDEXING_SERVICE_PROVIDER_CONNECTION_STRING);
 					var dataSet = new DataSet();
 					if (adapter.Fill(dataSet) > 0)
 					{
@@ -137,6 +90,56 @@ namespace DH.Helpdesk.Dal.Repositories
 			var ret = new Tuple<List<int>, List<int>>(caseNumbers, logIds);
 			return ret;
 
+		}
+
+		private static void GetFilesUsingIndexingService(string serverName, string catalogName, string searchText, string _INDEXING_SERVICE_PROVIDER_CONNECTION_STRING, List<int> caseNumbers, List<int> logIds)
+		{
+			var query = string.Format("SELECT path, filename{0}scope() " +
+													  "WHERE FREETEXT(Contents,'%{1}%')",
+													   _FROM_CLAUSE, searchText.SafeForSqlInject());
+
+			var indexQuery = GetIndexQueryText(serverName, catalogName, query);
+			using (var con = new OleDbConnection(_INDEXING_SERVICE_PROVIDER_CONNECTION_STRING))
+			{
+				using (IDbCommand cmd = con.CreateCommand())
+				{
+					try
+					{
+						con.Open();
+						cmd.Connection = con;
+						cmd.CommandType = CommandType.Text;
+						cmd.CommandText = indexQuery;
+						using (var dr = cmd.ExecuteReader())
+						{
+							if (dr != null)
+							{
+								while (dr.Read())
+								{
+									var fullPath = dr["path"].ToString();
+									bool isLog = false;
+									int number = -1;
+
+									RetrieveNumber(fullPath, out number, out isLog);
+									if (number != -1)
+										if (isLog)
+											logIds.Add(number);
+										else
+											caseNumbers.Add(number);
+								}
+							}
+							dr.Close();
+						}
+					}
+					catch (Exception ex)
+					{
+						DataLogRepository.SaveLog("Error: " + ex.Message, DataLogTypes.GENERAL);
+					}
+					finally
+					{
+						con.Close();
+					}
+				}
+			}
 		}
 
 		private static void RetrieveNumber(string fullPath, out int number, out bool isLog)
