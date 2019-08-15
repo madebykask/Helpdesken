@@ -49,7 +49,8 @@
                             var sortedList = new List<KeyValuePair<string, string>>();
                             foreach (var cfs in Model.CaseFieldSettingLanguages)
                             {
-                                if (cfs.Name != "Filename" && cfs.Name != "text_internal" && cfs.Name != "tblLog.Text_External" && cfs.Name != "tblLog.Text_Internal" && cfs.Name != "tblLog.Charge" && cfs.Name != "tblLog.Filename")
+                                @* todo: move to controller!*@
+                                if (cfs.Name != "Filename" && cfs.Name != "text_internal" && cfs.Name.IndexOf("tblLog.Text_") == -1 && cfs.Name != "tblLog.Charge" && cfs.Name.IndexOf("tblLog.Filename") == -1)
                                 {
                                     var itemCaption = (string.IsNullOrEmpty(cfs.Label) ? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id) : cfs.Label);
                                     var _item = new KeyValuePair<String, String>(cfs.Name, itemCaption);
