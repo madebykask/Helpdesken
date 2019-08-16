@@ -10,6 +10,7 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums.Settings;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Web.Models;
@@ -52,9 +53,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
                 var selectedModeValue = ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture);
                 
                 var dropDownName = GetInputName(modelName, index, modelPropertyName);
-                var selectList = new SelectList(_caseSolutionModes, nameof(ItemOverview.Value), nameof(ItemOverview.Name), selectedModeValue);
                 
-                //ToSelectList(model.CaseSolutionMode, ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture), false);
+                // this was done for performance optimisation - to reuse existing list instead of readin enum values each time 
+                var modeSelectOptions = _caseSolutionModes.Select(x => new SelectListItem()
+                {
+                    Value = x.Value,
+                    Text = TranslateModeName(x.Name),
+                    Selected = selectedModeValue == x.Value
+                }).ToList();
 
                 var fieldSettings = caseFieldSettings.getCaseSettingsValue(caseField.ToString());
                 
@@ -74,7 +80,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
                     htmlAttributesAsDict.Add("disabled", "disabled");
                 }
 
-                var dropDown = htmlHelper.DropDownList(dropDownName, selectList, htmlAttributesAsDict);
+                var dropDown = htmlHelper.DropDownList(dropDownName, modeSelectOptions, htmlAttributesAsDict);
                 return MvcHtmlString.Create(dropDown.ToString());
             }
 
@@ -87,38 +93,18 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
             return inputName;
         }
 
-        private static SelectList ToSelectList(CaseSolutionModes enumeration, string selected, bool isRequired)
+        private static string TranslateModeName(string mode)
         {
-            var list = CreateList(enumeration, isRequired);
-            return new SelectList(list, "ID", "Name", selected);
-        }
+            if (mode.Equals(CaseSolutionModes.DisplayField.ToString(), StringComparison.OrdinalIgnoreCase))
+                return Translation.GetCoreTextTranslation("Visa fält - redigera");
 
-        private static IEnumerable<dynamic> CreateList(CaseSolutionModes enumeration, bool isRequired)
-        {
-            IEnumerable<CaseSolutionModes> query = from CaseSolutionModes d in Enum.GetValues(enumeration.GetType())
-                                                   select d;
-            if (isRequired)
-            {
-                query = query.Where(x => x != CaseSolutionModes.ReadOnly);
-            }
+            if (mode.Equals(CaseSolutionModes.ReadOnly.ToString(), StringComparison.OrdinalIgnoreCase))
+                return Translation.GetCoreTextTranslation("Visa fält - skrivskyddat");
 
-            var list = query.Select(x => new { ID = Convert.ToInt32(x), Name = TranslateModeName(x) }).ToList();
-            return list;
-        }
+            if (mode.Equals(CaseSolutionModes.Hide.ToString(), StringComparison.OrdinalIgnoreCase))
+                return Translation.GetCoreTextTranslation("Dölj fält");
 
-        private static string TranslateModeName(CaseSolutionModes enumeration)
-        {
-            switch (enumeration)
-            {
-                case CaseSolutionModes.DisplayField:
-                    return Translation.GetCoreTextTranslation("Visa fält - redigera");
-                case CaseSolutionModes.ReadOnly:
-                    return Translation.GetCoreTextTranslation("Visa fält - skrivskyddat");
-                case CaseSolutionModes.Hide:
-                    return Translation.GetCoreTextTranslation("Dölj fält");
-                default:
-                    return Translation.GetCoreTextTranslation(enumeration.ToString());
-            }
+            return Translation.GetCoreTextTranslation(mode);
         }
     }
 }

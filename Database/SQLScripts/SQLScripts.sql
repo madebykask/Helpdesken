@@ -180,6 +180,25 @@ BEGIN
 END
 GO
 
+RAISERROR ('Add Internal Log file field setting display mode value for existing templates', 10, 1) WITH NOWAIT
+GO
+  DECLARE @internalLogFileFieldId INT 
+  SET @internalLogFileFieldId = 71 -- CaseSolutionFields.LogFileName_Internal
+
+  DECLARE @caseSolutionFieldMode INT 
+  SET @caseSolutionFieldMode = 1 -- DisplayField
+
+  ;WITH caseSolutionIds As (
+    SELECT cs.Id 
+    FROM dbo.tblCaseSolution cs 
+	   LEFT JOIN tblCaseSolutionFieldSettings csfs ON cs.Id = csfs.CaseSolution_Id AND csfs.FieldName_Id = @internalLogFileFieldId 
+    WHERE csfs.Id IS NULL)
+   INSERT tblCaseSolutionFieldSettings(CaseSolution_Id,  FieldName_Id, Mode)
+   SELECT cs.Id, @internalLogFileFieldId, @caseSolutionFieldMode
+   FROM caseSolutionIds cs
+    
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.43'
 GO

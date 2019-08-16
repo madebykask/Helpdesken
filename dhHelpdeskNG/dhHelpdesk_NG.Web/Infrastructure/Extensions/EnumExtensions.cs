@@ -26,24 +26,19 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return list;
         }
 
-        public static SelectList ToSelectList(this Enum enumeration, Func<string, string> translateFn)
+        public static SelectList ToSelectList(this Enum enumeration, Func<string, string> translateFn = null)
         {
+            var translate = translateFn ?? Translation.GetCoreTextTranslation;
             var list = (from Enum d in Enum.GetValues(enumeration.GetType())
-                        select new { ID = Convert.ToInt32(d), Name = Translation.GetCoreTextTranslation(d.ToString()) }).ToList();
+                        select new { ID = Convert.ToInt32(d), Name = translate(d.ToString()) }).ToList();
             return new SelectList(list, "ID", "Name");
         }
-
-        /// <summary>
-        /// Takes text from enum and translates it.
-        /// </summary>
-        /// <param name="enumeration"></param>
-        /// <param name="selected"></param>
-        /// <returns></returns>
-        public static SelectList ToSelectList(this Enum enumeration, string selected)
+        
+        public static SelectList ToSelectList(this Enum enumeration, string selected, Func<string, string> translateFn = null)
         {
-            var list =
-                (from Enum d in Enum.GetValues(enumeration.GetType())
-                 select new { ID = Convert.ToInt32(d), Name = Translation.GetCoreTextTranslation(d.ToString()) }).ToList();
+            var translate = translateFn ?? Translation.GetCoreTextTranslation;
+            var list = (from Enum d in Enum.GetValues(enumeration.GetType())
+                        select new { ID = Convert.ToInt32(d), Name = translate(d.ToString()) }).ToList();
             return new SelectList(list, "ID", "Name", selected);
         }
 
@@ -53,12 +48,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         /// <param name="enumeration"></param>
         /// <param name="selected"></param>
         /// <returns></returns>
-        public static SelectList ToSelectListDipslay(this Enum enumeration, string selected)
+        public static SelectList ToSelectListDipslay(this Enum enumeration, string selected, Func<string, string> translateFn = null)
         {
+            var translate = translateFn ?? Translation.GetCoreTextTranslation;
             var type = enumeration.GetType();
             var list =
                 (from Enum d in Enum.GetValues(enumeration.GetType())
-                 select new { ID = Convert.ToInt32(d), Name = Translation.GetCoreTextTranslation(GetDisplayName(type, d)) }).ToList();
+                 select new { ID = Convert.ToInt32(d), Name = translate(GetDisplayName(type, d)) }).ToList();
             return new SelectList(list, "ID", "Name", selected);
         }
 
