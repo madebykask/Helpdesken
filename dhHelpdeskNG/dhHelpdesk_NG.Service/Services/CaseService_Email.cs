@@ -256,7 +256,7 @@ namespace DH.Helpdesk.Services.Services
             #region Send email to tblCase.Performer_User_Id
 
             if ((!isClosingCase && isCreatingCase && newCase.Performer_User_Id.HasValue || 
-                !isCreatingCase && newCase.Performer_User_Id != oldCase.Performer_User_Id))
+                 !isCreatingCase && newCase.Performer_User_Id.HasValue && newCase.Performer_User_Id != oldCase.Performer_User_Id))
             {
                 var admin = _userRepository.GetUserInfo(newCase.Performer_User_Id.Value);
                 if (admin.AllocateCaseMail == 1 && IsValidEmail(admin.Email))

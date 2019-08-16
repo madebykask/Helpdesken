@@ -93,10 +93,9 @@
   <system.webServer>
     <modules runAllManagedModulesForAllRequests="false"/>
     <security>
-      <requestFiltering>
+        <requestFiltering allowDoubleEscaping="true" />
         <!-- for iis 7 >. 50 mb in bytes -->
         <requestLimits maxAllowedContentLength="5242880"/>
-      </requestFiltering>
     </security>
     <validation validateIntegratedModeConfiguration="false"/>
     <handlers>

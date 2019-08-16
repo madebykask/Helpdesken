@@ -1655,15 +1655,14 @@ namespace DH.Helpdesk.Services.Services
 
             if (c.ProductArea_Id.HasValue)
             {
-                if (c.ProductArea.Parent_ProductArea_Id.HasValue)
+                if (c.ProductArea.Parent_ProductArea_Id.HasValue && c.ProductArea.Parent_ProductArea_Id > 0)
                 {
                     var names = _productAreaService.GetParentPath(c.ProductArea_Id.Value, c.Customer_Id).ToList();
                     ret.Add(new Field {Key = "[#28]", StringValue = string.Join(" - ", names)});
                 }
                 else
                 {
-                    ret.Add(new Field
-                        {Key = "[#28]", StringValue = c.ProductArea != null ? c.ProductArea.Name : string.Empty});
+                    ret.Add(new Field {Key = "[#28]", StringValue = c.ProductArea != null ? c.ProductArea.Name : string.Empty});
                 }
             }
 
