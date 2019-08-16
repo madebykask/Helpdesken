@@ -82,7 +82,7 @@
                                 }
                             }
                         </td>
-                        <td>
+                        <td class="action">
                             @* TODO: fix this, set deleteattachedfilepermission to true if usergroupid is administrator *@
                             @if (!GuidHelper.IsGuid(Model.LogId) && (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1 || SessionFacade.CurrentUser.UserGroupId == 4))
                             {

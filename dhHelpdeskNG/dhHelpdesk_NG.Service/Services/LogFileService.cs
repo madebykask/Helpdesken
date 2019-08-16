@@ -144,7 +144,8 @@ namespace DH.Helpdesk.Services.Services
                 Name = x.FileName,
                 CaseId = x.Case_Id,
                 IsExistCaseFile = true,
-                IsExistLogFile = false
+                IsExistLogFile = false,
+                IsInternalLogNote = x.IsInternalLogNote
             }).ToList();
 
             var logFiles = files.Where(x => x.Log_Id.HasValue).Select(f => new LogExistingFileModel

@@ -2444,7 +2444,8 @@ namespace DH.Helpdesk.Web.Controllers
                     IsExistLogFile = !x.IsCaseFile,
                     IsExistCaseFile = x.IsCaseFile,
                     LogId = x.LogId,
-                    LogType = x.LogType
+                    LogType = x.LogType,
+                    IsInternalLogNote = isInternalLogNote
                 });
 
                 var success = _logFileService.SaveAttachedExistingLogFiles(allFiles, caseId, isInternalLogNote);
