@@ -168,6 +168,17 @@ BEGIN
 	INSERT INTO tblFeatureToggle(Active, ChangeDate, [Description], StrongName)
 	SELECT 0, GETDATE(), 'Toogle for activating old Indexing Service usage (deprecated). No Support in 2008+', 'FILE_SEARCH_IDX_SERVICE'
 END
+GO
+
+RAISERROR ('Add FilesInternal to tblEMailLog', 10, 1) WITH NOWAIT
+GO
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		     where syscolumns.name = N'FilesInternal' and sysobjects.name = N'tblEMailLog')
+BEGIN
+    ALTER TABLE tblEMailLog
+    ADD FilesInternal nvarchar(max) NULL
+END
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.43'
