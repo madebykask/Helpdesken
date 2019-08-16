@@ -379,6 +379,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ILogProgramService>().To<LogProgramService>();
             kernel.Bind<IInventoryService>().To<InventoryService>();
             kernel.Bind<IUserEmailsSearchService>().To<UserEmailsSearchService>();
+            kernel.Bind<IFileIndexingRepository>().To<FileIndexingRepository>();
             kernel.Bind<IFeatureToggleService>().To<FeatureToggleService>();
 
             // Cache
