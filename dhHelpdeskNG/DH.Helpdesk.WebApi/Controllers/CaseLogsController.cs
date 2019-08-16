@@ -48,7 +48,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var includeInternalLogs = currentUser.CaseInternalLogPermission.ToBool();
 
             var fieldName = _caseFieldSettingsHelper.GetFieldName(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal.ToString());
-            var isTwoAttachmentsMode = _caseFieldSettingService.GetCaseFieldSetting(cid, fieldName)?.ShowExternal.ToBool() ?? false;
+            var isTwoAttachmentsMode = _caseFieldSettingService.GetCaseFieldSetting(cid, fieldName)?.IsActive ?? false;
 
             var includeInternalFiles = includeInternalLogs && isTwoAttachmentsMode;
             var logEntities = 
