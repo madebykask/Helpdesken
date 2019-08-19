@@ -166,7 +166,7 @@ RAISERROR ('Adding toggle for usage of deprecated Indexing Service, used to sear
 IF NOT EXISTS(SELECT 1 FROM tblFeatureToggle FT WHERE FT.StrongName = 'FILE_SEARCH_IDX_SERVICE')
 BEGIN
 	INSERT INTO tblFeatureToggle(Active, ChangeDate, [Description], StrongName)
-	SELECT 0, GETDATE(), 'Toogle for activating old Indexing Service usage (deprecated). No Support in 2008+', 'FILE_SEARCH_IDX_SERVICE'
+	SELECT 1, GETDATE(), 'Toogle for activating old Indexing Service usage (deprecated). No Support in 2008+', 'FILE_SEARCH_IDX_SERVICE'
 END
 GO
 
@@ -199,6 +199,15 @@ GO
     
 GO
 
+
+RAISERROR ('Droping foreign key constraint FK_CaseDocumentsCondition_CaseDocument (doublets)', 10, 1) WITH NOWAIT
+IF EXISTS (SELECT * FROM sys.foreign_keys 
+   WHERE object_id = OBJECT_ID(N'dbo.FK_CaseDocumentsCondition_CaseDocument')
+   AND parent_object_id = OBJECT_ID(N'dbo.tblCaseDocumentCondition')
+)
+BEGIN
+	ALTER TABLE [dbo].[tblCaseDocumentCondition] DROP CONSTRAINT [FK_CaseDocumentsCondition_CaseDocument]
+END
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.43'
 GO
