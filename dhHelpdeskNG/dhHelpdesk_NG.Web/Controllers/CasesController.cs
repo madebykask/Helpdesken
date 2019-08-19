@@ -3376,7 +3376,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 #region Editing existing case
 
-                oldCase = _caseService.GetDetachedCaseById(case_.Id);
+                oldCase = _caseService.GetCaseById(case_.Id);
                 var cu = _customerUserService.GetCustomerUserSettings(case_.Customer_Id, SessionFacade.CurrentUser.Id);
                 if (cu != null)
                 {
@@ -3763,7 +3763,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, case_, oldCase);
             if (actions.Any())
-                _caseService.ExecuteBusinessActions(actions, case_, caseLog, userTimeZone, caseHistoryId, basePath, SessionFacade.CurrentLanguageId, caseMailSetting, allLogFiles);
+                _caseService.ExecuteBusinessActions(actions, case_.Id, caseLog, userTimeZone, caseHistoryId, basePath, SessionFacade.CurrentLanguageId, caseMailSetting, allLogFiles);
 
             //Unlock Case            
             if (m.caseLock != null && !string.IsNullOrEmpty(m.caseLock.LockGUID))

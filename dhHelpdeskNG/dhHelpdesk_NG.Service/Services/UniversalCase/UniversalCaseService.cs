@@ -545,7 +545,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
             var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, caseEntity, oldCase);
             if (actions.Any())
-                _caseService.ExecuteBusinessActions(actions, caseEntity, logEntity, auxModel.UserTimeZone, historyId, "", auxModel.CurrentLanguageId, mailSettings);
+                _caseService.ExecuteBusinessActions(actions, caseEntity.Id, logEntity, auxModel.UserTimeZone, historyId, "", auxModel.CurrentLanguageId, mailSettings);
 
             caseId = caseEntity.Id;
             caseNumber = caseEntity.CaseNumber;

@@ -452,7 +452,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             // BRE
             var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, currentCase, oldCase);
             if (actions.Any())
-                _caseService.ExecuteBusinessActions(actions, currentCase, caseLog, userTimeZone, caseHistoryId,
+                _caseService.ExecuteBusinessActions(actions, currentCase.Id, caseLog, userTimeZone, caseHistoryId,
                                                     basePath, langId, caseMailSetting, allLogFiles); //TODO: async or move to scheduler
 
 

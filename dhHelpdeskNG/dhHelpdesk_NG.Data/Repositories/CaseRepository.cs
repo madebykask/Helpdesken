@@ -446,6 +446,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return DataContext.Cases
                 .Include(x => x.Department)
                 .Include(x => x.Workinggroup)
+                .Include(x => x.ProductArea)
                 .FirstOrDefault(x => x.Id == id);
         }
         

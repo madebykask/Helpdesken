@@ -94,7 +94,7 @@ namespace DH.Helpdesk.Services.Services
 
         List<BusinessRuleActionModel> CheckBusinessRules(BREventType occurredEvent, Case currentCase, Case oldCase = null);
 
-        void ExecuteBusinessActions(List<BusinessRuleActionModel> actions, Case currentCase, CaseLog log, TimeZoneInfo userTimeZone,
+        void ExecuteBusinessActions(List<BusinessRuleActionModel> actions, int currentCaseId, CaseLog log, TimeZoneInfo userTimeZone,
                                     int caseHistoryId, string basePath, int currentLanguageId, CaseMailSetting caseMailSetting,
                                     List<CaseLogFileDto> logFiles = null
                                     );

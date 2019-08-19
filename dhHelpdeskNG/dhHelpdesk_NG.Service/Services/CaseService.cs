@@ -1075,7 +1075,7 @@ namespace DH.Helpdesk.Services.Services
             return ret;
         }
 
-        public void ExecuteBusinessActions(List<BusinessRuleActionModel> actions, Case currentCase, CaseLog log, TimeZoneInfo userTimeZone,
+        public void ExecuteBusinessActions(List<BusinessRuleActionModel> actions, int currentCaseId, CaseLog log, TimeZoneInfo userTimeZone,
                                            int caseHistoryId, string basePath, int currentLanguageId, CaseMailSetting caseMailSetting,
                                            List<CaseLogFileDto> logFiles = null)
         {
@@ -1085,7 +1085,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     case BRActionType.SendEmail:
                         if (caseMailSetting != null)
-                            DoAction_SendEmail(action, currentCase, log, userTimeZone, caseHistoryId, basePath, currentLanguageId, caseMailSetting, logFiles);
+                            DoAction_SendEmail(action, currentCaseId, log, userTimeZone, caseHistoryId, basePath, currentLanguageId, caseMailSetting, logFiles);
                         break;
                 }
             }
@@ -1123,10 +1123,6 @@ namespace DH.Helpdesk.Services.Services
 
             return 0;
         }
-
-
-
-
 
         #region Private methods
 
@@ -1299,10 +1295,12 @@ namespace DH.Helpdesk.Services.Services
             return true;
         }
 
-        private void DoAction_SendEmail(BusinessRuleActionModel action, Case currentCase, CaseLog log, TimeZoneInfo userTimeZone,
+        private void DoAction_SendEmail(BusinessRuleActionModel action, int currentCaseId, CaseLog log, TimeZoneInfo userTimeZone,
                                         int caseHistoryId, string basePath, int currentLanguageId, CaseMailSetting caseMailSetting,
                                         List<CaseLogFileDto> logFiles = null)
         {
+
+            var currentCase = _caseRepository.GetCaseIncluding(currentCaseId);
             var customerId = currentCase.Customer_Id;
             var customerSettings = _settingService.GetCustomerSetting(customerId);
             var sep = new [] { ';' };
