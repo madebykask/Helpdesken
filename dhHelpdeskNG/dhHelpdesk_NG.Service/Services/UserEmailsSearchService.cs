@@ -49,6 +49,7 @@ namespace DH.Helpdesk.Services.Services
                             Email = x.Email,
                             DepartmentName = x.Department != null ? x.Department.DepartmentName : null
                         })
+                        .Take(25)
                         .ToList();
 
                 var inits = initiators.Select(x => new CaseEmailSendOverview
@@ -82,6 +83,7 @@ namespace DH.Helpdesk.Services.Services
                         GroupType = CaseUserSearchGroup.Administaror,
                         DepartmentName = string.Empty
                     })
+                    .Take(25)
                     .ToList();
 
                 result.AddRange(admins);
@@ -104,6 +106,7 @@ namespace DH.Helpdesk.Services.Services
                         GroupType = CaseUserSearchGroup.Users,
                         DepartmentName = string.Empty
                     })
+                    .Take(25)
                     .ToList();
 
                 result.AddRange(users);
@@ -141,6 +144,7 @@ namespace DH.Helpdesk.Services.Services
                         DepartmentName = string.Empty
                     })
                     .Where(x => x.Emails.Any())
+                    .Take(25)
                     .ToList();
 
                 result.AddRange(newList);
