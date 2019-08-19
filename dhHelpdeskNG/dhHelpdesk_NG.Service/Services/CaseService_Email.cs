@@ -455,7 +455,7 @@ namespace DH.Helpdesk.Services.Services
 
             var isSelfService = IsSelfService();
             
-            if (isSelfService && log != null && log.Id > 0 && !string.IsNullOrEmpty(log.TextExternal))
+            if (isSelfService && log != null && log.Id > 0)
             {
                 var isCaseActivated = oldCase != null && oldCase.FinishingDate.HasValue;
                 
@@ -564,7 +564,7 @@ namespace DH.Helpdesk.Services.Services
 
                 // Inform notifier about external lognote
                 if (!string.IsNullOrEmpty(performerUserEmail) &&
-                    !string.IsNullOrEmpty(log.TextExternal) &&
+                    log != null && (!string.IsNullOrEmpty(log.TextExternal) || !string.IsNullOrEmpty(log.TextInternal)) &&
                     newCase.FinishingDate == null && 
                     externalUpdateMail == 1)
                 {
