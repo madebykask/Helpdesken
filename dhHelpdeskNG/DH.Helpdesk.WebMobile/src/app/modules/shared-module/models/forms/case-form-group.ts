@@ -113,8 +113,4 @@ export class CaseFormGroup extends FormGroup {
     }
     return invalidControls;
   }
-
-  getNotifierFieldsSetter(isRegarding) {
-    return new NotifierFormFieldsSetter(isRegarding, this);
-  }
 }

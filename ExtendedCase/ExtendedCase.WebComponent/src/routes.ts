@@ -1,4 +1,4 @@
-﻿import { Routes, UrlSegment } from '@angular/router';
+﻿import { Routes } from '@angular/router';
 import { ExtendedCaseComponent } from './app/components/extended-case.component';
 
 export const routes: Routes = [

@@ -9,59 +9,59 @@ const packageJSON = require('../package.json');
 
 // Parse version at the top of your webpack.config
 let CONSTANTS = {
-    VERSION: JSON.stringify(packageJSON.version),
-    MODE: 'test'
-} 
+  VERSION: JSON.stringify(packageJSON.version),
+  MODE: 'dev',
+}
 
 const outputDir = 'dist';
 
-module.exports = WebpackMerge(CommonConfig({ env: CONSTANTS.MODE, outputDir: outputDir }), 
-    {     
-        devtool: 'source-map',
-        output: {
-            path: Helpers.root(outputDir),
-            publicPath: '/',
-            filename: '[name].[hash].js',
-            chunkFilename: '[id].[hash].chunk.js'
-        },
+module.exports = WebpackMerge.smart(CommonConfig({ env: CONSTANTS.MODE,  outputDir: outputDir }), 
+{
+  devtool: 'source-map',
+  output: {
+    path: Helpers.root(outputDir),
+    publicPath: '/',
+    filename: '[name].[hash].js',
+    chunkFilename: '[id].[hash].chunk.js'
+  },
 
-        optimization: {
-            minimize: true,
-            minimizer: [
-                // webpack 4 does minification by default in production mode
-                new TerserPlugin({
-                    parallel: true,
-                    sourceMap: true,
-                    terserOptions: {
-                      ie8: false,
-                      keep_fnames: true,
-                      ecma: 6,
-                      output: {
-                        comments: false,
-                      },
-                    },
-                  }),
+  optimization: {
+    minimize: true,
+    minimizer: [
+        // webpack 4 does minification by default in production mode
+        new TerserPlugin({
+            parallel: true,
+            sourceMap: true,
+            terserOptions: {
+              ie8: false,
+              keep_fnames: true,
+              ecma: 6,
+              output: {
+                comments: false,
+              },
+            },
+          }),
 
-                new OptimizeCSSAssetsPlugin({
-                    cssProcessor: cssnano,
-                    cssProcessorOptions: {
-                        discardComments: {
-                            removeAll: true
-                        }
-                    },
-                    canPrint: false
-                })
-            ]
-        },
+        new OptimizeCSSAssetsPlugin({
+            cssProcessor: cssnano,
+            cssProcessorOptions: {
+                discardComments: {
+                    removeAll: true
+                }
+            },
+            canPrint: false
+        })
+    ]
+  },
 
-        plugins: [
-            new Webpack.DefinePlugin({
-                ENV: JSON.stringify(CONSTANTS.MODE),
-                AppSettings: JSON.stringify({
-                    'apiHost': 'http://localhost:8090',
-                    'showDebugProxyModel': false,
-                    'debugMode': true
-                })
-            })
-        ]
-    });
+  plugins: [
+      new Webpack.DefinePlugin({
+          ENV: JSON.stringify(CONSTANTS.MODE),
+          AppSettings: JSON.stringify({
+              'apiHost': 'http://localhost:8090',
+              'showDebugProxyModel': true,
+              'debugMode': false
+          })
+      })
+  ]
+});

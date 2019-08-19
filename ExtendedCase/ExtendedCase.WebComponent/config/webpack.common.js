@@ -1,5 +1,5 @@
 ﻿const Webpack = require('webpack');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 //const CopyPlugin = require('copy-webpack-plugin');
@@ -15,13 +15,14 @@ module.exports = args => {
     console.log('>>> tsconfigFile: %s', tsconfigFile);
 
     return {
-        node: {process: false }, //keep it fo ie11 issue: https://github.com/angular/angular/issues/24769
+        node: {process: false }, // keep it fo ie11 issue: https://github.com/angular/angular/issues/24769
         
         mode: isDevMode ? 'development' : 'production', // webpack4 required
-        
+        stats: 'errors-warnings', // https://webpack.js.org/configuration/stats/
         entry: {
             ecapp: isDevMode ? './src/main.ts' : './src/main.aot.ts',
             ecpolyfills: './src/polyfills.ts',
+            ecpolyfillscore: './src/polyfills-core.ts', // contans core-js. if component consumer already has this pilyfill - dont use it
             //ecvendor: './src/vendor.ts'
         },
 
@@ -51,11 +52,11 @@ module.exports = args => {
                 {
                     test: /\.ts$/,
                     loaders: ['@ngtools/webpack'],
-                    exclude: [Helpers.root('dist'), Helpers.root('dist-test')]
+                    exclude: [Helpers.root('dist'), Helpers.root('dist')]
                 }, {
                     test: /\.html$/,
                     use: 'html-loader',
-                    exclude: [Helpers.root('dist'), Helpers.root('dist-test')]
+                    exclude: [Helpers.root('dist'), Helpers.root('dist')]
                 }, {
                     test: /\.(woff|woff2|eot|ttf|otf)(\?v=\d+\.\d+\.\d+)?$/,
                     use: {
@@ -82,7 +83,7 @@ module.exports = args => {
                             }
                         }
                     ],
-                    exclude: [Helpers.root('dist'), Helpers.root('dist-test')]
+                    exclude: [Helpers.root('dist'), Helpers.root('dist')]
                 }, {
                     test: /\.css$/,
                     use: [
@@ -100,8 +101,7 @@ module.exports = args => {
             ]
         },
         plugins: [
-            new CleanWebpackPlugin(['*.*'], {
-                root: Helpers.root(outputDir),
+            new CleanWebpackPlugin({
                 verbose: true
             }),
 
@@ -146,9 +146,9 @@ module.exports = args => {
                 template: "./public/test.ejs",
                 filename: "./test.html",
                 inject: false,
-                chunks: ['ecapp', 'ecpolyfills'],
+                chunks: ['ecapp', 'ecpolyfills', 'ecpolyfillscore'],
                 head: {
-                    js: ['ecpolyfills']
+                    js: ['ecpolyfillscore', 'ecpolyfills']
                 },
                 body: {
                     js: ['ecapp']

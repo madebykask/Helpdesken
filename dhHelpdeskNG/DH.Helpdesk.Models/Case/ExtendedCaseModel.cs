@@ -6,5 +6,6 @@ namespace DH.Helpdesk.Models.Case
     {
         public int ExtendedCaseFormId { get; set; }
         public Guid ExtendedCaseGuid { get; set; }
+        public string ExtendedCaseName { get; set; }
     }
 }

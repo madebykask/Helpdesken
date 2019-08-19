@@ -10,12 +10,12 @@ const packageJSON = require('../package.json');
 // Parse version at the top of your webpack.config
 let CONSTANTS = {
   VERSION: JSON.stringify(packageJSON.version),
-  MODE: 'test',
+  MODE: 'prod',
   BASEURL: 'ExtendedCase',
   BASEAPIURL: 'ExtendedCaseApi'
 }
 
-const outputDir = 'dist-test';
+const outputDir = 'dist';
 
 module.exports = WebpackMerge.smart(CommonConfig({ env: CONSTANTS.MODE,  outputDir: outputDir }), 
 {        

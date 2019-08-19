@@ -6,12 +6,11 @@
     {
       "type": "npm",
       "script": "build-dev",
-      "problemMatcher": []
-    },
-    {
-      "type": "gulp",
-      "task": "build-dev",
-      "problemMatcher": []
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     }
   ]
 }

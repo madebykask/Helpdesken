@@ -204,7 +204,7 @@ export class CaseEditLogic {
   }
 
   private processNotifierChanged(data: NotifierModel, isRegarding: boolean, form: CaseFormGroup) {
-    const formFieldsSetter = form.getNotifierFieldsSetter(isRegarding);
+    const formFieldsSetter = new NotifierFormFieldsSetter(isRegarding, form);
 
     if (data) {
       formFieldsSetter.setReportedBy(data.userId);

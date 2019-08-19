@@ -32,6 +32,8 @@ export class CaseEditInputModel {
     caseSolution: CaseSolution;
     extendedCaseData: ExtendedCaseData;
     mailToTickets: MailToTicketInfo[];
+    childCasesIds: number[] | null;
+    parentCaseId: number | null;
 }
 
 export enum CaseAccessMode {
@@ -67,6 +69,7 @@ export class CaseSolution {
 export class ExtendedCaseData {
     extendedCaseFormId: number;
     extendedCaseGuid: string;
+    extendedCaseName: string;
 }
 
 // tslint:disable-next-line: max-classes-per-file

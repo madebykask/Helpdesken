@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CaseEditRoutingModule } from './case-edit-routing.module';
 import { CaseEditComponent } from './components/case-edit/case-edit.component';
 import { MbscFormGroupExpandDirective } from './components/case-edit/directives/form-group-expand.directive';
@@ -63,6 +63,7 @@ import { CaseMenuComponent } from './components/case-menu/case-menu.component';
 
   ],
   entryComponents: [FieldChangeActionComponent, LogNoteActionComponent, GeneralActionComponent],
-  exports: []
+  exports: [],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class CaseEditModule { }

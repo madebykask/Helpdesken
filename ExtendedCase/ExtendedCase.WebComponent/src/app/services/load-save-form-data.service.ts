@@ -17,8 +17,9 @@ export class LoadSaveFormDataService {
     }
 
     loadFormData(extendedCaseId: string, helpdeskCaseId: number, authToken: string): Observable<FormDataModel> {
-        let authTokenLogValue = authToken && authToken.length > 0 ? authToken.slice(0,5) : 'empty';
-        this.logService.debugFormatted('loadSavedData: loading form saved data. extendedCaseGuid: {0}, helpdeskCaseId:{1}, Authtoken: {2}.', extendedCaseId, helpdeskCaseId, authTokenLogValue);
+        let authTokenLogValue = authToken && authToken.length > 0 ? authToken.slice(0, 5) : 'empty';
+        this.logService.debugFormatted('loadSavedData: loading form saved data. extendedCaseGuid: {0}, helpdeskCaseId:{1}, Authtoken: {2}.',
+         extendedCaseId, helpdeskCaseId, authTokenLogValue);
 
         return this.formDataService.getFormDataById(extendedCaseId, helpdeskCaseId, authToken).pipe(
             mergeMap(x => {

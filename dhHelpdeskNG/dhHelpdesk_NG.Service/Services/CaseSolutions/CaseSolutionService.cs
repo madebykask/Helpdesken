@@ -1476,14 +1476,11 @@ namespace DH.Helpdesk.Services.Services
 
                     case CaseSolutionIndexColumns.Name:
 
-
                         var query1 = (searchCaseSolutions.Ascending) ?
                                 cresList.OrderBy(l => (l.Name != null ? l.Name : string.Empty)) :
                                 cresList.OrderByDescending(l => (l.Name != null ? l.Name : string.Empty));
 
                         return query1.ToList();
-
-                        break;
 
                     case CaseSolutionIndexColumns.Category:
                         query1 = (searchCaseSolutions.Ascending) ?
@@ -1491,7 +1488,6 @@ namespace DH.Helpdesk.Services.Services
                                 cresList.OrderByDescending(l => (l.CaseSolutionCategory != null ? l.CaseSolutionCategory.Name : string.Empty));
 
                         return query1.ToList();
-                        break;
 
                     case CaseSolutionIndexColumns.Caption:
                         query1 = (searchCaseSolutions.Ascending) ?
@@ -1499,8 +1495,7 @@ namespace DH.Helpdesk.Services.Services
                                 cresList.OrderByDescending(l => (l.Caption != null ? l.Caption : string.Empty));
 
                         return query1.ToList();
-                        break;
-
+                        
                     case CaseSolutionIndexColumns.Administrator:
                         if (searchCaseSolutions.Ascending)
                             query1 = isFirstNamePresentation ?
@@ -1518,7 +1513,6 @@ namespace DH.Helpdesk.Services.Services
                                        .ThenByDescending(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));
 
                         return query1.ToList();
-                        break;
 
                     case CaseSolutionIndexColumns.Priority:
                         query1 = (searchCaseSolutions.Ascending) ?
@@ -1526,8 +1520,6 @@ namespace DH.Helpdesk.Services.Services
                                     cresList.OrderByDescending(l => (l.Priority != null ? l.Priority.Name : string.Empty));
 
                         return query1.ToList();
-                        break;
-
 
                     case CaseSolutionIndexColumns.Status:
                         query1 = (searchCaseSolutions.Ascending) ?
@@ -1535,7 +1527,6 @@ namespace DH.Helpdesk.Services.Services
                                 cresList.OrderByDescending(l => l.Status);
 
                         return query1.ToList();
-                        break;
 
                     case CaseSolutionIndexColumns.ConnectedToButton:
                         query1 = (searchCaseSolutions.Ascending) ?
@@ -1543,26 +1534,20 @@ namespace DH.Helpdesk.Services.Services
                                 cresList.OrderByDescending(l => l.ConnectedButton);
 
                         return query1.ToList();
-                        break;
                     case CaseSolutionIndexColumns.SortOrder:
                         query1 = (searchCaseSolutions.Ascending) ?
                                 cresList.OrderBy(l => l.SortOrder) :
                                 cresList.OrderByDescending(l => l.SortOrder);
 
                         return query1.ToList();
-                        break;
                     default:
                         query1 = (searchCaseSolutions.Ascending) ?
                                 cresList.OrderBy(l => (l.Name != null ? l.Name : string.Empty)) :
                                 cresList.OrderByDescending(l => (l.Name != null ? l.Name : string.Empty));
 
                         return query1.ToList();
-                        break;
-
 
                 }
-
-
             }
             else
             {

@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { ComponentCommService } from '../services/component-comm.service';
 import { FormModel, TabModel } from '../models/form.model';
 import { TabTemplateModel, SectionTemplateModel, SectionType } from '../models/template.model';
-import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'ec-tab',
@@ -13,10 +12,6 @@ export class ExtendedCaseTabComponent {
     @Input() tabTemplate: TabTemplateModel;
     @Input() tabModel: TabModel;
     @Input() formModel: FormModel;
-
-    private subscription: Subscription;
-    private validationEventSubscription: Subscription;
-    private colSequence: number[];
 
     constructor(private componentCommService: ComponentCommService) {
         //private changeDetector: ChangeDetectorRef) {

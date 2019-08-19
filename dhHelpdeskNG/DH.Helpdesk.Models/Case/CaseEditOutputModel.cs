@@ -17,6 +17,8 @@ namespace DH.Helpdesk.Models.Case
         public CaseSolutionInfo CaseSolution { get; set; }
         public AccessMode EditMode { get; set; }
         public ExtendedCaseModel ExtendedCaseData { get; set; }
+        public int? ParentCaseId { get; set; }
+        public List<int> ChildCasesIds { get; set; }
 
         //public List<CustomMailTemplate> MailTemplates { get; set; }
         //public List<CaseFile> CaseFiles { get; set; }

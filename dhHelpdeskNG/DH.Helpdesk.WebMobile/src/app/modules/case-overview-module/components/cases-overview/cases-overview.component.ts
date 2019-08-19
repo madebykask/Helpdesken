@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { finalize, take, distinctUntilChanged, takeUntil, filter, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Subject, forkJoin, throwError } from 'rxjs';
-import { PagingConstants, SortOrder } from 'src/app/modules/shared-module/constants';
+import { PagingConstants, SortOrder, CaseFieldsNames } from 'src/app/modules/shared-module/constants';
 import { CasesOverviewFilter } from '../../models/cases-overview/cases-overview-filter.model';
 import { CaseOverviewItem } from '../../models/cases-overview/cases-overview-item.model';
 import { CasesOverviewService } from '../../services/cases-overview';
@@ -44,6 +44,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   selectedSortFieldId: string;
   selectedSortFieldOrder: string;
   caseSortFields: CaseSortFieldModel[];
+  caseFieldsNames = CaseFieldsNames;
 
   listviewSettings: any = {
     enhance: false,
@@ -86,7 +87,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     const sortFields$ = this.casesOverviewService.getCaseSortingFields();
 
     // run initial search after filter state (sorting, filters) is fully loaded
-    forkJoin(sortFields$, filtersLoaded$).pipe(
+    forkJoin([sortFields$, filtersLoaded$]).pipe(
       take(1),
       catchError(err => throwError(err))
     ).subscribe(([sortFields, favFilters]: [CaseSortFieldModel[], FavoriteFilterModel[]]) => {

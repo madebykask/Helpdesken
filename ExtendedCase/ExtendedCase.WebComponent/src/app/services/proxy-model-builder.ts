@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TabTemplateModel, SectionTemplateModel, BaseControlTemplateModel } from '../models/template.model';
-import { FieldModelBase, TabModel, SectionModel, SectionInstanceModel, SingleControlFieldModel, MultiValueSingleControlFieldModel, MultiControlFieldModel, CustomDataSourceModel, ItemModel, FormControlType } from '../models/form.model';
+import { FieldModelBase, TabModel, SectionModel, SectionInstanceModel, SingleControlFieldModel, MultiValueSingleControlFieldModel,
+   MultiControlFieldModel, ItemModel, FormControlType } from '../models/form.model';
 import { ProxyModel, ProxyTab, ProxySection, ProxySingleInstanceSection, ProxySectionInstance,  ProxyControl } from '../models/proxy.model';
 import * as commonMethods from '../utils/common-methods';
 

@@ -12,7 +12,6 @@ import { SubscriptionManager } from './app/shared/subscription-manager';
 import { AppConfig, AppDiConfig } from './app/shared/app-config/app-config';
 import { WindowWrapper } from './app/shared/window-wrapper'
 
-import { ExtendedCaseComponent } from './app/components/extended-case.component';
 import { ExtendedCaseTabComponent } from './app/components/ec-tab.component';
 import { ExtendedCaseSectionComponent } from './app/components/ec-section.component';
 import { ExtendedCaseReviewSectionComponent } from './app/components/ec-review-section.component';
@@ -41,8 +40,7 @@ import { SafeStyle } from './app/pipes/safeStyle-pipe';
 import { Mask } from './app/directives/masks/mask.directive';
 import { TrimValueAccessor } from './app/directives/input-trim.directive';
 import { DatepickerModule, TabsModule, TypeaheadModule, ModalModule  } from 'ngx-bootstrap';
-//import { SelectModule } from './modules/ng-select/ng-select';
-import {SelectModule} from 'ng-select';
+import { SelectModule } from 'ng-select';
 import { ToNGSelectOptions } from './app/pipes/ng-select-options.pipe';
 import { AlertComponent } from './app/components/shared/alert.component';
 import { ProgressComponent } from './app/components/shared/progress.component';
@@ -55,11 +53,11 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { createCustomElement } from '@angular/elements';
 import { DynamicModule } from 'ng-dynamic-component';
 
-//import './styles/css/site.scss';
+// import './styles/css/site.scss';
 import { routes } from './routes';
 import { RouterModule } from '@angular/router';
 import { ExtendedCaseElementComponent } from './app/components/extended-case-element.component';
-
+import { ExtendedCaseComponent } from './app/components/extended-case.component';
 
 @NgModule({
     imports: [BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule, ReactiveFormsModule,
@@ -84,7 +82,7 @@ import { ExtendedCaseElementComponent } from './app/components/extended-case-ele
         ExtendedCaseReviewComponentEx, ExtendedCaseReviewSectionInstanceComponent, ExtendedCaseHtmlComponent, ValidationErrorComponent,
         ValidationWarningComponent, Mask, TrimValueAccessor, ToNGSelectOptions, AlertsFilter, SafeHtml, SafeStyle,
         ExtendedUnknowControlComponent],
-        entryComponents: [ExtendedCaseElementComponent, ExtendedCaseComponent],
+        entryComponents: [ExtendedCaseComponent],
     providers: [
         {
             provide: HTTP_INTERCEPTORS,
@@ -101,7 +99,7 @@ import { ExtendedCaseElementComponent } from './app/components/extended-case-ele
         UuidGenerator,
         SubscriptionManager,
         WindowWrapper
-    ]
+    ],
 })
 export class AppModule {
 
@@ -109,8 +107,8 @@ export class AppModule {
 
   ngDoBootstrap() {
     // register extended case component as web element
-    const custom = createCustomElement(ExtendedCaseElementComponent, { injector: this.injector});
-    customElements.define('extended-case-element', custom);
+    const custom = createCustomElement(ExtendedCaseComponent, { injector: this.injector});
+    customElements.define('extended-case', custom);
   }
 
 };

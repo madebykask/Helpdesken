@@ -13,11 +13,6 @@
           "kind": "build",
           "isDefault": true
         }
-      },
-      {
-        "type": "npm",
-        "script": "build_dev-prod",
-        "problemMatcher": []
       }
     ]
   }

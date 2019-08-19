@@ -55,6 +55,7 @@ namespace DH.Helpdesk.Services.Services
         IList<Department> GetDepartmentsWithRegion(int customerId, ActivationStatus isActive = ActivationStatus.Active);
         List<Department> GetActiveDepartmentForUserByRegion(int? regionId, int userId, int customerId);
         List<Department> GetDepartmentsForUser(int customerId, int userId, bool onlyActive = true);
+        bool IsUserDepartment(int departmentId, int userId, int customerId);
 
     }
 
@@ -126,17 +127,14 @@ namespace DH.Helpdesk.Services.Services
         public IList<int> GetDepartmentsIdsByUserPermissions(int userId, int customerId, bool isOnlyActive = true)
         {
             return
-                _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, isOnlyActive, true).AsQueryable()
-                    .Select(d => d.Id)
+                GetDepartmentsIdsByUserPermissionsQuery(userId, customerId, isOnlyActive)
                     .ToList();
         }
 
         public Task<List<int>> GetDepartmentsIdsByUserPermissionsAsync(int userId, int customerId, bool isOnlyActive = true)
         {
             return
-                _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, isOnlyActive, true).AsQueryable()
-                    .Select(d => d.Id)
-                    .ToListAsync();
+                GetDepartmentsIdsByUserPermissionsQuery(userId, customerId, isOnlyActive)                    .ToListAsync();
         }
 
         public IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool isOnlyActive = true)
@@ -403,5 +401,18 @@ namespace DH.Helpdesk.Services.Services
 
             return dep;
         }
+
+        public bool IsUserDepartment(int departmentId, int userId, int customerId)
+        {
+            return _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, false, true)
+                .Any(d => d.Id == departmentId);
+        }
+
+        private IQueryable<int> GetDepartmentsIdsByUserPermissionsQuery(int userId, int customerId, bool isOnlyActive)
+        {
+            return _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, isOnlyActive, true)
+                .Select(d => d.Id);
+        }
+
     }
 }

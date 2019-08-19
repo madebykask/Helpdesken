@@ -1,7 +1,7 @@
 import { MbscModule } from '@mobiscroll/angular';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
-import { NgModule, ErrorHandler, forwardRef } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { APP_INITIALIZER } from '@angular/core';
 import { LoginComponent, HeaderTitleComponent } from './shared/components';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';

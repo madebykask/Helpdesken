@@ -11,7 +11,7 @@ export class WindowWrapper {
     get extendedCaseComponentRef():any {
         return this.nativeWindow.extendedCaseComponentRef;
     }
-    
+
     get nativeWindow(): any {
         return window;
     }

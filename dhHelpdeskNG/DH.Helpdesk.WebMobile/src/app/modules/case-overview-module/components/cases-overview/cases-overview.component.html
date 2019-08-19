@@ -63,15 +63,15 @@
                       </div>
                       <div class="mbsc-row">
                           <div class="mbsc-col">
-                              <div><i class="mbsc-ic mbsc-ic-fa-user"></i>{{ (case.columns | getByKey: 'Performer_User_Id') || '&nbsp;' }}</div>
-                              <div><i class="mbsc-ic mbsc-ic-fa-group"></i>{{ (case.columns | getByKey: 'WorkingGroup_Id') || '&nbsp;' }}</div>
+                              <div *ngIf="case.columns | caseHasValue: 'Performer_User_Id'"><i class="mbsc-ic mbsc-ic-fa-user"></i>{{ (case.columns | getByKey: 'Performer_User_Id') || '&nbsp;' }}</div>
+                              <div *ngIf="case.columns | caseHasValue: 'WorkingGroup_Id'"><i class="mbsc-ic mbsc-ic-fa-group"></i>{{ (case.columns | getByKey: 'WorkingGroup_Id') || '&nbsp;' }}</div>
                           </div>
                       </div>
                       <div class="mbsc-row">
                           <div class="mbsc-col">
-                              <div><i class="mbsc-ic mbsc-ic-fa-exclamation"></i>{{ (case.columns | getByKey: 'Priority_Id') || '&nbsp;' }}</div>
-                              <div><i class="mbsc-ic mbsc-ic-fa-exchange"></i>{{ (case.columns | getByKey: 'StateSecondary_Id') || '&nbsp;' }}</div>
-                              <div><i class="mbsc-ic mbsc-ic-fa-calendar"></i>{{ (case.columns | getByKey: 'WatchDate' | dateFormat) || '&nbsp;' }}</div>
+                              <div *ngIf="case.columns | caseHasValue: 'Priority_Id'"><i class="mbsc-ic mbsc-ic-fa-exclamation"></i>{{ (case.columns | getByKey: 'Priority_Id') || '&nbsp;' }}</div>
+                              <div *ngIf="case.columns | caseHasValue: 'StateSecondary_Id'"><i class="mbsc-ic mbsc-ic-fa-exchange"></i>{{ (case.columns | getByKey: 'StateSecondary_Id') || '&nbsp;' }}</div>
+                              <div *ngIf="case.columns | caseHasValue: 'WatchDate'"><i class="mbsc-ic mbsc-ic-fa-calendar"></i>{{ (case.columns | getByKey: 'WatchDate' | dateFormat) || '&nbsp;' }}</div>
                           </div>
                           <div class="mbsc-col-sm-auto mbsc-txt-s hours" [class.urgent]="case.isUrgent" *ngIf="(case.columns | getByKey: '_temporary_LeadTime') != ''">
                             {{ (case.columns | getByKey: '_temporary_LeadTime') || '&nbsp;'}}h

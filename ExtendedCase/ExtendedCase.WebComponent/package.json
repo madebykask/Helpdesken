@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.0-template",
   "name": "excase",
   "private": true,
   "devDependencies": {
@@ -8,7 +8,7 @@
     "@types/node": "^10.14.15",
     "angular2-template-loader": "^0.6.2",
     "awesome-typescript-loader": "^5.2.1",
-    "clean-webpack-plugin": "^1.0.0",
+    "clean-webpack-plugin": "^3.0.0",
     "codelyzer": "^5.1.0",
     "copy-webpack-plugin": "^4.3.1",
     "css-loader": "^0.28.0",
@@ -16,10 +16,6 @@
     "cssnano": "^4.1.10",
     "del": "^2.2.2",
     "file-loader": "^2.0.0",
-    "gulp": "^3.9.1",
-    "gulp-connect": "^2.2.0",
-    "gulp-typescript": "^3.1.6",
-    "gulp-util": "^3.0.8",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "merge": "^1.2.0",
@@ -62,18 +58,17 @@
     "concat": "^1.0.3",
     "core-js": "^3.2.0",
     "deep-equal": "^1.0.1",
-    "es6-shim": "^0.35.3",
-    "fs-extra": "^8.1.0",
-    "jquery": "^3.2.1",
+    "es6-shim": "^0.35.5",
     "moment": "^2.24.0",
     "ng-dynamic-component": "^5.0.0",
     "ng-select": "^1.0.2",
     "ngx-bootstrap": "^5.1.1",
     "ngx-clipboard": "^12.2.0",
     "ngx-moment": "^3.4.0",
-    "reflect-metadata": "^0.1.10",
+    "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.2",
-    "zone.js": "^0.9.1"
+    "url-search-params": "^1.1.0",
+    "zone.js": "^0.10.1"
   },
   "scripts": {
     "aot": "ngc -p tsconfig.aot.json",
@@ -88,7 +83,8 @@
     "installDependencies": "npm install",
     "stats": "webpack-bundle-analyzer dist/stats.json",
     "build-test": "webpack --env.mode=test",
-    "build-test-local": "webpack --env.mode=dev.test",
+    "builc-test-mobile": "webpack --env.mode=test-mobile --verbose",
+    "build-test-local": "webpack --env.mode=dev.test --verbose",
     "build-dev": "webpack --env.mode=dev --verbose",
     "bundle-report": "webpack-bundle-analyzer dist/stats.json -m static"
   }

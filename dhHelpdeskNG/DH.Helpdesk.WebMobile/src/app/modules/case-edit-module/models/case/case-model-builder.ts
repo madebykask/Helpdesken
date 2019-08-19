@@ -21,6 +21,8 @@ export class CaseModelBuilder {
       caseSolution: caseSolution,
       extendedCaseData: extendedCaseData,
       mailToTickets: mailToTickets,
+      childCasesIds: json.childCasesIds || null,
+      parentCaseId: json.parentCaseId || null,
       fields: fields.map(v => {
         let field = null;
         switch (v.JsonType) {

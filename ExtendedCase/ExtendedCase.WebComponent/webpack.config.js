@@ -13,6 +13,9 @@ module.exports = env => {
           configFile = './config/webpack.test.js';
           break;
 
+        case 'test-mobile':
+          configFile = './config/webpack.test-mobile.js';
+
         case 'prod':
           configFile = './config/webpack.prod.js';
           break;

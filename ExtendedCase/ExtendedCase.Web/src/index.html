@@ -1,1 +1,86 @@
-﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="${BASE_URL}">
+    <title>Extended Case Web</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="ecpolyfillscore.${HASH}.js"></script>
+	<script src="ecpolyfills.${HASH}.js"></script>
+	<script src="iframeResizer.contentWindow.min.js"></script>	
+	<style>
+	 .version{color:#fff}
+	<style>
+</head>
+<body>
+    <div style="padding: 0px !important">
+		<extended-case></extended-case>
+		<script src="ecapp.${HASH}.js"></script>
+        <span class="version">${VERSION}</span>        
+    </div>
+    <script type="text/javascript">
+
+      window.getFormParameters = function () {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.getFormParameters();
+          });
+      }
+
+      window.loadExtendedCase = function (options) {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.loadForm(options);
+          });
+      }
+
+      window.updateCaseFields = function (caseFieldValues) {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.updateCaseFieldValues(caseFieldValues);
+          });
+      }
+
+      window.saveExtendedCase = function (isOnNext) {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.save(isOnNext);
+          });
+      }
+
+      window.validateExtendedCase = function (isOnNext) {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.validate(isOnNext || false);
+          });
+      }
+
+      window.setInitialData = function (data) {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.setInitialData(data);
+          });
+      }
+
+      window.setNextStep = function (step, isNextValidation) {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.setNextStep(step, isNextValidation);
+          });
+      }
+
+      window.getCaseValues = function () {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.getCaseValues();
+          });
+      }
+
+      window.getFormData = function () {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.getFormData();
+          });
+      }		
+
+      function test() {
+        return window.extendedCaseComponentRef.zone.run(function () {
+                  window.extendedCaseComponentRef.component.test();
+		});
+	  }
+    </script>
+
+</body>
+
+</html>
