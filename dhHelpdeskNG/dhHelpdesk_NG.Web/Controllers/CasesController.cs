@@ -3376,7 +3376,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 #region Editing existing case
 
-                oldCase = _caseService.GetCaseById(case_.Id);
+                oldCase = _caseService.GetDetachedCaseById(case_.Id);
                 var cu = _customerUserService.GetCustomerUserSettings(case_.Customer_Id, SessionFacade.CurrentUser.Id);
                 if (cu != null)
                 {
