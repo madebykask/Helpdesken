@@ -11,7 +11,7 @@ const packageJSON = require('../package.json');
 let CONSTANTS = {
   VERSION: JSON.stringify(packageJSON.version),
   MODE: 'prod',
-  BASEAPIURL: '${APIURL}'
+  BASEAPIURL: '#{ECApiUrl}'
 }
 
 const outputDir = 'dist';
