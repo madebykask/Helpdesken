@@ -42,11 +42,8 @@ export class ExtendedCaseDateComponent extends BaseControl implements OnInit, Af
     }
 
     ngAfterViewInit(): void {
-        let self = this;
-        setTimeout(() => {
-            self.renderDatePicker = true;
-            self.changeDetector.detectChanges();
-        }, 100);
+       this.renderDatePicker = true;
+       this.changeDetector.detectChanges();
     }
 
     togglePopup(show?: boolean) {

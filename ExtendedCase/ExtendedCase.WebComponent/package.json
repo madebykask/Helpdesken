@@ -83,7 +83,7 @@
     "installDependencies": "npm install",
     "stats": "webpack-bundle-analyzer dist/stats.json",
     "build-test": "webpack --env.mode=test",
-    "builc-test-mobile": "webpack --env.mode=test-mobile --verbose",
+    "build-test-mobile": "webpack --env.mode=test-mobile --verbose",
     "build-test-local": "webpack --env.mode=dev.test --verbose",
     "build-dev": "webpack --env.mode=dev --verbose",
     "bundle-report": "webpack-bundle-analyzer dist/stats.json -m static"

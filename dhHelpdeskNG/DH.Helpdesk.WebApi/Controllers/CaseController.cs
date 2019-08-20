@@ -136,7 +136,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var stateSecondaryId = currentCase?.StateSecondary_Id ?? 0;
 
             model.ExtendedCaseData =
-                GetExtendedCaseModel(cid, currentCase.Id, 0, stateSecondaryId, userOverview.UserGUID.ToString(), langId);
+                GetExtendedCaseModel(cid, currentCase.Id, currentCase.CaseSolution_Id ?? 0, stateSecondaryId, userOverview.UserGUID.ToString(), langId);
             
             return model;
         }

@@ -12,7 +12,9 @@ module.exports = args => {
     const outputDir = args.outputDir;
     const isDevMode = args.env === 'dev' || args.env === 'dev-test';
     const tsconfigFile = isDevMode ? './tsconfig.json' : './tsconfig.aot.json';
+    const mainFile = isDevMode ? './src/main.ts' : './src/main.aot.ts';
     console.log('>>> tsconfigFile: %s', tsconfigFile);
+    console.log('>>> main: %s', mainFile);
 
     return {
         node: {process: false }, // keep it fo ie11 issue: https://github.com/angular/angular/issues/24769
@@ -20,7 +22,7 @@ module.exports = args => {
         mode: isDevMode ? 'development' : 'production', // webpack4 required
         stats: 'errors-warnings', // https://webpack.js.org/configuration/stats/
         entry: {
-            ecapp: isDevMode ? './src/main.ts' : './src/main.aot.ts',
+            ecapp: mainFile,
             ecpolyfills: './src/polyfills.ts',
             ecpolyfillscore: './src/polyfills-core.ts', // contans core-js. if component consumer already has this pilyfill - dont use it
             //ecvendor: './src/vendor.ts'

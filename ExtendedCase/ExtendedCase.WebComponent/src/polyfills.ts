@@ -14,9 +14,9 @@ import 'url-search-params';
   Element.prototype.matches = (<any>Element.prototype).msMatchesSelector ||
     Element.prototype.webkitMatchesSelector;
 } */
-declare var ENV: any; // // to avoid compiler error. Using global variable from js.
+declare let ENV: any; // // to avoid compiler error. Using global variable from js.
 
-declare var require: any;
+declare let require: any;
 
 if (ENV === 'production') {
     // Production

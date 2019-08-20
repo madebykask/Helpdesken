@@ -2,7 +2,7 @@
 import { ValidateOn } from '../../shared/validation-types';
 import { LogLevel } from '../../shared/common-types';
 import { IAppConfig } from './app-config.interface';
-declare var AppSettings: any; // to avoid compiler error. Using global variable from js.
+declare let AppSettings: any; // to avoid compiler error. Using global variable from js.
 
 const _settings = AppSettings;
 
