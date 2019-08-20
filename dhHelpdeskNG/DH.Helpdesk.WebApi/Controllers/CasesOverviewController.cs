@@ -60,23 +60,22 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         [HttpGet]
         [Route("sortingfields")]
-        public async Task<IList<CaseSortFieldModel>> GetSortingFields([FromUri]int langId, [FromUri]int cid)
+        public IList<CaseSortFieldModel> GetSortingFields([FromUri]int langId, [FromUri]int cid)
         {
             var sortingFields = new List<GlobalEnums.TranslationCaseFields>()
             {
                 GlobalEnums.TranslationCaseFields.CaseNumber,
-                GlobalEnums.TranslationCaseFields.RegTime,
+                GlobalEnums.TranslationCaseFields.ChangeTime,
                 GlobalEnums.TranslationCaseFields.Performer_User_Id,
                 GlobalEnums.TranslationCaseFields.WorkingGroup_Id,
                 GlobalEnums.TranslationCaseFields.Priority_Id,
                 GlobalEnums.TranslationCaseFields.StateSecondary_Id,
-                GlobalEnums.TranslationCaseFields.WatchDate
+                GlobalEnums.TranslationCaseFields.WatchDate,
+                GlobalEnums.TranslationCaseFields._temporary_LeadTime // Time Left - virtual field
             };
 
-            var caseFieldTranslations = await _caseFieldSettingService.GetCustomerCaseTranslationsAsync(cid);
-
-            var res = 
-                sortingFields.Select(f => new CaseSortFieldModel(_caseTranslationService.GetFieldLabel(f, langId, cid, caseFieldTranslations), f.ToString()))
+            var res =
+                sortingFields.Select(f => new CaseSortFieldModel(_caseTranslationService.GetCaseTranslation(f.ToString(), langId, cid), f.ToString()))
                 .OrderBy(f => f.Text)
                 .ToList();
 
@@ -124,7 +123,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 CaseSearchFilter = filter,
                 Search = new Search()
                 {
-                    SortBy = GlobalEnums.TranslationCaseFields.RegTime.ToString(),
+                    SortBy = GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
                     Ascending = false
                 }
             };
