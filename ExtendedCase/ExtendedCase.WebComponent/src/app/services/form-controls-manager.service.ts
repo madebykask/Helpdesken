@@ -689,7 +689,7 @@ export class FormControlsManagerService {
     }
 
     refreshOptionsDataSource(
-        formModel:FormModel,
+        formModel: FormModel,
         dataSourceTemplate: OptionsDataSourceTemplateModel,
         fieldModel: FieldModelBase,
         controlTemplateModel: BaseControlTemplateModel,
@@ -713,8 +713,8 @@ export class FormControlsManagerService {
 
                 let isChanged = this.setControlDataSourceOptions(formModel.proxyModel, fieldModel, controlTemplateModel, digestUpdateLog);
                 this.logService.infoFormatted('refreshOptionsDataSource: control {0} value changed - {1}', controlTemplateModel.id, isChanged);
-                return throwError(isChanged);
-            }),);
+                return of(isChanged);
+            }));
     }
 
     setControlDataSourceOptions(proxyModel: ProxyModel, fieldModel: FieldModelBase,
