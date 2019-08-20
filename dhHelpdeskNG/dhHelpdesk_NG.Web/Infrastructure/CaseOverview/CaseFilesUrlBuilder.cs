@@ -39,7 +39,7 @@ namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
 
         private string BuildPath(params string[] urlTokens)
         {
-            var fixedUrlTokens = urlTokens.Select(u => u.Trim(new char['/'])).ToList();
+            var fixedUrlTokens = urlTokens.Select(u => u.Trim('/')).ToList();
             var urlPath = string.Join("/", fixedUrlTokens);
             return urlPath;
         }
