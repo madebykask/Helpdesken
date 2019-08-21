@@ -22,6 +22,8 @@ module.exports = WebpackMerge(CommonConfig({ env: CONSTANTS.MODE, outputDir: out
     },
 
     plugins: [
+        new Webpack.ProgressPlugin(),
+
         new Webpack.DefinePlugin({
             ENV: JSON.stringify(CONSTANTS.MODE),
             AppSettings: JSON.stringify({

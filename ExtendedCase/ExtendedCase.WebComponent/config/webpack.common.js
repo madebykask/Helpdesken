@@ -11,8 +11,8 @@ module.exports = args => {
 
     const outputDir = args.outputDir;
     const isDevMode = args.env === 'dev' || args.env === 'dev-test';
-    const tsconfigFile = isDevMode ? './tsconfig.json' : './tsconfig.aot.json';
-    const mainFile = isDevMode ? './src/main.ts' : './src/main.aot.ts';
+    const tsconfigFile = Helpers.root(isDevMode ? 'tsconfig.json' : 'tsconfig.aot.json');
+    const mainFile = Helpers.root(isDevMode ? 'src/main.ts' : 'src/main.aot.ts');
     console.log('>>> tsconfigFile: %s', tsconfigFile);
     console.log('>>> main: %s', mainFile);
 
@@ -23,8 +23,8 @@ module.exports = args => {
         stats: 'errors-warnings', // https://webpack.js.org/configuration/stats/
         entry: {
             ecapp: mainFile,
-            ecpolyfills: './src/polyfills.ts',
-            ecpolyfillscore: './src/polyfills-core.ts', // contans core-js. if component consumer already has this pilyfill - dont use it
+            ecpolyfills: Helpers.root('src/polyfills.ts'),
+            ecpolyfillscore: Helpers.root('src/polyfills-core.ts'), // contans core-js. if component consumer already has this pilyfill - dont use it
             //ecvendor: './src/vendor.ts'
         },
 
@@ -123,11 +123,12 @@ module.exports = args => {
             */
             
             new AngularCompilerPlugin({
+                mainPath: mainFile,
                 tsConfigPath: tsconfigFile,
                 entryModule: Helpers.root('src', 'app.module#AppModule'),
                 sourceMap: isDevMode
             }),
-        
+
             // Workaround for angular/angular#11580
             new Webpack.ContextReplacementPlugin(
                 // The (\\|\/) piece accounts for path separators in *nix and Windows

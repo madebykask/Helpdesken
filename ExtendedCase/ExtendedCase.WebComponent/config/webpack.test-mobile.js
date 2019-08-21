@@ -10,7 +10,7 @@ const packageJSON = require('../package.json');
 // Parse version at the top of your webpack.config
 let CONSTANTS = {
   VERSION: JSON.stringify(packageJSON.version),
-  MODE: 'production',
+  MODE: 'prod',
   BASEAPIURL: '${ECApiUrl}'
 }
 
