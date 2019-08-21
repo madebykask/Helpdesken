@@ -412,7 +412,7 @@ export class CaseEditComponent {
         this.form.setSafe(CaseFieldsNames.DepartmentId, values.department_id.Value);
       }
 
-      let ouValue = values.ou_id_1 != null ? values._ou_id_1.Value : null;
+      let ouValue = values.ou_id_1 != null ? values.ou_id_1.Value : null;
       if (values.ou_id_2 != null) {
         ouValue = values.ou_id_2.Value;
       }
