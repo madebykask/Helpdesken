@@ -2475,8 +2475,11 @@ namespace DH.Helpdesk.Web.Controllers
             var userId = SessionFacade.CurrentUser.Id;
             var caseLockModel = new CaseLockModel();
             var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+            
+            //todo: implement CreateCaseLogViewModel separate method to read only required data from db
             var model = GetCaseInputViewModel(userId, customerId, caseId, caseLockModel, caseFieldSettings);
-            return PartialView("_CaseLog", model);
+            var caseLogViewModel = model.CreateCaseLogViewModel();
+            return PartialView("_CaseLog", caseLogViewModel);
         }
 
         [HttpGet]
@@ -2486,8 +2489,10 @@ namespace DH.Helpdesk.Web.Controllers
             var userId = SessionFacade.CurrentUser.Id;
             var caseLockModel = new CaseLockModel();
             var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+            //todo: implement CreateHistoryViewModel separate method to read only required data from db
             var model = GetCaseInputViewModel(userId, customerId, caseId, caseLockModel, caseFieldSettings);
-            return PartialView("_CaseHistory", model);
+            var caseHistoryViewModel = model.CreateHistoryViewModel();
+            return PartialView("_CaseHistory", caseHistoryViewModel);
         }
 
         [HttpGet]
