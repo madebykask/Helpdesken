@@ -541,7 +541,7 @@ export class FormControlsManagerService {
         }
     }
 
-    loadFormCustomDataSources(templateModel:FormTemplateModel, formModel:FormModel): Observable<Array<boolean>> {
+    loadFormCustomDataSources(templateModel: FormTemplateModel, formModel: FormModel): Observable<Array<boolean>> {
         let dsObservation: Observable<boolean>[] = [];
 
         for (let dsTemplate of templateModel.dataSources) {

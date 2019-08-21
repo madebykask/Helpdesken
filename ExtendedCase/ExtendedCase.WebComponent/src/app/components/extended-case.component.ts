@@ -159,7 +159,7 @@ export class ExtendedCaseComponent {
     const caseValues: {[id: string]: FieldValueModel} = {};
     Object.keys(data).forEach(prop => {
       const val = data[prop];
-      caseValues[prop] = new FieldValueModel(val);
+      caseValues[prop] = new FieldValueModel(val.Value);
     });
     return caseValues;
   }

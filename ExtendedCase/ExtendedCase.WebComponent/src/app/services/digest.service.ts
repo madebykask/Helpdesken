@@ -703,7 +703,7 @@ class DigestProcess {
                     dataSourcesOwner.dataSources[dataSourceId].setData(data);
                     this.logInfo(`Custom data source '${dataSourceId}' has been loaded successfully.`);
                     return of(true);
-                }),);
+                }));
 
         return result$;
     }

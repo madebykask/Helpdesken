@@ -67,8 +67,8 @@ export class KeyedCollection<T> implements IKeyedCollection<T> {
     }
 
     getItems(): T[] {
-        //used to return new collection
-        var values: T[] = [];
+        // used to return new collection
+        let values: T[] = [];
         Object.keys(this.items)
             .forEach((key: string) => values.push(this.items[key]));
 
@@ -76,7 +76,7 @@ export class KeyedCollection<T> implements IKeyedCollection<T> {
     }
 
     getEntries(): IMap<T> {
-        var entries: IMap<T> = {};
+        let entries: IMap<T> = {};
         Object.keys(this.items).forEach((key: string) => {
                 entries[key] = this.items[key];
             });
