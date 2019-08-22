@@ -545,7 +545,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     LanguageId = x.Language_Id,
                     UserGroupId = x.UserGroup_Id,
                     FollowUpPermission = x.FollowUpPermission,
-                    RestrictedCasePermission = x.RestrictedCasePermission,
+                    //RestrictedCasePermission = x.RestrictedCasePermission,
                     ShowNotAssignedWorkingGroups = x.ShowNotAssignedWorkingGroups,
                     CreateCasePermission = x.CreateCasePermission,
                     CreateSubCasePermission = x.CreateSubCasePermission,

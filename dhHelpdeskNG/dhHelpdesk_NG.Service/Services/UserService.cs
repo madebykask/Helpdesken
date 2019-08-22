@@ -109,7 +109,8 @@ namespace DH.Helpdesk.Services.Services
             int[] customersAvailable,
             int[] ots,
             int[] dus,
-            List<UserWorkingGroup> userWorkingGroups,
+            IList<UserWorkingGroup> userWorkingGroups,
+            IList<CustomerUserForEdit> customerUsers,
             out IDictionary<string, string> errors);
         
         void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> UserWorkingGroups, int[] departments, out IDictionary<string, string> errors, string confirmpassword = "");
@@ -198,7 +199,7 @@ namespace DH.Helpdesk.Services.Services
         bool IsUserValidAdmin(string userId, string pass);
 
         bool VerifyUserCasePermissions(UserOverview user, int caseId);
-        Expression<Func<Case, bool>> GetCasePermissionFilter(UserOverview user);
+        Expression<Func<Case, bool>> GetCasePermissionFilter(UserOverview user, int customerId);
     }
 
     public class UserService : IUserService
@@ -635,7 +636,7 @@ namespace DH.Helpdesk.Services.Services
             errors = new Dictionary<string, string>();
 
             _userRepository.Update(user);
-            this.Commit();
+            Commit();
         }
 
         public void SaveEditUser(
@@ -645,12 +646,13 @@ namespace DH.Helpdesk.Services.Services
             int[] customersAvailable, 
             int[] ots, 
             int[] dus, 
-            List<UserWorkingGroup> userWorkingGroups, 
+            IList<UserWorkingGroup> userWorkingGroups, 
+            IList<CustomerUserForEdit> customerUsers,
             out IDictionary<string, string> errors)
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user");
+                throw new ArgumentNullException(nameof(user));
             }
 
             errors = new Dictionary<string, string>();
@@ -829,13 +831,7 @@ namespace DH.Helpdesk.Services.Services
 
             #endregion
 
-            foreach (var customerUser in user.CustomerUsers)
-            {
-                if (customerUser.CasePerformerFilter == null)
-                {
-                    customerUser.CasePerformerFilter = string.Empty;
-                }
-            }
+            UpdareCustomerUserSettings(user, customerUsers);
 
             if (user.Id == 0)
                 _userRepository.Add(user);
@@ -843,7 +839,30 @@ namespace DH.Helpdesk.Services.Services
                 _userRepository.Update(user);
 
             if (errors.Count == 0)
-                this.Commit();
+                Commit();
+        }
+
+        private void UpdareCustomerUserSettings(User user, IList<CustomerUserForEdit> customerUsers)
+        {
+            foreach (var customerUser in user.CustomerUsers)
+            {
+                if (customerUser.CasePerformerFilter == null)
+                {
+                    customerUser.CasePerformerFilter = string.Empty;
+                }
+
+                var cusData = customerUsers.FirstOrDefault(x => x.CustomerId == customerUser.Customer_Id && x.UserId == customerUser.User_Id);
+                if (cusData != null)
+                {
+                    customerUser.UserInfoPermission = cusData.UserInfoPermission.ToInt();
+                    customerUser.CaptionPermission = cusData.CaptionPermission.ToInt();
+                    customerUser.ContactBeforeActionPermission = cusData.ContactBeforeActionPermission.ToInt();
+                    customerUser.PriorityPermission = cusData.PriorityPermission.ToInt();
+                    customerUser.StateSecondaryPermission = cusData.StateSecondaryPermission.ToInt();
+                    customerUser.WatchDatePermission = cusData.WatchDatePermission.ToInt();
+                    customerUser.RestrictedCasePermission = cusData.RestrictedCasePermission;
+                }
+            }
         }
         
         public void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> UserWorkingGroups, int[] departments, out IDictionary<string, string> errors, string confirmpassword = "")
@@ -1023,6 +1042,7 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
+            
             if (user.Id == 0)
                 _userRepository.Add(user);
             else
@@ -1129,9 +1149,12 @@ namespace DH.Helpdesk.Services.Services
 
         public bool VerifyUserCasePermissions(UserOverview user, int caseId)
         {
+            var caseCustomerId = _customerRepository.GetCustomerByCaseId(caseId);
+            var customerSettings = _customerUserRepository.GetCustomerSettings(caseCustomerId, user.Id);
+
             Expression<Func<Case, bool>> casePermissionFilter = null;
 
-            if (user.RestrictedCasePermission.ToBool())
+            if (customerSettings.RestrictedCasePermission)
             {
                 switch (user.UserGroupId)
                 {
@@ -1148,11 +1171,13 @@ namespace DH.Helpdesk.Services.Services
             return isAuthorised;
         }
 
-        public Expression<Func<Case, bool>> GetCasePermissionFilter(UserOverview user)
+        public Expression<Func<Case, bool>> GetCasePermissionFilter(UserOverview user, int customerId)
         {
+            var customerSettings = _customerUserRepository.GetCustomerSettings(customerId, user.Id);
+
             Expression<Func<Case, bool>> casePermissionFilter = null;
 
-            if (user.RestrictedCasePermission.ToBool())
+            if (customerSettings.RestrictedCasePermission)
             {
                 switch (user.UserGroupId)
                 {
@@ -1165,7 +1190,6 @@ namespace DH.Helpdesk.Services.Services
             }
 
             return casePermissionFilter;
-
         }
 
         /// <summary>

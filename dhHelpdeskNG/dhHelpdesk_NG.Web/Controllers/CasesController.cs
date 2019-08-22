@@ -342,7 +342,8 @@ namespace DH.Helpdesk.Web.Controllers
                 caseSearchService,
                 userService,
                 settingService,
-                productAreaService);
+                productAreaService,
+                customerUserService);
         }
 
         #endregion
@@ -677,6 +678,10 @@ namespace DH.Helpdesk.Web.Controllers
                     SessionFacade.CaseOverviewGridSettings.pageOptions.recPerPage = recPerPage;
             }
 
+            var currentUserId = SessionFacade.CurrentUser.Id;
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var customerUserSettings = _customerUserService.GetCustomerUserSettings(customerId, currentUserId);
+
             var searchResult = _caseSearchService.Search(
                 f,
                 m.caseSettings,
@@ -685,7 +690,7 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CurrentUser.UserId,
                 SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
                 SessionFacade.CurrentUser.UserGroupId,
-                SessionFacade.CurrentUser.RestrictedCasePermission,
+                customerUserSettings.RestrictedCasePermission,
                 sm.Search,
                 _workContext.Customer.WorkingDayStart,
                 _workContext.Customer.WorkingDayEnd,
@@ -6325,14 +6330,22 @@ namespace DH.Helpdesk.Web.Controllers
                         SessionFacade.CurrentUser.Id),
                 caseSettings = _caseSettingService.GetCaseSettingsWithUser(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId)
             };
+
             var search = this.InitEmptySearchModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
             search.Search.SortBy = sortBy ?? string.Empty;
             search.Search.Ascending = sortByAsc.ToBool();
             search.CaseSearchFilter.CaseProgress = CaseProgressFilter.None;
+
             var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
+
             CaseRemainingTimeData remainingTime;
             CaseAggregateData aggregateData;
             var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id).ToArray();
+
+            var currentUserId = SessionFacade.CurrentUser.Id;
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var customerSettings = _customerUserService.GetCustomerUserSettings(customerId, currentUserId);
+
             searchResult.cases = _caseSearchService.Search(
                 search.CaseSearchFilter,
                 searchResult.caseSettings,
@@ -6341,7 +6354,7 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CurrentUser.UserId,
                 SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
                 SessionFacade.CurrentUser.UserGroupId,
-                SessionFacade.CurrentUser.RestrictedCasePermission,
+                customerSettings.RestrictedCasePermission,
                 search.Search,
                 _workContext.Customer.WorkingDayStart,
                 _workContext.Customer.WorkingDayEnd,

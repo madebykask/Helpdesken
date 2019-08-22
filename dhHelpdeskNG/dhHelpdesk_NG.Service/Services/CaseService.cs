@@ -97,7 +97,8 @@ namespace DH.Helpdesk.Services.Services
         private readonly ITranslateCacheService _translateCacheService;
         private readonly ICaseTypeRepository _caseTypeRepository;
         private readonly ICategoryRepository _categoryRepository;
-        private IEntityToBusinessModelMapper<CaseFilterFavoriteEntity, CaseFilterFavorite> _caseFilterFavoriteToBusinessModelMapper;
+        private readonly IEntityToBusinessModelMapper<CaseFilterFavoriteEntity, CaseFilterFavorite> _caseFilterFavoriteToBusinessModelMapper;
+        private readonly ICustomerUserRepository _customerUserRepository;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -145,8 +146,10 @@ namespace DH.Helpdesk.Services.Services
             IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> caseHistoryOverviewMapper,
             ITranslateCacheService translateCacheService,
             ICaseTypeRepository caseTypeRepository,
-            ICategoryRepository categoryRepository)
+            ICategoryRepository categoryRepository,
+            ICustomerUserRepository customerUserRepository)
         {
+            _customerUserRepository = customerUserRepository;
             _caseFilterFavoriteToBusinessModelMapper = caseFilterFavoriteToBusinessModelMapper;
             _unitOfWork = unitOfWork;
             _caseRepository = caseRepository;
@@ -684,9 +687,12 @@ namespace DH.Helpdesk.Services.Services
             {
                 var caseRep = uow.GetRepository<Case>();
 
+                var restrictToOwnCasesOnly =
+                    uow.GetRepository<CustomerUser>().GetAll(x => x.Customer_Id == customerId && x.User_Id == currentUser.Id).Single().RestrictedCasePermission;
+
                 return caseRep.GetAll()
                         .GetByCustomer(customerId)
-                        .GetRelatedCases(caseId, userId, currentUser)
+                        .GetRelatedCases(caseId, userId, currentUser, restrictToOwnCasesOnly)
                         .MapToRelatedCases();
             }
         }
@@ -697,9 +703,12 @@ namespace DH.Helpdesk.Services.Services
             {
                 var caseRep = uow.GetRepository<Case>();
 
+                var restrictToOwnCasesOnly =
+                    uow.GetRepository<CustomerUser>().GetAll(x => x.Customer_Id == customerId && x.User_Id == currentUser.Id).Single().RestrictedCasePermission;
+
                 return caseRep.GetAll()
                         .GetByCustomer(customerId)
-                        .GetRelatedCases(caseId, userId, currentUser)
+                        .GetRelatedCases(caseId, userId, currentUser, restrictToOwnCasesOnly)
                         .Count();
             }
         }
@@ -1101,22 +1110,20 @@ namespace DH.Helpdesk.Services.Services
             using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var computerRep = uow.GetRepository<Computer>();
-
+                    
                 return computerRep.GetAll().GetRelatedInventoriesCount(userId, currentUser, customerId);
             }
         }
 
-        public int GetCaseQuickOpen(UserOverview user, string searchFor)
+        public int GetCaseQuickOpen(UserOverview user, int customerId, string searchFor)
         {
-
-            Expression<Func<Case, bool>> casePermissionFilter = _userService.GetCasePermissionFilter(user);
+            var casePermissionFilter = _userService.GetCasePermissionFilter(user, customerId);
 
             searchFor = searchFor.Tidy();
 
             if (searchFor.Length > 0)
             {
                 var case_ = _caseRepository.GetCaseQuickOpen(user, casePermissionFilter, searchFor);
-
                 if (case_ != null)
                     return case_.Id;
             }

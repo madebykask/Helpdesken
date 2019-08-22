@@ -999,6 +999,7 @@
     <Compile Include="Models\Supplier\Output\SupplierOverview.cs" />
     <Compile Include="Models\Systems\Output\SystemOverview.cs" />
     <Compile Include="Models\Translation2.cs" />
+    <Compile Include="Models\User\CustomerUserForEdit.cs" />
     <Compile Include="Models\User\CustomerUserInfo.cs" />
     <Compile Include="Models\User\LoginResult.cs" />
     <Compile Include="Models\User\UserLoginInfo.cs" />

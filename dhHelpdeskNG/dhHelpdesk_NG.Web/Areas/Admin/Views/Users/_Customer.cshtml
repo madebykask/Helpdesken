@@ -1,73 +1,21 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
-@using DH.Helpdesk.BusinessData.OldComponents
+﻿@model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
+
+@{
+    var counter = 0;
+ }
 
 <div class="container">
     <table class="tableform">
-        @{
-            var counter = 0;
-        }
         @foreach (var cu in Model.CustomerUsers)
         {
             <tr>
                 <td class="span3">
-                     @Translation.Get(cu.Customer.Name, Enums.TranslationSource.TextTranslation)
+                    @Translation.GetCoreTextTranslation(cu.CustomerName)&nbsp;
                 </td>
             </tr>
             <tr>
-                <td>
-                   
-                </td>
-                <td>
-                    <input type="checkbox" name="@string.Format("User.CustomerUsers[{0}].UserInfoPermission", counter)" @(cu.UserInfoPermission == 1 ? "checked=checked" : "") value="1"/>
-                    <input type="hidden" name="@string.Format("User.CustomerUsers[{0}].UserInfoPermission", counter)" value="0" />@Translation.Get("Användaren får läsa", Enums.TranslationSource.TextTranslation):&nbsp;@Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)<br />
-                    <input type="checkbox" name="@string.Format("User.CustomerUsers[{0}].CaptionPermission", counter)" @(cu.CaptionPermission == 1 ? "checked=checked" : "") value="1"/>
-                    <input type="hidden" name="@string.Format("User.CustomerUsers[{0}].CaptionPermission", counter)" value="0" />@Translation.Get("Användaren får ändra", Enums.TranslationSource.TextTranslation):&nbsp;@Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, cu.Customer_Id)<br />
-                    <input type="checkbox" name="@string.Format("User.CustomerUsers[{0}].ContactBeforeActionPermission", counter)" @(cu.ContactBeforeActionPermission == 1 ? "checked=checked" : "") value="1"/>
-                    <input type="hidden" name="@string.Format("User.CustomerUsers[{0}].ContactBeforeActionPermission", counter)" value="0" />@Translation.Get("Användaren får ändra", Enums.TranslationSource.TextTranslation):&nbsp;@Translation.Get(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(), Enums.TranslationSource.CaseTranslation, cu.Customer_Id)<br />
-                    <input type="checkbox" name="@string.Format("User.CustomerUsers[{0}].PriorityPermission", counter)" @(cu.PriorityPermission == 1 ? "checked=checked" : "") value="1"/>
-                    <input type="hidden" name="@string.Format("User.CustomerUsers[{0}].PriorityPermission", counter)" value="0" />@Translation.Get("Användaren får ändra", Enums.TranslationSource.TextTranslation):&nbsp;@Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, cu.Customer_Id)<br />
-                    <input type="checkbox" name="@string.Format("User.CustomerUsers[{0}].StateSecondaryPermission", counter)" @(cu.StateSecondaryPermission == 1 ? "checked=checked" : "") value="1"/>
-                    <input type="hidden" name="@string.Format("User.CustomerUsers[{0}].StateSecondaryPermission", counter)" value="0" />@Translation.Get("Användaren får ändra", Enums.TranslationSource.TextTranslation):&nbsp;@Translation.Get(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Enums.TranslationSource.CaseTranslation, cu.Customer_Id)<br />
-                    <input type="checkbox" name="@string.Format("User.CustomerUsers[{0}].WatchDatePermission", counter)" @(cu.WatchDatePermission == 1 ? "checked=checked" : "") value="1"/>
-                    <input type="hidden" name="@string.Format("User.CustomerUsers[{0}].WatchDatePermission", counter)" value="0" />@Translation.Get("Användaren får ändra", Enums.TranslationSource.TextTranslation):&nbsp;@Translation.Get(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Enums.TranslationSource.CaseTranslation, cu.Customer_Id)<br />
-                    
-                    
-
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].User_Id", counter), cu.User_Id)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].Customer_Id", counter), cu.Customer_Id)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].ShowOnStartPage", counter), cu.ShowOnStartPage)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseWorkingGroupFilter", counter), cu.CaseWorkingGroupFilter)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseDepartmentFilter", counter), cu.CaseDepartmentFilter)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseUserFilter", counter), cu.CaseUserFilter)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseStateSecondaryFilter", counter), cu.CaseStateSecondaryFilter)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseRegionFilter", counter), cu.CaseRegionFilter)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseProductAreaFilter", counter), cu.CaseProductAreaFilter)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CasePerformerFilter", counter), cu.CasePerformerFilter)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseCategoryFilter", counter), cu.CaseCategoryFilter)
-
-
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseRegistrationDateStartFilter", counter), cu.CaseRegistrationDateStartFilter)                
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseRegistrationDateEndFilter", counter), cu.CaseRegistrationDateEndFilter)
-
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseClosingDateStartFilter", counter), cu.CaseClosingDateStartFilter)                
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseClosingDateEndFilter", counter), cu.CaseClosingDateEndFilter)
-
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseWatchDateStartFilter", counter), cu.CaseWatchDateStartFilter)                
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseWatchDateEndFilter", counter), cu.CaseWatchDateEndFilter)
-
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseCaseTypeFilter", counter), cu.CaseCaseTypeFilter)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseStatusFilter", counter), cu.CaseStatusFilter)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseResponsibleFilter", counter), cu.CaseResponsibleFilter)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CasePriorityFilter", counter), cu.CasePriorityFilter)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseRegistrationDateFilterShow", counter), cu.CaseRegistrationDateFilterShow)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseWatchDateFilterShow", counter), cu.CaseWatchDateFilterShow)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseClosingDateFilterShow", counter), cu.CaseClosingDateFilterShow)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseClosingReasonFilter", counter), cu.CaseClosingReasonFilter)
-                    @Html.Hidden(string.Format("User.CustomerUsers[{0}].CaseInitiatorFilterShow", counter), cu.CaseInitiatorFilterShow)
-
-
-                </td>
+                <td></td>
+                <td>@Html.EditorFor(m => m.CustomerUsers[counter], "CustomerUser")</td>
             </tr>
             counter++;
         }

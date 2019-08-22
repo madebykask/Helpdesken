@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Enums.Inventory;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Common.Enums;
-using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport;
-using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
 using DH.Helpdesk.Services.Services;
-using DH.Helpdesk.Services.Services.Concrete;
 using DH.Helpdesk.Web.Areas.Inventory.Models;
-using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer;
 using DH.Helpdesk.Web.Areas.Inventory.Models.RelatedCasesModels;
 using DH.Helpdesk.Web.Controllers;
 using DH.Helpdesk.Web.Infrastructure;
@@ -33,6 +28,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         private readonly ICaseSearchService _caseSearchService;
         private readonly IProductAreaService _productAreaService;
         private readonly IInventorySettingsService _inventorySettingsService;
+        private readonly ICustomerUserService _customerUserService;
 
         public InventoryController(IMasterDataService masterDataService,
             IInventoryService inventoryService,
@@ -42,8 +38,10 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             ICaseFieldSettingService caseFieldSettingService,
             ICaseSearchService caseSearchService,
             IProductAreaService productAreaService,
-            IInventorySettingsService inventorySettingsService) : base(masterDataService)
+            IInventorySettingsService inventorySettingsService,
+            ICustomerUserService customerUserService) : base(masterDataService)
         {
+            _customerUserService = customerUserService;
             _inventoryService = inventoryService;
             _caseModelFactory = caseModelFactory;
             _caseOverviewSettingsService = caseOverviewSettingsService;
@@ -130,16 +128,25 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                         SessionFacade.CurrentUser.Id),
                 caseSettings = this._caseSettingService.GetCaseSettingsWithUser(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId)
             };
+
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var currentUserId = SessionFacade.CurrentUser.Id;
+
             var search = _caseModelFactory.InitEmptySearchModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
             search.Search.SortBy = sortBy;
             search.Search.Ascending = sortByAsc;
             search.CaseSearchFilter.CaseProgress = CaseProgressFilter.None;
+
             var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
-            CaseRemainingTimeData remainingTime;
-            CaseAggregateData aggregateData;
+
             var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id).ToArray();
+            var customerSettings = _customerUserService.GetCustomerUserSettings(customerId, currentUserId);
+
             if (relatedCaseIds.Any())
             {
+                CaseRemainingTimeData remainingTime;
+                CaseAggregateData aggregateData;
+
                 searchResult.cases = _caseSearchService.Search(
                     search.CaseSearchFilter,
                     searchResult.caseSettings,
@@ -148,7 +155,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                     SessionFacade.CurrentUser.UserId,
                     SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
                     SessionFacade.CurrentUser.UserGroupId,
-                    SessionFacade.CurrentUser.RestrictedCasePermission,
+                    customerSettings.RestrictedCasePermission,
                     search.Search,
                     SessionFacade.CurrentCustomer.WorkingDayStart,
                     SessionFacade.CurrentCustomer.WorkingDayEnd,

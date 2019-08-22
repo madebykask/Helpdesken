@@ -22,6 +22,7 @@ namespace DH.Helpdesk.Services.Services
     public interface ICustomerService
     {
         IList<Customer> GetAllCustomers();
+        IList<ItemOverview> GetCustomers();
         IList<Customer> GetCustomers(int customerId);
         IList<ItemOverview> GetCustomers(IList<int> ids);
         IList<Customer> SearchAndGenerateCustomers(ICustomerSearch searchCustomers);
@@ -103,6 +104,15 @@ namespace DH.Helpdesk.Services.Services
         public IList<Customer> GetAllCustomers()
         {
             return _customerRepository.GetAll().OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<ItemOverview> GetCustomers()
+        {
+            return _customerRepository.GetAll().AsQueryable().OrderBy(x => x.Name).Select(x => new ItemOverview()
+            {
+                Value = x.Id.ToString(),
+                Name   = x.Name
+            }).ToList();
         }
 
         public IList<ItemOverview> GetCustomers(IList<int> ids)

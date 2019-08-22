@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
+using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -312,17 +313,19 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user)
         {
-            var query = from c in this.DataContext.Cases
-                        where c.Customer_Id == customerId
-                        && c.Id != id
-                        && c.ReportedBy.ToLower() == reportedBy.ToLower()
-                        select c;
+            var query = DataContext.Cases.Where(c => c.Customer_Id == customerId
+                                                     && c.Id != id
+                                                     && c.ReportedBy.ToLower() == reportedBy.ToLower());
+
+            var restrictToOwnCasesOnly = 
+                DataContext.CustomerUsers.Single(x => x.Customer_Id == customerId && x.User_Id == user.Id).RestrictedCasePermission;
+            
             //handläggare
-            if (user.RestrictedCasePermission == 1 && user.UserGroupId == 2)
+            if (restrictToOwnCasesOnly && user.UserGroupId == UserGroups.Administrator)
                 query = query.Where(c => c.Performer_User_Id == user.Id || c.CaseResponsibleUser_Id == user.Id);
 
             //anmälare
-            if (user.RestrictedCasePermission == 1 && user.UserGroupId == 1)
+            if (restrictToOwnCasesOnly && user.UserGroupId == UserGroups.User)
                 query = query.Where(c => c.ReportedBy.ToLower() == user.UserId.ToLower());
 
             return query.Select(c => new CaseRelation()

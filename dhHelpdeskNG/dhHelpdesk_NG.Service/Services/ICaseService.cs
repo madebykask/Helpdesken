@@ -156,7 +156,7 @@ namespace DH.Helpdesk.Services.Services
 
         IList<Case> GetTop100CasesForTest();
         int GetCaseRelatedInventoryCount(int customerId, string userId, UserOverview currentUser);
-        int GetCaseQuickOpen(UserOverview user, string searchFor);
+        int GetCaseQuickOpen(UserOverview user, int customerId, string searchFor);
         void SendProblemLogEmail(Case cs, CaseMailSetting caseMailSetting, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, bool isClosedCaseSending);
         int GetCaseCustomerId(int caseId);
         Customer GetCaseCustomer(int caseId);

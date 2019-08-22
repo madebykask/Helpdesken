@@ -55,7 +55,7 @@ $(function () {
         moveCasePermission: 'moveCasePermission',
         activateCasePermission: 'activateCasePermission',
         closeCasePermission: 'closeCasePermission',
-        restrictedCasePermission: 'restrictedCasePermission',
+        //restrictedCasePermission: 'restrictedCasePermission',
         followUpPermission: 'followUpPermission',
         dataSecurityPermission: 'dataSecurityPermission',
         caseSolutionPermission: 'caseSolutionPermission',
@@ -219,15 +219,16 @@ $(function () {
                         var hasAccess = type == dhHelpdesk.admin.users.permissionType.createCasePermission ||
                                         type == dhHelpdesk.admin.users.permissionType.createSubCasePermission ||
                                         type == dhHelpdesk.admin.users.permissionType.closeCasePermission ||
-                                        type == dhHelpdesk.admin.users.permissionType.restrictedCasePermission ||
+                                        //type == dhHelpdesk.admin.users.permissionType.restrictedCasePermission ||
                                         type == dhHelpdesk.admin.users.permissionType.caseInternalLogPermission;
+
                         permission.setAccess(hasAccess);
 
                         if (setPermissions || !permission.getIsHasAccess()) {
                             var hasPermission = type == dhHelpdesk.admin.users.permissionType.createCasePermission ||
-                                        type == dhHelpdesk.admin.users.permissionType.createSubCasePermission ||
-                                        type == dhHelpdesk.admin.users.permissionType.closeCasePermission ||
-                                        type == dhHelpdesk.admin.users.permissionType.restrictedCasePermission;
+                                                type == dhHelpdesk.admin.users.permissionType.createSubCasePermission ||
+                                                //type == dhHelpdesk.admin.users.permissionType.restrictedCasePermission ||
+                                                type == dhHelpdesk.admin.users.permissionType.closeCasePermission;
                             permission.setHasPermission(hasPermission);
                         }
 
@@ -258,14 +259,14 @@ $(function () {
                 case dhHelpdesk.admin.users.userGroup.customerAdministrator:
                     walkPermissions(function (permission) {
                         var type = permission.getType();
-                        var hasAccess = type != dhHelpdesk.admin.users.permissionType.restrictedCasePermission;
-                        permission.setAccess(hasAccess);
+                        //var hasAccess = type != dhHelpdesk.admin.users.permissionType.restrictedCasePermission; // permission was moved to customer level
+                        permission.setAccess(true);
                         if (setPermissions || !permission.getIsHasAccess()) {
-                            var hasPermission = !(type == dhHelpdesk.admin.users.permissionType.restrictedCasePermission 
-                                || type == dhHelpdesk.admin.users.permissionType.dailyReportPermission);
+                            var hasPermission = 
+                                (/*type != dhHelpdesk.admin.users.permissionType.restrictedCasePermission && */// permission was moved to customer level
+                                  type != dhHelpdesk.admin.users.permissionType.dailyReportPermission);
                             permission.setHasPermission(hasPermission);
                         }
-
                         return true;
                     });
                     break;
@@ -275,10 +276,9 @@ $(function () {
                         var hasAccess = type == dhHelpdesk.admin.users.permissionType.dailyReportPermission;
                         permission.setAccess(hasAccess);
                         if (setPermissions || !permission.getIsHasAccess()) {
-                            var hasPermission = type != dhHelpdesk.admin.users.permissionType.restrictedCasePermission;
+                            var hasPermission = true; //type != dhHelpdesk.admin.users.permissionType.restrictedCasePermission; // permission was moved to customer level
                             permission.setHasPermission(hasPermission);
                         }
-
                         return true;
                     });
                     break;
@@ -500,6 +500,7 @@ $(function () {
         return that;
     }
 
+    //var user = dhHelpdesk.admin.users.user({ security: security, workingGroups: workingGroups });
     dhHelpdesk.admin.users.user = function (spec, my) {
         my = my || {};
         var that = dhHelpdesk.admin.users.object(spec, my);
@@ -536,7 +537,7 @@ $(function () {
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="moveCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.moveCasePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="activateCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.activateCasePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="closeCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.closeCasePermission }));
-        casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="restrictedCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.restrictedCasePermission }));
+        //casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="restrictedCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.restrictedCasePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="followUpPermission"]'), type: dhHelpdesk.admin.users.permissionType.followUpPermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="dataSecurityPermission"]'), type: dhHelpdesk.admin.users.permissionType.dataSecurityPermission }));
 

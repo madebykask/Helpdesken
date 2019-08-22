@@ -29,6 +29,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
         private readonly IUserService _userService;
         private readonly ISettingService _settingService;
         private readonly IProductAreaService _productAreaService;
+        private readonly ICustomerUserService _customerUserService;
 
         private readonly int DefaultMaxRows = 10;
 
@@ -36,8 +37,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
             ICaseSearchService caseSearchService, 
             IUserService userService, 
             ISettingService settingService, 
-            IProductAreaService productAreaService)
+            IProductAreaService productAreaService,
+            ICustomerUserService customerUserService)
         {
+            _customerUserService = customerUserService;
             _caseFieldSettingService = caseFieldSettingService;
             _caseSearchService = caseSearchService;
             _userService = userService;
@@ -74,6 +77,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
             var maxRecords = f.MaxRows.ToInt();
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId);
 
+            var currentUserId = SessionFacade.CurrentUser.Id;
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var customerUserSettings = _customerUserService.GetCustomerUserSettings(customerId, currentUserId);
+
             var normalSearchResultIds = new List<int>();
 
             if (f.IsExtendedSearch && extendedCustomers != null && !extendedCustomers.Contains(searchCustomerId))
@@ -90,7 +97,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
                         currentUser.UserId,
                         currentUser.ShowNotAssignedWorkingGroups,
                         currentUser.UserGroupId,
-                        currentUser.RestrictedCasePermission,
+                        customerUserSettings.RestrictedCasePermission,
                         sm.Search,
                         0,
                         0,
@@ -111,7 +118,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
                     currentUser.UserId,
                     currentUser.ShowNotAssignedWorkingGroups,
                     currentUser.UserGroupId,
-                    currentUser.RestrictedCasePermission,
+                    customerUserSettings.RestrictedCasePermission,
                     sm.Search,
                     0,
                     0,
@@ -211,9 +218,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
                             //Note, this is also checked in where clause  in ReturnCaseSearchWhere(SearchQueryBuildContext ctx)
                             //Check for access Department
                             //Check for access WorkingGroups
-                            if (currentUser.RestrictedCasePermission == 1 &&
+                            if (customerUserSettings.RestrictedCasePermission &&
                                 (availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId) || accessToAllDepartments) &&
-                                availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId))
+                                 availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId))
                             {
                                 //Use functionality from VerifyCase
                                 infoAvailableInExtended = _userService.VerifyUserCasePermissions(SessionFacade.CurrentUser, searchRow.Id);

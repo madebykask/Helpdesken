@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Models
+﻿using DH.Helpdesk.BusinessData.Models.User;
+
+namespace DH.Helpdesk.Web.Areas.Admin.Models
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
@@ -87,6 +89,8 @@
         public bool IsAsc { get; set; }
     }
 
+    
+
     public class UserInputViewModel
     {
         public int OrderP1 { get; set; }
@@ -101,7 +105,7 @@
 
         public User User { get; set; }
         public UsersUserRole UsersUserRole { get; set; }
-        public IEnumerable<CustomerUser> CustomerUsers { get; set; }
+        public IList<CustomerUserForEdit> CustomerUsers { get; set; }
         public IList<Department> Departments { get; set; }
         public IList<CustomerWorkingGroupForUser> ListWorkingGroupsForUser { get; set; }
         public IList<SelectListItem> AAsAvailable { get; set; }
@@ -147,7 +151,7 @@
         }
     }
 
-    public class UserSaveViewModel
+    public class UserSaveInputModel
     {
         public User User { get; set; }
 
@@ -163,5 +167,14 @@
 
         public int CopyUserid { get; set; }
         public string SelectedTimeZone { get; set; }
+
+        public int[] AAsSelected { get; set; }
+        public int[] CsSelected { get; set; }
+        public int[] OTsSelected { get; set; }
+        public int[] Departments { get; set; }
+        public List<UserWorkingGroup> UserWorkingGroups { get; set; }
+        public string NewPassword { get; set; }
+        public string ConfirmPassword { get; set; }
+        public List<CustomerUserForEdit> CustomerUsers { get; set; }
     }
 }

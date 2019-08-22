@@ -939,12 +939,12 @@ namespace DH.Helpdesk.Dal.Repositories
 
             // finns kryssruta pa anvandaren att den bara far se sina egna arenden
             //Note, this is also checked in CasesController.cs for ExtendedSearch, so if you change logic here, change in controller
-            var restrictedCasePermission = searchCriteria.CustomerUserSettings.User.RestrictedCasePermission;
-            if (restrictedCasePermission == 1 && !searchFilter.IsExtendedSearch)
+            var restrictedCasePermission = searchCriteria.CustomerUserSettings.RestrictedCasePermission;
+            if (restrictedCasePermission && !searchFilter.IsExtendedSearch)
             {
-                if (searchCriteria.UserGroupId == 2)
+                if (searchCriteria.UserGroupId == UserGroups.Administrator)
                     sb.Append(" and (tblCase.Performer_User_Id = " + searchCriteria.UserId + " or tblcase.CaseResponsibleUser_Id = " + searchCriteria.UserId + ")");
-                else if (searchCriteria.UserGroupId == 1)
+                else if (searchCriteria.UserGroupId == UserGroups.User)
                     sb.Append(" and (lower(tblCase.reportedBy) = lower('" + searchCriteria.UserUniqueId.SafeForSqlInject() + "') or tblcase.User_Id = " + searchCriteria.UserId + ")");
             }
 
@@ -998,7 +998,7 @@ namespace DH.Helpdesk.Dal.Repositories
             if (!string.IsNullOrWhiteSpace(searchFilter.UserPerformer))
             {
                 var performersDict = searchFilter.UserPerformer.Split(',').ToDictionary(it => it, it => true);
-                var searchingUnassigned = restrictedCasePermission != 1 && performersDict.ContainsKey(int.MinValue.ToString());
+                var searchingUnassigned = restrictedCasePermission == false && performersDict.ContainsKey(int.MinValue.ToString());
                 if (searchingUnassigned)
                 {
                     performersDict.Remove(int.MinValue.ToString());

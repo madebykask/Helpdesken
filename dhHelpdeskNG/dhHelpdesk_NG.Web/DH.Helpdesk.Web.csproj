@@ -341,6 +341,7 @@
     <Compile Include="Areas\Admin\Controllers\CustomerAdvancedSearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\GDPRProgressController.cs" />
     <Compile Include="Areas\Admin\Controllers\ExtendedCaseController.cs" />
+    <Compile Include="Areas\Admin\Infrastructure\Mappers\CustomerUserEntityToModelMapper.cs" />
     <Compile Include="Areas\Inventory\Controllers\InventoryController.cs" />
     <Compile Include="Areas\Inventory\Infrastucture\Extensions\TabSettingExtensions.cs" />
     <Compile Include="Areas\Inventory\Models\BaseEditCustomInventoryModel.cs" />
@@ -3444,6 +3445,7 @@
     <Content Include="Areas\Admin\Views\CustomerAdvancedSearch\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerAdvancedSearch\_CaseSummaryPartialView.cshtml" />
     <Content Include="Areas\Reports\Views\Report\ReportViewer\_JsReport.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\EditorTemplates\CustomerUser.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

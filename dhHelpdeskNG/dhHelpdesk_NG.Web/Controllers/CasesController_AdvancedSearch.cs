@@ -237,7 +237,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             string notFoundText = Translation.GetCoreTextTranslation("Inget ärende tillgängligt");
 
-            int caseId = _caseService.GetCaseQuickOpen(SessionFacade.CurrentUser, searchFor);
+            int caseId = _caseService.GetCaseQuickOpen(SessionFacade.CurrentUser, SessionFacade.CurrentCustomer.Id, searchFor);
 
             if (caseId > 0)
             {

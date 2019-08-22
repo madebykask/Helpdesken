@@ -16,7 +16,6 @@ export class UserData {
   selectedCustomerId: number;
   selectedLanguageId: number;
   userTimeZone?: string;
-  ownCasesOnly: boolean;
   createCasePermission: boolean;
   canDeleteAttachedFiles: boolean;
 }

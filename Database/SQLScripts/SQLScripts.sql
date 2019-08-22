@@ -195,10 +195,8 @@ GO
     WHERE csfs.Id IS NULL)
    INSERT tblCaseSolutionFieldSettings(CaseSolution_Id,  FieldName_Id, Mode)
    SELECT cs.Id, @internalLogFileFieldId, @caseSolutionFieldMode
-   FROM caseSolutionIds cs
-    
+   FROM caseSolutionIds cs    
 GO
-
 
 RAISERROR ('Droping foreign key constraint FK_CaseDocumentsCondition_CaseDocument (doublets)', 10, 1) WITH NOWAIT
 IF EXISTS (SELECT * FROM sys.foreign_keys 
@@ -208,6 +206,44 @@ IF EXISTS (SELECT * FROM sys.foreign_keys
 BEGIN
 	ALTER TABLE [dbo].[tblCaseDocumentCondition] DROP CONSTRAINT [FK_CaseDocumentsCondition_CaseDocument]
 END
+GO
+
+RAISERROR('Move tblUser.RestrictedCasePermission setting to tblCustomerUser table', 10, 1)
+IF NOT EXISTS( select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		     where syscolumns.name = N'RestrictedCasePermission' and sysobjects.name = N'tblCustomerUser')
+BEGIN     
+
+    BEGIN TRY
+    
+	   BEGIN TRANSACTION    
+
+	   --create RestrictedCasePermission in tblCustomerUSer
+	   ALTER TABLE tblCustomerUser
+	   ADD RestrictedCasePermission bit CONSTRAINT DF_tblCustomerUser_RestrictedCasePermission default ((0)) NOT NULL
+
+	   -- transfer setting value to tblCustomerUser
+	   DECLARE @updateCmd nvarchar(1024) = 
+		  N'UPDATE cu SET cu.RestrictedCasePermission = u.RestrictedCasePermission
+		    FROM tblCustomerUser cu INNER JOIN tblUsers u ON u.Customer_Id = cu.Customer_Id AND u.Id = cu.User_Id';
+	   EXEC (@updateCmd)
+
+	   -- drop old setting column in tblUsers
+	   ALTER TABLE tblUsers DROP COLUMN RestrictedCasePermission;
+	
+	   COMMIT TRAN;
+
+    END TRY 
+    BEGIN CATCH
+	   
+	   IF ( XACT_STATE() != 0 )
+		  ROLLBACK TRAN;
+	   SELECT  ERROR_MESSAGE() AS 'error'
+        
+    END CATCH    
+
+END
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.43'
 GO

@@ -24,25 +24,25 @@ namespace DH.Helpdesk.Dal.Repositories
         private readonly ICaseTypeRepository _caseTypeRepository;
         private readonly IDepartmentRepository _departmentRepository;
         private readonly IDbQueryExecutorFactory _queryExecutorFactory;
-		private readonly IFeatureToggleRepository _featureToggleRepository;
-		private readonly IFileIndexingRepository _fileIndexingRepository;
+        private readonly IFeatureToggleRepository _featureToggleRepository;
+        private readonly IFileIndexingRepository _fileIndexingRepository;
 
-		public CaseSearchRepository(
+        public CaseSearchRepository(
                 ICustomerUserRepository customerUserRepository,
                 ICaseTypeRepository caseTypeRepository,
                 IDepartmentRepository departmentRepository,
                 IDbQueryExecutorFactory queryExecutorFactory,
-				IFeatureToggleRepository featureToggleRepository,
-				IFileIndexingRepository fileIndexingRepository)
+                IFeatureToggleRepository featureToggleRepository,
+                IFileIndexingRepository fileIndexingRepository)
         {
             _customerUserRepository = customerUserRepository;
             _caseTypeRepository = caseTypeRepository;
             _departmentRepository = departmentRepository;
             _queryExecutorFactory = queryExecutorFactory;
-			_featureToggleRepository = featureToggleRepository;
-			_fileIndexingRepository = fileIndexingRepository;
+            _featureToggleRepository = featureToggleRepository;
+            _fileIndexingRepository = fileIndexingRepository;
 
-		}
+        }
 
         public DataTable Search(CaseSearchContext context)
         { 

@@ -14,17 +14,17 @@
             @foreach (var cu in Model.CustomerUsers)
             {
             <tr>
-                <td>@Translation.Get(cu.Customer.Name)</td>
+                <td>@Translation.Get(cu.CustomerName)</td>
                 <td>
                     <table>
                         @{ int i = 1; }
                         <tr>
                             @foreach (var d in Model.Departments)
                             {
-                                if (d.Customer_Id == cu.Customer_Id)
+                                if (d.Customer_Id == cu.CustomerId)
                                 {
                                     <td class="span5">
-                                        <input type="checkbox" name="Departments" @(d.Users.Any(u => u.Id == cu.User_Id) ? "checked=checked" : "") value="@d.Id" />
+                                        <input type="checkbox" name="Departments" @(d.Users.Any(u => u.Id == cu.UserId) ? "checked=checked" : "") value="@d.Id" />
                                         @*@Translation.Get(d.DepartmentName, Enums.TranslationSource.TextTranslation)*@
                                         @d.DepartmentName
                                     </td>

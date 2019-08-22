@@ -26,7 +26,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseSearch
 
         public int userGroupId;
 
-        public int restrictedCasePermission;
+        public bool restrictedCasePermission;
 
         public GlobalSetting globalSettings;
 

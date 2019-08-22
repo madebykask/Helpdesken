@@ -40,6 +40,8 @@ using System;
         int GetCustomerLanguage(int customerid);
 
         CaseDefaultsInfo GetCustomerDefaults(int customerId, bool isSelfService = false);
+
+        int GetCustomerByCaseId(int caseId);
     }
 
     public sealed class CustomerRepository : RepositoryBase<Customer>, ICustomerRepository
@@ -47,6 +49,12 @@ using System;
         public CustomerRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+
+        public int GetCustomerByCaseId(int caseId)
+        {
+            return DataContext.Cases.Where(x => x.Id == caseId).Select(x => x.Customer_Id).Single();
         }
 
         public string GetCustomerName(int customerId)

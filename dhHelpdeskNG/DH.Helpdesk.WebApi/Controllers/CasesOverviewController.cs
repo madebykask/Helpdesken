@@ -117,6 +117,9 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             var filter = CreateSearchFilter(input, cid);
 
+            var currentUserId = filter.UserId;
+            var customerId = filter.CustomerId;
+
             //var sm = await InitCaseSearchModel(filter.CustomerId, filter.UserId, filter);
             var sm = new CaseSearchModel()
             {
@@ -139,6 +142,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             AddMissingCaseSettingsForMobile(caseSettings); //TODO: Temporary  - remove after mobile case settings is implemented
 
             var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(filter.CustomerId);
+            var customerUserSettings = await _customerUserService.GetCustomerUserSettingsAsync(customerId, currentUserId);
 
             CaseRemainingTimeData remainingTimeData;
             CaseAggregateData aggregateData;
@@ -156,7 +160,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     UserName,
                     userOverview.ShowNotAssignedWorkingGroups,
                     userGroupId,
-                    userOverview.RestrictedCasePermission,
+                    customerUserSettings.RestrictedCasePermission,
                     sm.Search,
                     customerSettings.WorkingDayStart,
                     customerSettings.WorkingDayEnd,
@@ -181,7 +185,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     UserName,
                     userOverview.ShowNotAssignedWorkingGroups,
                     userGroupId,
-                    userOverview.RestrictedCasePermission,
+                    customerUserSettings.RestrictedCasePermission,
                     sm.Search,
                     customerSettings.WorkingDayStart,
                     customerSettings.WorkingDayEnd,

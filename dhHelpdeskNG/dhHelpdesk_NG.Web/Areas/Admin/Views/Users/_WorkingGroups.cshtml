@@ -1,82 +1,88 @@
 ﻿@using DH.Helpdesk.BusinessData.Enums.Users
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
+
 @{
     var admPostFix = WorkingGroupUserPermission.ADMINSTRATOR.ToString();
     var memberPostFix = "3";
     var readPostFix = WorkingGroupUserPermission.READ_ONLY.ToString();
     var customerName = "";
-}
-<div class="container">
-    @for (var i = 0; i < Model.ListWorkingGroupsForUser.Count; i++)
+
+    var workingGroupsByCustomer = Model.ListWorkingGroupsForUser.GroupBy(p => new {CustomerId = p.CustomerId, CustomerName = p.CustomerName}).OrderBy(gr => gr.Key.CustomerName).Select(gr => new
     {
-        var uwg = Model.ListWorkingGroupsForUser[i];
-        var enabledDefWG = uwg.RoleToUWG == WorkingGroupUserPermission.READ_ONLY || uwg.RoleToUWG == WorkingGroupUserPermission.ADMINSTRATOR;
-        var closeTable = i + 1 == Model.ListWorkingGroupsForUser.Count || uwg.CustomerName != Model.ListWorkingGroupsForUser[i+1].CustomerName;
-        if (customerName != uwg.CustomerName)
-        {
-            <text>
-                <table class="tableform"> 
-                <thead>
+        gr.Key.CustomerId,
+        gr.Key.CustomerName,
+        WorkingGroups = gr.OrderBy(wg => wg.WorkingGroupName).ToList()
+    }).ToList();
+
+    var i = 0;
+    var j = 0;
+}
+
+<div class="container">
+    @*for (var i = 0; i < Model.ListWorkingGroupsForUser.Count; i++)*@
+    @foreach (var customerGroup in workingGroupsByCustomer)
+    {
+        j = 0;
+        <table class="tableform"> 
+            <thead>
+            <tr>
+                <th class="span3">
+                    @Translation.GetCoreTextTranslation("Kund")
+                </th>
+                <th class="span3">
+                    @Translation.GetCoreTextTranslation("Driftgrupp")
+                </th>
+                <th class="span3">
+                    <input type="checkbox" class="allAdministrators" @(Model.ListWorkingGroupsForUser.Where(u => u.CustomerName == customerGroup.CustomerName).All(u => u.RoleToUWG == WorkingGroupUserPermission.ADMINSTRATOR) ? "checked=checked" : "")/>&nbsp;@Translation.GetCoreTextTranslation("Handläggarrättighet")
+                </th>
+                <th class="span3">
+                    <input type="checkbox" class="allWorkGroupMember" @(Model.ListWorkingGroupsForUser.Where(u => u.CustomerName == customerGroup.CustomerName).All(u => u.IsMemberOfGroup) ? "checked=checked" : "")/>&nbsp;@Translation.GetCoreTextTranslation("Medlem i grupp")
+                </th>
+                <th class="span3">
+                    <input type="checkbox" class="allReadPermissions" @(Model.ListWorkingGroupsForUser.Where(u => u.CustomerName == customerGroup.CustomerName).All(u => u.RoleToUWG == WorkingGroupUserPermission.READ_ONLY) ? "checked=checked" : "")/>&nbsp;@Translation.GetCoreTextTranslation("Läsrättighet")
+                </th>
+                <th class="span3">
+                    @Translation.GetCoreTextTranslation("Standard")
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var uwg in customerGroup.WorkingGroups)
+            {
+                var enabledDefWG = uwg.RoleToUWG == WorkingGroupUserPermission.READ_ONLY || uwg.RoleToUWG == WorkingGroupUserPermission.ADMINSTRATOR;
                 <tr>
-                    <th class="span3">
-                        @Translation.GetCoreTextTranslation("Kund")
-                    </th>
-                    <th class="span3">
-                        @Translation.GetCoreTextTranslation("Driftgrupp")
-                    </th>
-                    <th class="span3">
-                        <input type="checkbox" class="allAdministrators" @(Model.ListWorkingGroupsForUser.Where(u => u.CustomerName == uwg.CustomerName).All(u => u.RoleToUWG == WorkingGroupUserPermission.ADMINSTRATOR) ? "checked=checked" : "")/>&nbsp;@Translation.GetCoreTextTranslation("Handläggarrättighet")
-                    </th>
-                    <th class="span3">
-                        <input type="checkbox" class="allWorkGroupMember" @(Model.ListWorkingGroupsForUser.Where(u => u.CustomerName == uwg.CustomerName).All(u => u.IsMemberOfGroup) ? "checked=checked" : "")/>&nbsp;@Translation.GetCoreTextTranslation("Medlem i grupp")
-                    </th>
-                    <th class="span3">
-                        <input type="checkbox" class="allReadPermissions" @(Model.ListWorkingGroupsForUser.Where(u => u.CustomerName == uwg.CustomerName).All(u => u.RoleToUWG == WorkingGroupUserPermission.READ_ONLY) ? "checked=checked" : "")/>&nbsp;@Translation.GetCoreTextTranslation("Läsrättighet")
-                    </th>
-                    <th class="span3">
-                        @Translation.GetCoreTextTranslation("Standard")
-                    </th>
+                    <td>
+                        @if (j == 0)
+                        {
+                            @uwg.CustomerName
+                            <input type="radio" style="display: none;" data-field="userWorkingGroup" name="@uwg.CustomerId" value="-1"/>
+                        }
+                    </td>
+                    <td>
+                        <span class='@(!uwg.IsActive ? "disabled" : "")'> @Translation.GetCoreTextTranslation(uwg.WorkingGroupName) </span>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="@string.Format("UserWorkingGroups[{0}].UserRole", i)" id="UserWorkingGroup_[@i]_@admPostFix" @(uwg.RoleToUWG == WorkingGroupUserPermission.ADMINSTRATOR ? "checked=checked" : "") data-field-id="@i" class="userRole" value="@admPostFix"/>
+                        <input type="hidden" name="@string.Format("UserWorkingGroups[{0}].User_Id", i)" value="@uwg.User_Id"/>
+                        <input type="hidden" name="@string.Format("UserWorkingGroups[{0}].WorkingGroup_Id", i)" value="@uwg.WorkingGroup_Id"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="@string.Format("UserWorkingGroups[{0}].IsMemberOfGroup", i)" id="UserWorkingGroup_[@i]_@memberPostFix" @(uwg.IsMemberOfGroup ? "checked=checked" : "") data-field-id="@i" class="userRole" value="true"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="@string.Format("UserWorkingGroups[{0}].UserRole", i)" id="UserWorkingGroup_[@i]_@readPostFix" @(uwg.RoleToUWG == WorkingGroupUserPermission.READ_ONLY ? "checked=checked" : "") data-field-id="@i" class="userRole" value="@readPostFix"/>
+                    </td>
+                    <td>
+                        <input type="radio" name="@uwg.CustomerId" data-field="userWorkingGroup" data-field-id="@i" value="@uwg.IsStandard" @(uwg.IsStandard == 1 && enabledDefWG ? "checked=checked" : "") @(enabledDefWG ? "" : "disabled") id="UserWorkingGroup_[@i]_Def"/>
+                        <input type="hidden" name="@string.Format("UserWorkingGroups[{0}].IsDefault", i)" data-field="@string.Format("userWorkingGroup{0}", i)" value="@(enabledDefWG ? uwg.IsStandard : '0')" id="UserWorkingGroup_[@i]_Defhid"/>
+                    </td>
                 </tr>
-                </thead>
-                <tbody>
-            </text>
-        }
-        <tr>
-            <td>
-                @if (customerName != uwg.CustomerName)
-                {
-                    @uwg.CustomerName
-                    <input type="radio" style="display: none;" data-field="userWorkingGroup" name="@uwg.CustomerId" value="-1"/>
-                }
-            </td>
-            <td>
-                <span class='@(!uwg.IsActive ? "disabled" : "")'> @Translation.GetCoreTextTranslation(uwg.WorkingGroupName) </span>
-            </td>
-            <td>
-                <input type="checkbox" name="@string.Format("UserWorkingGroups[{0}].UserRole", i)" id="UserWorkingGroup_[@i]_@admPostFix" @(uwg.RoleToUWG == WorkingGroupUserPermission.ADMINSTRATOR ? "checked=checked" : "") data-field-id="@i" class="userRole" value="@admPostFix"/>
-                <input type="hidden" name="@string.Format("UserWorkingGroups[{0}].User_Id", i)" value="@uwg.User_Id"/>
-                <input type="hidden" name="@string.Format("UserWorkingGroups[{0}].WorkingGroup_Id", i)" value="@uwg.WorkingGroup_Id"/>
-            </td>
-            <td>
-                <input type="checkbox" name="@string.Format("UserWorkingGroups[{0}].IsMemberOfGroup", i)" id="UserWorkingGroup_[@i]_@memberPostFix" @(uwg.IsMemberOfGroup ? "checked=checked" : "") data-field-id="@i" class="userRole" value="true"/>
-            </td>
-            <td>
-                <input type="checkbox" name="@string.Format("UserWorkingGroups[{0}].UserRole", i)" id="UserWorkingGroup_[@i]_@readPostFix" @(uwg.RoleToUWG == WorkingGroupUserPermission.READ_ONLY ? "checked=checked" : "") data-field-id="@i" class="userRole" value="@readPostFix"/>
-            </td>
-            <td>
-                <input type="radio" name="@uwg.CustomerId" data-field="userWorkingGroup" data-field-id="@i" value="@uwg.IsStandard" @(uwg.IsStandard == 1 && enabledDefWG ? "checked=checked" : "") @(enabledDefWG ? "" : "disabled") id="UserWorkingGroup_[@i]_Def"/>
-                <input type="hidden" name="@string.Format("UserWorkingGroups[{0}].IsDefault", i)" data-field="@string.Format("userWorkingGroup{0}", i)" value="@(enabledDefWG ? uwg.IsStandard : '0')" id="UserWorkingGroup_[@i]_Defhid"/>
-            </td>
-        </tr>
-        customerName = uwg.CustomerName;
-
-        if (closeTable)
-        {
-            @:</tbody>
-            @:</table>
-        }
+                i++;
+                j++;
+            }
+            </tbody>
+        </table>
     }
-
 </div>
 <script type="text/javascript">
 

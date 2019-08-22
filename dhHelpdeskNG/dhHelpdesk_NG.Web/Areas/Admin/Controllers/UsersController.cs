@@ -417,17 +417,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
-        public ActionResult Edit(
-            int id, 
-            int[] AAsSelected,
-            int[] CsSelected, 
-            int[] OTsSelected, 
-            int[] Departments, 
-            List<UserWorkingGroup> UserWorkingGroups, 
-            UserSaveViewModel userModel, 
-            string NewPassword, 
-            string ConfirmPassword, 
-            FormCollection coll)
+        public ActionResult Edit(int id, UserSaveInputModel inputModel)
         {
             IDictionary<string, string> errors;
 
@@ -435,24 +425,23 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             if (id != -1)
             {
-                userToSave = this._userService.GetUser(id);
+                userToSave = _userService.GetUser(id);
 
-                var currentUserData = this._userService.GetUser(id);
-
-                if (SessionFacade.CurrentUser.UserGroupId != (int)UserGroup.SystemAdministrator
-                    && (SessionFacade.CurrentUser.UserGroupId < userToSave.UserGroup_Id || userModel.User.UserGroup_Id > SessionFacade.CurrentUser.UserGroupId))
+                if (SessionFacade.CurrentUser.UserGroupId != (int)UserGroup.SystemAdministrator && 
+                    (SessionFacade.CurrentUser.UserGroupId < userToSave.UserGroup_Id || 
+                     inputModel.User.UserGroup_Id > SessionFacade.CurrentUser.UserGroupId))
                 {
                     return this.RedirectToAction("Forbidden", "Error", new { area = string.Empty });
                 }
 
-                userModel.User.CustomerUsers = currentUserData.CustomerUsers;
+                //var currentUserData = _userService.GetUser(id);
+                //inputModel.User.CustomerUsers = currentUserData.CustomerUsers;
 
-                userToSave.OrderPermission = this.returnOrderPermissionForSave(userModel);
-                userToSave.CaseInfoMail = this.returnCaseInfoMailForEditSave(userModel);
-                userToSave.TimeZoneId = userModel.SelectedTimeZone;
+                TryUpdateModel(userToSave, "user");
 
-
-                this.TryUpdateModel(userToSave, "user");
+                userToSave.OrderPermission = returnOrderPermissionForSave(inputModel);
+                userToSave.CaseInfoMail = returnCaseInfoMailForEditSave(inputModel);
+                userToSave.TimeZoneId = inputModel.SelectedTimeZone;
 
                 // Remove admin rights if no view right for inventory
                 if(userToSave.InventoryViewPermission == 0)
@@ -491,32 +480,33 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                         userToSave.UserRoles.Remove(delete);
                     }
 
-                    if (userModel.UserRights.HasValue)
+                    if (inputModel.UserRights.HasValue)
                     {
-                        var userRight = this._userService.GetUserRoleById(userModel.UserRights.Value);
+                        var userRight = _userService.GetUserRoleById(inputModel.UserRights.Value);
                         userToSave.UserRoles.Add(userRight);
                     }
                 }
 
-                var customersAvailableHash = this.GetAvaliableCustomersFor(userToSave).ToDictionary(it => it.Id, it => true);
+                var customersAvailableHash = GetAvaliableCustomersFor(userToSave).ToDictionary(it => it.Id, it => true);
                 
                 int[] customersSelected = null;
-                if (CsSelected != null)
+                if (inputModel.CsSelected != null)
                 {
-                    customersSelected = CsSelected.Where(customersAvailableHash.ContainsKey).ToArray();
+                    customersSelected = inputModel.CsSelected.Where(customersAvailableHash.ContainsKey).ToArray();
                 }
                 
 
                 if (SessionFacade.CurrentUser.Id == userToSave.Id)
                 {
-                    this._userService.SaveEditUser(
+                   _userService.SaveEditUser(
                        userToSave,
-                       AAsSelected,
+                       inputModel.AAsSelected,
                        customersSelected,
                        customersAvailableHash.Keys.ToArray(),
-                       OTsSelected,
-                       Departments,
-                       UserWorkingGroups,
+                       inputModel.OTsSelected,
+                       inputModel.Departments,
+                       inputModel.UserWorkingGroups,
+                       inputModel.CustomerUsers,
                        out errors);
                 }
                 else
@@ -526,18 +516,21 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                         userToSave.CusomersAvailable.Where(it => !customersAvailableHash.ContainsKey(it.Id))
                             .Select(it => it.Id)
                             .ToList();
+
                     if (customersSelected != null)
                     {
                         usersOwnCustomer.AddRange(customersSelected);
                     }
-                    this._userService.SaveEditUser(
+
+                    _userService.SaveEditUser(
                         userToSave,
-                        AAsSelected,
+                        inputModel.AAsSelected,
                         customersSelected,
                         usersOwnCustomer.ToArray(),
-                        OTsSelected,
-                        Departments,
-                        UserWorkingGroups,
+                        inputModel.OTsSelected,
+                        inputModel.Departments,
+                        inputModel.UserWorkingGroups,
+                        inputModel.CustomerUsers,
                         out errors);
                 }
                 
@@ -546,10 +539,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 {
                     if (!string.IsNullOrEmpty(err))
                     {
-                        this.TempData["AlertMessage"] = err;
+                        TempData["AlertMessage"] = err;
                     }
                     
-                    return this.RedirectToAction("edit", "users", new { id = id });
+                    return RedirectToAction("edit", "users", new { id = id });
                 }
                 
                 foreach (var error in errors)
@@ -557,15 +550,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     ModelState.AddModelError(error.Key, Translation.GetCoreTextTranslation(error.Value));
                 }
                 
-                var model = this.CreateInputViewModel(userToSave);
-
-                return this.View(model);
+                var model = CreateInputViewModel(userToSave);
+                return View(model);
             }
 
-            var copy = userModel.User;
+            var copy = inputModel.User;
             copy.Id = 0;
-            copy.Password = NewPassword;
-            copy.TimeZoneId = userModel.SelectedTimeZone;
+            copy.Password = inputModel.NewPassword;
+            copy.TimeZoneId = inputModel.SelectedTimeZone;
 
             if (copy.Language_Id == 0)
             {
@@ -579,9 +571,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 copy.CustomerUsers.Clear();
             }
 
-            if (userModel.UserRights.HasValue)
+            if (inputModel.UserRights.HasValue)
             {
-                var userRight = this._userService.GetUserRoleById(userModel.UserRights.Value);
+                var userRight = this._userService.GetUserRoleById(inputModel.UserRights.Value);
                 if (copy.UserRoles == null)
                 {
                     copy.UserRoles = new List<UserRole>();
@@ -590,16 +582,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 copy.UserRoles.Add(userRight);
             }
   
-            this._userService.SaveNewUser(copy, AAsSelected, CsSelected, OTsSelected, UserWorkingGroups, Departments, out errors, ConfirmPassword);
+            _userService.SaveNewUser(copy, inputModel.AAsSelected, inputModel.CsSelected, inputModel.OTsSelected, inputModel.UserWorkingGroups, inputModel.Departments, out errors, inputModel.ConfirmPassword);
 
             if (errors.Count > 0)
             {
                 copy.Id = -1;
-                 var cmodel = this.CreateInputViewModel(copy);
+                 //var cmodel = this.CreateInputViewModel(copy); //todo: check
             }
               
 
-            var customerUsers = this._userService.GetCustomerUserForUser(copy.Id).ToList();
+            var customerUsers = _userService.GetCustomerUserForUser(copy.Id).ToList();
 
             foreach (var cu in customerUsers)
             {
@@ -672,13 +664,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 cu.ContactBeforeActionPermission = ccu.ContactBeforeActionPermission;
                 cu.StateSecondaryPermission = ccu.StateSecondaryPermission;
                 cu.WatchDatePermission = ccu.WatchDatePermission;
+                cu.RestrictedCasePermission = ccu.RestrictedCasePermission;
 
-                this._customerUserService.SaveCustomerUser(cu, out errors);
+                _customerUserService.SaveCustomerUser(cu, out errors);
 
                 var caseSettingsToCopy = new List<CaseSettings>();
-                if (userModel != null && userToSave != null)
+                if (inputModel != null && userToSave != null)
                 {
-                    this._caseSettingsService.GetCaseSettingsWithUser(cu.Customer_Id, userModel.CopyUserid, userToSave.UserGroup_Id);                    
+                    _caseSettingsService.GetCaseSettingsWithUser(cu.Customer_Id, inputModel.CopyUserid, userToSave.UserGroup_Id);                    
                 }    
 
                 if (caseSettingsToCopy != null)
@@ -695,7 +688,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                         newUserCaseSetting.UserGroup = cs.UserGroup;
                         newUserCaseSetting.ColOrder = cs.ColOrder;
 
-                        this._caseSettingsService.SaveCaseSetting(newUserCaseSetting, out errors);
+                        _caseSettingsService.SaveCaseSetting(newUserCaseSetting, out errors);
                     }                    
                 }
             }
@@ -703,18 +696,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             if (errors.Count == 0)
             {
                // return this.RedirectToAction("edit", "users", new { id = id });
-                return this.RedirectToAction("index", "users");
+                return RedirectToAction("index", "users");
             }
             else
             {
                 TempData["PreventError"] = errors.FirstOrDefault().Value;
             }
 
-            var copyModel = this.CreateInputViewModel(copy);
-
-            return this.View(copyModel);
+            var copyModel = CreateInputViewModel(copy);
+            return View(copyModel);
         }
-
+       
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         public ActionResult Delete(int id)
@@ -905,13 +897,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             var customersSelected = user.Cs ?? new List<Customer>();
             var selectedCustomersHash = customersSelected.ToDictionary(it => it.Id, it => true);
-            var customersAvailable = this.GetAvaliableCustomersFor(user)
-                .Where(it => !selectedCustomersHash.ContainsKey(it.Id))
-                .OrderBy(it => it.Name);
+            var customersAvailable = GetAvaliableCustomersFor(user).Where(it => !selectedCustomersHash.ContainsKey(it.Id)).OrderBy(it => it.Name);
             var otsSelected = user.OTs ?? new List<OrderType>();
             var otsAvailable = new List<OrderType>();
             
-            foreach (var ot in this._orderTypeService.GetOrderTypes(SessionFacade.CurrentCustomer.Id))
+            foreach (var ot in _orderTypeService.GetOrderTypes(SessionFacade.CurrentCustomer.Id))
             {
                 if (!otsSelected.Contains(ot))
                     otsAvailable.Add(ot);
@@ -1009,7 +999,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             #region Model
 
-            var customerUsers = user.CustomerUsers ?? this._userService.GetCustomerUserForUser(user.Id);
+            var customerUsers = user.CustomerUsers?.Any() ?? false ? user.CustomerUsers : _userService.GetCustomerUserForUser(user.Id);
+            var workgingGroups = _userService.GetListToUserWorkingGroup(user.Id);
 
             var model = new UserInputViewModel
             {
@@ -1017,26 +1008,30 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 CaseInfoMailList = li,
                 RefreshInterval = sli,
                 StartPageShowList = lis,
-                CustomerUsers = customerUsers.Where(x => x.Customer_Id > 0).ToList(),
-                Departments = this._userService.GetDepartmentsForUser(user.Id),
-                ListWorkingGroupsForUser = this._userService.GetListToUserWorkingGroup(user.Id),
+                CustomerUsers = customerUsers.Where(x => x.Customer_Id > 0).Select(x => x.MapToCustomerUserEdit()).ToList(),
+                Departments = _userService.GetDepartmentsForUser(user.Id),
+                ListWorkingGroupsForUser = _userService.GetListToUserWorkingGroup(user.Id),
                 AvailvableTimeZones = TimeZoneInfo.GetSystemTimeZones().Select(it => new SelectListItem() { Value = it.Id, Text = it.DisplayName, Selected = user.TimeZoneId == it.Id }),
-                Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
+
+                Customers = _customerService.GetCustomers().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Value
+                }).ToList(),
+
+                Domains = _domainService.GetDomains(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                Domains = this._domainService.GetDomains(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
-                Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
+
+                Languages = _languageService.GetLanguages().Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.Name),
                     Value = x.Id.ToString()
                 }).ToList(),
-                UserRoles = this._userService.GetUserRoles().Select(x => new SelectListItem
+
+                UserRoles = _userService.GetUserRoles().Select(x => new SelectListItem
                 {
                     Text = Translation.Get(x.Description, Enums.TranslationSource.TextTranslation),
                     Value = x.Id.ToString(),
@@ -1078,17 +1073,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 {
                     Text = x.WorkingGroupName,
                     Value = x.Id.ToString()
-                }).ToList()
-            };
+                }).ToList(),
+                UserGroups = this._userService.GetUserGroups()
+                    .Where(it => it.Id <= SessionFacade.CurrentUser.UserGroupId)
+                    .OrderBy(x => x.Id)
+                    .Select(x => new SelectListItem
+                    {
+                        Text = Translation.Get(x.Name),
+                        Value = x.Id.ToString()
+                    }).ToList()
 
-            model.UserGroups = this._userService.GetUserGroups()
-                .Where(it => it.Id <= SessionFacade.CurrentUser.UserGroupId)
-                .OrderBy(x => x.Id)
-                .Select(x => new SelectListItem
-            {
-                Text = Translation.Get(x.Name),
-                Value = x.Id.ToString()
-            }).ToList();
+            };
 
             #endregion
 
@@ -1200,7 +1195,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return user;
         }
 
-        private int returnCaseInfoMailForEditSave(UserSaveViewModel userModel)
+        private int returnCaseInfoMailForEditSave(UserSaveInputModel userModel)
         {
             int sendMail = 0;
 
@@ -1221,7 +1216,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return sendMail;
         }
 
-        private int returnOrderPermissionForSave(UserSaveViewModel userModel)
+        private int returnOrderPermissionForSave(UserSaveInputModel userModel)
         {
             userModel.UserOrderPermission = 0;
 

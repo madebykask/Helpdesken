@@ -21,7 +21,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             int languageId,
             int userGroupId,
             int followUpPermission,
-            int restrictedCasePermission,
+            //int restrictedCasePermission,
             int showNotAssignedWorkingGroups,
             int createCasePermission,
             int createSubCasePermission,
@@ -39,8 +39,8 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             int bulletinBoardPermission,
             int documentPermission,
             int inventoryAdminPermission,
-			int inventoryViewPermission,
-			int contractPermission,
+            int inventoryViewPermission,
+            int contractPermission,
             int setPriorityPermission,
             int invoicePermission,
             int dataSecurityPermission,
@@ -65,7 +65,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.CustomerId = customerId;
             this.LanguageId = languageId;
             this.UserGroupId = userGroupId;
-            this.RestrictedCasePermission = restrictedCasePermission;
+            //this.RestrictedCasePermission = restrictedCasePermission;
             this.ShowNotAssignedWorkingGroups = showNotAssignedWorkingGroups;
             this.CreateCasePermission = createCasePermission;
             this.CreateSubCasePermission = createSubCasePermission;
@@ -84,8 +84,8 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.BulletinBoardPermission = bulletinBoardPermission;
             this.DocumentPermission = documentPermission;
             this.InventoryAdminPermission = inventoryAdminPermission;
-			this.InventoryViewPermission = inventoryViewPermission;
-			this.ContractPermission = contractPermission;
+            this.InventoryViewPermission = inventoryViewPermission;
+            this.ContractPermission = contractPermission;
             this.SetPriorityPermission = setPriorityPermission;
             this.InvoicePermission = invoicePermission;
             this.DataSecurityPermission = dataSecurityPermission;
@@ -162,7 +162,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
 
         public int DataSecurityPermission { get; set; }
 
-        public int RestrictedCasePermission { get; set; }
+        //public int RestrictedCasePermission { get; set; }
 
         public int ShowNotAssignedWorkingGroups { get; set; }
 
@@ -188,9 +188,9 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
 
         public int InventoryAdminPermission { get; set; }
 
-		public int InventoryViewPermission { get; internal set; }
+        public int InventoryViewPermission { get; internal set; }
 
-		public int ContractPermission { get; set; }
+        public int ContractPermission { get; set; }
 
         public int CaseUnlockPermission { get; set; }
 
