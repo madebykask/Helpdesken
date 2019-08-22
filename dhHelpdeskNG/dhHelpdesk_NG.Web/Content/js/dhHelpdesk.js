@@ -1,5 +1,5 @@
 ﻿// Global variables 
-var dhHelpdesk = {};
+var dhHelpdesk = window.dhHelpdesk || {};
 var publicCustomerId = $('#case__Customer_Id').val();
 
 var _departmentControlName = '#case__Department_Id';

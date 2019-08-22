@@ -1,28 +1,10 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
-@using DH.Helpdesk.BusinessData.OldComponents
-@using DH.Helpdesk.Common.Extensions.String
 @using DH.Helpdesk.Web.Common.Enums.Case
-@using DH.Helpdesk.Web.Infrastructure
-
-@section Scripts {
-    <script type="text/javascript">
-        $(document).ready(function () {
-            LogInitForm();
-
-            $("a.isExisted").on("click", function (e) {
-                var exists = $(this).checkUrlFileExists();
-                if (!exists) {
-                    e.preventDefault();
-                    ShowToastMessage(window.parameters.fileExistError, "error");
-                }
-            });
-        });
-    </script>
-}
 
 @if (Model != null)
 {
     ViewData.Add("readonlyLog", !Model.newLog);
+
     using (Html.BeginForm("editlog", "cases", null, FormMethod.Post, new { id = "target" }))
     {
         <div class="secnavs fixed">
@@ -31,10 +13,11 @@
                     @if (Model.EditMode == AccessMode.FullAccess && !Model.newLog)
                     {
                         <li>
-                            @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "deletelog", new { id = @Model.CaseLog.Id, caseId = @Model.case_.Id },
-                    new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" })
-                    </li>
-                }
+                            @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "deletelog",
+                                new { id = @Model.CaseLog.Id, caseId = @Model.case_.Id },
+                                new { @class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?" })
+                        </li>
+                    }
                     @if (Model.newLog)
                     {
                         @*<li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), null, null, null, new { @class = "btn", id = "log-action-save" })</li>*@
@@ -65,4 +48,31 @@
     }
 }
 
-@Scripts.Render("~/bundles/Cases/common")
+
+@section Scripts {
+    @Scripts.Render("~/bundles/Cases/common")
+
+    <script type="text/javascript">
+        $(function () {
+            LogInitForm();
+
+            $("a.isExisted").on("click", function (e) {
+                var exists = $(this).checkUrlFileExists();
+                if (!exists) {
+                    e.preventDefault();
+                    ShowToastMessage(window.parameters.fileExistError, "error");
+                }
+            });
+        });
+
+        dhHelpdesk.caseLog =
+        {
+            deleteLogFileConfirmMessage: '@Translation.GetForJS("Är du säker på att du vill ta bort bifogad fil")' + '?',
+            deleteCaseFileExtraInvoiceMessage: '@Translation.GetForJS("Obs! Den tas även bort från order")',
+            okText: '@Translation.GetForJS("OK")',
+            cancelText: '@Translation.GetForJS("Avbryt")',
+            yesText: '@Translation.GetForJS("Ja")',
+            noText: '@Translation.GetForJS("Nej")'
+        };
+    </script>
+}

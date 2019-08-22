@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.Common.Enums.Logs
+﻿@using DH.Helpdesk.Common.Enums
+@using DH.Helpdesk.Common.Enums.Logs
 @using DH.Helpdesk.Common.Extensions.Integer
 @using DH.Helpdesk.Common.Tools
 @model DH.Helpdesk.Web.Models.Case.CaseLogFilesViewModel
@@ -84,16 +85,13 @@
                         </td>
                         <td class="action">
                             @* TODO: fix this, set deleteattachedfilepermission to true if usergroupid is administrator *@
-                            @if (!GuidHelper.IsGuid(Model.LogId) && (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1 || SessionFacade.CurrentUser.UserGroupId == 4))
+                            @if (!GuidHelper.IsGuid(Model.LogId) && (SessionFacade.CurrentUser.DeleteAttachedFilePermission.ToBool() || SessionFacade.CurrentUser.UserGroupId == UserGroups.SystemAdministrator))
                             {
                                 <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.GetCoreTextTranslation("Ta bort")"><i class="icon-remove"></i></a>
                             }
-                            else
+                            else if (GuidHelper.IsGuid(Model.LogId))
                             {
-                                if (GuidHelper.IsGuid(Model.LogId))
-                                {
-                                    <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.GetCoreTextTranslation("Ta bort")"><i class="icon-remove"></i></a>
-                                }
+                                <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.GetCoreTextTranslation("Ta bort")"><i class="icon-remove"></i></a>
                             }
                         </td>
                     </tr>
