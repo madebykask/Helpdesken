@@ -76,4 +76,5 @@ export class CaseEditOutputModel {
   description?: string;
   logSendMailToNotifier?: boolean;
   logExternalEmailsCc?: string;
+  extendedCaseGuid?: string;
 }

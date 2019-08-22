@@ -242,6 +242,8 @@ export class CaseEditComponent {
               switchMap((isEcSaved: boolean) => {
                 if (isEcSaved) {
                   this.isLoaded = false;
+                  this.isEcLoaded = false;
+                  this.currentTab = TabNames.Case;
                   return this.caseSaveService.saveCase(this.form, this.caseData).pipe(
                       take(1),
                       map(() => true),
@@ -527,6 +529,7 @@ export class CaseEditComponent {
 
           this.initLock();
           this.processCaseData();
+          this.loadExtendedCase(this.caseData);
       });
     }
 
