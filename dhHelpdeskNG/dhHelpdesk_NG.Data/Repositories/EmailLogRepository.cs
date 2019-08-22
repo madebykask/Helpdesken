@@ -37,7 +37,17 @@ namespace DH.Helpdesk.Dal.Repositories
                     where l.EmailLogGUID == Id
                     select l).FirstOrDefault();
 
-        }        
+        }
+
+        public void DeleteByLogId(int logId)
+        {
+            var mails = Table.Where(m => m.Log_Id == logId);
+            if (mails.Any())
+            {
+                DataContext.EmailLogs.RemoveRange(mails);
+            }
+
+        }
     }
 
     public class EmailLogAttemptRepository : RepositoryBase<EmailLogAttempt>, IEmailLogAttemptRepository

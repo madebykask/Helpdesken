@@ -458,6 +458,11 @@ namespace DH.Helpdesk.Services.Services
             }
             _mail2TicketRepository.Commit();
 
+            foreach (var l in logs)
+            {
+                _emailLogRepository.DeleteByLogId(l.Id);
+            }
+            _emailLogRepository.Commit();
 
             foreach (var l in logs)
             {
