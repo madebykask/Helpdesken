@@ -44,7 +44,7 @@ namespace DH.Helpdesk.WebApi.Logic.Case
                 var instanceWord = GetInstanceWord(translate);
                 if (!string.IsNullOrEmpty(instanceWord))
                 {
-                    translateByText = _translateCacheService.GetTextTranslation(instanceWord.ToLower(), languageId);
+                    translateByText = _translateCacheService.GetTextTranslation(instanceWord, languageId);
                 }
 
                 translate = 
