@@ -226,6 +226,14 @@ BEGIN
 		  N'UPDATE cu SET cu.RestrictedCasePermission = u.RestrictedCasePermission
 		    FROM tblCustomerUser cu INNER JOIN tblUsers u ON u.Customer_Id = cu.Customer_Id AND u.Id = cu.User_Id';
 	   EXEC (@updateCmd)
+	   	   
+	   -- DROP DEFAULT CONSTRAINT for tblUsers.RestrictedCasePermission
+	   DECLARE @ObjectName NVARCHAR(100)
+	   SELECT @ObjectName = OBJECT_NAME([default_object_id]) FROM SYS.COLUMNS
+        WHERE [object_id] = OBJECT_ID('[dbo].[tblUsers]') AND [name] = 'RestrictedCasePermission';
+	   
+	   IF (LEN(@ObjectName) > 0)
+	     EXEC('ALTER TABLE [dbo].[tblUsers] DROP CONSTRAINT ' + @ObjectName)		
 
 	   -- drop old setting column in tblUsers
 	   ALTER TABLE tblUsers DROP COLUMN RestrictedCasePermission;
