@@ -7,14 +7,14 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const cssnano = require('cssnano');
 //const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 
-const outputDir = 'dist';
+const outputDir = Helpers.root('dist');;
 
 module.exports = WebpackMerge(CommonConfig({ env: 'prod',  outputDir: outputDir }), 
 {    
     devtool: 'source-map', 
 
     output: {
-        path: Helpers.root(outputDir),
+        path: outputDir,
         publicPath: '/',
         filename: '[name].[hash].js',
         chunkFilename: '[id].[hash].chunk.js'

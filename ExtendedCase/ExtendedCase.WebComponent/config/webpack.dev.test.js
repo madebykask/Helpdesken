@@ -13,13 +13,13 @@ let CONSTANTS = {
   MODE: 'dev',
 }
 
-const outputDir = 'dist';
+const outputDir = Helpers.root('dist');;
 
 module.exports = WebpackMerge.smart(CommonConfig({ env: CONSTANTS.MODE,  outputDir: outputDir }), 
 {
   devtool: 'source-map',
   output: {
-    path: Helpers.root(outputDir),
+    path: outputDir,
     publicPath: '/',
     filename: '[name].[hash].js',
     chunkFilename: '[id].[hash].chunk.js'

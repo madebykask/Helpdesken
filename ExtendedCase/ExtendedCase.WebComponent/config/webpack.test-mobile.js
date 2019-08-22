@@ -14,13 +14,13 @@ let CONSTANTS = {
   BASEAPIURL: '${ECApiUrl}'
 }
 
-const outputDir = 'dist';
+const outputDir = Helpers.root('dist');
 
 module.exports = WebpackMerge.smart(CommonConfig({ env: CONSTANTS.MODE,  outputDir: outputDir }), 
 {        
         devtool: 'source-map',
         output: {
-            path: Helpers.root(outputDir),
+            path: outputDir,
             publicPath: '/',
             filename: '[name].[hash].js',
             chunkFilename: '[id].[hash].chunk.js'
@@ -54,7 +54,7 @@ module.exports = WebpackMerge.smart(CommonConfig({ env: CONSTANTS.MODE,  outputD
                 })
             ]
         },
-
+/* 
         module: {
             rules: [
                 {
@@ -70,7 +70,7 @@ module.exports = WebpackMerge.smart(CommonConfig({ env: CONSTANTS.MODE,  outputD
                     exclude: [Helpers.root(outputDir)]
                 }
             ]
-        },
+        }, */
         plugins: [
             new Webpack.DefinePlugin({
                 ENV: JSON.stringify(CONSTANTS.MODE),

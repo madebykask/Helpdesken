@@ -80,12 +80,11 @@ module.exports = args => {
                             loader: 'file-loader',
                             options: {
                                 name: '[name].[ext]?v=[hash]',
-                                outputPath: '/img/',
-                                publicPath: '/img'
+                                outputPath: 'img/',
                             }
                         }
                     ],
-                    exclude: [Helpers.root('dist'), Helpers.root('dist')]
+                    exclude: [Helpers.root(outputDir)]
                 }, {
                     test: /\.css$/,
                     use: [
@@ -108,7 +107,7 @@ module.exports = args => {
             }),
 
             // will be extracted and copied from css
-            //new CopyPlugin([{ from: 'src/styles/images/*', to: 'img/[name].[ext]' }]),
+            //new CopyPlugin([{ from: 'src/styles/img/*', to: 'img/[name].[ext]' }]),
             //new CopyPlugin([{ from: 'src/styles/fonts/*', to: 'fonts/[name].[ext]' }]),
 
             //new Webpack.LoaderOptionsPlugin({

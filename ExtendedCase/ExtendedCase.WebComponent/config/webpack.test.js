@@ -15,13 +15,13 @@ let CONSTANTS = {
   BASEAPIURL: 'ExtendedCaseApi'
 }
 
-const outputDir = 'dist';
+const outputDir = Helpers.root('dist');
 
 module.exports = WebpackMerge.smart(CommonConfig({ env: CONSTANTS.MODE,  outputDir: outputDir }), 
 {        
         devtool: 'source-map',
         output: {
-            path: Helpers.root(outputDir),
+            path: outputDir,
             publicPath: '/' + CONSTANTS.BASEURL + '/',
             filename: '[name].[hash].js',
             chunkFilename: '[id].[hash].chunk.js'
@@ -52,7 +52,7 @@ module.exports = WebpackMerge.smart(CommonConfig({ env: CONSTANTS.MODE,  outputD
                         }
                     },
                     canPrint: false
-                })
+                }),
             ]
         },
 
@@ -64,8 +64,7 @@ module.exports = WebpackMerge.smart(CommonConfig({ env: CONSTANTS.MODE,  outputD
                         loader: 'file-loader',
                         options: {
                             name: '[name].[ext]?v=[hash]',
-                            outputPath: 'img/',
-                            publicPath: CONSTANTS.BASEURL +'/'
+                            publicPath: '/'+ CONSTANTS.BASEURL +'/img'
                         }
                     }],
                     exclude: [Helpers.root(outputDir)]
