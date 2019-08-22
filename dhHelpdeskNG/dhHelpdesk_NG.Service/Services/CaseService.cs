@@ -688,7 +688,7 @@ namespace DH.Helpdesk.Services.Services
                 var caseRep = uow.GetRepository<Case>();
 
                 var restrictToOwnCasesOnly =
-                    uow.GetRepository<CustomerUser>().GetAll(x => x.Customer_Id == customerId && x.User_Id == currentUser.Id).Single().RestrictedCasePermission;
+                    uow.GetRepository<CustomerUser>().GetAll().Where(x => x.Customer_Id == customerId && x.User_Id == currentUser.Id).Single().RestrictedCasePermission;
 
                 return caseRep.GetAll()
                         .GetByCustomer(customerId)
@@ -704,7 +704,7 @@ namespace DH.Helpdesk.Services.Services
                 var caseRep = uow.GetRepository<Case>();
 
                 var restrictToOwnCasesOnly =
-                    uow.GetRepository<CustomerUser>().GetAll(x => x.Customer_Id == customerId && x.User_Id == currentUser.Id).Single().RestrictedCasePermission;
+                    uow.GetRepository<CustomerUser>().GetAll().Where(x => x.Customer_Id == customerId && x.User_Id == currentUser.Id).Single().RestrictedCasePermission;
 
                 return caseRep.GetAll()
                         .GetByCustomer(customerId)
