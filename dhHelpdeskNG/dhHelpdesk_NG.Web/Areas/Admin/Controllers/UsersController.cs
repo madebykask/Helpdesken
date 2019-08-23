@@ -1,4 +1,6 @@
-﻿using DH.Helpdesk.Common.Extensions.Integer;
+﻿using DH.Helpdesk.BusinessData.Models.User;
+using DH.Helpdesk.Common.Extensions.Boolean;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Web.Models.Shared;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
@@ -431,7 +433,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     (SessionFacade.CurrentUser.UserGroupId < userToSave.UserGroup_Id || 
                      inputModel.User.UserGroup_Id > SessionFacade.CurrentUser.UserGroupId))
                 {
-                    return this.RedirectToAction("Forbidden", "Error", new { area = string.Empty });
+                    return RedirectToAction("Forbidden", "Error", new { area = string.Empty });
                 }
 
                 //var currentUserData = _userService.GetUser(id);
@@ -451,7 +453,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                 var allCustomers = _customerService.GetAllCustomers();
                 string err = "";
-                List<string> customersAlert = new List<string>(); 
+                var customersAlert = new List<string>(); 
+
                 if (userToSave.IsActive == 0)
                 {
                     var emptyWG = new List<int>();
@@ -462,6 +465,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     }                                       
                 }
 
+                //todo: move to other method
                 if (customersAlert.Any())
                 {
                     err = Translation.GetCoreTextTranslation("Användare") + " [" + userToSave.FirstName + " " + userToSave.SurName + "] " +
@@ -554,6 +558,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 return View(model);
             }
 
+            //TODO: Move logic below to new method CaseService.CopyUser out from controller
+
             var copy = inputModel.User;
             copy.Id = 0;
             copy.Password = inputModel.NewPassword;
@@ -563,17 +569,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             {
                 copy.Language_Id = 2;
             }
-
-            var tempCustomerUser = new List<CustomerUser>();
-            if (copy.CustomerUsers != null)
-            {
-                tempCustomerUser = copy.CustomerUsers.ToList();
-                copy.CustomerUsers.Clear();
-            }
-
+            
             if (inputModel.UserRights.HasValue)
             {
-                var userRight = this._userService.GetUserRoleById(inputModel.UserRights.Value);
+                var userRight = _userService.GetUserRoleById(inputModel.UserRights.Value);
                 if (copy.UserRoles == null)
                 {
                     copy.UserRoles = new List<UserRole>();
@@ -587,111 +586,116 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             if (errors.Count > 0)
             {
                 copy.Id = -1;
-                 //var cmodel = this.CreateInputViewModel(copy); //todo: check
             }
-              
-
-            var customerUsers = _userService.GetCustomerUserForUser(copy.Id).ToList();
-
-            foreach (var cu in customerUsers)
+            else
             {
-                var ccu = tempCustomerUser.FirstOrDefault(x => x.Customer_Id == cu.Customer_Id);
+                var customerUserChanges = GetCustomerUserChanges(inputModel.CopyUserid, inputModel.CustomerUsers);
+                var newCustomerUsers = _userService.GetCustomerUserForUser(copy.Id).ToList();
 
-                if (ccu == null)
+                //Copy user customer settings after user with associated customers (tblCustomerUser) has been created
+                foreach (var cu in newCustomerUsers)
                 {
-                    continue;
-                }
-
-                if (ccu.CasePriorityFilter != null)
-                {
-                    cu.CasePriorityFilter = "0";
-                }
-
-                if (ccu.CaseCaseTypeFilter != null)
-                {
-                    cu.CaseCaseTypeFilter = "0";
-                }
-
-                if (ccu.CaseCategoryFilter != null)
-                {
-                    cu.CaseCategoryFilter = "0";
-                }
-
-                if (ccu.CaseProductAreaFilter != null)
-                {
-                    cu.CaseProductAreaFilter = "0";
-                }
-
-                if (ccu.CaseRegionFilter != null)
-                {
-                    cu.CaseRegionFilter = "0";
-                }
-
-                if (ccu.CaseResponsibleFilter != null)
-                {
-                    cu.CaseResponsibleFilter = "0";
-                }
-
-                if (ccu.CaseStateSecondaryFilter != null)
-                {
-                    cu.CaseStateSecondaryFilter = "0";
-                }
-
-                if (ccu.CaseDepartmentFilter != null)
-                {
-                    cu.CaseDepartmentFilter = "0";
-                }
-
-                if (ccu.CaseStatusFilter != null)
-                {
-                    cu.CaseStatusFilter = "0";
-                }
-
-                if (ccu.CaseUserFilter != null)
-                {
-                    cu.CaseUserFilter = "0";
-                }
-
-                if (ccu.CaseWorkingGroupFilter != null)
-                {
-                    cu.CaseWorkingGroupFilter = "0";
-                }
-               
-                cu.CasePerformerFilter = "0";
-
-                cu.PriorityPermission = ccu.PriorityPermission;
-                cu.CaptionPermission = ccu.CaptionPermission;
-                cu.ContactBeforeActionPermission = ccu.ContactBeforeActionPermission;
-                cu.StateSecondaryPermission = ccu.StateSecondaryPermission;
-                cu.WatchDatePermission = ccu.WatchDatePermission;
-                cu.RestrictedCasePermission = ccu.RestrictedCasePermission;
-
-                _customerUserService.SaveCustomerUser(cu, out errors);
-
-                var caseSettingsToCopy = new List<CaseSettings>();
-                if (inputModel != null && userToSave != null)
-                {
-                    _caseSettingsService.GetCaseSettingsWithUser(cu.Customer_Id, inputModel.CopyUserid, userToSave.UserGroup_Id);                    
-                }    
-
-                if (caseSettingsToCopy != null)
-                {
-                    foreach (var cs in caseSettingsToCopy)
+                    if (customerUserChanges != null && customerUserChanges.Any())
                     {
-                        var newUserCaseSetting = new CaseSettings();
+                        var ccu = customerUserChanges.FirstOrDefault(x => x.Customer_Id == cu.Customer_Id);
+                        if (ccu == null)
+                            continue;
 
-                        newUserCaseSetting.User_Id = copy.Id;
-                        newUserCaseSetting.Customer_Id = cs.Customer_Id;
-                        newUserCaseSetting.Name = cs.Name;
-                        newUserCaseSetting.Line = cs.Line;
-                        newUserCaseSetting.MinWidth = cs.MinWidth;
-                        newUserCaseSetting.UserGroup = cs.UserGroup;
-                        newUserCaseSetting.ColOrder = cs.ColOrder;
+                        if (ccu.CasePriorityFilter != null)
+                        {
+                            cu.CasePriorityFilter = "0";
+                        }
 
-                        _caseSettingsService.SaveCaseSetting(newUserCaseSetting, out errors);
-                    }                    
+                        if (ccu.CaseCaseTypeFilter != null)
+                        {
+                            cu.CaseCaseTypeFilter = "0";
+                        }
+
+                        if (ccu.CaseCategoryFilter != null)
+                        {
+                            cu.CaseCategoryFilter = "0";
+                        }
+
+                        if (ccu.CaseProductAreaFilter != null)
+                        {
+                            cu.CaseProductAreaFilter = "0";
+                        }
+
+                        if (ccu.CaseRegionFilter != null)
+                        {
+                            cu.CaseRegionFilter = "0";
+                        }
+
+                        if (ccu.CaseResponsibleFilter != null)
+                        {
+                            cu.CaseResponsibleFilter = "0";
+                        }
+
+                        if (ccu.CaseStateSecondaryFilter != null)
+                        {
+                            cu.CaseStateSecondaryFilter = "0";
+                        }
+
+                        if (ccu.CaseDepartmentFilter != null)
+                        {
+                            cu.CaseDepartmentFilter = "0";
+                        }
+
+                        if (ccu.CaseStatusFilter != null)
+                        {
+                            cu.CaseStatusFilter = "0";
+                        }
+
+                        if (ccu.CaseUserFilter != null)
+                        {
+                            cu.CaseUserFilter = "0";
+                        }
+
+                        if (ccu.CaseWorkingGroupFilter != null)
+                        {
+                            cu.CaseWorkingGroupFilter = "0";
+                        }
+
+                        cu.CasePerformerFilter = "0";
+
+                        //permissions
+                        cu.UserInfoPermission = ccu.UserInfoPermission;
+                        cu.CaptionPermission = ccu.CaptionPermission;
+                        cu.ContactBeforeActionPermission = ccu.ContactBeforeActionPermission;
+                        cu.PriorityPermission = ccu.PriorityPermission;
+                        cu.StateSecondaryPermission = ccu.StateSecondaryPermission;
+                        cu.WatchDatePermission = ccu.WatchDatePermission;
+                        cu.RestrictedCasePermission = ccu.RestrictedCasePermission;
+
+                        _customerUserService.SaveCustomerUser(cu);
+                    }
+
+                    var caseSettingsToCopy = new List<CaseSettings>();
+                    if (inputModel != null && userToSave != null)
+                    {
+                        _caseSettingsService.GetCaseSettingsWithUser(cu.Customer_Id, inputModel.CopyUserid, userToSave.UserGroup_Id);
+                    }
+
+                    if (caseSettingsToCopy != null)
+                    {
+                        foreach (var cs in caseSettingsToCopy)
+                        {
+                            var newUserCaseSetting = new CaseSettings();
+
+                            newUserCaseSetting.User_Id = copy.Id;
+                            newUserCaseSetting.Customer_Id = cs.Customer_Id;
+                            newUserCaseSetting.Name = cs.Name;
+                            newUserCaseSetting.Line = cs.Line;
+                            newUserCaseSetting.MinWidth = cs.MinWidth;
+                            newUserCaseSetting.UserGroup = cs.UserGroup;
+                            newUserCaseSetting.ColOrder = cs.ColOrder;
+
+                            _caseSettingsService.SaveCaseSetting(newUserCaseSetting, out errors);
+                        }
+                    }
                 }
             }
+
 
             if (errors.Count == 0)
             {
@@ -706,7 +710,29 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var copyModel = CreateInputViewModel(copy);
             return View(copyModel);
         }
-       
+
+        private IList<CustomerUser> GetCustomerUserChanges(int oldUserId, IList<CustomerUserForEdit> customerPermissions)
+        {
+            var customerUserSettingsCopy = _customerUserService.GetCustomerUsersForUserToCopy(oldUserId);
+
+            foreach (var cusData in customerPermissions)
+            {
+                var cu = customerUserSettingsCopy.FirstOrDefault(x => x.Customer_Id == cusData.CustomerId);
+                if (cu != null)
+                {
+                    cu.UserInfoPermission = cusData.UserInfoPermission.ToInt();
+                    cu.CaptionPermission = cusData.CaptionPermission.ToInt();
+                    cu.ContactBeforeActionPermission = cusData.ContactBeforeActionPermission.ToInt();
+                    cu.PriorityPermission = cusData.PriorityPermission.ToInt();
+                    cu.StateSecondaryPermission = cusData.StateSecondaryPermission.ToInt();
+                    cu.WatchDatePermission = cusData.WatchDatePermission.ToInt();
+                    cu.RestrictedCasePermission = cusData.RestrictedCasePermission;
+                }
+            }
+
+            return customerUserSettingsCopy;
+        }
+
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         public ActionResult Delete(int id)

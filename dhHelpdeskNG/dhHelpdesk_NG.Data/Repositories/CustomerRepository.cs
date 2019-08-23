@@ -186,6 +186,7 @@ using System;
         IList<CustomerUserList> GetCustomerUsersForStartFinal(int userId);
         IList<CustomerUser> GetCustomerUsersForCustomer(int customeId);
         IList<CustomerUser> GetCustomerUsersForUser(int userId);
+        IList<CustomerUser> GetCustomerUsersForToCopy(int userId);
         void UpdateUserSetting(UserCaseSetting newSetting);
         bool IsCustomerUser(int customerId, int userId);
         bool CheckUserCasePermissions(int userId, int caseId, Expression<Func<Case, bool>> casePermissionsFilter = null);
@@ -310,6 +311,12 @@ using System;
                          select cu;
 
             return query.ToList();
+        }
+
+        public IList<CustomerUser> GetCustomerUsersForToCopy(int userId)
+        {
+            var res = Table.AsNoTracking().Where(x => x.User_Id == userId).ToList();
+            return res;
         }
 
         /// <summary>

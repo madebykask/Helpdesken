@@ -129,7 +129,7 @@
         [CustomAuthorize(Roles = "3,4")]
         public ActionResult New()
         {
-			const string DEFAULT_TIMEZONE_ID = "Central Europe Standard Time";
+            const string DEFAULT_TIMEZONE_ID = "Central Europe Standard Time";
             var model = this.CustomerInputViewModel(new Customer() { TimeZoneId = DEFAULT_TIMEZONE_ID });
 
             return this.View(model);
@@ -592,11 +592,11 @@
                 }).ToList(),
                 UserFirstLastNameRepresentationList = userFirstLastNameSelectList,
                 UserFirstLastNameRepresentationId = settings.IsUserFirstLastNameRepresentation.AsUserFirstLastNameMode(),
-				TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectListItem
-				{
-					Text = x.DisplayName,
-					Value = x.Id
-				}).ToList()
+                TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectListItem
+                {
+                    Text = x.DisplayName,
+                    Value = x.Id
+                }).ToList()
             };
 
             #endregion
@@ -814,7 +814,7 @@
                Name = customerName,
                HelpdeskEmail = customerEmail,
                Language_Id = customerToCopy.Language_Id,
-			   TimeZoneId = customerToCopy.TimeZoneId
+               TimeZoneId = customerToCopy.TimeZoneId
             };
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -1047,7 +1047,7 @@
                 newCustomerCustomerUser.CasePerformerFilter = string.Empty;
                 newCustomerCustomerUser.ShowOnStartPage = cu.ShowOnStartPage;
                 newCustomerCustomerUser.UserInfoPermission = cu.UserInfoPermission;
-
+                //todo: add missing customer user settings
                 this._customerUserService.SaveCustomerUserForCopy(newCustomerCustomerUser, out errors);
             }
 
