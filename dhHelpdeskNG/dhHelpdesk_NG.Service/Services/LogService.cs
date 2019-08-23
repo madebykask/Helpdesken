@@ -125,14 +125,15 @@ namespace DH.Helpdesk.Services.Services
             var referencedFiles = _logFileRepository.GetReferencedFiles(id);
             referencedFiles?.ForEach(x => x.ParentLog_Id = null);
 
-            // delete email logs
-            var emailLogs = _emailLogRepository.GetEmailLogsByCaseId(id);
+            // delete email logs by log Id
+            var emailLogs = _emailLogRepository.GetEmailLogsByLogId(id);
             if (emailLogs != null)
             {
                 foreach (var l in emailLogs)
                 {
-                    if (l.EmailLogAttempts != null && l.EmailLogAttempts.Any())
+                    if (l.EmailLogAttempts != null && l.EmailLogAttempts.Any()) { 
                         _emailLogAttemptRepository.DeleteLogAttempts(l.Id);
+                    }
 
                     _emailLogRepository.Delete(l);
                 }

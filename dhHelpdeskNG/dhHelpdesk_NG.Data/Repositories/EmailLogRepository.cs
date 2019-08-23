@@ -1,18 +1,21 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Domain;
+
 namespace DH.Helpdesk.Dal.Repositories
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain;
-    using System;
-
     public class EmailLogRepository : RepositoryBase<EmailLog>, IEmailLogRepository
     {
         public EmailLogRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
 
+        public IList<EmailLog> GetEmailLogsByLogId(int logId)
+        {
+            return DataContext.EmailLogs.Where(l => l.Log_Id == logId).ToList();
         }
 
         public List<EmailLog> GetEmailLogsByCaseId(int caseId)  
