@@ -60,6 +60,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ICaseRepository _caseRepository;
         private readonly IProblemLogService _problemLogService;
+        private IEmailLogRepository _emailLogRepository;
 
         #endregion
 
@@ -73,9 +74,11 @@ namespace DH.Helpdesk.Services.Services
             IProblemLogService problemLogService,
             IFinishingCauseService finishingCauseService, 
             IMail2TicketRepository mail2TicketRepository,
+            IEmailLogRepository emailLogRepository,
             IUnitOfWorkFactory unitOfWorkFactory,
             IEntityToBusinessModelMapper<LogMapperData, LogOverview> logToLogOverviewMapper)
         {
+            _emailLogRepository = emailLogRepository;
             _logRepository = logRepository;
             _caseRepository = caseRepository;
             _problemLogService = problemLogService;
@@ -102,8 +105,6 @@ namespace DH.Helpdesk.Services.Services
 
         public Guid Delete(int id, string basePath)
         {
-            var ret = Guid.Empty;
-
             // delete log files
             var logFiles = _logFileRepository.GetLogFilesByLogId(id);
             if (logFiles != null)
@@ -121,11 +122,16 @@ namespace DH.Helpdesk.Services.Services
             var referencedFiles = _logFileRepository.GetReferencedFiles(id);
             referencedFiles?.ForEach(x => x.ParentLog_Id = null);
 
+            // delete email logs
+            _emailLogRepository.DeleteByLogId(id);
+            _emailLogRepository.Commit();
+            
+            // delete mail2tciket
             _mail2TicketRepository.DeleteByLogId(id);
             _mail2TicketRepository.Commit();
 
+            //delete log
             var l = _logRepository.GetById(id);
-
             _logRepository.Delete(l);
             _logRepository.Commit();
 
