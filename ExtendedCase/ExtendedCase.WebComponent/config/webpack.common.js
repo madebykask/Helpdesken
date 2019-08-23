@@ -66,8 +66,7 @@ module.exports = args => {
                         options: {
                             name: '[name].[ext]',
                             limit: 8192,
-                            outputPath: '/fonts/',
-                            publicPath: '/fonts'
+                            outputPath: 'fonts/',
                         }
                     }
                 }, {

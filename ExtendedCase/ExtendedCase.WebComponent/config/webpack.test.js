@@ -58,7 +58,17 @@ module.exports = WebpackMerge.smart(CommonConfig({ env: CONSTANTS.MODE,  outputD
 
         module: {
             rules: [
-                {
+              {
+                test: /\.(woff|woff2|eot|ttf|otf)(\?v=\d+\.\d+\.\d+)?$/,
+                use: {
+                    loader:'url-loader',
+                    options: {
+                        name: '[name].[ext]',
+                        limit: 8192,
+                        publicPath: '/'+ CONSTANTS.BASEURL +'/fonts'
+                    }
+                }
+            }, {
                     test: /\.(png|jpe?g|gif|ico)$/,
                     use: [{
                         loader: 'file-loader',
