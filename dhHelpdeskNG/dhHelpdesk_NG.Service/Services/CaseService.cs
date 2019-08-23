@@ -458,21 +458,12 @@ namespace DH.Helpdesk.Services.Services
             }
             _mail2TicketRepository.Commit();
 
-            foreach (var l in logs)
-            {
-                _emailLogRepository.DeleteByLogId(l.Id);
-            }
-            _emailLogRepository.Commit();
-
-            foreach (var l in logs)
-            {
-                _logRepository.Delete(l);
-            }
-            _logRepository.Commit();
-
-            //Delete Mail2Tickets by caseId
-            _mail2TicketRepository.DeleteByCaseId(id);
-            _mail2TicketRepository.Commit();
+            //foreach (var l in logs)
+            //{
+            //    _emailLogAttemptRepository.DeleteLogAttempts(l.Id);
+            //    _emailLogRepository.DeleteByLogId(l.Id);
+            //}
+            //_emailLogRepository.Commit();
 
             // delete email logs
             var elogs = _emailLogRepository.GetEmailLogsByCaseId(id);
@@ -487,6 +478,16 @@ namespace DH.Helpdesk.Services.Services
                 }
                 _emailLogRepository.Commit();
             }
+
+            foreach (var l in logs)
+            {
+                _logRepository.Delete(l);
+            }
+            _logRepository.Commit();
+
+            //Delete Mail2Tickets by caseId
+            _mail2TicketRepository.DeleteByCaseId(id);
+            _mail2TicketRepository.Commit();
 
             // delete caseHistory
             var caseHistories = _caseHistoryRepository.GetCaseHistoryByCaseId(id);
