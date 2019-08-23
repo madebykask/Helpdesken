@@ -61,6 +61,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseRepository _caseRepository;
         private readonly IProblemLogService _problemLogService;
         private IEmailLogRepository _emailLogRepository;
+        private IEmailLogAttemptRepository _emailLogAttemptRepository;
 
         #endregion
 
@@ -75,10 +76,10 @@ namespace DH.Helpdesk.Services.Services
             IFinishingCauseService finishingCauseService, 
             IMail2TicketRepository mail2TicketRepository,
             IEmailLogRepository emailLogRepository,
+            IEmailLogAttemptRepository emailLogAttemptRepository,
             IUnitOfWorkFactory unitOfWorkFactory,
             IEntityToBusinessModelMapper<LogMapperData, LogOverview> logToLogOverviewMapper)
         {
-            _emailLogRepository = emailLogRepository;
             _logRepository = logRepository;
             _caseRepository = caseRepository;
             _problemLogService = problemLogService;
@@ -86,6 +87,8 @@ namespace DH.Helpdesk.Services.Services
             _logFileRepository = logFileRepository;
             _finishingCauseService = finishingCauseService;
             _mail2TicketRepository = mail2TicketRepository;
+            _emailLogAttemptRepository = emailLogAttemptRepository;
+            _emailLogRepository = emailLogRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
             _logToLogOverviewMapper = logToLogOverviewMapper;
         }
@@ -123,19 +126,33 @@ namespace DH.Helpdesk.Services.Services
             referencedFiles?.ForEach(x => x.ParentLog_Id = null);
 
             // delete email logs
+            var emailLogs = _emailLogRepository.GetEmailLogsByCaseId(id);
+            if (emailLogs != null)
+            {
+                foreach (var l in emailLogs)
+                {
+                    if (l.EmailLogAttempts != null && l.EmailLogAttempts.Any())
+                        _emailLogAttemptRepository.DeleteLogAttempts(l.Id);
+
+                    _emailLogRepository.Delete(l);
+                }
+                _emailLogRepository.Commit();
+            }
+
+            // delete email logs
             _emailLogRepository.DeleteByLogId(id);
             _emailLogRepository.Commit();
             
+            //delete log
+            var log = _logRepository.GetById(id);
+            _logRepository.Delete(log);
+            _logRepository.Commit();
+
             // delete mail2tciket
             _mail2TicketRepository.DeleteByLogId(id);
             _mail2TicketRepository.Commit();
 
-            //delete log
-            var l = _logRepository.GetById(id);
-            _logRepository.Delete(l);
-            _logRepository.Commit();
-
-            return l.LogGUID;
+            return log.LogGUID;
         }
         
         public IList<LogOverview> GetCaseLogOverviews(int caseId, bool includeInternalLogs = false, bool includeInternalFiles = false)
