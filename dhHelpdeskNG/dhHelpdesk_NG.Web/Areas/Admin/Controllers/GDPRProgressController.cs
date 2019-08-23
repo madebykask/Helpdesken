@@ -6,7 +6,7 @@ using DH.Helpdesk.Services.Services;
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     //its important to keep session readonly to prevent simaltenous ajax requests from blocking
-    [SessionState(SessionStateBehavior.Disabled)]
+    [SessionState(SessionStateBehavior.ReadOnly)]
     public class GDPRProgressController : Controller  // keep Controller as a base class for faster performance
     {
         private readonly IGDPRTasksService _gdprTasksService;
