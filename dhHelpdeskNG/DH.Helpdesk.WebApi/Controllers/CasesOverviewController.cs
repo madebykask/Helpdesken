@@ -88,6 +88,12 @@ namespace DH.Helpdesk.WebApi.Controllers
         {
             var favorites = await _caseService.GetMyFavoritesWithFieldsAsync(cid, UserId);
 
+            //#71782: skip filters with ClosingReason and Closing date since mobile app supports only cases in progress only
+            favorites = 
+                favorites.Where(f => f.Fields != null && 
+                                     (f.Fields.ClosingReasonFilter == null || !f.Fields.ClosingReasonFilter.Any()) && 
+                                     (f.Fields.ClosingDateFilter == null || !f.Fields.ClosingDateFilter.HasValues)).ToList();
+
             var model = favorites.Any()
                 ? favorites.Select(f => new CaseFavoriteFilterModel()
                 {

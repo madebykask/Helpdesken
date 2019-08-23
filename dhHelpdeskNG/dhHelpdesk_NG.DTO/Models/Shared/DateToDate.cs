@@ -42,6 +42,11 @@ namespace DH.Helpdesk.BusinessData.Models.Shared
             return date?.ToString(format, DateTimeFormatInfo.InvariantInfo);
         }
 
+        public bool HasValues
+        {
+            get { return this.FromDate.HasValue || this.ToDate.HasValue; }
+        }
+
         #endregion
     }
 }
