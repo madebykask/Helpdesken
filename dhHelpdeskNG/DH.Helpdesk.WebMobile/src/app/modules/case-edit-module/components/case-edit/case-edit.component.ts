@@ -453,6 +453,9 @@ export class CaseEditComponent {
       if (values.costcentre != null) {
         this.form.setSafe(CaseFieldsNames.CostCentre, values.costcentre.Value);
       }
+      if (values.caption != null) {
+        this.form.setSafe(CaseFieldsNames.Caption, values.caption.Value);
+      }
     }
 
 /*     private extendedCaseIsValid(isOnNext: boolean): boolean {
