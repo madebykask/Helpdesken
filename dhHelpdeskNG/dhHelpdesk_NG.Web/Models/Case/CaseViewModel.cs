@@ -476,7 +476,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public Guid ExtendedCaseGuid { get; set; }
         public bool IndependentChild { get; internal set; }
         public Domain.CaseSolution CurrentCaseSolution { get; internal set; }
-
+        public string CurrentUserName { get; set; }
         public int CurrentUserRole { get; set; }
         
         public Dictionary<string, string> StatusBar { get; internal set; }

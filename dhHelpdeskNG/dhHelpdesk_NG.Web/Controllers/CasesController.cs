@@ -4678,6 +4678,7 @@ namespace DH.Helpdesk.Web.Controllers
             m.BackUrl = backUrl;
             m.CanGetRelatedCases = SessionFacade.CurrentUser.IsAdministrator();
             m.CurrentUserRole = SessionFacade.CurrentUser.UserGroupId;
+            m.CurrentUserName = SessionFacade.CurrentUserIdentity.UserId;
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             var acccessToGroups = _userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
             var deps = _departmentService.GetDepartmentsByUserPermissions(userId, customerId);

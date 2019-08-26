@@ -283,6 +283,7 @@ EditPage.prototype.loadExtendedCase = function () {
     formParameters.languageId = self.Current_EC_LanguageId;
     formParameters.extendedCaseGuid = self.Current_EC_Guid;
     formParameters.caseId = self.p.currentCaseId;
+    formParameters.currentUser = self.p.currentUserName;
     formParameters.applicationType = self.p.applicationType;
 
     var isLockedValue = window.parameters.isCaseLocked || '';
@@ -318,7 +319,7 @@ EditPage.prototype.loadExtendedCase = function () {
                 persons_cellphone: { Value: fieldValues.PersonsCellphone },
                 place: { Value: fieldValues.Place },
                 costcentre: { Value: fieldValues.CostCentre },
-                    caption: { Value: fieldValues.Caption }
+                caption: { Value: fieldValues.Caption }
             }
         }).then(function() {
             self.onExtendedCaseLoaded();

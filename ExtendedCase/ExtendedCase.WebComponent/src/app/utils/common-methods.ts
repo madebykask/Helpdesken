@@ -1,7 +1,7 @@
 ﻿import { Injectable, Inject } from '@angular/core';
 import { ItemModel } from '../models/form.model';
 import { IMap } from '../shared/common-types';
-var deepEqual = require('deep-equal');
+const deepEqual = require('deep-equal');
 import * as commonMethods from '../utils/common-methods';
 
 export function areItemModelArraysEqual(array1: ItemModel[], array2: ItemModel[]): boolean {
@@ -10,8 +10,8 @@ export function areItemModelArraysEqual(array1: ItemModel[], array2: ItemModel[]
         }
 
         let sortComparer = (x: ItemModel, y: ItemModel) => {
-            if (x.value < y.value) return -1;
-            if (x.value > y.value) return 1;
+            if (x.value < y.value) { return -1; }
+            if (x.value > y.value) { return 1; }
             return 0;
         };
 
@@ -48,7 +48,7 @@ export function areItemModelArraysEqual(array1: ItemModel[], array2: ItemModel[]
         return deepEqual(val1, val2, { strict : true });
     }
 
-    export function convertAnyToString(obj: any):string {
+    export function convertAnyToString(obj: any): string {
         if (isUndefinedOrNull(obj)) {
             return '';
         }
@@ -61,8 +61,9 @@ export function areItemModelArraysEqual(array1: ItemModel[], array2: ItemModel[]
     }
 
     export function clone(obj: any, copyNotOwnProperties?: boolean): any {
-        if (commonMethods.isArray(obj))
+        if (commonMethods.isArray(obj)) {
             return obj.slice();
+        }
 
         let newObj = {};
         for (let prop in obj) {
@@ -75,19 +76,19 @@ export function areItemModelArraysEqual(array1: ItemModel[], array2: ItemModel[]
     }
 
     export function hasKey<T>(items: T, key: string): boolean {
-        if (!items || items.constructor !== Array && items.constructor !== Object)
+        if (!items || items.constructor !== Array && items.constructor !== Object) {
             return false;
-        
+        }
         return items.hasOwnProperty(key);
     }
 
     export function getMapValueSafe<T>(items: IMap<T>, key: string): T {
-        if (!commonMethods.hasKey(items, key))
+        if (!commonMethods.hasKey(items, key)) {
             return undefined;
+        }
 
         return items[key];
     }
-
 
     export function toNumber(strNumber: string): number {
         if (!strNumber.length) {
@@ -96,11 +97,11 @@ export function areItemModelArraysEqual(array1: ItemModel[], array2: ItemModel[]
         return parseFloat(strNumber.replace(',', '.').replace(' ', ''));
     }
 
-    export function isUndefinedOrNull(value:any) {
+    export function isUndefinedOrNull(value: any) {
         return value === null || value === undefined;
     }
 
-    export function isUndefinedNullOrEmpty(value:any) {
+    export function isUndefinedNullOrEmpty(value: any) {
         return value === '' || value === undefined || value === null;
     }
 
@@ -108,13 +109,14 @@ export function areItemModelArraysEqual(array1: ItemModel[], array2: ItemModel[]
         return isUndefinedNullOrEmpty(val1) && isUndefinedNullOrEmpty(val2);
     }
 
-    export function areDictionariesEqual(a: IMap<any>, b: IMap<any>) : boolean {
+    export function areDictionariesEqual(a: IMap<any>, b: IMap<any>): boolean {
         if ((isUndefinedNullOrEmpty(a) && !isUndefinedNullOrEmpty(b)) ||
-           (!isUndefinedNullOrEmpty(a) && isUndefinedNullOrEmpty(b)))
+           (!isUndefinedNullOrEmpty(a) && isUndefinedNullOrEmpty(b))) {
             return false;
+        }
 
-        var aKeys = Object.keys(a).sort();
-        var bKeys = Object.keys(b).sort();
+        let aKeys = Object.keys(a).sort();
+        let bKeys = Object.keys(b).sort();
 
         if (aKeys.length !== bKeys.length) {
             return false;
@@ -124,9 +126,10 @@ export function areItemModelArraysEqual(array1: ItemModel[], array2: ItemModel[]
     }
 
     export function anyToBoolean(val: any): boolean {
-        if (isUndefinedNullOrEmpty(val))
+        if (isUndefinedNullOrEmpty(val)) {
             return false;
-        
+        }
+
         switch (val.toString().toLowerCase().trim()) {
             case 'true':
             case 'yes':
@@ -148,10 +151,10 @@ export function areItemModelArraysEqual(array1: ItemModel[], array2: ItemModel[]
         return str.substr(0, startIndex) + str.substr(startIndex + count);
     }
 
-    export function removeMultipleSpaces(val: string, trimTrailing:boolean = true): string {
-        if (typeof val !== 'string') return val;
+    export function removeMultipleSpaces(val: string, trimTrailing = true): string {
+        if (typeof val !== 'string') { return val; }
 
-        let regex = /\s{2,}/igm; //with multiline (m)
+        let regex = /\s{2,}/igm; // with multiline (m)
 
         while (regex.test(val)) {
             val = val.replace(regex, ' ');
@@ -174,25 +177,27 @@ export function areItemModelArraysEqual(array1: ItemModel[], array2: ItemModel[]
         return result;
     }
 
-    export function formatObject(item: any):string {
-        if (isUndefinedNullOrEmpty(item)) return '';
+    export function formatObject(item: any): string {
+        if (isUndefinedNullOrEmpty(item)) { return ''; }
 
-        //stringify arrays and objects
+        // stringify arrays and objects
         if (isArray(item) || typeof item === 'object') {
             return JSON.stringify(item);
         }
 
-        //numbers, boolean, string
+        // numbers, boolean, string
         return item.toString();
     }
 
-    export function parseIntOrDefault(val:any, defaultVal:number = 0) {
-        if (isUndefinedNullOrEmpty(val))
+    export function parseIntOrDefault(val: any, defaultVal = 0) {
+        if (isUndefinedNullOrEmpty(val)) {
             return defaultVal;
-        
-        let res = parseInt(val.toString());        
-        if (isNaN(res) || res === undefined)
+        }
+
+        let res = parseInt(val.toString(), 10);
+        if (isNaN(res) || res === undefined) {
             return defaultVal;
+        }
 
         return res;
     }
