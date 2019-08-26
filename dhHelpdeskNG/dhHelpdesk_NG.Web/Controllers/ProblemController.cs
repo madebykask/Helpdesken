@@ -433,7 +433,6 @@ namespace DH.Helpdesk.Web.Controllers
                     var caseLog = new CaseLog
                     {
                         CaseId = c.Id,
-                        Id = 1,
                         FinishingDate = log.FinishConnectedCases ? (log.FinishingDate.HasValue ? log.FinishingDate : DateTime.Now) : null,
                         FinishingType = log.FinishConnectedCases ? log.FinishingCauseId : null,
                         SendMailAboutLog = true,

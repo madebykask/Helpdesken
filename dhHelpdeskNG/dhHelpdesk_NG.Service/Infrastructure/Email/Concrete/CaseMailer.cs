@@ -63,7 +63,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 
             //if (!isCreatingCase)
             //{
-            if (log == null || log.Id <= 0 || string.IsNullOrWhiteSpace(log.TextExternal) ||
+            if (log == null || string.IsNullOrWhiteSpace(log.TextExternal) ||
                 !log.SendMailAboutCaseToNotifier ||
                 dontSendMailToNotfier ||
                 (caseMailSetting_DontSendMail == false && newCase.FinishingDate != null))
@@ -135,7 +135,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                 curMail,
                                 mailMessageId);
 
-                        notifierEmailLog.Log_Id = log.Id;
+                        if(log.Id > 0) 
+                            notifierEmailLog.Log_Id = log.Id;
 
                         var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + notifierEmailLog.EmailLogGUID.ToString();
                         var mailResponse = EmailResponse.GetEmptyEmailResponse();
