@@ -697,18 +697,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
 
-            if (errors.Count == 0)
-            {
-               // return this.RedirectToAction("edit", "users", new { id = id });
-                return RedirectToAction("index", "users");
-            }
-            else
+            if (errors.Count > 0)
             {
                 TempData["PreventError"] = errors.FirstOrDefault().Value;
+                var copyModel = CreateInputViewModel(copy);
+                return View(copyModel);
             }
 
-            var copyModel = CreateInputViewModel(copy);
-            return View(copyModel);
+            return RedirectToAction("index", "users");
         }
 
         private IList<CustomerUser> GetCustomerUserChanges(int oldUserId, IList<CustomerUserForEdit> customerPermissions)
