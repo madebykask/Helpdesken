@@ -81,14 +81,14 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface ILogFileRepository : IRepository<LogFile>
     {
         LogFile GetDetails(int id);
-        byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName, LogFileType logType = LogFileType.External);
+        byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName, LogFileType logType);
         List<string> FindFileNamesByLogId(int logId);
         List<string> FindFileNamesByLogId(int logId, LogFileType logType);
         List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId, LogFileType logFileType);
         List<LogFile> GetLogFilesByCaseId(int caseId, bool includeInternal);
         List<LogFile> GetLogFilesByLogId(int logId, bool includeInternal = true);
         List<LogFile> GetReferencedFiles(int logId);
-        void DeleteByLogIdAndFileName(int logId, string basePath, string fileName, LogFileType logType = LogFileType.External);
+        void DeleteByLogIdAndFileName(int logId, string basePath, string fileName, LogFileType logType);
         void MoveLogFiles(int caseId, string fromBasePath, string toBasePath);
         List<LogFileExisting> GetExistingFileNamesByCaseId(int caseId);
         List<LogFileExisting> GetExistingFileNamesByCaseId(int caseId, bool isInternalLogNote);
@@ -115,7 +115,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return Table.FirstOrDefault(f => f.Id == id);
         }
 
-        public byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName, LogFileType logType = LogFileType.External)
+        public byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName, LogFileType logType)
         {
             var logFolder = logType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
             return _filesStorage.GetFileContent(logFolder, logId, basePath, fileName);
@@ -166,9 +166,9 @@ namespace DH.Helpdesk.Dal.Repositories
             return DataContext.LogFiles.Where(l => l.ParentLog_Id == logId).ToList();
         }
 
-        public void DeleteByLogIdAndFileName(int logId, string basePath, string fileName, LogFileType logType = LogFileType.External)
+        public void DeleteByLogIdAndFileName(int logId, string basePath, string fileName, LogFileType logType)
         {
-            var lf = DataContext.LogFiles.Single(f => f.Log_Id == logId && f.FileName == fileName.Trim());
+            var lf = DataContext.LogFiles.Single(f => f.Log_Id == logId && f.FileName == fileName.Trim() && f.LogType == logType);
             DataContext.LogFiles.Remove(lf);
             Commit();
 

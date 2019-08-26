@@ -92,7 +92,7 @@ namespace DH.Helpdesk.Services.Services
 
         public void DeleteByLogIdAndFileName(int logId, string basePath, string fileName, LogFileType logType)
         {
-            _logFileRepository.DeleteByLogIdAndFileName(logId, basePath, fileName);
+            _logFileRepository.DeleteByLogIdAndFileName(logId, basePath, fileName, logType);
         }
 
         public void AddFiles(List<CaseLogFileDto> fileDtos, List<LogExistingFileModel> exFiles = null, int? currentLogId = null)
