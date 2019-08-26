@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using DH.Helpdesk.BusinessData.Models.Gdpr;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
@@ -47,7 +49,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 
         private class CaseFileEntity
         {
-			private LogFileType logType;
 			#region ctor()
 
 			public CaseFileEntity(int caseId, string caseNumber, string fileName)
@@ -61,7 +62,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 				CaseNumber = caseNumber;
 				LogId = logId;
 				FileName = fileName;
-				this.logType = logType;
+				LogType = logType;
 			}
 
 			#endregion
@@ -70,7 +71,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             public string CaseNumber { get; private set; }
             public int LogId { get; private set; }
             public string FileName { get; private set; }
-			public LogFileType LogType { get; internal set; }
+			public LogFileType LogType { get; private set; }
 
 			public int GetCaseNumberOrId()
             {
@@ -288,17 +289,32 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             foreach (var fileEntity in caseFiles)
             {
                 int caseId = fileEntity.GetCaseNumberOrId();
-                this._filesStorage.DeleteFile(ModuleName.Cases, caseId, baseDirPath, fileEntity.FileName);
+                try
+                {
+                    this._filesStorage.DeleteFile(ModuleName.Cases, caseId, baseDirPath, fileEntity.FileName);
+                }
+                catch (IOException e)
+                {
+                    _log.Error("Error deleting log file.", e);
+                }
+
             }
 
             //delete log files
             foreach (var fileEntity in logFiles)
             {
-				if (fileEntity.LogType == LogFileType.External)
-					this._filesStorage.DeleteFile(ModuleName.Log, fileEntity.LogId, baseDirPath, fileEntity.FileName);
-				else
-					this._filesStorage.DeleteFile(ModuleName.LogInternal, fileEntity.LogId, baseDirPath, fileEntity.FileName);
-			}
+                _log.Debug($"Deleting fileEntity { fileEntity.FileName }: {fileEntity.LogType}.");
+                try
+                {
+                    this._filesStorage.DeleteFile(
+                        fileEntity.LogType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal,
+                        fileEntity.LogId, baseDirPath, fileEntity.FileName);
+                }
+                catch (IOException e)
+                {
+                    _log.Error("Error deleting log file.", e);
+                }
+            }
         }
 
         private string GetFilesDirPath(int customerId)
