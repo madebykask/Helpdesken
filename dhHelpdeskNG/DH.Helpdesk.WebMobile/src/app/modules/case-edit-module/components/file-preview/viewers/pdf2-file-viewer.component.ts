@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrapper';
-import { saveAs } from "file-saver";
+import { saveAs } from 'file-saver';
 
 @Component({
-  styles:[`
+  styles: [`
   :host {
     display:block;
     position:relative;
@@ -12,7 +12,7 @@ import { saveAs } from "file-saver";
   }
   .pdfWrapper {
       position:relative;
-      display: table;      
+      display: table;
       position: relative;
       min-height:100%;
       min-width: 100%;
@@ -32,7 +32,7 @@ import { saveAs } from "file-saver";
     <div class="pdfWrapper">
       <object [attr.data]="content | sanitize:'resourceUrl'" type="application/pdf">
         <iframe [src]="content | sanitize:'resourceUrl'">
-            <p>Your browser does not support PDFs. <a (click)="downloadPdf()">Download the PDF</a>.</p>      
+            <p>Your browser does not support PDFs. <a (click)="downloadPdf()">Download the PDF</a>.</p>
         </iframe>
       </object>
     </div>
@@ -40,20 +40,20 @@ import { saveAs } from "file-saver";
 })
 export class Pdf2FileViewerComponent implements OnInit {
 
-  @Input() fileName:string;
-  @Input() fileData:Blob;
-  
-  content:any;
+  @Input() fileName: string;
+  @Input() fileData: Blob;
+
+  content: any;
 
   constructor(private windowWrapper: WindowWrapper) {
   }
 
   ngOnInit(): void {
-    this.content = this.windowWrapper.nativeWindow.URL.createObjectURL(this.fileData);// +"#view=FitW";    
+    this.content = this.windowWrapper.nativeWindow.URL.createObjectURL(this.fileData); // +"#view=FitW";
   }
 
   downloadPdf() {
-    saveAs(this.fileData, this.fileName); 
+    saveAs(this.fileData, this.fileName);
   }
 
 }

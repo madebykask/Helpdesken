@@ -21,6 +21,6 @@ export class RegionsService extends HttpApiServiceBase {
             map((jsItems: any) => {
                 return this.caseHelper.toOptionItems(jsItems as Array<any>) || new Array<OptionItem>();
             })
-        );//TODO: error handling
+        ); //TODO: error handling
     }
 }

@@ -5,10 +5,11 @@ import {
 import { CaseFormControl } from './case-form-control';
 import { BehaviorSubject } from 'rxjs';
 import { NotifierFormFieldsSetter } from './notifier-form-fields-setter';
-import { hasKey } from '../../Utils/common-methods';
+import { CommunicationService, Channels, CaseFieldValueChangedEvent } from 'src/app/services/communication';
 
 export class CaseFormGroup extends FormGroup {
   private isSubmitted$ = new BehaviorSubject<boolean>(false);
+  private commService: CommunicationService;
 
   constructor(controls: { [key: string]: CaseFormControl; },
     validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null,
@@ -47,6 +48,10 @@ export class CaseFormGroup extends FormGroup {
     return undefined;
   }
 
+  setCommService(commService: CommunicationService) {
+    this.commService = commService;
+  }
+
   getValue(name: string) {
     const noField = undefined;
     if (!this.contains(name)) {
@@ -57,10 +62,15 @@ export class CaseFormGroup extends FormGroup {
   }
 
   setSafe(name: string, val: any, raiseValueChange: boolean = true) {
-    const control = <CaseFormControl>super.get(name);
+    const control = this.get(name);
     if (control === undefined || control === null) { return; }
 
     control.setValue(val, { emitEvent: raiseValueChange });
+  }
+
+  setValueWithNotification(fieldName: string, value: any) {
+    this.setSafe(fieldName, value);
+    this.commService.publish(Channels.CaseFieldValueChanged, new CaseFieldValueChangedEvent(value, null, fieldName));
   }
 
   get isSubmitted() {
@@ -102,9 +112,5 @@ export class CaseFormGroup extends FormGroup {
       }
     }
     return invalidControls;
-  }
-
-  getNotifierFieldsSetter(isRegarding) {
-    return new NotifierFormFieldsSetter(isRegarding, this);
   }
 }

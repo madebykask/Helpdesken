@@ -12,12 +12,12 @@ export const environment = {
 };
 
 export const config = {
-      // apiUrl: 'http://dhutvas3.datahalland.se:8049',
-      apiUrl: 'http://localhost:8049',
-      clientId: 'hd',
-      version: VERSION.fullVersion,
-      internalVersion: require('../../package.json').version,
-      enableLog: true,
+    // apiUrl: 'http://dhutvas3.datahalland.se:8049',
+    apiUrl: 'http://localhost:8049',
+    clientId: 'hd',
+    version: VERSION.fullVersion,
+    internalVersion: require('../../package.json').version,
+    enableLog: true,
 };
 
 /*
@@ -26,4 +26,4 @@ export const config = {
  * import the following file, but please comment it out in production mode
  * because it will have performance impact when throw error
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI. 
+// import 'zone.js/dist/zone-error';  // Included with Angular CLI.

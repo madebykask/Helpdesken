@@ -28,15 +28,14 @@ namespace DH.Helpdesk.Web.Controllers
 
     public class ProblemsController : BaseController
     {
-        private readonly IProblemService problemService;
-        private readonly IProblemLogService problemLogService;
-        private readonly IFinishingCauseService finishingCauseService;
+        private readonly IProblemService _problemService;
+        private readonly IProblemLogService _problemLogService;
+        private readonly IFinishingCauseService _finishingCauseService;
         private readonly ISettingService _settingService;
-        private readonly ICaseService caseService;
-        private readonly IMasterDataService _masterDataService;
+        private readonly ICaseService _caseService;
         private readonly ICustomerService _customerService;
 
-        private readonly IUserService userService;
+        private readonly IUserService _userService;
 
         public ProblemsController(
                 IProblemService problemService,
@@ -49,13 +48,12 @@ namespace DH.Helpdesk.Web.Controllers
                 ICustomerService customerService)
             : base(masterDataService)
         {
-            this.problemService = problemService;
-            this.userService = userService;
-            this.problemLogService = problemLogService;
-            this.caseService = caseService;
-            this.finishingCauseService = finishingCauseService;
-            this._settingService = settingService;
-            _masterDataService = masterDataService;
+            _problemService = problemService;
+            _userService = userService;
+            _problemLogService = problemLogService;
+            _caseService = caseService;
+            _finishingCauseService = finishingCauseService;
+            _settingService = settingService;
             _customerService = customerService;
         }
 
@@ -138,7 +136,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Index()
         {
             var filter = SessionFacade.FindPageFilters<ProblemFilter>(PageName.Problems) ?? new ProblemFilter { EntityStatus = EntityStatus.Active };
-            var problems = this.problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id, filter.EntityStatus);
+            var problems = this._problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id, filter.EntityStatus);
             var customerId = SessionFacade.CurrentCustomer.Id;
             var settings = this._settingService.GetCustomerSetting(customerId);
 
@@ -153,7 +151,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public PartialViewResult Search(EntityStatus show)
         {
-            var problems = this.problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id, show);
+            var problems = this._problemService.GetCustomerProblems(SessionFacade.CurrentCustomer.Id, show);
             var settings = this._settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
             var problemOutputModels = problems.Select(t=> MapProblemOverviewToOutputModel(t, settings.IsUserFirstLastNameRepresentation == 1)).ToList();
 
@@ -180,13 +178,18 @@ namespace DH.Helpdesk.Web.Controllers
 
         public ActionResult NewProblem()
         {
-            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id);
+            var users = _userService.GetAvailablePerformersOrUserId(SessionFacade.CurrentCustomer.Id);
 
-            var userOutputModels = users.Select(x => new SelectListItem { Text = string.Format("{0} {1}", x.FirstName, x.SurName), Value = x.Id.ToString(CultureInfo.InvariantCulture) }).ToList();
+            var userOutputModels = 
+                users.Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(CultureInfo.InvariantCulture),
+                    Text = $"{x.FirstName} {x.SurName}"
+                }).ToList();
 
             var viewModel = new ProblemEditViewModel { Problem = new ProblemEditModel(), Users = userOutputModels };
 
-            return this.View(viewModel);
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -225,7 +228,7 @@ namespace DH.Helpdesk.Web.Controllers
                 log.FinishingDate,
                 log.FinishConnectedCases ? 1 : 0);
 
-            this.problemService.AddProblem(problemDto, logDto);
+            this._problemService.AddProblem(problemDto, logDto);
 
             return this.RedirectToAction("Index");
         }
@@ -247,14 +250,14 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CurrentCustomer.Id,
                 null);
 
-            this.problemService.AddProblem(problemDto);
+            this._problemService.AddProblem(problemDto);
 
             return this.RedirectToAction("Index");
         }
 
         public ActionResult Delete(int id)
         {
-            this.problemService.DeleteProblem(id);
+            this._problemService.DeleteProblem(id);
             return this.RedirectToAction("Index");
         }
 
@@ -272,28 +275,28 @@ namespace DH.Helpdesk.Web.Controllers
                     Id = problem.Id
                 };
 
-            this.problemService.UpdateProblem(problemDto);
+            this._problemService.UpdateProblem(problemDto);
 
             return this.RedirectToAction("Index");
         }
 
         public ActionResult Activate(int id)
         {
-            this.problemService.ActivateProblem(id);
+            this._problemService.ActivateProblem(id);
             return this.RedirectToAction("Problem", new { id });
         }
 
         public PartialViewResult LogForNewProblem()
         {
-            var causes = finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id);
+            var causes = _finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id);
             return this.PartialView("_InputLog", new LogEditModel { FinishingCauses = causes });
         }
 
         public PartialViewResult Log(int id)
         {
-            var causes = finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id);
-            var finishingCauses = finishingCauseService.GetFinishingCauseInfos(SessionFacade.CurrentCustomer.Id);
-            var log = MapLogs(this.problemLogService.GetProblemLog(id));
+            var causes = _finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id);
+            var finishingCauses = _finishingCauseService.GetFinishingCauseInfos(SessionFacade.CurrentCustomer.Id);
+            var log = MapLogs(this._problemLogService.GetProblemLog(id));
             log.FinishingCauses = causes;
             log.FinishingCause = CommonHelper.GetFinishingCauseFullPath(finishingCauses.ToArray(), log.FinishingCauseId);
 
@@ -302,7 +305,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         public PartialViewResult NewLog(int problemId)
         {
-            var causes = finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id);
+            var causes = _finishingCauseService.GetFinishingCausesWithChilds(SessionFacade.CurrentCustomer.Id);
             return this.PartialView("NewLog", new LogEditModel { FinishingCauses = causes });
         }
 
@@ -332,7 +335,7 @@ namespace DH.Helpdesk.Web.Controllers
                 log.FinishingDate,
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId };
 
-            this.problemLogService.AddLog(logDto);
+            this._problemLogService.AddLog(logDto);
             SendProblemLogEmail(log);
             return this.RedirectToAction("ProblemActiveLog", new { id = log.ProblemId });
         }
@@ -363,14 +366,14 @@ namespace DH.Helpdesk.Web.Controllers
                 log.FinishingDate,
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId, Id = log.Id };
 
-            this.problemLogService.UpdateLog(logDto);
+            this._problemLogService.UpdateLog(logDto);
             SendProblemLogEmail(log);
             return this.RedirectToAction("ProblemActiveLog", new { id = log.ProblemId });
         }
 
         public ActionResult DeleteLog(int problemId, int logId)
         {
-            this.problemLogService.DeleteLog(logId);
+            this._problemLogService.DeleteLog(logId);
             return this.RedirectToAction("ProblemActiveLog", new { id = problemId });
         }
 
@@ -383,15 +386,15 @@ namespace DH.Helpdesk.Web.Controllers
 
         private ProblemEditViewModel CreateProblemEditViewModel(int id)
         {
-            var problem = this.problemService.GetProblem(id);
-            var logs = this.problemLogService.GetProblemLogs(id);
+            var problem = this._problemService.GetProblem(id);
+            var logs = this._problemLogService.GetProblemLogs(id);
 
             // todo!!!
-            var cases = this.caseService.GetProblemCases(SessionFacade.CurrentCustomer.Id, id);
+            var cases = this._caseService.GetProblemCases(SessionFacade.CurrentCustomer.Id, id);
             var setting = this._settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
             var isFirstName = (setting.IsUserFirstLastNameRepresentation == 1);
 
-            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).Where(x => x.UserGroup_Id > 1);
+            var users = _userService.GetAvailablePerformersOrUserId(SessionFacade.CurrentCustomer.Id); 
             var problemOutputModel = MapProblemOverviewToEditOutputModel(problem);
 
             var outputLogs = logs.Select(x=> MapLogs(x, isFirstName)).OrderBy(x => x.Date).ToList();
@@ -412,11 +415,11 @@ namespace DH.Helpdesk.Web.Controllers
         {
             if (log.ExternNotering || log.FinishConnectedCases)
             {
-                var cases = caseService.GetProblemCases(log.ProblemId);
+                var cases = _caseService.GetProblemCases(log.ProblemId);
                 foreach (var c in cases)
                 {
                     var userTimeZone = TimeZoneInfo.Local;
-                    var caseHistoryId = problemService.GetCaseHistoryId(c.Id, log.ProblemId);
+                    var caseHistoryId = _problemService.GetCaseHistoryId(c.Id, log.ProblemId);
 
                     var customer = _customerService.GetCustomer(c.Customer_Id);
                     var caseMailSetting = new CaseMailSetting(string.Empty, customer.HelpdeskEmail, RequestExtension.GetAbsoluteUrl(), 1)
@@ -430,19 +433,20 @@ namespace DH.Helpdesk.Web.Controllers
                     var caseLog = new CaseLog
                     {
                         CaseId = c.Id,
-                        Id = 1,
                         FinishingDate = log.FinishConnectedCases ? (log.FinishingDate.HasValue ? log.FinishingDate : DateTime.Now) : null,
                         FinishingType = log.FinishConnectedCases ? log.FinishingCauseId : null,
                         SendMailAboutLog = true,
                         SendMailAboutCaseToNotifier = true,
                         CaseHistoryId = caseHistoryId
                     };
+
                     if (log.ExternNotering)
                         caseLog.TextExternal = log.LogText;
+
                     if (log.InternNotering)
                         caseLog.TextInternal = log.LogText;
 
-                    caseService.SendProblemLogEmail(c, caseMailSetting, caseHistoryId, userTimeZone, caseLog, log.FinishConnectedCases);
+                    _caseService.SendProblemLogEmail(c, caseMailSetting, caseHistoryId, userTimeZone, caseLog, log.FinishConnectedCases);
                 }
             }
         }

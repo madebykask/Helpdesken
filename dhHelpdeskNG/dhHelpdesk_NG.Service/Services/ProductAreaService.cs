@@ -756,7 +756,7 @@ namespace DH.Helpdesk.Services.Services
                 lookingProductAreaId = this.productAreaCache[lookingProductAreaId.Value].Parent_ProductArea_Id;
             }
 
-            return res.AsQueryable().Reverse().ToArray();
+            return res.AsEnumerable().Reverse();
         }
 
         public IEnumerable<string> GetParentPathOnExternalPage(int productAreaId, int customerId, out bool checkShowOnExtenal)

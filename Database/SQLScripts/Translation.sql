@@ -7387,13 +7387,6 @@ If not exists (select * from tblTextTranslation where text_id = 2005 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2005, 2, 'Extended Case is not valid')
 GO
 
-If not exists (select * from tbltext where id = 2006)
-	insert into tbltext (id, TextString) VALUES (2006, 'Ändrad')
-GO
-If not exists (select * from tblTextTranslation where text_id = 2006 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2006, 2, 'Changed Date')
-GO
-
 If not exists (select * from tbltext where id = 2016)
 	insert into tbltext (id, TextString) VALUES (2016, 'Max antal tecken har överskridits')
 GO
@@ -7440,6 +7433,26 @@ If not exists (select * from tblTextTranslation where text_id = 2022 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2022, 2, 'Log Note date')
 GO
 
+If not exists (select * from tbltext where id = 2023)
+	insert into tbltext (id, TextString) VALUES (2023, 'Ändrad')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2023 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2023, 2, 'Changed Date')
+GO
+
+If not exists (select * from tbltext where id = 2024)
+	insert into tbltext (id, TextString) VALUES (2024, 'Intern bifogad fil')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2024 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2024, 2, 'Internal attached file')
+GO
+
+If not exists (select * from tbltext where id = 2025)
+	insert into tbltext (id, TextString) VALUES (2025, 'Extern bifogad fil')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2025 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2025, 2, 'External attached file')
+GO
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)

@@ -40,6 +40,8 @@ using System;
         int GetCustomerLanguage(int customerid);
 
         CaseDefaultsInfo GetCustomerDefaults(int customerId, bool isSelfService = false);
+
+        int GetCustomerByCaseId(int caseId);
     }
 
     public sealed class CustomerRepository : RepositoryBase<Customer>, ICustomerRepository
@@ -47,6 +49,12 @@ using System;
         public CustomerRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+
+
+        public int GetCustomerByCaseId(int caseId)
+        {
+            return DataContext.Cases.Where(x => x.Id == caseId).Select(x => x.Customer_Id).Single();
         }
 
         public string GetCustomerName(int customerId)
@@ -126,14 +134,12 @@ using System;
 
         public ItemOverview GetOverview(int customerId)
         {
-            var entities = this.Table
+            var customerOverview = Table
                     .Where(c => c.Id == customerId)
-                    .Select(c => new { Value = c.Id, c.Name })
-                    .ToList();
+                    .Select(c => new ItemOverview() { Value = c.Id.ToString(), Name = c.Name })
+                    .FirstOrDefault();
 
-            return entities
-                    .Select(c => new ItemOverview(c.Name, c.Value.ToString(CultureInfo.InvariantCulture)))
-                    .FirstOrDefault();                        
+            return customerOverview;                        
         }
 
         public CaseDefaultsInfo GetCustomerDefaults(int customerId, bool isSelfService = false)
@@ -180,6 +186,7 @@ using System;
         IList<CustomerUserList> GetCustomerUsersForStartFinal(int userId);
         IList<CustomerUser> GetCustomerUsersForCustomer(int customeId);
         IList<CustomerUser> GetCustomerUsersForUser(int userId);
+        IList<CustomerUser> GetCustomerUsersForToCopy(int userId);
         void UpdateUserSetting(UserCaseSetting newSetting);
         bool IsCustomerUser(int customerId, int userId);
         bool CheckUserCasePermissions(int userId, int caseId, Expression<Func<Case, bool>> casePermissionsFilter = null);
@@ -304,6 +311,12 @@ using System;
                          select cu;
 
             return query.ToList();
+        }
+
+        public IList<CustomerUser> GetCustomerUsersForToCopy(int userId)
+        {
+            var res = Table.AsNoTracking().Where(x => x.User_Id == userId).ToList();
+            return res;
         }
 
         /// <summary>

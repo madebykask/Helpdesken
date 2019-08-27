@@ -28,10 +28,10 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 {
     public class OverviewController : BaseController
     {
-	    private readonly IDepartmentService _departmentService;
-		private readonly IInvoiceService _invoiceService;
-	    private readonly ISettingService _settingService;
-		private readonly IGlobalSettingService _globalSettingService;
+        private readonly IDepartmentService _departmentService;
+        private readonly IInvoiceService _invoiceService;
+        private readonly ISettingService _settingService;
+        private readonly IGlobalSettingService _globalSettingService;
         private readonly IExternalInvoiceService _externalInvoiceService;
         private readonly ILogService _logService;
 
@@ -39,75 +39,75 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
         private readonly IExcelFileComposer _excelFileComposer;
 
         public OverviewController(
-		    IMasterDataService masterDataService,
-			IDepartmentService departmentService,
-			IInvoiceService invoiceService,
-			ISettingService settingService,
-			IGlobalSettingService globalSettingService,
+            IMasterDataService masterDataService,
+            IDepartmentService departmentService,
+            IInvoiceService invoiceService,
+            ISettingService settingService,
+            IGlobalSettingService globalSettingService,
             IExternalInvoiceService externalInvoiceService,
             IExportFileNameFormatter exportFileNameFormatter,
             IExcelFileComposer excelFileComposer,
             ILogService logService)
-		    : base(masterDataService)
-		{
-			_departmentService = departmentService;
-			_invoiceService = invoiceService;
-			_settingService = settingService;
-			_globalSettingService = globalSettingService;
-		    _externalInvoiceService = externalInvoiceService;
-		    _logService = logService;
+            : base(masterDataService)
+        {
+            _departmentService = departmentService;
+            _invoiceService = invoiceService;
+            _settingService = settingService;
+            _globalSettingService = globalSettingService;
+            _externalInvoiceService = externalInvoiceService;
+            _logService = logService;
             _exportFileNameFormatter = exportFileNameFormatter;
             _excelFileComposer = excelFileComposer;
         }
 
-		// GET: Invoices/Overview
-		public ActionResult Index()
-		{
-			var customerId = SessionFacade.CurrentCustomer.Id;
+        // GET: Invoices/Overview
+        public ActionResult Index()
+        {
+            var customerId = SessionFacade.CurrentCustomer.Id;
 
-			ViewBag.Departments = _departmentService.GetChargedDepartments(customerId)
-				.Select(x => new SelectListItem
-				{
-					Text = x.DepartmentName,
-					Value = x.Id.ToString()
-				}).ToList();
+            ViewBag.Departments = _departmentService.GetChargedDepartments(customerId)
+                .Select(x => new SelectListItem
+                {
+                    Text = x.DepartmentName,
+                    Value = x.Id.ToString()
+                }).ToList();
 
-			var statuses = InvoiceStatus.No.ToSelectListItems();
-			statuses.RemoveAll(x => x.Value == InvoiceStatus.No.ToInt().ToString());
-			ViewBag.Statuses = statuses;
+            var statuses = InvoiceStatus.No.ToSelectListItems();
+            statuses.RemoveAll(x => x.Value == InvoiceStatus.No.ToInt().ToString());
+            ViewBag.Statuses = statuses;
 
-			var settings = _settingService.GetCustomerSetting(customerId);
+            var settings = _settingService.GetCustomerSetting(customerId);
 
-			ViewBag.MinStep = settings.MinRegWorkingTime;
+            ViewBag.MinStep = settings.MinRegWorkingTime;
 
-			var model = new InvoiceOverviewViewModel { Filter = new InvoiceOverviewFilterModel { Status = InvoiceStatus.Ready }, ShowFiles = settings.InvoiceType == 2 };
-			return View(model);
+            var model = new InvoiceOverviewViewModel { Filter = new InvoiceOverviewFilterModel { Status = InvoiceStatus.Ready }, ShowFiles = settings.InvoiceType == 2 };
+            return View(model);
         }
 
-	    public ActionResult Files()
-	    {
-			var customerId = SessionFacade.CurrentCustomer.Id;
+        public ActionResult Files()
+        {
+            var customerId = SessionFacade.CurrentCustomer.Id;
 
-			var settings = _settingService.GetCustomerSetting(customerId);
+            var settings = _settingService.GetCustomerSetting(customerId);
 
-			if (settings.InvoiceType != 2)
-				return new HttpNotFoundResult();
+            if (settings.InvoiceType != 2)
+                return new HttpNotFoundResult();
 
-		    var files = _invoiceService.GetInvoiceHeaders(customerId).Select(x => new InvoiceFileViewModel
-		    {
-				Guid = x.Guid,
-				Date = x.Date,
-				Name = x.Name
-		    }).ToList();
+            var files = _invoiceService.GetInvoiceHeaders(customerId).Select(x => new InvoiceFileViewModel
+            {
+                Guid = x.Guid,
+                Date = x.Date,
+                Name = x.Name
+            }).ToList();
 
-		    var filesModel = files.GroupBy(x => x.Date.ToString("yyyy"))
-			    .ToDictionary(x => x.Key.ToString(), x => x.GroupBy(y => y.Date.ToString("MM"))
-					.ToDictionary(y => y.Key, y => y.Select(z => z).ToList()));
+            var filesModel = files.GroupBy(x => x.Date.ToString("yyyy"))
+                .ToDictionary(x => x.Key.ToString(), x => x.GroupBy(y => y.Date.ToString("MM"))
+                    .ToDictionary(y => y.Key, y => y.Select(z => z).ToList()));
 
-			var model = new InvoiceFilesViewModel {ShowFiles = true, Files = filesModel };
+            var model = new InvoiceFilesViewModel {ShowFiles = true, Files = filesModel };
 
-			return View(model);
-	    }
+            return View(model);
+        }
 
         [System.Web.Http.HttpGet]
         public ActionResult InvoiceExport(InvoiceOverviewFilterModel filter)
@@ -162,17 +162,17 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
         }
 
         [System.Web.Http.HttpGet]
-	    public ActionResult InvoiceFile(Guid id)
-	    {
-		    var file = _invoiceService.GetInvoiceHeader(id);
+        public ActionResult InvoiceFile(Guid id)
+        {
+            var file = _invoiceService.GetInvoiceHeader(id);
 
-			if (file == null)
-				return HttpNotFound();
+            if (file == null)
+                return HttpNotFound();
 
-			var globalSetting = _globalSettingService.GetGlobalSettings().First();
+            var globalSetting = _globalSettingService.GetGlobalSettings().First();
 
-			return File(Path.Combine(globalSetting.InvoiceFileFolder, file.Name), "text/plain", file.Name);
-	    }
+            return File(Path.Combine(globalSetting.InvoiceFileFolder, file.Name), "text/plain", file.Name);
+        }
 
         [OutputCache(NoStore = true, Duration = 0)]
         [System.Web.Mvc.HttpGet]

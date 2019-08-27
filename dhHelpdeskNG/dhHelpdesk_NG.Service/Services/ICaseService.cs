@@ -37,6 +37,8 @@ namespace DH.Helpdesk.Services.Services
             string adUser,
             out ParentCaseInfo parentCaseInfo);
 
+
+        CaseOverview GetCaseBasic(int id);
         Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false);
         Case GetCaseById(int id, bool markCaseAsRead = false);
         Case GetDetachedCaseById(int id);
@@ -87,20 +89,20 @@ namespace DH.Helpdesk.Services.Services
             string caseExtraFollowers = null);
 
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath, TimeZoneInfo userTimeZone,
-                           Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null, User currentLoggedInUser = null,
+                           Case oldCase = null, CaseLog log = null, List<CaseLogFileDto> logFiles = null, User currentLoggedInUser = null,
                             string extraFollowersEmails = null);
 
         List<BusinessRuleActionModel> CheckBusinessRules(BREventType occurredEvent, Case currentCase, Case oldCase = null);
 
-        void ExecuteBusinessActions(List<BusinessRuleActionModel> actions, Case currentCase, CaseLog log, TimeZoneInfo userTimeZone,
+        void ExecuteBusinessActions(List<BusinessRuleActionModel> actions, int currentCaseId, CaseLog log, TimeZoneInfo userTimeZone,
                                     int caseHistoryId, string basePath, int currentLanguageId, CaseMailSetting caseMailSetting,
-                                    List<CaseFileDto> logFiles = null
+                                    List<CaseLogFileDto> logFiles = null
                                     );
 
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void MarkAsUnread(int caseId);
         void MarkAsRead(int caseId);
-        void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, TimeZoneInfo userTimeZone, List<CaseFileDto> logFiles = null, bool caseIsActivated = false);
+        void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, TimeZoneInfo userTimeZone, List<CaseLogFileDto> logFiles = null, bool caseIsActivated = false);
         void Activate(int caseId, int userId, string adUser, string createByApp, out IDictionary<string, string> errors);
         IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         void Commit();
@@ -138,7 +140,8 @@ namespace DH.Helpdesk.Services.Services
 
         Dictionary<int, string> GetCaseFiles(List<int> caseIds);
 
-        List<CaseFilterFavorite> GetMyFavorites(int customerId, int userId);
+        List<CaseFilterFavorite> GetMyFavoritesWithFields(int customerId, int userId);
+        Task<List<CaseFilterFavorite>> GetMyFavoritesWithFieldsAsync(int customerId, int userId);
 
         string SaveFavorite(CaseFilterFavorite favorite);
 
@@ -153,9 +156,10 @@ namespace DH.Helpdesk.Services.Services
 
         IList<Case> GetTop100CasesForTest();
         int GetCaseRelatedInventoryCount(int customerId, string userId, UserOverview currentUser);
-        int GetCaseQuickOpen(UserOverview user, string searchFor);
+        int GetCaseQuickOpen(UserOverview user, int customerId, string searchFor);
         void SendProblemLogEmail(Case cs, CaseMailSetting caseMailSetting, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, bool isClosedCaseSending);
         int GetCaseCustomerId(int caseId);
+        Customer GetCaseCustomer(int caseId);
         Task<List<CaseHistoryMapperData>> GetCaseHistoriesAsync(int caseId);
         Task<CustomerCasesStatus> GetCustomerCasesStatusAsync(int customerId, int userId);
         Task<Case> GetDetachedCaseByIdAsync(int id);

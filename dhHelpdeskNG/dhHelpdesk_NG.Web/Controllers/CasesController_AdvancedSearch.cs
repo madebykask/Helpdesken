@@ -237,7 +237,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             string notFoundText = Translation.GetCoreTextTranslation("Inget ärende tillgängligt");
 
-            int caseId = _caseService.GetCaseQuickOpen(SessionFacade.CurrentUser, searchFor);
+            int caseId = _caseService.GetCaseQuickOpen(SessionFacade.CurrentUser, SessionFacade.CurrentCustomer.Id, searchFor);
 
             if (caseId > 0)
             {
@@ -270,14 +270,8 @@ namespace DH.Helpdesk.Web.Controllers
             };
 
             // Case #53981
-            var userSearch = new UserSearch()
-            {
-                CustomerId = cusId,
-                StatusId = 3
-            };
-
             fd.AvailablePerformersList =
-                _userService.SearchSortAndGenerateUsers(userSearch).MapToCustomSelectList(fd.caseSearchFilter.UserPerformer, fd.customerSetting);
+                _userService.GetAllPerformers(cusId).MapToCustomSelectList(fd.caseSearchFilter.UserPerformer, fd.customerSetting);
 
             if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserPerformer))
             {

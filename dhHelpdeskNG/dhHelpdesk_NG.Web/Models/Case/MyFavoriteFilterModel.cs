@@ -177,7 +177,7 @@
             this.AddField(CaseFilterFields.WorkingGroupNameAttribute, filterFields.WorkingGroupFilter.GetSelectedStr());
             this.AddField(CaseFilterFields.RegisteredByNameAttribute, filterFields.RegisteredByFilter.GetSelectedStr());
             
-            this.AddField(CaseFilterFields.CaseClosingDateStartFilterNameAttribute, filterFields.ClosingDateFilter.FromDate.ToFormattedDate());            
+            this.AddField(CaseFilterFields.CaseClosingDateStartFilterNameAttribute, filterFields.ClosingDateFilter.FromDate.ToFormattedDate());
             this.AddField(CaseFilterFields.CaseClosingDateEndFilterNameAttribute, filterFields.ClosingDateFilter.ToDate.ToFormattedDate());
             
             this.AddField(CaseFilterFields.CaseRegistrationDateStartFilterNameAttribute, filterFields.RegistrationDateFilter.FromDate.ToFormattedDate());            

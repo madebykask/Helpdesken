@@ -168,9 +168,8 @@
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
@@ -342,6 +341,7 @@
     <Compile Include="Areas\Admin\Controllers\CustomerAdvancedSearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\GDPRProgressController.cs" />
     <Compile Include="Areas\Admin\Controllers\ExtendedCaseController.cs" />
+    <Compile Include="Areas\Admin\Infrastructure\Mappers\CustomerUserEntityToModelMapper.cs" />
     <Compile Include="Areas\Inventory\Controllers\InventoryController.cs" />
     <Compile Include="Areas\Inventory\Infrastucture\Extensions\TabSettingExtensions.cs" />
     <Compile Include="Areas\Inventory\Models\BaseEditCustomInventoryModel.cs" />
@@ -365,7 +365,9 @@
     <Compile Include="Infrastructure\Authentication\Behaviors\MixedModeAuthenticationBehavior.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\PrincipalExtensions.cs" />
     <Compile Include="Infrastructure\Behaviors\AdvancedSearchBehavior.cs" />
+    <Compile Include="Infrastructure\CaseOverview\CaseFilesUrlBuilder.cs" />
     <Compile Include="Infrastructure\Extensions\RouteDataExtensions.cs" />
+    <Compile Include="Infrastructure\JsonNetResult.cs" />
     <Compile Include="Models\Case\AdvancedCaseSearchInput.cs" />
     <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />
@@ -1165,6 +1167,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\SupplierEditModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
+    <Content Include="Content\js\ClipboardFileUpload.js" />
     <Content Include="Content\js\Common\userSearchCommon.js" />
     <Content Include="Content\js\Contract\contractCases.js" />
     <Content Include="Content\js\Contract\contractIndex.js" />
@@ -3442,6 +3445,7 @@
     <Content Include="Areas\Admin\Views\CustomerAdvancedSearch\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerAdvancedSearch\_CaseSummaryPartialView.cshtml" />
     <Content Include="Areas\Reports\Views\Report\ReportViewer\_JsReport.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\EditorTemplates\CustomerUser.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -4108,6 +4112,7 @@
     <Content Include="Views\Notifiers\NewCategory.cshtml" />
     <Content Include="Web.config.template">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Notifiers\_Details.cshtml" />
     <Content Include="Views\Notifiers\NotifierPopup.cshtml" />
@@ -4119,6 +4124,8 @@
     <Content Include="Views\Cases\_LogNoteEmails.cshtml" />
     <Content Include="Views\Cases\_LogNoteFiles.cshtml" />
     <Content Include="Views\Cases\_Mail2TicketEmails.cshtml" />
+    <Content Include="Views\Cases\_CaseLogInputFilesAttachment.cshtml" />
+    <Content Include="Views\Cases\_CaseAttachExistFileList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

@@ -13,24 +13,27 @@
   
   <div id="case-tabs">
     <mbsc-tab-nav [options]="caseTabsSettings" class="case-sub-header">
-        <mbsc-nav-item [selected]="currentTab == 'case_details'" (click)="currentTab='case_details'" translate>Ärende</mbsc-nav-item>
-        <mbsc-nav-item [selected]="currentTab == 'case_actions'" (click)="currentTab='case_actions'" translate>Händelser</mbsc-nav-item>
+        <mbsc-nav-item [selected]="currentTab == tabNames.Case" (click)="tabClick(tabNames.Case)" translate>Ärende</mbsc-nav-item>
+        <mbsc-nav-item *ngIf="caseData.extendedCaseData != null" [selected]="currentTab == tabNames.ExtendedCase" (click)="tabClick(tabNames.ExtendedCase)" translate>
+          <div [class.red]="isExtendedCaseInvalid">{{caseData.extendedCaseData.extendedCaseName}}</div>
+        </mbsc-nav-item>
+        <mbsc-nav-item [selected]="currentTab == tabNames.Actions" (click)="tabClick(tabNames.Actions)" translate>Händelser</mbsc-nav-item>
         <!--<mbsc-nav-item [selected]="currentTab == 'case_workflows'" (click)="currentTab='case_workflows'" translate>Åtgärd</mbsc-nav-item>-->
     </mbsc-tab-nav>
   </div>
 </mbsc-form>
 
-<mbsc-form [options]="formOptions" #mainForm  class="case-content">
+<div class="case-content">
 
   <!-- Case Actions -->
-  <div [hidden]="currentTab != 'case_actions'">
+  <div [hidden]="currentTab != tabNames.Actions">
       <div class="md-paging">
         <case-actions *ngIf="caseActions.length > 0" [caseKey]="caseKey" [items]="caseActions"></case-actions>
       </div>
   </div>
 
   <!-- Case edit fields -->
-  <div *ngIf="isLoaded" [hidden]="currentTab != 'case_details'">
+  <div *ngIf="isLoaded" [hidden]="currentTab != tabNames.Case">
     <div class="md-paging">
       <form [formGroup]="form" novalidate>
           <mbsc-form-group collapsible [open]="isNewCase" *ngIf="hasSection(caseSectionTypes.Initiator)">
@@ -167,7 +170,7 @@
                 <case-multi-dropdown-control *ngIf="showField(caseFieldsNames.ClosingReason)" [field]="caseFieldsNames.ClosingReason" [form]="form" [dataSource]="dataSource.closingReasonsStore$"></case-multi-dropdown-control>
                 <case-date-control *ngIf="showField(caseFieldsNames.FinishingDate)" [field]="caseFieldsNames.FinishingDate" [form]="form"></case-date-control>
             </mbsc-form-group-content>
-        </mbsc-form-group>
+          </mbsc-form-group>
 
           <!-- <mbsc-form-group collapsible [attr.open]="isSectionOpen(caseSectionTypes.Invoices)" #invoicesSection>
               <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Invoices)}}</mbsc-form-group-title>
@@ -176,7 +179,13 @@
               </mbsc-form-group-content>
           </mbsc-form-group> -->
       </form>
+    </div>
   </div>
+
+  <!-- Case extended case fields -->
+  <div [hidden]="currentTab != tabNames.ExtendedCase" class="extended-case-container">
+    <extended-case #extendedCase (formSaveComplete)="onExtendedCaseSaved($event)" (validationComplete)="onExtendedCaseValidation($event)"
+    (formLoadComplete)="onExtendedCaseLoadComplete($event)"></extended-case>
+  </div>
+  <case-menu *ngIf="isLoaded && !isLocked" [dataSource]="dataSource.workflowsStore$" (clickWorkflow)="onClickWorkflow($event)"></case-menu>
 </div>
-  
-</mbsc-form>

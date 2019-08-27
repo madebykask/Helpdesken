@@ -6,6 +6,11 @@
 
     public sealed class WorkingGroupUsers
     {
+        public WorkingGroupUsers()
+        {
+
+        }
+
         public WorkingGroupUsers(int workingGroupId, List<int> userIds)
         {
             this.WorkingGroupId = workingGroupId;
@@ -13,9 +18,9 @@
         }
 
         [IsId]
-        public int WorkingGroupId { get; private set; }
+        public int WorkingGroupId { get; set; }
 
         [NotNull]
-        public List<int> UserIds { get; private set; }
+        public List<int> UserIds { get; set; }
     }
 }

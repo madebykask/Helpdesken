@@ -452,7 +452,7 @@ namespace DH.Helpdesk.Web.Controllers
             var hasFaqs = _faqRepository.AnyFaqWithCategoryId(id);
             var hasSubcategories = _faqCategoryRepository.CategoryHasSubcategories(id);
 
-            var languageOverviewsOrginal = _languageService.GetOverviews();
+            var languageOverviewsOrginal = _languageService.GetOverviews(true);
             var languageOverviews =
                 languageOverviewsOrginal.Select(
                     o =>

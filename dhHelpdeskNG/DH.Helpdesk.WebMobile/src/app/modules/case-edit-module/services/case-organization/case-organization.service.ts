@@ -12,55 +12,55 @@ import { StateSecondariesService } from '../../../../services/case-organization/
 
 @Injectable({ providedIn: 'root' })
 export class CaseOrganizationService {
-    protected constructor (private _departmentService: DepartmentsService,
-        private _regionService: RegionsService,
-        private _OUsService: OUsService,
-        private _caseTypesService: CaseTypesService,
-        private _productAreasService: ProductAreasService,
-        private _categoriesService: CategoriesService,
-        private _closingReasonsService: ClosingReasonsService,
-        private _perfomersService: PerfomersService,
-        private _workingGroupsService: WorkingGroupsService,
-        private _stateSecondariesService: StateSecondariesService) {
+    protected constructor (private departmentService: DepartmentsService,
+        private regionService: RegionsService,
+        private oUsService: OUsService,
+        private caseTypesService: CaseTypesService,
+        private productAreasService: ProductAreasService,
+        private categoriesService: CategoriesService,
+        private closingReasonsService: ClosingReasonsService,
+        private perfomersService: PerfomersService,
+        private workingGroupsService: WorkingGroupsService,
+        private stateSecondariesService: StateSecondariesService) {
     }
 
     getRegions() {
-        return this._regionService.getRegions();
+        return this.regionService.getRegions();
     }
 
     getDepartments(regionId?: number) {
-        return this._departmentService.getDepartmentsByRegion(regionId);
+        return this.departmentService.getDepartmentsByRegion(regionId);
     }
 
     getOUs(departmentId?: number) {
-        return this._OUsService.getOUsByDepartment(departmentId);
+        return this.oUsService.getOUsByDepartment(departmentId);
     }
 
     getCaseTypes() {
-        return this._caseTypesService.getCaseTypes();
+        return this.caseTypesService.getCaseTypes();
     }
 
     getProductAreas(caseTypeId?: number, includeId?: number) {
-        return this._productAreasService.getProductAreas(caseTypeId, includeId);
+        return this.productAreasService.getProductAreas(caseTypeId, includeId);
     }
 
     getCategories() {
-        return this._categoriesService.getCategories();
+        return this.categoriesService.getCategories();
     }
 
     getClosingReasons() {
-        return this._closingReasonsService.getClosingReasons();
+        return this.closingReasonsService.getClosingReasons();
     }
 
     getPerformers(performerUserId?: number, workingGroupId?: number) {
-      return this._perfomersService.getPerformers(performerUserId, workingGroupId);
+      return this.perfomersService.getPerformers(performerUserId, workingGroupId);
     }
 
     getWorkingGroups() {
-      return this._workingGroupsService.getWorkingGroups();
+      return this.workingGroupsService.getWorkingGroups();
     }
 
     getStateSecondaries() {
-      return this._stateSecondariesService.getStateSecondaries();
+      return this.stateSecondariesService.getStateSecondaries();
     }
 }

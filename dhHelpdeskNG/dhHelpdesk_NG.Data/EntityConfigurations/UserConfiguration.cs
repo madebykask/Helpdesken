@@ -134,7 +134,7 @@
             this.Property(x => x.RefreshContent).IsRequired();
             this.Property(x => x.RegTime);
             this.Property(x => x.ReportPermission).IsRequired();
-            this.Property(x => x.RestrictedCasePermission).IsRequired();
+            //this.Property(x => x.RestrictedCasePermission).IsRequired();
             this.Property(x => x.SessionTimeout).IsRequired();
             this.Property(x => x.SetPriorityPermission).IsRequired();
             this.Property(x => x.ShowNotAssignedCases).IsRequired();

@@ -71,6 +71,20 @@ $disabled-color: #f2f2f2;
 
 .md-btn-loading { display: block; }
 
+.spinner-sm {
+  display: inline-block;
+  font-size: 16px; 
+  line-height: 1.5em;
+}
+
+.spinner-sm:before {
+  font-family: 'icons_mobiscroll';
+  content: '\ec3b';
+  display: inline-block;
+  -webkit-animation: md-rotating .8s linear infinite;
+  animation: md-rotating .8s linear infinite;
+}
+
 .stickyTop {
     position: fixed;
     top: 0;
@@ -139,9 +153,14 @@ span.disabled {
     }
   }
 
+  .mbsc-input input,
+    .mbsc-input textarea {
+      padding: 0 1em;
+    }
+
   .calendar-option {
     float: right;
-    color: #4eccc4;
+    //color: #4eccc4;
     //font-size: 1.5em;
   }
 
@@ -255,6 +274,11 @@ a {
     .mbsc-ic-fa-filter {
       margin-left:15px;
     }
+
+    .mbsc-ic-fa-sort { 
+      margin-left:10px;
+    }
+
     .selected .mbsc-ms-item.mbsc-menu-item-ic {
       //border: solid 1px #fff;
       border-radius: 4px 4px;
@@ -279,8 +303,7 @@ a {
                     }
                 }
             }
-            .center {
-                text-align: center;
+            .caption {                
                 margin: auto;
             }
             .bold {
@@ -294,6 +317,21 @@ a {
             }
         }
     }
+}
+
+.cases-overview {
+  .mbsc-ios.mbsc-card.mbsc-form{ margin: 10px 10px; }
+  .mbsc-lv-item-ic {  left:5px!important; } 
+  .mbsc-lv-item-ic-left:before, 
+  .mbsc-lv-item-ic-left:after { left:14px!important; }
+  .mbsc-card.mbsc-form { border-radius: 0;}
+  .mbsc-lv-item.mbsc-lv-item-ic-left { padding-left: 35px!important; }
+  .mbsc-lv-cont { font-size:14px; } 
+  .mbsc-card-content { padding-bottom: 10px}
+  .mbsc-card-header { padding: 0.5em }
+  .urgent {
+    color: red;
+  }
 }
 
 .header {
@@ -322,7 +360,7 @@ a {
         &:-webkit-autofill,
         &:-webkit-autofill:hover,
         &:-webkit-autofill:focus,
-        &t:-webkit-autofill:active {
+        &:-webkit-autofill:active {
             -webkit-transition-delay: 99999s;
             transition-delay: 99999s;
         }
@@ -441,6 +479,32 @@ ul.nostyle {
             }
           }
         }
+      }
+    }
+  }
+}
+case-menu {
+  .md-hamb {
+    .mbsc-ios {
+      &.mbsc-ms-c {
+          background: rgba(0, 0, 0, 0);
+          border-top: none;
+          border-bottom: none;
+      }
+      .mbsc-ms .mbsc-ms-item {
+        border: solid 1px;
+        border-radius: 50%;
+        background: #d96326;
+        color: white;
+        &.mbsc-ms-item {
+          padding: 1.9169em 0.5em;
+        }
+      }
+      .mbsc-scv-liq, .mbsc-scv-liq .mbsc-scv-item {
+        flex: 0 1 auto
+      }
+      .mbsc-scv.mbsc-comp {
+        margin: 0 0.7em 0.5em auto;
       }
     }
   }

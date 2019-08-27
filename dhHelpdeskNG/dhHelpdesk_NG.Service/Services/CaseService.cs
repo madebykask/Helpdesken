@@ -5,10 +5,11 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
-using DH.Helpdesk.BusinessData.OldComponents;
-using DH.Helpdesk.Common.Extensions.DateTime;
+using DH.Helpdesk.Common.Extensions.Lists;
+using DH.Helpdesk.Common.Types;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.Mappers;
+using DH.Helpdesk.Domain.Cases;
 using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Services.Services.Cache;
 
@@ -30,7 +31,6 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Domain.Problems;
     using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
@@ -39,7 +39,6 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Customers;
     using DH.Helpdesk.Services.Infrastructure.Email;
-    using DH.Helpdesk.Services.Localization;
     using DH.Helpdesk.Services.Services.CaseStatistic;
     using DH.Helpdesk.Services.utils;
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
@@ -96,6 +95,10 @@ namespace DH.Helpdesk.Services.Services
         private readonly IDepartmentService _departmentService;
         private readonly IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> _caseHistoryOverviewMapper;
         private readonly ITranslateCacheService _translateCacheService;
+        private readonly ICaseTypeRepository _caseTypeRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IEntityToBusinessModelMapper<CaseFilterFavoriteEntity, CaseFilterFavorite> _caseFilterFavoriteToBusinessModelMapper;
+        private readonly ICustomerUserRepository _customerUserRepository;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -139,8 +142,15 @@ namespace DH.Helpdesk.Services.Services
             ICustomerRepository customerRepository,
             ICustomerService customerService,
             IDepartmentService departmentService,
-            IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> caseHistoryOverviewMapper, ITranslateCacheService translateCacheService)
+            IEntityToBusinessModelMapper<CaseFilterFavoriteEntity, CaseFilterFavorite> caseFilterFavoriteToBusinessModelMapper,
+            IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> caseHistoryOverviewMapper,
+            ITranslateCacheService translateCacheService,
+            ICaseTypeRepository caseTypeRepository,
+            ICategoryRepository categoryRepository,
+            ICustomerUserRepository customerUserRepository)
         {
+            _customerUserRepository = customerUserRepository;
+            _caseFilterFavoriteToBusinessModelMapper = caseFilterFavoriteToBusinessModelMapper;
             _unitOfWork = unitOfWork;
             _caseRepository = caseRepository;
             _caseRepository = caseRepository;
@@ -186,6 +196,8 @@ namespace DH.Helpdesk.Services.Services
 
             _caseHistoryOverviewMapper = caseHistoryOverviewMapper;
             _translateCacheService = translateCacheService;
+            _caseTypeRepository = caseTypeRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -197,6 +209,12 @@ namespace DH.Helpdesk.Services.Services
         {
             var customerId = _caseRepository.GetCaseCustomerId(caseId);
             return customerId;
+        }
+
+        public Customer GetCaseCustomer(int caseId)
+        {
+            var customerId = _caseRepository.GetCaseCustomerId(caseId);
+            return _customerService.GetCustomer(customerId);
         }
 
         public Case GetDetachedCaseById(int id)
@@ -418,7 +436,7 @@ namespace DH.Helpdesk.Services.Services
             }
 
             // delete log files
-            var logFiles = _logFileRepository.GetLogFilesByCaseId(id);
+            var logFiles = _logFileRepository.GetLogFilesByCaseId(id, true);
 
             if (logFiles != null)
             {
@@ -440,16 +458,12 @@ namespace DH.Helpdesk.Services.Services
             }
             _mail2TicketRepository.Commit();
 
-
-            foreach (var l in logs)
-            {
-                _logRepository.Delete(l);
-            }
-            _logRepository.Commit();
-
-            //Delete Mail2Tickets by caseId
-            _mail2TicketRepository.DeleteByCaseId(id);
-            _mail2TicketRepository.Commit();
+            //foreach (var l in logs)
+            //{
+            //    _emailLogAttemptRepository.DeleteLogAttempts(l.Id);
+            //    _emailLogRepository.DeleteByLogId(l.Id);
+            //}
+            //_emailLogRepository.Commit();
 
             // delete email logs
             var elogs = _emailLogRepository.GetEmailLogsByCaseId(id);
@@ -464,6 +478,16 @@ namespace DH.Helpdesk.Services.Services
                 }
                 _emailLogRepository.Commit();
             }
+
+            foreach (var l in logs)
+            {
+                _logRepository.Delete(l);
+            }
+            _logRepository.Commit();
+
+            //Delete Mail2Tickets by caseId
+            _mail2TicketRepository.DeleteByCaseId(id);
+            _mail2TicketRepository.Commit();
 
             // delete caseHistory
             var caseHistories = _caseHistoryRepository.GetCaseHistoryByCaseId(id);
@@ -525,10 +549,22 @@ namespace DH.Helpdesk.Services.Services
         }
 
 
-        public List<CaseFilterFavorite> GetMyFavorites(int customerId, int userId)
+        public List<CaseFilterFavorite> GetMyFavoritesWithFields(int customerId, int userId)
         {
-            var ret = _caseFilterFavoriteRepository.GetUserFavoriteFilters(customerId, userId);
-            return ret;
+            var favorites = 
+                _caseFilterFavoriteRepository.GetUserFavoriteFilters(customerId, userId).ToList();
+
+            var res = favorites.Select(_caseFilterFavoriteToBusinessModelMapper.Map).ToList();
+            return res;
+        }
+
+        public async Task<List<CaseFilterFavorite>> GetMyFavoritesWithFieldsAsync(int customerId, int userId)
+        {
+            var favorites =
+                await _caseFilterFavoriteRepository.GetUserFavoriteFilters(customerId, userId).ToListAsync();
+
+            var res = favorites.Select(_caseFilterFavoriteToBusinessModelMapper.Map).ToList();
+            return res;
         }
 
         public string SaveFavorite(CaseFilterFavorite favorite)
@@ -657,9 +693,12 @@ namespace DH.Helpdesk.Services.Services
             {
                 var caseRep = uow.GetRepository<Case>();
 
+                var restrictToOwnCasesOnly =
+                    uow.GetRepository<CustomerUser>().GetAll().Where(x => x.Customer_Id == customerId && x.User_Id == currentUser.Id).Single().RestrictedCasePermission;
+
                 return caseRep.GetAll()
                         .GetByCustomer(customerId)
-                        .GetRelatedCases(caseId, userId, currentUser)
+                        .GetRelatedCases(caseId, userId, currentUser, restrictToOwnCasesOnly)
                         .MapToRelatedCases();
             }
         }
@@ -670,9 +709,12 @@ namespace DH.Helpdesk.Services.Services
             {
                 var caseRep = uow.GetRepository<Case>();
 
+                var restrictToOwnCasesOnly =
+                    uow.GetRepository<CustomerUser>().GetAll().Where(x => x.Customer_Id == customerId && x.User_Id == currentUser.Id).Single().RestrictedCasePermission;
+
                 return caseRep.GetAll()
                         .GetByCustomer(customerId)
-                        .GetRelatedCases(caseId, userId, currentUser)
+                        .GetRelatedCases(caseId, userId, currentUser, restrictToOwnCasesOnly)
                         .Count();
             }
         }
@@ -849,9 +891,9 @@ namespace DH.Helpdesk.Services.Services
                 .Select(o => o.Id)
                 .ToArray();
 
-			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(customer.TimeZoneId);
+            var timeZone = TimeZoneInfo.FindSystemTimeZoneById(customer.TimeZoneId);
 
-			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                 ManualDependencyResolver.Get<IHolidayService>(),
                 customer.WorkingDayStart,
                 customer.WorkingDayEnd,
@@ -875,12 +917,12 @@ namespace DH.Helpdesk.Services.Services
             var c = _caseRepository.GetDetachedCaseById(caseId);
             _caseStatService.UpdateCaseStatistic(c);
 
-			var extraFields = new ExtraFieldCaseHistory
-			{
-				ActionExternalTime = externalTimeToAdd,
-				ActionLeadTime = leadTime - _case.LeadTime,
-				LeadTime = leadTime
-			};
+            var extraFields = new ExtraFieldCaseHistory
+            {
+                ActionExternalTime = externalTimeToAdd,
+                ActionLeadTime = leadTime - _case.LeadTime,
+                LeadTime = leadTime
+            };
 
             SaveCaseHistory(c, userId, adUser, createdByApp, out errors, "", extraFields);
         }
@@ -1006,7 +1048,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CaseHistory> GetCaseHistoryByCaseId(int caseId)
         {
-            return _caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList();
+            return _caseHistoryRepository.GetCaseHistoryByCaseId(caseId).AsQueryable().OrderBy(h => h.Id).ToList();
         }
 
         public IList<CaseHistoryOverview> GetCaseHistories(int caseId)
@@ -1048,9 +1090,9 @@ namespace DH.Helpdesk.Services.Services
             return ret;
         }
 
-        public void ExecuteBusinessActions(List<BusinessRuleActionModel> actions, Case currentCase, CaseLog log, TimeZoneInfo userTimeZone,
+        public void ExecuteBusinessActions(List<BusinessRuleActionModel> actions, int currentCaseId, CaseLog log, TimeZoneInfo userTimeZone,
                                            int caseHistoryId, string basePath, int currentLanguageId, CaseMailSetting caseMailSetting,
-                                           List<CaseFileDto> logFiles = null)
+                                           List<CaseLogFileDto> logFiles = null)
         {
             foreach (var action in actions)
             {
@@ -1058,7 +1100,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     case BRActionType.SendEmail:
                         if (caseMailSetting != null)
-                            DoAction_SendEmail(action, currentCase, log, userTimeZone, caseHistoryId, basePath, currentLanguageId, caseMailSetting, logFiles);
+                            DoAction_SendEmail(action, currentCaseId, log, userTimeZone, caseHistoryId, basePath, currentLanguageId, caseMailSetting, logFiles);
                         break;
                 }
             }
@@ -1074,32 +1116,26 @@ namespace DH.Helpdesk.Services.Services
             using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var computerRep = uow.GetRepository<Computer>();
-
+                    
                 return computerRep.GetAll().GetRelatedInventoriesCount(userId, currentUser, customerId);
             }
         }
 
-        public int GetCaseQuickOpen(UserOverview user, string searchFor)
+        public int GetCaseQuickOpen(UserOverview user, int customerId, string searchFor)
         {
-
-            Expression<Func<Case, bool>> casePermissionFilter = _userService.GetCasePermissionFilter(user);
+            var casePermissionFilter = _userService.GetCasePermissionFilter(user, customerId);
 
             searchFor = searchFor.Tidy();
 
             if (searchFor.Length > 0)
             {
                 var case_ = _caseRepository.GetCaseQuickOpen(user, casePermissionFilter, searchFor);
-
                 if (case_ != null)
                     return case_.Id;
             }
 
             return 0;
         }
-
-
-
-
 
         #region Private methods
 
@@ -1272,15 +1308,18 @@ namespace DH.Helpdesk.Services.Services
             return true;
         }
 
-        private void DoAction_SendEmail(BusinessRuleActionModel action, Case currentCase, CaseLog log, TimeZoneInfo userTimeZone,
+        private void DoAction_SendEmail(BusinessRuleActionModel action, int currentCaseId, CaseLog log, TimeZoneInfo userTimeZone,
                                         int caseHistoryId, string basePath, int currentLanguageId, CaseMailSetting caseMailSetting,
-                                        List<CaseFileDto> logFiles = null)
+                                        List<CaseLogFileDto> logFiles = null)
         {
-            var customerId = currentCase.Customer_Id;
-            var mailTemplate = new MailTemplateLanguageEntity();
-            var sep = new char[] { ';' };
 
+            var currentCase = _caseRepository.GetCaseIncluding(currentCaseId);
+            var customerId = currentCase.Customer_Id;
+            var customerSettings = _settingService.GetCustomerSetting(customerId);
+            var sep = new [] { ';' };
+            var templateId = 0;
             var emailList = new List<string>();
+
             foreach (var param in action.ActionParams)
             {
                 var dataList = !string.IsNullOrEmpty(param.ParamValue) ? param.ParamValue.Split(BRConstItem.Value_Separator, StringSplitOptions.RemoveEmptyEntries) : null;
@@ -1289,9 +1328,8 @@ namespace DH.Helpdesk.Services.Services
                     case BRActionParamType.EMailTemplate:
                         if (!string.IsNullOrEmpty(param.ParamValue))
                         {
-                            int templateId = 0;
+                            templateId = 0;
                             int.TryParse(param.ParamValue, out templateId);
-                            mailTemplate = _mailTemplateService.GetMailTemplateLanguageForCustomer(templateId, customerId, currentCase.RegLanguage_Id);
                         }
                         break;
 
@@ -1321,9 +1359,7 @@ namespace DH.Helpdesk.Services.Services
                                 {
                                     if (wg.IsActive != 0 && wg.UserWorkingGroups != null && wg.UserWorkingGroups.Any())
                                     {
-                                        var usEmails = wg.UserWorkingGroups.Where(w => w.User != null && w.User.IsActive != 0)
-                                                                     .Select(w => w.User.Email)
-                                                                     .ToList();
+                                        var usEmails = wg.UserWorkingGroups.Where(w => w.User != null && w.User.IsActive != 0).Select(w => w.User.Email).ToList();
                                         emailList.AddRange(usEmails);
                                     }
                                 }
@@ -1383,18 +1419,23 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
-            if (mailTemplate != null && !string.IsNullOrEmpty(mailTemplate.Body) &&
-                !string.IsNullOrEmpty(mailTemplate.Subject) && emailList.Any())
+            if (templateId > 0 && emailList.Any())
             {
-                var distinctedEmails = emailList.Select(x => x.Trim().ToLower()).Distinct().ToList();
-                SendEmail(distinctedEmails, mailTemplate, currentCase, log, userTimeZone, caseHistoryId, basePath,
-                          currentLanguageId, caseMailSetting, logFiles);
+                var files = PrepareAttachedFiles(logFiles, basePath);
+
+                SendTemplateEmail(templateId,
+                    currentCase,
+                    log,
+                    caseHistoryId,
+                    customerSettings,
+                    caseMailSetting,
+                    caseMailSetting.HelpdeskMailFromAdress?.Trim(),
+                    emailList.ToDistintList(true),
+                    userTimeZone,
+                    files,
+                    1);
             }
-
         }
-
-
-
 
         private Case ValidateCaseRequiredValues(Case c, CaseLog caseLog)
         {
@@ -1564,38 +1605,51 @@ namespace DH.Helpdesk.Services.Services
 
         private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, string emailLogGuid, int stateHelper, TimeZoneInfo userTimeZone)
         {
-           var ret = new List<Field>();
-
+            var ret = new List<Field>();
             var userLocal_RegTime = TimeZoneInfo.ConvertTimeFromUtc(c.RegTime, userTimeZone);
 
             ret.Add(new Field { Key = "[#1]", StringValue = c.CaseNumber.ToString() });
             ret.Add(new Field { Key = "[#16]", StringValue = userLocal_RegTime.ToString() });
-            ret.Add(new Field { Key = "[#22]", StringValue = c.LastChangedByUser != null ? c.LastChangedByUser.FirstName + " " + c.LastChangedByUser.SurName : string.Empty });
+            var lastUserName = string.Empty;
+            if (c.ChangeByUser_Id.HasValue)
+            {
+                var user = _userRepository.GetUserName(c.ChangeByUser_Id.Value);
+                if (user != null)
+                    lastUserName = user.GetFullName();
+            }
+            ret.Add(new Field { Key = "[#22]", StringValue = lastUserName });
             ret.Add(new Field { Key = "[#3]", StringValue = c.PersonsName });
             ret.Add(new Field { Key = "[#8]", StringValue = c.PersonsEmail });
             ret.Add(new Field { Key = "[#9]", StringValue = c.PersonsPhone });
             ret.Add(new Field { Key = "[#18]", StringValue = c.PersonsCellphone });
-            ret.Add(new Field { Key = "[#2]", StringValue = c.Customer != null ? c.Customer.Name : string.Empty });
+            ret.Add(new Field { Key = "[#2]", StringValue = _customerRepository.GetCustomerName(c.Customer_Id) });
             ret.Add(new Field { Key = "[#24]", StringValue = c.Place });
             ret.Add(new Field { Key = "[#17]", StringValue = c.InventoryNumber });
-            ret.Add(new Field { Key = "[#25]", StringValue = c.CaseType != null ? c.CaseType.Name : string.Empty });
-            ret.Add(new Field { Key = "[#26]", StringValue = c.Category != null ? c.Category.Name : string.Empty });
+            var caseTypeName = _caseTypeRepository.GetCaseType(c.CaseType_Id).Select(ct => ct.Name).DefaultIfEmpty(string.Empty).FirstOrDefault();
+            ret.Add(new Field { Key = "[#25]", StringValue = caseTypeName });
+            var catName = c.Category_Id.HasValue ? 
+                _categoryRepository.GetCategory(c.Category_Id.Value).Select(ct => ct.Name).DefaultIfEmpty(string.Empty).FirstOrDefault() :
+                string.Empty;
+            ret.Add(new Field { Key = "[#26]", StringValue = catName });
             ret.Add(new Field { Key = "[#4]", StringValue = c.Caption });
             ret.Add(new Field { Key = "[#5]", StringValue = c.Description });
             ret.Add(new Field { Key = "[#23]", StringValue = c.Miscellaneous });
             ret.Add(new Field { Key = "[#19]", StringValue = c.Available });
-            ret.Add(new Field { Key = "[#15]", StringValue = c.Workinggroup != null ? c.Workinggroup.WorkingGroupName : string.Empty });
-            ret.Add(new Field { Key = "[#13]", StringValue = c.Workinggroup != null ? c.Workinggroup.EMail : string.Empty });
-            ret.Add(new Field { Key = "[#6]", StringValue = c.Administrator != null ? c.Administrator.FirstName : string.Empty });
-            ret.Add(new Field { Key = "[#7]", StringValue = c.Administrator != null ? c.Administrator.SurName : string.Empty });
-            ret.Add(new Field { Key = "[#12]", StringValue = c.Priority != null ? c.Priority.Name : string.Empty });
-            ret.Add(new Field { Key = "[#20]", StringValue = c.Priority != null ? c.Priority.Description : string.Empty });
+            var wg = c.WorkingGroup_Id.HasValue ? _workingGroupService.GetWorkingGroup(c.WorkingGroup_Id.Value) : null;
+            ret.Add(new Field { Key = "[#15]", StringValue = wg != null ? c.Workinggroup.WorkingGroupName : string.Empty });
+            ret.Add(new Field { Key = "[#13]", StringValue = wg != null ? c.Workinggroup.EMail : string.Empty });
+            var admin = c.Performer_User_Id.HasValue ? _userRepository.GetUserName(c.Performer_User_Id.Value) : null;
+            ret.Add(new Field { Key = "[#6]", StringValue = admin != null ? admin.FirstName : string.Empty });
+            ret.Add(new Field { Key = "[#7]", StringValue = admin != null ? admin.LastName : string.Empty });
+            var priority = c.Priority_Id.HasValue ? _priorityService.GetPriority(c.Priority_Id.Value) : null;
+            ret.Add(new Field { Key = "[#12]", StringValue = priority != null ? c.Priority.Name : string.Empty });
+            ret.Add(new Field { Key = "[#20]", StringValue = priority != null ? c.Priority.Description : string.Empty });
             ret.Add(new Field { Key = "[#21]", StringValue = c.WatchDate.ToString() });
 
             if (c.User_Id.HasValue)
             {
-                var user = _userService.GetUser(c.User_Id.Value);
-                ret.Add(new Field { Key = "[#29]", StringValue = user != null ? user.FirstName + " " + user.SurName : string.Empty });
+                var user = _userRepository.GetUserName(c.User_Id.Value);
+                ret.Add(new Field { Key = "[#29]", StringValue = user != null ? user.GetFullName() : string.Empty });
             }
             else
             {
@@ -1610,32 +1664,38 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
-            if (c.ProductArea?.Parent_ProductArea_Id != null)
+            if (c.ProductArea_Id.HasValue)
             {
-                var names = _productAreaService.GetParentPath(c.ProductArea.Id, c.Customer_Id).ToList();
-                ret.Add(new Field { Key = "[#28]", StringValue = string.Join(" - ", names) });
+                if (c.ProductArea.Parent_ProductArea_Id.HasValue && c.ProductArea.Parent_ProductArea_Id > 0)
+                {
+                    var names = _productAreaService.GetParentPath(c.ProductArea_Id.Value, c.Customer_Id).ToList();
+                    ret.Add(new Field {Key = "[#28]", StringValue = string.Join(" - ", names)});
+                }
+                else
+                {
+                    ret.Add(new Field {Key = "[#28]", StringValue = c.ProductArea != null ? c.ProductArea.Name : string.Empty});
+                }
             }
-            else
-            {
-                ret.Add(new Field { Key = "[#28]", StringValue = c.ProductArea != null ? c.ProductArea.Name : string.Empty });
-            }
+
             ret.Add(new Field { Key = "[#10]", StringValue = l?.TextExternal ?? "" });
             ret.Add(new Field { Key = "[#11]", StringValue = l?.TextInternal ?? "" });
+            
             // selfservice site
             if (cms != null)
             {
                 if (emailLogGuid == string.Empty)
                     emailLogGuid = " >> *" + stateHelper.ToString() + "*";
-                string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + emailLogGuid;
-                string url = "<br><a href='" + site + "'>" + site + "</a>";
+
+                var site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + emailLogGuid;
+                var url = "<br><a href='" + site + "'>" + site + "</a>";
                 ret.Add(new Field { Key = "[#98]", StringValue = url });
             }
 
             // heldesk site
             if (cms != null)
             {
-                string site = cms.AbsoluterUrl + "Cases/edit/" + c.Id.ToString();
-                string url = "<br><a href='" + site + "'>" + site + "</a>";
+                var site = cms.AbsoluterUrl + "Cases/edit/" + c.Id.ToString();
+                var url = "<br><a href='" + site + "'>" + site + "</a>";
                 ret.Add(new Field { Key = "[#99]", StringValue = url });
             }
 

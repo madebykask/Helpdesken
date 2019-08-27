@@ -35,6 +35,18 @@
                 window.TouchScreen = true;
                 window.removeEventListener('touchstart', onFirstTouch, false);
             }, false);
+
+			//prevent go back
+            if (location.hash === '#no-back') {
+                if (typeof history.pushState !== 'undefined') {
+                    history.pushState(null, '', '#stay');
+                    window.addEventListener('popstate', function(event) {
+                        history.pushState(null, '', '#stay');
+                    });
+                } else {
+                    window.history.forward();
+                }
+            }
         </script>
 
         <!--[if lt IE 9]>

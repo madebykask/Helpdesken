@@ -1,38 +1,36 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
-import { forkJoin, Subject, of, throwError, interval } from 'rxjs';
-import { switchMap, take, finalize, delay, catchError, map, takeUntil, takeWhile } from 'rxjs/operators';
+import { forkJoin, Subject, of, throwError, interval, EMPTY, BehaviorSubject, EmptyError } from 'rxjs';
+import { switchMap, take, finalize, delay, catchError, map, takeUntil, takeWhile, defaultIfEmpty } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { CommunicationService, Channels, CaseFieldValueChangedEvent, } from 'src/app/services/communication/communication.service';
 import { HeaderEventData } from 'src/app/services/communication/data/header-event-data';
 import { AuthenticationStateService } from 'src/app/services/authentication';
-import { WorkingGroupsService } from 'src/app/services/case-organization/workingGroups-service';
-import { StateSecondariesService } from 'src/app/services/case-organization/stateSecondaries-service';
-import { LocalStorageService } from 'src/app/services/local-storage';
 import { CaseDataStore } from '../../logic/case-edit/case-data.store';
-import { CaseDataReducersFactory, CaseDataReducers } from '../../logic/case-edit/case-data.reducers';
 import { CaseEditDataHelper } from '../../logic/case-edit/case-editdata.helper';
-import { CaseFieldsNames, CasesSearchType } from 'src/app/modules/shared-module/constants';
+import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
 import { CaseLockApiService } from '../../services/api/case/case-lock-api.service';
 import { CaseSaveService } from '../../services/case';
 import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel,
-   CaseLockModel, CaseFieldModel, CaseAction, CaseActionDataType, ICaseField, CaseFileModel } from '../../models';
-import { OptionItem, MultiLevelOptionItem } from 'src/app/modules/shared-module/models';
+   CaseLockModel, CaseAction, CaseActionDataType, CaseFileModel } from '../../models';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
-import { CaseWatchDateApiService } from '../../services/api/case/case-watchDate-api.service';
 import { CaseFilesApiService } from '../../services/api/case/case-files-api.service';
-import { NotifierType, NotifierModel } from 'src/app/modules/shared-module/models/notifier/notifier.model';
-import { CaseTypesService } from 'src/app/services/case-organization/caseTypes-service';
+import { NotifierType } from 'src/app/modules/shared-module/models/notifier/notifier.model';
 import { CaseFormGroup } from 'src/app/modules/shared-module/models/forms';
 import { MbscFormOptions } from '@mobiscroll/angular';
-import { ProductAreasService } from 'src/app/services/case-organization/productAreas-service';
-import { DateTime } from 'luxon';
 import { CaseFieldsDefaultErrorMessages } from '../../logic/constants/case-fields.constants';
 import { CaseFormGroupBuilder } from 'src/app/modules/shared-module/models/forms/case-form-group-builder';
-import { NotifierFormFieldsSetter } from 'src/app/modules/shared-module/models/forms/notifier-form-fields-setter';
-import { NotifierService } from '../../services/notifier.service';
+import { CaseWorkflowsApiService } from '../../services/api/workflow-api.service';
+import { CaseEditLogic } from '../../logic/case-edit/case-edit.logic';
+import { CaseTemplateFullModel } from 'src/app/models/caseTemplate/case-template-full.model';
+import { CaseTemplateService } from 'src/app/services/case-organization/case-template.service';
+import { FinalActionEnum } from 'src/app/modules/shared-module/constants/finalAction.enum';
+import { NgElement, WithProperties } from '@angular/elements';
+import { LocalStorageService } from 'src/app/services/local-storage';
+import { OUsService } from 'src/app/services/case-organization/ous-service';
+import { TabNames } from '../../constants/tab-names';
 
 @Component({
   selector: 'app-case-edit',
@@ -41,7 +39,7 @@ import { NotifierService } from '../../services/notifier.service';
 })
 export class CaseEditComponent {
 
-    @ViewChild('mainForm') mainForm: any; // MbscForm
+  @ViewChild('extendedCase', { static: false }) extendedCase: ElementRef; //ElementRefNgElement & WithProperties<{loadForm: any}>;
 
     constructor(private route: ActivatedRoute,
                 private caseService: CaseService,
@@ -52,16 +50,13 @@ export class CaseEditComponent {
                 private alertService: AlertsService,
                 private caseSaveService: CaseSaveService,
                 private commService: CommunicationService,
-                private сaseDataReducersFactory: CaseDataReducersFactory,
-                private workingGroupsService: WorkingGroupsService,
-                private stateSecondariesService: StateSecondariesService,
-                private caseTypesService: CaseTypesService,
-                private caseWatchDateApiService: CaseWatchDateApiService,
                 private translateService: TranslateService,
-                private localStorage:  LocalStorageService,
                 private caseFileService: CaseFilesApiService,
-                private productAreasService: ProductAreasService,
-                private notifierService: NotifierService) {
+                private caseWorkflowsService: CaseWorkflowsApiService,
+                private caseEditLogic: CaseEditLogic,
+                private caseTemplateService: CaseTemplateService,
+                private localStorageService: LocalStorageService,
+                private oUsService: OUsService) {
       // read route params
       if (this.route.snapshot.paramMap.has('id')) {
           this.isNewCase = false;
@@ -101,15 +96,17 @@ export class CaseEditComponent {
       if (this.isNewCase) {
         return true;
       }
-
       return this.accessMode === CaseAccessMode.FullAccess;
     }
 
+    isExtendedCaseInvalid = false;
     caseSectionTypes = CaseSectionType;
+    tabNames = TabNames;
     caseFieldsNames = CaseFieldsNames;
     accessModeEnum = CaseAccessMode;
     dataSource: CaseDataStore;
     isLoaded = false;
+    isEcLoaded = false;
     form: CaseFormGroup;
     caseKey: string;
     caseFiles: CaseFileModel[] = [];
@@ -125,16 +122,15 @@ export class CaseEditComponent {
     };
 
     formOptions: MbscFormOptions = {
-      onInit: (event, inst) => {
+      onInit: () => {
       }
     };
 
-    currentTab = 'case_details';
+    currentTab = TabNames.Case;
     caseActions: CaseAction<CaseActionDataType>[] = [];
     notifierTypes = NotifierType;
     isCommunicationSectionVisible = false;
 
-    private searchType: CasesSearchType = CasesSearchType.AllCases;
     private isNewCase = false;
     private caseId = 0;
     private templateId = 0;
@@ -144,6 +140,10 @@ export class CaseEditComponent {
     private destroy$ = new Subject();
     private caseLock: CaseLockModel = null;
     private isClosing = false;
+    private extendedCaseValidation$ = new Subject<boolean>();
+    private extendedCaseValidationObserver = this.extendedCaseValidation$.asObservable();
+    private extendedCaseSave$ = new Subject<boolean>();
+    private extendedCaseSaveObserver = this.extendedCaseSave$.asObservable();
 
     ngOnInit() {
       this.commService.publish(Channels.Header, new HeaderEventData(false));
@@ -166,7 +166,6 @@ export class CaseEditComponent {
       const caseLock$ = this.caseLockApiService.acquireCaseLock(caseId, sessionId);
       const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
 
-      // todo: apply search type (all, my cases)
       const caseData$ =
           this.caseService.getCaseData(caseId)
               .pipe(
@@ -181,7 +180,7 @@ export class CaseEditComponent {
                   catchError((e) => throwError(e)),
               );
 
-      forkJoin(caseSections$, caseData$, caseLock$).pipe(
+      forkJoin([caseSections$, caseData$, caseLock$]).pipe(
           take(1),
           finalize(() => this.isLoaded = true),
           catchError((e) => throwError(e))
@@ -192,6 +191,8 @@ export class CaseEditComponent {
 
           this.initLock();
           this.processCaseData();
+          this.loadWorkflows(caseId);
+          this.loadExtendedCase(this.caseData);
       });
     }
 
@@ -200,24 +201,19 @@ export class CaseEditComponent {
     }
 
     showField(name: string): boolean {
-      return this.caseDataHelpder.hasField(this.caseData, name) && !this.getField(name).isHidden;
+      return this.caseDataHelpder.hasField(this.caseData, name) && !this.caseDataHelpder.getField(this.caseData, name).isHidden;
     }
 
     hasSection(type: CaseSectionType): boolean {
       return this.caseDataHelpder.hasSection(this.caseData, type);
     }
 
-    private getField(name: string): CaseFieldModel<any> {
-      return this.caseDataHelpder.getField(this.caseData, name);
-    }
-
     public navigate(url: string) {
       if (url == null) { return; }
       of(true).pipe(
         delay(200),
-        map(() => this.router.navigate([url])),
         take(1)
-      ).subscribe();
+      ).subscribe(() => this.router.navigate([url]));
     }
 
     getSectionHeader(type: CaseSectionType): string {
@@ -230,40 +226,274 @@ export class CaseEditComponent {
         return this.caseSections.find(s => s.type == type).isEditCollapsed ? null : true;
     }
 
-    saveCase() {
+    saveCase(reload: boolean = false) {
       if (!this.canSave) { return; }
-      this.form.submit();
-      if (this.form.invalid) {
-        // let invalidControls = this.form.findInvalidControls(); // debug info
-        const errormessage = this.translateService.instant('Fyll i obligatoriska fält.');
-        this.alertService.showMessage(errormessage, AlertType.Error, 3);
+      if (this.caseData.extendedCaseData != null && !this.isEcLoaded) {
         return;
       }
-
-      this.isLoaded = false;
-      this.caseSaveService.saveCase(this.form, this.caseData).pipe(
-          take(1),
-          catchError((e) => throwError(e)) // TODO: handle here ? show error ?
-      ).subscribe(() => {
-          this.goToCases();
+      this.extendedCaseValidationObserver.pipe(
+        take(1),
+        switchMap((isEcValid: boolean) => {
+          this.isExtendedCaseInvalid = !isEcValid;
+          this.form.submit();
+          if (this.form.valid && isEcValid) {
+            return this.saveExtendedCase(false).pipe(
+              take(1),
+              switchMap((isEcSaved: boolean) => {
+                if (isEcSaved) {
+                  this.isLoaded = false;
+                  this.isEcLoaded = false;
+                  this.currentTab = TabNames.Case;
+                  return this.caseSaveService.saveCase(this.form, this.caseData).pipe(
+                      take(1),
+                      map(() => true),
+                      catchError((e) => throwError(e))
+                  );
+                } else {
+                  return EMPTY.pipe(defaultIfEmpty(false));
+                }
+              }),
+              catchError((e) => {
+                this.alertService.showMessage('Extended Case save was not succeed!', AlertType.Error, 3);
+                return throwError(e);
+              })
+            );
+          }
+          const errormessage = this.translateService.instant('Fyll i obligatoriska fält.');
+          this.alertService.showMessage(errormessage, AlertType.Error, 3);
+          return EMPTY.pipe(defaultIfEmpty(false));
+        }),
+        catchError((e) => throwError(e))
+      ).subscribe((isSaved: boolean) => {
+        if (isSaved) {
+          reload ? this.ngOnInit() : this.goToCases();
+        }
       });
-    }
-
-    goToCases() {
-      const res = this.localStorage.getCaseSearchState();
-      let searchType: string;
-      if (res) {
-        searchType = CasesSearchType[res.SearchType];
-      } else {
-        searchType = CasesSearchType[CasesSearchType.AllCases];
-      }
-      this.navigate('/casesoverview/' + searchType);
+      this.syncExtendedCaseValues();
+      this.validateExtendedCase(false);
     }
 
     cleanTempFiles(caseId: number) {
       this.caseFileService.deleteTemplFiles(caseId).pipe(
         take(1)
       ).subscribe();
+    }
+
+    onClickWorkflow(id: number) {
+      this.caseTemplateService.loadTemplate(id)
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe((data: CaseTemplateFullModel) => {
+        const finalAction = this.caseTemplateService.applyWorkflow(data, this.form);
+        if (finalAction == FinalActionEnum.Save ||
+          finalAction == FinalActionEnum.SaveAndClose) {
+            if (this.canSave) {
+              this.saveCase(finalAction == FinalActionEnum.Save);
+            }
+          }
+      });
+    }
+
+    onExtendedCaseSaved(event: any) {
+      this.extendedCaseSave$.next(event.detail.isSuccess);
+    }
+
+    onExtendedCaseValidation(event: any) {
+      this.extendedCaseValidation$.next(event.detail.data == null);
+    }
+
+    onExtendedCaseLoadComplete(event: any) {
+      if (event.detail.isSuccess) {
+        this.isEcLoaded = true;
+      }
+    }
+
+    tabClick(tab: TabNames) {
+      if (tab == TabNames.Case && this.currentTab == TabNames.ExtendedCase) {
+        this.syncExtendedCaseValues();
+      }
+      this.currentTab = tab;
+    }
+
+    ///////////////////////////////////////////////////////// Private section
+
+    private loadExtendedCase(caseData: CaseEditInputModel) {
+      if (caseData.extendedCaseData != null) {
+        const userData = this.localStorageService.getCurrentUser();
+        const ouId = this.caseDataHelpder.getField(caseData, CaseFieldsNames.OrganizationUnitId).value;
+        const empty$ = () => EMPTY.pipe(defaultIfEmpty(null));
+        const getOU = (_ouId) => _ouId != null ? this.oUsService.getOU(_ouId) : empty$();
+        getOU(ouId).pipe(
+          take(1)
+        ).subscribe(ou => {
+          const ouParentId = ou != null ? ou.parentId : null;
+          this.extendedCase.nativeElement.loadForm = {
+            formParameters: {
+              formId: caseData.extendedCaseData.extendedCaseFormId,
+              languageId: userData.currentData.selectedLanguageId,
+              extendedCaseGuid: caseData.extendedCaseData.extendedCaseGuid,
+              caseId: caseData.id,
+              applicationType: 'helpdesk',
+              isCaseLocked: this.isLocked,
+              // currentUser: userData.currentData.EmployeeNumber, not used in helpdesk
+              userGuid: userData.currentData.userGuid,
+              userRole: userData.currentData.userRole,
+              caseStatus: this.caseDataHelpder.getField(caseData, CaseFieldsNames.StateSecondaryId).value || '',
+              customerId: userData.currentData.selectedCustomerId
+            },
+            caseValues: {
+              administrator_id: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.PerformerUserId).value },
+              reportedby: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.ReportedBy).value },
+              persons_name: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.PersonName).value },
+              persons_phone: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.PersonPhone).value },
+              usercode: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.UserCode).value },
+              region_id: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.RegionId).value },
+              department_id: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.DepartmentId).value },
+              ou_id_1: { Value: ouParentId },
+              ou_id_2: { Value: ouId },
+              productarea_id: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.ProductAreaId).value },
+              status_id: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.StatusId).value },
+              subStatus_id: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.StateSecondaryId).value },
+              plandate: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.PlanDate).value },
+              watchdate: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.WatchDate).value },
+              priority_id: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.PriorityId).value },
+              log_textinternal: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.Log_InternalText).value },
+              case_relation_type: { Value: this.getCaseRelationType(caseData) },
+              persons_email: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.PersonEmail).value },
+              persons_cellphone: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.PersonCellPhone).value },
+              place: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.Place).value },
+              costcentre: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.CostCentre).value },
+              caption: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.Caption).value }
+            }
+          };
+        });
+      }
+    }
+
+    private saveExtendedCase(isOnNext: boolean) {
+      if (this.caseData.extendedCaseData == null) {
+        return EMPTY.pipe(defaultIfEmpty(true));
+      }
+
+      this.extendedCase.nativeElement.saveForm = isOnNext;
+      return this.extendedCaseSaveObserver;
+    }
+
+    private syncExtendedCaseValues() {
+      if (this.caseData.extendedCaseData == null) {
+        return;
+      }
+      const values = this.extendedCase.nativeElement.getCaseValues;
+      if (!values) {
+        return;
+      }
+
+      if (values.administrator_id != null) {
+        this.form.setSafe(CaseFieldsNames.PerformerUserId, values.administrator_id.Value);
+      }
+      if (values.reportedby != null) {
+        this.form.setSafe(CaseFieldsNames.ReportedBy, values.reportedby.Value);
+      }
+      if (values.persons_name != null) {
+        this.form.setSafe(CaseFieldsNames.PersonName, values.persons_name.Value);
+      }
+      if (values.persons_phone != null) {
+        this.form.setSafe(CaseFieldsNames.PersonPhone, values.persons_phone.Value);
+      }
+      if (values.usercode != null) {
+        this.form.setSafe(CaseFieldsNames.UserCode, values.usercode.Value);
+      }
+      if (values.log_textinternal != null) {
+        this.form.setSafe(CaseFieldsNames.Log_InternalText, values.log_textinternal.Value);
+      }
+      if (values.region_id != null) {
+        this.form.setSafe(CaseFieldsNames.RegionId, values.region_id.Value);
+      }
+      if (values.department_id != null) {
+        this.form.setSafe(CaseFieldsNames.DepartmentId, values.department_id.Value);
+      }
+
+      let ouValue = values.ou_id_1 != null ? values.ou_id_1.Value : null;
+      if (values.ou_id_2 != null) {
+        ouValue = values.ou_id_2.Value;
+      }
+      if (ouValue != null) {
+        this.form.setSafe(CaseFieldsNames.OrganizationUnitId, ouValue);
+      }
+
+      if (values.priority_id != null) {
+        this.form.setSafe(CaseFieldsNames.PriorityId, values.priority_id.Value);
+      }
+
+      if (values.priority_id != null) {
+        this.form.setSafe(CaseFieldsNames.PriorityId, values.priority_id.Value);
+      }
+      if (values.productarea_id != null) {
+        this.form.setSafe(CaseFieldsNames.ProductAreaId, values.productarea_id.Value);
+      }
+      if (values.status_id != null) {
+        this.form.setSafe(CaseFieldsNames.StatusId, values.status_id.Value);
+      }
+      if (values.subStatus_id != null) {
+        this.form.setSafe(CaseFieldsNames.StateSecondaryId, values.subStatus_id.Value);
+      }
+      if (values.plandate != null) {
+        this.form.setSafe(CaseFieldsNames.PlanDate, values.plandate.Value);
+      }
+      if (values.watchdate != null) {
+        this.form.setSafe(CaseFieldsNames.WatchDate, values.watchdate.Value);
+      }
+      if (values.persons_email != null) {
+        this.form.setSafe(CaseFieldsNames.PersonEmail, values.persons_email.Value);
+      }
+      if (values.persons_cellphone != null) {
+        this.form.setSafe(CaseFieldsNames.PersonCellPhone, values.persons_cellphone.Value);
+      }
+      if (values.costcentre != null) {
+        this.form.setSafe(CaseFieldsNames.CostCentre, values.costcentre.Value);
+      }
+      if (values.caption != null) {
+        this.form.setSafe(CaseFieldsNames.Caption, values.caption.Value);
+      }
+    }
+
+/*     private extendedCaseIsValid(isOnNext: boolean): boolean {
+      let result = true;
+      if (this.caseData.extendedCaseData != null) {
+        this.validateExtendedCase(isOnNext);
+        result = <boolean>this.extendedCase.nativeElement.validationResult;
+      }
+      return result;
+    } */
+
+    private validateExtendedCase(isOnNext: boolean) {
+      if (this.caseData.extendedCaseData == null) {
+        this.extendedCaseValidation$.next(true);
+      } else {
+        this.extendedCase.nativeElement.validateForm = isOnNext;
+      }
+    }
+
+    private getCaseRelationType(caseData: CaseEditInputModel) {
+      if (caseData.childCasesIds != null && caseData.childCasesIds.length > 0) {
+        return 'Parent';
+      }
+      if (caseData.parentCaseId != null && caseData.parentCaseId > 0) {
+        return 'Child';
+      }
+      return '';
+    }
+
+    private goToCases() {
+      this.navigate('/casesoverview/');
+    }
+
+    private loadWorkflows(caseId: number) {
+      this.caseWorkflowsService.getWorkflows(caseId)
+      .subscribe(workflows => {
+        this.dataSource.workflowsStore$.next(workflows);
+      });
     }
 
     private translateMessages() {
@@ -292,7 +522,7 @@ export class CaseEditComponent {
           catchError((e) => throwError(e)),
       );
 
-      forkJoin(caseSections$, caseData$).pipe(
+      forkJoin([caseSections$, caseData$]).pipe(
           take(1),
           finalize(() => this.isLoaded = true),
           catchError((e) => throwError(e))
@@ -302,6 +532,7 @@ export class CaseEditComponent {
 
           this.initLock();
           this.processCaseData();
+          this.loadExtendedCase(this.caseData);
       });
     }
 
@@ -309,191 +540,14 @@ export class CaseEditComponent {
       // drop down value changed
       this.commService.listen(Channels.CaseFieldValueChanged).pipe(
         takeUntil(this.destroy$)
-      ).subscribe((v: CaseFieldValueChangedEvent) => this.runUpdates(v));
-    }
-
-    private getCaseDataReducers(): CaseDataReducers {
-      return this.сaseDataReducersFactory.createCaseDataReducers(this.dataSource);
-    }
-
-    private getFormOptionsHelpers() {
-      const filters = this.caseDataHelpder.getFormCaseOptionsFilter(this.caseData, this.form);
-      return this.caseService.getOptionsHelper(filters);
-    }
-
-    private runUpdates(v: CaseFieldValueChangedEvent) { // TODO: move to new class
-      const reducer = this.getCaseDataReducers();
-      const filters = this.caseDataHelpder.getFormCaseOptionsFilter(this.caseData, this.form);
-      const optionsHelper = this.caseService.getOptionsHelper(filters);
-
-      // NOTE: remember to update case data reducer when adding new fields
-      switch (v.name) {
-        case CaseFieldsNames.RegionId: {
-          optionsHelper.getDepartments().pipe(
-            take(1),
-          ).subscribe((deps: OptionItem[]) => {
-            reducer.caseDataReducer(CaseFieldsNames.DepartmentId, { items: deps });
-            // clear org units
-            reducer.caseDataReducer(CaseFieldsNames.OrganizationUnitId, { items: []});
-          });
-          break;
-        }
-        case CaseFieldsNames.DepartmentId: {
-          optionsHelper.getOUs().pipe(
-            take(1),
-          ).subscribe((ous: OptionItem[]) => {
-            reducer.caseDataReducer(CaseFieldsNames.OrganizationUnitId, { items: ous });
-          });
-          break;
-        }
-        case CaseFieldsNames.IsAbout_RegionId: {
-          optionsHelper.getIsAboutDepartments().pipe(
-            take(1),
-          ).subscribe((deps: OptionItem[]) => {
-            reducer.caseDataReducer(CaseFieldsNames.IsAbout_DepartmentId, { items: deps });
-            // clear org units
-            reducer.caseDataReducer(CaseFieldsNames.IsAbout_OrganizationUnitId, { items: []});
-          });
-          break;
-        }
-        case CaseFieldsNames.IsAbout_DepartmentId: {
-          optionsHelper.getIsAboutOUs().pipe(
-            take(1),
-          ).subscribe((ous: OptionItem[]) => {
-            reducer.caseDataReducer(CaseFieldsNames.IsAbout_OrganizationUnitId, { items: ous });
-          });
-          break;
-        }
-        case CaseFieldsNames.CaseTypeId: {
-          if (v.value) {
-            this.caseTypesService.getCaseType(v.value).pipe(
-                take(1)
-              ).subscribe(ct => {
-                if (ct && ct.performerUserId != null && !this.getField(CaseFieldsNames.PerformerUserId).setByTemplate) {
-                  if (!this.dataSource.performersStore$.value.some((e) => e.value === ct.performerUserId)) {
-                    // get new list of performers with casetype perfomer included
-                    filters.CasePerformerUserId = ct.performerUserId;
-                    optionsHelper.getPerformers(true).pipe(
-                      take(1)
-                    ).subscribe((o: OptionItem[]) => {
-                      reducer.caseDataReducer(CaseFieldsNames.PerformerUserId, { items: o });
-                    });
-                  }
-                }
-                if (ct && ct.workingGroupId != null) {
-                  this.form.setSafe(CaseFieldsNames.WorkingGroupId, ct.workingGroupId);
-                }
-                if (ct && ct.performerUserId != null) {
-                  this.form.setSafe(CaseFieldsNames.PerformerUserId, ct.performerUserId);
-                }
-              });
-          }
-          optionsHelper.getProductAreas(null).pipe(
-            take(1)
-          ).subscribe((o: MultiLevelOptionItem[]) => {
-            reducer.caseDataReducer(CaseFieldsNames.ProductAreaId, { items: o });
-          });
-          break;
-        }
-        case CaseFieldsNames.WorkingGroupId: {
-          optionsHelper.getPerformers(false).pipe(
-            take(1)
-          ).subscribe((o: OptionItem[]) => {
-            reducer.caseDataReducer(CaseFieldsNames.PerformerUserId, { items: o });
-          });
-
-          if (!!v.value && this.form.contains(CaseFieldsNames.StateSecondaryId)) {
-            this.workingGroupsService.getWorkingGroup(v.value).pipe(
-              take(1)
-            ).subscribe(wg => {
-              if (wg && wg.stateSecondaryId != null) {
-                this.form.setSafe(CaseFieldsNames.StateSecondaryId, wg.stateSecondaryId);
-              }
-            });
-          }
-          break;
-        }
-        case CaseFieldsNames.StateSecondaryId: {
-          const sendExternalEmailsControl = this.form.get(CaseFieldsNames.Log_SendMailToNotifier);
-          const externalLogTextControl = this.form.get(CaseFieldsNames.Log_ExternalText);
-          if (v.value) {
-            this.stateSecondariesService.getStateSecondary(v.value)
-            .pipe(
-              take(1)
-            ).subscribe(ss => {
-              if (ss && ss.workingGroupId != null && this.form.contains(CaseFieldsNames.WorkingGroupId)) {
-                this.form.setSafe(CaseFieldsNames.WorkingGroupId, ss.workingGroupId);
-              }
-              const departmentCtrl = this.form.get(CaseFieldsNames.DepartmentId);
-              if (ss.recalculateWatchDate && departmentCtrl.value) {
-                  this.caseWatchDateApiService.getWatchDate(departmentCtrl.value).pipe(
-                    take(1)
-                  ).subscribe(date => this.form.setSafe(CaseFieldsNames.WatchDate, date));
-              }
-              // update extneral log field state
-              const sendExternalEmailsControl = this.form.get(CaseFieldsNames.Log_SendMailToNotifier);
-              const externalLogTextControl = this.form.get(CaseFieldsNames.Log_ExternalText);
-              if (ss.noMailToNotifier === true) {
-                sendExternalEmailsControl.disable({ onlySelf: true, emitEvent: true });
-              } else if (externalLogTextControl && externalLogTextControl.disabled === false) {
-                //enable only in case extneral log note text is enabled as well
-                sendExternalEmailsControl.enable({ onlySelf: true, emitEvent: true });
-              }
-            });
-          } else if (externalLogTextControl && externalLogTextControl.disabled === false) {
-            //enable only in case extneral log note text is enabled as well
-            sendExternalEmailsControl.enable({ onlySelf: true, emitEvent: true });
-          }
-          break;
-        }
-        case CaseFieldsNames.ProductAreaId: {
-          if (v.value) {
-            this.productAreasService.getProductArea(v.value).pipe(
-              take(1)
-            ).subscribe(ct => {
-              if (ct && ct.workingGroupId != null) {
-                this.form.setSafe(CaseFieldsNames.WorkingGroupId, ct.workingGroupId);
-              }
-              if (ct && ct.priorityId != null) {
-                this.form.setSafe(CaseFieldsNames.PriorityId, ct.priorityId);
-              }
-            });
-          }
-          break;
-        }
-        case CaseFieldsNames.ClosingReason: {
-          if (v.value) {
-            const finishingDateControl = this.form.get(CaseFieldsNames.FinishingDate);
-            if (finishingDateControl && !finishingDateControl.value) {
-              this.form.setSafe(CaseFieldsNames.FinishingDate, DateTime.local().toString());
-            }
-          } else {
-            this.form.setSafe(CaseFieldsNames.FinishingDate, '');
-          }
-          break;
-        }
-        case CaseFieldsNames.ReportedBy: {
-          const userId = v.value !== null ? +v.value : 0;
-          const notifierType = v.text && v.text.length ? <NotifierType>+v.text : NotifierType.Initiator;
-
-          if (!isNaN(userId) && userId > 0) {
-            this.notifierService.getNotifier(v.value).pipe(
-              take(1)
-            ).subscribe(x => {
-               this.processNotifierChanged(x, notifierType === NotifierType.Regarding);
-            });
-          } else {
-            this.processNotifierChanged(null, notifierType === NotifierType.Regarding);
-          }
-          break;
-        }
-      }
+      ).subscribe((v: CaseFieldValueChangedEvent) => this.caseEditLogic.runUpdates(v, this.dataSource, this.caseData, this.form));
     }
 
     private processCaseData() {
       // create form
       const fb = new CaseFormGroupBuilder(this.translateService);
       this.form = fb.createFormGroup(this.caseData.fields, this.canSave);
+      this.form.setCommService(this.commService);
 
       // run only for existing case
       if (this.caseId > 0) {
@@ -510,7 +564,7 @@ export class CaseEditComponent {
       }
 
       // get existing files
-      const filesField = this.getField(CaseFieldsNames.Filename);
+      const filesField = this.caseEditLogic.getField(this.caseData, CaseFieldsNames.Filename);
       if (filesField && filesField.value) {
         const files = filesField.value as Array<any>;
         if (files && files.length) {
@@ -540,7 +594,7 @@ export class CaseEditComponent {
         } else if (this.caseLock.timerInterval > 0) {
             // run extend case lock at specified interval
             interval(this.caseLock.timerInterval * 1000).pipe(
-                  takeWhile(x => this.ownsLock)
+                  takeWhile(() => this.ownsLock)
               ).subscribe(_ => {
                 this.caseLockApiService.reExtendedCaseLock(this.caseId, this.caseLock.lockGuid, this.caseLock.extendValue).pipe(
                   take(1)
@@ -561,85 +615,6 @@ export class CaseEditComponent {
       } else {
         this.caseLock = new CaseLockModel();
       }
-    }
-
-    private processNotifierChanged(data: NotifierModel, isRegarding: boolean) {
-      const formFieldsSetter = this.form.getNotifierFieldsSetter(isRegarding);
-
-      if (data) {
-        formFieldsSetter.setReportedBy(data.userId);
-        formFieldsSetter.setPersonName(data.name);
-        formFieldsSetter.setPersonEmail(data.email);
-        formFieldsSetter.setPersonPhone(data.phone);
-        formFieldsSetter.setPersonCellPhone(data.cellphone);
-        formFieldsSetter.setPlace(data.place);
-        formFieldsSetter.setUserCode(data.userCode);
-        formFieldsSetter.setCostCenter(data.costCentre);
-
-        this.updateOrganisationFields(formFieldsSetter, data);
-      } else {
-        this.resetNotifierFields(formFieldsSetter);
-      }
-    }
-
-    private updateOrganisationFields(notifierFieldsSetter: NotifierFormFieldsSetter, data: IOrganisationData) {
-      const regionId = data.regionId ? +data.regionId : null;
-      const departmentId = data.departmentId ? +data.departmentId : null;
-      const ouId = data.ouId ? +data.ouId : null;
-      const formRegionId = +this.form.getValue(CaseFieldsNames.RegionId);
-
-      if (regionId !== formRegionId) {
-        this.changeRegion(notifierFieldsSetter, regionId, departmentId, ouId);
-      } else {
-          // just set new department if exists
-          if (!isNaN(departmentId) && departmentId) {
-            this.changeDepartment(notifierFieldsSetter, departmentId, ouId);
-          }
-      }
-    }
-
-    private changeRegion(notifierFieldsSetter: NotifierFormFieldsSetter, regionId?: number, departmentId?: number, ouId?: number) {
-      // change first to update form
-      notifierFieldsSetter.setRegion(regionId || '');
-
-      const reducer = this.getCaseDataReducers();
-      const optionsHelper = this.getFormOptionsHelpers();
-
-      // change to new region and load departments
-      optionsHelper.getDepartments().pipe(
-        take(1)
-      ).subscribe(deps => {
-        reducer.caseDataReducer(CaseFieldsNames.DepartmentId, { items: deps });
-        this.changeDepartment(notifierFieldsSetter, departmentId, ouId);
-      });
-    }
-
-    private changeDepartment(notifierFieldsSetter: NotifierFormFieldsSetter, departmentId: number, ouId?: number) {
-
-      notifierFieldsSetter.setDepartment(departmentId || '');
-
-      const reducer = this.getCaseDataReducers();
-      const optionsHelper = this.getFormOptionsHelpers();
-
-      // load OUs
-      optionsHelper.getOUs(departmentId).pipe(
-        take(1)
-      ).subscribe(ous => {
-          reducer.caseDataReducer(CaseFieldsNames.OrganizationUnitId, { items: ous });
-          notifierFieldsSetter.setOU(ouId || '');
-      });
-    }
-
-    private resetNotifierFields(formFieldsSetter: NotifierFormFieldsSetter) {
-      formFieldsSetter.setReportedBy('');
-      formFieldsSetter.setPersonName('');
-      formFieldsSetter.setPersonEmail('');
-      formFieldsSetter.setPersonCellPhone('');
-      formFieldsSetter.setPlace('');
-      formFieldsSetter.setUserCode('');
-      formFieldsSetter.setCostCenter('');
-      formFieldsSetter.setRegion('');
-      this.changeRegion(formFieldsSetter, null, null, null);
     }
 
     private showLockWarning() {
@@ -666,14 +641,11 @@ export class CaseEditComponent {
       this.alertService.clearMessages();
       this.destroy$.next();
       this.destroy$.complete();
+      this.extendedCaseValidation$.complete();
+      this.extendedCaseSave$.complete();
 
       this.commService.publish(Channels.Header, new HeaderEventData(true));
 
   }
 }
 
-interface IOrganisationData {
-  regionId?: number;
-  departmentId?: number;
-  ouId?: number;
-}

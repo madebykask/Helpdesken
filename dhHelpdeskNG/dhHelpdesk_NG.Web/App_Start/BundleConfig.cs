@@ -206,11 +206,13 @@
 
             bundles.Add(new ScriptBundle("~/bundles/cases/new").Include(
                 "~/Content/js/Cases/caseInitForm.js",
+                "~/Content/js/ClipboardFileUpload.js",
                 "~/Content/js/Cases/commonHandlers.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/cases/edit").Include(
                 "~/Content/js/Cases/caseInitForm.js",
                 "~/Content/js/Cases/commonHandlers.js",
+                "~/Content/js/ClipboardFileUpload.js",
                 "~/Content/js/snippets/tabSwitchByHashTag.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/Cases/_CaseLogInput").Include(
@@ -231,12 +233,15 @@
                     "~/Content/js/jsrender.min.js",
                     "~/Content/js/Cases/externalInvoice.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/cases/_caseLogFiles").Include("~/Content/js/Cases/_caseLogFiles.js"));
-            bundles.Add(
-                new ScriptBundle("~/bundles/Cases/_ChildCases").Include(
+            bundles.Add(new ScriptBundle("~/bundles/cases/_caseLogFiles").Include(
+                "~/Content/js/Cases/_caseLogFiles.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/Cases/_ChildCases").Include(
                     "~/Content/js/Cases/_childCases.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/cases/editLog").Include("~/Content/js/Cases/editLog.logic.js"));
+            bundles.Add(new ScriptBundle("~/bundles/cases/editLog").Include(
+                "~/Content/js/Cases/editLog.logic.js"));
+
             bundles.Add(new ScriptBundle(ScriptNames.CaseCharge).Include("~/Content/js/Cases/Dialogs/CaseCharge.js"));
 
             #endregion

@@ -51,10 +51,21 @@ namespace DH.Helpdesk.Services.Services.Cache
             return _cacheService.Get(_textTranslationsKey, GetTranslationTexts, DateTime.UtcNow.AddMinutes(10));
         }
 
+        public IDictionary<string,TextList> GetAllTextTranslationsOptimized()
+        {
+            return _cacheService.Get("GetAllTextTranslationsOptimized", GetTranslationDictionaryTexts, DateTime.UtcNow.AddMinutes(10));
+        }
+
         public TextType GetTextType(string texttype)
         {
             var item = _textTypeRepository.GetTextTypeByName(texttype);
             return item;
+        }
+
+        public List<TextType> GetAllTextTypes()
+        {
+            var cacheKey = $"{ _caseTranslationsKey }_GetAllTextTypes";
+            return _cacheService.Get(cacheKey, () => _textTypeRepository.GetAllTextTypes(), DateTime.UtcNow.AddMinutes(100));
         }
 
         public IList<CustomKeyValue<string, string>> GetTextTranslationsForLanguage(int languageId, int typeId = 0) // TODO: ClearCache
@@ -104,11 +115,26 @@ namespace DH.Helpdesk.Services.Services.Cache
             return _textRepository.GetAllWithTranslation().ToList();
         }
 
+        private Dictionary<string, TextList> GetTranslationDictionaryTexts()
+        {
+            var dictionary = new Dictionary<string, TextList>(StringComparer.OrdinalIgnoreCase);
+            var texts = _textRepository.GetAllTextsAndTranslations();
+
+            texts.ForEach(t => {
+                if (dictionary.ContainsKey(t.TextToTranslate.ToLower() + t.Type.ToString()))
+                    dictionary[t.TextToTranslate.ToLower() + t.Type.ToString()] = t;
+                else 
+                    dictionary.Add(t.TextToTranslate.ToLower() + t.Type.ToString(), t);
+            });
+            return dictionary;
+        }
+
         #endregion
     }
 
     public interface ITranslateCacheService
     {
+        List<TextType> GetAllTextTypes();
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int customerId);
         IList<CustomKeyValue<string, string>> GetTextTranslationsForLanguage(int languageId, int typeId = 0);
         void ClearCaseTranslations(int customerId);
@@ -117,5 +143,6 @@ namespace DH.Helpdesk.Services.Services.Cache
         string GetMasterDataTextTranslation(string translate, int languageId);
         string GetTextTranslation(string translate, int languageId, int? textTypeId = null);
         void ClearAllTextTranslations();
+        IDictionary<string, TextList> GetAllTextTranslationsOptimized();
     }
 }

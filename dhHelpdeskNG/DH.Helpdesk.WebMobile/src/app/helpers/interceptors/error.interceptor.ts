@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationService } from '../../services/authentication';
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
-import { catchError, switchMap, filter, take, retry } from 'rxjs/operators';
+import { Observable, throwError, BehaviorSubject, EMPTY } from 'rxjs';
+import { catchError, switchMap, filter, take, retry, takeWhile } from 'rxjs/operators';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -21,7 +21,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         if (request.url.includes('account/refresh')) {
           this.authenticationService.logout();
           window.location.reload(true);
-          return;
+          return EMPTY;
         }
 
         if (request.url.includes('account/login')) {
@@ -49,11 +49,16 @@ export class ErrorInterceptor implements HttpInterceptor {
       // If refreshTokenInProgress is true, we will wait until refreshTokenSubject has a non-null value
       // – which means the new token is ready and we can retry the request again
       return this.refreshTokenSubject.pipe(
+          takeWhile(() => this.refreshTokenInProgress),
           filter(result => result !== null),
-          take(1),
-          switchMap(() => next.handle(this.authenticationService.setAuthHeader(request)))
+          switchMap((res: boolean) => {
+            if (res === true) {
+              return next.handle(this.authenticationService.setAuthHeader(request));
+            } else {
+              return EMPTY;
+            }
+          })
         );
-      //.subscribe(()=> { return next.handle(this.authenticationService.setAuthHeader(request)) });
     } else {
       this.refreshTokenInProgress = true;
 
@@ -62,6 +67,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
       // Call authenticationService.refreshToken(this is an Observable that will be returned)
       return this.authenticationService.refreshToken().pipe(
+        take(1),
         switchMap((r: boolean) => {
           //When the call to refreshToken completes we reset the refreshTokenInProgress to false
           // for the next time the token needs to be refreshed

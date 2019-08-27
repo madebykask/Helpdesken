@@ -147,11 +147,13 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "supplier_id": str = "Leverantör"; break;
                     case "system_id": str = "System"; break;
                     case "tbllog_charge": str = "Debitering"; break;
-                    case "tbllog_filename": str = "Log bifogad fil"; break;
+                    case "tbllog_filename": str = "Bifogad fil"; break;
+                    case "tbllog_filename_internal": str = "Intern bifogad fil"; break;
                     case "tbllog_text_external": str = "Extern notering"; break;
                     case "tbllog_text_internal": str = "Intern notering"; break;
                     case "tbllog.charge": str = "Debitering"; break;
-                    case "tbllog.filename": str = "Log bifogad fil"; break;
+                    case "tbllog.filename": str = "Bifogad fil"; break;
+                    case "tbllog.filename_internal": str = "Intern bifogad fil"; break;
                     case "tbllog.text_external": str = "Extern notering"; break;
                     case "tbllog.text_internal": str = "Intern notering"; break;
                     case "urgency_id": str = "Brådskandegrad"; break;
@@ -235,12 +237,14 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "system_id": str = "System"; break;
                     case "tbllog_charge": str = "Charge"; break;
                     case "tbllog_filename": str = "Log Attached file"; break;
+                    case "tbllog.filename": str = "Log Attached file"; break;
+                    case "tbllog_filename_internal": str = "Internal attached file"; break;
+                    case "tbllog.filename_internal": str = "Internal attached file"; break;
+                    case "tbllog.text_external": str = "External log note"; break;
                     case "tbllog_text_external": str = "External log note"; break;
+                    case "tbllog.text_internal": str = "Internal log note"; break;
                     case "tbllog_text_internal": str = "Internal log note"; break;
                     case "tbllog.charge": str = "Charge"; break;
-                    case "tbllog.filename": str = "Log Attached file"; break;
-                    case "tbllog.text_external": str = "External log note"; break;
-                    case "tbllog.text_internal": str = "Internal log note"; break;
                     case "urgency_id": str = "Urgent degree"; break;
                     case "user_id": str = "Registered by"; break;
                     case "usercode": str = "Orderer Code"; break;
@@ -366,7 +370,6 @@ namespace DH.Helpdesk.Common.Extensions.String
         {
             return string.IsNullOrEmpty(value)? elseValue : value;
         }
-
 
         /// <summary>
         /// Removes \r and \n from string and Trims

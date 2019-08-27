@@ -8,8 +8,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
-using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.BusinessData.Models.User.Interfaces;
+using DH.Helpdesk.Common.Enums.Logs;
 
 namespace DH.Helpdesk.BusinessData.Models.Logs.Output
 {
@@ -92,18 +92,20 @@ namespace DH.Helpdesk.BusinessData.Models.Logs.Output
 
     public class LogFileOverview
     {
-        public LogFileOverview(int id, string fileName, int? caseId = null, int? logId = null)
+        public LogFileOverview(int id, string fileName, int? caseId = null, int? logId = null, LogFileType logType = LogFileType.External)
         {
             Id = id;
             FileName = fileName;
             CaseId = caseId;
             LogId = logId;
+            LogType = logType;
         }
 
         public int Id { get; }
         public string FileName { get; }
         public int? CaseId { get; set; }
         public int? LogId { get; set; }
+        public LogFileType LogType { get; set; }
     }
 
     public class LogUserOverview : IUserInfo

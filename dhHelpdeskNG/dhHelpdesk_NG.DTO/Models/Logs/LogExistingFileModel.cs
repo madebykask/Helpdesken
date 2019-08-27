@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using DH.Helpdesk.Common.Enums.Logs;
 
 namespace DH.Helpdesk.BusinessData.Models.Logs
 {
@@ -14,5 +11,7 @@ namespace DH.Helpdesk.BusinessData.Models.Logs
         public bool IsExistLogFile { get; set; }
         public int? LogId { get; set; }
         public int CaseId { get; set; }
+        public LogFileType LogType { get; set; }
+        public bool IsInternalLogNote { get; set; }
     }
 }

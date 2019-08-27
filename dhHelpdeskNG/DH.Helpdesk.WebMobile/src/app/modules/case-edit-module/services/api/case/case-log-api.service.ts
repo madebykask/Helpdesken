@@ -4,6 +4,7 @@ import { HttpApiServiceBase } from 'src/app/modules/shared-module/services';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { config } from '@env/environment';
+import { LogFileType } from 'src/app/modules/shared-module/constants/logFileType.enum';
 
 @Injectable({ providedIn: 'root' })
 export class CaseLogApiService extends HttpApiServiceBase {
@@ -12,8 +13,8 @@ export class CaseLogApiService extends HttpApiServiceBase {
     super(http, localStorageService);
   }
 
-  getUploadLogFileUrl(caseId: string, customerId: number) {
-    return `${config.apiUrl}/api/case/${caseId}/logfile/?cid=${customerId}`;
+  getUploadLogFileUrl(caseId: string, customerId: number, type: LogFileType) {
+    return `${config.apiUrl}/api/case/${caseId}/logfile/?cid=${customerId}&type=${type}`;
   }
 
   getCaseLogs(caseId: number): Observable<Array<any>> {
@@ -21,9 +22,8 @@ export class CaseLogApiService extends HttpApiServiceBase {
     return this.getJson<Array<any>>(url);
   }
 
-  deleteTempLogFile(caseKey: string, fileName: string): Observable<boolean> {
-    //todo: encode fileName
-    const url = this.buildResourseUrl(`/api/case/${caseKey}/templogfile`, { fileName: fileName }, true, false);
+  deleteTempLogFile(caseKey: string, fileName: string, type: LogFileType): Observable<boolean> {
+    const url = this.buildResourseUrl(`/api/case/${caseKey}/templogfile`, { fileName: fileName, type: type.toString() }, true, false);
     return this.deleteWithResult<boolean>(url);
   }
 }

@@ -202,8 +202,7 @@ namespace DH.Helpdesk.Services.Services
             }
 
             //TODO: query can be optimized by filtering from,to. But departments which have calendar but not in range(from,to) also must be included
-            var allDepsWithCalendars = this._departmentService.GetDepartmentsByIdsWithHolidays(departmentsIds)
-                .Where(d => d.HolidayHeader.Id != DEFAULT_CALENDAR_ID).ToArray();
+            var allDepsWithCalendars = this._departmentService.GetDepartmentsByIdsWithHolidays(departmentsIds, DEFAULT_CALENDAR_ID);
             var depsWithCalendarsWithNoHolidays = allDepsWithCalendars.Where(d => d.HolidayHeader.Holidays.Count == 0).ToArray();
 
             var res = allDepsWithCalendars.SelectMany(

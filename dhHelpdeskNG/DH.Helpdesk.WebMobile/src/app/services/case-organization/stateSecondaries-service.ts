@@ -23,7 +23,7 @@ export class StateSecondariesService extends HttpApiServiceBase {
             map((jsItems: any) => {
                 return this.caseHelper.toOptionItems(jsItems as Array<any>) || new Array<OptionItem>();
             })
-        );//TODO: error handling
+        ); //TODO: error handling
     }
 
     getStateSecondary(id: number): Observable<StateSecondaryInputModel> {
@@ -31,10 +31,10 @@ export class StateSecondariesService extends HttpApiServiceBase {
       .pipe(
           take(1),
           map((jsItems: any) => {
-            let model = new StateSecondaryInputModel();
+            const model = new StateSecondaryInputModel();
             model.id = jsItems.id;
             model.changedDate = new Date(jsItems.changedDate);
-            model.createdDate = new Date(jsItems.createdDate)
+            model.createdDate = new Date(jsItems.createdDate);
             model.customerId = jsItems.customerId;
             model.isActive = jsItems.isActive;
             model.isDefault = jsItems.isDefault;
@@ -45,6 +45,6 @@ export class StateSecondariesService extends HttpApiServiceBase {
             model.reminderDays = jsItems.reminderDays;
             return model;
           })
-      );// TODO: error handling
+      ); // TODO: error handling
     }
 }

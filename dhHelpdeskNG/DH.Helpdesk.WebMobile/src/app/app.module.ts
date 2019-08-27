@@ -1,7 +1,7 @@
 import { MbscModule } from '@mobiscroll/angular';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
-import { NgModule, ErrorHandler, forwardRef } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { APP_INITIALIZER } from '@angular/core';
 import { LoginComponent, HeaderTitleComponent } from './shared/components';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
@@ -20,8 +20,6 @@ import { ErrorComponent } from './shared/components/error/error.component';
 import { UserSettingsApiService } from './services/api/user/user-settings-api.service';
 import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
 import { AltLayoutComponent } from './_layout/alt-layout/alt-layout.component';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '@env/environment';
 import { SharedModule } from './modules/shared-module/shared.module';
 import { TestComponent } from './components/test/test.component';
 import { initApplication } from './logic/app-configuration/app-configuration';
@@ -65,7 +63,7 @@ import { VersionComponent } from './components/version.component';
       useDefaultLang: true
     }),
     SharedModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     { provide: ErrorHandler, useClass: GlobalErrorHandler },

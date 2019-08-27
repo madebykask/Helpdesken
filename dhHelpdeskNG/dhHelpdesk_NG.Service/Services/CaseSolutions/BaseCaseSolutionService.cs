@@ -14,6 +14,7 @@ namespace DH.Helpdesk.Services.Services
     public interface IBaseCaseSolutionService
     {
         CaseSolution GetCaseSolution(int id);
+        Task<CaseSolution> GetCaseSolutionAsync(int id);
         Task<List<CaseSolutionOverview>> GetCustomerCaseSolutionsAsync(int customerId);
         Task<List<CaseSolutionOverview>> GetCustomerMobileCaseSolutionsAsync(int customerId);
         CaseSolutionCategory GetCaseSolutionCategory(int id);
@@ -39,6 +40,11 @@ namespace DH.Helpdesk.Services.Services
         public CaseSolution GetCaseSolution(int id)
         {
             return CaseSolutionRepository.GetById(id);
+        }
+
+        public Task<CaseSolution> GetCaseSolutionAsync(int id)
+        {
+            return CaseSolutionRepository.GetByIdAsync(id);
         }
        
         public Task<List<CaseSolutionOverview>> GetCustomerCaseSolutionsAsync(int customerId)

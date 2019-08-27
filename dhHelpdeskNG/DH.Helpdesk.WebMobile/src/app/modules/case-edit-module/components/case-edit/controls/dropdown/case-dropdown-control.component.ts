@@ -13,7 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
     styleUrls: ['./case-dropdown-control.component.scss']
   })
 export class CaseDropdownComponent extends BaseControl<number> {
-    @ViewChild('control') selectControl: MbscSelect;
+    @ViewChild('control', { static: true }) selectControl: MbscSelect;
     @Input() dataSource: BehaviorSubject<OptionItem[]>;
     @Input() disabled = false;
 
@@ -47,7 +47,7 @@ export class CaseDropdownComponent extends BaseControl<number> {
 
     localDataSource: OptionItem[] = [];
 
-    constructor(private commService: CommunicationService, 
+    constructor(private commService: CommunicationService,
       private ngxTranslateService: TranslateService) {
       super();
     }

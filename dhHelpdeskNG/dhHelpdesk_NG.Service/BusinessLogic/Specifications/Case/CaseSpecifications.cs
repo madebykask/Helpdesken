@@ -353,18 +353,20 @@ namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Case
             return query;
         }
 
-        public static IQueryable<Case> GetRelatedCases(this IQueryable<Case> query, int caseId, string userId, UserOverview user)
+        public static IQueryable<Case> GetRelatedCases(this IQueryable<Case> query, int caseId, string userId, UserOverview user, bool restrictToOwnCasesOnly)
         {
             query = query.Where(c => c.Id != caseId && c.ReportedBy.Trim().ToLower() == userId.Trim().ToLower());
 
-            if (user.RestrictedCasePermission == 1 && user.UserGroupId == (int)UserGroup.Administrator)
+            if (restrictToOwnCasesOnly)
             {
-                query = query.Where(c => c.Performer_User_Id == user.Id || c.CaseResponsibleUser_Id == user.Id);
-            }
-
-            if (user.RestrictedCasePermission == 1 && user.UserGroupId == (int)UserGroup.User)
-            {
-                query = query.Where(c => c.ReportedBy.Trim().ToLower() == user.UserId.Trim().ToLower());
+                if (user.UserGroupId == (int)UserGroup.Administrator)
+                {
+                    query = query.Where(c => c.Performer_User_Id == user.Id || c.CaseResponsibleUser_Id == user.Id);
+                }
+                else if (user.UserGroupId == (int)UserGroup.User)
+                {
+                    query = query.Where(c => c.ReportedBy.Trim().ToLower() == user.UserId.Trim().ToLower());
+                }
             }
 
             return query;

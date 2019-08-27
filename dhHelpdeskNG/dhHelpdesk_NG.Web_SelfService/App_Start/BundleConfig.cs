@@ -69,17 +69,20 @@ namespace DH.Helpdesk.SelfService
 
             bundles.Add(new ScriptBundle("~/Content/js/Case/newCase").Include(                          
                           "~/Content/js/Case/edit.js",
-                          "~/Content/js/Case/workflowStepsBehavior.js"));
+                          "~/Content/js/Case/workflowStepsBehavior.js",
+                "~/Content/js/Shared/clipBoardFileUpload.js"));
 
             bundles.Add(new ScriptBundle("~/Content/js/Case/casePage").Include(
                           "~/Content/js/Case/case.log.js",
-                          "~/Content/js/Case/workflowStepsBehavior.js"));
+                          "~/Content/js/Case/workflowStepsBehavior.js",
+                "~/Content/js/Shared/clipBoardFileUpload.js"));
 
             bundles.Add(new ScriptBundle("~/Content/js/Case/extendedCase").Include(
                           "~/Content/js/iframeResizer.js",
                           "~/Content/js/Case/case.extended.js",
                           "~/Content/js/Case/edit.js",
-                          "~/Content/js/Case/workflowStepsBehavior.js"));
+                          "~/Content/js/Case/workflowStepsBehavior.js",
+                          "~/Content/js/Shared/clipBoardFileUpload.js"));
 
             bundles.Add(new ScriptBundle("~/Content/js/Case/log").Include(
                           "~/Content/js/Case/case.log.js"));

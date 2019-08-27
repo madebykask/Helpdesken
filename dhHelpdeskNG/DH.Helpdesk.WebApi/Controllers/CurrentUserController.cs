@@ -27,16 +27,19 @@ namespace DH.Helpdesk.WebApi.Controllers
         [HttpGet]
         public async Task<UserSettingsModelOutput> Settings()
         {
-            var userSettings = await _userSerivice.GetUserOverviewAsync(UserId);//TODO: create new method to get cached/async result.
+            var userSettings = await _userSerivice.GetUserOverviewAsync(UserId);
+            
             return new UserSettingsModelOutput
             {
                 Id = UserId,
+                UserGuid = userSettings.UserGUID?.ToString(),
+                UserRole = userSettings.UserGroupId,
                 CustomerId = userSettings.CustomerId,
                 LanguageId = userSettings.LanguageId,
                 //note: windows and iana time zones sometimes changes. if unknown timezone is found, update nodatime lib or use other approach.
                 TimeZone = userSettings.TimeZoneId.WindowsToIana() ,
                 TimeZoneMoment = TimeZoneToMomentConverter.GenerateAddMomentZoneScript(userSettings.TimeZoneId, 2000, DateTime.Now.Year),
-                OwnCasesOnly = userSettings.RestrictedCasePermission.ToBool(),
+                //OwnCasesOnly = userSettings.RestrictedCasePermission.ToBool(),
                 CreateCasePermission = userSettings.CreateCasePermission.ToBool(),
                 DeleteAttachedFiles = userSettings.DeleteAttachedFilePermission.ToBool()
             };

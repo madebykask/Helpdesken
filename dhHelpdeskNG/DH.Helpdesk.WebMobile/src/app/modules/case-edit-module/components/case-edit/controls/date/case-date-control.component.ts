@@ -12,7 +12,7 @@ import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
     styleUrls: ['./case-date-control.component.scss']
   })
   export class CaseDateComponent extends BaseControl<string> {
-    @ViewChild('date') control: MbscCalendar;
+    @ViewChild('date', { static: true }) control: MbscCalendar;
     @Input() disabled = false;
     value?: string;
 

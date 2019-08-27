@@ -71,6 +71,7 @@
         AddFollowersBtn = 67,
         AgreedDate = 68,
         UserSearchCategory_Id = 69,
-        IsAbout_UserSearchCategory_Id = 70
+        IsAbout_UserSearchCategory_Id = 70,
+        LogFileName_Internal = 71,
     }
 }

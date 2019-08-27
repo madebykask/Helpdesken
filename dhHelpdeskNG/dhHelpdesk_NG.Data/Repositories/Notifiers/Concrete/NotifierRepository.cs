@@ -331,9 +331,14 @@ namespace DH.Helpdesk.Dal.Repositories.Notifiers.Concrete
                 requestBuilder.FilterByRegionId(parameters.RegionId.Value);
             }
 
-            if (parameters.DivisionId.HasValue)
+            if (parameters.DivisionId.HasValue) 
             {
                 requestBuilder.FilterByDivisionId(parameters.DivisionId.Value);
+            }
+
+            if (parameters.OrganizationUnit.HasValue)
+            {
+                requestBuilder.FilterByOrganisationUnit(parameters.OrganizationUnit.Value);
             }
 
             if (!string.IsNullOrEmpty(parameters.Pharse))
@@ -348,7 +353,7 @@ namespace DH.Helpdesk.Dal.Repositories.Notifiers.Concrete
                         ? null
                         : parameters.ComputerUserCategoryID;
 
-                requestBuilder.FilterByComputerUserCategoryID(categoryId);
+                requestBuilder.FilterByComputerUserCategoryId(categoryId);
             }
 
             var countingRequest = requestBuilder.Build();

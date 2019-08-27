@@ -4,9 +4,11 @@ import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
 import { MbscListviewOptions, MbscSwitch, MbscFormOptions } from '@mobiscroll/angular';
 import { Subject } from 'rxjs';
 import { CaseLogApiService } from '../../../services/api/case/case-log-api.service';
-import { take, takeUntil, distinctUntilChanged } from 'rxjs/internal/operators';
+import { take, takeUntil } from 'rxjs/internal/operators';
 import { CaseFormGroup, CaseFormControl } from 'src/app/modules/shared-module/models/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { LogFileType } from 'src/app/modules/shared-module/constants/logFileType.enum';
+import { FileUploadArgs } from '../controls/log-files-upload/log-files-upload.component';
 
 @Component({
   selector: 'case-log-input',
@@ -19,14 +21,16 @@ export class CaseLogInputComponent implements OnInit {
   @Input() caseData: CaseEditInputModel;
   @Input() accessMode: CaseAccessMode;
 
-  @ViewChild('sendMailToNotifierControl') sendMailToNotifierControl: MbscSwitch;
+  logFileType = LogFileType;
 
   files: string[] = [];
+  filesInternal: string[] = [];
   internalLogLabel = '';
   externalLogLabel = '';
   isExternalLogFieldVisible = false;
   isInternalLogFieldVisible = false;
   isAttachedFilesVisible = false;
+  isAttachedInternalFilesVisible = false;
   caseFieldsNames = CaseFieldsNames;
   isSendMailToNotifierDisabled = false; // have to use this variable and [disabled] binding, because control.disabled dont work on switch
   externalLogEmailsTo = '';
@@ -39,7 +43,19 @@ export class CaseLogInputComponent implements OnInit {
       color: 'red',
       icon: 'fa-trash',
       confirm: true,
-      action: this.onFileDelete.bind(this)
+      action: (event, inst) => this.onFileDelete(event, LogFileType.External)
+    }]
+  };
+
+  fileInternalListSettings: MbscListviewOptions = {
+    enhance: true,
+    swipe: true,
+    stages: [{
+      percent: -30,
+      color: 'red',
+      icon: 'fa-trash',
+      confirm: true,
+      action:  (event, inst) => this.onFileDelete(event, LogFileType.Internal)
     }]
   };
 
@@ -55,6 +71,7 @@ export class CaseLogInputComponent implements OnInit {
   private externalLogFormControl: CaseFormControl = null;
   private internalLogFormControl: CaseFormControl = null;
   private logFileFormControl: CaseFormControl = null;
+  private logFileInternalFormControl: CaseFormControl = null;
   private personsEmailFormControl: CaseFormControl = null;
   private noEmailsText = '';
   private destroy$ = new Subject();
@@ -84,6 +101,7 @@ export class CaseLogInputComponent implements OnInit {
     this.externalLogFormControl = this.getFormControl(CaseFieldsNames.Log_ExternalText);
     this.internalLogFormControl = this.getFormControl(CaseFieldsNames.Log_InternalText);
     this.logFileFormControl = this.getFormControl(CaseFieldsNames.Log_FileName);
+    this.logFileInternalFormControl = this.getFormControl(CaseFieldsNames.Log_FileName_Internal);
 
     this.noEmailsText = this.translateService.instant('Ingen tillgänglig mailadress'); //No email address available
 
@@ -104,7 +122,7 @@ export class CaseLogInputComponent implements OnInit {
         }
       });
 
-      // external emails text logic (depends on personsEmail form control value and on this.sendExternalEmailsFormControl.disabled)    
+      // external emails text logic (depends on personsEmail form control value and on this.sendExternalEmailsFormControl.disabled)
       this.updateExternalEmailsText();
     }
 
@@ -127,6 +145,46 @@ export class CaseLogInputComponent implements OnInit {
     if (this.logFileFormControl) {
       this.isAttachedFilesVisible = !this.logFileFormControl.fieldInfo.isHidden;
     }
+
+    if (this.logFileInternalFormControl) {
+      this.isAttachedInternalFilesVisible = !this.logFileInternalFormControl.fieldInfo.isHidden;
+    }
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  // handles UI switch change by user
+  onSendExternalEmailsCheckChanged() {
+    const val = this.sendExternalEmailsFormControl.value;
+    if (val) {
+      this.externalLogEmailsCcFormControl.enable({onlySelf: true, emitEvent: true});
+      this.externalLogEmailsCcFormControl.restorePrevValue();
+    } else {
+      this.externalLogEmailsCcFormControl.disable({onlySelf: true, emitEvent: true});
+      this.externalLogEmailsCcFormControl.setValue('');
+    }
+    this.updateExternalEmailsText();
+  }
+
+  processFileUploaded(params: FileUploadArgs) {
+    this.getFiles(params.type).push(params.file);
+  }
+
+  onFileDelete(event, type: LogFileType) {
+    const index = +event.index ;
+    const fileName = this.getFiles(type)[index];
+
+    // todo:add delete confirmation
+    this.caseLogApiService.deleteTempLogFile(this.caseKey, fileName, type).pipe(
+      take(1)
+    ).subscribe(res => {
+      if (res) {
+        this.getFiles(type).splice(index, 1);
+      }
+    });
   }
 
   // handles switch enable/disable state change (case lock, Substatus change,..)
@@ -143,17 +201,8 @@ export class CaseLogInputComponent implements OnInit {
     this.updateExternalEmailsText();
   }
 
-  // handles UI switch change by user
-  onSendExternalEmailsCheckChanged() {
-    const val = this.sendExternalEmailsFormControl.value;
-    if (val) {
-      this.externalLogEmailsCcFormControl.enable({onlySelf: true, emitEvent: true});
-      this.externalLogEmailsCcFormControl.restorePrevValue();
-    } else {
-      this.externalLogEmailsCcFormControl.disable({onlySelf: true, emitEvent: true});
-      this.externalLogEmailsCcFormControl.setValue('');
-    }
-    this.updateExternalEmailsText();
+  private getFiles(type: LogFileType) {
+    return type == LogFileType.External ? this.files : this.filesInternal;
   }
 
   private updateExternalEmailsText() {
@@ -165,32 +214,8 @@ export class CaseLogInputComponent implements OnInit {
     }
   }
 
-  processFileUploaded(file: string) {
-    this.files.push(file);
-  }
-
   protected getFormControl(name: string): CaseFormControl {
     if (this.form === null) { return null; }
     return this.form.get(name);
   }
-
-  onFileDelete(event) {
-    const index = +event.index ;
-    const fileName = this.files[index];
-
-    // todo:add delete confirmation
-    this.caseLogApiService.deleteTempLogFile(this.caseKey, fileName).pipe(
-      take(1)
-    ).subscribe(res => {
-      if (res) {
-        this.files.splice(index, 1);
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
 }

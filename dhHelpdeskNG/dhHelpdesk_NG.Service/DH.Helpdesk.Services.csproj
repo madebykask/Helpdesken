@@ -210,6 +210,7 @@
     <Compile Include="BusinessLogic\Mappers\Accounts\MapperData\AccountSettingsMapperForProcessing.cs" />
     <Compile Include="BusinessLogic\Mappers\BulletinBoards\BulletinBoardMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Calendars\CalendarMapper.cs" />
+    <Compile Include="BusinessLogic\Mappers\Cases\CaseLogDataMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Cases\CasesMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Cases\CaseOverviewMapper.cs" />
     <Compile Include="BusinessLogic\Mappers\Cases\CaseSettingsMapper.cs" />
@@ -591,7 +592,7 @@
     <Compile Include="Services\WebApi\Concrete\WebApiService.cs" />
     <Compile Include="Services\WebApi\IWebApiService.cs" />
     <Compile Include="Services\WorkingGroupServiceAsync.cs" />
-    <Compile Include="Services\СaseService_Email.cs" />
+    <Compile Include="Services\CaseService_Email.cs" />
     <Compile Include="utils\ServiceUtils.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Changes\IUpdateChangeRequestValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Changes\Concrete\UpdateChangeRequestValidator.cs" />

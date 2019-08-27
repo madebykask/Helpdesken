@@ -30,6 +30,7 @@ export class CaseDataStore {
   public productAreasStore$: BehaviorSubject<MultiLevelOptionItem[]>;
   public categoriesStore$: BehaviorSubject<MultiLevelOptionItem[]>;
   public closingReasonsStore$: BehaviorSubject<MultiLevelOptionItem[]>;
+  public workflowsStore$: BehaviorSubject<OptionItem[]>;
 
   constructor(options: CaseOptions) {
     this.workingGroupsStore$ = new BehaviorSubject(options.workingGroups);
@@ -59,5 +60,6 @@ export class CaseDataStore {
     this.productAreasStore$ = new BehaviorSubject(options.productAreas);
     this.categoriesStore$ = new BehaviorSubject(options.categories);
     this.closingReasonsStore$ = new BehaviorSubject(options.closingReasons);
+    this.workflowsStore$ = new BehaviorSubject([]);
   }
 }

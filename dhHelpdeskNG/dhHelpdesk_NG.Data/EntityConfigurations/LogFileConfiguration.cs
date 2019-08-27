@@ -1,11 +1,9 @@
-﻿namespace DH.Helpdesk.Dal.EntityConfigurations
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
+using DH.Helpdesk.Domain;
+
+namespace DH.Helpdesk.Dal.EntityConfigurations
 {
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.ModelConfiguration;
-
-    using DH.Helpdesk.Domain;
-
     public class LogFileConfiguration : EntityTypeConfiguration<LogFile>
     {
         internal LogFileConfiguration()
@@ -22,6 +20,7 @@
             this.Property(l => l.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(l => l.IsCaseFile).IsOptional();
             this.Property(l => l.ParentLog_Id).IsOptional();
+            this.Property(l => l.LogType).IsRequired();
 
             this.ToTable("tbllogfile");
         }

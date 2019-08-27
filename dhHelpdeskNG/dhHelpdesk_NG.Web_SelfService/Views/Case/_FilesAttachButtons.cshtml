@@ -1,0 +1,31 @@
+﻿@using DH.Helpdesk.BusinessData.OldComponents
+@{
+    var caption = (ViewData["fieldCaption"] ?? string.Empty).ToString();
+    var hasCaseFiles = (ViewData["hasFile"] ?? string.Empty).ToString() == "true"; 
+ }
+
+<div class="form-group row @GlobalEnums.TranslationCaseFields.Filename.ToString()">
+    @if (!string.IsNullOrEmpty(caption))
+    {
+        <label class="col-md-3">@Html.Raw(caption)</label>    
+    }
+    
+    <div class="@(!string.IsNullOrEmpty(caption) ? "col-md-4" : "col-md-12")">
+        <a href="#upload_files_popup" role="button" class="btn btn-default hasAttribute" data-toggle="modal"
+           standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add")</a>
+
+        <a id="addCaseFileFromClipboard" role="button" class="btn btn-default hasAttribute"
+           standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard")</a>
+
+        <table id="NewCasefiles_table" class="table table-striped">
+            <tbody>
+            @if (!hasCaseFiles)
+            {
+                <tr>
+                    <td><div id="no_uploaded_files_label"></div></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

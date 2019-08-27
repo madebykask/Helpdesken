@@ -8,18 +8,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ErrorComponent implements OnInit {
   pageSettings = {};
-  today:Date = new Date();
+  today: Date = new Date();
   errorGuid: string;
 
-  constructor(private ngZone: NgZone, private activatedRoute: ActivatedRoute, private router: Router) { 
+  constructor(private ngZone: NgZone, private activatedRoute: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit() {
-      this.errorGuid = this.activatedRoute.snapshot.queryParamMap.get("errorGuid");
+      this.errorGuid = this.activatedRoute.snapshot.queryParamMap.get('errorGuid');
   }
 
-  public navigate(url: string) {
-    if(url == null) return;
+  navigate(url: string) {
+    if (url == null) { return; }
     this.ngZone.run(() => this.router.navigate([url])).then();
   }
 }

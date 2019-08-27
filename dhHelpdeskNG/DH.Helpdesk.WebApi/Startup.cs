@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Configuration;
 using System.Threading.Tasks;
 using System.Web.Cors;
 using System.Web.Http;
-
+using Autofac;
 using Autofac.Integration.WebApi;
 using DH.Helpdesk.WebApi.Infrastructure.Owin;
 using Microsoft.Owin;
@@ -40,18 +41,14 @@ namespace DH.Helpdesk.WebApi
                 }
             });
 
-            // Register the Autofac middleware FIRST, then the Autofac Web API middleware,
-            // and finally the standard Web API middleware.
-            app.UseAutofacMiddleware(container);
+            RegisterMiddlewareComponents(container, app);
+
             app.UseAutofacWebApi(config);
 
             ConfigureAuth(app, config.DependencyResolver);
 
             WebApiConfig.InitLogging();
             WebApiConfig.Register(config);
-
-            app.Use<GlobalExceptionMiddleware>();
-            app.Use<RequestMiddleware>();
 
             app.UseWebApi(config);
 
@@ -63,6 +60,26 @@ namespace DH.Helpdesk.WebApi
 
             SwaggerConfig.Register(config);
             //configuration.AddVersionedApiExplorer(//TODO: install nuget and uncomment when ApiExplorer will be used
+        }
+
+        private void RegisterMiddlewareComponents(IContainer container, IAppBuilder app)
+        {
+            // Register the Autofac middleware FIRST, then the Autofac Web API middleware,
+            // and finally the standard Web API middleware.
+            //app.UseAutofacMiddleware(container); // for this approach compomnents should be registered withing the container builder
+
+            // alternative to UseAutofacMiddleware - to control order of pipeline
+            app.UseAutofacLifetimeScopeInjector(container);
+            
+            // middleware in specific order
+            app.UseMiddlewareFromContainer<GlobalExceptionMiddleware>();
+
+            if (ConfigurationManager.AppSettings["logRequest"] == "true")
+            {
+                app.UseMiddlewareFromContainer<LogRequestMiddleware>();
+            }
+            
+            app.UseMiddlewareFromContainer<RequestMiddleware>();
         }
     }
 }

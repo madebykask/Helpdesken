@@ -1,11 +1,11 @@
 ﻿Imports System.Configuration
 Imports System.Data.SqlClient
-Imports DH.Helpdesk.Mail2Ticket.Library
+Imports DH.Helpdesk.Library
 Imports Rebex.Net
 Imports System.IO
 Imports System.Linq
 Imports System.Text
-Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
+Imports DH.Helpdesk.Library.SharedFunctions
 Imports System.Text.RegularExpressions
 Imports Rebex.Mail
 Imports Rebex.Mime
@@ -270,7 +270,7 @@ Module DH_Helpdesk_Mail
                 End If
 
                 ' Filter workging groups based on diagnostic param
-                If (workingGroupsFilter.Any() AndAlso Not workingGroupsFilter.Contains(objCustomer.DefaultWorkingGroup_Id)) Then
+                If (iSyncType = SyncType.SyncByWorkingGroup AndAlso workingGroupsFilter.Any() AndAlso Not workingGroupsFilter.Contains(objCustomer.DefaultWorkingGroup_Id)) Then
                     Continue For
                 End If
 
@@ -425,7 +425,7 @@ Module DH_Helpdesk_Mail
                                     message.Silent = True
                                 End If
 
-                                Dim attachedFiles As List(Of String) = New List(Of String)()
+                                Dim attachedFiles As List(Of MailFile) = New List(Of MailFile)()
 
                                 Dim uniqueMessageId As String = ""
                                 If message.MessageId IsNot Nothing Then
@@ -680,11 +680,14 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     'Attached files processing for Case
-                                    attachedFiles = ProcessMessageAttachments(message, iHTMLFile, objCustomer, objCase.Casenumber.ToString(), Nothing, iPop3DebugLevel)
-                                    If (attachedFiles.Any())
-                                        For Each attachedFile As String In attachedFiles
-                                            Dim sFileName = Path.GetFileName(attachedFile)
+                                    Dim caseFiles as List(Of String) = ProcessMessageAttachments(message, iHTMLFile, objCustomer, objCase.Casenumber.ToString(), Nothing, iPop3DebugLevel)
+                                    If (caseFiles IsNot Nothing AndAlso caseFiles.Any())
+                                        For Each caseFilePath As String In caseFiles
+                                            Dim sFileName = Path.GetFileName(caseFilePath)
                                             objCaseData.saveFileInfo(objCase.Id, sFileName)
+                                            
+                                            'Add to files to attach list
+                                            attachedFiles.Add(New MailFile(sFileName, caseFilePath, False))
                                         Next
                                     End If
 
@@ -836,7 +839,7 @@ Module DH_Helpdesk_Mail
 
                                     ' Spara svaret som en loggpost på aktuellt ärende
                                     ' Ta endast med svaret
-                                    sBodyText = extractAnswer(sBodyText, objCustomer.EMailAnswerSeparator)
+                                    sBodyText = extractAnswerFromBody(sBodyText, objCustomer.EMailAnswerSeparator)
 
                                     ' Markera ärendet som oläst
                                     objCaseData.markCaseUnread(objCase)
@@ -872,57 +875,37 @@ Module DH_Helpdesk_Mail
 
                                     iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, objCase.Persons_EMail)
 
-                                    ' Logga händelsen
-                                    If gsInternalLogIdentifier <> "" Then
-
-                                        If InStr(sFromEMailAddress, gsInternalLogIdentifier) > 0 Or InStr(sToEMailAddress, gsInternalLogIdentifier) > 0 Then
-                                            ' Lägg in som intern loggpost
-                                            iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
-                                        Else
-                                            If iMailID = MailTemplates.AssignedCaseToUser Or iMailID = MailTemplates.InternalLogNote Or _
-                                               iMailID = MailTemplates.AssignedCaseToWorkinggroup Or iMailID = MailTemplates.CaseIsUpdated Then
-                                                iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
-                                            Else
-                                                If objCustomer.DefaultEmailLogDestination = 1 And iMailID = 0 Then
-                                                    iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
-                                                Else
-                                                    iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", sBodyText, 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
-                                                End If
-
-                                            End If
-
-                                        End If
+                                    Dim isInternalLogUsed as Boolean = CheckInternalLogConditions(iMailID, objCustomer, sFromEMailAddress, sToEMailAddress)
+                                    
+                                    ' Save Logs (Logga händelsen)
+                                    If isInternalLogUsed Then
+                                        ' Save as Internal Log (Lägg in som intern loggpost)
+                                        iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
                                     Else
-                                        If iMailID = MailTemplates.AssignedCaseToUser Or iMailID = MailTemplates.InternalLogNote Or _
-                                           iMailID = MailTemplates.AssignedCaseToWorkinggroup Or iMailID = MailTemplates.CaseIsUpdated Then
-                                            ' Svar på skicka intern loggpost eller om handläggaren svarar
-                                            iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
-                                        Else
-                                            If objCustomer.DefaultEmailLogDestination = 1 And iMailID = 0 Then
-                                                iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
-                                            Else
-                                                iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", sBodyText, 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
-                                            End If
-
-                                        End If
-
+                                        iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", sBodyText, 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
                                     End If
 
-                                    Dim sHTMLFileName As String = createHtmlFileFromMail(message, objCustomer.PhysicalFilePath & "\L" & iLog_Id, objCase.Casenumber)
+                                    Dim isTwoAttachmentsActive as Boolean = CheckIfTwoAttachmentsModeEnabled(objCaseData, objCustomer.Id)
+                                    Dim bIsInternalLogFile = isInternalLogUsed AndAlso isTwoAttachmentsActive ' Mark file as internal only 2attachments is enabled
+                                    Dim logSubFolderPrefix = If(bIsInternalLogFile, "LL", "L") ' LL - Internal log subfolder, L - external log subfolder
 
-                                    If sHTMLFileName <> "" Then
+                                    Dim sHTMLFileName As String = createHtmlFileFromMail(message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
+                                    If Not IsNullOrEmpty(sHTMLFileName) Then
                                         iHTMLFile = 1
 
                                         ' Lägg in i databasen
-                                        objLogData.saveFileInfo(iLog_Id, "html/" & sHTMLFileName)
+                                        objLogData.saveFileInfo(iLog_Id, "html/" & sHTMLFileName, bIsInternalLogFile)
                                     End If
 
                                     ' Process attached log files 
-                                    attachedFiles = ProcessMessageAttachments(message, iHTMLFile, objCustomer, iLog_Id.ToString(), "L", iPop3DebugLevel)
-                                    If (attachedFiles.Any())
-                                        For Each attachedFile As String In attachedFiles
-                                            Dim sFileName = Path.GetFileName(attachedFile)
-                                            objLogData.saveFileInfo(iLog_Id, sFileName)
+                                    Dim logFiles As List(Of String) = ProcessMessageAttachments(message, iHTMLFile, objCustomer, iLog_Id.ToString(), logSubFolderPrefix, iPop3DebugLevel)
+                                    If (logFiles IsNot Nothing AndAlso logFiles.Any())
+                                        For Each logFilePath As String In logFiles
+                                            Dim sFileName = Path.GetFileName(logFilePath)
+                                            objLogData.saveFileInfo(iLog_Id, sFileName, bIsInternalLogFile)
+                                            
+                                            'add file to files attachment list
+                                            attachedFiles.Add(New MailFile(sFileName, logFilePath, bIsInternalLogFile))
                                         Next
                                     End If
 
@@ -934,7 +917,9 @@ Module DH_Helpdesk_Mail
                                             Dim objMail As New Mail
                                             Dim objLog As New Log
 
-                                            objLog.Text_External = sBodyText
+                                            ' Set appropriate log text property
+                                            objLog.Text_External = If (Not isInternalLogUsed, sBodyText, String.Empty)
+                                            objLog.Text_Internal = If (isInternalLogUsed, sBodyText, String.Empty)
 
                                             sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                             sSendTime = Date.Now()
@@ -954,7 +939,9 @@ Module DH_Helpdesk_Mail
                                             Dim objMail As New Mail
                                             Dim objLog As New Log
 
-                                            objLog.Text_External = sBodyText
+                                            ' Set appropriate log text property
+                                            objLog.Text_External = If (Not isInternalLogUsed, sBodyText, String.Empty)
+                                            objLog.Text_Internal = If (isInternalLogUsed, sBodyText, String.Empty)
 
                                             sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                             sSendTime = Date.Now()
@@ -1025,6 +1012,32 @@ Module DH_Helpdesk_Mail
             Throw
         End Try
     End Function
+
+    Private Function CheckIfTwoAttachmentsModeEnabled(objCaseData as CaseData, iCustomerID As Integer) As Boolean
+        Dim sFieldName = "tblLog.FileName_Internal"
+        Dim res = objCaseData.CheckCaseField(iCustomerID, sFieldName)
+        Return res
+    End Function
+
+    Private Function CheckInternalLogConditions(iMailID As Int32, objCustomer As Customer, sFromEmail as String, sToEmail As String) 
+
+        If Not IsNullOrEmpty(gsInternalLogIdentifier) AndAlso (InStr(sFromEmail, gsInternalLogIdentifier) > 0 OrElse InStr(sToEmail, gsInternalLogIdentifier) > 0) Then
+            Return True
+        End If
+
+        If objCustomer.DefaultEmailLogDestination = 1 AndAlso iMailID = 0  Then
+            Return True
+        End If
+
+        IF iMailID = MailTemplates.AssignedCaseToUser OrElse iMailID = MailTemplates.InternalLogNote OrElse _
+           iMailID = MailTemplates.AssignedCaseToWorkinggroup OrElse iMailID = MailTemplates.CaseIsUpdated Then
+            Return True
+        End If
+
+        Return False
+
+    End Function
+
 
     Function BuildFilePath(ParamArray args() As String) As String
         Dim filePath As String = ""
@@ -1389,36 +1402,7 @@ Module DH_Helpdesk_Mail
         fz.CreateZip(sFileName, sSourceDir, True, "", "")
         fz = Nothing
     End Sub
-
-    Private Function extractAnswer(ByVal sBodyText As String, ByVal sEMailAnswerSeparator As String) As String
-        Dim aEMailAnswerSeparator() As String
-        Dim iPos As Integer = 0
-        Dim iPos_new As Integer = 0
-
-        aEMailAnswerSeparator = Split(sEMailAnswerSeparator, ";")
-
-        For i As Integer = 0 To aEMailAnswerSeparator.Length - 1
-            iPos = InStr(2, sBodyText, aEMailAnswerSeparator(i).ToString, CompareMethod.Binary)
-
-            If iPos > 0 Then
-                If iPos_new = 0 Then
-                    iPos_new = iPos
-                Else
-                    If iPos < iPos_new Then
-                        iPos_new = iPos
-                    End If
-                End If
-
-            End If
-        Next
-
-        If iPos_new = 0 Then
-            Return sBodyText
-        Else
-            Return Left(sBodyText, iPos_new - 1)
-        End If
-    End Function
-
+    
     Private Function convertHTMLtoText(ByVal sHTML As String) As String
         Dim startTime As DateTime
         Dim MyWebBrowser As New System.Windows.Forms.WebBrowser

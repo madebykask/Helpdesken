@@ -31,36 +31,39 @@ using DH.Helpdesk.Web.Models.Questionnaire.Input;
 
 namespace DH.Helpdesk.Web.Controllers
 {
-	public class FeedbackController : UserInteractionController
-	{
-		const string DefaultQuestionnaireNumber = "1";
+    public class FeedbackController : UserInteractionController
+    {
+        const string DefaultQuestionnaireNumber = "1";
 
-		private readonly IQestionnaireQuestionOptionService _questionnaireQuestionOptionService;
-		private readonly IQestionnaireQuestionService _questionnaireQuestionService;
-		private readonly IFeedbackService _feedbackService;
-		private readonly ICircularService _circularService;
-		private readonly IInfoService _infoService;
-		private readonly GridSettingsService _gridSettingsService;
-		private readonly ICaseLockService _caseLockService;
-		private readonly ISettingService _settingService;
-		private readonly IGlobalSettingService _globalSettingService;
-		private readonly ICaseSearchService _caseSearchService;
-		private readonly ICaseFieldSettingService _caseFieldSettingService;
-		private readonly ICaseSettingsService _caseSettingService;
-		private readonly IDepartmentService _departmentService;
+        private readonly IQestionnaireQuestionOptionService _questionnaireQuestionOptionService;
+        private readonly IQestionnaireQuestionService _questionnaireQuestionService;
+        private readonly IFeedbackService _feedbackService;
+        private readonly ICircularService _circularService;
+        private readonly IInfoService _infoService;
+        private readonly GridSettingsService _gridSettingsService;
+        private readonly ICaseLockService _caseLockService;
+        private readonly ISettingService _settingService;
+        private readonly IGlobalSettingService _globalSettingService;
+        private readonly ICaseSearchService _caseSearchService;
+        private readonly ICaseFieldSettingService _caseFieldSettingService;
+        private readonly ICaseSettingsService _caseSettingService;
+        private readonly IDepartmentService _departmentService;
+        private ICustomerUserService _customerUserService;
 
-		public FeedbackController(IMasterDataService masterDataService, IQestionnaireQuestionOptionService questionnaireQuestionOptionService,
-			IQestionnaireQuestionService questionnaireQuestionService, IFeedbackService feedbackService, ICircularService circularService,
-			IInfoService infoService, GridSettingsService gridSettingsService, ICaseLockService caseLockService, ISettingService settingService,
+        public FeedbackController(IMasterDataService masterDataService, IQestionnaireQuestionOptionService questionnaireQuestionOptionService,
+            IQestionnaireQuestionService questionnaireQuestionService, IFeedbackService feedbackService, ICircularService circularService,
+            IInfoService infoService, GridSettingsService gridSettingsService, ICaseLockService caseLockService, ISettingService settingService,
             IGlobalSettingService globalSettingService, ICaseSearchService caseSearchService, ICaseFieldSettingService caseFieldSettingService, ICaseSettingsService caseSettingService,
-            IDepartmentService departmentService) 
-			: base(masterDataService)
-		{
-			_questionnaireQuestionOptionService = questionnaireQuestionOptionService;
-			_questionnaireQuestionService = questionnaireQuestionService;
-			_feedbackService = feedbackService;
-			_circularService = circularService;
-			_infoService = infoService;
+            IDepartmentService departmentService,
+            ICustomerUserService customerUserService) 
+            : base(masterDataService)
+        {
+            _customerUserService = customerUserService;
+            _questionnaireQuestionOptionService = questionnaireQuestionOptionService;
+            _questionnaireQuestionService = questionnaireQuestionService;
+            _feedbackService = feedbackService;
+            _circularService = circularService;
+            _infoService = infoService;
             _gridSettingsService = gridSettingsService;
             _caseLockService = caseLockService;
             _settingService = settingService;
@@ -69,254 +72,254 @@ namespace DH.Helpdesk.Web.Controllers
             _caseFieldSettingService = caseFieldSettingService;
             _caseSettingService = caseSettingService;
             _departmentService = departmentService;
-		}
+        }
 
-		public ActionResult NewFeedback(EditFeedbackParams parameters)
-		{
-			return EditFeedback(parameters);
-		}
+        public ActionResult NewFeedback(EditFeedbackParams parameters)
+        {
+            return EditFeedback(parameters);
+        }
 
-		public ActionResult EditFeedback(EditFeedbackParams parameters)
-		{
-			FillEditLists();
+        public ActionResult EditFeedback(EditFeedbackParams parameters)
+        {
+            FillEditLists();
 
-			var model = new EditFeedbackModel
-			{
-				QuestionnaireId = parameters.FeedbackId.HasValue ? parameters.FeedbackId.Value : 0,
-				LanguageId = parameters.LanguageId
-			};
+            var model = new EditFeedbackModel
+            {
+                QuestionnaireId = parameters.FeedbackId.HasValue ? parameters.FeedbackId.Value : 0,
+                LanguageId = parameters.LanguageId
+            };
 
-			if (parameters.FeedbackId.HasValue)
-			{
-				//Get feedback
-				var feedback = _feedbackService.GetFeedback(parameters.FeedbackId.Value, parameters.LanguageId);
-				model.Name = feedback.Name;
-				model.Description = feedback.Description;
-				model.Identifier = feedback.Identifier;
-			    model.ExcludeAdministrators = feedback.ExcludeAdministrators;
+            if (parameters.FeedbackId.HasValue)
+            {
+                //Get feedback
+                var feedback = _feedbackService.GetFeedback(parameters.FeedbackId.Value, parameters.LanguageId);
+                model.Name = feedback.Name;
+                model.Description = feedback.Description;
+                model.Identifier = feedback.Identifier;
+                model.ExcludeAdministrators = feedback.ExcludeAdministrators;
 
-				//Get Feeddback question
-				var feedbackQuestions =
-					_questionnaireQuestionService.FindQuestionnaireQuestionsOverviews(feedback.Id, feedback.LanguageId);
-				if (feedbackQuestions != null && feedbackQuestions.Any())
-				{
-					var question = feedbackQuestions.Single();
-					model.QuestionId = question.Id;
-					model.Question = question.Question;
-					model.NoteText = question.NoteText;
+                //Get Feeddback question
+                var feedbackQuestions =
+                    _questionnaireQuestionService.FindQuestionnaireQuestionsOverviews(feedback.Id, feedback.LanguageId);
+                if (feedbackQuestions != null && feedbackQuestions.Any())
+                {
+                    var question = feedbackQuestions.Single();
+                    model.QuestionId = question.Id;
+                    model.Question = question.Question;
+                    model.NoteText = question.NoteText;
 
-					if (parameters.LanguageId != LanguageIds.Swedish)
-					{
-						var questionnaireQuestionSwedish =
-							_questionnaireQuestionService.GetQuestionnaireQuestionById(
-								question.Id,
-								LanguageIds.Swedish);
-						model.ShowNote = questionnaireQuestionSwedish.ShowNote;
-					}
-					else
-					{
-						model.ShowNote = question.ShowNote;
-					}
+                    if (parameters.LanguageId != LanguageIds.Swedish)
+                    {
+                        var questionnaireQuestionSwedish =
+                            _questionnaireQuestionService.GetQuestionnaireQuestionById(
+                                question.Id,
+                                LanguageIds.Swedish);
+                        model.ShowNote = questionnaireQuestionSwedish.ShowNote;
+                    }
+                    else
+                    {
+                        model.ShowNote = question.ShowNote;
+                    }
 
-					//Get Feedback question options
-					var feedbackQuestionOptions =
-						_questionnaireQuestionOptionService.FindQuestionnaireQuestionOptions(
-							question.Id,
-							feedback.LanguageId);
-					if (feedbackQuestionOptions != null && feedbackQuestionOptions.Any())
-					{
-						model.Options = feedbackQuestionOptions.Select(
-						q =>
-						new QuestionnaireQuesOptionModel
-						{
-							Id = q.Id,
-							LanguageId = q.LanguageId,
-							QuestionId = q.QuestionId,
-							ChangedDate = q.ChangedDate,
-							Option = q.Option,
-							OptionPos = q.OptionPos,
-							OptionValue = q.OptionValue,
-							IconId = q.IconId,
+                    //Get Feedback question options
+                    var feedbackQuestionOptions =
+                        _questionnaireQuestionOptionService.FindQuestionnaireQuestionOptions(
+                            question.Id,
+                            feedback.LanguageId);
+                    if (feedbackQuestionOptions != null && feedbackQuestionOptions.Any())
+                    {
+                        model.Options = feedbackQuestionOptions.Select(
+                        q =>
+                        new QuestionnaireQuesOptionModel
+                        {
+                            Id = q.Id,
+                            LanguageId = q.LanguageId,
+                            QuestionId = q.QuestionId,
+                            ChangedDate = q.ChangedDate,
+                            Option = q.Option,
+                            OptionPos = q.OptionPos,
+                            OptionValue = q.OptionValue,
+                            IconId = q.IconId,
                             IconSrc = q.IconSrc != null ? FeedBack.ImgId + Convert.ToBase64String(q.IconSrc) : string.Empty
-						}).OrderBy(qq => qq.OptionPos).ToList();
-					}
+                        }).OrderBy(qq => qq.OptionPos).ToList();
+                    }
 
-					//Get Feedback circular
-					var dbCircular = _circularService.GetSingleOrDefaultByQuestionnaireId(model.QuestionnaireId);
-					if (dbCircular != null)
-					{
-						model.CircularId = dbCircular.Id;
-						model.SelectedPercent = dbCircular.CaseFilter.SelectedProcent;
-					    model.IsSent = dbCircular.Status == CircularStates.Sent;
-					}
-				}
-			}
+                    //Get Feedback circular
+                    var dbCircular = _circularService.GetSingleOrDefaultByQuestionnaireId(model.QuestionnaireId);
+                    if (dbCircular != null)
+                    {
+                        model.CircularId = dbCircular.Id;
+                        model.SelectedPercent = dbCircular.CaseFilter.SelectedProcent;
+                        model.IsSent = dbCircular.Status == CircularStates.Sent;
+                    }
+                }
+            }
 
-			return View("EditFeedback", model);
-		}
-
-        [HttpPost]
-		public ActionResult EditFeedback(EditFeedbackModel model)
-		{
-			if (model.IsNew)
-			{
-				return CreateFeedback(model);
-			}
-			return UpdateFeedback(model);
-		}
-
-		private ActionResult CreateFeedback(EditFeedbackModel model)
-		{
-			Validate(model);
-			if (!ModelState.IsValid)
-			{
-				FillEditLists();
-				return View("EditFeedback", model);
-			}
-
-			//Create feedback
-			var newFeedback = new NewQuestionnaire(
-				model.Name,
-				model.Description,
-				SessionFacade.CurrentCustomer.Id,
-				DateTime.Now);
-			newFeedback.Identifier = model.Identifier;
-			newFeedback.ExcludeAdministrators = model.ExcludeAdministrators;
-
-			var feedbackId = _feedbackService.AddFeedback(newFeedback);
-
-			//Create feedback question
-			var newFeedbackQuestion = new NewQuestionnaireQuestion(
-				feedbackId,
-				DefaultQuestionnaireNumber,
-				model.Question,
-				model.ShowNote,
-				model.NoteText,
-				DateTime.Now);
-
-			_questionnaireQuestionService.AddQuestionnaireQuestion(newFeedbackQuestion);
-
-			CreateCircular(model.SelectedPercent, feedbackId);
-
-			return RedirectToAction(MvcUrlName.Feedback.Edit, new EditFeedbackParams
-			{
-				FeedbackId = feedbackId,
-				LanguageId = model.LanguageId
-			});
-		}
-
-
-		private ActionResult UpdateFeedback(EditFeedbackModel model)
-		{
-			Validate(model);
-			if (!ModelState.IsValid)
-			{
-				FillEditLists();
-				return View("EditFeedback", model);
-			}
-
-			var editFeedback = new EditQuestionnaire(
-				model.QuestionnaireId,
-				model.Name,
-				model.Description,
-				model.LanguageId,
-				DateTime.Now);
-			editFeedback.Identifier = model.Identifier;
-			editFeedback.ExcludeAdministrators = model.ExcludeAdministrators;
-
-			_feedbackService.UpdateFeedback(editFeedback);
-
-			var editFeedbackQuestion = new EditQuestionnaireQuestion(
-				model.QuestionId,
-				model.QuestionnaireId,
-				model.LanguageId,
-				DefaultQuestionnaireNumber,
-				model.Question,
-				model.ShowNote,
-				model.NoteText,
-				DateTime.Now);
-
-			_questionnaireQuestionService.UpdateQuestionnaireQuestion(editFeedbackQuestion);
-
-			if (model.Options != null)
-			{
-				var now = DateTime.Now;
-				foreach (var option in model.Options)
-				{
-					var questionOption = new QuestionnaireQuesOption(
-						option.Id,
-						option.QuestionId,
-						option.OptionPos,
-						option.Option,
-						option.OptionValue,
-						model.LanguageId,
-						now);
-					questionOption.IconId = option.IconId;
-				    questionOption.IconSrc = string.IsNullOrEmpty(option.IconSrc) || option.IconId != FeedBack.IconId ? null : Convert.FromBase64String(option.IconSrc.Split(',')[1]);
-					_questionnaireQuestionOptionService.UpdateQuestionnaireQuestionOption(questionOption);
-				}
-			}
-
-			if (model.CircularId.HasValue)
-			{
-				var dbCircular = _circularService.GetById(model.CircularId.Value);
-				if (dbCircular != null)
-				{
-					var casesIds = _circularService.GetAllCircularCasesIds(dbCircular.Id);
-					dbCircular.CaseFilter.SelectedProcent = model.SelectedPercent;
-
-					var circular = new CircularForUpdate(dbCircular.Id, dbCircular.CircularName, DateTime.Now, casesIds,
-						dbCircular.CaseFilter);
-					_circularService.UpdateCircular(circular);
-				}
-			}
-			else
-			{
-				CreateCircular(model.SelectedPercent, model.QuestionnaireId);
-			}
-
-			return RedirectToAction(MvcUrlName.Feedback.Edit, new EditFeedbackParams
-			{
-				FeedbackId = model.QuestionnaireId,
-				LanguageId = model.LanguageId
-			});
-		}
-
-		[HttpPost]
-		public ActionResult DeleteFeedback(DeleteFeedbackParams parameters)
-		{
-			_circularService.DeleteById(parameters.CircularId);
-			_feedbackService.DeleteFeedbackById(parameters.FeedbackId);
-			return RedirectToAction(MvcUrlName.Questionnaire.Index, MvcUrlName.Questionnaire.Controller, new { tab = "feedback"});
-		}
-
-		[HttpPost]
-		public ActionResult DeleteQuestionOption(DeleteQuestionOptionParams parameters)
-		{
-			_questionnaireQuestionOptionService.DeleteQuestionnaireQuestionOptionById(parameters.OptionId, parameters.LanguageId);
-
-			return RedirectToAction(MvcUrlName.Feedback.Edit, new EditFeedbackParams
-			{
-				FeedbackId = parameters.FeedbackId,
-				LanguageId = parameters.LanguageId
-			});
-		}
+            return View("EditFeedback", model);
+        }
 
         [HttpPost]
-		public ActionResult AddQuestionOption(AddQuestionOptionParams parameters)
-		{
-			var newOption = new QuestionnaireQuesOption(
-				1,
-				parameters.QuestionId,
-				parameters.OptionPos,
-				parameters.OptionText,
-				parameters.OptionValue,
-				parameters.LanguageId,
-				DateTime.Now);
-			newOption.IconId = parameters.OptionIcon;
-			newOption.IconSrc = string.IsNullOrEmpty(parameters.IconSrc) ? null : Convert.FromBase64String(parameters.IconSrc);
+        public ActionResult EditFeedback(EditFeedbackModel model)
+        {
+            if (model.IsNew)
+            {
+                return CreateFeedback(model);
+            }
+            return UpdateFeedback(model);
+        }
 
-			_questionnaireQuestionOptionService.AddQuestionnaireQuestionOption(newOption);
+        private ActionResult CreateFeedback(EditFeedbackModel model)
+        {
+            Validate(model);
+            if (!ModelState.IsValid)
+            {
+                FillEditLists();
+                return View("EditFeedback", model);
+            }
+
+            //Create feedback
+            var newFeedback = new NewQuestionnaire(
+                model.Name,
+                model.Description,
+                SessionFacade.CurrentCustomer.Id,
+                DateTime.Now);
+            newFeedback.Identifier = model.Identifier;
+            newFeedback.ExcludeAdministrators = model.ExcludeAdministrators;
+
+            var feedbackId = _feedbackService.AddFeedback(newFeedback);
+
+            //Create feedback question
+            var newFeedbackQuestion = new NewQuestionnaireQuestion(
+                feedbackId,
+                DefaultQuestionnaireNumber,
+                model.Question,
+                model.ShowNote,
+                model.NoteText,
+                DateTime.Now);
+
+            _questionnaireQuestionService.AddQuestionnaireQuestion(newFeedbackQuestion);
+
+            CreateCircular(model.SelectedPercent, feedbackId);
+
+            return RedirectToAction(MvcUrlName.Feedback.Edit, new EditFeedbackParams
+            {
+                FeedbackId = feedbackId,
+                LanguageId = model.LanguageId
+            });
+        }
+
+
+        private ActionResult UpdateFeedback(EditFeedbackModel model)
+        {
+            Validate(model);
+            if (!ModelState.IsValid)
+            {
+                FillEditLists();
+                return View("EditFeedback", model);
+            }
+
+            var editFeedback = new EditQuestionnaire(
+                model.QuestionnaireId,
+                model.Name,
+                model.Description,
+                model.LanguageId,
+                DateTime.Now);
+            editFeedback.Identifier = model.Identifier;
+            editFeedback.ExcludeAdministrators = model.ExcludeAdministrators;
+
+            _feedbackService.UpdateFeedback(editFeedback);
+
+            var editFeedbackQuestion = new EditQuestionnaireQuestion(
+                model.QuestionId,
+                model.QuestionnaireId,
+                model.LanguageId,
+                DefaultQuestionnaireNumber,
+                model.Question,
+                model.ShowNote,
+                model.NoteText,
+                DateTime.Now);
+
+            _questionnaireQuestionService.UpdateQuestionnaireQuestion(editFeedbackQuestion);
+
+            if (model.Options != null)
+            {
+                var now = DateTime.Now;
+                foreach (var option in model.Options)
+                {
+                    var questionOption = new QuestionnaireQuesOption(
+                        option.Id,
+                        option.QuestionId,
+                        option.OptionPos,
+                        option.Option,
+                        option.OptionValue,
+                        model.LanguageId,
+                        now);
+                    questionOption.IconId = option.IconId;
+                    questionOption.IconSrc = string.IsNullOrEmpty(option.IconSrc) || option.IconId != FeedBack.IconId ? null : Convert.FromBase64String(option.IconSrc.Split(',')[1]);
+                    _questionnaireQuestionOptionService.UpdateQuestionnaireQuestionOption(questionOption);
+                }
+            }
+
+            if (model.CircularId.HasValue)
+            {
+                var dbCircular = _circularService.GetById(model.CircularId.Value);
+                if (dbCircular != null)
+                {
+                    var casesIds = _circularService.GetAllCircularCasesIds(dbCircular.Id);
+                    dbCircular.CaseFilter.SelectedProcent = model.SelectedPercent;
+
+                    var circular = new CircularForUpdate(dbCircular.Id, dbCircular.CircularName, DateTime.Now, casesIds,
+                        dbCircular.CaseFilter);
+                    _circularService.UpdateCircular(circular);
+                }
+            }
+            else
+            {
+                CreateCircular(model.SelectedPercent, model.QuestionnaireId);
+            }
+
+            return RedirectToAction(MvcUrlName.Feedback.Edit, new EditFeedbackParams
+            {
+                FeedbackId = model.QuestionnaireId,
+                LanguageId = model.LanguageId
+            });
+        }
+
+        [HttpPost]
+        public ActionResult DeleteFeedback(DeleteFeedbackParams parameters)
+        {
+            _circularService.DeleteById(parameters.CircularId);
+            _feedbackService.DeleteFeedbackById(parameters.FeedbackId);
+            return RedirectToAction(MvcUrlName.Questionnaire.Index, MvcUrlName.Questionnaire.Controller, new { tab = "feedback"});
+        }
+
+        [HttpPost]
+        public ActionResult DeleteQuestionOption(DeleteQuestionOptionParams parameters)
+        {
+            _questionnaireQuestionOptionService.DeleteQuestionnaireQuestionOptionById(parameters.OptionId, parameters.LanguageId);
+
+            return RedirectToAction(MvcUrlName.Feedback.Edit, new EditFeedbackParams
+            {
+                FeedbackId = parameters.FeedbackId,
+                LanguageId = parameters.LanguageId
+            });
+        }
+
+        [HttpPost]
+        public ActionResult AddQuestionOption(AddQuestionOptionParams parameters)
+        {
+            var newOption = new QuestionnaireQuesOption(
+                1,
+                parameters.QuestionId,
+                parameters.OptionPos,
+                parameters.OptionText,
+                parameters.OptionValue,
+                parameters.LanguageId,
+                DateTime.Now);
+            newOption.IconId = parameters.OptionIcon;
+            newOption.IconSrc = string.IsNullOrEmpty(parameters.IconSrc) ? null : Convert.FromBase64String(parameters.IconSrc);
+
+            _questionnaireQuestionOptionService.AddQuestionnaireQuestionOption(newOption);
 
             return Json(new
             {
@@ -324,31 +327,31 @@ namespace DH.Helpdesk.Web.Controllers
                 FeedbackId = parameters.FeedbackId,
                 LanguageId = parameters.LanguageId
             });
-		}
+        }
 
-	    [HttpGet]
-	    public ViewResult Statistics(int feedbackId)
-	    {
-	        var circularId = this._circularService.GetCircularIdByQuestionnaireId(feedbackId);
-	        if (circularId < 0)
-	        {
-	            throw new NullReferenceException("Missing Circular for Feedback. Feedback should contain Circular");
-	        }
-	        var results = this._circularService.GetResult(circularId);
-	        var feedbackOverview = this._circularService.GetQuestionnaire(feedbackId, OperationContext);
+        [HttpGet]
+        public ViewResult Statistics(int feedbackId)
+        {
+            var circularId = this._circularService.GetCircularIdByQuestionnaireId(feedbackId);
+            if (circularId < 0)
+            {
+                throw new NullReferenceException("Missing Circular for Feedback. Feedback should contain Circular");
+            }
+            var results = this._circularService.GetResult(circularId);
+            var feedbackOverview = this._circularService.GetQuestionnaire(feedbackId, OperationContext);
             var jsonCaseIndexViewModel = GetJsonCaseIndexViewModel();
 
-	        var departments = _departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.DepartmentName).Select(x => new SelectListItem
-	        {
-	            Value = x.Id.ToString(),
+            var departments = _departmentService.GetDepartments(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.DepartmentName).Select(x => new SelectListItem
+            {
+                Value = x.Id.ToString(),
                 Text = x.DepartmentName
-	        }).ToList();
+            }).ToList();
 
             var viewModel = new FeedbackStatisticsViewModel(feedbackId, feedbackOverview, results, new StatisticsFilter(), jsonCaseIndexViewModel);
-	        viewModel.Departments = departments;
+            viewModel.Departments = departments;
 
             return this.View("Statistics", viewModel);
-	    }
+        }
 
         [HttpPost]
         public PartialViewResult Statistics(int questionnaireId, StatisticsFilter statisticsFilter)
@@ -375,90 +378,96 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [ValidateInput(false)]
-	    public ActionResult GetCases(FormCollection frm)
-	    {
-	        var customerSettings = _settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
-	        var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+        public ActionResult GetCases(FormCollection frm)
+        {
+            var customerSettings = _settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
 
-	        var f = new CaseSearchFilter
-	        {
-	            CustomerId = SessionFacade.CurrentCustomer.Id,
-	            UserId = SessionFacade.CurrentUser.Id
-	        };
+            var f = new CaseSearchFilter
+            {
+                CustomerId = SessionFacade.CurrentCustomer.Id,
+                UserId = SessionFacade.CurrentUser.Id
+            };
             f.CaseProgress = "9";
         
-	        var caseIds = frm.ReturnFormValue("caseIds").Split(',').Select(int.Parse).ToArray();
-	        var gridSettings = _gridSettingsService.GetForCustomerUserGrid(
-	            SessionFacade.CurrentCustomer.Id,
-	            SessionFacade.CurrentUser.UserGroupId,
-	            SessionFacade.CurrentUser.Id,
-	            GridSettingsService.CASE_CONNECTPARENT_GRID_ID);
+            var caseIds = frm.ReturnFormValue("caseIds").Split(',').Select(int.Parse).ToArray();
+            var gridSettings = _gridSettingsService.GetForCustomerUserGrid(
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentUser.UserGroupId,
+                SessionFacade.CurrentUser.Id,
+                GridSettingsService.CASE_CONNECTPARENT_GRID_ID);
 
-	        var sortBy = frm.ReturnFormValue(CaseFilterFields.OrderColumnNum);
-	        var sort = frm.ReturnFormValue(CaseFilterFields.OrderColumnDir);
-	        var sortDir = !string.IsNullOrEmpty(sort)
-	            ? GridSortOptions.SortDirectionFromString(sort)
-	            : SortingDirection.Asc;
-	        gridSettings.sortOptions.sortBy = sortBy;
-	        gridSettings.sortOptions.sortDir = sortDir;
+            var sortBy = frm.ReturnFormValue(CaseFilterFields.OrderColumnNum);
+            var sort = frm.ReturnFormValue(CaseFilterFields.OrderColumnDir);
+            var sortDir = !string.IsNullOrEmpty(sort)
+                ? GridSortOptions.SortDirectionFromString(sort)
+                : SortingDirection.Asc;
+            gridSettings.sortOptions.sortBy = sortBy;
+            gridSettings.sortOptions.sortDir = sortDir;
 
-	        int recPerPage;
-	        int pageStart;
-	        if (int.TryParse(frm.ReturnFormValue(CaseFilterFields.PageSize), out recPerPage) &&
-	            int.TryParse(frm.ReturnFormValue(CaseFilterFields.PageStart), out pageStart))
-	        {
-	            f.PageInfo = new PageInfo
-	            {
-	                PageSize = recPerPage,
-	                PageNumber = recPerPage != 0 ? pageStart/recPerPage : 0
-	            };
-	            gridSettings.pageOptions.recPerPage = recPerPage;
-	        }
+            int recPerPage;
+            int pageStart;
+            if (int.TryParse(frm.ReturnFormValue(CaseFilterFields.PageSize), out recPerPage) &&
+                int.TryParse(frm.ReturnFormValue(CaseFilterFields.PageStart), out pageStart))
+            {
+                f.PageInfo = new PageInfo
+                {
+                    PageSize = recPerPage,
+                    PageNumber = recPerPage != 0 ? pageStart/recPerPage : 0
+                };
+                gridSettings.pageOptions.recPerPage = recPerPage;
+            }
             var search = new Search
             {
                 SortBy = gridSettings.sortOptions.sortBy,
                 Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc
             };
 
-	        var caseSettings = _caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id,
-	            SessionFacade.CurrentUser.UserGroupId);
-	        var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
-	        CaseRemainingTimeData remainingTimeData;
-	        CaseAggregateData aggregateData;
-	        var searchResult = _caseSearchService.Search(
-	            f,
-	            caseSettings,
-	            caseFieldSettings,
-	            SessionFacade.CurrentUser.Id,
-	            SessionFacade.CurrentUser.UserId,
-	            SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
-	            SessionFacade.CurrentUser.UserGroupId,
-	            SessionFacade.CurrentUser.RestrictedCasePermission,
+            var caseSettings = 
+                _caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
+
+            var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
+            CaseRemainingTimeData remainingTimeData;
+            CaseAggregateData aggregateData;
+
+            var currentUserId = SessionFacade.CurrentUser.Id;
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var customerUserSettings = _customerUserService.GetCustomerUserSettings(customerId, currentUserId);
+
+            var searchResult = _caseSearchService.Search(
+                f,
+                caseSettings,
+                caseFieldSettings,
+                SessionFacade.CurrentUser.Id,
+                SessionFacade.CurrentUser.UserId,
+                SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
+                SessionFacade.CurrentUser.UserGroupId,
+                customerUserSettings.RestrictedCasePermission,
                 search,
-	            SessionFacade.CurrentCustomer.WorkingDayStart,
-	            SessionFacade.CurrentCustomer.WorkingDayEnd,
-	            userTimeZone,
-	            ApplicationTypes.Helpdesk,
-	            false,
-	            out remainingTimeData,
-	            out aggregateData,
-	            null, null, caseIds);
-	        var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1,
-	            userTimeZone);
-	        var data = BuildSearchResultData(searchResult.Items, gridSettings, outputFormatter);
-	        return Json(new
-	        {
-	            result = "success",
-	            data = data,
-	            recordsTotal = searchResult.Count,
-	            recordsFiltered = searchResult.Count,
-	        });
-	    }
+                SessionFacade.CurrentCustomer.WorkingDayStart,
+                SessionFacade.CurrentCustomer.WorkingDayEnd,
+                userTimeZone,
+                ApplicationTypes.Helpdesk,
+                false,
+                out remainingTimeData,
+                out aggregateData,
+                null, null, caseIds);
+            var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1,
+                userTimeZone);
+            var data = BuildSearchResultData(searchResult.Items, gridSettings, outputFormatter);
+            return Json(new
+            {
+                result = "success",
+                data = data,
+                recordsTotal = searchResult.Count,
+                recordsFiltered = searchResult.Count,
+            });
+        }
 
         #region Private
 
         private JsonCaseIndexViewModel GetJsonCaseIndexViewModel()
-	    {
+        {
             var gridSettings = _gridSettingsService.GetForCustomerUserGrid(
                             SessionFacade.CurrentCustomer.Id,
                             SessionFacade.CurrentUser.UserGroupId,
@@ -485,8 +494,8 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }
             };
-	        return m;
-	    }
+            return m;
+        }
 
         private IList<Dictionary<string, object>> BuildSearchResultData(IList<CaseSearchResult> caseSearchResults, GridSettingsModel gridSettings, OutputFormatter outputFormatter)
         {
@@ -583,46 +592,46 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         private List<SelectListItem> GetPercents()
-		{
-			var lst = new List<SelectListItem>();
+        {
+            var lst = new List<SelectListItem>();
 
-			for (var i = 5; i <= 100; i += 5)
-			{
-				lst.Add(new SelectListItem { Text = i.ToString(), Value =i.ToString() });
-			}
-			return lst;
-		}
-
-
-		private List<ItemOverview> GetLocalizedLanguages()
-		{
-			var languageOverviewsOrginal = _questionnaireQuestionService.FindActiveLanguageOverivews();
-			if (languageOverviewsOrginal.Any())
-			{
-				return languageOverviewsOrginal.Select(
-						o =>
-							new ItemOverview(
-								Translation.GetCoreTextTranslation(o.Name),
-								o.Value.ToString())).ToList();
-
-			}
-			
-			return new List<ItemOverview>();
-		}
+            for (var i = 5; i <= 100; i += 5)
+            {
+                lst.Add(new SelectListItem { Text = i.ToString(), Value =i.ToString() });
+            }
+            return lst;
+        }
 
 
-		private void CreateCircular(int selectedPercent, int feedbackId)
-		{
-			var caseFilter = new BusinessData.Models.Questionnaire.CircularCaseFilter
-			{
-				SelectedProcent = selectedPercent
-			};
+        private List<ItemOverview> GetLocalizedLanguages()
+        {
+            var languageOverviewsOrginal = _questionnaireQuestionService.FindActiveLanguageOverivews();
+            if (languageOverviewsOrginal.Any())
+            {
+                return languageOverviewsOrginal.Select(
+                        o =>
+                            new ItemOverview(
+                                Translation.GetCoreTextTranslation(o.Name),
+                                o.Value.ToString())).ToList();
 
-			var circular = new CircularForInsert("Feedback", feedbackId,
-				CircularStateId.ReadyToSend, DateTime.Now, new List<int>(), caseFilter);
+            }
+            
+            return new List<ItemOverview>();
+        }
 
-			_circularService.AddCircular(circular);
-		}
+
+        private void CreateCircular(int selectedPercent, int feedbackId)
+        {
+            var caseFilter = new BusinessData.Models.Questionnaire.CircularCaseFilter
+            {
+                SelectedProcent = selectedPercent
+            };
+
+            var circular = new CircularForInsert("Feedback", feedbackId,
+                CircularStateId.ReadyToSend, DateTime.Now, new List<int>(), caseFilter);
+
+            _circularService.AddCircular(circular);
+        }
 
         private List<SelectListItem> GetIcons()
         {
@@ -737,29 +746,29 @@ namespace DH.Helpdesk.Web.Controllers
             return lst;
         }
 
-	    private void Validate(EditFeedbackModel model)
-		{
-			//Check for unique identifier
-			var feedbacks = _feedbackService.FindFeedbackOverviews(SessionFacade.CurrentCustomer.Id);
-			if (feedbacks.Any(f => f.Id != model.QuestionnaireId && 
-				f.Identifier.Equals(model.Identifier, StringComparison.InvariantCultureIgnoreCase)))
-			{
-				ModelState.AddModelError(model.NameOf(m => m.Identifier),
-					Translation.GetCoreTextTranslation("Unik identifierare krävs"));
-			}
-		}
+        private void Validate(EditFeedbackModel model)
+        {
+            //Check for unique identifier
+            var feedbacks = _feedbackService.FindFeedbackOverviews(SessionFacade.CurrentCustomer.Id);
+            if (feedbacks.Any(f => f.Id != model.QuestionnaireId && 
+                f.Identifier.Equals(model.Identifier, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                ModelState.AddModelError(model.NameOf(m => m.Identifier),
+                    Translation.GetCoreTextTranslation("Unik identifierare krävs"));
+            }
+        }
 
-		private void FillEditLists()
-		{
-			var languages = GetLocalizedLanguages();
-			ViewBag.Languages = new SelectList(languages, "Value", "Name");
-			ViewBag.Percents = GetPercents();
-			ViewBag.IconsList = GetIcons();
-		}
-		#endregion
+        private void FillEditLists()
+        {
+            var languages = GetLocalizedLanguages();
+            ViewBag.Languages = new SelectList(languages, "Value", "Name");
+            ViewBag.Percents = GetPercents();
+            ViewBag.IconsList = GetIcons();
+        }
+        #endregion
 
         [HttpPost]
-	    public ActionResult UpdateOptionIcon(UpdateQuestionOptionIconParams data)
+        public ActionResult UpdateOptionIcon(UpdateQuestionOptionIconParams data)
         {
             var imageSource = Convert.FromBase64String(data.Src);
             _questionnaireQuestionOptionService.UpdateQuestionnaireQuestionOptionIcon(data.OptionId, imageSource);
@@ -769,5 +778,5 @@ namespace DH.Helpdesk.Web.Controllers
                 data = Convert.ToBase64String(imageSource)
             });
         }
-	}
+    }
 }

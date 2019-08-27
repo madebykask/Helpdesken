@@ -1,4 +1,4 @@
-import { CurrentUser, UserAuthenticationData, UserData, Language } from '../../models'
+import { CurrentUser, UserAuthenticationData, UserData, Language } from '../../models';
 import { Injectable } from '@angular/core';
 import { StorageNameConstants } from 'src/app/modules/shared-module/constants';
 import { CaseSearchStateModel } from 'src/app/modules/shared-module/models/cases-overview/case-search-state.model';
@@ -8,12 +8,15 @@ export class LocalStorageService {
     constructor() {}
 
     getCurrentUser(): CurrentUser {
-        let currentUser = localStorage.getItem(StorageNameConstants.userDataStorageName);
-        if(currentUser) {
+        const currentUser = localStorage.getItem(StorageNameConstants.userDataStorageName);
+        if (currentUser) {
             return this.fromJSONCurrentUser(currentUser);
         }
-
         return null;
+    }
+
+    clearAll() {
+      localStorage.clear();
     }
 
     setCurrentUser(user: CurrentUser) {
@@ -25,13 +28,13 @@ export class LocalStorageService {
     }
 
     getLanguages(): Language[] {
-        let json = localStorage.getItem(StorageNameConstants.languages);
-        let data= JSON.parse(json);
+        const json = localStorage.getItem(StorageNameConstants.languages);
+        const data = JSON.parse(json);
         return data;
     }
 
     saveLanguages(languages: Language[]) {
-        let json = JSON.stringify(languages);
+        const json = JSON.stringify(languages);
         localStorage.setItem(StorageNameConstants.languages, json);
     }
 
@@ -47,16 +50,16 @@ export class LocalStorageService {
     } */
 
     getCaseSearchState(): CaseSearchStateModel { // TODO: move it to session store 
-      let json = localStorage.getItem(StorageNameConstants.caseSearchState);
+      const json = localStorage.getItem(StorageNameConstants.caseSearchState);
       if (json) {
-        let data = JSON.parse(json);
+        const data = JSON.parse(json);
         return data;
-      };
+      }
       return null;
     }
 
     setCaseSearchState(data: CaseSearchStateModel ) { // TODO: move it to session store
-        let json = JSON.stringify(data);
+        const json = JSON.stringify(data);
         localStorage.setItem(StorageNameConstants.caseSearchState, json);
     }
 

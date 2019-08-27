@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using DH.Helpdesk.Common.Enums.Logs;
 
 namespace DH.Helpdesk.BusinessData.Models.Case
 {
@@ -6,20 +7,11 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
     public class FilesModel
     {
-        public FilesModel(string id,
-                          List<LogFileModel> files,
-                          bool virtualDirectory)
+        public FilesModel(string id, List<LogFileModel> files, bool virtualDirectory)
         {
-            this.Id = id;
-            this.Files = files.Select(x => new LogFileModel
-            {
-                Name = x.Name,
-                Id = x.Id,
-                IsExistLogFile = x.IsExistLogFile,
-                IsExistCaseFile = x.IsExistCaseFile,
-                ObjId = x.ObjId
-            }).ToList();
-            this.VirtualDirectory = virtualDirectory;
+            Id = id;
+            Files = files?.ToList() ?? new List<LogFileModel>();
+            VirtualDirectory = virtualDirectory;
         }
 
         public FilesModel() {}
@@ -35,8 +27,9 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public string Name { get; set; }
         public bool IsExistCaseFile { get; set; }
         public bool IsExistLogFile { get; set; }
-
+        public bool IsExternal { get; set; }
         //CaseId for case files, LogId for log files
         public int? ObjId { get; set; }
+        public LogFileType LogType { get; set; }
     }
 }

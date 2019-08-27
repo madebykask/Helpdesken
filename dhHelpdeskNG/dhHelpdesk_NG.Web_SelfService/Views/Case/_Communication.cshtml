@@ -1,25 +1,28 @@
 ﻿@using DH.Helpdesk.BusinessData.OldComponents
-@model DH.Helpdesk.SelfService.Models.Case.CaseLogModel
+@using DH.Helpdesk.SelfService.Models.Case
+@model CaseLogsModel
 
 @{
     var expand = string.Empty;
+    CaseLogModel lastMsg = null;
     if (Model.CaseLogs != null && Model.CaseLogs.Count > 0)
     {
-        var lastMsg = Model.GetLastLogForExternalPage();
-        if (lastMsg != null && lastMsg.User_Id != null)
+        lastMsg = Model.GetLastLog();
+        if (lastMsg != null && lastMsg.UserId != null)
         {
             expand = "expand";
         }
     }
- }
+    var isReadOnly = ViewData["readonly"] != null && (bool)ViewData["readonly"];
+}
 
 <div id="communicationPanel" class="siteCom">
     <div id="btnOpenLog" class="mapButtonclose mapButton @expand"><span class="glyphicon glyphicon-remove"></span></div>
+
     <div class="mapButtonside mapButton">
         @if (Model.CaseLogs != null && Model.CaseLogs.Count > 0)
         {
-            var lastMessage = Model.GetLastLogForExternalPage();
-            if (lastMessage != null && string.IsNullOrEmpty(lastMessage.RegUser))
+            if (lastMsg != null && string.IsNullOrEmpty(lastMsg.RegUserName))
             {
                 <div class="mapText" title="@Translation.Get("Communicate")">
                     <span class="glyphicon glyphicon-comment"></span>
@@ -37,33 +40,38 @@
         }
     </div>
     <div class="theMap">
-        <div class="container-fluid">
-            <div class="row">
-                <form onsubmit="return false">
-                    <div class="form-group col-md-10">
-                        <label for="logNote">@Translation.Get("Add comment"):</label>
-                        <textarea id="logNote" style="width: 450px; height: 100px;"></textarea>
-                    </div>
-                    <div class="form-group col-md-10">
-                        @if (ViewBag.IsAttachementsAllowed)
-                        {
-                            <label>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Filename.ToString(), @SessionFacade.CurrentCustomerID)</label>
+        @if (!isReadOnly)
+        {
+            <div class="container-fluid">
+                <div class="row">
+                    <form onsubmit="return false">
+                        <div class="form-group col-md-10">
+                            <label for="logNote">@Translation.Get("Add comment"):</label>
                             <div class="form-group">
-                                <a id="btnUploadFile" href="#Log_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Add")</a>
-                                <a id="btnLoadFromClipboard" href="#upload_clipboard_file_popup" role="button" class="btn btn-default" data-src="log">@Translation.Get("Add from clipboard")</a>
-                                <table id="LogFile_table" class="table com-files" style="margin-top: 10px;">
-                                </table>
+                                <textarea id="logNote" style="width: 450px; height: 100px;"></textarea>
                             </div>
-                        }
-                    </div>
-                    <br />
-                    <div class="form-group col-md-10">
-                        <button id="btnSendLog" data-src="communication" class="btn btn-default">@Translation.Get("Send")</button>
-                        <i id="sendLogIndicator" style="display:none" class="gif-loader">&nbsp;</i>
-                    </div>
-                </form>
+                        </div>
+                        <div class="form-group col-md-10">
+                            @if (Model.IsAttachmentsAllowed)
+                            {
+                                <label>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Filename.ToString(), @SessionFacade.CurrentCustomerID)</label>
+                                <div class="form-group">
+                                    <a id="btnUploadFile" href="#Log_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Add")</a>
+                                    <a id="addLogFileFromClipboard" role="button" class="btn btn-default">@Translation.Get("Add from clipboard")</a>
+                                    <table id="LogFile_table" class="table com-files" style="margin-top: 10px;"></table>
+                                </div>
+                            }
+                        </div>
+                        <br />
+                        <div class="form-group col-md-10">
+                            <a id="btnSendLog" data-src="communication" role="button" class="btn btn-default">@Translation.Get("Send")</a>
+                            <i id="sendLogIndicator" style="display: none" class="gif-loader">&nbsp;</i>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
+        }
+
         <hr />
         <div id="CaseLogPartial" class="com-list">
             @Html.Partial("_CaseLogNote", Model)

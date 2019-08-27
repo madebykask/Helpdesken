@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "projects": {
+    "extended-case-component": {
+      "root": "",
+      "sourceRoot": "src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        }
+      },
+      "architect": {}
+  }
+  }
+}

@@ -1,428 +1,262 @@
-﻿--update DB from 5.3.41 to 5.3.42 version
+﻿--update DB from 5.3.42 to 5.3.43 version
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'ShowOnMobile' and sysobjects.name = N'tblCaseSolution')
+/*-- M2T EmailAnswer Separator scripts
+----------------------------------------------------------------------------------------------*/
+
+RAISERROR ('Update EMailAnswerSeparator column size to 512', 10, 1) WITH NOWAIT
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'EMailAnswerSeparator' and sysobjects.name = N'tblSettings')
 BEGIN
-    ALTER TABLE tblCaseSolution
-    ADD ShowOnMobile int NOT NULL DEFAULT(0)        
+    ALTER TABLE tblSettings
+    ALTER COLUMN EMailAnswerSeparator nvarchar(512) not null    
 END
 GO
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'InventoryViewPermission' and sysobjects.name = N'tblUsers')
+RAISERROR ('Add email answer separator regular expressions for all customers', 10, 1) WITH NOWAIT
+GO
+
+BEGIN TRANSACTION 
+GO 
+
+DECLARE @count int
+DECLARE @curRow int
+DECLARE @Customers as Table(RowNumber int, CustomerId int)
+
+--select all customers that have settings
+INSERT INTO @Customers (RowNumber, CustomerId)
+SELECT (ROW_NUMBER() OVER (Order by cus.Id)) as RowNumber, cus.Id from tblCustomer cus 
+    INNER JOIN tblSettings st ON cus.Id = st.Customer_Id
+ORDER BY cus.Id
+
+select @count = COUNT(*) from @Customers
+SET @curRow = 1
+
+while(@curRow <= @count)
 BEGIN
-    ALTER TABLE tblUsers
-    ADD InventoryViewPermission int NOT NULL DEFAULT(0)        
-END
-GO
+    DECLARE @customerId int = 0	     
+    DECLARE @emailSep nvarchar(512)
+    DECLARE @newEmailSep nvarchar(512)
+    DECLARE @regex1 nvarchar(128)
+    DECLARE @regex2 nvarchar(128)
 
---Update Users with InventoryViewPermission = 1 where InventoryPermission = 1
-Update tblUsers Set InventoryViewPermission = 1 
-Where InventoryPermission = 1
-
-RAISERROR('Creating index IX_tblCaseHistory_Case_Id', 10, 1) WITH NOWAIT
-if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCaseHistory_Case_Id')	
-    CREATE NONCLUSTERED INDEX [IX_tblCaseHistory_Case_Id] ON [dbo].[tblCaseHistory]
-    (
-	   [Case_Id] ASC
-    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
-    GO
-GO
-
-RAISERROR('Creating column Type in table tblCaseSettings', 10, 1) WITH NOWAIT
-if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'Type' and sysobjects.name = N'tblCaseSettings')
-BEGIN
-	RAISERROR('SET NOEXEC ON - No script execution untill SET NOEXEC OFF', 10, 1) WITH NOWAIT
-	SET NOEXEC ON	
-END
-
-ALTER TABLE tblCaseSettings
-ADD [Type] int NOT NULL DEFAULT(0) -- Case Overview type 
-
-GO
-
-DECLARE @UserGroupId int
-DECLARE @Type int
-DECLARE @CurrentDate datetime
-SET @UserGroupId = 0
-SET @CurrentDate = GETDATE();
-SET @Type = 1
-RAISERROR('Creating default values for AdvancedSearch in tblCaseSettings', 10, 1) WITH NOWAIT
-INSERT INTO tblCaseSettings (CustomerId, [User_Id], tblCaseName, Line, 
-	MinWidth, UserGroup, ColOrder, ShowInMobileList, RegTime, ChangeTime, ColStyle, CaseSettingsGUID, [Type]) 
-VALUES
-	(NULL, NULL, 'CaseNumber', 1, 40, @UserGroupId, 1, 0, @CurrentDate, @CurrentDate, NULL, NEWID(), @Type),
-	(NULL, NULL, 'Persons_Name', 1, 100, @UserGroupId, 2, 0, @CurrentDate, @CurrentDate, NULL, NEWID(), @Type),
-	(NULL, NULL, 'Caption', 1, 200, @UserGroupId, 3, 0, @CurrentDate, @CurrentDate, NULL, NEWID(), @Type),
-	(NULL, NULL, 'Description', 1, 200, @UserGroupId, 4, 0, @CurrentDate, @CurrentDate, NULL, NEWID(), @Type),
-	(NULL, NULL, 'Performer_User_Id', 1, 100, @UserGroupId, 5, 0, @CurrentDate, @CurrentDate, NULL, NEWID(), @Type),
-	(NULL, NULL, 'WorkingGroup_Id', 1, 100, @UserGroupId, 6, 0, @CurrentDate, @CurrentDate, NULL, NEWID(), @Type),
-	(NULL, NULL, 'Department_Id', 1, 100, @UserGroupId, 7, 0, @CurrentDate, @CurrentDate, NULL, NEWID(), @Type),
-	(NULL, NULL, 'RegTime', 1, 50, @UserGroupId, 8, 0, @CurrentDate, @CurrentDate, NULL, NEWID(), @Type)
-
-DECLARE @CustomerId int
-
-DECLARE MY_CURSOR CURSOR 
-	LOCAL STATIC READ_ONLY FORWARD_ONLY
-FOR 
-SELECT DISTINCT CustomerId 
-FROM tblCaseSettings
-WHERE [Type] = 0 AND CustomerId IS NOT NULL
-
-OPEN MY_CURSOR
-FETCH NEXT FROM MY_CURSOR INTO @CustomerId
-WHILE @@FETCH_STATUS = 0
-BEGIN 	
-	IF not exists (SELECT * FROM tblCaseSettings WHERE CustomerId = @CustomerId AND [Type] = 1) 
-	BEGIN
-		INSERT INTO tblCaseSettings (CustomerId, [User_Id], tblCaseName, Line, 
-		MinWidth, UserGroup, ColOrder, ShowInMobileList, RegTime, ChangeTime, ColStyle, CaseSettingsGUID, [Type]) 
-		SELECT @CustomerId, [User_Id], tblCaseName, Line, 
-		MinWidth, 0, ColOrder, ShowInMobileList, RegTime, ChangeTime, ColStyle, CaseSettingsGUID,
-		1 -- Advanced Search Type
-		FROM tblCaseSettings
-		WHERE UserGroup = 0 AND CustomerId IS NULL AND [Type] = 1
-
-		PRINT @CustomerId
-	END
-	FETCH NEXT FROM MY_CURSOR INTO @CustomerId
-END
-CLOSE MY_CURSOR
-DEALLOCATE MY_CURSOR
-
-SET NOEXEC OFF
-RAISERROR('SET NOEXEC OFF', 10, 1) WITH NOWAIT
-
-GO
-
-RAISERROR('Adding new NewAdvancedSearch column in tblGlobalSettings table ', 10, 1) WITH NOWAIT
-IF NOT EXISTS(SELECT 1 FROM sys.columns WHERE Name = N'NewAdvancedSearch' and Object_ID = Object_ID(N'dbo.tblGlobalSettings'))
-BEGIN
-    ALTER TABLE tblGlobalSettings
-    ADD [NewAdvancedSearch] int null
-        
-    DECLARE @SQLQuery AS NVARCHAR(500)
-    SET @SQLQuery = N'UPDATE tblGlobalSettings SET NewAdvancedSearch = 1'
-    EXECUTE sp_executesql @SQLQuery
-
-    ALTER TABLE tblGlobalSettings 
-    ALTER COLUMN NewAdvancedSearch int not null    
-END
-GO
-
-RAISERROR('Changing tblOperationLog text columns to new size', 10, 1) WITH NOWAIT
-GO
-
---creating temp procedure to remove default constraints if any 
-IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'tempRemoveDefaultConstaint')
-  DROP PROCEDURE tempRemoveDefaultConstaint
-GO
-CREATE PROCEDURE tempRemoveDefaultConstaint(
-    @tableName as nvarchar(128), 
-    @columnName as nvarchar(128)) as
-BEGIN        
-        
-    DECLARE @name as nvarchar(256)
+    -- finds reply quote text in mail of type: <date> <time> <optional word> <email> <optional word>. 
+    SET @regex1 = '^.* [0-9]{1,2}:[0-9]{1,2} (\w{0,}\s{0,})?<?(([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}))>?(\s{0,}\w{0,})?:\r?$'
     
-    --get column default constraint 
-    select @name = dc.name
-    from sys.default_constraints dc
-    join sys.objects o
-	   on o.object_id = dc.parent_object_id
-    join sys.columns c
-	   on o.object_id = c.object_id
-	   and c.column_id = dc.parent_column_id
-    where o.name = @tableName
-    and c.name = @columnName
+    -- finds reply quote text: <email> <optional text> <date> <time>:
+    SET @regex2 = '^.* <?(([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}))>? (.*)\s?[0-9]{1,2}:[0-9]{1,2}:\r?$'
 
-    PRINT 'Found:' + ISNULL(@name, 'unknown')
+    select @customerId = CustomerId from @Customers where RowNumber = @curRow    
+    
+    --get customer current email answer separator
+    select @emailSep = ISNULL(EMailAnswerSeparator, '') from tblSettings where Customer_Id = @customerId
+    SET @newEmailSep = @emailSep
 
-    IF (LEN(@name) > 0) 
+    -- add first regex pattern
+    IF (@emailSep = '' OR CHARINDEX(@regex1, @emailSep) = 0)
+    BEGIN		  
+	   IF (len(@newEmailSep) > 0) SET @newEmailSep = @newEmailSep + ';'		  
+	   SET @newEmailSep = @newEmailSep + @regex1		  		
+    END
+	   
+    -- add second regex pattern
+    IF (@emailSep = '' OR CHARINDEX(@regex2, @emailSep) = 0)
     BEGIN
-	   DECLARE @cmd nvarchar(1024) 
-	   SET @cmd = N'ALTER TABLE dbo.' + @tableName + ' DROP CONSTRAINT ' + @name
-	   PRINT @cmd
-	   EXEC (@cmd)
+	   IF (len(@newEmailSep) > 0) SET @newEmailSep = @newEmailSep + ';'		  
+	   SET @newEmailSep = @newEmailSep + @regex2		  
     END    
+
+    IF (len(@newEmailSep) <> len(@emailSep))
+    BEGIN 
+	   -- updating email answer separator
+	   UPDATE tblSettings
+	   SET EMailAnswerSeparator = @newEmailSep
+	   WHERE Customer_Id = @customerId
+		  
+	   --PRINT 'Updated customer: ' + cast(@customerId as nvarchar(4))
+	   --PRINT 'EmailAnswerSeparator:' + @newEmailSep
+	   --PRINT '----------------------------------------------------'
+    END	       
+    SET @curRow += 1
+End
+GO 
+
+COMMIT
+GO
+/*----------------------------------------------------------------------------------------------*/
+
+
+RAISERROR ('Add LogType to tblLogFile', 10, 1) WITH NOWAIT
+GO
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'LogType' and sysobjects.name = N'tblLogFile')
+BEGIN
+    -- create column nullable 
+    ALTER TABLE tblLogFile
+    ADD LogType int null    
+
+    EXEC(N'UPDATE tblLogFile SET LogType = 0')
+
+    -- make column non nullable
+    ALTER TABLE tblLogFile
+    ALTER COLUMN LogType int NOT null    
 END
 GO
-    --remove default constraints
-    exec tempRemoveDefaultConstaint @tableName = 'tblOperationLog', @columnName = 'LogText'
-    GO    
-    exec tempRemoveDefaultConstaint @tableName = 'tblOperationLog', @columnName = 'LogAction'
-    GO
-    exec tempRemoveDefaultConstaint @tableName = 'tblOperationLog', @columnName = 'LogTextExternal'
-    GO
-       
-    ALTER TABLE tblOperationLog ALTER COLUMN LogAction NVARCHAR(MAX) NOT NULL    
-    GO
+
+RAISERROR ('Adding Default value constraint for tblLogFile.LogType column.', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT * FROM sys.objects WHERE type = 'D' AND name = 'DF_tblLogFile_LogType')
+BEGIN
+    ALTER TABLE tblLogFile 
+    ADD CONSTRAINT DF_tblLogFile_LogType DEFAULT(0) FOR LogType
+END
+GO 
+
+
+RAISERROR ('Adding tblLog.Filename_Internal case field setting to tblCaseFieldSettings', 10, 1) WITH NOWAIT
+;WITH cus as 
+(select fs1.Customer_Id as CustomerId
+ from tblCaseFieldSettings fs1
+ where NOT EXISTS
+	  (
+		  select 1 from tblCaseFieldSettings fs2 
+		  where fs2.Customer_Id = fs1.Customer_Id 
+		  AND fs2.CaseField = 'tblLog.Filename_Internal'
+	  )
+       AND fs1.Customer_Id IS NOT NULL
+GROUP BY fs1.Customer_Id) 
+INSERT INTO tblCaseFieldSettings (Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, Locked)
+select cus.CustomerId, 'tblLog.Filename_Internal', 0, 0, 0, 0, '', null, 0, 0 
+from cus
+GO
+
+RAISERROR ('Add LogType to tblLogFileExisting', 10, 1) WITH NOWAIT
+GO
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		     where syscolumns.name = N'LogType' and sysobjects.name = N'tblLogFileExisting')
+BEGIN
     
-    ALTER TABLE tblOperationLog ALTER COLUMN LogAction NVARCHAR(MAX) NOT NULL    
-    GO 
-
-    ALTER TABLE tblOperationLog  ALTER COLUMN LogText NVARCHAR(MAX) NOT NULL
-    GO
-
-    ALTER TABLE tblOperationLog
-    ALTER COLUMN LogTextExternal NVARCHAR(MAX) NOT NULL   
-    GO
-
-    --restore default values constraints
-    ALTER TABLE tblOperationLog ADD CONSTRAINT DF_tblOperationLog_LogText
-    DEFAULT('') FOR [LogText]
-    GO
-
-    ALTER TABLE tblOperationLog ADD CONSTRAINT DF_tblOperationLog_LogAction
-    DEFAULT('') FOR [LogAction]
-    GO
-
-    ALTER TABLE tblOperationLog ADD CONSTRAINT DF_tblOperationLog_LogTextExternal
-    DEFAULT('') FOR [LogTextExternal]
-    GO
-
--- drop temp proc
-DROP PROCEDURE tempRemoveDefaultConstaint
+    -- delete existing records from table (its temp table)
+    DELETE FROM tblLogFileExisting
+    
+    ALTER TABLE tblLogFileExisting 
+    ADD LogType int not null      
+END
 GO
 
--- Create feature toogle
-RAISERROR('Adding Feature toggle table tblFeatureToggle', 10, 1) WITH NOWAIT
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblFeatureToggle' AND type='U')
+RAISERROR ('Add IsInternalLogNote to tblLogFileExisting', 10, 1) WITH NOWAIT
+GO
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		     where syscolumns.name = N'IsInternalLogNote' and sysobjects.name = N'tblLogFileExisting')
 BEGIN
-	CREATE TABLE [dbo].[tblFeatureToggle](
-		[StrongName] [nvarchar](100) NOT NULL,
-		[Active] [bit] NOT NULL,
-		[Description] [nvarchar](max) NOT NULL,
-		[ChangeDate] [datetime] NOT NULL,
-	 CONSTRAINT [PK_tblFeatureToggle] PRIMARY KEY CLUSTERED 
-	(
-		[StrongName] ASC
-	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-	ALTER TABLE [dbo].[tblFeatureToggle] ADD  CONSTRAINT [DF_tblFeatureToggle_Active]  DEFAULT ((0)) FOR [Active]
-	ALTER TABLE [dbo].[tblFeatureToggle] ADD  CONSTRAINT [DF_tblFeatureToggle_Description]  DEFAULT ('') FOR [Description]
-	ALTER TABLE [dbo].[tblFeatureToggle] ADD  CONSTRAINT [DF_tblFeatureToggle_ChangeDate]  DEFAULT (getutcdate()) FOR [ChangeDate]
+    -- delete existing records from table (its temp table)
+    DELETE FROM tblLogFileExisting 
+
+    ALTER TABLE tblLogFileExisting 
+    ADD IsInternalLogNote bit not null        
 END
 GO
 
-RAISERROR('Adding Feature toggle trigger trFeatureToggleChange', 10, 1) WITH NOWAIT
-IF EXISTS (SELECT * FROM sysobjects WHERE name='trFeatureToggleChange' AND type='TR')
-BEGIN	
-	DROP TRIGGER [dbo].[trFeatureToggleChange] 
-END
-GO
+RAISERROR ('Altering tblSettings, making index service field larger', 10, 1) WITH NOWAIT
+ALTER TABLE [dbo].[tblSettings]	
+ALTER COLUMN [FileIndexingServerName] [nvarchar](200) NULL
+ALTER TABLE [dbo].[tblSettings]	
+ALTER COLUMN [FileIndexingCatalogName] [nvarchar](200) NULL
 
-CREATE TRIGGER [dbo].[trFeatureToggleChange] 
-	ON  [dbo].[tblFeatureToggle] 
-	AFTER UPDATE
-AS 
+RAISERROR ('Adding toggle for usage of deprecated Indexing Service, used to search case related files. If inactive Windows Search is used instead', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM tblFeatureToggle FT WHERE FT.StrongName = 'FILE_SEARCH_IDX_SERVICE')
 BEGIN
-	DECLARE @strongName NVARCHAR(MAX)
-	UPDATE FT SET ChangeDate = GETUTCDATE() FROM inserted U
-	JOIN tblFeatureToggle FT ON U.StrongName = FT.StrongName
+	INSERT INTO tblFeatureToggle(Active, ChangeDate, [Description], StrongName)
+	SELECT 1, GETDATE(), 'Toogle for activating old Indexing Service usage (deprecated). No Support in 2008+', 'FILE_SEARCH_IDX_SERVICE'
 END
 GO
 
-RAISERROR('Adding feature toggle REPORTS_REPORTGENERATOR_USE_PREVIOUS_SEARCH', 10, 1) WITH NOWAIT
-IF NOT EXISTS(SELECT * FROM tblFeatureToggle WHERE StrongName = 'REPORTS_REPORTGENERATOR_USE_PREVIOUS_SEARCH')
+RAISERROR ('Add FilesInternal to tblEMailLog', 10, 1) WITH NOWAIT
+GO
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		     where syscolumns.name = N'FilesInternal' and sysobjects.name = N'tblEMailLog')
 BEGIN
-	INSERT INTO [tblFeatureToggle](StrongName, Active, [Description]) 
-	VALUES ('REPORTS_REPORTGENERATOR_USE_PREVIOUS_SEARCH',	0, 'Should the report generator use the previous implementation of the search method')
+    ALTER TABLE tblEMailLog
+    ADD FilesInternal nvarchar(max) NULL
 END
 GO
 
-RAISERROR('Adding feature toggle NEW_ADVANCED_CASE_SEARCH', 10, 1) WITH NOWAIT
-IF NOT EXISTS(SELECT * FROM tblFeatureToggle WHERE StrongName = 'NEW_ADVANCED_CASE_SEARCH')
+RAISERROR ('Add Internal Log file field setting display mode value for existing templates', 10, 1) WITH NOWAIT
+GO
+  DECLARE @internalLogFileFieldId INT 
+  SET @internalLogFileFieldId = 71 -- CaseSolutionFields.LogFileName_Internal
+
+  DECLARE @caseSolutionFieldMode INT 
+  SET @caseSolutionFieldMode = 1 -- DisplayField
+
+  ;WITH caseSolutionIds As (
+    SELECT cs.Id 
+    FROM dbo.tblCaseSolution cs 
+	   LEFT JOIN tblCaseSolutionFieldSettings csfs ON cs.Id = csfs.CaseSolution_Id AND csfs.FieldName_Id = @internalLogFileFieldId 
+    WHERE csfs.Id IS NULL)
+   INSERT tblCaseSolutionFieldSettings(CaseSolution_Id,  FieldName_Id, Mode)
+   SELECT cs.Id, @internalLogFileFieldId, @caseSolutionFieldMode
+   FROM caseSolutionIds cs    
+GO
+
+RAISERROR ('Droping foreign key constraint FK_CaseDocumentsCondition_CaseDocument (doublets)', 10, 1) WITH NOWAIT
+IF EXISTS (SELECT * FROM sys.foreign_keys 
+   WHERE object_id = OBJECT_ID(N'dbo.FK_CaseDocumentsCondition_CaseDocument')
+   AND parent_object_id = OBJECT_ID(N'dbo.tblCaseDocumentCondition')
+)
 BEGIN
-	INSERT INTO [tblFeatureToggle](StrongName, Active, [Description]) 
-	VALUES ('NEW_ADVANCED_CASE_SEARCH', 1, 'Use new advanced search feature')
+	ALTER TABLE [dbo].[tblCaseDocumentCondition] DROP CONSTRAINT [FK_CaseDocumentsCondition_CaseDocument]
 END
 GO
 
-RAISERROR('Dropping NewAdvancedSearch column in NewAdvancedSearch', 10, 1) WITH NOWAIT
-IF EXISTS(SELECT 1 FROM sys.columns WHERE Name = N'NewAdvancedSearch' and Object_ID = Object_ID(N'dbo.tblGlobalSettings'))
-   ALTER TABLE tblGlobalSettings DROP COLUMN NewAdvancedSearch
-GO
+RAISERROR('Move tblUser.RestrictedCasePermission setting to tblCustomerUser table', 10, 1)
+IF NOT EXISTS( select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		     where syscolumns.name = N'RestrictedCasePermission' and sysobjects.name = N'tblCustomerUser')
+BEGIN     
 
+    BEGIN TRY
+    
+	   BEGIN TRANSACTION    
 
-RAISERROR('Adding new EMailSubject column to tblMail2Ticket', 10, 1) WITH NOWAIT
-IF NOT EXISTS(SELECT 1 FROM sys.columns WHERE Name = N'EMailSubject' and Object_ID = Object_ID(N'dbo.tblMail2Ticket'))
-   ALTER TABLE tblMail2Ticket
-   ADD EMailSubject nvarchar(512) NULL
-GO
+	   --create RestrictedCasePermission in tblCustomerUSer
+	   ALTER TABLE tblCustomerUser
+	   ADD RestrictedCasePermission bit CONSTRAINT DF_tblCustomerUser_RestrictedCasePermission default ((0)) NOT NULL
 
-RAISERROR('Creating index on tblCaseHistory', 10, 1) WITH NOWAIT
-IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id=OBJECT_ID('dbo.tblCaseHistory') AND name='idx_createddate_case_casetype_workinggroup')
-BEGIN 
-	CREATE NONCLUSTERED INDEX [idx_createddate_case_casetype_workinggroup] ON [dbo].[tblCaseHistory]
-	(
-		[CreatedDate] ASC
-	)
-	INCLUDE ( 	[Case_Id],
-		[CaseType_Id],
-		[WorkingGroup_Id]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-END
-GO
+	   -- transfer setting value to tblCustomerUser
+	   DECLARE @updateCmd nvarchar(1024) = 
+		  N'UPDATE cu SET cu.RestrictedCasePermission = u.RestrictedCasePermission
+		    FROM tblCustomerUser cu INNER JOIN tblUsers u ON u.Customer_Id = cu.Customer_Id AND u.Id = cu.User_Id';
+	   EXEC (@updateCmd)
+	   	   
+	   -- DROP DEFAULT CONSTRAINT for tblUsers.RestrictedCasePermission
+	   DECLARE @ObjectName NVARCHAR(100)
+	   SELECT @ObjectName = OBJECT_NAME([default_object_id]) FROM SYS.COLUMNS
+        WHERE [object_id] = OBJECT_ID('[dbo].[tblUsers]') AND [name] = 'RestrictedCasePermission';
+	   
+	   IF (LEN(@ObjectName) > 0)
+	     EXEC('ALTER TABLE [dbo].[tblUsers] DROP CONSTRAINT ' + @ObjectName)		
 
-RAISERROR('Creating type for ID list', 10, 1) WITH NOWAIT
-IF type_id('dbo.IDList') IS NULL
-BEGIN
-   CREATE TYPE dbo.IDList AS TABLE
-	(
-		ID INT
-	)
-END
-GO
-
-RAISERROR('Adding stored procedure for historical case report', 10, 1) WITH NOWAIT
-IF OBJECT_ID('ReportGetHistoricalData', 'P') IS NOT NULL
-BEGIN
-	DROP PROCEDURE ReportGetHistoricalData
-END
-GO
-
-CREATE PROCEDURE [dbo].[ReportGetHistoricalData] 
-	-- Add the parameters for the stored procedure here
-	@caseStatus INT,
-	@changeFrom DATETIME, 
-	@changeTo DATETIME,
-	@customerID INT,
-	@changeWorkingGroups AS dbo.IDList READONLY,
-	@registerFrom DATETIME,
-	@registerTo DATETIME, 
-	@closeFrom DATETIME, 
-	@closeTo DATETIME, 
-	@includeCasesWithHistoricalNoWorkingGroup BIT,
-	@includeCasesWithNoWorkingGroup BIT,
-	@administrators AS dbo.IDList READONLY, 
-	@departments AS dbo.IDList READONLY, 
-	@caseTypes AS dbo.IDList READONLY, 
-	@productAreas AS dbo.IDList READONLY,
-	@workingGroups AS dbo.IDList READONLY
-AS
-BEGIN
-	DECLARE @checkChangeWorkingGroups INT = 0,
-		@checkAdministrators INT = 0,
-		@checkDepartments INT = 0,
-		@checkCaseTypes INT = 0,
-		@checkProductAreas INT = 0,
-		@checkWorkingGroups INT = 1,
-		@checkCaseStatus INT = CASE WHEN @caseStatus IS NULL THEN 0 ELSE 1 END,
-		@checkChangeFrom INT = CASE WHEN @changeFrom IS NULL THEN 0 ELSE 1 END,
-		@checkChangeTo INT = CASE WHEN @changeTo IS NULL THEN 0 ELSE 1 END,
-		@checkRegisterFrom INT = CASE WHEN @registerFrom IS NULL THEN 0 ELSE 1 END,
-		@checkRegisterTo INT = CASE WHEN @registerTo IS NULL THEN 0 ELSE 1 END,
-		@checkCloseFrom INT = CASE WHEN @closeFrom IS NULL THEN 0 ELSE 1 END,
-		@checkCloseTo INT = CASE WHEN @closeTo IS NULL THEN 0 ELSE 1 END,
-		@checkCurrentCustomerOnly BIT = 0
-
-	SELECT TOP 1 @checkChangeWorkingGroups = 1 FROM @changeWorkingGroups
-	SELECT TOP 1 @checkAdministrators = 1 FROM @administrators
-	SELECT TOP 1 @checkDepartments = 1 FROM @departments
-	SELECT TOP 1 @checkCaseTypes = 1 FROM @caseTypes
-	SELECT TOP 1 @checkProductAreas = 1 FROM @productAreas
-	--SELECT TOP 1 @checkWorkingGroups = 1 FROM @workingGroups
-
-	SELECT @checkCurrentCustomerOnly = CASE WHEN (@checkAdministrators + @checkDepartments + @checkCaseTypes + @checkProductAreas + 
-		@checkWorkingGroups + @checkCaseStatus + @checkRegisterFrom + @checkRegisterTo + @checkCloseFrom + 
-		@checkCloseTo) > 0 THEN 1 ELSE 0 END	
+	   -- drop old setting column in tblUsers
+	   ALTER TABLE tblUsers DROP COLUMN RestrictedCasePermission;
 	
-	CREATE TABLE #rows 
-	(
-		CaseID INT,
-		CaseTypeID INT,
-		WorkingGroupID INT,
-		Created DATETIME,
-		R_ROW INT, 
-		R_CASE INT
-	)
+	   COMMIT TRAN;
 
-	INSERT INTO #rows(CaseId, CaseTypeID, Created, WorkingGroupID, R_ROW, R_CASE) 
-	SELECT C.Id, CT.ID, CH.CreatedDate, WG.ID WorkginGroupId, 
-		ROW_NUMBER() OVER (PARTITION BY C.Id, CT.ID, WG.ID ORDER BY CH.CreatedDate) R, 
-		ROW_NUMBER() OVER (PARTITION BY C.Id ORDER BY CH.CreatedDate) R_CASE FROM tblCase C 
-	JOIN tblCaseHistory CH ON CH.Case_Id = C.Id
-	JOIN tblCaseType CT ON CH.CaseType_Id = CT.ID
-	LEFT JOIN tblWorkingGroup WG ON CH.WorkingGroup_Id = WG.Id
-	WHERE 1=1
-	AND CH.Customer_Id = @customerID
-	AND CT.Customer_Id = @customerID
-	AND ((@checkCurrentCustomerOnly = 1 AND C.Customer_Id = @customerID) OR @checkCurrentCustomerOnly = 0)
-	AND (@checkAdministrators = 0 OR EXISTS(SELECT ID FROM @administrators A WHERE C.CaseResponsibleUser_Id = A.ID))
-	AND (@checkDepartments = 0 OR EXISTS(SELECT ID FROM @departments D WHERE C.Department_Id = D.ID))
-	AND (@checkCaseTypes = 0 OR EXISTS(SELECT ID FROM @caseTypes CT WHERE C.CaseType_Id = CT.ID))
-	AND (@checkProductAreas = 0 OR EXISTS(SELECT ID FROM @productAreas PA WHERE C.ProductArea_Id = PA.ID))
-	AND (@checkWorkingGroups = 0 OR EXISTS(SELECT ID FROM @workingGroups WG WHERE C.WorkingGroup_Id = WG.ID) OR (@includeCasesWithNoWorkingGroup = 1 AND C.WorkingGroup_Id IS NULL))
-	AND (@checkCaseStatus = 0 OR (@caseStatus = 1 AND C.FinishingDate IS NULL) OR (@caseStatus = 0 AND C.FinishingDate IS NOT NULL))
-	AND (@checkChangeFrom = 0 OR CH.CreatedDate >= @changeFrom)
-	AND (@checkChangeTo = 0 OR CH.CreatedDate <= @changeTo)
-	AND (@checkRegisterFrom = 0 OR C.RegTime >= @registerFrom)
-	AND (@checkRegisterTo = 0 OR C.RegTime <= @registerTo)
-	AND (@checkCloseFrom = 0 OR C.FinishingDate >= @closeFrom)
-	AND (@checkCloseTo = 0 OR C.FinishingDate <= @closeTo)
-	GROUP BY CT.Id, CT.CaseType, WG.ID, C.ID, CH.CreatedDate
-	ORDER BY C.Id
-	
-	-- creating index on temp #rows table with populated data
-	CREATE NONCLUSTERED INDEX ixCase ON  #rows(CaseID, CaseTypeID, WorkingGroupID, R_ROW, R_CASE)
+    END TRY 
+    BEGIN CATCH
+	   
+	   IF ( XACT_STATE() != 0 )
+		  ROLLBACK TRAN;
+	   SELECT  ERROR_MESSAGE() AS 'error'
+        
+    END CATCH    
 
-	SELECT R.*, CT.CaseType, WG.WorkingGroup FROM #rows R
-	JOIN tblCaseType CT ON R.CaseTypeID = CT.ID
-	LEFT JOIN tblWorkingGroup WG ON R.WorkingGroupID = WG.Id
-	LEFT JOIN #rows R2 ON R.CaseID = R2.CaseID
-		AND (R.WorkingGroupID = R2.WorkingGroupID
-			OR (R.WorkingGroupID IS NULL AND R2.WorkingGroupID IS NULL))
-		AND R2.CaseTypeID = R.CaseTypeID
-		AND R2.R_ROW = R.R_ROW - 1
-		AND R2.R_CASE = R.R_CASE - 1
-	WHERE R2.CaseID IS NULL
-	  		AND (@checkChangeWorkingGroups = 0 OR 
-			EXISTS(SELECT ID FROM @changeWorkingGroups CWG WHERE R.WorkingGroupID = CWG.ID) OR 
-			(@includeCasesWithHistoricalNoWorkingGroup = 1 AND R.WorkingGroupID IS NULL))
-	ORDER BY CaseID
-
-	DROP TABLE #rows
-END
-
-GO
-
-RAISERROR('Adding feature toggle NEW_REPORTED_TIME_REPORT', 10, 1) WITH NOWAIT
-IF NOT EXISTS(SELECT * FROM tblFeatureToggle WHERE StrongName = 'NEW_REPORTED_TIME_REPORT')
-BEGIN
-	INSERT INTO [tblFeatureToggle](StrongName, Active, [Description]) 
-	VALUES ('NEW_REPORTED_TIME_REPORT', 1, 'Use new Reported Time report implementation')
 END
 GO
-
-
-RAISERROR('Adding feature toggle NEW_NUMBER_OF_CASES_REPORT', 10, 1) WITH NOWAIT
-IF NOT EXISTS(SELECT * FROM tblFeatureToggle WHERE StrongName = 'NEW_NUMBER_OF_CASES_REPORT')
-BEGIN
-	INSERT INTO [tblFeatureToggle](StrongName, Active, [Description]) 
-	VALUES ('NEW_NUMBER_OF_CASES_REPORT', 1, 'Use new Number of Cases report implementation')
-END
-
-
-RAISERROR('Adding new TimeZoneId to tblCustomer', 10, 1) WITH NOWAIT
-IF NOT EXISTS(SELECT 1 FROM sys.columns WHERE Name = N'TimeZoneId' and Object_ID = Object_ID(N'dbo.tblCustomer'))
-   ALTER TABLE tblCustomer
-   ADD TimeZoneId nvarchar(64) NOT NULL DEFAULT('W. Europe Standard Time')
-GO
-
-
-RAISERROR('Creating index idx_casehistory_casetype', 10, 1) WITH NOWAIT
-IF NOT EXISTS (SELECT name FROM sysindexes WHERE name = 'idx_casehistory_casetype')	
-BEGIN
-	CREATE NONCLUSTERED INDEX [idx_casehistory_casetype]
-		ON [dbo].[tblCaseHistory]([CaseType_Id] ASC, [CreatedDate] ASC)
-		INCLUDE([Case_Id], [WorkingGroup_Id]);
-END
-GO
-
 
 -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.42'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.43'
 GO
 
 --ROLLBACK --TMP
+
+
+

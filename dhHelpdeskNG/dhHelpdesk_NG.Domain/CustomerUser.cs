@@ -63,6 +63,8 @@
         /// </summary>
         public bool CaseInitiatorFilterShow { get; set; }
 
+        public bool RestrictedCasePermission { get; set; }
+
         public virtual Customer Customer { get; set; }
 
         public virtual User User { get; set; }

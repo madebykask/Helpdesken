@@ -7,8 +7,9 @@ using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Paging;
+using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.BusinessData.Models.Shared.Output;
-using DH.Helpdesk.BusinessData.Models.User.Input;
+using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
@@ -18,11 +19,15 @@ using DH.Helpdesk.Web.Common.Models.Case;
 using DH.Helpdesk.Web.Common.Models.CaseSearch;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Extensions.Lists;
 using DH.Helpdesk.Models.CasesOverview;
 using DH.Helpdesk.WebApi.Infrastructure.Authentication;
+using DH.Helpdesk.WebApi.Logic.Case;
+using DH.Helpdesk.WebApi.Models.Output;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
+    [RoutePrefix("api/CasesOverview")]
     public class CasesOverviewController : BaseApiController
     {
         private readonly ICaseSearchService _caseSearchService;
@@ -31,20 +36,74 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly IUserService _userSerivice;
         private readonly ICustomerService _customerService;
+        private readonly ICaseService _caseService;
+        private readonly ICaseTranslationService _caseTranslationService;
 
         public CasesOverviewController(ICaseSearchService caseSearchService,
+            ICaseService caseService,
             ICustomerUserService customerUserService,
             ICaseSettingsService caseSettingService,
             ICaseFieldSettingService caseFieldSettingService,
+            ICaseTranslationService caseTranslationService,
             IUserService userSerivice,
             ICustomerService customerService)
         {
+            _caseTranslationService = caseTranslationService;
+            _caseService = caseService;
             _caseSearchService = caseSearchService;
             _customerUserService = customerUserService;
             _caseSettingService = caseSettingService;
             _caseFieldSettingService = caseFieldSettingService;
             _userSerivice = userSerivice;
             _customerService = customerService;
+        }
+
+        [HttpGet]
+        [Route("sortingfields")]
+        public IList<CaseSortFieldModel> GetSortingFields([FromUri]int langId, [FromUri]int cid)
+        {
+            var sortingFields = new List<GlobalEnums.TranslationCaseFields>()
+            {
+                GlobalEnums.TranslationCaseFields.CaseNumber,
+                GlobalEnums.TranslationCaseFields.ChangeTime,
+                GlobalEnums.TranslationCaseFields.Performer_User_Id,
+                GlobalEnums.TranslationCaseFields.WorkingGroup_Id,
+                GlobalEnums.TranslationCaseFields.Priority_Id,
+                GlobalEnums.TranslationCaseFields.StateSecondary_Id,
+                GlobalEnums.TranslationCaseFields.WatchDate,
+                GlobalEnums.TranslationCaseFields._temporary_LeadTime // Time Left - virtual field
+            };
+
+            var res =
+                sortingFields.Select(f => new CaseSortFieldModel(_caseTranslationService.GetCaseTranslation(f.ToString(), langId, cid), f.ToString()))
+                .OrderBy(f => f.Text)
+                .ToList();
+
+            return res;
+        }
+
+        [HttpGet]
+        [Route("favoritefilters")]
+        public async Task<List<CaseFavoriteFilterModel>> FavoriteFilters(int cid)
+        {
+            var favorites = await _caseService.GetMyFavoritesWithFieldsAsync(cid, UserId);
+
+            //#71782: skip filters with ClosingReason and Closing date since mobile app supports only cases in progress only
+            favorites = 
+                favorites.Where(f => f.Fields != null && 
+                                     (f.Fields.ClosingReasonFilter == null || !f.Fields.ClosingReasonFilter.Any()) && 
+                                     (f.Fields.ClosingDateFilter == null || !f.Fields.ClosingDateFilter.HasValues)).ToList();
+
+            var model = favorites.Any()
+                ? favorites.Select(f => new CaseFavoriteFilterModel()
+                {
+                    Id = f.Id,
+                    Name = f.Name,
+                    Fields = f.Fields.ToDictionary().Select(kv => new ItemOverview(kv.Key, kv.Value)).ToList()
+                }).ToList()
+                : null;
+
+            return model;
         }
 
         /// <summary>
@@ -55,17 +114,28 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<SearchResult<CaseSearchResult>> Get([FromUri]int cid, [FromBody]SearchOverviewFilterInputModel input)
+        public async Task<SearchResult<CaseSearchResult>> Search([FromUri]int cid, [FromBody]SearchOverviewFilterInputModel input)
         {
             var userGroupId = User.Identity.GetGroupId();
             var userOverview = await _userSerivice.GetUserOverviewAsync(UserId);
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(userOverview.TimeZoneId);
             var customerSettings = await _customerService.GetCustomerAsync(cid);
 
-            var filter = CreateSearchFilter(input, cid, userOverview);
+            var filter = CreateSearchFilter(input, cid);
 
-            var sm = await InitCaseSearchModel(filter.CustomerId, filter.UserId);
-            sm.CaseSearchFilter = filter;
+            var currentUserId = filter.UserId;
+            var customerId = filter.CustomerId;
+
+            //var sm = await InitCaseSearchModel(filter.CustomerId, filter.UserId, filter);
+            var sm = new CaseSearchModel()
+            {
+                CaseSearchFilter = filter,
+                Search = new Search()
+                {
+                    SortBy = GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
+                    Ascending = false
+                }
+            };
 
             if (!string.IsNullOrWhiteSpace(input.OrderBy))
                 sm.Search.SortBy = input.OrderBy;
@@ -73,33 +143,64 @@ namespace DH.Helpdesk.WebApi.Controllers
             if (input.Ascending.HasValue)
                 sm.Search.Ascending = input.Ascending.Value;
 
-            //TODO: review if it required
+            // TODO: review if it required
             var caseSettings = _caseSettingService.GetCaseSettingsWithUser(filter.CustomerId, filter.UserId, userGroupId);
-            AddMissingCaseSettingsForMobile(caseSettings);//TODO: Temporary  - remove after mobile case settings is implemented
+            AddMissingCaseSettingsForMobile(caseSettings); //TODO: Temporary  - remove after mobile case settings is implemented
 
             var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(filter.CustomerId);
+            var customerUserSettings = await _customerUserService.GetCustomerUserSettingsAsync(customerId, currentUserId);
 
             CaseRemainingTimeData remainingTimeData;
             CaseAggregateData aggregateData;
 
-            var searchResult = _caseSearchService.Search(
-                filter,
-                caseSettings,
-                caseFieldSettings.ToArray(),
-                filter.UserId,
-                UserName,
-                userOverview.ShowNotAssignedWorkingGroups,
-                userGroupId,
-                userOverview.RestrictedCasePermission,
-                sm.Search,
-                customerSettings.WorkingDayStart,
-                customerSettings.WorkingDayEnd,
-                userTimeZone,
-                ApplicationTypes.Helpdesk,
-                userOverview.ShowSolutionTime,
-                out remainingTimeData,
-                out aggregateData);
+            SearchResult<CaseSearchResult> searchResult = null;
 
+            if (input.CountOnly)
+            {
+                // run count only query 
+                searchResult = _caseSearchService.Search(
+                    filter,
+                    caseSettings,
+                    caseFieldSettings.ToArray(),
+                    filter.UserId,
+                    UserName,
+                    userOverview.ShowNotAssignedWorkingGroups,
+                    userGroupId,
+                    customerUserSettings.RestrictedCasePermission,
+                    sm.Search,
+                    customerSettings.WorkingDayStart,
+                    customerSettings.WorkingDayEnd,
+                    userTimeZone,
+                    ApplicationTypes.HelpdeskMobile,
+                    userOverview.ShowSolutionTime,
+                    out remainingTimeData,
+                    out aggregateData,
+                    null,
+                    null,
+                    null,
+                    countOnly: true);
+            }
+            else
+            {
+                // run normal search request
+                searchResult = _caseSearchService.Search(
+                    filter,
+                    caseSettings,
+                    caseFieldSettings.ToArray(),
+                    filter.UserId,
+                    UserName,
+                    userOverview.ShowNotAssignedWorkingGroups,
+                    userGroupId,
+                    customerUserSettings.RestrictedCasePermission,
+                    sm.Search,
+                    customerSettings.WorkingDayStart,
+                    customerSettings.WorkingDayEnd,
+                    userTimeZone,
+                    ApplicationTypes.HelpdeskMobile,
+                    userOverview.ShowSolutionTime,
+                    out remainingTimeData,
+                    out aggregateData);
+            }
 
             //searchResults = CommonHelper.TreeTranslate(m.cases, f.CustomerId, _productAreaService);
 
@@ -107,7 +208,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             return searchResult;
         }
 
-        private CaseSearchFilter CreateSearchFilter(SearchOverviewFilterInputModel input, int customerId, UserOverview userOverview)
+        private CaseSearchFilter CreateSearchFilter(SearchOverviewFilterInputModel input, int customerId)
         {
             const int maxTextCharCount = 200;
 
@@ -120,14 +221,14 @@ namespace DH.Helpdesk.WebApi.Controllers
                 CaseType = input.CaseTypeId ?? 0,
                 ProductArea = input.ProductAreaId?.ToString() ?? string.Empty,
                 Category = input.CategoryId?.ToString() ?? string.Empty,
-                Region = input.RegionIds.Any() ? string.Join(",", input.RegionIds) : string.Empty,
-                User = input.RegisteredByIds.Any() ? string.Join(",", input.RegisteredByIds) : string.Empty,
-                WorkingGroup = input.WorkingGroupIds.Any() ? string.Join(",", input.WorkingGroupIds) : string.Empty,
-                UserResponsible = input.ResponsibleUserIds.Any() ? string.Join(",", input.ResponsibleUserIds) : string.Empty,
-                UserPerformer = input.PerfomerUserIds.Any() ? string.Join(",", input.PerfomerUserIds) : string.Empty,
-                Priority = input.PriorityIds.Any() ? string.Join(",", input.PriorityIds) : string.Empty,
-                Status = input.StatusIds.Any() ? string.Join(",", input.StatusIds) : string.Empty,
-                StateSecondary = input.StateSecondaryIds.Any() ? string.Join(",", input.StateSecondaryIds) : string.Empty,
+                Region = input.RegionIds.JoinToString() ?? string.Empty,
+                User = input.RegisteredByIds.JoinToString() ?? string.Empty,
+                WorkingGroup = input.WorkingGroupIds.JoinToString() ?? string.Empty,
+                UserResponsible = input.ResponsibleUserIds.JoinToString() ?? string.Empty,
+                UserPerformer = input.PerfomerUserIds.JoinToString() ?? string.Empty,
+                Priority = input.PriorityIds.JoinToString() ?? string.Empty,
+                Status = input.StatusIds.JoinToString() ?? string.Empty,
+                StateSecondary = input.StateSecondaryIds.JoinToString() ?? string.Empty,
                 CaseRegistrationDateStartFilter = input.CaseRegistrationDateStartFilter,
                 CaseRegistrationDateEndFilter = input.CaseRegistrationDateEndFilter,
                 CaseWatchDateStartFilter = input.CaseWatchDateStartFilter,
@@ -142,8 +243,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 CaseProgress = ((int)input.CaseProgress).ToString(), // from params - frm.ReturnFormValue(CaseFilterFields.FilterCaseProgressNameAttribute);
                 CaseFilterFavorite = input.CaseFilterFavoriteId?.ToString() ?? string.Empty, // from params - frm.ReturnFormValue(CaseFilterFields.CaseFilterFavoriteNameAttribute);
                 FreeTextSearch = input.FreeTextSearch, //TODO: remove restricted symbols here. from params - frm.ReturnFormValue(CaseFilterFields.FreeTextSearchNameAttribute);
-                Department = input.DepartmentIds.Any() ? string.Join(",", input.DepartmentIds) : string.Empty, // format - GetDepartmentsFrom(departments_OrganizationUnits);
-                OrganizationUnit = input.OrganizationUnitIds.Any() ? string.Join(",", input.OrganizationUnitIds) : string.Empty, // format - GetOrganizationUnitsFrom(departments_OrganizationUnits);
+                Department = input.DepartmentIds.JoinToString() ?? string.Empty, // format - GetDepartmentsFrom(departments_OrganizationUnits);
+                OrganizationUnit = input.OrganizationUnitIds.JoinToString() ?? string.Empty, // format - GetOrganizationUnitsFrom(departments_OrganizationUnits);
 
                 MaxTextCharacters = maxTextCharCount,
 
@@ -315,16 +416,16 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         }
 
+        //TODO: check if required?
         private async Task<CaseSearchModel> InitCaseSearchModel(int customerId, int userId)
         {
             var search = new Search();
             var filter = new CaseSearchFilter();
+
             var cu = await _customerUserService.GetCustomerUserSettingsAsync(customerId, userId);
             if (cu == null)
-            {
                 throw new Exception($"Customers settings is empty or not valid for customer id {customerId}");
-            }
-
+            
             filter.CustomerId = customerId;
             filter.UserId = userId;
             filter.CaseType = cu.CaseCaseTypeFilter.ReturnCustomerUserValue().ToInt();

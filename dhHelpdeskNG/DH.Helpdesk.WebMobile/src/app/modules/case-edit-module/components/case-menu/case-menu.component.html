@@ -1,0 +1,7 @@
+<div class="md-hamb mbsc-padding" *ngIf="localDataSource.length > 0">
+  <mbsc-hamburger-nav [options]="bottomMenu">
+      <mbsc-nav-item *ngFor="let item of localDataSource; trackBy:trackByFn" 
+      [id]="item.value"
+      (click)="applyWorkflow(item.value)">{{ item.text }}</mbsc-nav-item>
+  </mbsc-hamburger-nav>
+</div>

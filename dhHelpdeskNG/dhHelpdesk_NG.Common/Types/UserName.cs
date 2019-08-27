@@ -2,15 +2,20 @@
 {
     public sealed class UserName
     {
+        public UserName()
+        {
+
+        }
+
         public UserName(string firstName, string lastName)
         {
             this.FirstName = firstName;
             this.LastName = lastName;
         }
 
-        public string FirstName { get; private set; }
+        public string FirstName { get; set; }
 
-        public string LastName { get; private set; }
+        public string LastName { get; set; }
 
         public string GetFullName()
         {

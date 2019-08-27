@@ -766,6 +766,12 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = GetFieldStatusType(ruleMode, TranslationCaseFields.tblLog_Filename, caseFieldSettings, CaseSolutionFields.LogFileName, templateSettingModel.ToList())
             };
 
+            caseBasicInfo.LogFileInternal = new BasicSingleItemField()
+            {
+                Selected = FieldItem.CreateEmpty(),
+                StatusType = GetFieldStatusType(ruleMode, TranslationCaseFields.tblLog_Filename_Internal, caseFieldSettings, CaseSolutionFields.LogFileName_Internal, templateSettingModel.ToList())
+            };
+
             caseBasicInfo.FinishingDate = new BasicSingleItemField()
             {
                 Selected = new FieldItem(currentData.FinishingDate?.ToShortDateString(), string.Empty),
@@ -2556,6 +2562,26 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = basicInformation.LogFile.StatusType
             };
             ret.Add(attrLogFile);
+
+            #endregion
+
+            #region Log Internal File
+
+            curField = TranslationCaseFields.tblLog_Filename_Internal.ToString();
+            var attrLogInternalFile = new FieldAttributeModel()
+            {
+                FieldId = curField,
+                FieldName = curField,
+                FieldCaption = Translation.Get(curField, Enums.TranslationSource.CaseTranslation, customerId),
+                FieldType = CaseFieldType.ButtonField,
+                DefaultItem = new FieldItem(string.Empty, string.Empty, true),
+                Selected = new FieldItem(string.Empty, string.Empty, true),
+                IsAvailableOnHelpdesk = caseFieldSettings.getShowOnStartPage(curField).ToBool(),
+                IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
+                IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
+                StatusType = basicInformation.LogFileInternal.StatusType
+            };
+            ret.Add(attrLogInternalFile);
 
             #endregion
 

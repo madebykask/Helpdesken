@@ -191,6 +191,7 @@
     <Compile Include="Models\Case\CaseFileContent.cs" />
     <Compile Include="Models\Case\CaseLockSettings.cs" />
     <Compile Include="Models\Case\CaseLock\CaseLockInfo.cs" />
+    <Compile Include="Models\Case\CaseLogfileDto.cs" />
     <Compile Include="Models\Case\CaseLogs\CaseLog.cs" />
     <Compile Include="Models\Case\CaseSectionInfo.cs" />
     <Compile Include="Models\Case\CaseSolutionConditionOverview.cs" />
@@ -361,6 +362,7 @@
     <Compile Include="Models\Logs\Output\EmailLogOverview.cs" />
     <Compile Include="Models\Mail2Tickets\Output\Mail2TicketOverview.cs" />
     <Compile Include="Models\MailTemplates\CustomMailTemplateLanguage.cs" />
+    <Compile Include="Models\MailTemplates\MailFile.cs" />
     <Compile Include="Models\Modules\Output\ModulesOverview.cs" />
     <Compile Include="Models\OperationLog\Output\OperationLogObjectOverview.cs" />
     <Compile Include="Models\Orders\Index\FieldSettingsOverview\AccountInfoFieldSettingsOverview.cs" />
@@ -997,6 +999,7 @@
     <Compile Include="Models\Supplier\Output\SupplierOverview.cs" />
     <Compile Include="Models\Systems\Output\SystemOverview.cs" />
     <Compile Include="Models\Translation2.cs" />
+    <Compile Include="Models\User\CustomerUserForEdit.cs" />
     <Compile Include="Models\User\CustomerUserInfo.cs" />
     <Compile Include="Models\User\LoginResult.cs" />
     <Compile Include="Models\User\UserLoginInfo.cs" />

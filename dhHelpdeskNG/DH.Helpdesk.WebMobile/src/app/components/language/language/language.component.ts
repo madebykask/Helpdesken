@@ -19,8 +19,6 @@ export class LanguageComponent implements OnInit {
     private userSettingsService: UserSettingsApiService,
     private languagesService: LanguagesApiService) { }
 
-  @ViewChild('languageListView') languageListView: MbscListview;
-
   languages: any[];
   languageId: number;
   isLoadingLanguage: Boolean;

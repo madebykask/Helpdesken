@@ -28,7 +28,7 @@ namespace DH.Helpdesk.Dal.Repositories
         void SetNullProblemByProblemId(int problemId);
 
         CaseHistory GetCloneOfLatest(int caseId);
-        CaseHistory GetCloneOfPenultimate(int caseId);
+        CaseHistory GetCloneOfLastByOne(int caseId);
         CaseHistory GetCaseHistoryByProblemId(int caseId, int problemId);
     }
 
@@ -45,7 +45,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var q = (from ch in this.DataContext.CaseHistories
                      where ch.Case_Id == caseId
                      select ch);
-            return q.OrderBy(l => l.Id);
+            return q;
         }
 
         public IEnumerable<CaseHistoryMapperData> GetCaseHistories(int caseId)
@@ -81,13 +81,13 @@ namespace DH.Helpdesk.Dal.Repositories
                 .FirstOrDefault();
         }
 
-        public CaseHistory GetCloneOfPenultimate(int caseId)
+        public CaseHistory GetCloneOfLastByOne(int caseId)
         {
             return DataContext.Set<CaseHistory>()
                 .AsNoTracking()
                 .Where(it => it.Case_Id == caseId)
                 .OrderByDescending(it => it.Id)
-                .Skip(1).Take(1)
+                .Skip(1)
                 .FirstOrDefault();
         }
 
@@ -104,7 +104,6 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             return 
                 from caseHistory in Table
-                let emailLogs = caseHistory.Emaillogs.DefaultIfEmpty()
                 where caseHistory.Case_Id == caseId
                 select new CaseHistoryMapperData
                 {
@@ -251,7 +250,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         Name = caseHistory.Impact.Name,
                     } : null,
 
-                    EmailLogs = emailLogs.Where(t => t.Id > 0).Select(t => new EmailLogsOverview
+                    EmailLogs = caseHistory.Emaillogs.Select(t => new EmailLogsOverview
                     {
                         Id = t.Id,
                         MailId = t.MailId,

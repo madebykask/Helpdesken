@@ -15,15 +15,11 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICaseLockService _caseLockService;
         private readonly IMapper _mapper;
 
-        #region ctor()
-
         public CaseLocksController(ICaseLockService caseLockService, IMapper mapper)
         {
             _caseLockService = caseLockService;
             _mapper = mapper;
         }
-
-            #endregion
 
         // isLocked - already locked by ither
         //todo: add permissions checks

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
@@ -8,9 +9,11 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Models.Case.Field;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
 using DH.Helpdesk.WebApi.Logic.Case;
+using DH.Helpdesk.WebApi.Models.Case;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -29,12 +32,14 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IUserService _userService;
         private readonly ICaseFieldsCreator _caseFieldsCreator;
         private readonly ICustomerService _customerService;
+        private readonly ITranslateCacheService _translateCacheService;
 
         public CaseController(ICaseService caseService, ICaseFieldSettingService caseFieldSettingService,
             IBaseCaseSolutionService caseSolutionService, ICustomerUserService customerUserService,
             ISettingService customerSettingsService, IMapper mapper, ICaseEditModeCalcStrategy caseEditModeCalcStrategy,
             ICaseSolutionSettingService caseSolutionSettingService, IUserService userService, ICaseFieldsCreator caseFieldsCreator,
-            ICustomerService customerService)
+            ICustomerService customerService,
+            ITranslateCacheService translateCacheService)
         {
             _caseService = caseService;
             _caseFieldSettingService = caseFieldSettingService;
@@ -47,6 +52,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _userService = userService;
             _caseFieldsCreator = caseFieldsCreator;
             _customerService = customerService;
+            _translateCacheService = translateCacheService;
         }
 
         /// <summary>
@@ -122,13 +128,21 @@ namespace DH.Helpdesk.WebApi.Controllers
             //calc case edit mode
             model.EditMode = _caseEditModeCalcStrategy.CalcEditMode(cid, UserId, currentCase); // remember to apply isCaseLocked check on client
 
+            model.ChildCasesIds = _caseService.GetChildCasesFor(caseId).Select(c => c.Id).ToList();
+            model.ParentCaseId = _caseService.GetParentInfo(caseId)?.ParentId;
+
             _caseService.MarkAsRead(caseId);
 
+            var stateSecondaryId = currentCase?.StateSecondary_Id ?? 0;
+
+            model.ExtendedCaseData =
+                GetExtendedCaseModel(cid, currentCase.Id, currentCase.CaseSolution_Id ?? 0, stateSecondaryId, userOverview.UserGUID.ToString(), langId);
+            
             return model;
         }
 
         [HttpGet]
-        [Route("template/{templateId:int}")]
+        [Route("new/{templateId:int}")]
         [CheckUserPermissions(UserPermission.CreateCasePermission)]
         public async Task<IHttpActionResult> New([FromUri]int langId, [FromUri]int cid, [FromUri]int? templateId)
         { 
@@ -159,17 +173,47 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             _caseFieldsCreator.CreateInitiatorSection(cid, customerUserSetting, caseFieldSettings, caseTemplateSettings, null, caseTemplate, langId,
                 caseFieldTranslations, model, customerDefaults);
+
             _caseFieldsCreator.CreateRegardingSection(cid, caseFieldSettings, caseTemplateSettings, null, caseTemplate, langId, caseFieldTranslations, model);
+
             _caseFieldsCreator.CreateComputerInfoSection(cid, caseFieldSettings, caseTemplateSettings, null, caseTemplate, langId, caseFieldTranslations, model);
+
             _caseFieldsCreator.CreateCaseInfoSection(cid, caseFieldSettings, caseTemplateSettings, null, caseTemplate, langId, caseFieldTranslations,
                 model, customerUserSetting, customerDefaults);
+
             _caseFieldsCreator.CreateCaseManagementSection(cid, userOverview, caseFieldSettings, caseTemplateSettings, null, caseTemplate, langId,
                 caseFieldTranslations, model, customerUserSetting, customerSettings, customerDefaults);
+
             _caseFieldsCreator.CreateCommunicationSection(cid, userOverview, caseFieldSettings, caseTemplateSettings, null, caseTemplate, langId,
                 caseFieldTranslations, model, customerSettings);
 
-            model.EditMode = Web.Common.Enums.Case.AccessMode.FullAccess;
+            model.EditMode = Web.Common.Enums.Case.AccessMode.FullAccess; //todo: check mode calculation
+
+            var stateSecondaryId = caseTemplate?.StateSecondary_Id ?? 0;
+
+            model.ExtendedCaseData =
+                GetExtendedCaseModel(cid, 0, caseTemplate?.Id ?? 0, stateSecondaryId, userOverview.UserGUID.ToString(), langId);
+
             return Ok(model);
+        }
+
+        private ExtendedCaseModel GetExtendedCaseModel(int customerId, int caseId, int caseSolutionId, int stateSecondaryId, string userGuid, int langId)
+        {
+            ExtendedCaseModel model = null;
+
+            var exCaseData = 
+                _caseService.GetCaseExtendedCaseForm(caseSolutionId, customerId, caseId, userGuid, stateSecondaryId);
+
+            if (exCaseData != null)
+            {
+                model = new ExtendedCaseModel
+                {
+                    ExtendedCaseFormId = exCaseData.ExtendedCaseFormId,
+                    ExtendedCaseGuid = exCaseData.ExtendedCaseGuid,
+                    ExtendedCaseName = _translateCacheService.GetMasterDataTextTranslation(exCaseData.ExtendedCaseFormName, langId)
+                };
+            }
+            return model;
         }
     }
 }

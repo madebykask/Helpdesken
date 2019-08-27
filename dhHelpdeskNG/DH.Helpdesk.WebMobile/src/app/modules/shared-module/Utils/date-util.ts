@@ -15,17 +15,23 @@ export class DateUtil {
      DateTime.fromISO(date as string).toLocaleString(DateTime.DATETIME_SHORT) : DateTime.fromISO(date as string).toLocaleString(format);
   }
 
-    static isDate(val: any) {
+  static isDate(val: any) {
      return val && Object.prototype.toString.call(val) === '[object Date]' && !isNaN(val);
   }
 
-  static tryConvertToDate(value: any) {
+  static tryConvertToDate(value: any, isUtc: boolean = false) {
     if (!value) { return value; }
 
-    const dateValue = DateTime.fromISO(value);
+    let dateValue = isUtc ? DateTime.fromISO(value, { zone: 'utc' }) : DateTime.fromISO(value);
     if (dateValue.isValid) {
       return dateValue.toJSDate();
     }
+
+    dateValue = isUtc ? DateTime.fromSQL(value, { zone: 'utc' }) : DateTime.fromSQL(value);
+    if (dateValue.isValid) {
+      return dateValue.toJSDate();
+    }
+
     return value;
   }
 

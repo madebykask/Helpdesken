@@ -31,6 +31,7 @@ namespace DH.Helpdesk.Web.Controllers
             IProductAreaService productAreaService,
             ICaseSettingsService caseSettingsService,
             IUserService userService, 
+            ICustomerUserService customerUserService,
             GridSettingsService gridSettingsService)
         {
             _settingService = settingService;
@@ -39,7 +40,8 @@ namespace DH.Helpdesk.Web.Controllers
                 caseSearchService, 
                 userService, 
                 settingService, 
-                productAreaService);
+                productAreaService,
+                customerUserService);
         }
 
         [HttpPost]

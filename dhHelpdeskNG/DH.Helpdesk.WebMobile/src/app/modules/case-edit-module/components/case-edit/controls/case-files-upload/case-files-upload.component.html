@@ -2,9 +2,6 @@
   <mbsc-listview-item *ngFor="let item of fileUploader.queue"
         icon="fa-paperclip">
         <span class="filename" [ngStyle]="getStatusStyles(item)">{{ item?.file?.name }}</span>
-        <!--
-        <mbsc-progress [value]="item?.progress" max="100" color="primary"></mbsc-progress>
-        -->
   </mbsc-listview-item>
 </mbsc-listview>
 

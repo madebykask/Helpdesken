@@ -9,7 +9,6 @@ function LogInitForm() {
     var $finishTypeId = $("#CaseLog_FinishingType");
     var $finishTypeBreadcrubs = $("#divBreadcrumbs_FinishingType");
     var $finishDate = $('#CaseLog_FinishingDate');
-    var EDIT_LOG_URL = '/Cases/EditLog';
     
     $finishTypeContainer.find('ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
@@ -39,6 +38,7 @@ function LogInitForm() {
     });
 
     bindDeleteLogFileBehaviorToDeleteButtons();
+    bindDeleteLogFileBehaviorToDeleteButtons(true);
 
     $("#btnCaseCharge").on('click', function (ev) {
         window.caseChargeObj.show();

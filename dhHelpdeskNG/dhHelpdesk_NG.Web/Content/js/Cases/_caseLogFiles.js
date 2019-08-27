@@ -1,8 +1,7 @@
 ﻿'use strict';
 
-var params = dhHelpdesk.caseLog;
-
 $(function () {
+    var params = dhHelpdesk.caseLog;
     var confirmDialog = function (text, onOk, onCancel, yesNo) {
         var firstText = params.yesText;
         var secondText = params.noText;
@@ -63,7 +62,7 @@ $(function () {
 
         var buttonName = '';
         buttonName = '#' + that[0].id;
-        var fileName = $(buttonName).attr('data-fileName');
+        var fileName = $(buttonName).data('filename');
         if (fileName != undefined && fileName != null)
             fileName = fileName.toLowerCase();
         else

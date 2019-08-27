@@ -34,7 +34,15 @@ export class CommEvent {
 export enum Channels {
     Header,
     AuthenticationChange,
-    CaseFieldValueChanged
+    CaseFieldValueChanged,
+    CaseSearchFilterChanged,
+    UserLoggedIn
+}
+
+export class CaseSearchFilterChangedEvent {
+  constructor(public filterId: number,
+              public filterName: string) {
+  }
 }
 
 export class CaseFieldValueChangedEvent {

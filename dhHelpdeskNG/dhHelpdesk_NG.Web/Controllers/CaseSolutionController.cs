@@ -1194,16 +1194,10 @@ namespace DH.Helpdesk.Web.Controllers
                 return new HttpNotFoundResult("No case solution found...");
 
             // Positive: Send Mail to...
-            /// If you ever remove this - please remove it in GetTemplate() action also
-            if (caseSolution.NoMailToNotifier == 0)
-                caseSolution.NoMailToNotifier = 1;
-            else
-                caseSolution.NoMailToNotifier = 0;
+            // If you ever remove this - please remove it in GetTemplate() action also
+            caseSolution.NoMailToNotifier = caseSolution.NoMailToNotifier == 0 ? 1 : 0;
 
-            if (backToPageId == null)
-                ViewBag.PageId = 0;
-            else
-                ViewBag.PageId = backToPageId;
+            ViewBag.PageId = backToPageId ?? 0;
 
             //ViewBag.IdVal = caseSolution.Id;
             var model = this.CreateInputViewModel(caseSolution);
@@ -1220,7 +1214,7 @@ namespace DH.Helpdesk.Web.Controllers
                 return new HttpNotFoundResult("No case solution found...");
             }
 
-            /// This strange logic I took from Edit() action
+            // This strange logic I took from Edit() action
             caseSolution.NoMailToNotifier = caseSolution.NoMailToNotifier == 0 ? 1 : 0;
 
             // Check CaseType is Active

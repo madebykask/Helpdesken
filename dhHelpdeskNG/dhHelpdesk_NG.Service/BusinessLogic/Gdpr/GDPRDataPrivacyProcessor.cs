@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using DH.Helpdesk.BusinessData.Models.Gdpr;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Exceptions;
 using DH.Helpdesk.Common.Serializers;
 using DH.Helpdesk.Dal.Enums;
@@ -46,29 +49,31 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 
         private class CaseFileEntity
         {
-            #region ctor()
+			#region ctor()
 
-            public CaseFileEntity(int caseId, string caseNumber, string fileName)
-                : this(caseId, caseNumber, 0, fileName)
+			public CaseFileEntity(int caseId, string caseNumber, string fileName)
+                : this(caseId, caseNumber, 0, fileName, LogFileType.External)
             {
             }
 
-            public CaseFileEntity(int caseId, string caseNumber, int logId, string fileName)
-            {
-                CaseId = caseId;
-                CaseNumber = caseNumber;
-                LogId = logId;
-                FileName = fileName;
-            }
+			public CaseFileEntity(int caseId, string caseNumber, int logId, string fileName, LogFileType logType = LogFileType.External)
+			{
+				CaseId = caseId;
+				CaseNumber = caseNumber;
+				LogId = logId;
+				FileName = fileName;
+				LogType = logType;
+			}
 
-            #endregion
+			#endregion
 
-            public int CaseId { get; private set; }
+			public int CaseId { get; private set; }
             public string CaseNumber { get; private set; }
             public int LogId { get; private set; }
             public string FileName { get; private set; }
+			public LogFileType LogType { get; private set; }
 
-            public int GetCaseNumberOrId()
+			public int GetCaseNumberOrId()
             {
                 int res;
                 if (int.TryParse(CaseNumber, out res))
@@ -284,13 +289,31 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             foreach (var fileEntity in caseFiles)
             {
                 int caseId = fileEntity.GetCaseNumberOrId();
-                this._filesStorage.DeleteFile(ModuleName.Cases, caseId, baseDirPath, fileEntity.FileName);
+                try
+                {
+                    this._filesStorage.DeleteFile(ModuleName.Cases, caseId, baseDirPath, fileEntity.FileName);
+                }
+                catch (IOException e)
+                {
+                    _log.Error("Error deleting log file.", e);
+                }
+
             }
 
             //delete log files
             foreach (var fileEntity in logFiles)
             {
-                this._filesStorage.DeleteFile(ModuleName.Log, fileEntity.LogId, baseDirPath, fileEntity.FileName);
+                _log.Debug($"Deleting fileEntity { fileEntity.FileName }: {fileEntity.LogType}.");
+                try
+                {
+                    this._filesStorage.DeleteFile(
+                        fileEntity.LogType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal,
+                        fileEntity.LogId, baseDirPath, fileEntity.FileName);
+                }
+                catch (IOException e)
+                {
+                    _log.Error("Error deleting log file.", e);
+                }
             }
         }
 
@@ -549,7 +572,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                 if (logFilesEnitites.Any())
                 {
                     //store to delete from disk
-                    var items = logFilesEnitites.Select(l => new CaseFileEntity(c.Id, c.CaseNumber.ToString(), l.Log_Id, l.FileName)).ToList();
+                    var items = logFilesEnitites.Select(l => new CaseFileEntity(c.Id, c.CaseNumber.ToString(), l.Log_Id, l.FileName, l.LogType)).ToList();
                     caseFilesToDelete.AddRange(items);
 
                     //delete from db

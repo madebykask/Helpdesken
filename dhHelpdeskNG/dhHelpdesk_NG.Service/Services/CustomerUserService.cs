@@ -17,6 +17,7 @@ namespace DH.Helpdesk.Services.Services
         IList<CustomerUser> GetCustomerUsersForCustomer(int customerId);
 
         IList<CustomerUser> GetCustomerUsersForUser(int userId);
+        IList<CustomerUser> GetCustomerUsersForUserToCopy(int userId);
 
         CustomerUser GetCustomerUserSettings(int customer, int user);
         Task<CustomerUser> GetCustomerUserSettingsAsync(int customer, int user);
@@ -25,7 +26,7 @@ namespace DH.Helpdesk.Services.Services
 
         void UpdateUserCaseSetting(UserCaseSetting newSetting);
 
-        void SaveCustomerUser(CustomerUser customerUser, out IDictionary<string, string> errors);
+        void SaveCustomerUser(CustomerUser customerUser);
 
         void SaveCustomerUserForCopy(CustomerUser customerUser, out IDictionary<string, string> errors);
 
@@ -66,6 +67,11 @@ namespace DH.Helpdesk.Services.Services
         public IList<CustomerUser> GetCustomerUsersForUser(int userId)
         {
             return _customerUserRepository.GetCustomerUsersForUser(userId);
+        }
+
+        public IList<CustomerUser> GetCustomerUsersForUserToCopy(int userId)
+        {
+            return _customerUserRepository.GetCustomerUsersForToCopy(userId);
         }
 
         public IList<CustomerUserList> GetFinalListForCustomerUsersHomeIndexPage(int userId)
@@ -121,12 +127,9 @@ namespace DH.Helpdesk.Services.Services
             _customerUserRepository.Commit();
         }
 
-        public void SaveCustomerUser(CustomerUser customerUser, out IDictionary<string, string> errors)
+        public void SaveCustomerUser(CustomerUser customerUser)
         {
-            errors = new Dictionary<string, string>();
-
             _customerUserRepository.Update(customerUser);
-            //this.customerUserRepository.Add(customerUser);
             _customerUserRepository.Commit();
         }
 

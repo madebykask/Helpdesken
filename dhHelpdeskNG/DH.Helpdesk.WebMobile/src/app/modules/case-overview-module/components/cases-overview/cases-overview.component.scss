@@ -17,3 +17,70 @@ mbsc-listview {
         }
     }
 }
+ 
+:host  {
+  mbsc-card {
+    border-radius: 0px; 
+
+      &.owner { 
+         border-left: solid 3px #438eb9;
+      }
+
+      .mbsc-card-subtitle {
+        color:#333;
+      }
+
+     .time, .hours {
+        text-align: right;
+        font-weight: normal;
+      }
+
+      .case-number {
+        color: #333;
+        font-size: 13px;
+        font-weight: normal;
+        i {
+          font-size: 11px;
+        }
+      }
+
+      &.unread {
+        .time {
+          color: blue
+        }
+      }
+
+      .mbsc-ic {
+        margin-right: 6px;
+      }
+
+      .mbsc-grid {
+        .mbsc-row {
+          margin-bottom: 0.5em;
+          &:nth-of-type(n+2) {
+            .mbsc-col-sm-auto {
+              display: flex;
+              align-items: flex-end;
+              margin: 0;
+              width: auto;
+            }
+            .mbsc-col {
+              font-size: 12px;
+              display: flex;
+              width: auto;
+              div {
+                padding: 0.5em;
+                margin-right: 10px;
+                box-shadow: 3px 3px 5px 0px #cccccc;
+                display: inline;
+              }
+            }
+          }
+        }
+      }
+
+      .mbsc-card-content {
+        padding: 0;
+      }
+    }
+}

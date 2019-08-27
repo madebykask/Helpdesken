@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthenticationStateService, AuthenticationService } from '../../services/authentication';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -15,6 +15,7 @@ export class AuthGuard implements CanActivate {
     if (this.authStateService.hasToken()) {
       if (this.authStateService.isTokenExpired()) {
         return this.authService.refreshToken().pipe(
+          take(1),
           switchMap((r: boolean) => {
             if (!r) {
               this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });

@@ -15,11 +15,12 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
     version = config.version;
     isFooterVisible = true;
     pageSettings = {};
-    
-    constructor(private _commService: CommunicationService) { }
+
+    constructor(private commService: CommunicationService) {
+    }
 
     ngOnInit() {
-        this._commService.listen<HeaderEventData>(Channels.Header)
+        this.commService.listen<HeaderEventData>(Channels.Header)
         .pipe(
           delay(0),
           takeUntil(this.destroy$)

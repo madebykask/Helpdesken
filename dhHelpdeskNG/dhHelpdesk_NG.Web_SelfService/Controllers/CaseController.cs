@@ -1,17 +1,15 @@
-﻿using System.Diagnostics;
-using System.Threading;
-using System.Web.SessionState;
+﻿using System.Threading;
+using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.BusinessData.Models.Email;
-using DH.Helpdesk.BusinessData.Models.WorktimeCalculator;
+using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.SelfService.Controllers.Behaviors;
 using DH.Helpdesk.SelfService.Entites;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using log4net;
-using log4net.Core;
 using WebGrease.Css.Extensions;
-using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.Lists;
 using DH.Helpdesk.Common.Types;
+using DH.Helpdesk.SelfService.Infrastructure.Attributes;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Services.Utils;
 
@@ -19,7 +17,6 @@ namespace DH.Helpdesk.SelfService.Controllers
 {
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Linq;
     using System.Net;
     using System.Web;
@@ -39,7 +36,6 @@ namespace DH.Helpdesk.SelfService.Controllers
     using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
     using DH.Helpdesk.SelfService.Infrastructure.Extensions;
     using DH.Helpdesk.SelfService.Infrastructure.Tools;
-    using DH.Helpdesk.SelfService.Models;
     using DH.Helpdesk.SelfService.Models.Case;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
@@ -47,10 +43,6 @@ namespace DH.Helpdesk.SelfService.Controllers
     using BusinessData.Models.ExtendedCase;
     using Services.Services.UniversalCase;
     using Common.Extensions.Integer;
-    using Common.Extensions.String;
-    using Common.Extensions.DateTime;
-    using Infrastructure.Helpers;
-    using BusinessData.Models.Shared;
     using Models.Message;
     using Services.Infrastructure;
 
@@ -275,22 +267,26 @@ namespace DH.Helpdesk.SelfService.Controllers
                     return RedirectToAction("Index", "Error");
                 }
             }
-
+            
             if (currentCase.CaseExtendedCaseDatas.Any())
                 return RedirectToAction("ExtendedCase", new { caseId = currentCase.Id });
            
-            Customer currentCustomer;
-            if (SessionFacade.CurrentCustomer != null)
+            var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
+            var isMultiCustomerMode = globalSettings.MultiCustomersSearch.ToBool();
+            // check only if multi customer is not enabled. Allow user to see own cases for different customers.
+            if (!isMultiCustomerMode && currentCase.Customer_Id != SessionFacade.CurrentCustomerID)
             {
-                currentCustomer = SessionFacade.CurrentCustomer;
-            }
-            else
-            {
-                ErrorGenerator.MakeError("Customer is not valid!");
-                return RedirectToAction("Index", "Error");                
+                ErrorGenerator.MakeError("Selected Case doesn't belong to current customer!");
+                return null;
             }
 
-            currentCase.Customer = currentCustomer;
+            var currentCustomer = SessionFacade.CurrentCustomer;
+            if (isMultiCustomerMode)
+            {
+                //override current customer when openning case from another customer in multicustomer search mode
+                currentCustomer = currentCase.Customer;
+                //SessionFacade.CurrentCustomer = currentCustomer;
+            }
 
             var languageId = SessionFacade.CurrentLanguageId;
             var caseReceipt = GetCaseReceiptModel(currentCase, languageId);
@@ -320,13 +316,12 @@ namespace DH.Helpdesk.SelfService.Controllers
                 caseReceipt.CanAddExternalNote = false;
             }
 
-            var cs = _settingService.GetCustomerSetting(currentCase.Customer.Id);
+            var cs = _settingService.GetCustomerSetting(currentCustomer.Id);
             ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
 
             var appSettings = ConfigurationService.AppSettings;
             ViewBag.ShowCommunicationForSelfService = appSettings.ShowCommunicationForSelfService;
             ViewBag.caseEmailGuid = id.Is<Guid>() ? Guid.Parse(id).ToString() : "";
-            ViewBag.IsAttachementsAllowed = CheckField(caseReceipt.FieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString());
 
             return View(caseReceipt);
         }
@@ -545,6 +540,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
+        [NoCache] // prevent caching when go back after post
         public ActionResult ExtendedCase(int? caseTemplateId = null, int? caseId = null)
         {
             var model = GetExtendedCaseViewModel(caseTemplateId, caseId);
@@ -561,6 +557,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
             }
 
+            RouteData.Values.Remove("caseId"); //hack to prevent ambient params in Url.Action in view
             return View("ExtendedCase", model);
         }
 
@@ -603,31 +600,32 @@ namespace DH.Helpdesk.SelfService.Controllers
                 return null;
             }
 
-            if (SessionFacade.CurrentCustomer == null)
-            {
-                var cusId = caseModel != null && caseModel.Customer_Id > 0
-                    ? caseModel.Customer_Id
-                    : (caseTemplate?.Customer_Id ?? 0);
+            var cusId = caseModel != null && caseModel.Customer_Id > 0 ? caseModel.Customer_Id : (caseTemplate?.Customer_Id ?? 0);
+            var globalSettings = _globalSettingService.GetGlobalSettings().First();
 
-                SessionFacade.CurrentCustomer = _customerService.GetCustomer(cusId);
-            }
-
-            if (SessionFacade.CurrentCustomer == null)
+            // check only if multi customer is not enabled. Allow user to see own cases for different customers.
+            if (!globalSettings.MultiCustomersSearch.ToBool() && !caseId.IsNew() && cusId != SessionFacade.CurrentCustomerID)
             {
-                ErrorGenerator.MakeError("Customer is not valid!");
+                ErrorGenerator.MakeError("Selected Case doesn't belong to current customer!");
                 return null;
             }
-        
+
+            var customer = SessionFacade.CurrentCustomer;
+
+            if (globalSettings.MultiCustomersSearch.ToBool() && !caseId.IsNew())
+            {
+                //override current customer when openning a case from another customer in multicustomer search mode
+                customer = _customerService.GetCustomer(cusId);
+                //SessionFacade.CurrentCustomer = customer;
+            }
+            
+            var customerId = customer.Id;
             var languageId = SessionFacade.CurrentLanguageId;
-            var customerId = SessionFacade.CurrentCustomer.Id;
-            var currentCustomer = SessionFacade.CurrentCustomer;
             var appSettings = ConfigurationService.AppSettings;
-            var globalSettings = _globalSettingService.GetGlobalSettings().First();
             var cs = _settingService.GetCustomerSetting(customerId);
             
             caseModel.FieldSettings = 
-                _caseFieldSettingService.ListToShowOnCasePage(customerId, languageId)
-                    .Where(c => c.ShowExternal == 1).ToList();
+                _caseFieldSettingService.ListToShowOnCasePage(customerId, languageId).Where(c => c.ShowExternal == 1).ToList();
 
             if (caseId.IsNew())
             {
@@ -638,21 +636,12 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
             }
 
-            // check only if multi customer is not enabled. Allow user to see own cases for different customers.
-            if (globalSettings.MultiCustomersSearch == 0 &&
-                caseId.IsNew() == false && caseModel.Customer_Id != customerId)
-            {
-                ErrorGenerator.MakeError("Selected Case doesn't belong to current customer!");
-                return null;
-            }
-
             if (caseId == null || caseId == 0)
             {
                 caseModel.Customer_Id = customerId;
 
                 var registrationSource =
-                    _registrationSourceCustomerService.GetCustomersActiveRegistrationSources(customerId)
-                        .FirstOrDefault(x => x.SystemCode == (int)CaseRegistrationSource.SelfService);
+                    _registrationSourceCustomerService.GetCustomersActiveRegistrationSources(customerId).FirstOrDefault(x => x.SystemCode == (int)CaseRegistrationSource.SelfService);
 
                 if (registrationSource != null)
                     caseModel.RegistrationSourceCustomer_Id = registrationSource.Id;
@@ -691,12 +680,6 @@ namespace DH.Helpdesk.SelfService.Controllers
                 ErrorGenerator.MakeError(lastError);
                 return null;
             }
-            
-            //todo: should be refactored to use CaseLogData dto instead of Log ef entity.
-            var caseLogs = caseId.HasValue
-                ? _logService.GetLogsByCaseId(caseId.Value).OrderByDescending(l => l.LogDate).ToList()
-                : new List<Log>();
-            ViewBag.IsAttachementsAllowed = CheckField(caseModel.FieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString());
 
             var model = new ExtendedCaseViewModel
             {
@@ -706,7 +689,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 LanguageId = initData.LanguageId,
                 ExtendedCaseDataModel = extendedCaseDataModel,
                 CurrentUser = SessionFacade.CurrentUserIdentity.EmployeeNumber,
-                CurrentCustomer = SessionFacade.CurrentCustomer,
+                CurrentCustomer = customer,
                 UserRole = initData.UserRole,
                 StateSecondaryId = caseStateSecondaryId,
                 CaseOU = caseModel.OU_Id.HasValue ? _ouService.GetOU(caseModel.OU_Id.Value) : null,
@@ -715,15 +698,14 @@ namespace DH.Helpdesk.SelfService.Controllers
                 ApplicationType = CurrentApplicationType,
                 AttachmentPlacement = cs.AttachmentPlacement,
                 ShowCommunicationForSelfservice = appSettings.ShowCommunicationForSelfService,
-                ShowCaseActionsPanelOnTop = currentCustomer.ShowCaseActionsPanelOnTop,
-                ShowCaseActionsPanelAtBottom = currentCustomer.ShowCaseActionsPanelAtBottom,
+                ShowCaseActionsPanelOnTop = customer.ShowCaseActionsPanelOnTop,
+                ShowCaseActionsPanelAtBottom = customer.ShowCaseActionsPanelAtBottom,
                 ClosedCaseAlertModel = new ClosedCaseAlertModel()
                 {
                     FinishingDate = caseModel.FinishingDate,
                     CaseComplaintDays = cs.CaseComplaintDays
                 },
-                CaseLogModel = new CaseLogModel(initData.CaseId, caseLogs, SessionFacade.CurrentSystemUser,
-                     currentCustomer.UseInternalLogNoteOnExternalPage == 1)
+                CaseLogsModel = GetCaseLogsModel(initData.CaseId)
             };
 
             if (string.IsNullOrEmpty(model.ExtendedCaseDataModel.FormModel.Name))
@@ -754,7 +736,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             
             // Apply template values to case:
             ApplyTemplate(caseTemplate, caseModel, true);
-
+            
             var localUserId = SessionFacade.CurrentLocalUser?.Id ?? 0;
             var auxModel = new AuxCaseModel(SessionFacade.CurrentLanguageId,
                 localUserId,
@@ -772,7 +754,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpGet]
         public ActionResult GetWorkflowSteps(int caseId, int templateId)
         {
-            var customerId = SessionFacade.CurrentCustomer.Id;
+            var customerId = caseId > 0 ? _caseService.GetCaseCustomerId(caseId) : SessionFacade.CurrentCustomerID;
             var steps = GetWorkflowStepModel(customerId, caseId, templateId);
             return Json(new { sucess = true, items = steps }, JsonRequestBehavior.AllowGet);
         }
@@ -841,7 +823,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
                 else if (caseId > 0)
                 {
-                    customerId = _caseService.GetCaseCustomerId(model.CustomerId);
+                    customerId = _caseService.GetCaseCustomerId(caseId);
                 }
 
                 if (caseId > 0)
@@ -856,11 +838,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                     {
                         TempData[ShowRegistrationMessageKey] = isNewCase;
 
-                        //return RedirectToAction("UserCases", new { customerId = model.CustomerId });
                         if (string.IsNullOrEmpty(returnUrl))
-                            return RedirectToAction("ExtendedCase", new { caseId = caseId });
+                            return new RedirectResult(Url.Action("ExtendedCase", "Case", new { caseId = caseId }) + "#no-back");
                         else
-                            return Redirect(returnUrl);
+                            return Redirect(returnUrl + "#no-back");
                     }
                 }
             }
@@ -878,10 +859,10 @@ namespace DH.Helpdesk.SelfService.Controllers
             ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
             ViewBag.ShowCommunicationForSelfservice = ConfigurationService.AppSettings.ShowCommunicationForSelfService;
 
-            model.CaseDataModel.FieldSettings = _caseFieldSettingService.ListToShowOnCasePage(model.CustomerId, model.LanguageId)
-                .Where(c => c.ShowExternal == 1)
-                .ToList();
-            ViewBag.IsAttachementsAllowed = CheckField(model.CaseDataModel.FieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString());
+            model.CaseDataModel.FieldSettings = 
+                _caseFieldSettingService.ListToShowOnCasePage(model.CustomerId, model.LanguageId).Where(c => c.ShowExternal == 1).ToList();
+
+            model.CaseLogsModel = GetCaseLogsModel(caseId);
 
             return View("ExtendedCase", model);
         }
@@ -985,10 +966,10 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
             else
             {
-                var c = _caseService.GetCaseById(int.Parse(id));
+                var c = _caseService.GetCaseBasic(int.Parse(id));
                 var basePath = string.Empty;
                 if (c != null)
-                    basePath = _masterDataService.GetFilePath(c.Customer_Id);
+                    basePath = _masterDataService.GetFilePath(c.CustomerId);
 
                 fileContent = _caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
             }
@@ -1004,10 +985,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                 fileContent =  _userTemporaryFilesStorage.GetFileContent(fileName, id, "");
             else
             {
-                var c = _caseService.GetCaseById(int.Parse(id));
+                var c = _caseService.GetCaseBasic(int.Parse(id));
                 var basePath = string.Empty;
                 if (c != null)
-                    basePath = _masterDataService.GetFilePath(c.Customer_Id);
+                    basePath = _masterDataService.GetFilePath(c.CustomerId);
 
                 fileContent = _caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
             }
@@ -1017,22 +998,15 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpPost]
         public void UploadFile(string id, string name)
         {
-            var uploadedFile = Request.Files[0];
-            if(uploadedFile != null)
+            var uploadedData = Request.GetFileContent();
+            if (uploadedData != null)
             {
-                var uploadedData = new byte[uploadedFile.InputStream.Length];
-                uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
-
-                if(GuidHelper.IsGuid(id))
+                if (GuidHelper.IsGuid(id))
                 {
                     if(_userTemporaryFilesStorage.FileExists(name, id))
-                    {
                         throw new HttpException((int)HttpStatusCode.Conflict, null);
-                    }
-                    else
-                    {
-                        _userTemporaryFilesStorage.AddFile(uploadedData, name, id);
-                    }
+                    
+                    _userTemporaryFilesStorage.AddFile(uploadedData, name, id);
                 }
             }
         }
@@ -1040,46 +1014,16 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpPost]
         public void NewCaseUploadFile(string id, string name)
         {
-            var uploadedFile = Request.Files[0];
-            if(uploadedFile != null)
+            var uploadedData = Request.GetFileContent();
+            if (uploadedData != null)
             {
-                var uploadedData = new byte[uploadedFile.InputStream.Length];
-                uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
-
-                if(GuidHelper.IsGuid(id))
+                if (GuidHelper.IsGuid(id))
                 {
                     if(_userTemporaryFilesStorage.FileExists(name, id))
-                    {
                         throw new HttpException((int)HttpStatusCode.Conflict, null);
-                    }
-                    else
-                    {
-                        _userTemporaryFilesStorage.AddFile(uploadedData, name, id);
-                    }
+                    
+                    _userTemporaryFilesStorage.AddFile(uploadedData, name, id);
                 }
-            }
-        }
-
-        [HttpPost]
-        public void DeleteFile(string id, string fileName)
-        {
-            if(GuidHelper.IsGuid(id))
-            {
-                _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id);
-            }
-            else
-            {
-                var log = _logService.GetLogById(int.Parse(id));
-                Case c = null;
-                var basePath = string.Empty;
-                if (log != null)
-                {
-                    c = _caseService.GetCaseById(log.CaseId);
-                    if (c != null)
-                        basePath = _masterDataService.GetFilePath(c.Customer_Id);
-                }
-
-                _logFileService.DeleteByLogIdAndFileName(int.Parse(id), basePath, fileName.Trim());
             }
         }
 
@@ -1102,16 +1046,6 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
-        public JsonResult Files(string id)
-        {
-            var fileNames = GuidHelper.IsGuid(id)
-                                ? _userTemporaryFilesStorage.GetFileNames(id)
-                                : _logFileService.FindFileNamesByLogId(int.Parse(id));
-
-            return Json(fileNames, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
         public JsonResult NewCaseFiles(string id)
         {
             var fileNames = GuidHelper.IsGuid(id)
@@ -1122,65 +1056,66 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
-        public FileContentResult DownloadLogFile(string id, string fileName)
+        public FileContentResult DownloadLogFile(string id, string fileName, int? caseId)
         {
+            var customer = caseId.HasValue && caseId > 0 ? _caseService.GetCaseCustomer(caseId.Value) : SessionFacade.CurrentCustomer; 
+            var isTwoAttachmentsMode = IsTwoAttachmentsModeEnabled(customer.Id);
+            var useInternalLogs = customer.UseInternalLogNoteOnExternalPage.ToBool();
+
+            var logFileType = LogFileType.External;
+            var logSubFolder = ModuleName.Log;
+
+            if (isTwoAttachmentsMode && useInternalLogs)
+            {
+                logFileType = LogFileType.Internal;
+                logSubFolder = ModuleName.LogInternal;
+            }
+            
             byte[] fileContent;
             if (GuidHelper.IsGuid(id))
-                fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Log);
+            {
+                fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, logSubFolder);
+            }
             else
             {
-                var log = _logService.GetLogById(int.Parse(id));
-                Case c = null;
-                var basePath = string.Empty;
-                if (log != null)
-                {
-                    c = _caseService.GetCaseById(log.CaseId);
-                    if (c != null)
-                        basePath = _masterDataService.GetFilePath(c.Customer_Id);
-                } 
-
-                fileContent = _logFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+                //existing file
+                var basePath = _masterDataService.GetFilePath(customer.Id);
+                fileContent = _logFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName, logFileType);
             }
 
             return File(fileContent, "application/octet-stream", fileName);
         }
 
+        //TODO: should be refactored to methods with single responsibility!
         [HttpGet]
         [ValidateInput(false)]
         public ActionResult _CaseLogNote(int caseId, string note, string logFileGuid)
         {
-            SaveExternalMessage(caseId, note, logFileGuid);
-
-            var caseLogs = 
-                _logService.GetLogsByCaseId(caseId).OrderByDescending(l => l.RegTime).ToList();
-
-            var model = new CaseLogModel(caseId, 
-                            caseLogs, 
-                            SessionFacade.CurrentSystemUser,
-                            SessionFacade.CurrentCustomer.UseInternalLogNoteOnExternalPage == 1);
+            SaveLogMessage(caseId, note, logFileGuid);
+            
+            var model = GetCaseLogsModel(caseId);
             return PartialView(model);
         }
 
-        private void SaveExternalMessage(int caseId, string extraNote, string logFileGuid) 
+        //TODO: should be moved to CaseService!
+        private void SaveLogMessage(int caseId, string extraNote, string logFileGuid) 
         { 
             IDictionary<string, string> errors;            
             var currentCase = _caseService.GetCaseById(caseId);
-            var currentCustomer = _customerService.GetCustomer(currentCase.Customer_Id);
-            var cs = _settingService.GetCustomerSetting(currentCustomer.Id);
+            var customer = _customerService.GetCustomer(currentCase.Customer_Id);
+            var cs = _settingService.GetCustomerSetting(customer.Id);
             var caseIsActivated = false;
-
+            var useInternalLog = customer.UseInternalLogNoteOnExternalPage.ToBool();
             var appSettings = ConfigurationService.AppSettings;
 
             // save case history
 
             // unread/status flag update if not case is closed
 
-            
-
             if (currentCase.FinishingDate.HasValue)
             {
-                string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                this._caseService.Activate(currentCase.Id, 0, adUser, CreatedByApplications.SelfService5, out errors);
+                var adUser = SessionFacade.CurrentSystemUser; // global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                _caseService.Activate(currentCase.Id, 0, adUser, CreatedByApplications.SelfService5, out errors);
                 caseIsActivated = true;
                 currentCase = _caseService.GetCaseById(caseId);
             }
@@ -1192,26 +1127,23 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (currentCase.Department_Id.HasValue)
                 departmentIds = new int[] { currentCase.Department_Id.Value };
 
-
-			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(currentCustomer.TimeZoneId);
-
-
-			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
-                ManualDependencyResolver.Get<IHolidayService>(),
-                currentCustomer.WorkingDayStart,
-                currentCustomer.WorkingDayEnd,
+            var timeZone = TimeZoneInfo.FindSystemTimeZoneById(customer.TimeZoneId);
+            
+            //todo: should be injected via DI
+            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                ManualDependencyResolver.Get<IHolidayService>(), 
+                customer.WorkingDayStart,
+                customer.WorkingDayEnd,
                 timeZone);
 
             var utcNow = DateTime.UtcNow;
             var workTimeCalc = workTimeCalcFactory.Build(currentCase.RegTime, utcNow, departmentIds);
 
-            var possibleWorktime = workTimeCalc.CalculateWorkTime(
-                currentCase.RegTime,
-                utcNow,
-                currentCase.Department_Id);
+            var possibleWorktime = 
+                workTimeCalc.CalculateWorkTime(currentCase.RegTime, utcNow, currentCase.Department_Id);
 
+            int externalTimeToAdd = 0;
 
-			int externalTimeToAdd = 0;
             // if statesecondary has ResetOnExternalUpdate
             if (currentCase.StateSecondary_Id.HasValue)
             {
@@ -1223,45 +1155,45 @@ namespace DH.Helpdesk.SelfService.Controllers
 
                 if (casestatesecundary.IncludeInCaseStatistics == 0)
                 {
-                    externalTimeToAdd = workTimeCalc.CalculateWorkTime(
-                        currentCase.ChangeTime,
-                        utcNow,
-                        currentCase.Department_Id);
+                    externalTimeToAdd = 
+                        workTimeCalc.CalculateWorkTime(currentCase.ChangeTime, utcNow, currentCase.Department_Id);
+
                     currentCase.ExternalTime += externalTimeToAdd;
                 }
             }
 
-			var oldLeadTime = currentCase.LeadTime;
+            var oldLeadTime = currentCase.LeadTime;
             currentCase.LeadTime = possibleWorktime - currentCase.ExternalTime;
 
             currentCase.ChangeTime = DateTime.UtcNow;
 
-			var extraFields = new ExtraFieldCaseHistory()
-			{
-				ActionExternalTime = externalTimeToAdd,
-				ActionLeadTime = currentCase.LeadTime - oldLeadTime,
-				LeadTime = currentCase.LeadTime
-			};
+            var extraFields = new ExtraFieldCaseHistory()
+            {
+                ActionExternalTime = externalTimeToAdd,
+                ActionLeadTime = currentCase.LeadTime - oldLeadTime,
+                LeadTime = currentCase.LeadTime
+            };
 
-			var caseHistoryId = _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5, out errors, SessionFacade.CurrentUserIdentity.UserId, extraFields);            
-            
+            var caseHistoryId = 
+                _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5, out errors, SessionFacade.CurrentUserIdentity.UserId, extraFields);
+
             // save log
             var caseLog = new CaseLog
-                              {
-                                  CaseHistoryId = caseHistoryId,
-                                  CaseId = caseId,
-                                  LogGuid = Guid.NewGuid(),
-                                  TextExternal = (currentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseExternalLogNote? extraNote.Replace("\n","\r\n") : string.Empty),
-                                  UserId = null,
-                                  TextInternal = (currentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseInternalLogNote? extraNote.Replace("\n", "\r\n") : string.Empty),
-                                  WorkingTime = 0,
-                                  EquipmentPrice = 0,
-                                  Price = 0,
-                                  Charge = false,
-                                  RegUser = SessionFacade.CurrentSystemUser,
-                                  SendMailAboutCaseToNotifier = true,
-                                  SendMailAboutLog = true                                 
-                              };
+            {
+                CaseHistoryId = caseHistoryId,
+                CaseId = caseId,
+                LogGuid = Guid.NewGuid(),
+                TextExternal = !useInternalLog ? extraNote.Replace("\n","\r\n") : string.Empty,
+                UserId = null,
+                TextInternal = useInternalLog ? extraNote.Replace("\n", "\r\n") : string.Empty,
+                WorkingTime = 0,
+                EquipmentPrice = 0,
+                Price = 0,
+                Charge = false,
+                RegUser = SessionFacade.CurrentSystemUser,
+                SendMailAboutCaseToNotifier = false,
+                SendMailAboutLog = true                                 
+            };
             
             if(currentCase.WorkingGroup_Id != null)
             {
@@ -1298,22 +1230,34 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
             }
 
-            var caseMailSetting = new CaseMailSetting(currentCustomer.NewCaseEmailList,
-                currentCustomer.HelpdeskEmail,
+            var caseMailSetting = new CaseMailSetting(customer.NewCaseEmailList,
+                customer.HelpdeskEmail,
                 appSettings.HelpdeskPath,
                 cs.DontConnectUserToWorkingGroup
             );
 
             var temporaryLogFiles = new List<WebTemporaryFile>();
             var userTimeZone = TimeZoneInfo.Local;
+
             if (!string.IsNullOrEmpty(logFileGuid))
             {
-                temporaryLogFiles = _userTemporaryFilesStorage.GetFiles(logFileGuid, ModuleName.Log);
+                var logSubFolder = ModuleName.Log;
+                var logFileType = LogFileType.External;
+
+                if (IsTwoAttachmentsModeEnabled(customer.Id) && useInternalLog)
+                {
+                    logSubFolder = ModuleName.LogInternal;
+                    logFileType = LogFileType.Internal;
+                }
+
+                temporaryLogFiles = _userTemporaryFilesStorage.GetFiles(logFileGuid, logSubFolder);
                 caseLog.Id = _logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
-                var basePath = _masterDataService.GetFilePath(currentCase.Customer_Id);
+
                 // save log files
-                var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
+                var basePath = _masterDataService.GetFilePath(currentCase.Customer_Id);
+                var newLogFiles = temporaryLogFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, null, logFileType)).ToList();
                 _logFileService.AddFiles(newLogFiles);
+
                 // send emails                
                 _caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, userTimeZone, newLogFiles, caseIsActivated);
                 _userTemporaryFilesStorage.DeleteFiles(logFileGuid);
@@ -1405,51 +1349,73 @@ namespace DH.Helpdesk.SelfService.Controllers
             var models = _userEmailsSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, searchScope);
             return Json(new { searchKey = searchKey, result = models });
         }
-        
-        [HttpPost]
-        public void UploadLogFile(string id, string name)
-        {
-            var uploadedFile = Request.Files[0];
-            var uploadedData = new byte[uploadedFile.InputStream.Length];
-            uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
 
+        [HttpPost]
+        public void UploadLogFile(string id, string name, int? caseId)
+        {
+            var customer = caseId.HasValue && caseId > 0 ? _caseService.GetCaseCustomer(caseId.Value) : SessionFacade.CurrentCustomer;
+            var isTwoAttachmentsMode = IsTwoAttachmentsModeEnabled(customer.Id);
+            var isInternalLogUsed =  customer.UseInternalLogNoteOnExternalPage.ToBool();
+            var logSubFolder = isTwoAttachmentsMode && isInternalLogUsed ? ModuleName.LogInternal : ModuleName.Log;
+            
             if (GuidHelper.IsGuid(id))
             {
-                if (_userTemporaryFilesStorage.FileExists(name, id, ModuleName.Log))
+                var fileContent = Request.GetFileContent();
+                
+                if (_userTemporaryFilesStorage.FileExists(name, id, logSubFolder))
                 {
                     //return;
                     //this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Log); 
                     //throw new HttpException((int)HttpStatusCode.Conflict, null); because it take a long time.
                 }
-                _userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Log);
+                _userTemporaryFilesStorage.AddFile(fileContent, name, id, logSubFolder);
             }
         }
 
         [HttpGet]
-        public JsonResult GetLogFiles(string id)
+        public JsonResult GetLogFiles(string id, int? caseId)
         {
-            var fileNames = GuidHelper.IsGuid(id)
-                                ? _userTemporaryFilesStorage.GetFileNames(id, ModuleName.Log)
-                                : _logFileService.FindFileNamesByLogId(int.Parse(id));
+            var customer = caseId.HasValue && caseId > 0 ? _caseService.GetCaseCustomer(caseId.Value) : SessionFacade.CurrentCustomer;
+            var isTwoAttachmentsMode = IsTwoAttachmentsModeEnabled(customer.Id);
+            var isInternalLogUsed = customer.UseInternalLogNoteOnExternalPage.ToBool();
 
+            //default log files values
+            var logType = LogFileType.External;
+            var logSubFolder = ModuleName.Log;
+            
+            //load only internal log files if 2attachments and internalLog is used 
+            if (isTwoAttachmentsMode && isInternalLogUsed)
+            {
+                logType = LogFileType.Internal;
+                logSubFolder = ModuleName.LogInternal;
+            }
+
+            var fileNames = GuidHelper.IsGuid(id)
+                ? _userTemporaryFilesStorage.GetFileNames(id, logSubFolder)
+                : _logFileService.FindFileNamesByLogId(int.Parse(id), logType);
+            
             return Json(fileNames, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public void DeleteLogFile(string id, string fileName)
+        public void DeleteLogFile(string id, string fileName, int? caseId)
         {
             if (GuidHelper.IsGuid(id))
-                _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Log);            
+            {
+                var customer = caseId.HasValue && caseId > 0 ? _caseService.GetCaseCustomer(caseId.Value) : SessionFacade.CurrentCustomer;
+                var isTwoAttachmentsMode = IsTwoAttachmentsModeEnabled(customer.Id);
+                var logSubFolder = isTwoAttachmentsMode && customer.UseInternalLogNoteOnExternalPage.ToBool() ? ModuleName.LogInternal : ModuleName.Log;
+
+                // delete log file - check internal or external
+                _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, logSubFolder);
+            }
         }
 
         [HttpGet]
         [ChildActionOnly]
         public PartialViewResult Communication(int caseId)
         {
-            var model = GetCaseLogModel(caseId);
-            var fieldSettings = _caseFieldSettingService.ListToShowOnCasePage(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId)
-                .Where(c => c.ShowExternal == 1).ToList();
-            ViewBag.IsAttachementsAllowed = CheckField(fieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString());
+            var model = GetCaseLogsModel(caseId);
             return PartialView("_Communication", model);
         }
 
@@ -1457,23 +1423,71 @@ namespace DH.Helpdesk.SelfService.Controllers
         [ChildActionOnly]
         public PartialViewResult CaseLogNote(int caseId)
         {
-            var model = GetCaseLogModel(caseId);
+            var model = GetCaseLogsModel(caseId);
             return PartialView("_CaseLogNote", model);
         }
 
-        private CaseLogModel GetCaseLogModel(int? caseId)
+        private CaseLogsModel GetCaseLogsModel(int? caseId)
         {
-            var caseLogs = new List<Log>();
+            var customer = caseId.HasValue && caseId > 0 ? _caseService.GetCaseCustomer(caseId.Value) : SessionFacade.CurrentCustomer;
+            var isTwoAttachmentsMode = IsTwoAttachmentsModeEnabled(customer.Id);
+            var useInternalLogs = customer.UseInternalLogNoteOnExternalPage.ToBool();
+            
+            var caseLogModels = new List<CaseLogModel>();
             if (caseId > 0)
             {
-                caseLogs = _logService.GetLogsByCaseId(caseId.Value).OrderByDescending(l => l.RegTime).ToList();
-            }
+                var caseLogs = 
+                    _logService.GetLogsByCaseId(caseId.Value, useInternalLogs, isTwoAttachmentsMode && useInternalLogs).OrderByDescending(l => l.RegTime).ToList();
 
-            var model = new CaseLogModel(
-                            caseId ?? 0, 
-                            caseLogs, 
+                var logsFilter =
+                    useInternalLogs
+                        ? (Func<CaseLogData, bool>)(l => !string.IsNullOrEmpty(l.InternalText.Trim()))
+                        : (Func<CaseLogData, bool>)(l => !string.IsNullOrEmpty(l.ExternalText.Trim()));
+
+                var logType = useInternalLogs ? LogFileType.Internal : LogFileType.External;
+
+                // filter case logs
+                caseLogModels = caseLogs.Where(logsFilter).Select(data => new CaseLogModel
+                {
+                    Id = data.Id,
+                    CaseId = data.CaseId,
+                    UserId = data.UserId,
+                    UserFirstName = data.UserFirstName,
+                    UserSurName = data.UserSurName,
+                    RegUserName = data.RegUserName,
+                    InternalText = data.InternalText,
+                    ExternalText = data.ExternalText,
+                    LogDate = data.LogDate,
+                    RegTime = data.RegTime,
+                    
+                    //filter files
+                    Files = data.Files?.Where(f => !isTwoAttachmentsMode || f.LogType == logType).Select(f => new Models.Case.LogFileModel
+                    {
+                        Id = f.Id,
+                        FileName = f.FileName,
+                        LogType = f.LogType
+                    }).ToList()
+                }).ToList();
+            }
+            
+            bool allowAttachments;
+            if (useInternalLogs)
+            {
+                allowAttachments = isTwoAttachmentsMode;
+            }
+            else
+            {
+                var fieldName = GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString().GetCaseFieldName();
+                allowAttachments = _caseFieldSettingService.GetCaseFieldSetting(customer.Id, fieldName)?.ShowExternal.ToBool() ?? false;
+            }
+            
+
+            var model = new CaseLogsModel(
+                            caseId ?? 0,
+                            caseLogModels,
                             SessionFacade.CurrentSystemUser,
-                            SessionFacade.CurrentCustomer.UseInternalLogNoteOnExternalPage == 1);
+                            useInternalLogs,
+                            allowAttachments);
             return model;
         }
 
@@ -1771,8 +1785,8 @@ namespace DH.Helpdesk.SelfService.Controllers
 
         private bool UserHasAccessToCase(Case currentCase)
         {            
-            var curUser = SessionFacade.CurrentUserIdentity.UserId;
-            var userEmployeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
+            //var curUser = SessionFacade.CurrentUserIdentity.UserId;
+            //var userEmployeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
 
             //Hide this to next release #57742
             if (currentCase.CaseType.ShowOnExtPageCases == 0 || currentCase.ProductArea?.ShowOnExtPageCases == 0)
@@ -2067,7 +2081,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
         private CaseOverviewModel GetCaseReceiptModel(Case currentCase, int languageId)
         {
-            var currentCustomer = SessionFacade.CurrentCustomer;
+            var currentCustomer = currentCase.Customer ?? SessionFacade.CurrentCustomer;
             var caseFieldSetting = 
                 _caseFieldSettingService.ListToShowOnCasePage(currentCase.Customer_Id, languageId)
                     .Where(c => c.ShowExternal == 1 ||
@@ -2112,7 +2126,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             var caseId = currentCase.Id;
-            var caseLogs = _logService.GetLogsByCaseId(currentCase.Id).OrderByDescending(l => l.LogDate).ToList();
 
             if (currentCase.Impact_Id.HasValue && currentCase.Impact == null)
                 currentCase.Impact = _impactService.GetImpact(currentCase.Impact_Id.Value);
@@ -2120,10 +2133,11 @@ namespace DH.Helpdesk.SelfService.Controllers
             var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(currentCase.Id).Select(x => x.Follower).ToArray();
             var followerUsers = caseFolowerUsers.Any() ? string.Join(";", caseFolowerUsers) + ";" : string.Empty;
 
+            //
             var model = new CaseOverviewModel
             {
                 CaseId = caseId,
-                CustomerId = SessionFacade.CurrentCustomer.Id,
+                CustomerId = currentCustomer.Id,
                 InfoText = infoText?.Name,
                 CasePreview = currentCase,
                 CaseFieldGroups = caseFieldGroups,
@@ -2136,12 +2150,8 @@ namespace DH.Helpdesk.SelfService.Controllers
 
                 //logs
                 LogFileGuid = Guid.NewGuid().ToString(),
-                    LogFilesModel = new FilesModel(),
-                    CaseLogModel = new CaseLogModel(
-                                        caseId, 
-                                        caseLogs, 
-                                        SessionFacade.CurrentSystemUser,
-                                        SessionFacade.CurrentCustomer.UseInternalLogNoteOnExternalPage == 1),
+                LogFilesModel = new FilesModel(),
+                CaseLogsModel = GetCaseLogsModel(caseId),
 
                 ClosedCaseAlertModel = new ClosedCaseAlertModel()
                 {
@@ -2183,7 +2193,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var model = new NewCaseModel
             {
                 NewCase = new Case { Customer_Id = customerId },
-                CustomerId = SessionFacade.CurrentCustomer.Id,
+                CustomerId = customerId,
                 CurrentLanguageId = SessionFacade.CurrentLanguageId,
                 CaseFieldGroups = caseFieldGroups,
                 FieldSettings = caseFieldSetting,
@@ -2217,8 +2227,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                     orgUnitURL = Url.Action("GetOrgUnitsByDepartments", "Case")
                 },
                 
-                ShowCaseActionsPanelOnTop = SessionFacade.CurrentCustomer.ShowCaseActionsPanelOnTop,
-                ShowCaseActionsPanelAtBottom = SessionFacade.CurrentCustomer.ShowCaseActionsPanelAtBottom,
+                ShowCaseActionsPanelOnTop = currentCustomer.ShowCaseActionsPanelOnTop,
+                ShowCaseActionsPanelAtBottom = currentCustomer.ShowCaseActionsPanelAtBottom,
                 CaseTypeParantPath = ParentPathDefaultValue,
                 ProductAreaParantPath = ParentPathDefaultValue,
                 CategoryParentPath = ParentPathDefaultValue,
@@ -2549,16 +2559,19 @@ namespace DH.Helpdesk.SelfService.Controllers
             var userIdentityUserId = SessionFacade.CurrentUserIdentity?.UserId;
             var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
             var localUserId = SessionFacade.CurrentLocalUser?.UserId;
-        }        
+        }
 
-        private bool CheckField(List<CaseListToCase> fieldSettings, string fieldName)
+        private bool CheckFieldExists(List<CaseListToCase> fieldSettings, string fieldName)
         {
-            var fieldNameToCheck = 
-                fieldName == GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString() 
-                    ? fieldName.Replace('_', '.') 
-                    : fieldName;
-
+            var fieldNameToCheck = fieldName.GetCaseFieldName();
             return fieldSettings.Select(f => f.Name).Contains(fieldNameToCheck);
+        }
+
+        private bool IsTwoAttachmentsModeEnabled(int customerId)
+        {
+            var fieldName = GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal.ToString().GetCaseFieldName();
+            var isChecked = _caseFieldSettingService.GetCaseFieldSetting(customerId, fieldName)?.ShowExternal.ToBool() ?? false;
+            return isChecked;
         }
 
         #endregion

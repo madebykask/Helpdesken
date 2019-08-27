@@ -2,9 +2,17 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { mobiscroll } from '@mobiscroll/angular';
 import { config } from '@env/environment';
 import { AuthenticationStateService } from './services/authentication';
-import { LoggerService } from './services/logging';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { CommunicationService, Channels } from './services/communication';
+import { UserSettingsApiService } from './services/api/user/user-settings-api.service';
+import { CaseTemplateService } from './services/case-organization/case-template.service';
+import { SearchFilterService } from './modules/case-overview-module/services/cases-overview/search-filter.service';
+import { AppStore, AppStoreKeys } from './store';
+import { CurrentUser } from './models';
+import { takeUntil, take } from 'rxjs/operators';
+import { CaseTemplateModel } from './models/caseTemplate/case-template.model';
+import { FavoriteFilterModel } from './modules/case-overview-module/models/cases-overview/favorite-filter.model';
 
 @Component({
   selector: 'app-root',
@@ -22,36 +30,63 @@ export class AppComponent implements OnInit, OnDestroy {
   version = config.version;
   // navStart: Observable<NavigationStart>;
 
-  constructor(private _authenticationService: AuthenticationStateService,
-    private _logger: LoggerService,
-    private _router: Router) {
+  constructor(private authenticationService: AuthenticationStateService,
+    private communicationService: CommunicationService,
+    private userSettingsService: UserSettingsApiService,
+    private caseTemplateService: CaseTemplateService,
+    private searchFilterService: SearchFilterService,
+    private appStore: AppStore,
+    private router: Router) {
 
     mobiscroll.settings = { theme: 'ios', lang: 'en', labelStyle: 'stacked' };
 
-    /*
-    this.navStart = _router.events.pipe(
-      filter(evt => evt instanceof NavigationStart),
-      takeUntil(this.destroy$)
-    ) as Observable<NavigationStart>;*/
+    // if user is already logged in - run app state init immediately
+    if (this.authenticationService.isAuthenticated()) {
+      this.initAppStoreState();
+    }
+
+    // also subscribe to the login event to reload state on new login
+    this.communicationService.listen<CurrentUser>(Channels.UserLoggedIn)
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe(e => {
+        this.initAppStoreState();
+      });
   }
 
   ngOnInit(): void {
-    // this.navStart.subscribe(evt => this._infoLogger.log(`Navigation started: ${evt.url}`));
-
-    const version = this._authenticationService.getVersion();
-    const isAuthenticated = this._authenticationService.isAuthenticated();
+    const version = this.authenticationService.getVersion();
+    const isAuthenticated = this.authenticationService.isAuthenticated();
 
     if (isAuthenticated && config.version !== version) {
-      this._logger.log('>>>>>>>>>>>>>>>>Logout: version changed');
-      this._router.navigate(['/login']);
+      //this.logger.log('>>> Logout: version changed');
+      this.router.navigate(['/login']);
     }
+  }
 
-    // Checks if should display install popup notification:
-    /*
-    if (this.isIos() && this.isInStandaloneMode()) {
-      // logout or refresh token on open.
-    }
-    */
+  private initAppStoreState() {
+    this.loadTemplates();
+    this.loadSearchFilters();
+  }
+
+  private loadTemplates() {
+    if (this.userSettingsService.getUserData().createCasePermission) {
+      this.caseTemplateService.loadTemplates().pipe(
+       take(1)
+     ).subscribe((templates: CaseTemplateModel[]) => {
+       this.appStore.set(AppStoreKeys.Templates, templates);
+     });
+   }
+  }
+
+  // load search filters
+  private loadSearchFilters() {
+    this.searchFilterService.loadFavoriteFilters().pipe(
+      take(1)
+    ).subscribe((filters: FavoriteFilterModel[]) => {
+      this.appStore.set(AppStoreKeys.FavoriteFilters, filters);
+    });
   }
 
   ngOnDestroy(): void {

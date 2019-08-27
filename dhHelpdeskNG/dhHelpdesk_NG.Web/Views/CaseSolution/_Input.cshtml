@@ -1962,6 +1962,26 @@
                                 }
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())">
+                                        <td>
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
+                                        </td>
+                                        <td></td>
+                                        <td>
+                                            <table>
+                                                <tr id="stateIconPlace_@GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()">
+                                                    @*State icons will be added Here*@
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.LogFileName, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename)
+                                        </td>
+                                    </tr>    
+                                }
+                                
+                                @if (Model.CaseFieldSettings.Count() != 0)
+                                {
                                     <tr>
                                         <td>
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
@@ -1981,6 +2001,25 @@
                                         </td>
                                     </tr>
                                 }
+                                
+                                @if (Model.CaseFieldSettings.Count() != 0)
+                                {
+                                    <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal.ToString())">
+                                        <td>@Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)</td>
+                                        <td></td>
+                                        <td>
+                                            <table>
+                                                <tr id="stateIconPlace_@GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal.ToString()">
+                                                    @*State icons will be added Here*@
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.LogFileName_Internal, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal)
+                                        </td>
+                                    </tr>
+                                }
+
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
                                     <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())">
@@ -2003,23 +2042,6 @@
                                     </tr>
                                 }
 
-                                <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())">
-                                    <td>
-                                        @Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
-                                    </td>
-                                    <td></td>
-                                    <td>
-                                        <table>
-                                            <tr id="stateIconPlace_@GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()">
-                                                @*State icons will be added Here*@
-                                            </tr>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.LogFileName, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename)
-                                    </td>
-                                </tr>
-
                                 <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.FinishingDate.ToString())">
                                     <td>
                                         @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
@@ -2038,6 +2060,7 @@
                                         @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.FinishingDate, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.FinishingDate)
                                     </td>
                                 </tr>
+
                                 <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ClosingReason.ToString())">
                                     <td>
                                         @Translation.Get(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)

@@ -57,7 +57,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure
             return null;
         }
 
-        protected ForbiddenResult Forbidden(string msg)
+        protected IHttpActionResult Forbidden(string msg)
         {
             return new ForbiddenResult(Request, msg);
         }

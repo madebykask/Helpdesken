@@ -22,7 +22,7 @@ namespace DH.Helpdesk.Dal.Repositories.Concrete
         {
             if(workingGroupIds == null) throw new ArgumentNullException(nameof(workingGroupIds));
 
-            var items = (from wg in DataContext.WorkingGroups
+            var items = (from wg in DataContext.WorkingGroups.AsNoTracking()
                 from wgUser in wg.UserWorkingGroups.DefaultIfEmpty()
                 where workingGroupIds.Contains(wg.Id) && wgUser.User_Id != 0
                 select new
@@ -51,8 +51,11 @@ namespace DH.Helpdesk.Dal.Repositories.Concrete
 
             var result =
                  items.GroupBy(o => o.Id)
-                      .ToList()
-                      .Select(o => new WorkingGroupUsers(o.Key, o.Select(u => u.UserId).ToList()))
+                      .Select(o => new WorkingGroupUsers
+                      {
+                          WorkingGroupId = o.Key,
+                          UserIds = o.Select(u => u.UserId).ToList()
+                      })
                       .ToList();
          
             return result;

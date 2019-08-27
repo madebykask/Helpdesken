@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Logs.Output;
 using DH.Helpdesk.BusinessData.OldComponents;
-using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Dal.MapperData.Logs;
 
 namespace DH.Helpdesk.Dal.Mappers.Logs
@@ -47,7 +47,7 @@ namespace DH.Helpdesk.Dal.Mappers.Logs
 
                 LogFiles =
                     data.LogFiles.Where(e => e.Id.HasValue && e.Id > 0)
-                        .Select(t => new LogFileOverview(t.Id ?? 0, t.FileName, t.CaseId, t.LogId))
+                        .Select(f => new LogFileOverview(f.Id ?? 0, f.FileName, f.CaseId, f.LogId, (LogFileType)f.LogType.Value))
                         .ToList(),
 
                 Mail2Tickets =

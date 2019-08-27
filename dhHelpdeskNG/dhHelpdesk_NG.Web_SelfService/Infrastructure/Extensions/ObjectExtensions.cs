@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
+﻿using System;
+using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.SelfService.Models.Case;
 
@@ -357,6 +358,11 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
             else
                 result = Translation.Get(defaultHeader);
             return result;
+        }
+
+        public static CaseListToCase GetField(this List<CaseListToCase> fieldSettings, string fieldName)
+        {
+            return fieldSettings.Where(f => f.Name.Equals(fieldName.GetCaseFieldName(), StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
         }
     }
 }

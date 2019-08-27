@@ -81,23 +81,23 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Edit(int customerId, CustomerInputViewModel vmodel, List<CaseFieldSetting> CaseFieldSettings, int[] UsSelected, int languageId)
+        public ActionResult Edit(int customerId, CustomerInputViewModel vmodel, List<CaseFieldSetting> caseFieldSettings, int[] usSelected, int languageId)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
             if (vmodel.ShowStatusBarIds != null && vmodel.ShowStatusBarIds.Any())
             {
-                var selected = CaseFieldSettings.Where(c => vmodel.ShowStatusBarIds.Any(m => m == c.Id));
+                var selected = caseFieldSettings.Where(c => vmodel.ShowStatusBarIds.Any(m => m == c.Id));
                 selected.ForEach(c => c.ShowStatusBar = true );
             }
 
             if (vmodel.ShowExternalStatusBarIds != null && vmodel.ShowExternalStatusBarIds.Any())
             {
-                var selected = CaseFieldSettings.Where(c => vmodel.ShowExternalStatusBarIds.Any(m => m == c.Id));
+                var selected = caseFieldSettings.Where(c => vmodel.ShowExternalStatusBarIds.Any(m => m == c.Id));
                 selected.ForEach(c => c.ShowExternalStatusBar = true);
             }
 
-            _customerService.SaveCaseFieldSettingsForCustomer(customerId, languageId, vmodel.CaseFieldSettingWithLangauges, CaseFieldSettings, out errors);
+            _customerService.SaveCaseFieldSettingsForCustomer(customerId, languageId, vmodel.CaseFieldSettingWithLangauges, caseFieldSettings, out errors);
             _caseSectionService.SaveCaseSections(languageId, vmodel.CaseSections, customerId);
             _cacheService.ClearCaseTranslations(customerId);
 

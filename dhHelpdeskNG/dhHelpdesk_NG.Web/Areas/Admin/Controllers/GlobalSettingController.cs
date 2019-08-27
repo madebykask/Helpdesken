@@ -1625,26 +1625,27 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             if (customerId.HasValue && customerId > 0)
             {
-                var exceptionList = new List<string>
-                {
+				var exceptionList = new List<string>
+				{
                     //GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString(),
                     GlobalEnums.TranslationCaseFields.AddUserBtn.ToString(),
-                    GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString(),
-                    GlobalEnums.TranslationCaseFields.Filename.ToString(),
-                    "tblLog.Charge",
-                    "tblLog.Filename",
-                    GlobalEnums.TranslationCaseFields.FinishingDate.ToString(),
-                    GlobalEnums.TranslationCaseFields.Verified.ToString(), //mandatory
+					GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString(),
+					GlobalEnums.TranslationCaseFields.Filename.ToString(),
+					"tblLog.Charge",
+					"tblLog.Filename",
+					GlobalEnums.TranslationCaseFields.FinishingDate.ToString(),
+					GlobalEnums.TranslationCaseFields.Verified.ToString(), //mandatory
                     GlobalEnums.TranslationCaseFields.SMS.ToString(),
-                    GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(),
+					GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(),
                     //GlobalEnums.TranslationCaseFields.User_Id.ToString(), //because included in registeredBy
                     GlobalEnums.TranslationCaseFields.RegTime.ToString(),
-                    GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
-                    GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), //mandatory
+					GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
+					GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), //mandatory
                     GlobalEnums.TranslationCaseFields.CaseNumber.ToString(),
-                    GlobalEnums.TranslationCaseFields.Customer_Id.ToString(),
-                    GlobalEnums.TranslationCaseFields.Cost.ToString()
-                };
+					GlobalEnums.TranslationCaseFields.Customer_Id.ToString(),
+					GlobalEnums.TranslationCaseFields.Cost.ToString(),
+					"tblLog.Filename_Internal"
+				};
 
                 var additionalFields = new List<CaseFieldSettingsWithLanguage>
                 {

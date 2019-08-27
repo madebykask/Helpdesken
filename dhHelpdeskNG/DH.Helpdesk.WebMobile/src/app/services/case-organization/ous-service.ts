@@ -1,15 +1,16 @@
-import { Injectable } from "@angular/core";
-import { LocalStorageService } from "../local-storage";
-import { HttpClient } from "@angular/common/http";
-import { OptionsHelper } from "../../helpers/options-helper";
-import { map, take } from "rxjs/operators";
-import { OptionItem } from "src/app/modules/shared-module/models";
-import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
+import { Injectable } from '@angular/core';
+import { LocalStorageService } from '../local-storage';
+import { HttpClient } from '@angular/common/http';
+import { OptionsHelper } from '../../helpers/options-helper';
+import { map, take } from 'rxjs/operators';
+import { OptionItem } from 'src/app/modules/shared-module/models';
+import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/httpServiceBase';
+import { OrganizationalUnitInputModel } from 'src/app/models/organizationalUnits/organizationalUnitInputModel';
 
 @Injectable({ providedIn: 'root' })
 export class OUsService extends HttpApiServiceBase {
 
-    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService, 
+    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService,
         private caseHelper: OptionsHelper) {
             super(http, localStorageService);
     }
@@ -21,6 +22,20 @@ export class OUsService extends HttpApiServiceBase {
             map((jsItems: any) => {
                 return this.caseHelper.toOptionItems(jsItems as Array<any>) || new Array<OptionItem>();
             })
-        );// TODO: error handling
+        ); // TODO: error handling
+    }
+
+    getOU(id: number) {
+      return this.getJson(this.buildResourseUrl(`/api/organizationalunits/${id}` , null, true, true))
+        .pipe(
+            take(1),
+            map((jsItem: any) => {
+              const model = new OrganizationalUnitInputModel();
+              model.id = jsItem.id;
+              model.parentId = jsItem.parentId;
+              model.name = jsItem.name;
+              return model;
+            })
+        ); // TODO: error handling
     }
 }

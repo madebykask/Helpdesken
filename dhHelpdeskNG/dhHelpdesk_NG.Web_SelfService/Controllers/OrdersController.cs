@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web;
-using System.Web.Helpers;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
 using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Enums.Orders;
 using DH.Helpdesk.BusinessData.Models.Case;
@@ -15,7 +13,6 @@ using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.SelfService.Infrastructure;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Orders;
-using DH.Helpdesk.Dal.Infrastructure.Context;
 using DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders;
 using DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders.Concrete;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
@@ -349,19 +346,12 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpPost]
         public RedirectToRouteResult UploadFile(string entityId, Subtopic subtopic, string name)
         {
-            var uploadedFile = Request.Files[0];
-            if (uploadedFile == null)
-            {
+            var fileContent = Request.GetFileContent();
+            if (fileContent == null)
                 throw new HttpException((int)HttpStatusCode.NotFound, null);
-            }
-
-            var fileContent = new byte[uploadedFile.InputStream.Length];
-            uploadedFile.InputStream.Read(fileContent, 0, fileContent.Length);
 
             if (_filesStore.FileExists(name, entityId, subtopic.ToString()))
-            {
                 throw new HttpException((int)HttpStatusCode.Conflict, null);
-            }
 
             _filesStore.AddFile(fileContent, name, entityId, subtopic.ToString());
 

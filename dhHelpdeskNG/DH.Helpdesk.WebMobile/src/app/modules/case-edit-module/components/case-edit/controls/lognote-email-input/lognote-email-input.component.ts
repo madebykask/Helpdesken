@@ -4,7 +4,7 @@ import { SearchInputBaseComponent } from '../search-input-base/search-input-base
 import { UserService } from '../../../../services/user.service';
 import { CaseUserSearchGroup } from '../../../../logic/constants/case-user-search-group';
 import { EmailsSearchItem } from '../../../../services/model/emails-search-item';
-import * as cm from 'src/app/modules/shared-module/Utils/common-methods';
+import * as cm from 'src/app/modules/shared-module/utils/common-methods';
 
 @Component({
   selector: 'lognote-email-input',

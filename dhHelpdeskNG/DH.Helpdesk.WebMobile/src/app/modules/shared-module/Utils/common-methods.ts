@@ -23,6 +23,16 @@ export function areArraysEqual(array1: any[], array2: any[]): boolean {
   return a.length === b.length && a.every((el, ix) => el === b[ix]);
 }
 
+export function convertNameValueArrayToObject(itemsArray: {name: string, value: string}[]): {[key: string]: string} {
+  if (itemsArray && itemsArray.length) {
+    return itemsArray.reduce((obj, f) => {
+      obj[f.name] = f.value;
+      return obj;
+    }, {});
+  }
+  return null;
+}
+
 export function areValuesEqual(value1: any, value2: any): boolean {
   if (value1 instanceof Array && value2 instanceof Array) {
     return areArraysEqual(value1 as any[], value2 as any[]);

@@ -1,4 +1,4 @@
-import { MailToTicketInfo, CaseSolution, CaseAccessMode, CaseEditInputModel, CaseFieldModel, IKeyValue } from '..';
+import { MailToTicketInfo, CaseSolution, CaseAccessMode, CaseEditInputModel, CaseFieldModel, IKeyValue, ExtendedCaseData } from '..';
 import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
 import { CaseHistoryChangeModel, CaseLogModel, LogFile, CaseHistoryModel, Mail2Ticket, EmailLog } from './case-actions-api.model';
 
@@ -14,11 +14,15 @@ export class CaseModelBuilder {
     const caseSolution = json.caseSolution ? <CaseSolution>json.caseSolution : null;
     const mailToTickets: MailToTicketInfo = json.mailToTickets ? <MailToTicketInfo>json.mailToTickets : null;
     const editMode = <CaseAccessMode>json.editMode;
+    const extendedCaseData = json.extendedCaseData ? <ExtendedCaseData>json.extendedCaseData : null;
 
     return Object.assign(new CaseEditInputModel(), json, {
       editMode: editMode,
       caseSolution: caseSolution,
+      extendedCaseData: extendedCaseData,
       mailToTickets: mailToTickets,
+      childCasesIds: json.childCasesIds || null,
+      parentCaseId: json.parentCaseId || null,
       fields: fields.map(v => {
         let field = null;
         switch (v.JsonType) {

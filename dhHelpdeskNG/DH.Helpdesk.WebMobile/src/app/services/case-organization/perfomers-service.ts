@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { LocalStorageService } from "../local-storage";
-import { HttpClient } from "@angular/common/http";
-import { OptionsHelper } from "../../helpers/options-helper";
-import { map, take } from "rxjs/operators";
-import { OptionItem } from "src/app/modules/shared-module/models";
-import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
+import { Injectable } from '@angular/core';
+import { LocalStorageService } from '../local-storage';
+import { HttpClient } from '@angular/common/http';
+import { OptionsHelper } from '../../helpers/options-helper';
+import { map, take } from 'rxjs/operators';
+import { OptionItem } from 'src/app/modules/shared-module/models';
+import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/httpServiceBase';
 
 @Injectable({ providedIn: 'root' })
 export class PerfomersService extends HttpApiServiceBase {
@@ -16,14 +16,14 @@ export class PerfomersService extends HttpApiServiceBase {
 
     getPerformers(performerUserId?: number, workingGroupId?: number) {
         let params = { };
-        if (performerUserId != null) Object.assign(params, { performerUserId: performerUserId });
-        if (workingGroupId != null) Object.assign(params, { workingGroupId: workingGroupId });
+        if (performerUserId != null) { Object.assign(params, { performerUserId: performerUserId }); }
+        if (workingGroupId != null) { Object.assign(params, { workingGroupId: workingGroupId }); }
         return this.getJson(this.buildResourseUrl('/api/perfomers/options', params, true, true))
             .pipe(
                 take(1),
                 map((jsItems: any) => {
                   return this.caseHelper.toOptionItems(jsItems as Array<any>) || new Array<OptionItem>();
                 })
-            );// TODO: error handling
+            ); // TODO: error handling
     }
 }

@@ -308,6 +308,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IGDPRDataPrivacyFavoriteRepository>().To<GDPRDataPrivacyFavoriteRepository>();
             this.Bind<IGDPRTaskRepository>().To<GDPRTaskRepository>();
 			this.Bind<IFeatureToggleRepository>().To<FeatureToggleRepository>();
+			this.Bind<IFileIndexingRepository>().To<FileIndexingRepository>();
 		}
 
         #endregion

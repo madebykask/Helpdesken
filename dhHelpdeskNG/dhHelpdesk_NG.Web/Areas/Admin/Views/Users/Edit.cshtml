@@ -1,41 +1,57 @@
-﻿@using System.Web.Optimization
-@model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
+﻿@model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
 @{
     ViewBag.Title = "Edit";
-    string copy = Request.QueryString["copy"];
-    
+    var isCopyRequest = Request.QueryString["copy"] == "1";
+    var requestParams =
+        isCopyRequest ? (object) new { id = Model.User.Id, copy = 1 } : new { id = Model.User.Id };
 }
-@using (Html.BeginForm("edit", "users", new { id = Model.User.Id }, FormMethod.Post, new { id = "target" }))
+
+@using (Html.BeginForm("edit", "users", requestParams, FormMethod.Post, new { id = "target" }))
 {
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
-                <li>@Html.ActionLink(Translation.Get("Spara"), "edit", new { id = Model.User.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
-            
-                <li>@Html.ActionLink(Translation.Get("Ta bort"), "delete", new { id = Model.User.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post") })</li>
-           
-                @if (copy !=  "1")
+                <li>
+                    @Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), "edit", new { id = Model.User.Id },
+                        new { id = "btnSave", @class = "btn" })
+                </li>
+
+                <li>
+                    @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "delete", new { id = Model.User.Id },
+                            new { @class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") })
+                </li>
+
+                @if (!isCopyRequest)
                 {
-                    <li>@Html.ActionLink(Translation.Get("Kopiera"), "edit", new { id = Model.User.Id, copy = 1 }, new { @class = "btn" })</li>
+                    <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Kopiera"), "edit", new { id = Model.User.Id, copy = 1 }, new { @class = "btn" })</li>
                 }
-                <li>@Html.ActionLink(Translation.Get("Avbryt"), "index", null, new { @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "index", null, new { @class = "btn" })</li>
             </ul>
         </div>
     </div>
     @Html.Partial("_Input", Model)
 }
 
-@if (Model.ChangePasswordModel != null)
-{
-    @Html.Partial("~/Views/Shared/_ChangePassword.cshtml", Model.ChangePasswordModel)
+@section Dialogs
+{ 
+    @if (Model.ChangePasswordModel != null)
+    {
+        @Html.Partial("~/Views/Shared/_ChangePassword.cshtml", Model.ChangePasswordModel)
+    }
 }
 
 @section Scripts {
     @Scripts.Render("~/bundles/admin/users")
 
     <script type="text/javascript">
-
+        var isUserCopy = @Html.Raw(Json.Encode(isCopyRequest));
         $(function() {
+
+            $('#btnSave').click(function(e) {
+                e.preventDefault();
+                $('#target').submit();
+                return false;
+            });
 
             var validator = $("#target").validate({
                 rules: {
@@ -49,13 +65,27 @@
                         required: true
                     },
                     "User.Email": {
-                        required: true
-                    }
-                    ,
+                        required: true,
+                        email: true
+                    },
                     "User.Customer_Id": {
                         required: true
-                    }
+                    },
 
+                    "NewPassword": {
+                        required: function() {
+                            return isUserCopy;
+                        }
+                    },
+
+                    "ConfirmPassword": {
+                        equalTo: {
+                            param: '#NewPassword',
+                            depends: function(el) {
+                               return isUserCopy;
+                            }
+                        }
+                    }
                 },
                 messages: {
                     "User.UserID": {
@@ -68,11 +98,20 @@
                         required: "@Translation.GetForJS("Du måste ange ett namn")"
                     },
                     "User.Email": {
-                        required: "@Translation.GetForJS("Du måste ange en e-post adress")"
+                        required: "@Translation.GetForJS("Du måste ange en e-post adress")",
+                        email: "@Translation.GetForJS("E-postadress är inte giltig.")"
                     }
                     ,
                     "User.Customer_Id": {
                         required: "@Translation.GetForJS("Du måste ange en standardkund", Enums.TranslationSource.TextTranslation)"
+                    },
+
+                    "NewPassword": {
+                        required: "@Translation.GetForJS("Du måste ange ett lösenord")"
+                    },
+
+                    "ConfirmPassword": {
+                        equalTo: "@Translation.GetForJS("Kontrollera att lösenord och bekräftat lösenord stämmer överens")"
                     }
                 },
                 submitHandler: function(form) {
@@ -81,11 +120,13 @@
                 }
             });
 
-            var message = '@TempData["AlertMessage"]';
-            if (message !== '') {
+            const message = '@TempData["AlertMessage"]';
+            if (message) {
                 dhHelpdesk.admin.users.utils.showWarning(message);
             }
         });
+
+
     </script>
 }
     

@@ -15,8 +15,10 @@ namespace DH.Helpdesk.Services.Services
     {
         IList<CaseListToCase> ListToShowOnCasePage(int customerId, int languageId);
         IList<CaseFieldSetting> GetAllCaseFieldSettings();
-        IList<CaseFieldSetting> GetCaseFieldSettings(int customerId);
-        Task<IList<CaseFieldSetting>> GetCaseFieldSettingsAsync(int customerId);
+        IList<CaseFieldSetting> GetCaseFieldSettingsByName(int customerId, string name);
+        CaseFieldSetting GetCaseFieldSetting(int customerId, string fieldId);
+        IList<CaseFieldSetting> GetCaseFieldSettings(int customerId, int? languageId = null);
+        Task<IList<CaseFieldSetting>> GetCaseFieldSettingsAsync(int customerId, int? languageId = null);
         IList<CaseFieldSetting> GetCustomerEnabledCaseFieldSettings(int customerId);
         
         IList<CaseFieldSettingLanguage> GetCaseFieldSettingLanguages();
@@ -46,18 +48,23 @@ namespace DH.Helpdesk.Services.Services
             ICaseFieldSettingRepository caseFieldSettingRepository,
             ICaseFieldSettingLanguageRepository caseFieldSettingLanguageRepository)
         {
-            this._caseFieldSettingRepository = caseFieldSettingRepository;
-            this._caseFieldSettingLanguageRepository = caseFieldSettingLanguageRepository;
+            _caseFieldSettingRepository = caseFieldSettingRepository;
+            _caseFieldSettingLanguageRepository = caseFieldSettingLanguageRepository;
         }
 
         public IList<CaseListToCase> ListToShowOnCasePage(int customerId, int languageId)
         {
-            return this._caseFieldSettingRepository.GetListToCustomerCase(customerId, languageId).ToList();
+            return _caseFieldSettingRepository.GetListToCustomerCase(customerId, languageId).ToList();
         }
 
         public IList<CaseFieldSetting> GetAllCaseFieldSettings()
         {
-            return this._caseFieldSettingRepository.GetAll().ToList();
+            return _caseFieldSettingRepository.GetAll().ToList();
+        }
+
+        public CaseFieldSetting GetCaseFieldSetting(int customerId, string fieldId)
+        {
+            return _caseFieldSettingRepository.GetMany(f => f.Customer_Id == customerId && f.Name == fieldId).FirstOrDefault();
         }
 
         /// <summary>
@@ -65,24 +72,24 @@ namespace DH.Helpdesk.Services.Services
         /// </summary>
         /// <param name="customerId"></param>
         /// <returns></returns>
-        public IList<CaseFieldSetting> GetCaseFieldSettings(int customerId)
+        public IList<CaseFieldSetting> GetCaseFieldSettings(int customerId, int? languageId = null)
         {
-            return this._caseFieldSettingRepository.GetMany(x => x.Customer_Id == customerId).ToList();
+            return _caseFieldSettingRepository.GetCustomerCaseFieldSettings(customerId, languageId).ToList();
         }
 
-        public async Task<IList<CaseFieldSetting>> GetCaseFieldSettingsAsync(int customerId)
+        public async Task<IList<CaseFieldSetting>> GetCaseFieldSettingsAsync(int customerId, int? languageId = null)
         {
-            return await _caseFieldSettingRepository.GetMany(x => x.Customer_Id == customerId).AsQueryable().ToListAsync();
+            return await _caseFieldSettingRepository.GetCustomerCaseFieldSettings(customerId, languageId).AsQueryable().ToListAsync();
         }
 
         public IList<CaseFieldSetting> GetCustomerEnabledCaseFieldSettings(int customerId)
         {
-            return this._caseFieldSettingRepository.GetMany(x => x.Customer_Id == customerId && x.ShowOnStartPage == 1).ToList();
+            return _caseFieldSettingRepository.GetMany(x => x.Customer_Id == customerId && x.ShowOnStartPage == 1).ToList();
         }
         
         public IList<CaseFieldSetting> GetCaseFieldSettingsForDefaultCust()
         {
-            var list = this._caseFieldSettingRepository.GetMany(x => x.Customer_Id == null).ToList();
+            var list = _caseFieldSettingRepository.GetMany(x => x.Customer_Id == null).ToList();
 
             return list;
         
@@ -90,29 +97,29 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CaseFieldSettingLanguage> GetCaseFieldSettingLanguages()
         {
-            return this._caseFieldSettingLanguageRepository.GetAll().ToList();
+            return _caseFieldSettingLanguageRepository.GetAll().ToList();
         }
 
         public IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int? customerId, int languageId)
         {
-            return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsWithLanguages(customerId, languageId)
+            return _caseFieldSettingLanguageRepository.GetCaseFieldSettingsWithLanguages(customerId, languageId)
                 .Where(c => !c.Name.ToLower().Contains("isabout_") && !c.Name.ToLower().Contains("addfollowersbtn") && !c.Name.ToLower().Contains("adduserbtn"))
                 .ToList();
         }
 
         public IList<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettingsWithLanguages(int? customerId, int languageId)
         {
-            return this._caseFieldSettingLanguageRepository.GetAllCaseFieldSettingsWithLanguages(customerId, languageId).ToList();
+            return _caseFieldSettingLanguageRepository.GetAllCaseFieldSettingsWithLanguages(customerId, languageId).ToList();
         }
 
         public IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int languageId)
         {
-            return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsWithLanguagesForDefaultCust(languageId).ToList();
+            return _caseFieldSettingLanguageRepository.GetCaseFieldSettingsWithLanguagesForDefaultCust(languageId).ToList();
         }
 
         public CaseFieldSettingLanguage GetCaseFieldSettingLanguage(int id, int languageId)
         {
-            return this._caseFieldSettingLanguageRepository.Get(x => x.CaseFieldSetting.Id == id && x.Language_Id == languageId);
+            return _caseFieldSettingLanguageRepository.Get(x => x.CaseFieldSetting.Id == id && x.Language_Id == languageId);
         }
 
         public IList<CaseFieldSettingsForTranslation> GetCustomerCaseTranslations(int customerId)
@@ -127,12 +134,12 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<ListCases> ListToShowOnCaseSummaryPage(int? customerId, int? languageId, int? userGroupId)
         {
-            return this._caseFieldSettingRepository.GetListCasesToCaseSummary(customerId, languageId, userGroupId).ToList();
+            return _caseFieldSettingRepository.GetListCasesToCaseSummary(customerId, languageId, userGroupId).ToList();
         }
 
         public IList<ListCases> ListToShowOnCustomerSettingSummaryPage(int? customerId, int? languageId, int? userGroupId)
         {
-            return this._caseFieldSettingRepository.GetCaseFieldSettingsListToCustomerCaseSummary(customerId, languageId, userGroupId).ToList();
+            return _caseFieldSettingRepository.GetCaseFieldSettingsListToCustomerCaseSummary(customerId, languageId, userGroupId).ToList();
         }
 
         public void SaveFieldSettingsDefaultValue(int fieldId, string defaultValue)
@@ -143,6 +150,12 @@ namespace DH.Helpdesk.Services.Services
 
             _caseFieldSettingRepository.Update(fieldSettings);
             _caseFieldSettingRepository.Commit();
+        }
+
+        public IList<CaseFieldSetting> GetCaseFieldSettingsByName(int customerId, string name)
+        {
+            return _caseFieldSettingRepository
+                .GetMany(x => x.Name == name && x.Customer_Id == customerId).ToList();
         }
     }
 }

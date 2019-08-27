@@ -114,9 +114,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\DH.Helpdesk.Mail2Ticket.Library\DH.Helpdesk.Mail2Ticket.Library.vbproj">
+    <ProjectReference Include="..\DH.Helpdesk.Library\DH.Helpdesk.Library.vbproj">
       <Project>{300807ad-e3da-4bf5-93fc-2503d617edc1}</Project>
-      <Name>DH.Helpdesk.Mail2Ticket.Library</Name>
+      <Name>DH.Helpdesk.Library</Name>
     </ProjectReference>
     <ProjectReference Include="..\DH.Helpdesk.Web.Common\DH.Helpdesk.Web.Common.csproj">
       <Project>{D268E4E5-CD72-45DC-9DC0-9F0AD89F3F6E}</Project>

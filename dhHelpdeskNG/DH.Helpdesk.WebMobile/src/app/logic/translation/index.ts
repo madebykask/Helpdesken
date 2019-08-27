@@ -1,1 +1,1 @@
-export * from './translateLoader'
+export * from './translateLoader';

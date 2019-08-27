@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity
-{
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.Domain.Cases;
+﻿using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Shared;
+using DH.Helpdesk.Domain.Cases;
 
+namespace DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity
+{
     public sealed class CaseFilterFavoriteToBusinessModelMapper : IEntityToBusinessModelMapper<CaseFilterFavoriteEntity, CaseFilterFavorite>
     {
         public CaseFilterFavorite Map(CaseFilterFavoriteEntity entity)

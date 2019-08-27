@@ -1,127 +1,88 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
-import { CasesSearchType } from 'src/app/modules/shared-module/constants';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { LocalStorageService } from 'src/app/services/local-storage';
-import { CaseSearchStateModel } from 'src/app/modules/shared-module/models/cases-overview/case-search-state.model';
-import { CaseRouteReuseStrategy } from 'src/app/helpers/case-route-resolver.stategy';
+import { FilterMenuItemModel } from '../../models/cases-overview/filter-menu-item-model';
+import { FavoriteFilterModel } from '../../models/cases-overview/favorite-filter.model';
+import { Subject } from 'rxjs';
+import { CaseStandardSearchFilters } from '../../models/cases-overview/enums';
 
+//presentation component
 @Component({
   selector: 'cases-filter',
   templateUrl: './cases-filter.component.html',
   styleUrls: ['./cases-filter.component.scss']
 })
 export class CasesFilterComponent implements OnInit {
-  
-  @ViewChild('navMenu') filterMenu;
-  @Output() filterChanged:EventEmitter<any> = new EventEmitter<any>();
 
-  get filterType() : CasesSearchType {
-    const sel = this.getSelectedItem();
-    return sel ? sel.id : CasesSearchType.AllCases;
-  }
-
-  get filterName() {
-    const sel = this.getSelectedItem();
-    return sel ? sel.text : null;
-  }
+  @Input() favoriteFilters: FavoriteFilterModel[] = [];
+  @Input() initialFilterId = 0;
+  @Output() filterChanged: EventEmitter<any> = new EventEmitter<any>();
 
   filterMenuOptions = {
     theme: 'mobiscroll',
     type: 'hamburger',
     menuIcon: 'fa-filter',
     menuText: '',
-    onItemTap: function (event, inst) {
-      //console.log('item tap: ' + (inst.id || ''));
-    },
     onMenuShow: function (event, inst) {
-      if (!event.menu.element.classList.contains('case-search-filter'))
-        event.menu.element.classList.add('case-search-filter');    
+      if (!event.menu.element.classList.contains('case-search-filter')) {
+        event.menu.element.classList.add('case-search-filter');
+      }
     }
-  }
+  };
 
-  menuItems = [{
-    id: +CasesSearchType.MyCases,
-    text: this.translateService.instant('Mina ärenden'),
-    selected: false
-  }];
-
-  constructor(private router: Router,
-              private localStorageService: LocalStorageService,
-              private translateService: TranslateService) {
-    this.initMenuItems();
-  } 
+  menuItems: FilterMenuItemModel[] = [];
 
   get isFilterApplied() {
     return this.menuItems.some(x => x.selected);
   }
 
+  private filterId = 0;
+  private destroy$ = new Subject<any>();
+
+  constructor(private translateService: TranslateService) {
+  }
+
   ngOnInit() {
-    //clear case page snapshots in reuse strategy
-    CaseRouteReuseStrategy.deleteSnaphots();
+    //console.log('>> casesFilter: ngOnInit');
+    this.filterId = this.initialFilterId;
+    this.initFilterMenu();
   }
 
-  initMenuItems() {
-   let selectedItem = null;
-    const state = this.localStorageService.getCaseSearchState();
-    if (state) {
-      selectedItem = this.findItem(+state.SearchType);
-      if (selectedItem) {
-        selectedItem.selected = true;
-      }
-    }
-    this.raiseFilterChanged(selectedItem);
+  private initFilterMenu() {
+    // build menu items
+    this.menuItems =
+      this.favoriteFilters && this.favoriteFilters.length
+        ? this.favoriteFilters.map(f =>
+            new FilterMenuItemModel(f.id, this.translateService.instant(f.name), this.filterId && f.id === this.filterId))
+        : [];
   }
 
-  applyFilter(searchTypeId: number) {
-    let searchType = <CasesSearchType>searchTypeId;
-    const selectedItem = this.findItem(searchTypeId);
+  applyFilter(selectedItem: FilterMenuItemModel) {
+    // update menu item
     selectedItem.selected = !selectedItem.selected;
-   
-    if (selectedItem && selectedItem.selected){
-      searchType = searchTypeId;
-    }
-    else {
-      searchType = CasesSearchType.AllCases;
-    }
 
-    // save to storage
-    this.saveSearchState(searchType);
-
+    if (selectedItem && selectedItem.selected) {
+      this.filterId = selectedItem.id;
+    } else {
+      this.filterId = +CaseStandardSearchFilters.AllCases;
+    }
     this.raiseFilterChanged(selectedItem);
   }
 
-  private saveSearchState(searchType: CasesSearchType): any {
-    let state = new CaseSearchStateModel();
-    state.SearchType = searchType;
-    this.localStorageService.setCaseSearchState(state);
-  }
-
-  private raiseFilterChanged(selectedItem) {
-    if (selectedItem && selectedItem.selected)
-      this.filterChanged.emit({ type: selectedItem.id, name: selectedItem.text });
-    else
-      this.filterChanged.emit(null);
-  }
-
-  private findItem(searchTypeId: number) {
-    const res = this.menuItems.filter(x => x.id === searchTypeId);
-    if (res && res.length) {
-      return res[0];
+  private raiseFilterChanged(selectedItem: FilterMenuItemModel) {
+    if (selectedItem && selectedItem.selected) {
+      this.filterChanged.emit({ filterId: selectedItem.id, filterName: selectedItem.text });
+    } else {
+      this.filterChanged.emit({ filterId: +CaseStandardSearchFilters.AllCases, filterName: null });
     }
-    return null;
-  }
-
-  private getSelectedItem() {
-    const res = this.menuItems.filter(x => x.selected);
-    if (res && res.length) {
-      return res[0];
-    }
-    return null;
   }
 
   trackByFn(index, item) {
     return item.id;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 }

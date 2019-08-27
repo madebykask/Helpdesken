@@ -7,9 +7,9 @@ export class CaseOverviewItem {
     sortOrder: string;
     secSortOrder: string;
     tooltip: string;
-    isUnread: false;
+    isUnread: boolean;
     isUrgent: boolean;
-    columns: CaseOverviewColumn[]
+    columns: CaseOverviewColumn[];
 }
 
 export class CaseOverviewColumn {

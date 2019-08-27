@@ -44,10 +44,6 @@ namespace DH.Helpdesk.Models.CasesOverview
         public int? Page { get; set; }
         public string OrderBy { get; set; }
         public bool? Ascending { get; set; }
-
-        public SearchOverviewFilterInputModel()
-        {
-            //RegionIds = new List<int>();
-        }
+        public bool CountOnly { get; set; }
     }
 }

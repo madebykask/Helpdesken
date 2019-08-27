@@ -50,7 +50,7 @@ namespace DH.Helpdesk.Services.Services
         IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case case_, IList<int> workFlowCaseSolutionIds, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId);
 
         IList<CaseSolution> GetCaseSolutions();
-        IList<int> GetWorkflowCaseSolutionIds(int customerId);
+        IList<int> GetWorkflowCaseSolutionIds(int customerId, int? userId = null);
         
         bool CheckIfExtendedFormExistForSolutionsInCategories(int customerId, List<int> list);
     }
@@ -69,12 +69,7 @@ namespace DH.Helpdesk.Services.Services
 
         private readonly ICaseSolutionConditionRepository _caseSolutionConditionRepository;
         private readonly IWorkingGroupService _workingGroupService;
-        private readonly ICaseSolutionConditionService _caseSolutionConditionService;
-        private readonly IStateSecondaryService _stateSecondaryService;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-        private readonly Dictionary<string, IList<WorkingGroupEntity>> _adminGroups =
-            new Dictionary<string, IList<WorkingGroupEntity>>(StringComparer.OrdinalIgnoreCase);
 
         private readonly IComputerUserCategoryRepository _computerUserCategoryRepository;
 
@@ -90,8 +85,6 @@ namespace DH.Helpdesk.Services.Services
             ICaseSolutionConditionRepository caseSolutionConditionRepository,
             ICacheProvider cache,
             IWorkingGroupService workingGroupService,
-            ICaseSolutionConditionService caseSolutionCondtionService,
-            IStateSecondaryService stateSecondaryService,
             IComputerUserCategoryRepository computerUserCategoryRepository,
             IUnitOfWorkFactory unitOfWorkFactory) 
             : base(caseSolutionRepository, caseSolutionCategoryRepository) 
@@ -105,9 +98,7 @@ namespace DH.Helpdesk.Services.Services
             _unitOfWork = unitOfWork;
             _cache = cache;
             _workingGroupService = workingGroupService;
-            _caseSolutionConditionService = caseSolutionCondtionService;
             _caseSolutionConditionRepository = caseSolutionConditionRepository;
-            _stateSecondaryService = stateSecondaryService;
             _unitOfWorkFactory = unitOfWorkFactory;
             _computerUserCategoryRepository = computerUserCategoryRepository;
         }
@@ -231,12 +222,22 @@ namespace DH.Helpdesk.Services.Services
             return CaseSolutionRepository.GetMany(x => x.Status >= 0).AsQueryable().OrderBy(x => x.Customer.Name).ThenBy(x => x.Name).ToList();
         }
 
-        public IList<int> GetWorkflowCaseSolutionIds(int customerId)
+        public IList<int> GetWorkflowCaseSolutionIds(int customerId, int? userId = null)
         {
             //ConnectedButton == 0 - worfklow type
             var query = 
                 CaseSolutionRepository.GetMany(x => x.Customer_Id == customerId && x.ConnectedButton == 0 && x.Status > 0)
                 .AsQueryable();
+
+            if (userId.HasValue && userId.Value > 0)
+            {
+                // restrict case solutions by user working groups
+                var userWorkingGroups =
+                    _workingGroupService.ListWorkingGroupsForUser(userId.Value);
+                
+                query =
+                    query.Where(cs => cs.WorkingGroup_Id == null || userWorkingGroups.Contains(cs.WorkingGroup_Id.Value));
+            }
 
             return query.Select(x => x.Id).ToList();
         }
@@ -426,10 +427,10 @@ namespace DH.Helpdesk.Services.Services
                         var wgShowWorkflowStep = false;
                         var conditionValues = conditionValue.Split(',').Select(sValue => sValue.Trim()).ToArray();
 
-                        for (int i = 0; i < conditionValues.Length; i++)
+                        foreach (var val in conditionValues)
                         {
-                            var val = conditionValues[i];
-                            if (ctx.WorkingGroups.Where(x => x.WorkingGroupGuid.ToString().ToLower() == val).Count() > 0)
+                            var val1 = val;
+                            if (ctx.WorkingGroups.Any(x => x.WorkingGroupGuid.ToString().ToLower() == val1))
                             {
                                 wgShowWorkflowStep = true;
                                 //it is enough with one hit
@@ -515,10 +516,8 @@ namespace DH.Helpdesk.Services.Services
                         showWorkflowStep = true;
                         continue;
                     }
-                    else
-                    {
-                        return false;
-                    }
+
+                    return false;
                 }
                 catch (Exception ex)
                 {
@@ -1477,14 +1476,11 @@ namespace DH.Helpdesk.Services.Services
 
                     case CaseSolutionIndexColumns.Name:
 
-
                         var query1 = (searchCaseSolutions.Ascending) ?
                                 cresList.OrderBy(l => (l.Name != null ? l.Name : string.Empty)) :
                                 cresList.OrderByDescending(l => (l.Name != null ? l.Name : string.Empty));
 
                         return query1.ToList();
-
-                        break;
 
                     case CaseSolutionIndexColumns.Category:
                         query1 = (searchCaseSolutions.Ascending) ?
@@ -1492,7 +1488,6 @@ namespace DH.Helpdesk.Services.Services
                                 cresList.OrderByDescending(l => (l.CaseSolutionCategory != null ? l.CaseSolutionCategory.Name : string.Empty));
 
                         return query1.ToList();
-                        break;
 
                     case CaseSolutionIndexColumns.Caption:
                         query1 = (searchCaseSolutions.Ascending) ?
@@ -1500,8 +1495,7 @@ namespace DH.Helpdesk.Services.Services
                                 cresList.OrderByDescending(l => (l.Caption != null ? l.Caption : string.Empty));
 
                         return query1.ToList();
-                        break;
-
+                        
                     case CaseSolutionIndexColumns.Administrator:
                         if (searchCaseSolutions.Ascending)
                             query1 = isFirstNamePresentation ?
@@ -1519,7 +1513,6 @@ namespace DH.Helpdesk.Services.Services
                                        .ThenByDescending(l => (l.PerformerUser != null ? l.PerformerUser.FirstName : string.Empty));
 
                         return query1.ToList();
-                        break;
 
                     case CaseSolutionIndexColumns.Priority:
                         query1 = (searchCaseSolutions.Ascending) ?
@@ -1527,8 +1520,6 @@ namespace DH.Helpdesk.Services.Services
                                     cresList.OrderByDescending(l => (l.Priority != null ? l.Priority.Name : string.Empty));
 
                         return query1.ToList();
-                        break;
-
 
                     case CaseSolutionIndexColumns.Status:
                         query1 = (searchCaseSolutions.Ascending) ?
@@ -1536,7 +1527,6 @@ namespace DH.Helpdesk.Services.Services
                                 cresList.OrderByDescending(l => l.Status);
 
                         return query1.ToList();
-                        break;
 
                     case CaseSolutionIndexColumns.ConnectedToButton:
                         query1 = (searchCaseSolutions.Ascending) ?
@@ -1544,26 +1534,20 @@ namespace DH.Helpdesk.Services.Services
                                 cresList.OrderByDescending(l => l.ConnectedButton);
 
                         return query1.ToList();
-                        break;
                     case CaseSolutionIndexColumns.SortOrder:
                         query1 = (searchCaseSolutions.Ascending) ?
                                 cresList.OrderBy(l => l.SortOrder) :
                                 cresList.OrderByDescending(l => l.SortOrder);
 
                         return query1.ToList();
-                        break;
                     default:
                         query1 = (searchCaseSolutions.Ascending) ?
                                 cresList.OrderBy(l => (l.Name != null ? l.Name : string.Empty)) :
                                 cresList.OrderByDescending(l => (l.Name != null ? l.Name : string.Empty));
 
                         return query1.ToList();
-                        break;
-
 
                 }
-
-
             }
             else
             {

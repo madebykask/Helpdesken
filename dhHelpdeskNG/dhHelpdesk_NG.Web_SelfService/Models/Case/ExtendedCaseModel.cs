@@ -3,6 +3,7 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.Domain;
 using System.Collections.Generic;
+using System.Linq;
 using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.SelfService.Models.Case
@@ -38,7 +39,7 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public string LogFileGuid { get; set; }
         
 
-        public CaseLogModel CaseLogModel { get; set; }
+        public CaseLogsModel CaseLogsModel { get; set; }
 
         public ClosedCaseAlertModel ClosedCaseAlertModel { get; set; }
         public int AttachmentPlacement { get; set; }
@@ -50,6 +51,21 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public CaseControlsPanelModel CreateExtendedCaseControlsPanelModel(int position = 1)
         {
             return new CaseControlsPanelModel(position, true);
+        }
+
+        public string BuildCaseLogDownloadUrlParams()
+        {
+            var urlParams = new List<string>();
+            if (!string.IsNullOrEmpty(LogFileGuid))
+            {
+                urlParams.Add($"id={LogFileGuid}");
+            }
+            
+            if (CaseId > 0)
+            {
+                urlParams.Add($"caseId={CaseId}");
+            }
+            return urlParams.Any() ? string.Join("&", urlParams) : string.Empty;
         }
     }
 }

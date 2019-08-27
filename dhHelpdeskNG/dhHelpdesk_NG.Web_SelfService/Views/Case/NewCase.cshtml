@@ -671,7 +671,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Caption)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(c => Model.NewCase.Caption, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Caption.ToString() })
+                                                @Html.TextBoxFor(c => Model.NewCase.Caption, new { maxlength = "100", @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Caption.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -823,27 +823,13 @@
                                             </div>
                                         </div>
                                     }
-
-                                    @if (Model.AttachmentPlacement == 0 && Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+                                    @if (Model.AttachmentPlacement == 0 & Model.FieldSettings.Any(f => f.Name.Equals(GlobalEnums.TranslationCaseFields.Filename.ToString())))
                                     {
-                                        <div class="form-group row @GlobalEnums.TranslationCaseFields.Filename.ToString()">
-                                            <label class="col-md-3">@CaseFieldCaption(GlobalEnums.TranslationCaseFields.Filename, false)</label>
-                                            <div class="col-md-4">
-                                                <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add")</a>
-                                                <a href="#upload_clipboard_file_popup" role="button" class="btn btn-default hasAttribute" data-src="case" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard")</a>
-                                                <table id="NewCasefiles_table" class="table table-striped">
-                                                    <tbody>
-                                                        @if (Model.NewCase.CaseFiles == null)
-                                                        {
-                                                            <tr>
-                                                                <td><div id="no_uploaded_files_label"></div></td>
-                                                            </tr>
-
-                                                        }
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
+                                        @Html.Partial("_FilesAttachButtons", new ViewDataDictionary(ViewData)
+                                        {
+                                            {"fieldCaption", CaseFieldCaption(GlobalEnums.TranslationCaseFields.Filename, false) },
+                                            {"hasFiles", Model.NewCase.CaseFiles != null && Model.NewCase.CaseFiles.Any()}
+                                        })
                                     }
                                     <div class="form-group row">
                                         <label class="col-md-3"></label>
@@ -856,46 +842,15 @@
             </div>
 
         </div>
-        @if (Model.AttachmentPlacement == 1 && Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+        @if (Model.AttachmentPlacement == 1 && Model.FieldSettings.Any(f => f.Name.Equals(GlobalEnums.TranslationCaseFields.Filename.ToString())))
         {
             <div id="attachment-tab" class="tab-pane" style="overflow:hidden;">
                 <div class="container-fluid dh-container">
-
-                    <div class="form-group row @GlobalEnums.TranslationCaseFields.Filename.ToString()">
-                        <div class="col-md-12">
-                            <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add")</a>
-                            <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                            <h5 class="modal-title">&nbsp;</h5>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div id="NewCasefile_uploader"></div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close")</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <a href="#upload_clipboard_file_popup" role="button" class="btn btn-default hasAttribute" data-src="case" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard")</a>
-
-
-                            <table id="NewCasefiles_table" class="table table-striped">
-                                <tbody>
-                                    @if (Model.NewCase.CaseFiles == null)
-                                    {
-                                        <tr>
-                                            <td><div id="no_uploaded_files_label"></div></td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    @Html.Partial("_FilesAttachButtons", new ViewDataDictionary(ViewData)
+                    {
+                        {"fieldCaption", null },
+                        {"hasFiles", Model.NewCase.CaseFiles != null && Model.NewCase.CaseFiles.Any()}
+                    })
                 </div>
             </div>
         }
@@ -908,79 +863,8 @@
 }
 
 @section Dialogs {
-
-    <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h5 class="modal-title">&nbsp;</h5>
-                </div>
-                <div class="modal-body">
-                    <div id="NewCasefile_uploader"></div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close")</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="upload_clipboard_file_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3>&nbsp;</h3>
-                </div>
-                <div class="modal-body" style="max-height: 600px; text-align: center;">
-                    <form onsubmit="return false;">
-                        <div class="form-group">
-                            <label>@Translation.Get("1. Write filename (leave blank for automatic naming)") </label><br />
-                            <input class="" type="text" id="imgFilename" autocomplete="Off" />
-                            <span id="imageNameRequired" style="color: red"> @Translation.Get("must be specified") </span>
-                        </div>
-                        <div class="form-group">
-                            <label>@(Translation.Get("2. Press Ctrl+V for inserting picture") )</label><br />
-                            <label>@(Translation.Get("3. Click on Save for adding to case")) </label>
-                            <div id="previewPnl"></div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="btnSave" class="btn btn-ok btn-default" style="display: none">@Translation.Get("Save")</button>
-                    <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel")</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="upload_clipboard_file_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3>&nbsp;</h3>
-                </div>
-                <div class="modal-body" style="max-height: 600px; text-align: center;">
-                    <form onsubmit="return false;">
-                        <div class="form-group">
-                            <label>@Translation.Get("1. Write filename (leave blank for automatic naming)") </label><br />
-                            <input class="" type="text" id="imgFilename" autocomplete="Off" />
-                            <span id="imageNameRequired" style="color: red"> @Translation.Get("must be specified") </span>
-                        </div>
-                        <div class="form-group">
-                            <label>@(Translation.Get("2. Press Ctrl+V for inserting picture") )</label><br />
-                            <label>@(Translation.Get("3. Click on Save for adding to case")) </label>
-                            <div id="previewPnl"></div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="btnSave" class="btn btn-ok btn-default" style="display: none">@Translation.Get("Save")</button>
-                    <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel")</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    @Html.Partial("ModalDialogs/_UploadFilePopup", "upload_files_popup")
+    @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")
 
     <div id="case_urgent_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true" style="display: none">
         <div class="modal-dialog">
@@ -1041,7 +925,7 @@
             //Save case
             $('.save-button').on('click', function (e) {
                 e.preventDefault();
-                
+
                 saveNewCase();
             });
 

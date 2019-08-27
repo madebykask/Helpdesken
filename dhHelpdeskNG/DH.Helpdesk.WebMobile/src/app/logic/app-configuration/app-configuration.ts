@@ -13,10 +13,10 @@ export function initApplication(
   localStorage: LocalStorageService,
   logger: LoggerService): Function {
     return () => {
-      let userSettings$ = userSettingsService.applyUserSettings();
-      let translation$ = translationApiService.getLanguages();
+      const userSettings$ = userSettingsService.applyUserSettings();
+      const translation$ = translationApiService.getLanguages();
 
-      return forkJoin(userSettings$, translation$).pipe(
+      return forkJoin([userSettings$, translation$]).pipe(
           take(1),
           map(([userSettings, langs]) => {
             // add languages to the inner collection of supported languages to switch into

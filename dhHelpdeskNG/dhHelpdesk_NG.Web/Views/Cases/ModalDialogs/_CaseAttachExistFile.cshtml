@@ -1,8 +1,5 @@
 ﻿
 @using DH.Helpdesk.Web
-@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
-
-@Scripts.Render(BundleConfig.ScriptNames.CaseAttachExistingFiles)
 
 <div id="case_attach_ex_file_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
@@ -12,25 +9,8 @@
                 <h5>@Translation.GetCoreTextTranslation("Bifogade filer")</h5>
             </div>
             <div class="modal-body max-height-600">
-                <div>
-                    <table class="table-striped table-bordered table-hover" style="width: 100%" id="table_attached_files">
-                        @foreach (var file in Model.CaseAttachedExFiles)
-                        {
-                            <tr>
-                                <td style="padding: 3px;">
-                                    <div class="checkbox commun">
-                                        <input type="hidden" id="isCaseFile" value="@file.IsCaseFile.ToString()"/>
-                                        @if (!file.IsCaseFile)
-                                        {
-                                            <input type="hidden" id="file_logId" value="@file.LogId"/>
-                                        }
-                                        <input type="checkbox" value="@file.Id"/>
-                                        <span class="lbl">@file.FileName</span>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </table>
+                <div id="attachedFiles">
+                    @*Populated by ajax from server*@
                 </div>
             </div>
             <div class="modal-footer-right">
@@ -40,3 +20,5 @@
         </div>
     </div>
 </div>
+
+@Scripts.Render(BundleConfig.ScriptNames.CaseAttachExistingFiles)

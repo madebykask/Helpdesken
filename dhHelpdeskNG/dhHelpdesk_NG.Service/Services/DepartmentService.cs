@@ -46,7 +46,7 @@ namespace DH.Helpdesk.Services.Services
 
         IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId);
 
-        IEnumerable<Department> GetDepartmentsByIdsWithHolidays(int[] departmentsIds);
+        List<Department> GetDepartmentsByIdsWithHolidays(int[] departmentsIds, int defaultCalendarId);
 
         IList<Department> GetChargedDepartments(int customerId);
         bool CheckIfOUsRequireDebit(int departmentId, int? ouId = null);
@@ -55,6 +55,7 @@ namespace DH.Helpdesk.Services.Services
         IList<Department> GetDepartmentsWithRegion(int customerId, ActivationStatus isActive = ActivationStatus.Active);
         List<Department> GetActiveDepartmentForUserByRegion(int? regionId, int userId, int customerId);
         List<Department> GetDepartmentsForUser(int customerId, int userId, bool onlyActive = true);
+        bool IsUserDepartment(int departmentId, int userId, int customerId);
 
     }
 
@@ -126,17 +127,14 @@ namespace DH.Helpdesk.Services.Services
         public IList<int> GetDepartmentsIdsByUserPermissions(int userId, int customerId, bool isOnlyActive = true)
         {
             return
-                _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, isOnlyActive, true).AsQueryable()
-                    .Select(d => d.Id)
+                GetDepartmentsIdsByUserPermissionsQuery(userId, customerId, isOnlyActive)
                     .ToList();
         }
 
         public Task<List<int>> GetDepartmentsIdsByUserPermissionsAsync(int userId, int customerId, bool isOnlyActive = true)
         {
             return
-                _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, isOnlyActive, true).AsQueryable()
-                    .Select(d => d.Id)
-                    .ToListAsync();
+                GetDepartmentsIdsByUserPermissionsQuery(userId, customerId, isOnlyActive)                    .ToListAsync();
         }
 
         public IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool isOnlyActive = true)
@@ -266,10 +264,10 @@ namespace DH.Helpdesk.Services.Services
             return _departmentRepository.GetActiveDepartmentsBy(customerId, regionId);
         }
 
-        public IEnumerable<Department> GetDepartmentsByIdsWithHolidays(int[] departmentsIds)
+        public List<Department> GetDepartmentsByIdsWithHolidays(int[] departmentsIds, int defaultCalendarId)
         {
-            return _departmentRepository.GetDepartmentsByIds(departmentsIds, true)
-                .Where(it => it.HolidayHeader != null);
+            return _departmentRepository.GetDepartmentsByIds(departmentsIds,  true)
+                .Where(it => it.HolidayHeader != null && it.HolidayHeader.Id != defaultCalendarId).ToList();
         }
 
         public void SaveDepartment(Department department,int[] invoiceOus, out IDictionary<string, string> errors)
@@ -363,7 +361,7 @@ namespace DH.Helpdesk.Services.Services
         
         public bool CheckIfOUsRequireDebit(int departmentId, int? ouId = null)
         {
-            var ous = _ouRepository.GetMany(o => o.Department_Id.HasValue && o.Department_Id == departmentId);
+            var ous = _ouRepository.GetMany(o => o.Department_Id.HasValue && o.Department_Id == departmentId).ToList();
             if (!ous.Any(o => o.ShowInvoice))
                 return true;
 
@@ -403,5 +401,18 @@ namespace DH.Helpdesk.Services.Services
 
             return dep;
         }
+
+        public bool IsUserDepartment(int departmentId, int userId, int customerId)
+        {
+            return _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, false, true)
+                .Any(d => d.Id == departmentId);
+        }
+
+        private IQueryable<int> GetDepartmentsIdsByUserPermissionsQuery(int userId, int customerId, bool isOnlyActive)
+        {
+            return _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, isOnlyActive, true)
+                .Select(d => d.Id);
+        }
+
     }
 }

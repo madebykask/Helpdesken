@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Specifications.User
+﻿using DH.Helpdesk.Common.Enums;
+
+namespace DH.Helpdesk.Services.BusinessLogic.Specifications.User
 {
     using System.Linq;
 
@@ -31,13 +33,20 @@
             query = query.Where(u => u.IsActive != 0);
 
             return query;
-        } 
+        }
+
+        public static IQueryable<User> GetPerformers(this IQueryable<User> query)
+        {
+            query = query.Where(u => u.Performer == 1 && u.UserGroup_Id > UserGroups.User);
+            return query;
+        }
 
         public static IQueryable<User> GetAdministratorsWithEmails(this IQueryable<User> query, int customerId)
         {
             query = query
                 .GetByCustomer(customerId)
                 .GetActive()
+                .GetPerformers()
                 .Where(u => u.Email != string.Empty);
 
             return query;

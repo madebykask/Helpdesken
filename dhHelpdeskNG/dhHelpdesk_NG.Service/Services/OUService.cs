@@ -17,6 +17,7 @@ namespace DH.Helpdesk.Services.Services
         IList<OU> GetThemAllOUs(int customerId);
         IList<OU> GetOuForDepartment(int departmentId);
         IList<OU> GetOUs(int customerId);
+        IList<OU> GetRootOUs(int customerId, bool includeSubOu = false);
 
         IList<OU> GetOUs(int customerId, int departmentId, bool? isActive = null);
         Task<IList<OU>> GetOUsAsync(int customerId, int departmentId, bool? isActive = null);
@@ -69,6 +70,11 @@ namespace DH.Helpdesk.Services.Services
         public IList<OU> GetOUs(int customerId)
         {
             return this._ouRepository.GetMany(x => x.Parent_OU_Id == null && x.Department.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<OU> GetRootOUs(int customerId, bool includeSubOu = false)
+        {
+            return _ouRepository.GetRootOUs(customerId, includeSubOu).ToList();
         }
 
         public IList<OU> GetOUs(int customerId, int departmentId, bool? isActive = null)

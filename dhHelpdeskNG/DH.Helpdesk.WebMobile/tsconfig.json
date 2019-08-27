@@ -6,10 +6,10 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
+    "module": "commonjs", //esnext is required for aot
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es5",
-    //"strictNullChecks": true,
+    "target": "es2015",
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -18,7 +18,15 @@
       "dom"
     ],
     "paths": {
-      "@env/*": ["src/environments/*"]
-    }
+      "@env/*": ["src/environments/*"],
+      "core-js/es7/reflect": [
+        "node_modules/core-js/proposals/reflect-metadata"
+      ]   
+    }   
   }
+  /*
+  "angularCompilerOptions": {   
+    "enableIvy": true  // requires module: 'esnext'
+  }
+  */  
 }

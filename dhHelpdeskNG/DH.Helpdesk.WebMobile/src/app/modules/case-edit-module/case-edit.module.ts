@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CaseEditRoutingModule } from './case-edit-routing.module';
 import { CaseEditComponent } from './components/case-edit/case-edit.component';
 import { MbscFormGroupExpandDirective } from './components/case-edit/directives/form-group-expand.directive';
@@ -38,6 +38,7 @@ import { Pdf3FileViewerComponent } from './components/file-preview/viewers/pdf3-
 import { NotifierSearchComponent } from './components/case-edit/controls/notifier-search/notifier-search.component';
 import { FilterExtDirective } from './directives/filter-ext.directive';
 import { LognoteEmailInputComponent } from './components/case-edit/controls/lognote-email-input/lognote-email-input.component';
+import { CaseMenuComponent } from './components/case-menu/case-menu.component';
 
 @NgModule({
   declarations: [ CaseEditComponent,
@@ -47,7 +48,7 @@ import { LognoteEmailInputComponent } from './components/case-edit/controls/logn
     CaseActionContainerComponent, GeneralActionComponent, FieldChangeActionComponent, LogNoteActionComponent, ActionsFilterPipe,
     CaseLogInputComponent, LogFilesUploadComponent, FilePreviewComponent, PdfFileViewer, CommonFileViewer, ImageFileViewerComponent,
     TextFileViewerComponent, Pdf2FileViewerComponent, Pdf3FileViewerComponent, NotifierSearchComponent, MbscFormGroupExpandDirective,
-    FilterExtDirective, LognoteEmailInputComponent
+    FilterExtDirective, LognoteEmailInputComponent, CaseMenuComponent
 ],
   imports: [
     CommonModule,
@@ -62,6 +63,7 @@ import { LognoteEmailInputComponent } from './components/case-edit/controls/logn
 
   ],
   entryComponents: [FieldChangeActionComponent, LogNoteActionComponent, GeneralActionComponent],
-  exports: []
+  exports: [],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class CaseEditModule { }

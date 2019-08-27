@@ -16,11 +16,11 @@ const appRoutes: Routes = [{
         path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard]
       }, {
         path: 'casesoverview',
-        loadChildren: './modules/case-overview-module/case-overview.module#CaseOverviewModule',
+        loadChildren: () => import('./modules/case-overview-module/case-overview.module').then(m => m.CaseOverviewModule),
         canActivate: [AuthGuard]
       }, {
         path: 'case',
-        loadChildren: './modules/case-edit-module/case-edit.module#CaseEditModule',
+        loadChildren: () => import('./modules/case-edit-module/case-edit.module').then(m => m.CaseEditModule),
         canActivate: [AuthGuard]
       }, {
         path: 'createcase',

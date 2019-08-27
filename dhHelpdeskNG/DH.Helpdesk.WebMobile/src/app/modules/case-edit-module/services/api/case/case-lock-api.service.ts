@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable, throwError } from "rxjs";
-import { take, map, catchError } from "rxjs/operators";
-import { LocalStorageService } from "src/app/services/local-storage";
-import { CaseLockModel } from "../../../models";
-import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { take, map, catchError } from 'rxjs/operators';
+import { LocalStorageService } from 'src/app/services/local-storage';
+import { CaseLockModel } from '../../../models';
+import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/httpServiceBase';
 
 @Injectable({ providedIn: 'root' })
 export class CaseLockApiService extends HttpApiServiceBase {
@@ -25,7 +25,7 @@ export class CaseLockApiService extends HttpApiServiceBase {
     );
   }
 
-  reExtendedCaseLock(caseId: number, lockGuid: string, extendValue: number): Observable<Boolean>{
+  reExtendedCaseLock(caseId: number, lockGuid: string, extendValue: number): Observable<Boolean> {
       const data = {
           caseId: caseId,
           lockGuid : lockGuid,

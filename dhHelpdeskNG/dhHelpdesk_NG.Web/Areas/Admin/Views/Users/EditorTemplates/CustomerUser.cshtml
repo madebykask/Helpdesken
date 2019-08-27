@@ -1,0 +1,14 @@
+﻿@using DH.Helpdesk.BusinessData.OldComponents
+@model DH.Helpdesk.BusinessData.Models.User.CustomerUserForEdit
+    
+<td>
+    @Html.HiddenFor(m => Model.CustomerId)
+    @Html.HiddenFor(m => Model.UserId)
+    @Html.CheckBoxFor(m => Model.UserInfoPermission)@Translation.GetCoreTextTranslation("Användaren får läsa"):&nbsp; @Translation.GetCoreTextTranslation("Användarinformation")<br />
+    @Html.CheckBoxFor(m => Model.CaptionPermission)@Translation.GetCoreTextTranslation("Användaren får ändra"):&nbsp; @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Caption.ToString(), Model.CustomerId)<br />
+    @Html.CheckBoxFor(m => Model.ContactBeforeActionPermission)@Translation.GetCoreTextTranslation("Användaren får ändra"):&nbsp; @Translation.GetForCase(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(), Model.CustomerId)<br />
+    @Html.CheckBoxFor(m => Model.PriorityPermission)@Translation.GetCoreTextTranslation("Användaren får ändra"):&nbsp; @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Model.CustomerId)<br />
+    @Html.CheckBoxFor(m => Model.StateSecondaryPermission)@Translation.GetCoreTextTranslation("Användaren får ändra"):&nbsp; @Translation.GetForCase(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Model.CustomerId)<br />
+    @Html.CheckBoxFor(m => Model.WatchDatePermission)@Translation.GetCoreTextTranslation("Användaren får ändra"):&nbsp; @Translation.GetForCase(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Model.CustomerId)<br />
+    @Html.CheckBoxFor(m => Model.RestrictedCasePermission)@Translation.GetCoreTextTranslation("Användaren kan endast se sina egna ärenden")<br />
+</td>

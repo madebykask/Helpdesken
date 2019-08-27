@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
+using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -23,6 +24,7 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         IQueryable<Case> GetCustomerCases(int customerId);
         IQueryable<Case> GetDetachedCaseQuery(int id, bool includeLogs = false);
+        CaseOverview GetCaseBasic(int id);
         Case GetCaseById(int id, bool markCaseAsRead = false);
         Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false);
         Case GetCaseByGUID(Guid GUID);
@@ -93,6 +95,17 @@ namespace DH.Helpdesk.Dal.Repositories
         public IQueryable<Case> GetCustomerCases(int customerId)
         {
             return Table.Where(x => x.Customer_Id == customerId);
+        }
+        
+        public CaseOverview GetCaseBasic(int id)
+        {
+            var caseInfo = DataContext.Cases.Where(c => c.Id == id).Select(c => new CaseOverview()
+            {
+                Id = c.Id,
+                CustomerId = c.Customer_Id, 
+                CaseNumber = c.CaseNumber,
+            }).FirstOrDefault();
+            return caseInfo;
         }
 
         public Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false)
@@ -209,6 +222,11 @@ namespace DH.Helpdesk.Dal.Repositories
         public IQueryable<Case> GetDetachedCaseQuery(int id, bool includeLogs = false)
         {
             var query = DataContext.Cases.Where(w => w.Id == id);
+                //.Include(c => c.CaseType)
+                //.Include(c => c.Priority)
+                //.Include(c => c.Workinggroup)
+                //.Include(c => c.ProductArea)
+                //.Include(c => c.StateSecondary);
             if (includeLogs)
                 query = query.Include(c => c.Logs);
             return query.AsNoTracking();
@@ -295,17 +313,19 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user)
         {
-            var query = from c in this.DataContext.Cases
-                        where c.Customer_Id == customerId
-                        && c.Id != id
-                        && c.ReportedBy.ToLower() == reportedBy.ToLower()
-                        select c;
+            var query = DataContext.Cases.Where(c => c.Customer_Id == customerId
+                                                     && c.Id != id
+                                                     && c.ReportedBy.ToLower() == reportedBy.ToLower());
+
+            var restrictToOwnCasesOnly = 
+                DataContext.CustomerUsers.Single(x => x.Customer_Id == customerId && x.User_Id == user.Id).RestrictedCasePermission;
+            
             //handläggare
-            if (user.RestrictedCasePermission == 1 && user.UserGroupId == 2)
+            if (restrictToOwnCasesOnly && user.UserGroupId == UserGroups.Administrator)
                 query = query.Where(c => c.Performer_User_Id == user.Id || c.CaseResponsibleUser_Id == user.Id);
 
             //anmälare
-            if (user.RestrictedCasePermission == 1 && user.UserGroupId == 1)
+            if (restrictToOwnCasesOnly && user.UserGroupId == UserGroups.User)
                 query = query.Where(c => c.ReportedBy.ToLower() == user.UserId.ToLower());
 
             return query.Select(c => new CaseRelation()
@@ -325,6 +345,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 .Where(c => customers.Contains(c.Customer_Id))
                 .Select(c => new CaseOverview()
                 {
+                    Id = c.Id,
                     CustomerId = c.Customer_Id,
                     Deleted = c.Deleted,
                     FinishingDate = c.FinishingDate,
@@ -344,10 +365,18 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public CaseOverview GetCaseOverview(int caseId)
         {
-            var query = (from _case in DataContext.Cases
-                         from caseHistory in _case.CaseHistories.DefaultIfEmpty() //will load CaseHistories with left join
+            var query = (from _case in DataContext.Cases.AsNoTracking()
+                         //from caseHistory in _case.CaseHistories.DefaultIfEmpty() //will load CaseHistories with left join
                          where _case.Id == caseId
-                         select _case);
+                         select _case)
+                        .Include(c => c.CaseHistories)
+                        .Include(c => c.CaseType)
+                        .Include(c => c.Department)
+                        .Include(c => c.Region)
+                        .Include(c => c.Priority)
+                        .Include(c => c.Workinggroup)
+                        .Include(c => c.ProductArea)
+                        .Include(c => c.StateSecondary);
 
             return query.Select(CaseToCaseOverviewMapper.Map).FirstOrDefault();
         }
@@ -420,6 +449,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return DataContext.Cases
                 .Include(x => x.Department)
                 .Include(x => x.Workinggroup)
+                .Include(x => x.ProductArea)
                 .FirstOrDefault(x => x.Id == id);
         }
         

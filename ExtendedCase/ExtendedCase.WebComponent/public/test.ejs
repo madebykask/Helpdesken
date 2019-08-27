@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>    
+    <base href="<%= htmlWebpackPlugin.options.baseUrl %>">
+    <meta charset="utf-8" />
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <% for (var chunk in htmlWebpackPlugin.options.head.css) { %>
+        <link  href="<%= htmlWebpackPlugin.files.chunks[htmlWebpackPlugin.options.head.css[chunk]].css %>" rel="stylesheet"></link>
+    <% } %>
+    <% for (var customCss in htmlWebpackPlugin.options.head.customCss) { %>
+        <link  href="<%= htmlWebpackPlugin.options.head.customCss[customCss] %>" rel="stylesheet"></link>
+    <% } %>
+    <% for (var chunk in htmlWebpackPlugin.options.head.js) { %>
+        <script src="<%= htmlWebpackPlugin.files.chunks[htmlWebpackPlugin.options.head.js[chunk]].entry %>"></script>
+    <% } %>
+</head>
+<body>
+
+<!-- extended case web element -->
+<extended-case></extended-case>
+
+<br />
+<div>
+    <button type="button" onclick="saveFormData()">Save</button>
+</div>
+<br />
+<!-- test validation: validation buttons test -->
+<div id="form">    
+    <form>
+            <div class="form-group">
+                <label for="extendedCaseFormId">FormId:</label>
+                <input id="extendedCaseFormId" type="text" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="extendedCaseGuid">ExtendedCase Guid:</label>
+                <input id="extendedCaseGuid" type="text" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="customerId">CustomerId:</label>
+                <input id="customerId" type="text" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="langId">Language:</label>
+                <input id="langId" type="text" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="userId">UserId:</label>
+                <input id="userId" type="text" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="userRole">UserRole:</label>
+                <input id="userRole" type="text" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="caseStatus">CaseStatus:</label>
+                <input id="caseStatus" type="text" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="userGuid">User Guid:</label>
+                <input id="userGuid" type="text" class="form-control" />
+            </div>
+
+
+    </form>
+    <button type="button" class="btn btn-success" onclick="loadForm()">Load Form</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="reloadForm()">Reload Form</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="getCaseValues()">Get Case Values</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="setNextStep()">Set Next Step</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="setPrevStep()">Set Prev Step</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="validateExtendedCase(false)">Validate onSave</button>&nbsp;
+    <button type="button" class="btn btn-success" onclick="validateExtendedCase(true)">Validate onNext</button>
+    <button type="button" class="btn btn-success" onclick="test()">Test</button>
+</div>
+<br />
+
+<script type="text/javascript">
+      
+    var _component = null;
+
+    function getComponent() {
+        if (_component === null) {
+            _component = document.querySelector('extended-case');
+        }
+       return _component;
+    }
+
+    function loadForm() {
+        const component = getComponent();
+        
+        var state = {
+        formParameters: {
+            formId: 2, 
+            extendedCaseGuid: '595D56C0-1C21-4CC1-94FB-E8674740DB47',
+            userGuid: '9005F3D3-D62B-4F54-85B3-63A8EFB80782',
+            languageId: 1,
+            currentUser: 'admin',
+            isCaseLocked: 0,
+            
+            //assignment parameters:
+            customerId: 1,
+            userRole: 4,
+            caseStatus: 0
+        }, 
+        caseValues: { 
+            caseField1: '2', 
+            reportedby: '8',
+            test: 'val'  
+        } 
+        };
+
+        subscribeEvents(component);
+
+        //load component
+        component.loadForm = state;
+    }
+
+    function subscribeEvents(component) {
+
+        component.addEventListener('formLoadComplete', function(event) {
+          if (event.detail.isSuccess) {
+            console.log('Form has been loaded successfully');
+            alert('Form has been loaded successfully');
+          } else {
+            console.log('Form failed to load. Error: %s', event.detail);
+            alert('Form failed to load');
+          }
+        });
+
+        component.addEventListener('formSaveComplete', function(event) {
+          if (event.detail.isSuccess) {
+            console.log('Form saved. Guid: ', event.detail.data.toString());
+            alert('Form saved!');
+          } else {
+            console.log('Form failed to save. Error: %s', event.detail);
+            alert('Failed to save form');
+          }
+        });
+
+        
+        component.addEventListener('validationComplete', function(event) {
+            console.log('Form has been validated: %s', JSON.stringify(event.detail.data));
+            alert('Form has been validated');
+        });
+
+        component.addEventListener('formParametersRead', function(event) {
+            console.log('FormParameters has been read: %s', JSON.stringify(event.detail.data));
+            alert('FormParameters has been read');
+        });
+
+        component.addEventListener('caseValuesRead', function(event) {            
+            console.log('Case values has been read: %s', JSON.stringify(event.detail.data));
+            alert('Case values has been read');
+        });
+    }
+
+    //function test() {
+    //    window.extendedCaseComponentRef.zone.run(function () {
+    //        return window.extendedCaseComponentRef.component.test();
+    //    });
+    //}
+        
+    function reloadForm() {
+        var formParameters = document.getElementById("extendedCaseFrame").contentWindow.getFormParameters();
+        formParameters.languageId = 1;
+        document.getElementById("extendedCaseFrame").contentWindow.loadExtendedCase({ formParameters: formParameters, caseValues: { caseField1: { Value: '2'} } });
+    }
+        
+    function getCaseValues() {
+        const component = getComponent();
+        component.getCaseValues = 'sss'; // any value to call setter function
+        
+        //var vals = document.getElementById("extendedCaseFrame").contentWindow.getCaseValues();
+        //console.log(vals);
+    }
+        
+    function setNextStep() {
+        const component = getComponent();
+        component.setNextStep = {step: 5, isNextValidation: true};
+        //document.getElementById("extendedCaseFrame").contentWindow.setNextStep(5, true);
+    }
+
+    function setPrevStep() {
+        const component = getComponent();
+        component.setNextStep = {step: 0, isNextValidation: false};
+        //document.getElementById("extendedCaseFrame").contentWindow.setNextStep(0, false);
+    }
+
+    function saveFormData() {
+        const component = getComponent();
+        component.saveForm = false; //raises saveComplete event
+        //var promise = document.getElementById("extendedCaseFrame").contentWindow.saveExtendedCase(false);
+        //promise.then(onSaveSuccess, onSaveError);
+    }
+
+    function validateExtendedCase(isOnNext) {
+        //debugger;
+        const component = getComponent();
+        component.validateForm = isOnNext || false; // raises an event
+        //var errors = document.getElementById("extendedCaseFrame").contentWindow.validateExtendedCase(isOnNext || false);
+        //if (errors) alert(JSON.stringify(errors));// validation failed
+    }
+
+    function onSaveSuccess(result) {
+        console.log('Success. Result: ' + result.extendedCaseGuid);
+    }
+
+    function onSaveError(err) {
+        var errorMsg = err.error || 'Unknown error';
+        console.error('Error. ' + errorMsg);
+    }
+</script>
+
+<% for (var chunk in htmlWebpackPlugin.options.body.js) { %>
+    <script src="<%= htmlWebpackPlugin.files.chunks[htmlWebpackPlugin.options.body.js[chunk]].entry %>"></script>
+<% } %>
+
+</body>
+</html>

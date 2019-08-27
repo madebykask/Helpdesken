@@ -1,5 +1,5 @@
 ﻿// Global variables 
-var dhHelpdesk = {};
+var dhHelpdesk = window.dhHelpdesk || {};
 var publicCustomerId = $('#case__Customer_Id').val();
 
 var _departmentControlName = '#case__Department_Id';
@@ -368,28 +368,43 @@ function bindDeleteCaseFileBehaviorToDeleteButtons() {
         });
     });
 }
-function bindDeleteLogFileBehaviorToDeleteButtons() {
-    $('#log_files_table a[id^="delete_logfile_button_"]').click(function () {
-        var key = $('#LogKey').val();
-        var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
-        var isAttached = $(this).parent().parent().find('a.isExisted');
-        var logFileId = null;
-        if (isAttached.length > 0) {
-            logFileId = $(this).parent().parent().find("#logfile_id").val();
-        }
-        var pressedDeleteFileButton = this;
 
-        $.post("/Cases/DeleteLogFile", { id: key, fileName: fileName, isExisting: isAttached.length > 0, fileId: logFileId }, function () {
-                $(pressedDeleteFileButton).parents('tr:first').remove();
-                var fileNames = $('#LogFileNames').val();
+//TODO: update usages to separate between Internl/External logs handling
+function bindDeleteLogFileBehaviorToDeleteButtons(isInternalLog) {
+    // add delete btn handler
+    var $container = isInternalLog === true ? $('div.internalLog-files') : $('div.externalLog-files');
+    if ($container.length) {
+        $container.find('a[id^="delete_logfile_button_"]').click(function () {
+            var key = $('#LogKey').val();
+            var $row = $(this).closest('tr');
+            var $fileLinkEl = $row.find('a');
+            var fileName = $fileLinkEl.text();
+            var isAttached = $fileLinkEl.hasClass('isExisted');
+            var logFileId = isAttached ? $row.find("#logfile_id").val() : null;
+            var isInternalLog = $row.closest('table').data('logtype') === 'internalLog';
+
+            //prepare input data
+            var data = {
+                id: key,
+                fileName: fileName,
+                isExisting: isAttached,
+                fileId: logFileId,
+                logType: isInternalLog === true ? 1 : 0
+            };
+
+            $.post("/Cases/DeleteLogFile", $.param(data), function () {
+                $row.remove();
+                var $logFileNames = isInternalLog ? $('#LogFileNamesInternal') : $('#LogFileNames');
+                var fileNames = $logFileNames.val();
                 fileNames = fileNames.replace("|" + fileName.trim(), "");
                 fileNames = fileNames.replace(fileName.trim() + "|", "");
-                $('#LogFileNames').val(fileNames);
+                $logFileNames.val(fileNames);
 
                 // Raise event about deleted file
                 $(document).trigger("OnDeleteCaseLogFile", [key, fileName]);
             });
-    });
+        });
+    }
 }
 
 function SetPriority() {

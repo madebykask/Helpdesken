@@ -1,7 +1,7 @@
-﻿using System.Linq.Expressions;
+﻿using System.Data.Entity;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case;
-using DH.Helpdesk.BusinessData.Models.Customer.Input;
 using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Extensions.Integer;
@@ -81,6 +81,7 @@ namespace DH.Helpdesk.Services.Services
         IList<UserGroup> GetUserGroups();
         IList<UserRole> GetUserRoles();
         IList<UserWorkingGroup> GetUserWorkingGroups();
+        IList<UserWorkingGroup> GetUserWorkingGroupsByWorkgroup(int workingGroupId);
         IList<int> GetUserCustomersIds(int userId);
 
         //IList<User> GetUsersForWorkingGroup(int customerId, int workingGroupId, bool includeWorkingGroups = false);
@@ -108,7 +109,8 @@ namespace DH.Helpdesk.Services.Services
             int[] customersAvailable,
             int[] ots,
             int[] dus,
-            List<UserWorkingGroup> userWorkingGroups,
+            IList<UserWorkingGroup> userWorkingGroups,
+            IList<CustomerUserForEdit> customerUsers,
             out IDictionary<string, string> errors);
         
         void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> UserWorkingGroups, int[] departments, out IDictionary<string, string> errors, string confirmpassword = "");
@@ -197,7 +199,7 @@ namespace DH.Helpdesk.Services.Services
         bool IsUserValidAdmin(string userId, string pass);
 
         bool VerifyUserCasePermissions(UserOverview user, int caseId);
-        Expression<Func<Case, bool>> GetCasePermissionFilter(UserOverview user);
+        Expression<Func<Case, bool>> GetCasePermissionFilter(UserOverview user, int customerId);
     }
 
     public class UserService : IUserService
@@ -435,7 +437,7 @@ namespace DH.Helpdesk.Services.Services
         {
             var query =
                 _userRepository.GetUsers(customerId)
-                    .Where(e => e.IsActive == 1 && (e.Performer == 1 || (userId.HasValue && e.Id == userId)))
+                    .Where(e => e.IsActive == 1 && (e.UserGroup_Id > UserGroups.User && e.Performer == 1 || (userId.HasValue && e.Id == userId)))
                     .OrderBy(e => e.SurName)
                     .ThenBy(e => e.FirstName);
 
@@ -447,7 +449,8 @@ namespace DH.Helpdesk.Services.Services
         {
             return
                 _userRepository.GetUsers(customerId)
-                    .Where(e => e.Performer == 1 || (userId.HasValue && e.Id == userId)).OrderBy(e => e.SurName)
+                    .Where(e => e.Performer == 1 && e.UserGroup_Id > UserGroups.User || (userId.HasValue && e.Id == userId))
+                    .OrderBy(e => e.SurName)
                     .ToList();
         }
 
@@ -455,7 +458,7 @@ namespace DH.Helpdesk.Services.Services
         {
             return
                 _userRepository.GetUsers(customerId)
-                    .Where(e => e.Performer == 1)
+                    .Where(e => e.Performer == 1 && e.UserGroup_Id > UserGroups.User)
                     .ToList();
         }
 
@@ -465,11 +468,11 @@ namespace DH.Helpdesk.Services.Services
             {
                 var query = 
                     _userRepository.GetUsersForWorkingGroupQuery(workingGroup.Value, customerId, true) 
-                        .Where(it => it.IsActive == 1 && it.Performer == 1); 
+                        .Where(it => it.IsActive == 1 && it.Performer == 1 && it.UserGroup_Id > UserGroups.User); 
 
                 return MapToCustomerUserInfo(query).ToList(); //todo: check working group flag
             }
-            return this.GetAvailablePerformersOrUserId(customerId);
+            return GetAvailablePerformersOrUserId(customerId);
         }
 
         public IList<User> SearchSortAndGenerateUsers(UserSearch searchUsers)
@@ -495,6 +498,15 @@ namespace DH.Helpdesk.Services.Services
         public IList<UserWorkingGroup> GetUserWorkingGroups()
         {
             return _userWorkingGroupRepository.GetAll().ToList();
+        }
+
+        public IList<UserWorkingGroup> GetUserWorkingGroupsByWorkgroup(int workingGroupId)
+        {
+            return _userWorkingGroupRepository.GetMany(uw => uw.WorkingGroup_Id == workingGroupId)
+                .AsQueryable()
+                .AsNoTracking()
+                .Include(ur => ur.User.Departments)
+                .ToList();
         }
         
         public CustomerUserInfo GetUserInfo(int id)
@@ -624,7 +636,7 @@ namespace DH.Helpdesk.Services.Services
             errors = new Dictionary<string, string>();
 
             _userRepository.Update(user);
-            this.Commit();
+            Commit();
         }
 
         public void SaveEditUser(
@@ -634,12 +646,13 @@ namespace DH.Helpdesk.Services.Services
             int[] customersAvailable, 
             int[] ots, 
             int[] dus, 
-            List<UserWorkingGroup> userWorkingGroups, 
+            IList<UserWorkingGroup> userWorkingGroups, 
+            IList<CustomerUserForEdit> customerUsers,
             out IDictionary<string, string> errors)
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user");
+                throw new ArgumentNullException(nameof(user));
             }
 
             errors = new Dictionary<string, string>();
@@ -678,8 +691,8 @@ namespace DH.Helpdesk.Services.Services
                 errors.Add("User permissions", _translator.Translate("There are wrong permissions for this user group."));
             }
 
-            var hasDublicate = this.GetUsers()
-                            .Any(u => u.UserID.EqualWith(user.UserID) && u.Id != user.Id);
+            var userId = user.UserID.ToLower().Trim();
+            var hasDublicate = _userRepository.GetMany(u => u.UserID.ToLower() == userId && u.Id != user.Id).Any();
             if (hasDublicate)
             {
                 errors.Add("User.UserID", "Det här användarnamnet är upptaget. Var vänlig använd något annat.");
@@ -818,13 +831,7 @@ namespace DH.Helpdesk.Services.Services
 
             #endregion
 
-            foreach (var customerUser in user.CustomerUsers)
-            {
-                if (customerUser.CasePerformerFilter == null)
-                {
-                    customerUser.CasePerformerFilter = string.Empty;
-                }
-            }
+            UpdareCustomerUserSettings(user, customerUsers);
 
             if (user.Id == 0)
                 _userRepository.Add(user);
@@ -832,7 +839,30 @@ namespace DH.Helpdesk.Services.Services
                 _userRepository.Update(user);
 
             if (errors.Count == 0)
-                this.Commit();
+                Commit();
+        }
+
+        private void UpdareCustomerUserSettings(User user, IList<CustomerUserForEdit> customerUsers)
+        {
+            foreach (var customerUser in user.CustomerUsers)
+            {
+                if (customerUser.CasePerformerFilter == null)
+                {
+                    customerUser.CasePerformerFilter = string.Empty;
+                }
+
+                var cusData = customerUsers.FirstOrDefault(x => x.CustomerId == customerUser.Customer_Id && x.UserId == customerUser.User_Id);
+                if (cusData != null)
+                {
+                    customerUser.UserInfoPermission = cusData.UserInfoPermission.ToInt();
+                    customerUser.CaptionPermission = cusData.CaptionPermission.ToInt();
+                    customerUser.ContactBeforeActionPermission = cusData.ContactBeforeActionPermission.ToInt();
+                    customerUser.PriorityPermission = cusData.PriorityPermission.ToInt();
+                    customerUser.StateSecondaryPermission = cusData.StateSecondaryPermission.ToInt();
+                    customerUser.WatchDatePermission = cusData.WatchDatePermission.ToInt();
+                    customerUser.RestrictedCasePermission = cusData.RestrictedCasePermission;
+                }
+            }
         }
         
         public void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> UserWorkingGroups, int[] departments, out IDictionary<string, string> errors, string confirmpassword = "")
@@ -1012,6 +1042,7 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
+            
             if (user.Id == 0)
                 _userRepository.Add(user);
             else
@@ -1118,9 +1149,12 @@ namespace DH.Helpdesk.Services.Services
 
         public bool VerifyUserCasePermissions(UserOverview user, int caseId)
         {
+            var caseCustomerId = _customerRepository.GetCustomerByCaseId(caseId);
+            var customerSettings = _customerUserRepository.GetCustomerSettings(caseCustomerId, user.Id);
+
             Expression<Func<Case, bool>> casePermissionFilter = null;
 
-            if (user.RestrictedCasePermission.ToBool())
+            if (customerSettings.RestrictedCasePermission)
             {
                 switch (user.UserGroupId)
                 {
@@ -1137,11 +1171,13 @@ namespace DH.Helpdesk.Services.Services
             return isAuthorised;
         }
 
-        public Expression<Func<Case, bool>> GetCasePermissionFilter(UserOverview user)
+        public Expression<Func<Case, bool>> GetCasePermissionFilter(UserOverview user, int customerId)
         {
+            var customerSettings = _customerUserRepository.GetCustomerSettings(customerId, user.Id);
+
             Expression<Func<Case, bool>> casePermissionFilter = null;
 
-            if (user.RestrictedCasePermission.ToBool())
+            if (customerSettings.RestrictedCasePermission)
             {
                 switch (user.UserGroupId)
                 {
@@ -1154,7 +1190,6 @@ namespace DH.Helpdesk.Services.Services
             }
 
             return casePermissionFilter;
-
         }
 
         /// <summary>

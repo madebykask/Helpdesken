@@ -1,11 +1,9 @@
 ﻿using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using DH.Helpdesk.Common.Enums.Logs;
+using DH.Helpdesk.Dal.Enums;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -15,14 +13,15 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IMasterDataService _masterDataService;
         private readonly ILogService _logService;
 
-        public FileHandlerController(ICaseService caseService,
+        public FileHandlerController(
+            ICaseService caseService,
             IMasterDataService masterDataService,
             ILogService logService)
             : base(masterDataService)
         {
-            this._masterDataService = masterDataService;
-            this._caseService = caseService;
-            this._logService = logService;
+            _masterDataService = masterDataService;
+            _caseService = caseService;
+            _logService = logService;
         }
 
         /// <summary>
@@ -37,7 +36,7 @@ namespace DH.Helpdesk.Web.Controllers
             var link = "";
             var absolute = RequestExtension.GetAbsoluteUrl();
 
-            var c = this._caseService.GetCaseById(int.Parse(id));
+            var c = _caseService.GetCaseById(int.Parse(id));
             var basePath = string.Empty;
             if (c != null)
             {
@@ -49,36 +48,37 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             link = absolute + basePath + c.CaseNumber + "/" + EncodeStr(fileName);
-            
             return link;
         }
 
         [HttpGet]
-        public string LogFileLinkVD(string id, string fileName)
+        public string LogFileLinkVD(string id, string fileName, int logType)
         {
             var link = "";
 
             var absolute = RequestExtension.GetAbsoluteUrl();
-            var l = this._logService.GetLogById(int.Parse(id));
+            var l = _logService.GetLogById(int.Parse(id));
             var basePath = string.Empty;
 
             if (l != null)
             {
-                var c = this._caseService.GetCaseById(l.CaseId);
+                var c = _caseService.GetCaseBasic(l.CaseId);
                 if (c != null)
                 {
-                    basePath = _masterDataService.GetVirtualDirectoryPath(c.Customer_Id);
+                    basePath = _masterDataService.GetVirtualDirectoryPath(c.CustomerId);
                     if (!basePath.EndsWith("/"))
                     {
                         basePath = basePath + "/";
                     }
                 }
-                link = absolute + basePath + "L" + id + "/" + EncodeStr(fileName);
+                var logFolder = logType == (int) LogFileType.Internal ? ModuleName.LogInternal : ModuleName.Log;
+                link = absolute + basePath + logFolder + id + "/" + EncodeStr(fileName);
             }
            
             return link;
         }
 
+        //todo: move to separate class and use Uri.EscapeDataString for IE, Edge.
         private string EncodeStr(string str)
         {
             str = str.Replace("%", "%25");
@@ -94,7 +94,7 @@ namespace DH.Helpdesk.Web.Controllers
             str = str.Replace("'", "%27");
             str = str.Replace(";", "%3B");
             str = str.Replace("+", "%2B");
-                        
+
             return str;
         }
 

@@ -2,6 +2,7 @@
 using DH.Helpdesk.BusinessData.Models.Orders.Index.OrderOverview;
 using DH.Helpdesk.BusinessData.Models.Shared.Input;
 using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
+using DH.Helpdesk.Services.BusinessLogic.Specifications.User;
 
 namespace DH.Helpdesk.Services.Services.Concrete.Orders
 {
@@ -176,12 +177,11 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 
                 var orderTypesInRow = this.GetChildrenInRow(orderTypes, true).ToList();
 
-                var administrators = administratorRep.GetAll()
-                                    .GetAdministrators(customerId);
+                var administrators = administratorRep.GetAll().GetAdministrators(customerId);
 
                 var statuses = statusRep.GetAll()
                                     .GetOrderStatuses(customerId);
-	            selectedStatuses = statuses.Where(x => x.SelectedInSearchCondition == 1).Select(x => x.Id).ToArray();
+                selectedStatuses = statuses.Where(x => x.SelectedInSearchCondition == 1).Select(x => x.Id).ToArray();
                 return OrderMapper.MapToFilterData(orderTypes, orderTypesInRow, administrators, statuses);
             }
         }
@@ -250,46 +250,46 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 
         public SearchResponse Search(SearchParameters parameters, int userId, bool isSelfService = false)
         {
-			var settings = this._orderFieldSettingsService.GetOrdersFieldSettingsOverview(parameters.CustomerId, parameters.OrderTypeId);
+            var settings = this._orderFieldSettingsService.GetOrdersFieldSettingsOverview(parameters.CustomerId, parameters.OrderTypeId);
             var user = _userRepository.GetUser(userId);
-			using (var uow = this._unitOfWorkFactory.CreateWithDisabledLazyLoading())
-			{
-				var orderTypeRep = uow.GetRepository<OrderType>();
+            using (var uow = this._unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var orderTypeRep = uow.GetRepository<OrderType>();
                 var orderFieldTypesRep = uow.GetRepository<OrderFieldType>();
                 var orderTypes = orderTypeRep.GetAll(x => x.Users).GetOrderTypes(parameters.CustomerId).ToList();
-			    var filteredOrderTypes = orderTypes;
+                var filteredOrderTypes = orderTypes;
                 if (isSelfService && user.UserGroupId < UserGroups.Administrator)
-			    {
-			        filteredOrderTypes = FilterOrderTypeByUser(orderTypes, userId);
-			    }
+                {
+                    filteredOrderTypes = FilterOrderTypeByUser(orderTypes, userId);
+                }
                 var rootOrderType = filteredOrderTypes.Where(ot => parameters.OrderTypeId == null || ot.Id == parameters.OrderTypeId).ToList();
-				var orderTypeDescendants = GetChildrenInRow(rootOrderType, true).ToList();
-				orderTypeDescendants.AddRange(rootOrderType);
-				var orderRep = uow.GetRepository<Order>();
+                var orderTypeDescendants = GetChildrenInRow(rootOrderType, true).ToList();
+                orderTypeDescendants.AddRange(rootOrderType);
+                var orderRep = uow.GetRepository<Order>();
 
-				var overviews = orderRep.GetAll().Search(
-									parameters.CustomerId,
-									orderTypeDescendants.Select(ot => ot.Id).ToArray(),
-									parameters.AdministratorIds,
-									parameters.StartDate,
-									parameters.EndDate,
-									parameters.StatusIds,
-									parameters.Phrase,
-									parameters.SortField,
-									parameters.SelectCount,
+                var overviews = orderRep.GetAll().Search(
+                                    parameters.CustomerId,
+                                    orderTypeDescendants.Select(ot => ot.Id).ToArray(),
+                                    parameters.AdministratorIds,
+                                    parameters.StartDate,
+                                    parameters.EndDate,
+                                    parameters.StatusIds,
+                                    parameters.Phrase,
+                                    parameters.SortField,
+                                    parameters.SelectCount,
                                     parameters.CreatedBy);
 
-				var caseNumbers = overviews.Where(o => o.CaseNumber.HasValue).Select(o => o.CaseNumber).ToList();
-				var caseRep = uow.GetRepository<Case>();
-				var caseEntities = caseRep.GetAll().Where(c => caseNumbers.Contains(c.CaseNumber)).ToList();
-			    var orderFieldTypes = orderFieldTypesRep.GetAll().GetByType(parameters.OrderTypeId).ActiveOnly().ToList();
+                var caseNumbers = overviews.Where(o => o.CaseNumber.HasValue).Select(o => o.CaseNumber).ToList();
+                var caseRep = uow.GetRepository<Case>();
+                var caseEntities = caseRep.GetAll().Where(c => caseNumbers.Contains(c.CaseNumber)).ToList();
+                var orderFieldTypes = orderFieldTypesRep.GetAll().GetByType(parameters.OrderTypeId).ActiveOnly().ToList();
 
-				var orderData = Sort(overviews.MapToFullOverviews(orderTypes, caseEntities, orderFieldTypes), parameters.SortField);
+                var orderData = Sort(overviews.MapToFullOverviews(orderTypes, caseEntities, orderFieldTypes), parameters.SortField);
 
                 var searchResult = new SearchResult(orderData.Count(), orderData);
-				return new SearchResponse(settings, searchResult);
-			}
-		}
+                return new SearchResponse(settings, searchResult);
+            }
+        }
 
         private List<OrderType> FilterOrderTypeByUser(List<OrderType> orderTypes, int userId)
         {
@@ -673,18 +673,17 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             var currentUser = _userRepository.GetById(request.UserId);
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId);
             var customer = _customerRepository.GetById(request.CustomerId);
-			var customerSetting = _settingService.GetCustomerSetting(request.CustomerId);
+            var customerSetting = _settingService.GetCustomerSetting(request.CustomerId);
+            var customEmailSender1 = customer.HelpdeskEmail;
 
-			var customEmailSender1 = customer.HelpdeskEmail;
-            var m = _mailTemplateService.GetMailTemplateLanguageForCustomer(40, request.CustomerId, request.LanguageId,
-                request.Order.OrderTypeId);
-            if (!String.IsNullOrEmpty(m?.Body) && !String.IsNullOrEmpty(m.Subject) &&
+            var m = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(request.CustomerId, request.LanguageId, 40, request.Order.OrderTypeId);
+
+            if (!string.IsNullOrEmpty(m?.Body) && !string.IsNullOrEmpty(m.Subject) &&
                 !string.IsNullOrWhiteSpace(mailto) && _emailService.IsValidEmail(mailto))
             {
                 var el = new OrderEMailLog(entity.Id, historyEntity.Id, 40, mailto, customEmailSender1);
                 var fields = GetOrderFieldsForEmail(entity, el.OrderEMailLogGUID.ToString(), userTimeZone);
-                var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() +
-                                      el.OrderEMailLogGUID.ToString();
+                var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.OrderEMailLogGUID.ToString();
 
                 //var AbsoluteUrl = RequestExtension.GetAbsoluteUrl();
                 var AbsoluteUrl = "";
@@ -770,14 +769,14 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             var programsRep = uow.GetRepository<Program>();
 
             var statuses = statusesRep.GetAll().GetByCustomer(customerId).OrderBy(x => x.SortOrder);
-            var administrators = administratorsRep.GetAll().GetByCustomer(customerId).GetActiveUsers(customerId);
+            var administrators = administratorsRep.GetAll().GetByCustomer(customerId).GetActiveUsers(customerId).GetPerformers();
             var domains = domainsRep.GetAll().GetByCustomer(customerId);
             var departments = departmentsRep.GetAll().GetActiveByCustomer(customerId);
             var units = ousRep.GetAll();
             var properties = propertiesRep.GetAll().GetByOrderType(orderTypeId);
             var deliveryDepartments = departmentsRep.GetAll().GetActiveByCustomer(customerId);
             var deliveryOuIds = ousRep.GetAll();
-            var administratorsWithEmails = administratorsRep.GetAll().GetActiveUsers(customerId).Where(x => x.Performer == 1 && x.Email != string.Empty);
+            var administratorsWithEmails = administratorsRep.GetAll().GetAdministratorsWithEmails(customerId);
             var orderType = orderTypeId.HasValue ? orderTypeRep.GetAll().GetById(orderTypeId.Value) : null;
             var orderTypeName = orderType != null ? orderType.MapToName() : null;
             var orderTypeDesc = orderType?.MapToDescription();

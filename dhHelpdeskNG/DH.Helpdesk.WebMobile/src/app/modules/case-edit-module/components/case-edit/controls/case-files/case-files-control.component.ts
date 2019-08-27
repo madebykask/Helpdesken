@@ -24,9 +24,6 @@ export class CaseFilesControlComponent {
   @Input() caseKey: string;
   @Input() accessMode: CaseAccessMode;
 
-  @ViewChild('fileList') fileList: MbscListview;
-  @ViewChild(CaseFilesUploadComponent) caseFilesComponent: CaseFilesUploadComponent;
-
   fileListSettings: MbscListviewOptions = {
     enhance: true,
     swipe: false
@@ -83,7 +80,7 @@ export class CaseFilesControlComponent {
     }
   }
   */
- 
+
   processNewFileUpload(data: { id: number, name: string }) {
     if (data) {
         this.files.push(new CaseFileModel(data.id, data.name));

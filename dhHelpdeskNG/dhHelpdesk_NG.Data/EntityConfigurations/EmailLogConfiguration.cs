@@ -8,30 +8,42 @@ namespace DH.Helpdesk.Dal.EntityConfigurations
     {
         internal EmailLogConfiguration()
         {
-            this.HasKey(l => l.Id);
+            HasKey(l => l.Id);
+            Property(l => l.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            this.Property(l => l.EmailLogGUID).IsRequired();
-            this.Property(l => l.Log_Id).IsOptional();
-            this.Property(l => l.EmailAddress).IsRequired().HasMaxLength(1000);
-            this.Property(l => l.MailId).IsRequired();
-            this.Property(l => l.MessageId).IsOptional();
-            this.Property(l => l.CaseHistory_Id).IsOptional();
-            this.Property(l => l.ChangedDate).IsRequired();
-            this.Property(l => l.CreatedDate).IsRequired();
-            this.Property(l => l.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            this.Property(l => l.SendTime).IsOptional();
-            this.Property(l => l.ResponseMessage).IsOptional();
+            Property(l => l.CaseHistory_Id).IsOptional();
+            Property(l => l.Log_Id).IsOptional();
+            Property(l => l.MailId).IsRequired();
+            Property(l => l.EmailAddress).IsRequired().HasMaxLength(1000);
+            Property(l => l.MessageId).IsOptional();
+            Property(l => l.EmailLogGUID).IsRequired();
+            Property(l => l.ChangedDate).IsRequired();
+            Property(l => l.CreatedDate).IsRequired();
+            Property(l => l.SendTime).IsOptional();
+            Property(l => l.ResponseMessage).IsOptional();
 
-            this.HasMany(x => x.EmailLogAttempts)
+            Property(l => l.Body).IsOptional();
+            Property(l => l.Subject).IsOptional();
+            Property(l => l.From).IsOptional().HasMaxLength(1000); 
+            Property(l => l.Cc).IsOptional().HasMaxLength(1000); 
+            Property(l => l.Bcc).IsOptional().HasMaxLength(1000); 
+            Property(l => l.HighPriority).IsRequired();
+            Property(l => l.Files).IsOptional();
+            Property(l => l.FilesInternal).IsOptional();
+            Property(l => l.SendStatus).IsRequired();
+            Property(l => l.LastAttempt).IsOptional();
+            Property(l => l.Attempts).IsOptional();
+
+            HasMany(x => x.EmailLogAttempts)
                 .WithRequired(x => x.EmailLog)
                 .HasForeignKey(x => x.EmailLog_Id);
 
-            this.HasOptional(l => l.CaseHistory)
+            HasOptional(l => l.CaseHistory)
                 .WithMany(l => l.Emaillogs)
                 .HasForeignKey(l => l.CaseHistory_Id)
                 .WillCascadeOnDelete(false);
 
-            this.ToTable("tblEmaillog");
+            ToTable("tblEmaillog");
         }
     }
 }

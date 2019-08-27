@@ -190,7 +190,7 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
                                                         int userGroupId,
                                                         int userId,
                                                         bool showRemainingTime = false,
-                                                        int restrictedCasePermission = 1,
+                                                        bool restrictedCasePermission = true,
                                                         int showNotAssignedWorkingGroups = 1)
         {
             var currentUser = searchParams.IdentityUser;

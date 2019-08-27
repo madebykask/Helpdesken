@@ -20,10 +20,10 @@ namespace DH.Helpdesk.Services.Services
             using (var uow = _unitOfWorkFactory.Create())
             {
                 var caseFieldSettingsRep = uow.GetRepository<CaseFieldSetting>();
-                caseResponsibleUserIsVisible = caseFieldSettingsRep.GetAll().Any(cf => cf.Customer_Id == customerId &&
-                                                                            cf.Name == GlobalEnums.TranslationCaseFields
-                                                                                .CaseResponsibleUser_Id.ToString() &&
-                                                                            cf.ShowOnStartPage == 1);
+                caseResponsibleUserIsVisible = caseFieldSettingsRep.GetAll()
+                    .Any(cf => cf.Customer_Id == customerId &&
+                               cf.Name == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString() &&
+                               cf.ShowOnStartPage == 1);
             }
 
             var customerCasesQuery = _caseRepository.GetCustomerCases(customerId).AsQueryable();
@@ -46,6 +46,11 @@ namespace DH.Helpdesk.Services.Services
                 ClosedToday =
                     customerCasesQuery.Count(c => c.FinishingDate != null && DbFunctions.TruncateTime(c.FinishingDate) == today),
             }).SingleOrDefaultAsync();
+        }
+
+        public CaseOverview GetCaseBasic(int id)
+        {
+            return _caseRepository.GetCaseBasic(id);
         }
 
         public Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false)

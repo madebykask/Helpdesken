@@ -44,12 +44,66 @@ namespace DH.Helpdesk.Web.Models.Case
         public IList<CaseFieldSetting> caseFieldSettings { get; set; }
         public IList<CaseHistoryOverview> CaseHistories { get; set; }
         public List<CustomMailTemplate> MailTemplates { get; set; }
+    }
 
+    public class CaseLogFilesViewModel
+    {
+        public string LogId { get; set; } 
+        public bool UseVirtualDirectory { get; set; }
+        public int CaseNumber { get; set; }
+        public CaseFilesUrlBuilder FilesUrlBuilder { get; set; }
+        public List<LogFileModel> Files { get; set; }
+        public bool IsExternal { get; set; }
+        public bool IsTwoAttachmentsMode { get; set; }
+    }
 
+    public class CaseLogInputFilesAttachmentViewModel
+    {
+        public bool IsExternalNote { get; set; }
+        public string FieldStyles { get; set; }
+        public bool AllowFileAttach { get; set; }
+        public bool IsReadonly { get; set; }
+        public string Caption { get; set; }
+        public string LogFileNames { get; set; }
+        public CaseLogFilesViewModel LogFilesModel { get; set; }
     }
 
     public class CaseInputViewModel
     {
+        public CaseLogInputFilesAttachmentViewModel CreateLogInputFilesAttachmentViewModel(
+            bool isExternal, 
+            string caption, 
+            string fieldStyles, 
+            bool allowFileAttach,
+            bool isReadonly, 
+            bool isTwoAttachmentMode)
+        {
+            var filesNames = LogFileNames;
+
+            var filesModel = isExternal ? LogFilesModel : LogInternalFilesModel;
+
+            return new CaseLogInputFilesAttachmentViewModel
+            {
+                IsExternalNote = isExternal,
+                Caption = caption,
+                FieldStyles = fieldStyles,
+                IsReadonly = isReadonly,
+                AllowFileAttach = allowFileAttach, 
+                LogFileNames = filesNames,
+
+                LogFilesModel = filesModel != null ? new CaseLogFilesViewModel
+                {
+                    LogId = filesModel?.Id,
+                    CaseNumber = Convert.ToInt32(CaseNumber),
+                    UseVirtualDirectory = filesModel.VirtualDirectory,
+                    FilesUrlBuilder = CaseFilesUrlBuilder,
+                    Files = filesModel.Files,
+                    IsExternal = isExternal,
+                    IsTwoAttachmentsMode = isTwoAttachmentMode,
+                } : new CaseLogFilesViewModel()
+            };
+        }
+
         public CaseInputViewModel()
         {
             CaseSolutionSettingModels = CaseSolutionSettingModel.CreateDefaultModel();
@@ -63,7 +117,6 @@ namespace DH.Helpdesk.Web.Models.Case
             };
             ExternalInvoices = new List<ExternalInvoiceModel>();
             SelectedWorkflowStep = 0;
-            CaseAttachedExFiles = new List<CaseAttachedExFileModel>();
             CaseLock = new CaseLockModel();
         }
 
@@ -72,6 +125,7 @@ namespace DH.Helpdesk.Web.Models.Case
             return new CaseLogViewModel
             {
                 CustomerId = CustomerId,
+                CaseNumber = Convert.ToInt32(CaseNumber),
                 CaseCustomerId = case_?.Customer_Id,
                 UserTimeZone = UserTimeZone,
                 CurrentCaseLanguageId = CurrentCaseLanguageId,
@@ -85,7 +139,9 @@ namespace DH.Helpdesk.Web.Models.Case
                 CaseFieldSettings = caseFieldSettings,
                 CustomerSettings = CustomerSettings,
                 CaseSolutionSettingModels = CaseSolutionSettingModels,
-                
+                FilesUrlBuilder = CaseFilesUrlBuilder,
+                IsTwoAttachmentsMode = EnableTwoAttachments,
+
                 // Invoices fields
                 ShowInvoiceFields = ShowInvoiceFields,
                 ShowExternalInvoiceFields = ShowExternalInvoiceFields,
@@ -143,6 +199,11 @@ namespace DH.Helpdesk.Web.Models.Case
         public int CustomerId
         {
             get { return case_?.Customer_Id ?? 0; }
+        }
+
+        public decimal CaseNumber
+        {
+            get { return case_?.CaseNumber ?? 0; }
         }
 
         public IList<CaseHistoryOverview> CaseHistories { get; set; }
@@ -240,6 +301,8 @@ namespace DH.Helpdesk.Web.Models.Case
         public List<CustomMailTemplate> MailTemplates { get; set; }
         
         public FilesModel LogFilesModel { get; set; }
+        
+        public FilesModel LogInternalFilesModel { get; set; }
 
         public CaseFilesModel CaseFilesModel { get; set; }
 
@@ -248,9 +311,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public string LogFileNames { get; set; }
 
         public string SavedFiles { get; set; }
-
-        public List<CaseAttachedExFileModel> CaseAttachedExFiles { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the case owner default working group.
         /// </summary>
@@ -390,6 +451,8 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public OutputFormatter OutFormatter { get; set; }
 
+        public CaseFilesUrlBuilder CaseFilesUrlBuilder { get; set; }
+
         public List<CaseTemplateButton> CaseTemplateButtons { get; set; }
 
         public bool IsFollowUp { get; set; }
@@ -413,7 +476,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public Guid ExtendedCaseGuid { get; set; }
         public bool IndependentChild { get; internal set; }
         public Domain.CaseSolution CurrentCaseSolution { get; internal set; }
-
+        public string CurrentUserName { get; set; }
         public int CurrentUserRole { get; set; }
         
         public Dictionary<string, string> StatusBar { get; internal set; }
@@ -443,8 +506,8 @@ namespace DH.Helpdesk.Web.Models.Case
             get { return CurrentUserRole > (int)BusinessData.Enums.Admin.Users.UserGroup.User; }
         }
 
-        public TimeZoneInfo UserTimeZone { get; set; } 
-
+        public TimeZoneInfo UserTimeZone { get; set; }
+        public bool EnableTwoAttachments { get; internal set; }
     }
 
     public class CaseIndexViewModel

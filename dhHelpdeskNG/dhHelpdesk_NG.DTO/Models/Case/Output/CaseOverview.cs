@@ -30,6 +30,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
     /// </summary>
     public sealed class CaseOverview
     {
+        public int Id { get; set; }
+
         /// <summary>
         /// Gets or sets the customer_ id.
         /// </summary>

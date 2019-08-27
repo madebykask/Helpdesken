@@ -4,6 +4,11 @@
 
     public sealed class ItemWithEmail
     {
+        public ItemWithEmail()
+        {
+
+        }
+
         public ItemWithEmail(int itemId, string email)
         {
             this.ItemId = itemId;
@@ -11,9 +16,9 @@
         }
 
         [IsId]
-        public int ItemId { get; private set; }
+        public int ItemId { get; set; }
 
         [NotNullAndEmpty]
-        public string Email { get; private set; }
+        public string Email { get; set; }
     }
 }

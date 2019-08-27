@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DH.Helpdesk.Common.Enums.Logs;
 
 namespace DH.Helpdesk.Models.Case.Logs
 {
@@ -22,6 +23,7 @@ namespace DH.Helpdesk.Models.Case.Logs
         public string FileName { get; set; }
         public DateTime CreatedDate { get; set; }
         public int? CaseId { get; set; }
+        public LogFileType LogType { get; set; }
     }
 
     public class EmailLogModel

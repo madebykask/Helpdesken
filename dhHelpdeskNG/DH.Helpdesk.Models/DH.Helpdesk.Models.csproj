@@ -57,6 +57,7 @@
     <Compile Include="Case\CaseEditInputModel.cs" />
     <Compile Include="Case\CaseEditOutputModel.cs" />
     <Compile Include="Case\CaseLockModel.cs" />
+    <Compile Include="Case\ExtendedCaseModel.cs" />
     <Compile Include="Case\Field\BaseCaseField.cs" />
     <Compile Include="Case\GetCaseFileInputModel.cs" />
     <Compile Include="Case\GetCaseInputModel.cs" />

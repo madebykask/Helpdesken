@@ -1126,21 +1126,28 @@ table th.thpointer {
     margin-bottom: 10px;
 }
 
-    .tableform th,
-    .tableform td {
-        padding: 0 8px 0px 0;
-        margin: 0;
-        text-align: left;
-        vertical-align: top;
-        line-height: 25px;
-        /* LINES BETWEEN ROWS
-  border-bottom: 1px dotted #dddddd;
-  padding:3px 8px 0 8px;*/
-    }
+.tableform th,
+.tableform td {
+    padding: 0 8px 0px 0;
+    margin: 0;
+    text-align: left;
+    vertical-align: top;
+    line-height: 25px;
+    /* LINES BETWEEN ROWS
+    border-bottom: 1px dotted #dddddd;
+    padding:3px 8px 0 8px;*/
+}
 
-    .tableform.nobm, .tableform.nobm form, .nobm {
-        margin-bottom: 0;
-    }
+.tableform td.action {
+    text-align: right; 
+    padding-right:0;
+    vertical-align: middle;
+}
+
+
+.tableform.nobm, .tableform.nobm form, .nobm {
+    margin-bottom: 0;
+}
 
 .tableintable {
     width: 100%;
@@ -2395,6 +2402,10 @@ h4 {
 
 .icon-dh {
     background-image: url("../img/glyphicons-halflings-dh.png");
+}
+
+.sm-fa {
+    font-size: 12px!important;
 }
 
 [class^="dh-icon-"],

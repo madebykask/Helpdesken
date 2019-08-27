@@ -1,4 +1,9 @@
 {
   "editor.detectIndentation": false,
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/src/content": true,
+    "**/src/lib": true,
+ }
 }

@@ -278,6 +278,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\ApplicationFacade.cs" />
+    <Compile Include="Infrastructure\Attributes\NoCacheAttribute.cs" />
     <Compile Include="Infrastructure\BadRequestOnNotValidAttribute.cs" />
     <Compile Include="Infrastructure\BaseController.cs" />
     <Compile Include="Infrastructure\BaseInputViewModel.cs" />
@@ -380,7 +381,7 @@
     <Compile Include="Models\Case\CaseControlsPanelModel.cs" />
     <Compile Include="Models\Case\CaseFieldSettingJSModel.cs" />
     <Compile Include="Models\Case\CaseOverviewModel.cs" />
-    <Compile Include="Models\Case\CaseLogModel.cs" />
+    <Compile Include="Models\Case\CaseLogsModel.cs" />
     <Compile Include="Models\Case\ClosedCaseAlertModel.cs" />
     <Compile Include="Models\Case\ExtendedCaseModel.cs" />
     <Compile Include="Models\Case\NewCaseModel.cs" />
@@ -501,6 +502,7 @@
     <Content Include="Content\js\jquery.dataTables.min.js" />
     <Content Include="Content\js\Orders\order.edit.js" />
     <Content Include="Content\js\Orders\orders.list.js" />
+    <Content Include="Content\js\Shared\clipBoardFileUpload.js" />
     <Content Include="Content\js\Shared\commonUtils.js" />
     <Content Include="Content\js\Shared\app.layout.js" />
     <Content Include="Content\js\typeahead.js" />
@@ -826,7 +828,6 @@
     <Content Include="Views\Case\_SearchError.cshtml" />
     <Content Include="Views\Case\_CaseInformation.cshtml" />
     <Content Include="Views\Case\_CaseControlPanel.cshtml" />
-    <Content Include="Views\Case\ModalDialogs\_UploadExistingLogFilePopup.cshtml" />
     <Content Include="Views\Case\ModalDialogs\_UploadFileFromClipboardPopup.cshtml" />
     <Content Include="Views\Shared\_MainMenu.cshtml" />
     <Content Include="Views\Case\_ClosedCaseAlert.cshtml" />
@@ -834,6 +835,8 @@
     <Content Include="Web.config.template">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\Case\ModalDialogs\_UploadFilePopup.cshtml" />
+    <Content Include="Views\Case\_FilesAttachButtons.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DH.Helpdesk.Web.Common\DH.Helpdesk.Web.Common.csproj">

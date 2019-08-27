@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums.Settings;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Web.Models;
@@ -16,6 +19,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 {
     public static class CaseSolutionSettingExtension
     {
+        private static readonly IList<ItemOverview> _caseSolutionModes = CaseSolutionModes.DisplayField.ToItemOverviewList();
+
         public static MvcHtmlString CaseSolutionSettingsFor<TModel>(
             this HtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, IList<CaseSolutionSettingModel>>> expression,
@@ -34,7 +39,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
             Expression<Func<TModel, IList<CaseSolutionSettingModel>>> expression,
             CaseSolutionFields caseSolutionField,
             IList<CaseFieldSetting> caseFieldSettings,
-            GlobalEnums.TranslationCaseFields caseField)
+            GlobalEnums.TranslationCaseFields caseField) 
         {
             var metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
             var models = (IList<CaseSolutionSettingModel>)metadata.Model;
@@ -43,16 +48,20 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
             if (model != null)
             {
                 var index = models.IndexOf(model);
+                var modelName = ExpressionHelper.GetExpressionText(expression);
+                var modelPropertyName = nameof(CaseSolutionSettingOverview.CaseSolutionMode);
+                var selectedModeValue = ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture);
                 
-                var modePropertyName =
-                    ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(x => x.CaseSolutionMode);
-
-                var prefix = ExpressionHelper.GetExpressionText(expression);
-                var dropDownName = GetInputName(prefix, index, modePropertyName);
-
-                var selectList =
-                    ToSelectList(model.CaseSolutionMode, ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture), false);
+                var dropDownName = GetInputName(modelName, index, modelPropertyName);
                 
+                // this was done for performance optimisation - to reuse existing list instead of readin enum values each time 
+                var modeSelectOptions = _caseSolutionModes.Select(x => new SelectListItem()
+                {
+                    Value = x.Value,
+                    Text = TranslateModeName(x.Name),
+                    Selected = selectedModeValue == x.Value
+                }).ToList();
+
                 var fieldSettings = caseFieldSettings.getCaseSettingsValue(caseField.ToString());
                 
                 var htmlAttributes = new
@@ -71,7 +80,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
                     htmlAttributesAsDict.Add("disabled", "disabled");
                 }
 
-                var dropDown = htmlHelper.DropDownList(dropDownName, selectList, htmlAttributesAsDict);
+                var dropDown = htmlHelper.DropDownList(dropDownName, modeSelectOptions, htmlAttributesAsDict);
                 return MvcHtmlString.Create(dropDown.ToString());
             }
 
@@ -80,50 +89,22 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
         private static string GetInputName(string name, int i, string idPropertyName)
         {
-            var inputName = string.Format("{0}[{1}].{2}", name, i, idPropertyName);
+            var inputName = $"{name}[{i}].{idPropertyName}";
             return inputName;
         }
 
-        private static SelectList ToSelectList(CaseSolutionModes enumeration, bool isRequired)
+        private static string TranslateModeName(string mode)
         {
-            var list = CreateList(enumeration, isRequired);
+            if (mode.Equals(CaseSolutionModes.DisplayField.ToString(), StringComparison.OrdinalIgnoreCase))
+                return Translation.GetCoreTextTranslation("Visa fält - redigera");
 
-            return new SelectList(list, "ID", "Name");
-        }
+            if (mode.Equals(CaseSolutionModes.ReadOnly.ToString(), StringComparison.OrdinalIgnoreCase))
+                return Translation.GetCoreTextTranslation("Visa fält - skrivskyddat");
 
-        private static SelectList ToSelectList(CaseSolutionModes enumeration, string selected, bool isRequired)
-        {
-            var list = CreateList(enumeration, isRequired);
+            if (mode.Equals(CaseSolutionModes.Hide.ToString(), StringComparison.OrdinalIgnoreCase))
+                return Translation.GetCoreTextTranslation("Dölj fält");
 
-            return new SelectList(list, "ID", "Name", selected);
-        }
-
-        private static IEnumerable<dynamic> CreateList(CaseSolutionModes enumeration, bool isRequired)
-        {
-            IEnumerable<CaseSolutionModes> query = from CaseSolutionModes d in Enum.GetValues(enumeration.GetType())
-                                                   select d;
-            if (isRequired)
-            {
-                query = query.Where(x => x != CaseSolutionModes.ReadOnly);
-            }
-
-            var list = query.Select(x => new { ID = Convert.ToInt32(x), Name = CreateName(x) }).ToList();
-            return list;
-        }
-
-        private static string CreateName(CaseSolutionModes enumeration)
-        {
-            switch (enumeration)
-            {
-                case CaseSolutionModes.DisplayField:
-                    return Translation.Get("Visa fält - redigera");
-                case CaseSolutionModes.ReadOnly:
-                    return Translation.Get("Visa fält - skrivskyddat");
-                case CaseSolutionModes.Hide:
-                    return Translation.Get("Dölj fält");
-                default:
-                    return Translation.Get(enumeration.ToString());
-            }
+            return Translation.GetCoreTextTranslation(mode);
         }
     }
 }

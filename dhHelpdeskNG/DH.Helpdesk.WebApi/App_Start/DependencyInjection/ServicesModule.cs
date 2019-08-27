@@ -94,6 +94,9 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<HolidayService>().As<IHolidayService>();
             builder.RegisterType<UserEmailsSearchService>().As<IUserEmailsSearchService>();
             builder.RegisterType<Mail2TicketService>().As<IMail2TicketService>();
+            builder.RegisterType<CaseSolutionService>().As<ICaseSolutionService>();
+            builder.RegisterType<LinkService>().As<ILinkService>();
+            builder.RegisterType<CaseSolutionConditionService>().As<ICaseSolutionConditionService>();
         }
 
         #endregion

@@ -2,14 +2,11 @@
 using System.Linq;
 using DH.Helpdesk.BusinessData.Models.ReportService;
 using DH.Helpdesk.BusinessData.Models.Shared;
-using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Dal.Repositories.ReportService;
-using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain;
 using System.Collections.Generic;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Services.Services.Reports;
-using DH.Helpdesk.BusinessData.Models.Reports;
 
 namespace DH.Helpdesk.Services.Services.Concrete.Reports
 {   
@@ -57,8 +54,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             var reportFilter = new ReportFilter();                        
             reportFilter.CaseCreationDate = new DateToDate(DateTime.Now.AddMonths(-1), DateTime.Now);
 
-            var userSearch = new UserSearch() { CustomerId = customerId, StatusId = 3 };
-            var administrators = _userService.SearchSortAndGenerateUsers(userSearch).ToList();            
+            var administrators = _userService.GetAllPerformers(customerId).ToList();            
             reportFilter.Administrators = administrators;
 
             var departments = _departmentService.GetDepartmentsByUserPermissions(userId, customerId, false);
@@ -96,8 +92,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             return _reportServiceRepository.GetReportData(reportIdentity, filters);
         }
 
-		public IList<HistoricalDataResult> GetHistoricalData(HistoricalDataFilter filter, int userId)
-		{
+        public IList<HistoricalDataResult> GetHistoricalData(HistoricalDataFilter filter, int userId)
+        {
             var user = _userService.GetUser(userId);
 
             filter.IncludeCasesWithNoWorkingGroup = CanSeeCasesWithEmptyWorkingGroups(filter.WorkingGroups, user);
@@ -105,9 +101,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             filter.WorkingGroups = GetWorkingGroups(filter.WorkingGroups, filter.CustomerID, user);
             filter.Departments = GetDepartments(filter.Departments, filter.CustomerID, userId);
 
-			var result = _reportServiceRepository.GetHistoricalData(filter);
-			return result;
-		}
+            var result = _reportServiceRepository.GetHistoricalData(filter);
+            return result;
+        }
 
         public IList<ReportedTimeDataResult> GetReportedTimeData(ReportedTimeDataFilter filter, int userId)
         {

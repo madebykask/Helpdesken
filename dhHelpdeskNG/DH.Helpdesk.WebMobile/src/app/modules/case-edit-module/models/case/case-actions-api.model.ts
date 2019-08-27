@@ -1,3 +1,5 @@
+import { LogFileType } from 'src/app/modules/shared-module/constants/logFileType.enum';
+
 export class CaseLogModel {
   id: number;
   text: string;
@@ -15,6 +17,7 @@ export class LogFile {
   fileName: string;
   createdDate: Date;
   caseId?: number | null;
+  logType: LogFileType;
 }
 
 export class EmailLog {

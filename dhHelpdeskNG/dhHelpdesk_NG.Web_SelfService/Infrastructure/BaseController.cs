@@ -449,8 +449,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             lastError = null;
             UserIdentity userIdentity = null;
             var employeeNum = string.Empty;            
-            string userId = DEFAULT_ANONYMOUS_USER_ID;
-
+            string userId = DEFAULT_ANONYMOUS_USER_ID; // shall we get login user? global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             var defaultUserId = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultUserId);
             if (!string.IsNullOrEmpty(defaultUserId))
                 userId = defaultUserId;

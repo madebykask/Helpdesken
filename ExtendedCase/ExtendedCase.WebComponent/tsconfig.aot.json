@@ -1,0 +1,40 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "es2015",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "lib": [ "es2015", "dom" ],
+        "noImplicitAny": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "importHelpers": true,
+        "typeRoots": [
+          "node_modules/@types/"
+        ],
+        "types": [
+          "node"
+        ],
+        "baseUrl": ""
+      },
+      "compileOnSave": false,
+      "buildOnSave": false,
+      "exclude": [
+        "node_modules",
+        "src/main.ts",
+        "dist*",
+        "**/*.spec.ts",
+        "**/*.e2e.ts",
+        "**/*.d.ts",
+        "**/*.ngfactory.ts", // Do not forget to exclude ngfactory
+        "**/*.shim.ts"
+    ],                                                          
+
+     // Required if Compile options are not given into AOTPlugin
+    "angularCompilerOptions": {
+      "genDir": "./aot",
+      "entryModule": "./src/app.module#AppModule",
+      "skipMetadataEmit": true      
+    }
+  }

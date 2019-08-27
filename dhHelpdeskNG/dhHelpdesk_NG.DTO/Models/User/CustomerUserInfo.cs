@@ -15,5 +15,8 @@ namespace DH.Helpdesk.BusinessData.Models.User
         public string SurName { get; set; }
 
         public IList<UserWorkingGroupOverview> WorkingGroups { get; set; }
+        public int AllocateCaseMail { get; set; }
+        public int AllocateCaseSMS { get; set; }
+        public string CellPhone { get; set; }
     }
 }

@@ -815,7 +815,6 @@ window.advancedSearchPage =
         var breadCrumbsPrefix = "#divBreadcrumbs_";
         var hiddenPrefix = "#hid_";
 
-        var defaultFocusObj = params.DefaultFocusObject;
         var caseTypeDropDown = params.CaseTypeDropDown;
         var productAreaDropDown = params.ProductAreaDropDown;
         var closingReasonDropDown = params.ClosingReasonDropDown;
@@ -854,8 +853,6 @@ window.advancedSearchPage =
                 $(breadCrumbsPrefix + closingReasonDropDown).text(getBreadcrumbs(this));
                 $(hiddenPrefix + closingReasonDropDown).val(val);
             });
-
-            setTimeout(function () { $(defaultFocusObj).focus(); }, 100);
         }
     };
 

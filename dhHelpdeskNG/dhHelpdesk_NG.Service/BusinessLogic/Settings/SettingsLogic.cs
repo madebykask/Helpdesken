@@ -29,6 +29,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Settings
         public string GetFilePath(int customerId)
         {
             var customerFilePath = this._settingRepository.GetMany(s => s.Customer_Id == customerId)
+                .AsQueryable()
                 .Select(s => s.PhysicalFilePath)
                 .FirstOrDefault();
             return FilePath(customerFilePath);
@@ -59,9 +60,12 @@ namespace DH.Helpdesk.Services.BusinessLogic.Settings
         {
             if (string.IsNullOrEmpty(customerFilePath))
             {
-                var globalSetting = this._globalSettingRepository.GetAll().FirstOrDefault();
+                var globalSetting = this._globalSettingRepository.GetAll()
+                    .AsQueryable()
+                    .Select(s => s.AttachedFileFolder)
+                    .FirstOrDefault();
                 if (globalSetting != null)
-                    customerFilePath = globalSetting.AttachedFileFolder;
+                    customerFilePath = globalSetting;
             }
 
             return (string.IsNullOrEmpty(customerFilePath) ? string.Empty : customerFilePath);

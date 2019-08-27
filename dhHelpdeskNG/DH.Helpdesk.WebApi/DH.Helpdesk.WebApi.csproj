@@ -121,8 +121,8 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NodaTime, Version=2.4.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
       <HintPath>..\packages\NodaTime.2.4.0\lib\net45\NodaTime.dll</HintPath>
@@ -192,12 +192,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
-    <Compile Include="Controllers\CaseFieldsCreator.cs" />
+    <Compile Include="Controllers\CaseLogFilesController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Infrastructure\Owin\LogRequestMiddleware.cs" />
+    <Compile Include="Logic\Case\CaseFieldsCreator.cs" />
     <Compile Include="Controllers\CaseHistoryController.cs" />
     <Compile Include="Controllers\CaseLogsController.cs" />
     <Compile Include="Controllers\CaseTemplatesController.cs" />
     <Compile Include="Controllers\CaseWatchDateController.cs" />
     <Compile Include="Controllers\CaseStatisticsController.cs" />
+    <Compile Include="Controllers\CaseWorkflowsController.cs" />
     <Compile Include="Controllers\NotifierController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Infrastructure\Owin\GlobalExceptionMiddleware.cs" />
@@ -286,10 +290,13 @@
     <Compile Include="Infrastructure\Translate\Translation.cs" />
     <Compile Include="Models\CaseLockInputModel.cs" />
     <Compile Include="Models\CaseUnLockInputModel.cs" />
+    <Compile Include="Models\Case\CaseSolutionModel.cs" />
     <Compile Include="Models\Case\СaseStatisticsResult.cs" />
     <Compile Include="Models\ClientLogItemModel.cs" />
     <Compile Include="Models\ExtendCaseLockInput.cs" />
     <Compile Include="Models\LoginUserInputModel.cs" />
+    <Compile Include="Models\Output\CaseSortFieldModel.cs" />
+    <Compile Include="Models\Output\FavoriteFilterField.cs" />
     <Compile Include="Models\Output\NotifierData.cs" />
     <Compile Include="Models\Output\NotifierSearchItem.cs" />
     <Compile Include="Models\RefreshTokenInputModel.cs" />

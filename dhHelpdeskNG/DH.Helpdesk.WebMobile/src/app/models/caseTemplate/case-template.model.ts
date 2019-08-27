@@ -1,8 +1,8 @@
 export class CaseTemplateModel {
-  public id:number;
-  public name:string;  
-  public categoryId:number;
-  public categoryName:string;
+  public id: number;
+  public name: string;
+  public categoryId: number;
+  public categoryName: string;
 }
 
 export class CaseTemplateNode {
@@ -12,9 +12,9 @@ export class CaseTemplateNode {
 }
 
 export class CaseTemplateCategoryNode {
-  public items:CaseTemplateNode[] = [];
+  public items: CaseTemplateNode[] = [];
 
   constructor(public id: number,
               public name: string) {
-  } 
+  }
 }

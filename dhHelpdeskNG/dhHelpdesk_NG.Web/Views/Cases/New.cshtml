@@ -1,4 +1,5 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
+@using DH.Helpdesk.Common.Extensions.Boolean
 @using DH.Helpdesk.Web
 
 @section Styles
@@ -26,7 +27,11 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            CaseInitForm();
+            var opt = {
+                twoAttacmentsMode: @(Model.EnableTwoAttachments.ToJavaScriptBool()) 
+            };
+
+            CaseInitForm(opt);
 
             $("#case-action-save").click(function (e) {
                 e.preventDefault();                

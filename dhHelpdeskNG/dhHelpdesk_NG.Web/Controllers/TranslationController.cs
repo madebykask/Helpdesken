@@ -75,12 +75,10 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult GetCaseFieldsForTranslation()
         {
-            var CustomerId = SessionFacade.CurrentCustomer.Id;
-            var CurrentLanguageId = SessionFacade.CurrentLanguageId;
             var caseFields = this._caseFieldSettingService.GetCaseFieldSettingsWithLanguages(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
-            var allCaseFields = this._caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id);
+            var allCaseFields = this._caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id, LanguageIds.Swedish);
             List<CaseFieldSettingsWithLanguage> newListOfCaseFieldSettingsWithLanguage = new List<CaseFieldSettingsWithLanguage>();
-            var allCaseFieldsMissingLabels = allCaseFields.Where(x=> !caseFields.Any(y=>y.Name == x.Name));
+            var allCaseFieldsMissingLabels = allCaseFields.Where(x=> caseFields.All(y => y.Name != x.Name));
             foreach (var caseField in allCaseFieldsMissingLabels)
             {
                 var translatedCaseField = new CaseFieldSettingsWithLanguage();

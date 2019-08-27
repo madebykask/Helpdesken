@@ -33,8 +33,6 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         List<ItemOverview> FindActiveUsersIncludeEmails(int customerId);
 
-        UserName GetUserNameById(int userId);
-
         List<ItemOverview> FindActiveOverviews(int customerId);
 
         List<ItemWithEmail> FindUsersEmails(List<int> userIds, bool isActive = false);
@@ -183,14 +181,6 @@ namespace DH.Helpdesk.Dal.Repositories
                     u => new ItemOverview(u.FirstName + " " + u.SurName, u.Email.Split(";").First())).ToList();
         }
 
-        public UserName GetUserNameById(int userId)
-        {
-            var user =
-                this.DataContext.Users.Where(u => u.Id == userId).Select(u => new { u.FirstName, u.SurName }).Single();
-
-            return new UserName(user.FirstName, user.SurName);
-        }
-
         public List<ItemOverview> FindActiveOverviews(int customerId)
         {
             var users = this.FindByCustomerId(customerId).Where(u => u.IsActive != 0);
@@ -230,13 +220,16 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public List<ItemWithEmail> FindUsersEmails(List<int> userIds, bool activeOnly = false)
         {
-            var query = Table.Where(u => userIds.Contains(u.Id) && u.Email.Length > 1);
+            var query = Table.AsNoTracking().Where(u => userIds.Contains(u.Id) && u.Email.Length > 1);
 
             if (activeOnly)
                 query = query.Where(u => u.IsActive == 1);
 
-           var usersEmails = query.Select(u => new {u.Id, u.Email}).ToList();
-           return usersEmails.Select(u => new ItemWithEmail(u.Id, u.Email)).ToList();
+            return query.Select(u => new ItemWithEmail
+            {
+                ItemId = u.Id,
+                Email = u.Email
+            }).ToList();
         }
 
         public User GetUserForCopy(int id)
@@ -257,7 +250,10 @@ namespace DH.Helpdesk.Dal.Repositories
                     Performer = x.Performer,
                     Email = x.Email,
                     FirstName = x.FirstName,
-                    SurName = x.SurName
+                    SurName = x.SurName,
+                    AllocateCaseMail = x.AllocateCaseMail,
+                    AllocateCaseSMS = x.AllocateCaseSMS,
+                    CellPhone = x.CellPhone
                 })
                 .FirstOrDefault();
 
@@ -266,7 +262,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IQueryable<User> GetUsersForWorkingGroupQuery(int workingGroupId, int? customerId, bool requireMemberOfGroup = false)
         {
-            bool checkGroup = requireMemberOfGroup;
+            var checkGroup = requireMemberOfGroup;
             var query = 
                 from u in this.DataContext.Users
                 join uw in this.DataContext.UserWorkingGroups on u.Id equals uw.User_Id
@@ -357,7 +353,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IList<User> GetUsersForUserSettingList(UserSearch searchUser)
         {
-
             var query = from u in this.DataContext.Users
                         join cu in this.DataContext.CustomerUsers on u.Id equals cu.User_Id into cuGroup
                         from cuOJ in cuGroup.DefaultIfEmpty()
@@ -501,10 +496,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public UserName GetUserName(int userId)
         {
-            var user =
-               this.DataContext.Users.Where(u => u.Id == userId).Select(u => new { u.FirstName, u.SurName }).Single();
-
-            return new UserName(user.FirstName, user.SurName);
+            return DataContext.Users.Where(u => u.Id == userId).Select(u => new UserName() { FirstName = u.FirstName, LastName = u.SurName}).SingleOrDefault();
         }
 
         public ItemOverview FindActiveOverview(int userId)
@@ -553,7 +545,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     LanguageId = x.Language_Id,
                     UserGroupId = x.UserGroup_Id,
                     FollowUpPermission = x.FollowUpPermission,
-                    RestrictedCasePermission = x.RestrictedCasePermission,
+                    //RestrictedCasePermission = x.RestrictedCasePermission,
                     ShowNotAssignedWorkingGroups = x.ShowNotAssignedWorkingGroups,
                     CreateCasePermission = x.CreateCasePermission,
                     CreateSubCasePermission = x.CreateSubCasePermission,

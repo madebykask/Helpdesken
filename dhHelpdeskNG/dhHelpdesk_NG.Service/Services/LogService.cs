@@ -7,6 +7,7 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.BusinessData.Models.Logs.Output;
 using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Dal.Infrastructure;
@@ -17,6 +18,7 @@ using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.NewInfrastructure;
 using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Domain;
+using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
 using LinqLib.Operators;
 
 namespace DH.Helpdesk.Services.Services
@@ -35,9 +37,13 @@ namespace DH.Helpdesk.Services.Services
         void AddChildCaseLogToParentCase(int caseId, CaseLog parentCaseLog);
         Guid Delete(int id, string basePath);
 
-        IList<LogOverview> GetCaseLogOverviews(int caseId);
+        IList<LogOverview> GetCaseLogOverviews(int caseId, bool includeInternalLogs = false, bool includeInternalFiles = false);
+
+        //TODO: remove! replace with CaseLogData!
         IList<Log> GetLogsByCaseId(int caseId);
-        Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false);
+
+        IList<CaseLogData> GetLogsByCaseId(int caseId, bool includeInternalLogs, bool includeInternalFiles);
+        Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false, bool includeInternalFiles = false);
     }
 
     public class LogService : ILogService
@@ -54,6 +60,8 @@ namespace DH.Helpdesk.Services.Services
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ICaseRepository _caseRepository;
         private readonly IProblemLogService _problemLogService;
+        private IEmailLogRepository _emailLogRepository;
+        private IEmailLogAttemptRepository _emailLogAttemptRepository;
 
         #endregion
 
@@ -67,6 +75,8 @@ namespace DH.Helpdesk.Services.Services
             IProblemLogService problemLogService,
             IFinishingCauseService finishingCauseService, 
             IMail2TicketRepository mail2TicketRepository,
+            IEmailLogRepository emailLogRepository,
+            IEmailLogAttemptRepository emailLogAttemptRepository,
             IUnitOfWorkFactory unitOfWorkFactory,
             IEntityToBusinessModelMapper<LogMapperData, LogOverview> logToLogOverviewMapper)
         {
@@ -77,6 +87,8 @@ namespace DH.Helpdesk.Services.Services
             _logFileRepository = logFileRepository;
             _finishingCauseService = finishingCauseService;
             _mail2TicketRepository = mail2TicketRepository;
+            _emailLogAttemptRepository = emailLogAttemptRepository;
+            _emailLogRepository = emailLogRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
             _logToLogOverviewMapper = logToLogOverviewMapper;
         }
@@ -96,15 +108,14 @@ namespace DH.Helpdesk.Services.Services
 
         public Guid Delete(int id, string basePath)
         {
-            var ret = Guid.Empty;
-
             // delete log files
             var logFiles = _logFileRepository.GetLogFilesByLogId(id);
             if (logFiles != null)
             {
                 foreach (var f in logFiles)
                 {
-                    _filesStorage.DeleteFile(ModuleName.Log, f.Log_Id, basePath, f.FileName);
+                    var subFolder = f.LogType == LogFileType.Internal ? ModuleName.LogInternal : ModuleName.Log;
+                    _filesStorage.DeleteFile(subFolder, f.Log_Id, basePath, f.FileName);
                     _logFileRepository.Delete(f);
                 }
                 _logFileRepository.Commit();
@@ -114,21 +125,41 @@ namespace DH.Helpdesk.Services.Services
             var referencedFiles = _logFileRepository.GetReferencedFiles(id);
             referencedFiles?.ForEach(x => x.ParentLog_Id = null);
 
+            // delete email logs by log Id
+            var emailLogs = _emailLogRepository.GetEmailLogsByLogId(id);
+            if (emailLogs != null)
+            {
+                foreach (var l in emailLogs)
+                {
+                    if (l.EmailLogAttempts != null && l.EmailLogAttempts.Any()) { 
+                        _emailLogAttemptRepository.DeleteLogAttempts(l.Id);
+                    }
+
+                    _emailLogRepository.Delete(l);
+                }
+                _emailLogRepository.Commit();
+            }
+
+            // delete email logs
+            _emailLogRepository.DeleteByLogId(id);
+            _emailLogRepository.Commit();
+            
+            //delete log
+            var log = _logRepository.GetById(id);
+            _logRepository.Delete(log);
+            _logRepository.Commit();
+
+            // delete mail2tciket
             _mail2TicketRepository.DeleteByLogId(id);
             _mail2TicketRepository.Commit();
 
-            var l = _logRepository.GetById(id);
-
-            _logRepository.Delete(l);
-            _logRepository.Commit();
-
-            return l.LogGUID;
+            return log.LogGUID;
         }
         
-        public IList<LogOverview> GetCaseLogOverviews(int caseId)
+        public IList<LogOverview> GetCaseLogOverviews(int caseId, bool includeInternalLogs = false, bool includeInternalFiles = false)
         {
             var result = new List<LogOverview>();
-            var caseLogsEntities = GetCaseLogsQueryable(caseId).ToList();
+            var caseLogsEntities = GetCaseLogsQueryable(caseId, includeInternalLogs, includeInternalFiles).ToList();
             var caseLogs = caseLogsEntities.Select(_logToLogOverviewMapper.Map).ToList();
 
             result.AddRange(caseLogs);
@@ -156,54 +187,22 @@ namespace DH.Helpdesk.Services.Services
             return result.OrderByDescending(l => l.LogDate).ToList();
         }
 
-        public async Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false)
+        public IList<CaseLogData> GetLogsByCaseId(int caseId, bool includeInternalLogs, bool includeInternalFiles)
         {
-            var caseLogsEntities = await GetCaseLogsQueryable(caseId, includeInternalLogs).ToListAsync();
-            
-            var caseLogs =
-                (from data in caseLogsEntities
-                 let log = data.Log
-                 orderby log.LogDate descending 
-                 select new CaseLogData
-                 {
-                     Id = log.Id,
-                     UserId = log.User_Id,
-                     UserFirstName = log.User?.FirstName,
-                     UserSurName = log.User?.SurName,
-                     LogDate = log.LogDate,
-                     RegUserName = log.RegUser,
-                     InternalText = includeInternalLogs ? log.Text_Internal : string.Empty, //empty internal if exist
-                     ExternalText = log.Text_External,
-
-                     EmailLogs = 
-                        data.EmailLogs?.Where(t => t != null && t.Id > 0).Select(t => new EmailLogData()
-                        {
-                            Id = t.Id ?? 0,
-                            MailId = t.MailId ?? 0,
-                            Email = t.EmailAddress.ToLower()
-                        })
-                        .OrderBy(s => s.Email)
-                        .Distinct()
-                        .ToList() ?? new List<EmailLogData>(),
-
-                     Files =
-                         data.LogFiles?.Where(f => f != null && f.Id > 0).Select(f => new LogFileData()
-                        {
-                             Id = f.Id.Value,
-                             LogId = f.LogId ?? 0,
-                             FileName = f.FileName,
-                             CaseId = f.CaseId
-                        }).ToList() ?? new List<LogFileData>(),
-
-                     Mail2Tickets =
-                         data.Mail2Tickets?.Where(m => m.Id != null && m.Id > 0).Select(m => new Mail2TicketData(m.Id.Value, m.Type, m.EMailAddress, m.EMailSubject)).ToList() ?? new List<Mail2TicketData>()
-
-                 }).ToList();
-
+            var caseLogsEntities = GetCaseLogsQueryable(caseId, includeInternalLogs, includeInternalFiles).ToList();
+            var caseLogs = caseLogsEntities.MapToCaseLogData(includeInternalLogs);
             return caseLogs;
         }
 
-        private IQueryable<LogMapperData> GetCaseLogsQueryable(int caseId, bool includeInternalLogs = true)
+        public async Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false, bool includeInternalFiles = false)
+        {
+            var caseLogsEntities = await GetCaseLogsQueryable(caseId, includeInternalLogs, includeInternalFiles).ToListAsync();
+
+            var caseLogs = caseLogsEntities.MapToCaseLogData(includeInternalLogs);
+            return caseLogs;
+        }
+
+        private IQueryable<LogMapperData> GetCaseLogsQueryable(int caseId, bool includeInternalLogs = true, bool includeInternalFiles = false)
         {
             var caseLogsQuery = _logRepository.GetCaseLogs(caseId);
 
@@ -226,7 +225,9 @@ namespace DH.Helpdesk.Services.Services
 
                 EmailLogs = 
                     l.CaseHistory.Emaillogs.DefaultIfEmpty()
-                        .Where(t => t.MailId == (int)GlobalEnums.MailTemplates.InternalLogNote || t.MailId == (int)GlobalEnums.MailTemplates.InformNotifier)
+                        .Where(t => t.MailId == (int)GlobalEnums.MailTemplates.InternalLogNote || 
+                                    t.MailId == (int)GlobalEnums.MailTemplates.InformNotifier ||
+                                    t.MailId == (int)GlobalEnums.MailTemplates.CaseIsUpdated) //#71840
                         .Select(t => new EmailLogMapperData
                         {
                             Id = t.Id,
@@ -236,12 +237,13 @@ namespace DH.Helpdesk.Services.Services
                         }).ToList(),
 
                 LogFiles = 
-                    l.LogFiles.DefaultIfEmpty().Select(t => new LogFileMapperData
+                    l.LogFiles.DefaultIfEmpty().Where(f => includeInternalLogs && includeInternalFiles || f.LogType == LogFileType.External).Select(t => new LogFileMapperData
                     {
                         Id = t.Id,
                         FileName = t.FileName,
                         LogId = t.ParentLog_Id,
-                        CaseId = t.IsCaseFile.HasValue && t.IsCaseFile.Value ? t.Log.Case_Id : (int?) null
+                        CaseId = t.IsCaseFile.HasValue && t.IsCaseFile.Value ? t.Log.Case_Id : (int?) null,
+                        LogType = t.LogType
                     }).ToList(),
                
                 Mail2Tickets = 
@@ -286,6 +288,12 @@ namespace DH.Helpdesk.Services.Services
         {
             var log = _logRepository.GetById(id);
             return GetCaseLogFromLog(log); 
+        }
+
+        public CaseLog GetLogInfo(int id)
+        {
+            var log = _logRepository.GetById(id);
+            return GetCaseLogFromLog(log);
         }
 
         public CaseLog InitCaseLog(int userId, string regUser)

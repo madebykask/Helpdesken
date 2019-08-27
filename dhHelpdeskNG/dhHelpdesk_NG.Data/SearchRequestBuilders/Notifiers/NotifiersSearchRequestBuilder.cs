@@ -1,33 +1,33 @@
-﻿namespace DH.Helpdesk.Dal.SearchRequestBuilders.Notifiers
+﻿using System;
+using System.Linq;
+
+using DH.Helpdesk.BusinessData.Enums.Notifiers;
+using DH.Helpdesk.BusinessData.Models.Shared.Input;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Domain.Computers;
+
+namespace DH.Helpdesk.Dal.SearchRequestBuilders.Notifiers
 {
-    using System;
-    using System.Linq;
-
-    using DH.Helpdesk.BusinessData.Enums.Notifiers;
-    using DH.Helpdesk.BusinessData.Models.Shared.Input;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Domain.Computers;
-
-    public sealed class NotifiersSearchRequestBuilder
+    internal sealed class NotifiersSearchRequestBuilder
     {
         private IQueryable<ComputerUser> _notifiers; 
 
-        public NotifiersSearchRequestBuilder(IQueryable<ComputerUser> notifiers)
+        internal NotifiersSearchRequestBuilder(IQueryable<ComputerUser> notifiers)
         {
             _notifiers = notifiers;
         }
 
-        public IQueryable<ComputerUser> Build()
+        internal IQueryable<ComputerUser> Build()
         {
             return _notifiers;
         } 
 
-        public void OrderByDefault()
+        internal void OrderByDefault()
         {
             _notifiers = _notifiers.OrderBy(n => n.UserId).ThenBy(n => n.FirstName).ThenBy(n => n.SurName);
         }
 
-        public void OrderBy(SortField field)
+        internal void OrderBy(SortField field)
         {
             switch (field.SortBy)
             {
@@ -201,7 +201,7 @@
             }
         }
 
-        public void FilterByStatus(NotifierStatus status)
+        internal void FilterByStatus(NotifierStatus status)
         {
             if (status == NotifierStatus.Active)
             {
@@ -213,32 +213,37 @@
             }
         }
 
-        public void FilterByDomainId(int domainId)
+        internal void FilterByDomainId(int domainId)
         {
             _notifiers = _notifiers.Where(n => n.Domain_Id == domainId);
         }
 
-        public void FilterByDepartmentId(int departmentId)
+        internal void FilterByDepartmentId(int departmentId)
         {
             _notifiers = _notifiers.Where(n => n.Department_Id == departmentId);
         }
 
-        public void FilterByRegionId(int regionId)
+        internal void FilterByRegionId(int regionId)
         {
             _notifiers = _notifiers.Where(n => n.Department_Id.HasValue && n.Department.Region_Id == regionId);
         }
 
-        public void FilterByDivisionId(int divisionId)
+        internal void FilterByDivisionId(int divisionId)
         {
             _notifiers = _notifiers.Where(n => n.Division_Id == divisionId);
         }
 
-        public void TakeCount(int takeCount)
+        internal void FilterByOrganisationUnit(int orgUnitId)
+        {
+            _notifiers = _notifiers.Where(n => n.OU_Id == orgUnitId);
+        }
+
+        internal void TakeCount(int takeCount)
         {
             _notifiers = _notifiers.Take(takeCount);
         }
 
-        public void FilterByPharse(string pharse)
+        internal void FilterByPharse(string pharse)
         {
             var pharseInLowerCase = pharse.ToLower();
 
@@ -257,9 +262,9 @@
                     || n.Email.ToLower().Contains(pharseInLowerCase) || n.UserCode.ToLower().Contains(pharseInLowerCase));
         }
 
-		internal void FilterByComputerUserCategoryID(int? value)
-		{
-			_notifiers = _notifiers.Where(o => o.ComputerUsersCategoryID == value);
-		}
-	}
+        internal void FilterByComputerUserCategoryId(int? value)
+        {
+            _notifiers = _notifiers.Where(o => o.ComputerUsersCategoryID == value);
+        }
+    }
 }

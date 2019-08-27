@@ -11,6 +11,8 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Customer;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.BusinessRule;
+using DH.Helpdesk.Common.Enums.Cases;
+using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Tools;
@@ -365,11 +367,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             }
             else
             {
-                //if (model.ExtendedCaseGuid != Guid.Empty)
-                //{
-                //    var exData = _caseService.GetExtendedCaseData(model.ExtendedCaseGuid);
-                //    _caseService.CreateExtendedCaseRelationship(currentCase.Id, exData.Id);
-                //}
+                if (model.ExtendedCaseGuid != Guid.Empty)
+                {
+                    var exData = _caseService.GetExtendedCaseData(model.ExtendedCaseGuid);
+                    _caseService.CreateExtendedCaseRelationship(currentCase.Id, exData.Id);
+                }
                 //if (model.ReportedBy != null && model.ExtendedInitiatorGUID.HasValue)
                 //{
                 //    var exData = _caseService.GetExtendedCaseData(model.ExtendedInitiatorGUID.Value);
@@ -414,23 +416,36 @@ namespace DH.Helpdesk.WebApi.Controllers
                 caseLog.TextInternal = null;
 
             var temporaryLogFiles = _userTempFilesStorage.FindFiles(caseKey, ModuleName.Log);
-            var temporaryExLogFiles = _logFileService.GetExistingFileNamesByCaseId(currentCase.Id);
-            var logFileCount = temporaryLogFiles.Count + temporaryExLogFiles.Count;
+            var temporaryLogInternalFiles = _userTempFilesStorage.FindFiles(caseKey, ModuleName.LogInternal);
+            var temporaryExLogFiles = _logFileService.GetExistingFileNamesByCaseId(currentCase.Id); // gets all attached existing files
+            var logFileCount = temporaryLogFiles.Count + temporaryExLogFiles.Count + temporaryLogInternalFiles.Count;
 
             // SAVE LOG
             caseLog.Id = _logService.SaveLog(caseLog, logFileCount, out errors);
 
             // save log files
-            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, utcNow, caseLog.Id, currentUser.Id)).ToList();
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, utcNow, caseLog.Id, currentUser.Id, LogFileType.External)).ToList();
+            if (temporaryLogInternalFiles.Any())
+            {
+                var internalLogFiles = temporaryLogInternalFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, currentUser.Id, LogFileType.Internal)).ToList();
+                newLogFiles.AddRange(internalLogFiles);
+            }
             _logFileService.AddFiles(newLogFiles, temporaryExLogFiles, caseLog.Id);
 
-            var allLogFiles = temporaryExLogFiles.Select(f => new CaseFileDto(basePath, f.Name, f.IsExistCaseFile ? Convert.ToInt32(currentCase.CaseNumber) : f.LogId.Value, f.IsExistCaseFile)).ToList();
+            var allLogFiles = 
+                temporaryExLogFiles.Select(f => 
+                    new CaseLogFileDto(basePath, 
+                        f.Name, 
+                        f.IsExistCaseFile ? Convert.ToInt32(currentCase.CaseNumber) : f.LogId.Value, 
+                        f.IsExistCaseFile)).ToList();
+
             allLogFiles.AddRange(newLogFiles);
 
             #endregion // Logs handling
 
             // send emails
             var caseMailSetting = GetCaseMailSetting(currentCase, customer, customerSettings);
+
             _caseService.SendCaseEmail(currentCase.Id, caseMailSetting, caseHistoryId, basePath,
                                        userTimeZone, oldCase, caseLog, allLogFiles, currentUser,
                                        model.LogExternalEmailsCc); //TODO: async or move to scheduler
@@ -438,7 +453,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             // BRE
             var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, currentCase, oldCase);
             if (actions.Any())
-                _caseService.ExecuteBusinessActions(actions, currentCase, caseLog, userTimeZone, caseHistoryId,
+                _caseService.ExecuteBusinessActions(actions, currentCase.Id, caseLog, userTimeZone, caseHistoryId,
                                                     basePath, langId, caseMailSetting, allLogFiles); //TODO: async or move to scheduler
 
 
@@ -565,13 +580,17 @@ namespace DH.Helpdesk.WebApi.Controllers
                     mailSenders.DefaultOwnerWGEMail = defaultWgEmail.EMail;
             }
 
-            var caseMailSetting = new CaseMailSetting(
-                customer.NewCaseEmailList,
-                customer.HelpdeskEmail,
-                ConfigurationManager.AppSettings[AppSettingsKey.HelpdeskPath],
-                customerSettings.DontConnectUserToWorkingGroup);
-            caseMailSetting.CustomeMailFromAddress = mailSenders;
-            caseMailSetting.DontSendMailToNotifier = !customer.CommunicateWithNotifier.ToBool();
+            var caseMailSetting = 
+                new CaseMailSetting(
+                    customer.NewCaseEmailList,
+                    customer.HelpdeskEmail,
+                    ConfigurationManager.AppSettings[AppSettingsKey.HelpdeskPath],
+                    customerSettings.DontConnectUserToWorkingGroup)
+            {
+                CustomeMailFromAddress = mailSenders,
+                DontSendMailToNotifier = !customer.CommunicateWithNotifier.ToBool()
+            };
+
             mailSenders.SystemEmail = caseMailSetting.HelpdeskMailFromAdress;
 
             return caseMailSetting;

@@ -9,7 +9,7 @@ import { BaseControl } from '../base-control';
     styleUrls: ['./case-datetime-control.component.scss']
   })
   export class CaseDateTimeComponent extends BaseControl<string> {
-    @ViewChild('control') control: any;
+    @ViewChild('control', { static: true }) control: any;
     value?: Date;
     /*
     // @ViewChild('datetime') control: MbscDatetime

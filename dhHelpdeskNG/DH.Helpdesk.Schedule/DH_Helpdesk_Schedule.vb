@@ -1,8 +1,8 @@
 ﻿Imports System.Configuration
 Imports System.Data.SqlClient
-Imports DH.Helpdesk.Mail2Ticket.Library
+Imports DH.Helpdesk.Library
 Imports System.IO
-Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
+Imports DH.Helpdesk.Library.SharedFunctions
 
 Module DH_Helpdesk_Schedule
     'Private objLogFile As StreamWriter

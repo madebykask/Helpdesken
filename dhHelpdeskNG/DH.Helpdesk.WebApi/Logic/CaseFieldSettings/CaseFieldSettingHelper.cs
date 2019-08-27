@@ -12,6 +12,8 @@ namespace DH.Helpdesk.WebApi.Logic.CaseFieldSettings
 {
     public interface ICaseFieldSettingsHelper
     {
+        string GetFieldName(string fieldName);
+
         bool IsActive(IList<CaseFieldSetting> caseFieldSettings, ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings, 
             GlobalEnums.TranslationCaseFields field);
 
@@ -61,7 +63,8 @@ namespace DH.Helpdesk.WebApi.Logic.CaseFieldSettings
 
         public CaseFieldSetting GetCaseFieldSetting(IList<CaseFieldSetting> caseFieldSettings, string fieldName)
         {
-            return caseFieldSettings.FirstOrDefault(s => s.Name.Equals(fieldName.Replace("tblLog_", "tblLog."), StringComparison.OrdinalIgnoreCase));
+            var dbFieldName = GetFieldName(fieldName);
+            return caseFieldSettings.FirstOrDefault(s => s.Name.Equals(dbFieldName, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool IsCaseNew(int? currentCaseId)
@@ -79,6 +82,12 @@ namespace DH.Helpdesk.WebApi.Logic.CaseFieldSettings
         public CaseSolutionSettingOverview CaseSolutionFieldSetting(ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings, GlobalEnums.TranslationCaseFields field)
         {
             return caseTemplateSettings?.FirstOrDefault(c => c.CaseSolutionField.MapToCaseField() == field);
+        }
+
+        public string GetFieldName(string fieldName)
+        {
+            if (string.IsNullOrEmpty(fieldName)) return fieldName;
+            return fieldName.Replace("tblLog_", "tblLog.");
         }
 
     }

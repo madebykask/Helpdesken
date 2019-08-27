@@ -16,6 +16,8 @@ namespace DH.Helpdesk.Dal.Repositories
         List<ItemOverview> FindActive(int? departmentId);
 
         List<OU> GetOUs(int? departmentId);
+
+        IEnumerable<OU> GetRootOUs(int customerId, bool includeSubOu = false);
         
         IEnumerable<OU> GetActiveAndShowable();
 

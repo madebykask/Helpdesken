@@ -460,21 +460,22 @@
                                 </tr>
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString() });
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString() });
-                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 4 ||
-                                    Model.MailTemplateLanguage.MailTemplate.MailID == 5 ||
-                                    Model.MailTemplateLanguage.MailTemplate.MailID == 1 ||
+
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == (int)GlobalEnums.MailTemplates.InformNotifier ||
+                                    Model.MailTemplateLanguage.MailTemplate.MailID == (int)GlobalEnums.MailTemplates.InternalLogNote ||
+                                    Model.MailTemplateLanguage.MailTemplate.MailID == (int)GlobalEnums.MailTemplates.NewCase ||
                                     Model.MailTemplateLanguage.MailTemplate.MailID == (int)GlobalEnums.MailTemplates.ClosedCase ||
                                     Model.MailTemplateLanguage.MailTemplate.MailID > 99)
                                 {
                                     <tr>
-                                        <td>
-                                            @Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            [#14]
-                                        </td>
+                                        <td>@Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)</td>
+                                        <td>[#14]</td>
                                     </tr>
-}
+                                    <tr>
+                                        <td>@Translation.Get("Intern bifogad fil", Enums.TranslationSource.TextTranslation)</td>
+                                        <td>[#30]</td>
+                                    </tr>
+                                }
                                 if (Model.MailTemplateLanguage.MailTemplate.MailID == 11)
                                 {
                                     <tr>

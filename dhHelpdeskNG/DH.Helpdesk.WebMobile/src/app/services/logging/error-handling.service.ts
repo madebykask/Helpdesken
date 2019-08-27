@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import { ClientLogEntryModel, ClientLogLevel } from '../../models/shared/client-log.model';
-import { LoggerService } from './logger.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { ClientLogApiService } from '../api';
+import { ClientLogEntryModel, ClientLogLevel } from '../../models/shared/client-log.model';
+import { LoggerService } from './logger.service';
+import { ClientLogApiService } from '../api/logging/client-log-api.service';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrapper';
 import { UuidGenerator } from 'src/app/modules/shared-module/utils/uuid-generator';
-import { Alert } from 'selenium-webdriver';
+import { take, catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class ErrorHandlingService {
@@ -73,22 +74,26 @@ export class ErrorHandlingService {
          this.router.navigate(['/error'], {  queryParams: { errorGuid: errorGuid } });
     }
 
-    private saveErrorOnServer(errorGuid: string, error: any, errorMsg) {
+    private saveErrorOnServer(errorGuid: string, error: any, errorMsg: string) {
         const logEntry = new ClientLogEntryModel();
         logEntry.uniqueId = errorGuid;
         logEntry.level = ClientLogLevel.Error;
         logEntry.url = this.window.nativeWindow.location.href;
-        logEntry.message = errorMsg;
+        logEntry.message = errorMsg || '';
 
         if (error && error instanceof Error && error.stack) {
             logEntry.stack = error.stack.toString();
         }
 
-        this.clientLogApiService.saveLogEntry(logEntry)
-            .subscribe(
-                () => { },
-                (e: any) => this.logService.error(`Failed to send error (${logEntry.uniqueId}) to server. error: ${e.toString()}`)
-        );
+        this.clientLogApiService.saveLogEntry(logEntry).pipe(
+          take(1),
+          catchError((err: any) => throwError(err))
+        ).subscribe(
+          () => { },
+          (e: any) => {
+            this.logService.error(`Failed to send error (${logEntry.uniqueId}) to server. Error: ${e.toString()}`);
+            this.alertsService.showMessage(`Failed to send the error (${logEntry.uniqueId}) to server. Error: ${errorMsg}.`, AlertType.Error);
+          });
     }
 
     // handles user error
@@ -109,12 +114,5 @@ export class ErrorHandlingService {
 
         //raise error alert to display user error message on ui
         this.alertsService.showMessage(`${userMsg}`, AlertType.Warning);
-    }
-
-    private buildErrorAlertMessage(errorId: string): string {
-        const str =
-            `Sorry, an error occurred while processing your request. Please provide Error Id to the support team.
-             ErrorId: ${errorId}`;
-        return str;
     }
 }

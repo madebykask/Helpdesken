@@ -238,13 +238,13 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             {
                 auxModel.UserTimeZone = TimeZoneInfo.Local;
             }
-			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(curCustomer.TimeZoneId);
+            var timeZone = TimeZoneInfo.FindSystemTimeZoneById(curCustomer.TimeZoneId);
 
-			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                                             _holidayService,
                                             curCustomer.WorkingDayStart,
                                             curCustomer.WorkingDayEnd,
-											timeZone);
+                                            timeZone);
 
             int[] deptIds = null;
             if (caseModel.Department_Id.HasValue)
@@ -545,7 +545,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
             var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, caseEntity, oldCase);
             if (actions.Any())
-                _caseService.ExecuteBusinessActions(actions, caseEntity, logEntity, auxModel.UserTimeZone, historyId, "", auxModel.CurrentLanguageId, mailSettings);
+                _caseService.ExecuteBusinessActions(actions, caseEntity.Id, logEntity, auxModel.UserTimeZone, historyId, "", auxModel.CurrentLanguageId, mailSettings);
 
             caseId = caseEntity.Id;
             caseNumber = caseEntity.CaseNumber;
@@ -685,6 +685,9 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 LogType = 0,
                 TextExternal = caseModel.Text_External,
                 TextInternal = caseModel.Text_Internal,
+
+                //SendMailAboutLog = 
+                SendMailAboutCaseToNotifier = false,
 
                 //// aux model values
                 UserId = auxCaseModel.CurrentUserId > 0 ? (int?)auxCaseModel.CurrentUserId : null,

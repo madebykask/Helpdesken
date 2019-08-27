@@ -36,6 +36,7 @@ namespace DH.Helpdesk.Dal.Repositories
         CategoryOverview GetCategoryOverview(int id);
 
 		IQueryable<Category> GetManyWithSubCategories(Expression<Func<Category, bool>> where);
+        IQueryable<Category> GetCategory(int id);
 
 		IList<BusinessData.Models.Case.CategoryOverview> GetCategoriesOverview(int customerId, bool activeOnly);
     }
@@ -84,6 +85,11 @@ namespace DH.Helpdesk.Dal.Repositories
 		{
 			return this.DataContext.Categories.Include("SubCategories").Where(where);
 		}
+
+        public IQueryable<Category> GetCategory(int id)
+        {
+            return DataContext.Categories.Where(c => c.Id == id);
+        }
 
 		public IList<CategoryOverview> GetCategoriesOverview(int customerId, bool activeOnly)
         {

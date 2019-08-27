@@ -77,10 +77,10 @@
                 permissions.Add(UserPermission.CloseCasePermission);
             }
 
-            if (user.RestrictedCasePermission.ToBool())
-            {
-                permissions.Add(UserPermission.RestrictedCasePermission);
-            }
+            //if (user.RestrictedCasePermission.ToBool())
+            //{
+            //    permissions.Add(UserPermission.RestrictedCasePermission);
+            //}
 
             if (user.FollowUpPermission.ToBool())
             {
@@ -250,21 +250,25 @@
                     }
 
                     break;
+
                 case UserGroup.Administrator:
                     // add permissions for Handläggare here
                     break;
+
                 case UserGroup.CustomerAdministrator:
-                    if (permissions.Contains(UserPermission.RestrictedCasePermission))
-                    {
-                        wrongPermissions.Add(UserPermission.RestrictedCasePermission);
-                    }
+                    // moved to customer level
+                    //if (permissions.Contains(UserPermission.RestrictedCasePermission))
+                    //{
+                    //    wrongPermissions.Add(UserPermission.RestrictedCasePermission);
+                    //}
 
                     break;
                 case UserGroup.SystemAdministrator:
-                    if (permissions.Contains(UserPermission.RestrictedCasePermission))
-                    {
-                        wrongPermissions.Add(UserPermission.RestrictedCasePermission);
-                    }
+                    // moved to customer level
+                    //if (permissions.Contains(UserPermission.RestrictedCasePermission))
+                    //{
+                    //    wrongPermissions.Add(UserPermission.RestrictedCasePermission);
+                    //}
 
                     break;
                 default:

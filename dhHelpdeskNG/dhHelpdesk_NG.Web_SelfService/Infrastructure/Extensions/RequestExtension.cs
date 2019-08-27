@@ -1,12 +1,11 @@
-﻿namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
-{
-    using System.Linq;
-    using System.Net;
-    using System.Web;
+﻿using System.Linq;
+using System.Net;
+using System.Web;
 
+namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
+{
     public static class RequestExtension
     {
-
         public static string GetComputerName(this HttpRequestBase request)
         {
             try
@@ -63,5 +62,16 @@
             return appPath;
         }
 
+        public static byte[] GetFileContent(this HttpRequestBase request)
+        {
+            byte[] fileContent = null;
+            var postedFile = request.Files[0];
+            if (postedFile != null && postedFile.HasFile())
+            {
+                fileContent = new byte[postedFile.InputStream.Length];
+                postedFile.InputStream.Read(fileContent, 0, fileContent.Length);
+            }
+            return fileContent;
+        }
     }
 }
