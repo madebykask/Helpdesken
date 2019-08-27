@@ -1043,7 +1043,7 @@ Module DH_Helpdesk_Mail
         Dim filePath As String = ""
         For Each token as String In args
             If Not IsNullOrEmpty(token)
-                filePath = Path.Combine(filePath, token.Trim("\"))
+                filePath = Path.Combine(filePath, token.TrimEnd("\")) ' token may start with network path - should keep it. ex: \\machine\
             End If
         Next
         Return filePath

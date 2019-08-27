@@ -270,10 +270,9 @@ namespace DH.Helpdesk.SelfService.Controllers
             
             if (currentCase.CaseExtendedCaseDatas.Any())
                 return RedirectToAction("ExtendedCase", new { caseId = currentCase.Id });
-
+           
             var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
             var isMultiCustomerMode = globalSettings.MultiCustomersSearch.ToBool();
-            
             // check only if multi customer is not enabled. Allow user to see own cases for different customers.
             if (!isMultiCustomerMode && currentCase.Customer_Id != SessionFacade.CurrentCustomerID)
             {
