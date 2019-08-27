@@ -224,7 +224,7 @@ BEGIN
 	   -- transfer setting value to tblCustomerUser
 	   DECLARE @updateCmd nvarchar(1024) = 
 		  N'UPDATE cu SET cu.RestrictedCasePermission = u.RestrictedCasePermission
-		    FROM tblCustomerUser cu INNER JOIN tblUsers u ON u.Customer_Id = cu.Customer_Id AND u.Id = cu.User_Id';
+		    FROM tblCustomerUser cu INNER JOIN tblUsers u ON u.Id = cu.User_Id';
 	   EXEC (@updateCmd)
 	   	   
 	   -- DROP DEFAULT CONSTRAINT for tblUsers.RestrictedCasePermission
