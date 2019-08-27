@@ -7,7 +7,7 @@ import { PagingConstants, SortOrder, CaseFieldsNames } from 'src/app/modules/sha
 import { CasesOverviewFilter } from '../../models/cases-overview/cases-overview-filter.model';
 import { CaseOverviewItem } from '../../models/cases-overview/cases-overview-item.model';
 import { CasesOverviewService } from '../../services/cases-overview';
-import { CaseProgressFilter, CaseStandardSearchFilters } from '../../models/cases-overview/enums';
+import { CaseProgressFilter, CaseStandardSearchFilters, InitiatorSearchScope } from '../../models/cases-overview/enums';
 import { DateTime } from 'luxon';
 import { TranslateService } from '@ngx-translate/core';
 import { CaseRouteReuseStrategy } from 'src/app/helpers/case-route-resolver.stategy';
@@ -53,8 +53,10 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     // an event to handle load on demand when scrolling results to the end
     onListEnd: (event, inst) => {
       if (!this.isLoading) {
+        if (this.filter) {
           this.filter.Page += 1;
           this.search();
+        }
       }
     }
   };
@@ -209,8 +211,8 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   private initSearchFilter() {
     this.filter = new CasesOverviewFilter();
     this.filter.FreeTextSearch = this.filtersForm.controls.freeSearch.value;
-    this.filter.InitiatorSearchScope = 0; // TODO: use enum instead
-    this.filter.PageSize =  this.pageSize || PagingConstants.pageSize;
+    this.filter.InitiatorSearchScope = +InitiatorSearchScope.UserAndIsAbout;
+    this.filter.PageSize = this.pageSize || PagingConstants.pageSize;
     this.filter.Page = PagingConstants.page;
     this.filter.Ascending = this.selectedSortFieldOrder === SortOrder.SortAsc;
     this.filter.OrderBy = this.selectedSortFieldId;
