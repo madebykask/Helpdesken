@@ -35,7 +35,8 @@ namespace DH.Helpdesk.Web.Common.Tools.Files
         public void AddFile(byte[] content, string fileName, string objectId, params string[] subtopics)
         {
             var saveDirectory = this.ComposeDirectoryPath(objectId, subtopics);
-            Directory.CreateDirectory(saveDirectory);
+            if (!Directory.Exists(saveDirectory))
+                Directory.CreateDirectory(saveDirectory);
             var savePath = this.ComposeFilePath(fileName, objectId, subtopics);
 
             using (var fileStream = new FileStream(savePath, FileMode.CreateNew))

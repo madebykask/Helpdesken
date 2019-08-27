@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Dal.Infrastructure.Concrete
-{
-    using System.Globalization;
-    using System.IO;
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 
+namespace DH.Helpdesk.Dal.Infrastructure.Concrete
+{
     public sealed class FilesStorage : IFilesStorage
     {
         private readonly List<string> FilteredFiles = new List<string>();
@@ -15,21 +15,23 @@
 
         public string GetCaseFilePath(string topic, int entityId, string basePath, string fileName)
         {
-            var filePath = this.ComposeFilePath(topic, entityId, basePath, fileName);
+            var filePath = ComposeFilePath(topic, entityId, basePath, fileName);
             return filePath;
         }
 
         public byte[] GetFileContent(string topic, int entityId, string basePath, string fileName)
         {
-            var filePath = this.ComposeFilePath(topic, entityId, basePath,  fileName);  
+            var filePath = ComposeFilePath(topic, entityId, basePath,  fileName);  
             return File.ReadAllBytes(filePath);
         }
 
         public void SaveFile(byte[] content, string basePath, string fileName, string topic, int entityId)
         {
-            var saveDirectory = this.ComposeDirectoryPath(basePath, topic, entityId); 
-            Directory.CreateDirectory(saveDirectory);
-            var savePath = this.ComposeFilePath(topic, entityId, basePath,  fileName);
+            var saveDirectory = ComposeDirectoryPath(basePath, topic, entityId); 
+            if (!Directory.Exists(saveDirectory))
+                Directory.CreateDirectory(saveDirectory);
+
+            var savePath = ComposeFilePath(topic, entityId, basePath,  fileName);
             
             using (var fileStream = new FileStream(savePath, FileMode.CreateNew))
             {
@@ -39,7 +41,7 @@
 
         public void DeleteFile(string topic, int entityId, string basePath, string fileName)
         {
-            var filePath = this.ComposeFilePath(topic, entityId, basePath,  fileName);
+            var filePath = ComposeFilePath(topic, entityId, basePath,  fileName);
 
             if (File.Exists(filePath))
             {
@@ -49,8 +51,8 @@
 
         public void MoveDirectory(string topic, string entityId, string sourceBasePath, string targetBasePath)
         {
-            var fromDirPath = this.ComposeFilePath(topic, entityId, sourceBasePath, string.Empty);
-            var targetDirPath = this.ComposeFilePath(topic, entityId, targetBasePath, string.Empty);
+            var fromDirPath = ComposeFilePath(topic, entityId, sourceBasePath, string.Empty);
+            var targetDirPath = ComposeFilePath(topic, entityId, targetBasePath, string.Empty);
 
             if (Directory.Exists(fromDirPath))
             {
@@ -86,7 +88,7 @@
 
         public string ComposeFilePath(string topic, int entityId, string basePath, string fileName)
         {
-            var directoryPath = this.ComposeDirectoryPath(basePath, topic, entityId);
+            var directoryPath = ComposeDirectoryPath(basePath, topic, entityId);
             return Path.Combine(directoryPath, fileName.Trim());
         }
 
@@ -97,7 +99,7 @@
 
         public string ComposeFilePath(string topic, string entityId, string basePath, string fileName)
         {
-            var directoryPath = this.ComposeDirectoryPath(basePath, topic, entityId);
+            var directoryPath = ComposeDirectoryPath(basePath, topic, entityId);
             return Path.Combine(directoryPath, fileName.Trim());
         }
 
