@@ -1,26 +1,28 @@
-﻿<progress-cmp></progress-cmp>
-<tabset *ngIf="isLoaded; else loading">
-    <tab *ngFor="let tabTemplate of templateModel.tabs; let i = index; trackBy: trackById"
-         [heading]="tabTemplate.name"
-         [customClass]="getTabStyle(tabTemplate)"
-         (select)="selectTabFn($event, tabTemplate)"
-         [attr.name]="tabTemplate.id">
-        <ec-tab *ngIf="!formModel.tabs[tabTemplate.id].hidden" 
-                [formModel]="formModel" 
-                [tabTemplate]="tabTemplate" 
-                [tabModel]="formModel.tabs[tabTemplate.id]"></ec-tab>
-    </tab>
-</tabset>
-<!--<div *ngIf="config.showDebugProxyModel">
-    <br />
-    <a href="javascript:;" (click)="showDebugPanel = !showDebugPanel">{{showDebugPanel ? "hide " : "show "}} debug panel</a>
-    <div class="well-sm collapse" [class.in]="showDebugPanel">
-        <strong>ProxyModel: {{ formModel.proxyModel | json }}</strong>
-    </div>
-    <div>
-        <button type="button" (click)="do()">DoSmth</button>
-    </div>
-</div>-->
+﻿<div class="container pull-left">
+  <progress-cmp></progress-cmp>
+  <tabset *ngIf="isLoaded; else loading">
+      <tab *ngFor="let tabTemplate of templateModel.tabs; let i = index; trackBy: trackById"
+          [heading]="tabTemplate.name"
+          [customClass]="getTabStyle(tabTemplate)"
+          (select)="selectTabFn($event, tabTemplate)"
+          [attr.name]="tabTemplate.id">
+          <ec-tab *ngIf="!formModel.tabs[tabTemplate.id].hidden" 
+                  [formModel]="formModel" 
+                  [tabTemplate]="tabTemplate" 
+                  [tabModel]="formModel.tabs[tabTemplate.id]"></ec-tab>
+      </tab>
+  </tabset>
+  <!--<div *ngIf="config.showDebugProxyModel">
+      <br />
+      <a href="javascript:;" (click)="showDebugPanel = !showDebugPanel">{{showDebugPanel ? "hide " : "show "}} debug panel</a>
+      <div class="well-sm collapse" [class.in]="showDebugPanel">
+          <strong>ProxyModel: {{ formModel.proxyModel | json }}</strong>
+      </div>
+      <div>
+          <button type="button" (click)="do()">DoSmth</button>
+      </div>
+  </div>-->
+</div>
 <ng-template #loading>
     Loading Data...
 </ng-template>
