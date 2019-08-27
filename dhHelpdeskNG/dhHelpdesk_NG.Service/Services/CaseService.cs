@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Extensions.Lists;
 using DH.Helpdesk.Common.Types;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
@@ -442,7 +443,8 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (var f in logFiles)
                 {
-                    _filesStorage.DeleteFile(ModuleName.Log, f.Log_Id, basePath, f.FileName);
+                    var logFolder = f.LogType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
+                    _filesStorage.DeleteFile(logFolder, f.Log_Id, basePath, f.FileName);
                     _logFileRepository.Delete(f);
                 }
                 _logFileRepository.Commit();
