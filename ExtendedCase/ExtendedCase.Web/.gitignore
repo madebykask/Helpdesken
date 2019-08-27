@@ -3,6 +3,5 @@
 *.Web.csproj.user
 *.js.map
 *.component.js
-/src/**/*.js
 /compilerconfig.json
 /compilerconfig.json.defaults
