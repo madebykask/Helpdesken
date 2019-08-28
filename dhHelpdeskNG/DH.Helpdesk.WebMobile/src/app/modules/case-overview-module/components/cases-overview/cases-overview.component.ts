@@ -137,7 +137,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
   processFilterChanged(filterChangeArg) {
     this.selectedFilterId = +filterChangeArg.filterId;
-    this.headerText = filterChangeArg.filterName ? filterChangeArg.filterName : this.defaultHeaderText;
+    this.headerText = filterChangeArg.filterName ? this.ngxTranslateService.instant(filterChangeArg.filterName) : this.defaultHeaderText;
     this.saveSearchState();
 
     // run new search
