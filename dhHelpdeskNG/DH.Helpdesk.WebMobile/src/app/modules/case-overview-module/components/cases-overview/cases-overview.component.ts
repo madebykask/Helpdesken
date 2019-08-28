@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { finalize, take, distinctUntilChanged, takeUntil, filter, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -25,6 +25,7 @@ import { CaseSearchStateModel } from 'src/app/modules/shared-module/models/cases
 })
 export class CasesOverviewComponent implements OnInit, OnDestroy {
   @ViewChild('searchInput', { static: false }) searchInput: any;
+  @ViewChild('listview', { static: false }) listView: ElementRef;
 
   private selectedFilterId: number;
   private filter: CasesOverviewFilter;
@@ -154,17 +155,6 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     }
   }
 
-  private saveSearchState() {
-    let state = this.localStorageService.getCaseSearchState();
-    if (state === null) {
-      state = new CaseSearchStateModel();
-    }
-    state.filterId = this.selectedFilterId;
-    state.sortField = this.selectedSortFieldId;
-    state.sortOrder = this.selectedSortFieldOrder;
-    this.localStorageService.setCaseSearchState(state);
-  }
-
   applyFilterAndSearch() {
     if (this.searchInput.element.blur != null) { // on android/ios removing focus from field hides keyboard
       this.searchInput.element.blur();
@@ -188,10 +178,30 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     this.goToCase(this.cases[event.index].id);
   }
 
+  trackByFn(index, item: CaseOverviewItem) {
+    return item.id;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   private runNewSearch() {
     this.initSearchFilter();
     this.resetCases();
     this.search();
+  }
+
+  private saveSearchState() {
+    let state = this.localStorageService.getCaseSearchState();
+    if (state === null) {
+      state = new CaseSearchStateModel();
+    }
+    state.filterId = this.selectedFilterId;
+    state.sortField = this.selectedSortFieldId;
+    state.sortOrder = this.selectedSortFieldOrder;
+    this.localStorageService.setCaseSearchState(state);
   }
 
   private search() {
@@ -231,7 +241,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
   private caclucatePageSize(): number {
     const headerSize = 53;
-    const caseElemSize = 130; // TODO: get real height from UI
+    const caseElemSize = 85; // TODO: get real height from UI
     const windowHeight = window.innerHeight;
     const defaultPageSize = 2;
     const size = ((windowHeight - headerSize) / caseElemSize) + 1 || defaultPageSize;
@@ -246,14 +256,4 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   private resetCases() {
     this.cases = [];
   }
-
-  trackByFn(index, item: CaseOverviewItem) {
-    return item.id;
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
 }
