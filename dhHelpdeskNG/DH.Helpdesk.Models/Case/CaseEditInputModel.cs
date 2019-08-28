@@ -83,7 +83,7 @@ namespace DH.Helpdesk.Models.Case
         public string LogInternalEmailTo { get; set; }
         public string LogInternalEmailCc { get; set; }
         public string LogExternalText { get; set; }
-        public Guid ExtendedCaseGuid { get; set; }
+        public Guid? ExtendedCaseGuid { get; set; }
         public string Description { get; set; }
         public bool LogSendMailToNotifier { get; set; }
         public string LogExternalEmailsCc { get; set; }

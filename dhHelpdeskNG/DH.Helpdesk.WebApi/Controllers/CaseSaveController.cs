@@ -14,6 +14,7 @@ using DH.Helpdesk.Common.Enums.BusinessRule;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Extensions.Boolean;
+using DH.Helpdesk.Common.Extensions.GUID;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.Enums;
@@ -367,9 +368,9 @@ namespace DH.Helpdesk.WebApi.Controllers
             }
             else
             {
-                if (model.ExtendedCaseGuid != Guid.Empty)
+                if (!model.ExtendedCaseGuid.IsEmpty())
                 {
-                    var exData = _caseService.GetExtendedCaseData(model.ExtendedCaseGuid);
+                    var exData = _caseService.GetExtendedCaseData(model.ExtendedCaseGuid.Value);
                     _caseService.CreateExtendedCaseRelationship(currentCase.Id, exData.Id);
                 }
                 //if (model.ReportedBy != null && model.ExtendedInitiatorGUID.HasValue)
