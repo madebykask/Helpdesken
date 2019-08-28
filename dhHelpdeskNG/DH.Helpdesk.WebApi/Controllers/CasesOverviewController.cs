@@ -100,7 +100,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Id = f.Id,
                     Name = f.Name,
                     Fields = f.Fields.ToDictionary().Select(kv => new ItemOverview(kv.Key, kv.Value)).ToList()
-                }).ToList()
+                }).OrderBy(f => f.Name).ToList()
                 : null;
 
             return model;
@@ -243,8 +243,9 @@ namespace DH.Helpdesk.WebApi.Controllers
                 CaseProgress = ((int)input.CaseProgress).ToString(), // from params - frm.ReturnFormValue(CaseFilterFields.FilterCaseProgressNameAttribute);
                 CaseFilterFavorite = input.CaseFilterFavoriteId?.ToString() ?? string.Empty, // from params - frm.ReturnFormValue(CaseFilterFields.CaseFilterFavoriteNameAttribute);
                 FreeTextSearch = input.FreeTextSearch, //TODO: remove restricted symbols here. from params - frm.ReturnFormValue(CaseFilterFields.FreeTextSearchNameAttribute);
-                Department = input.DepartmentIds.JoinToString() ?? string.Empty, // format - GetDepartmentsFrom(departments_OrganizationUnits);
-                OrganizationUnit = input.OrganizationUnitIds.JoinToString() ?? string.Empty, // format - GetOrganizationUnitsFrom(departments_OrganizationUnits);
+
+                Department = GetDepartmentsFrom(input.DepartmentIds), 
+                OrganizationUnit = GetOrganizationUnitsFrom(input.DepartmentIds),
 
                 MaxTextCharacters = maxTextCharCount,
 
@@ -327,6 +328,31 @@ namespace DH.Helpdesk.WebApi.Controllers
             // from params - frm.IsFormValueTrue(CaseFilterFields.IsConnectToParent);
 
             return filter;
+        }
+
+        //1,-2,-3
+        private string GetDepartmentsFrom(IList<int> ids)
+        {
+            var ret = string.Empty;
+            if (ids == null)
+                return ret;
+
+            var depIds = ids.Where(x => x > 0).ToList();
+            if (depIds.Any())
+                ret = string.Join(",", depIds);
+            return ret;
+        }
+
+        private string GetOrganizationUnitsFrom(IList<int> ids)
+        {
+            var ret = string.Empty;
+            if (ids == null)
+                return ret;
+
+            var ouIds = ids.Where(x => x < 0).Select(x => -1 * x).ToList();
+            if (ouIds.Any())
+                ret = string.Join(",", ouIds);
+            return ret;
         }
 
         /// <summary>

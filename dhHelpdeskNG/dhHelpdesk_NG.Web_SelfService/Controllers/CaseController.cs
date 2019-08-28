@@ -688,7 +688,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 CustomerId = initData.CustomerId,
                 LanguageId = initData.LanguageId,
                 ExtendedCaseDataModel = extendedCaseDataModel,
-                CurrentUser = SessionFacade.CurrentUserIdentity.EmployeeNumber,
+                CurrentUser = IsLineManagerApplication() ? SessionFacade.CurrentUserIdentity.EmployeeNumber : SessionFacade.CurrentSystemUser,
                 CurrentCustomer = customer,
                 UserRole = initData.UserRole,
                 StateSecondaryId = caseStateSecondaryId,

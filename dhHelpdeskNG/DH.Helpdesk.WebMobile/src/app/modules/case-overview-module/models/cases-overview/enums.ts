@@ -35,3 +35,9 @@ export enum FilterFields {
   ClosingDateFilter,
   ProductArea
 }
+
+export enum InitiatorSearchScope {
+  UserAndIsAbout = 0,
+  User = 1,
+  IsAbout = 2
+}
