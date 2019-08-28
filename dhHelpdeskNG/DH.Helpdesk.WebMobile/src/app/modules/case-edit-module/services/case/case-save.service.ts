@@ -16,7 +16,7 @@ export class CaseSaveService {
     const model = new CaseEditOutputModel();
     model.caseId = caseInputData.id;
     model.caseGuid = caseInputData.caseGuid;
-    model.extendedCaseGuid = caseInputData.extendedCaseData != null ? caseInputData.extendedCaseData.extendedCaseGuid : '';
+    model.extendedCaseGuid = caseInputData.extendedCaseData != null ? caseInputData.extendedCaseData.extendedCaseGuid : null;
     model.caseSolutionId = caseInputData.caseSolution != null ? caseInputData.caseSolution.caseSolutionId : null;
     model.reportedBy = this.getStringValue(form, CaseFieldsNames.ReportedBy);
     model.personName = this.getStringValue(form, CaseFieldsNames.PersonName);
