@@ -387,14 +387,12 @@ window.extendedCasePage =
                 $('#' + _caseFields.SubStatusName).val(_subStatus_id.SecondaryValue);
             }
 
-            if (_plandate != undefined) {
-                var _date = self.parseDate(_plandate.Value);
-                $('#' + _caseFields.PlanDate).val(_date);
+            if (_plandate && _plandate.Value) {
+                $('#' + _caseFields.PlanDate).val(_plandate.Value);
             }
 
-            if (_watchdate != undefined) {
-                var _date = self.parseDate(_watchdate.Value);
-                $('#' + _caseFields.WatchDate).val(_date);
+            if (_watchdate && _watchdate.Value) {
+                $('#' + _caseFields.WatchDate).val(_watchdate.Value);
             }
 
             if (_department_id != undefined && _priority_id != undefined) {
