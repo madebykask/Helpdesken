@@ -34,7 +34,7 @@
 
   <system.webServer>
     <security>
-      <requestFiltering>
+	  <requestFiltering allowDoubleEscaping="true">
         <requestLimits maxAllowedContentLength="104857600" />
       </requestFiltering>
     </security>
