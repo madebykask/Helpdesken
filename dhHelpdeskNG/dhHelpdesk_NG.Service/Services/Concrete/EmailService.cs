@@ -418,8 +418,21 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
             try
             {
-                var externalFiles = files?.Where(f => !f.IsInternal).Select(f => f.FilePath).ToList();
-                var internalFiles = files?.Where(f => f.IsInternal).Select(f => f.FilePath).ToList();
+                var attachExternalFiles = body.Contains("[#14]");
+                var attachInternalFiles = body.Contains("[#30]"); 
+
+                var externalFiles = new List<string>();
+                var internalFiles = new List<string>();
+
+                if (attachExternalFiles && files != null)
+                {
+                    externalFiles = files.Where(f => !f.IsInternal).Select(f => f.FilePath).ToList();
+                }
+
+                if (attachInternalFiles && files != null)
+                {
+                    internalFiles = files.Where(f => f.IsInternal).Select(f => f.FilePath).ToList();
+                }
                 
                 var msg = GetMailMessage(from, to, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType);
 
@@ -428,8 +441,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 el.Cc = string.Join(",", msg.CC.Select(x => x.Address));
                 el.Bcc = string.Join(",", msg.Bcc.Select(x => x.Address));
                 el.HighPriority = highPriority;
-                el.Files = externalFiles != null && externalFiles.Any() ? string.Join(",", externalFiles) : "";
-                el.FilesInternal = internalFiles != null && internalFiles.Any() ? string.Join(",", internalFiles) : "";
+                el.Files = externalFiles.Any() ? externalFiles.JoinToString() : "";
+                el.FilesInternal = internalFiles.Any() ? internalFiles.JoinToString() : "";
                 el.From = msg.From.Address;
                 el.SendStatus = EmailSendStatus.Pending;
                 el.Attempts = 0;
