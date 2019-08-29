@@ -9,11 +9,13 @@ import { throwError, Observable } from 'rxjs';
 import * as cm from '../../../shared-module/utils/common-methods';
 import { LocalStorageService } from 'src/app/services/local-storage';
 import { CaseSearchStateModel } from 'src/app/modules/shared-module/models/cases-overview/case-search-state.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({ providedIn: 'root' })
 export class SearchFilterService {
   constructor(private searchFilterApiService: SearchFilterApiService,
-              private localStorageService: LocalStorageService) {
+              private localStorageService: LocalStorageService,
+              private ngxTranslateService: TranslateService) {
   }
 
   getFilterIdFromState(): number {
@@ -52,8 +54,8 @@ export class SearchFilterService {
   private createDefaultSearchFilters(): FavoriteFilterModel[] {
     // standard/fix filters will have negative Ids
     const myCasesFilter = new FavoriteFilterModel();
-    myCasesFilter.id = -1; // TODO: Use constants!
-    myCasesFilter.name = 'Mina ärenden'; // My cases
+    myCasesFilter.id = CaseStandardSearchFilters.MyCases;
+    myCasesFilter.name = this.ngxTranslateService.instant('Mina ärenden'); // My cases
     return [ myCasesFilter ];
   }
 
