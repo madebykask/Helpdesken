@@ -147,17 +147,12 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public List<CheckListServiceBM> GetCheckListServices(int checkListId)
         {
-            
             var checkListServiceEntitys =
                    this.DbContext.CheckListServices.Where(c => c.CheckList_Id == checkListId).ToList();
 
-            if (checkListServiceEntitys != null)
-            {
-               
-                return checkListServiceEntitys.Select(c => new CheckListServiceBM(c.Customer_Id, c.CheckList_Id, c.Id, c.IsActive, c.Name, c.ChangedDate, c.CreatedDate)).ToList();
-            }
-            else
-                return null;
+            return checkListServiceEntitys.Any() 
+                ? checkListServiceEntitys.Select(c => new CheckListServiceBM(c.Customer_Id, c.CheckList_Id, c.Id, c.IsActive, c.Name, c.ChangedDate, c.CreatedDate)).ToList() 
+                : null;
         }
 
 
