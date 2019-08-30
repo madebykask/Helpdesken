@@ -140,7 +140,7 @@ namespace DH.Helpdesk.Web.Controllers
         private CheckListInputModel CreateCheckListInput(CheckListBM checklist)
         {
             var workingGroups = this._WorkingGroupService.GetWorkingGroups(SessionFacade.CurrentCustomer.Id);
-            var chLServices = this._CheckListServiceService.GetCheckListServices(checklist.Id).ToList();
+            var chLServices = this._CheckListServiceService.GetCheckListServices(checklist.Id) ?? new List<CheckListServiceBM>();
 
             var wgs = workingGroups.Select(x => new SelectListItem
             {
@@ -285,26 +285,33 @@ namespace DH.Helpdesk.Web.Controllers
             var chkLstBm = new CheckListBM(checklist.CheckListId, SessionFacade.CurrentCustomer.Id, checklist.WGId, checklist.CheckListName, DateTime.Now, DateTime.Now);
             _CheckListsService.UpdateCheckList(chkLstBm);
 
-            foreach (var sm in checklist.Services)
+            if (checklist.Services != null)
             {
-                var chkServiceBm = new CheckListServiceBM(SessionFacade.CurrentCustomer.Id, sm.CheckList_Id, sm.Id, sm.IsActive, sm.ServiceName, DateTime.Now, DateTime.Now);
-                _CheckListServiceService.UpdateCheckListService(chkServiceBm);
-
-                foreach (var am in sm.ActionsList)
+                foreach (var sm in checklist.Services)
                 {
-                    var chkActionBm = new CheckListActionBM(am.Action_Id, am.Service_Id, am.IsActive, am.ActionName, DateTime.Now, DateTime.Now);
-                    if (chkActionBm.Id > 0)
+                    var chkServiceBm = new CheckListServiceBM(SessionFacade.CurrentCustomer.Id, sm.CheckList_Id, sm.Id,
+                        sm.IsActive, sm.ServiceName, DateTime.Now, DateTime.Now);
+                    _CheckListServiceService.UpdateCheckListService(chkServiceBm);
+
+                    foreach (var am in sm.ActionsList)
                     {
-                        _CheckListActionService.UpdateAction(chkActionBm);
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrEmpty(chkActionBm.ActionName))
-                            _CheckListActionService.SaveCheckListAction(chkActionBm);
+                        var chkActionBm = new CheckListActionBM(am.Action_Id, am.Service_Id, am.IsActive, am.ActionName,
+                            DateTime.Now, DateTime.Now);
+                        if (chkActionBm.Id > 0)
+                        {
+                            _CheckListActionService.UpdateAction(chkActionBm);
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(chkActionBm.ActionName))
+                                _CheckListActionService.SaveCheckListAction(chkActionBm);
+                        }
                     }
                 }
             }
+
             _CheckListsService.CommitChanges();
+
             return CreateCheckListInput(chkLstBm);
         }
 
