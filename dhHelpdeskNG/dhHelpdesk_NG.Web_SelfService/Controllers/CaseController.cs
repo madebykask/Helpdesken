@@ -1444,8 +1444,6 @@ namespace DH.Helpdesk.SelfService.Controllers
                         ? (Func<CaseLogData, bool>)(l => !string.IsNullOrEmpty(l.InternalText.Trim()))
                         : (Func<CaseLogData, bool>)(l => !string.IsNullOrEmpty(l.ExternalText.Trim()));
 
-                var logType = useInternalLogs ? LogFileType.Internal : LogFileType.External;
-
                 // filter case logs
                 caseLogModels = caseLogs.Where(logsFilter).Select(data => new CaseLogModel
                 {
@@ -1460,8 +1458,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                     LogDate = data.LogDate,
                     RegTime = data.RegTime,
                     
-                    //filter files
-                    Files = data.Files?.Where(f => !isTwoAttachmentsMode || f.LogType == logType).Select(f => new Models.Case.LogFileModel
+                    Files = data.Files?.Select(f => new Models.Case.LogFileModel
                     {
                         Id = f.Id,
                         FileName = f.FileName,
