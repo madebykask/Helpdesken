@@ -1078,9 +1078,22 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
             else
             {
-                //existing file
-                var basePath = _masterDataService.GetFilePath(customer.Id);
-                fileContent = _logFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName, logFileType);
+				var logId = int.Parse(id);
+
+				var logFiles = _logFileService.GetLogFilesByNameAndId(fileName, logId);
+				var logFile = logFiles
+					.OrderBy(o => o.LogType)
+					.FirstOrDefault(o => o.FileName == fileName);
+
+				// Check that the found file also have set its logfiletype to Internal, if not use external for legacy support.
+				if (isTwoAttachmentsMode && useInternalLogs && logFile.LogType == LogFileType.Internal)
+					logFileType = LogFileType.Internal;
+				else
+					logFileType = LogFileType.External;
+
+				//existing file
+				var basePath = _masterDataService.GetFilePath(customer.Id);
+                fileContent = _logFileService.GetFileContentByIdAndFileName(logId, basePath, fileName, logFileType);
             }
 
             return File(fileContent, "application/octet-stream", fileName);
