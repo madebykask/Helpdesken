@@ -1086,7 +1086,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 					.FirstOrDefault(o => o.FileName == fileName);
 
 				// Check that the found file also have set its logfiletype to Internal, if not use external for legacy support.
-				if (isTwoAttachmentsMode && useInternalLogs && logFile.LogType == LogFileType.Internal)
+				if (logFile != null && isTwoAttachmentsMode && useInternalLogs && logFile.LogType == LogFileType.Internal)
 					logFileType = LogFileType.Internal;
 				else
 					logFileType = LogFileType.External;

@@ -41,7 +41,7 @@
                 {
                     foreach (var f in logModel.Files)
                     {
-                        <a href="@Url.Action("DownloadLogFile", "Case", new { id = logModel.Id, caseId = logModel.CaseId, fileName = Url.Encode(f.FileName) })">
+                        <a href="@Url.Action("DownloadLogFile", "Case", new { id = logModel.Id, caseId = logModel.CaseId, fileName = f.FileName })">
                             <i class="glyphicon glyphicon-file"></i>
                             @f.FileName
                         </a>
