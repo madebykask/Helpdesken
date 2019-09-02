@@ -458,15 +458,6 @@ export class CaseEditComponent {
       }
     }
 
-/*     private extendedCaseIsValid(isOnNext: boolean): boolean {
-      let result = true;
-      if (this.caseData.extendedCaseData != null) {
-        this.validateExtendedCase(isOnNext);
-        result = <boolean>this.extendedCase.nativeElement.validationResult;
-      }
-      return result;
-    } */
-
     private validateExtendedCase(isOnNext: boolean) {
       if (this.caseData.extendedCaseData == null) {
         this.extendedCaseValidation$.next(true);
