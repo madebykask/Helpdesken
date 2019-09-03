@@ -1,7 +1,8 @@
 ﻿'use strict';
+var params = dhHelpdesk.caseLog;
 
 $(function () {
-    var params = dhHelpdesk.caseLog;
+    
     var confirmDialog = function (text, onOk, onCancel, yesNo) {
         var firstText = params.yesText;
         var secondText = params.noText;
