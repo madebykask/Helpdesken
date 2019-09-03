@@ -383,7 +383,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
             //Apply & save specific filters only when user has selected one customer 
             if (!string.IsNullOrEmpty(f.Customer) && !f.Customer.Contains(","))
             {
-                f.WorkingGroup = frm.ReturnFormValue("lstFilterWorkingGroup");
+                f.WorkingGroup = frm.ReturnFormValue("lstfilterWorkingGroup");
                 f.Department = frm.ReturnFormValue("lstfilterDepartment");
                 f.Priority = frm.ReturnFormValue("lstfilterPriority");
                 f.StateSecondary = frm.ReturnFormValue("lstfilterStateSecondary");

@@ -355,9 +355,16 @@ window.advancedSearchPage =
             var fd = $('#frmAdvanceSearch').serializeObject();
             console.dir('formData: ', fd);
 
+            const nomalizeParamValue = function (value) {
+                if (Array.isArray(value)) {
+                    return value.join(',');
+                }
+                return value;
+            }
+
             var data = {
                 IsExtendedSearch: fd.isExtendedSearch || 'false',
-                Customers: fd.lstfilterCustomers || '', //todo: check usages
+                Customers: nomalizeParamValue(fd.lstfilterCustomers || ''),
                 CaseProgress: fd.lstfilterCaseProgress || '',
                 UserPerformer: fd.lstfilterPerformer || '',
                 Initiator: fd.CaseInitiatorFilter || '',
@@ -385,13 +392,13 @@ window.advancedSearchPage =
             if (sortOptions) {
                 self.setSortOptionsParams(sortOptions, data);
             }
-            
+
             // set only if one customer is selected
-            if (data.Customers.length === 1) {
-                data.WorkingGroup = fd.lstfilterWorkingGroup || '';
-                data.Department = fd.lstfilterDepartment || '';
-                data.Priority = fd.lstfilterPriority || '';
-                data.StateSecondary = fd.lstfilterStateSecondary || '';
+            if (!Array.isArray(fd.lstfilterCustomers) && fd.lstfilterCustomers.length >= 0) {
+                data.WorkingGroup =  nomalizeParamValue(fd.lstfilterWorkingGroup || '');
+                data.Department = nomalizeParamValue(fd.lstfilterDepartment || '');
+                data.Priority = nomalizeParamValue(fd.lstfilterPriority || '');
+                data.StateSecondary = nomalizeParamValue(fd.lstfilterStateSecondary || '');
                 data.CaseType = fd.hid_CaseTypeDropDown || '0';
                 data.ProductArea = fd.hid_ProductAreaDropDown || '';
                 data.CaseClosingReasonFilter = fd.hid_ClosingReasonDropDown || '';
