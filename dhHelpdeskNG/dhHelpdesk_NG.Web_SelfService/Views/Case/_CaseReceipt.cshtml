@@ -513,7 +513,9 @@
                                     {
                                         <tr>
                                             <td>
-                                                <a style="color:blue" href="@Url.Action("DownloadFile",  new { @id = Model.CasePreview.Id,  fileName = Url.Encode(file.FileName) })"><i class="icon-file"></i>@file.FileName</a>
+                                               @{ //<a style="color:blue" href="@Url.Action("DownloadFile",  new { @id = Model.CasePreview.Id, fileName = file.FileName })"><i class="icon-file"></i>@file.FileName</a> 
+                                               }
+                                                <a style="color:blue" href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
                                             </td>
                                         </tr>
                                     }

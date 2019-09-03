@@ -31,7 +31,8 @@ namespace DH.Helpdesk.Services.Services
         void ClearExistingAttachedFiles(int caseId);
         List<LogFileModel> GetLogFileNamesByLogId(int logId, bool includeInternal);
         List<LogFileModel> GetLogFilesByCaseId(int caseId, bool includeInternal);
-    }
+		List<LogFile> GetLogFilesByNameAndId(string fileName, int logId);
+	}
 
     public class LogFileService : ILogFileService
     {
@@ -247,5 +248,9 @@ namespace DH.Helpdesk.Services.Services
             _filesStorage.SaveFile(fileDto.Content, fileDto.BasePath, fileDto.FileName, logFolder, fileDto.ReferenceId);
         }
 
-    }
+		public List<LogFile> GetLogFilesByNameAndId(string fileName, int logId)
+		{
+			return _logFileRepository.GetMany(o => o.FileName == fileName && o.Log_Id == logId).ToList();
+		}
+	}
 }
