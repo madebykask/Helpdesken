@@ -166,7 +166,7 @@ namespace DH.Helpdesk.Services.Services
 
             var caseOverview = _caseRepository.GetCaseOverview(caseId);
 
-            if (caseOverview != null && caseOverview.ProblemId.HasValue)
+            if (caseOverview?.ProblemId != null)
             {
                 var problemLogs = _problemLogService.GetProblemLogs(caseOverview.ProblemId.Value);
                 if (problemLogs != null)
@@ -227,6 +227,7 @@ namespace DH.Helpdesk.Services.Services
                     l.CaseHistory.Emaillogs.DefaultIfEmpty()
                         .Where(t => t.MailId == (int)GlobalEnums.MailTemplates.InternalLogNote || 
                                     t.MailId == (int)GlobalEnums.MailTemplates.InformNotifier ||
+                                    t.MailId == (int)GlobalEnums.MailTemplates.ClosedCase && !string.IsNullOrEmpty(l.Text_External) || //#73472
                                     t.MailId == (int)GlobalEnums.MailTemplates.CaseIsUpdated) //#71840
                         .Select(t => new EmailLogMapperData
                         {
