@@ -381,7 +381,7 @@ export class CaseEditComponent {
     }
 
     private syncExtendedCaseValues() {
-      if (this.caseData.extendedCaseData == null) {
+      if (!this.isEcLoaded || this.caseData.extendedCaseData == null) {
         return;
       }
       const values = this.extendedCase.nativeElement.getCaseValues;
