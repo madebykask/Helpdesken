@@ -1027,6 +1027,10 @@
         }
 
         function setupValidation() {
+            // remove unobtrusive validation and chached validator, otherwise manual rules won't be applied
+            // alternative: run this method before unobstrusive parse
+            $mainForm.data("unobtrusiveValidation", null);
+            $mainForm.data("validator", null);
             $mainForm.validate({
                 ignore: "",
                 rules: {
