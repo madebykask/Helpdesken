@@ -889,9 +889,8 @@ namespace DH.Helpdesk.Services.Services
             if (string.IsNullOrEmpty(user.Password))
             {
                 errors.Add("NewPassWord", "Du måste ange ett lösenord");
-            }
-
-            if (!user.Password.Equals(confirmpassword, StringComparison.CurrentCulture) && !string.IsNullOrEmpty(user.Password))
+            } 
+            else if(!user.Password.Equals(confirmpassword, StringComparison.CurrentCulture))
             {
                 errors.Add("NewPassword", "Det nya lösenordet bekräftades inte korrekt. Kontrollera att nytt lösenord och bekräftat lösenord stämmer överens");
             }

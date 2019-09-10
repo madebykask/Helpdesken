@@ -699,7 +699,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             if (errors.Count > 0)
             {
-                TempData["PreventError"] = errors.FirstOrDefault().Value;
+                foreach (var error in errors)
+                {
+                    ModelState.AddModelError(error.Key, Translation.Get(error.Value));
+                }
                 var copyModel = CreateInputViewModel(copy);
                 return View(copyModel);
             }
