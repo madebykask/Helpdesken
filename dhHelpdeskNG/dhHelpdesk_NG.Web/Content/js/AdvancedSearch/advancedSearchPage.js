@@ -394,7 +394,7 @@ window.advancedSearchPage =
             }
 
             // set only if one customer is selected
-            if (!Array.isArray(fd.lstfilterCustomers) && fd.lstfilterCustomers.length >= 0) {
+            if (fd.lstfilterCustomers && !Array.isArray(fd.lstfilterCustomers) && fd.lstfilterCustomers.length >= 0) {
                 data.WorkingGroup =  nomalizeParamValue(fd.lstfilterWorkingGroup || '');
                 data.Department = nomalizeParamValue(fd.lstfilterDepartment || '');
                 data.Priority = nomalizeParamValue(fd.lstfilterPriority || '');
