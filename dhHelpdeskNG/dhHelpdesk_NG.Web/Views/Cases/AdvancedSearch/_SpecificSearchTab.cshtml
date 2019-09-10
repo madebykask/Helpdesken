@@ -41,7 +41,7 @@
             <tr>
                 <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Model.CustomerId)</td>
                 <td>
-                    <select id="lstfilterWorkingGroup" name="lstFilterWorkingGroup" data-placeholder="@Translation.GetCoreTextTranslation("Valj en eller flera")" multiple="multiple" class="chosen-select">
+                    <select id="lstfilterWorkingGroup" name="lstfilterWorkingGroup" data-placeholder="@Translation.GetCoreTextTranslation("Valj en eller flera")" multiple="multiple" class="chosen-select">
                         @foreach (var e in Model.WorkingGroupList)
                         {
                             if (e.IsActive == 1)
