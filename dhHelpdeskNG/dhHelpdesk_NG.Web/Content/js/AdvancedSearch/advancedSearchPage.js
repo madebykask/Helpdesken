@@ -93,7 +93,7 @@ window.advancedSearchPage =
             }
 
             if (params.extendedCustomers.length) {
-                $.each(params.userCustomers, function (idx, el) {
+                $.each(params.extendedCustomers, function (idx, el) {
                     var customerItem = mapToCustomerItem(el);
                     self.extendedCustomers.push(customerItem);
                     self.allCustomers.push(customerItem);
@@ -249,7 +249,7 @@ window.advancedSearchPage =
             
             //set customer specific params
             filterData.customerId = customerId;
-            filterData.IsExtendedSearchCustomer = self.isExtendedCustomer(customerId);
+            filterData.IsExtendedSearch = self.isExtendedCustomer(customerId);
 
             var sortOptions = self.getSortOptionsOrDefaults(customerId);
             self.setSortOptionsParams(sortOptions, filterData);
@@ -356,8 +356,12 @@ window.advancedSearchPage =
             console.dir('formData: ', fd);
 
             var data = {
+<<<<<<< Updated upstream
                 IsExtendedSearch: fd.isExtendedSearch || 'false',
                 Customers: fd.lstfilterCustomers || '', //todo: check usages
+=======
+                Customers: nomalizeParamValue(fd.lstfilterCustomers || ''),
+>>>>>>> Stashed changes
                 CaseProgress: fd.lstfilterCaseProgress || '',
                 UserPerformer: fd.lstfilterPerformer || '',
                 Initiator: fd.CaseInitiatorFilter || '',
