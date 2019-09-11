@@ -95,8 +95,12 @@ window.advancedSearchPage =
             if (params.extendedCustomers.length) {
                 $.each(params.extendedCustomers, function (idx, el) {
                     var customerItem = mapToCustomerItem(el);
-                    self.extendedCustomers.push(customerItem);
-                    self.allCustomers.push(customerItem);
+                    if (self.availableCustomers.filter(function(el, i) {
+                        return el.customerId === customerItem.customerId;
+                        }).length === 0) {
+                        self.extendedCustomers.push(customerItem);
+                        self.allCustomers.push(customerItem);
+                    }
                 });
             }
 
