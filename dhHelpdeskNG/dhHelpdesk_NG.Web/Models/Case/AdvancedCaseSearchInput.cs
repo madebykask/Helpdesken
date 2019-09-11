@@ -6,7 +6,6 @@ namespace DH.Helpdesk.Web.Models.Case
     public class AdvancedCaseSearchInput
     {
         public int CustomerId { get; set; }
-        public bool IsExtendedCustomer { get; set; }
         public bool IsExtendedSearch { get; set; }
         public string Customers { get; set; }
         public string CaseProgress { get; set; }
