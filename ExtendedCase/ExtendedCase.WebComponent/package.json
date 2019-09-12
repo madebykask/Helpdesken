@@ -67,7 +67,7 @@
     "ngx-moment": "^3.4.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.2",
-    "url-search-params": "^1.1.0",
+    "url-search-params-polyfill": "^7.0.0",
     "zone.js": "^0.10.1"
   },
   "scripts": {

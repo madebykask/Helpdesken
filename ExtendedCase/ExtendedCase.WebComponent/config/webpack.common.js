@@ -24,7 +24,7 @@ module.exports = args => {
         entry: {
             ecapp: mainFile,
             ecpolyfills: Helpers.root('src/polyfills.ts'),
-            ecpolyfillscore: Helpers.root('src/polyfills-core.ts'), // contans core-js. if component consumer already has this pilyfill - dont use it
+            ecpolyfillscore: Helpers.root('src/polyfills-core.ts'), // contains core-js. if component consumer already has this pilyfill - dont use it
             //ecvendor: './src/vendor.ts'
         },
 
