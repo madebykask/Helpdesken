@@ -1154,7 +1154,7 @@ namespace DH.Helpdesk.Services.Services
 
             Expression<Func<Case, bool>> casePermissionFilter = null;
 
-            if (customerSettings.RestrictedCasePermission)
+            if (customerSettings != null && customerSettings.RestrictedCasePermission)
             {
                 switch (user.UserGroupId)
                 {
