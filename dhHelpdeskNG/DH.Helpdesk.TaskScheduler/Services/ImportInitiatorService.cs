@@ -360,7 +360,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                 var isNew = existingId <= 0;
 
 				int? regionId;
-				if(row.Item2.ContainsKey(regionIdentifier) && !string.IsNullOrEmpty(row.Item2[regionIdentifier]))
+				if (regionIdentifier != null && row.Item2.ContainsKey(regionIdentifier) && !string.IsNullOrEmpty(row.Item2[regionIdentifier]))
 				{
 					var regionName = row.Item2[regionIdentifier].ToLower();
 					if(regions.ContainsKey(regionName))
