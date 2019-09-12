@@ -37,8 +37,8 @@ module.exports = WebpackMerge.smart(CommonConfig({ env: CONSTANTS.MODE,  outputD
                     terserOptions: {
                       ie8: false,
                       keep_fnames: true,
-                      ecma: 6,
                       output: {
+                        ecma: 5,
                         comments: false,
                       },
                     },
