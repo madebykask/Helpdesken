@@ -185,23 +185,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
             var allProductAreas = _productAreaService.GetProductAreasForSetting(id, false);
-
-            List<int> prodareawgs = new List<int>();
-            int[] wgs = null;
             foreach (var prod in allProductAreas)
             {
                 if (SelectedProductAreas != null && SelectedProductAreas.Contains(prod.Id))
                     prod.ShowOnExtPageCases = 1;
                 else
                     prod.ShowOnExtPageCases = 0;
-
-                if (prod.WorkingGroups.Count > 0)
-                {
-                    foreach (var wg in prod.WorkingGroups)
-                        prodareawgs.Add(wg.Id);
-
-                    wgs = prodareawgs.ToArray();
-                }
+                
+                var prodareawgs = prod.WorkingGroups.Any() ? prod.WorkingGroups.Select(wg => wg.Id).ToArray() : new int[0];
 
                 CaseTypeProductArea connectedCaseType = null;
                 if (prod.Id > 0)
@@ -210,9 +201,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 }
                 caseType_Id = connectedCaseType?.CaseType_Id ?? 0;
 
-                _productAreaService.SaveProductArea(prod, wgs, caseType_Id, out errors);
+                _productAreaService.SaveProductArea(prod, prodareawgs, caseType_Id, out errors);
             }
-
 
             var setting = _settingService.GetCustomerSetting(id);
             if (setting != null)
