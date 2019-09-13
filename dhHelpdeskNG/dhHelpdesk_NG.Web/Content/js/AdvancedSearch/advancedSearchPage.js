@@ -370,7 +370,7 @@ window.advancedSearchPage =
                 IsExtendedSearch: fd.isExtendedSearch || 'false',
                 Customers: nomalizeParamValue(fd.lstfilterCustomers || ''),
                 CaseProgress: fd.lstfilterCaseProgress || '',
-                UserPerformer: fd.lstfilterPerformer || '',
+                UserPerformer: nomalizeParamValue(fd.lstfilterPerformer || ''),
                 Initiator: fd.CaseInitiatorFilter || '',
                 InitiatorSearchScope: fd["CaseSearchFilterData.InitiatorSearchScope"],
                 CaseRegistrationDateStartFilter: fd.CaseRegistrationDateStartFilter || '', //date
