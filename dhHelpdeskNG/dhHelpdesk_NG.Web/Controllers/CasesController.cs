@@ -2167,12 +2167,18 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ActionResult Files(string id, string savedFiles)
         {
-            //var files = _caseFileService.GetCaseFiles(int.Parse(id));
-            var files = GuidHelper.IsGuid(id)
-                                ? _userTemporaryFilesStorage.FindFileNamesAndDates(id, ModuleName.Cases)
-                                : _caseFileService.FindFileNamesAndDatesByCaseId(int.Parse(id));
+            IList<CaseFileModel> caseFiles;
+            if (GuidHelper.IsGuid(id))
+            {
+                var files = _userTemporaryFilesStorage.FindFileNamesAndDates(id, ModuleName.Cases);
+                caseFiles = MakeCaseFileModel(files, savedFiles);
+            }
+            else
+            {
+                var canDelete = SessionFacade.CurrentUser.DeleteAttachedFilePermission.ToBool();
+                caseFiles = _caseFileService.GetCaseFiles(int.Parse(id), canDelete);
+            }
 
-            var cfs = MakeCaseFileModel(files, savedFiles);
             var customerId = 0;
             if (!GuidHelper.IsGuid(id))
             {
@@ -2181,7 +2187,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var useVd = customerId != 0 && !string.IsNullOrEmpty(_masterDataService.GetVirtualDirectoryPath(customerId));
 
-            var model = new CaseFilesModel(id, cfs.ToArray(), savedFiles, useVd);
+            var model = new CaseFilesModel(id, caseFiles.OrderBy(x => x.CreatedDate).ToArray(), savedFiles, useVd);
             return PartialView("_CaseFiles", model);
         }
         
