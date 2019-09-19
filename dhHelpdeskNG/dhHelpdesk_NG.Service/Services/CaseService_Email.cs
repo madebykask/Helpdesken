@@ -665,8 +665,8 @@ namespace DH.Helpdesk.Services.Services
 
                     if (!cms.DontSendMailToNotifier)
                     {
-                        var followerEmails = newCase.PersonsEmail.Split(';', ',').ToList();
-                        var emailList = GetCaseFollowersEmails(newCase).ToDistintList(true);
+                        var followerEmails = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();//newCase.PersonsEmail.Split(';', ',').ToList();
+						var emailList = GetCaseFollowersEmails(newCase).ToDistintList(true);
                         
                         SendTemplateEmail(mailTemplateId,
                             mailTpl,
@@ -847,9 +847,10 @@ namespace DH.Helpdesk.Services.Services
                         subject = GetSmsSubject(customerSetting);
                     }
 
-              
-                    //exclude admin specific fields (fieldTemplate.ExcludeAdministrators) or those provided with filterFieldsEmails
-                    var feedBackFields = ApplyFieldsExcludeFilter(mailTemplateId, case_, cms, fields, recepient, mailTpl, filterFieldsEmails);
+
+					//exclude admin specific fields (fieldTemplate.ExcludeAdministrators) or those provided with filterFieldsEmails
+					var body = mailTpl.Body;
+                    var feedBackFields = ApplyFieldsExcludeFilter(mailTemplateId, case_, cms, fields, recepient, ref body, filterFieldsEmails);
                     fieldsToUpdate.AddRange(feedBackFields);
 
                     var res =
@@ -857,7 +858,7 @@ namespace DH.Helpdesk.Services.Services
                             senderEmail,
                             emailLog.EmailAddress,
                             subject,
-                            mailTpl.Body,
+                            body,
                             fields,
                             mailSetting,
                             emailLog.MessageId,
@@ -873,7 +874,7 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        private List<FeedbackField> ApplyFieldsExcludeFilter(int mailTemplateId, Case newCase, CaseMailSetting cms, List<Field> fields, string recepient, MailTemplateLanguageEntity mailTpl, List<string> filterFieldsEmails)
+        private List<FeedbackField> ApplyFieldsExcludeFilter(int mailTemplateId, Case newCase, CaseMailSetting cms, List<Field> fields, string recepient, ref string body , List<string> filterFieldsEmails)
         {
             var templateFields = new List<FeedbackField>();
             var emailsToCheck = filterFieldsEmails ?? new List<string>();
@@ -881,7 +882,7 @@ namespace DH.Helpdesk.Services.Services
             if (mailTemplateId == (int)GlobalEnums.MailTemplates.ClosedCase)
             {
                 var adminEmails = newCase.Customer.UsersAvailable.Where(x => x.UserGroup_Id != UserGroups.User).Select(x => x.Email).ToList();
-                var identifiers = _feedbackTemplateService.FindIdentifiers(mailTpl.Body).ToList();
+                var identifiers = _feedbackTemplateService.FindIdentifiers(body).ToList();
 
                 //dont send feedback to admins
                 var identifiersToDel = new List<string>();
@@ -904,7 +905,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     if (!string.IsNullOrEmpty(identifier))
                     {
-                        mailTpl.Body = mailTpl.Body.Replace(identifier, string.Empty);
+                       body = body.Replace(identifier, string.Empty);
                     }
                 }
             }
