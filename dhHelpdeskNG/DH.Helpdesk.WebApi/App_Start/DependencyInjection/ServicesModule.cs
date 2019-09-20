@@ -97,7 +97,8 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<CaseSolutionService>().As<ICaseSolutionService>();
             builder.RegisterType<LinkService>().As<ILinkService>();
             builder.RegisterType<CaseSolutionConditionService>().As<ICaseSolutionConditionService>();
-        }
+			builder.RegisterType<FileViewLogService>().As<IFileViewLogService>();
+		}
 
         #endregion
     }

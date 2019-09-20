@@ -299,10 +299,10 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ICaseSectionsRepository>().To<CaseSectionsRepository>();
             kernel.Bind<IComputerUserCategoryRepository>().To<ComputerUserCategoryRepository>();
             kernel.Bind<IFeatureToggleRepository>().To<FeatureToggleRepository>();
+			kernel.Bind<IFileViewLogRepository>().To<FileViewLogRepository>();
 
-
-            // Service             
-            kernel.Bind<IMasterDataService>().To<MasterDataService>();            
+			// Service             
+			kernel.Bind<IMasterDataService>().To<MasterDataService>();            
             kernel.Bind<ISettingService>().To<SettingService>();
             kernel.Bind<ICaseService>().To<CaseService>();
             kernel.Bind<ILogService>().To<LogService>();
@@ -385,8 +385,11 @@ namespace DH.Helpdesk.SelfService
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
 
-            // FormLib
-            var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DSN"].ConnectionString;
+			// File view log
+			kernel.Bind<IFileViewLogService>().To<FileViewLogService>();
+
+			// FormLib
+			var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DSN"].ConnectionString;
 
             kernel.Bind<ECT.Model.Abstract.IGlobalViewRepository>()
             .To<ECT.Model.Contrete.GlobalViewRepository>().InRequestScope().WithConstructorArgument("connectionString", connectionString);
@@ -398,7 +401,9 @@ namespace DH.Helpdesk.SelfService
             .To<ECT.Model.Contrete.UserRepository>().InRequestScope().WithConstructorArgument("connectionString", connectionString);
 
             kernel.Bind<ECT.Core.Service.IFileService>().To<ECT.Service.FileService>().InRequestScope();
-        }        
+
+			
+		}        
     }
    
 }

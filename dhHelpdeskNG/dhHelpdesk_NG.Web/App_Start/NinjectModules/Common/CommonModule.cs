@@ -23,39 +23,42 @@ using DH.Helpdesk.Web.Infrastructure.Cache;
 
 namespace DH.Helpdesk.Web.NinjectModules.Common
 {
-    using DH.Helpdesk.BusinessData.Models.Calendar.Output;
-    using DH.Helpdesk.BusinessData.Models.Case.Output;
-    using DH.Helpdesk.BusinessData.Models.Customer;
-    using DH.Helpdesk.BusinessData.Models.Customer.Input;
-    using DH.Helpdesk.BusinessData.Models.Document.Output;
-    using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.Dal.Infrastructure.Translate;
-    using DH.Helpdesk.Dal.Mappers;
-    using DH.Helpdesk.Dal.Mappers.Calendars.BusinessModelToEntity;
-    using DH.Helpdesk.Dal.Mappers.Calendars.EntityToBusinessModel;
-    using DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity;
-    using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
-    using DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel;
-    using DH.Helpdesk.Dal.Mappers.Documents.EntityToBusinessModel;
-    using DH.Helpdesk.Dal.Mappers.ProductArea.BusinessModelToEntity;
-    using DH.Helpdesk.Dal.Mappers.ProductArea.EntityToBusinessModel;
-    using DH.Helpdesk.Dal.Mappers.CaseDocument;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Domain.Cases;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete;
-    using DH.Helpdesk.Web.Infrastructure.Translate;
-    using DH.Helpdesk.BusinessData.Models.CaseDocument;
-    using Ninject.Modules;
-    using DH.Helpdesk.Domain.ExtendedCaseEntity;
-    using BusinessData.Models.Condition;
-    using Dal.Mappers.Condition;
+	using DH.Helpdesk.BusinessData.Models.Calendar.Output;
+	using DH.Helpdesk.BusinessData.Models.Case.Output;
+	using DH.Helpdesk.BusinessData.Models.Customer;
+	using DH.Helpdesk.BusinessData.Models.Customer.Input;
+	using DH.Helpdesk.BusinessData.Models.Document.Output;
+	using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+	using DH.Helpdesk.BusinessData.Models.Case;
+	using DH.Helpdesk.Dal.Infrastructure.Translate;
+	using DH.Helpdesk.Dal.Mappers;
+	using DH.Helpdesk.Dal.Mappers.Calendars.BusinessModelToEntity;
+	using DH.Helpdesk.Dal.Mappers.Calendars.EntityToBusinessModel;
+	using DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity;
+	using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
+	using DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel;
+	using DH.Helpdesk.Dal.Mappers.Documents.EntityToBusinessModel;
+	using DH.Helpdesk.Dal.Mappers.ProductArea.BusinessModelToEntity;
+	using DH.Helpdesk.Dal.Mappers.ProductArea.EntityToBusinessModel;
+	using DH.Helpdesk.Dal.Mappers.CaseDocument;
+	using DH.Helpdesk.Domain;
+	using DH.Helpdesk.Domain.Cases;
+	using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
+	using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete;
+	using DH.Helpdesk.Web.Infrastructure.Translate;
+	using DH.Helpdesk.BusinessData.Models.CaseDocument;
+	using Ninject.Modules;
+	using DH.Helpdesk.Domain.ExtendedCaseEntity;
+	using BusinessData.Models.Condition;
+	using Dal.Mappers.Condition;
+	using BusinessData.Models.FilewViewLog;
+	using Dal.Mappers.FileViewLog.BusinessModelToEntity;
+	using Dal.Mappers.FileViewLog.EntityToBusinessModel;
 
-    /// <summary>
-    /// The common module.
-    /// </summary>
-    public class CommonModule : NinjectModule
+	/// <summary>
+	/// The common module.
+	/// </summary>
+	public class CommonModule : NinjectModule
     {
         /// <summary>
         /// The load.
@@ -238,7 +241,15 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IEntityToBusinessModelMapper<GDPRDataPrivacyFavorite, GdprFavoriteModel>>()
                 .To<GdprFavoriteEntityToModelMapper>()
                 .InSingletonScope();
-            
-        }
+
+			this.Bind<IBusinessModelToEntityMapper<FileViewLogModel, FileViewLogEntity>>()
+				.To<FileViewLogToEntityMapper>()
+				.InSingletonScope();
+
+			this.Bind<IEntityToBusinessModelMapper<FileViewLogEntity, FileViewLogModel>>()
+				.To<FileViewLogToBusinessModelMapper>()
+				.InSingletonScope();
+
+		}
     }
 }

@@ -17,7 +17,8 @@
             this.Property(f => f.FileName).IsRequired().HasMaxLength(200);
             this.Property(f => f.FilePath).IsRequired().HasMaxLength(200);
             this.Property(f => f.FileSource).IsRequired();
-            this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+			this.Property(f => f.Operation).IsRequired();
+			this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             
             this.ToTable("tblFileViewLog");

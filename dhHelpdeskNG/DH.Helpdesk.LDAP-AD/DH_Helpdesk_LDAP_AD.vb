@@ -760,6 +760,7 @@ Module DH_Helpdesk_LDAP_AD
         If objLogFile IsNot Nothing Then
             objLogFile.WriteLine("----- Slut -----")
             objLogFile.Close()
+            objLogFile = Nothing
         End If
     End Sub
     Private Sub LogToFile(msg As String, level As Integer)

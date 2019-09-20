@@ -335,6 +335,8 @@
     <Compile Include="Mappers\Documents\EntityToBusinessModel\DocumentToBusinessModelMapper.cs" />
     <Compile Include="Mappers\ExternalInvoice\BusinessModelToEntity\ExternalInvoiceToEntityMapper.cs" />
     <Compile Include="Mappers\ExternalInvoice\EntityToBusinessModel\CaseInvoiceRowToBusinessModel.cs" />
+    <Compile Include="Mappers\FileViewLog\BusinessModelToEntity\FileViewLogToEntityMapper.cs" />
+    <Compile Include="Mappers\FileViewLog\EntityToBusinessModel\FileViewLogToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Gdpr\EntityToBusinessModel\GdprFavoriteEntityToModelMapper.cs" />
     <Compile Include="Mappers\Gdpr\BusinessModelToEntity\GdprFavoriteModelToEntityMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToFieldSettingsMapper.cs" />
@@ -520,6 +522,7 @@
     <Compile Include="Repositories\Condition\IConditionRepository.cs" />
     <Compile Include="Repositories\ComputerUserCategoryRepository.cs" />
     <Compile Include="Repositories\FeatureToggleRepository.cs" />
+    <Compile Include="Repositories\FileViewLogRepository.cs" />
     <Compile Include="Repositories\GDPR\GDPRDataPrivacyAccessRepository.cs" />
     <Compile Include="Repositories\GDPR\GDPRDataPrivacyFavortieRepository.cs" />
     <Compile Include="Repositories\GDPR\GDPROperationsAuditRespository.cs" />

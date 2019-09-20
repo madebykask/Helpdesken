@@ -261,7 +261,8 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseStatisticService caseStatService,
             IUserEmailsSearchService userEmailsSearchService,
             IMail2TicketService mail2TicketService,
-            IFeatureToggleService featureToggleService)
+            IFeatureToggleService featureToggleService,
+			IFileViewLogService fileViewLogService)
             : base(masterDataService)
         {
             _caseProcessor = caseProcessor;
@@ -337,8 +338,10 @@ namespace DH.Helpdesk.Web.Controllers
             _userEmailsSearchService = userEmailsSearchService;
             _mail2TicketService = mail2TicketService;
             _featureToggleService = featureToggleService;
+			_fileViewLogService = fileViewLogService;
 
-            _advancedSearchBehavior = new AdvancedSearchBehavior(caseFieldSettingService,
+
+			_advancedSearchBehavior = new AdvancedSearchBehavior(caseFieldSettingService,
                 caseSearchService,
                 userService,
                 settingService,
@@ -2393,8 +2396,14 @@ namespace DH.Helpdesk.Web.Controllers
                 if (c != null)
                     basePath = _masterDataService.GetFilePath(c.Customer_Id);
 
-                fileContent = _caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
-            }
+				var userId = SessionFacade.CurrentUser.Id;
+				var caseId = int.Parse(id);
+
+				fileContent = _caseFileService.GetFileContentByIdAndFileName(caseId, basePath, fileName);
+
+				//_fileViewLogService.Log(caseId, userId)
+
+			}
 
             return new UnicodeFileContentResult(fileContent, fileName);
         }
@@ -7281,8 +7290,9 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IDictionary<int, IList<Department>> _customerDepartments = new Dictionary<int, IList<Department>>();
         private AdvancedSearchBehavior _advancedSearchBehavior;
         private IMail2TicketService _mail2TicketService;
+		private readonly IFileViewLogService _fileViewLogService;
 
-        private IList<Department> GetCustomerDepartments(int customerId)
+		private IList<Department> GetCustomerDepartments(int customerId)
         {
             if (!_customerDepartments.ContainsKey(customerId))
             {

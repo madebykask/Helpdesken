@@ -19,6 +19,8 @@
 
         public int FileSource { get; set; }
 
-        public DateTime CreatedDate { get; set; } 
-    }
+        public DateTime CreatedDate { get; set; }
+
+		public int? Operation { get; set; }
+	}
 }

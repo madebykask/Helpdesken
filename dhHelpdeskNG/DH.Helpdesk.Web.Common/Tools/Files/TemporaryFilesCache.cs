@@ -43,6 +43,8 @@ namespace DH.Helpdesk.Web.Common.Tools.Files
             {
                 fileStream.Write(content, 0, content.Length);
             }
+
+
         }
 
         public void AddFile(byte[] content, string fileName, int objectId, params string[] subtopics)

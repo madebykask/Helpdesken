@@ -196,7 +196,10 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
 
             // Feature toggle
             Bind<IFeatureToggleService>().To<FeatureToggleService>();
-        }
+
+			Bind<IFileViewLogService>().To<FileViewLogService>();
+
+		}
 
         #endregion
     }

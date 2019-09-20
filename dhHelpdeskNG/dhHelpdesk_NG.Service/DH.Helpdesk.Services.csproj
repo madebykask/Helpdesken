@@ -364,6 +364,7 @@
     <Compile Include="Services\CaseSolutionConditionService.cs" />
     <Compile Include="Services\CaseStatistic\CaseStatisticService.cs" />
     <Compile Include="Services\Concrete\MetaDataService.cs" />
+    <Compile Include="Services\FileViewLogService.cs" />
     <Compile Include="Services\Mail2TicketService.cs" />
     <Compile Include="Services\UserEmailsSearchService.cs" />
     <Compile Include="Services\EmployeeService\Concrete\EmployeeService.cs" />
