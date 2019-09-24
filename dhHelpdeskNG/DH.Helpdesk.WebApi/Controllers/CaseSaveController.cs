@@ -33,6 +33,7 @@ using DH.Helpdesk.WebApi.Logic.Case;
 using DH.Helpdesk.WebApi.Logic.CaseFieldSettings;
 using DH.Helpdesk.Services.Utils;
 using DH.Helpdesk.WebApi.Models.Case;
+using DH.Helpdesk.BusinessData.Models.FilewViewLog;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -61,15 +62,19 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IStateSecondaryService _stateSecondaryService;
         private readonly IHolidayService _holidayService;
         private readonly ICaseStatisticService _caseStatService;
+		private readonly IFileViewLogService _fileViewLogService;
+		private readonly IFeatureToggleService _featureToggleService;
 
-        public CaseSaveController(ICaseService caseService,
+		public CaseSaveController(ICaseService caseService,
             ICaseLockService caseLockService, ICustomerService customerService, ISettingService customerSettingsService,
             ICaseEditModeCalcStrategy caseEditModeCalcStrategy, IUserService userService, ISettingsLogic settingsLogic,
             IWorkingGroupService workingGroupService, IEmailService emailService,
             ICaseFileService caseFileService, ICustomerUserService customerUserService, ILogFileService logFileService,
             IUserPermissionsChecker userPermissionsChecker, ILogService logService, ITemporaryFilesCache userTempFilesStorage,
             IBaseCaseSolutionService caseSolutionService, IStateSecondaryService stateSecondaryService,
-            IHolidayService holidayService, ICaseStatisticService caseStatService)
+            IHolidayService holidayService, ICaseStatisticService caseStatService,
+			IFileViewLogService fileViewLogService,
+			IFeatureToggleService featureToggleService)
         {
             _caseService = caseService;
             _caseLockService = caseLockService;
@@ -90,7 +95,10 @@ namespace DH.Helpdesk.WebApi.Controllers
             _stateSecondaryService = stateSecondaryService;
             _holidayService = holidayService;
             _caseStatService = caseStatService;
-        }
+			_fileViewLogService = fileViewLogService;
+			_featureToggleService = featureToggleService;
+
+		}
 
         /// <summary>
         /// Save Case
@@ -339,8 +347,19 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 var temporaryFiles = _userTempFilesStorage.FindFiles(caseKey, ModuleName.Cases); 
                 var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, currentCase.Id, UserId)).ToList();
-                _caseFileService.AddFiles(newCaseFiles);
-            }
+
+				var paths = new List<KeyValuePair<CaseFileDto, string>>();
+                _caseFileService.AddFiles(newCaseFiles, paths);
+
+				var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+				if (!disableLogFileView.Active)
+				{
+					foreach (var file in paths)
+					{
+						_fileViewLogService.Log(currentCase.Id, UserId, file.Key.FileName, file.Value, FileViewLogFileSource.WebApi, FileViewLogOperation.Add);
+					}
+				}
+			}
 
             #region ExtendedCase sections
             if (isEdit)// TODO: attach Extended case if required
@@ -431,7 +450,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 var internalLogFiles = temporaryLogInternalFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, currentUser.Id, LogFileType.Internal)).ToList();
                 newLogFiles.AddRange(internalLogFiles);
             }
-            _logFileService.AddFiles(newLogFiles, temporaryExLogFiles, caseLog.Id);
+			var logPaths = new List<KeyValuePair<CaseLogFileDto, string>>();
+			_logFileService.AddFiles(newLogFiles, logPaths, temporaryExLogFiles, caseLog.Id);
 
             var allLogFiles = 
                 temporaryExLogFiles.Select(f => 

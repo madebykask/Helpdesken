@@ -188,8 +188,8 @@
 
         public byte[] GetFileContent(int id,string basePath, string fileName)
         {
-            var fileContent = this.projectFileRepository.GetFileContent(id, basePath, fileName);
-            return fileContent;
+            var model = this.projectFileRepository.GetFileContent(id, basePath, fileName);
+            return model.Content;
         }
 
         public bool FileExists(int id, string fileName)

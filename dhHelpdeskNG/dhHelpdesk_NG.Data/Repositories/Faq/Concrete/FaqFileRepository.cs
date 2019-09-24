@@ -1,15 +1,16 @@
 ﻿namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
 {
-    using System.Collections.Generic;
-    using System.Linq;
+	using System.Collections.Generic;
+	using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Faq.Input;
-    using DH.Helpdesk.BusinessData.Models.Faq.Output;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain.Faq;
+	using DH.Helpdesk.BusinessData.Models.Faq.Input;
+	using DH.Helpdesk.BusinessData.Models.Faq.Output;
+	using DH.Helpdesk.Dal.Enums;
+	using DH.Helpdesk.Dal.Infrastructure;
+	using DH.Helpdesk.Domain.Faq;
+	using BusinessData.Models;
 
-    public sealed class FaqFileRepository : RepositoryBase<FaqFileEntity>, IFaqFileRepository
+	public sealed class FaqFileRepository : RepositoryBase<FaqFileEntity>, IFaqFileRepository
     {
         #region Fields
 
@@ -79,7 +80,7 @@
             return faqFileEntities.Select(f => new FaqFileOverview { FaqId = f.FAQ_Id, Name = f.FileName }).ToList();
         }
 
-        public byte[] GetFileContentByFaqIdAndFileName(int faqId,string basePath, string fileName)
+        public FileContentModel GetFileContentByFaqIdAndFileName(int faqId,string basePath, string fileName)
         {
             return this.filesStorage.GetFileContent(ModuleName.Faq, faqId, basePath, fileName);
         }

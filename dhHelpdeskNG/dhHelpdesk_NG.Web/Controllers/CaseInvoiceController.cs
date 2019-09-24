@@ -134,10 +134,13 @@ namespace DH.Helpdesk.Web.Controllers
 
                     try
                     {
-                        if (GuidHelper.IsGuid(id))
-                            fileContent = this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases);
-                        else                                                    
-                            fileContent = this.caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);                        
+						if (GuidHelper.IsGuid(id))
+							fileContent = this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases);
+						else
+						{
+							var model = this.caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+							fileContent = model.Content;
+						}
                     }
                     catch (Exception)
                     {
@@ -199,7 +202,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                             try
                             {
-                                fileContent = this.logFileService.GetFileContentByIdAndFileName(logFile.Key, basePath, logFile.Value, LogFileType.External);
+								var model = this.logFileService.GetFileContentByIdAndFileName(logFile.Key, basePath, logFile.Value, LogFileType.External);
+								fileContent = model.Content;
                             }
                             catch (Exception)
                             {
@@ -287,7 +291,8 @@ namespace DH.Helpdesk.Web.Controllers
                 if (c != null)
                     basePath = masterDataService.GetFilePath(c.Customer_Id);
 
-                fileContent = this.caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+				var model = this.caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+				fileContent = model.Content;
             }
 
             return new UnicodeFileContentResult(fileContent, fileName);

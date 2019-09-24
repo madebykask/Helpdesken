@@ -15,6 +15,7 @@ using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.ActionResults;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
+using DH.Helpdesk.BusinessData.Models.FilewViewLog;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -26,20 +27,27 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICaseFileService _caseFileService;
         private readonly ITemporaryFilesCache _userTemporaryFilesStorage;
         private readonly ICaseFieldSettingService _caseFieldSettingService;
+		private readonly IFeatureToggleService _featureToggleService;
+		private readonly IFileViewLogService _fileViewLogService;
 
-        public CaseLogFilesController(
+		public CaseLogFilesController(
             ILogFileService logFileService,
             ICaseFileService caseFileService,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
             ISettingsLogic settingsLogic, 
-            ICaseFieldSettingService caseFieldSettingService)
+            ICaseFieldSettingService caseFieldSettingService,
+			IFeatureToggleService featureToggleService,
+			IFileViewLogService fileViewLogService)
         {
             _caseFileService = caseFileService;
             _logFileService = logFileService;
             _settingsLogic = settingsLogic;
             _caseFieldSettingService = caseFieldSettingService;
             _userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
-        }
+			_featureToggleService = featureToggleService;
+			_fileViewLogService = fileViewLogService;
+
+		}
 
         //ex: /api/Case/123/LogFile/1203?cid=1
         [HttpGet]
@@ -51,10 +59,20 @@ namespace DH.Helpdesk.WebApi.Controllers
             var basePath = _settingsLogic.GetFilePath(cid);
             var fileInfo = _logFileService.GetFileDetails(fileId);
             var isCaseFile = fileInfo.IsCaseFile ?? false;
+			var userId = SessionFacade.CurrentUser?.Id ?? 0;
 
-            if (isCaseFile)
+			var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+
+			if (isCaseFile)
             {
-                content = _caseFileService.GetFileContentByIdAndFileName(caseId, basePath, fileInfo.FileName);
+				var model = _caseFileService.GetFileContentByIdAndFileName(caseId, basePath, fileInfo.FileName);
+
+				if (!disableLogFileView.Active)
+				{
+					_fileViewLogService.Log(caseId, userId, fileInfo.FileName, model.FilePath, FileViewLogFileSource.WebApi, FileViewLogOperation.View);
+				}
+
+				content = model.Content;
             }
             else
             {
@@ -67,7 +85,13 @@ namespace DH.Helpdesk.WebApi.Controllers
                         return Task.FromResult(Forbidden("Not allowed to view file."));
                 } 
                 var logFile = _logFileService.GetFileContentById(fileId, basePath, fileInfo.LogType);
-                content = logFile.Content;
+
+				if (!disableLogFileView.Active)
+				{
+					_fileViewLogService.Log(caseId, userId, logFile.FileName, logFile.Path, FileViewLogFileSource.WebApi, FileViewLogOperation.View);
+				}
+
+				content = logFile.Content;
             }
 
             if (content == null)

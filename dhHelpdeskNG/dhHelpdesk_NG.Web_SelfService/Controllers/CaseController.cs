@@ -15,38 +15,39 @@ using DH.Helpdesk.Services.Utils;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Web;
-    using System.Web.Mvc;
-    using System.Web.WebPages;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Net;
+	using System.Web;
+	using System.Web.Mvc;
+	using System.Web.WebPages;
 
-    using DH.Helpdesk.BusinessData.Enums.Case;
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.OldComponents;
-    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.SelfService.Infrastructure;
-    using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
-    using DH.Helpdesk.SelfService.Infrastructure.Extensions;
-    using DH.Helpdesk.SelfService.Infrastructure.Tools;
-    using DH.Helpdesk.SelfService.Models.Case;
-    using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Services.Services.Concrete;
-    using Models.Shared;
-    using BusinessData.Models.ExtendedCase;
-    using Services.Services.UniversalCase;
-    using Common.Extensions.Integer;
-    using Models.Message;
-    using Services.Infrastructure;
+	using DH.Helpdesk.BusinessData.Enums.Case;
+	using DH.Helpdesk.BusinessData.Models;
+	using DH.Helpdesk.BusinessData.Models.Case;
+	using DH.Helpdesk.BusinessData.OldComponents;
+	using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+	using DH.Helpdesk.Common.Enums;
+	using DH.Helpdesk.Common.Tools;
+	using DH.Helpdesk.Dal.Enums;
+	using DH.Helpdesk.Domain;
+	using DH.Helpdesk.SelfService.Infrastructure;
+	using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
+	using DH.Helpdesk.SelfService.Infrastructure.Extensions;
+	using DH.Helpdesk.SelfService.Infrastructure.Tools;
+	using DH.Helpdesk.SelfService.Models.Case;
+	using DH.Helpdesk.Services.Services;
+	using DH.Helpdesk.Services.Services.Concrete;
+	using Models.Shared;
+	using BusinessData.Models.ExtendedCase;
+	using Services.Services.UniversalCase;
+	using Common.Extensions.Integer;
+	using Models.Message;
+	using Services.Infrastructure;
+	using BusinessData.Models.FilewViewLog;
 
-    public class CaseController : BaseController
+	public class CaseController : BaseController
     {
         private readonly ILog _logger = LogManager.GetLogger(typeof(CaseController));
 
@@ -101,8 +102,10 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly char[] EMAIL_SEPARATOR = new char[] { ';' };
         private readonly CaseControllerBehavior _caseControllerBehavior;
         private const string ShowRegistrationMessageKey = "showRegistrationMessage";
+		private readonly IFileViewLogService _fileViewLogService;
+		private readonly IFeatureToggleService _featureToggleService;
 
-        public CaseController(
+		public CaseController(
             ICaseService caseService,
             ICaseFieldSettingService caseFieldSettingService,
             IMasterDataService masterDataService,
@@ -146,7 +149,10 @@ namespace DH.Helpdesk.SelfService.Controllers
             IGlobalSettingService globalSettingService,
             IWatchDateCalendarService watchDateCalendarService,
             ISelfServiceConfigurationService configurationService,
-            IStatusService statusService, ICaseSectionService caseSectionService)
+            IStatusService statusService, 
+			ICaseSectionService caseSectionService,
+			IFileViewLogService fileViewLogService,
+			IFeatureToggleService featureToggleService)
             : base(configurationService, masterDataService, caseSolutionService)
         {
             _caseControllerBehavior = new CaseControllerBehavior(masterDataService, caseService, caseSearchService,
@@ -197,7 +203,10 @@ namespace DH.Helpdesk.SelfService.Controllers
             _globalSettingService = globalSettingService;
             _statusService = statusService;
             _caseSectionService = caseSectionService;
-        }
+			_fileViewLogService = fileViewLogService;
+			_featureToggleService = featureToggleService;
+
+		}
 
         [HttpGet]
         public ActionResult Index(string id, bool showRegistrationMessage = false)
@@ -768,10 +777,21 @@ namespace DH.Helpdesk.SelfService.Controllers
             {
                 var temporaryFiles = _userTemporaryFilesStorage.GetFiles(caseFileKey, ModuleName.Cases);
                 var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseId, userId)).ToList();
-                _caseFileService.AddFiles(newCaseFiles);
 
-                // delete temp folders                
-                _userTemporaryFilesStorage.DeleteFiles(caseFileKey);
+				var paths = new List<KeyValuePair<CaseFileDto, string>>();
+                _caseFileService.AddFiles(newCaseFiles, paths);
+
+				var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+				if (!disableLogFileView.Active)
+				{
+					foreach (var file in paths)
+					{
+						_fileViewLogService.Log(caseId, userId, file.Key.FileName, file.Value, FileViewLogFileSource.Selfservice, FileViewLogOperation.Add);
+					}
+				}
+
+				// delete temp folders                
+				_userTemporaryFilesStorage.DeleteFiles(caseFileKey);
             }
         }
 
@@ -966,12 +986,22 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
             else
             {
-                var c = _caseService.GetCaseBasic(int.Parse(id));
+				var caseId = int.Parse(id);
+				var c = _caseService.GetCaseBasic(caseId);
                 var basePath = string.Empty;
                 if (c != null)
                     basePath = _masterDataService.GetFilePath(c.CustomerId);
 
-                fileContent = _caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+				var model = _caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+
+				var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+				if (!disableLogFileView.Active)
+				{
+					var userId = SessionFacade.CurrentUser?.Id ?? 0;
+					_fileViewLogService.Log(caseId, userId, fileName, model.FilePath, FileViewLogFileSource.Selfservice, FileViewLogOperation.View);
+				}
+
+				fileContent = model.Content;
             }
 
             return File(fileContent, "application/octet-stream", fileName);
@@ -990,7 +1020,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                 if (c != null)
                     basePath = _masterDataService.GetFilePath(c.CustomerId);
 
-                fileContent = _caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+				var model = _caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+				fileContent = model.Content;
             }
             return File(fileContent, "application/octet-stream", fileName);
         }
@@ -1093,7 +1124,9 @@ namespace DH.Helpdesk.SelfService.Controllers
 
 				//existing file
 				var basePath = _masterDataService.GetFilePath(customer.Id);
-                fileContent = _logFileService.GetFileContentByIdAndFileName(logId, basePath, fileName, logFileType);
+				var model = _logFileService.GetFileContentByIdAndFileName(logId, basePath, fileName, logFileType);
+
+				fileContent = model.Content;
             }
 
             return File(fileContent, "application/octet-stream", fileName);
@@ -1269,10 +1302,23 @@ namespace DH.Helpdesk.SelfService.Controllers
                 // save log files
                 var basePath = _masterDataService.GetFilePath(currentCase.Customer_Id);
                 var newLogFiles = temporaryLogFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, null, logFileType)).ToList();
-                _logFileService.AddFiles(newLogFiles);
 
-                // send emails                
-                _caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, userTimeZone, newLogFiles, caseIsActivated);
+				var paths = new List<KeyValuePair<CaseLogFileDto, string>>();
+				_logFileService.AddFiles(newLogFiles, paths);
+
+				var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+				if (!disableLogFileView.Active)
+				{
+					var userId = SessionFacade.CurrentUser?.Id ?? 0;
+
+					foreach (var path in paths)
+					{
+						_fileViewLogService.Log(caseId, userId, path.Key.FileName, path.Value, FileViewLogFileSource.Selfservice, FileViewLogOperation.Add);
+					}
+				}
+
+				// send emails                
+				_caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, userTimeZone, newLogFiles, caseIsActivated);
                 _userTemporaryFilesStorage.DeleteFiles(logFileGuid);
             }
             else

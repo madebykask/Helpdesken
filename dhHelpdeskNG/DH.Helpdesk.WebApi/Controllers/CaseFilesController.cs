@@ -17,6 +17,7 @@ using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.ActionResults;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
+using DH.Helpdesk.BusinessData.Models.FilewViewLog;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -27,19 +28,26 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICaseService _caseService;
         private readonly ISettingsLogic _settingsLogic;
         private readonly ITemporaryFilesCache _userTemporaryFilesStorage;
+		private readonly IFileViewLogService _fileViewLogService;
+		private readonly IFeatureToggleService _featureToggleService;
 
-        #region ctor()
+		#region ctor()
 
-        public CaseFilesController(ICaseService caseService,
+		public CaseFilesController(ICaseService caseService,
             ICaseFileService caseFileService,
             ISettingsLogic settingsLogic,
-            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory)
+            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
+			IFileViewLogService fileViewLogService,
+			IFeatureToggleService featureToggleService)
         {
             _settingsLogic = settingsLogic;
             _caseService = caseService;
             _caseFileService = caseFileService;
             _userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
-        }
+			_fileViewLogService = fileViewLogService;
+			_featureToggleService = featureToggleService;
+
+		}
 
         #endregion
       
@@ -138,8 +146,16 @@ namespace DH.Helpdesk.WebApi.Controllers
                     caseId,
                     UserId);
 
-                var fileId = _caseFileService.AddFile(caseFileDto);
-                return Ok(new { id = fileId, name = fileName});
+				string path = "";
+                var fileId = _caseFileService.AddFile(caseFileDto, ref path);
+
+				var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+				if (!disableLogFileView.Active)
+				{
+					_fileViewLogService.Log(caseId, UserId, caseFileDto.FileName, path, FileViewLogFileSource.WebApi, FileViewLogOperation.Add);
+				}
+
+				return Ok(new { id = fileId, name = fileName});
             }
 
             return BadRequest("Failed to upload a file");

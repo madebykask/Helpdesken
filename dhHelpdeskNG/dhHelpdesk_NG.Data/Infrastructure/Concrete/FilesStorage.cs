@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DH.Helpdesk.BusinessData.Models;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 
@@ -19,13 +20,19 @@ namespace DH.Helpdesk.Dal.Infrastructure.Concrete
             return filePath;
         }
 
-        public byte[] GetFileContent(string topic, int entityId, string basePath, string fileName)
+        public FileContentModel GetFileContent(string topic, int entityId, string basePath, string fileName)
         {
             var filePath = ComposeFilePath(topic, entityId, basePath,  fileName);  
-            return File.ReadAllBytes(filePath);
+			var content = File.ReadAllBytes(filePath);
+			var model = new FileContentModel
+			{
+				FilePath = filePath,
+				Content = content
+			};
+			return model;
         }
 
-        public void SaveFile(byte[] content, string basePath, string fileName, string topic, int entityId)
+        public string SaveFile(byte[] content, string basePath, string fileName, string topic, int entityId)
         {
             var saveDirectory = ComposeDirectoryPath(basePath, topic, entityId); 
             if (!Directory.Exists(saveDirectory))
@@ -37,6 +44,8 @@ namespace DH.Helpdesk.Dal.Infrastructure.Concrete
             {
                 fileStream.Write(content, 0, content.Length);
             }
+
+			return savePath;
         }
 
         public void DeleteFile(string topic, int entityId, string basePath, string fileName)

@@ -9,10 +9,10 @@ namespace DH.Helpdesk.BusinessData.Models.FilewViewLog
 	public enum FileViewLogOperation
 	{
 		Legacy = 0, // TODO: Regard old as view?
-		Viewed = 1,
-		Deleted = 2,
-		Added = 3,
-		AddedTemporary = 4
+		View = 1,
+		Delete = 2,
+		Add = 3,
+		AddTemporary = 4
 	}
 
 	public enum FileViewLogFileSource

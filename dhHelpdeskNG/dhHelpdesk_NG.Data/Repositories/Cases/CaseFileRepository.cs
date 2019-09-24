@@ -2,24 +2,25 @@
 
 namespace DH.Helpdesk.Dal.Repositories.Cases
 {
-    using System.Collections.Generic;
-    using System.Linq;
+	using System.Collections.Generic;
+	using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain;
-using System;
+	using DH.Helpdesk.BusinessData.Models.Case;
+	using DH.Helpdesk.Dal.Enums;
+	using DH.Helpdesk.Dal.Infrastructure;
+	using DH.Helpdesk.Domain;
+	using System;
+	using BusinessData.Models;
 
-    public interface ICaseFileRepository : IRepository<CaseFile>
+	public interface ICaseFileRepository : IRepository<CaseFile>
     {
         string GetCaseFilePath(int caseId, int fileId, string basePath);
         List<string> FindFileNamesByCaseId(int caseid);
         List<CaseFile> GetCaseFilesByCaseId(int caseid);
         CaseFileContent GetCaseFileContent(int caseId, int fileId, string basePath);
-        byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
+        FileContentModel GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
         bool FileExists(int caseId, string fileName);
-        int SaveCaseFile(CaseFileDto caseFileDto);
+        int SaveCaseFile(CaseFileDto caseFileDto, ref string path);
         void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
         void MoveCaseFiles(string caseNumber, string fromBasePath, string toBasePath);
         int GetCaseNumberForUploadedFile(int caseId);
@@ -74,16 +75,19 @@ using System;
                 Id = fileId,
                 CaseNumber = caseNumber,
                 FileName = Path.GetFileName(caseFileInfo.FileName),
-                Content = content
+                Content = content.Content
             };
 
             return res;
         }
 
-        public byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName)
+        public FileContentModel GetFileContentByIdAndFileName(int caseId, string basePath, string fileName)
         {
             int id = GetCaseNumberForUploadedFile(caseId);
-            return this._filesStorage.GetFileContent(ModuleName.Cases, id, basePath, fileName);
+            var model = _filesStorage.GetFileContent(ModuleName.Cases, id, basePath, fileName);
+
+			return model;
+
         }
 
         public bool FileExists(int caseId, string fileName)
@@ -91,7 +95,7 @@ using System;
             return this.DataContext.CaseFiles.Any(f => f.Case_Id == caseId && f.FileName == fileName.Trim());
         }
 
-        public int SaveCaseFile(CaseFileDto caseFileDto)
+        public int SaveCaseFile(CaseFileDto caseFileDto, ref string path)
         {
             var caseFile = new CaseFile
             {
@@ -105,7 +109,7 @@ using System;
             Commit();
 
             var caseNo = GetCaseNumberForUploadedFile(caseFileDto.ReferenceId);
-            _filesStorage.SaveFile(caseFileDto.Content, caseFileDto.BasePath, caseFileDto.FileName, ModuleName.Cases, caseNo);
+            path = _filesStorage.SaveFile(caseFileDto.Content, caseFileDto.BasePath, caseFileDto.FileName, ModuleName.Cases, caseNo);
 
             return caseFile.Id;
         }

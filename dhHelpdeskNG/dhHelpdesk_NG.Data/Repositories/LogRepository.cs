@@ -7,7 +7,7 @@ using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Common.Enums.Logs;
-
+using DH.Helpdesk.BusinessData.Models;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -81,7 +81,7 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface ILogFileRepository : IRepository<LogFile>
     {
         LogFile GetDetails(int id);
-        byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName, LogFileType logType);
+        FileContentModel GetFileContentByIdAndFileName(int caseId, string basePath, string fileName, LogFileType logType);
         List<string> FindFileNamesByLogId(int logId);
         List<string> FindFileNamesByLogId(int logId, LogFileType logType);
         List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId, LogFileType logFileType);
@@ -97,7 +97,7 @@ namespace DH.Helpdesk.Dal.Repositories
         void DeleteExistingById(int filename);
         void ClearExistingAttachedFiles(int caseId);
         void AddExistLogFiles(IEnumerable<LogFile> logExFiles);
-        byte[] GetCaseFileContentByIdAndFileName(int caseId, string basePath, string fileName);
+        FileContentModel GetCaseFileContentByIdAndFileName(int caseId, string basePath, string fileName);
     }
 
     public class LogFileRepository : RepositoryBase<LogFile>, ILogFileRepository
@@ -115,13 +115,13 @@ namespace DH.Helpdesk.Dal.Repositories
             return Table.FirstOrDefault(f => f.Id == id);
         }
 
-        public byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName, LogFileType logType)
+        public FileContentModel GetFileContentByIdAndFileName(int logId, string basePath, string fileName, LogFileType logType)
         {
             var logFolder = logType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
             return _filesStorage.GetFileContent(logFolder, logId, basePath, fileName);
         }
 
-        public byte[] GetCaseFileContentByIdAndFileName(int caseId, string basePath, string fileName)
+        public FileContentModel GetCaseFileContentByIdAndFileName(int caseId, string basePath, string fileName)
         {
             var caseNumber = DataContext.Cases.Single(x => x.Id == caseId).CaseNumber;
             return _filesStorage.GetFileContent(ModuleName.Cases, Convert.ToInt32(caseNumber), basePath, fileName);

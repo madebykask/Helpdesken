@@ -330,6 +330,7 @@
     <Compile Include="Models\Feedback\FeedbackFullItem.cs" />
     <Compile Include="Models\Feedback\FeedbackQuestionOption.cs" />
     <Compile Include="Models\Feedback\FeedbackQuestionOverview.cs" />
+    <Compile Include="Models\FileContentModel.cs" />
     <Compile Include="Models\FilewViewLog\FileViewLogModel.cs" />
     <Compile Include="Models\FinishingCause\FinishingCauseItem.cs" />
     <Compile Include="Models\Gdpr\DataPrivacyParameters.cs" />

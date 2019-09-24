@@ -324,7 +324,8 @@ namespace DH.Helpdesk.Web.Controllers
                 if (faq != null)
                     basePath = _masterDataService.GetFilePath(faq.CustomerId);
 
-                fileContent = _faqFileRepository.GetFileContentByFaqIdAndFileName(int.Parse(faqId), basePath, fileName);
+				var model = _faqFileRepository.GetFileContentByFaqIdAndFileName(int.Parse(faqId), basePath, fileName);
+				fileContent = model.Content;
             }
 
             return File(fileContent, "application/octet-stream", fileName);
