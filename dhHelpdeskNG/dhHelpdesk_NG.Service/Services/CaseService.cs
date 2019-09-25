@@ -508,11 +508,14 @@ namespace DH.Helpdesk.Services.Services
 
             // delete case files
             var caseFiles = _caseFileRepository.GetCaseFilesByCaseId(id);
+            var c = _caseRepository.GetById(id);
+
             if (caseFiles != null)
             {
                 foreach (var f in caseFiles)
                 {
-                    _filesStorage.DeleteFile(ModuleName.Cases, f.Case_Id, basePath, f.FileName);
+                    var intCaseNumber = decimal.ToInt32(c.CaseNumber);
+                    _filesStorage.DeleteFile(ModuleName.Cases, intCaseNumber, basePath, f.FileName);
                     _caseFileRepository.Delete(f);
                 }
                 _caseFileRepository.Commit();
@@ -529,8 +532,6 @@ namespace DH.Helpdesk.Services.Services
             //delete FollowUp
             _caseFollowUpService.DeleteFollowUp(id);
             _caseExtraFollowersService.DeleteByCase(id);
-
-            var c = _caseRepository.GetById(id);
 
             if (c.CaseSectionExtendedCaseDatas != null && c.CaseSectionExtendedCaseDatas.Any())
             {

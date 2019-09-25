@@ -288,7 +288,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             //delete case files
             foreach (var fileEntity in caseFiles)
             {
-                int caseId = fileEntity.GetCaseNumberOrId();
+                var caseId = fileEntity.GetCaseNumberOrId();
                 try
                 {
                     this._filesStorage.DeleteFile(ModuleName.Cases, caseId, baseDirPath, fileEntity.FileName);
