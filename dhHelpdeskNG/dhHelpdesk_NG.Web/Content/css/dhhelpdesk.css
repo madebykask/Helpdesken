@@ -1572,6 +1572,9 @@ table th.thpointer {
             text-decoration: none !important;
         }
 
+    .admin-user.nav-tabs > li.error.active > a,
+    .admin-user.nav-tabs > li.error.active > a:hover,
+    .admin-user.nav-tabs > li.error.active > a:focus,
     .nav-tabs > .active > a,
     .nav-tabs > .active > a:hover,
     .nav-tabs > .active > a:focus {
@@ -1641,9 +1644,6 @@ table th.thpointer {
         border-bottom-color: transparent;
         padding-bottom: 8px;
     }
-
-
-
 
 .nav-tabs-actions {
 }
@@ -2657,6 +2657,10 @@ h4 {
 /*--------------------------------------------------------------------------------------------------------------------
  LEFT MENU AND BOX FOR ADMIN - MENU LINKS
 ---------------------------------------------------------------------------------------------------------------------*/
+
+.admin-user-departments label {
+    display: inline;
+}
 
 .ui-layout-west ul {
     list-style: none;

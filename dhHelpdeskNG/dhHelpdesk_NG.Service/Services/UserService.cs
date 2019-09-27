@@ -657,17 +657,7 @@ namespace DH.Helpdesk.Services.Services
 
             errors = new Dictionary<string, string>();
 
-            var userEMail = "";
-            if (user.Email != null)
-            {
-                userEMail = user.Email.TrimStart().TrimEnd();
-                if (userEMail.Contains(' ') || !EmailHelper.IsValid(userEMail))
-                    errors.Add("User.Email", "E-postadress är inte giltig.");
-            }
-            else
-                errors.Add("User.Email", "E-postadress är inte giltig.");
-
-            user.Email = userEMail;
+            user.Email = user.Email.TrimStart().TrimEnd();
 
             var curTime = DateTime.Now;
 
@@ -678,28 +668,15 @@ namespace DH.Helpdesk.Services.Services
             user.CellPhone = user.CellPhone ?? string.Empty;
             user.Email = user.Email ?? string.Empty;
             user.Logo = user.Logo ?? string.Empty;
-            user.LogoBackColor = user.LogoBackColor ?? string.Empty;            
+            user.LogoBackColor = user.LogoBackColor ?? string.Empty;
             user.Phone = user.Phone ?? string.Empty;
             user.PostalAddress = user.PostalAddress ?? string.Empty;
-            user.PostalCode = user.PostalCode ?? string.Empty;            
+            user.PostalCode = user.PostalCode ?? string.Empty;
             user.ShowQuickMenuOnStartPage = user.ShowQuickMenuOnStartPage;
-            user.Password = user.Password ?? string.Empty;            
+            user.Password = user.Password ?? string.Empty;
 
-            List<UserPermission> wrongPermissions;
-            if (!_userPermissionsChecker.CheckPermissions(user, out wrongPermissions))
-            {
-                errors.Add("User permissions", _translator.Translate("There are wrong permissions for this user group."));
-            }
-
-            var userId = user.UserID.ToLower().Trim();
-            var hasDublicate = _userRepository.GetMany(u => u.UserID.ToLower() == userId && u.Id != user.Id).Any();
-            if (hasDublicate)
-            {
-                errors.Add("User.UserID", "Det här användarnamnet är upptaget. Var vänlig använd något annat.");
-            }
-
-            if (string.IsNullOrEmpty(user.SurName + user.FirstName + user.UserID))
-                errors.Add("User.SurName" + "User.FirstName" + "User.UserID", "Du måste ange ett för- och efternamn, samt ett Id");
+            //if (string.IsNullOrEmpty(user.SurName + user.FirstName + user.UserID))
+            //    errors.Add("User.SurName" + "User.FirstName" + "User.UserID", "Du måste ange ett för- och efternamn, samt ett Id");
 
             # region handling <ILists>
 
@@ -756,10 +733,7 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
-            if (!user.Cs.Any(it => it.Id == user.Customer_Id))
-            {
-                errors.Add("User.Customer_Id", "Du måste ange en standardkund");
-            }
+            errors = ValidateUserFields(user, true);
 
             if (user.Id == 0)
             {
@@ -831,7 +805,7 @@ namespace DH.Helpdesk.Services.Services
 
             #endregion
 
-            UpdareCustomerUserSettings(user, customerUsers);
+            UpdateCustomerUserSettings(user, customerUsers);
 
             if (user.Id == 0)
                 _userRepository.Add(user);
@@ -842,7 +816,7 @@ namespace DH.Helpdesk.Services.Services
                 Commit();
         }
 
-        private void UpdareCustomerUserSettings(User user, IList<CustomerUserForEdit> customerUsers)
+        private void UpdateCustomerUserSettings(User user, IList<CustomerUserForEdit> customerUsers)
         {
             foreach (var customerUser in user.CustomerUsers)
             {
@@ -864,8 +838,8 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
         }
-        
-        public void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> UserWorkingGroups, int[] departments, out IDictionary<string, string> errors, string confirmpassword = "")
+
+        public void SaveNewUser(User user, int[] aas, int[] cs, int[] ots, List<UserWorkingGroup> userWorkingGroups, int[] departments, out IDictionary<string, string> errors, string confirmpassword = "")
         {
             if (user == null)
             {
@@ -874,40 +848,9 @@ namespace DH.Helpdesk.Services.Services
 
             errors = new Dictionary<string, string>();
 
-            List<UserPermission> wrongPermissions;
-            if (!_userPermissionsChecker.CheckPermissions(user, out wrongPermissions))
-            {
-                errors.Add("User permissions", _translator.Translate("There are wrong permissions for this user group."));
-            }
-
-            var hasDublicate = _userRepository.FindUsersByUserId(user.UserID).Count() > 0;
-            if (hasDublicate)
-            {
-                errors.Add("User.UserID", "Det här användarnamnet är upptaget. Var vänlig använd något annat.");
-            }
-
-            if (string.IsNullOrEmpty(user.Password))
-            {
-                errors.Add("NewPassWord", "Du måste ange ett lösenord");
-            } 
-            else if(!user.Password.Equals(confirmpassword, StringComparison.CurrentCulture))
-            {
-                errors.Add("NewPassword", "Det nya lösenordet bekräftades inte korrekt. Kontrollera att nytt lösenord och bekräftat lösenord stämmer överens");
-            }
-
-            var userEMail = "";
-            if (user.Email != null)
-            {
-                userEMail = user.Email.TrimStart().TrimEnd();
-                if (userEMail.Contains(' ') || !EmailHelper.IsValid(userEMail))
-                    errors.Add("User.Email", "E-postadress är inte giltig.");
-            }
-            else
-                errors.Add("User.Email", "E-postadress är inte giltig.");
-            
             var curTime = DateTime.Now;
 
-            user.Email = userEMail;
+            user.Email = user.Email?.TrimStart().TrimEnd();
             user.Address = user.Address ?? string.Empty;
             user.ArticleNumber = user.ArticleNumber ?? string.Empty;
             user.BulletinBoardDate = user.BulletinBoardDate ?? curTime;
@@ -924,15 +867,6 @@ namespace DH.Helpdesk.Services.Services
             user.RegTime = curTime;
             user.TimeZoneId = user.TimeZoneId;
 
-            if (string.IsNullOrEmpty(user.UserID))
-                errors.Add("User.UserID", "Du måste ange ett Id");
-
-            if (string.IsNullOrEmpty(user.SurName))
-                errors.Add("User.SurName", "Du måste ange ett efternamn");
-
-            if (string.IsNullOrEmpty(user.FirstName))
-                errors.Add("User.FirstName", "Du måste ange ett förnamn");
-
             if (user.AAs != null)
                 foreach (var delete in user.AAs.ToList())
                     user.AAs.Remove(delete);
@@ -941,7 +875,7 @@ namespace DH.Helpdesk.Services.Services
 
             if (aas != null)
             {
-                foreach (int id in aas)
+                foreach (var id in aas)
                 {
                     var aa = _accountActivityRepository.GetById(id);
 
@@ -964,30 +898,7 @@ namespace DH.Helpdesk.Services.Services
                     .ForEach(it => user.Cs.Add(it));
             }
 
-            if (!user.Cs.Any(it => it.Id == user.Customer_Id))
-            {
-                errors.Add("User.Customer_Id", "Du måste ange en standardkund");
-            }
-
-            // Get passwordlength for Customer
-            var MinPasswordLength = 0;
-            var customerSetting = _settingRepository.GetCustomerSetting(user.Customer_Id);
-            if (customerSetting != null)
-                MinPasswordLength = customerSetting.MinPasswordLength;
-
-            if (!string.IsNullOrEmpty(user.Password))
-            {
-                if (customerSetting != null)
-                { 
-                    if (customerSetting.ComplexPassword != 0)
-                    {
-                        if (!PasswordHelper.IsValid(user.Password))
-                            errors.Add("NewPassword", "Lösenord är inte giltigt. Minst 8 tecken, varav en stor bokstav, en liten bokstav, en siffra och ett special tecken (!@#=$&?*).");
-                    }
-                    else if (user.Password.Length < MinPasswordLength)
-                        errors.Add("NewPassword", "Lösenord är inte giltigt. Minst antal tecken är: " + MinPasswordLength);
-                }
-            }
+            errors = ValidateUserFields(user, false, confirmpassword);
 
             if (user.UserWorkingGroups != null)
                 foreach (var delete in user.UserWorkingGroups.ToList())
@@ -995,15 +906,12 @@ namespace DH.Helpdesk.Services.Services
             else
                 user.UserWorkingGroups = new List<UserWorkingGroup>();
 
-            if (user != null)
+            if (userWorkingGroups != null)
             {
-                if (UserWorkingGroups != null)
+                foreach (var uwg in userWorkingGroups)
                 {
-                    foreach (var uwg in UserWorkingGroups)
-                    {
-                        if (uwg.UserRole != WorkingGroupUserPermission.NO_ACCESS)
-                            user.UserWorkingGroups.Add(uwg);
-                    }
+                    if (uwg.UserRole != WorkingGroupUserPermission.NO_ACCESS)
+                        user.UserWorkingGroups.Add(uwg);
                 }
             }
 
@@ -1490,6 +1398,80 @@ namespace DH.Helpdesk.Services.Services
             }
 
             return true;
+        }
+
+        private IDictionary<string, string> ValidateUserFields(User user, bool isExistingUser = false, string confirmpassword = "")
+        {
+            var errors = new Dictionary<string, string>();
+
+            List<UserPermission> wrongPermissions;
+            if (!_userPermissionsChecker.CheckPermissions(user, out wrongPermissions))
+            {
+                errors.Add("User permissions", _translator.Translate("There are wrong permissions for this user group."));
+            }
+            var hasDublicate = _userRepository.FindUsersByUserId(user.UserID).Count() > (isExistingUser ? 1 : 0);
+            if (hasDublicate)
+            {
+                errors.Add("User.UserID", "Det här användarnamnet är upptaget. Var vänlig använd något annat.");
+            }
+
+            if (!isExistingUser)
+            {
+                if (string.IsNullOrEmpty(user.Password))
+                {
+                    errors.Add("NewPassWord", "Du måste ange ett lösenord");
+                }
+                else if (!user.Password.Equals(confirmpassword, StringComparison.CurrentCulture))
+                {
+                    errors.Add("NewPassword",
+                        "Det nya lösenordet bekräftades inte korrekt. Kontrollera att nytt lösenord och bekräftat lösenord stämmer överens");
+                }
+            }
+
+            if (user.Email != null)
+            {
+                var userEMail = user.Email.TrimStart().TrimEnd();
+                if (userEMail.Contains(' ') || !EmailHelper.IsValid(userEMail))
+                    errors.Add("User.Email", "E-postadress är inte giltig.");
+            }
+            else
+                errors.Add("User.Email", "E-postadress är inte giltig.");
+
+            if (string.IsNullOrEmpty(user.UserID))
+                errors.Add("User.UserID", "Du måste ange ett Id");
+
+            if (string.IsNullOrEmpty(user.SurName))
+                errors.Add("User.SurName", "Du måste ange ett efternamn");
+
+            if (string.IsNullOrEmpty(user.FirstName))
+                errors.Add("User.FirstName", "Du måste ange ett förnamn");
+
+            if (!user.Cs.Any(it => it.Id == user.Customer_Id))
+            {
+                errors.Add("User.Customer_Id", "Du måste ange en standardkund");
+            }
+
+            // Get passwordlength for Customer
+            var minPasswordLength = 0;
+            var customerSetting = _settingRepository.GetCustomerSetting(user.Customer_Id);
+            if (customerSetting != null)
+                minPasswordLength = customerSetting.MinPasswordLength;
+
+            if (!string.IsNullOrEmpty(user.Password))
+            {
+                if (customerSetting != null)
+                { 
+                    if (customerSetting.ComplexPassword != 0)
+                    {
+                        if (!PasswordHelper.IsValid(user.Password))
+                            errors.Add("NewPassword", "Lösenord är inte giltigt. Minst 8 tecken, varav en stor bokstav, en liten bokstav, en siffra och ett special tecken (!@#=$&?*).");
+                    }
+                    else if (user.Password.Length < minPasswordLength)
+                        errors.Add("NewPassword", "Lösenord är inte giltigt. Minst antal tecken är: " + minPasswordLength);
+                }
+            }
+
+            return errors;
         }
     }
 }

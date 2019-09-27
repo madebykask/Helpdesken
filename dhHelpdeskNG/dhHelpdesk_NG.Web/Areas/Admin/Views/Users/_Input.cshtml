@@ -4,7 +4,7 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Användare", Enums.TranslationSource.TextTranslation) - @Model.User.FirstName @Model.User.SurName</a></li>
+            <li class="active"><a href="#fragment-1">@Translation.GetCoreTextTranslation("Användare") - @Model.User.FirstName @Model.User.SurName</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
@@ -12,8 +12,8 @@
                 <div class="container">
                     @if (TempData["Error"] != null)
                     {
-                        <div class="alert alert-error">@Translation.Get("Användare", Enums.TranslationSource.TextTranslation)
-                            @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+                        <div class="alert alert-error">@Translation.GetCoreTextTranslation("Användare")
+                            @Translation.GetCoreTextTranslation("som används går inte att ta bort")
                         </div>   
                     }
                     else
@@ -21,7 +21,7 @@
                     {
                         var msg = (string)TempData["PreventError"];
                         <div class="alert alert-error">
-                            @Translation.Get(msg, Enums.TranslationSource.TextTranslation)
+                            @Translation.GetCoreTextTranslation(msg)
                         </div>   
                     }
                    
@@ -31,7 +31,7 @@
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Id", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
+                                        @Translation.GetCoreTextTranslation("Id") <span class="mandatorystar">*</span>
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => model.User.UserID, new { maxlength = "40" })
@@ -41,7 +41,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            @Translation.Get("Domän", Enums.TranslationSource.TextTranslation)
+                                            @Translation.GetCoreTextTranslation("Domän")
                                         </td>
                                         <td>
                                             @Html.DropDownListFor(model => model.User.Domain_Id, Model.Domains, "", new { })
@@ -53,15 +53,15 @@
                     </div>
                 </div>
                 <div class="container" id="subTabContainer">
-                    <ul class="nav nav-tabs" id="myTabSub">
+                    <ul class="admin-user nav nav-tabs" id="myTabSub">
                        
-                        <li class="active"><a href="#subfragment-1">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</a></li>               
-                        <li><a href="#subfragment-2">@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</a></li>
-                        <li><a href="#subfragment-3">@Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)</a></li>
-                        <li><a href="#subfragment-5">@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</a></li>
-                        <li><a href="#subfragment-6">@Translation.Get("Kund", Enums.TranslationSource.TextTranslation)</a></li>
-                        <li><a href="#subfragment-7">@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</a></li>
-                        <li><a href="#subfragment-8">@Translation.Get("Driftgrupper", Enums.TranslationSource.TextTranslation)</a></li>
+                        <li class="active" tab="subfragment-1"><a href="#subfragment-1">@Translation.GetCoreTextTranslation("Allmänt")</a></li>               
+                        <li tab="subfragment-2"><a href="#subfragment-2">@Translation.GetCoreTextTranslation("Säkerhet")</a></li>
+                        <li tab="subfragment-3"><a href="#subfragment-3">@Translation.GetCoreTextTranslation("Meddelande")</a></li>
+                        <li tab="subfragment-5"><a href="#subfragment-5">@Translation.GetCoreTextTranslation("Övrigt")</a></li>
+                        <li tab="subfragment-6"><a href="#subfragment-6">@Translation.GetCoreTextTranslation("Kund")</a></li>
+                        <li tab="subfragment-7"><a href="#subfragment-7">@Translation.GetCoreTextTranslation("Avdelning")</a></li>
+                        <li tab="subfragment-8"><a href="#subfragment-8">@Translation.GetCoreTextTranslation("Driftgrupper")</a></li>
                       
                     </ul>
                     <div class="tab-content">
@@ -98,7 +98,6 @@
                 </div>
                 </div>
                 <div>
-                    @Html.HiddenFor(model => model.User.Customer_Id)
                     @Html.HiddenFor(model => model.User.Id)
                     @Html.HiddenFor(model => model.CopyUserid)
                 </div>

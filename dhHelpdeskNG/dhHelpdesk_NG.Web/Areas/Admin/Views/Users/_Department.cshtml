@@ -2,21 +2,21 @@
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
 
 <div class="container">
-    <p>@Translation.Get("För att begränsa rättigheter, markera de enheter som användaren endast bör ha tillgång till"):</p>
+    <p>@Translation.GetCoreTextTranslation("För att begränsa rättigheter, markera de enheter som användaren endast bör ha tillgång till"):</p>
     <table class="tableform">
         <thead>
             <tr>
-                <th class="span3">@Translation.Get("Kund")</th>
-                <th>@Translation.Get("Avdelning")</th>
+                <th class="span3">@Translation.GetCoreTextTranslation("Kund")</th>
+                <th>@Translation.GetCoreTextTranslation("Avdelning")</th>
             </tr>
         </thead>
         <tr>
             @foreach (var cu in Model.CustomerUsers)
             {
             <tr>
-                <td>@Translation.Get(cu.CustomerName)</td>
+                <td>@Translation.GetCoreTextTranslation(cu.CustomerName)</td>
                 <td>
-                    <table>
+                    <table class="admin-user-departments">
                         @{ int i = 1; }
                         <tr>
                             @foreach (var d in Model.Departments)
@@ -24,9 +24,11 @@
                                 if (d.Customer_Id == cu.CustomerId)
                                 {
                                     <td class="span5">
-                                        <input type="checkbox" name="Departments" @(d.Users.Any(u => u.Id == cu.UserId) ? "checked=checked" : "") value="@d.Id" />
-                                        @*@Translation.Get(d.DepartmentName, Enums.TranslationSource.TextTranslation)*@
-                                        @d.DepartmentName
+                                        @{
+                                            var inpName = string.Format("d_{0}", d.Id);
+                                        }
+                                        <input type="checkbox" name="Departments" id="@inpName" @(d.Users.Any(u => u.Id == cu.UserId) ? "checked=checked" : "") value="@d.Id"/>
+                                        <label for="@inpName">@d.DepartmentName</label>
                                     </td>
 
                                     if (i % 3 == 0)

@@ -1,39 +1,45 @@
-﻿.text-danger {
-  color: #cc5965 !important;
+﻿extended-case-element .text-danger {
+    color: #cc5965 !important;
 }
 
-.has-error.checkbox-inline label {
-  color: #cc5965 !important;
-}
-.has-error .form-control {
-  border-color: #cc5965 !important;
-}
-.has-error .form-control:focus {
-  border-color: #843534 !important;
-}
-.has-error .input-group-addon {
-  color: #cc5965 !important;
-  background-color: #f2dede !important;
-  border-color: #cc5965 !important;
-}
-.has-error .form-control-feedback {
-  color: #cc5965 !important;
+extended-case-element .has-error.checkbox-inline label {
+    color: #cc5965 !important;
 }
 
-.nav-tabs > li > a {
-  border-radius: 0px 0px 0 0 !important;
-  background: #438eb9 !important;
-  border: 1px solid #438eb9 !important;
-  color: #fff !important;
+extended-case-element .has-error .form-control {
+    border-color: #cc5965 !important;
 }
-.nav-tabs > li > a:hover {
-  border-color: #eee #eee #ddd !important;
-  color: #000 !important;
+
+extended-case-element .has-error .form-control:focus {
+    border-color: #843534 !important;
 }
-.nav-tabs > li.active > a,
-.nav-tabs > li.active > a:hover,
-.nav-tabs > li.active > a:focus {
-	color: #555555 !important;
+
+extended-case-element .has-error .input-group-addon {
+    color: #cc5965 !important;
+    background-color: #f2dede !important;
+    border-color: #cc5965 !important;
+}
+
+extended-case-element .has-error .form-control-feedback {
+    color: #cc5965 !important;
+}
+
+extended-case-element .nav-tabs > li > a {
+    border-radius: 0px 0px 0 0 !important;
+    background: #438eb9 !important;
+    border: 1px solid #438eb9 !important;
+    color: #fff !important;
+}
+
+extended-case-element .nav-tabs > li > a:hover {
+    border-color: #eee #eee #ddd !important;
+    color: #000 !important;
+}
+
+extended-case-element .nav-tabs > li.active > a,
+extended-case-element .nav-tabs > li.active > a:hover,
+extended-case-element .nav-tabs > li.active > a:focus {
+    color: #555555 !important;
     cursor: default !important;
     background-color: #ffffff !important;
     border: 1px solid #ddd !important;
@@ -42,91 +48,94 @@
     text-decoration: none !important;
 }
 
-ul{
-	list-style-type: none  !important;
-}
-.alert-danger {
-  color: #cc5965 !important;
-  background-color: transparent !important;
-  border-color: transparent !important;
+extended-case-element ul {
+    list-style-type: none !important;
 }
 
-.list-group-item-danger {
-  color: #cc5965 !important;
-  background-color: #f2dede !important;
-}
-a.list-group-item-danger,
-button.list-group-item-danger {
-  color: #cc5965 !important;
+extended-case-element .alert-danger {
+    color: #cc5965 !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
 }
 
-a.list-group-item-danger:hover,
-button.list-group-item-danger:hover,
-a.list-group-item-danger:focus,
-button.list-group-item-danger:focus {
-  color: #cc5965 !important;
-  background-color: #ebcccc !important;
-}
-a.list-group-item-danger.active,
-button.list-group-item-danger.active,
-a.list-group-item-danger.active:hover,
-button.list-group-item-danger.active:hover,
-a.list-group-item-danger.active:focus,
-button.list-group-item-danger.active:focus {
-  color: #fff !important;
-  background-color: #cc5965 !important;
-  border-color: #cc5965 !important;
+extended-case-element .list-group-item-danger {
+    color: #cc5965 !important;
+    background-color: #f2dede !important;
 }
 
-.panel-danger > .panel-heading {
-  color: #cc5965 !important;
-  background-color: #f2dede !important;
-  border-color: #ebccd1 !important;
-}
-.panel-danger > .panel-heading + .panel-collapse > .panel-body {
-  border-top-color: #ebccd1 !important;
-}
-.panel-danger > .panel-heading .badge {
-  color: #f2dede !important;
-  background-color: #cc5965 !important;
+extended-case-element a.list-group-item-danger,
+extended-case-element button.list-group-item-danger {
+    color: #cc5965 !important;
 }
 
-.nav-tabs li.ng-invalid a, .nav-tabs li.ng-invalid a:hover, .nav-tabs li.ng-invalid a:focus {
-      color: #a94442 !important;
+extended-case-element a.list-group-item-danger:hover,
+extended-case-element button.list-group-item-danger:hover,
+extended-case-element a.list-group-item-danger:focus,
+extended-case-element button.list-group-item-danger:focus {
+    color: #cc5965 !important;
+    background-color: #ebcccc !important;
+}
+
+extended-case-element a.list-group-item-danger.active,
+extended-case-element button.list-group-item-danger.active,
+extended-case-element a.list-group-item-danger.active:hover,
+extended-case-element button.list-group-item-danger.active:hover,
+extended-case-element a.list-group-item-danger.active:focus,
+extended-case-element button.list-group-item-danger.active:focus {
+    color: #fff !important;
+    background-color: #cc5965 !important;
+    border-color: #cc5965 !important;
+}
+
+extended-case-element .panel-danger > .panel-heading {
+    color: #cc5965 !important;
+    background-color: #f2dede !important;
+    border-color: #ebccd1 !important;
+}
+
+extended-case-element .panel-danger > .panel-heading + .panel-collapse > .panel-body {
+    border-top-color: #ebccd1 !important;
+}
+
+extended-case-element .panel-danger > .panel-heading .badge {
+    color: #f2dede !important;
+    background-color: #cc5965 !important;
+}
+
+extended-case-element .nav-tabs li.ng-invalid a,
+extended-case-element .nav-tabs li.ng-invalid a:hover,
+extended-case-element .nav-tabs li.ng-invalid a:focus {
+    color: #a94442 !important;
     cursor: default !important;
     background-color: #ffeeee !important;
     border: 1px solid #ddd !important;
     border-bottom-color: transparent !important;
     padding-bottom: 8px !important;
-  }
+}
 
-ec-section .actionsPanel {
+extended-case-element ec-section .actionsPanel {
     background-color: #fff !important;
     padding: 5px;
     margin-left: 15px;
     border-radius: 0px !important;
 }
 
-ec-section ec-label .col-md-6:nth-child(2) {
-  font-style:italic !important;
-  
-  padding-top:0px !important;
-  padding-bottom:0px !important;
-  margin-bottom: 5px !important;
-  margin-top:5px !important;
-  
+extended-case-element ec-section ec-label .col-md-6:nth-child(2) {
+    font-style: italic !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    margin-bottom: 5px !important;
+    margin-top: 5px !important;
 }
 
 
-.form-group {
+extended-case-element .form-group {
     margin-bottom: 10px !important;
 }
 
-.btn-primary
-{
+extended-case-element .btn-primary {
     background-color: #adadad !important;
     border: none !important;
-
 }
 
 /*h2 {
@@ -136,12 +145,11 @@ ec-section ec-label .col-md-6:nth-child(2) {
      margin-bottom: 20px !important;
 }*/
 
-select-dropdown > div .options ul li:first-child {
-     min-height:20px;
-     height:20px;
+extended-case-element select-dropdown > div .options ul li:first-child {
+    min-height: 20px;
+    height: 20px;
 }
 
-body
-{
+extended-case-element body {
     margin: 0px !important;
 }
