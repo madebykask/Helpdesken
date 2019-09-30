@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Domain;
-using DH.Helpdesk.BusinessData.Models.FilewViewLog;
 using DH.Helpdesk.Dal.Mappers;
 
 namespace DH.Helpdesk.Dal.Repositories

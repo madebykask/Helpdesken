@@ -1,5 +1,4 @@
-﻿using DH.Helpdesk.BusinessData.Models.FilewViewLog;
-using DH.Helpdesk.Dal.Mappers;
+﻿using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Domain;
 using System;
@@ -7,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Models.FileViewLog;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -29,6 +29,7 @@ namespace DH.Helpdesk.Services.Services
 			_modelToEntityMapper = modelToEntityMapper;
 
 		}
+
 		public FileViewLogModel Log(int caseId, int userId, string fileName, string filePath, FileViewLogFileSource fileSource, FileViewLogOperation operation)
 		{
 			var model = new FileViewLogModel

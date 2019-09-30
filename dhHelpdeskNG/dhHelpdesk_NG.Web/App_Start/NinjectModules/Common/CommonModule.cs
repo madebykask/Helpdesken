@@ -9,6 +9,7 @@
 
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
+using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.BusinessData.Models.Gdpr;
 using DH.Helpdesk.Common;
 using DH.Helpdesk.Common.Serializers;
@@ -51,8 +52,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
 	using DH.Helpdesk.Domain.ExtendedCaseEntity;
 	using BusinessData.Models.Condition;
 	using Dal.Mappers.Condition;
-	using BusinessData.Models.FilewViewLog;
-	using Dal.Mappers.FileViewLog.BusinessModelToEntity;
+    using Dal.Mappers.FileViewLog.BusinessModelToEntity;
 	using Dal.Mappers.FileViewLog.EntityToBusinessModel;
 
 	/// <summary>

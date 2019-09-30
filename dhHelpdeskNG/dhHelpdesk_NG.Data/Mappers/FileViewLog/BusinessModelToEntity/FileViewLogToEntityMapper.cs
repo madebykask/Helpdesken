@@ -1,10 +1,10 @@
-﻿using DH.Helpdesk.BusinessData.Models.FilewViewLog;
-using DH.Helpdesk.Domain;
+﻿using DH.Helpdesk.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Models.FileViewLog;
 
 namespace DH.Helpdesk.Dal.Mappers.FileViewLog.BusinessModelToEntity
 {

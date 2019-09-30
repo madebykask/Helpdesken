@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
+using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.BusinessData.Models.Logs;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums.Cases;
@@ -95,9 +96,8 @@ namespace DH.Helpdesk.Web.Controllers
 	using BusinessData.Models.ProductArea.Output;
 	using DH.Helpdesk.Common.Extensions.Boolean;
 	using Common.Tools.Files;
-	using BusinessData.Models.FilewViewLog;
 
-	public partial class CasesController : BaseController
+    public partial class CasesController : BaseController
     {
         #region ***Constant/Variables***
 

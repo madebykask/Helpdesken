@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.BusinessData.Models.Email;
+using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.SelfService.Controllers.Behaviors;
 using DH.Helpdesk.SelfService.Entites;
@@ -45,9 +46,8 @@ namespace DH.Helpdesk.SelfService.Controllers
 	using Common.Extensions.Integer;
 	using Models.Message;
 	using Services.Infrastructure;
-	using BusinessData.Models.FilewViewLog;
 
-	public class CaseController : BaseController
+    public class CaseController : BaseController
     {
         private readonly ILog _logger = LogManager.GetLogger(typeof(CaseController));
 

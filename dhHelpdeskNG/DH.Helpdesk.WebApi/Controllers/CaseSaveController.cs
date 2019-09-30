@@ -9,6 +9,7 @@ using System.Web.Http;
 using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Customer;
+using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.BusinessRule;
 using DH.Helpdesk.Common.Enums.Cases;
@@ -33,7 +34,6 @@ using DH.Helpdesk.WebApi.Logic.Case;
 using DH.Helpdesk.WebApi.Logic.CaseFieldSettings;
 using DH.Helpdesk.Services.Utils;
 using DH.Helpdesk.WebApi.Models.Case;
-using DH.Helpdesk.BusinessData.Models.FilewViewLog;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {

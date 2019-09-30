@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.SelfService.Infrastructure.Cache;
 using DH.Helpdesk.Services.Services.Cache;
@@ -54,8 +55,7 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
 	using Dal.Mappers.Calendars.EntityToBusinessModel;
 	using BusinessData.Models.Calendar.Output;
 	using Dal.Mappers.Calendars.BusinessModelToEntity;
-	using BusinessData.Models.FilewViewLog;
-	using Dal.Mappers.FileViewLog.EntityToBusinessModel;
+    using Dal.Mappers.FileViewLog.EntityToBusinessModel;
 	using Dal.Mappers.FileViewLog.BusinessModelToEntity;
 
 	/// <summary>
