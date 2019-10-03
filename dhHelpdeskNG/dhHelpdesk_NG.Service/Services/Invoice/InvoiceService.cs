@@ -7,6 +7,7 @@ using System.Text;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
 using DH.Helpdesk.BusinessData.Models.Invoice;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Dal.Repositories;
@@ -232,7 +233,7 @@ namespace DH.Helpdesk.Services.Services.Invoice
 
 				var externalInvoices = string.Join(",", fileCase.Value.Item2.Select(x => x.InvoiceNumber));
 				var referenceNumber = accountInfo?.ReferenceNumber ?? orderInfo?.OrdererReferenceNumber;
-			    var caseDate = caseInfo.FinishingDate?.ToString("yyyy-MM-dd") ?? DateTime.Now.ToString("yyyy-MM-dd");
+			    var caseDate = caseInfo.FinishingDate?.ToString(DateFormats.Date) ?? DateTime.Now.ToString(DateFormats.Date);
                 var amount = fileCase.Value.Item1
 					             .Where(x => x.Charge.ToBool())
 					             .Sum(x => ((decimal)x.WorkingTime / 60) * caseInfo.Department.AccountancyAmount +

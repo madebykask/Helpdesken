@@ -3,17 +3,25 @@ using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Domain;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Enums.FileViewLogs;
 using DH.Helpdesk.BusinessData.Models.FileViewLog;
+using DH.Helpdesk.BusinessData.Models.Shared.Input;
+using DH.Helpdesk.Common.Constants;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Enums.FileViewLog;
+using LinqLib.Operators;
 
 namespace DH.Helpdesk.Services.Services
 {
 	public interface IFileViewLogService
 	{
 		FileViewLogModel Log(int caseId, int userId, string fileName, string filePath, FileViewLogFileSource fileSource, FileViewLogOperation operation);
-	}
+        IList<FileViewLogListItemModel> Find(FileViewLogListFilter filter, string timeZoneId);
+    }
 	public class FileViewLogService : IFileViewLogService
 	{
 		private readonly IEntityToBusinessModelMapper<FileViewLogEntity, FileViewLogModel> _entityToModelMapper;
@@ -52,5 +60,27 @@ namespace DH.Helpdesk.Services.Services
 
 			return model;
 		}
+
+        public IList<FileViewLogListItemModel> Find(FileViewLogListFilter filter, string timeZoneId)
+        {
+            const int maxAmount = 10000;
+            const int defaultAmount = 500;
+            if (filter.Sort == null)
+                filter.Sort = new SortField(FileViewLogSortFields.Department, SortBy.Ascending);
+            if (filter.AmountPerPage > maxAmount)
+                filter.AmountPerPage = defaultAmount;
+
+            var data = _fileViewLogRepository.Find(filter);
+
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+
+            if (!string.IsNullOrWhiteSpace(timeZoneId))
+            {
+                foreach (var item in data)
+                    item.Log.CreatedDate = TimeZoneInfo.ConvertTimeFromUtc(item.Log.CreatedDate, userTimeZone);
+            }
+
+            return data;
+        }
 	}
 }

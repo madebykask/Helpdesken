@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Orders.Concrete
+﻿using DH.Helpdesk.Common.Constants;
+
+namespace DH.Helpdesk.Services.BusinessLogic.Orders.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -350,7 +352,7 @@
         {
             if (firstValue.HasValue)
             {
-                var difference = new FieldDifference(settings.Caption, null, firstValue.Value.ToString("yyyy-MM-dd", Thread.CurrentThread.CurrentUICulture));
+                var difference = new FieldDifference(settings.Caption, null, firstValue.Value.ToString(DateFormats.Date, Thread.CurrentThread.CurrentUICulture));
                 differencies.Add(difference);
             }
         }
@@ -415,8 +417,8 @@
             {
                 var difference = new FieldDifference(                            
                             settings.Caption,
-                            oldValue.HasValue ? oldValue.Value.ToString("yyyy-MM-dd", Thread.CurrentThread.CurrentUICulture) : string.Empty,
-                            newValue.HasValue ? newValue.Value.ToString("yyyy-MM-dd", Thread.CurrentThread.CurrentUICulture) : string.Empty);
+                            oldValue.HasValue ? oldValue.Value.ToString(DateFormats.Date, Thread.CurrentThread.CurrentUICulture) : string.Empty,
+                            newValue.HasValue ? newValue.Value.ToString(DateFormats.Date, Thread.CurrentThread.CurrentUICulture) : string.Empty);
                 differencies.Add(difference);
             }
         }

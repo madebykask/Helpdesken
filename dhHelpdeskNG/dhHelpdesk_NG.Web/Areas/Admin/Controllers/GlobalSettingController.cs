@@ -3,16 +3,20 @@ using System.Globalization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.BusinessData.Models.Gdpr;
 using DH.Helpdesk.BusinessData.Models.Grid;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums.Settings;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.Infrastructure.Context;
 using DH.Helpdesk.Domain.GDPR;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Models.FileViewLogs;
 using DH.Helpdesk.Web.Models.Gdpr;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
@@ -47,6 +51,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IGDPRFavoritesService _gdprFavoritesService;
         private readonly IUserContext _userContext;
         private readonly IGDPRTasksService _gdprTasksService;
+        private readonly IFileViewLogService _fileViewLogService;
+        private readonly IDepartmentService _departmentsService;
 
         public GlobalSettingController(
             IGlobalSettingService globalSettingService,
@@ -56,27 +62,30 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             IWatchDateCalendarService watchDateCalendarService,
             ICustomerUserService customerUserService,
             ICaseFieldSettingService caseFieldSettingService,
-            ICaseService caseService,
             IGDPROperationsService gdprOperationsService,
             IGDPRDataPrivacyAccessService gdprDataPrivacyAccessService,
             IMasterDataService masterDataService,
             IGDPRFavoritesService gdprFavoritesService,
             IGDPRTasksService gdprTasksService,
-            IUserContext userContext)
+            IUserContext userContext,
+            IFileViewLogService fileViewLogService,
+            IDepartmentService departmentsService)
             : base(masterDataService)
         {
-            this._gdprTasksService = gdprTasksService;
-            this._gdprFavoritesService = gdprFavoritesService;
-            this._globalSettingService = globalSettingService;
-            this._holidayService = holidayService;
-            this._languageService = languageService;
-            this._textTranslationService = textTranslationService;
-            this._watchDateCalendarService = watchDateCalendarService;
-            this._customerUserService = customerUserService;
-            this._caseFieldSettingService = caseFieldSettingService;
-            this._gdprDataPrivacyAccessService = gdprDataPrivacyAccessService;
-            this._userContext = userContext;
-            this._gdprOperationsService = gdprOperationsService;
+            _gdprTasksService = gdprTasksService;
+            _gdprFavoritesService = gdprFavoritesService;
+            _globalSettingService = globalSettingService;
+            _holidayService = holidayService;
+            _languageService = languageService;
+            _textTranslationService = textTranslationService;
+            _watchDateCalendarService = watchDateCalendarService;
+            _customerUserService = customerUserService;
+            _caseFieldSettingService = caseFieldSettingService;
+            _gdprDataPrivacyAccessService = gdprDataPrivacyAccessService;
+            _userContext = userContext;
+            _gdprOperationsService = gdprOperationsService;
+            _fileViewLogService = fileViewLogService;
+            _departmentsService = departmentsService;
         }
 
         public ActionResult Index(int texttypeid, string textSearch, int compareMethod)
@@ -448,13 +457,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private GlobalSettingIndexViewModel GetGSIndexViewModel( int holidayheaderid, int languageId, SearchOption searchOption)
         {
             const int DEFAULT_HOLIDAYS_CALENDAR_ID = 1;
-            var start = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
-
-            //int texttypeid,
-            //string textSearch
 
             var gridModel = new TranslationGridModel();
-            //gridModel.AllTexts = this._textTranslationService.GetAllTexts(texttypeid).ToList();
             var allTexts = this._textTranslationService.GetAllTexts(searchOption.TextType, LanguageIds.English).ToList();
             if (string.IsNullOrEmpty(searchOption.TextSearch))
                 gridModel.AllTexts = allTexts.OrderBy(a => a.TextToTranslate).ToList();
@@ -513,7 +517,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                HasDataPrivacyAccess = dataPrivacyAccess != null
+                HasDataPrivacyAccess = dataPrivacyAccess != null,
+                HasDataSecurityInformationPermission = SessionFacade.CurrentUser.DataSecurityPermission.ToBool()
             };
 
             model.SearchConditions = new List<SelectListItem>();
@@ -1609,7 +1614,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Cases = item.ClosedOnly ? closedText : $"{closedText}, {openedText}",
                     Data = formattedFields.Any() ? string.Join(", ", formattedFields) : "",
                     AttachedFiles = attachedFilesFormatted.ToString().Trim(',').Trim(),
-                    Executed = TimeZoneInfo.ConvertTimeFromUtc(item.ExecutedDate, userTimeZone).ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)
+                    Executed = TimeZoneInfo.ConvertTimeFromUtc(item.ExecutedDate, userTimeZone).ToString(DateFormats.DateTime, CultureInfo.InvariantCulture)
                 };
 
                 model.Add(modelItem);
@@ -1618,6 +1623,70 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var viewPath = "~/Areas/Admin/Views/GlobalSetting/_DataPrivacyHistoryTable.cshtml";
             var content = RenderRazorViewToString(viewPath, model);
             return Json(new {Success = true, Content = content}, JsonRequestBehavior.AllowGet);
+        }
+
+        [ChildActionOnly]
+        public PartialViewResult FilesViewLog()
+        {
+            var customers = _customerUserService.GetCustomerUsersForUser(SessionFacade.CurrentUser.Id).OrderBy(x => x.Customer.Name).ToList();
+            var availableCustomers = customers.Select(x => new SelectListItem
+            {
+                Value = x.Customer.Id.ToString(),
+                Text = x.Customer.Name
+            }).ToList();
+            var selectedCustomerId = customers.Any() ? customers.First().Customer_Id : 0;
+
+            //var userDepartments =
+            //    _departmentsService.GetDepartmentsForUser(selectedCustomerId, SessionFacade.CurrentUser.Id);
+
+            var model = new FileViewLogsViewModel
+            {
+                SelectedCustomerId = selectedCustomerId,
+                Customers = availableCustomers,
+                SelectedDepartmetsIds = new List<int>(),
+                Departments = new List<SelectListItem>(),
+                Amount = 500
+            };
+
+            return PartialView("_FilesViewLog", model);
+        }
+
+        [NoCache]
+        [HttpGet]
+        public JsonResult LoadCustomerDepartments(int id)
+        {
+            var departmets = _departmentsService.GetDepartmentsForUser(id, SessionFacade.CurrentUser.Id);
+            var data = departmets != null
+                ? departmets.Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.DepartmentName.Trim()
+                }).ToList()
+                : new List<SelectListItem>();
+            return Json(new { data }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [UserPermissions(UserPermission.DataSecurityPermission)]
+        public JsonResult LoadFileViewLogs(FileViewLogListFilter filter)
+        {
+            var data = _fileViewLogService.Find(filter, SessionFacade.CurrentUser.TimeZoneId);
+            var model = data.Select(f => new FileViewLogItemViewModel
+            {
+                CaseNumber = f.CaseNumber.ToString(),
+                CreatedDate = f.Log.CreatedDate,
+                DepartmentName = f.DepartmentName,
+                ProductAreaName = f.ProductAreaName,
+                FileName = f.Log.FileName,
+                FilePath = f.Log.FilePath,
+                Id = f.Log.Id,
+                UserName = f.UserName,
+                Operation = f.Log.Operation.Translate()
+            }).ToList();
+
+            var viewPath = "~/Areas/Admin/Views/GlobalSetting/_FileViewLogTable.cshtml";
+            var content = RenderRazorViewToString(viewPath, model);
+            return Json(new { content });
         }
 
         [HttpPost]

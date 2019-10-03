@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Extensions.DateTime;
 
 namespace DH.Helpdesk.BusinessData.Models.Shared
@@ -32,7 +33,7 @@ namespace DH.Helpdesk.BusinessData.Models.Shared
 
         #region Methods
 
-        public string GetDateString(string sep = ",", string format = "yyyy-MM-dd")
+        public string GetDateString(string sep = ",", string format = DateFormats.Date)
         {
             return $"{FormatDate(FromDate, format)}{sep}{FormatDate(ToDate, format)}";
         }

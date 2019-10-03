@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Services.BusinessLogic.Contracts;
 using DH.Helpdesk.Web.Infrastructure;
@@ -54,11 +55,11 @@ namespace DH.Helpdesk.Web.Components.Contracts
             if (isDateTime)
             {
                 var localTime = TimeZoneInfo.ConvertTimeFromUtc(input, this.CurrentTimeZone);
-                return localTime.ToString("yyyy-MM-dd HH:mm:ss", Thread.CurrentThread.CurrentUICulture);
+                return localTime.ToString(DateFormats.DateTime, Thread.CurrentThread.CurrentUICulture);
             }
             else
             {
-                return input.ToLocalTime().ToString("yyyy-MM-dd", Thread.CurrentThread.CurrentUICulture);
+                return input.ToLocalTime().ToString(DateFormats.Date, Thread.CurrentThread.CurrentUICulture);
             }
         }
 

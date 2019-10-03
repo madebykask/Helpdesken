@@ -13,6 +13,7 @@ using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.BusinessData.Models.Logs;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums.Cases;
+using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Enums.Settings;
 using DH.Helpdesk.Common.Exceptions;
@@ -178,7 +179,8 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseStatisticService _caseStatService;
         private readonly IUserEmailsSearchService _userEmailsSearchService;
         private readonly IFeatureToggleService _featureToggleService;
-
+        private readonly IFileViewLogService _fileViewLogService;
+        
         #endregion
 
         private readonly int DefaultMaxRows = 10;
@@ -261,7 +263,6 @@ namespace DH.Helpdesk.Web.Controllers
             ISendToDialogModelFactory sendToDialogModelFactory, 
             ICaseStatisticService caseStatService,
             IUserEmailsSearchService userEmailsSearchService,
-            IMail2TicketService mail2TicketService,
             IFeatureToggleService featureToggleService,
 			IFileViewLogService fileViewLogService)
             : base(masterDataService)
@@ -337,7 +338,6 @@ namespace DH.Helpdesk.Web.Controllers
             _sendToDialogModelFactory = sendToDialogModelFactory;
             _caseStatService = caseStatService;
             _userEmailsSearchService = userEmailsSearchService;
-            _mail2TicketService = mail2TicketService;
             _featureToggleService = featureToggleService;
 			_fileViewLogService = fileViewLogService;
 
@@ -7333,8 +7333,6 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly IDictionary<int, IList<Department>> _customerDepartments = new Dictionary<int, IList<Department>>();
         private AdvancedSearchBehavior _advancedSearchBehavior;
-        private IMail2TicketService _mail2TicketService;
-		private readonly IFileViewLogService _fileViewLogService;
 
 		private IList<Department> GetCustomerDepartments(int customerId)
         {

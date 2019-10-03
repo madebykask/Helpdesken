@@ -5,6 +5,11 @@
 
     public sealed class SortField
     {
+        public SortField()
+        {
+
+        }
+
         public SortField(string name, SortBy sortBy)
         {
             this.Name = name;
@@ -12,8 +17,8 @@
         }
 
         [NotNullAndEmpty]
-        public string Name { get; private set; }
+        public string Name { get; }
 
-        public SortBy SortBy { get; private set; }
+        public SortBy SortBy { get; }
     }
 }

@@ -1,0 +1,109 @@
+﻿@using DH.Helpdesk.BusinessData.Enums.FileViewLogs
+@model DH.Helpdesk.Web.Models.FileViewLogs.FileViewLogsViewModel
+@{
+    Layout = null;
+}
+<div class="container">
+    <div class="row">
+        <div class="span12">
+            @using (Html.BeginForm(null, null, null, FormMethod.Post, new { id = "fileViewLogForm", @action = "", texttypeid = 0, compareMethod = 1 }))
+            {
+                <table class="tableform">
+                    <tbody>
+                    <tr>
+                        <td class="span3">@Translation.GetCoreTextTranslation("Kund")</td>
+                        <td class="span9">
+                            @Html.DropDownListFor(x => x.SelectedCustomerId, Model.Customers, "",
+                                new
+                                {
+                                    id = "fvl_customerId",
+                                    @class = "chosen-single-select"
+                                })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.GetCoreTextTranslation("Avdelning")
+                        </td>
+                        <td class="span9">
+                            @Html.DropDownListFor(m => m.SelectedDepartmetsIds, Model.Departments,
+                                new
+                                {
+                                    id = "fvl_lstFilterDepartments",
+                                    multiple = "multiple",
+                                    @class = "chosen-select",
+                                    placeholder = Translation.GetCoreTextTranslation("Välj en eller flera"),
+                                    style = "width: 300px"
+                                })
+                            <i id="departmentsLoader" class="gif-loader" style="display: none">&nbsp;</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.GetCoreTextTranslation("Period")
+                        </td>
+                        <td class="span9">
+                            @Html.EditorFor(m => m.PeriodFrom, "DatePicker", new { id = "fvl_periodFrom", type = "text" })
+                            @Html.EditorFor(m => m.PeriodTo, "DatePicker", new { id = "fvl_periodTo", type = "text" })
+                            <div id="datesErrorLabel"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.GetCoreTextTranslation("Visa")
+                        </td>
+                        <td class="span9">
+                            @Html.TextBoxFor(m => m.Amount, new { id = "fvl_logsAmount", maxlength="3", @class = "inputw50" })
+                            @Translation.GetCoreTextTranslation("poster per sida")
+                            <div id="logsAmountError" errorFor="fvl_logsAmount"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="span100">
+            <table class="table table-striped table-bordered table-hover table-cases" id="fvl_Table">
+                <thead>
+                    <tr>
+                        <th class="" sortField="@FileViewLogSortFields.Department">@Translation.GetCoreTextTranslation("Avdelning")</th>
+                        <th class="" sortField="@FileViewLogSortFields.Date">@Translation.GetCoreTextTranslation("Datum")</th>
+                        <th class="" sortField="@FileViewLogSortFields.User">@Translation.GetCoreTextTranslation("Användare")</th>
+                        <th class="" sortField="@FileViewLogSortFields.Case">@Translation.GetCoreTextTranslation("Ärende")</th>
+                        <th class="" sortField="@FileViewLogSortFields.ProductArea">@Translation.GetCoreTextTranslation("Produktområde")</th>
+                        <th class="" sortField="@FileViewLogSortFields.File">@Translation.GetCoreTextTranslation("Fil")</th>
+                        <th class="" sortField="@FileViewLogSortFields.Path">@Translation.GetCoreTextTranslation("Sökväg katalog")</th>
+                        <th class="" sortField="@FileViewLogSortFields.Operation">@Translation.GetCoreTextTranslation("Drift")</th>
+                    </tr>
+                </thead>
+                <tbody id="fvl_Table_rows">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/fileviewlog")
+<script type="text/javascript">
+    // JQuery load
+    $(function() {
+        var settings = {
+            urls: {
+                RunUrl: '@Url.Action("LoadFileViewLogs")',
+                LoadDepartmentsUrl: '@Url.Action("LoadCustomerDepartments")'
+            },
+            translations: {
+                SelectedCustomerIdRequired: '@Translation.GetForJS("Kund") @Translation.GetForJS("måste anges")',
+                DepartmentsRequired: '@Translation.GetForJS("Avdelning") @Translation.GetForJS("måste anges")',
+                InvalidDateRange: '@Translation.GetForJS("Valt datumintervall är ogiltigt")'
+            },
+            sortBy: '@FileViewLogSortFields.Department',
+            sortOrder: 0
+        }
+        window.fileViewLogForm = new FileViewLog();
+        window.fileViewLogForm.init(settings);
+    });
+</script>

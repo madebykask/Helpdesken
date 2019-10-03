@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Utils;
 using DH.Helpdesk.Common.Tools;
@@ -1040,10 +1041,10 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                     caseModel.Priority_Id = value.ToInt();
                     break;
                 case "plandate":
-                    caseModel.PlanDate = DateTime.ParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    caseModel.PlanDate = DateTime.ParseExact(value, DateFormats.Date, CultureInfo.InvariantCulture);
                     break;
                 case "watchdate":
-                    caseModel.WatchDate = DateTime.ParseExact(value, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    caseModel.WatchDate = DateTime.ParseExact(value, DateFormats.Date, CultureInfo.InvariantCulture);
                     break;
                 case "persons_name":
                     caseModel.PersonsName = value;

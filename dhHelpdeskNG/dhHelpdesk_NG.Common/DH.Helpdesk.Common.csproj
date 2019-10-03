@@ -82,12 +82,14 @@
     <Compile Include="Constants\CaseSearchConstants.cs" />
     <Compile Include="Constants\CaseSections.cs" />
     <Compile Include="Constants\CaseType.cs" />
+    <Compile Include="Constants\DateFormats.cs" />
     <Compile Include="Constants\FeatureToggleTypes.cs" />
     <Compile Include="Constants\Shared.cs" />
     <Compile Include="Constants\DataTypeValue.cs" />
     <Compile Include="Constants\BRConstItem.cs" />
     <Compile Include="Constants\UserAccessRole.cs" />
     <Compile Include="Constraints\NotifierConstraint.cs" />
+    <Compile Include="Enums\FileViewLog\FileViewLogOperation.cs" />
     <Compile Include="Enums\AdditionalDataPrivacyFields.cs" />
     <Compile Include="Enums\AppSettingsKey.cs" />
     <Compile Include="Enums\Cases\CaseSettingTypes.cs" />

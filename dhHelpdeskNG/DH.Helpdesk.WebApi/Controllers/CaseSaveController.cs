@@ -13,6 +13,7 @@ using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.BusinessRule;
 using DH.Helpdesk.Common.Enums.Cases;
+using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.GUID;

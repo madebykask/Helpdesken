@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
 using DH.Helpdesk.BusinessData.Models.Invoice;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Domain.Invoice;
 using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport;
 using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
@@ -143,7 +144,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
                     new NewGridRowCellValueModel("2", new StringDisplayValue(inv.CaseNumber.ToString("F0"))),
                     new NewGridRowCellValueModel("3", new StringDisplayValue(inv.Caption)),
                     new NewGridRowCellValueModel("4", new StringDisplayValue(inv.Category)),
-                    new NewGridRowCellValueModel("5", new StringDisplayValue(inv.FinishingDate?.ToString("yyyy-MM-dd") ?? "")),
+                    new NewGridRowCellValueModel("5", new StringDisplayValue(inv.FinishingDate?.ToString(DateFormats.Date) ?? "")),
                     new NewGridRowCellValueModel("6", new StringDisplayValue(inv.Department)),
                     new NewGridRowCellValueModel("7", new StringDisplayValue($"{inv.LogInvoices.Sum(x => x.WorkingTime)}")),
                     new NewGridRowCellValueModel("8", new StringDisplayValue($"{inv.LogInvoices.Sum(x => x.Overtime)}")),

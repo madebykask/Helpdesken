@@ -22,9 +22,9 @@ namespace DH.Helpdesk.Dal.Mappers.FileViewLog.BusinessModelToEntity
 			entity.CreatedDate = businessModel.CreatedDate;
 			entity.FileName = businessModel.FileName;
 			entity.FilePath = businessModel.FilePath;
-			entity.FileSource = (int)businessModel.FileSource;
+			entity.FileSource = businessModel.FileSource;
 			entity.User_Id = businessModel.User_Id;
-			entity.Operation = (int)businessModel.Operation;
+			entity.Operation = businessModel.Operation;
 		}
 	}
 }

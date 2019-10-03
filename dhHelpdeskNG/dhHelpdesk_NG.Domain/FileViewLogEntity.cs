@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Domain
+﻿using DH.Helpdesk.Common.Enums.FileViewLog;
+
+namespace DH.Helpdesk.Domain
 {
     using global::System;
        
@@ -17,10 +19,12 @@
 
         public string FilePath { get; set; }
 
-        public int FileSource { get; set; }
+        public FileViewLogFileSource FileSource { get; set; }
 
         public DateTime CreatedDate { get; set; }
 
-		public int? Operation { get; set; }
-	}
+		public FileViewLogOperation? Operation { get; set; }
+        public virtual Case Case { get; set; }
+        public virtual User User { get; set; }
+    }
 }

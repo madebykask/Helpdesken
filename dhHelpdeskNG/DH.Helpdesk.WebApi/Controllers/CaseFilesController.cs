@@ -9,6 +9,7 @@ using System.Web.Http;
 using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.FileViewLog;
+using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Services.BusinessLogic.Settings;

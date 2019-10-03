@@ -1,23 +1,8 @@
 ﻿using System;
+using DH.Helpdesk.Common.Enums.FileViewLog;
 
 namespace DH.Helpdesk.BusinessData.Models.FileViewLog
 {
-	public enum FileViewLogOperation
-	{
-		Legacy = 0, // TODO: Regard old as view?
-		View = 1,
-		Delete = 2,
-		Add = 3,
-		AddTemporary = 4
-	}
-
-	public enum FileViewLogFileSource
-	{
-		Helpdesk = 5,
-		Selfservice = 6,
-		WebApi = 7
-	}
-
 	public class FileViewLogModel
 	{
 		public int Id { get; set; }
@@ -31,6 +16,5 @@ namespace DH.Helpdesk.BusinessData.Models.FileViewLog
 		public int Case_Id { get; set; }
 
 		public FileViewLogOperation Operation { get; set; }
-
-	}
+    }
 }

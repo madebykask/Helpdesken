@@ -2,6 +2,7 @@
 using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.BusinessData.Models.Email;
 using DH.Helpdesk.BusinessData.Models.FileViewLog;
+using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.SelfService.Controllers.Behaviors;
 using DH.Helpdesk.SelfService.Entites;

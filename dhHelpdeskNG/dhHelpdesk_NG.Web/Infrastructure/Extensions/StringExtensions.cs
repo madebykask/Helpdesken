@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using DH.Helpdesk.BusinessData.Models.User.Interfaces;
+using DH.Helpdesk.Common.Enums.FileViewLog;
 
 namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
@@ -294,43 +295,46 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             switch (value)
             {
                 case 1:
-                    ret = Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation); 
+                    ret = Translation.GetCoreTextTranslation("Nytt ärende"); 
                     break;
                 case 2:
-                    ret = Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation);     
+                    ret = Translation.GetCoreTextTranslation("Tilldelat ärende") + " " + Translation.GetCoreTextTranslation("Handläggare");     
                     break;
                 case 3: case 14:
-                    ret = Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation);
+                    ret = Translation.GetCoreTextTranslation("Ärendet avslutat");
                     break;
                 case 4:
-                    ret = Translation.Get("Informera anmälaren om åtgärden", Enums.TranslationSource.TextTranslation);
+                    ret = Translation.GetCoreTextTranslation("Informera anmälaren om åtgärden");
                     break;
                 case 5:
-                    ret = Translation.Get("Skicka intern loggpost till", Enums.TranslationSource.TextTranslation);
+                    ret = Translation.GetCoreTextTranslation("Skicka intern loggpost till");
                     break;
                 case 6:
-                    ret = Translation.Get("Enkät", Enums.TranslationSource.TextTranslation);
+                    ret = Translation.GetCoreTextTranslation("Enkät");
                     break;
                 case 7:
-                    ret = Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation);     
+                    ret = Translation.GetCoreTextTranslation("Tilldelat ärende") + " " + Translation.GetCoreTextTranslation("Driftgrupp");     
                     break;
                 case 8:
-                    ret = Translation.Get("Beställning", Enums.TranslationSource.TextTranslation);
+                    ret = Translation.GetCoreTextTranslation("Beställning");
                     break;
                 case 9:
-                    ret = Translation.Get("Bevakningsdatum inträffar", Enums.TranslationSource.TextTranslation);
+                    ret = Translation.GetCoreTextTranslation("Bevakningsdatum inträffar");
                     break;
                 case 10:
-                    ret = Translation.Get("Anmälaren uppdaterat ärende", Enums.TranslationSource.TextTranslation);
+                    ret = Translation.GetCoreTextTranslation("Anmälaren uppdaterat ärende");
                     break;
                 case 11:
-                    ret = Translation.Get("SMS", Enums.TranslationSource.TextTranslation) + ": " + Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation);     
+                    ret = Translation.GetCoreTextTranslation("SMS") + ": "
+                                                                    + Translation.GetCoreTextTranslation(
+                                                                        "Tilldelat ärende") + " "
+                                                                    + Translation.GetCoreTextTranslation("Handläggare");
                     break;
                 case 12:
-                    ret = Translation.Get("Skicka mail när planerat åtgärdsdatum inträffar", Enums.TranslationSource.TextTranslation);
+                    ret = Translation.GetCoreTextTranslation("Skicka mail när planerat åtgärdsdatum inträffar");
                     break;
                 case 13:
-                    ret = Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation);
+                    ret = Translation.GetCoreTextTranslation("Prioritet");
                     break;
                 default:
                     if (value > 99 && customMailTemplates.Any())
@@ -398,6 +402,25 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
             var encodedString = HttpUtility.HtmlEncode(s);
             return encodedString.Replace(Environment.NewLine, "<br />").Replace("\n", "<br />");
+        }
+
+        public static string Translate(this FileViewLogOperation operation)
+        {
+            switch (operation)
+            {
+                case FileViewLogOperation.Legacy:
+                    return "";
+                case FileViewLogOperation.View:
+                    return Translation.GetCoreTextTranslation("Se");
+                case FileViewLogOperation.Delete:
+                    return Translation.GetCoreTextTranslation("Ta bort");
+                case FileViewLogOperation.Add:
+                    return Translation.GetCoreTextTranslation("Lägg till");
+                case FileViewLogOperation.AddTemporary:
+                    return Translation.GetCoreTextTranslation("Lägg till");
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(operation), operation, null);
+            }
         }
     }
 }

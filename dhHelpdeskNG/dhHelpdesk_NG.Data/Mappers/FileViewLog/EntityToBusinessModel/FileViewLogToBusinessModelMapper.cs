@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.FileViewLog;
+using DH.Helpdesk.Common.Enums.FileViewLog;
 
 namespace DH.Helpdesk.Dal.Mappers.FileViewLog.EntityToBusinessModel
 {
@@ -21,7 +22,7 @@ namespace DH.Helpdesk.Dal.Mappers.FileViewLog.EntityToBusinessModel
 				FilePath = entity.FilePath,
 				FileSource = (FileViewLogFileSource)entity.FileSource,
 				User_Id = entity.User_Id,
-				Operation = (FileViewLogOperation)entity.Operation
+				Operation = entity.Operation ?? FileViewLogOperation.Legacy
 			};
 		}
 	}
