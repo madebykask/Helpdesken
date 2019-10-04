@@ -78,7 +78,12 @@ function FileViewLog() {
         return true;
     };
 
+    this.isValidDate = function(date) {
+        return (date instanceof Date && !isNaN(date));
+    }
+
     this.setupValidation = function () {
+        var self = this;
         this.validator$ = this.form$.validate({
             ignore: '*:not([name])',
             rules: {
@@ -86,7 +91,19 @@ function FileViewLog() {
                     required: true
                 },
                 "SelectedDepartmetsIds": {
-                    required: true,
+                    required: true
+                },
+                "PeriodFrom": {
+                    checkDateRange: function () {
+                        var hasVal = self.isValidDate(self.getSelectedDate(self.periodFromDate$));
+                        return hasVal;
+                    }
+                },
+                "PeriodTo": {
+                    checkDateRange: function () {
+                        var hasVal = self.isValidDate(self.getSelectedDate(self.periodToDate$));
+                        return hasVal;
+                    }
                 }
             },
             messages: {
@@ -105,12 +122,14 @@ function FileViewLog() {
                     }
                     error.insertAfter(errorPlaceholder);
                     error.css('width', '315px');
-                    $("#" + element.attr('id') + "_chosen").addClass('error');
-                } else if ($('[errorFor="' + element.attr('id') + '"]')) {
-                    $('[errorFor="' + element.attr('id') + '"]').html(error);
-                }
-                else {
-                    error.insertAfter(element);
+                    $('#' + element.attr('id') + '_chosen').addClass('error');
+                } else {
+                    var ctrl$ = $('[errorFor~="' + element.attr('id') + '"]');
+                    if (ctrl$.length > 0) {
+                        ctrl$.html(error);
+                    } else {
+                        error.insertAfter(element);
+                    }
                 }
             },
             highlight: function (element) {

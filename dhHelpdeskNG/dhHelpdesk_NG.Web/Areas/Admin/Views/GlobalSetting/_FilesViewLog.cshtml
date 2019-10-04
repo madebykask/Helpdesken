@@ -45,7 +45,7 @@
                         <td class="span9">
                             @Html.EditorFor(m => m.PeriodFrom, "DatePicker", new { id = "fvl_periodFrom", type = "text" })
                             @Html.EditorFor(m => m.PeriodTo, "DatePicker", new { id = "fvl_periodTo", type = "text" })
-                            <div id="datesErrorLabel"></div>
+                            <div id="datesErrorLabel" errorFor="PeriodFrom PeriodTo"></div>
                         </td>
                     </tr>
                     <tr>
