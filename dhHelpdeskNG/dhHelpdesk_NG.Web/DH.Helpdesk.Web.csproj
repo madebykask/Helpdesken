@@ -362,6 +362,8 @@
     <Compile Include="Areas\WebApi\Controllers\CaseApiController.cs" />
     <Compile Include="Components\Contracts\ContractHistoryFormatter.cs" />
     <Compile Include="Components\Contracts\ContractHistoryMarkupBuilder.cs" />
+    <Compile Include="Controllers\CasesController_Files.cs" />
+    <Compile Include="Controllers\FileAccessController.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\MixedModeAuthenticationBehavior.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\PrincipalExtensions.cs" />
     <Compile Include="Infrastructure\Behaviors\AdvancedSearchBehavior.cs" />
@@ -4850,6 +4852,7 @@
     <Folder Include="FormLibContent\Xmls\Norway\Data\AdditionalPaymentsDeductions\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
     <Folder Include="rss\" />
+    <Folder Include="Views\LogAccess\" />
     <Folder Include="Views\Password\" />
   </ItemGroup>
   <ItemGroup>

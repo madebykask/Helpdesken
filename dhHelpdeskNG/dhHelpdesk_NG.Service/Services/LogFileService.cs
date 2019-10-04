@@ -9,6 +9,7 @@ using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Services.Services
 {

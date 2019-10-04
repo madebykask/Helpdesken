@@ -1,3 +1,5 @@
+using DH.Helpdesk.Common.Enums;
+
 namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
 {
 	using System.Collections.Generic;

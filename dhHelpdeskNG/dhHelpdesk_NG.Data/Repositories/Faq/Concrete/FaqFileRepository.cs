@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
+﻿using DH.Helpdesk.Common.Enums;
+
+namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
 {
 	using System.Collections.Generic;
 	using System.Linq;

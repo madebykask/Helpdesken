@@ -1,4 +1,6 @@
-﻿@using DH.Helpdesk.Common.Extensions.DateTime
+﻿@using DH.Helpdesk.Common.Enums.Logs
+@using DH.Helpdesk.Common.Extensions.DateTime
+@using DH.Helpdesk.Dal.Enums
 
 @model DH.Helpdesk.Web.Models.Case.CaseFilesModel     
 @if (Model != null && Model.Files != null && Model.Files.Any())
@@ -8,13 +10,13 @@
         <thead>
             <tr>
                 <th>
-                    @Translation.Get("Filnamn")
+                    @Translation.GetCoreTextTranslation("Filnamn")
                 </th>
                 <th>
-                    @Translation.Get("Skapad datum")
+                    @Translation.GetCoreTextTranslation("Skapad datum")
                 </th>
                 <th>
-                    @Translation.Get("Upplagd av")
+                    @Translation.GetCoreTextTranslation("Upplagd av")
                 </th>
                 <th></th>
             </tr>
@@ -33,7 +35,7 @@
                     <td>
                         @if (Model.VirtualDirectory)
                         {
-                            <a target="_blank" href="@Html.Action("CaseFileLinkVD","FileHandler", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
+                            <a target="_blank" onclick="window.dhHelpdesk.logFileAccess(@Model.ObjectId, '@file.FileName', @((int)CaseFileType.CaseFile))" href="@Html.Action("CaseFileLinkVD","FileHandler", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
                         }
                         else
                         {
@@ -51,7 +53,7 @@
                         {
                             if (!caseInactive)
                             {
-                                <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn bt-small" data-fileName="@file.FileName" data-field="deleteFile" title="@Translation.Get("Ta bort")"><i class="icon-remove"></i></a> 
+                                <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn bt-small" data-fileName="@file.FileName" data-field="deleteFile" title="@Translation.GetCoreTextTranslation("Ta bort")"><i class="icon-remove"></i></a> 
                             }
                            
                         }

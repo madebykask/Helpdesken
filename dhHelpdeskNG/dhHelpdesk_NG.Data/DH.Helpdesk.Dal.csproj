@@ -443,7 +443,6 @@
     <Compile Include="EntityConfigurations\WorkstationModules\RAMConfiguration.cs" />
     <Compile Include="EntityConfigurations\WorkstationModules\SoftwareConfiguration.cs" />
     <Compile Include="Enums\EntityStatus.cs" />
-    <Compile Include="Enums\ModuleName.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeChangeConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeContactConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeDepartmentConfiguration.cs" />

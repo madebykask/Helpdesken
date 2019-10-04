@@ -9,9 +9,12 @@ using System.Web.Http;
 using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.FileViewLog;
+using DH.Helpdesk.Common.Constants;
+using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Dal.Enums;
+using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Common.Tools.Files;
@@ -31,6 +34,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ITemporaryFilesCache _userTemporaryFilesStorage;
 		private readonly IFileViewLogService _fileViewLogService;
 		private readonly IFeatureToggleService _featureToggleService;
+        private readonly IFilesStorage _filesStorage;
 
 		#region ctor()
 
@@ -39,7 +43,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             ISettingsLogic settingsLogic,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
 			IFileViewLogService fileViewLogService,
-			IFeatureToggleService featureToggleService)
+			IFeatureToggleService featureToggleService, IFilesStorage filesStorage)
         {
             _settingsLogic = settingsLogic;
             _caseService = caseService;
@@ -47,8 +51,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             _userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
 			_fileViewLogService = fileViewLogService;
 			_featureToggleService = featureToggleService;
-
-		}
+            _filesStorage = filesStorage;
+        }
 
         #endregion
       
@@ -191,6 +195,16 @@ namespace DH.Helpdesk.WebApi.Controllers
             var caseFileInfo = _caseFileService.GetCaseFile(caseId, fileId);
             _caseFileService.DeleteByCaseIdAndFileName(caseId, basePath, caseFileInfo.FileName);
 
+            var disableLogFileView =
+                _featureToggleService.Get(
+                    FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+            if (!disableLogFileView.Active)
+            {
+                var userId = SessionFacade.CurrentUser?.Id ?? 0;
+                var path = _filesStorage.ComposeFilePath(ModuleName.Cases, decimal.ToInt32(c.CaseNumber), basePath, "");
+                _fileViewLogService.Log(caseId, userId, caseFileInfo.FileName, path, FileViewLogFileSource.WebApi,
+                    FileViewLogOperation.Delete);
+            }
             //todo: ?
             //_invoiceArticleService.DeleteFileByCaseId(int.Parse(id), fileName.Trim());
 

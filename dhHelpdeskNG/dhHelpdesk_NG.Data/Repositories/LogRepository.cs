@@ -8,6 +8,7 @@ using DH.Helpdesk.Domain;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Dal.Repositories
 {

@@ -9,7 +9,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
-using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.BusinessData.Models.Logs;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums.Cases;
@@ -17,6 +16,7 @@ using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Enums.Settings;
 using DH.Helpdesk.Common.Exceptions;
+using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Web.Models.Invoice;
 using DH.Helpdesk.Domain.Interfaces;
@@ -33,70 +33,69 @@ using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
 
 namespace DH.Helpdesk.Web.Controllers
 {
-	using DH.Helpdesk.BusinessData.Enums.Case;
-	using DH.Helpdesk.BusinessData.Models;
-	using DH.Helpdesk.BusinessData.Models.Case;
-	using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
-	using DH.Helpdesk.BusinessData.Models.Grid;
-	using DH.Helpdesk.BusinessData.Models.Shared;
-	using DH.Helpdesk.BusinessData.Models.User.Input;
-	using DH.Helpdesk.BusinessData.OldComponents;
-	using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-	using DH.Helpdesk.Common.Enums;
-	using DH.Helpdesk.Common.Extensions.Integer;
-	using DH.Helpdesk.Common.Tools;
-	using DH.Helpdesk.Dal.Enums;
-	using DH.Helpdesk.Dal.Infrastructure.Context;
-	using DH.Helpdesk.Domain;
-	using DH.Helpdesk.Services.Infrastructure;
-	using DH.Helpdesk.Services.Services;
-	using DH.Helpdesk.Services.Services.Concrete;
-	using DH.Helpdesk.Services.Services.Grid;
-	using DH.Helpdesk.Services.Utils;
-	using DH.Helpdesk.Web.Infrastructure;
-	using DH.Helpdesk.Web.Infrastructure.Attributes;
-	using DH.Helpdesk.Web.Infrastructure.Case;
-	using DH.Helpdesk.Web.Infrastructure.CaseOverview;
-	using DH.Helpdesk.Web.Infrastructure.Configuration;
-	using DH.Helpdesk.Web.Infrastructure.Extensions;
-	using DH.Helpdesk.Web.Infrastructure.Grid;
-	using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
-	using DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers;
-	using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
-	using DH.Helpdesk.Web.Infrastructure.Mvc;
-	using DH.Helpdesk.Web.Infrastructure.Tools;
-	using DH.Helpdesk.Web.Models;
-	using DH.Helpdesk.Web.Models.Case;
-	using DH.Helpdesk.Web.Models.Case.ChildCase;
-	using DH.Helpdesk.Web.Models.Case.Input;
-	using DH.Helpdesk.Web.Models.Case.Output;
-	using DH.Helpdesk.Web.Models.CaseLock;
-	using DH.Helpdesk.Web.Models.Shared;
-	using DH.Helpdesk.Common.Extensions.DateTime;
+    using DH.Helpdesk.BusinessData.Enums.Case;
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
+    using DH.Helpdesk.BusinessData.Models.Grid;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.User.Input;
+    using DH.Helpdesk.BusinessData.OldComponents;
+    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Common.Extensions.Integer;
+    using DH.Helpdesk.Common.Tools;
+    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.Infrastructure;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Services.Services.Concrete;
+    using DH.Helpdesk.Services.Services.Grid;
+    using DH.Helpdesk.Services.Utils;
+    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Attributes;
+    using DH.Helpdesk.Web.Infrastructure.Case;
+    using DH.Helpdesk.Web.Infrastructure.CaseOverview;
+    using DH.Helpdesk.Web.Infrastructure.Configuration;
+    using DH.Helpdesk.Web.Infrastructure.Extensions;
+    using DH.Helpdesk.Web.Infrastructure.Grid;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Web.Models;
+    using DH.Helpdesk.Web.Models.Case;
+    using DH.Helpdesk.Web.Models.Case.ChildCase;
+    using DH.Helpdesk.Web.Models.Case.Input;
+    using DH.Helpdesk.Web.Models.Case.Output;
+    using DH.Helpdesk.Web.Models.CaseLock;
+    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Common.Extensions.DateTime;
 
-	using DHDomain = DH.Helpdesk.Domain;
-	using ParentCaseInfo = DH.Helpdesk.BusinessData.Models.Case.ChidCase.ParentCaseInfo;
-	using DH.Helpdesk.Web.Enums;
-	using DH.Helpdesk.Services.Services.Reports;
-	using DH.Helpdesk.Common.Enums.CaseSolution;
-	using DH.Helpdesk.Common.Enums.BusinessRule;
-	using Services.BusinessLogic.Admin.Users;
-	using Services.BusinessLogic.Mappers.Users;
-	using BusinessData.Enums.Admin.Users;
-	using System.Diagnostics;
-	using Models.CaseRules;
-	using Infrastructure.ModelFactories.Case.Concrete;
-	using static BusinessData.OldComponents.GlobalEnums;
-	using System.Threading;
-	using Models.WebApi;
-	using Infrastructure.WebApi;
-	using System.Configuration;
-	using Infrastructure.Helpers;
-	using Infrastructure.Cryptography;
-	using Domain.Computers;
-	using BusinessData.Models.ProductArea.Output;
-	using DH.Helpdesk.Common.Extensions.Boolean;
-	using Common.Tools.Files;
+    using DHDomain = DH.Helpdesk.Domain;
+    using ParentCaseInfo = DH.Helpdesk.BusinessData.Models.Case.ChidCase.ParentCaseInfo;
+    using DH.Helpdesk.Web.Enums;
+    using DH.Helpdesk.Services.Services.Reports;
+    using DH.Helpdesk.Common.Enums.CaseSolution;
+    using DH.Helpdesk.Common.Enums.BusinessRule;
+    using Services.BusinessLogic.Admin.Users;
+    using Services.BusinessLogic.Mappers.Users;
+    using BusinessData.Enums.Admin.Users;
+    using System.Diagnostics;
+    using Models.CaseRules;
+    using Infrastructure.ModelFactories.Case.Concrete;
+    using static BusinessData.OldComponents.GlobalEnums;
+    using System.Threading;
+    using Models.WebApi;
+    using Infrastructure.WebApi;
+    using System.Configuration;
+    using Infrastructure.Helpers;
+    using Infrastructure.Cryptography;
+    using Domain.Computers;
+    using BusinessData.Models.ProductArea.Output;
+    using DH.Helpdesk.Common.Extensions.Boolean;
+    using Common.Tools.Files;
 
     public partial class CasesController : BaseController
     {
@@ -180,6 +179,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IUserEmailsSearchService _userEmailsSearchService;
         private readonly IFeatureToggleService _featureToggleService;
         private readonly IFileViewLogService _fileViewLogService;
+        private readonly IFilesStorage _filesStorage;
         
         #endregion
 
@@ -264,7 +264,8 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseStatisticService caseStatService,
             IUserEmailsSearchService userEmailsSearchService,
             IFeatureToggleService featureToggleService,
-			IFileViewLogService fileViewLogService)
+			IFileViewLogService fileViewLogService,
+            IFilesStorage filesStorage)
             : base(masterDataService)
         {
             _caseProcessor = caseProcessor;
@@ -340,9 +341,10 @@ namespace DH.Helpdesk.Web.Controllers
             _userEmailsSearchService = userEmailsSearchService;
             _featureToggleService = featureToggleService;
 			_fileViewLogService = fileViewLogService;
+            _filesStorage = filesStorage;
 
 
-			_advancedSearchBehavior = new AdvancedSearchBehavior(caseFieldSettingService,
+            _advancedSearchBehavior = new AdvancedSearchBehavior(caseFieldSettingService,
                 caseSearchService,
                 userService,
                 settingService,
@@ -2164,406 +2166,6 @@ namespace DH.Helpdesk.Web.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion
-
-        #region --Files--
-
-        [HttpGet]
-        public ActionResult Files(string id, string savedFiles)
-        {
-            IList<CaseFileModel> caseFiles;
-            if (GuidHelper.IsGuid(id))
-            {
-                var files = _userTemporaryFilesStorage.FindFileNamesAndDates(id, ModuleName.Cases);
-                caseFiles = MakeCaseFileModel(files, savedFiles);
-            }
-            else
-            {
-                var canDelete = SessionFacade.CurrentUser.DeleteAttachedFilePermission.ToBool();
-                caseFiles = _caseFileService.GetCaseFiles(int.Parse(id), canDelete);
-            }
-
-            var customerId = 0;
-            if (!GuidHelper.IsGuid(id))
-            {
-                customerId = _caseService.GetCaseById(int.Parse(id)).Customer_Id;
-            }
-
-            var useVd = customerId != 0 && !string.IsNullOrEmpty(_masterDataService.GetVirtualDirectoryPath(customerId));
-
-            var model = new CaseFilesModel(id, caseFiles.OrderBy(x => x.CreatedDate).ToArray(), savedFiles, useVd);
-            return PartialView("_CaseFiles", model);
-        }
-        
-        [HttpGet]
-        //todo: check log files permission here
-        public ActionResult LogFiles(string id, bool isInternalLog, int? caseId = null)
-        {
-            var customerId = SessionFacade.CurrentCustomer.Id;
-            var currentUser = SessionFacade.CurrentUser;
-            if (isInternalLog && 
-                !CheckInternalLogFilesAccess(customerId, currentUser))
-                return new HttpUnauthorizedResult("You are not authorized to access intenral log files");
-
-            //todo: add check to ensure that users will not be able to request action without required rights!
-            var subTopic = isInternalLog ? ModuleName.LogInternal : ModuleName.Log;
-            var logType = isInternalLog ? LogFileType.Internal : LogFileType.External;
-
-            var logFiles = GuidHelper.IsGuid(id)
-                            ? _userTemporaryFilesStorage.FindFileNames(id, subTopic)
-                            : _logFileService.FindFileNamesByLogId(int.Parse(id), logType);
-
-            BusinessData.Models.Case.Output.CaseOverview caseInfo = null;
-
-            var existingFiles = new List<LogFileModel>();
-            if (caseId.HasValue && caseId.Value > 0)
-            {
-                caseInfo = _caseService.GetCaseBasic(caseId.Value);
-                var exFiles = _logFileService.GetExistingFileNamesByCaseId(caseId.Value, isInternalLog);
-                existingFiles = exFiles.Select(f => new LogFileModel
-                {
-                    Id = f.Id,
-                    Name = f.Name,
-                    IsExistCaseFile = f.IsExistCaseFile,
-                    IsExistLogFile = f.IsExistLogFile,
-                    ObjId = f.LogId ?? f.CaseId,
-                    LogType = f.LogType
-                }).ToList();
-            }
-
-            existingFiles.AddRange(logFiles.Select(x => new LogFileModel
-            {
-                Name = x,
-                LogType = logType
-            }));
-
-            var virtualPathDir = _masterDataService.GetVirtualDirectoryPath(customerId);
-            var model = new CaseLogFilesViewModel
-            {
-                FilesUrlBuilder = new CaseFilesUrlBuilder(virtualPathDir, RequestExtension.GetAbsoluteUrl()), 
-                LogId = id,
-                IsExternal = logType == LogFileType.External,
-                CaseNumber = Convert.ToInt32(caseInfo?.CaseNumber ?? 0.00M),
-                Files = existingFiles,
-                UseVirtualDirectory = !string.IsNullOrEmpty(virtualPathDir)
-            };
-            return PartialView("_CaseLogFiles", model);
-        }
-
-        [HttpPost]
-        public void UploadCaseFile(string id, string name)
-        {
-            var uploadedFile = this.Request.Files[0];
-            var uploadedData = new byte[uploadedFile.InputStream.Length];
-            uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
-
-            int caseId = 0;
-            if (GuidHelper.IsGuid(id))
-            {
-                if (_userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))
-                {
-                    name = DateTime.Now.ToString() + '-' + name;
-                }
-                _userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);
-            }
-            else if (Int32.TryParse(id, out caseId))
-            {
-                if (_caseFileService.FileExists(int.Parse(id), name))
-                {
-                    name = DateTime.Now.ToString() + '_' + name;
-                }
-                
-                var customerId = _caseService.GetCaseCustomerId(caseId);
-                var basePath = _masterDataService.GetFilePath(customerId);
-
-                var caseFileDto = new CaseFileDto(
-                                uploadedData,
-                                basePath,
-                                name,
-                                DateTime.Now,
-                                int.Parse(id),
-                                _workContext.User.UserId);
-
-				var path = "";
-				_caseFileService.AddFile(caseFileDto, ref path);
-				var disableLogFileView = _featureToggleService.Get(DH.Helpdesk.Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-				if (!disableLogFileView.Active)
-				{
-					var userId = SessionFacade.CurrentUser?.Id ?? 0;
-					_fileViewLogService.Log(caseId, userId, caseFileDto.FileName, path, FileViewLogFileSource.Helpdesk, FileViewLogOperation.Add);
-				}
-
-			
-            }
-        }
-
-        [HttpPost]
-        public void UploadLogFile(string id, string name, bool isInternalLog)
-        {
-            var uploadedFile = Request.Files[0];
-            var uploadedData = new byte[uploadedFile.InputStream.Length];
-            uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
-
-            if (GuidHelper.IsGuid(id))
-            {
-                var subTopic = isInternalLog ? ModuleName.LogInternal : ModuleName.Log;
-
-                if (_userTemporaryFilesStorage.FileExists(name, id, subTopic))
-                {
-                    //return;
-                    //this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Log); 
-                    //throw new HttpException((int)HttpStatusCode.Conflict, null); because it take a long time.
-                }
-                _userTemporaryFilesStorage.AddFile(uploadedData, name, id, subTopic);
-            }
-        }
-
-        [HttpPost]
-        public void DeleteCaseFile(string id, string fileName)
-        {
-            if (GuidHelper.IsGuid(id))
-            {
-                _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Cases);
-            }
-            else
-            {
-                var c = _caseService.GetCaseById(int.Parse(id));
-                var basePath = _masterDataService.GetFilePath(c.Customer_Id);
-
-                _caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), basePath, fileName.Trim());
-                _invoiceArticleService.DeleteFileByCaseId(int.Parse(id), fileName.Trim());
-
-                IDictionary<string, string> errors;
-                string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                var extraField = new ExtraFieldCaseHistory { CaseFile = StringTags.Delete + fileName.Trim() };
-                _caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
-            }
-        }
-
-        [HttpPost]
-        public void DeleteLogFile(string id, string fileName, bool isExisting = false, LogFileType logType = LogFileType.External, int? fileId = null)
-        {
-            var logSubFolder = logType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
-
-            if (fileId.HasValue)
-            {
-                if (fileId == 0 && !isExisting)
-                {
-                    if (GuidHelper.IsGuid(id))
-                    {
-                        _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, logSubFolder);
-                    }
-                }
-                else if (isExisting)
-                {
-                    _logFileService.DeleteExistingById(fileId.Value);
-                }
-                else
-                {
-                    //todo: check why file is not deleted from disk!
-                    _logFileService.DeleteByFileIdAndFileName(fileId.Value, fileName.Trim());
-                }
-            }
-            else
-            {
-                if (GuidHelper.IsGuid(id))
-                {
-                    _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, logSubFolder);
-                }
-                else
-                {
-                    var log = _logService.GetLogById(int.Parse(id));
-                    
-                    if (log != null)
-                    {
-                        var case_ = _caseService.GetCaseById(log.CaseId);
-                        var basePath = _masterDataService.GetFilePath(case_.Customer_Id);
-                    
-                        _logFileService.DeleteByLogIdAndFileName( int.Parse(id), basePath, fileName.Trim(), logType);
-
-                        IDictionary<string, string> errors;
-                        var adUser = SessionFacade.CurrentUserIdentity.UserId; //global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                        if (case_ != null)
-                        {
-                            var extraField = new ExtraFieldCaseHistory { LogFile = StringTags.Delete + fileName.Trim() };
-                            _caseService.SaveCaseHistory(case_, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
-                        }
-                    }
-                }
-            }
-        }
-
-        [HttpGet]
-        public UnicodeFileContentResult DownloadFile(string id, string fileName)
-        {
-            byte[] fileContent;
-
-            if (GuidHelper.IsGuid(id))
-                fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases);
-            else
-            {
-                var c = _caseService.GetCaseById(int.Parse(id));
-                var basePath = string.Empty;
-                if (c != null)
-                    basePath = _masterDataService.GetFilePath(c.Customer_Id);
-
-				var userId = SessionFacade.CurrentUser.Id;
-				var caseId = int.Parse(id);
-
-				var model = _caseFileService.GetFileContentByIdAndFileName(caseId, basePath, fileName);
-				fileContent = model.Content;
-
-				//_fileViewLogService.Log(caseId, userId)
-
-			}
-
-            return new UnicodeFileContentResult(fileContent, fileName);
-        }
-
-        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)] // do not replace with [HttpGet, HttpHead]
-        public ActionResult DownloadLogFile(string id, string fileName, LogFileType logType)
-        {
-            byte[] fileContent;
-            
-            if (logType == LogFileType.Internal &&
-                !CheckInternalLogFilesAccess(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser))
-                return new HttpUnauthorizedResult("You are not authorized to access intenral log files");
-
-            if (GuidHelper.IsGuid(id))
-            {
-                var logFolder = logType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
-                fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, logType.ToString());
-            }
-            else
-            {
-                var l = _logService.GetLogById(int.Parse(id));
-                var basePath = string.Empty;
-                if (l != null)
-                {
-                    var c = _caseService.GetCaseBasic(l.CaseId);
-                    if (c != null)
-                        basePath = _masterDataService.GetFilePath(c.CustomerId);
-                }
-
-                try
-                {
-                    var model = _logFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName, logType);
-					fileContent = model.Content;
-
-				}
-                catch (FileNotFoundException e)
-                {
-                    return HttpNotFound("File not found");
-                }
-            }
-
-            return new UnicodeFileContentResult(fileContent, fileName);
-        }
-
-        private string GetCaseFileNames(int id)
-        {
-            var files = _caseFileService.FindFileNamesByCaseId(id);
-            return string.Join("|", files);
-        }
-
-        [HttpPost]
-        public ActionResult AttachExistingFile(List<CaseAttachedExFileModel> files, int caseId, bool isInternalLogNote)
-        {
-            if (files != null && files.Any())
-            {
-                var allFiles = files.Select(x => new LogExistingFileModel
-                {
-                    Name = x.FileName,
-                    CaseId = x.CaseId,
-                    IsExistLogFile = !x.IsCaseFile,
-                    IsExistCaseFile = x.IsCaseFile,
-                    LogId = x.LogId,
-                    LogType = x.LogType,
-                    IsInternalLogNote = isInternalLogNote
-                });
-
-                var success = _logFileService.SaveAttachedExistingLogFiles(allFiles, caseId, isInternalLogNote);
-                return Json(new { success = true });
-            }
-            return Json(new { success = true }); ;
-        }
-
-        [HttpGet]
-        public ActionResult GetCaseFilesJS(int caseId)
-        {
-            var files = _caseFileService.FindFileNamesAndDatesByCaseId(caseId);
-            var cfs = MakeCaseFileModel(files, string.Empty);
-            var customerId = 0;
-            customerId = _caseService.GetCaseById(caseId).Customer_Id;
-
-            var useVD = customerId != 0 && !string.IsNullOrEmpty(_masterDataService.GetVirtualDirectoryPath(customerId));
-
-            var model = new CaseFilesModel(caseId.ToString(), cfs.ToArray(), string.Empty, useVD);
-            return PartialView("_CaseFiles", model);
-        }
-        
-        [HttpGet]
-        public ActionResult GetCaseInputModelForLog(int caseId)
-        {
-            var customerId = SessionFacade.CurrentCustomer.Id;
-            var userId = SessionFacade.CurrentUser.Id;
-            var caseLockModel = new CaseLockModel();
-            var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
-            
-            //todo: implement CreateCaseLogViewModel separate method to read only required data from db
-            var model = GetCaseInputViewModel(userId, customerId, caseId, caseLockModel, caseFieldSettings);
-            var caseLogViewModel = model.CreateCaseLogViewModel();
-            return PartialView("_CaseLog", caseLogViewModel);
-        }
-
-        [HttpGet]
-        public ActionResult GetCaseInputModelForHistory(int caseId)
-        {
-            var customerId = SessionFacade.CurrentCustomer.Id;
-            var userId = SessionFacade.CurrentUser.Id;
-            var caseLockModel = new CaseLockModel();
-            var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
-            //todo: implement CreateHistoryViewModel separate method to read only required data from db
-            var model = GetCaseInputViewModel(userId, customerId, caseId, caseLockModel, caseFieldSettings);
-            var caseHistoryViewModel = model.CreateHistoryViewModel();
-            return PartialView("_CaseHistory", caseHistoryViewModel);
-        }
-
-        [HttpGet]
-        public ActionResult GetCaseExistingFilesToAttach(int caseId, bool isInternalLog)
-        {
-            var customerId = SessionFacade.CurrentCustomer.Id;
-            var currentUser = SessionFacade.CurrentUser;
-            if (isInternalLog &&
-                !CheckInternalLogFilesAccess(customerId, currentUser))
-                return new HttpUnauthorizedResult("You are not authorized to access internal log files");
-
-            //todo: check log type access
-            var canDelete = SessionFacade.CurrentUser.DeleteAttachedFilePermission.ToBool();
-            var caseFiles = _caseFileService.GetCaseFiles(caseId, canDelete).OrderBy(x => x.CreatedDate);
-            
-            var attachedFiles = caseFiles.Select(f => new CaseAttachedExFileModel
-            {
-                Id = f.Id,
-                FileName = f.FileName,
-                IsCaseFile = true,
-                CaseId = caseId,
-                LogType = LogFileType.External // case files are always public
-            }).ToList();
-
-            //todo: filter files by log type 
-            var exLogFiles = _logFileService.GetLogFilesByCaseId(caseId, isInternalLog).Select(f => new CaseAttachedExFileModel
-            {
-                Id = f.Id,
-                FileName = f.Name,
-                LogId = f.ObjId,
-                LogType = f.LogType
-            }).ToList();
-
-            attachedFiles.AddRange(exLogFiles);
-
-            return PartialView("_CaseAttachExistFileList", attachedFiles);
-        }
         #endregion
 
         #region --Overview Setting--

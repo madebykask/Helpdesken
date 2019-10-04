@@ -13,6 +13,7 @@ using DH.Helpdesk.BusinessData.Models.Shared.Input;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.FileViewLog;
+using DH.Helpdesk.Common.Tools;
 using LinqLib.Operators;
 
 namespace DH.Helpdesk.Services.Services
@@ -69,6 +70,10 @@ namespace DH.Helpdesk.Services.Services
                 filter.Sort = new SortField(FileViewLogSortFields.Department, SortBy.Ascending);
             if (filter.AmountPerPage > maxAmount)
                 filter.AmountPerPage = defaultAmount;
+            if (filter.PeriodFrom.HasValue)
+                filter.PeriodFrom = filter.PeriodFrom.GetStartOfDay();
+            if (filter.PeriodTo.HasValue)
+                filter.PeriodTo = filter.PeriodTo.GetEndOfDay();
 
             var data = _fileViewLogRepository.Find(filter);
 

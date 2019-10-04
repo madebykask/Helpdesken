@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Core;
+using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Serializers;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Dal.Infrastructure;

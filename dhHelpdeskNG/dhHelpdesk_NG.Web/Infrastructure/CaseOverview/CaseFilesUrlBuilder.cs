@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Dal.Enums;
 

@@ -97,6 +97,7 @@
     <Compile Include="Enums\Condition\ConditionOperator.cs" />
     <Compile Include="Enums\FederationServiceKeys.cs" />
     <Compile Include="Enums\Logs\LogFileType.cs" />
+    <Compile Include="Enums\ModuleName.cs" />
     <Compile Include="Enums\UserRoleType.cs" />
     <Compile Include="Enums\BusinessRules\BREventType.cs" />
     <Compile Include="Enums\BusinessRules\BRFieldType.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Extensions\Integer\IntExtension.cs" />
     <Compile Include="Extensions\Integer\ToBoolExtension.cs" />
     <Compile Include="Extensions\Lists\ListExtensions.cs" />
+    <Compile Include="Extensions\ModuleName\ModuleNameExtensions.cs" />
     <Compile Include="Extensions\Object\ObjectExtension.cs" />
     <Compile Include="Extensions\String\SplitExtension.cs" />
     <Compile Include="Extensions\String\StringExtension.cs" />

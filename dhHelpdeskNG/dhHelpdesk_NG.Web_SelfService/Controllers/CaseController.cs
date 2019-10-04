@@ -2,6 +2,7 @@
 using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.BusinessData.Models.Email;
 using DH.Helpdesk.BusinessData.Models.FileViewLog;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.SelfService.Controllers.Behaviors;
@@ -11,6 +12,7 @@ using log4net;
 using WebGrease.Css.Extensions;
 using DH.Helpdesk.Common.Extensions.Lists;
 using DH.Helpdesk.Common.Types;
+using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.SelfService.Infrastructure.Attributes;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Services.Utils;
@@ -73,8 +75,6 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly ISupplierService _supplierService;
         private readonly ISettingService _settingService;
         private readonly IComputerService _computerService;
-        private readonly ICaseSettingsService _caseSettingService;
-        private readonly ICaseSearchService _caseSearchService;
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IStateSecondaryService _stateSecondaryService;
@@ -94,7 +94,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly IGlobalSettingService _globalSettingService;
         private readonly IStatusService _statusService;
         private readonly ICaseSectionService _caseSectionService;
-
+        private readonly IFilesStorage _filesStorage;
 
         private const string ParentPathDefaultValue = "--";
         private const string EnterMarkup = "<br />";
@@ -153,7 +153,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             IStatusService statusService, 
 			ICaseSectionService caseSectionService,
 			IFileViewLogService fileViewLogService,
-			IFeatureToggleService featureToggleService)
+			IFeatureToggleService featureToggleService,
+            IFilesStorage filesStorage)
             : base(configurationService, masterDataService, caseSolutionService)
         {
             _caseControllerBehavior = new CaseControllerBehavior(masterDataService, caseService, caseSearchService,
@@ -180,8 +181,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             _settingService = settingService;
             _computerService = computerService;
             _customerService = customerService;
-            _caseSettingService = caseSettingService;
-            _caseSearchService = caseSearchService;
             _workingGroupService = workingGroupService;
             _userService = userService;
             _stateSecondaryService = stateSecondaryService;
@@ -206,8 +205,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             _caseSectionService = caseSectionService;
 			_fileViewLogService = fileViewLogService;
 			_featureToggleService = featureToggleService;
-
-		}
+            _filesStorage = filesStorage;
+        }
 
         [HttpGet]
         public ActionResult Index(string id, bool showRegistrationMessage = false)
@@ -1068,12 +1067,23 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
             else
             {
-                var c = _caseService.GetCaseById(int.Parse(id));
+                var caseId = int.Parse(id);
+                var c = _caseService.GetCaseBasic(caseId);
                 var basePath = string.Empty;
                 if (c != null)
-                    basePath = _masterDataService.GetFilePath(c.Customer_Id);
+                    basePath = _masterDataService.GetFilePath(c.CustomerId);
 
-                _caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), basePath, fileName.Trim());
+                _caseFileService.DeleteByCaseIdAndFileName(caseId, basePath, fileName.Trim());
+                var disableLogFileView =
+                    _featureToggleService.Get(
+                        FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+                if (!disableLogFileView.Active)
+                {
+                    var userId = SessionFacade.CurrentUser?.Id ?? 0;
+                    var path = _filesStorage.ComposeFilePath(ModuleName.Cases, decimal.ToInt32(c.CaseNumber), basePath, "");
+                    _fileViewLogService.Log(caseId, userId, fileName.Trim(), path, FileViewLogFileSource.Selfservice,
+                        FileViewLogOperation.Delete);
+                }
             }
         }
 

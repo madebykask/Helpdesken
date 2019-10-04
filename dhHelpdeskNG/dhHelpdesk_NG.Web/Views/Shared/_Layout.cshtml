@@ -474,15 +474,16 @@
 
             function ShowToastMessage(message, msgType) {
                 msgType = msgType || 'notice';
-                $().toastmessage('showToast', {
-                    text: message,
-                    sticky: false,
-                    position: 'top-center',
-                    type: msgType,
-                    closeText: '',
-                    stayTime: 10000,
-                    inEffectDuration: 1000
-                });
+                $().toastmessage('showToast',
+                    {
+                        text: message,
+                        sticky: false,
+                        position: 'top-center',
+                        type: msgType,
+                        closeText: '',
+                        stayTime: 10000,
+                        inEffectDuration: 1000
+                    });
             }
 
             if (timezoneAutodetectRes === 'Failure') {
@@ -493,6 +494,18 @@
                 ShowToastMessage(noticeMsg);
             }
         });
+        window.dhHelpdesk = window.dhHelpdesk || {};
+        window.dhHelpdesk.logFileAccess = function(caseId, fileName, type, logId) {
+            $.ajax({
+                url: '@Url.Action("LogFileAccess", "FileAccess")',
+                cache: 'false',
+                type: 'POST',
+                data: $.param({ caseId: caseId, fileName: fileName, type: type, logId: logId}),
+                dataType: 'json'
+            }).done(function(res) {
+            }).always(function (res) {
+            });
+        }
     </script>
 </body>
 </html>

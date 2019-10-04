@@ -1,6 +1,5 @@
-﻿namespace DH.Helpdesk.Dal.Enums
+﻿namespace DH.Helpdesk.Common.Enums
 {
-    // ToDo: Move to Common.
     public static class ModuleName
     {
 

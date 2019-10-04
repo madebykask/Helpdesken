@@ -48,6 +48,7 @@ namespace DH.Helpdesk.Web.Models.Case
 
     public class CaseLogFilesViewModel
     {
+        public int CaseId { get; set; }
         public string LogId { get; set; } 
         public bool UseVirtualDirectory { get; set; }
         public int CaseNumber { get; set; }
@@ -94,6 +95,7 @@ namespace DH.Helpdesk.Web.Models.Case
                 LogFilesModel = filesModel != null ? new CaseLogFilesViewModel
                 {
                     LogId = filesModel?.Id,
+                    CaseId = CaseId,
                     CaseNumber = Convert.ToInt32(CaseNumber),
                     UseVirtualDirectory = filesModel.VirtualDirectory,
                     FilesUrlBuilder = CaseFilesUrlBuilder,

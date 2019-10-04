@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Dal.Repositories.Cases
 {
