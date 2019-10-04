@@ -33,7 +33,7 @@ function FileViewLog() {
         fvl_lstFilterDepartments: true,
         fvl_periodFrom: true,
         fvl_periodTo: true,
-        fvl_logsAmount: false
+        fvl_logsAmount: true
     };
 
     this.loadDepartments = function (custId) {
@@ -175,10 +175,20 @@ function FileViewLog() {
 
         //required to notify chosen to update its state
         this.departmentsSelect$.trigger('chosen:updated');
+        this.customersSelect$.trigger('chosen:updated');
     };
 
     this.enableControl = function (el, enable) {
-        var attr = el.attr('type') == 'text' ? 'readonly' : 'disabled';
+        var attr = el.attr('type') === 'text' ? 'readonly' : 'disabled';
+        if (el.hasClass('date')) {
+            if (enable) {
+                el.datepicker('option', { minDate: null, maxDate: null });
+                el.find('input').prop(attr, false);
+            } else {
+                el.datepicker('option', { minDate: -1, maxDate: -2 });
+                el.find('input').prop(attr, true);
+            }
+        }
         if (enable) {
             el.prop(attr, false);
         } else {
