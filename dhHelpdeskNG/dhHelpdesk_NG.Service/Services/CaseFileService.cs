@@ -61,6 +61,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     Id = res.Id,
                     FileName = res.FileName,
+                    FilePath = caseFilePath,
                     Content = EmbedFilesIntoHtml(caseFilePath, res.Content)
                 };
             }

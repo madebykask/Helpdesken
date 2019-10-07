@@ -64,6 +64,16 @@ namespace DH.Helpdesk.WebApi.Controllers
             var fileContent = _caseFileService.GetCaseFile(cid, caseId, fileId, true); //TODO: async
 
             IHttpActionResult res = new FileResult(fileContent.FileName, fileContent.Content, Request, inline ?? false);
+
+            var disableLogFileView =
+                _featureToggleService.Get(
+                    FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+            if (!disableLogFileView.Active)
+            {
+                var path = Path.GetDirectoryName(fileContent.FilePath);
+                _fileViewLogService.Log(caseId, UserId, fileContent.FileName.Trim(), path, FileViewLogFileSource.WebApi,
+                    FileViewLogOperation.View);
+            }
             return Task.FromResult(res);
         }
 
@@ -151,13 +161,14 @@ namespace DH.Helpdesk.WebApi.Controllers
                     caseId,
                     UserId);
 
-				string path = "";
+				var path = "";
                 var fileId = _caseFileService.AddFile(caseFileDto, ref path);
 
-				var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+				var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
 				if (!disableLogFileView.Active)
 				{
-					_fileViewLogService.Log(caseId, UserId, caseFileDto.FileName, path, FileViewLogFileSource.WebApi, FileViewLogOperation.Add);
+                    var fpath = Path.GetDirectoryName(path);
+					_fileViewLogService.Log(caseId, UserId, caseFileDto.FileName, fpath, FileViewLogFileSource.WebApi, FileViewLogOperation.Add);
 				}
 
 				return Ok(new { id = fileId, name = fileName});
@@ -200,9 +211,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
             if (!disableLogFileView.Active)
             {
-                var userId = SessionFacade.CurrentUser?.Id ?? 0;
                 var path = _filesStorage.ComposeFilePath(ModuleName.Cases, decimal.ToInt32(c.CaseNumber), basePath, "");
-                _fileViewLogService.Log(caseId, userId, caseFileInfo.FileName, path, FileViewLogFileSource.WebApi,
+                _fileViewLogService.Log(caseId, UserId, caseFileInfo.FileName, path, FileViewLogFileSource.WebApi,
                     FileViewLogOperation.Delete);
             }
             //todo: ?

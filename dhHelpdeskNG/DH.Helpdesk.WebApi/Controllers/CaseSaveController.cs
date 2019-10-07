@@ -342,6 +342,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             // TODO: caseNotifications?
 
+            var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
             //case files
             // todo: Check if new cases should be handled here. Save case files for new cases only!
             if (!isEdit)
@@ -352,7 +353,6 @@ namespace DH.Helpdesk.WebApi.Controllers
 				var paths = new List<KeyValuePair<CaseFileDto, string>>();
                 _caseFileService.AddFiles(newCaseFiles, paths);
 
-				var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
 				if (!disableLogFileView.Active)
 				{
 					foreach (var file in paths)
@@ -462,6 +462,14 @@ namespace DH.Helpdesk.WebApi.Controllers
                         f.IsExistCaseFile)).ToList();
 
             allLogFiles.AddRange(newLogFiles);
+
+            if (!disableLogFileView.Active)
+            {
+                foreach (var newLogFile in newLogFiles)
+                {
+                    _fileViewLogService.Log(currentCase.Id, UserId, newLogFile.FileName, newLogFile.BasePath, FileViewLogFileSource.WebApi, FileViewLogOperation.Add);
+                }
+            }
 
             #endregion // Logs handling
 

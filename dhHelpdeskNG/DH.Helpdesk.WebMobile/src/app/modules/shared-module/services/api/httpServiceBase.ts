@@ -77,7 +77,7 @@ export abstract class HttpApiServiceBase {
         );
   }
 
-  //tod:review files delete
+  // TODO: review files delete
   protected deleteResource(url: string, headers: any = null, noAuth = false): Observable<any> {
     // fixed issue https://github.com/angular/angular/issues/18680 - remove after fix
     return this.http

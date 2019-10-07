@@ -61,7 +61,6 @@ namespace DH.Helpdesk.WebApi.Controllers
             var basePath = _settingsLogic.GetFilePath(cid);
             var fileInfo = _logFileService.GetFileDetails(fileId);
             var isCaseFile = fileInfo.IsCaseFile ?? false;
-			var userId = SessionFacade.CurrentUser?.Id ?? 0;
 
 			var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
 
@@ -71,7 +70,8 @@ namespace DH.Helpdesk.WebApi.Controllers
 
 				if (!disableLogFileView.Active)
 				{
-					_fileViewLogService.Log(caseId, userId, fileInfo.FileName, model.FilePath, FileViewLogFileSource.WebApi, FileViewLogOperation.View);
+                    var path = Path.GetDirectoryName(model.FilePath);
+					_fileViewLogService.Log(caseId, UserId, fileInfo.FileName, path, FileViewLogFileSource.WebApi, FileViewLogOperation.View);
 				}
 
 				content = model.Content;
@@ -89,8 +89,9 @@ namespace DH.Helpdesk.WebApi.Controllers
                 var logFile = _logFileService.GetFileContentById(fileId, basePath, fileInfo.LogType);
 
 				if (!disableLogFileView.Active)
-				{
-					_fileViewLogService.Log(caseId, userId, logFile.FileName, logFile.Path, FileViewLogFileSource.WebApi, FileViewLogOperation.View);
+                {
+                    var path = Path.GetDirectoryName(logFile.Path);
+					_fileViewLogService.Log(caseId, UserId, logFile.FileName, path, FileViewLogFileSource.WebApi, FileViewLogOperation.View);
 				}
 
 				content = logFile.Content;
