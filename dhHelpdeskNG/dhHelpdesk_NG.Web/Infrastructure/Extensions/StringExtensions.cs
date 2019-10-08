@@ -411,7 +411,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 case FileViewLogOperation.Legacy:
                     return "";
                 case FileViewLogOperation.View:
-                    return Translation.GetCoreTextTranslation("Se");
+                    return Translation.GetCoreTextTranslation("Öppna");
                 case FileViewLogOperation.Delete:
                     return Translation.GetCoreTextTranslation("Ta bort");
                 case FileViewLogOperation.Add:
@@ -421,6 +421,22 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 default:
                     throw new ArgumentOutOfRangeException(nameof(operation), operation, null);
             }
+        }
+
+        public static string Translate(this FileViewLogFileSource source)
+        {
+            switch (source)
+            {
+                case FileViewLogFileSource.Helpdesk:
+                    return "Helpdesk";
+                case FileViewLogFileSource.Selfservice:
+                    return "SelfService";
+                case FileViewLogFileSource.WebApi:
+                    return "Mobile";
+                default:
+                    return "";
+            }
+
         }
     }
 }

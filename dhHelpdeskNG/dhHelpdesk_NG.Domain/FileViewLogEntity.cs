@@ -13,7 +13,8 @@ namespace DH.Helpdesk.Domain
 
         public int Case_Id { get; set; }
 
-        public int User_Id { get; set; }
+        public int? User_Id { get; set; }
+        public string UserName { get; set; }
 
         public string FileName { get; set; }
 

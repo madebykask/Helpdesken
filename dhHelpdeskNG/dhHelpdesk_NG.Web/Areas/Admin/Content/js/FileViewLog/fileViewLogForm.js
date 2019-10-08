@@ -90,9 +90,9 @@ function FileViewLog() {
                 "SelectedCustomerId": {
                     required: true
                 },
-                "SelectedDepartmetsIds": {
-                    required: true
-                },
+                //"SelectedDepartmetsIds": {
+                //    required: true
+                //},
                 "PeriodFrom": {
                     checkDateRange: function () {
                         var hasVal = self.isValidDate(self.getSelectedDate(self.periodFromDate$));
@@ -116,11 +116,11 @@ function FileViewLog() {
             },
             errorPlacement: function (error, element) {
                 if (element.is('select.chosen-select') || element.is('select.chosen-single-select')) {
-                    var errorPlaceholder = element.next();
-                    if ($(errorPlaceholder).next().hasClass('gif-loader')) {
+                    var errorPlaceholder = $('[errorFor~="' + element.attr('id') + '"]');
+                    if (errorPlaceholder.prev().hasClass('gif-loader')) {
                         errorPlaceholder = $(errorPlaceholder).next();
                     }
-                    error.insertAfter(errorPlaceholder);
+                    errorPlaceholder.html(error);
                     error.css('width', '315px');
                     $('#' + element.attr('id') + '_chosen').addClass('error');
                 } else {
@@ -263,9 +263,10 @@ function FileViewLog() {
             this.blockUI(true, this.loaders.inProcessLoader);
             var dateFrom = this.getSelectedDate(this.periodFromDate$);
             var dateTo = this.getSelectedDate(this.periodToDate$);
+            var deps = this.departmentsSelect$.chosen().val();
             var inputData = {
                 CustomerId: this.customersSelect$.val(),
-                DepartmentsIds: this.departmentsSelect$.chosen().val(),
+                DepartmentsIds: deps !== null ? deps : this.departmentsSelect$.find('option').toArray().map(function (i) { return i.value }),
                 PeriodFrom: (dateFrom instanceof Date && !isNaN(dateFrom)) ? dateFrom.toISOString() : '',
                 PeriodTo: (dateTo instanceof Date && !isNaN(dateTo)) ? dateTo.toISOString() : '',
                 AmountPerPage: this.logAmount$.val(),

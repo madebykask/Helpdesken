@@ -17,13 +17,14 @@
                 .HasForeignKey(x => x.Case_Id)
                 .WillCascadeOnDelete(false);
 
-            this.HasRequired(x => x.User)
+            this.HasOptional(x => x.User)
                 .WithMany()
                 .HasForeignKey(x => x.User_Id)
                 .WillCascadeOnDelete(false);
 
             this.Property(f => f.Case_Id).IsRequired();
-            this.Property(f => f.User_Id).IsRequired();
+            this.Property(f => f.User_Id).IsOptional();
+            this.Property(f => f.UserName).IsOptional().HasMaxLength(200);
             this.Property(f => f.FileName).IsRequired().HasMaxLength(200);
             this.Property(f => f.FilePath).IsRequired().HasMaxLength(200);
             this.Property(f => f.FileSource).IsRequired();

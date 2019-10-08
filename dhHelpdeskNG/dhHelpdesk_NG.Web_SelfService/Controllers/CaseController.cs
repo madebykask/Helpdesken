@@ -994,11 +994,12 @@ namespace DH.Helpdesk.SelfService.Controllers
 
 				var model = _caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
 
-				var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+				var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
 				if (!disableLogFileView.Active)
 				{
-					var userId = SessionFacade.CurrentUser?.Id ?? 0;
-					_fileViewLogService.Log(caseId, userId, fileName, model.FilePath, FileViewLogFileSource.Selfservice, FileViewLogOperation.View);
+                    var result = SessionFacade.CurrentUser != null
+                        ? _fileViewLogService.Log(caseId, SessionFacade.CurrentUser.Id, fileName.Trim(), model.FilePath, FileViewLogFileSource.Selfservice, FileViewLogOperation.View) 
+                        : _fileViewLogService.Log(caseId, GetUserName(), fileName.Trim(), model.FilePath, FileViewLogFileSource.Selfservice, FileViewLogOperation.View) ;
 				}
 
 				fileContent = model.Content;
@@ -1015,12 +1016,21 @@ namespace DH.Helpdesk.SelfService.Controllers
                 fileContent =  _userTemporaryFilesStorage.GetFileContent(fileName, id, "");
             else
             {
-                var c = _caseService.GetCaseBasic(int.Parse(id));
+                var caseId = int.Parse(id);
+                var c = _caseService.GetCaseBasic(caseId);
                 var basePath = string.Empty;
                 if (c != null)
                     basePath = _masterDataService.GetFilePath(c.CustomerId);
 
-				var model = _caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+				var model = _caseFileService.GetFileContentByIdAndFileName(caseId, basePath, fileName);
+
+                var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+                if (!disableLogFileView.Active)
+                {
+                    var result = SessionFacade.CurrentUser != null
+                        ? _fileViewLogService.Log(caseId, SessionFacade.CurrentUser.Id, fileName.Trim(), model.FilePath, FileViewLogFileSource.Selfservice, FileViewLogOperation.View) 
+                        : _fileViewLogService.Log(caseId, GetUserName(), fileName.Trim(), model.FilePath, FileViewLogFileSource.Selfservice, FileViewLogOperation.View) ;
+                }
 				fileContent = model.Content;
             }
             return File(fileContent, "application/octet-stream", fileName);
@@ -1138,6 +1148,19 @@ namespace DH.Helpdesk.SelfService.Controllers
 				var model = _logFileService.GetFileContentByIdAndFileName(logId, basePath, fileName, logFileType);
 
 				fileContent = model.Content;
+
+                var disableLogFileView =
+                    _featureToggleService.Get(
+                        FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+                if (!disableLogFileView.Active)
+                {
+                    var logCaseId = caseId ?? _logService.GetLogById(logId).CaseId;
+                    logSubFolder = logFileType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
+                    var path = _filesStorage.ComposeFilePath(logSubFolder, logId, basePath, "");
+                    var result = SessionFacade.CurrentUser != null
+                        ? _fileViewLogService.Log(logCaseId, SessionFacade.CurrentUser.Id, fileName.Trim(), path, FileViewLogFileSource.Selfservice, FileViewLogOperation.View) 
+                        : _fileViewLogService.Log(logCaseId, GetUserName(), fileName.Trim(), path, FileViewLogFileSource.Selfservice, FileViewLogOperation.View) ;
+                }
             }
 
             return File(fileContent, "application/octet-stream", fileName);
@@ -1317,14 +1340,14 @@ namespace DH.Helpdesk.SelfService.Controllers
 				var paths = new List<KeyValuePair<CaseLogFileDto, string>>();
 				_logFileService.AddFiles(newLogFiles, paths);
 
-				var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+				var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
 				if (!disableLogFileView.Active)
 				{
-					var userId = SessionFacade.CurrentUser?.Id ?? 0;
-
 					foreach (var path in paths)
 					{
-						_fileViewLogService.Log(caseId, userId, path.Key.FileName, path.Value, FileViewLogFileSource.Selfservice, FileViewLogOperation.Add);
+                        var result = SessionFacade.CurrentUser != null
+                            ? _fileViewLogService.Log(caseId, SessionFacade.CurrentUser.Id, path.Key.FileName, path.Value, FileViewLogFileSource.Selfservice, FileViewLogOperation.Add) 
+                            : _fileViewLogService.Log(caseId, GetUserName(), path.Key.FileName, path.Value, FileViewLogFileSource.Selfservice, FileViewLogOperation.Add) ;
 					}
 				}
 
@@ -2144,6 +2167,12 @@ namespace DH.Helpdesk.SelfService.Controllers
                 ret = null;
             
             return ret;
+        }
+
+        private string GetUserName()
+        {
+            return SessionFacade.CurrentUserIdentity?.UserId ??
+                   SessionFacade.CurrentLocalUser?.UserId ?? "AnonymousUser";
         }
 
         private CaseOverviewModel GetCaseReceiptModel(Case currentCase, int languageId)

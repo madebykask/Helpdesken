@@ -28,8 +28,6 @@
             </li>
             <li id="menu8" style="display: none">
                 <span id="tooltip-button-wrapper" data-title=''>
-                    <button class="btn" id="logFilesRunBtn">@Translation.GetCoreTextTranslation("Kör")</button>
-                    <i id="logFilesInProcessLoader" class="gif-loader" style="display: none">&nbsp;</i>
                 </span>
             </li>
         </ul>
@@ -56,7 +54,7 @@
             @if (Model.HasDataSecurityInformationPermission)
             {
                 <li id="tab6" onclick="toggleMenuItems(8)">
-                    <a href="#fragment-8">@Translation.GetCoreTextTranslation("Nedladdade filer")</a>
+                    <a href="#fragment-8">@Translation.GetCoreTextTranslation("Filåtkomst")</a>
                 </li>
             }
         </ul>

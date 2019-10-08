@@ -16,5 +16,6 @@ namespace DH.Helpdesk.BusinessData.Enums.FileViewLogs
         public const string File = "File";
         public const string Path = "Path";
         public const string Operation = "Operation";
+        public const string Source = "Source";
     }
 }

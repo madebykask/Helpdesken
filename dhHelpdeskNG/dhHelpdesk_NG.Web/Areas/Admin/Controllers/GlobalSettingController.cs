@@ -1681,7 +1681,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 FilePath = f.Log.FilePath,
                 Id = f.Log.Id,
                 UserName = f.UserName,
-                Operation = f.Log.Operation.Translate()
+                Operation = f.Log.Operation.Translate(),
+                Source = f.Log.FileSource.Translate()
             }).ToList();
 
             var viewPath = "~/Areas/Admin/Views/GlobalSetting/_FileViewLogTable.cshtml";

@@ -17,8 +17,8 @@
         }
 
         [NotNullAndEmpty]
-        public string Name { get; }
+        public string Name { get; set; }
 
-        public SortBy SortBy { get; }
+        public SortBy SortBy { get; set; }
     }
 }

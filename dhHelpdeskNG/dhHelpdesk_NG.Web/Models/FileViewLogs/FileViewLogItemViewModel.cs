@@ -17,6 +17,7 @@ namespace DH.Helpdesk.Web.Models.FileViewLogs
         public string CaseNumber { get; set; }
 
         public string Operation { get; set; }
+        public string Source { get; set; }
         public string DepartmentName { get; set; }
         public string ProductAreaName { get; set; }
     }

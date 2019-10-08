@@ -24,6 +24,7 @@ namespace DH.Helpdesk.Dal.Mappers.FileViewLog.BusinessModelToEntity
 			entity.FilePath = businessModel.FilePath;
 			entity.FileSource = businessModel.FileSource;
 			entity.User_Id = businessModel.User_Id;
+            entity.UserName = businessModel.UserName;
 			entity.Operation = businessModel.Operation;
 		}
 	}

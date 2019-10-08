@@ -20,8 +20,9 @@ namespace DH.Helpdesk.Dal.Mappers.FileViewLog.EntityToBusinessModel
 				CreatedDate = entity.CreatedDate,
 				FileName = entity.FileName,
 				FilePath = entity.FilePath,
-				FileSource = (FileViewLogFileSource)entity.FileSource,
+				FileSource = entity.FileSource,
 				User_Id = entity.User_Id,
+                UserName = entity.UserName,
 				Operation = entity.Operation ?? FileViewLogOperation.Legacy
 			};
 		}

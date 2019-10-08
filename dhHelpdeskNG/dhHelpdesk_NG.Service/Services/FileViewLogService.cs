@@ -19,7 +19,9 @@ using LinqLib.Operators;
 namespace DH.Helpdesk.Services.Services
 {
 	public interface IFileViewLogService
-	{
+    {
+        FileViewLogModel Log(int caseId, string userName, string fileName, string filePath,
+            FileViewLogFileSource fileSource, FileViewLogOperation operation);
 		FileViewLogModel Log(int caseId, int userId, string fileName, string filePath, FileViewLogFileSource fileSource, FileViewLogOperation operation);
         IList<FileViewLogListItemModel> Find(FileViewLogListFilter filter, string timeZoneId);
     }
@@ -39,12 +41,31 @@ namespace DH.Helpdesk.Services.Services
 
 		}
 
+        public FileViewLogModel Log(int caseId, string userName, string fileName, string filePath,
+            FileViewLogFileSource fileSource, FileViewLogOperation operation)
+        {
+            var model = new FileViewLogModel
+            {
+                Case_Id = caseId,
+                User_Id = null,
+                UserName = userName,
+                FileName = fileName,
+                FilePath = filePath,
+                FileSource = fileSource,
+                Operation = operation,
+                CreatedDate = DateTime.UtcNow
+            };
+
+            return Log(model);
+        }
+
 		public FileViewLogModel Log(int caseId, int userId, string fileName, string filePath, FileViewLogFileSource fileSource, FileViewLogOperation operation)
-		{
-			var model = new FileViewLogModel
+        {
+            var model = new FileViewLogModel
 			{
 				Case_Id = caseId,
 				User_Id = userId,
+                UserName = null,
 				FileName = fileName,
 				FilePath = filePath,
 				FileSource = fileSource,
@@ -52,15 +73,8 @@ namespace DH.Helpdesk.Services.Services
 				CreatedDate = DateTime.UtcNow
 			};
 
-			var entity = new FileViewLogEntity();
-
-			_modelToEntityMapper.Map(model, entity);
-
-			_fileViewLogRepository.Add(entity);
-			_fileViewLogRepository.Commit();
-
-			return model;
-		}
+            return Log(model);
+        }
 
         public IList<FileViewLogListItemModel> Find(FileViewLogListFilter filter, string timeZoneId)
         {
@@ -86,6 +100,18 @@ namespace DH.Helpdesk.Services.Services
             }
 
             return data;
+        }
+
+        private FileViewLogModel Log(FileViewLogModel model)
+        {
+            var entity = new FileViewLogEntity();
+
+            _modelToEntityMapper.Map(model, entity);
+
+            _fileViewLogRepository.Add(entity);
+            _fileViewLogRepository.Commit();
+
+            return model;
         }
 	}
 }

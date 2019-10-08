@@ -78,12 +78,12 @@ namespace DH.Helpdesk.Dal.Repositories
                     break;
                 }
                 case (FileViewLogSortFields.User):
-                {
-                    query = filter.Sort.SortBy == SortBy.Ascending
-                        ? query.OrderBy(f => f.User.UserID)
-                        : query.OrderByDescending(f => f.User.UserID);
-                    break;
-                }
+                //{
+                //    query = filter.Sort.SortBy == SortBy.Ascending
+                //        ? query.OrderBy(f => f.User.UserID)
+                //        : query.OrderByDescending(f => f.User.UserID);
+                //    break;
+                //}
                 case (FileViewLogSortFields.Department):
                 default:
                 {
@@ -105,13 +105,14 @@ namespace DH.Helpdesk.Dal.Repositories
                     FileSource = f.FileSource,
                     Id = f.Id,
                     Operation = f.Operation ?? FileViewLogOperation.Legacy,
-                    User_Id = f.User_Id
+                    User_Id = f.User_Id,
+                    UserName = f.UserName
                 },
                 DepartmentId = f.Case.Department_Id,
                 DepartmentName = f.Case.Department_Id.HasValue ? f.Case.Department.DepartmentName : "",
                 ProductAreaId = f.Case.ProductArea_Id,
                 ProductAreaName = f.Case.ProductArea_Id.HasValue ? f.Case.ProductArea.Name : "",
-                UserName = f.User.UserID,
+                UserName = (f.User_Id.HasValue ? f.User.UserID : f.UserName) ?? "",
                 CaseNumber = f.Case.CaseNumber
             }).ToList();
         }

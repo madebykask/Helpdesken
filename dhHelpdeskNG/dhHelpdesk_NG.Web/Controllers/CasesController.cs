@@ -3251,6 +3251,7 @@ namespace DH.Helpdesk.Web.Controllers
             #endregion
 
             var basePath = _masterDataService.GetFilePath(case_.Customer_Id);
+            var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
             
             // save case files
             if (!edit)
@@ -3260,8 +3261,7 @@ namespace DH.Helpdesk.Web.Controllers
 
 				var paths = new List<KeyValuePair<CaseFileDto, string>>();
 				_caseFileService.AddFiles(newCaseFiles, paths);
-
-				var disableLogFileView = _featureToggleService.Get(DH.Helpdesk.Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+				
 				if (!disableLogFileView.Active)
 				{
 					foreach (var file in paths)
@@ -3364,6 +3364,15 @@ namespace DH.Helpdesk.Web.Controllers
                         x.IsExistCaseFile))
                 .ToList();
             allLogFiles.AddRange(newLogFiles);
+
+            if (!disableLogFileView.Active)
+            {
+                foreach (var newLogFile in newLogFiles)
+                {
+                    var userId = SessionFacade.CurrentUser?.Id ?? 0;
+                    _fileViewLogService.Log(case_.Id, userId, newLogFile.FileName, newLogFile.BasePath, FileViewLogFileSource.Helpdesk, FileViewLogOperation.Add);
+                }
+            }
             
             #endregion
 
