@@ -266,6 +266,7 @@ function FileViewLog() {
             var deps = this.departmentsSelect$.chosen().val();
             var inputData = {
                 CustomerId: this.customersSelect$.val(),
+                IncludeEmptyDepartments: deps === null,
                 DepartmentsIds: deps !== null ? deps : this.departmentsSelect$.find('option').toArray().map(function (i) { return i.value }),
                 PeriodFrom: (dateFrom instanceof Date && !isNaN(dateFrom)) ? dateFrom.toISOString() : '',
                 PeriodTo: (dateTo instanceof Date && !isNaN(dateTo)) ? dateTo.toISOString() : '',

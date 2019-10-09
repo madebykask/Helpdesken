@@ -11,6 +11,7 @@ namespace DH.Helpdesk.BusinessData.Models.FileViewLog
     {
         public int CustomerId { get; set; }
         public List<int> DepartmentsIds { get; set; }
+        public bool IncludeEmptyDepartments { get; set; }
         public DateTime? PeriodFrom { get; set; }
         public DateTime? PeriodTo { get; set; }
         public int AmountPerPage { get; set; }

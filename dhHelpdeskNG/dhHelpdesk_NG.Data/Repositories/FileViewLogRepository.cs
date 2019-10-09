@@ -34,7 +34,11 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var query = Table.AsNoTracking().Where(f => f.Case.Customer_Id == filter.CustomerId);
             if (filter.DepartmentsIds != null)
-                query = query.Where(f => f.Case.Department_Id.HasValue && filter.DepartmentsIds.Contains(f.Case.Department_Id.Value));
+            {
+                query = query.Where(f => (filter.IncludeEmptyDepartments && !f.Case.Department_Id.HasValue) ||
+                    (f.Case.Department_Id.HasValue && filter.DepartmentsIds.Contains(f.Case.Department_Id.Value)));
+            }
+
             if (filter.PeriodFrom.HasValue)
                 query = query.Where(f => f.CreatedDate >= filter.PeriodFrom.Value);
             if (filter.PeriodTo.HasValue)
