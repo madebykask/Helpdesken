@@ -12,6 +12,7 @@ using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Extensions.DateTime;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Common.Extensions.String;
 
@@ -465,15 +466,14 @@ namespace DH.Helpdesk.Dal.Repositories
                 {
                     strBld.AppendLine("WITH SearchFreeTextFilter (CaseId) as ( ");
 
-                    var filter = ctx.Criterias.SearchFilter;
                     var items = new List<string>
                     {
-                        BuildCaseFreeTextSearchQueryCte(freeText, filter),
-                        //BuildRegionFreeTextSearchQueryCte(freeText, filter),
-                        BuildDepartmentFreeTextSearchQueryCte(freeText, filter),
-                        BuildCaseIsAboutFreeTextSearchQueryCte(freeText, filter),
-                        BuildLogFreeTextSearchQueryCte(freeText, filter),
-                        BuilFormFieldValueFreeTextSearchQueryCte(freeText, filter)
+                        BuildCaseFreeTextSearchQueryCte(freeText, ctx),
+                        //BuildRegionFreeTextSearchQueryCte(freeText, ctx),
+                        BuildDepartmentFreeTextSearchQueryCte(freeText, ctx),
+                        BuildCaseIsAboutFreeTextSearchQueryCte(freeText, ctx),
+                        BuildLogFreeTextSearchQueryCte(freeText, ctx),
+                        BuilFormFieldValueFreeTextSearchQueryCte(freeText, ctx)
                     };
 
                     strBld.AppendLine(string.Join($"{Environment.NewLine} UNION ALL {Environment.NewLine} ", items));
@@ -492,16 +492,19 @@ namespace DH.Helpdesk.Dal.Repositories
 
         #region FreeText Search Queries
 
-        private string BuildCaseFreeTextSearchQueryCte(string text, CaseSearchFilter filter)
+        private string BuildCaseFreeTextSearchQueryCte(string text, SearchQueryBuildContext ctx)
         {
+            var filter = ctx.Criterias.SearchFilter;
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
             strBld.AppendLine(@"SELECT _case.Id FROM tblCase _case  WITH (NOLOCK) ");
             strBld.AppendLine(@"  INNER JOIN tblCustomer ON tblCustomer.Id = _case.Customer_Id ");
-            strBld.AppendLine(@"  INNER JOIN tblCustomerUser ON tblCustomerUser.Customer_Id = tblCustomer.Id");
-            strBld.AppendFormat("WHERE _case.Customer_Id = {0} ", customerId).AppendLine();
+            if (!ctx.Criterias.CustomerSetting.CustomerInExtendedSearch.ToBool())
+                strBld.AppendLine(@"  INNER JOIN tblCustomerUser ON tblCustomerUser.Customer_Id = tblCustomer.Id");
+            strBld.AppendFormat(" WHERE _case.Customer_Id = {0} ", customerId).AppendLine();
             strBld.AppendLine(" AND _case.Deleted = 0");
-            strBld.AppendFormat(" AND tblCustomerUser.User_Id = {0}", filter.UserId).AppendLine();
+            if (!ctx.Criterias.CustomerSetting.CustomerInExtendedSearch.ToBool())
+                strBld.AppendFormat(" AND tblCustomerUser.User_Id = {0}", filter.UserId).AppendLine();
 
             var finishingDateCondition = BuildFinishingDateCondition(filter, "_case");
             if (!string.IsNullOrEmpty(finishingDateCondition))
@@ -518,14 +521,15 @@ namespace DH.Helpdesk.Dal.Repositories
             return strBld.ToString();
         }
 
-        private string BuildCaseIsAboutFreeTextSearchQueryCte(string freeText, CaseSearchFilter filter)
+        private string BuildCaseIsAboutFreeTextSearchQueryCte(string freeText, SearchQueryBuildContext ctx)
         {
+            var filter = ctx.Criterias.SearchFilter;
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
 
             strBld.AppendLine(@"SELECT Case_Id FROM tblCaseIsAbout caseIsAbout ");
             strBld.AppendLine(@"  INNER JOIN tblCase WITH (nolock) ON tblCase.Id = caseIsAbout.Case_Id ");
-            strBld.AppendFormat("WHERE tblCase.Customer_Id = {0} ", customerId).AppendLine();
+            strBld.AppendFormat(" WHERE tblCase.Customer_Id = {0} ", customerId).AppendLine();
             strBld.AppendLine(" AND (");
 
             var items = BuildFreeTextConditionsFor(freeText, _freeTextCaseIsAboutConditionFields, "caseIsAbout");
@@ -537,19 +541,22 @@ namespace DH.Helpdesk.Dal.Repositories
             return strBld.ToString();
         }
 
-        private string BuildLogFreeTextSearchQueryCte(string freeText, CaseSearchFilter filter)
+        private string BuildLogFreeTextSearchQueryCte(string freeText, SearchQueryBuildContext ctx)
         {
+            var filter = ctx.Criterias.SearchFilter;
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
 
             strBld.AppendLine(@"SELECT Case_Id FROM tblLog WITH (NOLOCK)");
             strBld.AppendLine(@"  INNER JOIN tblCase WITH (nolock) ON tblLog.Case_Id = tblCase.Id ");
             strBld.AppendLine(@"  INNER JOIN tblCustomer ON tblCustomer.Id = tblCase.Customer_Id ");
-            strBld.AppendLine(@"  INNER JOIN tblCustomerUser ON tblCustomerUser.Customer_Id = tblCustomer.Id");
-            strBld.AppendLine("WHERE ");
+            if (!ctx.Criterias.CustomerSetting.CustomerInExtendedSearch.ToBool())
+                strBld.AppendLine(@"  INNER JOIN tblCustomerUser ON tblCustomerUser.Customer_Id = tblCustomer.Id");
+            strBld.AppendLine(" WHERE ");
             strBld.AppendFormat("tblCase.Customer_Id = {0} ", customerId).AppendLine();
             strBld.AppendLine(" AND tblCase.Deleted = 0");
-            strBld.AppendFormat(" AND tblCustomerUser.User_Id = {0}", filter.UserId).AppendLine();
+            if (!ctx.Criterias.CustomerSetting.CustomerInExtendedSearch.ToBool())
+                strBld.AppendFormat(" AND tblCustomerUser.User_Id = {0}", filter.UserId).AppendLine();
 
             var finishingDateCondition = BuildFinishingDateCondition(filter);
             if (!string.IsNullOrEmpty(finishingDateCondition))
@@ -573,7 +580,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
             strBld.AppendLine(@"SELECT caseReg.Id FROM tblRegion reg ");
             strBld.AppendLine("  INNER JOIN tblCase caseReg WITH (nolock) ON reg.Id = caseReg.Region_Id ");
-            strBld.AppendFormat("WHERE caseReg.Customer_Id = {0} ", customerId).AppendLine();
+            strBld.AppendFormat(" WHERE caseReg.Customer_Id = {0} ", customerId).AppendLine();
             strBld.AppendLine(" AND (");
             var items = BuildFreeTextConditionsFor(freeText, _freeTextRegionConditionFields);
             var formattedConditions = ConcatConditionsToString(items);
@@ -584,14 +591,15 @@ namespace DH.Helpdesk.Dal.Repositories
             return strBld.ToString();
         }
 
-        private string BuildDepartmentFreeTextSearchQueryCte(string freeText, CaseSearchFilter filter)
+        private string BuildDepartmentFreeTextSearchQueryCte(string freeText, SearchQueryBuildContext ctx)
         {
+            var filter = ctx.Criterias.SearchFilter;
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
 
             strBld.AppendLine(@"SELECT caseDep.Id FROM tblDepartment dep ");
             strBld.AppendLine("  INNER JOIN tblCase caseDep WITH (nolock) ON dep.Id = caseDep.Department_Id ");
-            strBld.AppendFormat("WHERE caseDep.Customer_Id = {0} ", customerId).AppendLine();
+            strBld.AppendFormat(" WHERE caseDep.Customer_Id = {0} ", customerId).AppendLine();
             strBld.AppendLine(" AND (");
             var items = BuildFreeTextConditionsFor(freeText, _freeTextDepartmentConditionFields);
             var formattedConditions = ConcatConditionsToString(items);
@@ -602,19 +610,22 @@ namespace DH.Helpdesk.Dal.Repositories
             return strBld.ToString();
         }
 
-        private string BuilFormFieldValueFreeTextSearchQueryCte(string freeText, CaseSearchFilter filter)
+        private string BuilFormFieldValueFreeTextSearchQueryCte(string freeText, SearchQueryBuildContext ctx)
         {
+            var filter = ctx.Criterias.SearchFilter;
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
 
             strBld.AppendLine(@"select tblCase.Id from tblCase WITH (NOLOCK) ");
             strBld.AppendLine(@"  INNER JOIN tblFormFieldValue WITH (NOLOCK) ON tblCase.Id = tblFormFieldValue.Case_Id ");
             strBld.AppendLine(@"  INNER JOIN tblCustomer ON tblCustomer.Id = tblCase.Customer_Id ");
-            strBld.AppendLine(@"  INNER JOIN tblCustomerUser ON tblCustomerUser.Customer_Id = tblCustomer.Id");
-            strBld.AppendLine("WHERE ");
+            if (!ctx.Criterias.CustomerSetting.CustomerInExtendedSearch.ToBool())
+                strBld.AppendLine(@"  INNER JOIN tblCustomerUser ON tblCustomerUser.Customer_Id = tblCustomer.Id");
+            strBld.AppendLine(" WHERE ");
             strBld.AppendFormat("tblCase.Customer_Id = {0} ", customerId).AppendLine();
             strBld.AppendLine(" AND tblCase.Deleted = 0");
-            strBld.AppendFormat(" AND tblCustomerUser.User_Id = {0}", filter.UserId).AppendLine();
+            if (!ctx.Criterias.CustomerSetting.CustomerInExtendedSearch.ToBool())
+                strBld.AppendFormat(" AND tblCustomerUser.User_Id = {0}", filter.UserId).AppendLine();
 
             var finishingDateCondition = BuildFinishingDateCondition(filter);
             if (!string.IsNullOrEmpty(finishingDateCondition))
