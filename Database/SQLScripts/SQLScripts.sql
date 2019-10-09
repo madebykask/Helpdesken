@@ -28,7 +28,7 @@ GO
 
 
 RAISERROR ('Change column User_Id to tblFileViewLog table', 10, 1) WITH NOWAIT
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
 		 where syscolumns.name = N'User_Id' and sysobjects.name = N'tblFileViewLog')
 BEGIN
     ALTER TABLE tblFileViewLog
