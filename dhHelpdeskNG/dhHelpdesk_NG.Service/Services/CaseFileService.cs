@@ -55,16 +55,9 @@ namespace DH.Helpdesk.Services.Services
             var res = _caseFileRepository.GetCaseFileContent(caseId, fileId, basePath);
 
             var caseFilePath = _caseFileRepository.GetCaseFilePath(caseId, fileId, basePath);
+            res.FilePath = caseFilePath;
             if (embedImmges && Path.GetExtension(res.FileName ?? string.Empty).Equals(".htm", StringComparison.OrdinalIgnoreCase))
-            {
-                res = new CaseFileContent()
-                {
-                    Id = res.Id,
-                    FileName = res.FileName,
-                    FilePath = caseFilePath,
-                    Content = EmbedFilesIntoHtml(caseFilePath, res.Content)
-                };
-            }
+                res.Content = EmbedFilesIntoHtml(caseFilePath, res.Content);
             
             return res;
         }

@@ -1089,10 +1089,11 @@ namespace DH.Helpdesk.SelfService.Controllers
                         FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
                 if (!disableLogFileView.Active)
                 {
-                    var userId = SessionFacade.CurrentUser?.Id ?? 0;
                     var path = _filesStorage.ComposeFilePath(ModuleName.Cases, decimal.ToInt32(c.CaseNumber), basePath, "");
-                    _fileViewLogService.Log(caseId, userId, fileName.Trim(), path, FileViewLogFileSource.Selfservice,
-                        FileViewLogOperation.Delete);
+                    var result = SessionFacade.CurrentUser != null
+                        ? _fileViewLogService.Log(caseId, SessionFacade.CurrentUser.Id, fileName.Trim(), path, FileViewLogFileSource.Selfservice, FileViewLogOperation.Delete) 
+                        : _fileViewLogService.Log(caseId, GetUserName(), fileName.Trim(), path, FileViewLogFileSource.Selfservice, FileViewLogOperation.Delete) ;
+
                 }
             }
         }

@@ -4,6 +4,7 @@ using DH.Helpdesk.Domain;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -105,6 +106,8 @@ namespace DH.Helpdesk.Services.Services
         private FileViewLogModel Log(FileViewLogModel model)
         {
             var entity = new FileViewLogEntity();
+            if(!string.IsNullOrEmpty(Path.GetExtension(model.FilePath)))// all uploaded files must have extension
+                model.FilePath = Path.GetDirectoryName(model.FilePath);
 
             _modelToEntityMapper.Map(model, entity);
 

@@ -70,8 +70,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
             if (!disableLogFileView.Active)
             {
-                var path = Path.GetDirectoryName(fileContent.FilePath);
-                _fileViewLogService.Log(caseId, UserId, fileContent.FileName.Trim(), path, FileViewLogFileSource.WebApi,
+                _fileViewLogService.Log(caseId, UserId, fileContent.FileName.Trim(), fileContent.FilePath, FileViewLogFileSource.WebApi,
                     FileViewLogOperation.View);
             }
             return Task.FromResult(res);
@@ -167,8 +166,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 				var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
 				if (!disableLogFileView.Active)
 				{
-                    var fpath = Path.GetDirectoryName(path);
-					_fileViewLogService.Log(caseId, UserId, caseFileDto.FileName, fpath, FileViewLogFileSource.WebApi, FileViewLogOperation.Add);
+					_fileViewLogService.Log(caseId, UserId, caseFileDto.FileName, path, FileViewLogFileSource.WebApi, FileViewLogOperation.Add);
 				}
 
 				return Ok(new { id = fileId, name = fileName});

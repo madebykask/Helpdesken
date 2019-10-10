@@ -20,6 +20,7 @@ using DH.Helpdesk.Common.Extensions.GUID;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.Enums;
+using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
@@ -65,6 +66,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICaseStatisticService _caseStatService;
 		private readonly IFileViewLogService _fileViewLogService;
 		private readonly IFeatureToggleService _featureToggleService;
+        private readonly IFilesStorage _filesStorage;
 
 		public CaseSaveController(ICaseService caseService,
             ICaseLockService caseLockService, ICustomerService customerService, ISettingService customerSettingsService,
@@ -75,7 +77,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             IBaseCaseSolutionService caseSolutionService, IStateSecondaryService stateSecondaryService,
             IHolidayService holidayService, ICaseStatisticService caseStatService,
 			IFileViewLogService fileViewLogService,
-			IFeatureToggleService featureToggleService)
+			IFeatureToggleService featureToggleService, IFilesStorage filesStorage)
         {
             _caseService = caseService;
             _caseLockService = caseLockService;
@@ -98,8 +100,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             _caseStatService = caseStatService;
 			_fileViewLogService = fileViewLogService;
 			_featureToggleService = featureToggleService;
-
-		}
+            _filesStorage = filesStorage;
+        }
 
         /// <summary>
         /// Save Case
@@ -467,7 +469,9 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 foreach (var newLogFile in newLogFiles)
                 {
-                    _fileViewLogService.Log(currentCase.Id, UserId, newLogFile.FileName, newLogFile.BasePath, FileViewLogFileSource.WebApi, FileViewLogOperation.Add);
+                    var path = _filesStorage.ComposeFilePath(newLogFile.LogType == LogFileType.Internal ? ModuleName.LogInternal : ModuleName.Log,
+                        caseLog.Id, basePath, "");
+                    _fileViewLogService.Log(currentCase.Id, UserId, newLogFile.FileName, path, FileViewLogFileSource.WebApi, FileViewLogOperation.Add);
                 }
             }
 

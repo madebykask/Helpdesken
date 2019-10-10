@@ -70,8 +70,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
 				if (!disableLogFileView.Active)
 				{
-                    var path = Path.GetDirectoryName(model.FilePath);
-					_fileViewLogService.Log(caseId, UserId, fileInfo.FileName, path, FileViewLogFileSource.WebApi, FileViewLogOperation.View);
+					_fileViewLogService.Log(caseId, UserId, fileInfo.FileName, model.FilePath, FileViewLogFileSource.WebApi, FileViewLogOperation.View);
 				}
 
 				content = model.Content;
@@ -90,8 +89,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
 				if (!disableLogFileView.Active)
                 {
-                    var path = Path.GetDirectoryName(logFile.Path);
-					_fileViewLogService.Log(caseId, UserId, logFile.FileName, path, FileViewLogFileSource.WebApi, FileViewLogOperation.View);
+					_fileViewLogService.Log(caseId, UserId, logFile.FileName, logFile.Path, FileViewLogFileSource.WebApi, FileViewLogOperation.View);
 				}
 
 				content = logFile.Content;

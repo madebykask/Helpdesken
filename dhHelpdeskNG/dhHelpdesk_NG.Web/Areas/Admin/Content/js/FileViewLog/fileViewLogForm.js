@@ -300,6 +300,12 @@ function FileViewLog() {
             _self.sortBy = settings.sortBy;
             _self.sortOrder = settings.sortOrder;
 
+            _self.departmentsSelect$.chosen({
+                width: '100%',
+                'placeholder_text_multiple': placeholder_text_multiple,
+                'no_results_text': no_results_text
+            });
+
             _self.logAmount$.on('keypress keyup blur', function (event) {
                 $(this).val($(this).val().replace(/[^\d].+/, ""));
                 if ((event.which < 48 || event.which > 57)) {

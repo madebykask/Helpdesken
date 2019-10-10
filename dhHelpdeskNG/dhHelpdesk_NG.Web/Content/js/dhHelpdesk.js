@@ -678,13 +678,13 @@ function InitDataTable(tableUniqId, perText, showingText, options, onError, empt
 // YES and NO SWITCH FOR CHECKBOXES END
 
 
-$(".chosen-select").chosen({
+$(".chosen-select:not(.custom)").chosen({
     width: "300px",
     'placeholder_text_multiple': placeholder_text_multiple,
     'no_results_text': no_results_text
 });
 
-$(".chosen-single-select").chosen({
+$(".chosen-single-select:not(.custom)").chosen({
     width: "315px",
     'placeholder_text_single': placeholder_text_single,
     'no_results_text': no_results_text

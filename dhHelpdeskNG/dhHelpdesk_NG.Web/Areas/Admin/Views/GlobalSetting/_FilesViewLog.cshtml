@@ -3,7 +3,7 @@
 @{
     Layout = null;
 }
-<div class="container">
+<div class="container file-view-logs">
     <div class="row">
         <div class="span12">
             @using (Html.BeginForm(null, null, null, FormMethod.Post, new { id = "fileViewLogForm", @action = "", texttypeid = 0, compareMethod = 1 }))
@@ -12,7 +12,7 @@
                     <tbody>
                         <tr>
                             <td class="span3">@Translation.GetCoreTextTranslation("Kund")</td>
-                            <td class="">
+                            <td colspan="2" class="">
                                 @Html.DropDownListFor(x => x.SelectedCustomerId, Model.Customers, "",
                                     new
                                     {
@@ -26,15 +26,15 @@
                             <td class="span3">
                                 @Translation.GetCoreTextTranslation("Avdelning")
                             </td>
-                            <td class="">
+                            <td colspan="2" class="">
                                 @Html.DropDownListFor(m => m.SelectedDepartmetsIds, Model.Departments,
                                     new
                                     {
                                         id = "fvl_lstFilterDepartments",
                                         multiple = "multiple",
-                                        @class = "chosen-select",
+                                        @class = "chosen-select custom",
                                         placeholder = Translation.GetCoreTextTranslation("Välj en eller flera"),
-                                        style = "width: 300px"
+                                        style = "width: 315px"
                                     })
                             </td>
                             <td>
@@ -48,7 +48,9 @@
                             </td>
                             <td class="">
                                 @Html.EditorFor(m => m.PeriodFrom, "DatePicker", new { id = "fvl_periodFrom", type = "text" })
-                                @Html.EditorFor(m => m.PeriodTo, "DatePicker", new { id = "fvl_periodTo", type = "text" })
+                            </td>
+                            <td>
+                                @Html.EditorFor(m => m.PeriodTo, "DatePicker", new {id = "fvl_periodTo", type = "text"})
                             </td>
                             <td><div id="datesErrorLabel" errorFor="PeriodFrom PeriodTo"></div></td>
                         </tr>
@@ -56,7 +58,7 @@
                             <td class="span3">
                                 @Translation.GetCoreTextTranslation("Visa")
                             </td>
-                            <td class="">
+                            <td colspan="2" class="">
                                 @Html.TextBoxFor(m => m.Amount, new { id = "fvl_logsAmount", maxlength = "3", @class = "inputw50" })
                                 @Translation.GetCoreTextTranslation("poster per sida")
                                 <span style="float: right">

@@ -3644,6 +3644,10 @@ a.inactive {
 
 /********CASEOVERVIEW SEARCH CASES STATUS********/
 
+.file-view-logs .date input {
+    width: 113px;
+}
+
 .caseoverviewaccordion.accordion, .caseoverviewaccordion .accordion {
     margin-bottom: 0;
 }
