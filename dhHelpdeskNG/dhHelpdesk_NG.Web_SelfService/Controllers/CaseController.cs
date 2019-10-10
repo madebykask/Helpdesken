@@ -447,6 +447,13 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
             }
 
+            if (model.NewCase.WorkingGroup_Id.HasValue && !model.NewCase.StateSecondary_Id.HasValue)
+            {
+                var wg = _workingGroupService.GetWorkingGroup(model.NewCase.WorkingGroup_Id.Value);
+                if (wg?.StateSecondary_Id != null)
+                    model.NewCase.StateSecondary_Id = wg.StateSecondary_Id.Value;
+            }
+
             if (model.NewCase.CaseType_Id > 0)
             {
                 var ct = _caseTypeService.GetCaseType(model.NewCase.CaseType_Id);
