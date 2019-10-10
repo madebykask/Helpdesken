@@ -492,7 +492,7 @@
                 minLength: 2,
 
                 source: function (query, process) {
-                    lastInitiatorSearchKey = CasePage.prototype.generateRandomKey();
+                    lastInitiatorSearchKey = me.generateRandomKey();
 
                     return $.ajax({
                         url: searchUserUrl,
@@ -879,8 +879,8 @@
                 return true;
             });
 
-            $('#NewCase_ReportedBy').typeahead(CasePage.prototype._GetComputerUserSearchOptions());
-            $('#NewCase_InventoryNumber').typeahead(CasePage.prototype._GetComputerSearchOptions());
+            $('#NewCase_ReportedBy').typeahead(self._GetComputerUserSearchOptions()).focus();
+            $('#NewCase_InventoryNumber').typeahead(self._GetComputerSearchOptions());
 
             // Remove after implementing http://redmine.fastdev.se/issues/10995
             self.$regionControl.on('change', function () {
@@ -923,4 +923,4 @@
         };
 
         return new CasePage();
-    })(jQuery);
+})(jQuery);
