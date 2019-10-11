@@ -9,10 +9,10 @@
 <script type="text/javascript">
     window.caseLogsParameters = {
         caseDetailsUrl: '@Url.Content("~/Case/Index")',
-        uploadLogFileUrl: '@Url.Action("UploadLogFile", "Case")',
-        getLogFilesUrl: '@Url.Action("GetLogFiles", "Case")',
-        deleteLogFileUrl: '@Url.Action("DeleteLogFile")',
-        downloadLogFileUrl: '@Url.Action("DownloadLogFile")',
+        uploadLogFileUrl: '@Url.Action("UploadLogFile", "CaseFiles")',
+        getLogFilesUrl: '@Url.Action("GetLogFiles", "CaseFiles")',
+        deleteLogFileUrl: '@Url.Action("DeleteLogFile", "CaseFiles")',
+        downloadLogFileUrl: '@Url.Action("DownloadLogFile", "CaseFiles")',
         downloadLogFileParamUrl: '@Model.BuildCaseLogDownloadUrlParams()',
         saveLogMessageUrl: '@Url.Action("_CaseLogNote", "Case")',
         fileAlreadyExistsMsg: '@Html.Raw(Translation.Get("File already exists"))',
@@ -515,7 +515,7 @@
                                             <td>
                                                @{ //<a style="color:blue" href="@Url.Action("DownloadFile",  new { @id = Model.CasePreview.Id, fileName = file.FileName })"><i class="icon-file"></i>@file.FileName</a> 
                                                }
-                                                <a style="color:blue" href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
+                                                <a style="color:blue" href="@this.Url.Action("DownloadFile", "CaseFiles", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
                                             </td>
                                         </tr>
                                     }

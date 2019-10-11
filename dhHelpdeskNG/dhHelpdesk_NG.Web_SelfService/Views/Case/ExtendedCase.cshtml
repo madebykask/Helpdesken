@@ -20,7 +20,7 @@
     //Model.ExtendedCaseDataModel.FormModel.Path =
     //    "http://dhhelpdesk-ikea-bschr-v5-ec.datahalland.se/ExtendedCase/?formId=" + extendedFormId + "&autoLoad=1";
 
-    var downloadCaseFileUrl = Url.Action("DownloadNewCaseFile");
+    var downloadCaseFileUrl = Url.Action("DownloadNewCaseFile", "CaseFiles");
     var downloadCaseFileParamUrl = (!string.IsNullOrEmpty(Model.CaseDataModel.CaseFileKey) ? "id=" + Model.CaseDataModel.CaseFileKey + "&" : string.Empty);
     var downloadCaseFileCompleteUrl = downloadCaseFileUrl + "?" + "id=" + "{id}" + "&fileName=" + "{name}";
 }
@@ -28,13 +28,13 @@
 <script type="text/javascript">
 
     window.appParameters = {
-        uploadCaseFileUrl: '@Url.Action("NewCaseUploadFile")',
+        uploadCaseFileUrl: '@Url.Action("NewCaseUploadFile", "CaseFiles")',
         caseFileKey: '@Model.CaseDataModel.CaseFileKey',
-        newCaseFilesUrl: '@Url.Action("NewCaseFiles")',
+        newCaseFilesUrl: '@Url.Action("NewCaseFiles", "CaseFiles")',
         fileAlreadyExistsMsg: '@Html.Raw(Translation.Get("File already exists", Enums.TranslationSource.TextTranslation))',
         downloadCaseFileUrl: '@downloadCaseFileUrl',
         downloadCaseFileParamUrl: '@downloadCaseFileParamUrl',
-        deleteCaseFileUrl: '@Url.Action("DeleteNewCaseFile")',
+        deleteCaseFileUrl: '@Url.Action("DeleteNewCaseFile", "CaseFiles")',
         searchUserUrl: '',
         seachComputerUrl: '',
         saveNewCaseUrl: '',
@@ -45,10 +45,10 @@
 
     window.caseLogsParameters = {
         caseDetailsUrl: '@Url.Action("ExtendedCase", "Case")',
-        uploadLogFileUrl: '@Url.Action("UploadLogFile", "Case")',
-        getLogFilesUrl: '@Url.Action("GetLogFiles", "Case")',
-        deleteLogFileUrl: '@Url.Action("DeleteLogFile")',
-        downloadLogFileUrl: '@Url.Action("DownloadLogFile")',
+        uploadLogFileUrl: '@Url.Action("UploadLogFile", "CaseFiles")',
+        getLogFilesUrl: '@Url.Action("GetLogFiles", "CaseFiles")',
+        deleteLogFileUrl: '@Url.Action("DeleteLogFile", "CaseFiles")',
+        downloadLogFileUrl: '@Url.Action("DownloadLogFile", "CaseFiles")',
         downloadLogFileParamUrl: '@Model.BuildCaseLogDownloadUrlParams()',
         saveLogMessageUrl: '@Url.Action("_CaseLogNote", "Case")',
         fileAlreadyExistsMsg: '@Html.Raw(Translation.Get("File already exists", Enums.TranslationSource.TextTranslation))',

@@ -363,45 +363,45 @@ if (ms.lenght > 0) {
     });
 }
 
-function bindDeleteCaseFileBehaviorToDeleteButtons() {
-    $('#case_files_table a[id^="delete_casefile_button_"]').click(function () {
-        var key = $('#CaseKey').val();
-        var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
-        var pressedDeleteFileButton = this;
-        $.post("/Cases/DeleteCaseFile", { id: key, fileName: fileName, myTime: Date.now() }, function () {
-            $(pressedDeleteFileButton).parents('tr:first').remove();
-        });
-    });
-}
+//function bindDeleteCaseFileBehaviorToDeleteButtons() {
+//    $('#case_files_table a[id^="delete_casefile_button_"]').click(function () {
+//        var key = $('#CaseKey').val();
+//        var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
+//        var pressedDeleteFileButton = this;
+//        $.post("/Cases/DeleteCaseFile", { id: key, fileName: fileName, myTime: Date.now() }, function () {
+//            $(pressedDeleteFileButton).parents('tr:first').remove();
+//        });
+//    });
+//}
 
-function bindDeleteLogFileBehaviorToDeleteButtons() {
-    $('#log_files_table a[id^="delete_logfile_button_"]').click(function () {
-        var key = $('#LogKey').val();
-        var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
-        var pressedDeleteFileButton = this;
+//function bindDeleteLogFileBehaviorToDeleteButtons() {
+//    $('#log_files_table a[id^="delete_logfile_button_"]').click(function () {
+//        var key = $('#LogKey').val();
+//        var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
+//        var pressedDeleteFileButton = this;
 
-        $.post("/Cases/DeleteLogFile", { id: key, fileName: fileName, myTime:Date.now() }, function () {
-            $(pressedDeleteFileButton).parents('tr:first').remove();
-        });
-    });
-}
+//        $.post("/Cases/DeleteLogFile", { id: key, fileName: fileName, myTime:Date.now() }, function () {
+//            $(pressedDeleteFileButton).parents('tr:first').remove();
+//        });
+//    });
+//}
 
-function SetPriority() {
-    var impactId = $('#case__Impact_Id').val();
-    var urgencyId = $('#case__Urgency_Id').val();
+//function SetPriority() {
+//    var impactId = $('#case__Impact_Id').val();
+//    var urgencyId = $('#case__Urgency_Id').val();
 
-    if (urgencyId > 0 && impactId > 0) {
-        $.post('/Cases/GetPriorityIdForImpactAndUrgency', { 'impactId': impactId, 'urgencyId': urgencyId, myTime:Date.now() }, function (data) {
-            if (data != null) {
-                var exists = $('#case__Priority_Id Option[value=' + data + ']').length;
-                if (exists > 0) {
-                    $('#case__Priority_Id').val(data);
-                }
-            }
-        }, 'json');
-    }
+//    if (urgencyId > 0 && impactId > 0) {
+//        $.post('/Cases/GetPriorityIdForImpactAndUrgency', { 'impactId': impactId, 'urgencyId': urgencyId, myTime:Date.now() }, function (data) {
+//            if (data != null) {
+//                var exists = $('#case__Priority_Id Option[value=' + data + ']').length;
+//                if (exists > 0) {
+//                    $('#case__Priority_Id').val(data);
+//                }
+//            }
+//        }, 'json');
+//    }
 
-}
+//}
 
 
 /* Table initialisation */

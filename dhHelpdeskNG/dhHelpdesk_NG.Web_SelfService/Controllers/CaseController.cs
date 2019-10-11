@@ -50,7 +50,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 	using Models.Message;
 	using Services.Infrastructure;
 
-    public class CaseController : BaseController
+    public partial class CaseController : BaseController
     {
         private readonly ILog _logger = LogManager.GetLogger(typeof(CaseController));
 
@@ -94,7 +94,6 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly IGlobalSettingService _globalSettingService;
         private readonly IStatusService _statusService;
         private readonly ICaseSectionService _caseSectionService;
-        private readonly IFilesStorage _filesStorage;
 
         private const string ParentPathDefaultValue = "--";
         private const string EnterMarkup = "<br />";
@@ -153,8 +152,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             IStatusService statusService, 
 			ICaseSectionService caseSectionService,
 			IFileViewLogService fileViewLogService,
-			IFeatureToggleService featureToggleService,
-            IFilesStorage filesStorage)
+			IFeatureToggleService featureToggleService)
             : base(configurationService, masterDataService, caseSolutionService)
         {
             _caseControllerBehavior = new CaseControllerBehavior(masterDataService, caseService, caseSearchService,
@@ -205,7 +203,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             _caseSectionService = caseSectionService;
 			_fileViewLogService = fileViewLogService;
 			_featureToggleService = featureToggleService;
-            _filesStorage = filesStorage;
         }
 
         [HttpGet]
@@ -335,12 +332,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             return View(caseReceipt);
         }
 
-        private string GetCaseRegistrationMessage(int languageId)
-        {
-            var registrationInfoText = _infoService.GetInfoText((int)InfoTextType.SelfServiceRegistrationMessage, SessionFacade.CurrentCustomer.Id, languageId);
-            return registrationInfoText?.Name ?? string.Empty;
-        }
-
         [HttpGet]
         public ActionResult NewCase(int customerId, int? caseTemplateId)
         {
@@ -425,6 +416,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                     }
                     model.ProductAreaParantPath = string.Join(" - ", translatedText);
                 }
+
+                if (p?.Priority_Id != null && !model.NewCase.Priority_Id.HasValue)
+                    model.NewCase.Priority_Id = p.Priority_Id;
             }
 
             //Translate Category Path
@@ -497,33 +491,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             return View("NewCase", model);
         }
 
-        private void ApplyTemplate(CaseSolution caseTemplate, Case caseEntity, bool isWorkflowChange = false)
-        {
-            if (caseEntity.IsAbout == null)
-                caseEntity.IsAbout = new CaseIsAboutEntity();
-
-            _caseSolutionService.ApplyCaseSolution(caseEntity, caseTemplate);
-
-            if (isWorkflowChange)
-            {
-                caseEntity.CurrentCaseSolution_Id = caseTemplate.Id;
-            }
-        }
-
-        private void ApplyTemplate(CaseSolution caseTemplate, CaseModel model, bool isWorkflowChange = false)
-        {
-            _caseSolutionService.ApplyCaseSolution(model, caseTemplate);
-
-            if (isWorkflowChange)
-            {
-                model.CurrentCaseSolution_Id = caseTemplate.Id;
-            }
-
-            model.Text_External = caseTemplate.Text_External;
-            model.Text_Internal = caseTemplate.Text_Internal;
-            model.FinishingType_Id = caseTemplate.FinishingCause_Id.IfNullThenElse(model.FinishingType_Id);
-        }
-
         [HttpGet]
         public ActionResult ExtendedCasePublic(Guid id)
         {
@@ -577,167 +544,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             return View("ExtendedCase", model);
         }
 
-        private ExtendedCaseViewModel GetExtendedCaseViewModel(int? caseTemplateId = null, int? caseId = null)
-        {
-            if (caseTemplateId.IsNew() && caseId.IsNew())
-            {
-                ErrorGenerator.MakeError("Template or Case must be specified!", 210);
-                return null;
-            }
-
-            var caseModel = new CaseModel
-            {
-                RegUserId = SessionFacade.CurrentUserIdentity.UserId,
-                RegUserDomain = SessionFacade.CurrentUserIdentity.Domain,
-                RegUserName = $"{SessionFacade.CurrentUserIdentity.FirstName} {SessionFacade.CurrentUserIdentity.LastName}".Trim(),
-                IpAddress = Request.GetIpAddress(),
-                CaseSolution_Id = caseTemplateId,
-                CurrentCaseSolution_Id = caseTemplateId,
-                CaseFileKey = Guid.NewGuid().ToString()
-            };
-
-            CaseSolution caseTemplate = null;
-            if (caseTemplateId.HasValue && caseTemplateId.Value > 0)
-                caseTemplate = _caseSolutionService.GetCaseSolution(caseTemplateId.Value);
-
-            if (caseId.HasValue)
-                caseModel = _universalCaseService.GetCase(caseId.Value);
-
-            if (caseModel == null && caseTemplate == null)
-            {
-                ErrorGenerator.MakeError("Template or Case must be specified!", 211);
-                return null;
-            }
-
-            var isAnonymousMode = ConfigurationService.AppSettings.LoginMode == LoginMode.Anonymous;
-            if (!isAnonymousMode && caseId.HasValue && !UserHasAccessToCase(caseModel))
-            {
-                ErrorGenerator.MakeError("Case not found among your cases!");
-                return null;
-            }
-
-            var cusId = caseModel != null && caseModel.Customer_Id > 0 ? caseModel.Customer_Id : (caseTemplate?.Customer_Id ?? 0);
-            var globalSettings = _globalSettingService.GetGlobalSettings().First();
-
-            // check only if multi customer is not enabled. Allow user to see own cases for different customers.
-            if (!globalSettings.MultiCustomersSearch.ToBool() && !caseId.IsNew() && cusId != SessionFacade.CurrentCustomerID)
-            {
-                ErrorGenerator.MakeError("Selected Case doesn't belong to current customer!");
-                return null;
-            }
-
-            var customer = SessionFacade.CurrentCustomer;
-
-            if (globalSettings.MultiCustomersSearch.ToBool() && !caseId.IsNew())
-            {
-                //override current customer when openning a case from another customer in multicustomer search mode
-                customer = _customerService.GetCustomer(cusId);
-                //SessionFacade.CurrentCustomer = customer;
-            }
-            
-            var customerId = customer.Id;
-            var languageId = SessionFacade.CurrentLanguageId;
-            var appSettings = ConfigurationService.AppSettings;
-            var cs = _settingService.GetCustomerSetting(customerId);
-            
-            caseModel.FieldSettings = 
-                _caseFieldSettingService.ListToShowOnCasePage(customerId, languageId).Where(c => c.ShowExternal == 1).ToList();
-
-            if (caseId.IsNew())
-            {
-                if (caseTemplate == null || caseTemplate.Status == 0 || !caseTemplate.ShowInSelfService || caseTemplate.Customer_Id != customerId)
-                {
-                    ErrorGenerator.MakeError("Selected template is not available anymore!");
-                    return null;
-                }
-            }
-
-            if (caseId == null || caseId == 0)
-            {
-                caseModel.Customer_Id = customerId;
-
-                var registrationSource =
-                    _registrationSourceCustomerService.GetCustomersActiveRegistrationSources(customerId).FirstOrDefault(x => x.SystemCode == (int)CaseRegistrationSource.SelfService);
-
-                if (registrationSource != null)
-                    caseModel.RegistrationSourceCustomer_Id = registrationSource.Id;
-
-                if (caseTemplate != null)
-                {
-                    _caseSolutionService.ApplyCaseSolution(caseModel, caseTemplate);
-
-                    caseModel.Text_External = caseTemplate.Text_External;
-                    caseModel.Text_Internal = caseTemplate.Text_Internal;
-                    caseModel.FinishingType_Id = caseTemplate.FinishingCause_Id;
-                }
-            }
-
-            /*Get StateSecondaryId if existing*/
-            var caseStateSecondaryId = 0;
-            if (caseModel?.StateSecondary_Id != null)
-            {
-                var ss = _stateSecondaryService.GetStateSecondary(caseModel.StateSecondary_Id.Value);
-                caseStateSecondaryId = ss?.StateSecondaryId ?? 0;
-                caseModel.StateSecondaryName = ss?.Name;
-            }
-
-            if (caseModel?.WorkingGroup_Id != null)
-            {
-                var curWorkingGroup = _workingGroupService.GetWorkingGroup(caseModel.WorkingGroup_Id.Value);
-                caseModel.WorkingGroupName = curWorkingGroup?.WorkingGroupName;
-            }
-
-            var initData = new InitExtendedForm(customerId, languageId, SessionFacade.CurrentUserIdentity.UserId, caseTemplateId, caseId, UserRoleType.LineManager, caseStateSecondaryId);
-            var lastError = string.Empty;
-
-            var extendedCaseDataModel = _extendedCaseService.GenerateExtendedFormModel(initData, out lastError);
-            if (extendedCaseDataModel == null)
-            {
-                ErrorGenerator.MakeError(lastError);
-                return null;
-            }
-
-            var model = new ExtendedCaseViewModel
-            {
-                CaseId = initData.CaseId,
-                CaseTemplateId = initData.CaseSolutionId,
-                CustomerId = initData.CustomerId,
-                LanguageId = initData.LanguageId,
-                ExtendedCaseDataModel = extendedCaseDataModel,
-                CurrentUser = IsLineManagerApplication() ? SessionFacade.CurrentUserIdentity.EmployeeNumber : SessionFacade.CurrentSystemUser,
-                CurrentCustomer = customer,
-                UserRole = initData.UserRole,
-                StateSecondaryId = caseStateSecondaryId,
-                CaseOU = caseModel.OU_Id.HasValue ? _ouService.GetOU(caseModel.OU_Id.Value) : null,
-                CaseDataModel = caseModel,
-                LogFileGuid = Guid.NewGuid().ToString(),
-                ApplicationType = CurrentApplicationType,
-                AttachmentPlacement = cs.AttachmentPlacement,
-                ShowCommunicationForSelfservice = appSettings.ShowCommunicationForSelfService,
-                ShowCaseActionsPanelOnTop = customer.ShowCaseActionsPanelOnTop,
-                ShowCaseActionsPanelAtBottom = customer.ShowCaseActionsPanelAtBottom,
-                ClosedCaseAlertModel = new ClosedCaseAlertModel()
-                {
-                    FinishingDate = caseModel.FinishingDate,
-                    CaseComplaintDays = cs.CaseComplaintDays
-                },
-                CaseLogsModel = GetCaseLogsModel(initData.CaseId)
-            };
-
-            if (string.IsNullOrEmpty(model.ExtendedCaseDataModel.FormModel.Name))
-            {
-                if (caseTemplate == null)
-                    caseTemplate = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id ?? (caseTemplateId ?? 0));
-
-                if (caseTemplate != null)
-                    model.ExtendedCaseDataModel.FormModel.Name = caseTemplate.Name;
-            }
-
-            model.StatusBar = caseId.IsNew() ? new Dictionary<string, string>() : GetStatusBar(model);
-
-            return model;
-        }
-
         [HttpPost]
         public ActionResult ApplyWorkflow(int caseId, int templateId)
         {
@@ -773,33 +579,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             var customerId = caseId > 0 ? _caseService.GetCaseCustomerId(caseId) : SessionFacade.CurrentCustomerID;
             var steps = GetWorkflowStepModel(customerId, caseId, templateId);
             return Json(new { sucess = true, items = steps }, JsonRequestBehavior.AllowGet);
-        }
-
-        private void SaveCaseFiles(string caseFileKey, int customerId, int caseId, int userId)
-        {
-            //Get from baseCase path
-            var basePath = _masterDataService.GetFilePath(customerId);
-
-            if (!string.IsNullOrWhiteSpace(caseFileKey))
-            {
-                var temporaryFiles = _userTemporaryFilesStorage.GetFiles(caseFileKey, ModuleName.Cases);
-                var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseId, userId)).ToList();
-
-				var paths = new List<KeyValuePair<CaseFileDto, string>>();
-                _caseFileService.AddFiles(newCaseFiles, paths);
-
-				var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-				if (!disableLogFileView.Active)
-				{
-					foreach (var file in paths)
-					{
-						_fileViewLogService.Log(caseId, userId, file.Key.FileName, file.Value, FileViewLogFileSource.Selfservice, FileViewLogOperation.Add);
-					}
-				}
-
-				// delete temp folders                
-				_userTemporaryFilesStorage.DeleteFiles(caseFileKey);
-            }
         }
 
         [HttpPost]
@@ -983,197 +762,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             return View("MultiCustomerCaseOverview", model);
         }
 
-        [HttpGet]
-        public FileContentResult DownloadFile(string id, string fileName)
-        {
-            byte[] fileContent;
-            if (GuidHelper.IsGuid(id))
-            {
-                fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, "");
-            }
-            else
-            {
-				var caseId = int.Parse(id);
-				var c = _caseService.GetCaseBasic(caseId);
-                var basePath = string.Empty;
-                if (c != null)
-                    basePath = _masterDataService.GetFilePath(c.CustomerId);
-
-				var model = _caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
-
-				var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-				if (!disableLogFileView.Active)
-				{
-                    var result = SessionFacade.CurrentUser != null
-                        ? _fileViewLogService.Log(caseId, SessionFacade.CurrentUser.Id, fileName.Trim(), model.FilePath, FileViewLogFileSource.Selfservice, FileViewLogOperation.View) 
-                        : _fileViewLogService.Log(caseId, GetUserName(), fileName.Trim(), model.FilePath, FileViewLogFileSource.Selfservice, FileViewLogOperation.View) ;
-				}
-
-				fileContent = model.Content;
-            }
-
-            return File(fileContent, "application/octet-stream", fileName);
-        }
-
-        [HttpGet]
-        public FileContentResult DownloadNewCaseFile(string id, string fileName)
-        {
-            byte[] fileContent;
-            if (GuidHelper.IsGuid(id))
-                fileContent =  _userTemporaryFilesStorage.GetFileContent(fileName, id, "");
-            else
-            {
-                var caseId = int.Parse(id);
-                var c = _caseService.GetCaseBasic(caseId);
-                var basePath = string.Empty;
-                if (c != null)
-                    basePath = _masterDataService.GetFilePath(c.CustomerId);
-
-				var model = _caseFileService.GetFileContentByIdAndFileName(caseId, basePath, fileName);
-
-                var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-                if (!disableLogFileView.Active)
-                {
-                    var result = SessionFacade.CurrentUser != null
-                        ? _fileViewLogService.Log(caseId, SessionFacade.CurrentUser.Id, fileName.Trim(), model.FilePath, FileViewLogFileSource.Selfservice, FileViewLogOperation.View) 
-                        : _fileViewLogService.Log(caseId, GetUserName(), fileName.Trim(), model.FilePath, FileViewLogFileSource.Selfservice, FileViewLogOperation.View) ;
-                }
-				fileContent = model.Content;
-            }
-            return File(fileContent, "application/octet-stream", fileName);
-        }
-
-        [HttpPost]
-        public void UploadFile(string id, string name)
-        {
-            var uploadedData = Request.GetFileContent();
-            if (uploadedData != null)
-            {
-                if (GuidHelper.IsGuid(id))
-                {
-                    if(_userTemporaryFilesStorage.FileExists(name, id))
-                        throw new HttpException((int)HttpStatusCode.Conflict, null);
-                    
-                    _userTemporaryFilesStorage.AddFile(uploadedData, name, id);
-                }
-            }
-        }
-
-        [HttpPost]
-        public void NewCaseUploadFile(string id, string name)
-        {
-            var uploadedData = Request.GetFileContent();
-            if (uploadedData != null)
-            {
-                if (GuidHelper.IsGuid(id))
-                {
-                    if(_userTemporaryFilesStorage.FileExists(name, id))
-                        throw new HttpException((int)HttpStatusCode.Conflict, null);
-                    
-                    _userTemporaryFilesStorage.AddFile(uploadedData, name, id);
-                }
-            }
-        }
-
-        [HttpPost]
-        public void DeleteNewCaseFile(string id, string fileName)
-        {
-            if(GuidHelper.IsGuid(id))
-            {
-                _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id);
-            }
-            else
-            {
-                var caseId = int.Parse(id);
-                var c = _caseService.GetCaseBasic(caseId);
-                var basePath = string.Empty;
-                if (c != null)
-                    basePath = _masterDataService.GetFilePath(c.CustomerId);
-
-                _caseFileService.DeleteByCaseIdAndFileName(caseId, basePath, fileName.Trim());
-                var disableLogFileView =
-                    _featureToggleService.Get(
-                        FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-                if (!disableLogFileView.Active)
-                {
-                    var path = _filesStorage.ComposeFilePath(ModuleName.Cases, decimal.ToInt32(c.CaseNumber), basePath, "");
-                    var result = SessionFacade.CurrentUser != null
-                        ? _fileViewLogService.Log(caseId, SessionFacade.CurrentUser.Id, fileName.Trim(), path, FileViewLogFileSource.Selfservice, FileViewLogOperation.Delete) 
-                        : _fileViewLogService.Log(caseId, GetUserName(), fileName.Trim(), path, FileViewLogFileSource.Selfservice, FileViewLogOperation.Delete) ;
-
-                }
-            }
-        }
-
-        [HttpGet]
-        public JsonResult NewCaseFiles(string id)
-        {
-            var fileNames = GuidHelper.IsGuid(id)
-                                ? _userTemporaryFilesStorage.GetFileNames(id)
-                                : _caseFileService.FindFileNamesByCaseId(int.Parse(id));
-
-            return Json(fileNames, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        public FileContentResult DownloadLogFile(string id, string fileName, int? caseId)
-        {
-            var customer = caseId.HasValue && caseId > 0 ? _caseService.GetCaseCustomer(caseId.Value) : SessionFacade.CurrentCustomer; 
-            var isTwoAttachmentsMode = IsTwoAttachmentsModeEnabled(customer.Id);
-            var useInternalLogs = customer.UseInternalLogNoteOnExternalPage.ToBool();
-
-            var logFileType = LogFileType.External;
-            var logSubFolder = ModuleName.Log;
-
-            if (isTwoAttachmentsMode && useInternalLogs)
-            {
-                logFileType = LogFileType.Internal;
-                logSubFolder = ModuleName.LogInternal;
-            }
-            
-            byte[] fileContent;
-            if (GuidHelper.IsGuid(id))
-            {
-                fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, logSubFolder);
-            }
-            else
-            {
-				var logId = int.Parse(id);
-
-				var logFiles = _logFileService.GetLogFilesByNameAndId(fileName, logId);
-				var logFile = logFiles
-					.OrderBy(o => o.LogType)
-					.FirstOrDefault(o => o.FileName == fileName);
-
-				// Check that the found file also have set its logfiletype to Internal, if not use external for legacy support.
-				if (logFile != null && isTwoAttachmentsMode && useInternalLogs && logFile.LogType == LogFileType.Internal)
-					logFileType = LogFileType.Internal;
-				else
-					logFileType = LogFileType.External;
-
-				//existing file
-				var basePath = _masterDataService.GetFilePath(customer.Id);
-				var model = _logFileService.GetFileContentByIdAndFileName(logId, basePath, fileName, logFileType);
-
-				fileContent = model.Content;
-
-                var disableLogFileView =
-                    _featureToggleService.Get(
-                        FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-                if (!disableLogFileView.Active)
-                {
-                    var logCaseId = caseId ?? _logService.GetLogById(logId).CaseId;
-                    logSubFolder = logFileType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
-                    var path = _filesStorage.ComposeFilePath(logSubFolder, logId, basePath, "");
-                    var result = SessionFacade.CurrentUser != null
-                        ? _fileViewLogService.Log(logCaseId, SessionFacade.CurrentUser.Id, fileName.Trim(), path, FileViewLogFileSource.Selfservice, FileViewLogOperation.View) 
-                        : _fileViewLogService.Log(logCaseId, GetUserName(), fileName.Trim(), path, FileViewLogFileSource.Selfservice, FileViewLogOperation.View) ;
-                }
-            }
-
-            return File(fileContent, "application/octet-stream", fileName);
-        }
-
         //TODO: should be refactored to methods with single responsibility!
         [HttpGet]
         [ValidateInput(false)]
@@ -1186,6 +774,439 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         //TODO: should be moved to CaseService!
+
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult NewCase(
+            Case newCase, 
+            CaseMailSetting caseMailSetting, 
+            string caseFileKey, 
+            string followerUsers, 
+            int? selectedWorkflowStep,
+            CaseLog caseLog)
+        {
+            decimal caseNum;
+
+            var templateId = selectedWorkflowStep ?? 0;
+            if (templateId > 0)
+            {
+                var caseTemplate = _caseSolutionService.GetCaseSolution(templateId);
+                ApplyTemplate(caseTemplate, newCase, true);
+            }
+
+            Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog, out caseNum);
+
+            if (ConfigurationService.AppSettings.ShowConfirmAfterCaseRegistration)
+            {
+                return RedirectToCaseConfirmation("Your case has been successfully registered.", $"You can follow up your case status via this number: {caseNum}");
+            }
+            else
+            {
+                return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult UrgentInfoMessage(int urgentId, int impactId)
+        {
+            var result = _priorityService.GetPriorityInfoTextByImpactAndUrgency(impactId, urgentId, SessionFacade.CurrentLanguageId);
+            return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult SearchUser(string query, int customerId, string searchKey)
+        {
+            var caseFieldSetting = _caseFieldSettingService.ListToShowOnCasePage(customerId, SessionFacade.CurrentLanguageId)
+                                                          .Where(c => c.ShowExternal == 1)
+                                                          .ToList();
+            var fieldsVisibility = new
+            {
+                Name = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()),
+                Email = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()),
+                Phone = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()),
+                Department = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Department_Id.ToString()),
+                UserCode = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.UserCode.ToString())
+            };
+            var result = _computerService.SearchComputerUsers(customerId, query);
+            return Json(new { searchKey = searchKey, result = result, fieldsVisibility = fieldsVisibility });
+        }
+
+        [HttpPost]
+        public ActionResult SearchComputer(string query, int customerId)
+        {
+            var result = _computerService.SearchComputer(customerId, query);
+            return Json(result);
+        }
+
+        [ValidateInput(false)]
+        [HttpPost]
+        public ActionResult CaseSearchUserEmails(string query, string searchKey)
+        {
+            var searchScope = new EmailSearchScope()
+            {
+                SearchInInitiators = true
+            };
+            var models = _userEmailsSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, searchScope);
+            return Json(new { searchKey = searchKey, result = models });
+        }
+
+        [HttpGet]
+        [ChildActionOnly]
+        public PartialViewResult Communication(int caseId)
+        {
+            var model = GetCaseLogsModel(caseId);
+            return PartialView("_Communication", model);
+        }
+
+        [HttpGet]
+        [ChildActionOnly]
+        public PartialViewResult CaseLogNote(int caseId)
+        {
+            var model = GetCaseLogsModel(caseId);
+            return PartialView("_CaseLogNote", model);
+        }
+
+        [HttpPost]
+        public JsonResult GetProductAreaByCaseType(int? caseTypeId)
+        {
+            var pa = _productAreaService.GetTopProductAreas(SessionFacade.CurrentCustomer.Id).Where(p => p.ShowOnExternalPage != 0).ToList();
+            TranslateProductArea(pa);
+
+            /*TODO: This part does not cover all states and needs to be fixed*/
+            if (caseTypeId.HasValue)
+            {
+                var ctProductAreas = _caseTypeService.GetCaseType(caseTypeId.Value).CaseTypeProductAreas.Select(x => x.ProductArea.GetParent()).ToList();
+                var paNoCaseType = pa.Where(x => x.CaseTypeProductAreas == null || !x.CaseTypeProductAreas.Any()).ToList();
+                ctProductAreas.AddRange(paNoCaseType.Where(p => !ctProductAreas.Select(c => c.Id).Contains(p.Id)));
+                ctProductAreas = ctProductAreas.OrderBy(p => p.Name).ToList();
+
+                if (ctProductAreas.Any())
+                {
+                    var paIds = ctProductAreas.Select(x => x.Id).ToList();
+                    foreach (var ctProductArea in ctProductAreas)
+                    {
+                        paIds.AddRange(GetSubProductAreasIds(ctProductArea));
+                    }
+                    var drString = HtmlHelperExtension.ProductAreaDropdownString(ctProductAreas);
+                    return Json(new { success = true, data = drString, paIds });
+                }
+            }
+
+            pa = pa.OrderBy(p => p.Name).ToList();
+            var praIds = pa.Select(x => x.Id).ToList();
+            foreach (var ctProductArea in pa)
+            {
+                praIds.AddRange(GetSubProductAreasIds(ctProductArea));
+            }
+            var dropString = HtmlHelperExtension.ProductAreaDropdownString(pa);
+            return Json(new { success = true, data = dropString, praIds });
+        }
+
+        [HttpGet]
+        public ActionResult ChangeSystem(int? id)
+        {
+            var emptyResult = Json(new { }, JsonRequestBehavior.AllowGet);
+            if (!id.HasValue) return emptyResult;
+
+            int? ret = null;
+            var e = _systemService.GetSystem(id.Value);
+            if (e != null)
+                ret = (e.Urgency_Id.HasValue && e.Urgency_Id.Value != 0) ? e.Urgency_Id.Value : new int?();
+            return ret.HasValue ?
+                Json(new { urgencyId = ret.Value }, JsonRequestBehavior.AllowGet) :
+                emptyResult;
+        }
+
+        #region private
+        private string GetCaseRegistrationMessage(int languageId)
+        {
+            var registrationInfoText = _infoService.GetInfoText((int)InfoTextType.SelfServiceRegistrationMessage, SessionFacade.CurrentCustomer.Id, languageId);
+            return registrationInfoText?.Name ?? string.Empty;
+        }
+
+        private void ApplyTemplate(CaseSolution caseTemplate, Case caseEntity, bool isWorkflowChange = false)
+        {
+            if (caseEntity.IsAbout == null)
+                caseEntity.IsAbout = new CaseIsAboutEntity();
+
+            _caseSolutionService.ApplyCaseSolution(caseEntity, caseTemplate);
+
+            if (isWorkflowChange)
+            {
+                caseEntity.CurrentCaseSolution_Id = caseTemplate.Id;
+            }
+        }
+
+        private void ApplyTemplate(CaseSolution caseTemplate, CaseModel model, bool isWorkflowChange = false)
+        {
+            _caseSolutionService.ApplyCaseSolution(model, caseTemplate);
+
+            if (isWorkflowChange)
+            {
+                model.CurrentCaseSolution_Id = caseTemplate.Id;
+            }
+
+            model.Text_External = caseTemplate.Text_External;
+            model.Text_Internal = caseTemplate.Text_Internal;
+            model.FinishingType_Id = caseTemplate.FinishingCause_Id.IfNullThenElse(model.FinishingType_Id);
+        }
+
+        private ExtendedCaseViewModel GetExtendedCaseViewModel(int? caseTemplateId = null, int? caseId = null)
+        {
+            if (caseTemplateId.IsNew() && caseId.IsNew())
+            {
+                ErrorGenerator.MakeError("Template or Case must be specified!", 210);
+                return null;
+            }
+
+            var caseModel = new CaseModel
+            {
+                RegUserId = SessionFacade.CurrentUserIdentity.UserId,
+                RegUserDomain = SessionFacade.CurrentUserIdentity.Domain,
+                RegUserName = $"{SessionFacade.CurrentUserIdentity.FirstName} {SessionFacade.CurrentUserIdentity.LastName}".Trim(),
+                IpAddress = Request.GetIpAddress(),
+                CaseSolution_Id = caseTemplateId,
+                CurrentCaseSolution_Id = caseTemplateId,
+                CaseFileKey = Guid.NewGuid().ToString()
+            };
+
+            CaseSolution caseTemplate = null;
+            if (caseTemplateId.HasValue && caseTemplateId.Value > 0)
+                caseTemplate = _caseSolutionService.GetCaseSolution(caseTemplateId.Value);
+
+            if (caseId.HasValue)
+                caseModel = _universalCaseService.GetCase(caseId.Value);
+
+            if (caseModel == null && caseTemplate == null)
+            {
+                ErrorGenerator.MakeError("Template or Case must be specified!", 211);
+                return null;
+            }
+
+            var isAnonymousMode = ConfigurationService.AppSettings.LoginMode == LoginMode.Anonymous;
+            if (!isAnonymousMode && caseId.HasValue && !UserHasAccessToCase(caseModel))
+            {
+                ErrorGenerator.MakeError("Case not found among your cases!");
+                return null;
+            }
+
+            var cusId = caseModel != null && caseModel.Customer_Id > 0 ? caseModel.Customer_Id : (caseTemplate?.Customer_Id ?? 0);
+            var globalSettings = _globalSettingService.GetGlobalSettings().First();
+
+            // check only if multi customer is not enabled. Allow user to see own cases for different customers.
+            if (!globalSettings.MultiCustomersSearch.ToBool() && !caseId.IsNew() && cusId != SessionFacade.CurrentCustomerID)
+            {
+                ErrorGenerator.MakeError("Selected Case doesn't belong to current customer!");
+                return null;
+            }
+
+            var customer = SessionFacade.CurrentCustomer;
+
+            if (globalSettings.MultiCustomersSearch.ToBool() && !caseId.IsNew())
+            {
+                //override current customer when openning a case from another customer in multicustomer search mode
+                customer = _customerService.GetCustomer(cusId);
+                //SessionFacade.CurrentCustomer = customer;
+            }
+            
+            var customerId = customer.Id;
+            var languageId = SessionFacade.CurrentLanguageId;
+            var appSettings = ConfigurationService.AppSettings;
+            var cs = _settingService.GetCustomerSetting(customerId);
+            
+            caseModel.FieldSettings = 
+                _caseFieldSettingService.ListToShowOnCasePage(customerId, languageId).Where(c => c.ShowExternal == 1).ToList();
+
+            if (caseId.IsNew())
+            {
+                if (caseTemplate == null || caseTemplate.Status == 0 || !caseTemplate.ShowInSelfService || caseTemplate.Customer_Id != customerId)
+                {
+                    ErrorGenerator.MakeError("Selected template is not available anymore!");
+                    return null;
+                }
+            }
+
+            if (caseId == null || caseId == 0)
+            {
+                caseModel.Customer_Id = customerId;
+
+                var registrationSource =
+                    _registrationSourceCustomerService.GetCustomersActiveRegistrationSources(customerId).FirstOrDefault(x => x.SystemCode == (int)CaseRegistrationSource.SelfService);
+
+                if (registrationSource != null)
+                    caseModel.RegistrationSourceCustomer_Id = registrationSource.Id;
+
+                if (caseTemplate != null)
+                {
+                    _caseSolutionService.ApplyCaseSolution(caseModel, caseTemplate);
+
+                    caseModel.Text_External = caseTemplate.Text_External;
+                    caseModel.Text_Internal = caseTemplate.Text_Internal;
+                    caseModel.FinishingType_Id = caseTemplate.FinishingCause_Id;
+                }
+            }
+
+            /*Get StateSecondaryId if existing*/
+            var caseStateSecondaryId = 0;
+            if (caseModel?.StateSecondary_Id != null)
+            {
+                var ss = _stateSecondaryService.GetStateSecondary(caseModel.StateSecondary_Id.Value);
+                caseStateSecondaryId = ss?.StateSecondaryId ?? 0;
+                caseModel.StateSecondaryName = ss?.Name;
+            }
+
+            if (caseModel?.WorkingGroup_Id != null)
+            {
+                var curWorkingGroup = _workingGroupService.GetWorkingGroup(caseModel.WorkingGroup_Id.Value);
+                caseModel.WorkingGroupName = curWorkingGroup?.WorkingGroupName;
+            }
+
+            var initData = new InitExtendedForm(customerId, languageId, SessionFacade.CurrentUserIdentity.UserId, caseTemplateId, caseId, UserRoleType.LineManager, caseStateSecondaryId);
+            var lastError = string.Empty;
+
+            var extendedCaseDataModel = _extendedCaseService.GenerateExtendedFormModel(initData, out lastError);
+            if (extendedCaseDataModel == null)
+            {
+                ErrorGenerator.MakeError(lastError);
+                return null;
+            }
+
+            var model = new ExtendedCaseViewModel
+            {
+                CaseId = initData.CaseId,
+                CaseTemplateId = initData.CaseSolutionId,
+                CustomerId = initData.CustomerId,
+                LanguageId = initData.LanguageId,
+                ExtendedCaseDataModel = extendedCaseDataModel,
+                CurrentUser = IsLineManagerApplication() ? SessionFacade.CurrentUserIdentity.EmployeeNumber : SessionFacade.CurrentSystemUser,
+                CurrentCustomer = customer,
+                UserRole = initData.UserRole,
+                StateSecondaryId = caseStateSecondaryId,
+                CaseOU = caseModel.OU_Id.HasValue ? _ouService.GetOU(caseModel.OU_Id.Value) : null,
+                CaseDataModel = caseModel,
+                LogFileGuid = Guid.NewGuid().ToString(),
+                ApplicationType = CurrentApplicationType,
+                AttachmentPlacement = cs.AttachmentPlacement,
+                ShowCommunicationForSelfservice = appSettings.ShowCommunicationForSelfService,
+                ShowCaseActionsPanelOnTop = customer.ShowCaseActionsPanelOnTop,
+                ShowCaseActionsPanelAtBottom = customer.ShowCaseActionsPanelAtBottom,
+                ClosedCaseAlertModel = new ClosedCaseAlertModel()
+                {
+                    FinishingDate = caseModel.FinishingDate,
+                    CaseComplaintDays = cs.CaseComplaintDays
+                },
+                CaseLogsModel = GetCaseLogsModel(initData.CaseId)
+            };
+
+            if (string.IsNullOrEmpty(model.ExtendedCaseDataModel.FormModel.Name))
+            {
+                if (caseTemplate == null)
+                    caseTemplate = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id ?? (caseTemplateId ?? 0));
+
+                if (caseTemplate != null)
+                    model.ExtendedCaseDataModel.FormModel.Name = caseTemplate.Name;
+            }
+
+            model.StatusBar = caseId.IsNew() ? new Dictionary<string, string>() : GetStatusBar(model);
+
+            return model;
+        }
+
+        private void SaveCaseFiles(string caseFileKey, int customerId, int caseId, int userId)
+        {
+            //Get from baseCase path
+            var basePath = _masterDataService.GetFilePath(customerId);
+
+            if (!string.IsNullOrWhiteSpace(caseFileKey))
+            {
+                var temporaryFiles = _userTemporaryFilesStorage.GetFiles(caseFileKey, ModuleName.Cases);
+                var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseId, userId)).ToList();
+
+                var paths = new List<KeyValuePair<CaseFileDto, string>>();
+                _caseFileService.AddFiles(newCaseFiles, paths);
+
+                var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+                if (!disableLogFileView.Active)
+                {
+                    foreach (var file in paths)
+                    {
+                        _fileViewLogService.Log(caseId, userId, file.Key.FileName, file.Value, FileViewLogFileSource.Selfservice, FileViewLogOperation.Add);
+                    }
+                }
+
+                // delete temp folders                
+                _userTemporaryFilesStorage.DeleteFiles(caseFileKey);
+            }
+        }
+
+        private ActionResult RedirectToCaseConfirmation(string title, string details)
+        {
+            SessionFacade.LastMessageDialog = MessageDialogModel.Success(title, details);
+            return RedirectToAction("Index", "Message");
+        }
+
+        private CaseLogsModel GetCaseLogsModel(int? caseId)
+        {
+            var customer = caseId.HasValue && caseId > 0 ? _caseService.GetCaseCustomer(caseId.Value) : SessionFacade.CurrentCustomer;
+            var isTwoAttachmentsMode = IsTwoAttachmentsModeEnabled(customer.Id);
+            var useInternalLogs = customer.UseInternalLogNoteOnExternalPage.ToBool();
+            
+            var caseLogModels = new List<CaseLogModel>();
+            if (caseId > 0)
+            {
+                var caseLogs = 
+                    _logService.GetLogsByCaseId(caseId.Value, useInternalLogs, isTwoAttachmentsMode && useInternalLogs).OrderByDescending(l => l.RegTime).ToList();
+
+                var logsFilter =
+                    useInternalLogs
+                        ? (Func<CaseLogData, bool>)(l => !string.IsNullOrEmpty(l.InternalText.Trim()))
+                        : (Func<CaseLogData, bool>)(l => !string.IsNullOrEmpty(l.ExternalText.Trim()));
+
+                // filter case logs
+                caseLogModels = caseLogs.Where(logsFilter).Select(data => new CaseLogModel
+                {
+                    Id = data.Id,
+                    CaseId = data.CaseId,
+                    UserId = data.UserId,
+                    UserFirstName = data.UserFirstName,
+                    UserSurName = data.UserSurName,
+                    RegUserName = data.RegUserName,
+                    InternalText = data.InternalText,
+                    ExternalText = data.ExternalText,
+                    LogDate = data.LogDate,
+                    RegTime = data.RegTime,
+                    
+                    Files = data.Files?.Select(f => new Models.Case.LogFileModel
+                    {
+                        Id = f.Id,
+                        FileName = f.FileName,
+                        LogType = f.LogType
+                    }).ToList()
+                }).ToList();
+            }
+            
+            bool allowAttachments;
+            if (useInternalLogs)
+            {
+                allowAttachments = isTwoAttachmentsMode;
+            }
+            else
+            {
+                var fieldName = GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString().GetCaseFieldName();
+                allowAttachments = _caseFieldSettingService.GetCaseFieldSetting(customer.Id, fieldName)?.ShowExternal.ToBool() ?? false;
+            }
+            
+
+            var model = new CaseLogsModel(
+                            caseId ?? 0,
+                            caseLogModels,
+                            SessionFacade.CurrentSystemUser,
+                            useInternalLogs,
+                            allowAttachments);
+            return model;
+        }
+
         private void SaveLogMessage(int caseId, string extraNote, string logFileGuid) 
         { 
             IDictionary<string, string> errors;            
@@ -1369,278 +1390,6 @@ namespace DH.Helpdesk.SelfService.Controllers
                 _caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, string.Empty, userTimeZone, null, caseIsActivated);
             }
         }
-
-        [HttpPost]
-        [ValidateInput(false)]
-        public ActionResult NewCase(
-            Case newCase, 
-            CaseMailSetting caseMailSetting, 
-            string caseFileKey, 
-            string followerUsers, 
-            int? selectedWorkflowStep,
-            CaseLog caseLog)
-        {
-            decimal caseNum;
-
-            var templateId = selectedWorkflowStep ?? 0;
-            if (templateId > 0)
-            {
-                var caseTemplate = _caseSolutionService.GetCaseSolution(templateId);
-                ApplyTemplate(caseTemplate, newCase, true);
-            }
-
-            Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog, out caseNum);
-
-            if (ConfigurationService.AppSettings.ShowConfirmAfterCaseRegistration)
-            {
-                return RedirectToCaseConfirmation("Your case has been successfully registered.", $"You can follow up your case status via this number: {caseNum}");
-            }
-            else
-            {
-                return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
-            }
-        }
-
-        private ActionResult RedirectToCaseConfirmation(string title, string details)
-        {
-            SessionFacade.LastMessageDialog = MessageDialogModel.Success(title, details);
-            return RedirectToAction("Index", "Message");
-        }
-
-        [HttpPost]
-        public ActionResult UrgentInfoMessage(int urgentId, int impactId)
-        {
-            var result = _priorityService.GetPriorityInfoTextByImpactAndUrgency(impactId, urgentId, SessionFacade.CurrentLanguageId);
-            return Json(result);
-        }
-
-        [HttpPost]
-        public ActionResult SearchUser(string query, int customerId, string searchKey)
-        {
-            var caseFieldSetting = _caseFieldSettingService.ListToShowOnCasePage(customerId, SessionFacade.CurrentLanguageId)
-                                                          .Where(c => c.ShowExternal == 1)
-                                                          .ToList();
-            var fieldsVisibility = new
-            {
-                Name = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()),
-                Email = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()),
-                Phone = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()),
-                Department = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Department_Id.ToString()),
-                UserCode = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.UserCode.ToString())
-            };
-            var result = _computerService.SearchComputerUsers(customerId, query);
-            return Json(new { searchKey = searchKey, result = result, fieldsVisibility = fieldsVisibility });
-        }
-
-        [HttpPost]
-        public ActionResult SearchComputer(string query, int customerId)
-        {
-            var result = _computerService.SearchComputer(customerId, query);
-            return Json(result);
-        }
-
-        [ValidateInput(false)]
-        [HttpPost]
-        public ActionResult CaseSearchUserEmails(string query, string searchKey)
-        {
-            var searchScope = new EmailSearchScope()
-            {
-                SearchInInitiators = true
-            };
-            var models = _userEmailsSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, searchScope);
-            return Json(new { searchKey = searchKey, result = models });
-        }
-
-        [HttpPost]
-        public void UploadLogFile(string id, string name, int? caseId)
-        {
-            var customer = caseId.HasValue && caseId > 0 ? _caseService.GetCaseCustomer(caseId.Value) : SessionFacade.CurrentCustomer;
-            var isTwoAttachmentsMode = IsTwoAttachmentsModeEnabled(customer.Id);
-            var isInternalLogUsed =  customer.UseInternalLogNoteOnExternalPage.ToBool();
-            var logSubFolder = isTwoAttachmentsMode && isInternalLogUsed ? ModuleName.LogInternal : ModuleName.Log;
-            
-            if (GuidHelper.IsGuid(id))
-            {
-                var fileContent = Request.GetFileContent();
-                
-                if (_userTemporaryFilesStorage.FileExists(name, id, logSubFolder))
-                {
-                    //return;
-                    //this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Log); 
-                    //throw new HttpException((int)HttpStatusCode.Conflict, null); because it take a long time.
-                }
-                _userTemporaryFilesStorage.AddFile(fileContent, name, id, logSubFolder);
-            }
-        }
-
-        [HttpGet]
-        public JsonResult GetLogFiles(string id, int? caseId)
-        {
-            var customer = caseId.HasValue && caseId > 0 ? _caseService.GetCaseCustomer(caseId.Value) : SessionFacade.CurrentCustomer;
-            var isTwoAttachmentsMode = IsTwoAttachmentsModeEnabled(customer.Id);
-            var isInternalLogUsed = customer.UseInternalLogNoteOnExternalPage.ToBool();
-
-            //default log files values
-            var logType = LogFileType.External;
-            var logSubFolder = ModuleName.Log;
-            
-            //load only internal log files if 2attachments and internalLog is used 
-            if (isTwoAttachmentsMode && isInternalLogUsed)
-            {
-                logType = LogFileType.Internal;
-                logSubFolder = ModuleName.LogInternal;
-            }
-
-            var fileNames = GuidHelper.IsGuid(id)
-                ? _userTemporaryFilesStorage.GetFileNames(id, logSubFolder)
-                : _logFileService.FindFileNamesByLogId(int.Parse(id), logType);
-            
-            return Json(fileNames, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public void DeleteLogFile(string id, string fileName, int? caseId)
-        {
-            if (GuidHelper.IsGuid(id))
-            {
-                var customer = caseId.HasValue && caseId > 0 ? _caseService.GetCaseCustomer(caseId.Value) : SessionFacade.CurrentCustomer;
-                var isTwoAttachmentsMode = IsTwoAttachmentsModeEnabled(customer.Id);
-                var logSubFolder = isTwoAttachmentsMode && customer.UseInternalLogNoteOnExternalPage.ToBool() ? ModuleName.LogInternal : ModuleName.Log;
-
-                // delete log file - check internal or external
-                _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, logSubFolder);
-            }
-        }
-
-        [HttpGet]
-        [ChildActionOnly]
-        public PartialViewResult Communication(int caseId)
-        {
-            var model = GetCaseLogsModel(caseId);
-            return PartialView("_Communication", model);
-        }
-
-        [HttpGet]
-        [ChildActionOnly]
-        public PartialViewResult CaseLogNote(int caseId)
-        {
-            var model = GetCaseLogsModel(caseId);
-            return PartialView("_CaseLogNote", model);
-        }
-
-        private CaseLogsModel GetCaseLogsModel(int? caseId)
-        {
-            var customer = caseId.HasValue && caseId > 0 ? _caseService.GetCaseCustomer(caseId.Value) : SessionFacade.CurrentCustomer;
-            var isTwoAttachmentsMode = IsTwoAttachmentsModeEnabled(customer.Id);
-            var useInternalLogs = customer.UseInternalLogNoteOnExternalPage.ToBool();
-            
-            var caseLogModels = new List<CaseLogModel>();
-            if (caseId > 0)
-            {
-                var caseLogs = 
-                    _logService.GetLogsByCaseId(caseId.Value, useInternalLogs, isTwoAttachmentsMode && useInternalLogs).OrderByDescending(l => l.RegTime).ToList();
-
-                var logsFilter =
-                    useInternalLogs
-                        ? (Func<CaseLogData, bool>)(l => !string.IsNullOrEmpty(l.InternalText.Trim()))
-                        : (Func<CaseLogData, bool>)(l => !string.IsNullOrEmpty(l.ExternalText.Trim()));
-
-                // filter case logs
-                caseLogModels = caseLogs.Where(logsFilter).Select(data => new CaseLogModel
-                {
-                    Id = data.Id,
-                    CaseId = data.CaseId,
-                    UserId = data.UserId,
-                    UserFirstName = data.UserFirstName,
-                    UserSurName = data.UserSurName,
-                    RegUserName = data.RegUserName,
-                    InternalText = data.InternalText,
-                    ExternalText = data.ExternalText,
-                    LogDate = data.LogDate,
-                    RegTime = data.RegTime,
-                    
-                    Files = data.Files?.Select(f => new Models.Case.LogFileModel
-                    {
-                        Id = f.Id,
-                        FileName = f.FileName,
-                        LogType = f.LogType
-                    }).ToList()
-                }).ToList();
-            }
-            
-            bool allowAttachments;
-            if (useInternalLogs)
-            {
-                allowAttachments = isTwoAttachmentsMode;
-            }
-            else
-            {
-                var fieldName = GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString().GetCaseFieldName();
-                allowAttachments = _caseFieldSettingService.GetCaseFieldSetting(customer.Id, fieldName)?.ShowExternal.ToBool() ?? false;
-            }
-            
-
-            var model = new CaseLogsModel(
-                            caseId ?? 0,
-                            caseLogModels,
-                            SessionFacade.CurrentSystemUser,
-                            useInternalLogs,
-                            allowAttachments);
-            return model;
-        }
-
-        [HttpPost]
-        public JsonResult GetProductAreaByCaseType(int? caseTypeId)
-        {
-            var pa = _productAreaService.GetTopProductAreas(SessionFacade.CurrentCustomer.Id).Where(p => p.ShowOnExternalPage != 0).ToList();
-            TranslateProductArea(pa);
-
-            /*TODO: This part does not cover all states and needs to be fixed*/
-            if (caseTypeId.HasValue)
-            {
-                var ctProductAreas = _caseTypeService.GetCaseType(caseTypeId.Value).CaseTypeProductAreas.Select(x => x.ProductArea.GetParent()).ToList();
-                var paNoCaseType = pa.Where(x => x.CaseTypeProductAreas == null || !x.CaseTypeProductAreas.Any()).ToList();
-                ctProductAreas.AddRange(paNoCaseType.Where(p => !ctProductAreas.Select(c => c.Id).Contains(p.Id)));
-                ctProductAreas = ctProductAreas.OrderBy(p => p.Name).ToList();
-
-                if (ctProductAreas.Any())
-                {
-                    var paIds = ctProductAreas.Select(x => x.Id).ToList();
-                    foreach (var ctProductArea in ctProductAreas)
-                    {
-                        paIds.AddRange(GetSubProductAreasIds(ctProductArea));
-                    }
-                    var drString = HtmlHelperExtension.ProductAreaDropdownString(ctProductAreas);
-                    return Json(new { success = true, data = drString, paIds });
-                }
-            }
-
-            pa = pa.OrderBy(p => p.Name).ToList();
-            var praIds = pa.Select(x => x.Id).ToList();
-            foreach (var ctProductArea in pa)
-            {
-                praIds.AddRange(GetSubProductAreasIds(ctProductArea));
-            }
-            var dropString = HtmlHelperExtension.ProductAreaDropdownString(pa);
-            return Json(new { success = true, data = dropString, praIds });
-        }
-
-        [HttpGet]
-        public ActionResult ChangeSystem(int? id)
-        {
-            var emptyResult = Json(new { }, JsonRequestBehavior.AllowGet);
-            if (!id.HasValue) return emptyResult;
-
-            int? ret = null;
-            var e = _systemService.GetSystem(id.Value);
-            if (e != null)
-                ret = (e.Urgency_Id.HasValue && e.Urgency_Id.Value != 0) ? e.Urgency_Id.Value : new int?();
-            return ret.HasValue ?
-                Json(new { urgencyId = ret.Value }, JsonRequestBehavior.AllowGet) :
-                emptyResult;
-        }
-
-        #region private
 
         private void TranslateProductArea(ICollection<ProductArea> pa)
         {
@@ -2654,22 +2403,16 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
 
-        // keep for diagnostic purposes
-        private void LogWithContext(string msg)
-        {
-            var customerId = SessionFacade.CurrentCustomerID;
-            var userIdentityEmail = SessionFacade.CurrentUserIdentity?.Email;
-            var userIdentityEmployeeNumber = SessionFacade.CurrentUserIdentity?.EmployeeNumber;
-            var userIdentityUserId = SessionFacade.CurrentUserIdentity?.UserId;
-            var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
-            var localUserId = SessionFacade.CurrentLocalUser?.UserId;
-        }
-
-        private bool CheckFieldExists(List<CaseListToCase> fieldSettings, string fieldName)
-        {
-            var fieldNameToCheck = fieldName.GetCaseFieldName();
-            return fieldSettings.Select(f => f.Name).Contains(fieldNameToCheck);
-        }
+        //// keep for diagnostic purposes
+        //private void LogWithContext(string msg)
+        //{
+        //    var customerId = SessionFacade.CurrentCustomerID;
+        //    var userIdentityEmail = SessionFacade.CurrentUserIdentity?.Email;
+        //    var userIdentityEmployeeNumber = SessionFacade.CurrentUserIdentity?.EmployeeNumber;
+        //    var userIdentityUserId = SessionFacade.CurrentUserIdentity?.UserId;
+        //    var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
+        //    var localUserId = SessionFacade.CurrentLocalUser?.UserId;
+        //}
 
         private bool IsTwoAttachmentsModeEnabled(int customerId)
         {
