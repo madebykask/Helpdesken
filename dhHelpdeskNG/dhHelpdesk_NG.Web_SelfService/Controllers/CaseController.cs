@@ -50,7 +50,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 	using Models.Message;
 	using Services.Infrastructure;
 
-    public partial class CaseController : BaseController
+    public class CaseController : BaseController
     {
         private readonly ILog _logger = LogManager.GetLogger(typeof(CaseController));
 
@@ -1131,7 +1131,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                 {
                     foreach (var file in paths)
                     {
-                        _fileViewLogService.Log(caseId, userId, file.Key.FileName, file.Value, FileViewLogFileSource.Selfservice, FileViewLogOperation.Add);
+                        var result = SessionFacade.CurrentUser != null
+                            ? _fileViewLogService.Log(caseId, SessionFacade.CurrentUser.Id, file.Key.FileName, file.Value, FileViewLogFileSource.Selfservice, FileViewLogOperation.Add) 
+                            : _fileViewLogService.Log(caseId, GetUserName(), file.Key.FileName, file.Value, FileViewLogFileSource.Selfservice, FileViewLogOperation.Add) ;
                     }
                 }
 
