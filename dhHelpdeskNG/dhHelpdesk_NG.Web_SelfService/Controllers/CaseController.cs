@@ -416,9 +416,6 @@ namespace DH.Helpdesk.SelfService.Controllers
                     }
                     model.ProductAreaParantPath = string.Join(" - ", translatedText);
                 }
-
-                if (p?.Priority_Id != null && !model.NewCase.Priority_Id.HasValue)
-                    model.NewCase.Priority_Id = p.Priority_Id;
             }
 
             //Translate Category Path
@@ -439,13 +436,6 @@ namespace DH.Helpdesk.SelfService.Controllers
                     }
                     model.CategoryParentPath = string.Join(" - ", translatedText);
                 }
-            }
-
-            if (model.NewCase.WorkingGroup_Id.HasValue && !model.NewCase.StateSecondary_Id.HasValue)
-            {
-                var wg = _workingGroupService.GetWorkingGroup(model.NewCase.WorkingGroup_Id.Value);
-                if (wg?.StateSecondary_Id != null)
-                    model.NewCase.StateSecondary_Id = wg.StateSecondary_Id.Value;
             }
 
             if (model.NewCase.CaseType_Id > 0)
@@ -1788,15 +1778,6 @@ namespace DH.Helpdesk.SelfService.Controllers
                 SystemEmail = caseMailSetting.HelpdeskMailFromAdress
             };
 
-            if (newCase.WorkingGroup_Id.HasValue)
-            {
-                var workingGroup = _workingGroupService.GetWorkingGroup(newCase.WorkingGroup_Id.Value);
-                if (!string.IsNullOrWhiteSpace(workingGroup?.EMail) && _emailService.IsValidEmail(workingGroup.EMail))
-                    mailSenders.WGEmail = workingGroup.EMail;
-            }
-
-            caseMailSetting.CustomeMailFromAddress = mailSenders;
-
             var basePath = _masterDataService.GetFilePath(newCase.Customer_Id);
             newCase.LatestSLACountDate = CalculateLatestSLACountDate(newCase.StateSecondary_Id);
 
@@ -1813,9 +1794,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 var priorityImpactUrgencies = _urgencyService.GetPriorityImpactUrgencies(newCase.Customer_Id);
                 var prioInfo = priorityImpactUrgencies.FirstOrDefault(p=> p.Impact_Id == newCase.Impact_Id && p.Urgency_Id == newCase.Urgency_Id);
                 if (prioInfo != null)
-                {
                     newCase.Priority_Id = prioInfo.Priority_Id;
-                }
             }
 
             // All values should be taken from the template, no rules 2017-09-29, only if template workinggroup is null this rule will happend (Höganäs)(2017-11-01)
@@ -1823,13 +1802,10 @@ namespace DH.Helpdesk.SelfService.Controllers
             {
                 var productArea = _productAreaService.GetProductArea(newCase.ProductArea_Id.Value);
 
-                if (!newCase.WorkingGroup_Id.HasValue)
-                {
-                    if (productArea != null && productArea.WorkingGroup_Id.HasValue)
-                    {
-                        newCase.WorkingGroup_Id = productArea.WorkingGroup_Id;
-                    }
-                }
+                if (!newCase.WorkingGroup_Id.HasValue && productArea?.WorkingGroup_Id != null)
+                    newCase.WorkingGroup_Id = productArea.WorkingGroup_Id;
+                if (!newCase.Priority_Id.HasValue && productArea?.Priority_Id != null)
+                    newCase.Priority_Id = productArea.Priority_Id;
             }
 
             if (newCase.Department_Id.HasValue && newCase.Priority_Id.HasValue)
@@ -1837,7 +1813,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 var dept = _departmentService.GetDepartment(newCase.Department_Id.Value);
                 var priority = _priorityService.GetPriorities(newCase.Customer_Id).Where(it => it.Id == newCase.Priority_Id && it.IsActive == 1).FirstOrDefault();
 
-                if (dept != null && dept.WatchDateCalendar_Id.HasValue && priority != null && priority.SolutionTime == 0)
+                if (dept?.WatchDateCalendar_Id != null && priority != null && priority.SolutionTime == 0)
                 {
                     newCase.WatchDate = 
                         _watchDateCalendarService.GetClosestDateTo(dept.WatchDateCalendar_Id.Value, utcNow);
@@ -1846,23 +1822,25 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             if (newCase.CaseType_Id > 0)
             {
-                var caseType = this._caseTypeService.GetCaseType(newCase.CaseType_Id);
-                if (!newCase.WorkingGroup_Id.HasValue)
-                {
-                    if (caseType != null && caseType.WorkingGroup_Id.HasValue)
-                    {
-                        newCase.WorkingGroup_Id = caseType.WorkingGroup_Id;
-                    }
-                }
+                var caseType = _caseTypeService.GetCaseType(newCase.CaseType_Id);
+                if (!newCase.WorkingGroup_Id.HasValue && caseType?.WorkingGroup_Id != null)
+                  newCase.WorkingGroup_Id = caseType.WorkingGroup_Id;
 
-                if (!newCase.Performer_User_Id.HasValue)
-                {
-                    if (caseType != null && caseType.User_Id.HasValue)
-                    {
-                        newCase.Performer_User_Id = caseType.User_Id;
-                    }
-                }
+                if (!newCase.Performer_User_Id.HasValue && caseType?.User_Id != null)
+                  newCase.Performer_User_Id = caseType.User_Id;
             }
+
+            if (newCase.WorkingGroup_Id.HasValue)
+            {
+                var wg = _workingGroupService.GetWorkingGroup(newCase.WorkingGroup_Id.Value);
+                if (!string.IsNullOrWhiteSpace(wg?.EMail) && _emailService.IsValidEmail(wg.EMail))
+                    mailSenders.WGEmail = wg.EMail;
+
+                if(!newCase.StateSecondary_Id.HasValue && wg?.StateSecondary_Id != null)
+                    newCase.StateSecondary_Id = wg.StateSecondary_Id.Value;
+            }
+
+            caseMailSetting.CustomeMailFromAddress = mailSenders;
 
             if (newCase.CaseSolution_Id == 0)
                 newCase.CaseSolution_Id = null;
