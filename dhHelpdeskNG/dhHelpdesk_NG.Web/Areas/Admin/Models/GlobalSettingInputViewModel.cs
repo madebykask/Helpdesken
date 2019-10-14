@@ -37,7 +37,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         public IList<SelectListItem> SearchConditions { get; set; }
 
         public bool HasDataPrivacyAccess { get; set; }
-        public bool HasDataSecurityInformationPermission { get; set; }
     }
 
     public class TranslationGridModel

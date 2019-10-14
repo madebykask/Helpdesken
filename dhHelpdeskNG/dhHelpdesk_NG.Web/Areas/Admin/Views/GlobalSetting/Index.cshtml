@@ -51,12 +51,9 @@
                     <a href="#fragment-7">@Translation.GetCoreTextTranslation("Dataintegritet") &ndash; @Translation.GetCoreTextTranslation("Historik")</a>
                 </li>
             }
-            @if (Model.HasDataSecurityInformationPermission)
-            {
-                <li id="tab6" onclick="toggleMenuItems(8)">
-                    <a href="#fragment-8">@Translation.GetCoreTextTranslation("Filåtkomst")</a>
-                </li>
-            }
+            <li id="tab6" onclick="toggleMenuItems(8)">
+                <a href="#fragment-8">@Translation.GetCoreTextTranslation("Filåtkomst")</a>
+            </li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
@@ -216,13 +213,10 @@
                 </div>
             }
 
-            @if (Model.HasDataSecurityInformationPermission)
-            {
-                <!-- Case Files View Log -->
-                <div class="tab-pane tab-pane-border" id="fragment-8">
-                    @Html.Action("FilesViewLog")
-                </div>
-            }
+            <!-- Case Files View Log -->
+            <div class="tab-pane tab-pane-border" id="fragment-8">
+                @Html.Action("FilesViewLog")
+            </div>
 
             <input type="hidden" name="activeTab" id="activeTab" value="@SessionFacade.ActiveTab" />
         </div>

@@ -144,14 +144,6 @@
         <tr>
             <td></td>
             <td>
-                <input data-field="dataSecurityPermission" type="checkbox" name="User.DataSecurityPermission" @(Model.User.DataSecurityPermission == 1 ? "checked=checked" : "") value="1" />
-                <input type="hidden" name="User.DataSecurityPermission" value="0" />
-                &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren har rättighet till datasäkerhetsinformation")
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
                 <input data-field="caseUnlockPermission" type="checkbox" name="User.CaseUnlockPermission" @(Model.User.CaseUnlockPermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.CaseUnlockPermission" value="0" />
                 &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren har rättighet till") @Translation.GetCoreTextTranslation("Lås upp ärende").ToLower()

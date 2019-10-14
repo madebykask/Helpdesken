@@ -43,7 +43,6 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             int contractPermission,
             int setPriorityPermission,
             int invoicePermission,
-            int dataSecurityPermission,
             int caseUnlockPermission,
             int refreshContent,
             string firstName,
@@ -88,7 +87,6 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.ContractPermission = contractPermission;
             this.SetPriorityPermission = setPriorityPermission;
             this.InvoicePermission = invoicePermission;
-            this.DataSecurityPermission = dataSecurityPermission;
             this.CaseUnlockPermission = caseUnlockPermission;
             this.RefreshContent = refreshContent;
             this.FirstName = firstName;
@@ -159,8 +157,6 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
         public int SetPriorityPermission { get; set; }
 
         public int InvoicePermission { get; set; }
-
-        public int DataSecurityPermission { get; set; }
 
         //public int RestrictedCasePermission { get; set; }
 

@@ -87,11 +87,6 @@
                 permissions.Add(UserPermission.FollowUpPermission);
             }
 
-            if (user.DataSecurityPermission.ToBool())
-            {
-                permissions.Add(UserPermission.DataSecurityPermission);
-            }
-
             if (user.CaseSolutionPermission.ToBool())
             {
                 permissions.Add(UserPermission.CaseSolutionPermission);
@@ -212,11 +207,6 @@
                     if (permissions.Contains(UserPermission.FollowUpPermission))
                     {
                         wrongPermissions.Add(UserPermission.FollowUpPermission);
-                    }
-
-                    if (permissions.Contains(UserPermission.DataSecurityPermission))
-                    {
-                        wrongPermissions.Add(UserPermission.DataSecurityPermission);
                     }
 
                     if (permissions.Contains(UserPermission.CaseSolutionPermission))

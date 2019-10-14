@@ -57,7 +57,6 @@ $(function () {
         closeCasePermission: 'closeCasePermission',
         //restrictedCasePermission: 'restrictedCasePermission',
         followUpPermission: 'followUpPermission',
-        dataSecurityPermission: 'dataSecurityPermission',
         caseSolutionPermission: 'caseSolutionPermission',
         reportPermission: 'reportPermission',
         faqPermission: 'faqPermission',
@@ -539,7 +538,6 @@ $(function () {
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="closeCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.closeCasePermission }));
         //casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="restrictedCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.restrictedCasePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="followUpPermission"]'), type: dhHelpdesk.admin.users.permissionType.followUpPermission }));
-        casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="dataSecurityPermission"]'), type: dhHelpdesk.admin.users.permissionType.dataSecurityPermission }));
 
         var caseTemplatePermissions = [];
         caseTemplatePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="caseSolutionPermission"]'), type: dhHelpdesk.admin.users.permissionType.caseSolutionPermission }));

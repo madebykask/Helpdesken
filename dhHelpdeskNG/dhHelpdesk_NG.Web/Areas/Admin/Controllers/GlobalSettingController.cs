@@ -518,7 +518,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
                 HasDataPrivacyAccess = dataPrivacyAccess != null,
-                HasDataSecurityInformationPermission = SessionFacade.CurrentUser.DataSecurityPermission.ToBool()
             };
 
             model.SearchConditions = new List<SelectListItem>();
@@ -1667,7 +1666,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [UserPermissions(UserPermission.DataSecurityPermission)]
         public JsonResult LoadFileViewLogs(FileViewLogListFilter filter)
         {
             var data = _fileViewLogService.Find(filter, SessionFacade.CurrentUser.TimeZoneId);
