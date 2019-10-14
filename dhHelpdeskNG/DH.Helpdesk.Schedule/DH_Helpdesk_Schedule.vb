@@ -753,7 +753,11 @@ Module DH_Helpdesk_Schedule
 
                         sMessage = sMessage & "<td " & sStyle & ">" & objCase.Department & "</td>"
 
-                        sLink = "<a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & "/Default.asp?GUID=" & objCase.CaseGUID & """>" & objCase.Casenumber & "</a>"
+                        If objGlobalSettings.DBVersion > "5" Then
+                            sLink = "<a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & "/cases/edit/" & objCase.Id & """>" & objCase.Casenumber & "</a>"
+                        Else
+                            sLink = "<a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & "/Default.asp?GUID=" & objCase.CaseGUID & """>" & objCase.Casenumber & "</a>"
+                        End If
 
                         sMessage = sMessage & "<td " & sStyle & ">" & sLink & "</td>"
                         sMessage = sMessage & "<td " & sStyle & ">" & objCase.RegTime.ToShortDateString & "</td>"
