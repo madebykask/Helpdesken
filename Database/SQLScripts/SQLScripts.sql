@@ -40,6 +40,26 @@ RAISERROR ('Change size of tblEmailLog.MessageId to 300', 10, 1) WITH NOWAIT
 ALTER TABLE tblEmailLog
 ALTER COLUMN MessageId NVARCHAR(300) NULL
 
+
+
+RAISERROR ('Change tblProblemLog.CreatedDate to default UTC date', 10, 1) WITH NOWAIT
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_tblProblemLog_CreatedDate]') AND type = 'D')
+BEGIN 
+	ALTER TABLE [dbo].[tblProblemLog] DROP  CONSTRAINT [DF_tblProblemLog_CreatedDate] 
+END	
+ALTER TABLE [dbo].[tblProblemLog] ADD  CONSTRAINT [DF_tblProblemLog_CreatedDate]  DEFAULT (getutcdate()) FOR [CreatedDate]
+
+GO
+
+RAISERROR ('Change tblProblemLog.ChangeDate to default UTC date', 10, 1) WITH NOWAIT
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_tblProblemLog_ChangedDate]') AND type = 'D')
+BEGIN 
+	ALTER TABLE [dbo].[tblProblemLog] DROP  CONSTRAINT [DF_tblProblemLog_ChangedDate]  
+END
+ALTER TABLE [dbo].[tblProblemLog] ADD  CONSTRAINT [DF_tblProblemLog_ChangedDate]  DEFAULT (getutcdate()) FOR [ChangedDate]
+
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.44'
 GO
