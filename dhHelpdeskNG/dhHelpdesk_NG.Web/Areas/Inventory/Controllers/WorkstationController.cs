@@ -124,7 +124,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             SessionFacade.SavePageFilters(WorkstationsSearchFilter.CreateFilterId(), filter);
             filter.RecordsCount = SearchFilter.RecordsOnPage;
 
-            InventoryGridModel viewModel = this.CreateInventoryGridModel(filter);
+            var viewModel = this.CreateInventoryGridModel(filter);
             return this.PartialView("InventoryGrid", viewModel);
         }
 
@@ -543,7 +543,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
             var models = this._inventoryService.GetWorkstations(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
 
-            InventoryGridModel viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
+            var viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
             return viewModel;
         }
 
