@@ -68,14 +68,15 @@
                     {
                         @Html.EditorFor(m => m.Delivery)
                     }
-                    @if (Model.Other.HasShowableFields())
-                    {
-                        @Html.EditorFor(m => m.Other)
-                    }
                     @if (Model.Program.HasShowableFields())
                     {
                         @Html.EditorFor(m => m.Program)
                     }
+                    @if (Model.Other.HasShowableFields())
+                    {
+                        @Html.EditorFor(m => m.Other)
+                    }
+
                     </div>
                 </div>
             </div>
