@@ -7,6 +7,15 @@
         @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
     </div>    
 }
+
+<script language="javascript">
+    $(function () {
+        tinymce.on('addeditor', function (event) {
+            var editor = event.editor;
+            editor.settings.maxLength = 4000;
+        }, true);
+    });
+</script>
 <div class="bulletinboard content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
