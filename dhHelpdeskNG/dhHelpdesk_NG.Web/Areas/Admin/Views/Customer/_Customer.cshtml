@@ -99,10 +99,10 @@
                                     @foreach (var us in Model.AvUsMultiSelect.Items)
                                     {
                                         var classType = us.IsActive ? "" : "style=color:lightgray;";
-                                        <option @classType value="@us.Id" > @us.Value </option>
+                                        <option @classType value="@us.Id"> @us.Value </option>
                                     }
-                                </select>      
-                               @* @Html.ListBox("UsAvailable", Model.UsAvailable, new { style = "width: 314px; height: 350px" })*@
+                                </select>
+                                @* @Html.ListBox("UsAvailable", Model.UsAvailable, new { style = "width: 314px; height: 350px" })*@
                             </td>
                             <td>
                                 <input type="button" value="&gt;" class="btn" id="addUs" /><br />
@@ -113,14 +113,14 @@
                                     @foreach (var us in Model.UsMultiSelect.Items)
                                     {
                                         var classType = us.IsActive ? "" : "style=color:lightgray;";
-                                        <option @classType value="@us.Id" > @us.Value </option>
+                                        <option @classType value="@us.Id"> @us.Value </option>
                                     }
-                                </select>                       
+                                </select>
                                 @*@Html.ListBox("UsSelected", Model.UsSelected, new { style = "width: 314px; height: 350px" })*@
                             </td>
                         </tr>
                     </table>
-                    
+
                 </td>
             </tr>
             <tr>
@@ -129,12 +129,12 @@
                 </td>
                 <td colspan="2">
                     <select data-val="true" data-val-number="The field DefaultAdministratorExternal must be a number." id="Setting_DefaultAdministratorExternal" name="Setting.DefaultAdministratorExternal">
-                        <option value="" > </option>
-                         @foreach (var us in Model.UsMultiSelect.Items)
-                            {
-                                var classType = us.IsActive ? "" : "style=color:lightgray;";
-                                <option @classType value="@us.Id" @us.Id.ValueIsSelected(Model.Setting.DefaultAdministratorExternal.ToString())> @us.Value </option>
-                            }
+                        <option value=""> </option>
+                        @foreach (var us in Model.UsMultiSelect.Items)
+                        {
+                            var classType = us.IsActive ? "" : "style=color:lightgray;";
+                            <option @classType value="@us.Id" @us.Id.ValueIsSelected(Model.Setting.DefaultAdministratorExternal.ToString())> @us.Value </option>
+                        }
                     </select>
                     @*@Html.DropDownListFor(model => model.Setting.DefaultAdministratorExternal, Model.UsSelected, "", new { })*@
                 </td>
@@ -145,18 +145,18 @@
                 </td>
                 <td colspan="2">
                     <select data-val="true" data-val-number="The field DefaultAdministrator must be a number." id="Setting_DefaultAdministrator" name="Setting.DefaultAdministrator">
-                        <option value="" > </option>
-                         @foreach (var us in Model.UsMultiSelect.Items)
-                            {
-                                var classType = us.IsActive ? "" : "style=color:lightgray;";
-                                <option @classType value="@us.Id" @us.Id.ValueIsSelected(Model.Setting.DefaultAdministrator.ToString())> @us.Value </option>
-                            }
+                        <option value=""> </option>
+                        @foreach (var us in Model.UsMultiSelect.Items)
+                        {
+                            var classType = us.IsActive ? "" : "style=color:lightgray;";
+                            <option @classType value="@us.Id" @us.Id.ValueIsSelected(Model.Setting.DefaultAdministrator.ToString())> @us.Value </option>
+                        }
                     </select>
                     @*@Html.DropDownListFor(model => model.Setting.DefaultAdministrator, Model.UsSelected, "", new { })*@
                 </td>
             </tr>
             <tr>
-                <td  style="width:220px">
+                <td style="width:220px">
                     @Translation.Get("Lista användaren")
                 </td>
                 <td colspan="2">
@@ -176,7 +176,7 @@
                 @Translation.Get("Skapa ärende", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                <input type="checkbox" name="setting.CreateCaseFromOrder" @(Model.Setting.CreateCaseFromOrder == 1 ? "checked=checked" : "") value="1"/>
+                <input type="checkbox" name="setting.CreateCaseFromOrder" @(Model.Setting.CreateCaseFromOrder == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="setting.CreateCaseFromOrder" value="0" />
                 &nbsp; @Translation.Get("skapa alltid ärende när beställning görs", Enums.TranslationSource.TextTranslation)
             </td>
@@ -197,84 +197,84 @@
 </div>
 <h4>@Translation.Get("E-post", Enums.TranslationSource.TextTranslation) @Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</h4>
 <div class="formContainer">
-	<table class="tableform">
-		<tr>
-			<td>
-				@Translation.Get("Batch e-post", Enums.TranslationSource.TextTranslation)
-			</td>
-			<td>
-				@Html.CheckBoxFor(model => model.Setting.BatchEmail)
-			</td>
-		</tr>
-		<tr>
-			<td>
-				@Translation.Get("Informera anmälaren som standard", Enums.TranslationSource.TextTranslation)?
-			</td>
-			<td>
-				@Html.DropDownListFor(model => model.Customer.CommunicateWithNotifier, Model.CWNSelect)
-			</td>
-		</tr>
-		<tr>
-			<td class="span3">
-				@Translation.Get("Helpdesk e-post", Enums.TranslationSource.TextTranslation)
-			</td>
-			<td>
-				@Html.TextBoxFor(model => model.Customer.HelpdeskEmail, new {maxlength = "100", style = "width: 600px;"})
-			</td>
-		</tr>
-		<tr>
-			<td style="vertical-align: top">
-				@Translation.Get("Statistik", Enums.TranslationSource.TextTranslation)
-			</td>
-			<td>
-				@Translation.Get("Skicka ärendestatistik till följande e-post adresser", Enums.TranslationSource.TextTranslation)<br/>
-				@Translation.Get("Separera adresser med semikolon", Enums.TranslationSource.TextTranslation) (;)<br/>
-				@Html.TextAreaFor(model => model.Customer.CaseStatisticsEmailList, new {style = "width: 600px; height: 65px;", maxlength = "500"})
-			</td>
-		</tr>
-		<tr>
-			<td style="vertical-align: top">
-				@Translation.Get("Dagrapport e-post", Enums.TranslationSource.TextTranslation)
-			</td>
-			<td>
-				@Translation.Get("Skicka dagrapport till följande e-post adresser", Enums.TranslationSource.TextTranslation)<br/>
-				@Translation.Get("Separera adresser med semikolon", Enums.TranslationSource.TextTranslation) (;)<br/>
-				@Html.TextAreaFor(model => model.Customer.DailyReportEmail, new {style = "width: 600px; height: 65px;", maxlength = "500"})
-			</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td style="vertical-align: top">
-				@Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation)
-			</td>
-			<td>
-				@Translation.Get("Skicka e-post till följande e-post adresser när nytt ärende registreras", Enums.TranslationSource.TextTranslation)<br/>
-				@Translation.Get("Separera adresser med semikolon", Enums.TranslationSource.TextTranslation) (;)<br/>
-				@Html.TextAreaFor(model => model.Customer.NewCaseEmailList, new {style = "width: 600px; height: 65px;", maxlength = "500"})
-			</td>
-		</tr>
-		<tr>
-			<td style="vertical-align: top">
-				@Translation.Get("Avslutat ärende", Enums.TranslationSource.TextTranslation)
-			</td>
-			<td>
-				@Translation.Get("Skicka e-post till följande e-post adresser när ett ärende avslutas", Enums.TranslationSource.TextTranslation)<br/>
-				@Translation.Get("Separera adresser med semikolon", Enums.TranslationSource.TextTranslation) (;)<br/>
-				@Html.TextAreaFor(model => model.Customer.CloseCaseEmailList, new {style = "width: 600px; height: 65px;", maxlength = "500"})
-			</td>
-		</tr>
-		<tr>
-			<td style="vertical-align: top">
-				@Translation.Get("Ansvarig", Enums.TranslationSource.TextTranslation)
-			</td>
-			<td>
-				@Translation.Get("Skicka e-post till följande e-postadresser om ärenden inte åtgärdas eller prioriteras inom", Enums.TranslationSource.TextTranslation)
-				&nbsp; @Html.TextBoxFor(model => model.Customer.ResponsibleReminderControlTime, new {style = "width: 30px;"})
-				&nbsp; @Translation.Get("timmar", Enums.TranslationSource.TextTranslation)<br/>
-				@Html.TextAreaFor(model => model.Customer.ResponsibleReminderEmailList, new {style = "width: 600px; height: 65px;", maxlength = "400"})
-			</td>
-		</tr>
-	</table>
+    <table class="tableform">
+        <tr>
+            <td>
+                @Translation.Get("Batch e-post", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.Setting.BatchEmail)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Translation.Get("Informera anmälaren som standard", Enums.TranslationSource.TextTranslation)?
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.Customer.CommunicateWithNotifier, Model.CWNSelect)
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">
+                @Translation.Get("Helpdesk e-post", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Customer.HelpdeskEmail, new { maxlength = "100", style = "width: 600px;" })
+            </td>
+        </tr>
+        <tr>
+            <td style="vertical-align: top">
+                @Translation.Get("Statistik", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Translation.Get("Skicka ärendestatistik till följande e-post adresser", Enums.TranslationSource.TextTranslation)<br />
+                @Translation.Get("Separera adresser med semikolon", Enums.TranslationSource.TextTranslation) (;)<br />
+                @Html.TextAreaFor(model => model.Customer.CaseStatisticsEmailList, new { style = "width: 600px; height: 65px;", maxlength = "500" })
+            </td>
+        </tr>
+        <tr>
+            <td style="vertical-align: top">
+                @Translation.Get("Dagrapport e-post", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Translation.Get("Skicka dagrapport till följande e-post adresser", Enums.TranslationSource.TextTranslation)<br />
+                @Translation.Get("Separera adresser med semikolon", Enums.TranslationSource.TextTranslation) (;)<br />
+                @Html.TextAreaFor(model => model.Customer.DailyReportEmail, new { style = "width: 600px; height: 65px;", maxlength = "500" })
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td style="vertical-align: top">
+                @Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Translation.Get("Skicka e-post till följande e-post adresser när nytt ärende registreras", Enums.TranslationSource.TextTranslation)<br />
+                @Translation.Get("Separera adresser med semikolon", Enums.TranslationSource.TextTranslation) (;)<br />
+                @Html.TextAreaFor(model => model.Customer.NewCaseEmailList, new { style = "width: 600px; height: 65px;", maxlength = "500" })
+            </td>
+        </tr>
+        <tr>
+            <td style="vertical-align: top">
+                @Translation.Get("Avslutat ärende", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Translation.Get("Skicka e-post till följande e-post adresser när ett ärende avslutas", Enums.TranslationSource.TextTranslation)<br />
+                @Translation.Get("Separera adresser med semikolon", Enums.TranslationSource.TextTranslation) (;)<br />
+                @Html.TextAreaFor(model => model.Customer.CloseCaseEmailList, new { style = "width: 600px; height: 65px;", maxlength = "500" })
+            </td>
+        </tr>
+        <tr>
+            <td style="vertical-align: top">
+                @Translation.Get("Ansvarig", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Translation.Get("Skicka e-post till följande e-postadresser om ärenden inte åtgärdas eller prioriteras inom", Enums.TranslationSource.TextTranslation)
+                &nbsp; @Html.TextBoxFor(model => model.Customer.ResponsibleReminderControlTime, new { style = "width: 30px;" })
+                &nbsp; @Translation.Get("timmar", Enums.TranslationSource.TextTranslation)<br />
+                @Html.TextAreaFor(model => model.Customer.ResponsibleReminderEmailList, new { style = "width: 600px; height: 65px;", maxlength = "400" })
+            </td>
+        </tr>
+    </table>
 
 </div>
 
@@ -286,7 +286,7 @@
                 @Translation.Get("Arbetstid", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                @Html.TextBoxFor(model => model.Customer.WorkingDayStart, new { style = "width: 40px;" }) @Translation.Get("-", Enums.TranslationSource.TextTranslation) @Html.TextBoxFor(model => model.Customer.WorkingDayEnd, new { style = "width: 40px;" })                    
+                @Html.TextBoxFor(model => model.Customer.WorkingDayStart, new { style = "width: 40px;" }) @Translation.Get("-", Enums.TranslationSource.TextTranslation) @Html.TextBoxFor(model => model.Customer.WorkingDayEnd, new { style = "width: 40px;" })
             </td>
         </tr>
         <tr>
@@ -298,20 +298,21 @@
             </td>
         </tr>
         <tr>
-            <td class="span3" style="vertical-align: middle">                                        
-                @Translation.Get("Löst i tid med Bevakningsdatum", Enums.TranslationSource.TextTranslation) 
-            </td>             
-            <td >
+            <td class="span3" style="vertical-align: middle">
+                @Translation.Get("Löst i tid med Bevakningsdatum", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
                 <input type="radio" name="Setting.CalcSolvedInTimeByLatestSLADate" @(Model.Setting.CalcSolvedInTimeByLatestSLADate == 0 ? "checked='checked'" : "") id="Customer_Setting_CalcSolvedInTimeByLatestSLADate1" value="0" />
                 @Translation.Get("Avslutsdatum", Enums.TranslationSource.TextTranslation)
-                <br />                
+                <br />
                 <input type="radio" name="Setting.CalcSolvedInTimeByLatestSLADate" @(Model.Setting.CalcSolvedInTimeByLatestSLADate == 1 ? "checked='checked'" : "") id="Customer_Setting_CalcSolvedInTimeByLatestSLADate2" value="1" />
                 @Translation.Get("Senaste understatus med Räkna tid", Enums.TranslationSource.TextTranslation)
-            </td>                       
+            </td>
         </tr>
     </table>
 </div>
 @Html.HiddenFor(model => model.Setting.MinRegWorkingTime)
+@Html.HiddenFor(model => model.Setting.CreateComputerFromOrder)
 <script type="text/javascript">
 
     var validator = $("#target").validate({

@@ -99,7 +99,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             Bind<IOperationLogCategoryService>().To<OperationLogCategoryService>();
             Bind<IOperationLogEmailLogService>().To<OperationLogEmailLogService>();
             Bind<IOperationObjectService>().To<OperationObjectService>();
-            Bind<IOrderService>().To<OrderService>();
+            //Bind<IOrderService>().To<OrderService>();
             Bind<IOperationLogService>().To<OperationLogService>();
             Bind<IOrderStateService>().To<OrderStateService>();
             Bind<IOrderTypeService>().To<OrderTypeService>();

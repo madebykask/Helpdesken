@@ -113,6 +113,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
         public bool CreateCase { get; set; }
 
         public bool UserHasAdminOrderPermission { get; set; }
+        public bool UserHasCreateWorkstationPermission { get; set; }
 
         [NotNull]
         public List<WebTemporaryFile> NewFiles { get; set; }

@@ -355,6 +355,7 @@
                 setting.DefaultAdministrator = vmodel.Setting.DefaultAdministrator;
                 setting.DefaultAdministratorExternal = vmodel.Setting.DefaultAdministratorExternal;
                 setting.CreateCaseFromOrder = vmodel.Setting.CreateCaseFromOrder;
+                setting.CreateComputerFromOrder = vmodel.Setting.CreateComputerFromOrder;
                 setting.ComplexPassword = vmodel.Setting.ComplexPassword;
                 setting.IsUserFirstLastNameRepresentation = vmodel.UserFirstLastNameRepresentationId == UserFirstLastNameModes.LastFirstNameMode ? 0 : 1;
                 setting.CalcSolvedInTimeByLatestSLADate = vmodel.Setting.CalcSolvedInTimeByLatestSLADate;
@@ -875,6 +876,7 @@
                 CustomerInExtendedSearch = customerToCopySettings.CustomerInExtendedSearch,
                 StateSecondaryFilterFormat = customerToCopySettings.StateSecondaryFilterFormat,
                 CreateCaseFromOrder = customerToCopySettings.CreateCaseFromOrder,
+                CreateComputerFromOrder = customerToCopySettings.CreateComputerFromOrder,
                 LeadTimeFromProductAreaSetDate = customerToCopySettings.LeadTimeFromProductAreaSetDate,
                 CaseSMS = customerToCopySettings.CaseSMS,
                 MaxPasswordAge = customerToCopySettings.MaxPasswordAge,

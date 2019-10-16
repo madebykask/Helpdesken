@@ -23,6 +23,7 @@ using DH.Helpdesk.Domain.Interfaces;
 using DH.Helpdesk.Domain.Invoice;
 using DH.Helpdesk.Services.BusinessLogic.Cases;
 using DH.Helpdesk.Services.Services.CaseStatistic;
+using DH.Helpdesk.Services.Services.Orders;
 using DH.Helpdesk.Web.Common.Enums.Case;
 using DH.Helpdesk.Web.Common.Extensions;
 using DH.Helpdesk.Web.Common.Models.Case;
@@ -169,7 +170,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IExternalInvoiceService _externalInvoiceService;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
         private readonly ICaseRuleFactory _caseRuleFactory;
-        private readonly IOrderService _orderService;
+        private readonly IOrdersService _orderService;
         private readonly IOrderAccountService _orderAccountService;
         private readonly ICaseSectionService _caseSectionService;
         private readonly ICaseDocumentService _caseDocumentService;
@@ -255,7 +256,7 @@ namespace DH.Helpdesk.Web.Controllers
             IExternalInvoiceService externalInvoiceService,
             ICaseExtraFollowersService caseExtraFollowersService,
             ICaseRuleFactory caseRuleFactory,
-            IOrderService orderService,
+            IOrdersService orderService,
             IOrderAccountService orderAccountService,
             ICaseDocumentService caseDocumentService,
             ICaseSectionService caseSectionService,
@@ -1336,7 +1337,7 @@ namespace DH.Helpdesk.Web.Controllers
                     this.InitFilter(currentCase.Customer_Id, false, CasesCustomFilter.None, false, true);
 
                 //Get order
-                m.OrderId = _orderService.GetOrder(id)?.Id;
+                m.OrderId = _orderService.GetOrderByCase(id)?.Id;
 
                 //Get account id
                 var account = _orderAccountService.GetAccountByCaseNumber(currentCase.CaseNumber);

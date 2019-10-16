@@ -3,6 +3,7 @@ using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Services.Services.Orders;
 using DH.Helpdesk.Web.Common.Tools.Files;
 using DH.Helpdesk.Web.Enums;
 using DH.Helpdesk.Web.Models.Shared;
@@ -52,6 +53,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         private readonly IComputerBuilder _computerBuilder;
         private readonly IUserPermissionsChecker _userPermissionsChecker;
         private readonly ITemporaryFilesCache _filesStore;
+        private readonly IOrdersService _ordersService;
 
         public WorkstationController(
             IMasterDataService masterDataService,
@@ -65,7 +67,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             IExportFileNameFormatter exportFileNameFormatter,
             IUserPermissionsChecker userPermissionsChecker,
             IExcelFileComposer excelFileComposer,
-            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory)
+            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
+            IOrdersService ordersService)
             : base(masterDataService, exportFileNameFormatter, excelFileComposer, organizationService, placeService)
         {
             _filesStore = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Inventory);
@@ -75,6 +78,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             _computerViewModelBuilder = computerViewModelBuilder;
             _computerBuilder = computerBuilder;
             _userPermissionsChecker = userPermissionsChecker;
+            _ordersService = ordersService;
         }
 
         [HttpGet]
@@ -262,20 +266,23 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
         [HttpGet]
 		[UserPermissions(UserPermission.InventoryViewPermission)]
-		public ViewResult New()
+		public ViewResult New(int? orderId = null)
         {
-            ComputerEditOptions options = this.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);
-            ComputerFieldsSettingsForModelEdit settings =
-                this._inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
+            var options = GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);
+            var settings =
+                _inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId);
 
-            var viewModel = this._computerViewModelBuilder.BuildViewModel(
+            var viewModel = _computerViewModelBuilder.BuildViewModel(
                 options,
                 settings,
                 SessionFacade.CurrentCustomer.Id);
 
-            return this.View(viewModel);
+            if (orderId.HasValue)
+                ApplyOrderFields(orderId.Value, viewModel);
+
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -536,6 +543,22 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             return this.PartialView("UserHistoryDialog", models);
         }
 
+        [HttpGet]
+        [UserPermissions(UserPermission.InventoryViewPermission)]
+        public ActionResult RelatedInventoryFull(string userId)
+        {
+            var sortField = new SortFieldModel
+            {
+                Name = BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.Name,
+                SortBy = SortBy.Ascending
+            };
+            var settings = _inventorySettingsService.GetWorkstationFieldSettingsOverview(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
+            var models = _inventoryService.GetRelatedInventory(SessionFacade.CurrentCustomer.Id, userId);
+            var viewModel = InventoryGridModel.BuildModel(models, settings, sortField);
+            ViewData.Add(new KeyValuePair<string, object>("UserId", userId));
+            return View(viewModel);
+        }
+
         private InventoryGridModel CreateInventoryGridModel(WorkstationsSearchFilter filter)
         {
             var settings =
@@ -588,22 +611,6 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             return computerResponse;
         }
 
-        [HttpGet]
-		[UserPermissions(UserPermission.InventoryViewPermission)]
-		public ActionResult RelatedInventoryFull(string userId)
-        {
-            var sortField = new SortFieldModel
-            {
-                Name = BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.Name,
-                SortBy = SortBy.Ascending
-            };
-            var settings = _inventorySettingsService.GetWorkstationFieldSettingsOverview(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
-            var models = _inventoryService.GetRelatedInventory(SessionFacade.CurrentCustomer.Id, userId);
-            var viewModel = InventoryGridModel.BuildModel(models, settings, sortField);
-            ViewData.Add(new KeyValuePair<string, object>("UserId", userId));
-            return View(viewModel);
-        }
-
         private RedirectToRouteResult RedirectToTab(TabSetting current, WorkstationTabsSettings tabSettings, int id, bool dialog, string userId)
         {
             var routes = new Dictionary<TabSetting, RedirectToRouteResult>()
@@ -630,6 +637,34 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             }
 
             return RedirectToAction("Index", "Workstation", new { Area = "Inventory"});
+        }
+
+        private void ApplyOrderFields(int orderId, ComputerViewModel viewModel)
+        {
+            var order = _ordersService.GetOrder(orderId);
+            if (order != null)
+            {
+                viewModel.ContractFieldsViewModel.ContractFieldsModel.AccountingDimension1.Value =
+                    order.AccountingDimension1;
+                viewModel.ContractFieldsViewModel.ContractFieldsModel.AccountingDimension2.Value =
+                    order.AccountingDimension2;
+                viewModel.ContractFieldsViewModel.ContractFieldsModel.AccountingDimension3.Value =
+                    order.AccountingDimension3;
+                viewModel.ContractFieldsViewModel.ContractFieldsModel.AccountingDimension4.Value =
+                    order.AccountingDimension4;
+                viewModel.ContractFieldsViewModel.ContractFieldsModel.AccountingDimension5.Value =
+                    order.AccountingDimension5;
+                viewModel.ContactFieldsModel.Name.Value = order.ReceiverName;
+                viewModel.ContactFieldsModel.Email.Value = order.ReceiverEMail;
+                viewModel.ContactFieldsModel.Phone.Value = order.ReceiverPhone;
+                viewModel.OrganizationFieldsViewModel.OrganizationFieldsModel.DepartmentId.Value = order.Department_Id;
+                viewModel.OrganizationFieldsViewModel.OrganizationFieldsModel.UnitId.Value = order.OU_Id;
+                viewModel.PlaceFieldsViewModel.PlaceFieldsModel.Address.Value = order.DeliveryAddress;
+                viewModel.PlaceFieldsViewModel.PlaceFieldsModel.PostalCode.Value = order.DeliveryPostalCode;
+                viewModel.PlaceFieldsViewModel.PlaceFieldsModel.PostalAddress.Value = order.DeliveryPostalAddress;
+                viewModel.PlaceFieldsViewModel.PlaceFieldsModel.Location.Value = order.DeliveryLocation;
+                viewModel.PlaceFieldsViewModel.PlaceFieldsModel.Location2.Value = order.OrderRow6;
+            }
         }
     }
 }
