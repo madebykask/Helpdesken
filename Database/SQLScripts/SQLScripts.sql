@@ -36,6 +36,9 @@ BEGIN
 END
 GO
 
+RAISERROR ('Change size of tblEmailLog.MessageId to 300', 10, 1) WITH NOWAIT
+ALTER TABLE tblEmailLog
+ALTER COLUMN MessageId NVARCHAR(300) NULL
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.44'
