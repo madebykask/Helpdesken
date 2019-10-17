@@ -40,7 +40,43 @@ RAISERROR ('Change size of tblEmailLog.MessageId to 300', 10, 1) WITH NOWAIT
 ALTER TABLE tblEmailLog
 ALTER COLUMN MessageId NVARCHAR(300) NULL
 
+GO
 
+RAISERROR ('Change size of tblMail2Ticket.UniqueMessageId to 300', 10, 1) WITH NOWAIT
+ALTER TABLE tblMail2Ticket
+ALTER COLUMN UniqueMessageId NVARCHAR(300) NULL
+
+GO
+
+RAISERROR ('Change size of tblAccountEMailLog.MessageId to 300', 10, 1) WITH NOWAIT
+ALTER TABLE tblAccountEMailLog
+ALTER COLUMN MessageId NVARCHAR(300) NULL
+
+GO
+
+RAISERROR ('Change size of tblChangeEMailLog.MessageId to 300', 10, 1) WITH NOWAIT
+ALTER TABLE tblChangeEMailLog
+ALTER COLUMN MessageId NVARCHAR(300) NULL
+
+GO
+
+RAISERROR ('Change size of tblOrderEMailLog.MessageId to 300', 10, 1) WITH NOWAIT
+ALTER TABLE tblOrderEMailLog
+ALTER COLUMN MessageId NVARCHAR(300) NULL
+
+GO
+
+RAISERROR ('Change size of tblProblemEMailLog.MessageId to 300', 10, 1) WITH NOWAIT
+ALTER TABLE tblProblemEMailLog
+ALTER COLUMN MessageId NVARCHAR(300) NULL
+
+GO
+
+RAISERROR ('Change size of tblMail2TicketCase.MessageId to 300', 10, 1) WITH NOWAIT
+ALTER TABLE tblMail2TicketCase
+ALTER COLUMN MessageId NVARCHAR(300) NULL
+
+GO
 
 RAISERROR ('Change tblProblemLog.CreatedDate to default UTC date', 10, 1) WITH NOWAIT
 IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_tblProblemLog_CreatedDate]') AND type = 'D')
