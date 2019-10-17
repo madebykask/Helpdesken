@@ -34,71 +34,72 @@ using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
 
 namespace DH.Helpdesk.Web.Controllers
 {
-    using DH.Helpdesk.BusinessData.Enums.Case;
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
-    using DH.Helpdesk.BusinessData.Models.Grid;
-    using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.User.Input;
-    using DH.Helpdesk.BusinessData.OldComponents;
-    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Common.Extensions.Integer;
-    using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure.Context;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services.Infrastructure;
-    using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Services.Services.Concrete;
-    using DH.Helpdesk.Services.Services.Grid;
-    using DH.Helpdesk.Services.Utils;
-    using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.Attributes;
-    using DH.Helpdesk.Web.Infrastructure.Case;
-    using DH.Helpdesk.Web.Infrastructure.CaseOverview;
-    using DH.Helpdesk.Web.Infrastructure.Configuration;
-    using DH.Helpdesk.Web.Infrastructure.Extensions;
-    using DH.Helpdesk.Web.Infrastructure.Grid;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Models;
-    using DH.Helpdesk.Web.Models.Case;
-    using DH.Helpdesk.Web.Models.Case.ChildCase;
-    using DH.Helpdesk.Web.Models.Case.Input;
-    using DH.Helpdesk.Web.Models.Case.Output;
-    using DH.Helpdesk.Web.Models.CaseLock;
-    using DH.Helpdesk.Web.Models.Shared;
-    using DH.Helpdesk.Common.Extensions.DateTime;
+	using DH.Helpdesk.BusinessData.Enums.Case;
+	using DH.Helpdesk.BusinessData.Models;
+	using DH.Helpdesk.BusinessData.Models.Case;
+	using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
+	using DH.Helpdesk.BusinessData.Models.Grid;
+	using DH.Helpdesk.BusinessData.Models.Shared;
+	using DH.Helpdesk.BusinessData.Models.User.Input;
+	using DH.Helpdesk.BusinessData.OldComponents;
+	using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+	using DH.Helpdesk.Common.Enums;
+	using DH.Helpdesk.Common.Extensions.Integer;
+	using DH.Helpdesk.Common.Tools;
+	using DH.Helpdesk.Dal.Enums;
+	using DH.Helpdesk.Dal.Infrastructure.Context;
+	using DH.Helpdesk.Domain;
+	using DH.Helpdesk.Services.Infrastructure;
+	using DH.Helpdesk.Services.Services;
+	using DH.Helpdesk.Services.Services.Concrete;
+	using DH.Helpdesk.Services.Services.Grid;
+	using DH.Helpdesk.Services.Utils;
+	using DH.Helpdesk.Web.Infrastructure;
+	using DH.Helpdesk.Web.Infrastructure.Attributes;
+	using DH.Helpdesk.Web.Infrastructure.Case;
+	using DH.Helpdesk.Web.Infrastructure.CaseOverview;
+	using DH.Helpdesk.Web.Infrastructure.Configuration;
+	using DH.Helpdesk.Web.Infrastructure.Extensions;
+	using DH.Helpdesk.Web.Infrastructure.Grid;
+	using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
+	using DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers;
+	using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
+	using DH.Helpdesk.Web.Infrastructure.Tools;
+	using DH.Helpdesk.Web.Models;
+	using DH.Helpdesk.Web.Models.Case;
+	using DH.Helpdesk.Web.Models.Case.ChildCase;
+	using DH.Helpdesk.Web.Models.Case.Input;
+	using DH.Helpdesk.Web.Models.Case.Output;
+	using DH.Helpdesk.Web.Models.CaseLock;
+	using DH.Helpdesk.Web.Models.Shared;
+	using DH.Helpdesk.Common.Extensions.DateTime;
 
-    using DHDomain = DH.Helpdesk.Domain;
-    using ParentCaseInfo = DH.Helpdesk.BusinessData.Models.Case.ChidCase.ParentCaseInfo;
-    using DH.Helpdesk.Web.Enums;
-    using DH.Helpdesk.Services.Services.Reports;
-    using DH.Helpdesk.Common.Enums.CaseSolution;
-    using DH.Helpdesk.Common.Enums.BusinessRule;
-    using Services.BusinessLogic.Admin.Users;
-    using Services.BusinessLogic.Mappers.Users;
-    using BusinessData.Enums.Admin.Users;
-    using System.Diagnostics;
-    using Models.CaseRules;
-    using Infrastructure.ModelFactories.Case.Concrete;
-    using static BusinessData.OldComponents.GlobalEnums;
-    using System.Threading;
-    using Models.WebApi;
-    using Infrastructure.WebApi;
-    using System.Configuration;
-    using Infrastructure.Helpers;
-    using Infrastructure.Cryptography;
-    using Domain.Computers;
-    using BusinessData.Models.ProductArea.Output;
-    using DH.Helpdesk.Common.Extensions.Boolean;
-    using Common.Tools.Files;
+	using DHDomain = DH.Helpdesk.Domain;
+	using ParentCaseInfo = DH.Helpdesk.BusinessData.Models.Case.ChidCase.ParentCaseInfo;
+	using DH.Helpdesk.Web.Enums;
+	using DH.Helpdesk.Services.Services.Reports;
+	using DH.Helpdesk.Common.Enums.CaseSolution;
+	using DH.Helpdesk.Common.Enums.BusinessRule;
+	using Services.BusinessLogic.Admin.Users;
+	using Services.BusinessLogic.Mappers.Users;
+	using BusinessData.Enums.Admin.Users;
+	using System.Diagnostics;
+	using Models.CaseRules;
+	using Infrastructure.ModelFactories.Case.Concrete;
+	using static BusinessData.OldComponents.GlobalEnums;
+	using System.Threading;
+	using Models.WebApi;
+	using Infrastructure.WebApi;
+	using System.Configuration;
+	using Infrastructure.Helpers;
+	using Infrastructure.Cryptography;
+	using Domain.Computers;
+	using BusinessData.Models.ProductArea.Output;
+	using DH.Helpdesk.Common.Extensions.Boolean;
+	using Common.Tools.Files;
+	using BusinessData.Models.FinishingCause;
 
-    public partial class CasesController : BaseController
+	public partial class CasesController : BaseController
     {
         #region ***Constant/Variables***
 
@@ -1485,7 +1486,14 @@ namespace DH.Helpdesk.Web.Controllers
                     m.case_ = _caseService.GetCaseById(m.CaseLog.CaseId);
                     m.IsCaseReopened = isCaseReopened;
 
-                    var virtualDirPath = _masterDataService.GetVirtualDirectoryPath(customerId);
+					var lastLog = m.case_.Logs.OrderByDescending(o => o.Id).FirstOrDefault();
+					if (lastLog.FinishingType.HasValue)
+					{
+						var finishingCausesInfos = _finishingCauseService.GetFinishingCauseInfos(customerId).ToArray();
+						m.FinishingCause = CommonHelper.GetFinishingCauseFullPath(finishingCausesInfos, lastLog.FinishingType);
+					}
+
+					var virtualDirPath = _masterDataService.GetVirtualDirectoryPath(customerId);
                     var useVD = !string.IsNullOrEmpty(virtualDirPath);
                     m.CaseFilesUrlBuilder = new CaseFilesUrlBuilder(virtualDirPath, RequestExtension.GetAbsoluteUrl());
 
