@@ -75,7 +75,7 @@ namespace DH.Helpdesk.Services.Services
 
         List<ComputerLogOverview> GetWorkstationLogOverviews(int id);
 
-        List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter);
+        List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter, bool isComputerDepartmentSource);
 
         int GetWorkstationIdByName(string computerName, int customerId);
 

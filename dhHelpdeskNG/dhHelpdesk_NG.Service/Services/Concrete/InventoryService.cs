@@ -508,7 +508,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             return _computerLogRepository.Find(id);
         }
 
-        public List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter)
+        public List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter, bool isComputerDepartmentSource)
         {
             var computerOverviews = _computerRepository.FindOverviews(
                 computersFilter.CustomerId,
@@ -528,7 +528,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 computersFilter.IsShowScrapped,
                 computersFilter.RecordsOnPage,
                 computersFilter.SortField,
-                computersFilter.RecordsCount);
+                computersFilter.RecordsCount,
+                isComputerDepartmentSource);
 
             return computerOverviews;
         }

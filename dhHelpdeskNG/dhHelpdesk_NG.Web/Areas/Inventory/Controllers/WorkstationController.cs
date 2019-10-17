@@ -2,6 +2,7 @@ using System;
 using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Services.Services.Orders;
 using DH.Helpdesk.Web.Common.Tools.Files;
@@ -54,6 +55,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         private readonly IUserPermissionsChecker _userPermissionsChecker;
         private readonly ITemporaryFilesCache _filesStore;
         private readonly IOrdersService _ordersService;
+        private readonly ISettingService _settingsService;
 
         public WorkstationController(
             IMasterDataService masterDataService,
@@ -68,7 +70,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             IUserPermissionsChecker userPermissionsChecker,
             IExcelFileComposer excelFileComposer,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
-            IOrdersService ordersService)
+            IOrdersService ordersService,
+            ISettingService settingsService)
             : base(masterDataService, exportFileNameFormatter, excelFileComposer, organizationService, placeService)
         {
             _filesStore = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Inventory);
@@ -79,6 +82,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             _computerBuilder = computerBuilder;
             _userPermissionsChecker = userPermissionsChecker;
             _ordersService = ordersService;
+            _settingsService = settingsService;
         }
 
         [HttpGet]
@@ -564,7 +568,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var settings =
                 this._inventorySettingsService.GetWorkstationFieldSettingsOverview(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
 
-            var models = this._inventoryService.GetWorkstations(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
+            var cs = _settingsService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+            var models = this._inventoryService.GetWorkstations(filter.CreateRequest(SessionFacade.CurrentCustomer.Id), cs.ComputerDepartmentSource.ToBool());
 
             var viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
             return viewModel;
