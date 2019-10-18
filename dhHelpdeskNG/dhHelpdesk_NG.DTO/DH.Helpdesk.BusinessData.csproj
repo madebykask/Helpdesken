@@ -768,8 +768,6 @@
     <Compile Include="Models\Holiday\Output\HolidayHeaderOverview.cs" />
     <Compile Include="Models\Holiday\Output\HolidayOverview.cs" />
     <Compile Include="Models\Impact\Output\ImpactOverview.cs" />
-    <Compile Include="Models\Inventory\ComputerStatuses.cs" />
-    <Compile Include="Models\Inventory\ContractStatuses.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\OrganizationFields.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\StateFields.cs" />
     <Compile Include="Models\Inventory\Edit\Printer\CommunicationFields.cs" />

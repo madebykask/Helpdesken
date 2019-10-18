@@ -265,7 +265,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var statuses =
                 CreateSelectListField(
                     settings.StateFieldsSettings.StateFieldSetting,
-                    new ComputerStatuses(),
+                    options.ComputerStatuses,
                     model.StateFields.State.ToString(CultureInfo.InvariantCulture));
 
             var stateViewModel = new StateFieldsViewModel(stateFieldsModel, statuses);
@@ -406,7 +406,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var contractStatuses =
                 CreateSelectListField(
                     settings.StateFieldsSettings.StateFieldSetting,
-                    new ContractStatuses(),
+                    options.ComputerContractStatuses,
                     model.ContractFields.ContractStatusId.ToString());
 
             var contractViewModel = new ContractFieldsViewModel(contractFieldsModel, contractStatuses);
@@ -644,7 +644,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var statuses = CreateSelectListField(
                 settings.StateFieldsSettings.StateFieldSetting,
-                new ComputerStatuses(),
+                options.ComputerStatuses,
                 null);
 
             var stateViewModel = new StateFieldsViewModel(stateFieldsModel, statuses);
@@ -710,7 +710,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var contractStatuses = CreateSelectListField(
                 settings.StateFieldsSettings.StateFieldSetting,
-                new ContractStatuses(),
+                options.ComputerContractStatuses,
                 null);
 
             var contractViewModel = new ContractFieldsViewModel(contractFieldsModel, contractStatuses);

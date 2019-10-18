@@ -160,6 +160,7 @@
     <Compile Include="Computers\ComputerInventory.cs" />
     <Compile Include="Computers\ComputerLog.cs" />
     <Compile Include="Computers\ComputerModel.cs" />
+    <Compile Include="Computers\ComputerStatus.cs" />
     <Compile Include="Computers\ComputerType.cs" />
     <Compile Include="CaseSource.cs" />
     <Compile Include="CaseIsAbout.cs" />

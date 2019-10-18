@@ -53,6 +53,9 @@ namespace DH.Helpdesk.Services.Services
         ReportModelWithInventoryType GetAllConnectedInventory(int inventoryTypeId, int? departmentId, string searchFor);
 
         ComputerShortOverview GetWorkstationShortInfo(int computerId);
+        List<ItemOverview> GetComputerStatuses(int customerId);
+        List<ItemOverview> GetComputerContractStatuses(int customerId);
+
 
         #region Workstation
 

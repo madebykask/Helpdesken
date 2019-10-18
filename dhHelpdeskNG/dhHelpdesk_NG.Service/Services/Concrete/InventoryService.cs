@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using DH.Helpdesk.BusinessData.Models.User.Input;
+using DH.Helpdesk.Domain.Computers;
 
 namespace DH.Helpdesk.Services.Services.Concrete
 {
@@ -43,69 +44,38 @@ namespace DH.Helpdesk.Services.Services.Concrete
         #region Fields
 
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
         private readonly IInventoryTypeRepository _inventoryTypeRepository;
-
         private readonly IComputerRepository _computerRepository;
-
         private readonly IServerRepository _serverRepository;
-
         private readonly IPrinterRepository _printerRepository;
-
         private readonly IInventoryRepository _inventoryRepository;
-
         private readonly IInventoryTypePropertyValueRepository _inventoryTypePropertyValueRepository;
-
         private readonly IComputerLogRepository _computerLogRepository;
-
         private readonly IComputerInventoryRepository _computerInventoryRepository;
-
         private readonly IOperationLogRepository _operationLogRepository;
-
         private readonly InventoryTypeGroupRepository _inventoryTypeGroupRepository;
-
         private readonly IInventoryFieldSettingsRepository _inventoryFieldSettingsRepository;
-
         private readonly IInventoryDynamicFieldSettingsRepository _inventoryDynamicFieldSettingsRepository;
-
         private readonly IComputerUsersRepository _computerUsersRepository;
-
         private readonly IComputerRestorer _computerRestorer;
-
+        private readonly IComputerStatusRepository _computerStatusRepository;
         private readonly IComputerValidator _computerValidator;
-
         private readonly IComputerFieldSettingsRepository _computerFieldSettingsRepository;
-
         private readonly IComputerHistoryRepository _computerHistoryRepository;
-
         private readonly ILogicalDriveRepository _logicalDriveRepository;
-
         private readonly ISoftwareRepository _softwareRepository;
-
         private readonly IServerFieldSettingsRepository _serverFieldSettingsRepository;
-
         private readonly IServerRestorer _serverRestorer;
-
         private readonly IServerValidator _serverValidator;
-
         private readonly IOperationObjectRepository _operationObjectRepository;
-
         private readonly IOperationLogEMailLogRepository _operationLogEMailLogRepository;
-
         private readonly IServerLogicalDriveRepository _serverLogicalDriveRepository;
-
         private readonly IServerSoftwareRepository _serverSoftwareRepository;
-
         private readonly IPrinterFieldSettingsRepository _printerFieldSettingsRepository;
-
         private readonly IPrinterRestorer _printerRestorer;
-
         private readonly IPrinterValidator _printerValidator;
-
         private readonly IInventoryValidator _inventoryValidator;
-
         private readonly IInventoryRestorer _inventoryRestorer;
-
         private readonly IInventoryTypeStandardSettingsRepository _inventoryTypeStandardSettingsRepository;
 
         #endregion
@@ -143,7 +113,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             IPrinterValidator printerValidator,
             IInventoryValidator inventoryValidator,
             IInventoryRestorer inventoryRestorer,
-            IUnitOfWorkFactory unitOfWorkFactory)
+            IUnitOfWorkFactory unitOfWorkFactory, IComputerStatusRepository computerStatusRepository)
         {
             _inventoryTypeStandardSettingsRepository = inventoryTypeStandardSettingsRepository;
             _inventoryTypeRepository = inventoryTypeRepository;
@@ -178,6 +148,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             _inventoryValidator = inventoryValidator;
             _inventoryRestorer = inventoryRestorer;
             _unitOfWorkFactory = unitOfWorkFactory;
+            _computerStatusRepository = computerStatusRepository;
         }
 
         public List<ComputerUserOverview> GetComputerUsers(int customerId, string searchFor)
@@ -538,6 +509,33 @@ namespace DH.Helpdesk.Services.Services.Concrete
         {
             return _computerRepository.GetIdByName(computerName, customerId);
         }
+
+        public List<ItemOverview> GetComputerContractStatuses(int customerId)
+        {
+            return _computerStatusRepository.GetByCustomer(customerId)
+                .Where(cs => cs.Type == ComputerStatusType.Contract)
+                .Select(cs => new ItemOverview
+                {
+                    Name = cs.Name,
+                    Value = cs.Id.ToString()
+                })
+                .OrderBy(cs => cs.Name)
+                .ToList();
+        }
+
+        public List<ItemOverview> GetComputerStatuses(int customerId)
+        {
+            return _computerStatusRepository.GetByCustomer(customerId)
+                .Where(cs => cs.Type == ComputerStatusType.Computer)
+                .Select(cs => new ItemOverview
+                {
+                    Name = cs.Name,
+                    Value = cs.Id.ToString()
+                })
+                .OrderBy(cs => cs.Name)
+                .ToList();
+        }
+
 
         #endregion
 

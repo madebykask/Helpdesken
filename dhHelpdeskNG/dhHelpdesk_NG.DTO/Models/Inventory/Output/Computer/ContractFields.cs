@@ -5,7 +5,7 @@
     public class ContractFields
     {
         public ContractFields(
-            ContractStatuses? contractStatusId,
+            string contractStatusName,
             string contractNumber,
             DateTime? contractStartDate,
             DateTime? contractEndDate,
@@ -16,7 +16,7 @@
             string accountingDimension4,
             string accountingDimension5)
         {
-            this.ContractStatusId = contractStatusId;
+            this.ContractStatusName = contractStatusName;
             this.ContractNumber = contractNumber;
             this.ContractStartDate = contractStartDate;
             this.ContractEndDate = contractEndDate;
@@ -28,7 +28,7 @@
             this.AccountingDimension5 = accountingDimension5;
         }
 
-        public ContractStatuses? ContractStatusId { get; set; }
+        public string ContractStatusName { get; set; }
 
         public string ContractNumber { get; set; }
 

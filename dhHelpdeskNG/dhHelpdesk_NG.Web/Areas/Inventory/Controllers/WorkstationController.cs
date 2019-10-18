@@ -108,6 +108,11 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId);
 
+            var computerContractStatuses = _inventoryService.GetComputerContractStatuses(SessionFacade.CurrentCustomer.Id)
+                .Translate()
+                .OrderBy(x => x.Name)
+                .ToList();
+
             var userHasInventoryAdminPermission = 
                 _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
 
@@ -116,6 +121,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 regions,
                 departments,
                 computerTypes,
+                computerContractStatuses,
                 settings,
                 (int)CurrentModes.Workstations,
                 inventoryTypes);
@@ -570,6 +576,11 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
             var cs = _settingsService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
             var models = this._inventoryService.GetWorkstations(filter.CreateRequest(SessionFacade.CurrentCustomer.Id), cs.ComputerDepartmentSource.ToBool());
+            models.ForEach(m =>
+            {
+                m.ContractFields.ContractStatusName = Translation.GetCoreTextTranslation(m.ContractFields.ContractStatusName);
+                m.StateFields.StateName = Translation.GetCoreTextTranslation(m.StateFields.StateName);
+            });
 
             var viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
             return viewModel;
@@ -577,27 +588,35 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
         private ComputerEditOptions GetWorkstationEditOptions(int customerId)
         {
-            List<ItemOverview> computerModels =
-                this._computerModulesService.GetComputerModels().OrderBy(x => x.Name).ToList();
-            List<ItemOverview> computerTypes =
-                this._computerModulesService.GetComputerTypes(customerId).OrderBy(x => x.Name).ToList();
-            List<ItemOverview> operatingSystems =
-                this._computerModulesService.GetOperatingSystems().OrderBy(x => x.Name).ToList();
-            List<ItemOverview> processors = this._computerModulesService.GetProcessors().OrderBy(x => x.Name).ToList();
-            List<ItemOverview> rams = this._computerModulesService.GetRams().OrderBy(x => x.Name).ToList();
-            List<ItemOverview> netAdapters = this._computerModulesService.GetNetAdapters().OrderBy(x => x.Name).ToList();
-            List<ItemOverview> departments =
-                this.OrganizationService.GetDepartments(customerId).OrderBy(x => x.Name).ToList();
-            List<ItemOverview> domains =
-                this.OrganizationService.GetDomains(customerId).OrderBy(x => x.Name).ToList();
+            var computerModels =
+                _computerModulesService.GetComputerModels().OrderBy(x => x.Name).ToList();
+            var computerTypes =
+                _computerModulesService.GetComputerTypes(customerId).OrderBy(x => x.Name).ToList();
+            var operatingSystems =
+                _computerModulesService.GetOperatingSystems().OrderBy(x => x.Name).ToList();
+            var processors = _computerModulesService.GetProcessors().OrderBy(x => x.Name).ToList();
+            var rams = _computerModulesService.GetRams().OrderBy(x => x.Name).ToList();
+            var netAdapters = _computerModulesService.GetNetAdapters().OrderBy(x => x.Name).ToList();
+            var departments =
+                OrganizationService.GetDepartments(customerId).OrderBy(x => x.Name).ToList();
+            var domains =
+                OrganizationService.GetDomains(customerId).OrderBy(x => x.Name).ToList();
 
-            List<ItemOverview> ous = this.OrganizationService.GetCustomerOUs(customerId)                                                             
+            var ous = OrganizationService.GetCustomerOUs(customerId)
                                                              .Select(o=> new ItemOverview(o.Name, o.Id.ToString()))
                                                              .OrderBy(x => x.Name).ToList();
 
-            List<ItemOverview> buildings = this.PlaceService.GetBuildings(customerId).OrderBy(x => x.Name).ToList();
-            List<ItemOverview> floors = this.PlaceService.GetFloors(customerId).OrderBy(x => x.Name).ToList();
-            List<ItemOverview> rooms = this.PlaceService.GetRooms(customerId).OrderBy(x => x.Name).ToList();
+            var buildings = PlaceService.GetBuildings(customerId).OrderBy(x => x.Name).ToList();
+            var floors = PlaceService.GetFloors(customerId).OrderBy(x => x.Name).ToList();
+            var rooms = PlaceService.GetRooms(customerId).OrderBy(x => x.Name).ToList();
+            var computerContractStatuses = _inventoryService.GetComputerContractStatuses(SessionFacade.CurrentCustomer.Id)
+                .Translate()
+                .OrderBy(x => x.Name)
+                .ToList();
+            var computerStatuses = _inventoryService.GetComputerStatuses(SessionFacade.CurrentCustomer.Id)
+                .Translate()
+                .OrderBy(x => x.Name)
+                .ToList();
 
             var computerResponse = new ComputerEditOptions(
                 computerModels,
@@ -611,7 +630,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 ous,
                 buildings,
                 floors,
-                rooms);
+                rooms,
+                computerContractStatuses,
+                computerStatuses);
 
             return computerResponse;
         }

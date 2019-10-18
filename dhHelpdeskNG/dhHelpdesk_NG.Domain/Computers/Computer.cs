@@ -94,7 +94,8 @@ namespace DH.Helpdesk.Domain.Computers
 
         public int Price { get; set; }
 
-        public int Status { get; set; }
+        // Status is not nullable and no foreign key to ComputerStatus because it can have 0 instaed of null -- legacy(supportability) of dh4
+        public int Status { get; set; } 
 
         public DateTime? SyncChangedDate { get; set; }
 
@@ -121,6 +122,7 @@ namespace DH.Helpdesk.Domain.Computers
         public virtual Room Room { get; set; }
 
         public virtual ComputerUser User { get; set; }
+        public virtual ComputerStatus ContractStatus { get; set; }
 
         public virtual Customer Customer { get; set; }
     }

@@ -1805,7 +1805,10 @@ table th.thpointer {
     display: inline-block;
 }
 
-.case-overview.page .table-cases, .advancedSearch-overview.page .table-cases {
+.case-overview.page .table-cases,
+.advancedSearch-overview.page .table-cases,
+.inventory-overview .table-cases
+{
     table-layout: fixed !important;
 }
 

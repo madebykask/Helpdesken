@@ -40,7 +40,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
         [IsId]
         public int? ComputerTypeId { get; set; }
 
-        public ContractStatuses? ContractStatusId { get; set; }
+        public int? ContractStatusId { get; set; }
 
         [NotNull]
         public DateRange ContractStartDate { get; set; }

@@ -93,8 +93,43 @@ BEGIN
 	ALTER TABLE [dbo].[tblProblemLog] DROP  CONSTRAINT [DF_tblProblemLog_ChangedDate]  
 END
 ALTER TABLE [dbo].[tblProblemLog] ADD  CONSTRAINT [DF_tblProblemLog_ChangedDate]  DEFAULT (getutcdate()) FOR [ChangedDate]
+GO
 
+RAISERROR ('Add tblComputerStatus table', 10, 1) WITH NOWAIT
+IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where sysobjects.name = N'tblComputerStatus')
+BEGIN 
+	CREATE TABLE [dbo].[tblComputerStatus](
+		[Id] [int] NOT NULL,
+		[ComputerStatus] [nvarchar](50) NOT NULL,
+		[Type] [int] NOT NULL,
+		[Customer_Id] [int] NOT NULL,
+		[CreatedDate] [datetime] NOT NULL,
+		[ChangedDate] [datetime] NOT NULL,
+	 CONSTRAINT [PK_tblComputerStatus] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+	
 
+	ALTER TABLE [dbo].[tblComputerStatus] ADD  CONSTRAINT [DF_tblComputerStatus_Type]  DEFAULT ((1)) FOR [Type]
+	ALTER TABLE [dbo].[tblComputerStatus] ADD  CONSTRAINT [DF_tblComputerStatus_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+	ALTER TABLE [dbo].[tblComputerStatus] ADD  CONSTRAINT [DF_tblComputerStatus_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
+	ALTER TABLE [dbo].[tblComputerStatus]  WITH CHECK ADD  CONSTRAINT [FK_tblComputerStatus_tblCustomer] FOREIGN KEY([Customer_Id])
+	REFERENCES [dbo].[tblCustomer] ([Id])
+	ALTER TABLE [dbo].[tblComputerStatus] CHECK CONSTRAINT [FK_tblComputerStatus_tblCustomer]	
+END
+GO
+
+RAISERROR ('Add Foreign key for column ComputerContractStatus_Id in tblComputer table', 10, 1) WITH NOWAIT
+IF OBJECT_ID('dbo.[FK_tblComputer_tblComputerStatus_Contract]', 'F') IS NULL
+BEGIN
+	ALTER TABLE [dbo].[tblComputer]  WITH NOCHECK ADD  CONSTRAINT [FK_tblComputer_tblComputerStatus_Contract] FOREIGN KEY([ComputerContractStatus_Id])
+	REFERENCES [dbo].[tblComputerStatus] ([Id])
+	ALTER TABLE [dbo].[tblComputer] NOCHECK CONSTRAINT [FK_tblComputer_tblComputerStatus_Contract]
+END
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.44'

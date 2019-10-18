@@ -316,8 +316,6 @@
     <Compile Include="DisplayValues\DisplayValue.cs" />
     <Compile Include="DisplayValues\HtmlStringsDisplayValue.cs" />
     <Compile Include="DisplayValues\IntegerDisplayValue.cs" />
-    <Compile Include="DisplayValues\Inventory\ComputerStatusesDisplayValue.cs" />
-    <Compile Include="DisplayValues\Inventory\ContractStatusDisplayValue.cs" />
     <Compile Include="DisplayValues\Questionnaire\CircularStatesDisplayValue.cs" />
     <Compile Include="DisplayValues\StringDisplayValue.cs" />
     <Compile Include="DisplayValues\StringsDisplayValue.cs" />
@@ -641,7 +639,9 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="DisplayValues\Inventory\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Import Project="..\packages\PostSharp.4.0.38\tools\PostSharp.targets" Condition="Exists('..\packages\PostSharp.4.0.38\tools\PostSharp.targets')" />

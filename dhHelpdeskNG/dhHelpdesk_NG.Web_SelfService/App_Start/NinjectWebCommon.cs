@@ -195,6 +195,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IComputerUsersBlackListRepository>().To<ComputerUsersBlackListRepository>();
             kernel.Bind<IComputerUsersRepository>().To<ComputerUsersRepository>();
             kernel.Bind<IComputerRepository>().To<ComputerRepository>();
+            kernel.Bind<IComputerStatusRepository>().To<ComputerStatusRepository>();
             kernel.Bind<IOrganizationUnitRepository>().To<OrganizationUnitRepository>();
             kernel.Bind<IAccountActivityRepository>().To<AccountActivityRepository>();
             kernel.Bind<ICustomerUserRepository>().To<CustomerUserRepository>();

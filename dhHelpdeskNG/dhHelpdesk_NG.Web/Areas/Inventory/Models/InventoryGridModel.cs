@@ -20,7 +20,6 @@
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
     using DH.Helpdesk.Services.DisplayValues;
-    using DH.Helpdesk.Services.DisplayValues.Inventory;
     using DH.Helpdesk.Services.Response.Inventory;
     using DH.Helpdesk.Web.Enums.Inventory;
     using DH.Helpdesk.Web.Models.Shared;
@@ -306,7 +305,7 @@
             CreateValueIfNeeded(
                 settings.ContractFieldsSettings.ContractStatusFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Computer.ContractFields.ContractStatusName,
-                (ContractStatusDisplayValue)overview.ContractFields.ContractStatusId,
+                (StringDisplayValue)overview.ContractFields.ContractStatusName,
                 values);
             CreateValueIfNeeded(
                 settings.ContractFieldsSettings.ContractNumberFieldSetting,
@@ -432,7 +431,7 @@
             CreateValueIfNeeded(
                 settings.StateFieldsSettings.StateFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Computer.StateFields.State,
-                (ComputerStatusesDisplayValue)overview.StateFields.State,
+                (StringDisplayValue)overview.StateFields.StateName,
                 values);
             CreateValueIfNeeded(
                 settings.StateFieldsSettings.StolenFieldSetting,

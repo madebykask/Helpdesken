@@ -34,6 +34,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 	        return listItems;
 	    }
 
+        public static SelectList Translate(this SelectList list)
+        {
+            foreach (var selectListItem in list)
+                selectListItem.Text = Translation.GetCoreTextTranslation(selectListItem.Text);
+            return list;
+        }
+
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "This is an appropriate nesting of generic types")]
 		public static MvcHtmlString ListBoxExtendedOptionsFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
 			Expression<Func<TModel, TProperty>> expression,

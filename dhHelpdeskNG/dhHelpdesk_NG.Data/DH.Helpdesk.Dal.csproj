@@ -133,6 +133,7 @@
     <Compile Include="EntityConfigurations\Cases\CaseSectionFieldConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseSectionsConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseTypeProductAreaConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Computers\ComputerStatusConfiguration.cs" />
     <Compile Include="EntityConfigurations\Computers\WorkstationTabSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\Computers\WorkstationTabSettingLanguageConfiguration.cs" />
     <Compile Include="EntityConfigurations\Condition\ConditionConfiguration.cs" />
@@ -487,7 +488,9 @@
     <Compile Include="Repositories\BusinessRules\Concrete\BusinessRuleRepository.cs" />
     <Compile Include="Repositories\BusinessRules\IBusinessRuleRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentTextConditionIdentifierRepository.cs" />
+    <Compile Include="Repositories\Computers\Concrete\ComputerStatusRepository.cs" />
     <Compile Include="Repositories\Computers\Concrete\ComputerTabsSettingsRepository.cs" />
+    <Compile Include="Repositories\Computers\IComputerStatusRepository.cs" />
     <Compile Include="Repositories\Computers\IComputerTabsSettingsRepository.cs" />
     <Compile Include="Repositories\Condition\Concrete\ConditionRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentTextIdentifierRepository.cs" />

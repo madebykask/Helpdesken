@@ -54,6 +54,7 @@
             List<ItemOverview> regionsItemOverviews,
             List<ItemOverview> departmentsItemOverviews,
             List<ItemOverview> computerTypesItemOverviews,
+            List<ItemOverview> computerStatusesItemOverviews,
             ComputerFieldsSettingsOverviewForFilter settings,
             int currentMode,
             List<ItemOverview> inventoryTypes)
@@ -61,7 +62,7 @@
             var regions = new SelectList(regionsItemOverviews, "Value", "Name");
             var departments = new SelectList(departmentsItemOverviews, "Value", "Name");
             var computerTypes = new SelectList(computerTypesItemOverviews, "Value", "Name");
-            var contractStatuses = new SelectList(Enum.GetValues(typeof(ContractStatuses)));
+            var contractStatuses = new SelectList(computerStatusesItemOverviews, "Value", "Name");
 
             var viewModel = new WorkstationSearchViewModel(
                 regions,
