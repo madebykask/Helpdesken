@@ -72,12 +72,6 @@ ALTER COLUMN MessageId NVARCHAR(300) NULL
 
 GO
 
-RAISERROR ('Change size of tblMail2TicketCase.MessageId to 300', 10, 1) WITH NOWAIT
-ALTER TABLE tblMail2TicketCase
-ALTER COLUMN MessageId NVARCHAR(300) NULL
-
-GO
-
 RAISERROR ('Change tblProblemLog.CreatedDate to default UTC date', 10, 1) WITH NOWAIT
 IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_tblProblemLog_CreatedDate]') AND type = 'D')
 BEGIN 
