@@ -38,6 +38,7 @@
         private readonly IPriorityService _priorityService;
         private readonly IComputerService _computerService;
         private readonly IMailTemplateService _mailTemplateService;
+        private readonly IInventoryService _inventoryService;
 
         public CustomerController(
             ICaseFieldSettingService caseFieldSettingService,
@@ -59,7 +60,8 @@
             IPriorityService priorityService,
             IComputerService computerService,
             IMailTemplateService mailTemplateService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            IInventoryService inventoryService)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
@@ -81,6 +83,7 @@
             this._priorityService = priorityService;
             this._computerService = computerService;
             this._mailTemplateService = mailTemplateService;
+            _inventoryService = inventoryService;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -1219,6 +1222,21 @@
                 newCustomerCaseSolutionCategories.IsDefault = csc.IsDefault;
 
                 this._caseSolutionService.SaveCaseSolutionCategory(newCustomerCaseSolutionCategories, out errors);
+            }
+
+            //Get Status to copy
+            var computerStatuses = _inventoryService.GetFullComputerStatuses(customerToCopy.Id).ToList();
+
+            foreach (var cs in computerStatuses)
+            {
+                var newComputerStatus = new ComputerStatus()
+                {
+                    Customer_Id = newCustomerToSave.Id,
+                    Name = cs.Name,
+                    Type = cs.Type
+                };
+
+                _inventoryService.SaveComputerStatus(newComputerStatus, out errors);
             }
 
             // Get CaseSolution to copy

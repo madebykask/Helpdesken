@@ -523,7 +523,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 .ToList();
         }
 
-        public List<ItemOverview> GetComputerStatuses(int customerId)
+        public List<ItemOverview> GetWorkstationStatuses(int customerId)
         {
             return _computerStatusRepository.GetByCustomer(customerId)
                 .Where(cs => cs.Type == ComputerStatusType.Computer)
@@ -536,6 +536,34 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 .ToList();
         }
 
+        public List<ComputerStatus> GetFullComputerStatuses(int customerId)
+        {
+            return _computerStatusRepository.GetByCustomer(customerId)
+                .OrderBy(cs => cs.Name)
+                .ToList();
+        }
+
+        public void SaveComputerStatus(ComputerStatus newCustomerStatus, out IDictionary<string, string> errors)
+        {
+            if (newCustomerStatus == null)
+                throw new ArgumentNullException("newCustomerStatus");
+
+            errors = new Dictionary<string, string>();
+            
+            if (string.IsNullOrEmpty(newCustomerStatus.Name))
+                errors.Add("newCustomerStatus.Name", "Du måste ange en avslutsorsak");
+            newCustomerStatus.CreatedDate = newCustomerStatus.ChangedDate = DateTime.UtcNow;
+            if (newCustomerStatus.Id == 0)
+            {
+                newCustomerStatus.Id = _computerStatusRepository.GetLastId() + 1;
+                _computerStatusRepository.Add(newCustomerStatus);
+            }
+            //else
+            //    _computerStatusRepository.Update(newCustomerStatus);
+
+            if (errors.Count == 0)
+                _computerStatusRepository.Commit();
+        }
 
         #endregion
 

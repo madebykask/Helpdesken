@@ -11,5 +11,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
     public interface IComputerStatusRepository: INewRepository
     {
         IQueryable<ComputerStatus> GetByCustomer(int customerId);
+        int GetLastId();
+        void Add(ComputerStatus model);
     }
 }

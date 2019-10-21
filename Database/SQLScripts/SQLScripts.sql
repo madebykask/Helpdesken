@@ -108,8 +108,8 @@ BEGIN
 	
 
 	ALTER TABLE [dbo].[tblComputerStatus] ADD  CONSTRAINT [DF_tblComputerStatus_Type]  DEFAULT ((1)) FOR [Type]
-	ALTER TABLE [dbo].[tblComputerStatus] ADD  CONSTRAINT [DF_tblComputerStatus_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
-	ALTER TABLE [dbo].[tblComputerStatus] ADD  CONSTRAINT [DF_tblComputerStatus_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
+	ALTER TABLE [dbo].[tblComputerStatus] ADD  CONSTRAINT [DF_tblComputerStatus_CreatedDate]  DEFAULT (getutcdate()) FOR [CreatedDate]
+	ALTER TABLE [dbo].[tblComputerStatus] ADD  CONSTRAINT [DF_tblComputerStatus_ChangedDate]  DEFAULT (getutcdate()) FOR [ChangedDate]
 	ALTER TABLE [dbo].[tblComputerStatus]  WITH CHECK ADD  CONSTRAINT [FK_tblComputerStatus_tblCustomer] FOREIGN KEY([Customer_Id])
 	REFERENCES [dbo].[tblCustomer] ([Id])
 	ALTER TABLE [dbo].[tblComputerStatus] CHECK CONSTRAINT [FK_tblComputerStatus_tblCustomer]	
@@ -124,6 +124,47 @@ BEGIN
 	ALTER TABLE [dbo].[tblComputer] NOCHECK CONSTRAINT [FK_tblComputer_tblComputerStatus_Contract]
 END
 GO
+
+RAISERROR ('Add missing data for tblComputerStatus table', 10, 1) WITH NOWAIT
+IF EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where sysobjects.name = N'tblComputerStatus')
+BEGIN
+	DECLARE @MyCursor CURSOR;
+	DECLARE @CustomerId int;
+	DECLARE @Id int;
+
+    SET @MyCursor = CURSOR FOR
+	SELECT DISTINCT c.Id FROM tblCustomer AS c
+		LEFT JOIN tblComputerStatus AS cs ON c.Id = cs.Customer_Id
+		WHERE cs.Customer_Id IS NULL
+		ORDER BY c.Id
+
+	OPEN @MyCursor 
+    FETCH NEXT FROM @MyCursor 
+    INTO @CustomerId
+
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+		
+	  RAISERROR ('Adding data to tblCustomerStatus for customer %d', 10, 1, @CustomerId) WITH NOWAIT
+   	  SELECT @Id = MAX([Id]) FROM tblComputerStatus
+	  PRINT @Id
+	  INSERT [dbo].[tblComputerStatus] ([Id], [ComputerStatus], [Type], [Customer_Id]) VALUES (@Id+1, N'Aktiv', 1, @CustomerId),
+		(@Id+2, N'Ej kopplad till användare', 1, @CustomerId),
+		(@Id+3, N'Stulen', 1, @CustomerId),
+		(@Id+4, N'Leasing', 2, @CustomerId),
+		(@Id+5, N'Köpt', 2, @CustomerId),
+		(@Id+6, N'Hyrd', 2, @CustomerId),
+		(@Id+7, N'Leasing (skola)', 2, @CustomerId),
+		(@Id+8, N'Certifiering', 2, @CustomerId)
+
+      FETCH NEXT FROM @MyCursor 
+      INTO @CustomerId 
+    END; 
+
+    CLOSE @MyCursor;
+    DEALLOCATE @MyCursor;
+END
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.44'

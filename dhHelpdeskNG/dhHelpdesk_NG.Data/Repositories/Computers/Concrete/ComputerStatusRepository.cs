@@ -20,5 +20,17 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         {
             return DbSet.AsNoTracking().Where(cs => cs.Customer_Id == customerId);
         }
+
+        public int GetLastId()
+        {
+            return DbSet.AsNoTracking().Max(cs => cs.Id);
+        }
+
+        public void Add(ComputerStatus entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException("entity");
+            DbSet.Add(entity);
+        }
     }
 }

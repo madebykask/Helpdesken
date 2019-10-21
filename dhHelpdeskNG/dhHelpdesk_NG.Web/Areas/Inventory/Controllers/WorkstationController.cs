@@ -613,7 +613,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 .Translate()
                 .OrderBy(x => x.Name)
                 .ToList();
-            var computerStatuses = _inventoryService.GetComputerStatuses(SessionFacade.CurrentCustomer.Id)
+            var computerStatuses = _inventoryService.GetWorkstationStatuses(SessionFacade.CurrentCustomer.Id)
                 .Translate()
                 .OrderBy(x => x.Name)
                 .ToList();

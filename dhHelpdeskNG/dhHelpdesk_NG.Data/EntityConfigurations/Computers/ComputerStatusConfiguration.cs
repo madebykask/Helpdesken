@@ -8,6 +8,8 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Computers
         public ComputerStatusConfiguration()
         {
             HasKey(x => x.Id);
+            Property(x => x.Id)
+                .HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.None);
             HasRequired(x => x.Customer)
                 .WithMany()
                 .HasForeignKey(x => x.Customer_Id)
