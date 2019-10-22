@@ -22,6 +22,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
         ComputerForRead FindById(int id);
         List<ComputerResults> Search(int customerId, string searchFor);
         List<ComputerOverview> FindOverviews(int customerId,
+            int? domainId,
             int? departmentId,
             int? regionId,
             int? computerTypeId,

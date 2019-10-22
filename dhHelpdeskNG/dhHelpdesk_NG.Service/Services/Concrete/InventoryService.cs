@@ -483,6 +483,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
         {
             var computerOverviews = _computerRepository.FindOverviews(
                 computersFilter.CustomerId,
+                computersFilter.DomainId,
                 computersFilter.DepartmentId,
                 computersFilter.RegionId,
                 computersFilter.ComputerTypeId,

@@ -12,6 +12,7 @@
     public class WorkstationSearchViewModel : BaseIndexModel
     {
         private WorkstationSearchViewModel(
+            SelectList domains,
             SelectList regions,
             SelectList departments,
             SelectList computerTypes,
@@ -22,6 +23,7 @@
             List<ItemOverview> overviews)
             : base(currentMode, overviews)
         {
+            Domains = domains;
             this.Departments = departments;
             this.Regions = regions;
             this.ComputerTypes = computerTypes;
@@ -29,6 +31,9 @@
             this.Filter = filter;
             this.Settings = settings;
         }
+
+        [NotNull]
+        public SelectList Domains { get; private set; }
 
         [NotNull]
         public SelectList Regions { get; private set; }
@@ -51,6 +56,7 @@
 
         public static WorkstationSearchViewModel BuildViewModel(
             WorkstationsSearchFilter currentFilter,
+            List<ItemOverview> domainsItemOverviews,
             List<ItemOverview> regionsItemOverviews,
             List<ItemOverview> departmentsItemOverviews,
             List<ItemOverview> computerTypesItemOverviews,
@@ -59,12 +65,14 @@
             int currentMode,
             List<ItemOverview> inventoryTypes)
         {
+            var domains = new SelectList(domainsItemOverviews, "Value", "Name");
             var regions = new SelectList(regionsItemOverviews, "Value", "Name");
             var departments = new SelectList(departmentsItemOverviews, "Value", "Name");
             var computerTypes = new SelectList(computerTypesItemOverviews, "Value", "Name");
             var contractStatuses = new SelectList(computerStatusesItemOverviews, "Value", "Name");
 
             var viewModel = new WorkstationSearchViewModel(
+                domains,
                 regions,
                 departments,
                 computerTypes,

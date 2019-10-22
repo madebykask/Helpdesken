@@ -338,6 +338,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 
 
         public List<ComputerOverview> FindOverviews(int customerId,
+            int? domainId,
             int? departmentId,
             int? regionId,
             int? computerTypeId,
@@ -386,6 +387,9 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 
             if (regionId.HasValue)
                 query = query.Where(x => x.Computer.Department.Region_Id == regionId);
+
+            if (domainId.HasValue)
+                query = query.Where(x => x.Computer.Domain_Id == domainId);
 
             if (departmentId.HasValue)
             {

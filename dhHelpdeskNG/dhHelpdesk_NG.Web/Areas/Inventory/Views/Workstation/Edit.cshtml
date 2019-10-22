@@ -113,28 +113,61 @@
 
 @section Scripts
 {
-@if (documentModel.Show)
-{
-    @Html.Partial("_InventoryFiles")
-    @Scripts.Render(BundleConfig.ScriptNames.InventoryFiles)
-    <script type="text/javascript">
+    @if (documentModel.Show)
+    {
+        @Html.Partial("_InventoryFiles")
+        @Scripts.Render(BundleConfig.ScriptNames.InventoryFiles)
+        <script type="text/javascript">
 
-        var inventoryFilesOptions = {
-            id: @Model.Id.ToString(),
-            attachedFileName: '@(documentModel.Value)',
-            currentLanguageId: '@Model.CurrentLanguageId',
-            documentFileKey: '', //uses id instead
-            uploadDocumentFileUrl: '@Url.Action("UploadFile", "Workstation")',
-            fileDownloadUrlMask: '@Url.Action("DownloadFile", "Workstation")',
-            fileDeleteUrl: '@Url.Action("DeleteFile", "Workstation")'
-        };
+            var inventoryFilesOptions = {
+                id: @Model.Id.ToString(),
+                attachedFileName: '@(documentModel.Value)',
+                currentLanguageId: '@Model.CurrentLanguageId',
+                documentFileKey: '', //uses id instead
+                uploadDocumentFileUrl: '@Url.Action("UploadFile", "Workstation")',
+                fileDownloadUrlMask: '@Url.Action("DownloadFile", "Workstation")',
+                fileDeleteUrl: '@Url.Action("DeleteFile", "Workstation")'
+            };
 
-        $(function(jQuery) {
-            // create instance and init
-            window.inventoryFiles = new InventoryFiles(jQuery);
-            window.inventoryFiles.init(inventoryFilesOptions);
-        });
+            $(function(jQuery) {
+                // create instance and init
+                window.inventoryFiles = new InventoryFiles(jQuery);
+                window.inventoryFiles.init(inventoryFilesOptions);
 
-    </script>
-}
+                var ouDepartmentCtrl = $('#OU_DepartmentId');
+                var ouOUCtrl = $('#OU_OUId');
+
+                ouDepartmentCtrl.on('change',
+                    function() {
+                        var departmentId = $(this).val();
+                        $.get('@Url.Action("GetDepartments", "Ajax", new { area = ""})',
+                            {
+                                'id': departmentId,
+                                'customerId': @Model.CustomerId,
+                                'departmentFilterFormat': 0
+                            },
+                            function(data) {
+
+                                var options = '<option value="">&nbsp;</option>';
+                                if (data) {
+                                    for (var i = 0; i < data.list.length; i++) {
+                                        var item = data.list[i];
+
+                                        options += "<option value='" + item.id + "'>" + item.name + "</option>";
+                                    }
+                                }
+
+                                ouOUCtrl.empty();
+                                ouOUCtrl.append(options);
+
+                            }, 'json').always(function () {
+                            
+                        });
+
+
+                    });
+            });
+
+        </script>
+    }
 }

@@ -5,7 +5,9 @@
     public class ComputerFieldsSettingsOverviewForFilter
     {
         public ComputerFieldsSettingsOverviewForFilter(
-            FieldSettingOverview departmnetFieldSetting,
+            FieldSettingOverview domainFieldSetting,
+            FieldSettingOverview regionFieldSetting,
+            FieldSettingOverview departmentFieldSetting,
             FieldSettingOverview computerTypeFieldSetting,
             FieldSettingOverview contractStatusFieldSetting,
             FieldSettingOverview contractStartDateFieldSetting,
@@ -13,7 +15,9 @@
             FieldSettingOverview scanDateFieldSetting,
             FieldSettingOverview scrapDateFieldSetting)
         {
-            DepartmnetFieldSetting = departmnetFieldSetting;
+            DomainFieldSetting = domainFieldSetting;
+            RegionFieldSetting = regionFieldSetting;
+            DepartmentFieldSetting = departmentFieldSetting;
             ComputerTypeFieldSetting = computerTypeFieldSetting;
             ContractStatusFieldSetting = contractStatusFieldSetting;
             ContractStartDateFieldSetting = contractStartDateFieldSetting;
@@ -23,7 +27,13 @@
         }
 
         [NotNull]
-        public FieldSettingOverview DepartmnetFieldSetting { get; private set; }
+        public FieldSettingOverview DomainFieldSetting { get; private set; }
+
+        [NotNull]
+        public FieldSettingOverview RegionFieldSetting { get; private set; }
+
+        [NotNull]
+        public FieldSettingOverview DepartmentFieldSetting { get; private set; }
 
         [NotNull]
         public FieldSettingOverview ComputerTypeFieldSetting { get; private set; }

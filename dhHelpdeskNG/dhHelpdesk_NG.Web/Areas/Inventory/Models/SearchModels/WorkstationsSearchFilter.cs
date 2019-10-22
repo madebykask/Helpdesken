@@ -31,6 +31,10 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
             SortField = new SortFieldModel();
         }
 
+        
+        [IsId]
+        public int? DomainId { get; set; }
+
         [IsId]
         public int? RegionId { get; set; }
 
@@ -82,6 +86,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
             }
             return new ComputersFilter(
                 customerId,
+                DomainId,
                 RegionId,
                 DepartmentId,
                 ComputerTypeId,

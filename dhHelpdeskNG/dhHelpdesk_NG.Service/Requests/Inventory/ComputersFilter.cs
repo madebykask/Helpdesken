@@ -8,6 +8,7 @@
     public class ComputersFilter
     {
         public ComputersFilter(int customerId,
+            int? domainId,
             int? regionId,
             int? departmentId,
             int? computerTypeId,
@@ -28,6 +29,7 @@
         {
             SortField = sortField;
             CustomerId = customerId;
+            DomainId = domainId;
             RegionId = regionId;
             DepartmentId = departmentId;
             ComputerTypeId = computerTypeId;
@@ -48,6 +50,9 @@
 
         [IsId]
         public int CustomerId { get; private set; }
+
+        [IsId]
+        public int? DomainId { get; private set; }
 
         [IsId]
         public int? RegionId { get; private set; }

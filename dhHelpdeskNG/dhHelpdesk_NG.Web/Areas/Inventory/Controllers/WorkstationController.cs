@@ -100,6 +100,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
             var computerTypes = _computerModulesService.GetComputerTypes(SessionFacade.CurrentCustomer.Id);
 
+            var domains = OrganizationService.GetDomains(SessionFacade.CurrentCustomer.Id);
             var regions = OrganizationService.GetRegions(SessionFacade.CurrentCustomer.Id);
             var departments = OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id, currentFilter.RegionId);
 
@@ -118,6 +119,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
             var viewModel = WorkstationSearchViewModel.BuildViewModel(
                 currentFilter,
+                domains,
                 regions,
                 departments,
                 computerTypes,
@@ -157,7 +159,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var readOnly = !userHasInventoryAdminPermission && dialog;
             var model = this._inventoryService.GetWorkstation(id);
 
-            var options = this.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);
+            var options = this.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id, model.OrganizationFields.DepartmentId);
 
             var settings =
                 _inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
@@ -278,7 +280,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 		[UserPermissions(UserPermission.InventoryViewPermission)]
 		public ViewResult New(int? orderId = null)
         {
-            var options = GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);
+            var options = GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id, null);
             var settings =
                 _inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
                     SessionFacade.CurrentCustomer.Id,
@@ -586,7 +588,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             return viewModel;
         }
 
-        private ComputerEditOptions GetWorkstationEditOptions(int customerId)
+        private ComputerEditOptions GetWorkstationEditOptions(int customerId, int? departmentId)
         {
             var computerModels =
                 _computerModulesService.GetComputerModels().OrderBy(x => x.Name).ToList();
@@ -602,7 +604,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var domains =
                 OrganizationService.GetDomains(customerId).OrderBy(x => x.Name).ToList();
 
-            var ous = OrganizationService.GetCustomerOUs(customerId)
+            var ous = departmentId.HasValue ? OrganizationService.GetOrganizationUnits(departmentId.Value)
+                : OrganizationService.GetCustomerOUs(customerId)
                                                              .Select(o=> new ItemOverview(o.Name, o.Id.ToString()))
                                                              .OrderBy(x => x.Name).ToList();
 
