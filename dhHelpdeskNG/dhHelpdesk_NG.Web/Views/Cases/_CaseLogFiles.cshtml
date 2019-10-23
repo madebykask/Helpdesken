@@ -76,13 +76,13 @@
                                 {
                                     if (Model.UseVirtualDirectory)
                                     {
-                                        <a target="_blank"
+                                        @*<a target="_blank"
                                            onclick="window.dhHelpdesk.logFileAccess(@Model.CaseId, '@fileModel.Name', @(fileModel.LogType == LogFileType.Internal ? (int)CaseFileType.LogInternal : (int)CaseFileType.LogExternal), @Model.LogId)"
                                            href="@BuildLogFileLinkVD(Model.LogId.ToInt(), fileModel.Name, fileModel.LogType)"
                                            data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(fileModel.LogType))"><i class="@(GetFileIcon(fileModel.LogType))"></i> @fileModel.Name</a>
                                     }
                                     else
-                                    {
+                                    {*@
                                         <a href="@Url.Action("DownloadLogFile", new RouteValueDictionary {{"id", Model.LogId}, {"fileName", fileModel.Name}, {"logType", (int)fileModel.LogType} })"
                                            data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(fileModel.LogType))"><i class="@(GetFileIcon(fileModel.LogType))"></i> @fileModel.Name</a>
                                     }

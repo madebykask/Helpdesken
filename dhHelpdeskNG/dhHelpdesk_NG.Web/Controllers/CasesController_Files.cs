@@ -324,7 +324,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (GuidHelper.IsGuid(id))
             {
                 var logFolder = logType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
-                fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, logType.ToString());
+                fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, logFolder);
             }
             else
             {
