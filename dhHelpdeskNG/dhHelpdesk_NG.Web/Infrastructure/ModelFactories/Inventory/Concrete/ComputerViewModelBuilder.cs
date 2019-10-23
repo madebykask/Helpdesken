@@ -128,6 +128,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var department = CreateNullableIntegerField(
                 settings.OrganizationFieldsSettings.DepartmentFieldSetting,
                 model.OrganizationFields.DepartmentId);
+            var region = CreateNullableIntegerField(
+                settings.OrganizationFieldsSettings.RegionFieldSetting,
+                model.OrganizationFields.RegionId);
+
             var domain = CreateNullableIntegerField(
                 settings.OrganizationFieldsSettings.DomainFieldSetting,
                 model.OrganizationFields.DomainId);
@@ -136,9 +140,15 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 model.OrganizationFields.UnitId);
 
             var organizationFieldsModel = new OrganizationFieldsModel(
+                region,
                 department,
                 domain,
                 unit);
+            var regions =
+                CreateSelectListField(
+                    settings.OrganizationFieldsSettings.RegionFieldSetting,
+                    options.Regions,
+                    model.OrganizationFields.RegionId.ToString());
             var departments =
                 CreateSelectListField(
                     settings.OrganizationFieldsSettings.DepartmentFieldSetting,
@@ -157,6 +167,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var organizationViewModel = new OrganizationFieldsViewModel(
                 organizationFieldsModel,
+                regions,
                 departments,
                 domains,
                 ous);
@@ -492,6 +503,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     CreateStringField(settings.ContactInformationFieldsSettings.UserIdFieldSetting, model.ContactInformationFields.UserStringId),
                     CreateStringField(settings.ContactInformationFieldsSettings.FirstNameFieldSetting, model.ContactInformationFields.UserName?.FirstName),
                     CreateStringField(settings.ContactInformationFieldsSettings.LastNameFieldSetting, model.ContactInformationFields.UserName?.LastName),
+                    CreateStringField(settings.ContactInformationFieldsSettings.RegionFieldSetting, model.ContactInformationFields.Region),
                     CreateStringField(settings.ContactInformationFieldsSettings.DepartmentFieldSetting, model.ContactInformationFields.Department),
                     CreateStringField(settings.ContactInformationFieldsSettings.UnitFieldSetting, model.ContactInformationFields.Unit));
 
@@ -568,13 +580,21 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var processorViewModel = new ProccesorFieldsViewModel(proccesorFieldsModel, processors);
 
+            var region = CreateNullableIntegerField(
+                settings.OrganizationFieldsSettings.RegionFieldSetting,
+                null);
             var department = CreateNullableIntegerField(
                 settings.OrganizationFieldsSettings.DepartmentFieldSetting,
                 null);
             var domain = CreateNullableIntegerField(settings.OrganizationFieldsSettings.DomainFieldSetting, null);
             var unit = CreateNullableIntegerField(settings.OrganizationFieldsSettings.UnitFieldSetting, null);
 
-            var organizationFieldsModel = new OrganizationFieldsModel(department, domain, unit);
+            var organizationFieldsModel = new OrganizationFieldsModel(region,department, domain, unit);
+            var regions =
+                CreateSelectListField(
+                    settings.OrganizationFieldsSettings.RegionFieldSetting,
+                    options.Regions,
+                    null);
             var departments = CreateSelectListField(
                 settings.OrganizationFieldsSettings.DepartmentFieldSetting,
                 options.Departments,
@@ -587,6 +607,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var organizationViewModel = new OrganizationFieldsViewModel(
                 organizationFieldsModel,
+                regions,
                 departments,
                 domains,
                 ous);
@@ -749,6 +770,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     CreateStringField(settings.ContactInformationFieldsSettings.UserIdFieldSetting, null),
                     CreateStringField(settings.ContactInformationFieldsSettings.FirstNameFieldSetting, null),
                     CreateStringField(settings.ContactInformationFieldsSettings.LastNameFieldSetting, null),
+                    CreateStringField(settings.ContactInformationFieldsSettings.RegionFieldSetting, null),
                     CreateStringField(settings.ContactInformationFieldsSettings.DepartmentFieldSetting, null),
                     CreateStringField(settings.ContactInformationFieldsSettings.UnitFieldSetting, null));
 

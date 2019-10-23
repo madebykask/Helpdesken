@@ -8,25 +8,24 @@
             ModelEditFieldSetting userIdFieldSetting, 
             ModelEditFieldSetting firstNameFieldSetting,
             ModelEditFieldSetting lastNameFieldSetting, 
+            ModelEditFieldSetting regionFieldSetting,
             ModelEditFieldSetting departmentFieldSetting,
             ModelEditFieldSetting unitFieldSetting)
         {
             UserIdFieldSetting = userIdFieldSetting;
             FirstNameFieldSetting = firstNameFieldSetting;
             LastNameFieldSetting = lastNameFieldSetting;
+            RegionFieldSetting = regionFieldSetting;
             DepartmentFieldSetting = departmentFieldSetting;
             UnitFieldSetting = unitFieldSetting;
         }
 
         [NotNull]
         public ModelEditFieldSetting UserIdFieldSetting { get; set; }
-
         public ModelEditFieldSetting FirstNameFieldSetting { get; set; }
-
         public ModelEditFieldSetting LastNameFieldSetting { get; set; }
-
+        public ModelEditFieldSetting RegionFieldSetting { get; set; }
         public ModelEditFieldSetting DepartmentFieldSetting { get; set; }
-
         public ModelEditFieldSetting UnitFieldSetting { get; set; }
 
     }

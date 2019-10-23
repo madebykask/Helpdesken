@@ -486,6 +486,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 computersFilter.DomainId,
                 computersFilter.DepartmentId,
                 computersFilter.RegionId,
+                computersFilter.UnitId,
                 computersFilter.ComputerTypeId,
                 computersFilter.ContractStatusId,
                 computersFilter.ContractStartDateFrom,

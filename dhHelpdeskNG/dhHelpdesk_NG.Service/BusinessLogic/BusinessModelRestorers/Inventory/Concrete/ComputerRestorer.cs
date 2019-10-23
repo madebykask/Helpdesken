@@ -334,6 +334,11 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory.Co
         {
             this.RestoreFieldIfNeeded(
                 updated,
+                () => updated.RegionId,
+                existing.RegionId,
+                this.CreateValidationRule(updatedSettings.RegionFieldSetting));
+            this.RestoreFieldIfNeeded(
+                updated,
                 () => updated.DepartmentId,
                 existing.DepartmentId,
                 this.CreateValidationRule(updatedSettings.DepartmentFieldSetting));

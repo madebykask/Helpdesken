@@ -15,6 +15,7 @@
             SelectList domains,
             SelectList regions,
             SelectList departments,
+            SelectList units,
             SelectList computerTypes,
             SelectList contractStatuses,
             WorkstationsSearchFilter filter,
@@ -24,12 +25,13 @@
             : base(currentMode, overviews)
         {
             Domains = domains;
-            this.Departments = departments;
-            this.Regions = regions;
-            this.ComputerTypes = computerTypes;
-            this.ContractStatuses = contractStatuses;
-            this.Filter = filter;
-            this.Settings = settings;
+            Units = units;
+            Departments = departments;
+            Regions = regions;
+            ComputerTypes = computerTypes;
+            ContractStatuses = contractStatuses;
+            Filter = filter;
+            Settings = settings;
         }
 
         [NotNull]
@@ -40,6 +42,9 @@
 
         [NotNull]
         public SelectList Departments { get; private set; }
+
+        [NotNull]
+        public SelectList Units { get; private set; }
 
         [NotNull]
         public SelectList ComputerTypes { get; private set; }
@@ -59,6 +64,7 @@
             List<ItemOverview> domainsItemOverviews,
             List<ItemOverview> regionsItemOverviews,
             List<ItemOverview> departmentsItemOverviews,
+            List<ItemOverview> unitsItemOverviews,
             List<ItemOverview> computerTypesItemOverviews,
             List<ItemOverview> computerStatusesItemOverviews,
             ComputerFieldsSettingsOverviewForFilter settings,
@@ -70,11 +76,13 @@
             var departments = new SelectList(departmentsItemOverviews, "Value", "Name");
             var computerTypes = new SelectList(computerTypesItemOverviews, "Value", "Name");
             var contractStatuses = new SelectList(computerStatusesItemOverviews, "Value", "Name");
+            var units = new SelectList(unitsItemOverviews, "Value", "Name");
 
             var viewModel = new WorkstationSearchViewModel(
                 domains,
                 regions,
                 departments,
+                units,
                 computerTypes,
                 contractStatuses,
                 currentFilter,

@@ -10,6 +10,7 @@
             string email,
             string phone,
             string mobilePhone,
+            string region, 
             string department, 
             string unit)
         {
@@ -21,6 +22,7 @@
             this.Email = email;
             this.Phone = phone;
             this.MobilePhone = mobilePhone;
+            this.Region = region;
             this.Department = department;
         }
 
@@ -38,6 +40,7 @@
 
         public string MobilePhone { get; private set; }
 
+        public string Region { get; private set; }
         public string Department { get; private set; }
 
         public string Unit { get; private set; }

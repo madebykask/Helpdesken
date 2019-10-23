@@ -61,6 +61,18 @@
                         </tr>
                     }
 
+                    if (Model.Region.Show)
+                    {
+                        <tr>
+                            <td class="span3">
+                                <label>@Translation.GetCoreTextTranslation("Område")</label>
+                            </td>
+                            <td class="span9" id="region_dialog_td">
+                                @Html.DisplayFor(m => m.Region.Value)
+                            </td>
+                        </tr>
+                    }
+
                     if (Model.Department.Show)
                     {
                         <tr>

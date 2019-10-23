@@ -61,6 +61,7 @@
             var userId = CreateFieldSetting(settings.FindByName(ContactInformationFields.UserId));
             var firstName = CreateFieldSetting(settings.FindByName(ContactInformationFields.FirstName));
             var lastName = CreateFieldSetting(settings.FindByName(ContactInformationFields.LastName));
+            var region = CreateFieldSetting(settings.FindByName(ContactInformationFields.Region));
             var department = CreateFieldSetting(settings.FindByName(ContactInformationFields.Department));
             var unit = CreateFieldSetting(settings.FindByName(ContactInformationFields.Unit));
 
@@ -68,6 +69,7 @@
                 userId,
                 firstName,
                 lastName,
+                region,
                 department,
                 unit);
 
@@ -239,11 +241,12 @@
 
         private static OrganizationFieldsSettings CreateOrganizationSettings(NamedObjectCollection<FieldSettingMapperDataForModelEdit> entity)
         {
+            var region = CreateFieldSetting(entity.FindByName(OrganizationFields.Region));
             var department = CreateFieldSetting(entity.FindByName(OrganizationFields.Department));
             var domain = CreateFieldSetting(entity.FindByName(OrganizationFields.Domain));
             var unit = CreateFieldSetting(entity.FindByName(OrganizationFields.Unit));
 
-            var settings = new OrganizationFieldsSettings(department, domain, unit);
+            var settings = new OrganizationFieldsSettings(region, department, domain, unit);
 
             return settings;
         }

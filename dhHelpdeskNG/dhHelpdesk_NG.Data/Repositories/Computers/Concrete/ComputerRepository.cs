@@ -135,6 +135,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                                 UserStringId = x.User.UserId,
                                 UserFirstName = x.User.FirstName,
                                 UserSurName = x.User.SurName,
+                                UserRegionName = x.User.Department.Region.Name,
                                 UserDepartmentName = x.User.Department.DepartmentName,
                                 UserUnitName = x.User.OU.Name
                             })
@@ -155,6 +156,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                                 t.s.UserStringId,
                                 t.s.UserFirstName,
                                 t.s.UserSurName,
+                                t.s.UserRegionName,
                                 t.s.UserDepartmentName,
                                 t.s.UserUnitName,
                                 ChangedByUserId = (int?)k.Id,
@@ -181,6 +183,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 
             var organization =
                 new BusinessData.Models.Inventory.Edit.Computer.OrganizationFields(
+                    anonymus.Entity.Region_Id,
                     anonymus.Entity.Department_Id,
                     anonymus.Entity.Domain_Id,
                     anonymus.Entity.OU_Id);
@@ -240,6 +243,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             var contactInfo = new BusinessData.Models.Inventory.Edit.Computer.ContactInformationFields(
                 anonymus.UserId,
                 anonymus.UserStringId,
+                anonymus.UserRegionName,
                 anonymus.UserDepartmentName,
                 anonymus.UserUnitName,
                 anonymus.UserId.HasValue ? new UserName(anonymus.UserFirstName, anonymus.UserSurName) : null);
@@ -341,6 +345,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             int? domainId,
             int? departmentId,
             int? regionId,
+            int? ouId,
             int? computerTypeId,
             int? contractStatusId,
             DateTime? contractStartDateFrom,
@@ -376,17 +381,16 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                     OUName = x.c.OU.Name ?? "",
                     RoomName = x.c.Room.Name ?? "",
                     UserId = x.c.User.UserId ?? "",
+                    UserRegionName = x.c.User.Department.Region_Id.HasValue ?  x.c.User.Department.Region.Name : "",
                     UserDepartmentName = x.c.User.Department.DepartmentName ?? "",
                     UserOUName = x.c.User.OU.Name ?? "",
-                    ContractStatusName = x.c.ContractStatus_Id.HasValue ? x.c.ContractStatus.Name : ""
+                    ContractStatusName = x.c.ContractStatus_Id.HasValue ? x.c.ContractStatus.Name : "",
+                    RegionName =  x.c.Region_Id.HasValue ? x.c.Region.Name : ""
                 })
                 .Where(x => x.Computer.Customer_Id == customerId);
 
             if (!isShowScrapped)
                 query = query.Where(x => x.Computer.ScrapDate == null);
-
-            if (regionId.HasValue)
-                query = query.Where(x => x.Computer.Department.Region_Id == regionId);
 
             if (domainId.HasValue)
                 query = query.Where(x => x.Computer.Domain_Id == domainId);
@@ -397,6 +401,24 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                     ? query.Where(x => x.Computer.Department_Id == departmentId)
                     : query.Where(x =>
                     x.Computer.User_Id.HasValue && x.Computer.User.Department_Id.HasValue && x.Computer.User.Department_Id == departmentId);
+            }
+
+            if (ouId.HasValue)
+            {
+                query = isComputerDepartmentSource 
+                    ? query.Where(x => x.Computer.OU_Id == ouId)
+                    : query.Where(x =>
+                        x.Computer.User_Id.HasValue && x.Computer.User.OU_Id == ouId);
+            }
+
+            if (regionId.HasValue)
+            {
+                query = isComputerDepartmentSource
+                    ? query.Where(x => x.Computer.Region_Id == regionId)
+                    : query.Where(x =>
+                        x.Computer.User_Id.HasValue &&
+                        x.Computer.User.Department_Id.HasValue &&
+                        x.Computer.User.Department.Region_Id == regionId);
             }
 
             if (computerTypeId.HasValue)
@@ -744,8 +766,10 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                     RoomName = x.c.Room.Name ?? "",
                     UserId = x.c.User.UserId ?? "",
                     UserDepartmentName = x.c.User.Department.DepartmentName ?? "",
+                    UserRegionName = x.c.User.Department.Region_Id.HasValue ?  x.c.User.Department.Region.Name : "",
                     UserOUName = x.c.User.OU.Name ?? "",
-                    ContractStatusName = x.c.ContractStatus_Id.HasValue ? x.c.ContractStatus.Name : ""
+                    ContractStatusName = x.c.ContractStatus_Id.HasValue ? x.c.ContractStatus.Name : "",
+                    RegionName =  x.c.Region_Id.HasValue ? x.c.Region.Name : ""
                 })
                 .Where(x => x.Computer.Customer_Id == customerId && x.Computer.User.UserId.Trim().Equals(userId.Trim()))
                 .ToList();
@@ -774,6 +798,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         x.Computer.Location),
                         new BusinessData.Models.Inventory.Output.Shared.ProcessorFields(x.ProcessorName),
                         new BusinessData.Models.Inventory.Output.Computer.OrganizationFields(
+                        x.RegionName,
                         x.DepartmentName,
                         x.DomainName,
                         x.OUName),
@@ -817,6 +842,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         x.Computer.AccountingDimension5),
                         new BusinessData.Models.Inventory.Output.Computer.ContactInformationFields(
                         x.UserId,
+                        x.UserRegionName,
                         x.UserDepartmentName,
                         x.UserOUName),
                         new BusinessData.Models.Inventory.Output.Computer.ContactFields(
@@ -853,6 +879,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.Processor_Id = businessModel.ProccesorFields.ProccesorId;
 
             entity.Department_Id = businessModel.OrganizationFields.DepartmentId;
+            entity.Region_Id = businessModel.OrganizationFields.RegionId;
             entity.Domain_Id = businessModel.OrganizationFields.DomainId;
             entity.OU_Id = businessModel.OrganizationFields.UnitId;
 
@@ -930,6 +957,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             public string UserOUName { get; set; }
             public string ContractStatusName { get; set; }
             public string UserDepartmentName { get; set; }
+            public string UserRegionName { get; set; }
+            public string RegionName { get; set; }
         }
     }
 }

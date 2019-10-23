@@ -38,6 +38,7 @@
                                     email: item.Email,
                                     phone: item.Phone,
                                     mobilephone: item.MobilePhone,
+                                    regionname: item.Region,
                                     departmentname: item.Department,
                                     unit: item.Unit,
                                     name_family: item.SurName + ' ' + item.FirstName
@@ -79,6 +80,8 @@
                 var orgQuery = this.query;
                 if (item.departmentname == null)
                     item.departmentname = "";
+                if (item.regionname == null)
+                    item.regionname = "";
                 var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
                 var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname;
                 var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname;
@@ -111,6 +114,11 @@
                     $('#surname_dialog_td').text(item.sname);
                 else
                     $('#surname_dialog_td').text("");
+
+                if (item.regionname != null)
+                    $('#region_dialog_td').text(item.regionname);
+                else
+                    $('#region_dialog_td').text("");
 
                 if (item.departmentname != null)
                     $('#department_dialog_td').text(item.departmentname);

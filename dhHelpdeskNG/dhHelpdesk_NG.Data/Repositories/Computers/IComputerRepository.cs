@@ -25,6 +25,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
             int? domainId,
             int? departmentId,
             int? regionId,
+            int? ouId,
             int? computerTypeId,
             int? contractStatusId,
             DateTime? contractStartDateFrom,

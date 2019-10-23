@@ -103,6 +103,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var domains = OrganizationService.GetDomains(SessionFacade.CurrentCustomer.Id);
             var regions = OrganizationService.GetRegions(SessionFacade.CurrentCustomer.Id);
             var departments = OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id, currentFilter.RegionId);
+            var units = currentFilter.DepartmentId.HasValue 
+                ? OrganizationService.GetOrganizationUnits(currentFilter.DepartmentId) 
+                : new List<ItemOverview>();
 
             var settings =
                 _inventorySettingsService.GetWorkstationFieldSettingsOverviewForFilter(
@@ -122,6 +125,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 domains,
                 regions,
                 departments,
+                units,
                 computerTypes,
                 computerContractStatuses,
                 settings,
@@ -159,7 +163,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var readOnly = !userHasInventoryAdminPermission && dialog;
             var model = this._inventoryService.GetWorkstation(id);
 
-            var options = this.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id, model.OrganizationFields.DepartmentId);
+            var options = this.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id, model.OrganizationFields.DepartmentId, model.OrganizationFields.RegionId);
 
             var settings =
                 _inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
@@ -280,7 +284,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 		[UserPermissions(UserPermission.InventoryViewPermission)]
 		public ViewResult New(int? orderId = null)
         {
-            var options = GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id, null);
+            var options = GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id, null, null);
             var settings =
                 _inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
                     SessionFacade.CurrentCustomer.Id,
@@ -588,7 +592,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             return viewModel;
         }
 
-        private ComputerEditOptions GetWorkstationEditOptions(int customerId, int? departmentId)
+        private ComputerEditOptions GetWorkstationEditOptions(int customerId, int? departmentId, int? regionId)
         {
             var computerModels =
                 _computerModulesService.GetComputerModels().OrderBy(x => x.Name).ToList();
@@ -599,8 +603,10 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var processors = _computerModulesService.GetProcessors().OrderBy(x => x.Name).ToList();
             var rams = _computerModulesService.GetRams().OrderBy(x => x.Name).ToList();
             var netAdapters = _computerModulesService.GetNetAdapters().OrderBy(x => x.Name).ToList();
+            var regions =
+                OrganizationService.GetRegions(customerId).OrderBy(x => x.Name).ToList();
             var departments =
-                OrganizationService.GetDepartments(customerId).OrderBy(x => x.Name).ToList();
+                OrganizationService.GetDepartments(customerId, regionId).OrderBy(x => x.Name).ToList();
             var domains =
                 OrganizationService.GetDomains(customerId).OrderBy(x => x.Name).ToList();
 
@@ -629,6 +635,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 rams,
                 netAdapters,
                 departments,
+                regions,
                 domains,
                 ous,
                 buildings,

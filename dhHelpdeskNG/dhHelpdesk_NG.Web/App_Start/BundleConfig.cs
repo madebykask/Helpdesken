@@ -528,7 +528,8 @@
             bundles.Add(new ScriptBundle(ScriptNames.InventoryRelatedCases).Include(
                     "~/Areas/Inventory/Content/js/relatedCases.js"));
             bundles.Add(new ScriptBundle(ScriptNames.InventoryFiles).Include(
-                "~/Areas/Inventory/Content/js/InventoryFiles.js"));
+                "~/Areas/Inventory/Content/js/inventoryFiles.js",
+                "~/Areas/Inventory/Content/js/workstationEdit.js"));
 
 
 

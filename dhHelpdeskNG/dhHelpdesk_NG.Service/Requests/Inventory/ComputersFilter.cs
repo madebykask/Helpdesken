@@ -10,6 +10,7 @@
         public ComputersFilter(int customerId,
             int? domainId,
             int? regionId,
+            int? unitId,
             int? departmentId,
             int? computerTypeId,
             int? contractStatusId,
@@ -31,6 +32,7 @@
             CustomerId = customerId;
             DomainId = domainId;
             RegionId = regionId;
+            UnitId = unitId;
             DepartmentId = departmentId;
             ComputerTypeId = computerTypeId;
             ContractStatusId = contractStatusId;
@@ -56,6 +58,9 @@
 
         [IsId]
         public int? RegionId { get; private set; }
+
+        [IsId]
+        public int? UnitId { get; private set; }
 
         [IsId]
         public int? DepartmentId { get; private set; }

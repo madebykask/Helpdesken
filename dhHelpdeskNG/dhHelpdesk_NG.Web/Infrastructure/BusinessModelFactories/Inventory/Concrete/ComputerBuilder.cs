@@ -346,11 +346,12 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 return OrganizationFields.CreateDefault();
             }
 
+            var region = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.OrganizationFieldsModel.RegionId);
             var department = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.OrganizationFieldsModel.DepartmentId);
             var domain = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.OrganizationFieldsModel.DomainId);
             var unit = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.OrganizationFieldsModel.UnitId);
 
-            var fields = new OrganizationFields(department, domain, unit);
+            var fields = new OrganizationFields(region, department, domain, unit);
 
             return fields;
         }

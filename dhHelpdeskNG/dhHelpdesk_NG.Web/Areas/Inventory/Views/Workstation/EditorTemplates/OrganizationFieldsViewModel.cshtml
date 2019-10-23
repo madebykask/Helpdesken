@@ -9,6 +9,7 @@
         <div class="span12">
             <table class="tableform">
                 @Html.EditorFor(m => m.OrganizationFieldsModel.DomainId, "Fields/List", new { Source = Model.Domains })
+                @Html.EditorFor(m => m.OrganizationFieldsModel.RegionId, "Fields/List", new { Source = Model.Regions, Id = "OU_RegionId" })
                 @Html.EditorFor(m => m.OrganizationFieldsModel.DepartmentId, "Fields/List", new { Source = Model.Departments, Id = "OU_DepartmentId" })
                 @Html.EditorFor(m => m.OrganizationFieldsModel.UnitId, "Fields/List", new { Source = Model.Units, Id = "OU_OUId" })
             </table>

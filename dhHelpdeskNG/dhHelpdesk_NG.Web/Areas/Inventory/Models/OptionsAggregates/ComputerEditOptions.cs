@@ -14,6 +14,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.OptionsAggregates
             List<ItemOverview> rams,
             List<ItemOverview> networkAdapters,
             List<ItemOverview> departments,
+            List<ItemOverview> regions,
             List<ItemOverview> domains,
             List<ItemOverview> units,
             List<ItemOverview> buildings,
@@ -29,6 +30,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.OptionsAggregates
             Rams = rams;
             NetworkAdapters = networkAdapters;
             Departments = departments;
+            Regions = regions;
             Domains = domains;
             Units = units;
             Buildings = buildings;
@@ -45,6 +47,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.OptionsAggregates
         public List<ItemOverview> Rams { get; private set; }
         public List<ItemOverview> NetworkAdapters { get; private set; }
         public List<ItemOverview> Departments { get; private set; }
+        public List<ItemOverview> Regions { get; private set; }
         public List<ItemOverview> Domains { get; private set; }
         public List<ItemOverview> Units { get; private set; }
         public List<ItemOverview> Buildings { get; private set; }

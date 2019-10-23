@@ -70,6 +70,11 @@
                 .HasForeignKey(x => x.OU_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.Region)
+                .WithMany()
+                .HasForeignKey(x => x.Region_Id)
+                .WillCascadeOnDelete(false);
+
             this.HasOptional(x => x.ContractStatus)
                 .WithMany()
                 .HasForeignKey(x => x.ContractStatus_Id)
@@ -128,6 +133,11 @@
 
             this.Property(x => x.RegUser_Id).IsOptional();
             this.Property(x => x.ChangedByUser_Id).IsOptional();
+
+            this.Property(x => x.Domain_Id).IsOptional();
+            this.Property(x => x.Department_Id).IsOptional();
+            this.Property(x => x.OU_Id).IsOptional();
+            this.Property(x => x.Region_Id).IsOptional();
 
             this.Property(x => x.CreatedDate).IsRequired();
             this.Property(x => x.ChangedDate).IsRequired();

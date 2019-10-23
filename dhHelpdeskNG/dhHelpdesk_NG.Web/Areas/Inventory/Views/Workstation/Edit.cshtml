@@ -76,7 +76,7 @@
                 {
                     <tr>
                         <td class="span3">
-                            <label>@Translation.Get(Model.ComputerViewModel.CreatedDate.Caption)</label>
+                            <label>@Translation.GetCoreTextTranslation(Model.ComputerViewModel.CreatedDate.Caption)</label>
                         </td>
                         <td class="span9">
                             @Html.DisplayFor(m => m.ComputerViewModel.CreatedDate.Value, "Date")
@@ -87,7 +87,7 @@
                 {
                     <tr>
                         <td class="span3">
-                            <label>@Translation.Get(Model.ComputerViewModel.ChangedDate.Caption)</label>
+                            <label>@Translation.GetCoreTextTranslation(Model.ComputerViewModel.ChangedDate.Caption)</label>
                         </td>
                         <td class="span9">
                             @Html.DisplayFor(m => m.ComputerViewModel.ChangedDate.Value, "Date")
@@ -134,38 +134,13 @@
                 window.inventoryFiles = new InventoryFiles(jQuery);
                 window.inventoryFiles.init(inventoryFilesOptions);
 
-                var ouDepartmentCtrl = $('#OU_DepartmentId');
-                var ouOUCtrl = $('#OU_OUId');
-
-                ouDepartmentCtrl.on('change',
-                    function() {
-                        var departmentId = $(this).val();
-                        $.get('@Url.Action("GetDepartments", "Ajax", new { area = ""})',
-                            {
-                                'id': departmentId,
-                                'customerId': @Model.CustomerId,
-                                'departmentFilterFormat': 0
-                            },
-                            function(data) {
-
-                                var options = '<option value="">&nbsp;</option>';
-                                if (data) {
-                                    for (var i = 0; i < data.list.length; i++) {
-                                        var item = data.list[i];
-
-                                        options += "<option value='" + item.id + "'>" + item.name + "</option>";
-                                    }
-                                }
-
-                                ouOUCtrl.empty();
-                                ouOUCtrl.append(options);
-
-                            }, 'json').always(function () {
-                            
-                        });
-
-
-                    });
+                window.workstationEdit = new WorkstationEdit($);
+                window.workstationEdit.init({
+                    userId: @SessionFacade.CurrentUser.Id,
+                    customerId: @SessionFacade.CurrentCustomer.Id,
+                    getUnitsUrl: '@Url.Action("GetUnits", "Ajax", new {area = ""})',
+                    getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})'
+                });
             });
 
         </script>

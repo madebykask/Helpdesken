@@ -225,6 +225,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             {
                 MapNotifierFieldSettingsToEditSettings(ContactInformationFields.FirstName, GeneralField.FirstName, GeneralFieldLabel.UserId, settings, langId),
                 MapNotifierFieldSettingsToEditSettings(ContactInformationFields.LastName, GeneralField.LastName, GeneralFieldLabel.LastName, settings, langId),
+                MapNotifierFieldSettingsToEditSettings(ContactInformationFields.Region, OrganizationField.Region, OrganizationFieldLabel.Region, settings, langId),
                 MapNotifierFieldSettingsToEditSettings(ContactInformationFields.Department, OrganizationField.Department, OrganizationFieldLabel.Department, settings, langId),
                 MapNotifierFieldSettingsToEditSettings(ContactInformationFields.Unit, OrganizationField.Unit, OrganizationFieldLabel.Unit, settings, langId)
             };
@@ -488,6 +489,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             string languageTextId,
             DateTime changeDate)
         {
+            MapFieldSetting(updatedSettings.RegionFieldSetting, entity.FindByName(OrganizationFields.Region), languageTextId, changeDate);
             MapFieldSetting(updatedSettings.DepartmentFieldSetting, entity.FindByName(OrganizationFields.Department), languageTextId, changeDate);
             MapFieldSetting(updatedSettings.DomainFieldSetting, entity.FindByName(OrganizationFields.Domain), languageTextId, changeDate);
             MapFieldSetting(updatedSettings.UnitFieldSetting, entity.FindByName(OrganizationFields.Unit), languageTextId, changeDate);

@@ -39,6 +39,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
         public int? RegionId { get; set; }
 
         [IsId]
+        public int? UnitId { get; set; }
+
+        [IsId]
         public int? DepartmentId { get; set; }
 
         [IsId]
@@ -88,6 +91,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
                 customerId,
                 DomainId,
                 RegionId,
+                UnitId,
                 DepartmentId,
                 ComputerTypeId,
                 (int?)ContractStatusId,

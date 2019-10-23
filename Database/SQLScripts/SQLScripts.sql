@@ -148,15 +148,24 @@ BEGIN
 		
 	  RAISERROR ('Adding data to tblCustomerStatus for customer %d', 10, 1, @CustomerId) WITH NOWAIT
    	  SELECT @Id = MAX([Id]) FROM tblComputerStatus
-	  PRINT @Id
-	  INSERT [dbo].[tblComputerStatus] ([Id], [ComputerStatus], [Type], [Customer_Id]) VALUES (@Id+1, N'Aktiv', 1, @CustomerId),
-		(@Id+2, N'Ej kopplad till användare', 1, @CustomerId),
-		(@Id+3, N'Stulen', 1, @CustomerId),
-		(@Id+4, N'Leasing', 2, @CustomerId),
-		(@Id+5, N'Köpt', 2, @CustomerId),
-		(@Id+6, N'Hyrd', 2, @CustomerId),
-		(@Id+7, N'Leasing (skola)', 2, @CustomerId),
-		(@Id+8, N'Certifiering', 2, @CustomerId)
+	  IF(@Id IS NULL)
+		  INSERT [dbo].[tblComputerStatus] ([Id], [ComputerStatus], [Type], [Customer_Id]) VALUES (1, N'Aktiv', 1, @CustomerId),
+			(2, N'Ej kopplad till användare', 1, @CustomerId),
+			(3, N'Stulen', 1, @CustomerId),
+			(11, N'Leasing', 2, @CustomerId),
+			(12, N'Köpt', 2, @CustomerId),
+			(13, N'Hyrd', 2, @CustomerId),
+			(14, N'Leasing (skola)', 2, @CustomerId),
+			(15, N'Certifiering', 2, @CustomerId)
+	  ELSE
+		  INSERT [dbo].[tblComputerStatus] ([Id], [ComputerStatus], [Type], [Customer_Id]) VALUES (@Id+1, N'Aktiv', 1, @CustomerId),
+			(@Id+2, N'Ej kopplad till användare', 1, @CustomerId),
+			(@Id+3, N'Stulen', 1, @CustomerId),
+			(@Id+4, N'Leasing', 2, @CustomerId),
+			(@Id+5, N'Köpt', 2, @CustomerId),
+			(@Id+6, N'Hyrd', 2, @CustomerId),
+			(@Id+7, N'Leasing (skola)', 2, @CustomerId),
+			(@Id+8, N'Certifiering', 2, @CustomerId)
 
       FETCH NEXT FROM @MyCursor 
       INTO @CustomerId 
@@ -164,6 +173,17 @@ BEGIN
 
     CLOSE @MyCursor;
     DEALLOCATE @MyCursor;
+END
+
+RAISERROR ('Add Region_Id to tblComputer table', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'Region_Id' and sysobjects.name = N'tblComputer')
+BEGIN
+    ALTER TABLE tblComputer
+    ADD Region_Id int null 
+	ALTER TABLE [dbo].[tblComputer]  WITH NOCHECK ADD  CONSTRAINT [FK_tblComputer_tblRegion] FOREIGN KEY([Region_Id])
+	REFERENCES [dbo].[tblComputer] ([Id])
+	ALTER TABLE [dbo].[tblComputer] NOCHECK CONSTRAINT [FK_tblComputer_tblRegion]
 END
 
 -- Last Line to update database version

@@ -460,6 +460,7 @@
     <Content Include="Areas\Admin\Content\js\OrderType\index.logic.js" />
     <Content Include="Areas\Admin\Content\js\QuickLinks\index.logic.js" />
     <Content Include="Areas\Inventory\Content\js\inventoryOverview.js" />
+    <Content Include="Areas\Inventory\Content\js\workstationEdit.js" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\Partials\OrderFieldWebTypes.cshtml" />
     <Content Include="Areas\Invoices\Scripts\Pages\invoiceFiles.js" />
     <Content Include="Areas\Invoices\Views\Overview\Files.cshtml" />

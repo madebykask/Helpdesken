@@ -100,8 +100,10 @@ namespace DH.Helpdesk.Domain.Computers
         public DateTime? SyncChangedDate { get; set; }
 
         public int? OU_Id { get; set; }
+        public int? Region_Id { get; set; }
 
         public virtual OU OU { get; set; }
+        public virtual Region Region { get; set; }
 
         public virtual ComputerModel ComputerModel { get; set; }
 

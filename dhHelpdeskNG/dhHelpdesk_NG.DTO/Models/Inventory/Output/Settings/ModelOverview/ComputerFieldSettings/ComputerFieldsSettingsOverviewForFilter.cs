@@ -8,6 +8,7 @@
             FieldSettingOverview domainFieldSetting,
             FieldSettingOverview regionFieldSetting,
             FieldSettingOverview departmentFieldSetting,
+            FieldSettingOverview unitFieldSetting,
             FieldSettingOverview computerTypeFieldSetting,
             FieldSettingOverview contractStatusFieldSetting,
             FieldSettingOverview contractStartDateFieldSetting,
@@ -18,6 +19,7 @@
             DomainFieldSetting = domainFieldSetting;
             RegionFieldSetting = regionFieldSetting;
             DepartmentFieldSetting = departmentFieldSetting;
+            UnitFieldSetting = unitFieldSetting;
             ComputerTypeFieldSetting = computerTypeFieldSetting;
             ContractStatusFieldSetting = contractStatusFieldSetting;
             ContractStartDateFieldSetting = contractStartDateFieldSetting;
@@ -34,6 +36,9 @@
 
         [NotNull]
         public FieldSettingOverview DepartmentFieldSetting { get; private set; }
+
+        [NotNull]
+        public FieldSettingOverview UnitFieldSetting { get; private set; }
 
         [NotNull]
         public FieldSettingOverview ComputerTypeFieldSetting { get; private set; }

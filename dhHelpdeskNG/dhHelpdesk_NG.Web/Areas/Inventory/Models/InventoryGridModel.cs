@@ -366,6 +366,11 @@
                 values);
 
             CreateValueIfNeeded(
+                settings.OrganizationFieldsSettings.RegionFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.OrganizationFields.Region,
+                (StringDisplayValue)overview.OrganizationFields.RegionName,
+                values);
+            CreateValueIfNeeded(
                 settings.OrganizationFieldsSettings.DepartmentFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Computer.OrganizationFields.Department,
                 (StringDisplayValue)overview.OrganizationFields.DepartmentName,
@@ -655,6 +660,10 @@
                 BusinessData.Enums.Inventory.Fields.Computer.ContactInformationFields.UserId,
                 headers);
 
+            CreateHeaderIfNeeded(
+                settings.OrganizationFieldsSettings.RegionFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.OrganizationFields.Region,
+                headers);
             CreateHeaderIfNeeded(
                 settings.OrganizationFieldsSettings.DepartmentFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Computer.OrganizationFields.Department,
