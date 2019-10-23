@@ -158,6 +158,7 @@ BEGIN
 			(14, N'Leasing (skola)', 2, @CustomerId),
 			(15, N'Certifiering', 2, @CustomerId)
 	  ELSE
+	  BEGIN
 		  INSERT [dbo].[tblComputerStatus] ([Id], [ComputerStatus], [Type], [Customer_Id]) VALUES (@Id+1, N'Aktiv', 1, @CustomerId),
 			(@Id+2, N'Ej kopplad till användare', 1, @CustomerId),
 			(@Id+3, N'Stulen', 1, @CustomerId),
@@ -166,6 +167,15 @@ BEGIN
 			(@Id+6, N'Hyrd', 2, @CustomerId),
 			(@Id+7, N'Leasing (skola)', 2, @CustomerId),
 			(@Id+8, N'Certifiering', 2, @CustomerId)
+		  UPDATE [dbo].[tblComputer] SET [Status]=@id+1 WHERE [Customer_Id] = @CustomerId AND [Status] = 1
+		  UPDATE [dbo].[tblComputer] SET [Status]=@id+2 WHERE [Customer_Id] = @CustomerId AND [Status] = 2
+		  UPDATE [dbo].[tblComputer] SET [Status]=@id+3 WHERE [Customer_Id] = @CustomerId AND [Status] = 3
+		  UPDATE [dbo].[tblComputer] SET [ComputerContractStatus_Id]=@id+4 WHERE [Customer_Id] = @CustomerId AND [ComputerContractStatus_Id] = 11
+		  UPDATE [dbo].[tblComputer] SET [ComputerContractStatus_Id]=@id+5 WHERE [Customer_Id] = @CustomerId AND [ComputerContractStatus_Id] = 12
+		  UPDATE [dbo].[tblComputer] SET [ComputerContractStatus_Id]=@id+6 WHERE [Customer_Id] = @CustomerId AND [ComputerContractStatus_Id] = 13
+		  UPDATE [dbo].[tblComputer] SET [ComputerContractStatus_Id]=@id+7 WHERE [Customer_Id] = @CustomerId AND [ComputerContractStatus_Id] = 14
+		  UPDATE [dbo].[tblComputer] SET [ComputerContractStatus_Id]=@id+8 WHERE [Customer_Id] = @CustomerId AND [ComputerContractStatus_Id] = 15
+	  END
 
       FETCH NEXT FROM @MyCursor 
       INTO @CustomerId 
@@ -174,6 +184,7 @@ BEGIN
     CLOSE @MyCursor;
     DEALLOCATE @MyCursor;
 END
+
 
 RAISERROR ('Add Region_Id to tblComputer table', 10, 1) WITH NOWAIT
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              

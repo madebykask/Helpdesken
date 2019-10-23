@@ -395,6 +395,16 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             if (domainId.HasValue)
                 query = query.Where(x => x.Computer.Domain_Id == domainId);
 
+            if (regionId.HasValue)
+            {
+                query = isComputerDepartmentSource
+                    ? query.Where(x => x.Computer.Region_Id == regionId)
+                    : query.Where(x =>
+                        x.Computer.User_Id.HasValue &&
+                        x.Computer.User.Department_Id.HasValue &&
+                        x.Computer.User.Department.Region_Id == regionId);
+            }
+
             if (departmentId.HasValue)
             {
                 query = isComputerDepartmentSource 
@@ -409,16 +419,6 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                     ? query.Where(x => x.Computer.OU_Id == ouId)
                     : query.Where(x =>
                         x.Computer.User_Id.HasValue && x.Computer.User.OU_Id == ouId);
-            }
-
-            if (regionId.HasValue)
-            {
-                query = isComputerDepartmentSource
-                    ? query.Where(x => x.Computer.Region_Id == regionId)
-                    : query.Where(x =>
-                        x.Computer.User_Id.HasValue &&
-                        x.Computer.User.Department_Id.HasValue &&
-                        x.Computer.User.Department.Region_Id == regionId);
             }
 
             if (computerTypeId.HasValue)
