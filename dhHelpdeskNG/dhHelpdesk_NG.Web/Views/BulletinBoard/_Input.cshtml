@@ -13,6 +13,19 @@
         tinymce.on('addeditor', function (event) {
             var editor = event.editor;
             editor.settings.maxLength = 4000;
+            var f = function (e) {
+                var content = editor.getContent();
+                if (content.length > editor.settings.maxLength) {
+                    $('.btn.save').attr('disabled', true)
+                }
+                else {
+                    $('.btn.save').attr('disabled', false);
+                }
+
+            };
+            editor.on('Change', f);
+            editor.on('KeyUp', f);
+            editor.on('NodeChange', f);
         }, true);
     });
 </script>
@@ -49,7 +62,7 @@
                                         @Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.TextAreaFor(model => model.BulletinBoard.Text, new { style = "width:600px; height:250px;", @class="richtexteditor" })
+                                        @Html.TextAreaFor(model => model.BulletinBoard.Text, new { style = "width:600px; height:250px;", @class="richtexteditor"})
                                     </td>
                                 </tr>
                                 <tr>
@@ -124,9 +137,11 @@
     });
 
     $('.btn.save').on('click', function () {
-        $("#WGsSelected option").attr("selected", "selected");
-        
-        $("#target").submit();
+        if (!$(this).attr('disabled')) {
+            $("#WGsSelected option").attr("selected", "selected");
+
+            $("#target").submit();
+        }
       
         return false;
     });
