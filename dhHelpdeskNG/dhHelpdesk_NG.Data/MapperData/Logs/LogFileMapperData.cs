@@ -10,5 +10,6 @@ namespace DH.Helpdesk.Dal.MapperData.Logs
         public int? CaseId { get; set; }
         public int? LogId { get; set; }
         public LogFileType? LogType { get; set; }
+        public LogFileType? ParentLogType { get; set; }
     }
 }

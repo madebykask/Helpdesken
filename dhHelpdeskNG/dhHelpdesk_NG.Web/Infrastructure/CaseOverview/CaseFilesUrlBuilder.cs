@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.Logs;
+using DH.Helpdesk.Common.Extensions;
 using DH.Helpdesk.Dal.Enums;
 
 namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
@@ -31,8 +32,8 @@ namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
 
         public string BuildLogFileLinkVD(int logId, string fileName, LogFileType logType)
         {
-            var logFolder = 
-                logType == LogFileType.Internal ? $"{ModuleName.LogInternal}{logId}" : $"{ModuleName.Log}{logId}";
+            var prefix = logType.GetFolderPrefix();
+            var logFolder = $"{prefix}{logId}";
 
             var fileUrl = BuildPath(_absolutePath, _virtualDirPath, logFolder, EncodeStr(fileName));
             return fileUrl;

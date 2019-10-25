@@ -9,6 +9,7 @@ using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Enums.Logs;
+using DH.Helpdesk.Common.Extensions;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.Enums;
@@ -63,14 +64,9 @@ namespace DH.Helpdesk.Web.Controllers
                 !CheckInternalLogFilesAccess(customerId, currentUser))
                 return new HttpUnauthorizedResult("You are not authorized to access intenral log files");
 
-            //todo: add check to ensure that users will not be able to request action without required rights!
             var subTopic = isInternalLog ? ModuleName.LogInternal : ModuleName.Log;
             var logType = isInternalLog ? LogFileType.Internal : LogFileType.External;
-
-            var logFiles = GuidHelper.IsGuid(id)
-                ? _userTemporaryFilesStorage.FindFileNames(id, subTopic)
-                : _logFileService.FindFileNamesByLogId(int.Parse(id), logType);
-
+            
             BusinessData.Models.Case.Output.CaseOverview caseInfo = null;
 
             var existingFiles = new List<LogFileModel>();
@@ -85,15 +81,25 @@ namespace DH.Helpdesk.Web.Controllers
                     IsExistCaseFile = f.IsExistCaseFile,
                     IsExistLogFile = f.IsExistLogFile,
                     ObjId = f.LogId ?? f.CaseId,
-                    LogType = f.LogType
+                    LogType = f.IsInternalLogNote ? LogFileType.Internal : LogFileType.External,
+                    ParentLogType = f.LogType
                 }).ToList();
             }
 
-            existingFiles.AddRange(logFiles.Select(x => new LogFileModel
+            if (GuidHelper.IsGuid(id))
             {
-                Name = x,
-                LogType = logType
-            }));
+                var tempFiles = _userTemporaryFilesStorage.FindFileNames(id, subTopic);
+                existingFiles.AddRange(tempFiles.Select(x => new LogFileModel
+                {
+                    Name = x,
+                    LogType = logType,
+                }));
+            }
+            else
+            {
+                var logFiles = _logFileService.GetLogFilesById(int.Parse(id), logType);
+                existingFiles.AddRange(logFiles);
+            }
 
             var virtualPathDir = _masterDataService.GetVirtualDirectoryPath(customerId);
             var model = new CaseLogFilesViewModel
@@ -218,7 +224,7 @@ namespace DH.Helpdesk.Web.Controllers
         public void DeleteLogFile(string id, string fileName, bool isExisting = false,
             LogFileType logType = LogFileType.External, int? fileId = null)
         {
-            var logSubFolder = logType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
+            var logSubFolder = logType.GetFolderPrefix();
 
             if (fileId.HasValue)
             {
@@ -235,7 +241,6 @@ namespace DH.Helpdesk.Web.Controllers
                 }
                 else
                 {
-                    //todo: check why file is not deleted from disk!
                     _logFileService.DeleteByFileIdAndFileName(fileId.Value, fileName.Trim());
                 }
             }
@@ -255,7 +260,7 @@ namespace DH.Helpdesk.Web.Controllers
                         var case_ = _caseService.GetCaseById(log.CaseId);
                         var basePath = _masterDataService.GetFilePath(case_.Customer_Id);
 
-                        _logFileService.DeleteByLogIdAndFileName(log.Id, basePath, fileName.Trim(), logType);
+                        _logFileService.DeleteByLogIdAndFileName(log.Id, basePath, fileName.Trim());
 
                         IDictionary<string, string> errors;
                         var adUser =
@@ -323,7 +328,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (GuidHelper.IsGuid(id))
             {
-                var logFolder = logType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
+                var logFolder = logType.GetFolderPrefix();
                 fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, logFolder);
             }
             else

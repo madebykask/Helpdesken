@@ -153,10 +153,7 @@ BEGIN
 			(2, N'Ej kopplad till användare', 1, @CustomerId),
 			(3, N'Stulen', 1, @CustomerId),
 			(11, N'Leasing', 2, @CustomerId),
-			(12, N'Köpt', 2, @CustomerId),
-			(13, N'Hyrd', 2, @CustomerId),
-			(14, N'Leasing (skola)', 2, @CustomerId),
-			(15, N'Certifiering', 2, @CustomerId)
+			(12, N'Köpt', 2, @CustomerId)
 	  ELSE
 	  BEGIN
 		  INSERT [dbo].[tblComputerStatus] ([Id], [ComputerStatus], [Type], [Customer_Id]) VALUES (@Id+1, N'Aktiv', 1, @CustomerId),
@@ -164,17 +161,12 @@ BEGIN
 			(@Id+3, N'Stulen', 1, @CustomerId),
 			(@Id+4, N'Leasing', 2, @CustomerId),
 			(@Id+5, N'Köpt', 2, @CustomerId),
-			(@Id+6, N'Hyrd', 2, @CustomerId),
-			(@Id+7, N'Leasing (skola)', 2, @CustomerId),
-			(@Id+8, N'Certifiering', 2, @CustomerId)
+			(@Id+6, N'Hyrd', 2, @CustomerId)
 		  UPDATE [dbo].[tblComputer] SET [Status]=@id+1 WHERE [Customer_Id] = @CustomerId AND [Status] = 1
 		  UPDATE [dbo].[tblComputer] SET [Status]=@id+2 WHERE [Customer_Id] = @CustomerId AND [Status] = 2
 		  UPDATE [dbo].[tblComputer] SET [Status]=@id+3 WHERE [Customer_Id] = @CustomerId AND [Status] = 3
 		  UPDATE [dbo].[tblComputer] SET [ComputerContractStatus_Id]=@id+4 WHERE [Customer_Id] = @CustomerId AND [ComputerContractStatus_Id] = 11
 		  UPDATE [dbo].[tblComputer] SET [ComputerContractStatus_Id]=@id+5 WHERE [Customer_Id] = @CustomerId AND [ComputerContractStatus_Id] = 12
-		  UPDATE [dbo].[tblComputer] SET [ComputerContractStatus_Id]=@id+6 WHERE [Customer_Id] = @CustomerId AND [ComputerContractStatus_Id] = 13
-		  UPDATE [dbo].[tblComputer] SET [ComputerContractStatus_Id]=@id+7 WHERE [Customer_Id] = @CustomerId AND [ComputerContractStatus_Id] = 14
-		  UPDATE [dbo].[tblComputer] SET [ComputerContractStatus_Id]=@id+8 WHERE [Customer_Id] = @CustomerId AND [ComputerContractStatus_Id] = 15
 	  END
 
       FETCH NEXT FROM @MyCursor 
@@ -197,9 +189,21 @@ BEGIN
 	ALTER TABLE [dbo].[tblComputer] NOCHECK CONSTRAINT [FK_tblComputer_tblRegion]
 END
 
+
+RAISERROR ('Add ParentLogType to tblLogFile table', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'ParentLogType' and sysobjects.name = N'tblLogFile')
+BEGIN
+    ALTER TABLE tblLogFile
+    ADD ParentLogType int null 
+
+	UPDATE lfc
+		SET lfc.[ParentLogType] = lfp.LogType
+	FROM [dbo].[tblLogFile] as lfc
+	INNER JOIN [dbo].[tblLogFile] as lfp ON lfc.ParentLog_Id = lfp.Log_Id
+	WHERE lfc.ParentLog_Id IS NOT NULL and lfc.[FileName] = lfp.[FileName]
+END
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.44'
 GO
-
-
 

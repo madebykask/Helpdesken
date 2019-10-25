@@ -9,6 +9,7 @@ using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Enums.Logs;
+using DH.Helpdesk.Common.Extensions;
 using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
@@ -85,7 +86,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     if (setting == null)
                         return Task.FromResult(Forbidden("Not allowed to view file."));
                 } 
-                var logFile = _logFileService.GetFileContentById(fileId, basePath, fileInfo.LogType);
+                var logFile = _logFileService.GetFileContentById(fileId, basePath, fileInfo.ParentLogType ?? fileInfo.LogType);
 
 				if (!disableLogFileView.Active)
                 {
@@ -122,7 +123,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 //fix file name if exists
                 var counter = 1;
                 var newFileName = fileName;
-                var moduleName = type == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
+                var moduleName = type.GetFolderPrefix();
                 while(_userTemporaryFilesStorage.FileExists(newFileName, caseId, moduleName))
                 {
                     newFileName = $"{Path.GetFileNameWithoutExtension(fileName)} ({counter++}){Path.GetExtension(fileName)}";
@@ -144,7 +145,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var fileNameSafe = (fileName ?? string.Empty).Trim();
             if (!string.IsNullOrEmpty(fileNameSafe))
             {
-                var moduleName = type == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
+                var moduleName = type.GetFolderPrefix();
                 _userTemporaryFilesStorage.DeleteFile(fileNameSafe, caseKey, moduleName);
             }
             return Ok(true);

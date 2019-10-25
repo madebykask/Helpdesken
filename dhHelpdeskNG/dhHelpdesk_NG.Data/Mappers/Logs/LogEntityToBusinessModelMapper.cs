@@ -47,7 +47,7 @@ namespace DH.Helpdesk.Dal.Mappers.Logs
 
                 LogFiles =
                     data.LogFiles.Where(e => e.Id.HasValue && e.Id > 0)
-                        .Select(f => new LogFileOverview(f.Id ?? 0, f.FileName, f.CaseId, f.LogId, (LogFileType)f.LogType.Value))
+                        .Select(f => new LogFileOverview(f.Id ?? 0, f.FileName, f.CaseId, f.LogId, f.LogType.Value, f.ParentLogType))
                         .ToList(),
 
                 Mail2Tickets =

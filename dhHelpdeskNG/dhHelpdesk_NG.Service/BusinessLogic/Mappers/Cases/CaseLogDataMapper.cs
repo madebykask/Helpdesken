@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
+using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Dal.MapperData.Logs;
 
 namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
@@ -44,7 +45,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
                             LogId = f.LogId ?? 0,
                             FileName = f.FileName,
                             CaseId = f.CaseId,
-                            LogType = f.LogType ?? 0
+                            LogType = f.LogType ?? LogFileType.External
 
                         }).ToList() ?? new List<LogFileData>(),
 

@@ -260,6 +260,7 @@
     <Compile Include="Infrastructure\Context\ICustomerContext.cs" />
     <Compile Include="Infrastructure\Context\IUserContext.cs" />
     <Compile Include="Infrastructure\Context\IWorkContext.cs" />
+    <Compile Include="Infrastructure\Extensions\LogFileExtensions.cs" />
     <Compile Include="Infrastructure\Helpers\QueryHelper.cs" />
     <Compile Include="Infrastructure\ModelFactories\Email\Concrete\EmailFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Email\IEmailFactory.cs" />

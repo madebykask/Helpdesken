@@ -369,7 +369,6 @@ function bindDeleteCaseFileBehaviorToDeleteButtons() {
     });
 }
 
-//TODO: update usages to separate between Internl/External logs handling
 function bindDeleteLogFileBehaviorToDeleteButtons(isInternalLog) {
     // add delete btn handler
     var $container = isInternalLog === true ? $('div.internalLog-files') : $('div.externalLog-files');

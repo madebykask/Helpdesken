@@ -144,6 +144,7 @@
     <Compile Include="Extensions\Integer\IntExtension.cs" />
     <Compile Include="Extensions\Integer\ToBoolExtension.cs" />
     <Compile Include="Extensions\Lists\ListExtensions.cs" />
+    <Compile Include="Extensions\LogFileTypeExtensions.cs" />
     <Compile Include="Extensions\ModuleName\ModuleNameExtensions.cs" />
     <Compile Include="Extensions\Object\ObjectExtension.cs" />
     <Compile Include="Extensions\String\SplitExtension.cs" />

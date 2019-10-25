@@ -60,7 +60,7 @@
                             <input type="hidden" id="logfile_id" value="@fileModel.Id" />
                             @if (fileModel.IsExistCaseFile && fileModel.ObjId.HasValue)
                             {
-                                <a target="_blank" class="isExisted" 
+                                <a target="_blank" class="@(GuidHelper.IsGuid(Model.LogId) ? "isExisted" : "")" 
                                    onclick="window.dhHelpdesk.logFileAccess(@Model.CaseId, '@fileModel.Name', @((int)CaseFileType.CaseFile))" 
                                    href="@BuildCaseFileLinkVD(fileModel.Name)"><i class="icon- attachedFile"></i>@fileModel.Name</a>
                             }
@@ -68,9 +68,9 @@
                             {
                                 if (fileModel.IsExistLogFile && fileModel.ObjId.HasValue)
                                 {
-                                    <a target="_blank" class="isExisted"
+                                    <a target="_blank" class="@(GuidHelper.IsGuid(Model.LogId) ? "isExisted" : "")"
                                        onclick="window.dhHelpdesk.logFileAccess(@Model.CaseId, '@fileModel.Name', @(fileModel.LogType == LogFileType.Internal ? (int)CaseFileType.LogInternal : (int)CaseFileType.LogExternal), @fileModel.ObjId.Value)"
-                                       href="@BuildLogFileLinkVD(fileModel.ObjId.Value, fileModel.Name, fileModel.LogType)"><i class="icon- attachedFile"></i> @fileModel.Name</a>
+                                       href="@BuildLogFileLinkVD(fileModel.ObjId.Value, fileModel.Name, fileModel.ParentLogType ?? fileModel.LogType)"><i class="icon- attachedFile"></i> @fileModel.Name</a>
                                 }
                                 else
                                 {

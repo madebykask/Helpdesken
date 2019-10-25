@@ -5,6 +5,7 @@ using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Enums.Logs;
+using DH.Helpdesk.Common.Extensions;
 using DH.Helpdesk.SelfService.Controllers.Behaviors;
 using DH.Helpdesk.SelfService.Entites;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
@@ -1342,21 +1343,19 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             if (!string.IsNullOrEmpty(logFileGuid))
             {
-                var logSubFolder = ModuleName.Log;
                 var logFileType = LogFileType.External;
 
                 if (IsTwoAttachmentsModeEnabled(customer.Id) && useInternalLog)
                 {
-                    logSubFolder = ModuleName.LogInternal;
                     logFileType = LogFileType.Internal;
                 }
 
-                temporaryLogFiles = _userTemporaryFilesStorage.GetFiles(logFileGuid, logSubFolder);
+                temporaryLogFiles = _userTemporaryFilesStorage.GetFiles(logFileGuid, logFileType.GetFolderPrefix());
                 caseLog.Id = _logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
 
                 // save log files
                 var basePath = _masterDataService.GetFilePath(currentCase.Customer_Id);
-                var newLogFiles = temporaryLogFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, null, logFileType)).ToList();
+                var newLogFiles = temporaryLogFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, null, logFileType, null)).ToList();
 
 				var paths = new List<KeyValuePair<CaseLogFileDto, string>>();
 				_logFileService.AddFiles(newLogFiles, paths);

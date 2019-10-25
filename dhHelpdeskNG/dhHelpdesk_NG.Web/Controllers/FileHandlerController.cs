@@ -4,6 +4,7 @@ using DH.Helpdesk.Web.Infrastructure.Extensions;
 using System.Web.Mvc;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.Logs;
+using DH.Helpdesk.Common.Extensions;
 using DH.Helpdesk.Dal.Enums;
 
 namespace DH.Helpdesk.Web.Controllers
@@ -51,7 +52,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public string LogFileLinkVD(string id, string fileName, int logType)
+        public string LogFileLinkVD(string id, string fileName, LogFileType logType)
         {
             var link = "";
 
@@ -70,7 +71,7 @@ namespace DH.Helpdesk.Web.Controllers
                         basePath = basePath + "/";
                     }
                 }
-                var logFolder = logType == (int) LogFileType.Internal ? ModuleName.LogInternal : ModuleName.Log;
+                var logFolder = logType.GetFolderPrefix();
                 link = absolute + basePath + logFolder + id + "/" + EncodeStr(fileName);
             }
            

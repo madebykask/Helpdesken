@@ -12,6 +12,7 @@ using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Dal.Infrastructure.Extensions;
 using DH.Helpdesk.Dal.MapperData;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.MapperData.Logs;
@@ -628,7 +629,8 @@ namespace DH.Helpdesk.Services.Services
                         FileName = t.FileName,
                         LogId = t.ParentLog_Id,
                         CaseId = t.IsCaseFile.HasValue && t.IsCaseFile.Value ? t.Log.Case_Id : (int?)null,
-                        LogType = t.LogType
+                        LogType = t.LogType,
+                        ParentLogType = t.ParentLogType
                     }).ToList(),
 
                 Mail2Tickets =
@@ -651,8 +653,9 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (var f in logFiles)
                 {
-                    var subFolder = f.LogType == LogFileType.Internal ? ModuleName.LogInternal : ModuleName.Log;
-                    _filesStorage.DeleteFile(subFolder, f.Log_Id, basePath, f.FileName);
+                    if (!f.ParentLog_Id.HasValue) // delete file if not reference
+                        _filesStorage.DeleteFile(f.GetFolderPrefix(), f.Log_Id, basePath, f.FileName);
+
                     _logFileRepository.Delete(f);
                 }
 

@@ -7,9 +7,11 @@ using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Enums.Logs;
+using DH.Helpdesk.Common.Extensions;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Dal.Infrastructure.Extensions;
 using DH.Helpdesk.SelfService.Infrastructure;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.SelfService.Infrastructure.Extensions;
@@ -208,18 +210,16 @@ namespace DH.Helpdesk.SelfService.Controllers
             var useInternalLogs = customer.UseInternalLogNoteOnExternalPage.ToBool();
 
             var logFileType = LogFileType.External;
-            var logSubFolder = ModuleName.Log;
 
             if (isTwoAttachmentsMode && useInternalLogs)
             {
                 logFileType = LogFileType.Internal;
-                logSubFolder = ModuleName.LogInternal;
             }
 
             byte[] fileContent;
             if (GuidHelper.IsGuid(id))
             {
-                fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, logSubFolder);
+                fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, logFileType.GetFolderPrefix());
             }
             else
             {
@@ -233,7 +233,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 // Check that the found file also have set its logfiletype to Internal, if not use external for legacy support.
                 if (logFile != null && isTwoAttachmentsMode && useInternalLogs &&
                     logFile.LogType == LogFileType.Internal)
-                    logFileType = LogFileType.Internal;
+                    logFileType = logFile.ParentLogType ?? logFile.LogType;
                 else
                     logFileType = LogFileType.External;
 
@@ -249,7 +249,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 if (!disableLogFileView.Active)
                 {
                     var logCaseId = caseId ?? _logService.GetLogById(logId).CaseId;
-                    logSubFolder = logFileType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
+                    var logSubFolder = logFileType.GetFolderPrefix();
                     var path = _filesStorage.ComposeFilePath(logSubFolder, logId, basePath, "");
                     var result = SessionFacade.CurrentUser != null
                         ? _fileViewLogService.Log(logCaseId, SessionFacade.CurrentUser.Id, fileName.Trim(), path,
@@ -298,17 +298,13 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             //default log files values
             var logType = LogFileType.External;
-            var logSubFolder = ModuleName.Log;
 
             //load only internal log files if 2attachments and internalLog is used 
             if (isTwoAttachmentsMode && isInternalLogUsed)
-            {
                 logType = LogFileType.Internal;
-                logSubFolder = ModuleName.LogInternal;
-            }
 
             var fileNames = GuidHelper.IsGuid(id)
-                ? _userTemporaryFilesStorage.GetFileNames(id, logSubFolder)
+                ? _userTemporaryFilesStorage.GetFileNames(id, logType.GetFolderPrefix())
                 : _logFileService.FindFileNamesByLogId(int.Parse(id), logType);
 
             return Json(fileNames, JsonRequestBehavior.AllowGet);

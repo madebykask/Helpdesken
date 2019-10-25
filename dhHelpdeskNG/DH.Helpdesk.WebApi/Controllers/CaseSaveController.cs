@@ -15,6 +15,7 @@ using DH.Helpdesk.Common.Enums.BusinessRule;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Enums.Logs;
+using DH.Helpdesk.Common.Extensions;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.GUID;
 using DH.Helpdesk.Common.Extensions.Integer;
@@ -447,10 +448,10 @@ namespace DH.Helpdesk.WebApi.Controllers
             caseLog.Id = _logService.SaveLog(caseLog, logFileCount, out errors);
 
             // save log files
-            var newLogFiles = temporaryLogFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, utcNow, caseLog.Id, currentUser.Id, LogFileType.External)).ToList();
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, utcNow, caseLog.Id, currentUser.Id, LogFileType.External, null)).ToList();
             if (temporaryLogInternalFiles.Any())
             {
-                var internalLogFiles = temporaryLogInternalFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, currentUser.Id, LogFileType.Internal)).ToList();
+                var internalLogFiles = temporaryLogInternalFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, currentUser.Id, LogFileType.Internal, null)).ToList();
                 newLogFiles.AddRange(internalLogFiles);
             }
 			var logPaths = new List<KeyValuePair<CaseLogFileDto, string>>();
@@ -461,7 +462,11 @@ namespace DH.Helpdesk.WebApi.Controllers
                     new CaseLogFileDto(basePath, 
                         f.Name, 
                         f.IsExistCaseFile ? Convert.ToInt32(currentCase.CaseNumber) : f.LogId.Value, 
-                        f.IsExistCaseFile)).ToList();
+                        f.IsExistCaseFile)
+                    {
+                        LogType = f.IsInternalLogNote ? LogFileType.Internal : LogFileType.External,
+                        ParentLogType = f.LogType
+                    }).ToList();
 
             allLogFiles.AddRange(newLogFiles);
 
@@ -469,7 +474,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 foreach (var newLogFile in newLogFiles)
                 {
-                    var path = _filesStorage.ComposeFilePath(newLogFile.LogType == LogFileType.Internal ? ModuleName.LogInternal : ModuleName.Log,
+                    var path = _filesStorage.ComposeFilePath(newLogFile.LogType.GetFolderPrefix(),
                         caseLog.Id, basePath, "");
                     _fileViewLogService.Log(currentCase.Id, UserId, newLogFile.FileName, path, FileViewLogFileSource.WebApi, FileViewLogOperation.Add);
                 }

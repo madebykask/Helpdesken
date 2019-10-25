@@ -6,6 +6,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
     public class CaseLogFileDto : CaseFileDto
     {
         public LogFileType LogType { get; set; }
+        public LogFileType? ParentLogType { get; set; }
 
         public CaseLogFileDto(
             string basePath,
@@ -23,10 +24,12 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             DateTime createdDate,
             int referenceId,
             int? userId,
-            LogFileType logType)
+            LogFileType logType,
+            LogFileType? parentLogType)
             : base(content, basePath, filename, createdDate, referenceId, userId)
         {
             LogType = logType;
+            ParentLogType = logType;
         }
     }
 }
