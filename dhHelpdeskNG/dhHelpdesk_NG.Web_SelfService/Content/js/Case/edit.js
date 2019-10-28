@@ -435,7 +435,7 @@
                 fileMarkup =
                     $('<tr>' +
                         '<td>' +
-                            '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href=' + downloadCaseFileUrl + '?' + downloadCaseFileParamUrl + 'fileName=' + file + '>' + file + '</a>' +
+                            '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href="' + downloadCaseFileUrl + '?' + downloadCaseFileParamUrl + 'fileName=' + file + '">' + file + '</a>' +
                         '</td>' +
                         '<td style="text-align:right !important;">' +
                             '<a id="delete_file_button_' + i + '" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-remove"></span> </a>' +
