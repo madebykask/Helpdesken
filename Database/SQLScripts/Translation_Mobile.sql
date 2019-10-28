@@ -50,7 +50,7 @@ BEGIN
 
 	ALTER TABLE [dbo].[tblTextTranslation] CHECK CONSTRAINT [FK_tblTextTranslation_tblText]
 END
-rollback transaction
+commit transaction
 
 -- Home
 If not exists (select * from tbltext where id = 30000)
@@ -439,3 +439,4 @@ If not exists (select * from tblTextTranslation where text_id = 30061 and Langua
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(30061, 2, 'Close cases')
 
 GO
+
