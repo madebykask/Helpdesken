@@ -37,7 +37,7 @@
         }
         @if (Model.Settings.UnitFieldSetting.IsShow)
         {
-            <tr id="unit_row" style = '@(Model.Units.Any() ? "" : "display:none" )' >
+            <tr id="unit_row" >
                 <td class="span3">@Translation.GetCoreTextTranslation(Model.Settings.UnitFieldSetting.Caption)</td>
                 <td>
                     @Html.DropDownListFor(m => m.Filter.UnitId, Model.Units, string.Empty, new { id = "unit_dropdown" })
@@ -170,10 +170,10 @@
         departmentCtrl.on('change',
             function() {
                 var departmentId = $(this).val();
-                if (departmentId > 0) {
+                //if (departmentId > 0) {
                     $.get('@Url.Action("GetUnits", "Ajax", new {area = ""})',
                         {
-                            'departmentId': departmentId,
+                            'departmentId': departmentId || '',
                             'customerId': @SessionFacade.CurrentCustomer.Id
                         },
                         function (data) {
@@ -187,9 +187,9 @@
                                 }
                                 unitCtrl.empty();
                                 unitCtrl.append(options);
-                                unitRow.show();
+                                //unitRow.show();
                             } else {
-                                unitRow.hide();
+                                //unitRow.hide();
                                 unitCtrl.val('');
                                 unitCtrl.empty();
                             }
@@ -197,11 +197,11 @@
                         'json').always(function() {
 
                     });
-                } else {
-                    unitRow.hide();
-                    unitCtrl.val('');
-                    unitCtrl.empty();
-                }
+                //} else {
+                //    //unitRow.hide();
+                //    unitCtrl.val('');
+                //    unitCtrl.empty();
+                //}
             });
 
         $(".search-expand-button").click(function() {

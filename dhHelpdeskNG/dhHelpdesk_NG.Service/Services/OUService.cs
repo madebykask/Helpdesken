@@ -69,7 +69,7 @@ namespace DH.Helpdesk.Services.Services
         /// <returns></returns>
         public IList<OU> GetOUs(int customerId)
         {
-            return this._ouRepository.GetMany(x => x.Parent_OU_Id == null && x.Department.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            return _ouRepository.GetRootOUs(customerId, false).ToList();;
         }
 
         public IList<OU> GetRootOUs(int customerId, bool includeSubOu = false)
@@ -157,7 +157,9 @@ namespace DH.Helpdesk.Services.Services
 
         public List<OU> GetActiveOuForDepartment(int? departmentId, int customerId)
         {
-            var oUs = departmentId.HasValue ? GetOUs(customerId, departmentId.Value, true) : null;
+            var oUs = departmentId.HasValue 
+                ? GetOUs(customerId, departmentId.Value, true) 
+                : GetOUs(customerId).Where(o => o.IsActive == 1).ToList();
             
             return GetOusFlatList(oUs);
         }

@@ -3,6 +3,7 @@
 namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
 
     using BusinessData.Models.Shared;
@@ -21,6 +22,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
         List<ItemOverview> GetDomains(int customerId);
 
         List<ItemOverview> GetOrganizationUnits();
+        List<ItemOverview> GetOrganizationUnits(int customerId);
 
         List<ItemOverview> GetOrganizationUnits(int? departmentId);
 
@@ -76,6 +78,14 @@ namespace DH.Helpdesk.Services.Services.Concrete
         public List<ItemOverview> GetOrganizationUnits()
         {
             return _organizationUnitRepository.FindActiveAndShowable();
+        }
+
+        public List<ItemOverview> GetOrganizationUnits(int customerId)
+        {
+            return _organizationUnitRepository.GetRootOUs(customerId).Select(
+                u => new ItemOverview(u.Name, u.Id.ToString(CultureInfo.InvariantCulture)))
+                .OrderBy(x => x.Name)
+                .ToList();;
         }
 
         public List<ItemOverview> GetOrganizationUnits(int? departmentId)

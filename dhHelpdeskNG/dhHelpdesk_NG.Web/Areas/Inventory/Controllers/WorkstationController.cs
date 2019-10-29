@@ -105,7 +105,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var departments = OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id, currentFilter.RegionId);
             var units = currentFilter.DepartmentId.HasValue 
                 ? OrganizationService.GetOrganizationUnits(currentFilter.DepartmentId) 
-                : new List<ItemOverview>();
+                : OrganizationService.GetOrganizationUnits(SessionFacade.CurrentCustomer.Id);
 
             var settings =
                 _inventorySettingsService.GetWorkstationFieldSettingsOverviewForFilter(
