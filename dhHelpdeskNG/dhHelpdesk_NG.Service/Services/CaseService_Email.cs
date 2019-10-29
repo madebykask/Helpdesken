@@ -137,21 +137,26 @@ namespace DH.Helpdesk.Services.Services
                     {
                         if (!cms.DontSendMailToNotifier && !dontSendMailToNotfier && !string.IsNullOrEmpty(newCase.PersonsEmail))
                         {
-                            var emailList = GetCaseFollowersEmails(newCase);
-                            SendTemplateEmail(mailTemplateId,
-                                mailTpl,
-                                newCase,
-                                log,
-                                caseHistoryId,
-                                customerSetting,
-                                cms,
-                                customEmailSender1,
-                                emailList,
-                                userTimeZone,
-                                files,
-                                1);
+							var productAreaMailTemplate = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, mailTemplateId);
 
-                            informNotifierHasBeenSent = true;
+							if (productAreaMailTemplate != null)
+							{
+								var emailList = GetCaseFollowersEmails(newCase);
+								SendTemplateEmail(mailTemplateId,
+									productAreaMailTemplate,
+									newCase,
+									log,
+									caseHistoryId,
+									customerSetting,
+									cms,
+									customEmailSender1,
+									emailList,
+									userTimeZone,
+									files,
+									1);
+
+								informNotifierHasBeenSent = true;
+							}
                         }
                     }
                 }
@@ -163,19 +168,23 @@ namespace DH.Helpdesk.Services.Services
                 if (newCase.Priority != null && !string.IsNullOrWhiteSpace(newCase.Priority.EMailList))
                 {
                     var emailList = newCase.Priority.EMailList.Split(';', ',').ToDistintList(true);
+					var priorityMailTemplate = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, (int)GlobalEnums.MailTemplates.AssignedCaseToPriority);
 
-                    SendTemplateEmail((int)GlobalEnums.MailTemplates.AssignedCaseToPriority,
-                        mailTpl,
-                        newCase,
-                        log,
-                        caseHistoryId,
-                        customerSetting,
-                        cms,
-                        helpdeskMailFromAdress,
-                        emailList,
-                        userTimeZone,
-                        files,
-                        5);
+					if (priorityMailTemplate != null)
+					{
+						SendTemplateEmail((int)GlobalEnums.MailTemplates.AssignedCaseToPriority,
+						priorityMailTemplate,
+						newCase,
+						log,
+						caseHistoryId,
+						customerSetting,
+						cms,
+						helpdeskMailFromAdress,
+						emailList,
+						userTimeZone,
+						files,
+						5);
+					}
                 }
 
                 #endregion
