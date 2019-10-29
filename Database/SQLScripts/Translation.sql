@@ -7483,59 +7483,67 @@ If not exists (select * from tblTextTranslation where text_id = 2029 and Languag
 GO
 
 If not exists (select * from tbltext where id = 2030)
+begin
 	insert into tbltext (id, TextString) VALUES (2030, 'Leasing')
-GO
-If not exists (select * from tblTextTranslation where text_id = 2030 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2030, 2, 'Leasing')
+	If not exists (select * from tblTextTranslation where text_id = 2030 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2030, 2, 'Leasing')
+end
 GO
 
 If not exists (select * from tbltext where id = 2031)
+begin
 	insert into tbltext (id, TextString) VALUES (2031, 'Köpt')
-GO
-If not exists (select * from tblTextTranslation where text_id = 2031 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2031, 2, 'Purchased')
+	If not exists (select * from tblTextTranslation where text_id = 2031 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2031, 2, 'Purchased')
+end
 GO
 
 If not exists (select * from tbltext where id = 2032)
+begin
 	insert into tbltext (id, TextString) VALUES (2032, 'Hyrd')
-GO
-If not exists (select * from tblTextTranslation where text_id = 2032 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2032, 2, 'Leased')
+	If not exists (select * from tblTextTranslation where text_id = 2032 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2032, 2, 'Leased')
+end
 GO
 
 If not exists (select * from tbltext where id = 2033)
+begin
 	insert into tbltext (id, TextString) VALUES (2033, 'Leasing (skola)')
-GO
-If not exists (select * from tblTextTranslation where text_id = 2033 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2033, 2, 'Leasing (School)')
+	If not exists (select * from tblTextTranslation where text_id = 2033 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2033, 2, 'Leasing (School)')
+end
 GO
 
 If not exists (select * from tbltext where id = 2034)
+begin
 	insert into tbltext (id, TextString) VALUES (2034, 'Certifiering')
-GO
-If not exists (select * from tblTextTranslation where text_id = 2034 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2034, 2, 'Certification')
+	If not exists (select * from tblTextTranslation where text_id = 2034 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2034, 2, 'Certification')
+end
 GO
 
 If not exists (select * from tbltext where id = 2035)
+begin
 	insert into tbltext (id, TextString) VALUES (2035, 'Aktiv')
-GO
-If not exists (select * from tblTextTranslation where text_id = 2035 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2035, 2, 'Active')
+	If not exists (select * from tblTextTranslation where text_id = 2035 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2035, 2, 'Active')
+end
 GO
 
 If not exists (select * from tbltext where id = 2036)
+begin
 	insert into tbltext (id, TextString) VALUES (2036, 'Ej kopplad till användare')
-GO
-If not exists (select * from tblTextTranslation where text_id = 2036 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2036, 2, 'Not connected to users')
+	If not exists (select * from tblTextTranslation where text_id = 2036 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2036, 2, 'Not connected to users')
+end
 GO
 
 If not exists (select * from tbltext where id = 2037)
+begin
 	insert into tbltext (id, TextString) VALUES (2037, 'Stulen')
-GO
-If not exists (select * from tblTextTranslation where text_id = 2037 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2037, 2, 'Stolen')
+	If not exists (select * from tblTextTranslation where text_id = 2037 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2037, 2, 'Stolen')
+end
 GO
 
 
