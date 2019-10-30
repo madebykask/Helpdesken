@@ -210,6 +210,8 @@ Module DH_Helpdesk_Mail
         Dim objPriorityData As New PriorityData
         Dim objCustomer As Customer
         Dim objCaseData As New CaseData
+        Dim objUserData As New UserData
+        Dim objUserWGData As New WorkingGroupUserData
         Dim objDepartmentData As New DepartmentData
         Dim objComputerUserData As New ComputerUserData
         Dim objMailTemplateData As New MailTemplateData
@@ -753,7 +755,6 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     If objCase.Performer_User_Id <> 0 Then
-                                        Dim objUserData As New UserData
                                         Dim objUser As User = objUserData.getUserById(objCase.Performer_User_Id)
 
                                         If Not objUser Is Nothing Then
@@ -788,25 +789,50 @@ Module DH_Helpdesk_Mail
                                         workingGroupAllocateCaseMail = objCase.PerformerWorkingGroupAllocateCaseMail
                                     End If
 
-                                    If workingGroupId <> 0 Then
+                                    If workingGroupId <> 0 And workingGroupAllocateCaseMail = 1 Then
+                                        Dim emailsList As List(Of String) = New List(Of String)()
 
-                                        If Not IsNullOrEmpty(workingGroupEMail) And workingGroupAllocateCaseMail = 1 Then
+                                        If Not IsNullOrEmpty(workingGroupEMail) Then
+                                            emailsList = workingGroupEMail.Split(New Char() {";"c, ","c}).ToList()
+                                        Else
+                                            Dim users As List(Of WorkingGroupUser) = objUserWGData.getWorkgroupUsers(workingGroupId)
+                                            Dim usersDepartments As List(Of KeyValuePair(Of Integer, Integer)) = New List(Of KeyValuePair(Of Integer, Integer))
+                                            If Not objCase.Department_Id = 0 Then
+                                                usersDepartments = objDepartmentData.getUserDepartmentsIds(users.Select(Function(x) x.Id).ToArray())
+                                            End If
+
+                                            For Each user As WorkingGroupUser In users
+                                                If user.AllocateCaseMail = 1 And Not String.IsNullOrWhiteSpace(user.EMail) And
+                                                   user.Status = 1 And user.WorkingGroupUserRole = WorkingGroupUserPermission.Administrator Then
+                                                    If Not objCase.Department_Id = 0 Then
+                                                        If usersDepartments.Any(Function(ud) ud.Key = user.Id And ud.Value = objCase.Department_Id) Then
+                                                            emailsList.Add(user.EMail)
+                                                        End If
+                                                    Else
+                                                        emailsList.Add(user.EMail)
+                                                    End If
+                                                End If
+                                            Next
+                                        End If
+
+                                        If emailsList.Any() Then
                                             objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.AssignedCaseToWorkinggroup, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
-
                                             If Not objMailTemplate Is Nothing Then
-                                                Dim objMail As New Mail
+                                                For Each recipient As String In emailsList.Where(Function(s) Not String.IsNullOrWhiteSpace(s)).Distinct()
+                                                    Dim objMail As New Mail
 
-                                                sMessageId = createMessageId(objCustomer.HelpdeskEMail)
-                                                sSendTime = Date.Now()
+                                                    sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+                                                    sSendTime = Date.Now()
 
-                                                Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+                                                    Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
-                                                sRet_SendMail = 
-                                                    objMail.sendMail(objCase, Nothing, objCustomer, workingGroupEMail, objMailTemplate, objGlobalSettings, 
-                                                                     sMessageId, sEMailLogGUID, sConnectionstring)
+                                                    sRet_SendMail =
+                                                        objMail.sendMail(objCase, Nothing, objCustomer, recipient, objMailTemplate, objGlobalSettings,
+                                                                         sMessageId, sEMailLogGUID, sConnectionstring)
 
-                                                objLogData.createEMailLog(iCaseHistory_Id, workingGroupEMail, MailTemplates.AssignedCaseToWorkinggroup, 
-                                                                          sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                    objLogData.createEMailLog(iCaseHistory_Id, recipient, MailTemplates.AssignedCaseToWorkinggroup,
+                                                                              sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                Next
                                             End If
                                         End If
                                     End If

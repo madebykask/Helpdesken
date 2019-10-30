@@ -159,6 +159,8 @@
     <Compile Include="Text\TextTranslationData.vb" />
     <Compile Include="User\User.vb" />
     <Compile Include="User\UserData.vb" />
+    <Compile Include="WorkingGroup\WorkingGroupUser.vb" />
+    <Compile Include="WorkingGroup\WorkingGroupUserData.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">

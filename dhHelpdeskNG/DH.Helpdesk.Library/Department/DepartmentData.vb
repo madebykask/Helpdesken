@@ -1,3 +1,4 @@
+Imports System.Linq
 Imports DH.Helpdesk.Library.SharedFunctions
 
 Public Class DepartmentData
@@ -20,9 +21,9 @@ Public Class DepartmentData
         Dim dt As DataTable
 
         Try
-            sSQL = "SELECT tblDepartment.Id, tblDepartment.Department, tblDepartment.DepartmentId, tblDepartment.SearchKey, tblDepartment.NDSPath, tblDepartment.Region_Id, Null AS WatchDate " & _
-                   "FROM tblDepartment " & _
-                   "WHERE tblDepartment.Customer_Id = " & iCustomer_Id & _
+            sSQL = "SELECT tblDepartment.Id, tblDepartment.Department, tblDepartment.DepartmentId, tblDepartment.SearchKey, tblDepartment.NDSPath, tblDepartment.Region_Id, Null AS WatchDate " &
+                   "FROM tblDepartment " &
+                   "WHERE tblDepartment.Customer_Id = " & iCustomer_Id &
                         " AND UPPER(Department) = '" & UCase(Name) & "'"
 
             'If giDBType = 0 Then
@@ -56,12 +57,12 @@ Public Class DepartmentData
             '       "WHERE tblDepartment.Customer_Id = " & iCustomer_Id & " AND tblDepartment.Status=1 "
 
 
-            sSQL = "SELECT tblDepartment.Id, tblDepartment.Region_Id, tblDepartment.Department, tblDepartment.DepartmentId, " & _
-                    "tblDepartment.SearchKey, tblDepartment.NDSPath, " & _
-                    "(select min(watchdate) from tblWatchDateCalendarValue where tblWatchDateCalendarValue.WatchDateCalendar_Id = tblDepartment.WatchDateCalendar_Id " & _
-                        "and convert(varchar(10), tblWatchDateCalendarValue.ValidUntilDate, 121) >= convert(varchar(10), getDate(), 121)) AS WatchDate " & _
-                    "FROM tblDepartment " & _
-                    "WHERE tblDepartment.Customer_Id = " & iCustomer_Id & _
+            sSQL = "SELECT tblDepartment.Id, tblDepartment.Region_Id, tblDepartment.Department, tblDepartment.DepartmentId, " &
+                    "tblDepartment.SearchKey, tblDepartment.NDSPath, " &
+                    "(select min(watchdate) from tblWatchDateCalendarValue where tblWatchDateCalendarValue.WatchDateCalendar_Id = tblDepartment.WatchDateCalendar_Id " &
+                        "and convert(varchar(10), tblWatchDateCalendarValue.ValidUntilDate, 121) >= convert(varchar(10), getDate(), 121)) AS WatchDate " &
+                    "FROM tblDepartment " &
+                    "WHERE tblDepartment.Customer_Id = " & iCustomer_Id &
                         "AND tblDepartment.Status=1 "
 
 
@@ -92,6 +93,27 @@ Public Class DepartmentData
 
             Return colDepartment
 
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Function
+
+    Public Function getUserDepartmentsIds(ByVal usersIds As Integer()) As List(Of KeyValuePair(Of Integer, Integer))
+        Dim departmentsIds = New List(Of Integer)
+        If Not usersIds.Any() Then
+            Return departmentsIds
+        End If
+
+        Try
+            Dim usersIdsStr = String.Join(",", usersIds)
+            Dim sSql As String = "select User_Id, Department_Id from tblDepartmentUser where User_Id in (" & usersIdsStr & ")"
+            Dim dt As DataTable = getDataTable(gsConnectionString, sSql)
+
+            For Each dr As DataRow In dt.Rows
+                departmentsIds.Add(New KeyValuePair(Of Integer, Integer)(dr("User_Id"), dr("Department_Id")))
+            Next
+
+            Return departmentsIds
         Catch ex As Exception
             Throw ex
         End Try
