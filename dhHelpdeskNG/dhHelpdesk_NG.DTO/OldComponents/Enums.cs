@@ -35,13 +35,6 @@ namespace DH.Helpdesk.BusinessData.OldComponents
             OperationLog = 60,
         }
 
-        public class WorkingGroupUserPermission
-        {
-            public const int NoAccess = 0;
-            public const int ReadOnly = 1;
-            public const int Administrator = 2;
-        }
-
         public enum TranslationCaseFields
         {
             None = -1,
