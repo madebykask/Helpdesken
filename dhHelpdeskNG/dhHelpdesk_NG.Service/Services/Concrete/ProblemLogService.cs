@@ -40,7 +40,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
             if (problemLog.FinishConnectedCases == 1)
             {
-                this.caseRepository.UpdateFinishedDate(problemLog.ProblemId, problemLog.FinishingDate ?? DateTime.Now);
+                this.caseRepository.UpdateFinishedDate(problemLog.ProblemId, problemLog.FinishingDate ?? DateTime.UtcNow);
                 this.caseRepository.Commit();
             }
 

@@ -205,9 +205,11 @@ namespace DH.Helpdesk.Dal.Repositories
 
         //todo: use once proper sql side paging is implemented
 
-        private string BuildCaseSearchSqlCount(SearchQueryBuildContext ctx)
+        private string BuildCaseSearchSqlCount(SearchQueryBuildContext ctx, out Exception ex)
         {
             var criterias = ctx.Criterias;
+
+			ex = null;
 
             var userId = criterias.UserId;
             var searchFilter = criterias.SearchFilter;
@@ -1215,7 +1217,11 @@ namespace DH.Helpdesk.Dal.Repositories
                     {
                         if (!string.IsNullOrEmpty(searchCriteria.CustomerSetting.FileIndexingServerName) && !string.IsNullOrEmpty(searchCriteria.CustomerSetting.FileIndexingCatalogName))
                         {
-                            var caseNumber_caseLogId = GetCasesContainsText(searchCriteria.CustomerSetting.FileIndexingServerName, searchCriteria.CustomerSetting.FileIndexingCatalogName, text);
+							string[] excludePathPatterns = searchCriteria.HasAccessToInternalLogNotes ?
+								new string[] { } :
+								new string[] { @"\\" + ModuleName.LogInternal + "[0-9]{1,}$" }; // Exclude internal log note paths, ex c:\DH\LL1234
+
+							var caseNumber_caseLogId = GetCasesContainsText(searchCriteria.CustomerSetting.FileIndexingServerName, searchCriteria.CustomerSetting.FileIndexingCatalogName, text, excludePathPatterns);
                             if (!string.IsNullOrEmpty(caseNumber_caseLogId.Item1))
                                 sb.AppendFormat(" OR [tblCase].[CaseNumber] In ({0}) ", caseNumber_caseLogId.Item1.SafeForSqlInject());
 
@@ -1367,7 +1373,7 @@ namespace DH.Helpdesk.Dal.Repositories
                    !appType.Equals(ApplicationTypes.SelfService, StringComparison.OrdinalIgnoreCase);
         }
 
-        private Tuple<string, string> GetCasesContainsText(string indexingServerName, string catalogName, string searchText)
+        private Tuple<string, string> GetCasesContainsText(string indexingServerName, string catalogName, string searchText, string[] excludePathPatterns)
         {
             var caseNumbers = string.Empty;
             var logIds = string.Empty;
@@ -1376,7 +1382,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 return new Tuple<string, string>(caseNumbers, logIds);
             else
             {
-                var caseNumeralInfo = _fileIndexingRepository.GetCaseNumeralInfoBy(indexingServerName, catalogName, searchText);
+                var caseNumeralInfo = _fileIndexingRepository.GetCaseNumeralInfoBy(indexingServerName, catalogName, searchText, excludePathPatterns);
 
                 if (caseNumeralInfo.Item1.Any())
                     caseNumbers = string.Join(",", caseNumeralInfo.Item1.ToArray());
