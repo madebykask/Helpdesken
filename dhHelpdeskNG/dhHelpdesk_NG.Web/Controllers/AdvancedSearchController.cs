@@ -14,6 +14,7 @@ using DH.Helpdesk.Web.Infrastructure.Grid;
 using DH.Helpdesk.Web.Models.Case;
 using System.Collections.Generic;
 using DH.Helpdesk.Dal.Repositories.FileIndexing;
+using System.Threading.Tasks;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -85,7 +86,7 @@ namespace DH.Helpdesk.Web.Controllers
 			catch (FileIndexingException ex)
 			{
 				Response.StatusCode = 500;
-				return Json(ex.Message);
+				return Json("Can not search file content, file indexing service not configured");
 			}
 
 			var jsonGridSettings =
