@@ -3401,7 +3401,7 @@ namespace DH.Helpdesk.Web.Controllers
                         x.IsExistCaseFile)
                     {
                         LogType = x.IsInternalLogNote ? LogFileType.Internal : LogFileType.External,
-                        ParentLogType = x.LogType
+                        ParentLogType = x.IsExistCaseFile ? (LogFileType?)null : x.LogType
                     })
                 .ToList();
             allLogFiles.AddRange(newLogFiles);

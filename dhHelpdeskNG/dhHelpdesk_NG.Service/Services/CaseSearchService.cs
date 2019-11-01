@@ -16,22 +16,25 @@ using DH.Helpdesk.Common.Enums.Cases;
 
 namespace DH.Helpdesk.Services.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.Case.CaseSearch;
-    using DH.Helpdesk.BusinessData.Models.Grid;
-    using DH.Helpdesk.BusinessData.OldComponents;
-    using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services.Utils;
+	using DH.Helpdesk.BusinessData.Models.Case;
+	using DH.Helpdesk.BusinessData.Models.Case.CaseSearch;
+	using DH.Helpdesk.BusinessData.Models.Grid;
+	using DH.Helpdesk.BusinessData.OldComponents;
+	using DH.Helpdesk.Common.Tools;
+	using DH.Helpdesk.Dal.Repositories;
+	using DH.Helpdesk.Domain;
+	using DH.Helpdesk.Services.Utils;
 
-    using ProductAreaEntity = DH.Helpdesk.Domain.ProductArea;
+	using ProductAreaEntity = DH.Helpdesk.Domain.ProductArea;
+	using BusinessLogic.Admin.Users;
+	using BusinessData.Enums.Admin.Users;
+	using BusinessLogic.Mappers.Users;
 
-    public interface ICaseSearchService
+	public interface ICaseSearchService
     {
         SearchResult<CaseSearchResult> Search(
             CaseSearchFilter f,
@@ -85,10 +88,12 @@ namespace DH.Helpdesk.Services.Services
         private readonly ISettingService _settingService;
         private readonly IHolidayService _holidayService;
         private readonly ICustomerService _customerService;
+		private readonly IUserPermissionsChecker _userPermissionsChecker;
+		private readonly IUserService _userService;
 
-        #region ctor()
+		#region ctor()
 
-        public CaseSearchService(
+		public CaseSearchService(
             ICaseSearchRepository caseSearchRepository,
             IProductAreaRepository productAreaRepository,
             ICaseTypeRepository caseTypeRepository,
@@ -97,8 +102,10 @@ namespace DH.Helpdesk.Services.Services
             IGlobalSettingService globalSettingService, 
             ISettingService settingService,
             IHolidayService holidayService,
-            ICustomerService customerService)
-        {
+            ICustomerService customerService, 
+			IUserPermissionsChecker userPermissionsChecker,
+			IUserService userService)
+		{
             _caseSearchRepository = caseSearchRepository;
             _productAreaRepository = productAreaRepository;
             _caseTypeRepository = caseTypeRepository;
@@ -108,7 +115,10 @@ namespace DH.Helpdesk.Services.Services
             _holidayService = holidayService;
             _productAreaService = productAreaService;
             _customerService = customerService;
-        }
+			_userPermissionsChecker = userPermissionsChecker;
+			_userService = userService;
+
+		}
 
         #endregion
       
@@ -185,9 +195,21 @@ namespace DH.Helpdesk.Services.Services
             var responisbleFieldSettings = customerCaseFieldsSettings.Where(it => it.Name == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()).FirstOrDefault();
             var isFieldResponsibleVisible = responisbleFieldSettings != null && responisbleFieldSettings.ShowOnStartPage == 1;
 
-            #region Prepare SearchContext
+			#region Prepare SearchContext
 
-            var context = new CaseSearchContext
+			bool hasInternalLogAccess;
+			if (userId > 0)
+			{
+				var user = _userService.GetUserOverview(userId);
+				hasInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(user), UserPermission.CaseInternalLogPermission);
+			}
+			else
+			{
+				hasInternalLogAccess = false;
+			}
+
+
+			var context = new CaseSearchContext
             {
                 f = csf,
                 userCaseSettings = caseSettings,
@@ -211,8 +233,9 @@ namespace DH.Helpdesk.Services.Services
                 relatedCasesUserId = relatedCasesUserId,
                 caseIds = caseIds,
                 now = now,
-                useFullTextSearch = _globalSettingService.GetGlobalSettings().First().FullTextSearch != 0
-            };
+                useFullTextSearch = _globalSettingService.GetGlobalSettings().First().FullTextSearch != 0,
+				hasAccessToInternalLogNotes = hasInternalLogAccess
+			};
 
             #endregion
 

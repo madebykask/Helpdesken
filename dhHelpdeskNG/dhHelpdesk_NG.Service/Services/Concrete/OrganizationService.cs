@@ -22,7 +22,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
         List<ItemOverview> GetDomains(int customerId);
 
         List<ItemOverview> GetOrganizationUnits();
-        List<ItemOverview> GetOrganizationUnits(int customerId);
+        List<ItemOverview> GetOrganizationUnitsByCustomer(int customerId);
 
         List<ItemOverview> GetOrganizationUnits(int? departmentId);
 
@@ -80,12 +80,11 @@ namespace DH.Helpdesk.Services.Services.Concrete
             return _organizationUnitRepository.FindActiveAndShowable();
         }
 
-        public List<ItemOverview> GetOrganizationUnits(int customerId)
+        public List<ItemOverview> GetOrganizationUnitsByCustomer(int customerId)
         {
-            return _organizationUnitRepository.GetRootOUs(customerId).Select(
-                u => new ItemOverview(u.Name, u.Id.ToString(CultureInfo.InvariantCulture)))
-                .OrderBy(x => x.Name)
-                .ToList();;
+            var emptyList = new List<ItemOverview>();
+            return _organizationUnitRepository.FindActiveByCustomer(customerId)
+                    .OrderBy(x => x.Name).ToList();
         }
 
         public List<ItemOverview> GetOrganizationUnits(int? departmentId)
@@ -93,7 +92,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
             var emptyList = new List<ItemOverview>();
             return departmentId == null ?
                 emptyList :
-                _organizationUnitRepository.FindActive(departmentId);
+                _organizationUnitRepository.FindActive(departmentId)
+                    .OrderBy(x => x.Name).ToList();
         }
 
         public List<OU> GetOUs(int? departmentId)

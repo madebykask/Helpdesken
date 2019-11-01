@@ -51,5 +51,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseSearch
         public DateTime now;
 
         public bool useFullTextSearch;
+
+		public bool hasAccessToInternalLogNotes;
     }
 }

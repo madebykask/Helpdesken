@@ -105,7 +105,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var departments = OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id, currentFilter.RegionId);
             var units = currentFilter.DepartmentId.HasValue 
                 ? OrganizationService.GetOrganizationUnits(currentFilter.DepartmentId) 
-                : OrganizationService.GetOrganizationUnits(SessionFacade.CurrentCustomer.Id);
+                : OrganizationService.GetOrganizationUnitsByCustomer(SessionFacade.CurrentCustomer.Id);
 
             var settings =
                 _inventorySettingsService.GetWorkstationFieldSettingsOverviewForFilter(
@@ -611,9 +611,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 OrganizationService.GetDomains(customerId).OrderBy(x => x.Name).ToList();
 
             var ous = departmentId.HasValue ? OrganizationService.GetOrganizationUnits(departmentId.Value)
-                : OrganizationService.GetCustomerOUs(customerId)
-                                                             .Select(o=> new ItemOverview(o.Name, o.Id.ToString()))
-                                                             .OrderBy(x => x.Name).ToList();
+                : OrganizationService.GetOrganizationUnitsByCustomer(customerId).ToList();
 
             var buildings = PlaceService.GetBuildings(customerId).OrderBy(x => x.Name).ToList();
             var floors = PlaceService.GetFloors(customerId).OrderBy(x => x.Name).ToList();

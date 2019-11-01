@@ -12,6 +12,9 @@ using DH.Helpdesk.Web.Infrastructure.Behaviors;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Infrastructure.Grid;
 using DH.Helpdesk.Web.Models.Case;
+using System.Collections.Generic;
+using DH.Helpdesk.Dal.Repositories.FileIndexing;
+using System.Threading.Tasks;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -67,16 +70,26 @@ namespace DH.Helpdesk.Web.Controllers
             var gridSettings =
                 CreateGridSettingsModel(customerId, SessionFacade.CurrentUser, gridSortingOptions);
 
-           var extendedCustomers = _settingService.GetExtendedSearchIncludedCustomers();
-            
-            var sr = _advancedSearchBehavior.RunAdvancedSearchForCustomer(searchFilter,
-                gridSettings,
-                customerId,
-                customerId,
-                SessionFacade.CurrentUser,
-                extendedCustomers);
+            var extendedCustomers = _settingService.GetExtendedSearchIncludedCustomers();
 
-            var jsonGridSettings =
+			List<Dictionary<string, object>> sr;
+			var fileIndexingFailed = false;
+			try
+			{
+				sr = _advancedSearchBehavior.RunAdvancedSearchForCustomer(searchFilter,
+					gridSettings,
+					customerId,
+					customerId,
+					SessionFacade.CurrentUser,
+					extendedCustomers);
+			}
+			catch (FileIndexingException ex)
+			{
+				Response.StatusCode = 500;
+				return Json("Can not search file content, file indexing service not configured");
+			}
+
+			var jsonGridSettings =
                 JsonGridSettingsMapper.ToJsonGridSettingsModel(
                     gridSettings, 
                     customerId,
@@ -86,7 +99,7 @@ namespace DH.Helpdesk.Web.Controllers
             var data = new
             {
                 searchResults = sr, 
-                gridSettings = jsonGridSettings 
+                gridSettings = jsonGridSettings
             };
 
             return Json(new { result = "success", data });

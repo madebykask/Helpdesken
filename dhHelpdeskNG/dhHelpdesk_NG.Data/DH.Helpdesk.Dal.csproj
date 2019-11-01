@@ -525,6 +525,7 @@
     <Compile Include="Repositories\Condition\IConditionRepository.cs" />
     <Compile Include="Repositories\ComputerUserCategoryRepository.cs" />
     <Compile Include="Repositories\FeatureToggleRepository.cs" />
+    <Compile Include="Repositories\FileIndexing\FileIndexingException.cs" />
     <Compile Include="Repositories\FileViewLogRepository.cs" />
     <Compile Include="Repositories\GDPR\GDPRDataPrivacyAccessRepository.cs" />
     <Compile Include="Repositories\GDPR\GDPRDataPrivacyFavortieRepository.cs" />
