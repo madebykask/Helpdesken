@@ -59,7 +59,7 @@
                 }
 
                 return new IdName {id = ou.Id, name = name};
-            }).ToArray();
+            }).OrderBy(x => x.name).ToArray();
         }
 
         /// <summary>
