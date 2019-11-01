@@ -273,6 +273,7 @@
                 var query = getSimpleQuery(this.query);
                 while (aItem = items.shift()) {
                     item = JSON.parse(aItem);
+                    if (item.userId === null) continue;
                     if (item.groupType === 0) {
                         if (!item.userId.toLowerCase().indexOf(query.toLowerCase())) beginswith.push(JSON.stringify(item));
                         else if (~item.userId.indexOf(query)) caseSensitive.push(JSON.stringify(item));

@@ -1029,7 +1029,7 @@ namespace DH.Helpdesk.Services.Services
                         {
                             FileName = x.FileName,
                             FilePath = _filesStorage.ComposeFilePath(ModuleName.Cases, x.ReferenceId, basePath, x.FileName),
-                            IsInternal = false
+                            IsInternal = x.LogType == LogFileType.Internal
                         }).ToList();
 
                 files =
