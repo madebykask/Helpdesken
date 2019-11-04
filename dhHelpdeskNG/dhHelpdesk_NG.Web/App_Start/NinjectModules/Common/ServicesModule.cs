@@ -131,7 +131,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             Bind<IInventorySettingsService>().To<InventorySettingsService>();
             Bind<IPlaceService>().To<PlaceService>();
             Bind<IOrganizationService>().To<OrganizationService>();
-            Bind<IInvoiceArticleService>().To<InvoiceArticleService>();
+			Bind<IOrganizationJsonService>().To<OrganizationJsonService>();
+			Bind<IInvoiceArticleService>().To<InvoiceArticleService>();
             Bind<ICaseSolutionSettingService>().To<CaseSolutionSettingService>();
             Bind<ICaseInvoiceSettingsService>().To<CaseInvoiceSettingsService>();
             Bind<ICheckListsService>().To<CheckListsService>();

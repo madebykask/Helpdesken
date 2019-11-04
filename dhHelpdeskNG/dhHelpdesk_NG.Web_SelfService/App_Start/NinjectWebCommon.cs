@@ -349,7 +349,8 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ISurveyService>().To<SurveyService>();
             kernel.Bind<IHolidayService>().To<HolidayService>();
             kernel.Bind<IOrganizationService>().To<OrganizationService>();
-            kernel.Bind<ILinkService>().To<LinkService>();
+			kernel.Bind<IOrganizationJsonService>().To<OrganizationJsonService>();
+			kernel.Bind<ILinkService>().To<LinkService>();
             kernel.Bind<ICaseLockService>().To<CaseLockService>();
             kernel.Bind<ICaseInvoiceSettingsService>().To<CaseInvoiceSettingsService>();
             kernel.Bind<IOperationLogService>().To<OperationLogService>();

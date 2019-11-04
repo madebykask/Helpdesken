@@ -53,8 +53,9 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
         private readonly ISettingService _settingService;
         private readonly IDocumentService _documentService;
         private readonly IOrganizationService _organizationService;
+		private readonly IOrganizationJsonService _organizationJsonService;
 
-        public OrdersController(
+		public OrdersController(
                 IMasterDataService masterDataService,
                 IOrdersService ordersService,
                 IWorkContext workContext,
@@ -72,7 +73,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
                 ICustomerService customerService,
                 ISettingService settingService,
                 IDocumentService documentService,
-                IOrganizationService organizationService)
+                IOrganizationService organizationService,
+				IOrganizationJsonService organizationJsonService)
             : base(masterDataService)
         {
             _ordersService = ordersService;
@@ -90,6 +92,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
             _settingService = settingService;
             _documentService = documentService;
             _organizationService = organizationService;
+			_organizationJsonService = organizationJsonService;
 
             _filesStateStore = editorStateCacheFactory.CreateForModule(ModuleName.Orders);
             _filesStore = temporaryFilesCacheFactory.CreateForModule(ModuleName.Orders);
@@ -451,5 +454,13 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
             var fileName = string.Format("O-{0}_{1}.txt", model.General.OrderNumber.Value, DateTime.Now.ToShortDateString());
             return File(fileContent, MimeType.BinaryFile, fileName);
         }
+
+		[HttpGet]
+		public JsonResult GetUnits(int? departmentId)
+		{
+			var ous = _organizationJsonService.GetActiveOUForDepartmentAsIdName(departmentId, _workContext.Customer.CustomerId)
+				.ToList();
+			return Json(ous, JsonRequestBehavior.AllowGet);
+		}
     }
 }

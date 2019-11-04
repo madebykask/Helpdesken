@@ -760,10 +760,10 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             var administrators = administratorsRep.GetAll().GetByCustomer(customerId).GetActiveUsers(customerId).GetPerformers();
             var domains = domainsRep.GetAll().GetByCustomer(customerId);
             var departments = departmentsRep.GetAll().GetActiveByCustomer(customerId);
-            var units = ousRep.GetAll();
+            var units = ousRep.GetAll().Where(o => o.Department.Customer_Id == customerId && o.IsActive == 1 && o.Show == 1);
             var properties = propertiesRep.GetAll().GetByOrderType(orderTypeId);
             var deliveryDepartments = departmentsRep.GetAll().GetActiveByCustomer(customerId);
-            var deliveryOuIds = ousRep.GetAll();
+            var deliveryOuIds = ousRep.GetAll().Where(o => o.Department.Customer_Id == customerId && o.IsActive == 1 && o.Show == 1); ;
             var administratorsWithEmails = administratorsRep.GetAll().GetAdministratorsWithEmails(customerId);
             var orderType = orderTypeId.HasValue ? orderTypeRep.GetAll().GetById(orderTypeId.Value) : null;
             var orderTypeName = orderType != null ? orderType.MapToName() : null;
