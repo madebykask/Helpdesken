@@ -203,6 +203,16 @@ BEGIN
 	INNER JOIN [dbo].[tblLogFile] as lfp ON lfc.ParentLog_Id = lfp.Log_Id
 	WHERE lfc.ParentLog_Id IS NOT NULL and lfc.[FileName] = lfp.[FileName]
 END
+
+
+RAISERROR ('Add SendMethod to tblMailTemplate table', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'SendMethod' and sysobjects.name = N'tblMailTemplate')
+BEGIN
+    ALTER TABLE tblMailTemplate
+    ADD SendMethod int not null default 0 
+END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.44'
 GO

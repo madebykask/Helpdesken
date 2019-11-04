@@ -17,6 +17,7 @@
             this.HasOptional(t => t.Customer).WithMany().HasForeignKey(t => t.Customer_Id).WillCascadeOnDelete(false);
             this.Property(t => t.IsStandard).IsRequired();
             this.Property(t => t.OrderType_Id).IsOptional();
+            this.Property(t => t.SendMethod).IsRequired();
             this.HasOptional(t => t.OrderType).WithMany().HasForeignKey(t => t.OrderType_Id).WillCascadeOnDelete(false);
             this.Property(t => t.AccountActivity_Id).IsOptional();
             

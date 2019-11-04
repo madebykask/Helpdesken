@@ -55,6 +55,7 @@ using DH.Helpdesk.BusinessData.Models.Language.Output;
         public IEnumerable<CaseFieldSettingsWithLanguage> CaseFieldSettingWithLangauges { get; set; }
         public IEnumerable<OrderFieldSettings> OrderFieldSettings { get; set; }
         public IEnumerable<AccountFieldSettings> AccountFieldSettings { get; set; }
+        public IEnumerable<SelectListItem> SendMethods { get; set; }
     }
 
     public class ActiveMailTemplateLanguage

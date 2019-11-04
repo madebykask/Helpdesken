@@ -1,8 +1,11 @@
-﻿using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+﻿using System;
+using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 using DH.Helpdesk.BusinessData.Enums.MailTemplates;
 using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Services.Services.Orders;
 using DH.Helpdesk.Web.Common.Constants.Case;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Models.Questionnaire.Output;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
@@ -108,11 +111,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 if (mailTemplate == null)
                 {
                     mailTemplate = new MailTemplateEntity
-                    {                        
+                    {
                         MailID = id,
-                        Customer_Id = customerId,
+                        Customer_Id = customerId
                     };
                 }
+
+                mailTemplate.SendMethod =
+                    mailtemplatelanguage?.MailTemplate?.SendMethod ?? EmailSendMethod.SeparateEmails;
                 var update = true;
                 
                 var mailtemplatelanguageToSave = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(customerId, languageId, mailTemplateId);
@@ -135,31 +141,26 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 this._mailTemplateService.SaveMailTemplateLanguage(mailtemplatelanguageToSave, update, out errors);
 
                 return this.RedirectToAction("index", "mailtemplate", new { customerId = customerId });
-
-
             }
 
-            return this.View(mailtemplatelanguage);
+            var customer = this._customerService.GetCustomer(customerId);
+            var model = this.CreateInputViewModel(mailtemplatelanguage, customer, customer.Language_Id, null, null);
+            return this.View(model);
         }
 
         public ActionResult Edit(int id, int customerId, int languageId, int? ordertypeId, int? accountactivityId)
         {            
             var customer = this._customerService.GetCustomer(customerId);
 
-            var mailTemplate = new MailTemplateEntity();
-
-            if (ordertypeId != null)
-                // Search by OrderTypeId
-                mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id, ordertypeId.Value);                
-            else
-                // Search by MailID                
-                mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id);            
+            var mailTemplate = ordertypeId != null ? 
+                this._mailTemplateService.GetMailTemplate(id, customer.Id, ordertypeId.Value) : 
+                this._mailTemplateService.GetMailTemplate(id, customer.Id);
 
             if (mailTemplate == null)
             {
                 mailTemplate = new MailTemplateEntity
-                {                    
-                    MailID = id,
+                {
+                    MailID = id
                 };
             }
 
@@ -178,13 +179,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 }
             }
 
-            var mailTemplateLanguage = new MailTemplateLanguageEntity();
-            if (ordertypeId != null)
-                // Search by OrderTypeId
-                mailTemplateLanguage = this._mailTemplateService.GetMailTemplateForCustomerAndLanguage(customer.Id, languageId, id, ordertypeId.Value);
-            else
-                // Search by MailID                
-                mailTemplateLanguage = this._mailTemplateService.GetMailTemplateForCustomerAndLanguage(customer.Id, languageId, id);
+            var mailTemplateLanguage = ordertypeId != null ?
+                this._mailTemplateService.GetMailTemplateForCustomerAndLanguage(customer.Id, languageId, id, ordertypeId.Value) :
+                this._mailTemplateService.GetMailTemplateForCustomerAndLanguage(customer.Id, languageId, id);
 
             if (mailTemplateLanguage == null)
             {
@@ -199,7 +196,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             else
             {
                 mailTemplateLanguage.MailTemplate = mailTemplate;
-            }            
+            }
 
             var model = this.CreateInputViewModel(mailTemplateLanguage, customer, languageId, ordertypeId, accountactivityId);
 
@@ -212,8 +209,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             if (id <= 99)
                 model.IsStandardTemplate = true;
             return this.View(model);
-
-
         }
 
         [HttpPost]
@@ -224,14 +219,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             var customer = this._customerService.GetCustomer(customerId);
 
-            var mailTemplate = new MailTemplateEntity();
-
-            if (ordertypeId != null)
-                // Search by OrderTypeId
-                mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id, ordertypeId.Value);
-            else
-                // Search by MailID                
-                mailTemplate = this._mailTemplateService.GetMailTemplate(id, customer.Id);               
+            var mailTemplate = ordertypeId != null ?
+                this._mailTemplateService.GetMailTemplate(id, customer.Id, ordertypeId.Value) :
+                this._mailTemplateService.GetMailTemplate(id, customer.Id);
 
             var customersettings = this._settingService.GetCustomerSetting(customer.Id);
 
@@ -245,18 +235,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     OrderType_Id = ordertypeId
                 };
             }
+
+            mailTemplate.SendMethod = mailTemplateLanguage?.MailTemplate?.SendMethod ?? EmailSendMethod.SeparateEmails;
             var update = true;
 
-            var mailtemplatelanguageToSave = new MailTemplateLanguageEntity();
-            if (ordertypeId != null)
-                // Search by OrderTypeId
-                mailtemplatelanguageToSave =
-                    this._mailTemplateService.GetMailTemplateLanguageForCustomerToSave(id, customerId, mailTemplateLanguage.Language_Id, ordertypeId.Value);
-            else
-                // Search by MailID   
-                mailtemplatelanguageToSave = 
-                    this._mailTemplateService.GetMailTemplateLanguageForCustomerToSave(id, customerId, mailTemplateLanguage.Language_Id);
-
+            var mailtemplatelanguageToSave = ordertypeId != null ?
+                this._mailTemplateService.GetMailTemplateLanguageForCustomerToSave(id, customerId, mailTemplateLanguage.Language_Id, ordertypeId.Value) :
+                this._mailTemplateService.GetMailTemplateLanguageForCustomerToSave(id, customerId, mailTemplateLanguage.Language_Id);
 
             if (mailtemplatelanguageToSave == null)
             {
@@ -293,7 +278,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             //	SetFeedbacks();
             //}
             return this.View(model);
-
         }
 
         [HttpPost]
@@ -682,11 +666,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 OrderFieldSettings = this._orderService.GetOrderFieldSettingsForMailTemplate(customer.Id, ordertypeId),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
-                    Text = Translation.Get(x.Name, Enums.TranslationSource.TextTranslation),
+                    Text = Translation.GetCoreTextTranslation(x.Name),
                     Value = x.Id.ToString(),
                     Selected = (x.Id == languageId)
+                }).ToList(),
+                SendMethods = Enum.GetValues(typeof(EmailSendMethod)).Cast<EmailSendMethod>().ToList()
+                    .Select(x => new SelectListItem
+                {
+                    Text = x.Translate(),
+                    Value = ((int)x).ToString(),
                 }).ToList()
-
             };
 
             return model;
