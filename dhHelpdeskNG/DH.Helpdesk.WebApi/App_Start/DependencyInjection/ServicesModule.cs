@@ -64,7 +64,8 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<SupplierService>().As<ISupplierService>();
             builder.RegisterType<RegionService>().As<IRegionService>();
             builder.RegisterType<OrganizationService>().As<IOrganizationService>();
-            builder.RegisterType<RegistrationSourceCustomerService>().As<IRegistrationSourceCustomerService>();
+			builder.RegisterType<OrganizationJsonService>().As<IOrganizationJsonService>();
+			builder.RegisterType<RegistrationSourceCustomerService>().As<IRegistrationSourceCustomerService>();
             builder.RegisterType<SystemService>().As<ISystemService>();
             builder.RegisterType<UrgencyService>().As<IUrgencyService>();
             builder.RegisterType<ImpactService>().As<IImpactService>();
