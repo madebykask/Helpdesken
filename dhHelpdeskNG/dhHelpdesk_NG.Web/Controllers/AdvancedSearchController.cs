@@ -26,8 +26,9 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly AdvancedSearchBehavior _advancedSearchBehavior;
         private readonly ISettingService _settingService;
         private readonly GridSettingsService _gridSettingsService;
+		private readonly ICustomerService _customerService;
 
-        public AdvancedSearchController(
+		public AdvancedSearchController(
             ICaseFieldSettingService caseFieldSettingService, 
             ICaseSearchService caseSearchService,
             ISettingService settingService,
@@ -35,10 +36,12 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseSettingsService caseSettingsService,
             IUserService userService, 
             ICustomerUserService customerUserService,
+			ICustomerService customerService,
             GridSettingsService gridSettingsService)
         {
             _settingService = settingService;
             _gridSettingsService = gridSettingsService;
+			_customerService = customerService;
             _advancedSearchBehavior = new AdvancedSearchBehavior(caseFieldSettingService, 
                 caseSearchService, 
                 userService, 
@@ -85,8 +88,9 @@ namespace DH.Helpdesk.Web.Controllers
 			}
 			catch (FileIndexingException ex)
 			{
-				Response.StatusCode = 500;
-				return Json("Can not search file content, file indexing service not configured");
+				var customer = _customerService.GetCustomer(customerId);
+				//Response.StatusCode = 500;
+				return Json(new { errorMsg = $"Can not search in files for customer { customer?.Name ?? "[unkown]" } ({customerId})" });
 			}
 
 			var jsonGridSettings =
