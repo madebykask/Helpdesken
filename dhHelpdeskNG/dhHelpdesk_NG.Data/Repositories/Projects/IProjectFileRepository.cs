@@ -1,12 +1,13 @@
 namespace DH.Helpdesk.Dal.Repositories.Projects
 {
-    using System.Collections.Generic;
+	using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Projects.Input;
-    using DH.Helpdesk.BusinessData.Models.Projects.Output;
-    using DH.Helpdesk.Dal.Dal;
+	using DH.Helpdesk.BusinessData.Models.Projects.Input;
+	using DH.Helpdesk.BusinessData.Models.Projects.Output;
+	using DH.Helpdesk.Dal.Dal;
+	using BusinessData.Models;
 
-    public interface IProjectFileRepository : INewRepository
+	public interface IProjectFileRepository : INewRepository
     {
         bool FileExists(int projectId, string fileName);
 
@@ -16,7 +17,7 @@ namespace DH.Helpdesk.Dal.Repositories.Projects
 
         List<string> FindFileNamesExcludeSpecified(int projectId, List<string> excludeFiles);
 
-        byte[] GetFileContent(int projectId, string basePath, string fileName);
+        FileContentModel GetFileContent(int projectId, string basePath, string fileName);
 
         void Add(NewProjectFile businessModel);
 

@@ -29,8 +29,8 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
-    <IISExpressSSLPort>44340</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressSSLPort>44300</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SkipPostSharp>True</SkipPostSharp>
@@ -259,6 +259,7 @@
     <Compile Include="App_Start\WorkContextModule.cs" />
     <Compile Include="Controllers\Behaviors\CaseControllerBehavior.cs" />
     <Compile Include="Controllers\CaseController.cs" />
+    <Compile Include="Controllers\CaseFilesController.cs" />
     <Compile Include="Controllers\CaseSearchController.cs" />
     <Compile Include="Entites\CaseSearchInputParameters.cs" />
     <Compile Include="Controllers\CoWorkersController.cs" />

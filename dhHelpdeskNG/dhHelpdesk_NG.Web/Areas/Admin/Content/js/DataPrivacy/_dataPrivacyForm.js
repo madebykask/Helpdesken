@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../../../../Content/js/moment.js" />
 
-window.DataPrivacyForm =
+window.dataPrivacyForm =
     (function($){
 
         var _self = this;
@@ -937,7 +937,7 @@ window.DataPrivacyForm =
         /// INIT
 
         return {
-            Init: function (settings) {
+            init: function (settings) {
                 _self.dateformat = settings.dateformat;
                 _self.urls = settings.urls;
                 _self.confirmationDialog = settings.confirmDialog;

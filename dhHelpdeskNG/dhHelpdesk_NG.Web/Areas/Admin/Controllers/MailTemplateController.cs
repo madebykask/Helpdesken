@@ -1,6 +1,7 @@
 ﻿using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 using DH.Helpdesk.BusinessData.Enums.MailTemplates;
 using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Services.Services.Orders;
 using DH.Helpdesk.Web.Common.Constants.Case;
 using DH.Helpdesk.Web.Models.Questionnaire.Output;
 
@@ -28,7 +29,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ICustomerService _customerService;
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly IAccountFieldSettingsService _accountFieldSettingsService;
-        private readonly IOrderService _orderService;
+        private readonly IOrdersService _orderService;
         private readonly ISettingService _settingService;
         private readonly IFeedbackService _feedbackService;
 
@@ -40,7 +41,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             ICustomerService customerService,
             ICaseFieldSettingService caseFieldSettingService,
             IAccountFieldSettingsService accountFieldSettingsService,
-            IOrderService orderService,
+            IOrdersService orderService,
             ISettingService settingSetvice,
             IFeedbackService feedbackService,
             IMasterDataService masterDataService)

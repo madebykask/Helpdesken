@@ -1572,6 +1572,9 @@ table th.thpointer {
             text-decoration: none !important;
         }
 
+    .admin-user.nav-tabs > li.error.active > a,
+    .admin-user.nav-tabs > li.error.active > a:hover,
+    .admin-user.nav-tabs > li.error.active > a:focus,
     .nav-tabs > .active > a,
     .nav-tabs > .active > a:hover,
     .nav-tabs > .active > a:focus {
@@ -1641,9 +1644,6 @@ table th.thpointer {
         border-bottom-color: transparent;
         padding-bottom: 8px;
     }
-
-
-
 
 .nav-tabs-actions {
 }
@@ -1805,7 +1805,10 @@ table th.thpointer {
     display: inline-block;
 }
 
-.case-overview.page .table-cases, .advancedSearch-overview.page .table-cases {
+.case-overview.page .table-cases,
+.advancedSearch-overview.page .table-cases,
+.inventory-overview .table-cases
+{
     table-layout: fixed !important;
 }
 
@@ -2657,6 +2660,10 @@ h4 {
 /*--------------------------------------------------------------------------------------------------------------------
  LEFT MENU AND BOX FOR ADMIN - MENU LINKS
 ---------------------------------------------------------------------------------------------------------------------*/
+
+.admin-user-departments label {
+    display: inline;
+}
 
 .ui-layout-west ul {
     list-style: none;
@@ -3640,6 +3647,10 @@ a.inactive {
 
 /********CASEOVERVIEW SEARCH CASES STATUS********/
 
+.file-view-logs .date input {
+    width: 113px;
+}
+
 .caseoverviewaccordion.accordion, .caseoverviewaccordion .accordion {
     margin-bottom: 0;
 }
@@ -3703,8 +3714,14 @@ a.inactive {
         padding: 1px 2px;
     }
 
-div.modal-body.max-height-600 {
-    max-height: 600px;
+div.modal-body.max-height-70-percent {
+    max-height: calc(100vh * 0.7);
+}
+
+@media(max-height: 700px) {
+    div.modal-body.max-height-70-percent {
+        max-height: calc(100vh * 0.6);
+    }
 }
 
 .case-dropdown-area {

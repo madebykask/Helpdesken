@@ -220,6 +220,7 @@
             List<string> settingNames,
             DbSet<ComputerFieldSettings> settings)
         {
+            CreateSettingIfNeeded(OrganizationFields.Region, customerId, settingNames, settings);
             CreateSettingIfNeeded(OrganizationFields.Department, customerId, settingNames, settings);
             CreateSettingIfNeeded(OrganizationFields.Domain, customerId, settingNames, settings);
             CreateSettingIfNeeded(OrganizationFields.Unit, customerId, settingNames, settings);

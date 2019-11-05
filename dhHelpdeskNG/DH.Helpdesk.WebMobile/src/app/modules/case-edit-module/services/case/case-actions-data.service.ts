@@ -21,7 +21,7 @@ export class CaseActionsDataService  {
         caseAction.createdBy = log.createdBy;
 
         const logNoteEmails = log.isExternal
-            ? log.emailLogs.filter(t => t.mailId === +MailTemplates.InformNotifier).map(t => t.email.toLowerCase())
+            ? log.emailLogs.filter(t => t.mailId === +MailTemplates.InformNotifier || t.mailId === +MailTemplates.ClosedCase).map(t => t.email.toLowerCase())
             : log.emailLogs.filter(t => t.mailId !== +MailTemplates.InformNotifier).map(t => t.email.toLowerCase());
 
         caseAction.data = new CaseLogActionData(log.text, logNoteEmails, log.files, log.mail2Tickets);

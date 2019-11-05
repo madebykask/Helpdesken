@@ -613,6 +613,7 @@ namespace DH.Helpdesk.Dal.DbContext
 
         public DbSet<CaseSolution_SplitToCaseSolutionEntity> CaseSolution_SplitToCaseSolutions { get; set; }
         public DbSet<ComputerUserCategory> ComputerUserCategories { get; set; }
+        public DbSet<ComputerStatus> ComputerStatuses { get; set; }
 
         public DbSet<ConditionEntity> Conditions { get; set; }
 
@@ -733,6 +734,7 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new ComputerLogConfiguration());
             modelBuilder.Configurations.Add(new ComputerModelConfiguration());
             modelBuilder.Configurations.Add(new ComputerTypeConfiguration());
+            modelBuilder.Configurations.Add(new ComputerStatusConfiguration());
             modelBuilder.Configurations.Add(new WorkstationTabSettingConfiguration());
             modelBuilder.Configurations.Add(new WorkstationTabSettingLanguageConfiguration());
             modelBuilder.Configurations.Add(new ContractCategoryConfiguration());

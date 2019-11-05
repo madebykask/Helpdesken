@@ -499,7 +499,8 @@
             byte[] fileContent;
             var basePath = string.Empty;
             basePath = _masterDataService.GetFilePath(CustomerId);
-            fileContent = _caseFileService.GetFileContentByIdAndFileName(caseId, basePath, file.FileName);
+			var model = _caseFileService.GetFileContentByIdAndFileName(caseId, basePath, file.FileName);
+			fileContent = model.Content;
             var encodedString = Convert.ToBase64String(fileContent);
             return encodedString;
         }

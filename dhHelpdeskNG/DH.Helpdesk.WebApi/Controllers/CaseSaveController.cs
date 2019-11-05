@@ -9,15 +9,19 @@ using System.Web.Http;
 using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Customer;
+using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.BusinessRule;
 using DH.Helpdesk.Common.Enums.Cases;
+using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Enums.Logs;
+using DH.Helpdesk.Common.Extensions;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.GUID;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.Enums;
+using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
@@ -61,15 +65,20 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IStateSecondaryService _stateSecondaryService;
         private readonly IHolidayService _holidayService;
         private readonly ICaseStatisticService _caseStatService;
+		private readonly IFileViewLogService _fileViewLogService;
+		private readonly IFeatureToggleService _featureToggleService;
+        private readonly IFilesStorage _filesStorage;
 
-        public CaseSaveController(ICaseService caseService,
+		public CaseSaveController(ICaseService caseService,
             ICaseLockService caseLockService, ICustomerService customerService, ISettingService customerSettingsService,
             ICaseEditModeCalcStrategy caseEditModeCalcStrategy, IUserService userService, ISettingsLogic settingsLogic,
             IWorkingGroupService workingGroupService, IEmailService emailService,
             ICaseFileService caseFileService, ICustomerUserService customerUserService, ILogFileService logFileService,
             IUserPermissionsChecker userPermissionsChecker, ILogService logService, ITemporaryFilesCache userTempFilesStorage,
             IBaseCaseSolutionService caseSolutionService, IStateSecondaryService stateSecondaryService,
-            IHolidayService holidayService, ICaseStatisticService caseStatService)
+            IHolidayService holidayService, ICaseStatisticService caseStatService,
+			IFileViewLogService fileViewLogService,
+			IFeatureToggleService featureToggleService, IFilesStorage filesStorage)
         {
             _caseService = caseService;
             _caseLockService = caseLockService;
@@ -90,6 +99,9 @@ namespace DH.Helpdesk.WebApi.Controllers
             _stateSecondaryService = stateSecondaryService;
             _holidayService = holidayService;
             _caseStatService = caseStatService;
+			_fileViewLogService = fileViewLogService;
+			_featureToggleService = featureToggleService;
+            _filesStorage = filesStorage;
         }
 
         /// <summary>
@@ -333,14 +345,25 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             // TODO: caseNotifications?
 
+            var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
             //case files
             // todo: Check if new cases should be handled here. Save case files for new cases only!
             if (!isEdit)
             {
                 var temporaryFiles = _userTempFilesStorage.FindFiles(caseKey, ModuleName.Cases); 
                 var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, currentCase.Id, UserId)).ToList();
-                _caseFileService.AddFiles(newCaseFiles);
-            }
+
+				var paths = new List<KeyValuePair<CaseFileDto, string>>();
+                _caseFileService.AddFiles(newCaseFiles, paths);
+
+				if (!disableLogFileView.Active)
+				{
+					foreach (var file in paths)
+					{
+						_fileViewLogService.Log(currentCase.Id, UserId, file.Key.FileName, file.Value, FileViewLogFileSource.WebApi, FileViewLogOperation.Add);
+					}
+				}
+			}
 
             #region ExtendedCase sections
             if (isEdit)// TODO: attach Extended case if required
@@ -425,22 +448,37 @@ namespace DH.Helpdesk.WebApi.Controllers
             caseLog.Id = _logService.SaveLog(caseLog, logFileCount, out errors);
 
             // save log files
-            var newLogFiles = temporaryLogFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, utcNow, caseLog.Id, currentUser.Id, LogFileType.External)).ToList();
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, utcNow, caseLog.Id, currentUser.Id, LogFileType.External, null)).ToList();
             if (temporaryLogInternalFiles.Any())
             {
-                var internalLogFiles = temporaryLogInternalFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, currentUser.Id, LogFileType.Internal)).ToList();
+                var internalLogFiles = temporaryLogInternalFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, currentUser.Id, LogFileType.Internal, null)).ToList();
                 newLogFiles.AddRange(internalLogFiles);
             }
-            _logFileService.AddFiles(newLogFiles, temporaryExLogFiles, caseLog.Id);
+			var logPaths = new List<KeyValuePair<CaseLogFileDto, string>>();
+			_logFileService.AddFiles(newLogFiles, logPaths, temporaryExLogFiles, caseLog.Id);
 
             var allLogFiles = 
                 temporaryExLogFiles.Select(f => 
                     new CaseLogFileDto(basePath, 
                         f.Name, 
                         f.IsExistCaseFile ? Convert.ToInt32(currentCase.CaseNumber) : f.LogId.Value, 
-                        f.IsExistCaseFile)).ToList();
+                        f.IsExistCaseFile)
+                    {
+                        LogType = f.IsInternalLogNote ? LogFileType.Internal : LogFileType.External,
+                        ParentLogType = f.LogType
+                    }).ToList();
 
             allLogFiles.AddRange(newLogFiles);
+
+            if (!disableLogFileView.Active)
+            {
+                foreach (var newLogFile in newLogFiles)
+                {
+                    var path = _filesStorage.ComposeFilePath(newLogFile.LogType.GetFolderPrefix(),
+                        caseLog.Id, basePath, "");
+                    _fileViewLogService.Log(currentCase.Id, UserId, newLogFile.FileName, path, FileViewLogFileSource.WebApi, FileViewLogOperation.Add);
+                }
+            }
 
             #endregion // Logs handling
 

@@ -8,6 +8,7 @@ using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Enums.Orders;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Orders.Index;
+using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.SelfService.Infrastructure;

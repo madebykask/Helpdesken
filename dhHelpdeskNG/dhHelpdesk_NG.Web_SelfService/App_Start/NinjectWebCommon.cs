@@ -195,6 +195,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IComputerUsersBlackListRepository>().To<ComputerUsersBlackListRepository>();
             kernel.Bind<IComputerUsersRepository>().To<ComputerUsersRepository>();
             kernel.Bind<IComputerRepository>().To<ComputerRepository>();
+            kernel.Bind<IComputerStatusRepository>().To<ComputerStatusRepository>();
             kernel.Bind<IOrganizationUnitRepository>().To<OrganizationUnitRepository>();
             kernel.Bind<IAccountActivityRepository>().To<AccountActivityRepository>();
             kernel.Bind<ICustomerUserRepository>().To<CustomerUserRepository>();
@@ -299,10 +300,10 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ICaseSectionsRepository>().To<CaseSectionsRepository>();
             kernel.Bind<IComputerUserCategoryRepository>().To<ComputerUserCategoryRepository>();
             kernel.Bind<IFeatureToggleRepository>().To<FeatureToggleRepository>();
+			kernel.Bind<IFileViewLogRepository>().To<FileViewLogRepository>();
 
-
-            // Service             
-            kernel.Bind<IMasterDataService>().To<MasterDataService>();            
+			// Service             
+			kernel.Bind<IMasterDataService>().To<MasterDataService>();            
             kernel.Bind<ISettingService>().To<SettingService>();
             kernel.Bind<ICaseService>().To<CaseService>();
             kernel.Bind<ILogService>().To<LogService>();
@@ -348,7 +349,8 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ISurveyService>().To<SurveyService>();
             kernel.Bind<IHolidayService>().To<HolidayService>();
             kernel.Bind<IOrganizationService>().To<OrganizationService>();
-            kernel.Bind<ILinkService>().To<LinkService>();
+			kernel.Bind<IOrganizationJsonService>().To<OrganizationJsonService>();
+			kernel.Bind<ILinkService>().To<LinkService>();
             kernel.Bind<ICaseLockService>().To<CaseLockService>();
             kernel.Bind<ICaseInvoiceSettingsService>().To<CaseInvoiceSettingsService>();
             kernel.Bind<IOperationLogService>().To<OperationLogService>();
@@ -385,8 +387,11 @@ namespace DH.Helpdesk.SelfService
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
 
-            // FormLib
-            var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DSN"].ConnectionString;
+			// File view log
+			kernel.Bind<IFileViewLogService>().To<FileViewLogService>();
+
+			// FormLib
+			var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DSN"].ConnectionString;
 
             kernel.Bind<ECT.Model.Abstract.IGlobalViewRepository>()
             .To<ECT.Model.Contrete.GlobalViewRepository>().InRequestScope().WithConstructorArgument("connectionString", connectionString);
@@ -398,7 +403,9 @@ namespace DH.Helpdesk.SelfService
             .To<ECT.Model.Contrete.UserRepository>().InRequestScope().WithConstructorArgument("connectionString", connectionString);
 
             kernel.Bind<ECT.Core.Service.IFileService>().To<ECT.Service.FileService>().InRequestScope();
-        }        
+
+			
+		}        
     }
    
 }

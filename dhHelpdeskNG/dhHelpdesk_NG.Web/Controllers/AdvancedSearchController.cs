@@ -12,6 +12,9 @@ using DH.Helpdesk.Web.Infrastructure.Behaviors;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Infrastructure.Grid;
 using DH.Helpdesk.Web.Models.Case;
+using System.Collections.Generic;
+using DH.Helpdesk.Dal.Repositories.FileIndexing;
+using System.Threading.Tasks;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -23,8 +26,9 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly AdvancedSearchBehavior _advancedSearchBehavior;
         private readonly ISettingService _settingService;
         private readonly GridSettingsService _gridSettingsService;
+		private readonly ICustomerService _customerService;
 
-        public AdvancedSearchController(
+		public AdvancedSearchController(
             ICaseFieldSettingService caseFieldSettingService, 
             ICaseSearchService caseSearchService,
             ISettingService settingService,
@@ -32,10 +36,12 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseSettingsService caseSettingsService,
             IUserService userService, 
             ICustomerUserService customerUserService,
+			ICustomerService customerService,
             GridSettingsService gridSettingsService)
         {
             _settingService = settingService;
             _gridSettingsService = gridSettingsService;
+			_customerService = customerService;
             _advancedSearchBehavior = new AdvancedSearchBehavior(caseFieldSettingService, 
                 caseSearchService, 
                 userService, 
@@ -67,16 +73,27 @@ namespace DH.Helpdesk.Web.Controllers
             var gridSettings =
                 CreateGridSettingsModel(customerId, SessionFacade.CurrentUser, gridSortingOptions);
 
-           var extendedCustomers = _settingService.GetExtendedSearchIncludedCustomers();
-            
-            var sr = _advancedSearchBehavior.RunAdvancedSearchForCustomer(searchFilter,
-                gridSettings,
-                customerId,
-                customerId,
-                SessionFacade.CurrentUser,
-                extendedCustomers);
+            var extendedCustomers = _settingService.GetExtendedSearchIncludedCustomers();
 
-            var jsonGridSettings =
+			List<Dictionary<string, object>> sr;
+			var fileIndexingFailed = false;
+			try
+			{
+				sr = _advancedSearchBehavior.RunAdvancedSearchForCustomer(searchFilter,
+					gridSettings,
+					customerId,
+					customerId,
+					SessionFacade.CurrentUser,
+					extendedCustomers);
+			}
+			catch (FileIndexingException ex)
+			{
+				var customer = _customerService.GetCustomer(customerId);
+				//Response.StatusCode = 500;
+				return Json(new { errorMsg = $"Can not search in files for customer { customer?.Name ?? "[unkown]" } ({customerId})" });
+			}
+
+			var jsonGridSettings =
                 JsonGridSettingsMapper.ToJsonGridSettingsModel(
                     gridSettings, 
                     customerId,
@@ -86,7 +103,7 @@ namespace DH.Helpdesk.Web.Controllers
             var data = new
             {
                 searchResults = sr, 
-                gridSettings = jsonGridSettings 
+                gridSettings = jsonGridSettings
             };
 
             return Json(new { result = "success", data });

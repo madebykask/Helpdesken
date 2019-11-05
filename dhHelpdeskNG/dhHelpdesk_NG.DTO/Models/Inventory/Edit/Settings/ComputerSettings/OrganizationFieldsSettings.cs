@@ -5,14 +5,19 @@
     public class OrganizationFieldsSettings
     {
         public OrganizationFieldsSettings(
+            FieldSetting regionFieldSetting,
             FieldSetting departmentFieldSetting,
             FieldSetting domainFieldSetting,
             FieldSetting unitFieldSetting)
         {
+            RegionFieldSetting = regionFieldSetting;
             this.DepartmentFieldSetting = departmentFieldSetting;
             this.DomainFieldSetting = domainFieldSetting;
             this.UnitFieldSetting = unitFieldSetting;
         }
+
+        [NotNull]
+        public FieldSetting RegionFieldSetting { get; set; }
 
         [NotNull]
         public FieldSetting DepartmentFieldSetting { get; set; }

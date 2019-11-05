@@ -119,10 +119,11 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var key = MapFieldSetting(settings.OperatingSystemFieldsSettingsModel.ProductKeyFieldSettingModel);
             var operatingSystemFieldsSettings = new OperatingSystemFieldsSettings(os, version, servicePack, code, key);
 
+            var region = MapFieldSetting(settings.OrganizationFieldsSettingsModel.RegionFieldSettingModel);
             var department = MapFieldSetting(settings.OrganizationFieldsSettingsModel.DepartmentFieldSettingModel);
             var domain = MapFieldSetting(settings.OrganizationFieldsSettingsModel.DomainFieldSettingModel);
             var unit = MapFieldSetting(settings.OrganizationFieldsSettingsModel.UnitFieldSettingModel);
-            var organizationFieldsSettings = new OrganizationFieldsSettings(department, domain, unit);
+            var organizationFieldsSettings = new OrganizationFieldsSettings(region, department, domain, unit);
 
             var proccesor = MapFieldSetting(settings.ProccesorFieldsSettingsModel.ProccesorFieldSettingModel);
             var proccesorFieldsSettings = new ProcessorFieldsSettings(proccesor);

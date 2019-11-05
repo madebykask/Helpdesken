@@ -707,7 +707,7 @@ If not exists (select * from tblTextTranslation where text_id = 1987 and Languag
 If exists (select * from tblTextTranslation where text_id = 2006)
 	delete from tblTextTranslation where text_id = 2006
 
-If not exists (select * from tbltext where id = 2006)
+If exists (select * from tbltext where id = 2006)
 	delete from tbltext where id = 2006
 
 If not exists (select * from tbltext where id = 2006 AND TextType = @textType)

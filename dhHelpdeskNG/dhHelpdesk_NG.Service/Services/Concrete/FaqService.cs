@@ -313,7 +313,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public byte[] GetFileContentByFaqIdAndFileName(int faqId, string basePath, string fileName)
         {
-            return _faqFileRepository.GetFileContentByFaqIdAndFileName(faqId, basePath, fileName);
+            return _faqFileRepository.GetFileContentByFaqIdAndFileName(faqId, basePath, fileName).Content;
         }
 
         public void UpdateCategory(EditCategory editedCategory)

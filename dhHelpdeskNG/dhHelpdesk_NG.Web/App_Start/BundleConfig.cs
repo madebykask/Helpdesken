@@ -340,8 +340,10 @@
                            "~/Areas/admin/Content/js/invoice/invoicearticleproductareaInput.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/admindataprivacy").Include(
-                    "~/Areas/Admin/Content/js/DataPrivacy/_dataPrivacyForm.js",
-                    "~/Content/js/moment.min.js"));
+                    "~/Areas/Admin/Content/js/DataPrivacy/_dataPrivacyForm.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/fileviewlog").Include(
+                "~/Areas/Admin/Content/js/FileViewLog/fileViewLogForm.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/common/admin").Include(
                            "~/Content/js/Shared/errors.js",
@@ -353,6 +355,7 @@
                            "~/Content/js/bootstrap-multiselect.js",
                            "~/Content/js/bootstrap-datepicker.js",
                            "~/Content/js/bootstrap-tagsinput.js",
+                           "~/Content/js/moment.min.js",
                         #if DEBUG
                             "~/Content/js/jquery.validate.js",
                             "~/Content/js/additional-methods.js",
@@ -525,7 +528,8 @@
             bundles.Add(new ScriptBundle(ScriptNames.InventoryRelatedCases).Include(
                     "~/Areas/Inventory/Content/js/relatedCases.js"));
             bundles.Add(new ScriptBundle(ScriptNames.InventoryFiles).Include(
-                "~/Areas/Inventory/Content/js/InventoryFiles.js"));
+                "~/Areas/Inventory/Content/js/inventoryFiles.js",
+                "~/Areas/Inventory/Content/js/workstationEdit.js"));
 
 
 

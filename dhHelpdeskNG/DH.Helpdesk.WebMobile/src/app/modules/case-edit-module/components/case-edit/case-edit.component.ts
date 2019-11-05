@@ -381,7 +381,7 @@ export class CaseEditComponent {
     }
 
     private syncExtendedCaseValues() {
-      if (this.caseData.extendedCaseData == null) {
+      if (!this.isEcLoaded || this.caseData.extendedCaseData == null) {
         return;
       }
       const values = this.extendedCase.nativeElement.getCaseValues;
@@ -457,15 +457,6 @@ export class CaseEditComponent {
         this.form.setSafe(CaseFieldsNames.Caption, values.caption.Value);
       }
     }
-
-/*     private extendedCaseIsValid(isOnNext: boolean): boolean {
-      let result = true;
-      if (this.caseData.extendedCaseData != null) {
-        this.validateExtendedCase(isOnNext);
-        result = <boolean>this.extendedCase.nativeElement.validationResult;
-      }
-      return result;
-    } */
 
     private validateExtendedCase(isOnNext: boolean) {
       if (this.caseData.extendedCaseData == null) {

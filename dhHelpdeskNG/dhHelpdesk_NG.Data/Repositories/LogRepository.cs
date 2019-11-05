@@ -7,7 +7,9 @@ using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Common.Enums.Logs;
-
+using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Extensions;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -78,12 +80,14 @@ namespace DH.Helpdesk.Dal.Repositories
 
     #region LOGFILE
 
+    // TODO: Move operations with file and directories to LogService. Repository should work only with db
     public interface ILogFileRepository : IRepository<LogFile>
     {
         LogFile GetDetails(int id);
-        byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName, LogFileType logType);
+        FileContentModel GetFileContentByIdAndFileName(int caseId, string basePath, string fileName, LogFileType logType);
         List<string> FindFileNamesByLogId(int logId);
         List<string> FindFileNamesByLogId(int logId, LogFileType logType);
+        LogFile FindLogFileNameByLogId(int logId, string filename);
         List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId, LogFileType logFileType);
         List<LogFile> GetLogFilesByCaseId(int caseId, bool includeInternal);
         List<LogFile> GetLogFilesByLogId(int logId, bool includeInternal = true);
@@ -97,7 +101,7 @@ namespace DH.Helpdesk.Dal.Repositories
         void DeleteExistingById(int filename);
         void ClearExistingAttachedFiles(int caseId);
         void AddExistLogFiles(IEnumerable<LogFile> logExFiles);
-        byte[] GetCaseFileContentByIdAndFileName(int caseId, string basePath, string fileName);
+        FileContentModel GetCaseFileContentByIdAndFileName(int caseId, string basePath, string fileName);
     }
 
     public class LogFileRepository : RepositoryBase<LogFile>, ILogFileRepository
@@ -115,13 +119,12 @@ namespace DH.Helpdesk.Dal.Repositories
             return Table.FirstOrDefault(f => f.Id == id);
         }
 
-        public byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName, LogFileType logType)
+        public FileContentModel GetFileContentByIdAndFileName(int logId, string basePath, string fileName, LogFileType logType)
         {
-            var logFolder = logType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
-            return _filesStorage.GetFileContent(logFolder, logId, basePath, fileName);
+            return _filesStorage.GetFileContent(logType.GetFolderPrefix(), logId, basePath, fileName);
         }
 
-        public byte[] GetCaseFileContentByIdAndFileName(int caseId, string basePath, string fileName)
+        public FileContentModel GetCaseFileContentByIdAndFileName(int caseId, string basePath, string fileName)
         {
             var caseNumber = DataContext.Cases.Single(x => x.Id == caseId).CaseNumber;
             return _filesStorage.GetFileContent(ModuleName.Cases, Convert.ToInt32(caseNumber), basePath, fileName);
@@ -135,6 +138,12 @@ namespace DH.Helpdesk.Dal.Repositories
         public List<string> FindFileNamesByLogId(int logId, LogFileType logType)
         {
             return DataContext.LogFiles.Where(f => f.Log_Id == logId && f.LogType == logType).Select(f => f.FileName).ToList();
+        }
+
+        public LogFile FindLogFileNameByLogId(int logId, string filename)
+        {
+            return DataContext.LogFiles.AsNoTracking()
+                .FirstOrDefault(f => f.Log_Id == logId && f.FileName.ToLower().Equals(filename.ToLower()));
         }
 
         public List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId, LogFileType logFileType)
@@ -171,17 +180,18 @@ namespace DH.Helpdesk.Dal.Repositories
             var lf = DataContext.LogFiles.Single(f => f.Log_Id == logId && f.FileName == fileName.Trim() && f.LogType == logType);
             DataContext.LogFiles.Remove(lf);
             Commit();
-
-            var logSubFolder = logType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
-            _filesStorage.DeleteFile(logSubFolder, logId, basePath, fileName);
         }
 
         public void MoveLogFiles(int caseId, string fromBasePath, string toBasePath)
         {
-            var logFiles = DataContext.LogFiles.Where(f => f.Log.Case_Id == caseId).Select(f => new {  f.Log_Id, f.LogType}).Distinct().ToList();
+            var logFiles = DataContext.LogFiles.Where(f => f.Log.Case_Id == caseId).Select(f => new
+            {
+                Log_Id = f.ParentLog_Id ?? f.Log_Id,
+                LogType = f.ParentLogType ?? f.LogType
+            }).Distinct().ToList();
             foreach (var logFile in logFiles)
             {
-                var logSubFolder = logFile.LogType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
+                var logSubFolder = logFile.LogType.GetFolderPrefix();
                 _filesStorage.MoveDirectory(logSubFolder, logFile.Log_Id.ToString(), fromBasePath, toBasePath);
             }
         }

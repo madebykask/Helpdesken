@@ -35,6 +35,7 @@
             this.Property(x => x.CustomerInExtendedSearch).IsRequired();
             this.Property(x => x.ComputerUserLog).IsRequired();
             this.Property(x => x.CreateCaseFromOrder).IsRequired();
+            this.Property(x => x.CreateComputerFromOrder).IsRequired();
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.DBType).IsRequired();
             this.Property(x => x.DefaultAdministrator).IsOptional();

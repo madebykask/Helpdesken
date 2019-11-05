@@ -90,6 +90,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 vmodel.Setting.DefaultAdministrator = setting.DefaultAdministrator;
                 vmodel.Setting.DefaultAdministratorExternal = setting.DefaultAdministratorExternal;
                 vmodel.Setting.CreateCaseFromOrder = setting.CreateCaseFromOrder;
+                vmodel.Setting.CreateComputerFromOrder = setting.CreateComputerFromOrder;
                 vmodel.Setting.IsUserFirstLastNameRepresentation = setting.IsUserFirstLastNameRepresentation;
             }
 

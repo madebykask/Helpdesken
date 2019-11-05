@@ -27,10 +27,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
     public class UsersController : BaseController
     {
-        private readonly IAccountActivityService _accountActivityService;
         private readonly ICustomerService _customerService;
         private readonly ICustomerUserService _customerUserService;
-        private readonly IDepartmentService _departmentService;
         private readonly IDomainService _domainService;
         private readonly ILanguageService _languageService;
         private readonly IOrderTypeService _orderTypeService;
@@ -41,10 +39,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ISettingService _settingService;
 
         public UsersController(
-            IAccountActivityService accountActivityService,
             ICustomerService customerService,
             ICustomerUserService customerUserService,
-            IDepartmentService departmentService,
             IDomainService domainService,
             ILanguageService languageService,
             IOrderTypeService orderTypeService,
@@ -56,10 +52,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             ISettingService settingService)
             : base(masterDataService)
         {
-            this._accountActivityService = accountActivityService;
             this._customerService = customerService;
             this._customerUserService = customerUserService;
-            this._departmentService = departmentService;
             this._domainService = domainService;
             this._languageService = languageService;
             this._orderTypeService = orderTypeService;
@@ -91,7 +85,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             var model = this.IndexInputViewModel();
             var userSearch = (UserSearch)this.Session["UserSearch"];
-           
+
             if (this.Session["UserSearch"] == null)
             {
                 if (SessionFacade.CurrentUser.UserGroupId == 3)
@@ -108,7 +102,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 //model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
             }
             else
-            {                       
+            {
                 var filter = (UserSearch)this.Session["UserSearch"];
                 model.Filter = filter;
                 if (SessionFacade.CurrentUser.UserGroupId == 3)
@@ -119,11 +113,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 {
                     model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsers(filter);
                 }
-                
+
                 model.UserOverviewList.Sorting = new UserSort { FieldName = "", IsAsc = true };
-                model.StatusUsers.FirstOrDefault(x => x.Value == filter.StatusId.ToString()).Selected = true;               
+                model.StatusUsers.FirstOrDefault(x => x.Value == filter.StatusId.ToString()).Selected = true;
             }
-            
+
             return this.View(model);
         }
 
@@ -139,9 +133,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult Index(UserSearch filter)
         {
-            var model = this.IndexInputViewModel();  
-            var userSearch = (UserSearch) this.Session["UserSearch"]; 
-            
+            var model = this.IndexInputViewModel();
+            var userSearch = (UserSearch)this.Session["UserSearch"];
+
             if (this.Session["UserSearch"] == null && filter.SearchUs == null)
             {
                 model.UserOverviewList.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
@@ -169,13 +163,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 }
             }
 
-           if (userSearch != null)
-           {
-              var fieldName = userSearch.SortBy;
-              var isAsc = userSearch.Ascending;
-              model.UserOverviewList.Users = this.SortUsers(model.UserOverviewList.Users, fieldName, isAsc);
-              model.UserOverviewList.Sorting = new UserSort { FieldName = fieldName, IsAsc = !isAsc };
-           }
+            if (userSearch != null)
+            {
+                var fieldName = userSearch.SortBy;
+                var isAsc = userSearch.Ascending;
+                model.UserOverviewList.Users = this.SortUsers(model.UserOverviewList.Users, fieldName, isAsc);
+                model.UserOverviewList.Sorting = new UserSort { FieldName = fieldName, IsAsc = !isAsc };
+            }
             return this.View(model);
         }
 
@@ -196,17 +190,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 model.Sorting = new UserSort { FieldName = fieldName, IsAsc = !isAsc };
             }
             else
-            {                
+            {
                 model.Users = this._userService.SearchSortAndGenerateUsers(filter);
             }
 
-            model.Users = this.SortUsers(model.Users,fieldName,isAsc);
+            model.Users = this.SortUsers(model.Users, fieldName, isAsc);
             model.Sorting = new UserSort { FieldName = fieldName, IsAsc = !isAsc };
 
             return PartialView("Index/_UserGrid", model);
         }
 
-        private IEnumerable<User> SortUsers(IEnumerable<User> users, string fieldName, bool  isAsc)
+        private IEnumerable<User> SortUsers(IEnumerable<User> users, string fieldName, bool isAsc)
         {
             switch (fieldName)
             {
@@ -269,13 +263,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [CustomAuthorize(Roles = "3,4")]
         public ActionResult New()
         {
-            var filter = (UserSearch)this.Session["UserSearch"];
-            if (filter == null)
-            {
-                filter = new UserSearch { CustomerId = SessionFacade.CurrentCustomer.Id };
-            }
-
-            var model = this.CreateInputViewModel(new User
+            var user = new User
             {
                 ActivateCasePermission = 1,
                 BulletinBoardDate = DateTime.Now,
@@ -300,7 +288,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 UserGroup_Id = 4,
                 TimeZoneId = SessionFacade.CurrentUser.TimeZoneId ?? TimeZoneInfo.Local.Id,
                 CaseInternalLogPermission = 1
-            });
+            };
+
+            var model = this.CreateInputViewModel(user, user.Id);
 
 
             return this.View(model);
@@ -309,12 +299,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         public ActionResult New(
-            UserInputViewModel userInputViewModel, 
-            int[] AAsSelected, 
-            int[] CsSelected, 
-            int[] OTsSelected, 
-            string NewPassword, 
-            string ConfirmPassword, 
+            UserInputViewModel userInputViewModel,
+            int[] AAsSelected,
+            int[] CsSelected,
+            int[] OTsSelected,
+            string NewPassword,
+            string ConfirmPassword,
             FormCollection coll)
         {
             IDictionary<string, string> errors;
@@ -379,10 +369,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 return this.RedirectToAction("edit", "users", new { id = user.Id });
             }
 
-            var model = this.CreateInputViewModel(userInputViewModel.User);
+            var model = this.CreateInputViewModel(userInputViewModel.User, userInputViewModel.User.Id);
             foreach (var error in errors)
             {
-                ModelState.AddModelError(error.Key, Translation.Get(error.Value));
+                ModelState.AddModelError(error.Key, Translation.GetCoreTextTranslation(error.Value));
             }
 
             return this.View(model);
@@ -395,8 +385,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             if (user == null)
                 return new HttpNotFoundResult("No user found...");
-            
-            var model = this.CreateInputViewModel(user);
+
+            var model = this.CreateInputViewModel(user, user.Id);
 
             if (copy.ToBool())
             {
@@ -423,174 +413,590 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             IDictionary<string, string> errors;
 
-            var userToSave = new User();
+            User userToSave;
+            var isCopy = id == -1;
 
-            if (id != -1)
+            if (!isCopy)
             {
                 userToSave = _userService.GetUser(id);
 
-                if (SessionFacade.CurrentUser.UserGroupId != (int)UserGroup.SystemAdministrator && 
-                    (SessionFacade.CurrentUser.UserGroupId < userToSave.UserGroup_Id || 
+                if (SessionFacade.CurrentUser.UserGroupId != (int)UserGroup.SystemAdministrator &&
+                    (SessionFacade.CurrentUser.UserGroupId < userToSave.UserGroup_Id ||
                      inputModel.User.UserGroup_Id > SessionFacade.CurrentUser.UserGroupId))
                 {
-                    return RedirectToAction("Forbidden", "Error", new { area = string.Empty });
-                }
-
-                //var currentUserData = _userService.GetUser(id);
-                //inputModel.User.CustomerUsers = currentUserData.CustomerUsers;
-
-                TryUpdateModel(userToSave, "user");
-
-                userToSave.OrderPermission = returnOrderPermissionForSave(inputModel);
-                userToSave.CaseInfoMail = returnCaseInfoMailForEditSave(inputModel);
-                userToSave.TimeZoneId = inputModel.SelectedTimeZone;
-
-                // Remove admin rights if no view right for inventory
-                if(userToSave.InventoryViewPermission == 0)
-                {
-                    userToSave.InventoryPermission = 0;
-                }
-
-                var allCustomers = _customerService.GetAllCustomers();
-                string err = "";
-                var customersAlert = new List<string>(); 
-
-                if (userToSave.IsActive == 0)
-                {
-                    var emptyWG = new List<int>();
-                    foreach (var c in allCustomers)
-                    {                        
-                        if (_userService.UserHasActiveCase(c.Id, userToSave.Id, emptyWG))
-                             customersAlert.Add(c.Name);
-                    }                                       
-                }
-
-                //todo: move to other method
-                if (customersAlert.Any())
-                {
-                    err = Translation.GetCoreTextTranslation("Användare") + " [" + userToSave.FirstName + " " + userToSave.SurName + "] " +
-                          Translation.GetCoreTextTranslation("har aktiva ärenden hos kund") + ":";
-                    err += "(" + string.Join(",", customersAlert.ToArray()) + ")|";
-                    err += " " + Translation.GetCoreTextTranslation("För att se över dessa ärenden, gå till") + ":|";
-                    err += " " + Translation.GetCoreTextTranslation("Ärendeöversikt") + "|";
-                    err += " " + Translation.GetCoreTextTranslation("Pågående ärenden") + "|";
-                    err += " " + Translation.GetCoreTextTranslation("Handläggare");
-                }
-
-                if (userToSave.UserRoles != null)
-                {
-                    foreach (var delete in userToSave.UserRoles.ToList())
                     {
-                        userToSave.UserRoles.Remove(delete);
-                    }
-
-                    if (inputModel.UserRights.HasValue)
-                    {
-                        var userRight = _userService.GetUserRoleById(inputModel.UserRights.Value);
-                        userToSave.UserRoles.Add(userRight);
+                        return RedirectToAction("Forbidden", "Error", new { area = string.Empty });
                     }
                 }
 
-                var customersAvailableHash = GetAvaliableCustomersFor(userToSave).ToDictionary(it => it.Id, it => true);
-                
-                int[] customersSelected = null;
-                if (inputModel.CsSelected != null)
-                {
-                    customersSelected = inputModel.CsSelected.Where(customersAvailableHash.ContainsKey).ToArray();
-                }
-                
-
-                if (SessionFacade.CurrentUser.Id == userToSave.Id)
-                {
-                   _userService.SaveEditUser(
-                       userToSave,
-                       inputModel.AAsSelected,
-                       customersSelected,
-                       customersAvailableHash.Keys.ToArray(),
-                       inputModel.OTsSelected,
-                       inputModel.Departments,
-                       inputModel.UserWorkingGroups,
-                       inputModel.CustomerUsers,
-                       out errors);
-                }
-                else
-                {
-                    // when user updates info about other user it is possible that second user has own selected customers that first user does not have
-                    var usersOwnCustomer =
-                        userToSave.CusomersAvailable.Where(it => !customersAvailableHash.ContainsKey(it.Id))
-                            .Select(it => it.Id)
-                            .ToList();
-
-                    if (customersSelected != null)
-                    {
-                        usersOwnCustomer.AddRange(customersSelected);
-                    }
-
-                    _userService.SaveEditUser(
-                        userToSave,
-                        inputModel.AAsSelected,
-                        customersSelected,
-                        usersOwnCustomer.ToArray(),
-                        inputModel.OTsSelected,
-                        inputModel.Departments,
-                        inputModel.UserWorkingGroups,
-                        inputModel.CustomerUsers,
-                        out errors);
-                }
-                
+                errors = SaveUserEdit(inputModel, userToSave);
 
                 if (errors.Count == 0)
-                {
-                    if (!string.IsNullOrEmpty(err))
-                    {
-                        TempData["AlertMessage"] = err;
-                    }
-                    
                     return RedirectToAction("edit", "users", new { id = id });
-                }
-                
+            }
+            else
+            {
+                userToSave = inputModel.User; //copy
+                errors = SaveUserNew(inputModel, userToSave);
+            }
+
+            if (errors.Count > 0)
+            {
                 foreach (var error in errors)
                 {
                     ModelState.AddModelError(error.Key, Translation.GetCoreTextTranslation(error.Value));
                 }
-                
-                var model = CreateInputViewModel(userToSave);
+
+                var userId = userToSave.Id;
+                if (isCopy) userId = inputModel.CopyUserId;
+
+                var model = CreateInputViewModel(userToSave, userId);
                 return View(model);
             }
 
-            //TODO: Move logic below to new method CaseService.CopyUser out from controller
+            return RedirectToAction("index", "users");
+        }
 
-            var copy = inputModel.User;
-            copy.Id = 0;
-            copy.Password = inputModel.NewPassword;
-            copy.TimeZoneId = inputModel.SelectedTimeZone;
+        [CustomAuthorize(Roles = "3,4")]
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            var allCustomers = _customerService.GetAllCustomers();
+            var customersAlert = new List<string>();
 
-            if (copy.Language_Id == 0)
+            var emptyWG = new List<int>();
+            foreach (var c in allCustomers)
             {
-                copy.Language_Id = 2;
+                if (_userService.UserHasActiveCase(c.Id, id, emptyWG))
+                    customersAlert.Add(c.Name);
             }
-            
-            if (inputModel.UserRights.HasValue)
-            {
-                var userRight = _userService.GetUserRoleById(inputModel.UserRights.Value);
-                if (copy.UserRoles == null)
-                {
-                    copy.UserRoles = new List<UserRole>();
-                }
 
-                copy.UserRoles.Add(userRight);
+            if (customersAlert.Any())
+            {
+                var err = Translation.GetCoreTextTranslation("Det är inte möjligt att ta bort denna användare. Var vänlig inaktivera användaren istället") + ": ";
+                err += "(" + string.Join(",", customersAlert.ToArray()) + ") ";
+                TempData["PreventError"] = err;
+                return this.RedirectToAction("edit", "users", new { id = id });
             }
-  
-            _userService.SaveNewUser(copy, inputModel.AAsSelected, inputModel.CsSelected, inputModel.OTsSelected, inputModel.UserWorkingGroups, inputModel.Departments, out errors, inputModel.ConfirmPassword);
 
-            if (errors.Count > 0)
+            if (this._userService.DeleteUser(id) == DeleteMessage.Success)
+                return this.RedirectToAction("index", "users");
+            else
             {
-                copy.Id = -1;
+                this.TempData.Add("Error", "");
+                return this.RedirectToAction("edit", "users", new { id = id });
+            }
+        }
+
+        [HttpGet]
+        public PartialViewResult UnlockCase(int caseId, int? selectedCustomerId = null, decimal caseNumber = 0, string searchText = "")
+        {
+            _caseLockService.UnlockCaseByCaseId(caseId);
+            var model = GetLockedCaseModel(selectedCustomerId, caseNumber, searchText);
+            return PartialView("Index/_LockedCaseOverview", model);
+        }
+
+        [HttpGet]
+        public PartialViewResult GetLoggedInUsers(int? selectedCustomerId = null)
+        {
+            var model = new List<LoggedInUsers>();
+            SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId = selectedCustomerId;
+            if (selectedCustomerId.HasValue)
+            {
+                model = ApplicationFacade.GetLoggedInUsers(selectedCustomerId.Value).ToList();
             }
             else
             {
-                var customerUserChanges = GetCustomerUserChanges(inputModel.CopyUserid, inputModel.CustomerUsers);
-                var newCustomerUsers = _userService.GetCustomerUserForUser(copy.Id).ToList();
+                model = ApplicationFacade.GetAllLoggedInUsers().ToList();
+            }
+
+            return PartialView("Index/_OnlineUserList", model);
+        }
+
+        [HttpGet]
+        public PartialViewResult FilterLockedCases(int? selectedCustomerId = null, decimal caseNumber = 0, string searchText = "")
+        {
+            var model = GetLockedCaseModel(selectedCustomerId, caseNumber, searchText);
+            SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId = selectedCustomerId;
+            return PartialView("Index/_LockedCaseTable", model.LockedCasesModels);
+
+        }
+        private UserIndexViewModel IndexInputViewModel()
+        {
+            var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
+            var csSelected = user.Cs ?? new List<Customer>();
+            var csAvailable = new List<Customer>();
+
+            foreach (var c in this._customerService.GetAllCustomers())
+            {
+                if (!csSelected.Contains(c))
+                    csAvailable.Add(c);
+            }
+
+            List<SelectListItem> sli = new List<SelectListItem>();
+            sli.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Aktiva", Enums.TranslationSource.TextTranslation),
+                Value = "1",
+                Selected = false
+            });
+            sli.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Inaktiva", Enums.TranslationSource.TextTranslation),
+                Value = "2",
+                Selected = false
+            });
+            sli.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Alla", Enums.TranslationSource.TextTranslation),
+                Value = "3",
+                Selected = false
+            });
+
+            //Locked Cases                        
+            int AdminUsersPageLockedCasesTabSelectedCustomerId = 0;
+            if (!SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId.HasValue)
+            {
+                SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId = SessionFacade.CurrentUser.CustomerId;
+            }
+
+            AdminUsersPageLockedCasesTabSelectedCustomerId = SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId.Value;
+            var lockedCasesModel = this.GetLockedCaseModel(AdminUsersPageLockedCasesTabSelectedCustomerId);
+
+            int AdminUsersPageLoggedInUsersTabSelectedCustomerId = 0;
+            if (!SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId.HasValue)
+            {
+                SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId = SessionFacade.CurrentUser.CustomerId;
+            }
+
+            AdminUsersPageLoggedInUsersTabSelectedCustomerId = SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId.Value;
+            var model = new UserIndexViewModel
+            {
+                User = user,
+                StatusUsers = sli,
+                LockedCaseModel = lockedCasesModel,
+                ListLoggedInUsers = AdminUsersPageLoggedInUsersTabSelectedCustomerId == 0 ? ApplicationFacade.GetAllLoggedInUsers() : ApplicationFacade.GetLoggedInUsers(AdminUsersPageLoggedInUsersTabSelectedCustomerId),
+                Filter = new UserSearch { CustomerId = AdminUsersPageLockedCasesTabSelectedCustomerId },
+                CsSelected = csSelected.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString(),
+                })
+                .OrderBy(c => c.Text)
+                .ToList(),
+                OnlineUsersTabSelectedCustomerId = AdminUsersPageLoggedInUsersTabSelectedCustomerId,
+                UserOverviewList = new UserList()
+            };
+
+            return model;
+        }
+
+        private LockedCaseOverviewModel GetLockedCaseModel(int? selectedCustomerId = null, decimal caseNumber = 0, string searchText = "")
+        {
+            var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
+
+            var csSelected = user.Cs ?? new List<Customer>();
+            var csAvailable = new List<Customer>();
+
+            foreach (var c in this._customerService.GetAllCustomers())
+            {
+                if (!csSelected.Contains(c))
+                    csAvailable.Add(c);
+            }
+
+            var customerList = csSelected.Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString(),
+                Selected = (selectedCustomerId != null && x.Id == selectedCustomerId.Value)
+            })
+                .OrderBy(c => c.Text)
+                .ToList();
+
+            // Delete the empty choice added to the top of the customer List
+            customerList.RemoveAt(0);
+
+            var lockedCases = new List<LockedCaseOverview>();
+            if (caseNumber > 0)
+                lockedCases = this._caseLockService.GetLockedCases(selectedCustomerId, caseNumber);
+            else
+                if (searchText != string.Empty)
+                lockedCases = this._caseLockService.GetLockedCases(selectedCustomerId, searchText);
+            else
+                lockedCases = this._caseLockService.GetLockedCases(selectedCustomerId);
+
+            var lockedCaseModel = lockedCases.Select(l => l.MapToViewModel()).OrderBy(u => u.UserId).ToList();
+            var model = new LockedCaseOverviewModel(customerList, selectedCustomerId, caseNumber, searchText, lockedCaseModel);
+
+            return model;
+        }
+
+        private UserInputViewModel CreateInputViewModel(User user, int userId)
+        {
+            #region Generals
+
+            // not used 
+            //var aasSelected = user.AAs ?? new List<AccountActivity>();
+            //var aasAvailable = new List<AccountActivity>();
+            //foreach (var aa in this._accountActivityService.GetAccountActivities(SessionFacade.CurrentCustomer.Id))
+            //{
+            //    if (!aasSelected.Contains(aa))
+            //        aasAvailable.Add(aa);
+            //}
+
+            var customersSelected = user.Cs ?? new List<Customer>();
+            var selectedCustomersHash = customersSelected.ToDictionary(it => it.Id, it => true);
+            var customersAvailable = GetAvaliableCustomersFor(user).Where(it => !selectedCustomersHash.ContainsKey(it.Id)).OrderBy(it => it.Name);
+            var otsSelected = user.OTs ?? new List<OrderType>();
+            var otsAvailable = new List<OrderType>();
+
+            foreach (var ot in _orderTypeService.GetOrderTypes(SessionFacade.CurrentCustomer.Id))
+            {
+                if (!otsSelected.Contains(ot))
+                    otsAvailable.Add(ot);
+            }
+
+            #endregion
+
+            #region SelectListItems
+
+            var lis = new List<SelectListItem>
+            {
+                new SelectListItem()
+                {
+                    Text = Translation.GetCoreTextTranslation("Start"),
+                    Value = ((int) StartPage.Start).ToString(CultureInfo.InvariantCulture),
+                    Selected = false
+                },
+                new SelectListItem()
+                {
+                    Text = Translation.GetCoreTextTranslation("Ärendeöversikt"),
+                    Value = ((int) StartPage.CaseSummary).ToString(CultureInfo.InvariantCulture),
+                    Selected = false
+                },
+                new SelectListItem()
+                {
+                    Text = Translation.GetCoreTextTranslation("Avancerad sökning"),
+                    Value = ((int) StartPage.AdvancedSearch).ToString(CultureInfo.InvariantCulture),
+                    Selected = false
+                }
+            };
+
+            var li = new List<SelectListItem>
+            {
+                new SelectListItem()
+                {
+                    Text = Translation.GetCoreTextTranslation("Varje vecka"), Value = "1", Selected = false
+                },
+                new SelectListItem()
+                {
+                    Text = Translation.GetCoreTextTranslation("Varje dag"), Value = "127", Selected = false
+                }
+            };
+
+            var sli = new List<SelectListItem>
+            {
+                new SelectListItem() {Text = "", Value = "0", Selected = false},
+                new SelectListItem() {Text = "1", Value = "60", Selected = false},
+                new SelectListItem() {Text = "2", Value = "120", Selected = false},
+                new SelectListItem() {Text = "3", Value = "180", Selected = false},
+                new SelectListItem() {Text = "4", Value = "240", Selected = false},
+                new SelectListItem() {Text = "5", Value = "300", Selected = false},
+                new SelectListItem() {Text = "10", Value = "600", Selected = false},
+                new SelectListItem() {Text = "15", Value = "900", Selected = false}
+            };
+
+            #endregion
+
+            #region Model
+
+            var customerUsers = user.CustomerUsers?.Any() ?? false ? user.CustomerUsers : _userService.GetCustomerUserForUser(userId);
+
+            var model = new UserInputViewModel
+            {
+                User = user,
+                CaseInfoMailList = li,
+                RefreshInterval = sli,
+                StartPageShowList = lis,
+                CustomerUsers = customerUsers.Where(x => x.Customer_Id > 0).Select(x => x.MapToCustomerUserEdit()).ToList(),
+                Departments = _userService.GetDepartmentsForUser(userId),
+                ListWorkingGroupsForUser = _userService.GetListToUserWorkingGroup(userId),
+                AvailvableTimeZones = TimeZoneInfo.GetSystemTimeZones().Select(it => new SelectListItem() { Value = it.Id, Text = it.DisplayName, Selected = user.TimeZoneId == it.Id }),
+
+                Customers = _customerService.GetCustomers().Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Value
+                }).ToList(),
+
+                Domains = _domainService.GetDomains(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+
+                Languages = _languageService.GetLanguages().Select(x => new SelectListItem
+                {
+                    Text = Translation.GetCoreTextTranslation(x.Name),
+                    Value = x.Id.ToString()
+                }).ToList(),
+
+                UserRoles = _userService.GetUserRoles().Select(x => new SelectListItem
+                {
+                    Text = Translation.GetCoreTextTranslation(x.Description),
+                    Value = x.Id.ToString(),
+                }).ToList(),
+
+                //AAsAvailable = aasAvailable.Select(x => new SelectListItem
+                //{
+                //    Text = x.Name,
+                //    Value = x.Id.ToString()
+                //}).ToList(),
+
+                //AAsSelected = aasSelected.Select(x => new SelectListItem
+                //{
+                //    Text = x.Name,
+                //    Value = x.Id.ToString()
+                //}).ToList(),
+
+                CsAvailable = customersAvailable.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                CsSelected = customersSelected.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).OrderBy(it => it.Text).ToList(),
+                OTsAvailable = otsAvailable.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                OTsSelected = otsSelected.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                WorkingGroups = this._workingGroupService.GetAllWorkingGroups().Select(x => new SelectListItem
+                {
+                    Text = x.WorkingGroupName,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                UserGroups = this._userService.GetUserGroups()
+                    .Where(it => it.Id <= SessionFacade.CurrentUser.UserGroupId)
+                    .OrderBy(x => x.Id)
+                    .Select(x => new SelectListItem
+                    {
+                        Text = Translation.GetCoreTextTranslation(x.Name),
+                        Value = x.Id.ToString()
+                    }).ToList()
+
+            };
+
+            #endregion
+
+            #region SetInts
+
+            if (model.User.Id != 0 && model.User.Id != -1)
+            {
+                model.UserRights = model.User.UserRoles.Any() ? model.User.UserRoles.First().Id : 0;
+            }
+
+            if (user.CaseInfoMail == 0)
+            {
+                model.SendMailYesNo = 0;
+            }
+            else if (user.CaseInfoMail == 1)
+            {
+                model.SendMailYesNo = 1;
+                model.SendMailYesNoWhen = 1;
+            }
+            else if (user.CaseInfoMail == 127)
+            {
+                model.SendMailYesNo = 1;
+                model.SendMailYesNoWhen = 127;
+            }
+
+            if (user.OrderPermission == 1)
+            {
+                model.OrderP1 = 1;
+            }
+            else if (user.OrderPermission == 2)
+            {
+                model.OrderP2 = 1;
+            }
+            else
+            {
+                model.OrderP1 = 0;
+                model.OrderP2 = 0;
+            }
+
+            // Edit mode
+            if (userId > 0)
+            {
+                var userCustomerSetting = this._settingService.GetCustomerSetting(user.Customer_Id);
+
+                model.ChangePasswordModel = new ChangePasswordModel()
+                {
+                    UserId = userId,
+                    MinPasswordLength = userCustomerSetting.MinPasswordLength,
+                    UseComplexPassword = userCustomerSetting.ComplexPassword.ToBool()
+                };
+            }
+
+            #endregion
+
+            return model;
+        }
+
+        private IDictionary<string, string> SaveUserEdit(UserSaveInputModel inputModel, User userToSave)
+        {
+            IDictionary<string, string> errors;
+            TryUpdateModel(userToSave, "user");
+
+            userToSave.OrderPermission = returnOrderPermissionForSave(inputModel);
+            userToSave.CaseInfoMail = returnCaseInfoMailForEditSave(inputModel);
+            userToSave.TimeZoneId = inputModel.SelectedTimeZone;
+
+            // Remove admin rights if no view right for inventory
+            if (userToSave.InventoryViewPermission == 0)
+            {
+                userToSave.InventoryPermission = 0;
+            }
+
+            var allCustomers = _customerService.GetAllCustomers();
+            var err = "";
+            var customersAlert = new List<string>();
+
+            if (userToSave.IsActive == 0)
+            {
+                var emptyWG = new List<int>();
+                foreach (var c in allCustomers)
+                {
+                    if (_userService.UserHasActiveCase(c.Id, userToSave.Id, emptyWG))
+                        customersAlert.Add(c.Name);
+                }
+            }
+
+            //todo: move to other method
+            if (customersAlert.Any())
+            {
+                err = Translation.GetCoreTextTranslation("Användare") + " [" + userToSave.FirstName + " " + userToSave.SurName +
+                      "] " +
+                      Translation.GetCoreTextTranslation("har aktiva ärenden hos kund") + ":";
+                err += "(" + string.Join(",", customersAlert.ToArray()) + ")|";
+                err += " " + Translation.GetCoreTextTranslation("För att se över dessa ärenden, gå till") + ":|";
+                err += " " + Translation.GetCoreTextTranslation("Ärendeöversikt") + "|";
+                err += " " + Translation.GetCoreTextTranslation("Pågående ärenden") + "|";
+                err += " " + Translation.GetCoreTextTranslation("Handläggare");
+            }
+
+            if (userToSave.UserRoles != null)
+            {
+                foreach (var delete in userToSave.UserRoles.ToList())
+                {
+                    userToSave.UserRoles.Remove(delete);
+                }
+
+                if (inputModel.UserRights.HasValue)
+                {
+                    var userRight = _userService.GetUserRoleById(inputModel.UserRights.Value);
+                    userToSave.UserRoles.Add(userRight);
+                }
+            }
+
+            var customersAvailableHash = GetAvaliableCustomersFor(userToSave).ToDictionary(it => it.Id, it => true);
+
+            int[] customersSelected = null;
+            if (inputModel.CsSelected != null)
+            {
+                customersSelected = inputModel.CsSelected.Where(customersAvailableHash.ContainsKey).ToArray();
+            }
+
+
+            if (SessionFacade.CurrentUser.Id == userToSave.Id)
+            {
+                _userService.SaveEditUser(
+                    userToSave,
+                    inputModel.AAsSelected,
+                    customersSelected,
+                    customersAvailableHash.Keys.ToArray(),
+                    inputModel.OTsSelected,
+                    inputModel.Departments,
+                    inputModel.UserWorkingGroups,
+                    inputModel.CustomerUsers,
+                    out errors);
+            }
+            else
+            {
+                // when user updates info about other user it is possible that second user has own selected customers that first user does not have
+                var usersOwnCustomer =
+                    userToSave.CusomersAvailable.Where(it => !customersAvailableHash.ContainsKey(it.Id))
+                        .Select(it => it.Id)
+                        .ToList();
+
+                if (customersSelected != null)
+                {
+                    usersOwnCustomer.AddRange(customersSelected);
+                }
+
+                _userService.SaveEditUser(
+                    userToSave,
+                    inputModel.AAsSelected,
+                    customersSelected,
+                    usersOwnCustomer.ToArray(),
+                    inputModel.OTsSelected,
+                    inputModel.Departments,
+                    inputModel.UserWorkingGroups,
+                    inputModel.CustomerUsers,
+                    out errors);
+            }
+
+            if (errors.Count == 0 && !string.IsNullOrEmpty(err))
+            {
+                TempData["AlertMessage"] = err;
+            }
+
+            return errors;
+        }
+
+        private IDictionary<string, string> SaveUserNew(UserSaveInputModel inputModel, User userToSave)
+        {
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            userToSave.Id = 0;
+            userToSave.Password = inputModel.NewPassword;
+            userToSave.TimeZoneId = inputModel.SelectedTimeZone;
+
+            if (userToSave.Language_Id == 0)
+            {
+                userToSave.Language_Id = 2;
+            }
+
+            if (inputModel.UserRights.HasValue)
+            {
+                var userRight = _userService.GetUserRoleById(inputModel.UserRights.Value);
+                if (userToSave.UserRoles == null)
+                {
+                    userToSave.UserRoles = new List<UserRole>();
+                }
+
+                userToSave.UserRoles.Add(userRight);
+            }
+
+            _userService.SaveNewUser(userToSave, inputModel.AAsSelected, inputModel.CsSelected, inputModel.OTsSelected,
+                inputModel.UserWorkingGroups, inputModel.Departments, out errors, inputModel.ConfirmPassword);
+
+            if (errors.Count > 0)
+            {
+                userToSave.Id = -1;
+            }
+            else
+            {
+                var customerUserChanges = GetCustomerUserChanges(inputModel.CopyUserId, inputModel.CustomerUsers);
+                var newCustomerUsers = _userService.GetCustomerUserForUser(userToSave.Id).ToList();
 
                 //Copy user customer settings after user with associated customers (tblCustomerUser) has been created
                 foreach (var cu in newCustomerUsers)
@@ -670,41 +1076,28 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                         _customerUserService.SaveCustomerUser(cu);
                     }
 
-                    var caseSettingsToCopy = new List<CaseSettings>();
-                    if (inputModel != null && userToSave != null)
+                    var caseSettingsToCopy = _caseSettingsService
+                        .GetCaseSettingsWithUser(cu.Customer_Id, inputModel.CopyUserId, userToSave.UserGroup_Id)
+                        .ToList();
+
+                    foreach (var cs in caseSettingsToCopy)
                     {
-                        _caseSettingsService.GetCaseSettingsWithUser(cu.Customer_Id, inputModel.CopyUserid, userToSave.UserGroup_Id);
-                    }
+                        var newUserCaseSetting = new CaseSettings();
 
-                    if (caseSettingsToCopy != null)
-                    {
-                        foreach (var cs in caseSettingsToCopy)
-                        {
-                            var newUserCaseSetting = new CaseSettings();
+                        newUserCaseSetting.User_Id = userToSave.Id;
+                        newUserCaseSetting.Customer_Id = cs.Customer_Id;
+                        newUserCaseSetting.Name = cs.Name;
+                        newUserCaseSetting.Line = cs.Line;
+                        newUserCaseSetting.MinWidth = cs.MinWidth;
+                        newUserCaseSetting.UserGroup = cs.UserGroup;
+                        newUserCaseSetting.ColOrder = cs.ColOrder;
 
-                            newUserCaseSetting.User_Id = copy.Id;
-                            newUserCaseSetting.Customer_Id = cs.Customer_Id;
-                            newUserCaseSetting.Name = cs.Name;
-                            newUserCaseSetting.Line = cs.Line;
-                            newUserCaseSetting.MinWidth = cs.MinWidth;
-                            newUserCaseSetting.UserGroup = cs.UserGroup;
-                            newUserCaseSetting.ColOrder = cs.ColOrder;
-
-                            _caseSettingsService.SaveCaseSetting(newUserCaseSetting, out errors);
-                        }
+                        _caseSettingsService.SaveCaseSetting(newUserCaseSetting, out errors);
                     }
                 }
             }
 
-
-            if (errors.Count > 0)
-            {
-                TempData["PreventError"] = errors.FirstOrDefault().Value;
-                var copyModel = CreateInputViewModel(copy);
-                return View(copyModel);
-            }
-
-            return RedirectToAction("index", "users");
+            return errors;
         }
 
         private IList<CustomerUser> GetCustomerUserChanges(int oldUserId, IList<CustomerUserForEdit> customerPermissions)
@@ -729,451 +1122,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return customerUserSettingsCopy;
         }
 
-        [CustomAuthorize(Roles = "3,4")]
-        [HttpPost]
-        public ActionResult Delete(int id)
-        {
-            var allCustomers = _customerService.GetAllCustomers();
-            string err = "";
-            List<string> customersAlert = new List<string>();
-            
-            var emptyWG = new List<int>();
-            foreach (var c in allCustomers)
-            {
-                if (_userService.UserHasActiveCase(c.Id, id, emptyWG))
-                    customersAlert.Add(c.Name);
-            }
-                        
-            if (customersAlert.Any())
-            {
-                err = Translation.Get("Det är inte möjligt att ta bort denna användare. Var vänlig inaktivera användaren istället") + ": ";
-                err += "(" + string.Join(",", customersAlert.ToArray()) + ") ";
-                TempData["PreventError"] = err;                
-                return this.RedirectToAction("edit", "users", new { id = id });
-            }                        
-
-            if (this._userService.DeleteUser(id) == DeleteMessage.Success)
-                return this.RedirectToAction("index", "users");
-            else
-            {
-                this.TempData.Add("Error", "");
-                return this.RedirectToAction("edit", "users", new { id = id });
-            }
-        }
-
-        [HttpGet]
-        public PartialViewResult UnlockCase(int caseId, int? selectedCustomerId = null, decimal caseNumber = 0, string searchText = "")
-        {
-            _caseLockService.UnlockCaseByCaseId(caseId);
-            var model = GetLockedCaseModel(selectedCustomerId, caseNumber, searchText);
-            return PartialView("Index/_LockedCaseOverview", model);
-        }
-
-        [HttpGet]
-        public PartialViewResult GetLoggedInUsers(int? selectedCustomerId = null)
-        {            
-            var model = new List<LoggedInUsers>();
-            SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId = selectedCustomerId;
-            if (selectedCustomerId.HasValue)
-            {
-                model = ApplicationFacade.GetLoggedInUsers(selectedCustomerId.Value).ToList();
-            }
-            else
-            {
-                model = ApplicationFacade.GetAllLoggedInUsers().ToList();
-            }
-
-            return PartialView("Index/_OnlineUserList", model);
-        }
-
-        [HttpGet]
-        public PartialViewResult FilterLockedCases(int? selectedCustomerId = null, decimal caseNumber = 0, string searchText = "")
-        {            
-            var model = GetLockedCaseModel(selectedCustomerId, caseNumber, searchText);
-            SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId = selectedCustomerId;
-            return PartialView("Index/_LockedCaseTable", model.LockedCasesModels);
-
-        }
-        private UserIndexViewModel IndexInputViewModel()
-        {
-            var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
-            var csSelected = user.Cs ?? new List<Customer>();
-            var csAvailable = new List<Customer>();
-
-            foreach (var c in this._customerService.GetAllCustomers())
-            {
-                if (!csSelected.Contains(c))
-                    csAvailable.Add(c);
-            }
-
-            List<SelectListItem> sli = new List<SelectListItem>();
-            sli.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Aktiva", Enums.TranslationSource.TextTranslation),
-                Value = "1",
-                Selected = false
-            });
-            sli.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Inaktiva", Enums.TranslationSource.TextTranslation),
-                Value = "2",
-                Selected = false
-            });
-            sli.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Alla", Enums.TranslationSource.TextTranslation),
-                Value = "3",
-                Selected = false
-            });
-            
-            //Locked Cases                        
-            int AdminUsersPageLockedCasesTabSelectedCustomerId = 0;
-            if (!SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId.HasValue)
-            {
-                SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId = SessionFacade.CurrentUser.CustomerId;
-            }
-
-            AdminUsersPageLockedCasesTabSelectedCustomerId = SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId.Value;
-            var lockedCasesModel = this.GetLockedCaseModel(AdminUsersPageLockedCasesTabSelectedCustomerId);
-
-            int AdminUsersPageLoggedInUsersTabSelectedCustomerId = 0;
-            if (!SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId.HasValue)
-            {
-                SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId = SessionFacade.CurrentUser.CustomerId;
-            }
-
-            AdminUsersPageLoggedInUsersTabSelectedCustomerId = SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId.Value;
-            var model = new UserIndexViewModel
-            {
-                User = user,
-                StatusUsers = sli,
-                LockedCaseModel = lockedCasesModel,
-                ListLoggedInUsers = AdminUsersPageLoggedInUsersTabSelectedCustomerId == 0 ? ApplicationFacade.GetAllLoggedInUsers() : ApplicationFacade.GetLoggedInUsers(AdminUsersPageLoggedInUsersTabSelectedCustomerId),
-                Filter = new UserSearch { CustomerId = AdminUsersPageLockedCasesTabSelectedCustomerId },
-                CsSelected = csSelected.Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString(),                    
-                })
-                .OrderBy(c => c.Text)
-                .ToList(),
-                OnlineUsersTabSelectedCustomerId = AdminUsersPageLoggedInUsersTabSelectedCustomerId,
-                UserOverviewList = new UserList()
-            };
-            
-            return model;
-        }
-
-        private LockedCaseOverviewModel GetLockedCaseModel(int? selectedCustomerId = null, decimal caseNumber = 0, string searchText = "")
-        {
-            var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
-
-            var csSelected = user.Cs ?? new List<Customer>();
-            var csAvailable = new List<Customer>();
-
-            foreach (var c in this._customerService.GetAllCustomers())
-            {
-                if (!csSelected.Contains(c))
-                    csAvailable.Add(c);
-            }
-          
-            var customerList = csSelected.Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString(),
-                    Selected = (selectedCustomerId != null && x.Id == selectedCustomerId.Value)
-                })
-                .OrderBy(c=> c.Text)
-                .ToList();
-
-            // Delete the empty choice added to the top of the customer List
-            customerList.RemoveAt(0);
-
-            var lockedCases = new List<LockedCaseOverview>();
-            if (caseNumber > 0)
-                lockedCases = this._caseLockService.GetLockedCases(selectedCustomerId, caseNumber);
-            else
-                if (searchText != string.Empty)
-                    lockedCases = this._caseLockService.GetLockedCases(selectedCustomerId, searchText);
-                else
-                    lockedCases = this._caseLockService.GetLockedCases(selectedCustomerId);
-
-            var lockedCaseModel = lockedCases.Select(l => l.MapToViewModel()).OrderBy(u=> u.UserId).ToList();
-            var model = new LockedCaseOverviewModel(customerList, selectedCustomerId, caseNumber, searchText, lockedCaseModel);
-
-            return model;
-        }
-
-        private UserInputViewModel CreateInputViewModel(User user)
-        {
-            #region Generals
-
-            // not used 
-            //var aasSelected = user.AAs ?? new List<AccountActivity>();
-            //var aasAvailable = new List<AccountActivity>();
-            //foreach (var aa in this._accountActivityService.GetAccountActivities(SessionFacade.CurrentCustomer.Id))
-            //{
-            //    if (!aasSelected.Contains(aa))
-            //        aasAvailable.Add(aa);
-            //}
-
-            var customersSelected = user.Cs ?? new List<Customer>();
-            var selectedCustomersHash = customersSelected.ToDictionary(it => it.Id, it => true);
-            var customersAvailable = GetAvaliableCustomersFor(user).Where(it => !selectedCustomersHash.ContainsKey(it.Id)).OrderBy(it => it.Name);
-            var otsSelected = user.OTs ?? new List<OrderType>();
-            var otsAvailable = new List<OrderType>();
-            
-            foreach (var ot in _orderTypeService.GetOrderTypes(SessionFacade.CurrentCustomer.Id))
-            {
-                if (!otsSelected.Contains(ot))
-                    otsAvailable.Add(ot);
-            }
-
-            #endregion
-
-            #region SelectListItems
-
-            var lis = new List<SelectListItem>();
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Start"),
-                Value = ((int)StartPage.Start).ToString(CultureInfo.InvariantCulture),
-                Selected = false
-            });
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Ärendeöversikt"),
-                Value = ((int)StartPage.CaseSummary).ToString(CultureInfo.InvariantCulture),
-                Selected = false
-            });
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Avancerad sökning"),
-                Value = ((int)StartPage.AdvancedSearch).ToString(CultureInfo.InvariantCulture),
-                Selected = false
-            });
-
-            List<SelectListItem> li = new List<SelectListItem>();
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Varje vecka", Enums.TranslationSource.TextTranslation),
-                Value = "1",
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("Varje dag", Enums.TranslationSource.TextTranslation),
-                Value = "127",
-                Selected = false
-            });
-
-            List<SelectListItem> sli = new List<SelectListItem>();
-            sli.Add(new SelectListItem()
-            {
-                Text = "",
-                Value = "0",
-                Selected = false
-            });
-            sli.Add(new SelectListItem()
-            {
-                Text = "1",
-                Value = "60",
-                Selected = false
-            });
-            sli.Add(new SelectListItem()
-            {
-                Text = "2",
-                Value = "120",
-                Selected = false
-            });
-            sli.Add(new SelectListItem()
-            {
-                Text = "3",
-                Value = "180",
-                Selected = false
-            });
-            sli.Add(new SelectListItem()
-            {
-                Text = "4",
-                Value = "240",
-                Selected = false
-            });
-            sli.Add(new SelectListItem()
-            {
-                Text = "5",
-                Value = "300",
-                Selected = false
-            });
-            sli.Add(new SelectListItem()
-            {
-                Text = "10",
-                Value = "600",
-                Selected = false
-            });
-            sli.Add(new SelectListItem()
-            {
-                Text = "15",
-                Value = "900",
-                Selected = false
-            });
-
-            #endregion
-
-            #region Model
-
-            var customerUsers = user.CustomerUsers?.Any() ?? false ? user.CustomerUsers : _userService.GetCustomerUserForUser(user.Id);
-            var workgingGroups = _userService.GetListToUserWorkingGroup(user.Id);
-
-            var model = new UserInputViewModel
-            {
-                User = user,
-                CaseInfoMailList = li,
-                RefreshInterval = sli,
-                StartPageShowList = lis,
-                CustomerUsers = customerUsers.Where(x => x.Customer_Id > 0).Select(x => x.MapToCustomerUserEdit()).ToList(),
-                Departments = _userService.GetDepartmentsForUser(user.Id),
-                ListWorkingGroupsForUser = _userService.GetListToUserWorkingGroup(user.Id),
-                AvailvableTimeZones = TimeZoneInfo.GetSystemTimeZones().Select(it => new SelectListItem() { Value = it.Id, Text = it.DisplayName, Selected = user.TimeZoneId == it.Id }),
-
-                Customers = _customerService.GetCustomers().Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Value
-                }).ToList(),
-
-                Domains = _domainService.GetDomains(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
-
-                Languages = _languageService.GetLanguages().Select(x => new SelectListItem
-                {
-                    Text = Translation.Get(x.Name),
-                    Value = x.Id.ToString()
-                }).ToList(),
-
-                UserRoles = _userService.GetUserRoles().Select(x => new SelectListItem
-                {
-                    Text = Translation.Get(x.Description, Enums.TranslationSource.TextTranslation),
-                    Value = x.Id.ToString(),
-                }).ToList(),
-
-                //AAsAvailable = aasAvailable.Select(x => new SelectListItem
-                //{
-                //    Text = x.Name,
-                //    Value = x.Id.ToString()
-                //}).ToList(),
-
-                //AAsSelected = aasSelected.Select(x => new SelectListItem
-                //{
-                //    Text = x.Name,
-                //    Value = x.Id.ToString()
-                //}).ToList(),
-
-                CsAvailable = customersAvailable.Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
-                CsSelected = customersSelected.Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).OrderBy(it => it.Text).ToList(),
-                OTsAvailable = otsAvailable.Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
-                OTsSelected = otsSelected.Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
-                WorkingGroups = this._workingGroupService.GetAllWorkingGroups().Select(x => new SelectListItem
-                {
-                    Text = x.WorkingGroupName,
-                    Value = x.Id.ToString()
-                }).ToList(),
-                UserGroups = this._userService.GetUserGroups()
-                    .Where(it => it.Id <= SessionFacade.CurrentUser.UserGroupId)
-                    .OrderBy(x => x.Id)
-                    .Select(x => new SelectListItem
-                    {
-                        Text = Translation.Get(x.Name),
-                        Value = x.Id.ToString()
-                    }).ToList()
-
-            };
-
-            #endregion
-
-            #region SetInts           
-
-            if (model.User.Id != 0 && model.User.Id != -1)
-            {
-                if (model.User.UserRoles.Any())
-                    model.UserRights = model.User.UserRoles.FirstOrDefault().Id;
-                else
-                    model.UserRights = 0;
-            }
-
-
-            if (user.CaseInfoMail == 0)
-            {
-                model.SendMailYesNo = 0;
-            }
-            else if (user.CaseInfoMail == 1)
-            {
-                model.SendMailYesNo = 1;
-                model.SendMailYesNoWhen = 1;
-            }
-            else if (user.CaseInfoMail == 127)
-            {
-                model.SendMailYesNo = 1;
-                model.SendMailYesNoWhen = 127;
-            }
-
-            if (user.OrderPermission == 1)
-            {
-                model.OrderP1 = 1;
-            }
-            else if (user.OrderPermission == 2)
-            {
-                model.OrderP2 = 1;
-            }
-            else
-            {
-                model.OrderP1 = 0;
-                model.OrderP2 = 0;
-            }
-
-            // Edit mode
-            if (user.Id > 0)
-            {
-                var userCustomerSetting = this._settingService.GetCustomerSetting(user.Customer_Id);
-
-                model.ChangePasswordModel = new ChangePasswordModel()
-                {
-                    UserId = user.Id,
-                    MinPasswordLength = userCustomerSetting.MinPasswordLength,
-                    UseComplexPassword = userCustomerSetting.ComplexPassword.ToBool()
-                };
-            }
-
-            #endregion
-
-            return model;
-        }
-
         private IEnumerable<Customer> GetAvaliableCustomersFor(User user)
         {
             if (SessionFacade.CurrentUser.UserGroupId == (int)UserGroup.SystemAdministrator)
             {
                 return this._customerService.GetAllCustomers().ToArray();
             }
-            
+
             if (user.IsNew())
             {
                 return this._userService.GetUser(SessionFacade.CurrentUser.Id).CusomersAvailable.OrderBy(it => it.Name).ToList();

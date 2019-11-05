@@ -6,17 +6,18 @@ using System.Web;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Dal.Repositories.Cases;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
+using DH.Helpdesk.BusinessData.Models;
 
 namespace DH.Helpdesk.Services.Services
 {
     public interface ICaseFileService
     {
         CaseFileContent GetCaseFile(int customerId, int caseId, int fileId, bool embedImmges = false);
-        byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
+        FileContentModel GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
         CaseFileModel GetCaseFile(int caseId, int fileId);
         IList<string> FindFileNamesByCaseId(int caseId);
-        int AddFile(CaseFileDto caseFileDto);
-        IList<int> AddFiles(IList<CaseFileDto> caseFileDtos);
+        int AddFile(CaseFileDto caseFileDto, ref string path);
+        IList<int> AddFiles(IList<CaseFileDto> caseFileDtos, List<KeyValuePair<CaseFileDto, string>> paths);
         void MoveCaseFiles(string caseNumber, string fromBasePath, string toBasePath);
         bool FileExists(int caseId, string fileName);
         void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
@@ -54,15 +55,9 @@ namespace DH.Helpdesk.Services.Services
             var res = _caseFileRepository.GetCaseFileContent(caseId, fileId, basePath);
 
             var caseFilePath = _caseFileRepository.GetCaseFilePath(caseId, fileId, basePath);
+            res.FilePath = caseFilePath;
             if (embedImmges && Path.GetExtension(res.FileName ?? string.Empty).Equals(".htm", StringComparison.OrdinalIgnoreCase))
-            {
-                res = new CaseFileContent()
-                {
-                    Id = res.Id,
-                    FileName = res.FileName,
-                    Content = EmbedFilesIntoHtml(caseFilePath, res.Content)
-                };
-            }
+                res.Content = EmbedFilesIntoHtml(caseFilePath, res.Content);
             
             return res;
         }
@@ -119,25 +114,28 @@ namespace DH.Helpdesk.Services.Services
             return res;
         }
         
-        public byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName)
+        public FileContentModel GetFileContentByIdAndFileName(int caseId, string basePath, string fileName)
         {
             return _caseFileRepository.GetFileContentByIdAndFileName(caseId, basePath, fileName);
         }
 
-        public IList<int> AddFiles(IList<CaseFileDto> caseFileDtos)
+        public IList<int> AddFiles(IList<CaseFileDto> caseFileDtos, List<KeyValuePair<CaseFileDto, string>> paths)
         {
             var fileIds = new List<int>();
             foreach (var fileDto in caseFileDtos)
             {
-                var id = AddFile(fileDto);
+				string path = "";
+                var id = AddFile(fileDto, ref path);
                 fileIds.Add(id);
+
+				paths.Add(new KeyValuePair<CaseFileDto, string>(fileDto, path));
             }
             return fileIds;
         }
 
-        public int AddFile(CaseFileDto caseFileDto)
+        public int AddFile(CaseFileDto caseFileDto, ref string path)
         {
-            return _caseFileRepository.SaveCaseFile(caseFileDto);
+            return _caseFileRepository.SaveCaseFile(caseFileDto, ref path);
         }
 
         public void MoveCaseFiles(string caseNumber, string fromBasePath, string toBasePath)

@@ -7,6 +7,36 @@
         }, options);
     }
 
+    function getUnits(department) {
+        return $.ajax({
+            url: '/Orders/Orders/GetUnits',
+            data: { departmentId: department }
+        }).done(function (res) {
+            $('#Delivery_DeliveryOuId_Value').empty();
+            $('#Delivery_DeliveryOuId_Value').append($('<option></option>'));
+            $.each(res, function (k, v) {
+                $('#Delivery_DeliveryOuId_Value').append($('<option></option>').val(v.id).html(v.name));
+            });
+        });
+    }
+
+    
+
+    $(function () {
+        var department = $('#Delivery_DeliveryDepartment_Value').val();
+        if (department != '') {
+            var unit = $('#Delivery_DeliveryOuId_Value').val();
+            getUnits(department).then(function () {
+                $('#Delivery_DeliveryOuId_Value').val(unit);
+            });            
+        }
+
+        $('#Delivery_DeliveryDepartment_Value').change(function () {
+            var val = this.value == '' ? null : this.value;
+            $('#Delivery_DeliveryOuId_Value').empty();
+            getUnits(val);
+        });
+    });
     window.EditOrder.prototype = {
         init: function () {
             var that = this;

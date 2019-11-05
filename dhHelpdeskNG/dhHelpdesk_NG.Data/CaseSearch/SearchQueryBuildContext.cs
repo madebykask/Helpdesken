@@ -17,29 +17,31 @@ namespace DH.Helpdesk.Dal.Repositories
                                        List<int> caseTypes)
         {
 
-            Criterias = new CaseSearchCriterias
-            {
-                ApplicationType = context.applicationType,
-                SearchFilter = context.f,
-                Search = context.s,
-                CustomerSetting = context.customerSetting,
-                IsFieldResponsibleVisible = context.isFieldResponsibleVisible,
-                UserId = context.userId,
-                UserUniqueId = context.userUserId,
-                ShowNotAssignedWorkingGroups = context.showNotAssignedWorkingGroups,
-                UserGroupId = context.userGroupId,
-                GlobalSetting = context.globalSettings,
-                RelatedCasesCaseId = context.relatedCasesCaseId,
-                CaseSettings = userCaseSettings,
-                RelatedCasesUserId = context.relatedCasesUserId,
-                CaseIds = context.caseIds,
-                
-                CustomerUserSettings = customerUserSettings,
-                UserDepartments = userDepartments,
-                CaseTypes = caseTypes,
-                FetchInfoAboutParentChild = context.f.FetchInfoAboutParentChild
+			Criterias = new CaseSearchCriterias
+			{
+				ApplicationType = context.applicationType,
+				SearchFilter = context.f,
+				Search = context.s,
+				CustomerSetting = context.customerSetting,
+				IsFieldResponsibleVisible = context.isFieldResponsibleVisible,
+				UserId = context.userId,
+				UserUniqueId = context.userUserId,
+				ShowNotAssignedWorkingGroups = context.showNotAssignedWorkingGroups,
+				UserGroupId = context.userGroupId,
+				GlobalSetting = context.globalSettings,
+				RelatedCasesCaseId = context.relatedCasesCaseId,
+				CaseSettings = userCaseSettings,
+				RelatedCasesUserId = context.relatedCasesUserId,
+				CaseIds = context.caseIds,
+
+				CustomerUserSettings = customerUserSettings,
+				UserDepartments = userDepartments,
+				CaseTypes = caseTypes,
+				FetchInfoAboutParentChild = context.f.FetchInfoAboutParentChild,
+				HasAccessToInternalLogNotes = context.hasAccessToInternalLogNotes
             };
 
+			
             UseFullTextSearch = context.useFullTextSearch;
             
         }

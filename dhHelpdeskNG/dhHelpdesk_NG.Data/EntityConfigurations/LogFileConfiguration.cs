@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations
             this.Property(l => l.IsCaseFile).IsOptional();
             this.Property(l => l.ParentLog_Id).IsOptional();
             this.Property(l => l.LogType).IsRequired();
+            this.Property(l => l.ParentLogType).IsOptional();
 
             this.ToTable("tbllogfile");
         }

@@ -12,6 +12,7 @@ namespace DH.Helpdesk.Domain
         public int? ParentLog_Id { get; set; }
         public bool? IsCaseFile { get; set; }
         public LogFileType LogType { get; set; }
+        public LogFileType? ParentLogType { get; set; } // Used only for correct filepath generation
 
         public virtual Log Log { get; set; }
     }

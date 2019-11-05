@@ -4,16 +4,16 @@
 
     public class StateFields
     {
-        public StateFields(ComputerStatuses state, bool stolen, string replaced, bool sendBack, DateTime? scrapDate)
+        public StateFields(string stateName, bool stolen, string replaced, bool sendBack, DateTime? scrapDate)
         {
-            this.State = state;
+            this.StateName = stateName;
             this.Stolen = stolen;
             this.Replaced = replaced;
             this.SendBack = sendBack;
             this.ScrapDate = scrapDate;
         }
 
-        public ComputerStatuses State { get; set; }
+        public string StateName { get; set; }
 
         public bool Stolen { get; set; }
 

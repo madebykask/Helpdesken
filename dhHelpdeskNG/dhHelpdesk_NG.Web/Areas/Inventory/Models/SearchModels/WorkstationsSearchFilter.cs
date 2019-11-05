@@ -31,8 +31,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
             SortField = new SortFieldModel();
         }
 
+        
+        [IsId]
+        public int? DomainId { get; set; }
+
         [IsId]
         public int? RegionId { get; set; }
+
+        [IsId]
+        public int? UnitId { get; set; }
 
         [IsId]
         public int? DepartmentId { get; set; }
@@ -40,7 +47,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
         [IsId]
         public int? ComputerTypeId { get; set; }
 
-        public ContractStatuses? ContractStatusId { get; set; }
+        public int? ContractStatusId { get; set; }
 
         [NotNull]
         public DateRange ContractStartDate { get; set; }
@@ -82,7 +89,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
             }
             return new ComputersFilter(
                 customerId,
+                DomainId,
                 RegionId,
+                UnitId,
                 DepartmentId,
                 ComputerTypeId,
                 (int?)ContractStatusId,

@@ -47,6 +47,7 @@ namespace DH.Helpdesk.Services.Services
         IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId);
 
         List<Department> GetDepartmentsByIdsWithHolidays(int[] departmentsIds, int defaultCalendarId);
+        List<Department> GetDepartmentsByIds(int[] departmentsIds);
 
         IList<Department> GetChargedDepartments(int customerId);
         bool CheckIfOUsRequireDebit(int departmentId, int? ouId = null);
@@ -62,13 +63,9 @@ namespace DH.Helpdesk.Services.Services
     public class DepartmentService : IDepartmentService
     {
         private readonly IDepartmentRepository _departmentRepository;
-
         private readonly IUnitOfWork _unitOfWork;
-
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
         private readonly IOrganizationUnitRepository _ouRepository;
-
 
         public DepartmentService(
             IDepartmentRepository departmentRepository,
@@ -264,9 +261,15 @@ namespace DH.Helpdesk.Services.Services
             return _departmentRepository.GetActiveDepartmentsBy(customerId, regionId);
         }
 
+        public List<Department> GetDepartmentsByIds(int[] departmentsIds)
+        {
+            return _departmentRepository.GetDepartmentsByIds(departmentsIds, true).ToList();
+        }
+
         public List<Department> GetDepartmentsByIdsWithHolidays(int[] departmentsIds, int defaultCalendarId)
         {
             return _departmentRepository.GetDepartmentsByIds(departmentsIds,  true)
+                .Include(d => d.HolidayHeader.Holidays)
                 .Where(it => it.HolidayHeader != null && it.HolidayHeader.Id != defaultCalendarId).ToList();
         }
 

@@ -1,95 +1,113 @@
 ﻿@using DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
 @using DH.Helpdesk.Web.Infrastructure
 @model WorkstationSearchViewModel
-<script>
-    $(function () {
-        $('#region_dropdown').change(function () {
-
-            var selectedValue = $(this).val();
-            $.get('@Url.Action("SearchDepartmentsByRegionId")', { selected: selectedValue }, function (json) {
-                var sel = $('#department_dropdown');
-                sel.empty();
-                sel.prepend("<option></option>");
-                for (var i = 0; i < json.length; i++) {
-                    var e = json[i];
-                    $('<option>').text(e.Name).val(e.Value).appendTo(sel);
-                }
-            });
-        });
-    });
-</script>
 @using (Ajax.BeginForm("WorkstationsGrid", null, new AjaxOptions { UpdateTargetId = "grid_container" }, new { id = "search_form" }))
 {
     @Html.HiddenFor(m => m.Filter.SortField.Name, new { id = "sortFieldName" })
     @Html.HiddenFor(m => m.Filter.SortField.SortBy, new { id = "sortFieldBy" })
 
-<div class="expanded-search-content">    
+<div class="expanded-search-content" style="display: none">    
     <table class="tableform">
-        @if (Model.Settings.DepartmnetFieldSetting.IsShow)
+        @if (Model.Settings.DomainFieldSetting.IsShow)
         {
             <tr>
-                <td class="span3">@Translation.Get(Model.Settings.DepartmnetFieldSetting.Caption)</td>
+                <td class="span3">@Translation.GetCoreTextTranslation(Model.Settings.DomainFieldSetting.Caption)</td>
                 <td>
-                    @Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments, string.Empty, new {id = "department_dropdown"})
+                    @Html.DropDownListFor(m => m.Filter.DomainId, Model.Domains, string.Empty)
+                </td>
+            </tr>
+        }
+        @if (Model.Settings.RegionFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.GetCoreTextTranslation(Model.Settings.RegionFieldSetting.Caption)</td>
+                <td>
+                    @Html.DropDownListFor(m => m.Filter.RegionId, Model.Regions, string.Empty, new { id = "region_dropdown" })
+                </td>
+            </tr>
+        }
+        @if (Model.Settings.DepartmentFieldSetting.IsShow)
+        {
+            <tr>
+                <td class="span3">@Translation.GetCoreTextTranslation(Model.Settings.DepartmentFieldSetting.Caption)</td>
+                <td>
+                    @Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments, string.Empty, new { id = "department_dropdown" })
+                </td>
+            </tr>
+        }
+        @if (Model.Settings.UnitFieldSetting.IsShow)
+        {
+            <tr id="unit_row" >
+                <td class="span3">@Translation.GetCoreTextTranslation(Model.Settings.UnitFieldSetting.Caption)</td>
+                <td>
+                    @Html.DropDownListFor(m => m.Filter.UnitId, Model.Units, string.Empty, new { id = "unit_dropdown" })
                 </td>
             </tr>
         }
         @if (Model.Settings.ComputerTypeFieldSetting.IsShow)
         {
             <tr>
-                <td class="span3">@Translation.Get(Model.Settings.ComputerTypeFieldSetting.Caption)</td>
+                <td class="span3">@Translation.GetCoreTextTranslation(Model.Settings.ComputerTypeFieldSetting.Caption)</td>
                 <td>@Html.DropDownListFor(m => m.Filter.ComputerTypeId, Model.ComputerTypes, string.Empty)</td>
             </tr>
         }
         @if (Model.Settings.ContractStatusFieldSetting.IsShow)
         {
             <tr>
-                <td class="span3">@Translation.Get(Model.Settings.ContractStatusFieldSetting.Caption)</td>
+                <td class="span3">@Translation.GetCoreTextTranslation(Model.Settings.ContractStatusFieldSetting.Caption)</td>
                 <td>@Html.DropDownListFor(m => m.Filter.ContractStatusId, Model.ContractStatuses, string.Empty)</td>
             </tr>
         }
         @if (Model.Settings.ContractStartDateFieldSetting.IsShow)
         {
             <tr>
-                <td class="span3">@Translation.Get(Model.Settings.ContractStartDateFieldSetting.Caption)</td>
-                <td>@Html.EditorFor(m => m.Filter.ContractStartDate.DateFrom, "DatePicker", new {id = "contractStartDateFrom_datepicker"})
-                    -
-                    @Html.EditorFor(m => m.Filter.ContractStartDate.DateTo, "DatePicker", new {id = "contractStartDateTo_datepicker"})</td>
-            </tr>
-        }
+                <td class="span3">@Translation.GetCoreTextTranslation(Model.Settings.ContractStartDateFieldSetting.Caption)</td>
+                <td>
+                    @Html.EditorFor(m => m.Filter.ContractStartDate.DateFrom, "DatePicker", new { id = "contractStartDateFrom_datepicker" })
+                -
+                @Html.EditorFor(m => m.Filter.ContractStartDate.DateTo, "DatePicker", new { id = "contractStartDateTo_datepicker" })
+            </td>
+        </tr>
+    }
         @if (Model.Settings.ContractEndDateFieldSetting.IsShow)
         {
             <tr>
-                <td class="span3">@Translation.Get(Model.Settings.ContractEndDateFieldSetting.Caption)</td>
-                <td>@Html.EditorFor(m => m.Filter.ContractEndDate.DateFrom, "DatePicker", new {id = "contractEndDateFrom_datepicker"})
-                    -
-                    @Html.EditorFor(m => m.Filter.ContractEndDate.DateTo, "DatePicker", new {id = "contractEndDateTo_datepicker"})</td>
-            </tr>
-        }
+                <td class="span3">@Translation.GetCoreTextTranslation(Model.Settings.ContractEndDateFieldSetting.Caption)</td>
+                <td>
+                    @Html.EditorFor(m => m.Filter.ContractEndDate.DateFrom, "DatePicker", new { id = "contractEndDateFrom_datepicker" })
+                -
+                @Html.EditorFor(m => m.Filter.ContractEndDate.DateTo, "DatePicker", new { id = "contractEndDateTo_datepicker" })
+            </td>
+        </tr>
+    }
         @if (Model.Settings.ScanDateFieldSetting.IsShow)
         {
             <tr>
-                <td class="span3">@Translation.Get(Model.Settings.ScanDateFieldSetting.Caption)</td>
-                <td>@Html.EditorFor(m => m.Filter.ScanDate.DateFrom, "DatePicker", new {id = "scanDateFrom_datepicker"})
-                    -
-                    @Html.EditorFor(m => m.Filter.ScanDate.DateTo, "DatePicker", new {id = "scanDateTo_datepicker"})</td>
-            </tr>
-        }
+                <td class="span3">@Translation.GetCoreTextTranslation(Model.Settings.ScanDateFieldSetting.Caption)</td>
+                <td>
+                    @Html.EditorFor(m => m.Filter.ScanDate.DateFrom, "DatePicker", new { id = "scanDateFrom_datepicker" })
+                -
+                @Html.EditorFor(m => m.Filter.ScanDate.DateTo, "DatePicker", new { id = "scanDateTo_datepicker" })
+            </td>
+        </tr>
+    }
         @if (Model.Settings.ScrapDateFieldSetting.IsShow)
         {
             <tr>
-                <td class="span3">@Translation.Get(Model.Settings.ScrapDateFieldSetting.Caption)</td>
-                <td>@Html.EditorFor(m => m.Filter.ScrapDate.DateFrom, "DatePicker", new {id = "scrapDateFrom_datepicker"})
-                    -
-                    @Html.EditorFor(m => m.Filter.ScrapDate.DateTo, "DatePicker", new {id = "scrapDateTo_datepicker"})</td>
-            </tr>
-        }
+                <td class="span3">@Translation.GetCoreTextTranslation(Model.Settings.ScrapDateFieldSetting.Caption)</td>
+                <td>
+                    @Html.EditorFor(m => m.Filter.ScrapDate.DateFrom, "DatePicker", new { id = "scrapDateFrom_datepicker" })
+                -
+                @Html.EditorFor(m => m.Filter.ScrapDate.DateTo, "DatePicker", new { id = "scrapDateTo_datepicker" })
+            </td>
+        </tr>
+    }
         <tr>
             <td class="span3">
                 @Html.LabelFor(m => m.Filter.IsShowScrapped)
             </td>
             <td>
-                @Html.CheckBoxFor(m => m.Filter.IsShowScrapped, new {@class = "switchcheckbox"})
+                @Html.CheckBoxFor(m => m.Filter.IsShowScrapped, new { @class = "switchcheckbox" })
             </td>
         </tr>
     </table>
@@ -101,30 +119,99 @@
                 @Html.LabelFor(m => m.Filter.SearchFor)
             </td>
             <td>
-                @Html.TextBoxFor(m => m.Filter.SearchFor) <input type="submit" value="@Translation.Get("Sök")" class="btn" />&nbsp;<i class='icon-plus-sign search-expand-button' style="cursor: pointer"></i>
+                @Html.TextBoxFor(m => m.Filter.SearchFor) <input type="submit" value="@Translation.GetCoreTextTranslation("Sök")" class="btn" />&nbsp;<i class='icon-plus-sign search-expand-button' style="cursor: pointer"></i>
               
             </td>
         </tr>
     </table>
 </div>
 }
-<div id="grid_container">
+<div id="grid_container" class="inventory-overview">
     @Html.Action("WorkstationsGrid", "Workstation", new { filter = Model.Filter })
 </div>
 <script type="text/javascript">
 
     $(".expanded-search-content").hide();
-   
-    $(function () {
-        $(".search-expand-button").click(function () {
+
+    $(function() {
+
+        var ouRegionCtrl = $('#region_dropdown');
+        var departmentCtrl = $('#department_dropdown');
+        var unitCtrl = $('#unit_dropdown');
+        var unitRow = $('#unit_row');
+
+        ouRegionCtrl.on('change', function () {
+            var regionId = $(this).val();
+            $.get('@Url.Action("GetDepartments", "Ajax", new {area = ""})',
+                {
+                    'regionId': regionId,
+                    'administratorId': @SessionFacade.CurrentUser.Id,
+                    'departmentFilterFormat': 0
+                },
+                function (data) {
+
+                    var options = '<option value="">&nbsp;</option>';
+                    if (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            var item = data[i];
+
+                            options += "<option value='" + item.Value + "'>" + item.Name + "</option>";
+                        }
+                    }
+
+                    departmentCtrl.empty();
+                    departmentCtrl.append(options);
+                    departmentCtrl.trigger('change');
+
+                }, 'json').always(function () {
+
+            });
+        });
+        departmentCtrl.on('change',
+            function() {
+                var departmentId = $(this).val();
+                //if (departmentId > 0) {
+                    $.get('@Url.Action("GetUnits", "Ajax", new {area = ""})',
+                        {
+                            'departmentId': departmentId || '',
+                            'customerId': @SessionFacade.CurrentCustomer.Id
+                        },
+                        function (data) {
+
+                            var options = '<option value="">&nbsp;</option>';
+                            if (data && data.length) {
+                                for (var i = 0; i < data.length; i++) {
+                                    var item = data[i];
+
+                                    options += "<option value='" + item.id + "'>" + item.name + "</option>";
+                                }
+                                unitCtrl.empty();
+                                unitCtrl.append(options);
+                                //unitRow.show();
+                            } else {
+                                //unitRow.hide();
+                                unitCtrl.val('');
+                                unitCtrl.empty();
+                            }
+                        },
+                        'json').always(function() {
+
+                    });
+                //} else {
+                //    //unitRow.hide();
+                //    unitCtrl.val('');
+                //    unitCtrl.empty();
+                //}
+            });
+
+        $(".search-expand-button").click(function() {
             //event.stopPropagation();
             var $target = $(event.target);
             $(".expanded-search-content").toggle();
 
             if ($target.closest("i").hasClass('icon-minus-sign')) {
                 $target.closest("i").removeClass('icon-minus-sign').addClass('icon-plus-sign');
-            }
-            else {
+            } else {
                 $target.closest("i").removeClass('icon-plus-sign').addClass('icon-minus-sign');
             }
         });

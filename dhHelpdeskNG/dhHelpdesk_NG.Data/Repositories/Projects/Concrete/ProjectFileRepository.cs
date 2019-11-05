@@ -1,17 +1,20 @@
+using DH.Helpdesk.Common.Enums;
+
 namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
 {
-    using System.Collections.Generic;
-    using System.Linq;
+	using System.Collections.Generic;
+	using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Projects.Input;
-    using DH.Helpdesk.BusinessData.Models.Projects.Output;
-    using DH.Helpdesk.Dal.Dal;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.Mappers;
-    using DH.Helpdesk.Domain.Projects;
+	using DH.Helpdesk.BusinessData.Models.Projects.Input;
+	using DH.Helpdesk.BusinessData.Models.Projects.Output;
+	using DH.Helpdesk.Dal.Dal;
+	using DH.Helpdesk.Dal.Enums;
+	using DH.Helpdesk.Dal.Infrastructure;
+	using DH.Helpdesk.Dal.Mappers;
+	using DH.Helpdesk.Domain.Projects;
+	using BusinessData.Models;
 
-    public class ProjectFileRepository : Repository, IProjectFileRepository
+	public class ProjectFileRepository : Repository, IProjectFileRepository
     {
         private readonly INewBusinessModelToEntityMapper<NewProjectFile, ProjectFile> newModelMapper;
 
@@ -56,7 +59,7 @@ namespace DH.Helpdesk.Dal.Repositories.Projects.Concrete
                     .ToList();
         }
 
-        public byte[] GetFileContent(int projectId, string basePath, string fileName)
+        public FileContentModel GetFileContent(int projectId, string basePath, string fileName)
         {
             return this.filesStorage.GetFileContent(ModuleName.Project, projectId, basePath, fileName);
         }

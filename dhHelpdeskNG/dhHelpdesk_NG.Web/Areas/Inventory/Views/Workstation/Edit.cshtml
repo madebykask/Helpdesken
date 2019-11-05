@@ -76,7 +76,7 @@
                 {
                     <tr>
                         <td class="span3">
-                            <label>@Translation.Get(Model.ComputerViewModel.CreatedDate.Caption)</label>
+                            <label>@Translation.GetCoreTextTranslation(Model.ComputerViewModel.CreatedDate.Caption)</label>
                         </td>
                         <td class="span9">
                             @Html.DisplayFor(m => m.ComputerViewModel.CreatedDate.Value, "Date")
@@ -87,7 +87,7 @@
                 {
                     <tr>
                         <td class="span3">
-                            <label>@Translation.Get(Model.ComputerViewModel.ChangedDate.Caption)</label>
+                            <label>@Translation.GetCoreTextTranslation(Model.ComputerViewModel.ChangedDate.Caption)</label>
                         </td>
                         <td class="span9">
                             @Html.DisplayFor(m => m.ComputerViewModel.ChangedDate.Value, "Date")
@@ -113,28 +113,36 @@
 
 @section Scripts
 {
-@if (documentModel.Show)
-{
-    @Html.Partial("_InventoryFiles")
-    @Scripts.Render(BundleConfig.ScriptNames.InventoryFiles)
-    <script type="text/javascript">
+    @if (documentModel.Show)
+    {
+        @Html.Partial("_InventoryFiles")
+        @Scripts.Render(BundleConfig.ScriptNames.InventoryFiles)
+        <script type="text/javascript">
 
-        var inventoryFilesOptions = {
-            id: @Model.Id.ToString(),
-            attachedFileName: '@(documentModel.Value)',
-            currentLanguageId: '@Model.CurrentLanguageId',
-            documentFileKey: '', //uses id instead
-            uploadDocumentFileUrl: '@Url.Action("UploadFile", "Workstation")',
-            fileDownloadUrlMask: '@Url.Action("DownloadFile", "Workstation")',
-            fileDeleteUrl: '@Url.Action("DeleteFile", "Workstation")'
-        };
+            var inventoryFilesOptions = {
+                id: @Model.Id.ToString(),
+                attachedFileName: '@(documentModel.Value)',
+                currentLanguageId: '@Model.CurrentLanguageId',
+                documentFileKey: '', //uses id instead
+                uploadDocumentFileUrl: '@Url.Action("UploadFile", "Workstation")',
+                fileDownloadUrlMask: '@Url.Action("DownloadFile", "Workstation")',
+                fileDeleteUrl: '@Url.Action("DeleteFile", "Workstation")'
+            };
 
-        $(function(jQuery) {
-            // create instance and init
-            window.inventoryFiles = new InventoryFiles(jQuery);
-            window.inventoryFiles.init(inventoryFilesOptions);
-        });
+            $(function(jQuery) {
+                // create instance and init
+                window.inventoryFiles = new InventoryFiles(jQuery);
+                window.inventoryFiles.init(inventoryFilesOptions);
 
-    </script>
-}
+                window.workstationEdit = new WorkstationEdit($);
+                window.workstationEdit.init({
+                    userId: @SessionFacade.CurrentUser.Id,
+                    customerId: @SessionFacade.CurrentCustomer.Id,
+                    getUnitsUrl: '@Url.Action("GetUnits", "Ajax", new {area = ""})',
+                    getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})'
+                });
+            });
+
+        </script>
+    }
 }

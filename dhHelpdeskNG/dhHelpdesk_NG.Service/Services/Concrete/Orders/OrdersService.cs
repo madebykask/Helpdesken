@@ -89,7 +89,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
         private readonly IWorkingGroupService _workingGroupService;
 
         private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
-
+        private readonly IOrderFieldSettingsRepository _orderFieldSettingsRepository;
 
         public OrdersService(
                 IUnitOfWorkFactory unitOfWorkFactory, 
@@ -118,7 +118,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 IPriorityService priorityService,
                 IMasterDataService masterDataService,
                 IWorkingGroupService workingGroupService,
-                IRegistrationSourceCustomerService registrationSourceCustomerService)
+                IRegistrationSourceCustomerService registrationSourceCustomerService, IOrderFieldSettingsRepository orderFieldSettingsRepository)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _orderFieldSettingsService = orderFieldSettingsService;
@@ -147,6 +147,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             _masterDataService = masterDataService;
             _workingGroupService = workingGroupService;
             _registrationSourceCustomerService = registrationSourceCustomerService;
+            _orderFieldSettingsRepository = orderFieldSettingsRepository;
         }
 
         public OrdersFilterData GetOrdersFilterData(int customerId, int userId, out int[] selectedStatuses)
@@ -291,32 +292,19 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             }
         }
 
-        private List<OrderType> FilterOrderTypeByUser(List<OrderType> orderTypes, int userId)
+        public Order GetOrderByCase(int caseid)
         {
-            return orderTypes
-                .Select(orderType => GetParentOrChildAssignedToUser(userId, orderType))
-                .Where(type => type != null).ToList();
+            return this._orderRepository.GetOrder(caseid);
         }
 
-        private static OrderType GetParentOrChildAssignedToUser(int userId, OrderType orderType)
+        public Order GetOrder(int orderId)
         {
-            for (var i = 0; i < 100000; i++)
-            {
-                if (orderType != null)
-                {
-                    if (orderType.Users.Any(u => u.Id == userId))
-                    {
-                        return orderType;
-                    }
-                    if (orderType.Parent_OrderType_Id.HasValue)
-                    {
-                        orderType = orderType.ParentOrderType;
-                        continue;
-                    }
-                }
-                return null;
-            }
-            return null;
+            return this._orderRepository.GetById(orderId);
+        }
+
+        public IList<OrderFieldSettings> GetOrderFieldSettingsForMailTemplate(int customerId, int? orderTypeId)
+        {
+            return this._orderFieldSettingsRepository.GetOrderFieldSettingsForMailTemplate(customerId, orderTypeId).ToList();
         }
 
         public NewOrderEditData GetNewOrderEditData(int customerId, int orderTypeId, int? lowestchildordertypeid, bool useExternal)
@@ -772,10 +760,10 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             var administrators = administratorsRep.GetAll().GetByCustomer(customerId).GetActiveUsers(customerId).GetPerformers();
             var domains = domainsRep.GetAll().GetByCustomer(customerId);
             var departments = departmentsRep.GetAll().GetActiveByCustomer(customerId);
-            var units = ousRep.GetAll();
+            var units = ousRep.GetAll().Where(o => o.Department.Customer_Id == customerId && o.IsActive == 1 && o.Show == 1);
             var properties = propertiesRep.GetAll().GetByOrderType(orderTypeId);
             var deliveryDepartments = departmentsRep.GetAll().GetActiveByCustomer(customerId);
-            var deliveryOuIds = ousRep.GetAll();
+            var deliveryOuIds = ousRep.GetAll().Where(o => o.Department.Customer_Id == customerId && o.IsActive == 1 && o.Show == 1); ;
             var administratorsWithEmails = administratorsRep.GetAll().GetAdministratorsWithEmails(customerId);
             var orderType = orderTypeId.HasValue ? orderTypeRep.GetAll().GetById(orderTypeId.Value) : null;
             var orderTypeName = orderType != null ? orderType.MapToName() : null;
@@ -883,6 +871,34 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                                     allPrograms,
                                     orderTypeDesc,
                                     orderTypeDoc);
+        }
+
+        private List<OrderType> FilterOrderTypeByUser(List<OrderType> orderTypes, int userId)
+        {
+            return orderTypes
+                .Select(orderType => GetParentOrChildAssignedToUser(userId, orderType))
+                .Where(type => type != null).ToList();
+        }
+
+        private static OrderType GetParentOrChildAssignedToUser(int userId, OrderType orderType)
+        {
+            for (var i = 0; i < 100000; i++)
+            {
+                if (orderType != null)
+                {
+                    if (orderType.Users.Any(u => u.Id == userId))
+                    {
+                        return orderType;
+                    }
+                    if (orderType.Parent_OrderType_Id.HasValue)
+                    {
+                        orderType = orderType.ParentOrderType;
+                        continue;
+                    }
+                }
+                return null;
+            }
+            return null;
         }
 
         private FullOrderOverview[] Sort(FullOrderOverview[] items, SortField sort)

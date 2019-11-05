@@ -10,6 +10,7 @@ using DH.Helpdesk.BusinessData.Models.MailTemplates;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.Logs;
+using DH.Helpdesk.Common.Extensions;
 using DH.Helpdesk.Common.Extensions.Lists;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Domain;
@@ -1028,7 +1029,7 @@ namespace DH.Helpdesk.Services.Services
                         {
                             FileName = x.FileName,
                             FilePath = _filesStorage.ComposeFilePath(ModuleName.Cases, x.ReferenceId, basePath, x.FileName),
-                            IsInternal = false
+                            IsInternal = x.LogType == LogFileType.Internal
                         }).ToList();
 
                 files =
@@ -1036,7 +1037,8 @@ namespace DH.Helpdesk.Services.Services
                         .Select(f => new MailFile()
                         {
                             FileName = f.FileName,
-                            FilePath = _filesStorage.ComposeFilePath(f.LogType == LogFileType.Internal ? ModuleName.LogInternal : ModuleName.Log, f.ReferenceId, basePath, f.FileName),
+                            FilePath = _filesStorage.ComposeFilePath((f.ParentLogType ?? f.LogType).GetFolderPrefix(),
+                                f.ReferenceId, basePath, f.FileName),
                             IsInternal = f.LogType == LogFileType.Internal
                         }).ToList();
 

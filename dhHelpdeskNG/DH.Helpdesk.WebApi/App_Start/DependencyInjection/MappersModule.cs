@@ -8,6 +8,7 @@ using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.Condition;
 using DH.Helpdesk.BusinessData.Models.Customer;
 using DH.Helpdesk.BusinessData.Models.Customer.Input;
+using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.BusinessData.Models.Invoice;
 using DH.Helpdesk.BusinessData.Models.Logs.Output;
 using DH.Helpdesk.BusinessData.Models.Problem.Input;
@@ -26,6 +27,8 @@ using DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity;
 using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
 using DH.Helpdesk.Dal.Mappers.Condition;
 using DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel;
+using DH.Helpdesk.Dal.Mappers.FileViewLog.BusinessModelToEntity;
+using DH.Helpdesk.Dal.Mappers.FileViewLog.EntityToBusinessModel;
 using DH.Helpdesk.Dal.Mappers.Invoice.BusinessModelToEntity;
 using DH.Helpdesk.Dal.Mappers.Invoice.EntityToBusinessModel;
 using DH.Helpdesk.Dal.Mappers.Logs;
@@ -301,6 +304,14 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<ProblemLogEntityToNewProblemLogMapper>()
                 .As<IEntityToBusinessModelMapper<ProblemLog, NewProblemLogDto>>()
                 .SingleInstance();
-        }
+
+			builder.RegisterType<FileViewLogToEntityMapper>()
+				.As<IBusinessModelToEntityMapper<FileViewLogModel, FileViewLogEntity>>()
+				.SingleInstance();
+
+			builder.RegisterType<FileViewLogToBusinessModelMapper>()
+				.As<IEntityToBusinessModelMapper<FileViewLogEntity, FileViewLogModel>>()
+				.SingleInstance();
+		}
     }
 }

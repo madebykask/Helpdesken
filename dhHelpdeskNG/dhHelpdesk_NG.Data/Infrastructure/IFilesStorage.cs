@@ -1,12 +1,14 @@
-﻿namespace DH.Helpdesk.Dal.Infrastructure
+﻿using DH.Helpdesk.BusinessData.Models;
+
+namespace DH.Helpdesk.Dal.Infrastructure
 {
     public interface IFilesStorage
     {
-        void SaveFile(byte[] content, string basePath, string fileName, string topic, int entityId);
+        string SaveFile(byte[] content, string basePath, string fileName, string topic, int entityId);
 
         void DeleteFile(string topic, int entityId, string basePath, string fileName);
 
-        byte[] GetFileContent(string topic, int entityId, string basePath, string fileName);
+        FileContentModel GetFileContent(string topic, int entityId, string basePath, string fileName);
 
         string ComposeFilePath(string topic, int entityId, string basePath, string fileName);
 

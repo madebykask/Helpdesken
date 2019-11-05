@@ -57,7 +57,7 @@
                     if (Model.DynamicCase.ViewMode == 0)
                     {
                         <li>
-                            <a href="#dh-form-area" id="loadContainer" class="eform" data-state="">@(Translation.Get(Model.DynamicCase.FormName))</a>
+                            <a href="#dh-form-area" id="loadContainer" class="eform" data-state="">@(Translation.GetCoreTextTranslation(Model.DynamicCase.FormName))</a>
                         </li>
 
                     }
@@ -212,8 +212,6 @@
                                     <strong>@Model.ParentCaseInfo.Administrator</strong>
                                 }
                                 <br />
-                                @*@Translation.Get("Independent child")&nbsp;<input id="IndependentChild" name="IndependentChild" type="checkbox" @(Model.IndependentChild ? "checked" : "") value="true" />
-                                    @Html.HiddenFor(model => Model.IndependentChild)*@
                                 @Translation.GetCoreTextTranslation("Fristående underärende")&nbsp;
                                 @Html.CheckBoxFor(model => Model.IndependentChild)
                             </div>
@@ -267,7 +265,7 @@
                                                     <a href="#"
                                                        id="AddNotifier"
                                                        style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.AddUserBtn, CaseSolutionFields.AddUserBtn)"
-                                                       class="btn @Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
+                                                       class="btn @Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">@Translation.GetCoreTextTranslation("Lägg till")</a>
                                                     @if (Model.CanGetRelatedCases)
                                                     {
                                                         <a href="#" data-field="relatedCases" style="display: none;" title="@Translation.GetCoreTextTranslation("Relaterade ärenden")" class="btn"><i class="icon-list"></i></a>
@@ -344,7 +342,7 @@
                                                         {
                                                             @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled" })
                                                         }
-                                                        @Translation.Get("Skicka mail till anmälaren", SessionFacade.CurrentLanguageId)
+                                                        @Translation.GetCoreTextTranslation("Skicka mail till anmälaren")
                                                         @*</label>*@
 
                                                         @if (Model.Languages != null && Model.Languages.Count() > 1 && Model.case_.Id == 0)
@@ -352,7 +350,7 @@
                                                             <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
                                                                 @foreach (var e in Model.Languages)
                                                                 {
-                                                                    <option value="@e.Id" @e.Id.IdIsSelected(SessionFacade.CurrentLanguageId.ToString())>@Translation.Get(e.Name, SessionFacade.CurrentLanguageId)</option>
+                                                                    <option value="@e.Id" @e.Id.IdIsSelected(SessionFacade.CurrentLanguageId.ToString())>@Translation.GetCoreTextTranslation(e.Name)</option>
                                                                 }
                                                             </select>
                                                         }
@@ -363,7 +361,7 @@
                                                                 <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
                                                                     @foreach (var e in Model.Languages)
                                                                     {
-                                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString())>@Translation.Get(e.Name, SessionFacade.CurrentLanguageId)</option>
+                                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString())>@Translation.GetCoreTextTranslation(e.Name)</option>
                                                                     }
                                                                 </select>
                                                             }
@@ -532,7 +530,7 @@
                                             @*                                            Save user info checkbox*@
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation, CaseSolutionFields.UpdateNotifierInformation)">
                                                 <td class="span3">
-                                                    @Translation.Get("Spara användaruppgifter", SessionFacade.CurrentLanguageId)
+                                                    @Translation.GetCoreTextTranslation("Spara användaruppgifter")
                                                 </td>
                                                 <td class="span4">
                                                     @if (Model.IsReadOnly(CaseSolutionFields.UpdateNotifierInformation))
@@ -965,7 +963,7 @@
                                             </tr>
                                             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.RegTime.ToString())">
                                                 <td>
-                                                    @Translation.Get("Registreringsdatum")
+                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.RegTime, "Registreringsdatum")
                                                 </td>
                                                 <td colspan="2">
                                                     @Html.DisplayFor(m => m.RegTime, "DateAndTime")
@@ -973,7 +971,7 @@
                                             </tr>
                                             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ChangeTime.ToString())">
                                                 <td>
-                                                    @Translation.Get("Ändringsdatum")
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ChangeTime, "Ändringsdatum")
                                                 </td>
                                                 <td colspan="2">
                                                     @Html.DisplayFor(m => m.ChangeTime)
@@ -1040,7 +1038,7 @@
                                                         <span class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="#">@Translation.Get("--")</a></li>
+                                                        <li><a href="#">@Translation.GetCoreTextTranslation("--")</a></li>
                                                         @Html.CaseTypeDropdownButtonString(Model.caseTypes)
                                                     </ul>
 
@@ -1062,7 +1060,7 @@
                                                         <span class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu subddMenu parentddMenu" style="z-index:99999999999;">
-                                                        <li><a href="#">@Translation.Get("--")</a></li>
+                                                        <li><a href="#">@Translation.GetCoreTextTranslation("--")</a></li>
                                                         @Html.ProductAreaDropdownButtonString(Model.productAreas, true, Model.case_.ProductArea_Id)
                                                     </ul>
                                                     @Html.HiddenFor(model => model.case_.ProductArea_Id, new { @class = "product-area-id" })
@@ -1200,7 +1198,7 @@
                                             <td>
                                                 @if (Model.countries != null)
                                                 {
-                                                    @Translation.Get("Land")<span>/</span>
+                                                    @Translation.GetCoreTextTranslation("Land")<span>/</span>
                                                 }
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Supplier_Id, "Leverantör")
                                             </td>
@@ -1419,7 +1417,7 @@
                                                 <span id="caseDescriptionPreview"
                                                       rel="tooltip"
                                                       class="icon-circle-arrow-up cursor-pointer"
-                                                      title="@Translation.Get("Förhandsgranska")"
+                                                      title="@Translation.GetCoreTextTranslation("Förhandsgranska")"
                                                       style="@(string.IsNullOrEmpty(Model.case_.Description) ? "visibility: hidden" : "")"></span>
 
                                             </td>
@@ -1479,7 +1477,7 @@
                                                     <input type="checkbox" id="case__SMS" name="case_.SMS" @(Model.case_.SMS == 1 ? "checked=checked" : "") value="1" disabled="disabled" />
                                                 }
                                                 <input type="hidden" name="case_.SMS" value="0" />
-                                                <span class="lbl">@Translation.Get("Skicka SMS när ärendet avslutas", SessionFacade.CurrentLanguageId).</span>
+                                                <span class="lbl">@Translation.GetCoreTextTranslation("Skicka SMS när ärendet avslutas").</span>
                                             </td>
                                         </tr>
                                         <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.AgreedDate, CaseSolutionFields.AgreedDate)">
@@ -1522,15 +1520,15 @@
                                                         @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost))
                                                         {
                                                             <td>
-                                                                @Translation.Get("Artikelkostnad", SessionFacade.CurrentLanguageId)<br />
+                                                                @Translation.GetCoreTextTranslation("Artikelkostnad")<br />
                                                                 @Html.TextBoxFor(model => model.case_.Cost, new { maxlength = "7", Class = "inputw50" })
                                                             </td>
                                                             <td>
-                                                                @Translation.Get("Övrig kostnad", SessionFacade.CurrentLanguageId)<br />
+                                                                @Translation.GetCoreTextTranslation("Övrig kostnad")<br />
                                                                 @Html.TextBoxFor(model => model.case_.OtherCost, new { maxlength = "7", Class = "inputw50" })
                                                             </td>
                                                             <td>
-                                                                @Translation.Get("Valuta", SessionFacade.CurrentLanguageId)<br />
+                                                                @Translation.GetCoreTextTranslation("Valuta")<br />
                                                                 <select id="case__Currency" name="case_.Currency" class="inputw100">
                                                                     <option value="">&nbsp;</option>
                                                                     @if (Model.currencies != null)
@@ -1546,15 +1544,15 @@
                                                         else
                                                         {
                                                             <td>
-                                                                @Translation.Get("Artikelkostnad", SessionFacade.CurrentLanguageId)<br />
+                                                                @Translation.GetCoreTextTranslation("Artikelkostnad")<br />
                                                                 @Html.TextBoxFor(model => model.case_.Cost, new { maxlength = "7", Class = "inputw50", @readonly = true })
                                                             </td>
                                                             <td>
-                                                                @Translation.Get("Övrig kostnad", SessionFacade.CurrentLanguageId)<br />
+                                                                @Translation.GetCoreTextTranslation("Övrig kostnad")<br />
                                                                 @Html.TextBoxFor(model => model.case_.OtherCost, new { maxlength = "7", Class = "inputw50", @readonly = true })
                                                             </td>
                                                             <td>
-                                                                @Translation.Get("Valuta", SessionFacade.CurrentLanguageId)<br />
+                                                                @Translation.GetCoreTextTranslation("Valuta")<br />
                                                                 @Html.TextBoxFor(m => m.case_.Currency, new { @readonly = true, Class = "inputw50" })
                                                                 @Html.HiddenFor(x => x.case_.Currency)
                                                             </td>
@@ -1573,8 +1571,8 @@
                                                 <td colspan="2">
                                                     @if (Model.EditMode == AccessMode.FullAccess)
                                                     {
-                                                        <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
-                                                        <a href="#upload_clipboard_file_popup" role="button" class="btn uploadCaseFileFromClipboardBtn" data-src="case">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
+                                                        <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.GetCoreTextTranslation("Lägg till")</a>
+                                                        <a href="#upload_clipboard_file_popup" role="button" class="btn uploadCaseFileFromClipboardBtn" data-src="case">@Translation.GetCoreTextTranslation("Lägg till från Urklipp")</a>
                                                     }
                                                     <div id="divCaseFiles">
                                                         @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary(ViewData) { { "CaseInactive", Model.case_.FinishingDate.HasValue } })
@@ -1863,7 +1861,7 @@
                                                                 }
                                                             </select>
                                                             <div id="divProblemResponsible" style="display: none">
-                                                                @Translation.Get("Ansvarig", SessionFacade.CurrentLanguageId)
+                                                                @Translation.GetCoreTextTranslation("Ansvarig")
                                                             </div>
                                                         }
                                                         else
@@ -1933,7 +1931,7 @@
                                             {
                                                 <tr class="displaytr" style="@Model.GetFieldStyle(CaseSolutionFields.Change)">
                                                     <td>
-                                                        @Translation.Get("Ändring", SessionFacade.CurrentLanguageId)
+                                                        @Translation.GetCoreTextTranslation("Ändring")
                                                     </td>
                                                     <td>
                                                         @if (!Model.IsReadOnly(CaseSolutionFields.Change))
@@ -2073,10 +2071,10 @@
                             {
                                 <div class="displaytr" class="container">
                                     <ul class="nav nav-tabs" id="logandhistorytabs">
-                                        <li class="active"><a href="#logtab">@Translation.Get("Ärendelogg", SessionFacade.CurrentLanguageId)</a></li>
+                                        <li class="active"><a href="#logtab">@Translation.GetCoreTextTranslation("Ärendelogg")</a></li>
                                         @if (Model.CaseInternalLogAccess)
                                         {
-                                            <li><a href="#historytab">@Translation.Get("Historik", SessionFacade.CurrentLanguageId)</a></li>
+                                            <li><a href="#historytab">@Translation.GetCoreTextTranslation("Historik")</a></li>
                                         }
                                     </ul>
                                     <div class="tab-content">
@@ -2110,7 +2108,7 @@
                                             </thead>
                                             <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)">
                                                 <td>
-                                                    @Translation.Get("Avslutsorsak", SessionFacade.CurrentLanguageId)
+                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ClosingReason, "Avslutsorsak")
                                                 </td>
                                                 <td>
                                                     @Model.FinishingCause
@@ -2160,8 +2158,8 @@
                                             <table class="tableform" id="externalInvoices">
                                                 <thead>
                                                     <tr>
-                                                        <th class="span3">@Translation.Get("Fakturanummer", SessionFacade.CurrentCaseLanguageId)</th>
-                                                        <th class="span1">@Translation.Get("Fakturapris", SessionFacade.CurrentCaseLanguageId)</th>
+                                                        <th class="span3">@Translation.GetCoreTextTranslation("Fakturanummer")</th>
+                                                        <th class="span1">@Translation.GetCoreTextTranslation("Fakturapris")</th>
                                                         <th class="span8"></th>
                                                     </tr>
                                                 </thead>
@@ -2316,8 +2314,8 @@
                                             <td colspan="3" class="span3">
                                                 @if (Model.EditMode == AccessMode.FullAccess)
                                                 {
-                                                    <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
-                                                    <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="case">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
+                                                    <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.GetCoreTextTranslation("Lägg till")</a>
+                                                    <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="case">@Translation.GetCoreTextTranslation("Lägg till från Urklipp")</a>
                                                 }
                                                 <div id="divCaseFiles" style="margin-top:10px;">
                                                     @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary { { "CaseInactive", Model.case_.FinishingDate.HasValue } })
@@ -2348,11 +2346,11 @@
         <div class="modal-dialog">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <p class="alert alert-info infop">@Translation.Get("Det finns information som kan bli ändrad. Vill du skriva över?")</p>
+                <p class="alert alert-info infop">@Translation.GetCoreTextTranslation("Det finns information som kan bli ändrad. Vill du skriva över?")</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-ok">@Translation.Get("Ja")</button>
-                <button type="button" class="btn btn-cancel">@Translation.Get("Nej")</button>
+                <button type="button" class="btn btn-ok">@Translation.GetCoreTextTranslation("Ja")</button>
+                <button type="button" class="btn btn-cancel">@Translation.GetCoreTextTranslation("Nej")</button>
             </div>
         </div>
     </div>

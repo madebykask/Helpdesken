@@ -25,5 +25,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public IList<int> CaseTypes { get; set; }
         public bool FetchInfoAboutParentChild { get; set; }
 
-    }
+		public bool HasAccessToInternalLogNotes { get; set; }
+
+	}
 }

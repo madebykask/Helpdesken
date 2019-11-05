@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var search = userId.ToLower();
 
-            var anonymus = this.DbSet.Where(x => x.Customer_Id == customerId && x.UserId.ToLower().Contains(search));
+            var anonymus = this.DbSet.AsNoTracking().Where(x => x.Customer_Id == customerId && x.UserId.ToLower().Contains(search));
 
             var models = GetConnectedToComputerOverviews(anonymus);
 
@@ -33,7 +33,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
             // todo need to replace with *
             var ids = this.DbContext.ComputerHistories.Where(x => x.Computer_Id == computerId).Select(x => x.UserId).ToList();
-            var anonymus = this.DbSet.Where(x => ids.Contains(x.UserId));
+            var anonymus = this.DbSet.AsNoTracking().Where(x => ids.Contains(x.UserId));
 
             var models = GetConnectedToComputerOverviews(anonymus);
 
@@ -90,6 +90,7 @@ namespace DH.Helpdesk.Dal.Repositories
                             x.Email,
                             x.Phone,
                             x.Phone2,
+                            RegionName = x.Department.Region.Name,
                             x.Department.DepartmentName,
                             UnitName = x.OU.Name
                         }).ToList();
@@ -105,6 +106,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.Email,
                         x.Phone,
                         x.Phone2,
+                        x.RegionName,
                         x.DepartmentName,
                         x.UnitName)).ToList();
             return models;

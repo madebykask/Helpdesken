@@ -70,6 +70,16 @@
                 .HasForeignKey(x => x.OU_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.Region)
+                .WithMany()
+                .HasForeignKey(x => x.Region_Id)
+                .WillCascadeOnDelete(false);
+
+            this.HasOptional(x => x.ContractStatus)
+                .WithMany()
+                .HasForeignKey(x => x.ContractStatus_Id)
+                .WillCascadeOnDelete(false);
+
             this.Property(x => x.ComputerGUID).IsRequired().HasMaxLength(100);
             this.Property(x => x.ComputerModelName).HasColumnName("ComputerModel").IsRequired().HasMaxLength(50);
             this.Property(x => x.ComputerName).IsRequired().HasMaxLength(60);
@@ -108,7 +118,7 @@
             this.Property(x => x.Info).IsOptional().HasMaxLength(1000);
             this.Property(x => x.LoggedUser).IsRequired().HasMaxLength(255);
 
-            this.Property(x => x.Status).IsRequired();
+            this.Property(x => x.Status).IsOptional();
             this.Property(x => x.Stolen).IsRequired();
             this.Property(x => x.ReplacedWithComputerName).IsRequired().HasMaxLength(20);
             this.Property(x => x.SendBack).IsRequired();
@@ -123,6 +133,11 @@
 
             this.Property(x => x.RegUser_Id).IsOptional();
             this.Property(x => x.ChangedByUser_Id).IsOptional();
+
+            this.Property(x => x.Domain_Id).IsOptional();
+            this.Property(x => x.Department_Id).IsOptional();
+            this.Property(x => x.OU_Id).IsOptional();
+            this.Property(x => x.Region_Id).IsOptional();
 
             this.Property(x => x.CreatedDate).IsRequired();
             this.Property(x => x.ChangedDate).IsRequired();

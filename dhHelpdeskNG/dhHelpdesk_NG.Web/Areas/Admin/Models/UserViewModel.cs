@@ -165,7 +165,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         //public string CaseStateSecondaryColor { get; set; }
         public string[] MenuSetting { get; set; }
 
-        public int CopyUserid { get; set; }
+        public int CopyUserId { get; set; }
         public string SelectedTimeZone { get; set; }
 
         public int[] AAsSelected { get; set; }

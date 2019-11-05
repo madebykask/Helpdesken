@@ -44,19 +44,25 @@
             <p>
                 @if (l.CaseId.HasValue)
                 {
-                    <a target="_blank" class="isExisted" href="@BuildCaseFileLinkVD(l.FileName)"><i class="icon- attachedFile"></i>@l.FileName</a>
+                    <a target="_blank" class="isExisted" 
+                       onclick="window.dhHelpdesk.logFileAccess(@l.CaseId, '@l.FileName', @((int)CaseFileType.CaseFile))" 
+                       href="@BuildCaseFileLinkVD(l.FileName)"><i class="icon- attachedFile"></i>@l.FileName</a>
                 }
                 else
                 {
                     if (l.LogId.HasValue)
                     {
-                        <a target="_blank" class="isExisted" href="@BuildLogFileLinkVD(l.LogId.Value, l.FileName, l.LogType)"><i class="icon- attachedFile"></i> @l.FileName</a>
+                        <a target="_blank" class="isExisted"
+                           onclick="window.dhHelpdesk.logFileAccess(@currentLog.CaseId, '@l.FileName', @(l.LogType == LogFileType.Internal ? (int)CaseFileType.LogInternal : (int)CaseFileType.LogExternal), @l.LogId.Value)"
+                           href="@BuildLogFileLinkVD(l.LogId.Value, l.FileName, l.ParentLogType ?? l.LogType)"><i class="icon- attachedFile"></i> @l.FileName</a>
                     }
                     else
                     {
                         if (Model.CaseFiles.VirtualDirectory)
                         {
-                            <a target="_blank" class="isExisted" href="@BuildLogFileLinkVD(currentLog.Id, l.FileName, l.LogType)"
+                            <a target="_blank" class="isExisted" 
+                               onclick="window.dhHelpdesk.logFileAccess(@currentLog.CaseId, '@l.FileName', @(l.LogType == LogFileType.Internal ? (int)CaseFileType.LogInternal : (int)CaseFileType.LogExternal), @currentLog.Id)"
+                               href="@BuildLogFileLinkVD(currentLog.Id, l.FileName, l.LogType)"
                                 data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(l))"><i class="@(GetFileIcon(l))"></i> @l.FileName</a>
                         }
                         else

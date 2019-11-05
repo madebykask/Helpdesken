@@ -9,10 +9,10 @@ namespace DH.Helpdesk.TaskScheduler.Dto
 {
     internal class CompuerUsersFieldSetting
     {
-        public CompuerUsersFieldSetting()
-        {
+			public CompuerUsersFieldSetting()
+			{
 
-        }
+			}
             public int Id { get; set; }
 
             public int Customer_Id { get; set; }           

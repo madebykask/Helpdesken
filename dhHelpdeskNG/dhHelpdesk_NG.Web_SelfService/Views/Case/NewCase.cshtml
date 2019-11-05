@@ -31,13 +31,13 @@
     window.caseTypeRelatedFields = @Html.Raw(jsSerializer.Serialize(Model.CaseTypeRelatedFields));
 
     window.appParameters = {
-        uploadCaseFileUrl: '@Url.Action("NewCaseUploadFile")',
+        uploadCaseFileUrl: '@Url.Action("NewCaseUploadFile", "CaseFiles")',
         caseFileKey: '@Model.CaseFileKey',
-        newCaseFilesUrl: '@Url.Action("NewCaseFiles")',
+        newCaseFilesUrl: '@Url.Action("NewCaseFiles", "CaseFiles")',
         fileAlreadyExistsMsg: '@Html.Raw(Translation.Get("File already exists"))',
-        downloadCaseFileUrl: '@Url.Action("DownloadNewCaseFile")',
+        downloadCaseFileUrl: '@Url.Action("DownloadNewCaseFile", "CaseFiles")',
         downloadCaseFileParamUrl: '@(!string.IsNullOrEmpty(Model.CaseFileKey) ? "id=" + Model.CaseFileKey + "&" : string.Empty)',
-        deleteCaseFileUrl: '@Url.Action("DeleteNewCaseFile")',
+        deleteCaseFileUrl: '@Url.Action("DeleteNewCaseFile", "CaseFiles")',
         searchUserUrl: '@Url.Content("~/Case/SearchUser")',
         seachComputerUrl: '@Url.Content("~/Case/SearchComputer")',
         changeSystemUrl: '@Url.Content("~/Case/ChangeSystem")',

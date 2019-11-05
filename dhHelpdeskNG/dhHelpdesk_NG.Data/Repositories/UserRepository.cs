@@ -567,7 +567,6 @@ namespace DH.Helpdesk.Dal.Repositories
                     ContractPermission = x.ContractPermission,
                     SetPriorityPermission = x.SetPriorityPermission,
                     InvoicePermission = x.InvoicePermission,
-                    DataSecurityPermission = x.DataSecurityPermission,
                     CaseUnlockPermission = x.CaseUnlockPermission,
                     RefreshContent = x.RefreshContent,
                     FirstName = x.FirstName,

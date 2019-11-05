@@ -345,6 +345,11 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory.C
             OrganizationFieldsSettings updatedSettings)
         {
             this.elementaryRulesValidator.ValidateIntegerField(
+                updated.RegionId,
+                existing.RegionId,
+                BusinessData.Enums.Inventory.Fields.Computer.OrganizationFields.Region,
+                this.CreateValidationRule(updatedSettings.RegionFieldSetting));
+            this.elementaryRulesValidator.ValidateIntegerField(
                 updated.DepartmentId,
                 existing.DepartmentId,
                 BusinessData.Enums.Inventory.Fields.Computer.OrganizationFields.Department,
@@ -707,6 +712,10 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory.C
             OrganizationFields model,
             OrganizationFieldsSettings modelSettings)
         {
+            this.elementaryRulesValidator.ValidateIntegerField(
+                model.RegionId,
+                BusinessData.Enums.Inventory.Fields.Computer.OrganizationFields.Region,
+                this.CreateValidationRule(modelSettings.RegionFieldSetting));
             this.elementaryRulesValidator.ValidateIntegerField(
                 model.DepartmentId,
                 BusinessData.Enums.Inventory.Fields.Computer.OrganizationFields.Department,

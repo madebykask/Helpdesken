@@ -8,6 +8,7 @@ using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Extensions.Lists;
 using DH.Helpdesk.Common.Types;
+using DH.Helpdesk.Dal.Infrastructure.Extensions;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Cases;
@@ -443,8 +444,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (var f in logFiles)
                 {
-                    var logFolder = f.LogType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
-                    _filesStorage.DeleteFile(logFolder, f.Log_Id, basePath, f.FileName);
+                    _filesStorage.DeleteFile(f.GetFolderPrefix(), f.Log_Id, basePath, f.FileName);
                     _logFileRepository.Delete(f);
                 }
                 _logFileRepository.Commit();
@@ -508,11 +508,14 @@ namespace DH.Helpdesk.Services.Services
 
             // delete case files
             var caseFiles = _caseFileRepository.GetCaseFilesByCaseId(id);
+            var c = _caseRepository.GetById(id);
+
             if (caseFiles != null)
             {
                 foreach (var f in caseFiles)
                 {
-                    _filesStorage.DeleteFile(ModuleName.Cases, f.Case_Id, basePath, f.FileName);
+                    var intCaseNumber = decimal.ToInt32(c.CaseNumber);
+                    _filesStorage.DeleteFile(ModuleName.Cases, intCaseNumber, basePath, f.FileName);
                     _caseFileRepository.Delete(f);
                 }
                 _caseFileRepository.Commit();
@@ -529,8 +532,6 @@ namespace DH.Helpdesk.Services.Services
             //delete FollowUp
             _caseFollowUpService.DeleteFollowUp(id);
             _caseExtraFollowersService.DeleteByCase(id);
-
-            var c = _caseRepository.GetById(id);
 
             if (c.CaseSectionExtendedCaseDatas != null && c.CaseSectionExtendedCaseDatas.Any())
             {
@@ -1644,8 +1645,8 @@ namespace DH.Helpdesk.Services.Services
             ret.Add(new Field { Key = "[#6]", StringValue = admin != null ? admin.FirstName : string.Empty });
             ret.Add(new Field { Key = "[#7]", StringValue = admin != null ? admin.LastName : string.Empty });
             var priority = c.Priority_Id.HasValue ? _priorityService.GetPriority(c.Priority_Id.Value) : null;
-            ret.Add(new Field { Key = "[#12]", StringValue = priority != null ? c.Priority.Name : string.Empty });
-            ret.Add(new Field { Key = "[#20]", StringValue = priority != null ? c.Priority.Description : string.Empty });
+            ret.Add(new Field { Key = "[#12]", StringValue = priority != null ? priority.Name : string.Empty });
+            ret.Add(new Field { Key = "[#20]", StringValue = priority != null ? priority.Description : string.Empty });
             ret.Add(new Field { Key = "[#21]", StringValue = c.WatchDate.ToString() });
 
             if (c.User_Id.HasValue)

@@ -42,6 +42,7 @@ import { ErrorHandlingService } from '../services/error-handling.service';
 import { ProgressComponent } from './shared/progress.component';
 import * as moment from 'moment';
 import { IAppConfig } from '../shared/app-config/app-config.interface';
+import { VERSION } from '../../../config/version';
 
 @Component({
     selector: 'extended-case-element',
@@ -110,6 +111,10 @@ export class ExtendedCaseElementComponent {
         }
 
         this.subscriptionManager.removeAll();
+    }
+
+    public get version() {
+      return VERSION.fullVersion;
     }
 
     getFormParameters(): FormParametersModel {

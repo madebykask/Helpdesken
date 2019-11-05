@@ -11,63 +11,70 @@
 
 @section Actions
 {
-    <ul class="secnav">
-        @if (Model.UserHasAdminOrderPermission)
+<ul class="secnav">
+    @if (Model.UserHasAdminOrderPermission)
+    {
+        <li>
+            @Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), null, null, new { id = "btnSave", @class = "btn" })
+        </li>
+        <li>
+            @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "Delete", "Orders", new { id = Model.Id },
+            new { @class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Are you sure?") })
+        </li>
+    }
+    <li>
+        @if (Model.IsReturnToCase && Model.Other.CaseNumber.Value.HasValue && Model.Other.CaseId.Value.HasValue)
+        {
+            <a href="@Url.Content("~/Cases/Edit/" + Model.Other.CaseId.Value.Value)" class="btn">@Translation.GetCoreTextTranslation("Avbryt")</a>
+        }
+        else
+        {
+            @Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", "Orders", null, new { @class = "btn" })
+        }
+    </li>
+    <li>
+        <i id="actionIndicator" class="gif-loader" style="display: none">&nbsp;</i>
+    </li>
+    @if (Model.UserHasCreateWorkstationPermission && !string.IsNullOrEmpty(Model.Id))
+    {
+        <li class="secspace"></li>
+        <li>
+            @Html.ActionLink(Translation.GetCoreTextTranslation("Skapa arbetsstation"), "New", "Workstation", new { Area = "Inventory", orderId = Model.Id }, new { id = "btnCreateWorkstation", @class = "btn btn-default" })
+        </li>
+    }
+    @if (Model.UserHasAdminOrderPermission)
+    {
+        <li class="secspace"></li>
+        <li>
+            @Html.ActionLink(" ", "ExportOrder", "Orders", new { id = Model.Id }, new { @class = "export-order", title = Translation.GetCoreTextTranslation("Export fil") })
+        </li>
+        <li class="secspace"></li>
+        <li>
+            @Html.CheckBoxFor(m => m.InformOrderer, new { id = "informOrderer_action" })
+        </li>
+        <li>
+            @Html.Label("informOrderer_action", Translation.GetCoreTextTranslation("informera beställare"))
+        </li>
+        <li class="secspace"></li>
+        <li>
+            @Html.CheckBoxFor(m => m.InformReceiver, new { id = "informReceiver_action" })
+        </li>
+        <li>
+            @Html.Label("informReceiver_action", Translation.GetCoreTextTranslation("Informera mottagare"))
+        </li>
+        <li class="secspace"></li>
+        if (Model.Other.CaseNumber.Value == null || Model.Other.CaseNumber.Value == 0)
         {
             <li>
-                @Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), null, null, new { id = "btnSave", @class = "btn" })
+                @Html.CheckBoxFor(m => m.CreateCase, new { id = "createCase_action" })
             </li>
             <li>
-                @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "Delete", "Orders", new { id = Model.Id },
-                new { @class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Are you sure?") })
+                @Html.Label("createCase_action", Translation.GetCoreTextTranslation("Skapa ärende"))
             </li>
         }
-        <li>
-            @if (Model.IsReturnToCase && Model.Other.CaseNumber.Value.HasValue && Model.Other.CaseId.Value.HasValue)
-            {
-                <a href="@Url.Content("~/Cases/Edit/" + Model.Other.CaseId.Value.Value)" class="btn">@Translation.GetCoreTextTranslation("Avbryt")</a>
-            }
-            else
-            {
-                @Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", "Orders", null, new { @class = "btn" })
-            }
-        </li>
-        <li>
-            <i id="actionIndicator" class="gif-loader" style="display: none">&nbsp;</i>
-        </li>
-        @if (Model.UserHasAdminOrderPermission)
-        {
-            <li class="secspace"></li>
-            <li>
-                @Html.ActionLink(" ", "ExportOrder", "Orders", new { id = Model.Id }, new { @class = "export-order", title = Translation.GetCoreTextTranslation("Export fil") })
-            </li>
-            <li class="secspace"></li>
-            <li>
-                @Html.CheckBoxFor(m => m.InformOrderer, new { id = "informOrderer_action" })
-            </li>
-            <li>
-                @Html.Label("informOrderer_action", Translation.GetCoreTextTranslation("informera beställare"))
-            </li>
-            <li class="secspace"></li>
-            <li>
-                @Html.CheckBoxFor(m => m.InformReceiver, new { id = "informReceiver_action" })
-            </li>
-            <li>
-                @Html.Label("informReceiver_action", Translation.GetCoreTextTranslation("Informera mottagare"))
-            </li>
-            <li class="secspace"></li>
-            if (Model.Other.CaseNumber.Value == null || Model.Other.CaseNumber.Value == 0)
-            {
-                <li>
-                    @Html.CheckBoxFor(m => m.CreateCase, new { id = "createCase_action" })
-                </li>
-                <li>
-                    @Html.Label("createCase_action", Translation.GetCoreTextTranslation("Skapa ärende"))
-                </li>
-            }
 
-        }
-    </ul>
+    }
+</ul>
 }
 
 @section Content

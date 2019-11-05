@@ -13,6 +13,7 @@
             ConfigurableFieldModel<string> userStringId,
             ConfigurableFieldModel<string> firstName,
             ConfigurableFieldModel<string> lastName,
+            ConfigurableFieldModel<string> region,
             ConfigurableFieldModel<string> department,
             ConfigurableFieldModel<string> unit)
         {
@@ -20,6 +21,7 @@
             UserStringId = userStringId;
             FirstName = firstName;
             LastName = lastName;
+            Region = region;
             Department = department;
             Unit = unit;
         }
@@ -31,6 +33,7 @@
         public ConfigurableFieldModel<string> UserStringId { get; set; }
         public ConfigurableFieldModel<string> FirstName { get; set; }
         public ConfigurableFieldModel<string> LastName { get; set; }
+        public ConfigurableFieldModel<string> Region { get; set; }
         public ConfigurableFieldModel<string> Department { get; set; }
         public ConfigurableFieldModel<string> Unit { get; set; }
     }

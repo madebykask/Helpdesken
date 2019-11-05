@@ -264,6 +264,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IComputerLogRepository>().To<ComputerLogRepository>();
             this.Bind<IComputerModelRepository>().To<ComputerModelRepository>();
             this.Bind<IComputerRepository>().To<ComputerRepository>();
+            this.Bind<IComputerStatusRepository>().To<ComputerStatusRepository>();
             this.Bind<IComputerTypeRepository>().To<ComputerTypeRepository>();
             this.Bind<IComputerUsersRepository>().To<ComputerUsersRepository>();
             this.Bind<IComputerUserLogRepository>().To<ComputerUserLogRepository>();
@@ -309,6 +310,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IGDPRTaskRepository>().To<GDPRTaskRepository>();
 			this.Bind<IFeatureToggleRepository>().To<FeatureToggleRepository>();
 			this.Bind<IFileIndexingRepository>().To<FileIndexingRepository>();
+			this.Bind<IFileViewLogRepository>().To<FileViewLogRepository>();
 		}
 
         #endregion

@@ -32,6 +32,8 @@ window.tinymceDefaultOptions = {
                         'The text is too long. Field has limitation of ' + this.settings.maxLength + ' characters.';
                     alert(msg);
                 }
+
+
             };
         });
     },

@@ -45,14 +45,6 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             this.PlaceService = placeService;
         }
 
-        [HttpGet]
-        public JsonResult SearchDepartmentsByRegionId(int? selected)
-        {
-            List<ItemOverview> models = this.OrganizationService.GetDepartments(
-                SessionFacade.CurrentCustomer.Id,
-                selected);
-            return this.Json(models, JsonRequestBehavior.AllowGet);
-        }
 
         [HttpGet]
         public JsonResult SearchFloorsByBuildingId(int? selected)

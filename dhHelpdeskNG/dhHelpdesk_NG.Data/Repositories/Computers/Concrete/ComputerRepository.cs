@@ -135,6 +135,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                                 UserStringId = x.User.UserId,
                                 UserFirstName = x.User.FirstName,
                                 UserSurName = x.User.SurName,
+                                UserRegionName = x.User.Department.Region.Name,
                                 UserDepartmentName = x.User.Department.DepartmentName,
                                 UserUnitName = x.User.OU.Name
                             })
@@ -155,6 +156,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                                 t.s.UserStringId,
                                 t.s.UserFirstName,
                                 t.s.UserSurName,
+                                t.s.UserRegionName,
                                 t.s.UserDepartmentName,
                                 t.s.UserUnitName,
                                 ChangedByUserId = (int?)k.Id,
@@ -181,6 +183,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 
             var organization =
                 new BusinessData.Models.Inventory.Edit.Computer.OrganizationFields(
+                    anonymus.Entity.Region_Id,
                     anonymus.Entity.Department_Id,
                     anonymus.Entity.Domain_Id,
                     anonymus.Entity.OU_Id);
@@ -240,6 +243,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             var contactInfo = new BusinessData.Models.Inventory.Edit.Computer.ContactInformationFields(
                 anonymus.UserId,
                 anonymus.UserStringId,
+                anonymus.UserRegionName,
                 anonymus.UserDepartmentName,
                 anonymus.UserUnitName,
                 anonymus.UserId.HasValue ? new UserName(anonymus.UserFirstName, anonymus.UserSurName) : null);
@@ -338,8 +342,10 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 
 
         public List<ComputerOverview> FindOverviews(int customerId,
-            int? regionId,
+            int? domainId,
             int? departmentId,
+            int? regionId,
+            int? ouId,
             int? computerTypeId,
             int? contractStatusId,
             DateTime? contractStartDateFrom,
@@ -354,48 +360,96 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             bool isShowScrapped,
             int recordsOnPage,
             SortField sortOptions,
-            int? recordsCount)
+            int? recordsCount,
+            bool isComputerDepartmentSource)
         {
-            var query = this.DbSet.Where(x => x.Customer_Id == customerId);
+            var query = (from c in DbContext.Computers
+                        from cs in DbContext.ComputerStatuses.Where(css => css.Id == c.Status).DefaultIfEmpty()
+                        select new {c, cs })
+                .Select(x => new ComputerDto
+                {
+                    Computer = x.c,
+                    StatusName = x.cs != null ? x.cs.Name : "",
+                    ComputerTypeName = x.c.ComputerType.Name ?? "",
+                    ComputerModelName = x.c.ComputerModel.Name ?? "",
+                    OSName = x.c.OS.Name ?? "",
+                    ProcessorName = x.c.Processor.Name ?? "",
+                    RAMName = x.c.RAM.Name ?? "",
+                    NICName = x.c.NIC.Name ?? "",
+                    DepartmentName= x.c.Department.DepartmentName ?? "",
+                    DomainName = x.c.Domain.Name ?? "",
+                    OUName = x.c.OU.Name ?? "",
+                    RoomName = x.c.Room.Name ?? "",
+                    UserId = x.c.User.UserId ?? "",
+                    UserRegionName = x.c.User.Department.Region_Id.HasValue ?  x.c.User.Department.Region.Name : "",
+                    UserDepartmentName = x.c.User.Department.DepartmentName ?? "",
+                    UserOUName = x.c.User.OU.Name ?? "",
+                    ContractStatusName = x.c.ContractStatus_Id.HasValue ? x.c.ContractStatus.Name : "",
+                    RegionName =  x.c.Region_Id.HasValue ? x.c.Region.Name : ""
+                })
+                .Where(x => x.Computer.Customer_Id == customerId);
 
             if (!isShowScrapped)
-                query = query.Where(x => x.ScrapDate == null);
+                query = query.Where(x => x.Computer.ScrapDate == null);
+
+            if (domainId.HasValue)
+                query = query.Where(x => x.Computer.Domain_Id == domainId);
 
             if (regionId.HasValue)
-                query = query.Where(x => x.Department.Region_Id == regionId);
+            {
+                query = isComputerDepartmentSource
+                    ? query.Where(x => x.Computer.Region_Id == regionId)
+                    : query.Where(x =>
+                        x.Computer.User_Id.HasValue &&
+                        x.Computer.User.Department_Id.HasValue &&
+                        x.Computer.User.Department.Region_Id == regionId);
+            }
 
             if (departmentId.HasValue)
-                query = query.Where(x => x.Department_Id == departmentId);
+            {
+                query = isComputerDepartmentSource 
+                    ? query.Where(x => x.Computer.Department_Id == departmentId)
+                    : query.Where(x =>
+                    x.Computer.User_Id.HasValue && x.Computer.User.Department_Id.HasValue && x.Computer.User.Department_Id == departmentId);
+            }
+
+            if (ouId.HasValue)
+            {
+                query = isComputerDepartmentSource 
+                    ? query.Where(x => x.Computer.OU_Id == ouId)
+                    : query.Where(x =>
+                        x.Computer.User_Id.HasValue && x.Computer.User.OU_Id == ouId);
+            }
 
             if (computerTypeId.HasValue)
-                query = query.Where(x => x.ComputerType_Id == computerTypeId);
+                query = query.Where(x => x.Computer.ComputerType_Id == computerTypeId);
 
             if (contractStatusId.HasValue)
-                query = query.Where(x => x.ContractStatus_Id == contractStatusId);
+                query = query.Where(x => x.Computer.ContractStatus_Id == contractStatusId);
 
             if (contractStartDateFrom.HasValue)
-                query = query.Where(x => x.ContractStartDate >= contractStartDateFrom);
+                query = query.Where(x => x.Computer.ContractStartDate >= contractStartDateFrom);
 
             if (contractStartDateTo.HasValue)
-                query = query.Where(x => x.ContractStartDate <= contractStartDateFrom);
+                query = query.Where(x => x.Computer.ContractStartDate <= contractStartDateFrom);
 
             if (contractEndDateFrom.HasValue)
-                query = query.Where(x => x.ContractEndDate >= contractEndDateFrom);
+                query = query.Where(x => x.Computer.ContractEndDate >= contractEndDateFrom);
 
             if (contractEndDateTo.HasValue)
-                query = query.Where(x => x.ContractEndDate <= contractEndDateTo);
+                query = query.Where(x => x.Computer.ContractEndDate <= contractEndDateTo);
 
             if (scanDateFrom.HasValue)
-                query = query.Where(x => x.ScanDate >= scanDateFrom);
+                query = query.Where(x => x.Computer.ScanDate >= scanDateFrom);
 
             if (scanDateTo.HasValue)
-                query = query.Where(x => x.ScanDate <= scanDateTo);
+                query = query.Where(x => x.Computer.ScanDate <= scanDateTo);
 
             if (scrapDateFrom.HasValue)
-                query = query.Where(x => x.ScrapDate >= scrapDateFrom);
+                query = query.Where(x => x.Computer.ScrapDate >= scrapDateFrom);
 
             if (scrapDateTo.HasValue)
-                query = query.Where(x => x.ScrapDate <= scrapDateTo);
+                query = query.Where(x => x.Computer.ScrapDate <= scrapDateTo);
 
             if (!string.IsNullOrEmpty(searchFor))
             {
@@ -404,19 +458,45 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 query =
                     query.Where(
                         c =>
-                        c.ComputerName.ToLower().Contains(pharseInLowerCase)
-                        || c.ComputerModel.Name.ToLower().Contains(pharseInLowerCase)
-                        || c.Manufacturer.ToLower().Contains(pharseInLowerCase)
-                        || c.SerialNumber.ToLower().Contains(pharseInLowerCase)
-                        || c.BIOSVersion.ToLower().Contains(pharseInLowerCase)
-                        || c.TheftMark.ToLower().Contains(pharseInLowerCase)
-                        || c.CarePackNumber.ToLower().Contains(pharseInLowerCase)
-                        || c.ComputerType.Name.ToLower().Contains(pharseInLowerCase)
-                        || c.Location.ToLower().Contains(pharseInLowerCase) 
-                        || c.User.UserId.ToLower().Contains(pharseInLowerCase)
-                        || c.User.FirstName.ToLower().Contains(pharseInLowerCase)
-                        || c.User.SurName.ToLower().Contains(pharseInLowerCase)
-                        || c.NIC.Name.ToLower().Contains(pharseInLowerCase));
+                        c.Computer.ComputerName.ToLower().Contains(pharseInLowerCase)
+                        || c.Computer.ComputerModel.Name.ToLower().Contains(pharseInLowerCase)
+                        || c.Computer.Manufacturer.ToLower().Contains(pharseInLowerCase)
+                        || c.Computer.SerialNumber.ToLower().Contains(pharseInLowerCase)
+                        || c.Computer.BIOSVersion.ToLower().Contains(pharseInLowerCase)
+                        || c.Computer.TheftMark.ToLower().Contains(pharseInLowerCase)
+                        || c.Computer.CarePackNumber.ToLower().Contains(pharseInLowerCase)
+                        || c.Computer.ComputerType.Name.ToLower().Contains(pharseInLowerCase)
+                        || c.Computer.Location.ToLower().Contains(pharseInLowerCase) 
+                        || c.Computer.User.UserId.ToLower().Contains(pharseInLowerCase)
+                        || c.Computer.User.FirstName.ToLower().Contains(pharseInLowerCase)
+                        || c.Computer.User.SurName.ToLower().Contains(pharseInLowerCase)
+                        || c.Computer.NIC.Name.ToLower().Contains(pharseInLowerCase)
+						|| c.Computer.BarCode.ToLower().Contains(pharseInLowerCase)
+						//|| c.Computer.Building.ToLower().Contains(pharseInLowerCase)
+						|| c.Computer.ChassisType.ToLower().Contains(pharseInLowerCase)
+						|| c.Computer.ContractNumber.ToLower().Contains(pharseInLowerCase)
+						//|| c.Floor.ToLower().Contains(pharseInLowerCase)
+						|| c.Computer.IPAddress.ToLower().Contains(pharseInLowerCase)
+						|| c.Computer.Location2.ToLower().Contains(pharseInLowerCase)
+						|| c.Computer.LocationAddress.ToLower().Contains(pharseInLowerCase)
+						|| c.Computer.LocationPostalAddress.ToLower().Contains(pharseInLowerCase)
+						|| c.Computer.LocationPostalCode.ToLower().Contains(pharseInLowerCase)
+						|| c.Computer.LocationAddress.ToLower().Contains(pharseInLowerCase)
+						|| c.Computer.MACAddress.ToLower().Contains(pharseInLowerCase)
+						|| c.Computer.NovellClient.ToLower().Contains(pharseInLowerCase)
+						|| (c.Computer.OS != null && c.Computer.OS.Name.ToLower().Contains(pharseInLowerCase))
+						|| (c.Computer.Processor != null && c.Computer.Processor.Name.ToLower().Contains(pharseInLowerCase))
+						|| (c.Computer.RAM != null && c.Computer.RAM.Name.ToLower().Contains(pharseInLowerCase))
+						|| c.Computer.ReplacedWithComputerName.ToLower().Contains(pharseInLowerCase)
+						|| (c.Computer.Room != null && c.Computer.Room.Name.ToLower().Contains(pharseInLowerCase))
+						|| c.Computer.SoundCard.ToLower().Contains(pharseInLowerCase)
+						|| c.Computer.SP.ToLower().Contains(pharseInLowerCase)
+						|| c.Computer.Info.ToLower().Contains(pharseInLowerCase)
+						|| c.Computer.Location.ToLower().Contains(pharseInLowerCase)
+						|| c.Computer.LocationRoom.ToLower().Contains(pharseInLowerCase)
+						|| (c.Computer.OU != null && c.Computer.OU.Name.ToLower().Contains(pharseInLowerCase))
+						|| c.Computer.VideoCard.ToLower().Contains(pharseInLowerCase)
+						);
             }
 
             if (sortOptions != null && sortOptions.Name != null)
@@ -424,107 +504,107 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 if (sortOptions.SortBy == SortBy.Ascending)
                 {
                     if (sortOptions.Name == ComputerFields.Name)
-                        query = query.OrderBy(x => x.ComputerName);
+                        query = query.OrderBy(x => x.Computer.ComputerName);
                     else if (sortOptions.Name == ComputerFields.Manufacturer)
-                        query = query.OrderBy(x => x.Manufacturer);
+                        query = query.OrderBy(x => x.Computer.Manufacturer);
                     else if (sortOptions.Name == ComputerFields.Model)
-                        query = query.OrderBy(x => x.ComputerModel.Name);
+                        query = query.OrderBy(x => x.Computer.ComputerModel.Name);
                     else if (sortOptions.Name == ComputerFields.SerialNumber)
-                        query = query.OrderBy(x => x.SerialNumber);
+                        query = query.OrderBy(x => x.Computer.SerialNumber);
                     else if (sortOptions.Name == ComputerFields.SerialNumber)
-                        query = query.OrderBy(x => x.SerialNumber);
+                        query = query.OrderBy(x => x.Computer.SerialNumber);
                     else if (sortOptions.Name == ComputerFields.BIOSVersion)
-                        query = query.OrderBy(x => x.BIOSVersion);
+                        query = query.OrderBy(x => x.Computer.BIOSVersion);
                     else if (sortOptions.Name == ComputerFields.BIOSDate)
-                        query = query.OrderBy(x => x.BIOSDate);
+                        query = query.OrderBy(x => x.Computer.BIOSDate);
                     else if (sortOptions.Name == ComputerFields.Theftmark)
-                        query = query.OrderBy(x => x.TheftMark);
+                        query = query.OrderBy(x => x.Computer.TheftMark);
                     else if (sortOptions.Name == ComputerFields.CarePackNumber)
-                        query = query.OrderBy(x => x.CarePackNumber);
+                        query = query.OrderBy(x => x.Computer.CarePackNumber);
                     else if (sortOptions.Name == ComputerFields.ComputerType)
-                        query = query.OrderBy(x => x.ComputerType.Name);
+                        query = query.OrderBy(x => x.Computer.ComputerType.Name);
                     else if (sortOptions.Name == DateFields.CreatedDate)
-                        query = query.OrderBy(x => x.CreatedDate);
+                        query = query.OrderBy(x => x.Computer.CreatedDate);
                     else if (sortOptions.Name == MemoryFields.RAM)
-                        query = query.OrderBy(x => x.RAM.Name);
+                        query = query.OrderBy(x => x.Computer.RAM.Name);
                     else if (sortOptions.Name == ProcessorFields.ProccesorName)
-                        query = query.OrderBy(x => x.Processor.Name);
+                        query = query.OrderBy(x => x.Computer.Processor.Name);
                     else if (sortOptions.Name == SoundFields.SoundCard)
-                        query = query.OrderBy(x => x.SoundCard);
+                        query = query.OrderBy(x => x.Computer.SoundCard);
                     else if (sortOptions.Name == GraphicsFields.VideoCard)
-                        query = query.OrderBy(x => x.VideoCard);
+                        query = query.OrderBy(x => x.Computer.VideoCard);
                     else if (sortOptions.Name == ContractFields.ContractStatusName)
-                        query = query.OrderBy(x => x.ContractStatus_Id.Value);
+                        query = query.OrderBy(x => x.Computer.ContractStatus.Name);
                     else if (sortOptions.Name == ContractFields.PurchasePrice)
-                        query = query.OrderBy(x => x.Price);
+                        query = query.OrderBy(x => x.Computer.Price);
                     else if (sortOptions.Name == OtherFields.Info)
-                        query = query.OrderBy(x => x.Info);
+                        query = query.OrderBy(x => x.Computer.Info);
                     else if (sortOptions.Name == ContactInformationFields.UserId)
-                        query = query.OrderBy(x => x.User_Id);
+                        query = query.OrderBy(x => x.Computer.User_Id);
                     else if (sortOptions.Name == StateFields.State)
-                        query = query.OrderBy(x => x.Status);
+                        query = query.OrderBy(x => x.StatusName);
                     else if (sortOptions.Name == DateFields.ChangedDate)
-                        query = query.OrderBy(x => x.ChangedDate);
+                        query = query.OrderBy(x => x.Computer.ChangedDate);
                     else if (sortOptions.Name == DateFields.SynchronizeDate)
-                        query = query.OrderBy(x => x.SyncChangedDate);
+                        query = query.OrderBy(x => x.Computer.SyncChangedDate);
                     else if (sortOptions.Name == CommunicationFields.NetworkAdapter)
-                        query = query.OrderBy(x => x.NIC.Name);
+                        query = query.OrderBy(x => x.Computer.NIC.Name);
                 }
                 else
                 {
                     if (sortOptions.Name == ComputerFields.Name)
-                        query = query.OrderByDescending(x => x.ComputerName);
+                        query = query.OrderByDescending(x => x.Computer.ComputerName);
                     else if (sortOptions.Name == ComputerFields.Manufacturer)
-                        query = query.OrderByDescending(x => x.Manufacturer);
+                        query = query.OrderByDescending(x => x.Computer.Manufacturer);
                     else if (sortOptions.Name == ComputerFields.Model)
-                        query = query.OrderByDescending(x => x.ComputerModel.Name);
+                        query = query.OrderByDescending(x => x.Computer.ComputerModel.Name);
                     else if (sortOptions.Name == ComputerFields.SerialNumber)
-                        query = query.OrderByDescending(x => x.SerialNumber);
+                        query = query.OrderByDescending(x => x.Computer.SerialNumber);
                     else if (sortOptions.Name == ComputerFields.SerialNumber)
-                        query = query.OrderByDescending(x => x.SerialNumber);
+                        query = query.OrderByDescending(x => x.Computer.SerialNumber);
                     else if (sortOptions.Name == ComputerFields.BIOSVersion)
-                        query = query.OrderByDescending(x => x.BIOSVersion);
+                        query = query.OrderByDescending(x => x.Computer.BIOSVersion);
                     else if (sortOptions.Name == ComputerFields.BIOSDate)
-                        query = query.OrderByDescending(x => x.BIOSDate);
+                        query = query.OrderByDescending(x => x.Computer.BIOSDate);
                     else if (sortOptions.Name == ComputerFields.Theftmark)
-                        query = query.OrderByDescending(x => x.TheftMark);
+                        query = query.OrderByDescending(x => x.Computer.TheftMark);
                     else if (sortOptions.Name == ComputerFields.CarePackNumber)
-                        query = query.OrderByDescending(x => x.CarePackNumber);
+                        query = query.OrderByDescending(x => x.Computer.CarePackNumber);
                     else if (sortOptions.Name == ComputerFields.ComputerType)
-                        query = query.OrderByDescending(x => x.ComputerType.Name);
+                        query = query.OrderByDescending(x => x.Computer.ComputerType.Name);
                     else if (sortOptions.Name == DateFields.CreatedDate)
-                        query = query.OrderByDescending(x => x.CreatedDate);
+                        query = query.OrderByDescending(x => x.Computer.CreatedDate);
                     else if (sortOptions.Name == MemoryFields.RAM)
-                        query = query.OrderByDescending(x => x.RAM.Name);
+                        query = query.OrderByDescending(x => x.Computer.RAM.Name);
                     else if (sortOptions.Name == ProcessorFields.ProccesorName)
-                        query = query.OrderByDescending(x => x.Processor.Name);
+                        query = query.OrderByDescending(x => x.Computer.Processor.Name);
                     else if (sortOptions.Name == SoundFields.SoundCard)
-                        query = query.OrderByDescending(x => x.SoundCard);
+                        query = query.OrderByDescending(x => x.Computer.SoundCard);
                     else if (sortOptions.Name == GraphicsFields.VideoCard)
-                        query = query.OrderByDescending(x => x.VideoCard);
+                        query = query.OrderByDescending(x => x.Computer.VideoCard);
                     else if (sortOptions.Name == ContractFields.ContractStatusName)
-                        query = query.OrderByDescending(x => x.ContractStatus_Id.Value);
+                        query = query.OrderByDescending(x => x.Computer.ContractStatus.Name);
                     else if (sortOptions.Name == ContractFields.PurchasePrice)
-                        query = query.OrderByDescending(x => x.Price);
+                        query = query.OrderByDescending(x => x.Computer.Price);
                     else if (sortOptions.Name == OtherFields.Info)
-                        query = query.OrderByDescending(x => x.Info);
+                        query = query.OrderByDescending(x => x.Computer.Info);
                     else if (sortOptions.Name == ContactInformationFields.UserId)
-                        query = query.OrderByDescending(x => x.User_Id);
+                        query = query.OrderByDescending(x => x.Computer.User_Id);
                     else if (sortOptions.Name == StateFields.State)
-                        query = query.OrderByDescending(x => x.Status);
+                        query = query.OrderByDescending(x => x.StatusName);
                     else if (sortOptions.Name == DateFields.ChangedDate)
-                        query = query.OrderByDescending(x => x.ChangedDate);
+                        query = query.OrderByDescending(x => x.Computer.ChangedDate);
                     else if (sortOptions.Name == DateFields.SynchronizeDate)
-                        query = query.OrderByDescending(x => x.SyncChangedDate);
+                        query = query.OrderByDescending(x => x.Computer.SyncChangedDate);
                     else if (sortOptions.Name == CommunicationFields.NetworkAdapter)
-                        query = query.OrderByDescending(x => x.NIC.Name);
+                        query = query.OrderByDescending(x => x.Computer.NIC.Name);
                 }
             }
 
             if (recordsCount.HasValue)
                 query = query.Take(recordsCount.Value);
 
-            var overviews = MapToComputerOverview(query.AsNoTracking());
+            var overviews = MapToComputerOverview(query.ToList());
             return overviews;
         }
 
@@ -667,110 +747,118 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 
         public List<ComputerOverview> GetRelatedOverviews(int customerId, string userId)
         {
-            var computers = DbSet.Where(x => x.Customer_Id == customerId && x.User.UserId.Trim().Equals(userId.Trim()));
+            var computers = (from c in DbContext.Computers
+                    from cs in DbContext.ComputerStatuses.Where(css => css.Id == c.Status).DefaultIfEmpty()
+                    select new {c, cs })
+                .Select(x => new ComputerDto
+                {
+                    Computer = x.c,
+                    StatusName = x.cs != null ? x.cs.Name : "",
+                    ComputerTypeName = x.c.ComputerType.Name ?? "",
+                    ComputerModelName = x.c.ComputerModel.Name ?? "",
+                    OSName = x.c.OS.Name ?? "",
+                    ProcessorName = x.c.Processor.Name ?? "",
+                    RAMName = x.c.RAM.Name ?? "",
+                    NICName = x.c.NIC.Name ?? "",
+                    DepartmentName= x.c.Department.DepartmentName ?? "",
+                    DomainName = x.c.Domain.Name ?? "",
+                    OUName = x.c.OU.Name ?? "",
+                    RoomName = x.c.Room.Name ?? "",
+                    UserId = x.c.User.UserId ?? "",
+                    UserDepartmentName = x.c.User.Department.DepartmentName ?? "",
+                    UserRegionName = x.c.User.Department.Region_Id.HasValue ?  x.c.User.Department.Region.Name : "",
+                    UserOUName = x.c.User.OU.Name ?? "",
+                    ContractStatusName = x.c.ContractStatus_Id.HasValue ? x.c.ContractStatus.Name : "",
+                    RegionName =  x.c.Region_Id.HasValue ? x.c.Region.Name : ""
+                })
+                .Where(x => x.Computer.Customer_Id == customerId && x.Computer.User.UserId.Trim().Equals(userId.Trim()))
+                .ToList();
             var overviews = MapToComputerOverview(computers);
             return overviews;
         }
 
-        private static List<ComputerOverview> MapToComputerOverview(IQueryable<Domain.Computers.Computer> query)
+        private static List<ComputerOverview> MapToComputerOverview(IList<ComputerDto> computers)
         {
-            var anonymus = query.Select(x =>
-                    new
-                    {
-                        Entity = x,
-                        ComputerTypeName = x.ComputerType.Name,
-                        ComputerModelName = x.ComputerModel.Name,
-                        OperatingName = x.OS.Name,
-                        ProcessorName = x.Processor.Name,
-                        RamName = x.RAM.Name,
-                        NetworkAdapterName = x.NIC.Name,
-                        x.Department.DepartmentName,
-                        DomainName = x.Domain.Name,
-                        UnitName = x.OU.Name,
-                        RoomName = x.Room.Name,
-                        x.User.UserId,
-                        UserDepartmentName = x.User.Department.DepartmentName,
-                        UserUnitName = x.User.OU.Name
-                    }).ToList();
-
-            var overviewAggregates = anonymus.Select(x =>
+            var overviewAggregates = computers.Select(x =>
                     new ComputerOverview(
-                        x.Entity.Id,
-                        x.Entity.Customer_Id,
-                        x.Entity.CreatedDate,
-                        x.Entity.ChangedDate,
+                        x.Computer.Id,
+                        x.Computer.Customer_Id,
+                        x.Computer.CreatedDate,
+                        x.Computer.ChangedDate,
                         new BusinessData.Models.Inventory.Output.Computer.WorkstationFields(
-                        x.Entity.ComputerName,
-                        x.Entity.Manufacturer,
+                        x.Computer.ComputerName,
+                        x.Computer.Manufacturer,
                         x.ComputerModelName,
-                        x.Entity.SerialNumber,
-                        x.Entity.BIOSVersion,
-                        x.Entity.BIOSDate,
-                        x.Entity.TheftMark,
-                        x.Entity.CarePackNumber,
+                        x.Computer.SerialNumber,
+                        x.Computer.BIOSVersion,
+                        x.Computer.BIOSDate,
+                        x.Computer.TheftMark,
+                        x.Computer.CarePackNumber,
                         x.ComputerTypeName,
-                        x.Entity.Location),
+                        x.Computer.Location),
                         new BusinessData.Models.Inventory.Output.Shared.ProcessorFields(x.ProcessorName),
                         new BusinessData.Models.Inventory.Output.Computer.OrganizationFields(
+                        x.RegionName,
                         x.DepartmentName,
                         x.DomainName,
-                        x.UnitName),
+                        x.OUName),
                         new BusinessData.Models.Inventory.Output.Shared.OperatingSystemFields(
-                        x.OperatingName,
-                        x.Entity.Version,
-                        x.Entity.SP,
-                        x.Entity.RegistrationCode,
-                        x.Entity.ProductKey),
-                        new BusinessData.Models.Inventory.Output.Shared.MemoryFields(x.RamName),
+                        x.OSName,
+                        x.Computer.Version,
+                        x.Computer.SP,
+                        x.Computer.RegistrationCode,
+                        x.Computer.ProductKey),
+                        new BusinessData.Models.Inventory.Output.Shared.MemoryFields(x.RAMName),
                         new BusinessData.Models.Inventory.Output.Shared.InventoryFields(
-                        x.Entity.BarCode,
-                        x.Entity.PurchaseDate),
-                        new BusinessData.Models.Inventory.Output.Shared.ChassisFields(x.Entity.ChassisType),
+                        x.Computer.BarCode,
+                        x.Computer.PurchaseDate),
+                        new BusinessData.Models.Inventory.Output.Shared.ChassisFields(x.Computer.ChassisType),
                         new BusinessData.Models.Inventory.Output.Computer.StateFields(
-                        (ComputerStatuses)x.Entity.Status,
-                        x.Entity.Stolen.ToBool(),
-                        x.Entity.ReplacedWithComputerName,
-                        x.Entity.SendBack.ToBool(),
-                        x.Entity.ScrapDate),
-                        new BusinessData.Models.Inventory.Output.Computer.SoundFields(x.Entity.SoundCard),
+                        x.StatusName,
+                        x.Computer.Stolen.ToBool(),
+                        x.Computer.ReplacedWithComputerName,
+                        x.Computer.SendBack.ToBool(),
+                        x.Computer.ScrapDate),
+                        new BusinessData.Models.Inventory.Output.Computer.SoundFields(x.Computer.SoundCard),
                         new BusinessData.Models.Inventory.Output.Computer.PlaceFields(
                         x.RoomName,
-                        x.Entity.LocationAddress,
-                        x.Entity.LocationPostalCode,
-                        x.Entity.LocationPostalAddress,
-                        x.Entity.LocationRoom,
-                        x.Entity.Location2),
-                        new BusinessData.Models.Inventory.Output.Computer.OtherFields(x.Entity.Info),
-                        new BusinessData.Models.Inventory.Output.Computer.GraphicsFields(x.Entity.VideoCard),
+                        x.Computer.LocationAddress,
+                        x.Computer.LocationPostalCode,
+                        x.Computer.LocationPostalAddress,
+                        x.Computer.LocationRoom,
+                        x.Computer.Location2),
+                        new BusinessData.Models.Inventory.Output.Computer.OtherFields(x.Computer.Info),
+                        new BusinessData.Models.Inventory.Output.Computer.GraphicsFields(x.Computer.VideoCard),
                         new BusinessData.Models.Inventory.Output.Computer.ContractFields(
-                        (ContractStatuses?)x.Entity.ContractStatus_Id,
-                        x.Entity.ContractNumber,
-                        x.Entity.ContractStartDate,
-                        x.Entity.ContractEndDate,
-                        x.Entity.Price,
-                        x.Entity.AccountingDimension1,
-                        x.Entity.AccountingDimension2,
-                        x.Entity.AccountingDimension3,
-                        x.Entity.AccountingDimension4,
-                        x.Entity.AccountingDimension5),
+                        x.ContractStatusName,
+                        x.Computer.ContractNumber,
+                        x.Computer.ContractStartDate,
+                        x.Computer.ContractEndDate,
+                        x.Computer.Price,
+                        x.Computer.AccountingDimension1,
+                        x.Computer.AccountingDimension2,
+                        x.Computer.AccountingDimension3,
+                        x.Computer.AccountingDimension4,
+                        x.Computer.AccountingDimension5),
                         new BusinessData.Models.Inventory.Output.Computer.ContactInformationFields(
                         x.UserId,
+                        x.UserRegionName,
                         x.UserDepartmentName,
-                        x.UserUnitName),
+                        x.UserOUName),
                         new BusinessData.Models.Inventory.Output.Computer.ContactFields(
-                        x.Entity.ContactName,
-                        x.Entity.ContactPhone,
-                        x.Entity.ContactEmailAddress),
+                        x.Computer.ContactName,
+                        x.Computer.ContactPhone,
+                        x.Computer.ContactEmailAddress),
                         new BusinessData.Models.Inventory.Output.Computer.CommunicationFields(
-                        x.NetworkAdapterName,
-                        x.Entity.IPAddress,
-                        x.Entity.MACAddress,
-                        x.Entity.RAS.ToBool(),
-                        x.Entity.NovellClient),
+                        x.NICName,
+                        x.Computer.IPAddress,
+                        x.Computer.MACAddress,
+                        x.Computer.RAS.ToBool(),
+                        x.Computer.NovellClient),
                         new BusinessData.Models.Inventory.Output.Computer.DateFields(
-                        x.Entity.SyncChangedDate,
-                        x.Entity.ScanDate,
-                        x.Entity.LDAPPath))).ToList();
+                        x.Computer.SyncChangedDate,
+                        x.Computer.ScanDate,
+                        x.Computer.LDAPPath))).ToList();
 
             return overviewAggregates;
         }
@@ -791,6 +879,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.Processor_Id = businessModel.ProccesorFields.ProccesorId;
 
             entity.Department_Id = businessModel.OrganizationFields.DepartmentId;
+            entity.Region_Id = businessModel.OrganizationFields.RegionId;
             entity.Domain_Id = businessModel.OrganizationFields.DomainId;
             entity.OU_Id = businessModel.OrganizationFields.UnitId;
 
@@ -848,6 +937,28 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.MACAddress = businessModel.CommunicationFields.MacAddress ?? string.Empty;
             entity.RAS = businessModel.CommunicationFields.IsRAS.ToInt();
             entity.NovellClient = businessModel.CommunicationFields.NovellClient ?? string.Empty;
+        }
+
+        private class ComputerDto
+        {
+            public Domain.Computers.Computer Computer { get; set; }
+            public string StatusName { get; set; }
+            public string ComputerTypeName { get; set; }
+            public string ComputerModelName { get; set; }
+            public string OSName { get; set; }
+            public string ProcessorName { get; set; }
+            public string RAMName { get; set; }
+            public string NICName { get; set; }
+            public string DepartmentName { get; set; }
+            public string DomainName { get; set; }
+            public string OUName { get; set; }
+            public string RoomName { get; set; }
+            public string UserId { get; set; }
+            public string UserOUName { get; set; }
+            public string ContractStatusName { get; set; }
+            public string UserDepartmentName { get; set; }
+            public string UserRegionName { get; set; }
+            public string RegionName { get; set; }
         }
     }
 }

@@ -3,16 +3,20 @@ using System.Globalization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.BusinessData.Models.Gdpr;
 using DH.Helpdesk.BusinessData.Models.Grid;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums.Settings;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.Infrastructure.Context;
 using DH.Helpdesk.Domain.GDPR;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Models.FileViewLogs;
 using DH.Helpdesk.Web.Models.Gdpr;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
@@ -47,6 +51,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IGDPRFavoritesService _gdprFavoritesService;
         private readonly IUserContext _userContext;
         private readonly IGDPRTasksService _gdprTasksService;
+        private readonly IFileViewLogService _fileViewLogService;
+        private readonly IDepartmentService _departmentsService;
 
         public GlobalSettingController(
             IGlobalSettingService globalSettingService,
@@ -56,33 +62,36 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             IWatchDateCalendarService watchDateCalendarService,
             ICustomerUserService customerUserService,
             ICaseFieldSettingService caseFieldSettingService,
-            ICaseService caseService,
             IGDPROperationsService gdprOperationsService,
             IGDPRDataPrivacyAccessService gdprDataPrivacyAccessService,
             IMasterDataService masterDataService,
             IGDPRFavoritesService gdprFavoritesService,
             IGDPRTasksService gdprTasksService,
-            IUserContext userContext)
+            IUserContext userContext,
+            IFileViewLogService fileViewLogService,
+            IDepartmentService departmentsService)
             : base(masterDataService)
         {
-            this._gdprTasksService = gdprTasksService;
-            this._gdprFavoritesService = gdprFavoritesService;
-            this._globalSettingService = globalSettingService;
-            this._holidayService = holidayService;
-            this._languageService = languageService;
-            this._textTranslationService = textTranslationService;
-            this._watchDateCalendarService = watchDateCalendarService;
-            this._customerUserService = customerUserService;
-            this._caseFieldSettingService = caseFieldSettingService;
-            this._gdprDataPrivacyAccessService = gdprDataPrivacyAccessService;
-            this._userContext = userContext;
-            this._gdprOperationsService = gdprOperationsService;
+            _gdprTasksService = gdprTasksService;
+            _gdprFavoritesService = gdprFavoritesService;
+            _globalSettingService = globalSettingService;
+            _holidayService = holidayService;
+            _languageService = languageService;
+            _textTranslationService = textTranslationService;
+            _watchDateCalendarService = watchDateCalendarService;
+            _customerUserService = customerUserService;
+            _caseFieldSettingService = caseFieldSettingService;
+            _gdprDataPrivacyAccessService = gdprDataPrivacyAccessService;
+            _userContext = userContext;
+            _gdprOperationsService = gdprOperationsService;
+            _fileViewLogService = fileViewLogService;
+            _departmentsService = departmentsService;
         }
 
         public ActionResult Index(int texttypeid, string textSearch, int compareMethod)
         {
             var searchOpt = new SearchOption { TextType = texttypeid, TextSearch = textSearch, CompareMethod = compareMethod };
-            var model = this.GetGSIndexViewModel(1, SessionFacade.CurrentCustomer.Language_Id, searchOpt);           
+            var model = this.GetGSIndexViewModel(1, SessionFacade.CurrentCustomer.Language_Id, searchOpt);
 
             return this.View(model);
         }
@@ -138,7 +147,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult NewHoliday(int id, GlobalSettingHolidayViewModel viewModel, FormCollection coll)
         {
-            
+
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
             if (id == 0)
@@ -155,7 +164,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                 return this.View(model);
             }
-            else {
+            else
+            {
                 var holidayheader = this._holidayService.GetHolidayHeader(id);
 
                 holidayheader.Name = viewModel.ChangedHeaderName;
@@ -167,8 +177,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 var model = this.SaveHolidayViewModel(holidayheader, viewModel.Year);
                 SessionFacade.ActiveTab = coll["activeTab"];
 
-               return this.View(model);
-              
+                return this.View(model);
+
             }
         }
 
@@ -184,10 +194,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             var model = this.SaveHolidayViewModel(holidayheader, year);
 
-            
+
             //model.ChangedHeaderName = holiday.HolidayHeader.Name;
             SessionFacade.ActiveTab = "#fragment-2";
-            
+
             return this.View(model);
         }
 
@@ -266,7 +276,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                 return this.View(model);
             }
-         
+
         }
 
         public ActionResult EditWatchDate(int id)
@@ -357,7 +367,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             if (errors.Count == 0)
                 return this.RedirectToAction("edittranslation", "globalsetting", new { area = "admin", id = text.Id, textType = 1, compareMethod = 1 });
-                //return this.RedirectToAction("index", "globalsetting", new { texttypeid = text.Type });
+            //return this.RedirectToAction("index", "globalsetting", new { texttypeid = text.Type });
 
 
             var model = this.GetTextTranslationViewModel(text, text.Type, 0, null, 1);
@@ -405,7 +415,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 t.ChangedByUser_Id = SessionFacade.CurrentUser.Id;
             }
 
-            
+
             IDictionary<string, string> errors = new Dictionary<string, string>();
 
             this._textTranslationService.SaveEditText(textToSave, TTs, out errors);
@@ -434,7 +444,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     var texttranslation = this._textTranslationService.GetTextTranslationById(tt.Text_Id);
                     this._textTranslationService.DeleteTextTranslation(texttranslation, out errors);
                 }
-                
+
 
             }
 
@@ -444,17 +454,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             SessionFacade.ActiveTab = coll["activeTab"];
             return this.RedirectToAction("index", "globalsetting", new { texttypeid = texttypeid, compareMethod = 1 });
         }
-        
-        private GlobalSettingIndexViewModel GetGSIndexViewModel( int holidayheaderid, int languageId, SearchOption searchOption)
+
+        private GlobalSettingIndexViewModel GetGSIndexViewModel(int holidayheaderid, int languageId, SearchOption searchOption)
         {
             const int DEFAULT_HOLIDAYS_CALENDAR_ID = 1;
-            var start = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
-
-            //int texttypeid,
-            //string textSearch
 
             var gridModel = new TranslationGridModel();
-            //gridModel.AllTexts = this._textTranslationService.GetAllTexts(texttypeid).ToList();
             var allTexts = this._textTranslationService.GetAllTexts(searchOption.TextType, LanguageIds.English).ToList();
             if (string.IsNullOrEmpty(searchOption.TextSearch))
                 gridModel.AllTexts = allTexts.OrderBy(a => a.TextToTranslate).ToList();
@@ -513,19 +518,19 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                HasDataPrivacyAccess = dataPrivacyAccess != null
+                HasDataPrivacyAccess = dataPrivacyAccess != null,
             };
 
             model.SearchConditions = new List<SelectListItem>();
-            model.SearchConditions.Add(new SelectListItem { Text = Translation.GetCoreTextTranslation("Börjar med"), Value = "1"});
-            model.SearchConditions.Add(new SelectListItem { Text = Translation.GetCoreTextTranslation("Innehåller"), Value = "2"});
+            model.SearchConditions.Add(new SelectListItem { Text = Translation.GetCoreTextTranslation("Börjar med"), Value = "1" });
+            model.SearchConditions.Add(new SelectListItem { Text = Translation.GetCoreTextTranslation("Innehåller"), Value = "2" });
 
             ViewBag.SelectedSearchCondition = searchOption.CompareMethod.ToString();
 
             model.SearchTextTr = searchOption.TextSearch;
-            
+
             model.GridModel.SearchOption = searchOption;
-           
+
             return model;
         }
 
@@ -546,323 +551,15 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         private GlobalSettingHolidayViewModel SaveHolidayViewModel(HolidayHeader holidayheader, int year)
         {
-            
             #region SelectListItems
 
-            List<SelectListItem> li = new List<SelectListItem>();
-
-            li.Add(new SelectListItem()
+            var timeList = new List<SelectListItem>();
+            for (var i = 0; i < 24; i++)
             {
-                Text = Translation.Get("00:00", Enums.TranslationSource.TextTranslation),
-                Value = "0",
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("01:00", Enums.TranslationSource.TextTranslation),
-                Value = "1",
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("02:00", Enums.TranslationSource.TextTranslation),
-                Value = "2",
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("03:00", Enums.TranslationSource.TextTranslation),
-                Value = "3",
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("04:00", Enums.TranslationSource.TextTranslation),
-                Value = "4",
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("05:00", Enums.TranslationSource.TextTranslation),
-                Value = "5",
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("06:00", Enums.TranslationSource.TextTranslation),
-                Value = "6",
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("07:00", Enums.TranslationSource.TextTranslation),
-                Value = "7",
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("08:00", Enums.TranslationSource.TextTranslation),
-                Value = "8",
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("09:00", Enums.TranslationSource.TextTranslation),
-                Value = "9",
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("10:00", Enums.TranslationSource.TextTranslation),
-                Value = "10",
-                Selected = false
-            });
-            li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("11:00", Enums.TranslationSource.TextTranslation),
-                Value = "11",
-                Selected = false
-            }); li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("12:00", Enums.TranslationSource.TextTranslation),
-                Value = "12",
-                Selected = false
-            }); li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("13:00", Enums.TranslationSource.TextTranslation),
-                Value = "13",
-                Selected = false
-            }); li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("14:00", Enums.TranslationSource.TextTranslation),
-                Value = "14",
-                Selected = false
-            }); li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("15:00", Enums.TranslationSource.TextTranslation),
-                Value = "15",
-                Selected = false
-            }); li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("16:00", Enums.TranslationSource.TextTranslation),
-                Value = "16",
-                Selected = false
-            }); li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("17:00", Enums.TranslationSource.TextTranslation),
-                Value = "17",
-                Selected = false
-            }); li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("18:00", Enums.TranslationSource.TextTranslation),
-                Value = "18",
-                Selected = false
-            }); li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("19:00", Enums.TranslationSource.TextTranslation),
-                Value = "19",
-                Selected = false
-            }); li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("20:00", Enums.TranslationSource.TextTranslation),
-                Value = "20",
-                Selected = false
-            }); li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("21:00", Enums.TranslationSource.TextTranslation),
-                Value = "21",
-                Selected = false
-            }); li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("22:00", Enums.TranslationSource.TextTranslation),
-                Value = "22",
-                Selected = false
-            }); li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("23:00", Enums.TranslationSource.TextTranslation),
-                Value = "23",
-                Selected = false
-            }); li.Add(new SelectListItem()
-            {
-                Text = Translation.Get("24:00", Enums.TranslationSource.TextTranslation),
-                Value = "24",
-                Selected = false
-            });
-            //for (int i = 00; i < 24; i++)
-            //{
-            //    li.Add(new SelectListItem
-            //    {
-            //        Text = i.ToString(),
-            //        Value = i.ToString()
-            //    });
-            //}
-            List<SelectListItem> lis = new List<SelectListItem>();
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("00:00", Enums.TranslationSource.TextTranslation),
-                Value = "0",
-                Selected = false
-            });
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("01:00", Enums.TranslationSource.TextTranslation),
-                Value = "1",
-                Selected = false
-            });
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("02:00", Enums.TranslationSource.TextTranslation),
-                Value = "2",
-                Selected = false
-            });
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("03:00", Enums.TranslationSource.TextTranslation),
-                Value = "3",
-                Selected = false
-            });
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("04:00", Enums.TranslationSource.TextTranslation),
-                Value = "4",
-                Selected = false
-            });
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("05:00", Enums.TranslationSource.TextTranslation),
-                Value = "5",
-                Selected = false
-            });
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("06:00", Enums.TranslationSource.TextTranslation),
-                Value = "6",
-                Selected = false
-            });
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("07:00", Enums.TranslationSource.TextTranslation),
-                Value = "7",
-                Selected = false
-            });
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("08:00", Enums.TranslationSource.TextTranslation),
-                Value = "8",
-                Selected = false
-            });
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("09:00", Enums.TranslationSource.TextTranslation),
-                Value = "9",
-                Selected = false
-            });
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("10:00", Enums.TranslationSource.TextTranslation),
-                Value = "10",
-                Selected = false
-            });
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("11:00", Enums.TranslationSource.TextTranslation),
-                Value = "11",
-                Selected = false
-            }); 
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("12:00", Enums.TranslationSource.TextTranslation),
-                Value = "12",
-                Selected = false
-            }); 
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("13:00", Enums.TranslationSource.TextTranslation),
-                Value = "13",
-                Selected = false
-            }); 
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("14:00", Enums.TranslationSource.TextTranslation),
-                Value = "14",
-                Selected = false
-            }); 
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("15:00", Enums.TranslationSource.TextTranslation),
-                Value = "15",
-                Selected = false
-            }); 
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("16:00", Enums.TranslationSource.TextTranslation),
-                Value = "16",
-                Selected = false
-            }); 
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("17:00", Enums.TranslationSource.TextTranslation),
-                Value = "17",
-                Selected = false
-            }); 
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("18:00", Enums.TranslationSource.TextTranslation),
-                Value = "18",
-                Selected = false
-            }); 
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("19:00", Enums.TranslationSource.TextTranslation),
-                Value = "19",
-                Selected = false
-            }); 
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("20:00", Enums.TranslationSource.TextTranslation),
-                Value = "20",
-                Selected = false
-            }); 
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("21:00", Enums.TranslationSource.TextTranslation),
-                Value = "21",
-                Selected = false
-            }); 
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("22:00", Enums.TranslationSource.TextTranslation),
-                Value = "22",
-                Selected = false
-            }); 
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("23:00", Enums.TranslationSource.TextTranslation),
-                Value = "23",
-                Selected = false
-            }); 
-            lis.Add(new SelectListItem()
-            {
-                Text = Translation.Get("24:00", Enums.TranslationSource.TextTranslation),
-                Value = "24",
-                Selected = false
-            });
-            //for (int i = 00; i < 24; i++)
-            //{
-            //    lis.Add(new SelectListItem
-            //    {
-            //        Text = i.ToString(),
-            //        Value = i.ToString()
-            //    });
-            //}
-
-            List<SelectListItem> yearlist = new List<SelectListItem>();
-            for (int j = 2010; j < 2020; j++)
-            {
-                yearlist.Add(new SelectListItem
+                timeList.Add(new SelectListItem
                 {
-                    Text = j.ToString(),
-                    Value = j.ToString()
+                    Text = Translation.Get(i < 10 ? $"0{i}:00" : $"{i}:00"),
+                    Value = i.ToString()
                 });
             }
             #endregion
@@ -878,9 +575,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                TimeFromList = li,
-                TimeTilList = lis,
-                YearList = yearlist,
+                TimeFromList = timeList,
+                TimeTilList = timeList,
+                YearList = GetYearsList(2000, DateTime.Now.Year + 5),
                 ChangedHeaderName = holidayheader.Name
             };
 
@@ -965,44 +662,39 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         private GlobalSettingWatchDateViewModel SaveWatchDateViewModel(WatchDateCalendar watchdatecalendar, int year)
         {
-            List<SelectListItem> yearlist = new List<SelectListItem>();
-            for (int j = 2010; j < 2020; j++)
-            {
-                yearlist.Add(new SelectListItem
-                {
-                    Text = j.ToString(),
-                    Value = j.ToString()
-                });
-            }
-
             var model = new GlobalSettingWatchDateViewModel
             {
                 WatchDateCalendarValue = null,
                 WatchDateCalendarValues = this._watchDateCalendarService.GetWDCalendarValuesByWDCIdAndYear(watchdatecalendar.Id, year),
                 WatchDateCalendarValuesForList = this._watchDateCalendarService.GetWDCalendarValuesByWDCIdAndYearForList(watchdatecalendar.Id, year),
                 WatchDateCalendar = watchdatecalendar,
-                YearList = yearlist
+                YearList = GetYearsList(2010, DateTime.Now.Year + 5)
             };
             model.Year = year;
             return model;
         }
 
-        private GlobalSettingWatchDateViewModel SaveWatchDateViewModel(WatchDateCalendarValue watchDateCalendarValue)
+        private List<SelectListItem> GetYearsList(int start, int end)
         {
-            List<SelectListItem> yearlist = new List<SelectListItem>();
-            for (int j = 2000; j < 2015; j++)
+            var yearList = new List<SelectListItem>();
+            for (var j = start; j < end; j++)
             {
-                yearlist.Add(new SelectListItem
+                yearList.Add(new SelectListItem
                 {
                     Text = j.ToString(),
                     Value = j.ToString()
                 });
             }
 
+            return yearList;
+        }
+
+        private GlobalSettingWatchDateViewModel SaveWatchDateViewModel(WatchDateCalendarValue watchDateCalendarValue)
+        {
             var model = new GlobalSettingWatchDateViewModel
             {
                 WatchDateCalendarValue = watchDateCalendarValue,
-                YearList = yearlist,
+                YearList = GetYearsList(2000, DateTime.Now.Year + 5),
                 WatchDateCalendars = this._watchDateCalendarService.GetAllWatchDateCalendars().Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -1112,13 +804,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         public PartialViewResult ChangeTextType(int id)
         {
             var model = new TranslationGridModel();
-            model.AllTexts = this._textTranslationService.GetAllTexts(id, LanguageIds.English).ToList();            
+            model.AllTexts = this._textTranslationService.GetAllTexts(id, LanguageIds.English).ToList();
             var view = "~/areas/admin/views/GlobalSetting/_TranslationsList.cshtml";
 
             var searchOpt = new SearchOption { TextType = id, TextSearch = "", CompareMethod = 1 };
             model.SearchOption = searchOpt;
 
-            return this.PartialView(view , model);                                     
+            return this.PartialView(view, model);
         }
 
         [HttpGet]
@@ -1130,7 +822,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             switch (searchOption)
             {
                 case 1:
-                    model.AllTexts = allTexts.Where(a => (a.TextToTranslate != null && a.TextToTranslate.ToLower().StartsWith(searchValue.ToLower())) || 
+                    model.AllTexts = allTexts.Where(a => (a.TextToTranslate != null && a.TextToTranslate.ToLower().StartsWith(searchValue.ToLower())) ||
                                                          (a.TextTranslated != null && a.TextTranslated.ToLower().StartsWith(searchValue.ToLower())))
                                              .OrderBy(a => a.TextToTranslate).ToList();
                     break;
@@ -1146,7 +838,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     break;
             }
 
-            var searchOpt = new SearchOption{TextType = textTypeId, TextSearch = searchValue, CompareMethod = searchOption} ;
+            var searchOpt = new SearchOption { TextType = textTypeId, TextSearch = searchValue, CompareMethod = searchOption };
             model.SearchOption = searchOpt;
             var view = "~/areas/admin/views/GlobalSetting/_TranslationsList.cshtml";
 
@@ -1205,7 +897,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
             model.Holiday = holiday;
-            
+
             this._holidayService.SaveHoliday(holiday, out errors);
             return this.UpdateHolidayList(holidayheader);
         }
@@ -1244,7 +936,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
 
             var holiday = this._holidayService.GetHoliday(id);
-            
+
             var holidayheader = this._holidayService.GetHolidayHeader(holiday.HolidayHeader_Id);
 
             if (this._holidayService.DeleteHoliday(id) == DeleteMessage.Success)
@@ -1258,23 +950,23 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         }
 
         [CustomAuthorize(Roles = "3,4")]
-        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")] 
+        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
         public string UpdateHolidayList(HolidayHeader holidayheader)
         {
             var year = DateTime.Today.Year;
 
             var model = this.SaveHolidayViewModel(holidayheader, year);
 
-            
+
             //model.ChangedHeaderName = holiday.HolidayHeader.Name;
             SessionFacade.ActiveTab = "#fragment-2";
-            
+
             this.UpdateModel(model, "holiday");
 
             //return View(model);
             var view = "~/areas/admin/views/GlobalSetting/_Holidays.cshtml";
             return this.RenderRazorViewToString(view, model);
-        
+
             //return this.View(model);
         }
 
@@ -1376,7 +1068,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var holidayheader = this._holidayService.GetHolidayHeader(holidayheaderId);
 
             var model = this.SaveHolidayViewModel(holidayheader, year);
-            
+
             SessionFacade.ActiveTab = "#fragment-2";
 
             this.UpdateModel(model, "holiday");
@@ -1393,7 +1085,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var watchdatecalendar = this._watchDateCalendarService.GetWatchDateCalendar(watchdatecalendarId);
 
             var model = this.SaveWatchDateViewModel(watchdatecalendar, year);
-           
+
 
             SessionFacade.ActiveTab = "#fragment-3";
 
@@ -1404,7 +1096,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         }
 
-        
+
         public ActionResult EditHolidayHeader(int id)
         {
             var holidayheader = this._holidayService.GetHolidayHeader(id);
@@ -1438,9 +1130,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
             globalSettings.MultiCustomersSearch = val ? 1 : 0;
 
-            IDictionary<string,string> errors = new Dictionary<string,string>();
+            IDictionary<string, string> errors = new Dictionary<string, string>();
             _globalSettingService.SaveGlobalSetting(globalSettings, out errors);
-            
+
             if (errors.Any())
             {
                 var errRes = new
@@ -1476,11 +1168,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         public JsonResult SaveDataPrivacyFavorites(GdprFavoriteModel model)
         {
             if (!ModelState.IsValid)
-                return Json(new {Success = false, Error = "Invalid parameters"});
-            
+                return Json(new { Success = false, Error = "Invalid parameters" });
+
             model.Id = _gdprFavoritesService.SaveFavorite(model, _userContext.UserId);
             var items = GetDataPrivacyFavorites();
-            return Json(new {Success = true, FavoriteId = model.Id, Favorites = items});
+            return Json(new { Success = true, FavoriteId = model.Id, Favorites = items });
         }
 
         private object GetDataPrivacyFavorites()
@@ -1502,7 +1194,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var model = GetDataPrivacyModel();
             return View(model);
         }
-        
+
         [HttpPost]
         [GdprAccess]
         public ActionResult DataPrivacy(DataPrivacyParameters model)
@@ -1546,7 +1238,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             {
                 IsAvailable = true,
                 Customers = availableCustomers,
-                Favorites = favorites.ToSelectList(new SelectListItem() { Value = "0", Text = Translation.GetCoreTextTranslation("Skapa ny") } )
+                Favorites = favorites.ToSelectList(new SelectListItem() { Value = "0", Text = Translation.GetCoreTextTranslation("Skapa ny") })
             };
             return model;
         }
@@ -1609,7 +1301,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Cases = item.ClosedOnly ? closedText : $"{closedText}, {openedText}",
                     Data = formattedFields.Any() ? string.Join(", ", formattedFields) : "",
                     AttachedFiles = attachedFilesFormatted.ToString().Trim(',').Trim(),
-                    Executed = TimeZoneInfo.ConvertTimeFromUtc(item.ExecutedDate, userTimeZone).ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)
+                    Executed = TimeZoneInfo.ConvertTimeFromUtc(item.ExecutedDate, userTimeZone).ToString(DateFormats.DateTime, CultureInfo.InvariantCulture)
                 };
 
                 model.Add(modelItem);
@@ -1617,7 +1309,71 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             var viewPath = "~/Areas/Admin/Views/GlobalSetting/_DataPrivacyHistoryTable.cshtml";
             var content = RenderRazorViewToString(viewPath, model);
-            return Json(new {Success = true, Content = content}, JsonRequestBehavior.AllowGet);
+            return Json(new { Success = true, Content = content }, JsonRequestBehavior.AllowGet);
+        }
+
+        [ChildActionOnly]
+        public PartialViewResult FilesViewLog()
+        {
+            var customers = _customerUserService.GetCustomerUsersForUser(SessionFacade.CurrentUser.Id).OrderBy(x => x.Customer.Name).ToList();
+            var availableCustomers = customers.Select(x => new SelectListItem
+            {
+                Value = x.Customer.Id.ToString(),
+                Text = x.Customer.Name
+            }).ToList();
+            var selectedCustomerId = customers.Any() ? customers.First().Customer_Id : 0;
+
+            //var userDepartments =
+            //    _departmentsService.GetDepartmentsForUser(selectedCustomerId, SessionFacade.CurrentUser.Id);
+
+            var model = new FileViewLogsViewModel
+            {
+                SelectedCustomerId = selectedCustomerId,
+                Customers = availableCustomers,
+                SelectedDepartmetsIds = new List<int>(),
+                Departments = new List<SelectListItem>(),
+                Amount = 500
+            };
+
+            return PartialView("_FilesViewLog", model);
+        }
+
+        [NoCache]
+        [HttpGet]
+        public JsonResult LoadCustomerDepartments(int id)
+        {
+            var departmets = _departmentsService.GetDepartmentsForUser(id, SessionFacade.CurrentUser.Id);
+            var data = departmets != null
+                ? departmets.Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.DepartmentName.Trim()
+                }).ToList()
+                : new List<SelectListItem>();
+            return Json(new { data }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult LoadFileViewLogs(FileViewLogListFilter filter)
+        {
+            var data = _fileViewLogService.Find(filter, SessionFacade.CurrentUser.TimeZoneId);
+            var model = data.Select(f => new FileViewLogItemViewModel
+            {
+                CaseNumber = f.CaseNumber.ToString(),
+                CreatedDate = f.Log.CreatedDate,
+                DepartmentName = f.DepartmentName,
+                ProductAreaName = f.ProductAreaName,
+                FileName = f.Log.FileName,
+                FilePath = f.Log.FilePath,
+                Id = f.Log.Id,
+                UserName = f.UserName,
+                Operation = f.Log.Operation.Translate(),
+                Source = f.Log.FileSource.Translate()
+            }).ToList();
+
+            var viewPath = "~/Areas/Admin/Views/GlobalSetting/_FileViewLogTable.cshtml";
+            var content = RenderRazorViewToString(viewPath, model);
+            return Json(new { content });
         }
 
         [HttpPost]
@@ -1625,27 +1381,27 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             if (customerId.HasValue && customerId > 0)
             {
-				var exceptionList = new List<string>
-				{
+                var exceptionList = new List<string>
+                {
                     //GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString(),
                     GlobalEnums.TranslationCaseFields.AddUserBtn.ToString(),
-					GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString(),
-					GlobalEnums.TranslationCaseFields.Filename.ToString(),
-					"tblLog.Charge",
-					"tblLog.Filename",
-					GlobalEnums.TranslationCaseFields.FinishingDate.ToString(),
-					GlobalEnums.TranslationCaseFields.Verified.ToString(), //mandatory
+                    GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString(),
+                    GlobalEnums.TranslationCaseFields.Filename.ToString(),
+                    "tblLog.Charge",
+                    "tblLog.Filename",
+                    GlobalEnums.TranslationCaseFields.FinishingDate.ToString(),
+                    GlobalEnums.TranslationCaseFields.Verified.ToString(), //mandatory
                     GlobalEnums.TranslationCaseFields.SMS.ToString(),
-					GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(),
+                    GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(),
                     //GlobalEnums.TranslationCaseFields.User_Id.ToString(), //because included in registeredBy
                     GlobalEnums.TranslationCaseFields.RegTime.ToString(),
-					GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
-					GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), //mandatory
+                    GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
+                    GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), //mandatory
                     GlobalEnums.TranslationCaseFields.CaseNumber.ToString(),
-					GlobalEnums.TranslationCaseFields.Customer_Id.ToString(),
-					GlobalEnums.TranslationCaseFields.Cost.ToString(),
-					"tblLog.Filename_Internal"
-				};
+                    GlobalEnums.TranslationCaseFields.Customer_Id.ToString(),
+                    GlobalEnums.TranslationCaseFields.Cost.ToString(),
+                    "tblLog.Filename_Internal"
+                };
 
                 var additionalFields = new List<CaseFieldSettingsWithLanguage>
                 {
@@ -1668,7 +1424,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                         .Select(f => new CaseFieldSettingsWithLanguage
                         {
                             Name = f.Name
-                        }).ToList(); 
+                        }).ToList();
 
                 // add additional fields
                 fields.AddRange(additionalFields);
@@ -1681,7 +1437,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     })
                     .OrderBy(f => f.Text)
                     .ToList();
-                
+
                 return Json(new { success = true, data });
             }
 

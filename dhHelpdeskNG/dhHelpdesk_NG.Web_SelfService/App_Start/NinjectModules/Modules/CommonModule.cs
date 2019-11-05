@@ -7,58 +7,61 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.SelfService.Infrastructure.Cache;
 using DH.Helpdesk.Services.Services.Cache;
 
 namespace DH.Helpdesk.SelfService.NinjectModules.Modules
 {
-    using BusinessData.Models.Case.CaseHistory;
-    using BusinessData.Models.Logs.Output;
-    using Dal.MapperData.CaseHistory;
-    using Dal.MapperData.Logs;
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
-    using DH.Helpdesk.BusinessData.Models.Case.Input;
-    using DH.Helpdesk.BusinessData.Models.Case.Output;
-    using DH.Helpdesk.BusinessData.Models.Customer;
-    using DH.Helpdesk.BusinessData.Models.Customer.Input;
-    using DH.Helpdesk.BusinessData.Models.Invoice;
-    using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
-    using DH.Helpdesk.BusinessData.Models.Projects.Input;
-    using DH.Helpdesk.BusinessData.Models.Projects.Output;
-    using DH.Helpdesk.Dal.Infrastructure.Translate;
-    using DH.Helpdesk.Dal.Mappers;
-    using DH.Helpdesk.Dal.Mappers.Logs;
-    using DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity;
-    using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
-    using DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel;
-    using DH.Helpdesk.Dal.Mappers.Invoice.BusinessModelToEntity;
-    using DH.Helpdesk.Dal.Mappers.Invoice.EntityToBusinessModel;
-    using DH.Helpdesk.Dal.Mappers.ProductArea.BusinessModelToEntity;
-    using DH.Helpdesk.Dal.Mappers.ProductArea.EntityToBusinessModel;
-    using DH.Helpdesk.Dal.Mappers.Projects;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Domain.Cases;
-    using DH.Helpdesk.Domain.Computers;
-    using DH.Helpdesk.Domain.Invoice;
-    using DH.Helpdesk.Domain.Projects;
-    using DH.Helpdesk.SelfService.Infrastructure.Translate;
-    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
-    using DH.Helpdesk.Services.BusinessLogic.Admin.Users.Concrete;
-    using Ninject.Modules;
-    using Dal.DbQueryExecutor;
-    using Domain.ExtendedCaseEntity;
-    using BusinessData.Models.Condition;
-    using Dal.Mappers.Condition;
-    using Dal.Mappers.Calendars.EntityToBusinessModel;
-    using BusinessData.Models.Calendar.Output;
-    using Dal.Mappers.Calendars.BusinessModelToEntity;
+	using BusinessData.Models.Case.CaseHistory;
+	using BusinessData.Models.Logs.Output;
+	using Dal.MapperData.CaseHistory;
+	using Dal.MapperData.Logs;
+	using DH.Helpdesk.BusinessData.Models.Case;
+	using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
+	using DH.Helpdesk.BusinessData.Models.Case.Input;
+	using DH.Helpdesk.BusinessData.Models.Case.Output;
+	using DH.Helpdesk.BusinessData.Models.Customer;
+	using DH.Helpdesk.BusinessData.Models.Customer.Input;
+	using DH.Helpdesk.BusinessData.Models.Invoice;
+	using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+	using DH.Helpdesk.BusinessData.Models.Projects.Input;
+	using DH.Helpdesk.BusinessData.Models.Projects.Output;
+	using DH.Helpdesk.Dal.Infrastructure.Translate;
+	using DH.Helpdesk.Dal.Mappers;
+	using DH.Helpdesk.Dal.Mappers.Logs;
+	using DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity;
+	using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
+	using DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel;
+	using DH.Helpdesk.Dal.Mappers.Invoice.BusinessModelToEntity;
+	using DH.Helpdesk.Dal.Mappers.Invoice.EntityToBusinessModel;
+	using DH.Helpdesk.Dal.Mappers.ProductArea.BusinessModelToEntity;
+	using DH.Helpdesk.Dal.Mappers.ProductArea.EntityToBusinessModel;
+	using DH.Helpdesk.Dal.Mappers.Projects;
+	using DH.Helpdesk.Domain;
+	using DH.Helpdesk.Domain.Cases;
+	using DH.Helpdesk.Domain.Computers;
+	using DH.Helpdesk.Domain.Invoice;
+	using DH.Helpdesk.Domain.Projects;
+	using DH.Helpdesk.SelfService.Infrastructure.Translate;
+	using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+	using DH.Helpdesk.Services.BusinessLogic.Admin.Users.Concrete;
+	using Ninject.Modules;
+	using Dal.DbQueryExecutor;
+	using Domain.ExtendedCaseEntity;
+	using BusinessData.Models.Condition;
+	using Dal.Mappers.Condition;
+	using Dal.Mappers.Calendars.EntityToBusinessModel;
+	using BusinessData.Models.Calendar.Output;
+	using Dal.Mappers.Calendars.BusinessModelToEntity;
+    using Dal.Mappers.FileViewLog.EntityToBusinessModel;
+	using Dal.Mappers.FileViewLog.BusinessModelToEntity;
 
-    /// <summary>
-    /// The common module.
-    /// </summary>
-    public class CommonModule : NinjectModule
+	/// <summary>
+	/// The common module.
+	/// </summary>
+	public class CommonModule : NinjectModule
     {
         /// <summary>
         /// The load.
@@ -289,6 +292,14 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
             this.Bind<IEntityToBusinessModelMapper<ConditionEntity, ConditionModel>>()
                 .To<ConditionToBusinessModelMapper>()
                 .InSingletonScope();
-        }
+
+			this.Bind<IBusinessModelToEntityMapper<FileViewLogModel, FileViewLogEntity>>()
+				.To<FileViewLogToEntityMapper>()
+				.InSingletonScope();
+
+			this.Bind<IEntityToBusinessModelMapper<FileViewLogEntity, FileViewLogModel>>()
+				.To<FileViewLogToBusinessModelMapper>()
+				.InSingletonScope();
+		}
     }
 }

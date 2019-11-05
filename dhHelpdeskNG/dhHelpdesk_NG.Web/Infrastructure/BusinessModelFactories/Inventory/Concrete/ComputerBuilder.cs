@@ -346,11 +346,12 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 return OrganizationFields.CreateDefault();
             }
 
+            var region = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.OrganizationFieldsModel.RegionId);
             var department = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.OrganizationFieldsModel.DepartmentId);
             var domain = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.OrganizationFieldsModel.DomainId);
             var unit = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.OrganizationFieldsModel.UnitId);
 
-            var fields = new OrganizationFields(department, domain, unit);
+            var fields = new OrganizationFields(region, department, domain, unit);
 
             return fields;
         }
@@ -392,7 +393,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
         private static StateFields CreateState(StateFieldsViewModel fieldsModel)
         {
-            if (fieldsModel == null || fieldsModel.StateFieldsModel == null)
+            if (fieldsModel?.StateFieldsModel == null)
             {
                 return StateFields.CreateDefault();
             }
@@ -403,7 +404,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var sendBack = ConfigurableFieldModel<bool>.GetValueOrDefault(fieldsModel.StateFieldsModel.IsSendBack);
             var scrapDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.StateFieldsModel.ScrapDate);
 
-            var fields = new StateFields(state.HasValue ? state.Value : 0, stolen, replaced, sendBack, scrapDate);
+            var fields = new StateFields(state ?? 0, stolen, replaced, sendBack, scrapDate);
 
             return fields;
         }

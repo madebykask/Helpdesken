@@ -100,6 +100,7 @@
     <Compile Include="Enums\Changes\Fields\OtherField.cs" />
     <Compile Include="Enums\Changes\Fields\RegistrationField.cs" />
     <Compile Include="Enums\Contracts\ContractFieldLabels.cs" />
+    <Compile Include="Enums\FileViewLogs\FileViewLogSortFields.cs" />
     <Compile Include="Enums\Inventory\CurrentModes.cs" />
     <Compile Include="Enums\Inventory\Fields\Computer\CommunicationFields.cs" />
     <Compile Include="Enums\Inventory\Fields\Computer\ContactFields.cs" />
@@ -330,6 +331,10 @@
     <Compile Include="Models\Feedback\FeedbackFullItem.cs" />
     <Compile Include="Models\Feedback\FeedbackQuestionOption.cs" />
     <Compile Include="Models\Feedback\FeedbackQuestionOverview.cs" />
+    <Compile Include="Models\FileContentModel.cs" />
+    <Compile Include="Models\FileViewLog\FileViewLogListFilter.cs" />
+    <Compile Include="Models\FileViewLog\FileViewLogListItemModel.cs" />
+    <Compile Include="Models\FileViewLog\FileViewLogModel.cs" />
     <Compile Include="Models\FinishingCause\FinishingCauseItem.cs" />
     <Compile Include="Models\Gdpr\DataPrivacyParameters.cs" />
     <Compile Include="Models\Gdpr\GdprFavoriteModel.cs" />
@@ -763,8 +768,6 @@
     <Compile Include="Models\Holiday\Output\HolidayHeaderOverview.cs" />
     <Compile Include="Models\Holiday\Output\HolidayOverview.cs" />
     <Compile Include="Models\Impact\Output\ImpactOverview.cs" />
-    <Compile Include="Models\Inventory\ComputerStatuses.cs" />
-    <Compile Include="Models\Inventory\ContractStatuses.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\OrganizationFields.cs" />
     <Compile Include="Models\Inventory\Edit\Computer\StateFields.cs" />
     <Compile Include="Models\Inventory\Edit\Printer\CommunicationFields.cs" />

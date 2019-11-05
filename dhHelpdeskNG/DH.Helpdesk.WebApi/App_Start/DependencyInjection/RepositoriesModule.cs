@@ -111,6 +111,7 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<ComputerUsersBlackListRepository>().As<IComputerUsersBlackListRepository>();
             builder.RegisterType<ComputerUsersRepository>().As<IComputerUsersRepository>();
             builder.RegisterType<ComputerRepository>().As<IComputerRepository>();
+            builder.RegisterType<ComputerStatusRepository>().As<IComputerStatusRepository>();
             builder.RegisterType<OrganizationUnitRepository>().As<IOrganizationUnitRepository>();
             builder.RegisterType<AccountActivityRepository>().As<IAccountActivityRepository>();
             builder.RegisterType<CustomerUserRepository>().As<ICustomerUserRepository>();
@@ -237,6 +238,7 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<CaseSolutionSettingRepository>().As<ICaseSolutionSettingRepository>();
             builder.RegisterType<FileIndexingRepository>().As<IFileIndexingRepository>();
             builder.RegisterType<FeatureToggleRepository>().As<IFeatureToggleRepository>();
-        }
+			builder.RegisterType<FileViewLogRepository>().As<IFileViewLogRepository>();
+		}
     }
 }

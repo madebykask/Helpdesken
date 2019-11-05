@@ -66,9 +66,13 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
         [NotNull]
         public DeliveryEditModel Delivery { get; set; }
 
-        [NotNull]
-        public GeneralEditModel General { get; set; }
+		[NotNull]
+		public ProgramEditModel Program { get; set; }
 
+
+		[NotNull]
+        public GeneralEditModel General { get; set; }
+		
         [NotNull]
         public LogEditModel Log { get; set; }
 
@@ -76,11 +80,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
         [NotNull]
         public OrderEditModel Order { get; set; }
 
-        [NotNull]
-        public OtherEditModel Other { get; set; }
 
-        [NotNull]
-        public ProgramEditModel Program { get; set; }
+
+		[NotNull]
+        public OtherEditModel Other { get; set; }
 
         [NotNull]
         public ReceiverEditModel Receiver { get; set; }
@@ -110,6 +113,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
         public bool CreateCase { get; set; }
 
         public bool UserHasAdminOrderPermission { get; set; }
+        public bool UserHasCreateWorkstationPermission { get; set; }
 
         [NotNull]
         public List<WebTemporaryFile> NewFiles { get; set; }

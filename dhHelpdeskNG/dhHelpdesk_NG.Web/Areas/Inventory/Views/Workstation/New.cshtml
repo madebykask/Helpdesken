@@ -10,15 +10,15 @@
 {
     <ul class="secnav">
         <li id="menu1">
-            <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#workstation_edit_form').submit(); "/>
+            <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn" onclick=" $('#workstation_edit_form').submit(); "/>
         </li>
-        <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
+        <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", null, new { @class = "btn" })</li>
     </ul>
 }
 
 @section Title
 {
-    @Translation.Get("Arbetsstation")
+    @Translation.GetCoreTextTranslation("Arbetsstation")
 }
 
 @section Content
@@ -67,6 +67,14 @@
                 // create instance and init
                 window.inventoryFiles = new InventoryFiles(jQuery);
                 window.inventoryFiles.init(inventoryFilesOptions);
+
+                window.workstationEdit = new WorkstationEdit($);
+                window.workstationEdit.init({
+                    userId: @SessionFacade.CurrentUser.Id,
+                    customerId: @SessionFacade.CurrentCustomer.Id,
+                    getUnitsUrl: '@Url.Action("GetUnits", "Ajax", new {area = ""})',
+                    getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})'
+                });
             });
         </script>    
     }

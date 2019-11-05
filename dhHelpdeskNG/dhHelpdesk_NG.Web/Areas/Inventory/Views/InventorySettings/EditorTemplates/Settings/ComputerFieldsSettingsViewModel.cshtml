@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.Computer.ComputerFieldsSettingsViewModel
 <script>
-    $(function() {
+    $(function () {
 
         // YES and NO SWITCH FOR CHECKBOXES
         $('.switchcheckbox').bootstrapSwitch('onText', trans_yes);
@@ -23,14 +23,14 @@
         //    }
         //});
 
-        $('.is_readonly_checkbox').on('switchChange.bootstrapSwitch', function(event, state) {
+        $('.is_readonly_checkbox').on('switchChange.bootstrapSwitch', function (event, state) {
             var value = state;
             if (value == true) {
                 $(this).closest("tr").find(".is_required_checkbox").bootstrapSwitch('state', !value);
             }
         });
 
-        $('.is_required_checkbox').on('switchChange.bootstrapSwitch', function(event, state) {
+        $('.is_required_checkbox').on('switchChange.bootstrapSwitch', function (event, state) {
             var value = state;
             if (value == true) {
                 $(this).closest("tr").find(".is_readonly_checkbox").bootstrapSwitch('state', !value);
@@ -41,20 +41,20 @@
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
-            <th>@Translation.Get("Fält")</th>
-            <th>@Translation.Get("Visa")</th>
+            <th>@Translation.GetCoreTextTranslation("Fält")</th>
+            <th>@Translation.GetCoreTextTranslation("Visa")</th>
             <th>
-                @Translation.Get("Rubrik")
+                @Translation.GetCoreTextTranslation("Rubrik")
                 @Html.DropDownListFor(m => m.LanguageId, Model.Languages, new { id = "settings_language_dropdown" })
             </th>
-            <th>@Translation.Get("Obligatorisk")</th>
-            <th>@Translation.Get("Lista")</th>
-            <th>@Translation.Get("Skrivskyddad")</th>
+            <th>@Translation.GetCoreTextTranslation("Obligatorisk")</th>
+            <th>@Translation.GetCoreTextTranslation("Lista")</th>
+            <th>@Translation.GetCoreTextTranslation("Skrivskyddad")</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td colspan="6" class="header">@Translation.Get("Arbetsstation")</td>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Arbetsstation")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.WorkstationFieldsSettingsModel.NameFieldSettingModel, "Settings/FieldSettingForComputerModel")
@@ -87,19 +87,19 @@
             @Html.EditorFor(m => m.WorkstationFieldsSettingsModel.LocationFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.Get("Chassis")</td>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Chassis")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.ChassisFieldsSettingsModel.ChassisFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.Get("Inventering")</td>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Inventering")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.InventoryFieldsSettingsModel.BarCodeFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.Get("Operativsystem")</td>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Operativsystem")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.OperatingSystemFieldsSettingsModel.OperatingSystemFieldSettingModel, "Settings/FieldSettingForComputerModel")
@@ -117,19 +117,19 @@
             @Html.EditorFor(m => m.OperatingSystemFieldsSettingsModel.ProductKeyFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.Get("Processor")</td>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Processor")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.ProccesorFieldsSettingsModel.ProccesorFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.Get("Minne")</td>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Minne")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.MemoryFieldsSettingsModel.RAMFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.Get("Kommunikation")</td>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Kommunikation")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.CommunicationFieldsSettingsModel.NetworkAdapterFieldSettingModel, "Settings/FieldSettingForComputerModel")
@@ -147,19 +147,19 @@
             @Html.EditorFor(m => m.CommunicationFieldsSettingsModel.NovellClientFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.Get("Grafik")</td>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Grafik")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.GraphicsFieldsSettingsModel.VideoCardFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.Get("Ljud")</td>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Ljud")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.SoundFieldsSettingsModel.SoundCardFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.Get("Avtal")</td>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Avtal")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.ContractFieldsSettingsModel.ContractStatusFieldSettingModel, "Settings/FieldSettingForComputerModel")
@@ -198,20 +198,24 @@
             @Html.EditorFor(m => m.ContractFieldsSettingsModel.DocumentsFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.Get("Övrigt")</td>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Övrigt")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.OtherFieldsSettingsModel.InfoFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.Get("Användaruppgifter")</td>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Användaruppgifter")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.ContactInformationFieldsSettingsModel.UserIdFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.Get("Organisation")</td>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Organisation")</td>
         </tr>
+        <tr>
+            @Html.EditorFor(m => m.OrganizationFieldsSettingsModel.RegionFieldSettingModel, "Settings/FieldSettingForComputerModel")
+        </tr>
+
         <tr>
             @Html.EditorFor(m => m.OrganizationFieldsSettingsModel.DepartmentFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
@@ -222,7 +226,7 @@
             @Html.EditorFor(m => m.OrganizationFieldsSettingsModel.UnitFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.Get("Placering")</td>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Placering")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.PlaceFieldsSettingsModel.RoomFieldSettingModel, "Settings/FieldSettingForComputerModel")
@@ -243,7 +247,7 @@
             @Html.EditorFor(m => m.PlaceFieldsSettingsModel.Place2FieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.Get("Kontakt")</td>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Kontakt")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.ContactFieldsSettingsModel.NameFieldSettingModel, "Settings/FieldSettingForComputerModel")
@@ -255,7 +259,7 @@
             @Html.EditorFor(m => m.ContactFieldsSettingsModel.EmailFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.Get("Status")</td>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Status")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.StateFieldsSettingsModel.StateFieldSettingModel, "Settings/FieldSettingForComputerModel")
@@ -273,7 +277,7 @@
             @Html.EditorFor(m => m.StateFieldsSettingsModel.ScrapDateFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.Get("Status")</td>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Status")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.DateFieldsSettingsModel.CreatedDateFieldSettingModel, "Settings/FieldSettingForComputerModel")
@@ -287,32 +291,32 @@
         <tr>
             @Html.EditorFor(m => m.DateFieldsSettingsModel.ScanDateFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
-    <tr>
-        @Html.EditorFor(m => m.DateFieldsSettingsModel.PathDirectoryFieldSettingModel, "Settings/FieldSettingForComputerModel")
-    </tr>
-    <tr>
-        <td colspan="6" class="header">@Translation.Get("Tabs")</td>
-    </tr>
-    <tr>
-        @Html.EditorFor(m => m.WorkstationTabsSettingsModel.ComputersTabSettingModel, "Settings/TabSettingForComputerModel")
-    </tr>
-    <tr>
-        @Html.EditorFor(m => m.WorkstationTabsSettingsModel.StorageTabSettingModel, "Settings/TabSettingForComputerModel")
-    </tr>
-    <tr>
-        @Html.EditorFor(m => m.WorkstationTabsSettingsModel.SoftwareTabSettingModel, "Settings/TabSettingForComputerModel")
-    </tr>
-    <tr>
-        @Html.EditorFor(m => m.WorkstationTabsSettingsModel.HotFixesTabSettingModel, "Settings/TabSettingForComputerModel")
-    </tr>
-    <tr>
-        @Html.EditorFor(m => m.WorkstationTabsSettingsModel.ComputerLogsTabSettingModel, "Settings/TabSettingForComputerModel")
-    </tr>
-    <tr>
-        @Html.EditorFor(m => m.WorkstationTabsSettingsModel.AccessoriesTabSettingModel, "Settings/TabSettingForComputerModel")
-    </tr>
-    <tr>
-        @Html.EditorFor(m => m.WorkstationTabsSettingsModel.RelatedCasesTabSettingModel, "Settings/TabSettingForComputerModel")
-    </tr>
+        <tr>
+            @Html.EditorFor(m => m.DateFieldsSettingsModel.PathDirectoryFieldSettingModel, "Settings/FieldSettingForComputerModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Tabs")</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationTabsSettingsModel.ComputersTabSettingModel, "Settings/TabSettingForComputerModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationTabsSettingsModel.StorageTabSettingModel, "Settings/TabSettingForComputerModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationTabsSettingsModel.SoftwareTabSettingModel, "Settings/TabSettingForComputerModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationTabsSettingsModel.HotFixesTabSettingModel, "Settings/TabSettingForComputerModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationTabsSettingsModel.ComputerLogsTabSettingModel, "Settings/TabSettingForComputerModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationTabsSettingsModel.AccessoriesTabSettingModel, "Settings/TabSettingForComputerModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationTabsSettingsModel.RelatedCasesTabSettingModel, "Settings/TabSettingForComputerModel")
+        </tr>
     </tbody>
 </table>

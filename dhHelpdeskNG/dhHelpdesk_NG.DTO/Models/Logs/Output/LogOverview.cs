@@ -92,13 +92,15 @@ namespace DH.Helpdesk.BusinessData.Models.Logs.Output
 
     public class LogFileOverview
     {
-        public LogFileOverview(int id, string fileName, int? caseId = null, int? logId = null, LogFileType logType = LogFileType.External)
+        public LogFileOverview(int id, string fileName, int? caseId = null, int? logId = null, LogFileType logType = LogFileType.External,
+            LogFileType? parentLogType = null)
         {
             Id = id;
             FileName = fileName;
             CaseId = caseId;
             LogId = logId;
             LogType = logType;
+            ParentLogType = parentLogType;
         }
 
         public int Id { get; }
@@ -106,6 +108,7 @@ namespace DH.Helpdesk.BusinessData.Models.Logs.Output
         public int? CaseId { get; set; }
         public int? LogId { get; set; }
         public LogFileType LogType { get; set; }
+        public LogFileType? ParentLogType { get; set; }
     }
 
     public class LogUserOverview : IUserInfo

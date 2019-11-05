@@ -27,6 +27,7 @@ namespace DH.Helpdesk.Domain
         public int ComputerUserInfoListLocation { get; set; }  //READ ONLY, DON'T CHANGE IT FROM PROJECT- ONLY IN DB IF NECESSARY!
         public int ComputerUserLog { get; set; }
         public int CreateCaseFromOrder { get; set; }
+        public int CreateComputerFromOrder { get; set; }
         public int Customer_Id { get; set; }
         public int DBType { get; set; }
         public int? DefaultAdministrator { get; set; }

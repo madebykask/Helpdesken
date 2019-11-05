@@ -7454,6 +7454,102 @@ If not exists (select * from tblTextTranslation where text_id = 2025 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2025, 2, 'External attached file')
 GO
 
+If not exists (select * from tbltext where id = 2026)
+	insert into tbltext (id, TextString) VALUES (2026, 'Drift')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2026 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2026, 2, 'Operation')
+GO
+
+If not exists (select * from tbltext where id = 2027)
+	insert into tbltext (id, TextString) VALUES (2027, 'Se')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2027 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2027, 2, 'View')
+GO
+
+If not exists (select * from tbltext where id = 2028)
+	insert into tbltext (id, TextString) VALUES (2028, 'Filåtkomst')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2028 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2028, 2, 'File Access')
+GO
+
+If not exists (select * from tbltext where id = 2029)
+	insert into tbltext (id, TextString) VALUES (2029, 'Skapa arbetsstation')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2029 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2029, 2, 'Create workstation')
+GO
+
+If not exists (select * from tbltext where id = 2030)
+begin
+	insert into tbltext (id, TextString) VALUES (2030, 'Leasing')
+	If not exists (select * from tblTextTranslation where text_id = 2030 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2030, 2, 'Leasing')
+end
+GO
+
+If not exists (select * from tbltext where id = 2031)
+begin
+	insert into tbltext (id, TextString) VALUES (2031, 'Köpt')
+	If not exists (select * from tblTextTranslation where text_id = 2031 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2031, 2, 'Purchased')
+end
+GO
+
+If not exists (select * from tbltext where id = 2032)
+begin
+	insert into tbltext (id, TextString) VALUES (2032, 'Hyrd')
+	If not exists (select * from tblTextTranslation where text_id = 2032 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2032, 2, 'Leased')
+end
+GO
+
+If not exists (select * from tbltext where id = 2033)
+begin
+	insert into tbltext (id, TextString) VALUES (2033, 'Leasing (skola)')
+	If not exists (select * from tblTextTranslation where text_id = 2033 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2033, 2, 'Leasing (School)')
+end
+GO
+
+If not exists (select * from tbltext where id = 2034)
+begin
+	insert into tbltext (id, TextString) VALUES (2034, 'Certifiering')
+	If not exists (select * from tblTextTranslation where text_id = 2034 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2034, 2, 'Certification')
+end
+GO
+
+If not exists (select * from tbltext where id = 2035)
+begin
+	insert into tbltext (id, TextString) VALUES (2035, 'Aktiv')
+	If not exists (select * from tblTextTranslation where text_id = 2035 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2035, 2, 'Active')
+end
+GO
+
+If not exists (select * from tbltext where id = 2036)
+begin
+	insert into tbltext (id, TextString) VALUES (2036, 'Ej kopplad till användare')
+	If not exists (select * from tblTextTranslation where text_id = 2036 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2036, 2, 'Not connected to users')
+end
+GO
+
+If not exists (select * from tbltext where id = 2037)
+begin
+	insert into tbltext (id, TextString) VALUES (2037, 'Stulen')
+	If not exists (select * from tblTextTranslation where text_id = 2037 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2037, 2, 'Stolen')
+end
+GO
+
+
+
+
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')

@@ -1,4 +1,6 @@
-﻿using DH.Helpdesk.Web.Common.Tools.Files;
+﻿using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Web.Common.Tools.Files;
 using DH.Helpdesk.Web.Infrastructure.Order;
 
 namespace DH.Helpdesk.Web.Areas.Orders.Controllers
@@ -35,40 +37,25 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
     public class OrdersController : BaseController
     {
         private readonly IOrdersService _ordersService;
-
         private readonly IWorkContext _workContext;
-
         private readonly IOrdersModelFactory _ordersModelFactory;
-
         private readonly TemporaryIdProvider _temporaryIdProvider;
-
         private readonly INewOrderModelFactory _newOrderModelFactory;
-
         private readonly IOrderModelFactory _orderModelFactory;
-
         private readonly ITemporaryFilesCache _filesStore;
-
         private readonly IEditorStateCache _filesStateStore;
-
         private readonly IUpdateOrderModelFactory _updateOrderModelFactory;
-
         private readonly ILogsModelFactory _logsModelFactory;
-
         private readonly IEmailService _emailService;
-
         private readonly IUserPermissionsChecker _userPermissionsChecker;
-
         private readonly IOrderTypeService _orderTypeService;
-
         private readonly ICustomerService _customerService;
-
         private readonly ISettingService _settingService;
-
         private readonly IDocumentService _documentService;
-
         private readonly IOrganizationService _organizationService;
+		private readonly IOrganizationJsonService _organizationJsonService;
 
-        public OrdersController(
+		public OrdersController(
                 IMasterDataService masterDataService,
                 IOrdersService ordersService,
                 IWorkContext workContext,
@@ -86,7 +73,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
                 ICustomerService customerService,
                 ISettingService settingService,
                 IDocumentService documentService,
-                IOrganizationService organizationService)
+                IOrganizationService organizationService,
+				IOrganizationJsonService organizationJsonService)
             : base(masterDataService)
         {
             _ordersService = ordersService;
@@ -103,6 +91,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
             _customerService = customerService;
             _settingService = settingService;
             _documentService = documentService;
+            _organizationService = organizationService;
+			_organizationJsonService = organizationJsonService;
 
             _filesStateStore = editorStateCacheFactory.CreateForModule(ModuleName.Orders);
             _filesStore = temporaryFilesCacheFactory.CreateForModule(ModuleName.Orders);
@@ -268,10 +258,16 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
             _filesStateStore.ClearObjectDeletedFiles(id);
 
             var userHasAdminOrderPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.AdministerOrderPermission);
+            var cs = _settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+            var userHasCreateWorkstationPermission = cs.CreateComputerFromOrder.ToBool() &&
+                                                     cs.ModuleInventory.ToBool() &&
+                                                     _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
 
             var model = _orderModelFactory.Create(response, _workContext.Customer.CustomerId);
             model.UserHasAdminOrderPermission = userHasAdminOrderPermission;
             model.IsReturnToCase = retToCase;
+            model.UserHasCreateWorkstationPermission = userHasCreateWorkstationPermission;
+
 
             return View(model);
         }
@@ -458,5 +454,13 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
             var fileName = string.Format("O-{0}_{1}.txt", model.General.OrderNumber.Value, DateTime.Now.ToShortDateString());
             return File(fileContent, MimeType.BinaryFile, fileName);
         }
+
+		[HttpGet]
+		public JsonResult GetUnits(int? departmentId)
+		{
+			var ous = _organizationJsonService.GetActiveOUForDepartmentAsIdName(departmentId, _workContext.Customer.CustomerId)
+				.ToList();
+			return Json(ous, JsonRequestBehavior.AllowGet);
+		}
     }
 }

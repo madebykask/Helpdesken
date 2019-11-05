@@ -4,13 +4,14 @@
         || Model.OrganizationFieldsModel.DomainId.Show
         || Model.OrganizationFieldsModel.UnitId.Show)
 {
-    <h4>@Translation.Get("Organisation")</h4>
+    <h4>@Translation.GetCoreTextTranslation("Organisation")</h4>
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @*@Html.EditorFor(m => m.OrganizationFieldsModel.DepartmentId, "Fields/List", new { Source = Model.Departments })*@
                 @Html.EditorFor(m => m.OrganizationFieldsModel.DomainId, "Fields/List", new { Source = Model.Domains })
-                @Html.EditorFor(m => m.OrganizationFieldsModel.UnitId, "Fields/List", new { Source = Model.Units })
+                @Html.EditorFor(m => m.OrganizationFieldsModel.RegionId, "Fields/List", new { Source = Model.Regions, Id = "OU_RegionId" })
+                @Html.EditorFor(m => m.OrganizationFieldsModel.DepartmentId, "Fields/List", new { Source = Model.Departments, Id = "OU_DepartmentId" })
+                @Html.EditorFor(m => m.OrganizationFieldsModel.UnitId, "Fields/List", new { Source = Model.Units, Id = "OU_OUId" })
             </table>
         </div>
     </div>

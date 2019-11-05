@@ -12,7 +12,6 @@
         CloseCasePermission,
         RestrictedCasePermission,
         FollowUpPermission,
-        DataSecurityPermission,
         CaseSolutionPermission,
         ReportPermission,
         FaqPermission,

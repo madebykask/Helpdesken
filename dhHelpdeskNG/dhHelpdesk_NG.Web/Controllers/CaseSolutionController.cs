@@ -3163,6 +3163,7 @@ namespace DH.Helpdesk.Web.Controllers
             model.ScheduleDays = string.Empty;
             model.ScheduleMonths = string.Empty;
             model.Schedule = 0;
+			model.ScheduleTime = 1;
 
             if (schedule != null)
             {

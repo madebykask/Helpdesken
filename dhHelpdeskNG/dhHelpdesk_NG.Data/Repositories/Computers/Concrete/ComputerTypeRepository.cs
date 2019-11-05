@@ -52,13 +52,15 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 
         public List<ItemOverview> FindOverviews(int customerId)
         {
-            var anonymus =
-                this.DbSet
-                    .Select(c => new { c.Name, c.Id, c.InventoryType_Id }).Where(c => c.InventoryType_Id == null)
-                    .ToList();
-
             var overviews =
-                anonymus.Select(c => new ItemOverview(c.Name, c.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+                DbSet.AsNoTracking()
+                    .Where(c => c.InventoryType_Id == null && c.Customer_Id == customerId)
+                    .Select(c => new ItemOverview()
+                    {
+                        Name = c.Name,
+                        Value = c.Id.ToString()
+                    })
+                    .ToList();
 
             return overviews;
         }

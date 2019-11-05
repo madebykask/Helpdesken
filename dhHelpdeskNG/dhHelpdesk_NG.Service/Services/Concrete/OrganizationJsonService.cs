@@ -5,7 +5,31 @@
 
     using DH.Helpdesk.BusinessData.Models;
 
-    public class OrganizationJsonService
+    public interface IOrganizationJsonService
+    {
+        IdName[] GetActiveOUForDepartmentAsIdName(int? departmentId, int customerId);
+
+        /// <summary>
+        /// Returns Key-value array of departmens for specified region filtered by permissions (In Admin-User "Department" tab)
+        /// </summary>
+        /// <param name="regionId"></param>
+        /// <param name="customerId"></param>
+        /// <param name="userId"></param>
+        /// <param name="departmentFilterFormat"></param>
+        /// <returns></returns>
+        IdName[] GetActiveDepartmentForUserByRegion(int? regionId, int userId, int customerId, int departmentFilterFormat);
+
+        /// <summary>
+        /// Returns Key-Value array of departments for specified region
+        /// </summary>
+        /// <param name="regionId"></param>
+        /// <param name="customerId"></param>
+        /// <param name="departmentFilterFormat"></param>
+        /// <returns></returns>
+        IdName[] GetActiveDepartmentForRegion(int? regionId, int customerId, int departmentFilterFormat);
+    }
+
+    public class OrganizationJsonService : IOrganizationJsonService
     {
         private readonly IOUService _ouService;
         private readonly IRegionService _regionService;
@@ -35,7 +59,7 @@
                 }
 
                 return new IdName {id = ou.Id, name = name};
-            }).ToArray();
+            }).OrderBy(x => x.name).ToArray();
         }
 
         /// <summary>

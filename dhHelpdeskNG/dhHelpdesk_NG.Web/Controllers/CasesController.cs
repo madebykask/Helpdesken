@@ -12,15 +12,20 @@ using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
 using DH.Helpdesk.BusinessData.Models.Logs;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums.Cases;
+using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Enums.Settings;
 using DH.Helpdesk.Common.Exceptions;
+using DH.Helpdesk.Common.Extensions;
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Dal.Infrastructure.Extensions;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Web.Models.Invoice;
 using DH.Helpdesk.Domain.Interfaces;
 using DH.Helpdesk.Domain.Invoice;
 using DH.Helpdesk.Services.BusinessLogic.Cases;
 using DH.Helpdesk.Services.Services.CaseStatistic;
+using DH.Helpdesk.Services.Services.Orders;
 using DH.Helpdesk.Web.Common.Enums.Case;
 using DH.Helpdesk.Web.Common.Extensions;
 using DH.Helpdesk.Web.Common.Models.Case;
@@ -31,72 +36,72 @@ using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
 
 namespace DH.Helpdesk.Web.Controllers
 {
-    using DH.Helpdesk.BusinessData.Enums.Case;
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
-    using DH.Helpdesk.BusinessData.Models.Grid;
-    using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.User.Input;
-    using DH.Helpdesk.BusinessData.OldComponents;
-    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Common.Extensions.Integer;
-    using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure.Context;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services.Infrastructure;
-    using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Services.Services.Concrete;
-    using DH.Helpdesk.Services.Services.Grid;
-    using DH.Helpdesk.Services.Utils;
-    using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.Attributes;
-    using DH.Helpdesk.Web.Infrastructure.Case;
-    using DH.Helpdesk.Web.Infrastructure.CaseOverview;
-    using DH.Helpdesk.Web.Infrastructure.Configuration;
-    using DH.Helpdesk.Web.Infrastructure.Extensions;
-    using DH.Helpdesk.Web.Infrastructure.Grid;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
-    using DH.Helpdesk.Web.Infrastructure.Mvc;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Models;
-    using DH.Helpdesk.Web.Models.Case;
-    using DH.Helpdesk.Web.Models.Case.ChildCase;
-    using DH.Helpdesk.Web.Models.Case.Input;
-    using DH.Helpdesk.Web.Models.Case.Output;
-    using DH.Helpdesk.Web.Models.CaseLock;
-    using DH.Helpdesk.Web.Models.Shared;
-    using DH.Helpdesk.Common.Extensions.DateTime;
+	using DH.Helpdesk.BusinessData.Enums.Case;
+	using DH.Helpdesk.BusinessData.Models;
+	using DH.Helpdesk.BusinessData.Models.Case;
+	using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
+	using DH.Helpdesk.BusinessData.Models.Grid;
+	using DH.Helpdesk.BusinessData.Models.Shared;
+	using DH.Helpdesk.BusinessData.Models.User.Input;
+	using DH.Helpdesk.BusinessData.OldComponents;
+	using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+	using DH.Helpdesk.Common.Enums;
+	using DH.Helpdesk.Common.Extensions.Integer;
+	using DH.Helpdesk.Common.Tools;
+	using DH.Helpdesk.Dal.Enums;
+	using DH.Helpdesk.Dal.Infrastructure.Context;
+	using DH.Helpdesk.Domain;
+	using DH.Helpdesk.Services.Infrastructure;
+	using DH.Helpdesk.Services.Services;
+	using DH.Helpdesk.Services.Services.Concrete;
+	using DH.Helpdesk.Services.Services.Grid;
+	using DH.Helpdesk.Services.Utils;
+	using DH.Helpdesk.Web.Infrastructure;
+	using DH.Helpdesk.Web.Infrastructure.Attributes;
+	using DH.Helpdesk.Web.Infrastructure.Case;
+	using DH.Helpdesk.Web.Infrastructure.CaseOverview;
+	using DH.Helpdesk.Web.Infrastructure.Configuration;
+	using DH.Helpdesk.Web.Infrastructure.Extensions;
+	using DH.Helpdesk.Web.Infrastructure.Grid;
+	using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
+	using DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers;
+	using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
+	using DH.Helpdesk.Web.Infrastructure.Tools;
+	using DH.Helpdesk.Web.Models;
+	using DH.Helpdesk.Web.Models.Case;
+	using DH.Helpdesk.Web.Models.Case.ChildCase;
+	using DH.Helpdesk.Web.Models.Case.Input;
+	using DH.Helpdesk.Web.Models.Case.Output;
+	using DH.Helpdesk.Web.Models.CaseLock;
+	using DH.Helpdesk.Web.Models.Shared;
+	using DH.Helpdesk.Common.Extensions.DateTime;
 
-    using DHDomain = DH.Helpdesk.Domain;
-    using ParentCaseInfo = DH.Helpdesk.BusinessData.Models.Case.ChidCase.ParentCaseInfo;
-    using DH.Helpdesk.Web.Enums;
-    using DH.Helpdesk.Services.Services.Reports;
-    using DH.Helpdesk.Common.Enums.CaseSolution;
-    using DH.Helpdesk.Common.Enums.BusinessRule;
-    using Services.BusinessLogic.Admin.Users;
-    using Services.BusinessLogic.Mappers.Users;
-    using BusinessData.Enums.Admin.Users;
-    using System.Diagnostics;
-    using Models.CaseRules;
-    using Infrastructure.ModelFactories.Case.Concrete;
-    using static BusinessData.OldComponents.GlobalEnums;
-    using System.Threading;
-    using Models.WebApi;
-    using Infrastructure.WebApi;
-    using System.Configuration;
-    using Infrastructure.Helpers;
-    using Infrastructure.Cryptography;
-    using Domain.Computers;
-    using BusinessData.Models.ProductArea.Output;
-    using DH.Helpdesk.Common.Extensions.Boolean;
-    using Common.Tools.Files;
+	using DHDomain = DH.Helpdesk.Domain;
+	using ParentCaseInfo = DH.Helpdesk.BusinessData.Models.Case.ChidCase.ParentCaseInfo;
+	using DH.Helpdesk.Web.Enums;
+	using DH.Helpdesk.Services.Services.Reports;
+	using DH.Helpdesk.Common.Enums.CaseSolution;
+	using DH.Helpdesk.Common.Enums.BusinessRule;
+	using Services.BusinessLogic.Admin.Users;
+	using Services.BusinessLogic.Mappers.Users;
+	using BusinessData.Enums.Admin.Users;
+	using System.Diagnostics;
+	using Models.CaseRules;
+	using Infrastructure.ModelFactories.Case.Concrete;
+	using static BusinessData.OldComponents.GlobalEnums;
+	using System.Threading;
+	using Models.WebApi;
+	using Infrastructure.WebApi;
+	using System.Configuration;
+	using Infrastructure.Helpers;
+	using Infrastructure.Cryptography;
+	using Domain.Computers;
+	using BusinessData.Models.ProductArea.Output;
+	using DH.Helpdesk.Common.Extensions.Boolean;
+	using Common.Tools.Files;
+	using BusinessData.Models.FinishingCause;
 
-    public partial class CasesController : BaseController
+	public partial class CasesController : BaseController
     {
         #region ***Constant/Variables***
 
@@ -168,7 +173,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IExternalInvoiceService _externalInvoiceService;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
         private readonly ICaseRuleFactory _caseRuleFactory;
-        private readonly IOrderService _orderService;
+        private readonly IOrdersService _orderService;
         private readonly IOrderAccountService _orderAccountService;
         private readonly ICaseSectionService _caseSectionService;
         private readonly ICaseDocumentService _caseDocumentService;
@@ -177,6 +182,8 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseStatisticService _caseStatService;
         private readonly IUserEmailsSearchService _userEmailsSearchService;
         private readonly IFeatureToggleService _featureToggleService;
+        private readonly IFileViewLogService _fileViewLogService;
+        private readonly IFilesStorage _filesStorage;
 
         #endregion
 
@@ -252,16 +259,17 @@ namespace DH.Helpdesk.Web.Controllers
             IExternalInvoiceService externalInvoiceService,
             ICaseExtraFollowersService caseExtraFollowersService,
             ICaseRuleFactory caseRuleFactory,
-            IOrderService orderService,
+            IOrdersService orderService,
             IOrderAccountService orderAccountService,
             ICaseDocumentService caseDocumentService,
             ICaseSectionService caseSectionService,
             IExtendedCaseService extendedCaseService,
-            ISendToDialogModelFactory sendToDialogModelFactory, 
+            ISendToDialogModelFactory sendToDialogModelFactory,
             ICaseStatisticService caseStatService,
             IUserEmailsSearchService userEmailsSearchService,
-            IMail2TicketService mail2TicketService,
-            IFeatureToggleService featureToggleService)
+            IFeatureToggleService featureToggleService,
+            IFileViewLogService fileViewLogService,
+            IFilesStorage filesStorage)
             : base(masterDataService)
         {
             _caseProcessor = caseProcessor;
@@ -335,8 +343,10 @@ namespace DH.Helpdesk.Web.Controllers
             _sendToDialogModelFactory = sendToDialogModelFactory;
             _caseStatService = caseStatService;
             _userEmailsSearchService = userEmailsSearchService;
-            _mail2TicketService = mail2TicketService;
             _featureToggleService = featureToggleService;
+            _fileViewLogService = fileViewLogService;
+            _filesStorage = filesStorage;
+
 
             _advancedSearchBehavior = new AdvancedSearchBehavior(caseFieldSettingService,
                 caseSearchService,
@@ -653,7 +663,7 @@ namespace DH.Helpdesk.Web.Controllers
             var gridSettings = SessionFacade.CaseOverviewGridSettings;
             sm.Search.SortBy = gridSettings.sortOptions.sortBy;
             sm.Search.Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc;
-            
+
             m.caseSettings = _caseSettingService.GetCaseSettingsWithUser(f.CustomerId, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
             var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
             var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
@@ -774,7 +784,7 @@ namespace DH.Helpdesk.Web.Controllers
             var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
 
             var casesLocks = _caseLockService.GetLockedCasesToOverView(ids, globalSettings, this.DefaultCaseLockBufferTime).ToList();
-        
+
             foreach (var searchRow in caseSearchResults)
             {
                 var caseId = searchRow.Id;
@@ -796,9 +806,9 @@ namespace DH.Helpdesk.Web.Controllers
                 //this specific case is locked
                 if (caseLock != null)
                 {
-                        jsRow.Add("isCaseLocked", true);
-                        jsRow.Add("caseLockedIconTitle", $"{caseLock.User.FirstName} {caseLock.User.LastName} ({caseLock.User.UserId})");
-                        jsRow.Add("caseLockedIconUrl", $"/Content/icons/{CaseIcon.Locked.CaseIconSrc()}");
+                    jsRow.Add("isCaseLocked", true);
+                    jsRow.Add("caseLockedIconTitle", $"{caseLock.User.FirstName} {caseLock.User.LastName} ({caseLock.User.UserId})");
+                    jsRow.Add("caseLockedIconUrl", $"/Content/icons/{CaseIcon.Locked.CaseIconSrc()}");
                 }
 
                 foreach (var col in gridSettings.columnDefs)
@@ -874,14 +884,14 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var caseLock = _caseLockService.GetCaseLockOverviewByCaseId(caseId);
 
-            if (caseLock != null && 
-                caseLock.LockGUID == new Guid(lockGuid) && 
+            if (caseLock != null &&
+                caseLock.LockGUID == new Guid(lockGuid) &&
                 caseLock.ExtendedTime >= DateTime.Now)
             {
                 // Case still is locked by me
                 return Json(true);
             }
-            else if (caseLock == null || 
+            else if (caseLock == null ||
                      (caseLock != null && !(caseLock.ExtendedTime >= DateTime.Now)))
             {
                 //case is not locked by me or is not locked at all 
@@ -975,7 +985,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 var customerId = SessionFacade.CurrentCustomer.Id;
-                
+
                 SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
                 if (SessionFacade.CurrentUser != null)
                 {
@@ -1133,14 +1143,14 @@ namespace DH.Helpdesk.Web.Controllers
             string err = "";
 
             var tmpLog = _logService.GetLogById(id);
-            var logFiles = _logFileService.FindFileNamesByLogId(id);
+            var logFiles = _logService.GetLogFilesByLogId(id);
 
             var logFileStr = string.Empty;
             if (logFiles.Any())
             {
                 if (currentuser.DeleteAttachedFilePermission != 0)
                 {
-                    logFileStr = string.Format("{0}{1}", StringTags.LogFile, string.Join(StringTags.Seperator, logFiles.ToArray()));
+                    logFileStr = string.Format("{0}{1}", StringTags.LogFile, string.Join(StringTags.Seperator, logFiles.Select(f => f.FileName).ToArray()));
                 }
                 else
                 {
@@ -1153,12 +1163,13 @@ namespace DH.Helpdesk.Web.Controllers
             var c = _caseService.GetCaseById(caseId);
             var basePath = _masterDataService.GetFilePath(c.Customer_Id);
             var logGuid = _logService.Delete(id, basePath);
+            LogLogFilesDelete(caseId, logFiles, c, basePath);
             _userTemporaryFilesStorage.ResetCacheForObject(logGuid.ToString());
 
             IDictionary<string, string> errors;
             string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
 
-            var logStr = string.Format("{0}{1}{2}{3}{4}{5}",
+            var logStr = string.Format("{0} {1} {2} {3} {4} {5}",
                                         StringTags.Delete,
                                         StringTags.ExternalLog,
                                         tmpLog.TextExternal,
@@ -1173,6 +1184,30 @@ namespace DH.Helpdesk.Web.Controllers
 
         }
 
+        private void LogLogFilesDelete(int caseId, List<LogFile> logFiles, Case c, string basePath)
+        {
+            if (logFiles.Any())
+            {
+                var disableLogFileView =
+                    _featureToggleService.Get(
+                        FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+                if (!disableLogFileView.Active)
+                {
+                    foreach (var f in logFiles)
+                    {
+                        if (!f.ParentLog_Id.HasValue) // delete only non reference files
+                        {
+                            var subFolder = f.GetFolderPrefix();
+                            var path = _filesStorage.ComposeFilePath(subFolder, decimal.ToInt32(c.CaseNumber), basePath,
+                                "");
+                            _fileViewLogService.Log(caseId, SessionFacade.CurrentUser.Id, f.FileName, path,
+                                FileViewLogFileSource.Helpdesk,
+                                FileViewLogOperation.Delete);
+                        }
+                    }
+                }
+            }
+        }
         #endregion
 
         #region --New/Edit--
@@ -1281,7 +1316,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var userId = SessionFacade.CurrentUser.Id;
 
                 var caseLockViewModel = GetCaseLockModel(id, userId, true, activeTab);
-                
+
                 //todo: check if GetCaseById can be used in model!
                 int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : _caseService.GetCaseCustomerId(id);
 
@@ -1309,7 +1344,7 @@ namespace DH.Helpdesk.Web.Controllers
                     this.InitFilter(currentCase.Customer_Id, false, CasesCustomFilter.None, false, true);
 
                 //Get order
-                m.OrderId = _orderService.GetOrder(id)?.Id;
+                m.OrderId = _orderService.GetOrderByCase(id)?.Id;
 
                 //Get account id
                 var account = _orderAccountService.GetAccountByCaseNumber(currentCase.CaseNumber);
@@ -1421,7 +1456,7 @@ namespace DH.Helpdesk.Web.Controllers
         private bool CheckInternalLogFilesAccess(int customerId, UserOverview user, IList<CaseFieldSetting> caseFieldSettings = null)
         {
             var internalFileFieldSetting =
-                caseFieldSettings == null 
+                caseFieldSettings == null
                 ? _caseFieldSettingService.GetCaseFieldSetting(customerId, TranslationCaseFields.tblLog_Filename_Internal.ToString().getCaseFieldName())
                 : caseFieldSettings.getCaseSettingsValue(TranslationCaseFields.tblLog_Filename_Internal.ToString());
 
@@ -1457,26 +1492,33 @@ namespace DH.Helpdesk.Web.Controllers
                     m.case_ = _caseService.GetCaseById(m.CaseLog.CaseId);
                     m.IsCaseReopened = isCaseReopened;
 
-                    var virtualDirPath = _masterDataService.GetVirtualDirectoryPath(customerId);
+					var lastLog = m.case_.Logs.OrderByDescending(o => o.Id).FirstOrDefault();
+					if (lastLog.FinishingType.HasValue)
+					{
+						var finishingCausesInfos = _finishingCauseService.GetFinishingCauseInfos(customerId).ToArray();
+						m.FinishingCause = CommonHelper.GetFinishingCauseFullPath(finishingCausesInfos, lastLog.FinishingType);
+					}
+
+					var virtualDirPath = _masterDataService.GetVirtualDirectoryPath(customerId);
                     var useVD = !string.IsNullOrEmpty(virtualDirPath);
                     m.CaseFilesUrlBuilder = new CaseFilesUrlBuilder(virtualDirPath, RequestExtension.GetAbsoluteUrl());
 
                     //prepare log files
                     m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
                     m.EnableTwoAttachments = m.caseFieldSettings.getCaseSettingsValue(TranslationCaseFields.tblLog_Filename_Internal.ToString())?.IsActive ?? false;
-                    
+
                     //get all log files
                     var logFiles = _logFileService.GetLogFileNamesByLogId(id, true);
 
-                    m.LogFilesModel = 
+                    m.LogFilesModel =
                         new FilesModel(id.ToString(), logFiles.Where(f => f.LogType == LogFileType.External).ToList(), useVD);
-                    
+
                     var includeInternalFiles = CheckInternalLogFilesAccess(customerId, SessionFacade.CurrentUser, m.caseFieldSettings);
                     if (includeInternalFiles)
                     {
                         m.LogInternalFilesModel = new FilesModel(id.ToString(), logFiles.Where(f => f.LogType == LogFileType.Internal).ToList(), useVD);
                     }
-                    
+
                     const bool isAddEmpty = true;
                     var responsibleUsersAvailable = _userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
                     m.OutFormatter = new OutputFormatter(cs.IsUserFirstLastNameRepresentation == 1, userTimeZone);
@@ -1529,7 +1571,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.LogFileNames = string.Join("|", m.LogFilesModel.Files.Select(x => x.Name).ToArray());
                     AddViewDataValues();
                     SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
-                    
+
                     // User has not access to case/log
                     if (m.EditMode == AccessMode.NoAccess)
                         return this.RedirectToAction("index", "home");
@@ -1558,7 +1600,8 @@ namespace DH.Helpdesk.Web.Controllers
             if (caseLog.FinishingType > 0)
             {
                 return this.RedirectToAction("index", "cases", new { id = case_.Customer_Id });
-            }else
+            }
+            else
             {
                 return this.RedirectToAction("edit", "cases", new { id = caseLog.CaseId });
             }
@@ -1646,7 +1689,7 @@ namespace DH.Helpdesk.Web.Controllers
                     departmentIds = _departmentService.GetDepartmentsIds(customerId);
                 }
             }
-            
+
             var result = _computerService.SearchComputerUsers(customerId, query, categoryID, departmentIds);
             return Json(new { searchKey = searchKey, result = result });
         }
@@ -1656,7 +1699,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             string url = null;
             Guid guid = Guid.Empty;
-            
+
             if (categoryID == 0)
                 return Json(new { guid, url });
 
@@ -1780,7 +1823,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public ActionResult Search_PcNumber(int userId, int customerId)
         {
-            var result = _computerService.SearchPcNumberByUserId(customerId, userId);          
+            var result = _computerService.SearchPcNumberByUserId(customerId, userId);
             return this.Json(result);
         }
 
@@ -1873,7 +1916,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult GetDepartmentInvoiceParameters(int? departmentId, int? ouId)
         {
-            return departmentId.HasValue? GetInvoiceTime(departmentId.Value, ouId) : null;
+            return departmentId.HasValue ? GetInvoiceTime(departmentId.Value, ouId) : null;
         }
 
         public JsonResult ChangeDepartment(int? id, int customerId)
@@ -1914,10 +1957,11 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     ret = p != null ? p.LogText : string.Empty;
                 }
-                else if(p.LogText != null)
+                else if (p.LogText != null)
                 {
                     ret = p.LogText;
-                }else
+                }
+                else
                     ret = textExternalLogNote;
             }
             else
@@ -1948,7 +1992,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
             if (caseType == null)
                 return new HttpNotFoundResult();
-            
+
             int userId = caseType.User_Id ?? 0;
             var performerUser = caseType.Administrator;
             return Json(new
@@ -2078,7 +2122,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult GetProductAreaByCaseType(int? caseTypeId, int customerId, int? productAreaIdToInclude)
         {
-            var productAreas = 
+            var productAreas =
                 _productAreaService.GetTopProductAreasForUserOnCase(customerId, productAreaIdToInclude, caseTypeId, SessionFacade.CurrentUser).ToList();
 
             //sort
@@ -2160,381 +2204,6 @@ namespace DH.Helpdesk.Web.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        #endregion
-
-        #region --Files--
-
-        [HttpGet]
-        public ActionResult Files(string id, string savedFiles)
-        {
-            //var files = _caseFileService.GetCaseFiles(int.Parse(id));
-            var files = GuidHelper.IsGuid(id)
-                                ? _userTemporaryFilesStorage.FindFileNamesAndDates(id, ModuleName.Cases)
-                                : _caseFileService.FindFileNamesAndDatesByCaseId(int.Parse(id));
-
-            var cfs = MakeCaseFileModel(files, savedFiles);
-            var customerId = 0;
-            if (!GuidHelper.IsGuid(id))
-            {
-                customerId = _caseService.GetCaseById(int.Parse(id)).Customer_Id;
-            }
-
-            var useVd = customerId != 0 && !string.IsNullOrEmpty(_masterDataService.GetVirtualDirectoryPath(customerId));
-
-            var model = new CaseFilesModel(id, cfs.ToArray(), savedFiles, useVd);
-            return PartialView("_CaseFiles", model);
-        }
-        
-        [HttpGet]
-        //todo: check log files permission here
-        public ActionResult LogFiles(string id, bool isInternalLog, int? caseId = null)
-        {
-            var customerId = SessionFacade.CurrentCustomer.Id;
-            var currentUser = SessionFacade.CurrentUser;
-            if (isInternalLog && 
-                !CheckInternalLogFilesAccess(customerId, currentUser))
-                return new HttpUnauthorizedResult("You are not authorized to access intenral log files");
-
-            //todo: add check to ensure that users will not be able to request action without required rights!
-            var subTopic = isInternalLog ? ModuleName.LogInternal : ModuleName.Log;
-            var logType = isInternalLog ? LogFileType.Internal : LogFileType.External;
-
-            var logFiles = GuidHelper.IsGuid(id)
-                            ? _userTemporaryFilesStorage.FindFileNames(id, subTopic)
-                            : _logFileService.FindFileNamesByLogId(int.Parse(id), logType);
-
-            BusinessData.Models.Case.Output.CaseOverview caseInfo = null;
-
-            var existingFiles = new List<LogFileModel>();
-            if (caseId.HasValue && caseId.Value > 0)
-            {
-                caseInfo = _caseService.GetCaseBasic(caseId.Value);
-                var exFiles = _logFileService.GetExistingFileNamesByCaseId(caseId.Value, isInternalLog);
-                existingFiles = exFiles.Select(f => new LogFileModel
-                {
-                    Id = f.Id,
-                    Name = f.Name,
-                    IsExistCaseFile = f.IsExistCaseFile,
-                    IsExistLogFile = f.IsExistLogFile,
-                    ObjId = f.LogId ?? f.CaseId,
-                    LogType = f.LogType
-                }).ToList();
-            }
-
-            existingFiles.AddRange(logFiles.Select(x => new LogFileModel
-            {
-                Name = x,
-                LogType = logType
-            }));
-
-            var virtualPathDir = _masterDataService.GetVirtualDirectoryPath(customerId);
-            var model = new CaseLogFilesViewModel
-            {
-                FilesUrlBuilder = new CaseFilesUrlBuilder(virtualPathDir, RequestExtension.GetAbsoluteUrl()), 
-                LogId = id,
-                IsExternal = logType == LogFileType.External,
-                CaseNumber = Convert.ToInt32(caseInfo?.CaseNumber ?? 0.00M),
-                Files = existingFiles,
-                UseVirtualDirectory = !string.IsNullOrEmpty(virtualPathDir)
-            };
-            return PartialView("_CaseLogFiles", model);
-        }
-
-        [HttpPost]
-        public void UploadCaseFile(string id, string name)
-        {
-            var uploadedFile = this.Request.Files[0];
-            var uploadedData = new byte[uploadedFile.InputStream.Length];
-            uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
-
-            int caseId = 0;
-            if (GuidHelper.IsGuid(id))
-            {
-                if (_userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))
-                {
-                    name = DateTime.Now.ToString() + '-' + name;
-                }
-                _userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);
-            }
-            else if (Int32.TryParse(id, out caseId))
-            {
-                if (_caseFileService.FileExists(int.Parse(id), name))
-                {
-                    name = DateTime.Now.ToString() + '_' + name;
-                }
-                
-                var customerId = _caseService.GetCaseCustomerId(caseId);
-                var basePath = _masterDataService.GetFilePath(customerId);
-
-                var caseFileDto = new CaseFileDto(
-                                uploadedData,
-                                basePath,
-                                name,
-                                DateTime.Now,
-                                int.Parse(id),
-                                _workContext.User.UserId);
-                _caseFileService.AddFile(caseFileDto);
-            }
-        }
-
-        [HttpPost]
-        public void UploadLogFile(string id, string name, bool isInternalLog)
-        {
-            var uploadedFile = Request.Files[0];
-            var uploadedData = new byte[uploadedFile.InputStream.Length];
-            uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
-
-            if (GuidHelper.IsGuid(id))
-            {
-                var subTopic = isInternalLog ? ModuleName.LogInternal : ModuleName.Log;
-
-                if (_userTemporaryFilesStorage.FileExists(name, id, subTopic))
-                {
-                    //return;
-                    //this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Log); 
-                    //throw new HttpException((int)HttpStatusCode.Conflict, null); because it take a long time.
-                }
-                _userTemporaryFilesStorage.AddFile(uploadedData, name, id, subTopic);
-            }
-        }
-
-        [HttpPost]
-        public void DeleteCaseFile(string id, string fileName)
-        {
-            if (GuidHelper.IsGuid(id))
-            {
-                _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Cases);
-            }
-            else
-            {
-                var c = _caseService.GetCaseById(int.Parse(id));
-                var basePath = _masterDataService.GetFilePath(c.Customer_Id);
-
-                _caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), basePath, fileName.Trim());
-                _invoiceArticleService.DeleteFileByCaseId(int.Parse(id), fileName.Trim());
-
-                IDictionary<string, string> errors;
-                string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                var extraField = new ExtraFieldCaseHistory { CaseFile = StringTags.Delete + fileName.Trim() };
-                _caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
-            }
-        }
-
-        [HttpPost]
-        public void DeleteLogFile(string id, string fileName, bool isExisting = false, LogFileType logType = LogFileType.External, int? fileId = null)
-        {
-            var logSubFolder = logType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
-
-            if (fileId.HasValue)
-            {
-                if (fileId == 0 && !isExisting)
-                {
-                    if (GuidHelper.IsGuid(id))
-                    {
-                        _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, logSubFolder);
-                    }
-                }
-                else if (isExisting)
-                {
-                    _logFileService.DeleteExistingById(fileId.Value);
-                }
-                else
-                {
-                    //todo: check why file is not deleted from disk!
-                    _logFileService.DeleteByFileIdAndFileName(fileId.Value, fileName.Trim());
-                }
-            }
-            else
-            {
-                if (GuidHelper.IsGuid(id))
-                {
-                    _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, logSubFolder);
-                }
-                else
-                {
-                    var log = _logService.GetLogById(int.Parse(id));
-                    
-                    if (log != null)
-                    {
-                        var case_ = _caseService.GetCaseById(log.CaseId);
-                        var basePath = _masterDataService.GetFilePath(case_.Customer_Id);
-                    
-                        _logFileService.DeleteByLogIdAndFileName( int.Parse(id), basePath, fileName.Trim(), logType);
-
-                        IDictionary<string, string> errors;
-                        var adUser = SessionFacade.CurrentUserIdentity.UserId; //global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                        if (case_ != null)
-                        {
-                            var extraField = new ExtraFieldCaseHistory { LogFile = StringTags.Delete + fileName.Trim() };
-                            _caseService.SaveCaseHistory(case_, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
-                        }
-                    }
-                }
-            }
-        }
-
-        [HttpGet]
-        public UnicodeFileContentResult DownloadFile(string id, string fileName)
-        {
-            byte[] fileContent;
-
-            if (GuidHelper.IsGuid(id))
-                fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases);
-            else
-            {
-                var c = _caseService.GetCaseById(int.Parse(id));
-                var basePath = string.Empty;
-                if (c != null)
-                    basePath = _masterDataService.GetFilePath(c.Customer_Id);
-
-                fileContent = _caseFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
-            }
-
-            return new UnicodeFileContentResult(fileContent, fileName);
-        }
-
-        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)] // do not replace with [HttpGet, HttpHead]
-        public ActionResult DownloadLogFile(string id, string fileName, LogFileType logType)
-        {
-            byte[] fileContent;
-            
-            if (logType == LogFileType.Internal &&
-                !CheckInternalLogFilesAccess(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser))
-                return new HttpUnauthorizedResult("You are not authorized to access intenral log files");
-
-            if (GuidHelper.IsGuid(id))
-            {
-                var logFolder = logType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
-                fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, logType.ToString());
-            }
-            else
-            {
-                var l = _logService.GetLogById(int.Parse(id));
-                var basePath = string.Empty;
-                if (l != null)
-                {
-                    var c = _caseService.GetCaseBasic(l.CaseId);
-                    if (c != null)
-                        basePath = _masterDataService.GetFilePath(c.CustomerId);
-                }
-
-                try
-                {
-                    fileContent = _logFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName, logType);
-                }
-                catch (FileNotFoundException e)
-                {
-                    return HttpNotFound("File not found");
-                }
-            }
-
-            return new UnicodeFileContentResult(fileContent, fileName);
-        }
-
-        private string GetCaseFileNames(int id)
-        {
-            var files = _caseFileService.FindFileNamesByCaseId(id);
-            return string.Join("|", files);
-        }
-
-        [HttpPost]
-        public ActionResult AttachExistingFile(List<CaseAttachedExFileModel> files, int caseId, bool isInternalLogNote)
-        {
-            if (files != null && files.Any())
-            {
-                var allFiles = files.Select(x => new LogExistingFileModel
-                {
-                    Name = x.FileName,
-                    CaseId = x.CaseId,
-                    IsExistLogFile = !x.IsCaseFile,
-                    IsExistCaseFile = x.IsCaseFile,
-                    LogId = x.LogId,
-                    LogType = x.LogType,
-                    IsInternalLogNote = isInternalLogNote
-                });
-
-                var success = _logFileService.SaveAttachedExistingLogFiles(allFiles, caseId, isInternalLogNote);
-                return Json(new { success = true });
-            }
-            return Json(new { success = true }); ;
-        }
-
-        [HttpGet]
-        public ActionResult GetCaseFilesJS(int caseId)
-        {
-            var files = _caseFileService.FindFileNamesAndDatesByCaseId(caseId);
-            var cfs = MakeCaseFileModel(files, string.Empty);
-            var customerId = 0;
-            customerId = _caseService.GetCaseById(caseId).Customer_Id;
-
-            var useVD = customerId != 0 && !string.IsNullOrEmpty(_masterDataService.GetVirtualDirectoryPath(customerId));
-
-            var model = new CaseFilesModel(caseId.ToString(), cfs.ToArray(), string.Empty, useVD);
-            return PartialView("_CaseFiles", model);
-        }
-        
-        [HttpGet]
-        public ActionResult GetCaseInputModelForLog(int caseId)
-        {
-            var customerId = SessionFacade.CurrentCustomer.Id;
-            var userId = SessionFacade.CurrentUser.Id;
-            var caseLockModel = new CaseLockModel();
-            var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
-            
-            //todo: implement CreateCaseLogViewModel separate method to read only required data from db
-            var model = GetCaseInputViewModel(userId, customerId, caseId, caseLockModel, caseFieldSettings);
-            var caseLogViewModel = model.CreateCaseLogViewModel();
-            return PartialView("_CaseLog", caseLogViewModel);
-        }
-
-        [HttpGet]
-        public ActionResult GetCaseInputModelForHistory(int caseId)
-        {
-            var customerId = SessionFacade.CurrentCustomer.Id;
-            var userId = SessionFacade.CurrentUser.Id;
-            var caseLockModel = new CaseLockModel();
-            var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
-            //todo: implement CreateHistoryViewModel separate method to read only required data from db
-            var model = GetCaseInputViewModel(userId, customerId, caseId, caseLockModel, caseFieldSettings);
-            var caseHistoryViewModel = model.CreateHistoryViewModel();
-            return PartialView("_CaseHistory", caseHistoryViewModel);
-        }
-
-        [HttpGet]
-        public ActionResult GetCaseExistingFilesToAttach(int caseId, bool isInternalLog)
-        {
-            var customerId = SessionFacade.CurrentCustomer.Id;
-            var currentUser = SessionFacade.CurrentUser;
-            if (isInternalLog &&
-                !CheckInternalLogFilesAccess(customerId, currentUser))
-                return new HttpUnauthorizedResult("You are not authorized to access internal log files");
-
-            //todo: check log type access
-            var canDelete = SessionFacade.CurrentUser.DeleteAttachedFilePermission.ToBool();
-            var caseFiles = _caseFileService.GetCaseFiles(caseId, canDelete).OrderBy(x => x.CreatedDate);
-            
-            var attachedFiles = caseFiles.Select(f => new CaseAttachedExFileModel
-            {
-                Id = f.Id,
-                FileName = f.FileName,
-                IsCaseFile = true,
-                CaseId = caseId,
-                LogType = LogFileType.External // case files are always public
-            }).ToList();
-
-            //todo: filter files by log type 
-            var exLogFiles = _logFileService.GetLogFilesByCaseId(caseId, isInternalLog).Select(f => new CaseAttachedExFileModel
-            {
-                Id = f.Id,
-                FileName = f.Name,
-                LogId = f.ObjId,
-                LogType = f.LogType
-            }).ToList();
-
-            attachedFiles.AddRange(exLogFiles);
-
-            return PartialView("_CaseAttachExistFileList", attachedFiles);
-        }
         #endregion
 
         #region --Overview Setting--
@@ -2863,7 +2532,7 @@ namespace DH.Helpdesk.Web.Controllers
             //else
             //	m.CaseMailSetting.DontSendMailToNotifier = false;
 
-            
+
 
             //return this.View("New", m);
         }
@@ -3189,8 +2858,8 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 return Json(new { Success = false, Error = $"Unknown error. {e.Message}".ToHtmlString() });
             }
- 
-            return Json(new { Success = true, Location = Url.Action("Index","Cases") });
+
+            return Json(new { Success = true, Location = Url.Action("Index", "Cases") });
         }
 
         [HttpGet]
@@ -3226,7 +2895,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var hasExtendedCase =
                 _caseService.HasExtendedCase(caseId, customerId);
-            
+
             var model = new CaseMoveModel()
             {
                 CaseCustomerId = customerId,
@@ -3280,7 +2949,7 @@ namespace DH.Helpdesk.Web.Controllers
                     _caseSolutionService.GetCaseSolutionCategoryTree(customerId, userId, location)
                         .Where(c => c.CaseTemplates == null || (c.CaseTemplates != null && c.CaseTemplates.Any())).ToList()
             };
-            
+
             return model;
         }
 
@@ -3334,7 +3003,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 case_.RegLanguage_Id = SessionFacade.CurrentLanguageId;
             }
-            
+
             if (case_.IsAbout != null)
                 case_.IsAbout.Id = case_.Id;
 
@@ -3373,9 +3042,9 @@ namespace DH.Helpdesk.Web.Controllers
             //If Persons_Email field not show on case, then the field should not be saved on case in db
             var customerfieldSettings = _caseFieldSettingService.GetCaseFieldSettings(case_.Customer_Id);
 
-            if (customerfieldSettings.Where(fs => 
-                    fs.Name == GlobalEnums.TranslationCaseFields.Persons_EMail.ToString() && 
-                    fs.ShowOnStartPage == 0).Any()) 
+            if (customerfieldSettings.Where(fs =>
+                    fs.Name == GlobalEnums.TranslationCaseFields.Persons_EMail.ToString() &&
+                    fs.ShowOnStartPage == 0).Any())
             {
                 case_.PersonsEmail = string.Empty;
             }
@@ -3525,7 +3194,7 @@ namespace DH.Helpdesk.Web.Controllers
                         User.Identity.Name,
                         ei,
                         out errors,
-                        parentCase, 
+                        parentCase,
                         m.FollowerUsers);
 
             if (isItChildCase)
@@ -3553,7 +3222,7 @@ namespace DH.Helpdesk.Web.Controllers
                     lName = names[names.Length - 1];
 
                 int lng = case_.RegLanguage_Id;
-                
+
                 var caseNotifier = _caseNotifierModelFactory.Create(
                                                             case_.ReportedBy,
                                                             fName,
@@ -3567,7 +3236,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                             case_.UserCode,
                                                             case_.Customer_Id,
                                                             lng);
-                                                            //m.InitiatorCategory); //todo: check if category is required
+                //m.InitiatorCategory); //todo: check if category is required
 
                 _notifierService.UpdateCaseNotifier(caseNotifier);
             }
@@ -3620,13 +3289,27 @@ namespace DH.Helpdesk.Web.Controllers
             #endregion
 
             var basePath = _masterDataService.GetFilePath(case_.Customer_Id);
-            
+            var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+
             // save case files
             if (!edit)
             {
                 var temporaryFiles = _userTemporaryFilesStorage.FindFiles(case_.CaseGUID.ToString(), ModuleName.Cases);
                 var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, utcNow, case_.Id, _workContext.User.UserId)).ToList();
-                _caseFileService.AddFiles(newCaseFiles);
+
+                var paths = new List<KeyValuePair<CaseFileDto, string>>();
+                _caseFileService.AddFiles(newCaseFiles, paths);
+
+                if (!disableLogFileView.Active)
+                {
+                    foreach (var file in paths)
+                    {
+                        var userId = SessionFacade.CurrentUser?.Id ?? 0;
+                        _fileViewLogService.Log(case_.Id, userId, file.Key.FileName, file.Value, FileViewLogFileSource.Helpdesk, FileViewLogOperation.Add);
+                    }
+                }
+
+
             }
 
             #region Save Logs
@@ -3638,7 +3321,7 @@ namespace DH.Helpdesk.Web.Controllers
             var temporaryLogInternalFiles = new List<WebTemporaryFile>();
             var temporaryLogFiles = _userTemporaryFilesStorage.FindFiles(caseLog.LogGuid.ToString(), ModuleName.Log);
             var temporaryExLogFiles = _logFileService.GetExistingFileNamesByCaseId(case_.Id);
-            
+
             /* #58573 Check that user have access to write to InternalLogNote */
             bool hasInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
             if (hasInternalLogAccess)
@@ -3655,9 +3338,9 @@ namespace DH.Helpdesk.Web.Controllers
             var logFileCount = temporaryLogFiles.Count + temporaryExLogFiles.Count + temporaryLogInternalFiles.Count;
             var orginalInternalLog = caseLog.TextInternal;
 
-            if (caseLog.SendLogToParentChildLog.HasValue && 
-                caseLog.SendLogToParentChildLog.Value && 
-                !string.IsNullOrEmpty(caseLog.TextInternal) && 
+            if (caseLog.SendLogToParentChildLog.HasValue &&
+                caseLog.SendLogToParentChildLog.Value &&
+                !string.IsNullOrEmpty(caseLog.TextInternal) &&
                 childCasesIds.Length > 0)
             {
                 var parentChildCasesMarker = Translation.GetCoreTextTranslation(CaseLog.ParentChildCasesMarker);
@@ -3675,9 +3358,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             caseLog.TextInternal = orginalInternalLog;
 
-            if (caseLog != null && 
-                caseLog.SendLogToParentChildLog.HasValue && 
-                caseLog.SendLogToParentChildLog.Value && 
+            if (caseLog != null &&
+                caseLog.SendLogToParentChildLog.HasValue &&
+                caseLog.SendLogToParentChildLog.Value &&
                 !string.IsNullOrEmpty(caseLog.TextInternal))
             {
                 if (parentCase != null)
@@ -3699,24 +3382,41 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             // save log files
-            var newLogFiles = temporaryLogFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, _workContext.User.UserId, LogFileType.External)).ToList();
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, _workContext.User.UserId, LogFileType.External, null)).ToList();
             if (temporaryLogInternalFiles.Any())
             {
-                var internalLogFiles = temporaryLogInternalFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, _workContext.User.UserId, LogFileType.Internal)).ToList();
+                var internalLogFiles = temporaryLogInternalFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, _workContext.User.UserId, LogFileType.Internal, null)).ToList();
                 newLogFiles.AddRange(internalLogFiles);
             }
 
-            _logFileService.AddFiles(newLogFiles, temporaryExLogFiles, caseLog.Id);
+            var logPaths = new List<KeyValuePair<CaseLogFileDto, string>>();
 
-            var allLogFiles = 
-                temporaryExLogFiles.Select(x => 
-                    new CaseLogFileDto(basePath, 
-                        x.Name, 
-                        x.IsExistCaseFile ? Convert.ToInt32(case_.CaseNumber) : x.LogId.Value, 
-                        x.IsExistCaseFile))
+            _logFileService.AddFiles(newLogFiles, logPaths, temporaryExLogFiles, caseLog.Id);
+
+            var allLogFiles =
+                temporaryExLogFiles.Select(x =>
+                    new CaseLogFileDto(basePath,
+                        x.Name,
+                        x.IsExistCaseFile ? Convert.ToInt32(case_.CaseNumber) : x.LogId.Value,
+                        x.IsExistCaseFile)
+                    {
+                        LogType = x.IsInternalLogNote ? LogFileType.Internal : LogFileType.External,
+                        ParentLogType = x.IsExistCaseFile ? (LogFileType?)null : x.LogType
+                    })
                 .ToList();
             allLogFiles.AddRange(newLogFiles);
-            
+
+            if (!disableLogFileView.Active)
+            {
+                foreach (var newLogFile in newLogFiles)
+                {
+                    var userId = SessionFacade.CurrentUser?.Id ?? 0;
+                    var path = _filesStorage.ComposeFilePath((newLogFile.ParentLogType ?? newLogFile.LogType).GetFolderPrefix(),
+                        caseLog.Id, basePath, "");
+                    _fileViewLogService.Log(case_.Id, userId, newLogFile.FileName, path, FileViewLogFileSource.Helpdesk, FileViewLogOperation.Add);
+                }
+            }
+
             #endregion
 
             if (movedFromCustomerId.HasValue)
@@ -3802,7 +3502,7 @@ namespace DH.Helpdesk.Web.Controllers
             int[] deptIds = null;
             if (case_.Department_Id.HasValue)
             {
-                deptIds = new int[] {case_.Department_Id.Value};
+                deptIds = new int[] { case_.Department_Id.Value };
             }
 
             var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, utcNow, deptIds);
@@ -3936,7 +3636,7 @@ namespace DH.Helpdesk.Web.Controllers
                     }
 
                     var workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, DateTime.UtcNow, deptIds);
-                    var externalTime  = workTimeCalc.CalculateWorkTime(
+                    var externalTime = workTimeCalc.CalculateWorkTime(
                         oldCase.ChangeTime,
                         DateTime.UtcNow,
                         oldCase.Department_Id);
@@ -4081,13 +3781,26 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                     else
                     {
-                        fileContent = _logFileService.GetFileContentByIdAndFileName(caseLog.OldLog_Id.Value, basePath, file.Name, file.LogType);
-                        var logNoteFile = new CaseLogFileDto(fileContent, basePath, file.Name, DateTime.UtcNow, caseLog.Id, _workContext.User.UserId, file.LogType);
+                        var model = _logFileService.GetFileContentByIdAndFileName(caseLog.OldLog_Id.Value, basePath, file.Name, file.LogType);
+                        fileContent = model.Content;
+                        var logNoteFile = new CaseLogFileDto(fileContent, basePath, file.Name, DateTime.UtcNow, caseLog.Id, _workContext.User.UserId, file.LogType, null);
                         newLogFiles.Add(logNoteFile);
                     }
                 }
             }
-            _logFileService.AddFiles(newLogFiles, exFiles, caseLog.Id);
+
+            var logPaths = new List<KeyValuePair<CaseLogFileDto, string>>();
+            _logFileService.AddFiles(newLogFiles, logPaths, exFiles, caseLog.Id);
+
+            var disableLogFileView = _featureToggleService.Get(DH.Helpdesk.Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+            if (!disableLogFileView.Active)
+            {
+                var userId = currentLoggedInUser.Id;
+                foreach (var path in logPaths)
+                {
+                    _fileViewLogService.Log(@case.Id, userId, path.Key.FileName, path.Value, FileViewLogFileSource.Helpdesk, FileViewLogOperation.Add);
+                }
+            }
 
             // send emails
             _caseService.SendCaseEmail(oldCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, null, currentLoggedInUser);
@@ -4115,10 +3828,10 @@ namespace DH.Helpdesk.Web.Controllers
         /// The result.
         /// </returns>
         /// 
-        private AccessMode EditMode(CaseInputViewModel m, 
-                                          string topic, 
+        private AccessMode EditMode(CaseInputViewModel m,
+                                          string topic,
                                           IList<Department> departmensForUser,
-                                          List<CustomerWorkingGroupForUser> accessToWorkinggroups, 
+                                          List<CustomerWorkingGroupForUser> accessToWorkinggroups,
                                           bool temporaryHasAccessToWG = false)
         {
             var gs = _globalSettingService.GetGlobalSettings().FirstOrDefault();
@@ -4168,11 +3881,11 @@ namespace DH.Helpdesk.Web.Controllers
                         var wg = accessToWorkinggroups.FirstOrDefault(w => w.WorkingGroup_Id == m.case_.WorkingGroup_Id.Value);
                         if (wg == null && (gs != null && gs.LockCaseToWorkingGroup == 1))
                         {
-                            return temporaryHasAccessToWG? AccessMode.ReadOnly : AccessMode.NoAccess;
+                            return temporaryHasAccessToWG ? AccessMode.ReadOnly : AccessMode.NoAccess;
                         }
 
                         if (wg != null && wg.RoleToUWG == 1)
-                        {                            
+                        {
                             return AccessMode.ReadOnly;
                         }
                     }
@@ -4458,7 +4171,7 @@ namespace DH.Helpdesk.Web.Controllers
             //produktonmråde
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseProductAreaFilter))
             {
-                fd.filterProductArea = _productAreaService.GetProductAreasOverviewWithChildren(cusId, isActiveOnly:true);
+                fd.filterProductArea = _productAreaService.GetProductAreasOverviewWithChildren(cusId, isActiveOnly: true);
             }
 
             //kategori                        
@@ -4509,7 +4222,7 @@ namespace DH.Helpdesk.Web.Controllers
             //användare
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseUserFilter))
             {
-                fd.RegisteredByUserList = 
+                fd.RegisteredByUserList =
                     _userService.GetUserOnCases(cusId, true).MapToSelectList(fd.customerSetting);
 
                 if (!string.IsNullOrEmpty(fd.caseSearchFilter.User))
@@ -4521,7 +4234,7 @@ namespace DH.Helpdesk.Web.Controllers
             //ansvarig
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseResponsibleFilter))
             {
-                fd.ResponsibleUserList = 
+                fd.ResponsibleUserList =
                     _userService.GetAvailablePerformersOrUserId(cusId).Cast<IUserCommon>().MapToSelectList(fd.customerSetting);
 
                 if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserResponsible))
@@ -4650,7 +4363,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
         }
-        
+
         #endregion
 
         #region --Get Models--
@@ -4674,7 +4387,7 @@ namespace DH.Helpdesk.Web.Controllers
             string activeTab = "")
         {
             var m = new CaseInputViewModel();
-            SessionFacade.IsCaseDataChanged = false;            
+            SessionFacade.IsCaseDataChanged = false;
             m.BackUrl = backUrl;
             m.CanGetRelatedCases = SessionFacade.CurrentUser.IsAdministrator();
             m.CurrentUserRole = SessionFacade.CurrentUser.UserGroupId;
@@ -4687,12 +4400,12 @@ namespace DH.Helpdesk.Web.Controllers
 
             var isCreateNewCase = caseId == 0;
             m.CaseLock = caseLocked;
-            
-            m.CaseUnlockAccess = 
+
+            m.CaseUnlockAccess =
                 _userPermissionsChecker.UserHasPermission(currentUser, UserPermission.CaseUnlockPermission);
 
             m.MailTemplates = _mailTemplateService.GetCustomMailTemplatesList(customerId).ToList();
-            
+
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
             m.UserTimeZone = userTimeZone;
 
@@ -4737,7 +4450,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var editMode = EditMode(m, ModuleName.Cases, deps, acccessToGroups);
                 if (m.case_.Unread != 0 && updateState && editMode == AccessMode.FullAccess)
                     _caseService.MarkAsRead(caseId);
-                
+
                 //todo: review
                 customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
                 //SessionFacade.CurrentCaseLanguageId = m.case_.RegLanguage_Id;
@@ -4748,14 +4461,14 @@ namespace DH.Helpdesk.Web.Controllers
                 var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(caseId);
                 m.MapToFollowerUsers(caseFolowerUsers);
             }
-            
-            
+
+
             m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(currentUser, UserPermission.CaseInternalLogPermission);
 
             var customerUserSetting = _customerUserService.GetCustomerUserSettings(customerId, userId);
             if (customerUserSetting == null)
                 throw new ArgumentException(string.Format("No customer settings for this customer '{0}' and user '{1}'", customerId, userId));
-            
+
             var case_ = m.case_;
             var customer = _customerService.GetCustomer(customerId);
             var customerSetting = GetCustomerSettings(customerId);
@@ -4766,7 +4479,7 @@ namespace DH.Helpdesk.Web.Controllers
             //todo: first
             m.caseFieldSettings = customerFieldSettings;
             m.CaseFieldSettingWithLangauges = _caseFieldSettingService.GetAllCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
-            
+
             //todo: performance - query
             m.CaseSectionModels = _caseSectionService.GetCaseSections(customerId, SessionFacade.CurrentLanguageId);
 
@@ -4781,26 +4494,26 @@ namespace DH.Helpdesk.Web.Controllers
             m.LogFilesModel = null; //not used on case page
             m.LogFileNames = m.CaseFileNames;
 
-            m.EnableTwoAttachments = customerFieldSettings.getCaseSettingsValue(TranslationCaseFields.tblLog_Filename_Internal.ToString())?.IsActive ?? false; 
+            m.EnableTwoAttachments = customerFieldSettings.getCaseSettingsValue(TranslationCaseFields.tblLog_Filename_Internal.ToString())?.IsActive ?? false;
             m.ActiveTab = activeTab;
-            
-            var virtualDirPath = _masterDataService.GetVirtualDirectoryPath(customerId); 
+
+            var virtualDirPath = _masterDataService.GetVirtualDirectoryPath(customerId);
             m.CaseFilesUrlBuilder = new CaseFilesUrlBuilder(virtualDirPath, RequestExtension.GetAbsoluteUrl());
 
             // Computer user categories
             var computerUserCategories = _computerService.GetComputerUserCategoriesByCustomerID(customerId, true);
             m.ComputerUserCategories = computerUserCategories.Where(o => !o.IsEmpty).ToList();
             m.EmptyComputerCategoryName = computerUserCategories.FirstOrDefault(o => o.IsEmpty)?.Name;
-            
+
             #region User Search Category
 
-            var initiatorFieldSettings 
+            var initiatorFieldSettings
                 = customerFieldSettings.getCaseSettingsValue(TranslationCaseFields.UserSearchCategory_Id.ToString());
-            
+
             if (initiatorFieldSettings.IsActive)
             {
                 var defaultCategoryId = 0;
-                
+
                 //set default value only for new case
                 if (Int32.TryParse(initiatorFieldSettings.DefaultValue, out defaultCategoryId))
                 {
@@ -4814,7 +4527,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             #region IsAbout - User Search Category
 
-            var regFieldSettings = 
+            var regFieldSettings =
                 customerFieldSettings.getCaseSettingsValue(TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString());
 
             if (regFieldSettings.IsActive)
@@ -4835,7 +4548,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (isCreateNewCase)
             {
                 #region New case model initialization actions
-                
+
                 var userName = SessionFacade.CurrentUserIdentity?.GetUserIdWithDomain();
                 if (copyFromCaseId.HasValue)
                 {
@@ -4894,13 +4607,13 @@ namespace DH.Helpdesk.Web.Controllers
                 // set visibility
 
                 #endregion
-            } 
+            }
             else
             {
                 #region Existing case model initialization actions
 
                 m.Logs = _logService.GetCaseLogOverviews(caseId, m.CaseInternalLogAccess, m.EnableTwoAttachments && m.CaseInternalLogAccess);
-                
+
                 var useVd = !string.IsNullOrEmpty(virtualDirPath);
 
                 var canDelete = (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1);
@@ -4909,7 +4622,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var caseFiles = _caseFileService.GetCaseFiles(caseId, canDelete).OrderBy(x => x.CreatedDate);
 
                 m.CaseFilesModel = new CaseFilesModel(caseId.ToString(), caseFiles.ToArray(), m.SavedFiles, useVd);
-                
+
                 if (m.case_.User_Id.HasValue)
                 {
                     m.RegByUser = _userService.GetUser(m.case_.User_Id.Value);
@@ -4966,7 +4679,7 @@ namespace DH.Helpdesk.Web.Controllers
                     .ToList();
 
             m.WorkflowSteps =
-                _caseSolutionService.GetWorkflowSteps(customerId, 
+                _caseSolutionService.GetWorkflowSteps(customerId,
                     m.case_,
                     workflowCaseSolutionIds,
                     isRelatedCase,
@@ -5005,7 +4718,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m.caseFieldSettings.ShowOnPage(TranslationCaseFields.ProductArea_Id))
             {
-                m.productAreas = 
+                m.productAreas =
                     _productAreaService.GetTopProductAreasForUserOnCase(customerId, m.case_.ProductArea_Id, SessionFacade.CurrentUser)
                         .OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
             }
@@ -5143,7 +4856,7 @@ namespace DH.Helpdesk.Web.Controllers
             m.finishingCauses = _finishingCauseService.GetFinishingCausesWithChilds(customerId);
             m.problems = _problemService.GetCustomerProblems(customerId, false);
             m.currencies = _currencyService.GetCurrencies();
-            
+
             m.projects = _projectService.GetCustomerProjects(customerId);
             m.departments = deps.Any() ? deps :
                 GetCustomerDepartments(customerId)
@@ -5170,8 +4883,8 @@ namespace DH.Helpdesk.Web.Controllers
                 var sup = m.suppliers.FirstOrDefault(x => x.Id == m.case_.Supplier_Id.GetValueOrDefault());
                 m.CountryId = sup?.Country_Id.GetValueOrDefault();
             }
-            
-            if (caseTemplate != null) 
+
+            if (caseTemplate != null)
             {
                 #region New case initialize
 
@@ -5255,7 +4968,7 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id.Value;
                     }
-                    
+
                     if (caseTemplate.Priority_Id != null)
                         m.case_.Priority_Id = caseTemplate.Priority_Id;
 
@@ -5561,7 +5274,7 @@ namespace DH.Helpdesk.Web.Controllers
                 performersList = _userService.GetAvailablePerformersForWorkingGroup(customerId, m.case_.WorkingGroup_Id);
             }
 
-            if (admUser != null && !performersList.Any(u => u.Id == admUser.Id) )
+            if (admUser != null && !performersList.Any(u => u.Id == admUser.Id))
             {
                 performersList.Insert(0, admUser);
             }
@@ -5585,7 +5298,7 @@ namespace DH.Helpdesk.Web.Controllers
                 else
                     m.isaboutous = null;
             }
-            
+
             // hämta parent path för casetype
             if (m.case_.CaseType_Id > 0)
             {
@@ -5672,7 +5385,7 @@ namespace DH.Helpdesk.Web.Controllers
                         m.CaseLog.SendMailAboutCaseToNotifier = true;
                 }
             }
-            
+
             if (isCreateNewCase)
             {
                 m.case_.DefaultOwnerWG_Id = null;
@@ -5711,7 +5424,7 @@ namespace DH.Helpdesk.Web.Controllers
             // "Administrator" (Performer)
             m.Performer_Id = m.case_.Performer_User_Id ?? 0;
 
-            m.Performers = 
+            m.Performers =
                 performersList.Where(it => it.IsActive == 1 && (it.Performer == 1 || it.Id == m.Performer_Id)).MapToSelectList(m.Setting, isAddEmpty);
 
             m.DynamicCase = _caseService.GetDynamicCase(m.case_.Id);
@@ -5739,7 +5452,7 @@ namespace DH.Helpdesk.Web.Controllers
             try
             {
                 string extendedCasePathMask = _globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
-           
+
                 if (!string.IsNullOrEmpty(extendedCasePathMask))
                 {
                     int userRole = 0;
@@ -5771,9 +5484,9 @@ namespace DH.Helpdesk.Web.Controllers
                     //CHECK HOW TO HANDLE WHEN FROM EMAIL
                     //At the moment we are only fetching 1 extended case since it is only programmed that way in editPage.js
                     var stateSecondaryId = m?.case_?.StateSecondary_Id ?? 0;
-                    
-                    m.ExtendedCases = 
-                        GetExtendedCaseFormModel(customerId, caseId, caseSolutionId, stateSecondaryId, extendedCasePathMask, 
+
+                    m.ExtendedCases =
+                        GetExtendedCaseFormModel(customerId, caseId, caseSolutionId, stateSecondaryId, extendedCasePathMask,
                             SessionFacade.CurrentLanguageId, userRole, SessionFacade.CurrentUser.UserGUID.ToString());
 
                     m.ContainsExtendedCase = m.ExtendedCases != null && m.ExtendedCases.Any();
@@ -5915,7 +5628,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 return ComputerUserCategory.CreateEmptyCategory();
             }
-            
+
             var category = _computerService.GetComputerUserCategoryByID(categoryID);
             if (category.IsEmpty)
             {
@@ -5942,7 +5655,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var res = new List<ExtendedCaseFormModel>();
 
-            var extendedCaseFormData = 
+            var extendedCaseFormData =
                 _caseService.GetCaseExtendedCaseForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentUser.UserGUID.ToString(), stateSecondaryId);
 
             if (extendedCaseFormData == null)
@@ -5955,7 +5668,7 @@ namespace DH.Helpdesk.Web.Controllers
                 userGuid = userGuid,
                 customerId = customerId,
             });
-            
+
             var model = new ExtendedCaseFormModel
             {
                 CaseId = caseId,
@@ -5971,7 +5684,7 @@ namespace DH.Helpdesk.Web.Controllers
             return new List<ExtendedCaseFormModel>() { model };
         }
 
-        private Dictionary<CaseSectionType, ExtendedCaseFormModel> GetExtendedCaseSectionsModel(Case case_,int customerId, string extendedCasePathMask,
+        private Dictionary<CaseSectionType, ExtendedCaseFormModel> GetExtendedCaseSectionsModel(Case case_, int customerId, string extendedCasePathMask,
             string userGuid, int languageId, int userWorkingGroupId)
         {
             var caseId = case_.Id;
@@ -5998,7 +5711,7 @@ namespace DH.Helpdesk.Web.Controllers
                     SectionType = (CaseSectionType)ecCaseForm.SectionType,
                     Id = ecCaseForm.ExtendedCaseFormId,
                     ExtendedCaseGuid = ecCaseForm.ExtendedCaseGuid,
-                    Path = extendedCasePath, 
+                    Path = extendedCasePath,
                     LanguageId = languageId,
                     //CaseStatus = caseStateSecondaryId,/Sent by querystring at the moment 
                     //UserRole = caseWorkingGroupId,/Sent by querystring at the moment
@@ -6038,7 +5751,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 var template = "";
                 var value = "";
-                if(setting == GlobalEnums.TranslationCaseFields.ReportedBy.ToString() ||
+                if (setting == GlobalEnums.TranslationCaseFields.ReportedBy.ToString() ||
                    setting == GlobalEnums.TranslationCaseFields.CostCentre.ToString() ||
                    setting == GlobalEnums.TranslationCaseFields.Place.ToString() ||
                    setting == GlobalEnums.TranslationCaseFields.UserCode.ToString() ||
@@ -6062,7 +5775,8 @@ namespace DH.Helpdesk.Web.Controllers
                             value = propValue.ToString();
                     }
 
-                } else if (setting == GlobalEnums.TranslationCaseFields.Persons_Name.ToString())
+                }
+                else if (setting == GlobalEnums.TranslationCaseFields.Persons_Name.ToString())
                 {
                     value = model.case_.PersonsName;
                 }
@@ -6668,10 +6382,10 @@ namespace DH.Helpdesk.Web.Controllers
                 //Check if case is still locked
                 var caseLockExtendedTime = caseLock.ExtendedTime.AddSeconds(bufferTime);
                 if (caseLockExtendedTime >= nowTime)
-                { 
+                {
                     caseIsLocked = true;
                 }
-                 else
+                else
                 {
                     caseIsLocked = false;
                 }
@@ -6751,7 +6465,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         private CaseSettingModel GetCaseSettingModel(
-            int customerId, 
+            int customerId,
             int userId,
             int gridId = GridSettingsService.CASE_OVERVIEW_GRID_ID,
             IList<CaseFieldSetting> customerCaseFieldSettings = null)
@@ -6774,9 +6488,9 @@ namespace DH.Helpdesk.Web.Controllers
             if (!departments.Any())
             {
                 departments =
-                    GetCustomerDepartments(customerId).Where(d => 
-                        d.Region_Id == null || 
-                        IsTakeOnlyActive == false || 
+                    GetCustomerDepartments(customerId).Where(d =>
+                        d.Region_Id == null ||
+                        IsTakeOnlyActive == false ||
                         (IsTakeOnlyActive && d.Region != null && d.Region.IsActive != 0)).ToList();
             }
 
@@ -6867,10 +6581,10 @@ namespace DH.Helpdesk.Web.Controllers
             ret.Priorities = priorities;
             ret.SelectedPriority = userCaseSettings.Priority;
 
-            ret.Categories = 
+            ret.Categories =
                 _categoryService.GetParentCategoriesWithChildren(customerId, true).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
 
-            ret.CategoryPath= "--";
+            ret.CategoryPath = "--";
 
             int ca;
             int.TryParse(userCaseSettings.Category, out ca);
@@ -6936,7 +6650,7 @@ namespace DH.Helpdesk.Web.Controllers
             ret.ColumnSettingModel =
                 _caseOverviewSettingsService.GetSettings(
                     customerId,
-                    SessionFacade.CurrentUser.UserGroupId, 
+                    SessionFacade.CurrentUser.UserGroupId,
                     userId,
                     gridId,
                     customerCaseFieldSettings);
@@ -7056,7 +6770,7 @@ namespace DH.Helpdesk.Web.Controllers
                                         _supplierService, _workingGroupService, _userService,
                                         _priorityService, _statusService, _stateSecondaryService,
                                         _projectService, _problemService, _causingPartService,
-                                        _changeService, _finishingCauseService, _watchDateCalendarService, 
+                                        _changeService, _finishingCauseService, _watchDateCalendarService,
                                         _computerService);
 
             var model = _caseRuleFactory.GetCaseRuleModel(customerId, ruleType, currentData, customerSettings, caseFieldSettings, new List<CaseSolutionSettingModel>());
@@ -7274,7 +6988,6 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly IDictionary<int, IList<Department>> _customerDepartments = new Dictionary<int, IList<Department>>();
         private AdvancedSearchBehavior _advancedSearchBehavior;
-        private IMail2TicketService _mail2TicketService;
 
         private IList<Department> GetCustomerDepartments(int customerId)
         {
@@ -7335,8 +7048,9 @@ namespace DH.Helpdesk.Web.Controllers
                 foreach (var pos in Enumerable.Range(0, count))
                 {
                     var fileName = $"file_{Guid.NewGuid()}";
-                    var logFile = new CaseLogFileDto(dummyContent, basePath, fileName, DateTime.UtcNow, lastLogNote.Id, _workContext.User?.UserId, LogFileType.External);
-                    _logFileService.AddFile(logFile);
+                    var logFile = new CaseLogFileDto(dummyContent, basePath, fileName, DateTime.UtcNow, lastLogNote.Id, _workContext.User?.UserId, LogFileType.External, null);
+                    var path = "";
+                    _logFileService.AddFile(logFile, ref path);
                 }
             }
             catch (Exception ex)
@@ -7361,7 +7075,10 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     var fileName = $"file_{Guid.NewGuid()}";
                     var caseFile = new CaseFileDto(dummyContent, basePath, fileName, DateTime.UtcNow, caseId, _workContext.User?.UserId);
-                    _caseFileService.AddFile(caseFile);
+
+                    // TODO: log? Is this used?
+                    string path = "";
+                    _caseFileService.AddFile(caseFile, ref path);
                 }
             }
             catch (Exception ex)

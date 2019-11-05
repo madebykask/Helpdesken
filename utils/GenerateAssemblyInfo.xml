@@ -134,6 +134,19 @@ export const VERSION = {
 /* tslint:enable */
 
 ' />
+
+<WriteLinesToFile Overwrite="true" File="$(ProjectDir)..\ExtendedCase\ExtendedCase.WebComponent\config\version.ts" Encoding="UTF-8" Lines='
+
+// IMPORTANT: THIS FILE IS AUTO GENERATED! DO NOT MANUALLY EDIT!
+/* tslint:disable */
+export const VERSION = {
+	"version": "$(VersionString)",
+    "fullVersion": "$(FullVersion)"
+};
+/* tslint:enable */
+
+' />
+
     
   </Target>
 </Project>

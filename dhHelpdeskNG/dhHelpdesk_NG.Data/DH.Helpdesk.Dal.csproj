@@ -133,6 +133,7 @@
     <Compile Include="EntityConfigurations\Cases\CaseSectionFieldConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseSectionsConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseTypeProductAreaConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Computers\ComputerStatusConfiguration.cs" />
     <Compile Include="EntityConfigurations\Computers\WorkstationTabSettingConfiguration.cs" />
     <Compile Include="EntityConfigurations\Computers\WorkstationTabSettingLanguageConfiguration.cs" />
     <Compile Include="EntityConfigurations\Condition\ConditionConfiguration.cs" />
@@ -259,6 +260,7 @@
     <Compile Include="Infrastructure\Context\ICustomerContext.cs" />
     <Compile Include="Infrastructure\Context\IUserContext.cs" />
     <Compile Include="Infrastructure\Context\IWorkContext.cs" />
+    <Compile Include="Infrastructure\Extensions\LogFileExtensions.cs" />
     <Compile Include="Infrastructure\Helpers\QueryHelper.cs" />
     <Compile Include="Infrastructure\ModelFactories\Email\Concrete\EmailFactory.cs" />
     <Compile Include="Infrastructure\ModelFactories\Email\IEmailFactory.cs" />
@@ -335,6 +337,8 @@
     <Compile Include="Mappers\Documents\EntityToBusinessModel\DocumentToBusinessModelMapper.cs" />
     <Compile Include="Mappers\ExternalInvoice\BusinessModelToEntity\ExternalInvoiceToEntityMapper.cs" />
     <Compile Include="Mappers\ExternalInvoice\EntityToBusinessModel\CaseInvoiceRowToBusinessModel.cs" />
+    <Compile Include="Mappers\FileViewLog\BusinessModelToEntity\FileViewLogToEntityMapper.cs" />
+    <Compile Include="Mappers\FileViewLog\EntityToBusinessModel\FileViewLogToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Gdpr\EntityToBusinessModel\GdprFavoriteEntityToModelMapper.cs" />
     <Compile Include="Mappers\Gdpr\BusinessModelToEntity\GdprFavoriteModelToEntityMapper.cs" />
     <Compile Include="Mappers\Inventory\EntityToBusinessModel\Computer\ComputerFieldSettingsToFieldSettingsMapper.cs" />
@@ -441,7 +445,6 @@
     <Compile Include="EntityConfigurations\WorkstationModules\RAMConfiguration.cs" />
     <Compile Include="EntityConfigurations\WorkstationModules\SoftwareConfiguration.cs" />
     <Compile Include="Enums\EntityStatus.cs" />
-    <Compile Include="Enums\ModuleName.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeChangeConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeContactConfiguration.cs" />
     <Compile Include="EntityConfigurations\Changes\ChangeDepartmentConfiguration.cs" />
@@ -486,7 +489,9 @@
     <Compile Include="Repositories\BusinessRules\Concrete\BusinessRuleRepository.cs" />
     <Compile Include="Repositories\BusinessRules\IBusinessRuleRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentTextConditionIdentifierRepository.cs" />
+    <Compile Include="Repositories\Computers\Concrete\ComputerStatusRepository.cs" />
     <Compile Include="Repositories\Computers\Concrete\ComputerTabsSettingsRepository.cs" />
+    <Compile Include="Repositories\Computers\IComputerStatusRepository.cs" />
     <Compile Include="Repositories\Computers\IComputerTabsSettingsRepository.cs" />
     <Compile Include="Repositories\Condition\Concrete\ConditionRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentTextIdentifierRepository.cs" />
@@ -520,6 +525,8 @@
     <Compile Include="Repositories\Condition\IConditionRepository.cs" />
     <Compile Include="Repositories\ComputerUserCategoryRepository.cs" />
     <Compile Include="Repositories\FeatureToggleRepository.cs" />
+    <Compile Include="Repositories\FileIndexing\FileIndexingException.cs" />
+    <Compile Include="Repositories\FileViewLogRepository.cs" />
     <Compile Include="Repositories\GDPR\GDPRDataPrivacyAccessRepository.cs" />
     <Compile Include="Repositories\GDPR\GDPRDataPrivacyFavortieRepository.cs" />
     <Compile Include="Repositories\GDPR\GDPROperationsAuditRespository.cs" />

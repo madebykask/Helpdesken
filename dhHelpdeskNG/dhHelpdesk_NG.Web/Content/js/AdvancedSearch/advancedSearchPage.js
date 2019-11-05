@@ -224,7 +224,13 @@ window.advancedSearchPage =
                 //run search 
                 var request =
                     self.runCustomerSearch(customerId, filterData).done(function (res) {
-                        self.processCustomerSearchResults(res.customerId, res.response);
+                        if (res.response.errorMsg) {
+                            alert(res.response.errorMsg);
+                        }
+                        else {
+                            self.processCustomerSearchResults(res.customerId, res.response);
+                        }
+                        
                     }).fail(function (res) {
                         self.processCustomerSearchError(res.customerId, res.err);
                     });

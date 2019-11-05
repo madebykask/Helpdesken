@@ -10,14 +10,20 @@
         }
 
         public OrganizationFieldsSettingsModel(
+            FieldSettingModel regionFieldSettingModel,
             FieldSettingModel departmentFieldSettingModel,
             FieldSettingModel domainFieldSettingModel,
             FieldSettingModel unitFieldSettingModel)
         {
+            RegionFieldSettingModel = regionFieldSettingModel;
             this.DepartmentFieldSettingModel = departmentFieldSettingModel;
             this.DomainFieldSettingModel = domainFieldSettingModel;
             this.UnitFieldSettingModel = unitFieldSettingModel;
         }
+
+        [NotNull]
+        [LocalizedDisplay("Område")]
+        public FieldSettingModel RegionFieldSettingModel { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Department")]

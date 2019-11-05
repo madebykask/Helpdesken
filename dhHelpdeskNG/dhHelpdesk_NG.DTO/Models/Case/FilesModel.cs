@@ -31,5 +31,6 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         //CaseId for case files, LogId for log files
         public int? ObjId { get; set; }
         public LogFileType LogType { get; set; }
+        public LogFileType? ParentLogType { get; set; }
     }
 }

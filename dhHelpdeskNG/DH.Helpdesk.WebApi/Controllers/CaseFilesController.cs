@@ -8,8 +8,13 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.FileViewLog;
+using DH.Helpdesk.Common.Constants;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Dal.Enums;
+using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Common.Tools.Files;
@@ -27,18 +32,26 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICaseService _caseService;
         private readonly ISettingsLogic _settingsLogic;
         private readonly ITemporaryFilesCache _userTemporaryFilesStorage;
+		private readonly IFileViewLogService _fileViewLogService;
+		private readonly IFeatureToggleService _featureToggleService;
+        private readonly IFilesStorage _filesStorage;
 
-        #region ctor()
+		#region ctor()
 
-        public CaseFilesController(ICaseService caseService,
+		public CaseFilesController(ICaseService caseService,
             ICaseFileService caseFileService,
             ISettingsLogic settingsLogic,
-            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory)
+            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
+			IFileViewLogService fileViewLogService,
+			IFeatureToggleService featureToggleService, IFilesStorage filesStorage)
         {
             _settingsLogic = settingsLogic;
             _caseService = caseService;
             _caseFileService = caseFileService;
             _userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
+			_fileViewLogService = fileViewLogService;
+			_featureToggleService = featureToggleService;
+            _filesStorage = filesStorage;
         }
 
         #endregion
@@ -51,6 +64,15 @@ namespace DH.Helpdesk.WebApi.Controllers
             var fileContent = _caseFileService.GetCaseFile(cid, caseId, fileId, true); //TODO: async
 
             IHttpActionResult res = new FileResult(fileContent.FileName, fileContent.Content, Request, inline ?? false);
+
+            var disableLogFileView =
+                _featureToggleService.Get(
+                    FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+            if (!disableLogFileView.Active)
+            {
+                _fileViewLogService.Log(caseId, UserId, fileContent.FileName.Trim(), fileContent.FilePath, FileViewLogFileSource.WebApi,
+                    FileViewLogOperation.View);
+            }
             return Task.FromResult(res);
         }
 
@@ -138,8 +160,16 @@ namespace DH.Helpdesk.WebApi.Controllers
                     caseId,
                     UserId);
 
-                var fileId = _caseFileService.AddFile(caseFileDto);
-                return Ok(new { id = fileId, name = fileName});
+				var path = "";
+                var fileId = _caseFileService.AddFile(caseFileDto, ref path);
+
+				var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+				if (!disableLogFileView.Active)
+				{
+					_fileViewLogService.Log(caseId, UserId, caseFileDto.FileName, path, FileViewLogFileSource.WebApi, FileViewLogOperation.Add);
+				}
+
+				return Ok(new { id = fileId, name = fileName});
             }
 
             return BadRequest("Failed to upload a file");
@@ -174,6 +204,15 @@ namespace DH.Helpdesk.WebApi.Controllers
             var caseFileInfo = _caseFileService.GetCaseFile(caseId, fileId);
             _caseFileService.DeleteByCaseIdAndFileName(caseId, basePath, caseFileInfo.FileName);
 
+            var disableLogFileView =
+                _featureToggleService.Get(
+                    FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+            if (!disableLogFileView.Active)
+            {
+                var path = _filesStorage.ComposeFilePath(ModuleName.Cases, decimal.ToInt32(c.CaseNumber), basePath, "");
+                _fileViewLogService.Log(caseId, UserId, caseFileInfo.FileName, path, FileViewLogFileSource.WebApi,
+                    FileViewLogOperation.Delete);
+            }
             //todo: ?
             //_invoiceArticleService.DeleteFileByCaseId(int.Parse(id), fileName.Trim());
 

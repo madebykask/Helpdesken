@@ -7,10 +7,12 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.BusinessData.Models.Logs.Output;
 using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Dal.Infrastructure.Extensions;
 using DH.Helpdesk.Dal.MapperData;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.MapperData.Logs;
@@ -26,24 +28,20 @@ namespace DH.Helpdesk.Services.Services
     public interface ILogService
     {
         IDictionary<string, string> Validate(CaseLog logToValidate);
-
         CaseLog InitCaseLog(int userId, string regUser);
         CaseLog GetLogById(int id);
-
         int SaveLog(CaseLog caseLog, int noOfAttachedFiles, out IDictionary<string, string> errors);
         void SaveChildsLogs(CaseLog baseCaseLog, int[] childCasesIds, out IDictionary<string, string> errors);
         void UpdateLogInvoices(List<CaseLog> logs);
         void AddParentCaseLogToChildCases(int[] caseIds, CaseLog parentCaseLog);
         void AddChildCaseLogToParentCase(int caseId, CaseLog parentCaseLog);
         Guid Delete(int id, string basePath);
-
         IList<LogOverview> GetCaseLogOverviews(int caseId, bool includeInternalLogs = false, bool includeInternalFiles = false);
-
         //TODO: remove! replace with CaseLogData!
         IList<Log> GetLogsByCaseId(int caseId);
-
         IList<CaseLogData> GetLogsByCaseId(int caseId, bool includeInternalLogs, bool includeInternalFiles);
         Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false, bool includeInternalFiles = false);
+        List<LogFile> GetLogFilesByLogId(int logId, bool includeInternal = true);
     }
 
     public class LogService : ILogService
@@ -52,7 +50,6 @@ namespace DH.Helpdesk.Services.Services
 
         private readonly ILogRepository _logRepository;
         private readonly ILogFileRepository _logFileRepository;
-        
         private readonly IFilesStorage _filesStorage;
         private readonly IFinishingCauseService _finishingCauseService;
         private readonly IMail2TicketRepository _mail2TicketRepository;
@@ -60,8 +57,8 @@ namespace DH.Helpdesk.Services.Services
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ICaseRepository _caseRepository;
         private readonly IProblemLogService _problemLogService;
-        private IEmailLogRepository _emailLogRepository;
-        private IEmailLogAttemptRepository _emailLogAttemptRepository;
+        private readonly IEmailLogRepository _emailLogRepository;
+        private readonly IEmailLogAttemptRepository _emailLogAttemptRepository;
 
         #endregion
 
@@ -71,9 +68,9 @@ namespace DH.Helpdesk.Services.Services
             ILogRepository logRepository,
             ILogFileRepository logFileRepository,
             IFilesStorage filesStorage,
-            ICaseRepository caseRepository, 
+            ICaseRepository caseRepository,
             IProblemLogService problemLogService,
-            IFinishingCauseService finishingCauseService, 
+            IFinishingCauseService finishingCauseService,
             IMail2TicketRepository mail2TicketRepository,
             IEmailLogRepository emailLogRepository,
             IEmailLogAttemptRepository emailLogAttemptRepository,
@@ -109,17 +106,7 @@ namespace DH.Helpdesk.Services.Services
         public Guid Delete(int id, string basePath)
         {
             // delete log files
-            var logFiles = _logFileRepository.GetLogFilesByLogId(id);
-            if (logFiles != null)
-            {
-                foreach (var f in logFiles)
-                {
-                    var subFolder = f.LogType == LogFileType.Internal ? ModuleName.LogInternal : ModuleName.Log;
-                    _filesStorage.DeleteFile(subFolder, f.Log_Id, basePath, f.FileName);
-                    _logFileRepository.Delete(f);
-                }
-                _logFileRepository.Commit();
-            }
+            DeleteLogFiles(id, basePath);
 
             //remove reference from parent in child records
             var referencedFiles = _logFileRepository.GetReferencedFiles(id);
@@ -131,7 +118,8 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (var l in emailLogs)
                 {
-                    if (l.EmailLogAttempts != null && l.EmailLogAttempts.Any()) { 
+                    if (l.EmailLogAttempts != null && l.EmailLogAttempts.Any())
+                    {
                         _emailLogAttemptRepository.DeleteLogAttempts(l.Id);
                     }
 
@@ -143,7 +131,7 @@ namespace DH.Helpdesk.Services.Services
             // delete email logs
             _emailLogRepository.DeleteByLogId(id);
             _emailLogRepository.Commit();
-            
+
             //delete log
             var log = _logRepository.GetById(id);
             _logRepository.Delete(log);
@@ -155,7 +143,7 @@ namespace DH.Helpdesk.Services.Services
 
             return log.LogGUID;
         }
-        
+
         public IList<LogOverview> GetCaseLogOverviews(int caseId, bool includeInternalLogs = false, bool includeInternalFiles = false)
         {
             var result = new List<LogOverview>();
@@ -166,7 +154,7 @@ namespace DH.Helpdesk.Services.Services
 
             var caseOverview = _caseRepository.GetCaseOverview(caseId);
 
-            if (caseOverview != null && caseOverview.ProblemId.HasValue)
+            if (caseOverview?.ProblemId != null)
             {
                 var problemLogs = _problemLogService.GetProblemLogs(caseOverview.ProblemId.Value);
                 if (problemLogs != null)
@@ -175,7 +163,7 @@ namespace DH.Helpdesk.Services.Services
                         .Where(p => p.IsShowOnCase())
                         .Select(p => new LogOverview()
                         {
-                            LogDate  = p.CreatedDate,
+                            LogDate = p.CreatedDate,
                             RegUser = p.ChangedByUserName,
                             TextInternal = p.IsInternal() ? p.LogText : null,
                             TextExternal = p.IsExternal() ? p.LogText : null,
@@ -202,63 +190,6 @@ namespace DH.Helpdesk.Services.Services
             return caseLogs;
         }
 
-        private IQueryable<LogMapperData> GetCaseLogsQueryable(int caseId, bool includeInternalLogs = true, bool includeInternalFiles = false)
-        {
-            var caseLogsQuery = _logRepository.GetCaseLogs(caseId);
-
-            if (!includeInternalLogs)
-            {
-                //keep only notes that have external, internal text will be trimmed in mapping logic in the called method
-                caseLogsQuery = caseLogsQuery.Where(l => !string.IsNullOrEmpty(l.Text_External));
-            }
-
-            IQueryable<LogMapperData> caseLogs = caseLogsQuery.Select(l => new LogMapperData
-            {
-                Log = l,
-
-                User = new UserMapperData
-                {
-                    Id = l.User_Id,
-                    FirstName = l.User != null ? l.User.FirstName : null,
-                    SurName = l.User != null ? l.User.SurName : null
-                },
-
-                EmailLogs = 
-                    l.CaseHistory.Emaillogs.DefaultIfEmpty()
-                        .Where(t => t.MailId == (int)GlobalEnums.MailTemplates.InternalLogNote || 
-                                    t.MailId == (int)GlobalEnums.MailTemplates.InformNotifier ||
-                                    t.MailId == (int)GlobalEnums.MailTemplates.CaseIsUpdated) //#71840
-                        .Select(t => new EmailLogMapperData
-                        {
-                            Id = t.Id,
-                            MailId = t.MailId,
-                            CaseHistoryId = t.CaseHistory_Id,
-                            EmailAddress = t.EmailAddress
-                        }).ToList(),
-
-                LogFiles = 
-                    l.LogFiles.DefaultIfEmpty().Where(f => includeInternalLogs && includeInternalFiles || f.LogType == LogFileType.External).Select(t => new LogFileMapperData
-                    {
-                        Id = t.Id,
-                        FileName = t.FileName,
-                        LogId = t.ParentLog_Id,
-                        CaseId = t.IsCaseFile.HasValue && t.IsCaseFile.Value ? t.Log.Case_Id : (int?) null,
-                        LogType = t.LogType
-                    }).ToList(),
-               
-                Mail2Tickets = 
-                    l.Mail2Tickets.DefaultIfEmpty().Select(x => new Mail2TicketMapperData()
-                    {
-                        Id = x.Id,
-                        Type = x.Type,
-                        EMailAddress = x.EMailAddress,
-                        EMailSubject = x.EMailSubject
-                    }).ToList()
-            });
-
-            return caseLogs;
-        }
-
         public void SaveChildsLogs(CaseLog baseCaseLog, int[] childCasesIds, out IDictionary<string, string> errors)
         {
             errors = Validate(baseCaseLog);
@@ -273,12 +204,6 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        private Log CreateLogFromCaseLog(int id, CaseLog cl)
-        {
-            cl.Id = id;
-            return GetLogFromCaseLog(cl);
-        }
-
         public IList<Log> GetLogsByCaseId(int caseId)
         {
             return _logRepository.GetCaseLogs(caseId).ToList();
@@ -287,7 +212,7 @@ namespace DH.Helpdesk.Services.Services
         public CaseLog GetLogById(int id)
         {
             var log = _logRepository.GetById(id);
-            return GetCaseLogFromLog(log); 
+            return GetCaseLogFromLog(log);
         }
 
         public CaseLog GetLogInfo(int id)
@@ -510,90 +435,90 @@ namespace DH.Helpdesk.Services.Services
                     caseHistories.Select(
                         it =>
                         new CaseHistory()
-                            {
-                                CaseHistoryGUID = Guid.NewGuid(),
-                                Case_Id = it.Case_Id,
-                                ReportedBy = it.ReportedBy,
-                                PersonsName = it.PersonsName,
-                                PersonsEmail = it.PersonsEmail,
-                                PersonsPhone = it.PersonsPhone,
-                                PersonsCellphone = it.PersonsCellphone,
-                                Customer_Id = it.Customer_Id,
-                                Region_Id = it.Region_Id,
-                                Department_Id = it.Department_Id,
-                                OU_Id = it.OU_Id,
-                                Place = it.Place,
-                                UserCode = it.UserCode,
-                                InventoryNumber = it.InventoryNumber,
-                                InventoryType = it.InventoryType,
-                                InventoryLocation = it.InventoryLocation,
-                                CaseNumber = it.CaseNumber,
-                                User_Id = it.User_Id,
-                                IpAddress = it.IpAddress,
-                                CaseType_Id = it.CaseType_Id,
-                                ProductArea_Id = it.ProductArea_Id,
-                                System_Id = it.System_Id,
-                                Urgency_Id = it.Urgency_Id,
-                                Impact_Id = it.Impact_Id,
-                                Category_Id = it.Category_Id,
-                                Supplier_Id = it.Supplier_Id,
-                                InvoiceNumber = it.InvoiceNumber,
-                                ReferenceNumber = it.ReferenceNumber,
-                                Caption = it.Caption,
-                                Description = it.Description,
-                                Miscellaneous = it.Miscellaneous,
-                                ContactBeforeAction = it.ContactBeforeAction,
-                                SMS = it.SMS,
-                                AgreedDate = it.AgreedDate,
-                                Available = it.Available,
-                                Cost = it.Cost,
-                                OtherCost = it.OtherCost,
-                                Currency = it.Currency,
-                                Performer_User_Id = it.Performer_User_Id,
-                                CaseResponsibleUser_Id = it.CaseResponsibleUser_Id,
-                                Priority_Id = it.Priority_Id,
-                                Status_Id = it.Status_Id,
-                                StateSecondary_Id = it.StateSecondary_Id,
-                                ExternalTime = it.ExternalTime,
-                                Project_Id = it.Project_Id,
-                                Verified = it.Verified,
-                                VerifiedDescription = it.VerifiedDescription,
-                                SolutionRate = it.SolutionRate,
-                                PlanDate = it.PlanDate,
-                                ApprovedDate = it.ApprovedDate,
-                                ApprovedBy_User_Id = it.ApprovedBy_User_Id,
-                                WatchDate = it.WatchDate,
-                                LockCaseToWorkingGroup_Id = it.LockCaseToWorkingGroup_Id,
-                                WorkingGroup_Id = it.WorkingGroup_Id,
-                                FinishingDate = it.FinishingDate,
-                                FinishingDescription = it.FinishingDescription,
-                                FollowUpDate = it.FollowUpDate,
-                                RegistrationSource = it.RegistrationSource,
-                                RelatedCaseNumber = it.RelatedCaseNumber,
-                                Problem_Id = it.Problem_Id,
-                                Change_Id = it.Change_Id,
-                                Unread = it.Unread,
-                                RegLanguage_Id = it.RegLanguage_Id,
-                                RegUserId = it.RegUserId,
-                                RegUserDomain = it.RegUserDomain,
-                                ProductAreaQuestionVersion_Id = it.ProductAreaQuestionVersion_Id,
-                                LeadTime = it.LeadTime,
-                                CreatedDate = DateTime.UtcNow,
-                                CreatedByUser = it.CreatedByUser,
-                                Deleted = it.Deleted,
-                                CausingPartId = it.CausingPartId,
-                                DefaultOwnerWG_Id = it.DefaultOwnerWG_Id,
-                                CaseFile = it.CaseFile,
-                                LogFile = it.LogFile,
-                                CaseLog = it.CaseLog,
-                                ClosingReason = it.ClosingReason,
-                                RegistrationSourceCustomer_Id = it.RegistrationSourceCustomer_Id,
-                                IsAbout_Persons_Name = it.IsAbout_Persons_Name,
-                                IsAbout_Department_Id = it.IsAbout_Department_Id,
-                                IsAbout_Persons_Phone = it.IsAbout_Persons_Phone,
-                                IsAbout_ReportedBy = it.IsAbout_ReportedBy,
-                                IsAbout_UserCode = it.IsAbout_UserCode
-                            })
+                        {
+                            CaseHistoryGUID = Guid.NewGuid(),
+                            Case_Id = it.Case_Id,
+                            ReportedBy = it.ReportedBy,
+                            PersonsName = it.PersonsName,
+                            PersonsEmail = it.PersonsEmail,
+                            PersonsPhone = it.PersonsPhone,
+                            PersonsCellphone = it.PersonsCellphone,
+                            Customer_Id = it.Customer_Id,
+                            Region_Id = it.Region_Id,
+                            Department_Id = it.Department_Id,
+                            OU_Id = it.OU_Id,
+                            Place = it.Place,
+                            UserCode = it.UserCode,
+                            InventoryNumber = it.InventoryNumber,
+                            InventoryType = it.InventoryType,
+                            InventoryLocation = it.InventoryLocation,
+                            CaseNumber = it.CaseNumber,
+                            User_Id = it.User_Id,
+                            IpAddress = it.IpAddress,
+                            CaseType_Id = it.CaseType_Id,
+                            ProductArea_Id = it.ProductArea_Id,
+                            System_Id = it.System_Id,
+                            Urgency_Id = it.Urgency_Id,
+                            Impact_Id = it.Impact_Id,
+                            Category_Id = it.Category_Id,
+                            Supplier_Id = it.Supplier_Id,
+                            InvoiceNumber = it.InvoiceNumber,
+                            ReferenceNumber = it.ReferenceNumber,
+                            Caption = it.Caption,
+                            Description = it.Description,
+                            Miscellaneous = it.Miscellaneous,
+                            ContactBeforeAction = it.ContactBeforeAction,
+                            SMS = it.SMS,
+                            AgreedDate = it.AgreedDate,
+                            Available = it.Available,
+                            Cost = it.Cost,
+                            OtherCost = it.OtherCost,
+                            Currency = it.Currency,
+                            Performer_User_Id = it.Performer_User_Id,
+                            CaseResponsibleUser_Id = it.CaseResponsibleUser_Id,
+                            Priority_Id = it.Priority_Id,
+                            Status_Id = it.Status_Id,
+                            StateSecondary_Id = it.StateSecondary_Id,
+                            ExternalTime = it.ExternalTime,
+                            Project_Id = it.Project_Id,
+                            Verified = it.Verified,
+                            VerifiedDescription = it.VerifiedDescription,
+                            SolutionRate = it.SolutionRate,
+                            PlanDate = it.PlanDate,
+                            ApprovedDate = it.ApprovedDate,
+                            ApprovedBy_User_Id = it.ApprovedBy_User_Id,
+                            WatchDate = it.WatchDate,
+                            LockCaseToWorkingGroup_Id = it.LockCaseToWorkingGroup_Id,
+                            WorkingGroup_Id = it.WorkingGroup_Id,
+                            FinishingDate = it.FinishingDate,
+                            FinishingDescription = it.FinishingDescription,
+                            FollowUpDate = it.FollowUpDate,
+                            RegistrationSource = it.RegistrationSource,
+                            RelatedCaseNumber = it.RelatedCaseNumber,
+                            Problem_Id = it.Problem_Id,
+                            Change_Id = it.Change_Id,
+                            Unread = it.Unread,
+                            RegLanguage_Id = it.RegLanguage_Id,
+                            RegUserId = it.RegUserId,
+                            RegUserDomain = it.RegUserDomain,
+                            ProductAreaQuestionVersion_Id = it.ProductAreaQuestionVersion_Id,
+                            LeadTime = it.LeadTime,
+                            CreatedDate = DateTime.UtcNow,
+                            CreatedByUser = it.CreatedByUser,
+                            Deleted = it.Deleted,
+                            CausingPartId = it.CausingPartId,
+                            DefaultOwnerWG_Id = it.DefaultOwnerWG_Id,
+                            CaseFile = it.CaseFile,
+                            LogFile = it.LogFile,
+                            CaseLog = it.CaseLog,
+                            ClosingReason = it.ClosingReason,
+                            RegistrationSourceCustomer_Id = it.RegistrationSourceCustomer_Id,
+                            IsAbout_Persons_Name = it.IsAbout_Persons_Name,
+                            IsAbout_Department_Id = it.IsAbout_Department_Id,
+                            IsAbout_Persons_Phone = it.IsAbout_Persons_Phone,
+                            IsAbout_ReportedBy = it.IsAbout_ReportedBy,
+                            IsAbout_UserCode = it.IsAbout_UserCode
+                        })
                         .ToArray();
                 newCaseHistories.ForEach(caseHistoryRepository.Add);
                 uow.Save();
@@ -603,26 +528,26 @@ namespace DH.Helpdesk.Services.Services
                 newCaseHistories.Select(
                     it =>
                     new Log
-                        {
-                            Id = it.Id,
-                            CaseHistory_Id = it.Id,
-                            Case_Id = it.Case_Id,
-                            User_Id = parentCaseLog.UserId,
-                            RegTime = DateTime.UtcNow,
-                            LogDate = DateTime.UtcNow,
-                            RegUser =
+                    {
+                        Id = it.Id,
+                        CaseHistory_Id = it.Id,
+                        Case_Id = it.Case_Id,
+                        User_Id = parentCaseLog.UserId,
+                        RegTime = DateTime.UtcNow,
+                        LogDate = DateTime.UtcNow,
+                        RegUser =
                                 string.IsNullOrWhiteSpace(parentCaseLog.RegUser)
                                     ? string.Empty
                                     : parentCaseLog.RegUser,
-                            LogType = parentCaseLog.LogType,
-                            LogGUID = parentCaseLog.LogGuid,
-                            Text_Internal =
+                        LogType = parentCaseLog.LogType,
+                        LogGUID = parentCaseLog.LogGuid,
+                        Text_Internal =
                                 string.IsNullOrWhiteSpace(parentCaseLog.TextInternal)
                                     ? string.Empty
                                     : parentCaseLog.TextInternal,
-                            Text_External = string.Empty,
-                            ChangeTime = DateTime.UtcNow
-                        }).ToArray();
+                        Text_External = string.Empty,
+                        ChangeTime = DateTime.UtcNow
+                    }).ToArray();
             caseLogs.ForEach(_logRepository.Add);
             _logRepository.Commit();
 
@@ -647,9 +572,96 @@ namespace DH.Helpdesk.Services.Services
             _logRepository.Commit();
         }
 
+        public List<LogFile> GetLogFilesByLogId(int logId, bool includeInternal = true)
+        {
+            return _logFileRepository.GetLogFilesByLogId(logId, includeInternal);
+        }
+
         #endregion
 
         #region Private Methods and Operators
+
+        private Log CreateLogFromCaseLog(int id, CaseLog cl)
+        {
+            cl.Id = id;
+            return GetLogFromCaseLog(cl);
+        }
+
+        private IQueryable<LogMapperData> GetCaseLogsQueryable(int caseId, bool includeInternalLogs = true, bool includeInternalFiles = false)
+        {
+            var caseLogsQuery = _logRepository.GetCaseLogs(caseId);
+
+            if (!includeInternalLogs)
+            {
+                //keep only notes that have external, internal text will be trimmed in mapping logic in the called method
+                caseLogsQuery = caseLogsQuery.Where(l => !string.IsNullOrEmpty(l.Text_External));
+            }
+
+            IQueryable<LogMapperData> caseLogs = caseLogsQuery.Select(l => new LogMapperData
+            {
+                Log = l,
+
+                User = new UserMapperData
+                {
+                    Id = l.User_Id,
+                    FirstName = l.User != null ? l.User.FirstName : null,
+                    SurName = l.User != null ? l.User.SurName : null
+                },
+
+                EmailLogs =
+                    l.CaseHistory.Emaillogs.DefaultIfEmpty()
+                        .Where(t => t.MailId == (int)GlobalEnums.MailTemplates.InternalLogNote ||
+                                    t.MailId == (int)GlobalEnums.MailTemplates.InformNotifier ||
+                                    t.MailId == (int)GlobalEnums.MailTemplates.ClosedCase && !string.IsNullOrEmpty(l.Text_External) || //#73472
+                                    t.MailId == (int)GlobalEnums.MailTemplates.CaseIsUpdated) //#71840
+                        .Select(t => new EmailLogMapperData
+                        {
+                            Id = t.Id,
+                            MailId = t.MailId,
+                            CaseHistoryId = t.CaseHistory_Id,
+                            EmailAddress = t.EmailAddress
+                        }).ToList(),
+
+                LogFiles =
+                    l.LogFiles.DefaultIfEmpty().Where(f => includeInternalLogs && includeInternalFiles || f.LogType == LogFileType.External).Select(t => new LogFileMapperData
+                    {
+                        Id = t.Id,
+                        FileName = t.FileName,
+                        LogId = t.ParentLog_Id,
+                        CaseId = t.IsCaseFile.HasValue && t.IsCaseFile.Value ? t.Log.Case_Id : (int?)null,
+                        LogType = t.LogType,
+                        ParentLogType = t.ParentLogType
+                    }).ToList(),
+
+                Mail2Tickets =
+                    l.Mail2Tickets.DefaultIfEmpty().Select(x => new Mail2TicketMapperData()
+                    {
+                        Id = x.Id,
+                        Type = x.Type,
+                        EMailAddress = x.EMailAddress,
+                        EMailSubject = x.EMailSubject
+                    }).ToList()
+            });
+
+            return caseLogs;
+        }
+
+        private void DeleteLogFiles(int logId, string basePath)
+        {
+            var logFiles = GetLogFilesByLogId(logId);
+            if (logFiles != null)
+            {
+                foreach (var f in logFiles)
+                {
+                    if (!f.ParentLog_Id.HasValue) // delete file if not reference
+                        _filesStorage.DeleteFile(f.GetFolderPrefix(), f.Log_Id, basePath, f.FileName);
+
+                    _logFileRepository.Delete(f);
+                }
+
+                _logFileRepository.Commit();
+            }
+        }
 
         private Log GetLogFromCaseLog(CaseLog caseLog)
         {
@@ -674,17 +686,17 @@ namespace DH.Helpdesk.Services.Services
             }
 
             log.Case_Id = caseLog.CaseId;
-            log.User_Id = caseLog.UserId; 
+            log.User_Id = caseLog.UserId;
             log.Charge = caseLog.Charge ? 1 : 0;
             log.EquipmentPrice = caseLog.EquipmentPrice;
             log.Price = caseLog.Price;
             log.FinishingDate = caseLog.FinishingDate;
             log.FinishingType = caseLog.FinishingType;
             log.ChangeTime = DateTime.UtcNow;
-            log.InformCustomer = caseLog.SendMailAboutCaseToNotifier ? 1 : 0 ;
+            log.InformCustomer = caseLog.SendMailAboutCaseToNotifier ? 1 : 0;
             log.Text_External = string.IsNullOrWhiteSpace(caseLog.TextExternal) ? string.Empty : caseLog.TextExternal;
             log.Text_Internal = string.IsNullOrWhiteSpace(caseLog.TextInternal) ? string.Empty : caseLog.TextInternal;
-            log.CaseHistory_Id = caseLog.CaseHistoryId; 
+            log.CaseHistory_Id = caseLog.CaseHistoryId;
             log.WorkingTime = caseLog.WorkingTime;
             log.OverTime = caseLog.Overtime;
 
@@ -723,6 +735,6 @@ namespace DH.Helpdesk.Services.Services
             return log;
         }
 
-    #endregion
+        #endregion
     }
 }

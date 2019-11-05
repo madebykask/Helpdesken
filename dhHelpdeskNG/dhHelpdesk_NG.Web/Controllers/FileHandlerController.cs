@@ -2,7 +2,9 @@
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using System.Web.Mvc;
+using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.Logs;
+using DH.Helpdesk.Common.Extensions;
 using DH.Helpdesk.Dal.Enums;
 
 namespace DH.Helpdesk.Web.Controllers
@@ -36,15 +38,13 @@ namespace DH.Helpdesk.Web.Controllers
             var link = "";
             var absolute = RequestExtension.GetAbsoluteUrl();
 
-            var c = _caseService.GetCaseById(int.Parse(id));
+            var c = _caseService.GetCaseBasic(int.Parse(id));
             var basePath = string.Empty;
             if (c != null)
             {
-                basePath = _masterDataService.GetVirtualDirectoryPath(c.Customer_Id);
+                basePath = _masterDataService.GetVirtualDirectoryPath(c.CustomerId);
                 if (!basePath.EndsWith("/"))
-                {
                     basePath = basePath + "/";
-                }
             }
 
             link = absolute + basePath + c.CaseNumber + "/" + EncodeStr(fileName);
@@ -52,7 +52,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
-        public string LogFileLinkVD(string id, string fileName, int logType)
+        public string LogFileLinkVD(string id, string fileName, LogFileType logType)
         {
             var link = "";
 
@@ -71,7 +71,7 @@ namespace DH.Helpdesk.Web.Controllers
                         basePath = basePath + "/";
                     }
                 }
-                var logFolder = logType == (int) LogFileType.Internal ? ModuleName.LogInternal : ModuleName.Log;
+                var logFolder = logType.GetFolderPrefix();
                 link = absolute + basePath + logFolder + id + "/" + EncodeStr(fileName);
             }
            

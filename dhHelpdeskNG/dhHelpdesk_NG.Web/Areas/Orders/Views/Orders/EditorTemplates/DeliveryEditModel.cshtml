@@ -13,6 +13,7 @@
         @Html.EditorFor(m => m.DeliveryDate, "Fields/Date", new { id = "deliverydate_datepicker" })
         @Html.EditorFor(m => m.InstallDate, "Fields/Date", new { id = "installdate_datepicker" })
         @Html.EditorFor(m => m.DeliveryDepartment, "Fields/List", new { Source = Model.Departments })
+        @Html.EditorFor(m => m.DeliveryOuId, "Fields/List", new { Source = Model.Units })
         @Html.EditorFor(m => m.DeliveryOu, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
         @Html.EditorFor(m => m.DeliveryAddress, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
         @Html.EditorFor(m => m.DeliveryPostalCode, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "10" } } })
@@ -21,6 +22,5 @@
         @Html.EditorFor(m => m.DeliveryInfo1, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "200" } } })
         @Html.EditorFor(m => m.DeliveryInfo2, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
         @Html.EditorFor(m => m.DeliveryInfo3, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "50" } } })
-        @Html.EditorFor(m => m.DeliveryOuId, "Fields/List", new { Source = Model.Units })
     </tbody>
 </table>

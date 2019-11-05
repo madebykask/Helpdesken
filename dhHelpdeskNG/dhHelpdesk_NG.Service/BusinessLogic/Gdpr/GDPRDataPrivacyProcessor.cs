@@ -8,6 +8,7 @@ using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Exceptions;
+using DH.Helpdesk.Common.Extensions;
 using DH.Helpdesk.Common.Serializers;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Dal.Infrastructure;
@@ -288,7 +289,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             //delete case files
             foreach (var fileEntity in caseFiles)
             {
-                int caseId = fileEntity.GetCaseNumberOrId();
+                var caseId = fileEntity.GetCaseNumberOrId();
                 try
                 {
                     this._filesStorage.DeleteFile(ModuleName.Cases, caseId, baseDirPath, fileEntity.FileName);
@@ -307,7 +308,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                 try
                 {
                     this._filesStorage.DeleteFile(
-                        fileEntity.LogType == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal,
+                        fileEntity.LogType.GetFolderPrefix(),
                         fileEntity.LogId, baseDirPath, fileEntity.FileName);
                 }
                 catch (IOException e)

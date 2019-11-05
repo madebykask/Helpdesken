@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using DH.Helpdesk.Services.Services.Concrete;
+
 namespace DH.Helpdesk.Web.Controllers
 {
     using System.Collections.Generic;
@@ -28,14 +30,9 @@ namespace DH.Helpdesk.Web.Controllers
         /// The product area service.
         /// </summary>
         private readonly IProductAreaService productAreaService;
-
-        /// <summary>
-        /// The causing type service.
-        /// </summary>
         private readonly ICausingPartService causingPartService;
-
         private readonly IDepartmentService departmentService;
-
+        private readonly OrganizationJsonService _organizationJsonService;
         private readonly IWorkContext workContext;
 
         public AjaxController(
@@ -43,12 +40,14 @@ namespace DH.Helpdesk.Web.Controllers
             IProductAreaService productAreaService, 
             ICausingPartService causingPartService, 
             IDepartmentService departmentService, 
+            OrganizationJsonService organizationJsonService,
             IWorkContext workContext)
             : base(masterDataService)
         {
             this.productAreaService = productAreaService;
             this.causingPartService = causingPartService;
             this.departmentService = departmentService;
+            _organizationJsonService = organizationJsonService;
             this.workContext = workContext;
         }
 
@@ -100,6 +99,13 @@ namespace DH.Helpdesk.Web.Controllers
                                     administratorId,
                                     regionId,
                                     departmentFilterFormat);
+            return this.Json(departments, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetUnits(int? departmentId, int customerId)
+        {
+            var departments = _organizationJsonService.GetActiveOUForDepartmentAsIdName(departmentId, customerId);;
             return this.Json(departments, JsonRequestBehavior.AllowGet);
         }
 

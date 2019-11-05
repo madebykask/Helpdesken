@@ -5,6 +5,7 @@ namespace DH.Helpdesk.Dal.Repositories
 	using Common.Constants;
 	using DH.Helpdesk.Common.Enums;
 	using DH.Helpdesk.Dal.Enums;
+	using FileIndexing;
 	using System;
 	using System.Collections.Generic;
 	using System.Configuration;
@@ -15,10 +16,11 @@ namespace DH.Helpdesk.Dal.Repositories
 	using System.IO;
 	using System.Linq;
 	using System.Text;
+	using System.Text.RegularExpressions;
 
 	public interface IFileIndexingRepository
 	{
-		Tuple<List<int>, List<int>> GetCaseNumeralInfoBy(string serverName, string catalogName, string searchText);
+		Tuple<List<int>, List<int>> GetCaseNumeralInfoBy(string serverName, string catalogName, string searchText, string[] excludePathPatterns);
 	}
 
 	public class FileIndexingRepository : IFileIndexingRepository
@@ -33,11 +35,11 @@ namespace DH.Helpdesk.Dal.Repositories
 			_featureToggleRepository = featureToggleRepository;
         }
 
-        public Tuple<List<int>, List<int>> GetCaseNumeralInfoBy(string serverName, string catalogName, string searchText)
-        {
-            var _INDEXING_SERVICE_PROVIDER_CONNECTION_STRING = string.Empty;
+		public Tuple<List<int>, List<int>> GetCaseNumeralInfoBy(string serverName, string catalogName, string searchText, string[] excludePathPatterns)
+		{
+			var _INDEXING_SERVICE_PROVIDER_CONNECTION_STRING = string.Empty;
 
-           
+
 			var fileSearchIdxToggle = _featureToggleRepository.GetByStrongName(FeatureToggleTypes.FILE_SEARCH_IDX_SERVICE.ToString());
 
 			if (ConfigurationManager.ConnectionStrings["HelpdeskIndexingService"] != null)
@@ -50,15 +52,26 @@ namespace DH.Helpdesk.Dal.Repositories
 			// Check if legacy indexing service should be used
 			if (fileSearchIdxToggle != null && fileSearchIdxToggle.Active)
 			{
-				// Deprecated: remove when sure not used any more
-				GetFilesUsingIndexingService(serverName, catalogName, searchText, _INDEXING_SERVICE_PROVIDER_CONNECTION_STRING, caseNumbers, logIds);
+				try
+				{
+					// Deprecated: remove when sure not used any more
+					GetFilesUsingIndexingService(serverName, catalogName, searchText, _INDEXING_SERVICE_PROVIDER_CONNECTION_STRING, caseNumbers, logIds);
+				}
+				catch (Exception ex)
+				{
+					DataLogRepository.SaveLog("Error: " + ex.Message, DataLogTypes.GENERAL);
+
+					throw new FileIndexingException(FileIndexingServiceType.IndexingService, ex);
+				}
 			}
 			else
 			{
 				try
 				{
+
+
 					var serverPrefix = serverName == null ? "" : serverName + ".";
-					var query = $"SELECT System.ItemName, System.ItemFolderPathDisplay FROM {serverPrefix}SystemIndex WHERE CONTAINS(*, '*{searchText.SafeForSqlInject()}*', 1033) RANK BY COERCION(Absolute, 1) AND SCOPE='file:{catalogName}'";
+					var query = $"SELECT System.ItemName, System.ItemFolderPathDisplay FROM {serverPrefix}SystemIndex WHERE CONTAINS(*, '\"{searchText.SafeForSqlInject()}\"', 1033) RANK BY COERCION(Absolute, 1) AND SCOPE='file:{catalogName}'";
 					var adapter = new OleDbDataAdapter(query, _INDEXING_SERVICE_PROVIDER_CONNECTION_STRING);
 					var dataSet = new DataSet();
 					if (adapter.Fill(dataSet) > 0)
@@ -74,7 +87,9 @@ namespace DH.Helpdesk.Dal.Repositories
 							var file = (string)row["System.ItemName"];
 							RetrieveNumber($"{path}\\{file})", out number, out isLog);
 
-							if (number != -1)
+							var excludePath = excludePathPatterns.Any(pattern => Regex.Match(path, pattern).Success);
+
+							if (number != -1 && !excludePath)
 								if (isLog)
 									logIds.Add(number);
 								else
@@ -85,11 +100,14 @@ namespace DH.Helpdesk.Dal.Repositories
 				catch (Exception ex)
 				{
 					DataLogRepository.SaveLog("Error: " + ex.Message, DataLogTypes.GENERAL);
+
+					throw new FileIndexingException(FileIndexingServiceType.WindowsSearch, ex);
 				}
 			}
+
+
 			var ret = new Tuple<List<int>, List<int>>(caseNumbers, logIds);
 			return ret;
-
 		}
 
 		private static void GetFilesUsingIndexingService(string serverName, string catalogName, string searchText, string _INDEXING_SERVICE_PROVIDER_CONNECTION_STRING, List<int> caseNumbers, List<int> logIds)

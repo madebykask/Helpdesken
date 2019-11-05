@@ -5,14 +5,19 @@
     public class OrganizationFieldsSettings
     {
         public OrganizationFieldsSettings(
+            ModelEditFieldSetting regionFieldSetting,
             ModelEditFieldSetting departmentFieldSetting,
             ModelEditFieldSetting domainFieldSetting,
             ModelEditFieldSetting unitFieldSetting)
         {
+            this.RegionFieldSetting = regionFieldSetting;
             this.DepartmentFieldSetting = departmentFieldSetting;
             this.DomainFieldSetting = domainFieldSetting;
             this.UnitFieldSetting = unitFieldSetting;
         }
+
+        [NotNull]
+        public ModelEditFieldSetting RegionFieldSetting { get; set; }
 
         [NotNull]
         public ModelEditFieldSetting DepartmentFieldSetting { get; set; }

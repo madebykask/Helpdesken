@@ -52,11 +52,11 @@
         [NotNull]
         public OrderEditFields Order { get; private set; }
 
-        [NotNull]
-        public OtherEditFields Other { get; private set; }
+		[NotNull]
+		public ProgramEditFields Program { get; private set; }
 
-        [NotNull]
-        public ProgramEditFields Program { get; private set; }
+		[NotNull]
+        public OtherEditFields Other { get; private set; }
 
         [NotNull]
         public ReceiverEditFields Receiver { get; private set; }

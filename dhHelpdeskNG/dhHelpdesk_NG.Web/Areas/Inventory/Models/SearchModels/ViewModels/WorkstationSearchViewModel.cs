@@ -12,8 +12,10 @@
     public class WorkstationSearchViewModel : BaseIndexModel
     {
         private WorkstationSearchViewModel(
+            SelectList domains,
             SelectList regions,
             SelectList departments,
+            SelectList units,
             SelectList computerTypes,
             SelectList contractStatuses,
             WorkstationsSearchFilter filter,
@@ -22,19 +24,27 @@
             List<ItemOverview> overviews)
             : base(currentMode, overviews)
         {
-            this.Departments = departments;
-            this.Regions = regions;
-            this.ComputerTypes = computerTypes;
-            this.ContractStatuses = contractStatuses;
-            this.Filter = filter;
-            this.Settings = settings;
+            Domains = domains;
+            Units = units;
+            Departments = departments;
+            Regions = regions;
+            ComputerTypes = computerTypes;
+            ContractStatuses = contractStatuses;
+            Filter = filter;
+            Settings = settings;
         }
+
+        [NotNull]
+        public SelectList Domains { get; private set; }
 
         [NotNull]
         public SelectList Regions { get; private set; }
 
         [NotNull]
         public SelectList Departments { get; private set; }
+
+        [NotNull]
+        public SelectList Units { get; private set; }
 
         [NotNull]
         public SelectList ComputerTypes { get; private set; }
@@ -51,21 +61,28 @@
 
         public static WorkstationSearchViewModel BuildViewModel(
             WorkstationsSearchFilter currentFilter,
+            List<ItemOverview> domainsItemOverviews,
             List<ItemOverview> regionsItemOverviews,
             List<ItemOverview> departmentsItemOverviews,
+            List<ItemOverview> unitsItemOverviews,
             List<ItemOverview> computerTypesItemOverviews,
+            List<ItemOverview> computerStatusesItemOverviews,
             ComputerFieldsSettingsOverviewForFilter settings,
             int currentMode,
             List<ItemOverview> inventoryTypes)
         {
+            var domains = new SelectList(domainsItemOverviews, "Value", "Name");
             var regions = new SelectList(regionsItemOverviews, "Value", "Name");
             var departments = new SelectList(departmentsItemOverviews, "Value", "Name");
             var computerTypes = new SelectList(computerTypesItemOverviews, "Value", "Name");
-            var contractStatuses = new SelectList(Enum.GetValues(typeof(ContractStatuses)));
+            var contractStatuses = new SelectList(computerStatusesItemOverviews, "Value", "Name");
+            var units = new SelectList(unitsItemOverviews, "Value", "Name");
 
             var viewModel = new WorkstationSearchViewModel(
+                domains,
                 regions,
                 departments,
+                units,
                 computerTypes,
                 contractStatuses,
                 currentFilter,

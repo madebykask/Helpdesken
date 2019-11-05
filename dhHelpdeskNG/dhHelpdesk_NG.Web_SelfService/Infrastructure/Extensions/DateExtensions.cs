@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
+﻿using DH.Helpdesk.Common.Constants;
+
+namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
 {
     using System;
 
@@ -16,7 +18,7 @@
 
         public static string GetDateFormat()
         {
-            return "yyyy-MM-dd";
+            return DateFormats.Date;
         }
 
     }

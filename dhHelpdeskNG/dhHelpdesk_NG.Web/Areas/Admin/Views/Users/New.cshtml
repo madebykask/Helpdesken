@@ -19,12 +19,14 @@
 }
 <script type="text/javascript">
     $(function () {
+        var submitted = false;
         var RemoveCustomerIDRequiredMessage = function () {
             $('.validation-summary-errors li:contains("Customer_Id")').remove();
         };
         RemoveCustomerIDRequiredMessage();
 
-       $("#target").validate({
+        $("#target").validate({
+            ignore: '',
             rules: {
                 "User.UserID": {
                     required: true
@@ -75,7 +77,24 @@
                 "ConfirmPassword": {
                     equalTo: "@Translation.GetForJS("Kontrollera att lösenord och bekräftat lösenord stämmer överens")"
                 }
-           },
+            },
+            showErrors: function(errorMap, errorList) {
+                if (submitted) {
+                    var liSet = '';
+                    $('li[tab]').removeClass('error');
+                    $.each(errorList, function () {
+                        const tabId = $(this.element).parents('.tab-pane')[0].id;
+                        $('li[tab="' + tabId + '"]').addClass('error');
+                        liSet += '<li>' + this.message + '</li>';
+                    });
+                    $('.validation-summary-valid ul').html(liSet);
+                    submitted = false;
+                }
+                this.defaultShowErrors();
+            },          
+            invalidHandler: function(form, validator) {
+                submitted = true;
+            },
             submitHandler: function (form) {
                 submitForm();
                 form.submit();

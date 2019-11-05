@@ -14,6 +14,7 @@ namespace DH.Helpdesk.Dal.Repositories
         List<ItemOverview> FindActiveAndShowable();
 
         List<ItemOverview> FindActive(int? departmentId);
+        List<ItemOverview> FindActiveByCustomer(int customerId);
 
         List<OU> GetOUs(int? departmentId);
 

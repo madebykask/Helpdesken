@@ -8,6 +8,7 @@ using DH.Helpdesk.Common.Enums.Cases;
 using Field = DH.Helpdesk.Domain.Field;
 using System.Collections.Generic;
 using System.Web;
+using DH.Helpdesk.Common.Constants;
 
 namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
 {
@@ -56,11 +57,11 @@ namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
             if (isDateTime)
             {
                 var localTime = TimeZoneInfo.ConvertTimeFromUtc(input, this.CurrentTimeZone);
-                return localTime.ToString("yyyy-MM-dd HH:mm:ss", Thread.CurrentThread.CurrentUICulture);
+                return localTime.ToString(DateFormats.DateTime, Thread.CurrentThread.CurrentUICulture);
             }
             else
             {
-                return  input.ToLocalTime().ToString("yyyy-MM-dd", Thread.CurrentThread.CurrentUICulture);                                
+                return  input.ToLocalTime().ToString(DateFormats.Date, Thread.CurrentThread.CurrentUICulture);                                
             }
         }
 

@@ -7,6 +7,7 @@ Imports System.Linq
 Imports System.Text
 Imports DH.Helpdesk.Library.SharedFunctions
 Imports System.Text.RegularExpressions
+Imports DH.Helpdesk.BusinessData.Enums.Users
 Imports Rebex.Mail
 Imports Rebex.Mime
 Imports DH.Helpdesk.BusinessData.OldComponents.GlobalEnums
@@ -53,7 +54,7 @@ Module DH_Helpdesk_Mail
         Dim productAreaSepArg As String = GetAppSettingValue("ProductAreaSeparator")
         Dim newModeArg As String = ""
 
-        #Region "Optional params for diagnostic purposes"
+#Region "Optional params for diagnostic purposes"
 
         Dim sWorkingGroupsFilter = GetAppSettingValue("workingGroupsFilter")
         Dim sCustomersFilter = GetAppSettingValue("customersFilter")
@@ -210,6 +211,8 @@ Module DH_Helpdesk_Mail
         Dim objPriorityData As New PriorityData
         Dim objCustomer As Customer
         Dim objCaseData As New CaseData
+        Dim objUserData As New UserData
+        Dim objUserWGData As New WorkingGroupUserData
         Dim objDepartmentData As New DepartmentData
         Dim objComputerUserData As New ComputerUserData
         Dim objMailTemplateData As New MailTemplateData
@@ -295,7 +298,7 @@ Module DH_Helpdesk_Mail
                         IMAPclient = New Imap()
 
                         ' Enable IMAPI Client Logging
-                        If bEnableIMAPIClientLog AndAlso Not IsNullOrEmpty(sIMAPIClientLogPath)
+                        If bEnableIMAPIClientLog AndAlso Not IsNullOrEmpty(sIMAPIClientLogPath) Then
                             IMAPclient.LogWriter = New Rebex.FileLogWriter(sIMAPIClientLogPath, Rebex.LogLevel.Debug)
                         End If
 
@@ -380,7 +383,7 @@ Module DH_Helpdesk_Mail
 
                             'Validate email folders
                             If Not IsNullOrEmpty(objCustomer.EMailFolder) Then
-                                If Not CheckEmailFolderExists(IMAPclient, objCustomer.EMailFolder)
+                                If Not CheckEmailFolderExists(IMAPclient, objCustomer.EMailFolder) Then
                                     LogError($"EmailFolder '{objCustomer.EMailFolder}' doesn't exist.")
                                     Exit For
                                 Else
@@ -389,7 +392,7 @@ Module DH_Helpdesk_Mail
                             End If
 
                             If Not IsNullOrEmpty(objCustomer.EMailFolderArchive) Then
-                                If Not CheckEmailFolderExists(IMAPclient, objCustomer.EMailFolderArchive)
+                                If Not CheckEmailFolderExists(IMAPclient, objCustomer.EMailFolderArchive) Then
                                     LogError($"EmailFolderArchive '{objCustomer.EMailFolderArchive}' doesn't exist.")
                                     Exit For
                                 End If
@@ -480,7 +483,7 @@ Module DH_Helpdesk_Mail
 
                                 iMailID = 0
 
-                                If bEnableNewEmailProcessing
+                                If bEnableNewEmailProcessing Then
                                     'New logic to find existing case by email
                                     Dim messageIds As List(Of String) = ExtractMessageIds(message)
                                     LogToFile(String.Format("MessageIds found: {0}", String.Join(",", messageIds)), objCustomer.POP3DebugLevel)
@@ -680,12 +683,13 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     'Attached files processing for Case
-                                    Dim caseFiles as List(Of String) = ProcessMessageAttachments(message, iHTMLFile, objCustomer, objCase.Casenumber.ToString(), Nothing, iPop3DebugLevel)
-                                    If (caseFiles IsNot Nothing AndAlso caseFiles.Any())
+                                    Dim caseFiles As List(Of String) = ProcessMessageAttachments(message, iHTMLFile, objCustomer, objCase.Casenumber.ToString(), Nothing, iPop3DebugLevel)
+                                    If (caseFiles IsNot Nothing AndAlso caseFiles.Any()) Then
+
                                         For Each caseFilePath As String In caseFiles
                                             Dim sFileName = Path.GetFileName(caseFilePath)
                                             objCaseData.saveFileInfo(objCase.Id, sFileName)
-                                            
+
                                             'Add to files to attach list
                                             attachedFiles.Add(New MailFile(sFileName, caseFilePath, False))
                                         Next
@@ -716,9 +720,9 @@ Module DH_Helpdesk_Mail
                                                 '    newcaseEmailTo = sNewCaseToEmailAddress
                                                 'End If
                                                 'helpdesk case 58782
-                                                sRet_SendMail = 
-                                                    objMail.sendMail(objCase, Nothing, objCustomer, newcaseEmailTo, objMailTemplate, objGlobalSettings, 
-                                                                     sMessageId, sEMailLogGUID, sConnectionstring) 
+                                                sRet_SendMail =
+                                                    objMail.sendMail(objCase, Nothing, objCustomer, newcaseEmailTo, objMailTemplate, objGlobalSettings,
+                                                                     sMessageId, sEMailLogGUID, sConnectionstring)
 
                                                 objLogData.createEMailLog(iCaseHistory_Id, newcaseEmailTo, MailTemplates.NewCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             End If
@@ -742,8 +746,8 @@ Module DH_Helpdesk_Mail
 
                                                 Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
-                                                sRet_SendMail = 
-                                                    objMail.sendMail(objCase, Nothing, objCustomer, vNewCaseEmailList(Index), objMailTemplate, objGlobalSettings, 
+                                                sRet_SendMail =
+                                                    objMail.sendMail(objCase, Nothing, objCustomer, vNewCaseEmailList(Index), objMailTemplate, objGlobalSettings,
                                                                      sMessageId, sEMailLogGUID, sConnectionstring)
 
                                                 objLogData.createEMailLog(iCaseHistory_Id, vNewCaseEmailList(Index), MailTemplates.NewCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
@@ -753,7 +757,6 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     If objCase.Performer_User_Id <> 0 Then
-                                        Dim objUserData As New UserData
                                         Dim objUser As User = objUserData.getUserById(objCase.Performer_User_Id)
 
                                         If Not objUser Is Nothing Then
@@ -768,8 +771,8 @@ Module DH_Helpdesk_Mail
 
                                                     Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
-                                                    sRet_SendMail = 
-                                                        objMail.sendMail(objCase, Nothing, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId, 
+                                                    sRet_SendMail =
+                                                        objMail.sendMail(objCase, Nothing, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId,
                                                                          sEMailLogGUID, sConnectionstring)
 
                                                     objLogData.createEMailLog(iCaseHistory_Id, objUser.EMail, MailTemplates.AssignedCaseToUser, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
@@ -788,25 +791,50 @@ Module DH_Helpdesk_Mail
                                         workingGroupAllocateCaseMail = objCase.PerformerWorkingGroupAllocateCaseMail
                                     End If
 
-                                    If workingGroupId <> 0 Then
+                                    If workingGroupId <> 0 And workingGroupAllocateCaseMail = 1 Then
+                                        Dim emailsList As List(Of String) = New List(Of String)()
 
-                                        If Not IsNullOrEmpty(workingGroupEMail) And workingGroupAllocateCaseMail = 1 Then
+                                        If Not IsNullOrEmpty(workingGroupEMail) Then
+                                            emailsList = workingGroupEMail.Split(New Char() {";"c, ","c}).ToList()
+                                        Else
+                                            Dim users As List(Of WorkingGroupUser) = objUserWGData.getWorkgroupUsers(workingGroupId)
+                                            Dim usersDepartments As List(Of KeyValuePair(Of Integer, Integer)) = New List(Of KeyValuePair(Of Integer, Integer))
+                                            If Not objCase.Department_Id = 0 Then
+                                                usersDepartments = objDepartmentData.getUserDepartmentsIds(users.Select(Function(x) x.Id).ToArray())
+                                            End If
+
+                                            For Each user As WorkingGroupUser In users
+                                                If user.AllocateCaseMail = 1 And Not String.IsNullOrWhiteSpace(user.EMail) And
+                                                   user.Status = 1 And user.WorkingGroupUserRole = WorkingGroupUserPermission.ADMINSTRATOR Then
+                                                    If Not objCase.Department_Id = 0 Then
+                                                        If usersDepartments.Any(Function(ud) ud.Key = user.Id And ud.Value = objCase.Department_Id) Then
+                                                            emailsList.Add(user.EMail)
+                                                        End If
+                                                    Else
+                                                        emailsList.Add(user.EMail)
+                                                    End If
+                                                End If
+                                            Next
+                                        End If
+
+                                        If emailsList.Any() Then
                                             objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.AssignedCaseToWorkinggroup, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
-
                                             If Not objMailTemplate Is Nothing Then
-                                                Dim objMail As New Mail
+                                                For Each recipient As String In emailsList.Where(Function(s) Not String.IsNullOrWhiteSpace(s)).Distinct()
+                                                    Dim objMail As New Mail
 
-                                                sMessageId = createMessageId(objCustomer.HelpdeskEMail)
-                                                sSendTime = Date.Now()
+                                                    sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+                                                    sSendTime = Date.Now()
 
-                                                Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+                                                    Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
-                                                sRet_SendMail = 
-                                                    objMail.sendMail(objCase, Nothing, objCustomer, workingGroupEMail, objMailTemplate, objGlobalSettings, 
-                                                                     sMessageId, sEMailLogGUID, sConnectionstring)
+                                                    sRet_SendMail =
+                                                        objMail.sendMail(objCase, Nothing, objCustomer, recipient, objMailTemplate, objGlobalSettings,
+                                                                         sMessageId, sEMailLogGUID, sConnectionstring)
 
-                                                objLogData.createEMailLog(iCaseHistory_Id, workingGroupEMail, MailTemplates.AssignedCaseToWorkinggroup, 
-                                                                          sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                    objLogData.createEMailLog(iCaseHistory_Id, recipient, MailTemplates.AssignedCaseToWorkinggroup,
+                                                                              sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                Next
                                             End If
                                         End If
                                     End If

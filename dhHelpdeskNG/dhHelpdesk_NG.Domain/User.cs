@@ -81,7 +81,6 @@
         public int TimeRegistration { get; set; }
         public int UserGroup_Id { get; set; }
         public int WatchDateMail { get; set; }
-        public int DataSecurityPermission { get; set; }
         public string Address { get; set; }
         public string ArticleNumber { get; set; }
         public string CellPhone { get; set; }

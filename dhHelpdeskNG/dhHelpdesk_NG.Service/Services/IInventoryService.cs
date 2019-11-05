@@ -1,5 +1,6 @@
 ﻿using DH.Helpdesk.BusinessData.Enums.Inventory;
 using DH.Helpdesk.BusinessData.Models.User.Input;
+using DH.Helpdesk.Domain.Computers;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -53,6 +54,9 @@ namespace DH.Helpdesk.Services.Services
         ReportModelWithInventoryType GetAllConnectedInventory(int inventoryTypeId, int? departmentId, string searchFor);
 
         ComputerShortOverview GetWorkstationShortInfo(int computerId);
+        List<ItemOverview> GetWorkstationStatuses(int customerId);
+        List<ItemOverview> GetComputerContractStatuses(int customerId);
+        List<ComputerStatus> GetFullComputerStatuses(int customerId);
 
         #region Workstation
 
@@ -75,7 +79,7 @@ namespace DH.Helpdesk.Services.Services
 
         List<ComputerLogOverview> GetWorkstationLogOverviews(int id);
 
-        List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter);
+        List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter, bool isComputerDepartmentSource);
 
         int GetWorkstationIdByName(string computerName, int customerId);
 
@@ -146,5 +150,6 @@ namespace DH.Helpdesk.Services.Services
         List<ComputerOverview> GetRelatedInventory(int customerId, string userId);
 
         List<int> GetRelatedCaseIds(CurrentModes inventoryType, int inventoryId, int customerId);
+        void SaveComputerStatus(ComputerStatus newCustomerStatus, out IDictionary<string, string> errors);
     }
 }

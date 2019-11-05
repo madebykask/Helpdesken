@@ -1,251 +1,209 @@
-﻿--update DB from 5.3.42 to 5.3.43 version
+﻿--update DB from 5.3.43 to 5.3.44 version
 
-/*-- M2T EmailAnswer Separator scripts
-----------------------------------------------------------------------------------------------*/
-
-RAISERROR ('Update EMailAnswerSeparator column size to 512', 10, 1) WITH NOWAIT
-if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
-		 where syscolumns.name = N'EMailAnswerSeparator' and sysobjects.name = N'tblSettings')
+RAISERROR ('Add column Operation to tblFileViewLog table', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'Operation' and sysobjects.name = N'tblFileViewLog')
 BEGIN
-    ALTER TABLE tblSettings
-    ALTER COLUMN EMailAnswerSeparator nvarchar(512) not null    
+    ALTER TABLE tblFileViewLog
+    ADD Operation int null    
 END
 GO
 
-RAISERROR ('Add email answer separator regular expressions for all customers', 10, 1) WITH NOWAIT
-GO
-
-BEGIN TRANSACTION 
-GO 
-
-DECLARE @count int
-DECLARE @curRow int
-DECLARE @Customers as Table(RowNumber int, CustomerId int)
-
---select all customers that have settings
-INSERT INTO @Customers (RowNumber, CustomerId)
-SELECT (ROW_NUMBER() OVER (Order by cus.Id)) as RowNumber, cus.Id from tblCustomer cus 
-    INNER JOIN tblSettings st ON cus.Id = st.Customer_Id
-ORDER BY cus.Id
-
-select @count = COUNT(*) from @Customers
-SET @curRow = 1
-
-while(@curRow <= @count)
-BEGIN
-    DECLARE @customerId int = 0	     
-    DECLARE @emailSep nvarchar(512)
-    DECLARE @newEmailSep nvarchar(512)
-    DECLARE @regex1 nvarchar(128)
-    DECLARE @regex2 nvarchar(128)
-
-    -- finds reply quote text in mail of type: <date> <time> <optional word> <email> <optional word>. 
-    SET @regex1 = '^.* [0-9]{1,2}:[0-9]{1,2} (\w{0,}\s{0,})?<?(([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}))>?(\s{0,}\w{0,})?:\r?$'
-    
-    -- finds reply quote text: <email> <optional text> <date> <time>:
-    SET @regex2 = '^.* <?(([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}))>? (.*)\s?[0-9]{1,2}:[0-9]{1,2}:\r?$'
-
-    select @customerId = CustomerId from @Customers where RowNumber = @curRow    
-    
-    --get customer current email answer separator
-    select @emailSep = ISNULL(EMailAnswerSeparator, '') from tblSettings where Customer_Id = @customerId
-    SET @newEmailSep = @emailSep
-
-    -- add first regex pattern
-    IF (@emailSep = '' OR CHARINDEX(@regex1, @emailSep) = 0)
-    BEGIN		  
-	   IF (len(@newEmailSep) > 0) SET @newEmailSep = @newEmailSep + ';'		  
-	   SET @newEmailSep = @newEmailSep + @regex1		  		
-    END
-	   
-    -- add second regex pattern
-    IF (@emailSep = '' OR CHARINDEX(@regex2, @emailSep) = 0)
-    BEGIN
-	   IF (len(@newEmailSep) > 0) SET @newEmailSep = @newEmailSep + ';'		  
-	   SET @newEmailSep = @newEmailSep + @regex2		  
-    END    
-
-    IF (len(@newEmailSep) <> len(@emailSep))
-    BEGIN 
-	   -- updating email answer separator
-	   UPDATE tblSettings
-	   SET EMailAnswerSeparator = @newEmailSep
-	   WHERE Customer_Id = @customerId
-		  
-	   --PRINT 'Updated customer: ' + cast(@customerId as nvarchar(4))
-	   --PRINT 'EmailAnswerSeparator:' + @newEmailSep
-	   --PRINT '----------------------------------------------------'
-    END	       
-    SET @curRow += 1
-End
-GO 
-
-COMMIT
-GO
-/*----------------------------------------------------------------------------------------------*/
-
-
-RAISERROR ('Add LogType to tblLogFile', 10, 1) WITH NOWAIT
-GO
-IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
-		 where syscolumns.name = N'LogType' and sysobjects.name = N'tblLogFile')
-BEGIN
-    -- create column nullable 
-    ALTER TABLE tblLogFile
-    ADD LogType int null    
-
-    EXEC(N'UPDATE tblLogFile SET LogType = 0')
-
-    -- make column non nullable
-    ALTER TABLE tblLogFile
-    ALTER COLUMN LogType int NOT null    
-END
-GO
-
-RAISERROR ('Adding Default value constraint for tblLogFile.LogType column.', 10, 1) WITH NOWAIT
-IF NOT EXISTS(SELECT * FROM sys.objects WHERE type = 'D' AND name = 'DF_tblLogFile_LogType')
-BEGIN
-    ALTER TABLE tblLogFile 
-    ADD CONSTRAINT DF_tblLogFile_LogType DEFAULT(0) FOR LogType
-END
-GO 
-
-
-RAISERROR ('Adding tblLog.Filename_Internal case field setting to tblCaseFieldSettings', 10, 1) WITH NOWAIT
-;WITH cus as 
-(select fs1.Customer_Id as CustomerId
- from tblCaseFieldSettings fs1
- where NOT EXISTS
-	  (
-		  select 1 from tblCaseFieldSettings fs2 
-		  where fs2.Customer_Id = fs1.Customer_Id 
-		  AND fs2.CaseField = 'tblLog.Filename_Internal'
-	  )
-       AND fs1.Customer_Id IS NOT NULL
-GROUP BY fs1.Customer_Id) 
-INSERT INTO tblCaseFieldSettings (Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, Locked)
-select cus.CustomerId, 'tblLog.Filename_Internal', 0, 0, 0, 0, '', null, 0, 0 
-from cus
-GO
-
-RAISERROR ('Add LogType to tblLogFileExisting', 10, 1) WITH NOWAIT
-GO
-IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
-		     where syscolumns.name = N'LogType' and sysobjects.name = N'tblLogFileExisting')
-BEGIN
-    
-    -- delete existing records from table (its temp table)
-    DELETE FROM tblLogFileExisting
-    
-    ALTER TABLE tblLogFileExisting 
-    ADD LogType int not null      
-END
-GO
-
-RAISERROR ('Add IsInternalLogNote to tblLogFileExisting', 10, 1) WITH NOWAIT
-GO
-IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
-		     where syscolumns.name = N'IsInternalLogNote' and sysobjects.name = N'tblLogFileExisting')
-BEGIN
-
-    -- delete existing records from table (its temp table)
-    DELETE FROM tblLogFileExisting 
-
-    ALTER TABLE tblLogFileExisting 
-    ADD IsInternalLogNote bit not null        
-END
-GO
-
-RAISERROR ('Altering tblSettings, making index service field larger', 10, 1) WITH NOWAIT
-ALTER TABLE [dbo].[tblSettings]	
-ALTER COLUMN [FileIndexingServerName] [nvarchar](200) NULL
-ALTER TABLE [dbo].[tblSettings]	
-ALTER COLUMN [FileIndexingCatalogName] [nvarchar](200) NULL
-
-RAISERROR ('Adding toggle for usage of deprecated Indexing Service, used to search case related files. If inactive Windows Search is used instead', 10, 1) WITH NOWAIT
-IF NOT EXISTS(SELECT 1 FROM tblFeatureToggle FT WHERE FT.StrongName = 'FILE_SEARCH_IDX_SERVICE')
+RAISERROR ('Adding toggle for usage of file access logging. DISABLE_LOG_VIEW_CASE_FILE', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM tblFeatureToggle FT WHERE FT.StrongName = 'DISABLE_LOG_VIEW_CASE_FILE')
 BEGIN
 	INSERT INTO tblFeatureToggle(Active, ChangeDate, [Description], StrongName)
-	SELECT 1, GETDATE(), 'Toogle for activating old Indexing Service usage (deprecated). No Support in 2008+', 'FILE_SEARCH_IDX_SERVICE'
+	SELECT 1, GETDATE(), 'Toogle for activating case file access logging', 'DISABLE_LOG_VIEW_CASE_FILE'
 END
 GO
 
-RAISERROR ('Add FilesInternal to tblEMailLog', 10, 1) WITH NOWAIT
+RAISERROR ('Add column UserName to tblFileViewLog table', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'UserName' and sysobjects.name = N'tblFileViewLog')
+BEGIN
+    ALTER TABLE tblFileViewLog
+    ADD UserName nvarchar(200) null    
+END
 GO
+
+
+RAISERROR ('Change column User_Id to tblFileViewLog table', 10, 1) WITH NOWAIT
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'User_Id' and sysobjects.name = N'tblFileViewLog')
+BEGIN
+    ALTER TABLE tblFileViewLog
+    ALTER COLUMN [User_Id] int null    
+END
+GO
+
+RAISERROR ('Change size of tblEmailLog.MessageId to 300', 10, 1) WITH NOWAIT
+ALTER TABLE tblEmailLog
+ALTER COLUMN MessageId NVARCHAR(300) NULL
+
+GO
+
+RAISERROR ('Change size of tblMail2Ticket.UniqueMessageId to 300', 10, 1) WITH NOWAIT
+ALTER TABLE tblMail2Ticket
+ALTER COLUMN UniqueMessageId NVARCHAR(300) NULL
+
+GO
+
+RAISERROR ('Change size of tblAccountEMailLog.MessageId to 300', 10, 1) WITH NOWAIT
+ALTER TABLE tblAccountEMailLog
+ALTER COLUMN MessageId NVARCHAR(300) NULL
+
+GO
+
+RAISERROR ('Change size of tblChangeEMailLog.MessageId to 300', 10, 1) WITH NOWAIT
+ALTER TABLE tblChangeEMailLog
+ALTER COLUMN MessageId NVARCHAR(300) NULL
+
+GO
+
+RAISERROR ('Change size of tblOrderEMailLog.MessageId to 300', 10, 1) WITH NOWAIT
+ALTER TABLE tblOrderEMailLog
+ALTER COLUMN MessageId NVARCHAR(300) NULL
+
+GO
+
+RAISERROR ('Change size of tblProblemEMailLog.MessageId to 300', 10, 1) WITH NOWAIT
+ALTER TABLE tblProblemEMailLog
+ALTER COLUMN MessageId NVARCHAR(300) NULL
+
+GO
+
+RAISERROR ('Change tblProblemLog.CreatedDate to default UTC date', 10, 1) WITH NOWAIT
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_tblProblemLog_CreatedDate]') AND type = 'D')
+BEGIN 
+	ALTER TABLE [dbo].[tblProblemLog] DROP  CONSTRAINT [DF_tblProblemLog_CreatedDate] 
+END	
+ALTER TABLE [dbo].[tblProblemLog] ADD  CONSTRAINT [DF_tblProblemLog_CreatedDate]  DEFAULT (getutcdate()) FOR [CreatedDate]
+
+GO
+
+RAISERROR ('Change tblProblemLog.ChangeDate to default UTC date', 10, 1) WITH NOWAIT
+IF  EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[DF_tblProblemLog_ChangedDate]') AND type = 'D')
+BEGIN 
+	ALTER TABLE [dbo].[tblProblemLog] DROP  CONSTRAINT [DF_tblProblemLog_ChangedDate]  
+END
+ALTER TABLE [dbo].[tblProblemLog] ADD  CONSTRAINT [DF_tblProblemLog_ChangedDate]  DEFAULT (getutcdate()) FOR [ChangedDate]
+GO
+
+RAISERROR ('Add tblComputerStatus table', 10, 1) WITH NOWAIT
 IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
-		     where syscolumns.name = N'FilesInternal' and sysobjects.name = N'tblEMailLog')
+		 where sysobjects.name = N'tblComputerStatus')
+BEGIN 
+	CREATE TABLE [dbo].[tblComputerStatus](
+		[Id] [int] NOT NULL,
+		[ComputerStatus] [nvarchar](50) NOT NULL,
+		[Type] [int] NOT NULL,
+		[Customer_Id] [int] NOT NULL,
+		[CreatedDate] [datetime] NOT NULL,
+		[ChangedDate] [datetime] NOT NULL,
+	 CONSTRAINT [PK_tblComputerStatus] PRIMARY KEY CLUSTERED 
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+	
+
+	ALTER TABLE [dbo].[tblComputerStatus] ADD  CONSTRAINT [DF_tblComputerStatus_Type]  DEFAULT ((1)) FOR [Type]
+	ALTER TABLE [dbo].[tblComputerStatus] ADD  CONSTRAINT [DF_tblComputerStatus_CreatedDate]  DEFAULT (getutcdate()) FOR [CreatedDate]
+	ALTER TABLE [dbo].[tblComputerStatus] ADD  CONSTRAINT [DF_tblComputerStatus_ChangedDate]  DEFAULT (getutcdate()) FOR [ChangedDate]
+	ALTER TABLE [dbo].[tblComputerStatus]  WITH CHECK ADD  CONSTRAINT [FK_tblComputerStatus_tblCustomer] FOREIGN KEY([Customer_Id])
+	REFERENCES [dbo].[tblCustomer] ([Id])
+	ALTER TABLE [dbo].[tblComputerStatus] CHECK CONSTRAINT [FK_tblComputerStatus_tblCustomer]	
+END
+GO
+
+RAISERROR ('Add Foreign key for column ComputerContractStatus_Id in tblComputer table', 10, 1) WITH NOWAIT
+IF OBJECT_ID('dbo.[FK_tblComputer_tblComputerStatus_Contract]', 'F') IS NULL
 BEGIN
-    ALTER TABLE tblEMailLog
-    ADD FilesInternal nvarchar(max) NULL
+	ALTER TABLE [dbo].[tblComputer]  WITH NOCHECK ADD  CONSTRAINT [FK_tblComputer_tblComputerStatus_Contract] FOREIGN KEY([ComputerContractStatus_Id])
+	REFERENCES [dbo].[tblComputerStatus] ([Id])
+	ALTER TABLE [dbo].[tblComputer] NOCHECK CONSTRAINT [FK_tblComputer_tblComputerStatus_Contract]
 END
 GO
 
-RAISERROR ('Add Internal Log file field setting display mode value for existing templates', 10, 1) WITH NOWAIT
-GO
-  DECLARE @internalLogFileFieldId INT 
-  SET @internalLogFileFieldId = 71 -- CaseSolutionFields.LogFileName_Internal
-
-  DECLARE @caseSolutionFieldMode INT 
-  SET @caseSolutionFieldMode = 1 -- DisplayField
-
-  ;WITH caseSolutionIds As (
-    SELECT cs.Id 
-    FROM dbo.tblCaseSolution cs 
-	   LEFT JOIN tblCaseSolutionFieldSettings csfs ON cs.Id = csfs.CaseSolution_Id AND csfs.FieldName_Id = @internalLogFileFieldId 
-    WHERE csfs.Id IS NULL)
-   INSERT tblCaseSolutionFieldSettings(CaseSolution_Id,  FieldName_Id, Mode)
-   SELECT cs.Id, @internalLogFileFieldId, @caseSolutionFieldMode
-   FROM caseSolutionIds cs    
-GO
-
-RAISERROR ('Droping foreign key constraint FK_CaseDocumentsCondition_CaseDocument (doublets)', 10, 1) WITH NOWAIT
-IF EXISTS (SELECT * FROM sys.foreign_keys 
-   WHERE object_id = OBJECT_ID(N'dbo.FK_CaseDocumentsCondition_CaseDocument')
-   AND parent_object_id = OBJECT_ID(N'dbo.tblCaseDocumentCondition')
-)
+RAISERROR ('Add missing data for tblComputerStatus table', 10, 1) WITH NOWAIT
+IF EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where sysobjects.name = N'tblComputerStatus')
 BEGIN
-	ALTER TABLE [dbo].[tblCaseDocumentCondition] DROP CONSTRAINT [FK_CaseDocumentsCondition_CaseDocument]
+	DECLARE @MyCursor CURSOR;
+	DECLARE @CustomerId int;
+	DECLARE @Id int;
+
+    SET @MyCursor = CURSOR FOR
+	SELECT DISTINCT c.Id FROM tblCustomer AS c
+		LEFT JOIN tblComputerStatus AS cs ON c.Id = cs.Customer_Id
+		WHERE cs.Customer_Id IS NULL
+		ORDER BY c.Id
+
+	OPEN @MyCursor 
+    FETCH NEXT FROM @MyCursor 
+    INTO @CustomerId
+
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+		
+	  RAISERROR ('Adding data to tblCustomerStatus for customer %d', 10, 1, @CustomerId) WITH NOWAIT
+   	  SELECT @Id = MAX([Id]) FROM tblComputerStatus
+	  IF(@Id IS NULL)
+		  INSERT [dbo].[tblComputerStatus] ([Id], [ComputerStatus], [Type], [Customer_Id]) VALUES (1, N'Aktiv', 1, @CustomerId),
+			(2, N'Ej kopplad till användare', 1, @CustomerId),
+			(3, N'Stulen', 1, @CustomerId),
+			(11, N'Leasing', 2, @CustomerId),
+			(12, N'Köpt', 2, @CustomerId)
+	  ELSE
+	  BEGIN
+		  INSERT [dbo].[tblComputerStatus] ([Id], [ComputerStatus], [Type], [Customer_Id]) VALUES (@Id+1, N'Aktiv', 1, @CustomerId),
+			(@Id+2, N'Ej kopplad till användare', 1, @CustomerId),
+			(@Id+3, N'Stulen', 1, @CustomerId),
+			(@Id+4, N'Leasing', 2, @CustomerId),
+			(@Id+5, N'Köpt', 2, @CustomerId),
+			(@Id+6, N'Hyrd', 2, @CustomerId)
+		  UPDATE [dbo].[tblComputer] SET [Status]=@id+1 WHERE [Customer_Id] = @CustomerId AND [Status] = 1
+		  UPDATE [dbo].[tblComputer] SET [Status]=@id+2 WHERE [Customer_Id] = @CustomerId AND [Status] = 2
+		  UPDATE [dbo].[tblComputer] SET [Status]=@id+3 WHERE [Customer_Id] = @CustomerId AND [Status] = 3
+		  UPDATE [dbo].[tblComputer] SET [ComputerContractStatus_Id]=@id+4 WHERE [Customer_Id] = @CustomerId AND [ComputerContractStatus_Id] = 11
+		  UPDATE [dbo].[tblComputer] SET [ComputerContractStatus_Id]=@id+5 WHERE [Customer_Id] = @CustomerId AND [ComputerContractStatus_Id] = 12
+	  END
+
+      FETCH NEXT FROM @MyCursor 
+      INTO @CustomerId 
+    END; 
+
+    CLOSE @MyCursor;
+    DEALLOCATE @MyCursor;
 END
-GO
 
-RAISERROR('Move tblUser.RestrictedCasePermission setting to tblCustomerUser table', 10, 1)
-IF NOT EXISTS( select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
-		     where syscolumns.name = N'RestrictedCasePermission' and sysobjects.name = N'tblCustomerUser')
-BEGIN     
 
-    BEGIN TRY
-    
-	   BEGIN TRANSACTION    
-
-	   --create RestrictedCasePermission in tblCustomerUSer
-	   ALTER TABLE tblCustomerUser
-	   ADD RestrictedCasePermission bit CONSTRAINT DF_tblCustomerUser_RestrictedCasePermission default ((0)) NOT NULL
-
-	   -- transfer setting value to tblCustomerUser
-	   DECLARE @updateCmd nvarchar(1024) = 
-		  N'UPDATE cu SET cu.RestrictedCasePermission = u.RestrictedCasePermission
-		    FROM tblCustomerUser cu INNER JOIN tblUsers u ON u.Id = cu.User_Id';
-	   EXEC (@updateCmd)
-	   	   
-	   COMMIT TRAN;
-
-    END TRY 
-    BEGIN CATCH
-	   
-	   IF ( XACT_STATE() != 0 )
-		  ROLLBACK TRAN;
-	   SELECT  ERROR_MESSAGE() AS 'error'
-        
-    END CATCH    
-
+RAISERROR ('Add Region_Id to tblComputer table', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'Region_Id' and sysobjects.name = N'tblComputer')
+BEGIN
+    ALTER TABLE tblComputer
+    ADD Region_Id int null 
+	ALTER TABLE [dbo].[tblComputer]  WITH NOCHECK ADD  CONSTRAINT [FK_tblComputer_tblRegion] FOREIGN KEY([Region_Id])
+	REFERENCES [dbo].[tblComputer] ([Id])
+	ALTER TABLE [dbo].[tblComputer] NOCHECK CONSTRAINT [FK_tblComputer_tblRegion]
 END
-GO
 
+
+RAISERROR ('Add ParentLogType to tblLogFile table', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'ParentLogType' and sysobjects.name = N'tblLogFile')
+BEGIN
+    ALTER TABLE tblLogFile
+    ADD ParentLogType int null 
+
+	UPDATE lfc
+		SET lfc.[ParentLogType] = lfp.LogType
+	FROM [dbo].[tblLogFile] as lfc
+	INNER JOIN [dbo].[tblLogFile] as lfp ON lfc.ParentLog_Id = lfp.Log_Id
+	WHERE lfc.ParentLog_Id IS NOT NULL and lfc.[FileName] = lfp.[FileName]
+END
 -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.43'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.44'
 GO
-
---ROLLBACK --TMP
-
-
 

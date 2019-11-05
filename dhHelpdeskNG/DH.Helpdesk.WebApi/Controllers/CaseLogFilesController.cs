@@ -4,8 +4,12 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Enums.Logs;
+using DH.Helpdesk.Common.Extensions;
 using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
@@ -26,20 +30,27 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICaseFileService _caseFileService;
         private readonly ITemporaryFilesCache _userTemporaryFilesStorage;
         private readonly ICaseFieldSettingService _caseFieldSettingService;
+		private readonly IFeatureToggleService _featureToggleService;
+		private readonly IFileViewLogService _fileViewLogService;
 
-        public CaseLogFilesController(
+		public CaseLogFilesController(
             ILogFileService logFileService,
             ICaseFileService caseFileService,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
             ISettingsLogic settingsLogic, 
-            ICaseFieldSettingService caseFieldSettingService)
+            ICaseFieldSettingService caseFieldSettingService,
+			IFeatureToggleService featureToggleService,
+			IFileViewLogService fileViewLogService)
         {
             _caseFileService = caseFileService;
             _logFileService = logFileService;
             _settingsLogic = settingsLogic;
             _caseFieldSettingService = caseFieldSettingService;
             _userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
-        }
+			_featureToggleService = featureToggleService;
+			_fileViewLogService = fileViewLogService;
+
+		}
 
         //ex: /api/Case/123/LogFile/1203?cid=1
         [HttpGet]
@@ -52,9 +63,18 @@ namespace DH.Helpdesk.WebApi.Controllers
             var fileInfo = _logFileService.GetFileDetails(fileId);
             var isCaseFile = fileInfo.IsCaseFile ?? false;
 
-            if (isCaseFile)
+			var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+
+			if (isCaseFile)
             {
-                content = _caseFileService.GetFileContentByIdAndFileName(caseId, basePath, fileInfo.FileName);
+				var model = _caseFileService.GetFileContentByIdAndFileName(caseId, basePath, fileInfo.FileName);
+
+				if (!disableLogFileView.Active)
+				{
+					_fileViewLogService.Log(caseId, UserId, fileInfo.FileName, model.FilePath, FileViewLogFileSource.WebApi, FileViewLogOperation.View);
+				}
+
+				content = model.Content;
             }
             else
             {
@@ -66,8 +86,14 @@ namespace DH.Helpdesk.WebApi.Controllers
                     if (setting == null)
                         return Task.FromResult(Forbidden("Not allowed to view file."));
                 } 
-                var logFile = _logFileService.GetFileContentById(fileId, basePath, fileInfo.LogType);
-                content = logFile.Content;
+                var logFile = _logFileService.GetFileContentById(fileId, basePath, fileInfo.ParentLogType ?? fileInfo.LogType);
+
+				if (!disableLogFileView.Active)
+                {
+					_fileViewLogService.Log(caseId, UserId, logFile.FileName, logFile.Path, FileViewLogFileSource.WebApi, FileViewLogOperation.View);
+				}
+
+				content = logFile.Content;
             }
 
             if (content == null)
@@ -97,7 +123,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 //fix file name if exists
                 var counter = 1;
                 var newFileName = fileName;
-                var moduleName = type == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
+                var moduleName = type.GetFolderPrefix();
                 while(_userTemporaryFilesStorage.FileExists(newFileName, caseId, moduleName))
                 {
                     newFileName = $"{Path.GetFileNameWithoutExtension(fileName)} ({counter++}){Path.GetExtension(fileName)}";
@@ -119,7 +145,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var fileNameSafe = (fileName ?? string.Empty).Trim();
             if (!string.IsNullOrEmpty(fileNameSafe))
             {
-                var moduleName = type == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
+                var moduleName = type.GetFolderPrefix();
                 _userTemporaryFilesStorage.DeleteFile(fileNameSafe, caseKey, moduleName);
             }
             return Ok(true);
