@@ -1645,8 +1645,8 @@ namespace DH.Helpdesk.Services.Services
             ret.Add(new Field { Key = "[#6]", StringValue = admin != null ? admin.FirstName : string.Empty });
             ret.Add(new Field { Key = "[#7]", StringValue = admin != null ? admin.LastName : string.Empty });
             var priority = c.Priority_Id.HasValue ? _priorityService.GetPriority(c.Priority_Id.Value) : null;
-            ret.Add(new Field { Key = "[#12]", StringValue = priority != null ? c.Priority.Name : string.Empty });
-            ret.Add(new Field { Key = "[#20]", StringValue = priority != null ? c.Priority.Description : string.Empty });
+            ret.Add(new Field { Key = "[#12]", StringValue = priority != null ? priority.Name : string.Empty });
+            ret.Add(new Field { Key = "[#20]", StringValue = priority != null ? priority.Description : string.Empty });
             ret.Add(new Field { Key = "[#21]", StringValue = c.WatchDate.ToString() });
 
             if (c.User_Id.HasValue)
