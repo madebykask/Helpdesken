@@ -197,13 +197,13 @@ BEGIN
     ALTER TABLE tblLogFile
     ADD ParentLogType int null 
 
-	UPDATE lfc
+	exec('UPDATE lfc
 		SET lfc.[ParentLogType] = lfp.LogType
 	FROM [dbo].[tblLogFile] as lfc
 	INNER JOIN [dbo].[tblLogFile] as lfp ON lfc.ParentLog_Id = lfp.Log_Id
-	WHERE lfc.ParentLog_Id IS NOT NULL and lfc.[FileName] = lfp.[FileName]
+	WHERE lfc.ParentLog_Id IS NOT NULL and lfc.[FileName] = lfp.[FileName]')
 END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.44'
 GO
-
