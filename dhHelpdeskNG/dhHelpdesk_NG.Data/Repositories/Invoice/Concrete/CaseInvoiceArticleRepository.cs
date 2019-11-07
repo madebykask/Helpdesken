@@ -21,23 +21,27 @@
         
         private readonly IBusinessModelToEntityMapper<CaseInvoiceArticle, CaseInvoiceArticleEntity> articleMapper;
 
-        private readonly IBusinessModelToEntityMapper<CaseInvoiceOrderFile, CaseInvoiceOrderFileEntity> filesMapper;        
+        private readonly IBusinessModelToEntityMapper<CaseInvoiceOrderFile, CaseInvoiceOrderFileEntity> filesMapper;
+		private readonly ICaseRepository _caseRepository;
 
-        public CaseInvoiceArticleRepository(
+		public CaseInvoiceArticleRepository(
                 IDatabaseFactory databaseFactory, 
                 IEntityToBusinessModelMapper<CaseInvoiceEntity, CaseInvoice> invoiceToBusinessModelMapper, 
                 IBusinessModelToEntityMapper<CaseInvoice, CaseInvoiceEntity> invoiceToEntityMapper, 
                 IBusinessModelToEntityMapper<CaseInvoiceOrder, CaseInvoiceOrderEntity> orderMapper,                 
                 IBusinessModelToEntityMapper<CaseInvoiceArticle, CaseInvoiceArticleEntity> articleMapper, 
-                IBusinessModelToEntityMapper<CaseInvoiceOrderFile, CaseInvoiceOrderFileEntity> filesMapper)
+                IBusinessModelToEntityMapper<CaseInvoiceOrderFile, CaseInvoiceOrderFileEntity> filesMapper,
+				ICaseRepository caseRepository)
             : base(databaseFactory)
         {
             this.invoiceToBusinessModelMapper = invoiceToBusinessModelMapper;
             this.invoiceToEntityMapper = invoiceToEntityMapper;
             this.orderMapper = orderMapper;            
             this.articleMapper = articleMapper;
-            this.filesMapper = filesMapper;            
-        }
+            this.filesMapper = filesMapper;
+			_caseRepository = caseRepository;
+
+		}
 
         public CaseInvoice[] GetCaseInvoices(int caseId)
         {
@@ -151,7 +155,10 @@
         public int SaveCaseInvoices(IEnumerable<CaseInvoice> invoices, int caseId, int userId)
         {
             var newOrderId = 0;
-            foreach (var invoice in invoices)
+
+			var loadIntoContext = _caseRepository.GetCaseById(caseId);
+
+			foreach (var invoice in invoices)
             {
                 invoice.CaseId = caseId;
                 CaseInvoiceEntity entity;
