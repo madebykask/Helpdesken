@@ -69,7 +69,7 @@
                         else
                         {
                             <a target="_blank" class="isExisted"
-                               href="@Url.Action("DownloadLogFile", new { id = currentLog.Id, fileName = l.FileName, logType = (int)l.LogType })"><i class="icon- attachedFile"></i>@l.FileName</a>
+                               href="@Url.Action("DownloadLogFile", new { id = l.LogId.Value, fileName = l.FileName, logType = (int)(l.ParentLogType ?? l.LogType) })"><i class="icon- attachedFile"></i>@l.FileName</a>
                         }
                     }
                     else
