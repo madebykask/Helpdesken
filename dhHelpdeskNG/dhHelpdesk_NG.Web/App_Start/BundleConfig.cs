@@ -32,7 +32,8 @@
             public const string InventoryOverview = "~/bundles/inventory/overview";
             public const string InventoryRelatedCases = "~/bundles/inventory/relatedcases";
             public const string InventoryFiles = "~/bundles/inventory/files";
-        }
+			public const string InventoryWorkstation = "~/bundles/inventory/workstation";
+		}
 
 
         public static void RegisterBundles(BundleCollection bundles)
@@ -527,13 +528,14 @@
                     "~/Areas/Inventory/Content/js/inventoryOverview.js"));
             bundles.Add(new ScriptBundle(ScriptNames.InventoryRelatedCases).Include(
                     "~/Areas/Inventory/Content/js/relatedCases.js"));
-            bundles.Add(new ScriptBundle(ScriptNames.InventoryFiles).Include(
-                "~/Areas/Inventory/Content/js/inventoryFiles.js",
-                "~/Areas/Inventory/Content/js/workstationEdit.js"));
+			bundles.Add(new ScriptBundle(ScriptNames.InventoryFiles).Include(
+				"~/Areas/Inventory/Content/js/inventoryFiles.js"));
+
+			bundles.Add(new ScriptBundle(ScriptNames.InventoryWorkstation).Include(
+				"~/Areas/Inventory/Content/js/workstationEdit.js"));
 
 
-
-            RegisterOrdersAreaBundles(bundles);
+			RegisterOrdersAreaBundles(bundles);
             RegisterInvoicesAreaBundles(bundles);
 
         }
