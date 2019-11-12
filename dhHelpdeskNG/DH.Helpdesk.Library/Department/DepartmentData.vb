@@ -99,7 +99,7 @@ Public Class DepartmentData
     End Function
 
     Public Function getUserDepartmentsIds(ByVal usersIds As Integer()) As List(Of KeyValuePair(Of Integer, Integer))
-        Dim departmentsIds = New List(Of Integer)
+        Dim departmentsIds = New List(Of KeyValuePair(Of Integer, Integer))
         If Not usersIds.Any() Then
             Return departmentsIds
         End If
