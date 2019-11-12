@@ -160,8 +160,7 @@ BEGIN
 			(@Id+2, N'Ej kopplad till användare', 1, @CustomerId),
 			(@Id+3, N'Stulen', 1, @CustomerId),
 			(@Id+4, N'Leasing', 2, @CustomerId),
-			(@Id+5, N'Köpt', 2, @CustomerId),
-			(@Id+6, N'Hyrd', 2, @CustomerId)
+			(@Id+5, N'Köpt', 2, @CustomerId)
 		  UPDATE [dbo].[tblComputer] SET [Status]=@id+1 WHERE [Customer_Id] = @CustomerId AND [Status] = 1
 		  UPDATE [dbo].[tblComputer] SET [Status]=@id+2 WHERE [Customer_Id] = @CustomerId AND [Status] = 2
 		  UPDATE [dbo].[tblComputer] SET [Status]=@id+3 WHERE [Customer_Id] = @CustomerId AND [Status] = 3
