@@ -42,7 +42,8 @@ namespace DH.Helpdesk.Dal.Mappers.Logs
                         Id = el.Id ?? 0,
                         CaseHistoryId = el.CaseHistoryId ?? 0,
                         MailTemplate = (GlobalEnums.MailTemplates)el.MailId,
-                        Email =  el.EmailAddress?.ToLower(),
+                        Email =  el.EmailAddress?.ToLower() ?? "",
+                        CcEmail =  el.CcEmailAddress?.ToLower() ?? "",
                     }).ToList(),
 
                 LogFiles =

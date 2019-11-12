@@ -12,8 +12,18 @@ else if (log.EmailLogs != null && log.EmailLogs.Any())
 {
     foreach (var l in log.EmailLogs)
     {
+        List<string> emails;
+        {
+            emails = l.Email.Split(',').ToList();
+            if (l.CcEmail.Any())
+            {
+                emails.AddRange(l.CcEmail.Split(','));
+            }
+        }
         <div>
-            <p>@l.Email</p>
+            @foreach (var e in emails.OrderBy(e => e)) {
+                <p>@e</p>
+            }
         </div>
     }
 }

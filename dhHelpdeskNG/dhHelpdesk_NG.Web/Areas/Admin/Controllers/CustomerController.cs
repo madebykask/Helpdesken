@@ -1277,8 +1277,8 @@
                     {
                         //Id = id,
                         MailID = mailTemplateToCopy.MailID,
-                        Customer_Id = newCustomerToSave.Id
-
+                        Customer_Id = newCustomerToSave.Id,
+                        SendMethod = mailTemplateToCopy.SendMethod
                     };
 
                     this._mailTemplateService.SaveMailTemplate(mailTemplateToSave, out errors);

@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using DH.Helpdesk.BusinessData.Models.User.Interfaces;
+using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.FileViewLog;
 
 namespace DH.Helpdesk.Web.Infrastructure.Extensions
@@ -436,7 +437,19 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 default:
                     return "";
             }
+        }
 
+        public static string Translate(this EmailSendMethod method)
+        {
+            switch (method)
+            {
+                case EmailSendMethod.SeparateEmails:
+                    return Translation.GetCoreTextTranslation("Separata e-postmeddelanden till alla");
+                case EmailSendMethod.OneEmail:
+                    return Translation.GetCoreTextTranslation("Alla mottagare i en e-post");
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(method), method, null);
+            }
         }
     }
 }

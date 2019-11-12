@@ -32,7 +32,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
                             {
                                 Id = t.Id ?? 0,
                                 MailId = t.MailId ?? 0,
-                                Email = t.EmailAddress.ToLower()
+                                Email = t.EmailAddress?.ToLower() ?? "",
+                                CcEmail = t.CcEmailAddress?.ToLower() ?? ""
                             })
                             .OrderBy(s => s.Email)
                             .Distinct()

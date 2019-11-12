@@ -254,7 +254,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     {
                         Id = t.Id,
                         MailId = t.MailId,
-                        EmailAddress = t.EmailAddress
+                        EmailAddress = t.EmailAddress ?? "",
+                        CcEmailAddress = t.Cc ?? ""
                     }).ToList()
                 };
         }

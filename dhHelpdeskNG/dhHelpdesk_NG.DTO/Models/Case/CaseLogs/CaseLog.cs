@@ -49,6 +49,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseLogs
         public int Id { get; set; }
         public int MailId { get; set; }
         public string Email { get; set; }
+        public string CcEmail { get; set; }
     }
 
     public class Mail2TicketData

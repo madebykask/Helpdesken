@@ -1,20 +1,17 @@
-﻿@using DH.Helpdesk.BusinessData.Enums.MailTemplates
-@using DH.Helpdesk.Web.Infrastructure
-@using DH.Helpdesk.Web.Infrastructure.Extensions
+﻿@using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.BusinessData.OldComponents
-@using DH.Helpdesk.Web.Models.Case
 @using DH.Helpdesk.Web.Models.Questionnaire.Output
 @model DH.Helpdesk.Web.Areas.Admin.Models.MailTemplateInputViewModel
 @if (TempData["Error"] != null)
 {
-    <div class="alert alert-error">@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
-        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+    <div class="alert alert-error">@Translation.GetCoreTextTranslation("E-post mall")
+        @Translation.GetCoreTextTranslation("som används går inte att ta bort")
     </div>
 }
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+            <li class="active"><a href="#fragment-1">@Translation.GetCoreTextTranslation("E-post mall") - @Model.Customer.Name</a></li>
         </ul>
         <input type="hidden" id="customerId" name="customerId" value="@Model.Customer.Id" />
         <input type="hidden" id="mailTemplateId" name="mailTemplateId" value="@Model.MailTemplateLanguage.MailTemplate_Id" />
@@ -23,330 +20,359 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            <table class="tableform">
-                                <tr>
-                                    <td class="span3">
-                                        @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
-                                    </td>
+                        <table class="tableform">
+                        @{ var mailTemplatesHasSendMethod = new[]
+                           {
+                               GlobalEnums.MailTemplates.NewCase,
+                               GlobalEnums.MailTemplates.ClosedCase,
+                               GlobalEnums.MailTemplates.InformNotifier,
+                               GlobalEnums.MailTemplates.InternalLogNote,
+                               GlobalEnums.MailTemplates.ReminderTo
+                           }; }
+                        @if (mailTemplatesHasSendMethod.Contains((GlobalEnums.MailTemplates)Model.MailTemplateLanguage.MailTemplate.MailID))
+                        {
+                            <tr>
+                                <td class="span3">
+                                    @Translation.GetCoreTextTranslation("Skicka metod")
+                                </td>
+                                <td>
+                                    @Html.DropDownListFor(model => model.MailTemplateLanguage.MailTemplate.SendMethod, Model.SendMethods,
+                                        new {id = "sendMethod"})
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(model => model.MailTemplateLanguage.MailTemplate.SendMethod)
+                        }
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Språk")
+                            </td>
+                            <td>
+                                @Html.DropDownListFor(model => Model.MailTemplateLanguage.Language_Id, Model.Languages,
+                                    new {id = "LanguageId"})
+                            </td>
+                        </tr>
+                        @if (Model.MailTemplateLanguage.MailTemplate_Id != 0)
+                        {
+                            <tr>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("E-post mall")
+                                </td>
+                                @*if (Model.MailTemplateLanguage.MailTemplateName == "" || Model.MailTemplateLanguage.MailTemplateName == null)*@
+                                @if (Model.MailTemplateLanguage.MailTemplate != null && Model.MailTemplateLanguage.MailTemplate.IsStandard == 1)
+                                {
                                     <td>
-                                        @Html.DropDownListFor(model => Model.MailTemplateLanguage.Language_Id, Model.Languages,
-                                                              new { id = "LanguageId" })
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 1)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Nytt ärende")
+                                        }
+
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 2)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Tilldelat ärende")
+                                            @Translation.GetCoreTextTranslation("Handläggare")
+                                        }
+
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == (int) GlobalEnums.MailTemplates.ClosedCase)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Ärendet avslutat")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 4)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Informera anmälaren om åtgärden")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 5)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Skicka intern loggpost till")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 6)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Enkät")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 7)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Tilldelat ärende")
+                                            @Translation.GetCoreTextTranslation("Driftgrupp")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 9)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Bevakningsdatum inträffar")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 10)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Anmälaren uppdaterat ärende")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 11)
+                                        {
+                                            @Translation.GetCoreTextTranslation("SMS")
+                                            @Translation.GetCoreTextTranslation("Tilldelat ärende")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 12)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Skicka mail när planerat åtgärdsdatum inträffar")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 13)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Prioritet")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 14)
+                                        {
+                                            @Translation.GetCoreTextTranslation("SMS")
+                                            @Translation.GetCoreTextTranslation("Ärendet avslutat")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 15)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Anmälaren aktiverat ärende")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 16)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Påminnelse")
+                                            @Translation.GetCoreTextTranslation("Enkät")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate_Id == 40)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Beställning")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 50)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Tilldelad ändring")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 51)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Skicka loggpost till")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 52)
+                                        {
+                                            @Translation.GetCoreTextTranslation("CAB")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 53)
+                                        {
+                                            @Translation.GetCoreTextTranslation("PIR")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 54)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Statusändring")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 55)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Ändring")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 60)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Driftlogg")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate_Id == 70)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Beställning kontobehörighet")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate_Id == 270)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Beställning kontobehörighet")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 272)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Beställning kontobehörighet")
+                                        }
                                     </td>
-                                </tr>
-                                @if (Model.MailTemplateLanguage.MailTemplate_Id != 0)
-                                {             
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        @*if (Model.MailTemplateLanguage.MailTemplateName == "" || Model.MailTemplateLanguage.MailTemplateName == null)*@
-                                        @if (Model.MailTemplateLanguage.MailTemplate != null && Model.MailTemplateLanguage.MailTemplate.IsStandard == 1)
-                                        {
-                                            <td>
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 1)
-                                                {
-                                                    @Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation)
-                                                }
-
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 2)
-                                                {
-                                                    @Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation)  @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)
-                                                }
-
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == (int)GlobalEnums.MailTemplates.ClosedCase)
-                                                {
-                                                    @Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 4)
-                                                {
-                                                    @Translation.Get("Informera anmälaren om åtgärden", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 5)
-                                                {
-                                                    @Translation.Get("Skicka intern loggpost till", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 6)
-                                                {
-                                                    @Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 7)
-                                                {
-                                                    @Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation)  @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 9)
-                                                {
-                                                    @Translation.Get("Bevakningsdatum inträffar", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 10)
-                                                {
-                                                    @Translation.Get("Anmälaren uppdaterat ärende", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 11)
-                                                {
-                                                    @Translation.Get("SMS", Enums.TranslationSource.TextTranslation)  @Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 12)
-                                                {
-                                                    @Translation.Get("Skicka mail när planerat åtgärdsdatum inträffar", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 13)
-                                                {
-                                                    @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 14)
-                                                {
-                                                    @Translation.Get("SMS", Enums.TranslationSource.TextTranslation)  @Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 15)
-                                                {
-                                                    @Translation.Get("Anmälaren aktiverat ärende", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 16)
-                                                {
-                                                    @Translation.Get("Påminnelse", Enums.TranslationSource.TextTranslation) @Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate_Id == 40)
-                                                {
-                                                    @Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 50)
-                                                {
-                                                    @Translation.Get("Tilldelad ändring", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 51)
-                                                {
-                                                    @Translation.Get("Skicka loggpost till", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 52)
-                                                {
-                                                    @Translation.Get("CAB", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 53)
-                                                {
-                                                    @Translation.Get("PIR", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 54)
-                                                {
-                                                    @Translation.Get("Statusändring", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 55)
-                                                {
-                                                    @Translation.Get("Ändring", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 60)
-                                                {
-                                                    @Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate_Id == 70)
-                                                {
-                                                    @Translation.Get("Beställning kontobehörighet", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate_Id == 270)
-                                                {
-                                                    @Translation.Get("Beställning kontobehörighet", Enums.TranslationSource.TextTranslation)
-                                                }
-                                                @if (Model.MailTemplateLanguage.MailTemplate.MailID == 272)
-                                                {
-                                                    @Translation.Get("Beställning kontobehörighet", Enums.TranslationSource.TextTranslation)
-                                                }
-                                            </td>
-                                        }
-                                        else
-                                        {
-                                            <td>
-                                                @Html.TextBoxFor(model => model.MailTemplateLanguage.MailTemplateName, new { maxlength = "50", })
-                                            </td>
-                                        }
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Ämne", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.TextBoxFor(model => Model.MailTemplateLanguage.Subject, new { maxlength = "50", })
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.TextAreaFor(model => Model.MailTemplateLanguage.Body, new { style = "width:600px; height:125px;", maxlength = "2000" })
-                                        </td>
-                                    </tr>
                                 }
                                 else
-                                {                                 
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        @if (Model.MailTemplateLanguage.MailTemplateName == "" || Model.MailTemplateLanguage.MailTemplateName == null)
-                                        {
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 1)
-                                            {
-                                            <td>
-                                                @Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 2)
-                                            {
-                                            <td>
-                                                @Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation)  @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == (int)GlobalEnums.MailTemplates.ClosedCase)
-                                            {
-                                            <td>
-                                                @Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 4)
-                                            {
-                                            <td>
-                                                @Translation.Get("Informera anmälaren om åtgärden", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 5)
-                                            {
-                                            <td>
-                                                @Translation.Get("Skicka intern loggpost till", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 6)
-                                            {
-                                            <td>
-                                                @Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 7)
-                                            {
-                                            <td>
-                                                @Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation)  @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 9)
-                                            {
-                                            <td>
-                                                @Translation.Get("Bevakningsdatum inträffar", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 10)
-                                            {
-                                            <td>
-                                                @Translation.Get("Anmälaren uppdaterat ärende", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 11)
-                                            {
-                                            <td>
-                                                @Translation.Get("SMS", Enums.TranslationSource.TextTranslation)  @Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 12)
-                                            {
-                                            <td>
-                                                @Translation.Get("Skicka mail när planerat åtgärdsdatum inträffar", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 13)
-                                            {
-                                            <td>
-                                                @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 14)
-                                            {
-                                            <td>
-                                                @Translation.Get("SMS", Enums.TranslationSource.TextTranslation)  @Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 15)
-                                            {
-                                            <td>
-                                                @Translation.Get("Anmälaren aktiverat ärende", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 16)
-                                            {
-                                            <td>
-                                                @Translation.Get("Påminnelse", Enums.TranslationSource.TextTranslation) @Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 60)
-                                            {
-                                            <td>
-                                                @Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 50)
-                                            {
-                                            <td>
-                                                @Translation.Get("Tilldelad ändring", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 51)
-                                            {
-                                            <td>
-                                                @Translation.Get("Skicka loggpost till", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 52)
-                                            {
-                                            <td>
-                                                @Translation.Get("CAB", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 53)
-                                            {
-                                            <td>
-                                                @Translation.Get("PIR", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 54)
-                                            {
-                                            <td>
-                                                @Translation.Get("Statusändring", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID == 55)
-                                            {
-                                            <td>
-                                                @Translation.Get("Ändring", Enums.TranslationSource.TextTranslation)
-                                            </td>
-                                            }
-                                            if (Model.MailTemplateLanguage.MailTemplate.MailID >= 99)
-                                            {
-                                            <td>
-                                                @Html.TextBoxFor(model => model.MailTemplateLanguage.MailTemplateName, new { maxlength = "50", })
-                                            </td>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <td>
-                                                @Html.TextBoxFor(model => model.MailTemplateLanguage.MailTemplateName, new { maxlength = "50", })
-                                            </td>
-                                        }
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Ämne", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.TextBoxFor(model => Model.MailTemplateLanguage.Subject, new { maxlength = "50", })
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            @Translation.Get("Text", Enums.TranslationSource.TextTranslation)
-                                        </td>
-                                        <td>
-                                            @Html.TextAreaFor(model => Model.MailTemplateLanguage.Body, new { style = "width:600px; height:125px;", maxlength = "2000" })
-                                        </td>
-                                    </tr>
+                                {
+                                    <td>
+                                        @Html.TextBoxFor(model => model.MailTemplateLanguage.MailTemplateName, new {maxlength = "50",})
+                                    </td>
                                 }
-                            </table>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Ämne")
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => Model.MailTemplateLanguage.Subject, new {maxlength = "50",})
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Text")
+                                </td>
+                                <td>
+                                    @Html.TextAreaFor(model => Model.MailTemplateLanguage.Body, new {style = "width:600px; height:125px;", maxlength = "2000"})
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("E-post mall")
+                                </td>
+                                @if (Model.MailTemplateLanguage.MailTemplateName == "" || Model.MailTemplateLanguage.MailTemplateName == null)
+                                {
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 1)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Nytt ärende")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 2)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Tilldelat ärende") @Translation.GetCoreTextTranslation("Handläggare")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == (int) GlobalEnums.MailTemplates.ClosedCase)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Ärendet avslutat")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 4)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Informera anmälaren om åtgärden")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 5)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Skicka intern loggpost till")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 6)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Enkät")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 7)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Tilldelat ärende") @Translation.GetCoreTextTranslation("Driftgrupp")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 9)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Bevakningsdatum inträffar")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 10)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Anmälaren uppdaterat ärende")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 11)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("SMS") @Translation.GetCoreTextTranslation("Tilldelat ärende")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 12)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Skicka mail när planerat åtgärdsdatum inträffar")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 13)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Prioritet")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 14)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("SMS") @Translation.GetCoreTextTranslation("Ärendet avslutat")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 15)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Anmälaren aktiverat ärende")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 16)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Påminnelse") @Translation.GetCoreTextTranslation("Enkät")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 60)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Driftlogg")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 50)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Tilldelad ändring")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 51)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Skicka loggpost till")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 52)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("CAB")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 53)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("PIR")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 54)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Statusändring")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 55)
+                                    {
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Ändring")
+                                        </td>
+                                    }
+                                    if (Model.MailTemplateLanguage.MailTemplate.MailID >= 99)
+                                    {
+                                        <td>
+                                            @Html.TextBoxFor(model => model.MailTemplateLanguage.MailTemplateName, new {maxlength = "50",})
+                                        </td>
+                                    }
+                                }
+                                else
+                                {
+                                    <td>
+                                        @Html.TextBoxFor(model => model.MailTemplateLanguage.MailTemplateName, new {maxlength = "50",})
+                                    </td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Ämne")
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(model => Model.MailTemplateLanguage.Subject, new {maxlength = "50",})
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Text")
+                                </td>
+                                <td>
+                                    @Html.TextAreaFor(model => Model.MailTemplateLanguage.Body, new {style = "width:600px; height:125px;", maxlength = "2000"})
+                                </td>
+                            </tr>
+                        }
+                        </table>
                         </div>
                     </div>
                     <div class="container">
@@ -354,10 +380,10 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        @Translation.Get("Fält", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Fält")
                                     </th>
                                     <th>
-                                        @Translation.Get("Identifierare", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Identifierare")
                                     </th>
                                 </tr>
                             </thead>
@@ -366,12 +392,12 @@
                             {
                                 <tr>
                                     <th colspan="2">
-                                        @Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Allmänt")
                                     </th>
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Ärende")
                                     </td>
                                     <td>
                                         [#1]
@@ -379,7 +405,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Registreringsdatum", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Registreringsdatum")
                                     </td>
                                     <td>
                                         [#16]
@@ -387,7 +413,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Registrerad av", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Registrerad av")
                                     </td>
                                     <td>
                                         [#29]
@@ -395,7 +421,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Senast uppdaterad av", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Senast uppdaterad av")
                                     </td>
                                     <td>
                                         [#22]
@@ -403,7 +429,7 @@
                                 </tr>
                                 <tr>
                                     <th colspan="2">
-                                        @Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Användarinformation")
                                     </th>
                                 </tr>
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { mailTemplateRowName = GlobalEnums.TranslationCaseFields.Persons_Name.ToString() });
@@ -416,14 +442,14 @@
                                 {
                                     <tr>
                                         <th colspan="2">
-                                            @Translation.Get("Datorinformation", Enums.TranslationSource.TextTranslation)
+                                            @Translation.GetCoreTextTranslation("Datorinformation")
                                         </th>
                                     </tr>
 }
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() });
                                 <tr>
                                     <th colspan="2">
-                                        @Translation.Get("Ärendeinformation", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Ärendeinformation")
                                     </th>
                                 </tr>
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.CaseType_Id.ToString() });
@@ -435,7 +461,7 @@
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Available.ToString() });
                                 <tr>
                                     <th colspan="2">
-                                        @Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Övrigt")
                                     </th>
                                 </tr>
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString() });
@@ -446,7 +472,7 @@
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Priority_Id.ToString() });
                                 <tr>
                                     <td>
-                                        @Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()) @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
+                                        @Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()) @Translation.GetCoreTextTranslation("Beskrivning")
                                     </td>
                                     <td>
                                         [#20]
@@ -455,7 +481,7 @@
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.WatchDate.ToString() });
                                 <tr>
                                     <th colspan="2">
-                                        @Translation.Get("Ärendelogg", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Ärendelogg")
                                     </th>
                                 </tr>
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString() });
@@ -468,11 +494,11 @@
                                     Model.MailTemplateLanguage.MailTemplate.MailID > 99)
                                 {
                                     <tr>
-                                        <td>@Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation)</td>
+                                        <td>@Translation.GetCoreTextTranslation("Bifogad fil")</td>
                                         <td>[#14]</td>
                                     </tr>
                                     <tr>
-                                        <td>@Translation.Get("Intern bifogad fil", Enums.TranslationSource.TextTranslation)</td>
+                                        <td>@Translation.GetCoreTextTranslation("Intern bifogad fil")</td>
                                         <td>[#30]</td>
                                     </tr>
                                 }
@@ -480,7 +506,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            @Translation.Get("Hyperlänk", Enums.TranslationSource.TextTranslation) @Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)
+                                            @Translation.GetCoreTextTranslation("Hyperlänk") @Translation.GetCoreTextTranslation("Enkät")
                                         </td>
                                         <td>
                                             [#99]
@@ -492,7 +518,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            @Translation.Get("Hyperlänk", Enums.TranslationSource.TextTranslation) @Translation.Get("till", Enums.TranslationSource.TextTranslation) @Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)
+                                            @Translation.GetCoreTextTranslation("Hyperlänk") @Translation.GetCoreTextTranslation("till") @Translation.GetCoreTextTranslation("Självservice")
                                         </td>
                                         <td>
                                             [#98]
@@ -501,7 +527,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            @Translation.Get("Hyperlänk", Enums.TranslationSource.TextTranslation) @Translation.Get("till", Enums.TranslationSource.TextTranslation) @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)
+                                            @Translation.GetCoreTextTranslation("Hyperlänk") @Translation.GetCoreTextTranslation("till") @Translation.GetCoreTextTranslation("Handläggare")
                                         </td>
                                         <td>
                                             [#99]
@@ -520,39 +546,39 @@
                                             <th colspan="2">
                                                 @if (item.OrderField == "Customer_Id")
                                                 {
-                                                    @Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Allmänt")
 }
                                                 else if (item.OrderField == "User_Id")
                                                 {
-                                                    @Translation.Get("Användare", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Användare")
 }
                                                 else if (item.OrderField == "OrdererID")
                                                 {
-                                                    @Translation.Get("Beställare", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Beställare")
 }
                                                 else if (item.OrderField == "OrderProperty_Id")
                                                 {
-                                                    @Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Beställning")
 }
                                                 else if (item.OrderField == "ReceiverId")
                                                 {
-                                                    @Translation.Get("Mottagare", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Mottagare")
 }
                                                 else if (item.OrderField == "SupplierOrderNumber")
                                                 {
-                                                    @Translation.Get("Orderinformation", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Orderinformation")
 }
                                                 else if (item.OrderField == "DeliveryDate")
                                                 {
-                                                    @Translation.Get("Leveransinformation", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Leveransinformation")
 }
                                                 else if (item.OrderField == "Program")
                                                 {
-                                                    @Translation.Get("Program", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Program")
 }
                                                 else if (item.OrderField == "Filename")
                                                 {
-                                                    @Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Övrigt")
 }
 
                                             </th>
@@ -578,35 +604,35 @@
                                             <th colspan="2">
                                                 @if (item.AccountField == "Customer_Id")
                                                 {
-                                                    @Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Allmänt")
 }
                                                 else if (item.AccountField == "UserId")
                                                 {
-                                                    @Translation.Get("Användarinformation", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Användarinformation")
 }
                                                 else if (item.AccountField == "OrdererID")
                                                 {
-                                                    @Translation.Get("Beställare", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Beställare")
 }
                                                 else if (item.AccountField == "AccountStartDate")
                                                 {
-                                                    @Translation.Get("Kontoinformation", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Kontoinformation")
 }
                                                 else if (item.AccountField == "ContactId")
                                                 {
-                                                    @Translation.Get("Kontakt", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Kontakt")
 }
                                                 else if (item.AccountField == "DeliveryName")
                                                 {
-                                                    @Translation.Get("Leveransinformation", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Leveransinformation")
 }
                                                 else if (item.AccountField == "Program")
                                                 {
-                                                    @Translation.Get("Program", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Program")
 }
                                                 else if (item.AccountField == "CaseNumber")
                                                 {
-                                                    @Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("Övrigt")
 }
                                             </th>
 
@@ -625,12 +651,12 @@
                             {
                                 <tr>
                                     <th colspan="2">
-                                        @Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Driftlogg")
                                     </th>
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Driftsobjekt", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Driftsobjekt")
                                     </td>
                                     <td>
                                         [#1]
@@ -638,7 +664,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Kategori")
                                     </td>
                                     <td>
                                         [#2]
@@ -646,7 +672,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Beskrivning")
                                     </td>
                                     <td>
                                         [#3]
@@ -654,7 +680,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Åtgärd", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Åtgärd")
                                     </td>
                                     <td>
                                         [#4]
@@ -662,7 +688,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Tidsåtgång", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Tidsåtgång")
                                     </td>
                                     <td>
                                         [#5]
@@ -672,12 +698,12 @@
                             {
                                 <tr>
                                     <th colspan="2">
-                                        @Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Allmänt")
                                     </th>
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Change", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Change")
                                     </td>
                                     <td>
                                         [#3]
@@ -685,7 +711,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Customer", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Customer")
                                     </td>
                                     <td>
                                         [#4]
@@ -693,7 +719,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("ID", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("ID")
                                     </td>
                                     <td>
                                         [#50]
@@ -701,7 +727,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Namn")
                                     </td>
                                     <td>
                                         [#27]
@@ -709,7 +735,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Telefon", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Telefon")
                                     </td>
                                     <td>
                                         [#28]
@@ -717,7 +743,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Mobil", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Mobil")
                                     </td>
                                     <td>
                                         [#51]
@@ -725,7 +751,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("E-post")
                                     </td>
                                     <td>
                                         [#29]
@@ -733,7 +759,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Avdelning")
                                     </td>
                                     <td>
                                         [#52]
@@ -741,7 +767,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Prioritering", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Prioritering")
                                     </td>
                                     <td>
                                         [#2]
@@ -749,7 +775,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Titel", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Titel")
                                     </td>
                                     <td>
                                         [#5]
@@ -757,7 +783,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Status", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Status")
                                     </td>
                                     <td>
                                         [#1]
@@ -765,7 +791,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("System", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("System")
                                     </td>
                                     <td>
                                         [#30]
@@ -773,7 +799,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Objekt", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Objekt")
                                     </td>
                                     <td>
                                         [#6]
@@ -781,7 +807,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Inventarie", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Inventarie")
                                     </td>
                                     <td>
                                         [#55]
@@ -789,7 +815,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Ägare", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Ägare")
                                     </td>
                                     <td>
                                         [#7]
@@ -797,7 +823,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Driftgrupp")
                                     </td>
                                     <td>
                                         [#34]
@@ -805,7 +831,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Ansvarig", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Ansvarig")
                                     </td>
                                     <td>
                                         [#13]
@@ -813,7 +839,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Closing Date", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Closing Date")
                                     </td>
                                     <td>
                                         [#64]
@@ -821,7 +847,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Namn")
                                     </td>
                                     <td>
                                         [#60]
@@ -829,7 +855,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Telefon", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Telefon")
                                     </td>
                                     <td>
                                         [#61]
@@ -837,7 +863,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("E-post")
                                     </td>
                                     <td>
                                         [#62]
@@ -845,7 +871,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Företag", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Företag")
                                     </td>
                                     <td>
                                         [#63]
@@ -853,7 +879,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Beskrivning")
                                     </td>
                                     <td>
                                         [#9]
@@ -861,7 +887,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Affärsnytta", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Affärsnytta")
                                     </td>
                                     <td>
                                         [#10]
@@ -869,7 +895,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Konsekvens", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Konsekvens")
                                     </td>
                                     <td>
                                         [#33]
@@ -877,7 +903,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Påverkan", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Påverkan")
                                     </td>
                                     <td>
                                         [#47]
@@ -885,7 +911,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Önskas infört", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Önskas infört")
                                     </td>
                                     <td>
                                         [#31]
@@ -893,7 +919,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Verifierad", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Verifierad")
                                     </td>
                                     <td>
                                         [#14]
@@ -901,7 +927,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Godkännade", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Godkännade")
                                     </td>
                                     <td>
                                         [#46]
@@ -909,7 +935,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Förklaring", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Förklaring")
                                     </td>
                                     <td>
                                         [#50]
@@ -917,7 +943,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Kategori")
                                     </td>
                                     <td>
                                         [#32]
@@ -925,7 +951,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Prioritet")
                                     </td>
                                     <td>
                                         [#11]
@@ -933,12 +959,12 @@
                                 </tr>
                                 <tr>
                                     <th colspan="2">
-                                        @Translation.Get("Analys", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Analys")
                                     </th>
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Analyst", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Analyst")
                                     </td>
                                     <td>
                                         [#15]
@@ -946,7 +972,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Lösning", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Lösning")
                                     </td>
                                     <td>
                                         [#16]
@@ -954,7 +980,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Kostnad", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Kostnad")
                                     </td>
                                     <td>
                                         [#17]
@@ -962,7 +988,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Årlig kostnad", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Årlig kostnad")
                                     </td>
                                     <td>
                                         [#18]
@@ -970,7 +996,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Tidsuppskattning timmar", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Tidsuppskattning timmar")
                                     </td>
                                     <td>
                                         [#22]
@@ -978,7 +1004,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Risk", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Risk")
                                     </td>
                                     <td>
                                         [#48]
@@ -986,7 +1012,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Start genomförande", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Start genomförande")
                                     </td>
                                     <td>
                                         [#19]
@@ -994,7 +1020,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Slutdatum", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Slutdatum")
                                     </td>
                                     <td>
                                         [#20]
@@ -1002,7 +1028,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Implementationsplan framtagen", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Implementationsplan framtagen")
                                     </td>
                                     <td>
                                         [#35]
@@ -1010,7 +1036,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Återställningsplan framtagen", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Återställningsplan framtagen")
                                     </td>
                                     <td>
                                         [#36]
@@ -1018,7 +1044,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("CAB Rekommendation", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("CAB Rekommendation")
                                     </td>
                                     <td>
                                         [#45]
@@ -1026,7 +1052,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Logg", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Logg")
                                     </td>
                                     <td>
                                         [#56]
@@ -1034,7 +1060,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Godkännande", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Godkännande")
                                     </td>
                                     <td>
                                         [#49]
@@ -1042,12 +1068,12 @@
                                 </tr>
                                 <tr>
                                     <th colspan="2">
-                                        @Translation.Get("Implementation", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Implementation")
                                     </th>
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Status implementation", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Status implementation")
                                     </td>
                                     <td>
                                         [#21]
@@ -1055,7 +1081,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Verkligt startdatum", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Verkligt startdatum")
                                     </td>
                                     <td>
                                         [#24]
@@ -1063,7 +1089,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Bygg och test genomförd", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Bygg och test genomförd")
                                     </td>
                                     <td>
                                         [#40]
@@ -1071,7 +1097,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Implementationsplan använd", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Implementationsplan använd")
                                     </td>
                                     <td>
                                         [#39]
@@ -1079,7 +1105,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Avvikelse", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Avvikelse")
                                     </td>
                                     <td>
                                         [#41]
@@ -1087,7 +1113,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Återställningsplan använd", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Återställningsplan använd")
                                     </td>
                                     <td>
                                         [#38]
@@ -1095,7 +1121,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Closing Date", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Closing Date")
                                     </td>
                                     <td>
                                         [#23]
@@ -1103,7 +1129,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Logg", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Logg")
                                     </td>
                                     <td>
                                         [#57]
@@ -1111,7 +1137,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Implementation klar", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Implementation klar")
                                     </td>
                                     <td>
                                         [#53]
@@ -1119,12 +1145,12 @@
                                 </tr>
                                 <tr>
                                     <th colspan="2">
-                                        @Translation.Get("Utvärdering", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Utvärdering")
                                     </th>
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Utvärdering", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Utvärdering")
                                     </td>
                                     <td>
                                         [#43]
@@ -1132,7 +1158,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Logg", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Logg")
                                     </td>
                                     <td>
                                         [#58]
@@ -1140,7 +1166,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Utvärdering klar", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Utvärdering klar")
                                     </td>
                                     <td>
                                         [#54]
@@ -1148,7 +1174,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Logg", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Logg")
                                     </td>
                                     <td>
                                         [#59]
@@ -1175,11 +1201,11 @@
                             @*
                 COMMENTED OUT BECAUSE THIS MODULE IS NOT YET FINISHED
             <tr>
-                <th colspan="2">@Translation.Get("Snabbenkät", Enums.TranslationSource.TextTranslation)
+                <th colspan="2">@Translation.GetCoreTextTranslation("Snabbenkät")
                 </th>
             </tr>
                 <tr>
-                    <td>@Translation.Get("Snabbenkät", Enums.TranslationSource.TextTranslation)
+                    <td>@Translation.GetCoreTextTranslation("Snabbenkät")
                     </td>
                     <td>[#777]
                     </td>

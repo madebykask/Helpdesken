@@ -97,6 +97,7 @@
     <Compile Include="Enums\Condition\ConditionOperator.cs" />
     <Compile Include="Enums\FederationServiceKeys.cs" />
     <Compile Include="Enums\Logs\LogFileType.cs" />
+    <Compile Include="Enums\MailEnums.cs" />
     <Compile Include="Enums\ModuleName.cs" />
     <Compile Include="Enums\UserRoleType.cs" />
     <Compile Include="Enums\BusinessRules\BREventType.cs" />

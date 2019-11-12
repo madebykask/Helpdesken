@@ -100,17 +100,23 @@
 
         public MailTemplateEntity GetMailTemplate(int id, int customerId)
         {
-            return this._mailTemplateRepository.GetMany(x => x.MailID == id && x.Customer_Id == customerId).FirstOrDefault();
+            return this._mailTemplateRepository.GetMany(x => x.MailID == id && x.Customer_Id == customerId)
+                .AsQueryable()
+                .FirstOrDefault();
         }
 
         public MailTemplateEntity GetMailTemplate(int id, int customerId, int orderTypeId)
         {
-            return this._mailTemplateRepository.GetMany(x => x.MailID == id && x.Customer_Id == customerId && x.OrderType_Id == orderTypeId ).FirstOrDefault();
+            return this._mailTemplateRepository.GetMany(x => x.MailID == id && x.Customer_Id == customerId && x.OrderType_Id == orderTypeId )
+                .AsQueryable()
+                .FirstOrDefault();
         }
 
         public MailTemplateEntity GetMailTemplateForCopyCustomer(int id, int customerId)
         {
-            return this._mailTemplateRepository.GetMany(x => x.MailID == id && x.Customer_Id == customerId).FirstOrDefault();
+            return this._mailTemplateRepository.GetMany(x => x.MailID == id && x.Customer_Id == customerId)
+                .AsQueryable()
+                .FirstOrDefault();
         }
 
         public MailTemplateEntity GetMailTemplateForCustomer(int id, int customerId, int languageId)
@@ -209,10 +215,7 @@
             mailtemplate.ChangedDate = DateTime.UtcNow;
 
             if (mailtemplate.MailTemplateGUID == Guid.Empty)
-            {
                 mailtemplate.MailTemplateGUID = Guid.NewGuid();
-     
-            }
 
             if (mailtemplate.Id == 0)
                 this._mailTemplateRepository.Add(mailtemplate);

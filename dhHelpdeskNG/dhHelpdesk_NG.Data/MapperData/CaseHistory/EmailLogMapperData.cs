@@ -6,5 +6,6 @@
         public int? CaseHistoryId { get; set; }
         public int? MailId { get; set; }
         public string EmailAddress { get; set; }
+        public string CcEmailAddress { get; set; }
     }
 }

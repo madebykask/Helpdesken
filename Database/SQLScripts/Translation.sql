@@ -7546,7 +7546,29 @@ begin
 end
 GO
 
+If not exists (select * from tbltext where id = 2038)
+begin
+	insert into tbltext (id, TextString) VALUES (2038, 'Skicka metod')
+	If not exists (select * from tblTextTranslation where text_id = 2038 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2038, 2, 'Send method')
+end
+GO
 
+If not exists (select * from tbltext where id = 2039)
+begin
+	insert into tbltext (id, TextString) VALUES (2039, 'Separata e-postmeddelanden till alla')
+	If not exists (select * from tblTextTranslation where text_id = 2039 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2039, 2, 'Separate emails to all')
+end
+GO
+
+If not exists (select * from tbltext where id = 2040)
+begin
+	insert into tbltext (id, TextString) VALUES (2040, 'Alla mottagare i en e-post')
+	If not exists (select * from tblTextTranslation where text_id = 2040 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2040, 2, 'All receivers in one email')
+end
+GO
 
 
 
