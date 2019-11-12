@@ -2315,7 +2315,7 @@
                                                 @if (Model.EditMode == AccessMode.FullAccess)
                                                 {
                                                     <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.GetCoreTextTranslation("Lägg till")</a>
-                                                    <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="case">@Translation.GetCoreTextTranslation("Lägg till från Urklipp")</a>
+                                                    <a href="#upload_clipboard_file_popup" role="button" class="btn uploadCaseFileFromClipboardBtn" data-src="case">@Translation.GetCoreTextTranslation("Lägg till från Urklipp")</a>
                                                 }
                                                 <div id="divCaseFiles" style="margin-top:10px;">
                                                     @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary { { "CaseInactive", Model.case_.FinishingDate.HasValue } })

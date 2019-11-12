@@ -113,6 +113,19 @@
 
 @section Scripts
 {
+    @Scripts.Render(BundleConfig.ScriptNames.InventoryWorkstation)
+    <script type="text/javascript">
+        $(function(jQuery) {
+            window.workstationEdit = new WorkstationEdit($);
+            window.workstationEdit.init({
+                userId: @SessionFacade.CurrentUser.Id,
+                customerId: @SessionFacade.CurrentCustomer.Id,
+                getUnitsUrl: '@Url.Action("GetUnits", "Ajax", new {area = ""})',
+                getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})'
+            });
+        });
+    </script>
+
     @if (documentModel.Show)
     {
         @Html.Partial("_InventoryFiles")
@@ -133,14 +146,6 @@
                 // create instance and init
                 window.inventoryFiles = new InventoryFiles(jQuery);
                 window.inventoryFiles.init(inventoryFilesOptions);
-
-                window.workstationEdit = new WorkstationEdit($);
-                window.workstationEdit.init({
-                    userId: @SessionFacade.CurrentUser.Id,
-                    customerId: @SessionFacade.CurrentCustomer.Id,
-                    getUnitsUrl: '@Url.Action("GetUnits", "Ajax", new {area = ""})',
-                    getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})'
-                });
             });
 
         </script>

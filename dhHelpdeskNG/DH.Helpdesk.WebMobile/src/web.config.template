@@ -14,6 +14,7 @@
       <remove statusCode="404"/>
       <error statusCode="404" path="/index.html" responseMode="ExecuteURL"/>
     </httpErrors>
+	#{if IsSubsite}
 	<rewrite>
 		<rules>
 			<rule name="angularjs routes" stopProcessing="true">
@@ -22,9 +23,10 @@
 					<add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
 					<add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
 				</conditions>
-				<action type="Rewrite" url="/mobile/" />
+				<action type="Rewrite" url="#{SubsiteUrl}" />
 			</rule>
 		</rules>
 	</rewrite>
+	#{/if}
   </system.webServer>
 </configuration>

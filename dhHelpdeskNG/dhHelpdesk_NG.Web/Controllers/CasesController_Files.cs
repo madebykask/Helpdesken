@@ -287,8 +287,8 @@ namespace DH.Helpdesk.Web.Controllers
             }
         }
 
-        [HttpGet]
-        public UnicodeFileContentResult DownloadFile(string id, string fileName)
+		[AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)]
+		public UnicodeFileContentResult DownloadFile(string id, string fileName)
         {
             byte[] fileContent;
 

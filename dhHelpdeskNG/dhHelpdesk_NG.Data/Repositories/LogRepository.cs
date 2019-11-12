@@ -161,7 +161,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public List<LogFile> GetLogFilesByCaseId(int caseId, bool includeInternal)
         {
             var caseFiles = DataContext.Logs.Where(l => l.Case_Id == caseId).SelectMany(l => l.LogFiles);
-            return caseFiles.Where(f => includeInternal || f.LogType == LogFileType.External).ToList();
+            return caseFiles.Where(f => includeInternal || (f.LogType == LogFileType.External && !string.IsNullOrEmpty(f.Log.Text_External))).ToList();
         }
 
         public List<LogFile> GetLogFilesByLogId(int logId, bool includeInternal = true)
