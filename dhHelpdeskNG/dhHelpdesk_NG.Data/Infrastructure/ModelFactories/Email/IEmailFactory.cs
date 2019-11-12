@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.BusinessData.Models.MailTemplates;
+using DH.Helpdesk.BusinessData.OldComponents;
 
 namespace DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email
 {
@@ -19,9 +20,9 @@ namespace DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email
             bool isHighPriority,
             List<MailFile> files);
 
-        EmailLog CreatEmailLog(
+        EmailLog CreateEmailLog(
             int caseHistoryId, 
-            int mailId, 
+            GlobalEnums.MailTemplates mailId, 
             string email, 
             string messageId);
     }

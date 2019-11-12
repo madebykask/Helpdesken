@@ -26,6 +26,7 @@ namespace DH.Helpdesk.Services.Services
         EmailResponse SendEmail(
             string from,
             string to,
+            string cc,
             string subject,
             string body,
             List<Field> fields,
@@ -41,6 +42,7 @@ namespace DH.Helpdesk.Services.Services
             EmailLog el,
             string from,
             string to,
+            string cc,
             string subject,
             string body,
             List<Field> fields,
@@ -52,7 +54,8 @@ namespace DH.Helpdesk.Services.Services
             string siteHelpdesk = "",
             EmailType emailType = EmailType.ToMail);
 
-        EmailResponse SendEmail(EmailLog el, EmailItem item, EmailSettings emailsettings, string siteSelfService = "", string siteHelpdesk = "", EmailType emailType = EmailType.ToMail);
+        EmailResponse SendEmail(EmailLog el, EmailItem item, EmailSettings emailsettings, string siteSelfService = "",
+            string siteHelpdesk = "", EmailType emailType = EmailType.ToMail);
 
         #endregion
     }

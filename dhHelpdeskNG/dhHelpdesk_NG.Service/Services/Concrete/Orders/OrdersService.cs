@@ -678,7 +678,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 var mailResponse = EmailResponse.GetEmptyEmailResponse();
                 var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
                 var siteHelpdesk = AbsoluteUrl + "Areas/Orders/edit/" + entity.Id;
-                var e_res = _emailService.SendEmail(customEmailSender1, el.EMailAddress, m.Subject, m.Body, fields, mailSetting,
+                var e_res = _emailService.SendEmail(customEmailSender1, el.EMailAddress, null, m.Subject, m.Body, fields, mailSetting,
                     el.MessageId, false, null, siteSelfService, siteHelpdesk);
 
                 //el.SetResponse(e_res.SendTime, e_res.ResponseMessage);

@@ -341,7 +341,8 @@ namespace DH.Helpdesk.Services.Services
 
                             var e_res =_emailService.SendEmail(
                                 helpdeskMailFromAdress, 
-                                el.Recipients, 
+                                el.Recipients,
+                                null,
                                 template.Subject,
                                 template.Body, 
                                 fields, 
@@ -418,7 +419,7 @@ namespace DH.Helpdesk.Services.Services
                             var el = new OperationLogEMailLog(operationLog.Id, txtSMS, t);
                             var mailResponse = EmailResponse.GetEmptyEmailResponse();
                             var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
-                            var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.Recipients, smsSubject, el.SMSText, null, mailSetting, null, false, null);
+                            var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.Recipients, null, smsSubject, el.SMSText, null, mailSetting, null, false, null);
 
                             var now = DateTime.Now;
                             el.CreatedDate = now;

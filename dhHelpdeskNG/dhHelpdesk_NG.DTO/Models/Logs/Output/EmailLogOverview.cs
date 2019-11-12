@@ -8,5 +8,6 @@ namespace DH.Helpdesk.BusinessData.Models.Logs.Output
         public int CaseHistoryId { get; set; }
         public GlobalEnums.MailTemplates MailTemplate { get; set; }
         public string Email { get; set; }
+        public string CcEmail { get; set; }
     }
 }

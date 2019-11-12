@@ -432,66 +432,68 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) + ")" + " (" + Translation.Get("Grunddata", Enums.TranslationSource.TextTranslation) + ")",
+                Text = Translation.Get("Nytt ärende") + " (" + Translation.Get("Anmälare") + ")"
+                       + " (" + Translation.Get("Grunddata") + ")",
                 Value = "1",
 
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
+                Text = Translation.Get("Tilldelat ärende") + " (" + Translation.Get("Handläggare") + ")",
                 Value = "2",
 
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation) + ")",
+                Text = Translation.Get("Tilldelat ärende") + " (" + Translation.Get("Driftgrupp") + ")",
                 Value = "7",
 
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) + ")" + " (" + Translation.Get("Grunddata", Enums.TranslationSource.TextTranslation) + ")",
+                Text = Translation.Get("Ärendet avslutat") + " (" + Translation.Get("Anmälare") + ")" 
+                       + " (" + Translation.Get("Grunddata") + ")",
                 Value = "3",
 
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Informera anmälaren om åtgärden", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) + ")",
+                Text = Translation.Get("Informera anmälaren om åtgärden") + " (" + Translation.Get("Anmälare") + ")",
                 Value = "4",
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Skicka intern loggpost till", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Skicka intern loggpost till"),
                 Value = "5",
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Anmälaren uppdaterat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
+                Text = Translation.Get("Anmälaren uppdaterat ärende") + " (" + Translation.Get("Handläggare") + ")",
                 Value = "10",
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Anmälaren aktiverat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
+                Text = Translation.Get("Anmälaren aktiverat ärende") + " (" + Translation.Get("Handläggare") + ")",
                 Value = "15",
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Bevakningsdatum inträffar", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
+                Text = Translation.Get("Bevakningsdatum inträffar") + " (" + Translation.Get("Handläggare") + ")",
                 Value = "9",
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Skicka mail när planerat åtgärdsdatum inträffar", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
+                Text = Translation.Get("Skicka mail när planerat åtgärdsdatum inträffar") + " (" + Translation.Get("Handläggare") + ")",
                 Value = "12",
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Grunddata", Enums.TranslationSource.TextTranslation) + ")",
+                Text = Translation.Get("Prioritet") + " (" + Translation.Get("Grunddata") + ")",
                 Value = "13",
             });
             _regularCase.Add(new SelectListItem()
             {
-                Text = Translation.Get("Påminnelse", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) + ")",
+                Text = Translation.Get("Påminnelse") + " (" + Translation.Get("Anmälare") + ")",
                 Value = "17",
             });
             #endregion
@@ -502,12 +504,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             _caseSMS.Add(new SelectListItem()
             {
-                Text = Translation.Get("Ärendet avslutat", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Ärendet avslutat"),
                 Value = "14",
             });
             _caseSMS.Add(new SelectListItem()
             {
-                Text = Translation.Get("Tilldelat ärende", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) + ")",
+                Text = Translation.Get("Tilldelat ärende") + " (" + Translation.Get("Handläggare") + ")",
                 Value = "11",
             });
 
@@ -519,32 +521,32 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             _changes.Add(new SelectListItem()
             {
-                Text = Translation.Get("Tilldelad ändring", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Tilldelad ändring"),
                 Value = "50",
             });
             _changes.Add(new SelectListItem()
             {
-                Text = Translation.Get("Skicka loggpost till", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Skicka loggpost till"),
                 Value = "51",
             });
             _changes.Add(new SelectListItem()
             {
-                Text = Translation.Get("CAB", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("CAB"),
                 Value = "52",
             });
             _changes.Add(new SelectListItem()
             {
-                Text = Translation.Get("PIR", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("PIR"),
                 Value = "53",
             });
             _changes.Add(new SelectListItem()
             {
-                Text = Translation.Get("Statusändring", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Statusändring"),
                 Value = "54",
             });
             _changes.Add(new SelectListItem()
             {
-                Text = Translation.Get("Ändring", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Ändring"),
                 Value = "55",
             });
 
@@ -556,7 +558,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             _operationLogs.Add(new SelectListItem()
             {
-                Text = Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Driftlogg"),
                 Value = "60",
             });
 
@@ -568,12 +570,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             _survey.Add(new SelectListItem()
             {
-                Text = Translation.Get("Enkät", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Enkät"),
                 Value = "6",
             });
             _survey.Add(new SelectListItem()
             {
-                Text = Translation.Get("Påminnelse", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Enkät", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Påminnelse") + " " + Translation.Get("Enkät"),
                 Value = "16",
             });
             #endregion

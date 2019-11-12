@@ -1,8 +1,11 @@
+Imports DH.Helpdesk.Common.Enums
+
 Public Class MailTemplate
 #Region "Declarations"
     Private miMailId As Integer
     Private msSubject As String
     Private msBody As String
+    Private msSendMethod As EmailSendMethod
 #End Region
 
 #Region "Constructors"
@@ -11,6 +14,7 @@ Public Class MailTemplate
         miMailId = dr("MailId")
         msSubject = dr("Subject")
         msBody = dr("Body")
+        msSendMethod = dr("SendMethod")
     End Sub
 
 #End Region
@@ -40,6 +44,15 @@ Public Class MailTemplate
         End Get
         Set(ByVal Value As String)
             msBody = Value
+        End Set
+    End Property
+
+    Public Property SendMethod() As String
+        Get
+            Return msSendMethod
+        End Get
+        Set(ByVal Value As String)
+            msSendMethod = Value
         End Set
     End Property
 #End Region
