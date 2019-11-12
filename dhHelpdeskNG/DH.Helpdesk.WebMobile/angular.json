@@ -32,7 +32,9 @@
             "assets": [
               "src/favicon.ico",
               "src/web.config",
+              "src/web.config.template",
               "src/manifest.json",
+              "src/manifest.json.template",
               {
                 "glob": "**/*",
                 "input": "src/content/icons",
