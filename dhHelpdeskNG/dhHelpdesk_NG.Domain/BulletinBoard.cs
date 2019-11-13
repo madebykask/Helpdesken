@@ -21,8 +21,10 @@ namespace DH.Helpdesk.Domain
         [DataType(DataType.Date)]
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        [Required] 
         [DataType(DataType.Date)]
         public DateTime? ShowDate { get; set; }
+        [Required] 
         [DataType(DataType.Date)]
         public DateTime? ShowUntilDate { get; set; }
 
