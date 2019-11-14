@@ -32,7 +32,7 @@ namespace ExtendedCase.Logic.Services
             var metaDataObj = JObject.Parse(metaData);
             var dataSourceType = (string)metaDataObj["Type"];
 
-            var provider = _customDataSourceProviderFactory.GetProvider(dataSourceType);
+			var provider = _customDataSourceProviderFactory.GetProvider(dataSourceType);
 
             return provider.GetData(metaDataObj, query);
         }

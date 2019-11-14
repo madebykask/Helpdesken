@@ -10,6 +10,7 @@
   </configSections>
   <connectionStrings>
     <add name="HelpdeskDb" connectionString="Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword};MultipleActiveResultSets=True;Connection Lifetime=3;Max Pool Size=3;" providerName="System.Data.SqlClient" />
+    #{CustomConnectionStrings}
   </connectionStrings>
 
   <appSettings>

@@ -49,9 +49,9 @@ namespace ExtendedCase.Dal.Repositories
             return QueryDictionaryList(sql, parameters);
         }
 
-        public IList<IDictionary<string, string>> GetDataFromQuery(string sql, IDictionary<string, string> parameters)
+        public IList<IDictionary<string, string>> GetDataFromQuery(string sql, string connectionString, IDictionary<string, string> parameters)
         {
-            return QueryDictionaryList(sql, parameters);
+			return QueryDictionaryList(query: sql, parametersDict: parameters, connectionString: connectionString);
         }
 
         public IList<IDictionary<string, string>> GetDataFromSp(string spName, IDictionary<string, string> parameters)
@@ -68,7 +68,7 @@ namespace ExtendedCase.Dal.Repositories
         string GetMetaDataByDataSourceId(string dataSourceId);
 
         IList<IDictionary<string, string>> GetDataFromTable(string tableName, List<string> columns, IDictionary<string, string> parameters);
-        IList<IDictionary<string, string>> GetDataFromQuery(string sql, IDictionary<string, string> parameters);
+        IList<IDictionary<string, string>> GetDataFromQuery(string sql, string connectionString, IDictionary<string, string> parameters);
         IList<IDictionary<string, string>> GetDataFromSp(string spName, IDictionary<string, string> parameters);
     }
 }
