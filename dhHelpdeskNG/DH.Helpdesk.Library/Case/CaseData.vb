@@ -935,7 +935,7 @@ Public Class CaseData
                     End If
 
                     ' Kontrollera om användaruppgifter ska hämtas
-                    If Not IsDBNull(dr("ReportedBy")) And Not String.IsNullOrEmpty(DirectCast(dr("ReportedBy"), String)) Then
+                    If Not IsDBNull(dr("ReportedBy")) AndAlso Not String.IsNullOrEmpty(DirectCast(dr("ReportedBy"), String)) Then
                         Dim objComputerUser As ComputerUser = objComputerUserData.getComputerUserByUserId(dr("ReportedBy"), dr("Customer_Id"))
 
                         If Not objComputerUser Is Nothing Then

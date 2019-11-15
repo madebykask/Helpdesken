@@ -28,10 +28,10 @@ namespace DH.Helpdesk.Dal.Repositories.Concrete
                 select new
                 {
                     Id = wg.Id,
-                    UserId = wgUser.User_Id,
-                    UserRole = wgUser.UserRole,
-                    IsActiveUser = wgUser.User.IsActive,
-                    IsMemberOfGroup = wgUser.IsMemberOfGroup
+                    UserId = wgUser == null ? (int?) null : wgUser.User_Id,
+                    UserRole = wgUser == null ? (int?)null : wgUser.UserRole,
+                    IsActiveUser = wgUser == null ? (int?)null : wgUser.User.IsActive,
+                    IsMemberOfGroup = wgUser == null ? (bool?)null : wgUser.IsMemberOfGroup
                 });
 
             if (!includeAdmins)
@@ -54,7 +54,7 @@ namespace DH.Helpdesk.Dal.Repositories.Concrete
                       .Select(o => new WorkingGroupUsers
                       {
                           WorkingGroupId = o.Key,
-                          UserIds = o.Select(u => u.UserId).ToList()
+                          UserIds = o.Where(u => u.UserId.HasValue).Select(u => u.UserId.Value).ToList()
                       })
                       .ToList();
          

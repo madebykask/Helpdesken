@@ -1,10 +1,10 @@
 {
-  "name": "Helpdesk",
-  "short_name": "Helpdesk",
+  "name": "DH Helpdesk",
+  "short_name": "DH Helpdesk",
   "theme_color": "#fff",
   "background_color": "#fff",
   "display": "standalone",
-  "scope": "/",
+  "scope": "/mobile/",
   "start_url": "/",
   "icons": [
     {

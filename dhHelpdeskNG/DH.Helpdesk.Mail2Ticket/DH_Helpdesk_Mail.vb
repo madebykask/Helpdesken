@@ -806,7 +806,7 @@ Module DH_Helpdesk_Mail
                                             For Each user As WorkingGroupUser In users
                                                 If user.AllocateCaseMail = 1 And Not String.IsNullOrWhiteSpace(user.EMail) And
                                                    user.Status = 1 And user.WorkingGroupUserRole = WorkingGroupUserPermission.ADMINSTRATOR Then
-                                                    If Not objCase.Department_Id = 0 Then
+                                                    If Not objCase.Department_Id = 0 And usersDepartments.Any(Function(ud) ud.Key = user.Id) Then
                                                         If usersDepartments.Any(Function(ud) ud.Key = user.Id And ud.Value = objCase.Department_Id) Then
                                                             emailsList.Add(user.EMail)
                                                         End If
