@@ -57,7 +57,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng")</button>
     </div>
 </div>
 
@@ -234,4 +234,18 @@
 
         //UpdateLogo();
     });
+
 </script>
+@if (Model.StatisticsOverviews != null)
+{
+    <script type="text/javascript">
+        dhHelpdesk.statistics.init({
+            dataUrl: '@Url.Action("GetStatistics", "Home")'
+        });
+        dhHelpdesk.statistics.loadStatistics();
+
+        $(function() {
+            dhHelpdesk.statistics.tryApplyData();
+        });
+    </script>
+}

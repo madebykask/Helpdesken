@@ -1,5 +1,9 @@
 ﻿using System.Security.Principal;
 using System.Threading;
+using DH.Helpdesk.BusinessData.Enums.Case;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Statistics.Output;
+using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -39,8 +43,6 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly IProblemService problemService;
 
-        private readonly IStatisticsService statisticsService;
-
         private readonly ILinkModelFactory linkModelFactory;
 
         private readonly IDocumentService documentService;
@@ -54,7 +56,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IChangeService changeService;
 
         private readonly ILanguageService languageService;
-
+        private readonly IStatisticsService _statisticsService;
 
         public HomeController(
             IBulletinBoardService bulletinBoardService,
@@ -68,14 +70,14 @@ namespace DH.Helpdesk.Web.Controllers
             IDailyReportService dailyReportService,
             ILinkService linkService,
             IProblemService problemService,
-            IStatisticsService statisticsService,
             ILinkModelFactory linkModelFactory,
             IDocumentService documentService,
             IWorkContext workContext, 
             ICaseModelFactory caseModelFactory, 
             IModulesInfoFactory modulesInfoFactory, 
             IChangeService changeService,
-            ILanguageService languageService)
+            ILanguageService languageService,
+            IStatisticsService statisticsService)
             : base(masterDataService)
         {
             this.bulletinBoardService = bulletinBoardService;
@@ -88,7 +90,6 @@ namespace DH.Helpdesk.Web.Controllers
             this.dailyReportService = dailyReportService;
             this.linkService = linkService;
             this.problemService = problemService;
-            this.statisticsService = statisticsService;
             this.linkModelFactory = linkModelFactory;
             this.documentService = documentService;
             this.workContext = workContext;
@@ -96,6 +97,7 @@ namespace DH.Helpdesk.Web.Controllers
             this.modulesInfoFactory = modulesInfoFactory;
             this.changeService = changeService;
             this.languageService = languageService;
+            _statisticsService = statisticsService;
         }
 
         [HttpGet]
@@ -259,7 +261,7 @@ namespace DH.Helpdesk.Web.Controllers
                             model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviewsForStartPage(customerIdsAll, module.NumberOfRows, true));
                         break;
                     case Module.Statistics:
-                        model.StatisticsOverviews = this.statisticsService.GetStatistics(customerIdsAll, this.workContext.User.UserId);
+                        model.StatisticsOverviews = new StatisticsOverview();
                         break;
                     case Module.ChangeManagement:
                         var customerChanges = this.changeService.GetCustomerChanges(customersIds, SessionFacade.CurrentUser.Id);
@@ -275,6 +277,17 @@ namespace DH.Helpdesk.Web.Controllers
 
             return model;
         }
+
+        public JsonResult GetStatistics()
+        {
+            var customerIdsAll = customerUserService.GetCustomerUsersForHomeIndexPage(SessionFacade.CurrentUser.Id)
+                .Select(c => c.Customer.Customer_Id).ToArray();
+
+            var model = _statisticsService.GetStatistics(customerIdsAll, SessionFacade.CurrentUser);
+
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
+        
 
         //diagnostic action
         public JsonResult _Ctx()

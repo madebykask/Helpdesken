@@ -1,68 +1,50 @@
 ﻿@model DH.Helpdesk.BusinessData.Models.Statistics.Output.StatisticsOverview
 
-@if (!Model.IsEmpty())
+@if (Model != null)
 {
     <div class="row-fluid">
         <div class="box-box span12">
             <div class="box-header portlet-header">
-                <div class="start-tile-img label green"><img src="@Url.Content("~/Content/icons/chart.png")" alt="@Translation.Get("Statistik")" /></div><h4>@Translation.Get("Statistik")</h4>
+                <div class="start-tile-img label green">
+                    <img src="@Url.Content("~/Content/icons/chart.png")"
+                         alt="@Translation.Get("Statistik")" />
+                </div><h4>@Translation.Get("Statistik")</h4>
             </div>
             <div class="box-body portlet-content">
                 <div class="box-post">
-                    <div class="row-fluid">
-                        <div class="span3">                                                    
-                            <div class="graph unread">
-                                <strong class="bar" style="height: @(GetScale(Model.ActiveCases))%;">@Model.ActiveCases</strong>
-                            </div>
-                            <p>
-                                @Translation.Get("Pågående")                                
-                            </p>
-                        </div>
-                        <div class="span3">                                                    
-                            <div class="graph unreaded">
-                                <strong class="bar" style="height: @(GetScale(Model.UnreadCases))%;">@Model.UnreadCases</strong>
-                            </div>
-                            <p>
-                                @Translation.Get("Olästa ärenden")                                
-                            </p>
-                        </div>
-                        <div class="span3">                                                    
-                            <div class="graph inrest">
-                                <strong class="bar" style="height: @(GetScale(Model.InRestCases))%;">@Model.InRestCases</strong>
-                            </div>
-                            <p>
-                                @Translation.Get("Vilande")
-                            </p>
-                        </div>  
-                        <div class="span3">                                                    
-                            <div class="graph my">
-                                <strong class="bar" style="height: @(GetScale(Model.MyCases))%;">@Model.MyCases</strong>
-                            </div>
-                            <p>
-                                @Translation.Get("Mina ärenden")
-                            </p>
-                        </div>  
+                    <div id="statisticsLoader" style="width: 100%; text-align: center">
+                        <i class="gif-loader" style="">&nbsp;</i>
+                    </div>
+                    <div id="statisticsData" style="display: none">
+                        <table class="table-condensed">
+                            <tr>
+                                <td>@Translation.Get("Pågående ärende")</td>
+                                <td>@Translation.Get("Oöppnad")</td>
+                                <td>@Translation.Get("Vilande")</td>
+                                <td>@Translation.Get("Försenad")</td>
+                            </tr>
+                            <tr>
+                                <td id="st_inProgress">11</td>
+                                <td id="st_unopend">22</td>
+                                <td id="st_onhold">33</td>
+                                <td id="st_delayed">4444</td>
+                            </tr>
+                            <tr>
+                                <td>@Translation.Get("Nya idag")</td>
+                                <td>@Translation.Get("Försenad idag")</td>
+                                <td>@Translation.Get("Löst idag")</td>
+                                <td>@Translation.Get("Löst i tid idag")</td>
+                            </tr>
+                            <tr>
+                                <td id="st_newToday">11</td>
+                                <td id="st_delayedToday">222</td>
+                                <td id="st_solved">33</td>
+                                <td><span id="st_solvedInTime"></span>%</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 }
-@functions 
-{
-    private int GetScale(int value)
-    {
-        var max = Math.Max(Model.ActiveCases, Model.InRestCases);
-        max = Math.Max(max, Model.MyCases);
-        max = Math.Max(max, Model.UnreadCases);
-
-        var result = 100 - (int)((value/(float) max) * 100);
-
-        if (result == 100)
-            result -= 1;
-        
-        return result;
-    }   
-}    
-
-    

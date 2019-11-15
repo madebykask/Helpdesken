@@ -7570,6 +7570,55 @@ begin
 end
 GO
 
+If not exists (select * from tbltext where id = 2041)
+begin
+	insert into tbltext (id, TextString) VALUES (2041, 'Oöppnad')
+	If not exists (select * from tblTextTranslation where text_id = 2041 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2041, 2, 'Unopened')
+end
+GO
+
+If not exists (select * from tbltext where id = 2042)
+begin
+	insert into tbltext (id, TextString) VALUES (2042, 'Vilande')
+	If not exists (select * from tblTextTranslation where text_id = 2042 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2042, 2, 'On hold')
+end
+GO
+
+If not exists (select * from tbltext where id = 2043)
+begin
+	insert into tbltext (id, TextString) VALUES (2043, 'Försenad')
+	If not exists (select * from tblTextTranslation where text_id = 2043 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2043, 2, 'Overdue')
+end
+GO
+
+If not exists (select * from tbltext where id = 2044)
+begin
+	insert into tbltext (id, TextString) VALUES (2044, 'Försenad idag')
+	If not exists (select * from tblTextTranslation where text_id = 2044 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2044, 2, 'Due today')
+end
+GO
+
+If not exists (select * from tbltext where id = 2045)
+begin
+	insert into tbltext (id, TextString) VALUES (2045, 'Löst idag')
+	If not exists (select * from tblTextTranslation where text_id = 2045 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2045, 2, 'Solved today')
+end
+GO
+
+If not exists (select * from tbltext where id = 2046)
+begin
+	insert into tbltext (id, TextString) VALUES (2046, 'Löst i tid idag')
+	If not exists (select * from tblTextTranslation where text_id = 2046 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2046, 2, 'Solved in time today')
+end
+GO
+
+
 
 
 -- Generate id sequence for customer generated IDs

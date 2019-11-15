@@ -1186,6 +1186,7 @@
     <Content Include="Content\js\Faqs\faqsPage.js" />
     <Content Include="Content\js\Feedback\feedback.edit.js" />
     <Content Include="Content\js\Feedback\feedbackStatisticsCases.js" />
+    <Content Include="Content\js\Home\statistics.js" />
     <Content Include="Content\js\Inventory\inventory.search.js" />
     <Content Include="Areas\Inventory\Content\js\inventoryFiles.js" />
     <Content Include="Content\js\moment.js" />

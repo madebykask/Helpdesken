@@ -255,5 +255,10 @@ namespace DH.Helpdesk.Common.Tools
         {
             return date.HasValue ? new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 0, 0, 0) : (DateTime?) null;
         }
+
+        public static DateTime GetStartOfDay(this DateTime date)
+        {
+            return new DateTime(date.Year, date.Month, date.Day, 0, 0, 0);
+        }
     }
 }

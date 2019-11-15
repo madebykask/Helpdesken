@@ -4,123 +4,123 @@ if (window.dhHelpdesk == null)
 
 $(function () {
 
-dhHelpdesk.UserModules = {
+    dhHelpdesk.UserModules = {
 
-    _columns: [],
-    _items: [],
+        _columns: [],
+        _items: [],
 
-    GetItems: function() {
-        return this._items;
-    },
+        GetItems: function () {
+            return this._items;
+        },
 
-    AddColumn: function(column) {
-        this._columns.push(column);
-        column.Number = this._columns.length;
-    },
+        AddColumn: function (column) {
+            this._columns.push(column);
+            column.Number = this._columns.length;
+        },
 
-    AddItem: function(item) {
-        this._items.push(item);
-    },
-
-    SortItems: function() {
-        this._items = dhHelpdesk.UserModules.SortItemsByStartPosition(this._items);
-    },
-
-    Column : function() {
-        this.Number = 0;
-        this.Container = null;
-
-        this._items = [];
-
-        this.AddItem = function(item) {
+        AddItem: function (item) {
             this._items.push(item);
-            item.Number = this._items.length;
-            item.Column = this;
-            this._recalcNumbers();
-        }
-
-        this.RemoveItem = function(item) {
-            this._items.pop(item);
-            item.Number = null;
-            item.Column = null;
-            this._recalcNumbers();
         },
 
-        this.MoveItemsToColumn = function() {
-            for (var i = 0; i < this._items.length; i++) {
-                var item = this._items[i];
-                this.Container.append(item.Container);
+        SortItems: function () {
+            this._items = dhHelpdesk.UserModules.SortItemsByStartPosition(this._items);
+        },
+
+        Column: function () {
+            this.Number = 0;
+            this.Container = null;
+
+            this._items = [];
+
+            this.AddItem = function (item) {
+                this._items.push(item);
+                item.Number = this._items.length;
+                item.Column = this;
+                this._recalcNumbers();
             }
+
+            this.RemoveItem = function (item) {
+                this._items.pop(item);
+                item.Number = null;
+                item.Column = null;
+                this._recalcNumbers();
+            },
+
+                this.MoveItemsToColumn = function () {
+                    for (var i = 0; i < this._items.length; i++) {
+                        var item = this._items[i];
+                        this.Container.append(item.Container);
+                    }
+                },
+
+                this._recalcNumbers = function () {
+                    var children = this.Container.find('[data-usermodules="item"]');
+                    for (var i = 0; i < children.length; i++) {
+                        var child = $(children[i]);
+                        var item = this._getItemByModuleId(child.attr("data-usermodules-moduleid"));
+                        if (item != null)
+                            item.Number = i + 1;
+                    }
+                },
+
+                this._getItemByModuleId = function (moduleId) {
+                    for (var i = 0; i < this._items.length; i++) {
+                        var item = this._items[i];
+                        if (item.ModuleId == moduleId)
+                            return item;
+                    }
+                    return null;
+                }
         },
 
-        this._recalcNumbers = function() {
-            var children = this.Container.find('[data-usermodules="item"]');
-            for (var i = 0; i < children.length; i++) {
-                var child = $(children[i]);
-                var item = this._getItemByModuleId(child.attr("data-usermodules-moduleid"));
-                if (item != null)
-                    item.Number = i + 1;
+        ColumnItem: function () {
+            this.UserId = null;
+            this.ModuleId = null;
+            this.Column = null;
+            this.Number = 0;
+            this.StartPosition = 0;
+            this.Container = null;
+
+            this.GetFullNumber = function () {
+                return this.Column.Number * 100 + this.Number;
+            },
+
+                this.IsStartPositionForColumn = function (column) {
+                    return parseInt(this.StartPosition / 100) == column.Number;
+                }
+        },
+
+        SortItemsByStartPosition: function (items) {
+
+            function compare(item1, item2) {
+                if (item1.StartPosition < item2.StartPosition)
+                    return -1;
+                if (item1.StartPosition > item2.StartPosition)
+                    return 1;
+                return 0;
             }
+
+            return items.sort(compare);
         },
 
-        this._getItemByModuleId = function(moduleId) {
+        GetItemByModuleId: function (moduleId) {
             for (var i = 0; i < this._items.length; i++) {
                 var item = this._items[i];
                 if (item.ModuleId == moduleId)
                     return item;
             }
             return null;
-        }
-    },
-    
-    ColumnItem: function () {
-        this.UserId = null;
-        this.ModuleId = null;
-        this.Column = null;
-        this.Number = 0;
-        this.StartPosition = 0;
-        this.Container = null;
-
-        this.GetFullNumber = function() {
-            return this.Column.Number * 100 + this.Number;
         },
 
-        this.IsStartPositionForColumn = function(column) {
-            return parseInt(this.StartPosition / 100) == column.Number;
+        GetColumnByNumber: function (number) {
+            for (var i = 0; i < this._columns.length; i++) {
+                var column = this._columns[i];
+                if (column.Number == number)
+                    return column;
+            }
+            return null;
         }
-    },
-
-    SortItemsByStartPosition: function(items) {
-
-        function compare(item1, item2) {
-            if (item1.StartPosition < item2.StartPosition)
-                return -1;
-            if (item1.StartPosition > item2.StartPosition)
-                return 1;
-            return 0;
-        }
-
-        return items.sort(compare);
-    },
-
-    GetItemByModuleId: function(moduleId) {
-        for (var i = 0; i < this._items.length; i++) {
-            var item = this._items[i];
-            if (item.ModuleId == moduleId)
-                return item;
-        }
-        return null;
-    },
-
-    GetColumnByNumber: function(number) {
-        for (var i = 0; i < this._columns.length; i++) {
-            var column = this._columns[i];
-            if (column.Number == number)
-                return column;
-        }
-        return null;
     }
-}
 
     var userId = parseInt($('[data-usermodules="items"]').attr("data-usermodules-userid"));
 
@@ -158,7 +158,7 @@ dhHelpdesk.UserModules = {
         dhHelpdesk.UserModules.AddColumn(column);
     });
 
-    $(document).on("OnUserModuleItemMoved", function(event, p) {
+    $(document).on("OnUserModuleItemMoved", function (event, p) {
         var item = dhHelpdesk.UserModules.GetItemByModuleId(p.item.attr("data-usermodules-moduleid"));
         if (item != null) {
             item.Column.RemoveItem(item);
@@ -166,11 +166,11 @@ dhHelpdesk.UserModules = {
             if (column != null) {
                 column.AddItem(item);
                 $.post("/Home/UpdateUserModulePosition",
-                {
-                    userId: item.UserId,
-                    moduleId: item.ModuleId,
-                    position: item.GetFullNumber()
-                });
+                    {
+                        userId: item.UserId,
+                        moduleId: item.ModuleId,
+                        position: item.GetFullNumber()
+                    });
             }
         }
     });

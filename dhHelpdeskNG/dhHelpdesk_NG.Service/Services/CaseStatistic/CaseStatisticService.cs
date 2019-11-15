@@ -1,4 +1,6 @@
-﻿using DH.Helpdesk.BusinessData.Models.Case;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
+using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Services.Utils;
 
 namespace DH.Helpdesk.Services.Services.CaseStatistic
@@ -18,6 +20,7 @@ namespace DH.Helpdesk.Services.Services.CaseStatistic
     {
         DateTime? CalculateLatestSLACountDate(int? oldSubStateId, int? newSubStateId, DateTime? oldSLADate);
         CaseStatistic GetForCase(int caseId);
+        IList<CaseStatistic> GetForCases(IList<int> casesIds);
         void UpdateCaseStatistic(Case @case);
     }
 
@@ -55,6 +58,16 @@ namespace DH.Helpdesk.Services.Services.CaseStatistic
             using (var uow = this._unitOfWorkFactory.Create())
             {
                 return uow.GetRepository<CaseStatistic>().Find(it => it.CaseId == caseId).FirstOrDefault();
+            }
+        }
+
+        public IList<CaseStatistic> GetForCases(IList<int> casesIds)
+        {
+            if(casesIds == null || !casesIds.Any()) return new List<CaseStatistic>();
+
+            using (var uow = this._unitOfWorkFactory.Create())
+            {
+                return uow.GetRepository<CaseStatistic>().GetAll().AsNoTracking().Where(it => casesIds.Contains(it.CaseId)).ToList();
             }
         }
 
