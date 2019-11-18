@@ -242,10 +242,12 @@
         dhHelpdesk.statistics.init({
             dataUrl: '@Url.Action("GetStatistics", "Home")'
         });
-        dhHelpdesk.statistics.loadStatistics();
+        var statXhr = dhHelpdesk.statistics.loadStatistics();
 
-        $(function() {
-            dhHelpdesk.statistics.tryApplyData();
+        $(function () {
+            statXhr.done(function() {
+                dhHelpdesk.statistics.tryApplyData();
+            });
         });
     </script>
 }
