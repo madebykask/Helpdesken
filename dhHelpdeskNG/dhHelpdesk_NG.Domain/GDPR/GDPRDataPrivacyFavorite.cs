@@ -18,6 +18,7 @@ namespace DH.Helpdesk.Domain.GDPR
         public DateTime? ReplaceDatesWith { get; set; }
         public bool RemoveCaseAttachments { get; set; }
         public bool RemoveLogAttachments { get; set; }
+        public bool RemoveFileViewLogs { get; set; }
 
         public DateTime? CreatedDate { get; set; }
         public int? CreatedByUser_Id { get; set; }

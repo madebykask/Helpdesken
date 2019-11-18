@@ -80,6 +80,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         public DateTime? ReplaceDatesWith { get; set; }
         public bool RemoveCaseAttachments { get; set; }
         public bool RemoveLogAttachments { get; set; }
+        public bool RemoveFileViewLogs { get; set; }
     }
 
     public class GlobalSettingInputViewModel : BaseTabInputViewModel

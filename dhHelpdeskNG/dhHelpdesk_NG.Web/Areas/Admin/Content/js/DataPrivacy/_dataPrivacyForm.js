@@ -1,7 +1,7 @@
 ﻿/// <reference path="../../../../../Content/js/moment.js" />
 
 window.dataPrivacyForm =
-    (function($){
+    (function ($) {
 
         var _self = this;
 
@@ -31,7 +31,7 @@ window.dataPrivacyForm =
         this.favoritesSelect$ = form$.find("#favoritesSelect");
         this.registerDateFrom$ = form$.find("#RegisterDateFrom");
         this.registerDateTo$ = form$.find("#RegisterDateTo");
-        
+
         this.calculateRegistrationDate$ = form$.find("#CalculateRegistrationDate");
         this.retentionPeriod$ = form$.find("#retentionPeriod");
         this.filterFields$ = form$.find("#lstFilterFields");
@@ -40,6 +40,7 @@ window.dataPrivacyForm =
         this.replaceDatesWith$ = form$.find("#ReplaceDatesWith");
         this.removeCaseAttachments$ = form$.find("#RemoveCaseAttachments");
         this.removeLogAttachments$ = form$.find("#RemoveLogAttachments");
+        this.removeFileViewLogs$ = form$.find("#RemoveFileViewLogs");
         this.replaceEmails$ = form$.find("#ReplaceEmails");
 
         //buttons
@@ -48,18 +49,18 @@ window.dataPrivacyForm =
 
         //private functions:
 
-         this.formFieldsState = {
-             btnFavorite: true,
-             privacyRunBtn: true,
-             favoritesSelect: true,
-             customerSelect: true,
-             lstFilterFields: true,
-             CalculateRegistrationDate: false
-         };
+        this.formFieldsState = {
+            btnFavorite: true,
+            privacyRunBtn: true,
+            favoritesSelect: true,
+            customerSelect: true,
+            lstFilterFields: true,
+            CalculateRegistrationDate: false
+        };
 
         this.isBlocked = false;
 
-        this.blockUI = function(block, loaderEl) {
+        this.blockUI = function (block, loaderEl) {
 
             //ignore same action 
             if ((block && this.isBlocked) || (!block && !this.isBlocked))
@@ -105,30 +106,30 @@ window.dataPrivacyForm =
             this.filterFields$.trigger("chosen:updated");
         };
 
-         this.saveControlsState = function() {
-             for (var controlId in this.formFieldsState) {
-                 if (this.formFieldsState.hasOwnProperty(controlId)) {
-                     var ctrl$ = $('#' + controlId);
-                     if (ctrl$.length) {
-                         this.formFieldsState[controlId] = this.isEnabled(ctrl$);
-                     }
-                 }
-             }
-         };
+        this.saveControlsState = function () {
+            for (var controlId in this.formFieldsState) {
+                if (this.formFieldsState.hasOwnProperty(controlId)) {
+                    var ctrl$ = $('#' + controlId);
+                    if (ctrl$.length) {
+                        this.formFieldsState[controlId] = this.isEnabled(ctrl$);
+                    }
+                }
+            }
+        };
 
-         this.restoreControlsState = function() {
-             for (var controlId in this.formFieldsState) {
-                 if (this.formFieldsState.hasOwnProperty(controlId)) {
-                     var ctrl$ = $('#' + controlId);
-                     if (ctrl$.length) {
-                         var prevState = this.formFieldsState[controlId];
-                         this.enableControl(ctrl$, prevState);
-                     }
-                 }
-             }
-         };
+        this.restoreControlsState = function () {
+            for (var controlId in this.formFieldsState) {
+                if (this.formFieldsState.hasOwnProperty(controlId)) {
+                    var ctrl$ = $('#' + controlId);
+                    if (ctrl$.length) {
+                        var prevState = this.formFieldsState[controlId];
+                        this.enableControl(ctrl$, prevState);
+                    }
+                }
+            }
+        };
 
-        this.togglePrivacyRunBtn = function(enable) {
+        this.togglePrivacyRunBtn = function (enable) {
             var wrapper$ = $('#tooltip-button-wrapper');
             if (enable) {
                 wrapper$.tooltip('destroy');
@@ -145,7 +146,7 @@ window.dataPrivacyForm =
             $.getJSON(self.urls.GetRunningDataPrivacyTasksAction, $.param({ favoriteId: favoriteId }), function (res) {
                 var count = +res.count || 0;
                 if (count > 0) {
-                    window.ShowToastMessage( self.translations.favoritesUnlockWarning, 'warning');
+                    window.ShowToastMessage(self.translations.favoritesUnlockWarning, 'warning');
                     return;
                 } else {
                     self.lockFormFields(false);
@@ -157,12 +158,12 @@ window.dataPrivacyForm =
             var self = this;
             self.showLocks(lock, !lock);
 
-            this.form$.find("input, select").each(function(index, el) {
+            this.form$.find("input, select").each(function (index, el) {
                 var id = el.id;
                 if (id !== self.favoritesSelect$[0].id) {
                     var ctl$ = $('#' + id);
                     self.enableControl(ctl$, !lock);
-                }  
+                }
             });
 
             self.refreshChosenControls();
@@ -177,10 +178,10 @@ window.dataPrivacyForm =
             _self.enableControl(_self.btnFavorite$, !lock);
         }
 
-        this.getFilterData = function() {
-            
+        this.getFilterData = function () {
+
             var fields = [];
-            this.filterFields$.find("option:selected").each(function() {
+            this.filterFields$.find("option:selected").each(function () {
                 fields.push($(this).val());
             });
             return {
@@ -196,11 +197,12 @@ window.dataPrivacyForm =
                 replaceDatesWith: $("#ReplaceDatesWith").val(),
                 removeCaseAttachments: $("#RemoveCaseAttachments").prop("checked"),
                 removeLogAttachments: $("#RemoveLogAttachments").prop("checked"),
+                removeFileViewLogs: $("#RemoveFileViewLogs").prop("checked"),
                 replaceEmails: this.replaceEmails$.prop("checked")
             };
         };
 
-        this.setupValidation = function() {
+        this.setupValidation = function () {
             var self = this;
             var caseFieldsDropDown = "lstFilterFields";
 
@@ -208,7 +210,7 @@ window.dataPrivacyForm =
                 ignore: '*:not([name])',
                 //debug: true,
                 rules: self.getRules(),
-                errorPlacement: function(error, element) {
+                errorPlacement: function (error, element) {
                     if (element.is("#RegisterDateFrom") ||
                         element.is("#RegisterDateTo")) {
                         $("#datesErrorLabel").html(error);
@@ -229,15 +231,15 @@ window.dataPrivacyForm =
                         }
                     }
                 },
-                highlight: function(element) {
+                highlight: function (element) {
                     if ($(element).is("select.chosen-select") || $(element).is("select.chosen-single-select")) {
                         $("#" + element.id + "_chosen").removeClass('error success').addClass('error');
                     } else {
                         $(element).removeClass('error success').addClass('error');
                     }
                 },
-                success: function(label) {
-                    var element$ = $('#' +label.attr("for"));
+                success: function (label) {
+                    var element$ = $('#' + label.attr("for"));
                     if (element$.is("select.chosen-select") || element$.is("select.chosen-single-select")) {
                         $("#" + label.attr("for") + "_chosen").removeClass("error");
                     }
@@ -255,9 +257,9 @@ window.dataPrivacyForm =
                     },
                     "RegisterDateTo": {
                         required: self.translations.RegisterDateToRequired
-                     },
-                     "ReplaceDataWith": {
-                         maxlength: self.translations.MaxLength.replace('{0}', '15')
+                    },
+                    "ReplaceDataWith": {
+                        maxlength: self.translations.MaxLength.replace('{0}', '15')
                     }
                 }
             });
@@ -287,7 +289,7 @@ window.dataPrivacyForm =
             //    $(this).valid();
             //});
 
-            this.validateDateRangeControls = function() {
+            this.validateDateRangeControls = function () {
                 _self.registerDateFrom$.valid();
                 _self.registerDateTo$.valid();
             };
@@ -318,53 +320,53 @@ window.dataPrivacyForm =
             return true;
         };
 
-         this.getRules = function () {
-             var self = this;
+        this.getRules = function () {
+            var self = this;
 
-             return {
-                 "SelectedCustomerId": {
-                     required: true
-                 },
-                 "FieldsNames": {
-                     required: true,
-                 },
-                 "RegisterDateFrom": {
-                     required: true,
-                     checkDateRange: function () {
-                         var hasVal = !!self.registerDateTo$.val();
-                         return hasVal;
-                     }
-                 },
-                 "RegisterDateTo": {
-                     required: true,
-                     checkDateRange: function() {
-                         var hasVal = !!self.registerDateFrom$.val();
-                         return hasVal;
-                     },
-                     checkRetentionDate: function () {
+            return {
+                "SelectedCustomerId": {
+                    required: true
+                },
+                "FieldsNames": {
+                    required: true,
+                },
+                "RegisterDateFrom": {
+                    required: true,
+                    checkDateRange: function () {
+                        var hasVal = !!self.registerDateTo$.val();
+                        return hasVal;
+                    }
+                },
+                "RegisterDateTo": {
+                    required: true,
+                    checkDateRange: function () {
+                        var hasVal = !!self.registerDateFrom$.val();
+                        return hasVal;
+                    },
+                    checkRetentionDate: function () {
                         var hasVal = !!self.registerDateTo$.val() && !!self.retentionPeriod$.val();
                         return hasVal;
-                     }
-                 },
-                 "ReplaceDataWith": {
-                     maxlength: 15
-                 }
-             };
-         };
-        
-         this.onRetentionPeriodChanged = function () {
-
-             var text = this.retentionPeriod$.val() || '';
-            if (!text.length) {
-                this.emptyDatePicker(this.registerDateTo$);
-             } 
-
-             this.setRetentionPeriodChangedState();
-             this.updateDateRange();
-             //this.validateDateRangeControls();
+                    }
+                },
+                "ReplaceDataWith": {
+                    maxlength: 15
+                }
+            };
         };
 
-        this.onCalculateRetentionPeriodChanged = function(checked) {
+        this.onRetentionPeriodChanged = function () {
+
+            var text = this.retentionPeriod$.val() || '';
+            if (!text.length) {
+                this.emptyDatePicker(this.registerDateTo$);
+            }
+
+            this.setRetentionPeriodChangedState();
+            this.updateDateRange();
+            //this.validateDateRangeControls();
+        };
+
+        this.onCalculateRetentionPeriodChanged = function (checked) {
             if (!checked) {
                 //empty dateTo to require user to enter a new date.
                 this.emptyDatePicker(this.registerDateTo$);
@@ -401,36 +403,36 @@ window.dataPrivacyForm =
             return dateTo.toDate();
         };
 
-        this.onValidationChanged = function() {
-             if (this.validator$) {
-                 var numberOfInvalids = this.validator$.numberOfInvalids();
-                 this.enableControl(this.btnFavorite$, numberOfInvalids === 0);
-             }
-         };
+        this.onValidationChanged = function () {
+            if (this.validator$) {
+                var numberOfInvalids = this.validator$.numberOfInvalids();
+                this.enableControl(this.btnFavorite$, numberOfInvalids === 0);
+            }
+        };
 
-         this.loadCustomerFields = function(customerId) {
-             var self = this;
-             if (customerId) {
-                 this.blockUI(true, this.loaders.fieldsLoader);
-                 self.filterFields$.empty();
+        this.loadCustomerFields = function (customerId) {
+            var self = this;
+            if (customerId) {
+                this.blockUI(true, this.loaders.fieldsLoader);
+                self.filterFields$.empty();
 
-                 this.execLoadCustomerFieldsRequest(customerId)
-                     .done(function(response) {
-                         self.blockUI(false);
-                         if (response.success) {
-                             self.populateCustomerFields(response.data);
-                         }
-                     })
-                     .fail(function() {
-                         self.blockUI(false);
-                     });
-             } else {
-                 self.filterFields$.empty();
-                 self.refreshChosenControls(self.filterFields$);
-             }
-         };
+                this.execLoadCustomerFieldsRequest(customerId)
+                    .done(function (response) {
+                        self.blockUI(false);
+                        if (response.success) {
+                            self.populateCustomerFields(response.data);
+                        }
+                    })
+                    .fail(function () {
+                        self.blockUI(false);
+                    });
+            } else {
+                self.filterFields$.empty();
+                self.refreshChosenControls(self.filterFields$);
+            }
+        };
 
-        this.execLoadCustomerFieldsRequest = function(customerId) {
+        this.execLoadCustomerFieldsRequest = function (customerId) {
             var jqXhr = $.ajax({
                 url: self.urls.GetCustomerCaseFieldsAction,
                 type: "POST",
@@ -440,7 +442,7 @@ window.dataPrivacyForm =
             return jqXhr;
         };
 
-        this.populateCustomerFields = function(items) {
+        this.populateCustomerFields = function (items) {
             var self = this;
             this.filterFields$.empty();
             $.each(items,
@@ -452,123 +454,124 @@ window.dataPrivacyForm =
         }
 
 
-         this.runDataPrivacy = function() {
-             var self = this;
-             var isValid = this.form$.valid();
-             if (isValid) {
-                 this.confirmationDialog.showConfirmation(
-                     this.translations.dataPrivacyConfirmation,
-                     function () {
-                        self.execDataPrivacyRequest();
-                     },
-                     function() {
-                 });
-             }
-         };
-
-         this.execDataPrivacyRequest = function() {
-             
-             var filter = this.getFilterData();
-
-             var inputData = {
-                 SelectedFavoriteId:filter.selectedFavoriteId, 
-                 SelectedCustomerId: filter.selectedCustomerId,
-                 CalculateRegistrationDate: filter.calculateRegistrationDate,
-                 RegisterDateFrom: filter.registerDateFrom,
-                 RegisterDateTo: filter.registerDateTo,
-                 ClosedOnly: filter.closedOnly,
-                 FieldsNames: filter.fields,
-                 ReplaceDataWith: filter.replaceDataWith,
-                 ReplaceDatesWith: filter.replaceDatesWith,
-                 RemoveCaseAttachments: filter.removeCaseAttachments,
-                 RemoveLogAttachments: filter.removeLogAttachments,
-                 ReplaceEmails: filter.replaceEmails
-             };
-
-             $.ajax({
-                 url: self.urls.DataPrivacyAction,
-                 type: "POST",
-                 data: $.param(inputData), 
-                 dataType: "json"
-             }).done(function(result) {
-                 if (result.success) {
-                     self.startOperationProgress(result.taskId);
-                 } else {
-                     window.ShowToastMessage("Operation has failed.", "error");
-                 }
-             }).always(function () {
-                 //todo: add ajax time out error  handling
-             });
-         };
-
-         this.startOperationProgress = function (operationId) {
+        this.runDataPrivacy = function () {
             var self = this;
-            
+            var isValid = this.form$.valid();
+            if (isValid) {
+                this.confirmationDialog.showConfirmation(
+                    this.translations.dataPrivacyConfirmation,
+                    function () {
+                        self.execDataPrivacyRequest();
+                    },
+                    function () {
+                    });
+            }
+        };
+
+        this.execDataPrivacyRequest = function () {
+
+            var filter = this.getFilterData();
+
+            var inputData = {
+                SelectedFavoriteId: filter.selectedFavoriteId,
+                SelectedCustomerId: filter.selectedCustomerId,
+                CalculateRegistrationDate: filter.calculateRegistrationDate,
+                RegisterDateFrom: filter.registerDateFrom,
+                RegisterDateTo: filter.registerDateTo,
+                ClosedOnly: filter.closedOnly,
+                FieldsNames: filter.fields,
+                ReplaceDataWith: filter.replaceDataWith,
+                ReplaceDatesWith: filter.replaceDatesWith,
+                RemoveCaseAttachments: filter.removeCaseAttachments,
+                RemoveLogAttachments: filter.removeLogAttachments,
+                RemoveFileViewLogs: filter.removeFileViewLogs,
+                ReplaceEmails: filter.replaceEmails
+            };
+
+            $.ajax({
+                url: self.urls.DataPrivacyAction,
+                type: "POST",
+                data: $.param(inputData),
+                dataType: "json"
+            }).done(function (result) {
+                if (result.success) {
+                    self.startOperationProgress(result.taskId);
+                } else {
+                    window.ShowToastMessage("Operation has failed.", "error");
+                }
+            }).always(function () {
+                //todo: add ajax time out error  handling
+            });
+        };
+
+        this.startOperationProgress = function (operationId) {
+            var self = this;
+
             if (self.pollingRequest) {
                 self.pollingRequest.abort();
                 self.pollingRequest = null;
             }
             console.log(">>> start operation polling. Id = " + operationId);
             self.progressIntervalId =
-                setInterval(function() {
-                     self.pollTaskProgress(operationId);
+                setInterval(function () {
+                    self.pollTaskProgress(operationId);
                 }, 1000);
 
-             self.enableControl(self.privacyRunBtn$, false);
-             self.showGlobalProgress(true);
-         };
+            self.enableControl(self.privacyRunBtn$, false);
+            self.showGlobalProgress(true);
+        };
 
-         this.stopTaskProgress = function() {
+        this.stopTaskProgress = function () {
             var self = this;
             console.log(">>> stop operation polling.");
             self.enableControl(self.privacyRunBtn$, true);
             self.showGlobalProgress(false);
             clearInterval(self.progressIntervalId);
         };
-        
-         this.pollTaskProgress = function (taskId) {
-             var self = _self;
-             if (self.pollingRequest)
-                 return;
+
+        this.pollTaskProgress = function (taskId) {
+            var self = _self;
+            if (self.pollingRequest)
+                return;
 
             console.log("pollOperationProgress: " + taskId);
-            
+
             this.pollingRequest =
                 $.getJSON(self.urls.GetTaskProgressAction, $.param({ id: taskId })).done(function (res) {
-                //console.log(">>> Task poll result. Complete: " + (res.isComplete ? 'true' : 'false'));
-                if (res.isComplete) {
-                    self.stopTaskProgress();
-                    if (res.Success) {
-                        window.ShowToastMessage(self.translations.operationSuccessMessage, "success");
+                    //console.log(">>> Task poll result. Complete: " + (res.isComplete ? 'true' : 'false'));
+                    if (res.isComplete) {
+                        self.stopTaskProgress();
+                        if (res.Success) {
+                            window.ShowToastMessage(self.translations.operationSuccessMessage, "success");
+                        } else {
+                            var err = res.Error || '';
+                            window.ShowToastMessage('Operation has failed. ' + err, "error");
+                        }
                     } else {
-                        var err = res.Error || '';
-                        window.ShowToastMessage('Operation has failed. ' + err, "error");
+                        var progress = res.Progress || 0;
+                        $("#taskProgress").text(progress);
                     }
-                } else {
-                    var progress = res.Progress || 0;
-                    $("#taskProgress").text(progress);
-                }
-            }).always(function() {
-                self.pollingRequest = null;
-            });
-         };
+                }).always(function () {
+                    self.pollingRequest = null;
+                });
+        };
 
-         this.showGlobalProgress = function (show) {
-             var self = this;
-             var progressDiv$ = $("#operationProgress");
+        this.showGlobalProgress = function (show) {
+            var self = this;
+            var progressDiv$ = $("#operationProgress");
 
-             if (show) {
-                 self.blockUI(true, this.loaders.inProcessLoader);
-                 progressDiv$.show();
-             } else {
-                 progressDiv$.hide();
-                 self.blockUI(false);
-             }
-         };
+            if (show) {
+                self.blockUI(true, this.loaders.inProcessLoader);
+                progressDiv$.show();
+            } else {
+                progressDiv$.hide();
+                self.blockUI(false);
+            }
+        };
 
-         this.onFavoritesChanged = function (favoriteId) {
-             if (favoriteId > 0) {
-                 this.loadFavoriteFields(favoriteId);
+        this.onFavoritesChanged = function (favoriteId) {
+            if (favoriteId > 0) {
+                this.loadFavoriteFields(favoriteId);
             } else {
                 //reset validation errors if New is selected
                 this.resetFormFields();
@@ -580,7 +583,7 @@ window.dataPrivacyForm =
         this.loadFavoriteFields = function (favId) {
             var self = this;
             this.blockUI(true, this.loaders.favoritesLoader);
-            
+
             $.getJSON(this.urls.LoadFavoriteDataAction, $.param({ id: favId }))
                 .done(function (res) {
                     self.blockUI(false);
@@ -595,12 +598,12 @@ window.dataPrivacyForm =
                                 }
                             });
                     }
-                }).fail(function() {
+                }).fail(function () {
                     self.blockUI(false);
                 });
         };
-        
-        this.saveFavorites = function() {
+
+        this.saveFavorites = function () {
             var isValid = this.form$.valid();
             if (isValid) {
                 var favId = _self.getSelectedFavoriteId();
@@ -613,19 +616,20 @@ window.dataPrivacyForm =
             var self = this;
             self.customerSelect$.val(null);
             self.filterFields$.empty();
-            
+
             self.enableControl(this.registerDateTo$, true);
             self.enableControl(this.calculateRegistrationDate$);
 
             self.setDatepickerDate(registerDateFrom$, null);
             self.setDatepickerDate(registerDateTo$, null);
-            
+
             self.retentionPeriod$.val('');
             self.calculateRegistrationDate$.prop('checked', false);
             self.replaceDataWith$.val('');
             self.setDatepickerDate(self.replaceDatesWith$, null);
             self.removeCaseAttachments$.prop('checked', false);
             self.removeLogAttachments$.prop('checked', false);
+            self.removeFileViewLogs$.prop('checked', false);
             self.replaceEmails$.prop('checked', true);
             self.closedOnly$.prop('checked', false);
 
@@ -675,14 +679,14 @@ window.dataPrivacyForm =
         this.calcDateRangeLimits = function () {
             var self = this;
             var dateTo$ = moment(this.getSelectedDate(self.registerDateTo$));
-            
+
             //calc max date for dateTo
             var dateToMax = this.calculateValidRetentionPeriodEndDate();
-            
+
             var isCalcChecked = self.calculateRegistrationDate$.is(':checked');
 
             //calc max date for dateFrom: should be less then dateFrom;
-            var dateFromMax = dateTo$.isValid() && dateTo$.isSameOrBefore(dateToMax, 'days') && !isCalcChecked 
+            var dateFromMax = dateTo$.isValid() && dateTo$.isSameOrBefore(dateToMax, 'days') && !isCalcChecked
                 ? dateTo$.toDate()
                 : dateToMax;
 
@@ -692,7 +696,7 @@ window.dataPrivacyForm =
             };
         };
 
-        this.populateFormFields = function(data) {
+        this.populateFormFields = function (data) {
             var self = this;
             var customerId = data.CustomerId;
 
@@ -710,7 +714,7 @@ window.dataPrivacyForm =
             if (data.CalculateRegistrationDate) {
                 self.enableControl(self.registerDateTo$, false);
             }
-            
+
             // update date range to correct values
             self.updateDateRange();
 
@@ -719,6 +723,7 @@ window.dataPrivacyForm =
             self.setDatepickerDate(self.replaceDatesWith$, data.ReplaceDatesWith);
             self.removeCaseAttachments$.prop('checked', data.RemoveCaseAttachments);
             self.removeLogAttachments$.prop('checked', data.RemoveLogAttachments);
+            self.removeFileViewLogs$.prop('checked', data.RemoveFileViewLogs);
             self.replaceEmails$.prop('checked', data.ReplaceEmails);
 
             var defer = $.Deferred();
@@ -742,8 +747,8 @@ window.dataPrivacyForm =
 
             return defer;
         };
-        
-        this.deleteFavorite = function(favId) {
+
+        this.deleteFavorite = function (favId) {
             var self = this;
             if (favId) {
                 self.blockUI(true, self.loaders.saveFavoritesLoader);
@@ -751,7 +756,7 @@ window.dataPrivacyForm =
                 $.ajax({
                     url: self.urls.DeleteFavoriteAction,
                     type: "POST",
-                    data: $.param({ id: favId}),
+                    data: $.param({ id: favId }),
                     dataType: "json"
                 }).done(function (res) {
                     self.blockUI(false);
@@ -761,13 +766,13 @@ window.dataPrivacyForm =
                     } else {
                         window.ShowToastMessage('Operation has failed.', "error");
                     }
-                }).fail(function(res) {
+                }).fail(function (res) {
                     self.blockUI(false);
                 });
             }
         }
 
-        this.addUpdateFavorites = function(name) {
+        this.addUpdateFavorites = function (name) {
             var self = this;
 
             if (this.form$.valid()) {
@@ -789,6 +794,7 @@ window.dataPrivacyForm =
                     ReplaceDatesWith: filter.replaceDatesWith,
                     RemoveCaseAttachments: filter.removeCaseAttachments,
                     RemoveLogAttachments: filter.removeLogAttachments,
+                    RemoveFileViewLogs: filter.removeFileViewLogs,
                     ReplaceEmails: filter.replaceEmails
                 };
 
@@ -804,7 +810,7 @@ window.dataPrivacyForm =
                 }).done(function (res) {
                     self.blockUI(false);
                     if (res.Success) {
-                        window.ShowToastMessage(self.translations.operationSuccessMessage, "success"); 
+                        window.ShowToastMessage(self.translations.operationSuccessMessage, "success");
                         if (res.FavoriteId) {
                             self.populateFavorites(res.FavoriteId, res.Favorites, isNew);
                             // lock form if favorite is selected
@@ -814,17 +820,17 @@ window.dataPrivacyForm =
                         var err = res.Error || 'Unknown error';
                         window.ShowToastMessage(err, "error");
                     }
-                }).fail(function() {
+                }).fail(function () {
                     self.blockUI(false);
                 });
             }
         };
 
-        this.populateFavorites = function(selectedId, items, triggerChange) {
+        this.populateFavorites = function (selectedId, items, triggerChange) {
             var self = this;
 
             //build options
-            var options = items.map(function(item) {
+            var options = items.map(function (item) {
                 return '<option value="' + item.value + '">' + item.text + '</option>';
             });
 
@@ -839,8 +845,8 @@ window.dataPrivacyForm =
             }
         };
 
-        this.showSaveFavoritesDlg = function(saveNew) {
-            
+        this.showSaveFavoritesDlg = function (saveNew) {
+
             var nameField$ = $("#fm_name");
 
             $("#fm_header_new").toggle(saveNew);
@@ -893,7 +899,7 @@ window.dataPrivacyForm =
             var date = ctrl.parent().datepicker('getDate');
             return date;
         }
-        
+
         this.setDatepickerDate = function (ctrl, date, raiseEvent) {
             var cmd = raiseEvent ? 'setDate' : 'update';
             //console.log('>>>setDatepickerDate. Date: ' + date + ', Cmd: ' + cmd);
@@ -923,7 +929,7 @@ window.dataPrivacyForm =
             }
         };
 
-        this.showControl = function(el, show) {
+        this.showControl = function (el, show) {
             if (show)
                 el.show();
             else
@@ -950,7 +956,7 @@ window.dataPrivacyForm =
                     _self.onFavoritesChanged(favoriteId);
                 });
 
-                _self.customerSelect$.on('change', function() {
+                _self.customerSelect$.on('change', function () {
                     var customerId = $(this).val();
                     _self.loadCustomerFields(customerId);
                 });
@@ -974,14 +980,14 @@ window.dataPrivacyForm =
                     _self.runDataPrivacy();
                 });
 
-                _self.retentionPeriod$.on('input', function(e) {
+                _self.retentionPeriod$.on('input', function (e) {
                     _self.onRetentionPeriodChanged();
                 });
 
                 _self.calculateRegistrationDate$.on('change', function (e) {
                     _self.onCalculateRetentionPeriodChanged(this.checked);
                 });
-                
+
                 //dateFrom change event
                 _self.registerDateFrom$.parent().datepicker().on('changeDate', function (selected) {
                     console.log('>>> registerDateFrom$: change event');
@@ -996,17 +1002,17 @@ window.dataPrivacyForm =
 
                 //////////////////////////////////////////
                 //save dlg
-                $('#btnSaveFav').on("click", function() {
+                $('#btnSaveFav').on("click", function () {
                     var name = $("#fm_name").val();
                     _self.addUpdateFavorites(name);
                 });
 
-                $('#btnDeleteFav').on("click", function() {
+                $('#btnDeleteFav').on("click", function () {
                     var favoriteId = _self.getSelectedFavoriteId();
                     _self.deleteFavorite(favoriteId);
                 });
-                
-                $("#fm_name").on("input", function() {
+
+                $("#fm_name").on("input", function () {
                     var val = $(this).val() || '';
                     $('#btnSaveFav').prop('disabled', val === '');
                 });
@@ -1018,4 +1024,3 @@ window.dataPrivacyForm =
         };
     })(jQuery);
 
- 

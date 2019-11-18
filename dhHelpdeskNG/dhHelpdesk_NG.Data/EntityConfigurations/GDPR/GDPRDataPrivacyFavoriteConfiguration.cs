@@ -22,7 +22,8 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.GDPR
 
             this.Property(x => x.ReplaceDatesWith).IsOptional();
             this.Property(x => x.RemoveCaseAttachments).IsRequired();
-            this.Property(x => x.RemoveCaseAttachments).IsRequired();
+            this.Property(x => x.RemoveLogAttachments).IsRequired();
+            this.Property(x => x.RemoveFileViewLogs).IsRequired();
             this.Property(x => x.ReplaceEmails).IsRequired();
 
             this.Property(x => x.CreatedDate).IsOptional();

@@ -22,6 +22,7 @@ using DH.Helpdesk.Domain.GDPR;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services;
 using log4net;
+using File = DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields.File;
 using IUnitOfWork = DH.Helpdesk.Dal.NewInfrastructure.IUnitOfWork;
 
 namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
@@ -579,6 +580,12 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                     //delete from db
                     logFiles.DeleteRange(logFilesEnitites);
                 }
+            }
+
+            if (parameters.RemoveFileViewLogs)
+            {
+                var fileAccessLog = uow.GetRepository<FileViewLogEntity>();
+                fileAccessLog.DeleteWhere(f => f.Case_Id == c.Id);
             }
         }
 
