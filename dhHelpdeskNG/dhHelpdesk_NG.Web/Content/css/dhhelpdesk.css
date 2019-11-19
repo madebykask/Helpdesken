@@ -4160,6 +4160,14 @@ div.chosen-container.chosen-container-single.error .chosen-single {
     font-weight: bolder;
 }
 
+#statisticsData table tr td {
+    width: 25%
+}
+
+#statisticsData table tr:nth-child(2) td{
+    padding-bottom: 19px;
+}
+
 #statisticsData table tr:nth-child(odd) td {
     text-align: center;
     font-size: smaller;
