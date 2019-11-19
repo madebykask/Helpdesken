@@ -1375,15 +1375,7 @@ namespace DH.Helpdesk.Services.Services
 
         private int? GetDefaultNumberOfRows(Module module)
         {
-            switch (module)
-            {
-                case Module.QuickLinks:
-                    return null;
-                case Module.CaseQuickOpen:
-                    return null;
-            }
-
-            return 3;
+            return null; // null =  All on UI
         }
 
         private bool GetDefaultVisibility(Module module)
