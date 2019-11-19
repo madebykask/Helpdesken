@@ -89,7 +89,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             var caseTypes = _caseTypeService.GetAllCaseTypes(customerId, false, true);
             TranslateCaseTypes(caseTypes, 0);
             var caseTypesFullNames = _caseTypeService.GetChildrenInRow(caseTypes.OrderBy(p => p.Name).ToList()).ToList();
-            var total = result.Count;
+            var total = wgs.Count();
 			var responce = new 
             {
                 totalLabel = string.Format("{0}: {1}", Translation.GetCoreTextTranslation("Summa"), total),
