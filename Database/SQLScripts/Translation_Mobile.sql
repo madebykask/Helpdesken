@@ -564,8 +564,5 @@ begin
 end
 
 
-
---Filinnehåll
-
 GO
 
