@@ -135,7 +135,7 @@
                         <td class="span3">@Translation.GetCoreTextTranslation("Bifogad fil")</td>
                         <td class="span4">
                             <div>
-                                @Html.CheckBoxFor(m => Model.CaseSearchFilterData.caseSearchFilter.SearchThruFiles, new { id = "chkSearchThruFiles", @class = "switchcheckbox" })
+                                @Html.CheckBoxFor(m => Model.CaseSearchFilterData.caseSearchFilter.SearchThruFiles, new { id = "chkSearchThruFiles", @class = "switchcheckbox", disabled="true" })
                             </div>
                         </td>
                     </tr>
