@@ -228,33 +228,33 @@
                 },
                 messages: {
                     'BulletinBoard.ShowDate': {
-                        required: '@( $"{Translation.GetForJS("Du måste ange")} {Translation.GetForJS("Visa fr.o.m")}" )',
+                        required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Visa fr.o.m") ))',
                         date: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")'
                     },
                     'BulletinBoard.ShowUntilDate': {
-                        required: '@( $"{Translation.GetForJS("Du måste ange")} {Translation.GetForJS("Visa t.o.m")}" )',
+                        required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Visa t.o.m") ))',
                         date: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")'
                     },
                     "BulletinBoard.Text": {
-                        required: '@( $"{Translation.GetForJS("Du måste ange")} {Translation.GetForJS("Anslagstavla")}" )'
+                        required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Anslagstavla") ))'
                     },
                     "WGsSelected": {
-                        required: '@( $"{Translation.GetForJS("Du måste ange")} {Translation.GetForJS("Driftgrupp")}" )'
+                        required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Driftgrupp") ))'
                     }
-                },
+    },
                 errorPlacement: function (error, element) {
-                    if (element.is("textarea")) {
-                        element.parent().prepend(error);
-                    } else if (element.parent().hasClass('date')) {
-                        element.parent().append(error);
-                    } else {
-                        error.insertAfter(element);
-                    }
-                },
+        if (element.is("textarea")) {
+            element.parent().prepend(error);
+        } else if (element.parent().hasClass('date')) {
+            element.parent().append(error);
+        } else {
+            error.insertAfter(element);
+        }
+    },
                 submitHandler: function (form) {
-                    form.submit();
-                }
-            });
+        form.submit();
+    }
+});
             validator.focusInvalid = function() {
                 // put focus on tinymce on submit validation
                 if (this.settings.focusInvalid) {
