@@ -16,6 +16,10 @@ BEGIN
     ADD RemoveFileViewLogs bit not null default 1 
 END
 
+RAISERROR ('Increasing length of tblCaseHistory.ClosingReason', 10, 1) WITH NOWAIT
+ALTER TABLE tblCaseHistory
+ALTER COLUMN ClosingReason NVARCHAR(300) NULL
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.45'
 GO
