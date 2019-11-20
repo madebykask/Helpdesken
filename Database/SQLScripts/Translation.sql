@@ -7627,7 +7627,13 @@ begin
 end
 GO
 
+If not exists (select * from tbltext where id = 2048)
+begin
+	insert into tbltext (id, TextString) VALUES (2048, 'Filinnehåll')
 
+	If not exists (select * from tblTextTranslation where text_id = 2048 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2048, 2, 'File content')
+end
 
 
 
@@ -7638,6 +7644,9 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 20000 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(20000, 2, 'Start of customer generated ID:s (ignore)')
 GO
+
+
+
 
 
 GO
