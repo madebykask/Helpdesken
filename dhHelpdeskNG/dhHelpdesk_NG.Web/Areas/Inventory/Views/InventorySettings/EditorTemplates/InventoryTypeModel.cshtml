@@ -9,7 +9,7 @@
                     <td>@Translation.Get("Inventarietyp")
                     </td>
                     <td>
-                        @Html.EditorFor(x => x.Name)
+                        @Html.EditorFor(x => x.Name, new { maxlength = 50 })
                     </td>
                 </tr>
             </table>

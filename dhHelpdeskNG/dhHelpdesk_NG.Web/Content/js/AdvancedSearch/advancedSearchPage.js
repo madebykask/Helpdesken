@@ -112,6 +112,8 @@ window.advancedSearchPage =
             
             self.setSpecificConditionTab(false);
 
+            self.setSearchThruFileState();
+
             if (params.isExtSearch) {
                 self.onExtSearchLoading();
             }
