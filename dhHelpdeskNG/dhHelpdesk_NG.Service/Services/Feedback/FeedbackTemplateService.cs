@@ -100,9 +100,9 @@ namespace DH.Helpdesk.Services.Services.Feedback
             var casesIds = _circularService.GetAllCircularCasesIds(dbCircular.Id);
             casesIds.Add(caseId);
             var circular = new CircularForUpdate(dbCircular.Id, dbCircular.CircularName, DateTime.Now, casesIds, dbCircular.CaseFilter);
-            _circularService.UpdateCircular(circular);//also in this method Participant is created.
+            _circularService.UpdateCircular(circular); //also in this method Participant is created.
 
-            var participant = _circularService.GetNotAnsweredParticipants(dbCircular.Id).SingleOrDefault(p => p.CaseId == caseId);//should be only 1 part. for feedback
+            var participant = _circularService.GetNotAnsweredParticipant(dbCircular.Id, caseId);//should be only 1 part. for feedback
 
             if (participant != null)
             {

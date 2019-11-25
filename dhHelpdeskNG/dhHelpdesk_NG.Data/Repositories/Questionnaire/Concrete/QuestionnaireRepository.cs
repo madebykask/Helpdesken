@@ -128,7 +128,7 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
 
 	    public List<QuestionnaireEntity> GetFeedbackFullItems(int customerId, IEnumerable<string> identifiers = null)
 	    {
-		    var query = DbContext.Questionnaires
+		    var query = DbContext.Questionnaires.AsNoTracking()
 			    .Where(q => q.Customer_Id == customerId && q.Type == QuestionnaireType.Feedback)
 			    .Include(q => q.QuestionnaireQuestionEntities)
 			    .Include(q => q.QuestionnaireQuestionEntities.Select(qe => qe.QuestionnaireQuesLangEntities))

@@ -599,7 +599,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public ActionResult EditCircular(CircularModel newCircular, int[] connectedCases, int? backStatusId)
         {
-            var cases = connectedCases == null || connectedCases.Count() == 0
+            var cases = connectedCases == null || !connectedCases.Any()
                             ? new List<int>()
                             : connectedCases.ToList();
 

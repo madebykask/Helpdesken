@@ -57,6 +57,7 @@ namespace DH.Helpdesk.Services.Services
         int SaveAnswers(ParticipantForInsert businessModel);
 
 	    List<BusinessLogic.MapperData.Participant> GetNotAnsweredParticipants(int circularId);
+        BusinessLogic.MapperData.Participant GetNotAnsweredParticipant(int circularId, int caseId);
 
         void SetStatus(int circularId, CircularStates circularState);
         void UpdateParticipantSendDate(Guid participantGuid, DateTime operationDate);
