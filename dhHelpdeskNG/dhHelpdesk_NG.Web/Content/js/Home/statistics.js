@@ -4,7 +4,6 @@
 
     this.loadedData = null;
     this.isLoading = true;
-    this.loader$ = null;
     this.statisticsData$ = null;
     this.retries = 10;
     this.notAvailableString = '-';
@@ -25,28 +24,15 @@
         $('#st_solvedInTime').text(this.loadedData.SolvedInTimeToday);
     }
 
-    this.toggleLoader = function(state) {
-        state = typeof state === 'undefined' ? true : state;
-        if (state) {
-            this.loader$.show();
-            this.statisticsData$.hide();
-        } else {
-            this.loader$.hide();
-            this.statisticsData$.show();
-        }
-    };
-
     this.stopLoading = function () {
         _self.loadedData = null;
         _self.applyData();
-        _self.toggleLoader(false);
     }
 
     return {
         init: function(options) {
             _self.options = options;
-            _self.loader$ = $('#statisticsLoader');
-            _self.statisticsData$ = $('#statisticsData'); 
+            _self.statisticsData$ = $('#statisticsData');
         },
 
         loadStatistics: function() {
