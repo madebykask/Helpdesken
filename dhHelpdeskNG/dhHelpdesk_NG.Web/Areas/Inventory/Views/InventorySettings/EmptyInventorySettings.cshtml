@@ -25,7 +25,7 @@
     </ul>
     <div class="tab-content">
         <div class="tab-pane tab-pane-border active" id="fragment-1">
-            @Html.EditorFor(m => m.InventoryTypeModel)
+            @Html.EditorFor(m => m.InventoryTypeModel, new { htmlAttributes = new { maxlength = 50 } })
             @Html.EditorFor(m => m.InventoryFieldSettingsViewModel, "Settings/InventorySettings")
         </div>
     </div>
