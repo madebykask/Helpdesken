@@ -626,9 +626,9 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
             {
-                var circular = new CircularForUpdate(newCircular.Id, newCircular.CircularName, DateTime.Now, cases, caseFilter, extraEmails);
+                var circular = new CircularForUpdate(newCircular.Id, newCircular.CircularName, DateTime.Now, caseFilter, extraEmails);
                 circular.MailTemplateId = newCircular.MailTemplateId;
-                this._circularService.UpdateCircular(circular);
+                this._circularService.UpdateCircular(circular, cases);
                 circularId = circular.Id;
             }
 

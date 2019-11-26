@@ -16,7 +16,7 @@ namespace DH.Helpdesk.Services.Services
 
         int AddCircular(CircularForInsert businessModel);
 
-        void UpdateCircular(CircularForUpdate businessModel);
+        void UpdateCircular(CircularForUpdate businessModel, List<int> caseIds = null);
 
         CircularForEdit GetById(int id);
 
@@ -64,5 +64,8 @@ namespace DH.Helpdesk.Services.Services
         int GetCircularIdByQuestionnaireId(int questionaireId);
         void SaveFeedbackNote(int questionId, string noteText);
         List<string> GetCircularExtraEmails(int circularId);
-    }
+
+		void AddCaseToCircular(int circularID, int caseID);
+
+	}
 }
