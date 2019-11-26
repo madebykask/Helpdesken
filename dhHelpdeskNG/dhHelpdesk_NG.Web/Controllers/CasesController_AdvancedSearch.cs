@@ -185,7 +185,7 @@ namespace DH.Helpdesk.Web.Controllers
                             searchCustomerId,
                             currentCustomerId,
                             currentUser,
-                            extendedCustomers);
+                            extendedCustomers).Data;
 
                     res.Add(new Tuple<List<Dictionary<string, object>>, GridSettingsModel>(sr, gridSettings));
                 }
@@ -203,7 +203,7 @@ namespace DH.Helpdesk.Web.Controllers
                         gridSettings, 
                         searchCustomerId,
                         currentCustomerId,
-                        SessionFacade.CurrentUser);
+                        SessionFacade.CurrentUser).Data;
 
                 res.Add(new Tuple<List<Dictionary<string, object>>, GridSettingsModel>(sr, gridSettings));
             }

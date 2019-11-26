@@ -75,17 +75,17 @@ namespace DH.Helpdesk.Web.Controllers
 
             var extendedCustomers = _settingService.GetExtendedSearchIncludedCustomers();
 
-			List<Dictionary<string, object>> sr;
+            AdvancedSearchDataModel searchDataModel;
 			var fileIndexingFailed = false;
 			try
 			{
-				sr = _advancedSearchBehavior.RunAdvancedSearchForCustomer(searchFilter,
+				searchDataModel = _advancedSearchBehavior.RunAdvancedSearchForCustomer(searchFilter,
 					gridSettings,
 					customerId,
 					customerId,
 					SessionFacade.CurrentUser,
 					extendedCustomers);
-			}
+            }
 			catch (FileIndexingException ex)
 			{
 				var customer = _customerService.GetCustomer(customerId);
@@ -102,7 +102,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             var data = new
             {
-                searchResults = sr, 
+                searchResults = searchDataModel.Data, 
+                count = searchDataModel.CasesCount,
                 gridSettings = jsonGridSettings
             };
 

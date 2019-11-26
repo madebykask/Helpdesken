@@ -475,7 +475,8 @@ window.advancedSearchPage =
                 self.showCustomerSearchResults(customer.customerId, markup);
                 
                 var itemsCount = responseData.searchResults.length || 0;
-                self.showCustomerSearchResultsCount(customerId, itemsCount);
+                var totalCount = responseData.count || 0;
+                self.showCustomerSearchResultsCount(customerId, itemsCount, totalCount);
 
                 if (responseData.searchResults.length === 0) {
                     self.showMsg(NODATA_MSG_TYPE, customerId);
@@ -484,7 +485,7 @@ window.advancedSearchPage =
                     $('#customerTable' + customerId).find('th.thpointer.sr' + customerId).click(function(e) {
                         self.sortByField(customerId, $(this).attr('fieldname'), $(this));
                     });
-                    self.totalItemsCount += responseData.searchResults.length;
+                    self.totalItemsCount += responseData.count;
                 }
             } else {
                 self.showMsg(ERROR_MSG_TYPE, customerId);
@@ -720,9 +721,9 @@ window.advancedSearchPage =
             $('#customerTable' + customerId).html(content);
         }
 
-        this.showCustomerSearchResultsCount = function (customerId, itemsCount) {
+        this.showCustomerSearchResultsCount = function (customerId, itemsCount, totalCount) {
             var $itemsCount = $('#customer_sr_' + customerId).find('.itemsCount');
-            $itemsCount.html('(' + itemsCount.toString() + ')');
+            $itemsCount.html('(' + itemsCount.toString() + ' / ' + totalCount.toString() +')');
         }
 
         this.showMsg = function(msgType, customerId) {

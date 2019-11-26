@@ -48,7 +48,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
             _productAreaService = productAreaService;
         }
        
-        public List<Dictionary<string, object>> RunAdvancedSearchForCustomer(
+        public AdvancedSearchDataModel RunAdvancedSearchForCustomer(
             CaseSearchFilter f,
             GridSettingsModel gridSettings,
             int searchCustomerId,
@@ -109,7 +109,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
             }
 
             //RUN normal customers search
-            m.cases =
+            m.cases = 
                 _caseSearchService.Search(
                     f,
                     m.caseSettings,
@@ -126,6 +126,29 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
                     ApplicationTypes.Helpdesk
                 ).Items.Take(maxRecords).ToList();
 
+            CaseRemainingTimeData remainingTimeData;
+            CaseAggregateData aggregateData;
+            var casesCount = _caseSearchService.Search(
+                    f,
+                    m.caseSettings,
+                    caseFieldSettings,
+                    currentUser.Id,
+                    currentUser.UserId,
+                    currentUser.ShowNotAssignedWorkingGroups,
+                    currentUser.UserGroupId,
+                    customerUserSettings.RestrictedCasePermission,
+                    sm.Search,
+                    0,
+                    0,
+                    userTimeZone,
+                    ApplicationTypes.Helpdesk,
+                    false,
+                    out remainingTimeData,
+                    out aggregateData,
+                    null,
+                    null,
+                    null,
+                    true).Count;
 
             m.cases = CommonHelper.TreeTranslate(m.cases, currentCustomerId, _productAreaService);
             sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
@@ -265,7 +288,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
                 data.Add(jsRow);
             }
 
-            return data;
+            return new AdvancedSearchDataModel
+            {
+                Data = data,
+                CasesCount = casesCount
+            };
         }
 
         public CaseSearchFilter MapToCaseSearchFilter(AdvancedCaseSearchInput input)
@@ -541,5 +568,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
 
             return ret;
         }
+    }
+
+    public class AdvancedSearchDataModel
+    {
+        public List<Dictionary<string, object>> Data { get; set; }
+        public int CasesCount { get; set; }
     }
 }
