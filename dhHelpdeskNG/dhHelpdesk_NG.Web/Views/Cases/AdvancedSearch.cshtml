@@ -27,7 +27,25 @@
                 <div class="tab-content">
                     <div class="tab-pane tab-pane-border active" id="fragment-1">
                         @Html.Partial("AdvancedSearch/_SearchOverview", Model)
-                        <input type="submit" class="submit btn" value="@Translation.GetCoreTextTranslation("Sök")" id="btnSearch" />
+                        <div class="container">
+                            <div class="row">
+                                <div class="span6">
+                                    @if (Model.CaseSearchFilterData.filterMaxRows != null)
+                                    {
+                                        @Translation.GetCoreTextTranslation("Visa")
+                                        <select id="lstfilterMaxRows" name="lstfilterMaxRows" style="width: 70px" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")">
+                                            @foreach (var r in Model.CaseSearchFilterData.filterMaxRows)
+                                            {
+                                                var curId = int.Parse(r.Value);
+                                                <option value="@r.Value" @curId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.MaxRows)> @r.Name </option>
+                                            }
+                                        </select>
+                                        @Translation.GetCoreTextTranslation("poster i sökresultat/Kund")
+                                    }
+                                    <input type="submit" class="submit btn" value="@Translation.GetCoreTextTranslation("Sök")" id="btnSearch"/>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="tab-content">

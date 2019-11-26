@@ -79,22 +79,6 @@
                         </td>
                     </tr>
 
-                    @if (Model.CaseSearchFilterData.filterMaxRows != null)
-                    {
-                        <tr>
-                            <td>@Translation.GetCoreTextTranslation("Visa")</td>
-                            <td>
-                                <select id="lstfilterMaxRows" name="lstfilterMaxRows" style="width:70px" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")">
-                                    @foreach (var r in Model.CaseSearchFilterData.filterMaxRows)
-                                    {
-                                        var curId = int.Parse(r.Value);
-                                        <option value="@r.Value" @curId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.MaxRows)> @r.Name </option>
-                                    }
-                                </select>
-                                @Translation.GetCoreTextTranslation("poster i sökresultat/Kund")
-                            </td>
-                        </tr>
-                    }
                     <tr>
                         <td>@Translation.GetCoreTextTranslation("Utökad sökning")</td>
                         <td><input type="checkbox" name="@CaseFilterFields.IsExtendedSearch" id="@CaseFilterFields.IsExtendedSearch" value="true" /></td>
