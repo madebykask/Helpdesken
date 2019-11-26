@@ -22,29 +22,31 @@
                         <div class="span12">
                         <table class="tableform">
                         @{ var mailTemplatesHasSendMethod = new[]
-                           {
+                                 {
                                GlobalEnums.MailTemplates.NewCase,
                                GlobalEnums.MailTemplates.ClosedCase,
                                GlobalEnums.MailTemplates.InformNotifier,
                                GlobalEnums.MailTemplates.InternalLogNote,
                                GlobalEnums.MailTemplates.ReminderTo
-                           }; }
-                        @if (mailTemplatesHasSendMethod.Contains((GlobalEnums.MailTemplates)Model.MailTemplateLanguage.MailTemplate.MailID))
-                        {
-                            <tr>
-                                <td class="span3">
-                                    @Translation.GetCoreTextTranslation("Skicka metod")
-                                </td>
-                                <td>
+                           };
+                         }
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Skicka metod")
+                            </td>
+                            <td>
+                                @if (mailTemplatesHasSendMethod.Contains((GlobalEnums.MailTemplates) Model.MailTemplateLanguage.MailTemplate.MailID))
+                                {
                                     @Html.DropDownListFor(model => model.MailTemplateLanguage.MailTemplate.SendMethod, Model.SendMethods,
-                                        new {id = "sendMethod"})
-                                </td>
-                            </tr>
-                        }
-                        else
-                        {
-                            @Html.HiddenFor(model => model.MailTemplateLanguage.MailTemplate.SendMethod)
-                        }
+                                        new {id = "sendMethod" })
+                                }
+                                else
+                                {
+                                    @Html.DropDownListFor(model => model.MailTemplateLanguage.MailTemplate.SendMethod, Model.SendMethods,
+                                        new {id = "sendMethod", @disabled = ""})
+                                }
+                            </td>
+                        </tr>
                         <tr>
                             <td class="span3">
                                 @Translation.GetCoreTextTranslation("Språk")
