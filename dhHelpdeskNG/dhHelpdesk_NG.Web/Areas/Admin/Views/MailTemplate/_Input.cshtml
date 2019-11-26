@@ -35,7 +35,8 @@
                                 @Translation.GetCoreTextTranslation("Skicka metod")
                             </td>
                             <td>
-                                @if (mailTemplatesHasSendMethod.Contains((GlobalEnums.MailTemplates) Model.MailTemplateLanguage.MailTemplate.MailID))
+                                @if (mailTemplatesHasSendMethod.Contains((GlobalEnums.MailTemplates) Model.MailTemplateLanguage.MailTemplate.MailID) ||
+                                     Model.MailTemplateLanguage.MailTemplate.MailID > 100)
                                 {
                                     @Html.DropDownListFor(model => model.MailTemplateLanguage.MailTemplate.SendMethod, Model.SendMethods,
                                         new {id = "sendMethod" })
