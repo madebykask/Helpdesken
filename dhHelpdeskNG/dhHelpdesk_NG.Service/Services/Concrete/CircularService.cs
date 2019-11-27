@@ -511,11 +511,11 @@
 
         public List<OptionResult> GetResults(List<int> circularIds, DateTime? from, DateTime? to)
         {
-            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            using (var uof = this.unitOfWorkFactory.Create())
             {
                 var questionnaireQuestionResultRepository = uof.GetRepository<QuestionnaireQuestionResultEntity>();
 
-                List<OptionResult> overviews =
+                var overviews =
                     questionnaireQuestionResultRepository.GetAll()
                         .GetCircularsQuestionnaireQuestionResultEntities(circularIds)
                         .GetCircularDateFromQuestionnaireQuestionResultEntities(from)
@@ -529,10 +529,10 @@
 
         public List<OptionResult> GetResults(int circularId, DateTime? from, DateTime? to, List<int> departmentIds)
         {
-            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            using (var uof = this.unitOfWorkFactory.Create())
             {
                 var questionnaireQuestionResultRepository = uof.GetRepository<QuestionnaireQuestionResultEntity>();
-                List<OptionResult> overviews =
+                var overviews =
                     questionnaireQuestionResultRepository.GetAll()
                         .GetCircularQuestionnaireQuestionResultEntities(circularId)
                         .GetQuestionResultDateFrom(from)
