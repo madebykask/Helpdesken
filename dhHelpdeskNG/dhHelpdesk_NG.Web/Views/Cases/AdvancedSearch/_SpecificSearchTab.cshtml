@@ -15,7 +15,7 @@
                         <td>
                             <select id="lstfilterDepartment" name="lstfilterDepartment" 
                                     data-field="department" 
-                                    data-placeholder="@Translation.GetCoreTextTranslation("Valj en eller flera")" 
+                                    data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" 
                                     multiple="multiple" 
                                     class="chosen-select">
                                 @foreach (var e in Model.DepartmentList)
@@ -41,7 +41,7 @@
             <tr>
                 <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Model.CustomerId)</td>
                 <td>
-                    <select id="lstfilterWorkingGroup" name="lstfilterWorkingGroup" data-placeholder="@Translation.GetCoreTextTranslation("Valj en eller flera")" multiple="multiple" class="chosen-select">
+                    <select id="lstfilterWorkingGroup" name="lstfilterWorkingGroup" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
                         @foreach (var e in Model.WorkingGroupList)
                         {
                             if (e.IsActive == 1)
@@ -64,7 +64,7 @@
                     <tr>
                         <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Model.CustomerId)</td>
                         <td>
-                            <select id="lstfilterPriority" name="lstfilterPriority" data-placeholder="@Translation.GetCoreTextTranslation("Valj en eller flera")" multiple="multiple" class="chosen-select">
+                            <select id="lstfilterPriority" name="lstfilterPriority" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
                                 @foreach (var e in Model.PriorityList)
                                 {
                                     if (e.IsActive == 1)
@@ -86,7 +86,7 @@
                     <tr>
                         <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), Model.CustomerId)</td>
                         <td>
-                            <select id="lstfilterStateSecondary" name="lstfilterStateSecondary" data-placeholder="@Translation.GetCoreTextTranslation("Valj en eller flera")" multiple="multiple" class="chosen-select">
+                            <select id="lstfilterStateSecondary" name="lstfilterStateSecondary" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
                                 @foreach (var e in Model.StateSecondaryList)
                                 {
                                     if (e.IsActive == 1)
