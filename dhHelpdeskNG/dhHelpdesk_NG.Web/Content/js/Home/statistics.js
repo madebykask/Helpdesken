@@ -61,7 +61,6 @@
             console.log('tryApplyData ' + _self.retries);
             if (!_self.isLoading) {
                 _self.applyData();
-                _self.toggleLoader(false);
                 _self.retries = 0;
                 return;
             }
