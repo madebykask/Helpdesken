@@ -1042,7 +1042,7 @@ namespace DH.Helpdesk.Web.Controllers
         private bool HasPermissions(Contract contract)
         {
             var deps = _departmentService.GetDepartmentsForUser(SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentUser.Id);
+                SessionFacade.CurrentUser.Id, false);
             return !contract.Department_Id.HasValue || deps.Select(d => d.Id).Contains(contract.Department_Id.Value);
         }
 
