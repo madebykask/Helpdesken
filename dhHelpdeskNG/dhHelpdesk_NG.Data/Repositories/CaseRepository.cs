@@ -45,9 +45,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IEnumerable<CaseOverview> GetCaseOverviews(int[] customers);
         int LookupLanguage(int custid, string notid, int regid, int depid, string notifierid);
         List<DynamicCase> GetAllDynamicCases(int customerId, int[] caseIds);
-
-
-
+        bool IsCaseExists(int id);
         Case GetCaseIncluding(int id);
 
         CaseModel GetCase(int id);
@@ -106,6 +104,11 @@ namespace DH.Helpdesk.Dal.Repositories
                 CaseNumber = c.CaseNumber,
             }).FirstOrDefault();
             return caseInfo;
+        }
+
+        public bool IsCaseExists(int id)
+        {
+            return DataContext.Cases.Any(c => c.Id == id);
         }
 
         public Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false)

@@ -1308,6 +1308,12 @@ namespace DH.Helpdesk.Web.Controllers
         {
             CaseInputViewModel m = null;
 
+            if (!_caseService.IsCaseExist(id))
+            {
+                TempData["NotFound"] = Translation.Get("Ärendet hittades inte!");
+                return View(m);
+            }
+
             if (SessionFacade.CurrentUser != null)
             {
                 /* Used for Extended Case */

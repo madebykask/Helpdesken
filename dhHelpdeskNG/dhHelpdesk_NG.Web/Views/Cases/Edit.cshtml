@@ -5,7 +5,24 @@
 
 @{
     var t = new ViewDataDictionary { { "isJS", "true" } };
- }
+}
+
+@if (TempData["NotFound"] != null)
+{
+    <div id="caseContainer">
+        <div class="secnavs fixed">
+            <div class="pull-left">
+                <ul class="secnav">
+                    <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Stäng"), "Index", new { customerId = SessionFacade.CurrentCustomer.Id }, new { @class = "btn", id = "case-action-close" })</li>
+                </ul>
+            </div>
+        </div>
+        <div class="content onemenu editcase" style="text-align: center;height: 80vh;">
+            @TempData["NotFound"]
+        </div>
+    </div>
+    return;
+}
 
 @section Styles
 {
@@ -15,7 +32,7 @@
     }
 }
 
-@section Scripts 
+@section Scripts
 {
     @if (Model.DynamicCase != null || Model.ContainsExtendedCase || Model.HasExtendedComputerUsers)
     {
@@ -24,17 +41,17 @@
 
     @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
     {
-        @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)    
+        @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
     }
-    
+
     @Scripts.Render("~/bundles/cases/edit")
 
-    <script type = "text/javascript">
+    <script type="text/javascript">
 
         $(function () {
 
             var opt = {
-             twoAttacmentsMode: @(Model.EnableTwoAttachments.ToJavaScriptBool()) 
+             twoAttacmentsMode: @(Model.EnableTwoAttachments.ToJavaScriptBool())
             };
 
             CaseInitForm(opt);
@@ -158,13 +175,13 @@
             $(this).parent().parent().find("#fake_CaseLog_EmailRecepientsInternalLogCc").removeClass("hidefollowers");
         });
     </script>
-    
+
     @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
     {
         <script type="text/javascript">
             $(function () {
                 var currentpage = new dhform({
-                    url: '@Model.DynamicCase.BuildUrl()', 
+                    url: '@Model.DynamicCase.BuildUrl()',
                     modal: '@Model.DynamicCase.ViewMode'
                 });
             });
@@ -359,15 +376,15 @@
                 <div class="pull-right">
                     <ul class="secnav">
                         @if (Model.CaseTemplateButtons != null && Model.CaseTemplateButtons.Any())
-                    {
-                        foreach (var button in Model.CaseTemplateButtons)
                         {
+                            foreach (var button in Model.CaseTemplateButtons)
+                            {
                                 <li><a href="#" onclick='LoadTemplate("@button.CaseTemplateId.ToString()")' title="@button.CaseTemplateName" class="btn templateQuickButton" rel="tooltip" data-placement="bottom" data-original-title="@button.CaseTemplateName"> @button.ButtonNumber </a></li>
                             }
                         }
 
                         @if (Model.case_.Id > 0)
-                    {
+                        {
                             <li><a title="@Translation.GetCoreTextTranslation("Skriv ut")" class="btn print-case"><i class="icon-file"></i></a></li>
                         }
                         <li><a onclick="UnLockCase('@Model.CaseLock.LockGUID')" href="@Model.case_.Id.GetUrlForNavigationBetweenCases()" title="@Translation.GetCoreTextTranslation("Föregående ärende")" class="btn previous-case"><i class="icon-chevron-left"></i></a></li>

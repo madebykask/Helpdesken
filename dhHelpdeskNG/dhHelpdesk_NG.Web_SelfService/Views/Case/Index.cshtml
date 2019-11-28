@@ -12,6 +12,16 @@
     <link href="@Url.Content("~/Content/css/case-mobile.css")" rel="stylesheet" type="text/css" />
 }
 
+@if (TempData["NotFound"] != null)
+{
+    <div class="jumbotron greybar">
+    </div>
+    <div class="container-fluid dh-container" style="text-align: center;height: 80vh;">
+        @Translation.Get((string)TempData["NotFound"])
+    </div>
+    return;
+}
+
 @if (Model.ShowCaseActionsPanelOnTop)
 {
     @Html.Partial("_CaseControlPanel", Model.CreateCaseControlsPanelModel())

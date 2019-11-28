@@ -7635,6 +7635,21 @@ begin
 		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2048, 2, 'File content')
 end
 
+If not exists (select * from tbltext where id = 2049)
+begin
+	insert into tbltext (id, TextString) VALUES (2049, 'Ärendet hittades inte!')
+
+	If not exists (select * from tblTextTranslation where text_id = 2049 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2049, 2, 'Case not found')
+end
+
+
+
+
+
+
+
+
 
 
 -- Generate id sequence for customer generated IDs

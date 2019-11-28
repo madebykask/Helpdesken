@@ -225,8 +225,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                 caseId = _caseService.GetCaseIdByEmailGUID(guid);
                 if (caseId == 0)
                 {
-                    ErrorGenerator.MakeError("Link is not valid!");
-                    return RedirectToAction("Index", "Error");
+                    TempData["NotFound"] = "Link is not valid!";
+                    return View(new CaseOverviewModel());
                 }
 
                 // open extended case by guid
@@ -259,8 +259,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             var currentCase = _caseService.GetCaseById(caseId);
             if (currentCase == null)
             {
-                ErrorGenerator.MakeError("Case not found!");
-                return RedirectToAction("Index", "Error");
+                TempData["NotFound"] = "Case not found!";
+                return View(new CaseOverviewModel());
             }
 
             //check if case is among customer cases only if its not anonymous access and not opened via link in email
