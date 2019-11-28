@@ -7654,7 +7654,7 @@ begin
 end
 GO
 
-UPDATE tblTextTranslation Set TextTranslation = 'Unread case' WHERE Text_Id=547 AND Language_Id=2;
+UPDATE tblTextTranslation Set TextTranslation = 'Unread cases' WHERE Text_Id=547 AND Language_Id=2;
 go
 
 
