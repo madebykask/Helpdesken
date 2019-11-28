@@ -43,7 +43,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var userCustomers =
                 _userService.GetUserProfileCustomersSettings(SessionFacade.CurrentUser.Id)
-                    .Select(c => new ItemOverview(c.CustomerName, c.CustomerId.ToString()))
+                    .Select(c => new ItemOverview(c.CustomerName, c.CustomerId.ToString(), c.Active))
                     .OrderBy(c => c.Name).ToList();
 
             model.UserCustomers = userCustomers;

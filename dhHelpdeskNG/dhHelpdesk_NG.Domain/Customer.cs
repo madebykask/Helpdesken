@@ -72,7 +72,9 @@
 
 		public string TimeZoneId { get; set; }
 
-        public virtual Language Language { get; set; }
+		public int Status { get; set; }
+
+		public virtual Language Language { get; set; }
         public virtual ICollection<Application> Applications { get; set; }
         public virtual ICollection<Case> Cases { get; set; }
         public virtual ICollection<CaseFieldSetting> CaseFieldSettings { get; set; }

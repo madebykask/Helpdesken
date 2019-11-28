@@ -338,7 +338,7 @@
                                     <ul class="customers dropdown-menu">
                                         @if (model.Customers != null)
                                         {
-                                            foreach (var customer in model.Customers)
+                                            foreach (var customer in model.Customers.Where(o => o.Active))
                                             {
                                                 <li>
                                                     @if (customer.Id == SessionFacade.CurrentCustomer.Id)

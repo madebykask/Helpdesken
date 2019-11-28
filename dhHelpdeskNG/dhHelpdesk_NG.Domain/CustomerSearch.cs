@@ -4,12 +4,13 @@ namespace DH.Helpdesk.Domain
     public interface ICustomerSearch : ISearch
     {
         string SearchCs { get; set; }
-    }
+	}
 
     public class CustomerSearch : Search, ICustomerSearch
     {
         public string SearchCs { get; set; }
-    }
+		public bool ActiveOnly { get; set; }
+	}
 
     public interface ICustomerSearchSelection : ISearch
     {

@@ -38,7 +38,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
 
         public Customer Customer { get; set; }
 
-        public IList<Customer> Customers { get; set; }
+		public bool ActiveOnly { get; set; }
+
+		public IList<Customer> Customers { get; set; }
     }
 
     public class OutputCaseField

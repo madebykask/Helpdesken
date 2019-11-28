@@ -103,6 +103,7 @@
             this.Property(x => x.GroupCaseTemplates).IsRequired();
             this.Property(x => x.FetchPcNumber).IsRequired();
 			this.Property(x => x.TimeZoneId).IsRequired();
+			this.Property(x => x.Status).IsRequired();
 
 			this.ToTable("tblcustomer");
         }

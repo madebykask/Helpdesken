@@ -723,10 +723,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 ListWorkingGroupsForUser = _userService.GetListToUserWorkingGroup(userId),
                 AvailvableTimeZones = TimeZoneInfo.GetSystemTimeZones().Select(it => new SelectListItem() { Value = it.Id, Text = it.DisplayName, Selected = user.TimeZoneId == it.Id }),
 
-                Customers = _customerService.GetCustomers().Select(x => new SelectListItem
+                Customers = _customerService.GetAllCustomers().Select(x => new StateSelectListItem
                 {
                     Text = x.Name,
-                    Value = x.Value
+                    Value = x.Id.ToString(),
+					Active = x.Status == 1
+					
                 }).ToList(),
 
                 Domains = _domainService.GetDomains(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
@@ -759,16 +761,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 //    Value = x.Id.ToString()
                 //}).ToList(),
 
-                CsAvailable = customersAvailable.Select(x => new SelectListItem
+                CsAvailable = customersAvailable.Select(x => new StateSelectListItem
                 {
                     Text = x.Name,
-                    Value = x.Id.ToString()
+                    Value = x.Id.ToString(),
+					Active = x.Status == 1
                 }).ToList(),
-                CsSelected = customersSelected.Select(x => new SelectListItem
+                CsSelected = customersSelected.Select(x => new StateSelectListItem
                 {
                     Text = x.Name,
-                    Value = x.Id.ToString()
-                }).OrderBy(it => it.Text).ToList(),
+                    Value = x.Id.ToString(),
+					Active = x.Status == 1
+				}).OrderBy(it => it.Text).ToList(),
                 OTsAvailable = otsAvailable.Select(x => new SelectListItem
                 {
                     Text = x.Name,

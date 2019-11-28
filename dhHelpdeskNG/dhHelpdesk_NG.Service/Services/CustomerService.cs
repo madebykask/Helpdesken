@@ -746,11 +746,12 @@ namespace DH.Helpdesk.Services.Services
             List<MoveCaseCustomersListItem> res = new List<MoveCaseCustomersListItem>();
             var userCustomers =
                 _customerRepository.CustomersForUser(userId)
+					.Where(o => o.Status == 1)
                     .Select(x => new MoveCaseCustomersListItem
                     {
                         Id = x.Id,
                         Name = x.Name,
-                        IsUserCustomer = true
+                        IsUserCustomer = true,
                     }).ToList();
 
             if (userCustomers.Any())

@@ -342,6 +342,7 @@
     <Compile Include="Areas\Admin\Controllers\GDPRProgressController.cs" />
     <Compile Include="Areas\Admin\Controllers\ExtendedCaseController.cs" />
     <Compile Include="Areas\Admin\Infrastructure\Mappers\CustomerUserEntityToModelMapper.cs" />
+    <Compile Include="Areas\Admin\Models\StateSelectListItem.cs" />
     <Compile Include="Areas\Inventory\Controllers\InventoryController.cs" />
     <Compile Include="Areas\Inventory\Infrastucture\Extensions\TabSettingExtensions.cs" />
     <Compile Include="Areas\Inventory\Models\BaseEditCustomInventoryModel.cs" />

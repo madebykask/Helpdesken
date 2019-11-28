@@ -22,9 +22,20 @@
                     <div class="filterContent">
                         <table id="">
                             <tr>
+                                <td style="width: 200px">
+                                    @Translation.Get("Sök", Enums.TranslationSource.TextTranslation)
+                                </td>
                                 <td>
                                     @Html.TextBoxFor(model => model.SearchCs, new { maxlength = "50"})
                                     <input type="button" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" onclick="submit();" />
+                                </td>
+                            </tr>
+                            <tr>
+                                 <td style="width: 200px">
+                                    @Translation.Get("Visa endast aktiva")
+                                </td>
+                                <td>
+                                    <input type="checkbox" class="switchcheckbox" id="ActiveOnly" name="ActiveOnly" value="true" @(Model.ActiveOnly ? "checked" : "")/>
                                 </td>
                             </tr>
                         </table>
@@ -51,22 +62,22 @@
                             </thead>
                             <tbody>
                                 @foreach (var items in Model.Customers)
-                                {                            
+                                {
                                     <tr>
                                         <td>
-                                            <a href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.CustomerID)</a>
+                                            <a style="@(items.Status == 1 ? "" : "color: #ccc")" href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.CustomerID)</a>
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.Name)</a>
+                                            <a style="@(items.Status == 1 ? "" : "color: #ccc")" href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.Name)</a>
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.Address)</a>
+                                            <a style="@(items.Status == 1 ? "" : "color: #ccc")" href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.Address)</a>
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.HelpdeskEmail)</a>
+                                            <a style="@(items.Status == 1 ? "" : "color: #ccc")" href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.HelpdeskEmail)</a>
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("edit", "customer", new {area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.Phone)</a>
+                                            <a style="@(items.Status == 1 ? "" : "color: #ccc")" href="@Url.Action("edit", "customer", new {area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.Phone)</a>
                                         </td>
                                     </tr>
                                 }
@@ -86,6 +97,7 @@
         $("#currentCustomer").change(function () {
             $("#search").submit();
         });
+
     });
 
 </script>

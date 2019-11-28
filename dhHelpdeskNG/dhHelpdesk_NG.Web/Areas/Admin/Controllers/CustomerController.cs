@@ -102,8 +102,8 @@
                 //model.Customers = this._userService.GetCustomersForUser(SessionFacade.CurrentUser.Id);
             }
 
-            
-
+			model.Customers = model.Customers.Where(o => o.Status == 1).ToList();
+			model.ActiveOnly = true;
 
 
             return this.View(model);
@@ -125,6 +125,10 @@
                 model.Customers = this._customerService.SearchAndGenerateCustomersConnectedToUser(SearchCustomers, SessionFacade.CurrentUser.Id);
             }
 
+			if (SearchCustomers.ActiveOnly)
+				model.Customers = model.Customers.Where(o => o.Status == 1).ToList();
+
+			model.ActiveOnly = SearchCustomers.ActiveOnly;
 
             return this.View(model);
         }

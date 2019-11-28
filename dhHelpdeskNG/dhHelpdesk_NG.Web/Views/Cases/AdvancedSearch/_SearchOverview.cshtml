@@ -24,7 +24,7 @@
                                     @foreach (var c in Model.CaseSearchFilterData.filterCustomers)
                                     {
                                         var customerId = c.Value.ToInt();
-                                        <option value="@customerId" @customerId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.Customer)>@c.Name</option>
+                                        <option value="@customerId" @customerId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.Customer) style="@(c.Active ? "" : "color: #ccc")">@c.Name</option>
                                     }
                                 </select>
                                 <select id="lstIncludedCustomers" name="lstIncludedCustomers" 
@@ -33,7 +33,7 @@
                                     @foreach (var c in Model.ExtendedCustomers)
                                     {
                                         var customerId = c.Value.ToInt();
-                                        <option value="@customerId" @customerId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.Customer)>@c.Name</option>
+                                        <option value="@customerId" @customerId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.Customer) style="@(c.Active ? "" : "color: #ccc")">@c.Name</option>
                                     }
                                 </select>
                             </td>

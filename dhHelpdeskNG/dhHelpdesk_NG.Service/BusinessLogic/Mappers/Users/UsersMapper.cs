@@ -174,12 +174,13 @@
                             {
                                 cu.Customer_Id,
                                 c.Name,
-                                cu.ShowOnStartPage
+                                cu.ShowOnStartPage,
+								Active = c.Status == 1
                             })
                             .OrderBy(r => r.Name)
                             .ToList();
 
-            return entities.Select(e => new UserProfileCustomerSettings(e.Customer_Id, e.Name, e.ShowOnStartPage.ToDefaultTrueBool())).ToList();
+            return entities.Select(e => new UserProfileCustomerSettings(e.Customer_Id, e.Name, e.ShowOnStartPage.ToDefaultTrueBool(), e.Active)).ToList();
         }
 
         public static List<ItemOverview> MapToWorkingGroupUsers(

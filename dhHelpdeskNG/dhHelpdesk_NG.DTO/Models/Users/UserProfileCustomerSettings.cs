@@ -11,11 +11,13 @@
         public UserProfileCustomerSettings(
             int customerId, 
             string customerName, 
-            bool showOnStartPage)
+            bool showOnStartPage,
+			bool active)
         {
             this.CustomerName = customerName;
             this.ShowOnStartPage = showOnStartPage;
             this.CustomerId = customerId;
+			this.Active = active;
         }
 
         [IsId]
@@ -25,5 +27,7 @@
         public string CustomerName { get; set; }
 
         public bool ShowOnStartPage { get; set; }
-    }
+
+		public bool Active { get; set; }
+	}
 }
