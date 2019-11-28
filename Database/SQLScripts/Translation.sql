@@ -7621,9 +7621,9 @@ GO
 
 If not exists (select * from tbltext where id = 2047)
 begin
-	insert into tbltext (id, TextString) VALUES (2047, 'Ta bort filåtkomstloggen')
+	insert into tbltext (id, TextString) VALUES (2047, 'Ta bort relaterade poster i filåtkomstlogg')
 	If not exists (select * from tblTextTranslation where text_id = 2047 and Language_Id = 2)
-		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2047, 2, 'Remove file access log')
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2047, 2, 'Remove related entries in File access log')
 end
 GO
 
