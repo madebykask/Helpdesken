@@ -7657,6 +7657,14 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = 'Unread cases' WHERE Text_Id=547 AND Language_Id=2;
 go
 
+If not exists (select * from tbltext where id = 2051)
+begin
+	insert into tbltext (id, TextString) VALUES (2051, 'poster per kund')
+
+	If not exists (select * from tblTextTranslation where text_id = 2051 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2051, 2, 'records per customer')
+end
+GO
 
 
 

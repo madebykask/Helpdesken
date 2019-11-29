@@ -30,9 +30,19 @@
                         <div class="container">
                             <div class="row">
                                 <div class="span6">
+                                    <input type="submit" class="submit btn" value="@Translation.GetCoreTextTranslation("Sök")" id="btnSearch" />
+                                </div>
+                            </div>
+                            <div class="row">&nbsp;</div>
+                            <div class="row">
+                                <div class="span6">
+                                    @Translation.GetCoreTextTranslation("Poster i sökresultat"): <span data-field="TotalAdvSearchCount">0</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="span6">
                                     @if (Model.CaseSearchFilterData.filterMaxRows != null)
                                     {
-                                        @Translation.GetCoreTextTranslation("Visa")
                                         <select id="lstfilterMaxRows" name="lstfilterMaxRows" style="width: 70px" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")">
                                             @foreach (var r in Model.CaseSearchFilterData.filterMaxRows)
                                             {
@@ -40,9 +50,8 @@
                                                 <option value="@r.Value" @curId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.MaxRows)> @r.Name </option>
                                             }
                                         </select>
-                                        @Translation.GetCoreTextTranslation("poster i sökresultat/Kund")
+                                        @Translation.GetCoreTextTranslation("poster per kund")
                                     }
-                                    <input type="submit" class="submit btn" value="@Translation.GetCoreTextTranslation("Sök")" id="btnSearch"/>
                                 </div>
                             </div>
                         </div>
@@ -56,7 +65,6 @@
                                     <div class="loader">@Translation.GetCoreTextTranslation("Laddar...")</div>
                                 </div>
                             </div>
-                            <div>@Translation.GetCoreTextTranslation("Poster i sökresultat"): <span data-field="TotalAdvSearchCount">0</span></div>
                             <div class="customer-cases-area">
                                 @foreach (var customer in Model.AllCustomers)
                                 {

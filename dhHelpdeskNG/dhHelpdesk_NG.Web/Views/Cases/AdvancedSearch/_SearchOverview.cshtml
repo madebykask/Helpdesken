@@ -78,7 +78,20 @@
                             </select>
                         </td>
                     </tr>
-
+                    <tr class="date-block">
+                        <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Model.CaseSearchFilterData.filterCustomerId)</td>
+                        <td>
+                            @Html.EditorFor(m => Model.CaseSearchFilterData.caseSearchFilter.CaseRegistrationDateStartFilter, "DatePicker", new { id = "AdvSearch_CaseRegistrationDateStartFilter", name = "CaseRegistrationDateStartFilter" })
+                            @Html.EditorFor(m => Model.CaseSearchFilterData.caseSearchFilter.CaseRegistrationDateEndFilter, "DatePicker", new { id = "AdvSearch_CaseRegistrationDateEndFilter", name = "CaseRegistrationDateEndFilter" })
+                        </td>
+                    </tr>
+                    <tr class="date-block">
+                        <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Model.CaseSearchFilterData.filterCustomerId)</td>
+                        <td>
+                            @Html.EditorFor(m => Model.CaseSearchFilterData.caseSearchFilter.CaseClosingDateStartFilter, "DatePicker", new { id = "AdvSearch_CaseClosingDateStartFilter", name = "CaseClosingDateStartFilter" })
+                            @Html.EditorFor(m => Model.CaseSearchFilterData.caseSearchFilter.CaseClosingDateEndFilter, "DatePicker", new { id = "AdvSearch_CaseClosingDateEndFilter", name = "CaseClosingDateEndFilter" })
+                        </td>
+                    </tr>
                     <tr>
                         <td>@Translation.GetCoreTextTranslation("Utökad sökning")</td>
                         <td><input type="checkbox" name="@CaseFilterFields.IsExtendedSearch" id="@CaseFilterFields.IsExtendedSearch" value="true" /></td>
@@ -121,20 +134,6 @@
                             <div>
                                 @Html.CheckBoxFor(m => Model.CaseSearchFilterData.caseSearchFilter.SearchThruFiles, new { id = "chkSearchThruFiles", @class = "switchcheckbox" })
                             </div>
-                        </td>
-                    </tr>
-                    <tr class="date-block">
-                        <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Model.CaseSearchFilterData.filterCustomerId)</td>
-                        <td>
-                            @Html.EditorFor(m => Model.CaseSearchFilterData.caseSearchFilter.CaseRegistrationDateStartFilter, "DatePicker", new { id = "AdvSearch_CaseRegistrationDateStartFilter", name = "CaseRegistrationDateStartFilter" })
-                            @Html.EditorFor(m => Model.CaseSearchFilterData.caseSearchFilter.CaseRegistrationDateEndFilter, "DatePicker", new { id = "AdvSearch_CaseRegistrationDateEndFilter", name = "CaseRegistrationDateEndFilter" })
-                        </td>
-                    </tr>
-                    <tr class="date-block">
-                        <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Model.CaseSearchFilterData.filterCustomerId)</td>
-                        <td>
-                            @Html.EditorFor(m => Model.CaseSearchFilterData.caseSearchFilter.CaseClosingDateStartFilter, "DatePicker", new { id = "AdvSearch_CaseClosingDateStartFilter", name = "CaseClosingDateStartFilter" })
-                            @Html.EditorFor(m => Model.CaseSearchFilterData.caseSearchFilter.CaseClosingDateEndFilter, "DatePicker", new { id = "AdvSearch_CaseClosingDateEndFilter", name = "CaseClosingDateEndFilter" })
                         </td>
                     </tr>
                 </table>
