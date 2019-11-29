@@ -58,9 +58,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         public int NewPassword { get; set; }
         public int OrderPermission { get; set; }
         public int PasswordHis { get; set; }
-        public int CreateCaseFromOrder { get; set; }        
+        public int CreateCaseFromOrder { get; set; }
 
-        public Customer Customer { get; set; }
+		public bool Active { get; set; }
+
+		public Customer Customer { get; set; }
         public Setting Setting { get; set; }
         public Language Language { get; set; }
         public UserGroup UserGroup { get; set; }
