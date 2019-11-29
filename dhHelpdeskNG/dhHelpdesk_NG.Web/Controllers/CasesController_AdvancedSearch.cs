@@ -89,9 +89,9 @@ namespace DH.Helpdesk.Web.Controllers
             model.DoSearchAtBegining = doSearchAtBegining;
             model.IsExtSearch = isExtSearch;
 
-            var useNewAdvancedSearch = _featureToggleService.Get(FeatureToggleTypes.NEW_ADVANCED_CASE_SEARCH);
+            var useOldAdvancedSearch = _featureToggleService.Get(FeatureToggleTypes.USE_DEPRICATED_ADVANCED_CASE_SEARCH);
             
-            return View(useNewAdvancedSearch.Active ? "AdvancedSearch" : "AdvancedSearch/Index", model);
+            return View(!useOldAdvancedSearch.Active ? "AdvancedSearch" : "AdvancedSearch/Index", model);
         }
 
         [HttpGet]

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Enums.Logs;
@@ -63,13 +64,13 @@ namespace DH.Helpdesk.WebApi.Controllers
             var fileInfo = _logFileService.GetFileDetails(fileId);
             var isCaseFile = fileInfo.IsCaseFile ?? false;
 
-			var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+            var disableLogFileView = _featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
 
 			if (isCaseFile)
             {
 				var model = _caseFileService.GetFileContentByIdAndFileName(caseId, basePath, fileInfo.FileName);
 
-				if (!disableLogFileView.Active)
+				if (!disableLogFileView)
 				{
 					_fileViewLogService.Log(caseId, UserId, fileInfo.FileName, model.FilePath, FileViewLogFileSource.WebApi, FileViewLogOperation.View);
 				}
@@ -88,7 +89,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 } 
                 var logFile = _logFileService.GetFileContentById(fileId, basePath, fileInfo.ParentLogType ?? fileInfo.LogType);
 
-				if (!disableLogFileView.Active)
+				if (!disableLogFileView)
                 {
 					_fileViewLogService.Log(caseId, UserId, logFile.FileName, logFile.Path, FileViewLogFileSource.WebApi, FileViewLogOperation.View);
 				}

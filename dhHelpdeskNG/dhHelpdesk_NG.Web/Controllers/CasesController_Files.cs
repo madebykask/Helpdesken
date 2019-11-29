@@ -152,10 +152,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var path = "";
                 _caseFileService.AddFile(caseFileDto, ref path);
-                var disableLogFileView =
-                    _featureToggleService.Get(
-                        FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-                if (!disableLogFileView.Active)
+                if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
                 {
                     var userId = SessionFacade.CurrentUser?.Id ?? 0;
                     _fileViewLogService.Log(caseId, userId, caseFileDto.FileName, path, FileViewLogFileSource.Helpdesk,
@@ -207,10 +204,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var extraField = new ExtraFieldCaseHistory {CaseFile = StringTags.Delete + fileName.Trim()};
                 _caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5,
                     out errors, string.Empty, extraField);
-                var disableLogFileView =
-                    _featureToggleService.Get(
-                        FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-                if (!disableLogFileView.Active)
+                if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
                 {
                     var userId = SessionFacade.CurrentUser?.Id ?? 0;
                     var path = _filesStorage.ComposeFilePath(ModuleName.Cases, decimal.ToInt32(c.CaseNumber), basePath, "");
@@ -272,10 +266,7 @@ namespace DH.Helpdesk.Web.Controllers
                             _caseService.SaveCaseHistory(case_, SessionFacade.CurrentUser.Id, adUser,
                                 CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
                         }
-                        var disableLogFileView =
-                            _featureToggleService.Get(
-                                FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-                        if (!disableLogFileView.Active)
+                        if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
                         {
                             var userId = SessionFacade.CurrentUser?.Id ?? 0;
                             var path = _filesStorage.ComposeFilePath(logSubFolder, log.Id, basePath, "");
@@ -305,8 +296,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var model = _caseFileService.GetFileContentByIdAndFileName(caseId, basePath, fileName);
                 fileContent = model.Content;
 
-                var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-                if (!disableLogFileView.Active)
+                if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
                 {
                     var userId = SessionFacade.CurrentUser?.Id ?? 0;
                     _fileViewLogService.Log(caseId, userId, fileName, model.FilePath, FileViewLogFileSource.Helpdesk, FileViewLogOperation.View);
@@ -348,8 +338,7 @@ namespace DH.Helpdesk.Web.Controllers
                     var model = _logFileService.GetFileContentByIdAndFileName(logId, basePath, fileName,
                         logType);
                     fileContent = model.Content;
-                    var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-                    if (!disableLogFileView.Active)
+                    if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
                     {
                         var userId = SessionFacade.CurrentUser?.Id ?? 0;
                         _fileViewLogService.Log(l.CaseId, userId, fileName, model.FilePath, FileViewLogFileSource.Helpdesk, FileViewLogOperation.View);

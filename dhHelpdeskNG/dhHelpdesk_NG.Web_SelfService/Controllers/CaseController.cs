@@ -1117,8 +1117,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 var paths = new List<KeyValuePair<CaseFileDto, string>>();
                 _caseFileService.AddFiles(newCaseFiles, paths);
 
-                var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-                if (!disableLogFileView.Active)
+                if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
                 {
                     foreach (var file in paths)
                     {
@@ -1360,8 +1359,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 				var paths = new List<KeyValuePair<CaseLogFileDto, string>>();
 				_logFileService.AddFiles(newLogFiles, paths);
 
-				var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-				if (!disableLogFileView.Active)
+				if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
 				{
 					foreach (var path in paths)
 					{

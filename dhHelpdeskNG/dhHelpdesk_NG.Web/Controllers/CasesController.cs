@@ -1188,10 +1188,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             if (logFiles.Any())
             {
-                var disableLogFileView =
-                    _featureToggleService.Get(
-                        FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-                if (!disableLogFileView.Active)
+                if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
                 {
                     foreach (var f in logFiles)
                     {
@@ -3798,8 +3795,7 @@ namespace DH.Helpdesk.Web.Controllers
             var logPaths = new List<KeyValuePair<CaseLogFileDto, string>>();
             _logFileService.AddFiles(newLogFiles, logPaths, exFiles, caseLog.Id);
 
-            var disableLogFileView = _featureToggleService.Get(DH.Helpdesk.Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-            if (!disableLogFileView.Active)
+            if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
             {
                 var userId = currentLoggedInUser.Id;
                 foreach (var path in logPaths)

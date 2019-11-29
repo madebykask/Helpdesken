@@ -132,6 +132,60 @@ BEGIN
 END
 
 
+RAISERROR ('Renaming NEW_ADVANCED_CASE_SEARCH to USE_DEPRICATED_ADVANCED_CASE_SEARCH in tblFeatureToggle', 10, 1) WITH NOWAIT
+IF EXISTS(SELECT 1 FROM tblFeatureToggle FT WHERE FT.StrongName = 'NEW_ADVANCED_CASE_SEARCH')
+BEGIN
+	UPDATE tblFeatureToggle
+	SET
+	 StrongName = 'USE_DEPRICATED_ADVANCED_CASE_SEARCH',
+	 Active = FT.NewActive,
+	 Description = 'Use old advanced search feature'
+	FROM (
+		SELECT CASE
+           WHEN Active = 1 THEN 0
+		   WHEN Active = 0 THEN 1
+		   ELSE 0
+		END AS NewActive FROM tblFeatureToggle FT WHERE FT.StrongName = 'NEW_ADVANCED_CASE_SEARCH'
+	) FT
+	 WHERE StrongName = 'NEW_ADVANCED_CASE_SEARCH'
+END
+
+RAISERROR ('Renaming NEW_REPORTED_TIME_REPORT to USE_DEPRICATED_REPORTED_TIME_REPORT in tblFeatureToggle', 10, 1) WITH NOWAIT
+IF EXISTS(SELECT 1 FROM tblFeatureToggle FT WHERE FT.StrongName = 'NEW_REPORTED_TIME_REPORT')
+BEGIN
+	UPDATE tblFeatureToggle
+	SET
+	 StrongName = 'USE_DEPRICATED_REPORTED_TIME_REPORT',
+	 Active = FT.NewActive,
+	 Description = 'Use old Reported Time report implementation'
+	FROM (
+		SELECT CASE
+           WHEN Active = 1 THEN 0
+		   WHEN Active = 0 THEN 1
+		   ELSE 0
+		END AS NewActive FROM tblFeatureToggle FT WHERE FT.StrongName = 'NEW_REPORTED_TIME_REPORT'
+	) FT
+	 WHERE StrongName = 'NEW_REPORTED_TIME_REPORT'
+END
+
+RAISERROR ('Renaming NEW_NUMBER_OF_CASES_REPORT to USE_DEPRICATED_NUMBER_OF_CASES_REPORT in tblFeatureToggle', 10, 1) WITH NOWAIT
+IF EXISTS(SELECT 1 FROM tblFeatureToggle FT WHERE FT.StrongName = 'NEW_NUMBER_OF_CASES_REPORT')
+BEGIN
+	UPDATE tblFeatureToggle
+	SET
+	 StrongName = 'USE_DEPRICATED_NUMBER_OF_CASES_REPORT',
+	 Active = FT.NewActive,
+	 Description = 'Use old Number of Cases report implementation'
+	FROM (
+		SELECT CASE
+           WHEN Active = 1 THEN 0
+		   WHEN Active = 0 THEN 1
+		   ELSE 0
+		END AS NewActive FROM tblFeatureToggle FT WHERE FT.StrongName = 'NEW_NUMBER_OF_CASES_REPORT'
+	) FT
+	 WHERE StrongName = 'NEW_NUMBER_OF_CASES_REPORT'
+END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.45'
 GO

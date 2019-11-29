@@ -6,7 +6,8 @@ using System;
 namespace DH.Helpdesk.Services.Services
 {
 	public interface IFeatureToggleService
-	{
+    {
+        bool IsActive(FeatureToggleTypes featureToggleType);
 		FeatureToggleModel Get(FeatureToggleTypes featureToggleType);
 	}
 	public class FeatureToggleService : IFeatureToggleService
@@ -17,6 +18,11 @@ namespace DH.Helpdesk.Services.Services
 		{
 			_featureToggleRepository = featureToggleRepository;
 		}
+
+        public bool IsActive(FeatureToggleTypes featureToggleType)
+        {
+            return Get(featureToggleType).Active;
+        }
 
 		public FeatureToggleModel Get(FeatureToggleTypes featureToggleType)
 		{
