@@ -100,6 +100,7 @@ namespace DH.Helpdesk.Web.Controllers
 	using DH.Helpdesk.Common.Extensions.Boolean;
 	using Common.Tools.Files;
 	using BusinessData.Models.FinishingCause;
+	using Infrastructure.Mvc;
 
 	public partial class CasesController : BaseController
     {
@@ -2909,13 +2910,32 @@ namespace DH.Helpdesk.Web.Controllers
             return PartialView("_MoveCase", model);
         }
 
-        #endregion
+	/*	[HttpGet]
+		//[Route("Files/{type:string}/{id:int}/filename:string}")]
+		public UnicodeFileContentResult CaseFiles(string caseId, string filename)
+		{
+			return DownloadFile(caseId, filename);
+		}
 
-        #region ***Private Methods***
+		public UnicodeFileContentResult CaseLogFiles(string type, string logId, string filename)
+		{
+			LogFileType logFileType;
+			if (Enum.TryParse(type, out logFileType))
+			{
+				return (UnicodeFileContentResult)DownloadLogFile(logId, filename, logFileType);
+			}
 
-        #region --Case Template--
+			throw new ArgumentException("Invalid log file type", "type");
+		} */
 
-        private void CheckTemplateParameters(int? templateId, int caseId)
+
+		#endregion
+
+		#region ***Private Methods***
+
+		#region --Case Template--
+
+		private void CheckTemplateParameters(int? templateId, int caseId)
         {
             if (templateId.HasValue)
             {
@@ -3800,7 +3820,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var userId = currentLoggedInUser.Id;
                 foreach (var path in logPaths)
                 {
-                    _fileViewLogService.Log(@case.Id, userId, path.Key.FileName, path.Value, FileViewLogFileSource.Helpdesk, FileViewLogOperation.Add);
+                    _fileViewLogService.Log(oldCase.Id, userId, path.Key.FileName, path.Value, FileViewLogFileSource.Helpdesk, FileViewLogOperation.Add);
                 }
             }
 
