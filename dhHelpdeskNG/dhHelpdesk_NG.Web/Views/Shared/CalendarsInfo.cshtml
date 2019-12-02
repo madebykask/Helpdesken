@@ -8,10 +8,10 @@
             <div class="box-header portlet-header">
                 <div class="start-tile-img label purple">
                     <a href="@Url.Action("index", "calendar", new {area = ""})">
-                        <img src="@Url.Content("~/Content/icons/news.png")" alt="@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)"/>
+                        <img src="@Url.Content("~/Content/icons/news.png")" alt="@Translation.Get("Aktuellt")"/>
                     </a>
                 </div>
-                <h4>@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)</h4>
+                <h4>@Translation.Get("Aktuellt")</h4>
             </div>
             <div class="box-body portlet-content">
                 @foreach (var calendar in Model.Items)
@@ -24,7 +24,9 @@
                 }
                 @if (Model.ShowMore)
                 {
-                    <div class="box-post" style="text-align: center"><a href="@Url.Action("index", "calendar", new {area = ""})">>></a></div>
+                    <div class="box-post" style="text-align: center">
+                        <a class="btn" href="@Url.Action("index", "calendar", new {area = ""})">>></a>
+                    </div>
                 }
             </div>
         </div>

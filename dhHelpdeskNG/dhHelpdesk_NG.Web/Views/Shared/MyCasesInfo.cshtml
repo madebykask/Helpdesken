@@ -52,7 +52,7 @@
             @if (Model.ShowMore)
             {
                 <div style="text-align: center;">
-                    <a href="@Url.Action("AdvancedSearch", "Cases", new {area = "", clearFilters=true})">@Translation.Get("Visa fler")</a>
+                    <a class="btn" href="@Url.Action("AdvancedSearch", "Cases", new {area = "", clearFilters=true})">@Translation.Get("Visa fler")</a>
                 </div>
             }
 
