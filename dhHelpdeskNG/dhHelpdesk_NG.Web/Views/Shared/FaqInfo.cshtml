@@ -1,22 +1,27 @@
 ﻿@using DH.Helpdesk.Common.Extensions.DateTime
 @using DH.Helpdesk.Domain.Faq
-@model IEnumerable<DH.Helpdesk.BusinessData.Models.Faq.Output.FaqInfoOverview>
+@model DH.Helpdesk.Web.Models.Widgets.WidgetModel<DH.Helpdesk.BusinessData.Models.Faq.Output.FaqInfoOverview>
 
-@if (Model != null && Model.Any())
+@if (Model != null && Model.Items.Any())
 {
     <div class="row-fluid">
         <div class="box-box span12">
             <div class="box-header portlet-header">
-                <div class="start-tile-img label blue"><a href="@Url.Action("index", "faq", new {area = ""})"><img src="@Url.Content("~/Content/icons/faq.png")" alt="@Translation.Get("Faq", Enums.TranslationSource.TextTranslation)" /></a></div><h4>@Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)</h4>
+                <div class="start-tile-img label blue">
+                    <a href="@Url.Action("index", "faq", new {area = ""})">
+                        <img src="@Url.Content("~/Content/icons/faq.png")" alt="@Translation.Get("Faq")"/>
+                    </a>
+                </div>
+                <h4>@Translation.Get("FAQ")</h4>
             </div>
             <div class="box-body portlet-content">
                 <div class="box-main">
                     <div class="accordion" id="faqstart">
-                        @foreach (var faq in Model)
+                        @foreach (var faq in Model.Items)
                         {
                             <div class="accordion-group accordion-caret">
                                 <div class="accordion-heading">
-                                    <a class="accordion-toggle accordion-caret collapsed" data-toggle="collapse" data-parent="#faqstart" href="#collapse@(faq.Id)">                                        
+                                    <a class="accordion-toggle accordion-caret collapsed" data-toggle="collapse" data-parent="#faqstart" href="#collapse@(faq.Id)">
                                         @faq.CustomerName | @faq.ChangeDate.ToFormattedDate()<br /><i>@GetCategoryPathString(faq.Category)</i><br />@faq.Text
                                     </a>
                                 </div>
@@ -26,26 +31,30 @@
                                     </div>
                                 </div>
                             </div>
-                        }    
+                        }
+                        @if (Model.ShowMore)
+                        {
+                            <div class="box-post" style="text-align: center"><a href="@Url.Action("index", "faq", new {area = ""})">>></a></div>
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </div>
 }
-@functions 
+@functions
 {
     private MvcHtmlString GetCategoryPathString(FaqCategoryEntity category)
     {
         if (category == null)
             return null;
 
-        var result = category.Name;        
+        var result = category.Name;
         if (category.ParentFAQCategory != null)
         {
             result.Insert(0, category.ParentFAQCategory.Name + " - ");
         }
 
-        return new MvcHtmlString(result);       
+        return new MvcHtmlString(result);
     }
-}    
+}

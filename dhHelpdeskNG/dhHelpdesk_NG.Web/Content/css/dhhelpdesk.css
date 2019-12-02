@@ -1438,7 +1438,7 @@ table th.thpointer {
 }
 
     .box-main .accordion {
-        margin-bottom: 20px;
+        margin-bottom: 0;
     }
 
     .box-main .accordion-group {

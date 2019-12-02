@@ -13,6 +13,7 @@
             this.Cases = cases;
         }
 
-        public MyCase[] Cases { get; private set; }        
+        public MyCase[] Cases { get; set; }
+        public bool ShowMore { get; set; }
     }
 }

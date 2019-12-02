@@ -7667,6 +7667,15 @@ end
 GO
 
 
+If not exists (select * from tbltext where id = 2052)
+begin
+	insert into tbltext (id, TextString) VALUES (2052, 'Visa fler')
+
+	If not exists (select * from tblTextTranslation where text_id = 2052 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2052, 2, 'Show more')
+end
+GO
+
 
 
 

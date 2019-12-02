@@ -87,7 +87,7 @@
         data-usermodules-moduleid="@(GetModuleId(Module.Problems))"
         data-usermodules-position="@(GetModulePosition(Module.Problems))">
         @{
-            Html.RenderPartial("ProblemsInfo", Model.ProblemOverviews);
+            Html.RenderPartial("ProblemsInfo", Model.ProblemModel);
         }                                                                        
     </div>                                        
     <div class="portlet statistics" 
@@ -103,7 +103,7 @@
         data-usermodules-moduleid="@(GetModuleId(Module.BulletinBoard))"        
         data-usermodules-position="@(GetModulePosition(Module.BulletinBoard))">
         @{
-            Html.RenderPartial("BulletinBoardInfo", Model.BulletinBoardOverviews);
+            Html.RenderPartial("BulletinBoardInfo", Model.BulletinBoardModel);
         }                                                                                                    
     </div>                                        
     <div class="portlet calendar" 
@@ -111,7 +111,7 @@
         data-usermodules-moduleid="@(GetModuleId(Module.Calendar))"
         data-usermodules-position="@(GetModulePosition(Module.Calendar))">
         @{
-            Html.RenderPartial("CalendarsInfo", Model.CalendarOverviews);
+            Html.RenderPartial("CalendarsInfo", Model.CalendarModel);
         }                                                                        
     </div>                                        
     <div class="portlet faq" 
@@ -119,7 +119,7 @@
         data-usermodules-moduleid="@(GetModuleId(Module.Faq))"
         data-usermodules-position="@(GetModulePosition(Module.Faq))">
         @{
-            Html.RenderPartial("FaqInfo", Model.FaqOverviews);
+            Html.RenderPartial("FaqInfo", Model.FaqModel);
         }                                                                        
     </div>                                        
     <div class="portlet operartionallog" 
@@ -127,7 +127,7 @@
         data-usermodules-moduleid="@(GetModuleId(Module.OperationalLog))"
         data-usermodules-position="@(GetModulePosition(Module.OperationalLog))">
         @{
-            Html.RenderPartial("OperationLogsInfo", Model.OperationLogOverviews);
+            Html.RenderPartial("OperationLogsInfo", Model.OperationLogModel);
         }                                                                                                                                
     </div>                                        
     <div class="portlet dailyreport" 
@@ -151,7 +151,7 @@
         data-usermodules-moduleid="@(GetModuleId(Module.Documents))"
         data-usermodules-position="@(GetModulePosition(Module.Documents))">
         @{
-            Html.RenderPartial("DocumentsInfo", Model.DocumentOverviews);
+            Html.RenderPartial("DocumentsInfo", Model.DocumentsModel);
         }                                                                                            
     </div>                                        
     <div class="cases" 

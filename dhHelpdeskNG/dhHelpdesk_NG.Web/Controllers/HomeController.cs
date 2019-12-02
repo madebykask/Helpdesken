@@ -1,4 +1,5 @@
-﻿using System.Security.Principal;
+﻿using System.Collections;
+using System.Security.Principal;
 using System.Threading;
 using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Models.Case;
@@ -211,27 +212,39 @@ namespace DH.Helpdesk.Web.Controllers
                 var customersIds = module.NumberOfRows.HasValue
                                                   ? customers.Take(module.NumberOfRows.Value).Select(c => c.Customer.Customer_Id).ToArray()
                                                   : customers.Select(c => c.Customer.Customer_Id).ToArray();
-
-
-
+                var queryRowsNumber = module.NumberOfRows + 1 ?? module.NumberOfRows;
 
                 switch ((Module)module.Module_Id)
                 {
                     case Module.BulletinBoard:
                         if (SessionFacade.CurrentUser.UserGroupId == (int)BusinessData.Enums.Admin.Users.UserGroup.User ||
                             SessionFacade.CurrentUser.UserGroupId == (int)BusinessData.Enums.Admin.Users.UserGroup.Administrator)
-                            model.BulletinBoardOverviews = this.bulletinBoardService.GetBulletinBoardOverviews(customerIdsAll, module.NumberOfRows, true, bulletinBoardWGRestriction);
+                            model.BulletinBoardModel.Items = 
+                                this.bulletinBoardService.GetBulletinBoardOverviews(customerIdsAll, queryRowsNumber, true, bulletinBoardWGRestriction).ToArray();
                         else
-                            model.BulletinBoardOverviews = this.bulletinBoardService.GetBulletinBoardOverviews(customerIdsAll, module.NumberOfRows, true);
+                            model.BulletinBoardModel.Items = 
+                                this.bulletinBoardService.GetBulletinBoardOverviews(customerIdsAll, queryRowsNumber, true).ToArray();
+                        if (module.NumberOfRows.HasValue)
+                        {
+                            model.BulletinBoardModel.ShowMore = model.BulletinBoardModel.Items.Count() > module.NumberOfRows.Value;
+                            model.BulletinBoardModel.Items = model.BulletinBoardModel.Items.Take(module.NumberOfRows.Value);
+                        }
                         break;
                     case Module.Calendar:
                         if (SessionFacade.CurrentUser.UserGroupId == (int)BusinessData.Enums.Admin.Users.UserGroup.User ||
                             SessionFacade.CurrentUser.UserGroupId == (int)BusinessData.Enums.Admin.Users.UserGroup.Administrator)
-                            model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true, true, calendarWGRestriction)
-                                                      .OrderByDescending(c => c.CalendarDate);
+                            model.CalendarModel.Items = this.calendarService.GetCalendarOverviews(customerIdsAll, queryRowsNumber, true, true, true, calendarWGRestriction)
+                                                      .OrderByDescending(c => c.CalendarDate)
+                                                      .ToArray();
                         else
-                            model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true)
-                                                      .OrderByDescending(c => c.CalendarDate);
+                            model.CalendarModel.Items = this.calendarService.GetCalendarOverviews(customerIdsAll, queryRowsNumber, true, true)
+                                                      .OrderByDescending(c => c.CalendarDate)
+                                                      .ToArray();
+                        if (module.NumberOfRows.HasValue)
+                        {
+                            model.CalendarModel.ShowMore = model.CalendarModel.Items.Count() > module.NumberOfRows.Value;
+                            model.CalendarModel.Items = model.CalendarModel.Items.Take(module.NumberOfRows.Value);
+                        }
                         break;
                     case Module.Customers:
                         var customerCases = this.caseService.GetCustomersCases(customersIds, this.workContext.User.UserId);                        
@@ -241,16 +254,38 @@ namespace DH.Helpdesk.Web.Controllers
                         model.DailyReportOverviews = this.dailyReportService.GetDailyReportOverviews(customerIdsAll, module.NumberOfRows);
                         break;
                     case Module.Documents:
-                        model.DocumentOverviews = this.documentService.GetDocumentOverviews(customerIdsAll, module.NumberOfRows, true).OrderByDescending(d => d.ChangedDate);
+                        model.DocumentsModel.Items = this.documentService.GetDocumentOverviews(customerIdsAll, queryRowsNumber, true)
+                            .OrderByDescending(d => d.ChangedDate)
+                            .ToArray();
+                        if (module.NumberOfRows.HasValue)
+                        {
+                            model.DocumentsModel.ShowMore = model.DocumentsModel.Items.Count() > module.NumberOfRows.Value;
+                            model.DocumentsModel.Items = model.DocumentsModel.Items.Take(module.NumberOfRows.Value);
+                        }
                         break;
                     case Module.Faq:
-                        model.FaqOverviews = this.faqService.GetFaqByCustomers(customerIdsAll, module.NumberOfRows, true);
+                        model.FaqModel.Items = this.faqService.GetFaqByCustomers(customerIdsAll, queryRowsNumber, true).ToArray();
+                        if (module.NumberOfRows.HasValue)
+                        {
+                            model.FaqModel.ShowMore = model.FaqModel.Items.Count() > module.NumberOfRows.Value;
+                            model.FaqModel.Items = model.FaqModel.Items.Take(module.NumberOfRows.Value);
+                        }
                         break;
                     case Module.OperationalLog:
-                        model.OperationLogOverviews = this.operationLogService.GetOperationLogOverviews(customerIdsAll, module.NumberOfRows, true);
+                        model.OperationLogModel.Items = this.operationLogService.GetOperationLogOverviews(customerIdsAll, queryRowsNumber, true).ToArray();
+                        if (module.NumberOfRows.HasValue)
+                        {
+                            model.OperationLogModel.ShowMore = model.OperationLogModel.Items.Count() > module.NumberOfRows.Value;
+                            model.OperationLogModel.Items = model.OperationLogModel.Items.Take(module.NumberOfRows.Value);
+                        }
                         break;
                     case Module.Problems:
-                        model.ProblemOverviews = this.problemService.GetProblemOverviews(customerIdsAll, module.NumberOfRows, true);
+                        model.ProblemModel.Items = this.problemService.GetProblemOverviews(customerIdsAll, queryRowsNumber, true).ToArray();
+                        if (module.NumberOfRows.HasValue)
+                        {
+                            model.ProblemModel.ShowMore = model.ProblemModel.Items.Count() > module.NumberOfRows.Value;
+                            model.ProblemModel.Items = model.ProblemModel.Items.Take(module.NumberOfRows.Value);
+                        }
                         break;
                     case Module.QuickLinks:
                         if (SessionFacade.CurrentUser.UserGroupId == (int)BusinessData.Enums.Admin.Users.UserGroup.User ||
@@ -269,8 +304,13 @@ namespace DH.Helpdesk.Web.Controllers
                         model.CustomerChanges = this.modulesInfoFactory.GetCustomerChangesModel(customerChanges, showIcon);
                         break;
                     case Module.Cases:
-                        var myCases = this.caseService.GetMyCases(this.workContext.User.UserId, module.NumberOfRows);                       
-                        model.MyCases = this.modulesInfoFactory.GetMyCasesModel(myCases);                      
+                        var myCases = this.caseService.GetMyCases(this.workContext.User.UserId, queryRowsNumber);
+                        model.MyCases = this.modulesInfoFactory.GetMyCasesModel(myCases);
+                        if (module.NumberOfRows.HasValue)
+                        {
+                            model.MyCases.ShowMore = model.MyCases.Cases.Count() > module.NumberOfRows.Value;
+                            model.MyCases.Cases = model.MyCases.Cases.Take(module.NumberOfRows.Value).ToArray();
+                        }
                         break;
                 }
             }

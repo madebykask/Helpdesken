@@ -1,21 +1,30 @@
 ﻿@using DH.Helpdesk.Common.Extensions.DateTime
-@model IEnumerable<DH.Helpdesk.BusinessData.Models.Calendar.Output.CalendarOverview>
+@model DH.Helpdesk.Web.Models.Widgets.WidgetModel<DH.Helpdesk.BusinessData.Models.Calendar.Output.CalendarOverview>
 
-@if (Model != null && Model.Any())
+@if (Model != null && Model.Items.Any())
 {
     <div class="row-fluid">
         <div class="box-box span12">
             <div class="box-header portlet-header">
-                <div class="start-tile-img label purple"><a href="@Url.Action("index", "calendar", new {area = ""})"><img src="@Url.Content("~/Content/icons/news.png")" alt="@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)" /></a></div><h4>@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)</h4>
+                <div class="start-tile-img label purple">
+                    <a href="@Url.Action("index", "calendar", new {area = ""})">
+                        <img src="@Url.Content("~/Content/icons/news.png")" alt="@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)"/>
+                    </a>
+                </div>
+                <h4>@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)</h4>
             </div>
             <div class="box-body portlet-content">
-                @foreach (var calendar in Model)
+                @foreach (var calendar in Model.Items)
                 {
                     <div class="box-post">                        
                         <div class="label purple">@calendar.CustomerName | @calendar.CalendarDate.ToFormattedDate()</div>
                         <div class="captionrow">@calendar.Caption</div>
                         <div class="textrow">@Html.Raw(calendar.Text)</div>
                     </div>
+                }
+                @if (Model.ShowMore)
+                {
+                    <div class="box-post" style="text-align: center"><a href="@Url.Action("index", "calendar", new {area = ""})">>></a></div>
                 }
             </div>
         </div>

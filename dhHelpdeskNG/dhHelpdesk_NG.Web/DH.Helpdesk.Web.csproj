@@ -430,6 +430,7 @@
     <Compile Include="Models\Questionnaire\Input\QuestionnaireAnswerParams.cs" />
     <Compile Include="Models\Notifiers\ComputerUserCategoryModel.cs" />
     <Compile Include="Models\WebApi\TokenModel.cs" />
+    <Compile Include="Models\Widgets\WidgetModel.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Areas\Invoices\Models\BaseIndexModel.cs" />
     <Compile Include="Areas\Invoices\Models\IndexModelType.cs" />
