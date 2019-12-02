@@ -101,8 +101,8 @@
             <div class="span6">
                 <table class="tableform">
                     <tr>
-                        <td>@Translation.GetCoreTextTranslation("Anmälare")</td>
-                        <td>
+                        <td class="span3">@Translation.GetCoreTextTranslation("Anmälare")</td>
+                        <td class="span3">
                             <input type="text" id="CaseInitiatorFilter" value="@Model.CaseSearchFilterData.CaseInitiatorFilter" name="CaseInitiatorFilter" />
                             @if (Model.CaseSearchFilterData.IsAboutEnabled)
                             {
@@ -112,25 +112,25 @@
                     </tr>
                     <tr>
                         <td class="span3">@Translation.GetCoreTextTranslation("Ärendenummer")</td>
-                        <td class="span4">
+                        <td class="span3">
                             <input type="text" id="txtCaseNumberSearch" value="@Model.CaseSearchFilterData.caseSearchFilter.CaseNumber" name="txtCaseNumberSearch" />
                         </td>
                     </tr>
                     <tr>
                         <td class="span3">@Translation.GetCoreTextTranslation("Rubrik")</td>
-                        <td class="span4">
+                        <td class="span3">
                             <input type="text" id="txtCaptionSearch" value="@Model.CaseSearchFilterData.caseSearchFilter.CaptionSearch" name="txtCaptionSearch" />
                         </td>
                     </tr>
                     <tr>
                         <td class="span3">@Translation.GetCoreTextTranslation("Fritextfält")</td>
-                        <td class="span4">
+                        <td class="span3">
                             <input type="text" id="txtFreeTextSearch" value="@Model.CaseSearchFilterData.caseSearchFilter.FreeTextSearch" name="txtFreeTextSearch" />
                         </td>
                     </tr>
                     <tr>
                         <td class="span3">@Translation.GetCoreTextTranslation("Filinnehåll")</td>
-                        <td class="span4">
+                        <td class="span3">
                             <div>
                                 @Html.CheckBoxFor(m => Model.CaseSearchFilterData.caseSearchFilter.SearchThruFiles, new { id = "chkSearchThruFiles", @class = "switchcheckbox" })
                             </div>
