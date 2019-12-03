@@ -269,11 +269,15 @@ namespace DH.Helpdesk.Web.Controllers
                 filterCustomerId = cusId
             };
 
-            // Case #53981
-            fd.AvailablePerformersList =
-                _userService.GetAllPerformers(cusId).MapToCustomSelectList(fd.caseSearchFilter.UserPerformer, fd.customerSetting);
+			// Case #53981
+			var performers = _userService.GetAllPerformers(cusId);
+			var notAssigned = ObjectExtensions.notAssignedPerformer();
+			performers.Insert(0, new Domain.User { Id = notAssigned.Id, FirstName = notAssigned.FirstName, SurName = notAssigned.SurName });
 
-            if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserPerformer))
+			fd.AvailablePerformersList = performers.MapToCustomSelectList(fd.caseSearchFilter.UserPerformer, fd.customerSetting);
+
+
+			if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserPerformer))
             {
                 fd.lstfilterPerformer = fd.caseSearchFilter.UserPerformer.Split(',').Select(int.Parse).ToArray();
             }
@@ -303,7 +307,9 @@ namespace DH.Helpdesk.Web.Controllers
             fd.filterWorkingGroup.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
 
             //Sub status            
-            fd.filterStateSecondary = _stateSecondaryService.GetStateSecondaries(cusId);
+			var stateSecondaries = _stateSecondaryService.GetStateSecondaries(cusId);
+			stateSecondaries.Insert(0, ObjectExtensions.notAssignedStateSecondary());
+			fd.filterStateSecondary = stateSecondaries;
             fd.filterMaxRows = GetMaxRowsFilter();
 
             return fd;
@@ -343,29 +349,38 @@ namespace DH.Helpdesk.Web.Controllers
             if (HasField(customerfieldSettings, GlobalEnums.TranslationCaseFields.Department_Id))
             {
                 const bool IsTakeOnlyActive = false;
-                specificFilter.DepartmentList = this._departmentService.GetDepartmentsByUserPermissions(
-                    userId,
-                    customerId,
-                    IsTakeOnlyActive);
-                if (!specificFilter.DepartmentList.Any())
+
+				var departments = this._departmentService.GetDepartmentsByUserPermissions(
+					userId,
+					customerId,
+					IsTakeOnlyActive);
+                if (!departments.Any())
                 {
-                    specificFilter.DepartmentList =
+                    departments =
                         this._departmentService.GetDepartments(customerId, ActivationStatus.All)
                             .ToList();
                 }
 
                 if (customerSetting != null && customerSetting.ShowOUsOnDepartmentFilter != 0)
-                    specificFilter.DepartmentList = AddOrganizationUnitsToDepartments(specificFilter.DepartmentList);
-            }
+                    departments = AddOrganizationUnitsToDepartments(departments);
+
+				departments.Insert(0, ObjectExtensions.notAssignedDepartment());
+				specificFilter.DepartmentList = departments;
+
+			}
 
             if (HasField(customerfieldSettings, GlobalEnums.TranslationCaseFields.StateSecondary_Id))
             {
-                specificFilter.StateSecondaryList = this._stateSecondaryService.GetStateSecondaries(customerId);
+				var stateSecondaries = this._stateSecondaryService.GetStateSecondaries(customerId);
+				stateSecondaries.Insert(0, ObjectExtensions.notAssignedStateSecondary());
+				specificFilter.StateSecondaryList = stateSecondaries;
             }
 
             if (HasField(customerfieldSettings, GlobalEnums.TranslationCaseFields.Priority_Id))
             {
-                specificFilter.PriorityList = this._priorityService.GetPriorities(customerId);
+				var priorities = this._priorityService.GetPriorities(customerId);
+				priorities.Insert(0, ObjectExtensions.notAssignedPriority());
+				specificFilter.PriorityList = priorities;
             }
 
             if (HasField(customerfieldSettings, GlobalEnums.TranslationCaseFields.ClosingReason))

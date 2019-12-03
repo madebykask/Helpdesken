@@ -4130,25 +4130,32 @@ namespace DH.Helpdesk.Web.Controllers
                 filterCustomerId = cusId
             };
 
-            //region
-            if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseRegionFilter))
-                fd.filterRegion = _regionService.GetRegions(cusId);
+			//region
+			if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseRegionFilter))
+			{
+				var regions = _regionService.GetRegions(cusId);
+				regions.Insert(0, ObjectExtensions.notAssignedRegion());
+				fd.filterRegion = regions;
+			}
 
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseDepartmentFilter))
             {
-                fd.filterDepartment =
-                    _departmentService.GetDepartmentsByUserPermissions(userId, cusId, false);
+                var departments = _departmentService.GetDepartmentsByUserPermissions(userId, cusId, false);
 
-                if (!fd.filterDepartment.Any())
+                if (!departments.Any())
                 {
-                    fd.filterDepartment =
+					departments =
                         _departmentService.GetDepartments(cusId)
                             .ToList();
                 }
 
-                if (fd.customerSetting != null && fd.customerSetting.ShowOUsOnDepartmentFilter != 0)
-                    fd.filterDepartment = AddOrganizationUnitsToDepartments(fd.filterDepartment);
-            }
+				if (fd.customerSetting != null && fd.customerSetting.ShowOUsOnDepartmentFilter != 0)
+                    departments = AddOrganizationUnitsToDepartments(departments);
+
+				departments.Insert(0, ObjectExtensions.notAssignedDepartment());
+
+				fd.filterDepartment = departments;
+			}
 
             //ärendetyp
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCaseTypeFilter))
@@ -4207,16 +4214,29 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
 
-            //fd.filterCategory = _categoryService.GetActiveCategories(cusId);
-            //prio
-            if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CasePriorityFilter))
-                fd.filterPriority = _priorityService.GetPriorities(cusId);
-            //status
-            if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseStatusFilter))
-                fd.filterStatus = _statusService.GetStatuses(cusId);
-            //understatus
-            if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseStateSecondaryFilter))
-                fd.filterStateSecondary = _stateSecondaryService.GetStateSecondaries(cusId);
+			//fd.filterCategory = _categoryService.GetActiveCategories(cusId);
+			//prio
+			if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CasePriorityFilter))
+			{
+				var priorities = _priorityService.GetPriorities(cusId);
+				priorities.Insert(0, ObjectExtensions.notAssignedPriority());
+				fd.filterPriority = priorities;
+				
+			}
+			//status
+			if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseStatusFilter))
+			{
+				var status = _statusService.GetStatuses(cusId);
+				status.Insert(0, ObjectExtensions.notAssignedStatus());
+				fd.filterStatus = status;
+			}
+			//understatus
+			if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseStateSecondaryFilter))
+			{
+				var stateSecondaries = _stateSecondaryService.GetStateSecondaries(cusId);
+				stateSecondaries.Insert(0, ObjectExtensions.notAssignedStateSecondary());
+				fd.filterStateSecondary = stateSecondaries;
+			}
 
             fd.filterCaseProgress = ObjectExtensions.GetFilterForCases(SessionFacade.CurrentUser.FollowUpPermission, cusId);
             fd.CaseRegistrationDateStartFilter = fd.customerUserSetting.CaseRegistrationDateStartFilter;
@@ -6501,6 +6521,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var regions = _regionService.GetRegions(customerId);
             ret.RegionCheck = userCaseSettings.Region != string.Empty;
+			regions.Insert(0, ObjectExtensions.notAssignedRegion());
             ret.Regions = regions;
             ret.SelectedRegion = userCaseSettings.Region;
 
@@ -6520,11 +6541,12 @@ namespace DH.Helpdesk.Web.Controllers
             ret.IsDepartmentChecked = userCaseSettings.Departments != string.Empty;
 
             if (customerSettings != null && customerSettings.ShowOUsOnDepartmentFilter != 0)
-                ret.Departments = AddOrganizationUnitsToDepartments(departments);
-            else
-                ret.Departments = departments;
+                departments = AddOrganizationUnitsToDepartments(departments);
+               
+			departments.Insert(0, ObjectExtensions.notAssignedDepartment());
+			ret.Departments = departments;
 
-            ret.SelectedDepartments = userCaseSettings.Departments;
+			ret.SelectedDepartments = userCaseSettings.Departments;
 
             ret.RegisteredByCheck = userCaseSettings.RegisteredBy != string.Empty;
             ret.RegisteredByUserList = _userService.GetUserOnCases(customerId, IsTakeOnlyActive).MapToSelectList(customerSettings);
@@ -6600,8 +6622,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             var priorities = _priorityService.GetPriorities(customerId).OrderBy(p => p.Code).ToList();
             ret.PriorityCheck = (userCaseSettings.Priority != string.Empty);
-            ret.Priorities = priorities;
-            ret.SelectedPriority = userCaseSettings.Priority;
+			priorities.Insert(0, ObjectExtensions.notAssignedPriority());
+			ret.Priorities = priorities;
+			ret.SelectedPriority = userCaseSettings.Priority;
 
             ret.Categories =
                 _categoryService.GetParentCategoriesWithChildren(customerId, true).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
@@ -6627,11 +6650,13 @@ namespace DH.Helpdesk.Web.Controllers
 
             var states = _statusService.GetStatuses(customerId).OrderBy(s => s.Name).ToList();
             ret.StateCheck = (userCaseSettings.State != string.Empty);
+			states.Insert(0, ObjectExtensions.notAssignedStatus());
             ret.States = states;
             ret.SelectedState = userCaseSettings.State;
 
             var subStates = _stateSecondaryService.GetStateSecondaries(customerId).OrderBy(s => s.Name).ToList();
             ret.SubStateCheck = (userCaseSettings.SubState != string.Empty);
+			subStates.Insert(0, ObjectExtensions.notAssignedStateSecondary());
             ret.SubStates = subStates;
             ret.SelectedSubState = userCaseSettings.SubState;
 
