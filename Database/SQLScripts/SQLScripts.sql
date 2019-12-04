@@ -138,15 +138,8 @@ BEGIN
 	UPDATE tblFeatureToggle
 	SET
 	 StrongName = 'USE_DEPRICATED_ADVANCED_CASE_SEARCH',
-	 Active = FT.NewActive,
+	 Active = 0,
 	 Description = 'Use old advanced search feature'
-	FROM (
-		SELECT CASE
-           WHEN Active = 1 THEN 0
-		   WHEN Active = 0 THEN 1
-		   ELSE 0
-		END AS NewActive FROM tblFeatureToggle FT WHERE FT.StrongName = 'NEW_ADVANCED_CASE_SEARCH'
-	) FT
 	 WHERE StrongName = 'NEW_ADVANCED_CASE_SEARCH'
 END
 
@@ -156,15 +149,8 @@ BEGIN
 	UPDATE tblFeatureToggle
 	SET
 	 StrongName = 'USE_DEPRICATED_REPORTED_TIME_REPORT',
-	 Active = FT.NewActive,
+	 Active = 0,
 	 Description = 'Use old Reported Time report implementation'
-	FROM (
-		SELECT CASE
-           WHEN Active = 1 THEN 0
-		   WHEN Active = 0 THEN 1
-		   ELSE 0
-		END AS NewActive FROM tblFeatureToggle FT WHERE FT.StrongName = 'NEW_REPORTED_TIME_REPORT'
-	) FT
 	 WHERE StrongName = 'NEW_REPORTED_TIME_REPORT'
 END
 
@@ -174,15 +160,8 @@ BEGIN
 	UPDATE tblFeatureToggle
 	SET
 	 StrongName = 'USE_DEPRICATED_NUMBER_OF_CASES_REPORT',
-	 Active = FT.NewActive,
+	 Active = 0,
 	 Description = 'Use old Number of Cases report implementation'
-	FROM (
-		SELECT CASE
-           WHEN Active = 1 THEN 0
-		   WHEN Active = 0 THEN 1
-		   ELSE 0
-		END AS NewActive FROM tblFeatureToggle FT WHERE FT.StrongName = 'NEW_NUMBER_OF_CASES_REPORT'
-	) FT
 	 WHERE StrongName = 'NEW_NUMBER_OF_CASES_REPORT'
 END
 
