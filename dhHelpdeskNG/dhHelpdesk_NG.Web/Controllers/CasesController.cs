@@ -5081,9 +5081,6 @@ namespace DH.Helpdesk.Web.Controllers
                     if (caseTemplate.StateSecondary_Id.HasValue)
                         m.case_.StateSecondary_Id = caseTemplate.StateSecondary_Id;
 
-                    // TODO: JWE What is "Verfied"?
-                    //m.case_.Verified = caseTemplate.Verified;
-
                     if (!string.IsNullOrEmpty(caseTemplate.VerifiedDescription))
                         m.case_.VerifiedDescription = caseTemplate.VerifiedDescription;
 
