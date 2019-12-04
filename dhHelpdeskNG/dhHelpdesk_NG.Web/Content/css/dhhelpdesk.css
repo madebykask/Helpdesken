@@ -4171,9 +4171,10 @@ div.chosen-container.chosen-container-single.error .chosen-single {
 #statisticsData table tr:nth-child(odd) td {
     text-align: center;
     font-size: smaller;
+    color: #999;
 }
 
-#statisticsData table tr td:nth-child(1) {
+/*#statisticsData table tr td:nth-child(1) {
     color: #438eb9;
 }
 
@@ -4189,19 +4190,19 @@ div.chosen-container.chosen-container-single.error .chosen-single {
 #statisticsData table tr:nth-child(1) td:nth-child(4),
 #statisticsData table tr:nth-child(2) td:nth-child(4) {
     color: red;
-}
+}*/
 
 #statisticsData table tr:nth-child(even) td {
     text-align: center;
     font-size: larger;
 }
 
-#statisticsData table tr:nth-child(3) td:nth-child(3),
+/*#statisticsData table tr:nth-child(3) td:nth-child(3),
 #statisticsData table tr:nth-child(4) td:nth-child(3) {
     color: #2e8965;
-}
+}*/
 
-#statisticsData table tr:nth-child(3) td:nth-child(4),
+/*#statisticsData table tr:nth-child(3) td:nth-child(4),
 #statisticsData table tr:nth-child(4) td:nth-child(4) {
     color: #999;
-}
+}*/

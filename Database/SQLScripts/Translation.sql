@@ -7588,7 +7588,7 @@ GO
 
 If not exists (select * from tbltext where id = 2043)
 begin
-	insert into tbltext (id, TextString) VALUES (2043, 'Försenade')
+	insert into tbltext (id, TextString) VALUES (2043, 'Förfallna')
 	If not exists (select * from tblTextTranslation where text_id = 2043 and Language_Id = 2)
 		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2043, 2, 'Overdue')
 end
@@ -7596,7 +7596,7 @@ GO
 
 If not exists (select * from tbltext where id = 2044)
 begin
-	insert into tbltext (id, TextString) VALUES (2044, 'Försenade idag')
+	insert into tbltext (id, TextString) VALUES (2044, 'Förfaller idag')
 	If not exists (select * from tblTextTranslation where text_id = 2044 and Language_Id = 2)
 		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2044, 2, 'Due today')
 end
@@ -7612,9 +7612,9 @@ GO
 
 If not exists (select * from tbltext where id = 2046)
 begin
-	insert into tbltext (id, TextString) VALUES (2046, 'Lösta i tid idag')
+	insert into tbltext (id, TextString) VALUES (2046, 'Lösta i tid')
 	If not exists (select * from tblTextTranslation where text_id = 2046 and Language_Id = 2)
-		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2046, 2, 'Solved in time today')
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2046, 2, 'Solved in time')
 end
 GO
 
@@ -7676,7 +7676,17 @@ begin
 end
 GO
 
+UPDATE tblTextTranslation Set TextTranslation = 'In progress' WHERE Text_Id=640 AND Language_Id=2;
+go
 
+If not exists (select * from tbltext where id = 2053)
+begin
+	insert into tbltext (id, TextString) VALUES (2053, 'Nya idag')
+
+	If not exists (select * from tblTextTranslation where text_id = 2053 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2053, 2, 'New today')
+end
+GO
 
 
 
