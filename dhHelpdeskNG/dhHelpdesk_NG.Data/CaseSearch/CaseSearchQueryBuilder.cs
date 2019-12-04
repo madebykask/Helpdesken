@@ -1062,57 +1062,111 @@ namespace DH.Helpdesk.Dal.Repositories
             // department / avdelning
             if (!string.IsNullOrWhiteSpace(searchFilter.Department))
             {
-                // organizationUnit
-                if (!string.IsNullOrWhiteSpace(searchFilter.OrganizationUnit))
-                {
-                    switch (searchFilter.InitiatorSearchScope)
-                    {
-                        case CaseInitiatorSearchScope.UserAndIsAbout:
-                            sb.Append(" and (tblCase.Department_Id in (" + searchFilter.Department.SafeForSqlInject() + ") or " +
-                                      "tblCaseIsAbout.Department_Id in (" + searchFilter.Department.SafeForSqlInject() + ") or " +
-                                      "tblCase.OU_Id in (" + searchFilter.OrganizationUnit.SafeForSqlInject() + "))");
-                            break;
-                        case CaseInitiatorSearchScope.User:
-                            sb.Append(" and (tblCase.Department_Id in (" + searchFilter.Department.SafeForSqlInject() + ") or " +
-                                      "tblCase.OU_Id in (" + searchFilter.OrganizationUnit.SafeForSqlInject() + "))");
-                            break;
-                        case CaseInitiatorSearchScope.IsAbout:
-                            sb.Append(" and (tblCaseIsAbout.Department_Id in (" + searchFilter.Department.SafeForSqlInject() + ") or " +
-                                      "tblCase.OU_Id in (" + searchFilter.OrganizationUnit.SafeForSqlInject() + "))");
-                            break;
-                        default:
-                            sb.Append(" and (tblCase.Department_Id in (" + searchFilter.Department.SafeForSqlInject() + ") or " +
-                                      "tblCaseIsAbout.Department_Id in (" + searchFilter.Department.SafeForSqlInject() + ") or " +
-                                      "tblCase.OU_Id in (" + searchFilter.OrganizationUnit.SafeForSqlInject() + "))");
-                            break;
-                    }
-                }
-                else
-                {
-                    switch (searchFilter.InitiatorSearchScope)
-                    {
-                        case CaseInitiatorSearchScope.UserAndIsAbout:
-                            sb.Append(" and (tblCase.Department_Id in (" + searchFilter.Department.SafeForSqlInject() + ")" +
-                                      " or tblCaseIsAbout.Department_Id in (" + searchFilter.Department.SafeForSqlInject() + "))");
-                            break;
-                        case CaseInitiatorSearchScope.User:
-                            sb.Append(" and (tblCase.Department_Id in (" + searchFilter.Department.SafeForSqlInject() + "))");
-                            break;
-                        case CaseInitiatorSearchScope.IsAbout:
-                            sb.Append(" and (tblCaseIsAbout.Department_Id in (" + searchFilter.Department.SafeForSqlInject() + "))");
-                            break;
-                        default:
-                            sb.Append(" and (tblCase.Department_Id in (" + searchFilter.Department.SafeForSqlInject() + ")" +
-                                      " or tblCaseIsAbout.Department_Id in (" + searchFilter.Department.SafeForSqlInject() + "))");
-                            break;
-                    }
-                }
-            }
+				var departmentIds = searchFilter.Department.Split(',').Select(o => int.Parse(o)).ToDictionary(it => it, it => it);
+				var searchUnassigned = departmentIds.ContainsKey(int.MinValue);
+				if (searchUnassigned)
+				{
+					departmentIds.Remove(int.MinValue);
+				}
+
+				var departments = departmentIds.Any() ? departmentIds.Select(o => o.Key.ToString()).Aggregate((o, p) => $"{o}, {p}") : "";
+				// organizationUnit
+				if (!string.IsNullOrWhiteSpace(departments))
+				{
+					if (!string.IsNullOrWhiteSpace(searchFilter.OrganizationUnit))
+					{
+						switch (searchFilter.InitiatorSearchScope)
+						{
+							default:
+							case CaseInitiatorSearchScope.UserAndIsAbout:
+								sb.Append(" and ((tblCase.Department_Id in (" + departments.SafeForSqlInject() + ") or " +
+										  "tblCaseIsAbout.Department_Id in (" + departments.SafeForSqlInject() + ") or " +
+										  "tblCase.OU_Id in (" + searchFilter.OrganizationUnit.SafeForSqlInject() + ") OR " +
+										  "tblCaseIsAbout.OU_Id in (" + searchFilter.OrganizationUnit.SafeForSqlInject() + "))");
+								sb.Append(searchUnassigned ? " OR (tblCase.Department_Id IS NULL AND tblCaseIsAbout.Department_Id IS NULL))" : ")");
+								break;
+							case CaseInitiatorSearchScope.User:
+								sb.Append(" and ((tblCase.Department_Id in (" + departments.SafeForSqlInject() + ") or " +
+										  "tblCase.OU_Id in (" + searchFilter.OrganizationUnit.SafeForSqlInject() + "))");
+								sb.Append(searchUnassigned ? " OR (tblCase.Department_Id IS NULL))" : ")");
+								break;
+							case CaseInitiatorSearchScope.IsAbout:
+								sb.Append(" and ((tblCaseIsAbout.Department_Id in (" + departments.SafeForSqlInject() + ") or " +
+										  "tblCaseIsAbout.OU_Id in (" + searchFilter.OrganizationUnit.SafeForSqlInject() + "))");
+								sb.Append(searchUnassigned ? " OR (tblCaseIsAbout.Department_Id IS NULL))" : ")");
+								break;
+						}
+					}
+					else
+					{
+						switch (searchFilter.InitiatorSearchScope)
+						{
+							default:
+							case CaseInitiatorSearchScope.UserAndIsAbout:
+								sb.Append(" and ((tblCase.Department_Id in (" + departments.SafeForSqlInject() + ")" +
+										  " or tblCaseIsAbout.Department_Id in (" + departments.SafeForSqlInject() + "))");
+								sb.Append(searchUnassigned ? " OR (tblCase.Department_Id IS NULL AND tblCaseIsAbout.Department_Id IS NULL))" : ")");
+								break;
+							case CaseInitiatorSearchScope.User:
+								sb.Append(" and ((tblCase.Department_Id in (" + departments.SafeForSqlInject() + "))");
+								sb.Append(searchUnassigned ? " OR (tblCase.Department_Id IS NULL))" : ")");
+								break;
+							case CaseInitiatorSearchScope.IsAbout:
+								sb.Append(" and ((tblCaseIsAbout.Department_Id in (" + departments.SafeForSqlInject() + "))");
+								sb.Append(searchUnassigned ? " OR (tblCaseIsAbout.Department_Id IS NULL))" : ")");
+								break;
+						}
+					}
+				}
+				else if (searchUnassigned)
+				{
+
+					var useOUFilter = !string.IsNullOrWhiteSpace(searchFilter.OrganizationUnit);
+
+					switch (searchFilter.InitiatorSearchScope)
+					{
+						case CaseInitiatorSearchScope.UserAndIsAbout:
+						default:
+							sb.Append(" AND ((tblCase.Department_Id IS NULL AND tblCaseIsAbout.Department_Id IS NULL)");
+							sb.Append(useOUFilter ? " OR (tblCase.OU_Id in (" + searchFilter.OrganizationUnit.SafeForSqlInject() + ") OR tblCaseIsAbout.OU_Id IN (" +
+								searchFilter.OrganizationUnit.SafeForSqlInject() + ")))" : ")");
+							break;
+						case CaseInitiatorSearchScope.User:
+							sb.Append(" AND (tblCase.Department_Id IS NULL");
+							sb.Append(useOUFilter ? " OR tblCase.OU_Id IN (" + searchFilter.OrganizationUnit.SafeForSqlInject() + "))" : ")");
+							break;
+						case CaseInitiatorSearchScope.IsAbout:
+							sb.Append(" AND (tblCaseIsAbout.Department_Id IS NULL");
+							sb.Append(useOUFilter ? " OR tblCaseIsAbout.OU_Id IN (" + searchFilter.OrganizationUnit.SafeForSqlInject() + "))" : ")");
+							break;
+					}
+				}
+				else
+				{
+					throw new ArgumentException("Invalid search filter for department");
+				}
+			}
             else
             {
-                // organizationUnit
-                if (!string.IsNullOrWhiteSpace(searchFilter.OrganizationUnit))
-                    sb.Append(" and (tblCase.OU_Id in (" + searchFilter.OrganizationUnit.SafeForSqlInject() + "))");
+				// organizationUnit
+				if (!string.IsNullOrWhiteSpace(searchFilter.OrganizationUnit))
+				{
+					switch (searchFilter.InitiatorSearchScope)
+					{
+						case CaseInitiatorSearchScope.UserAndIsAbout:
+						default:
+							sb.Append("AND (tblCase.OU_Id in (" + searchFilter.OrganizationUnit.SafeForSqlInject() + ") OR tblCaseIsAbout.OU_Id IN (" +
+								searchFilter.OrganizationUnit.SafeForSqlInject() + "))");
+							break;
+						case CaseInitiatorSearchScope.User:
+							sb.Append("AND tblCase.OU_Id IN (" + searchFilter.OrganizationUnit.SafeForSqlInject() + ")");
+							break;
+						case CaseInitiatorSearchScope.IsAbout:
+							sb.Append(" AND tblCaseIsAbout.OU_Id IN (" + searchFilter.OrganizationUnit.SafeForSqlInject() + ")");
+							break;
+
+					}
+				}
             }
 
             // anvandare / user            

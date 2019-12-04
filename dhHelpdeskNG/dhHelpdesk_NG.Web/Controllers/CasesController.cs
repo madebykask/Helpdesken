@@ -4031,11 +4031,19 @@ namespace DH.Helpdesk.Web.Controllers
             string ret = string.Empty;
             var ids = departments_OrganizationUnits.Split(',');
             var depIds = new List<int>();
-            if (ids.Length > 0)
-            {
-                for (int i = 0; i < ids.Length; i++)
-                    if (!string.IsNullOrEmpty(ids[i].Trim()) && int.Parse(ids[i].Trim()) > 0)
-                        depIds.Add(int.Parse(ids[i]));
+			if (ids.Length > 0)
+			{
+				for (int i = 0; i < ids.Length; i++)
+				{
+					if (!string.IsNullOrEmpty(ids[i].Trim()))
+					{
+						var id = int.Parse(ids[i].Trim());
+						if (id > 0 || id == ObjectExtensions.notAssignedDepartment().Id)
+						{
+							depIds.Add(id);
+						}
+					}
+				}
             }
             if (depIds.Any())
                 ret = string.Join(",", depIds);
@@ -4049,9 +4057,17 @@ namespace DH.Helpdesk.Web.Controllers
             var ouIds = new List<int>();
             if (ids.Length > 0)
             {
-                for (int i = 0; i < ids.Length; i++)
-                    if (!string.IsNullOrEmpty(ids[i].Trim()) && int.Parse(ids[i].Trim()) < 0)
-                        ouIds.Add(-int.Parse(ids[i]));
+				for (int i = 0; i < ids.Length; i++)
+				{
+					if (!string.IsNullOrEmpty(ids[i].Trim()))
+					{
+						var id = int.Parse(ids[i].Trim());
+						if (id < 0 && id != ObjectExtensions.notAssignedDepartment().Id)
+						{
+							ouIds.Add(-id);
+						}
+					}
+				}
             }
             if (ouIds.Any())
                 ret = string.Join(",", ouIds);
