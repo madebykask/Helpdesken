@@ -1377,13 +1377,11 @@ namespace DH.Helpdesk.Services.Services
         {
             switch (module)
             {
-                case Module.Customers:
-                    return null;
-                case Module.QuickLinks:
-                    return null;
+                case Module.ChangeManagement:
+                    return 3;
             }
 
-            return 3;
+            return null;
         }
 
         private bool GetDefaultVisibility(Module module)

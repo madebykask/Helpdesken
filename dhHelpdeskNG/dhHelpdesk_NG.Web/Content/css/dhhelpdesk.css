@@ -4174,35 +4174,15 @@ div.chosen-container.chosen-container-single.error .chosen-single {
     color: #999;
 }
 
-/*#statisticsData table tr td:nth-child(1) {
-    color: #438eb9;
-}
-
-#statisticsData table tr td:nth-child(2) {
-    color: #d96326;
-}
-
-#statisticsData table tr:nth-child(1) td:nth-child(3),
-#statisticsData table tr:nth-child(2) td:nth-child(3) {
-    color: #999;
-}
-
-#statisticsData table tr:nth-child(1) td:nth-child(4),
-#statisticsData table tr:nth-child(2) td:nth-child(4) {
-    color: red;
-}*/
-
 #statisticsData table tr:nth-child(even) td {
     text-align: center;
     font-size: larger;
 }
 
-/*#statisticsData table tr:nth-child(3) td:nth-child(3),
-#statisticsData table tr:nth-child(4) td:nth-child(3) {
-    color: #2e8965;
-}*/
+.portlet-content .more {
+    text-align: right;
+}
 
-/*#statisticsData table tr:nth-child(3) td:nth-child(4),
-#statisticsData table tr:nth-child(4) td:nth-child(4) {
-    color: #999;
-}*/
+.portlet-content .more .btn {
+    padding: 2px 6px;
+}

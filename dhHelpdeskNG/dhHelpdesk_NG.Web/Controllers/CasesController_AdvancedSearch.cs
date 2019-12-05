@@ -22,7 +22,7 @@ namespace DH.Helpdesk.Web.Controllers
     public partial class CasesController
     {
         [System.Web.Http.HttpGet]
-        public ActionResult AdvancedSearch(bool? clearFilters = false, bool doSearchAtBegining = false, bool isExtSearch = false)
+        public ActionResult AdvancedSearch(bool? clearFilters = false, bool doSearchAtBegining = false, bool isExtSearch = false, bool currentUserAdmin = false)
         {
             if (SessionFacade.CurrentUser == null)
             {
@@ -63,6 +63,12 @@ namespace DH.Helpdesk.Web.Controllers
             else
             {
                 advancedSearchModel = SessionFacade.CurrentAdvancedSearch;
+            }
+
+            if (currentUserAdmin)
+            {
+                advancedSearchModel.CaseSearchFilter.UserPerformer = currentUserId.ToString();
+                advancedSearchModel.CaseSearchFilter.Customer = "";
             }
 
             model.CaseSearchFilterData =

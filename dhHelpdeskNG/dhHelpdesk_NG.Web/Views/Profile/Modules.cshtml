@@ -5,11 +5,11 @@
     <table class="table table-striped table-bordered table-hover">
         <thead>
             <th style="width: 1%;"></th>
-            <th style="width: 30%;">@Translation.Get("Moduler", Enums.TranslationSource.TextTranslation)</th>
-            <th>@Translation.Get("Antal rader", Enums.TranslationSource.TextTranslation)</th>
-        </thead>        
-        <tbody>    
+            <th style="width: 30%;">@Translation.Get("Moduler")</th>
+            <th>@Translation.Get("Antal rader")</th>
+        </thead>
+        <tbody> 
             @Html.EditorFor(m => m.Modules)
         </tbody>
-    </table>            
+    </table>
 }

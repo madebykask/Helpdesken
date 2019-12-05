@@ -3,9 +3,6 @@
 namespace DH.Helpdesk.Web.Models
 {
     using System.Collections.Generic;
-    using System.Web.Mvc;
-
-    using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.BulletinBoard.Output;
     using DH.Helpdesk.BusinessData.Models.Calendar.Output;
     using DH.Helpdesk.BusinessData.Models.DailyReport.Output;
@@ -14,7 +11,6 @@ namespace DH.Helpdesk.Web.Models
     using DH.Helpdesk.BusinessData.Models.Problem.Output;
     using DH.Helpdesk.BusinessData.Models.Statistics.Output;
     using DH.Helpdesk.BusinessData.Models.Users.Output;
-    using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Models.Case;
     using DH.Helpdesk.Web.Models.Changes;
     using DH.Helpdesk.Web.Models.Link;
@@ -40,7 +36,7 @@ namespace DH.Helpdesk.Web.Models
 
         public WidgetModel<OperationLogOverview> OperationLogModel { get; set; } = new WidgetModel<OperationLogOverview>();
 
-        public IEnumerable<DailyReportOverview> DailyReportOverviews { get; set; } = new DailyReportOverview[] { };
+        public WidgetModel<DailyReportOverview> DailyReportModel { get; set; } = new WidgetModel<DailyReportOverview>();
 
         public LinksInfoViewModel LinksInfo { get; set; } = new LinksInfoViewModel();
 

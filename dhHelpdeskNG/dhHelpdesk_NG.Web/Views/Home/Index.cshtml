@@ -135,32 +135,32 @@
         data-usermodules-moduleid="@(GetModuleId(Module.DailyReport))"
         data-usermodules-position="@(GetModulePosition(Module.DailyReport))">
         @{
-            Html.RenderPartial("DailyReportsInfo", Model.DailyReportOverviews);
-        }                                                                                                                                
-    </div>                                        
+            Html.RenderPartial("DailyReportsInfo", Model.DailyReportModel);
+        }
+    </div>
     <div class="portlet quicklinks" 
         data-usermodules="item" 
         data-usermodules-moduleid="@(GetModuleId(Module.QuickLinks))"
         data-usermodules-position="@(GetModulePosition(Module.QuickLinks))">
         @{
             Html.RenderPartial("LinksInfo", Model.LinksInfo);
-        }                                                                                                                                
-    </div>                                        
+        }
+    </div>
     <div class="portlet documents" 
         data-usermodules="item" 
         data-usermodules-moduleid="@(GetModuleId(Module.Documents))"
         data-usermodules-position="@(GetModulePosition(Module.Documents))">
         @{
             Html.RenderPartial("DocumentsInfo", Model.DocumentsModel);
-        }                                                                                            
-    </div>                                        
+        }
+    </div>
     <div class="cases" 
         data-usermodules="item" 
         data-usermodules-moduleid="@(GetModuleId(Module.Cases))"
         data-usermodules-position="@(GetModulePosition(Module.Cases))">
         @{
             Html.RenderPartial("MyCasesInfo", Model.MyCases);
-        }                                                                                            
+        }
     </div>
     <div class="cases quick-open"
          data-usermodules="item"
@@ -170,7 +170,7 @@
         {
             Html.RenderPartial("CaseQuickOpen");
         }
-    </div>                                      
+    </div>
 </div>
 @functions
 {

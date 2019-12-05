@@ -51,8 +51,8 @@
             </table>
             @if (Model.ShowMore)
             {
-                <div style="text-align: center;">
-                    <a class="btn" href="@Url.Action("AdvancedSearch", "Cases", new {area = "", clearFilters=true})">@Translation.Get("Visa fler")</a>
+                <div class="more">
+                    <a class="btn" href="@Url.Action("AdvancedSearch", "Cases", new {area = "", clearFilters = true, currentUserAdmin = true})">>></a>
                 </div>
             }
 

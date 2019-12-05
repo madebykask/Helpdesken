@@ -14,10 +14,6 @@ namespace DH.Helpdesk.Web.Models.Profile
 
     public class ProfileInputViewModel
     {
-        private UserModulesViewModel modules = new UserModulesViewModel();
-
-        private UserCustomersSettingsViewModel customersSettings = new UserCustomersSettingsViewModel();
-
         public User User { get; set; }
 
         public ChangePasswordModel ChangePasswordModel { get; set; }
@@ -28,24 +24,9 @@ namespace DH.Helpdesk.Web.Models.Profile
 
         public IList<SelectListItem> RefreshInterval { get; set; }
 
-        public UserModulesViewModel Modules
-        {
-            get { return this.modules; }
-            set { this.modules = value; }
-        }
+        public UserModulesViewModel Modules { get; set; } = new UserModulesViewModel();
 
-        public UserCustomersSettingsViewModel CustomersSettings
-        {
-            get
-            {
-                return this.customersSettings;
-            }
-
-            set
-            {
-                this.customersSettings = value;
-            }
-        }
+        public UserCustomersSettingsViewModel CustomersSettings { get; set; } = new UserCustomersSettingsViewModel();
 
         public string SelectedTimeZone { get; set; }
 
@@ -54,9 +35,6 @@ namespace DH.Helpdesk.Web.Models.Profile
 
     public class ProfileSaveViewModel
     {
-        private IList<UserModule> modules = new List<UserModule>();
-
-        private List<UserProfileCustomerSettings> customersSettings = new List<UserProfileCustomerSettings>();
 
         public User User { get; set; }
 
@@ -76,25 +54,10 @@ namespace DH.Helpdesk.Web.Models.Profile
 
         public string[] MenuSetting { get; set; }
 
-        public IList<UserModule> Modules
-        {
-            get { return this.modules; }
-            set { this.modules = value; }
-        }
+        public IList<UserModule> Modules { get; set; } = new List<UserModule>();
 
-        public List<UserProfileCustomerSettings> CustomersSettings
-        {
-            get
-            {
-                return this.customersSettings;
-            }
-
-            set
-            {
-                this.customersSettings = value;
-            }
-        }
-
+        public List<UserProfileCustomerSettings> CustomersSettings { get; set; } = new List<UserProfileCustomerSettings>();
+        
         public string SelectedTimeZone { get; set; }
     }
 }

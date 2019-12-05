@@ -165,6 +165,15 @@ BEGIN
 	 WHERE StrongName = 'NEW_NUMBER_OF_CASES_REPORT'
 END
 
+RAISERROR ('Changing module name in tblModule', 10, 1) WITH NOWAIT
+IF EXISTS(SELECT 1 FROM tblModule WHERE [Name] = 'Ärendeöversikt')
+BEGIN
+	UPDATE tblModule
+	SET
+	 [Name] = 'Sammanfattning - Ärende'
+	 WHERE [Name] = 'Ärendeöversikt'
+END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.45'
 GO

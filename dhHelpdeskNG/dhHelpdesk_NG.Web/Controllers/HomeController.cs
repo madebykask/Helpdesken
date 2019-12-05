@@ -247,11 +247,18 @@ namespace DH.Helpdesk.Web.Controllers
                         }
                         break;
                     case Module.Customers:
-                        var customerCases = this.caseService.GetCustomersCases(customersIds, this.workContext.User.UserId);                        
+                        var customerCases = this.caseService.GetCustomersCases(customersIds, this.workContext.User.UserId);
                         model.CustomersInfo = this.caseModelFactory.CreateCustomerCases(customerCases);
                         break;
                     case Module.DailyReport:
-                        model.DailyReportOverviews = this.dailyReportService.GetDailyReportOverviews(customerIdsAll, module.NumberOfRows);
+                        model.DailyReportModel.Items = this.dailyReportService.GetDailyReportOverviews(customerIdsAll, queryRowsNumber)
+                            .OrderByDescending(d => d.CreatedDate)
+                            .ToArray();
+                        if (module.NumberOfRows.HasValue)
+                        {
+                            model.DailyReportModel.ShowMore = model.DailyReportModel.Items.Count() > module.NumberOfRows.Value;
+                            model.DailyReportModel.Items = model.DailyReportModel.Items.Take(module.NumberOfRows.Value);
+                        }
                         break;
                     case Module.Documents:
                         model.DocumentsModel.Items = this.documentService.GetDocumentOverviews(customerIdsAll, queryRowsNumber, true)
