@@ -4160,23 +4160,25 @@ div.chosen-container.chosen-container-single.error .chosen-single {
     font-weight: bolder;
 }
 
+/*div#statisticsData {
+    padding-left: 20px;
+}*/
+
 #statisticsData table tr td {
     width: 25%
 }
 
 #statisticsData table tr:nth-child(2) td{
-    padding-bottom: 19px;
+    padding-bottom: 5px;
 }
 
 #statisticsData table tr:nth-child(odd) td {
-    text-align: center;
     font-size: smaller;
     color: #999;
 }
 
 #statisticsData table tr:nth-child(even) td {
-    text-align: center;
-    font-size: larger;
+    font-size: x-large;
 }
 
 .portlet-content .more {
