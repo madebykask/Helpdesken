@@ -334,12 +334,13 @@ Module DH_Helpdesk_Schedule
 
         For i As Integer = 1 To colCase.Count
             objCaseSolution = colCase(i)
-
             objLogFile.WriteLine(Now() & ", CaseSolutionSchedule, Caption:" & objCaseSolution.Caption)
 
             objCase = objCaseData.createCase(objCaseSolution)
-
             objLogFile.WriteLine(Now() & ", CaseSolutionSchedule, CaseNumber:" & objCase.Casenumber)
+
+            Dim isAboutObj As ComputerUser = getIsAboutData(objCaseSolution)
+            objCaseData.saveCaseIsAbout(objCase.Id, isAboutObj)
 
             Dim iCaseHistory_Id As Integer = objCaseData.saveCaseHistory(objCase.Id, "DH Helpdesk")
 
@@ -374,6 +375,22 @@ Module DH_Helpdesk_Schedule
         'End If
 
     End Sub
+
+    Private Function getIsAboutData(objCaseSolution As CCase) As ComputerUser
+        Dim isAboutData As ComputerUser = New ComputerUser()
+        isAboutData.UserId = objCaseSolution.IsAbout_ReportedBy
+        isAboutData.SurName = objCaseSolution.IsAbout_PersonsName
+        isAboutData.EMail = objCaseSolution.IsAbout_PersonsEMail
+        isAboutData.Phone = objCaseSolution.IsAbout_PersonsPhone
+        isAboutData.CellPhone = objCaseSolution.IsAbout_PersonsCellPhone
+        isAboutData.Region_Id = objCaseSolution.IsAbout_Region_Id
+        isAboutData.Department_Id = objCaseSolution.IsAbout_Department_Id
+        isAboutData.OU_Id = objCaseSolution.IsAbout_OU_Id
+        isAboutData.Location = objCaseSolution.IsAbout_Place
+        isAboutData.CostCentre = objCaseSolution.IsAbout_CostCentre
+        isAboutData.UserCode = objCaseSolution.IsAbout_UserCode
+        Return isAboutData
+    End Function
 
     Private Sub caseReminder(ByVal sConnectionString As String)
         Dim objGlobalSettingsData As New GlobalSettingsData

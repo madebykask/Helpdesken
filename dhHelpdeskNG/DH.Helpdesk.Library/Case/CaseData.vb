@@ -7,7 +7,7 @@ Imports DH.Helpdesk.Dal.Repositories
 Imports DH.Helpdesk.Library.SharedFunctions
 Imports DH.Helpdesk.Services.Infrastructure
 Imports DH.Helpdesk.Services.Services
-Imports DH.Helpdesk.Services.Utils
+Imports DH.Helpdesk.Services.utils
 
 Public Class CaseData
     Public Function getTodayPlanDate() As Collection
@@ -272,19 +272,19 @@ Public Class CaseData
         Dim sSQL As String
 
         Try
-            Dim workTime as CaseWorkTime = calculateWorkTimeOnChange(objCase)
-            
+            Dim workTime As CaseWorkTime = calculateWorkTimeOnChange(objCase)
+
             sSQL = $"UPDATE tblCase 
                      SET Status=1, 
                          ChangeTime = @changeTime, 
                          ExternalTime = @externalTime, 
                          LeadTime = @leadTime
                      WHERE Id = @caseId"
-            
+
             Dim parameters As New List(Of SqlParameter) From {
                 DbHelper.createDbParameter("@caseId", objCase.Id),
                 DbHelper.createDbParameter("@changeTime", workTime.Now),
-                DbHelper.createDbParameter("@externalTime",workTime.ExternalTime),
+                DbHelper.createDbParameter("@externalTime", workTime.ExternalTime),
                 DbHelper.createDbParameter("@leadTime", workTime.LeadTime)
             }
 
@@ -1074,10 +1074,6 @@ Public Class CaseData
                     End If
                     'End If
 
-                    If Not IsDBNull(dr("ProductArea_Id")) Then
-                        c.ProductArea_Id = dr("ProductArea_Id")
-                    End If
-
                     If Not IsDBNull(dr("Project_Id")) Then
                         c.Project_Id = dr("Project_Id")
                     End If
@@ -1226,64 +1222,12 @@ Public Class CaseData
                         c.Persons_EMail = dr("PersonsEmail")
                     End If
 
-                    'If Not IsDBNull(dr("IsAbout_ReportedBy")) Then
-                    '    c.IsAbout_ReportedBy = dr("IsAbout_ReportedBy")
-                    'End If
-
-                    'If Not IsDBNull(dr("IsAbout_PersonsName")) Then
-                    '    c.IsAbout_PersonsName = dr("IsAbout_PersonsName")
-                    'End If
-
-                    'If Not IsDBNull(dr("IsAbout_PersonsEmail")) Then
-                    '    c.IsAbout_PersonsEmail = dr("IsAbout_PersonsEmail")
-                    'End If
-
-                    'If Not IsDBNull(dr("IsAbout_PersonsPhone")) Then
-                    '    c.IsAbout_PersonsPhone = dr("IsAbout_PersonsPhone")
-                    'End If
-
-                    'If Not IsDBNull(dr("IsAbout_PersonsCellPhone")) Then
-                    '    c.IsAbout_PersonsCellPhone = dr("IsAbout_PersonsCellPhone")
-                    'End If
-
-                    'If Not IsDBNull(dr("IsAbout_Region_Id")) Then
-                    '    c.IsAbout_Region_Id = dr("IsAbout_Region_Id")
-                    'End If
-
-                    'If Not IsDBNull(dr("IsAbout_Department_Id")) Then
-                    '    c.IsAbout_Department_Id = dr("IsAbout_Department_Id")
-                    'End If
-
-                    'If Not IsDBNull(dr("IsAbout_OU_Id")) Then
-                    '    c.IsAbout_OU_Id = dr("IsAbout_OU_Id")
-                    'End If
-
-                    'If Not IsDBNull(dr("IsAbout_Place")) Then
-                    '    c.IsAbout_Place = dr("IsAbout_Place")
-                    'End If
-
-                    'If Not IsDBNull(dr("IsAbout_CostCentre")) Then
-                    '    c.IsAbout_CostCentre = dr("IsAbout_CostCentre")
-                    'End If
-
-                    'If Not IsDBNull(dr("IsAbout_UserCode")) Then
-                    '    c.IsAbout_UserCode = dr("IsAbout_UserCode")
-                    'End If
-
-                    'If Not IsDBNull(dr("AgreedDate")) Then
-                    '    c.AgreedDate = dr("AgreedDate")
-                    'End If
-
                     If Not IsDBNull(dr("CostCentre")) Then
                         c.CostCentre = dr("CostCentre")
                     End If
 
                     If Not IsDBNull(dr("Region_Id")) Then
                         c.Region_Id = dr("Region_Id")
-                    End If
-
-                    If Not IsDBNull(dr("CaseType_Id")) Then
-                        c.CaseType_Id = dr("CaseType_Id")
                     End If
 
                     If Not IsDBNull(dr("Category_Id")) Then
@@ -1330,6 +1274,78 @@ Public Class CaseData
 
                         End If
 
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_ReportedBy")) Then
+                        c.IsAbout_ReportedBy = dr("IsAbout_ReportedBy")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_PersonsName")) Then
+                        c.IsAbout_PersonsName = dr("IsAbout_PersonsName")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_PersonsEmail")) Then
+                        c.IsAbout_PersonsEmail = dr("IsAbout_PersonsEmail")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_PersonsPhone")) Then
+                        c.IsAbout_PersonsPhone = dr("IsAbout_PersonsPhone")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_PersonsCellPhone")) Then
+                        c.IsAbout_PersonsCellPhone = dr("IsAbout_PersonsCellPhone")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_Region_Id")) Then
+                        c.IsAbout_Region_Id = dr("IsAbout_Region_Id")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_Department_Id")) Then
+                        c.IsAbout_Department_Id = dr("IsAbout_Department_Id")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_OU_Id")) Then
+                        c.IsAbout_OU_Id = dr("IsAbout_OU_Id")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_Place")) Then
+                        c.IsAbout_Place = dr("IsAbout_Place")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_CostCentre")) Then
+                        c.IsAbout_CostCentre = dr("IsAbout_CostCentre")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_UserCode")) Then
+                        c.IsAbout_UserCode = dr("IsAbout_UserCode")
+                    End If
+
+                    If Not IsDBNull(dr("CaseType_Id")) Then
+                        c.CaseType_Id = dr("CaseType_Id")
+                        If (Not c.CaseType_Id = 0) Then
+                            Dim caseTypeData As New CaseTypeData()
+                            Dim caseType As CaseType = caseTypeData.getCaseTypeById(c.CaseType_Id)
+                            If (c.WorkingGroup_Id = 0 And Not caseType.WorkingGroup_Id = 0) Then
+                                c.WorkingGroup_Id = caseType.WorkingGroup_Id
+                            End If
+                            If (c.Performer_User_Id = 0 And Not caseType.User_Id = 0) Then
+                                c.Performer_User_Id = caseType.User_Id
+                            End If
+                        End If
+                    End If
+
+                    If Not IsDBNull(dr("ProductArea_Id")) Then
+                        c.ProductArea_Id = dr("ProductArea_Id")
+                        If (Not c.ProductArea_Id = 0) Then
+                            Dim productAreaData As New ProductAreaData()
+                            Dim productArea As ProductArea = productAreaData.GetProductArea(c.ProductArea_Id)
+                            If (c.WorkingGroup_Id = 0 And Not productArea.WorkingGroup_Id = 0) Then
+                                c.WorkingGroup_Id = productArea.WorkingGroup_Id
+                            End If
+                            If (c.Priority_Id = 0 And Not productArea.Priority_Id = 0) Then
+                                c.Priority_Id = productArea.Priority_Id
+                            End If
+                        End If
                     End If
 
                     If logAdded = True Then
@@ -1538,9 +1554,9 @@ Public Class CaseData
         End Try
     End Sub
 
-    Public Function CheckCaseField(iCustomerId as Integer, sFieldName As String) as Boolean
-        Dim sCmd as String = "SELECT Show FROM dbo.tblCaseFieldSettings WHERE CaseField = @fieldName AND Customer_Id = @customerId"
-        Dim cmdParams as New List(Of SqlParameter) From {
+    Public Function CheckCaseField(iCustomerId As Integer, sFieldName As String) As Boolean
+        Dim sCmd As String = "SELECT Show FROM dbo.tblCaseFieldSettings WHERE CaseField = @fieldName AND Customer_Id = @customerId"
+        Dim cmdParams As New List(Of SqlParameter) From {
                 DbHelper.createDbParameter("customerId", iCustomerId),
                 DbHelper.createDbParameter("fieldName", sFieldName)
         }

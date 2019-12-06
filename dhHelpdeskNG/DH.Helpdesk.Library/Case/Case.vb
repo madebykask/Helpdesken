@@ -92,17 +92,17 @@ Imports System.Data
     Private miCausingPartId As Integer
     Private miVerified As Integer
     Private mdtAgreedDate As DateTime
-    'Private msIsAbout_ReportedBy As String
-    'Private msIsAbout_PersonsName As String
-    'Private msIsAbout_PersonsEmail As String
-    'Private msIsAbout_PersonsPhone As String
-    'Private msIsAbout_PersonsCellPhone As String
-    'Private msIsAbout_Region_IdAs As String
-    'Private msIsAbout_Department_Id As String
-    'Private msIsAbout_OU_Id As String
-    'Private msIsAbout_Place As String
-    'Private msIsAbout_CostCentre As String
-    'Private msIsAbout_UserCode As String
+    Private msIsAbout_ReportedBy As String
+    Private msIsAbout_PersonsName As String
+    Private msIsAbout_PersonsEmail As String
+    Private msIsAbout_PersonsPhone As String
+    Private msIsAbout_PersonsCellPhone As String
+    Private miIsAbout_Region_Id As Integer
+    Private miIsAbout_Department_Id As Integer
+    Private miIsAbout_OU_Id As Integer
+    Private msIsAbout_Place As String
+    Private msIsAbout_CostCentre As String
+    Private msIsAbout_UserCode As String
 
 #End Region
 
@@ -282,6 +282,72 @@ Imports System.Data
             msCostCentre = ""
         Else
             msCostCentre = dr("CostCentre")
+        End If
+
+        If Not dr.Table.Columns.Contains("IsAbout_ReportedBy") OrElse IsDBNull(dr("IsAbout_ReportedBy")) Then
+            msIsAbout_ReportedBy = ""
+        Else
+            msIsAbout_ReportedBy = dr("IsAbout_ReportedBy")
+            End If
+
+        If Not dr.Table.Columns.Contains("IsAbout_Persons_Name") OrElse IsDBNull(dr("IsAbout_Persons_Name")) Then
+            msIsAbout_PersonsName = ""
+        Else
+            msIsAbout_PersonsName = dr("IsAbout_Persons_Name")
+            End If
+
+        If Not dr.Table.Columns.Contains("IsAbout_Persons_Phone") OrElse IsDBNull(dr("IsAbout_Persons_Phone")) Then
+            msIsAbout_PersonsPhone = ""
+        Else
+            msIsAbout_PersonsPhone = dr("IsAbout_Persons_Phone")
+            End If
+
+        If Not dr.Table.Columns.Contains("IsAbout_Persons_CellPhone") OrElse IsDBNull(dr("IsAbout_Persons_CellPhone")) Then
+            msIsAbout_PersonsCellPhone = ""
+        Else
+            msIsAbout_PersonsCellPhone = dr("IsAbout_Persons_CellPhone")
+            End If
+
+        If Not dr.Table.Columns.Contains("IsAbout_Persons_EMail") OrElse IsDBNull(dr("IsAbout_Persons_EMail")) Then
+            msIsAbout_PersonsEmail = ""
+        Else
+            msIsAbout_PersonsEmail = dr("IsAbout_Persons_EMail")
+            End If
+
+        If Not dr.Table.Columns.Contains("IsAbout_Place") OrElse IsDBNull(dr("IsAbout_Place")) Then
+            msIsAbout_Place = ""
+        Else
+            msIsAbout_Place = dr("IsAbout_Place")
+            End If
+
+        If Not dr.Table.Columns.Contains("IsAbout_UserCode") OrElse IsDBNull(dr("IsAbout_UserCode")) Then
+            msIsAbout_UserCode = ""
+        Else
+            msIsAbout_UserCode = dr("IsAbout_UserCode")
+            End If
+
+        If Not dr.Table.Columns.Contains("IsAbout_CostCentre") OrElse IsDBNull(dr("IsAbout_CostCentre")) Then
+            msIsAbout_CostCentre = ""
+        Else
+            msIsAbout_CostCentre = dr("IsAbout_CostCentre")
+        End If
+
+        If Not dr.Table.Columns.Contains("IsAbout_Region_Id") OrElse IsDBNull(dr("IsAbout_Region_Id")) Then
+            miIsAbout_Region_Id = 0
+        Else
+            miIsAbout_Region_Id = dr("IsAbout_Region_Id")
+        End If
+
+        If Not dr.Table.Columns.Contains("IsAbout_Department_Id") OrElse IsDBNull(dr("IsAbout_Department_Id")) Then
+            miIsAbout_Department_Id = 0
+        Else
+            miIsAbout_Department_Id = dr("IsAbout_Department_Id")
+        End If
+
+        If Not dr.Table.Columns.Contains("IsAbout_OU_Id") OrElse IsDBNull(dr("IsAbout_OU_Id")) Then
+            miIsAbout_OU_Id = 0
+        Else
+            miIsAbout_OU_Id = dr("IsAbout_OU_Id")
         End If
 
         If Not IsDBNull(dr("PriorityName")) Then
@@ -729,6 +795,105 @@ Imports System.Data
         End Get
         Set(ByVal Value As String)
             msCostCentre = Value
+        End Set
+    End Property
+
+    Public Property IsAbout_ReportedBy() As String
+        Get
+            Return msIsAbout_ReportedBy
+        End Get
+        Set(ByVal Value As String)
+            msIsAbout_ReportedBy = Value
+        End Set
+    End Property
+
+    Public Property IsAbout_PersonsName() As String
+        Get
+            Return msIsAbout_PersonsName
+        End Get
+        Set(ByVal Value As String)
+            msIsAbout_PersonsName = Value
+        End Set
+    End Property
+
+    Public Property IsAbout_PersonsEMail() As String
+        Get
+            Return msIsAbout_PersonsEmail
+        End Get
+        Set(ByVal Value As String)
+            msIsAbout_PersonsEmail = Value
+        End Set
+    End Property
+
+    Public Property IsAbout_PersonsPhone() As String
+        Get
+            Return msIsAbout_PersonsPhone
+        End Get
+        Set(ByVal Value As String)
+            msIsAbout_PersonsPhone = Value
+        End Set
+    End Property
+
+    Public Property IsAbout_PersonsCellPhone() As String
+        Get
+            Return msIsAbout_PersonsCellPhone
+        End Get
+        Set(ByVal Value As String)
+            msIsAbout_PersonsCellPhone = Value
+        End Set
+    End Property
+
+    Public Property IsAbout_Place() As String
+        Get
+            Return msIsAbout_Place
+        End Get
+        Set(ByVal Value As String)
+            msIsAbout_Place = Value
+        End Set
+    End Property
+
+    Public Property IsAbout_UserCode() As String
+        Get
+            Return msIsAbout_UserCode
+        End Get
+        Set(ByVal Value As String)
+            msIsAbout_UserCode = Value
+        End Set
+    End Property
+
+    Public Property IsAbout_CostCentre() As String
+        Get
+            Return msIsAbout_CostCentre
+        End Get
+        Set(ByVal Value As String)
+            msIsAbout_CostCentre = Value
+        End Set
+    End Property
+
+    Public Property IsAbout_Region_Id() As Integer
+        Get
+            Return miIsAbout_Region_Id
+        End Get
+        Set(ByVal Value As Integer)
+            miIsAbout_Region_Id = Value
+        End Set
+    End Property
+
+    Public Property IsAbout_Department_Id() As Integer
+        Get
+            Return miIsAbout_Department_Id
+        End Get
+        Set(ByVal Value As Integer)
+            miIsAbout_Department_Id = Value
+        End Set
+    End Property
+
+    Public Property IsAbout_OU_Id() As Integer
+        Get
+            Return miIsAbout_OU_Id
+        End Get
+        Set(ByVal Value As Integer)
+            miIsAbout_OU_Id = Value
         End Set
     End Property
 

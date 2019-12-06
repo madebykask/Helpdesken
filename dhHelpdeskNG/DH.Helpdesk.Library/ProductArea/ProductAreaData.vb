@@ -33,4 +33,26 @@ Public Class ProductAreaData
         End Try
     End Function
 
+    Public Function GetProductArea(ByVal iId As Integer) As ProductArea
+        Dim sSQL As String
+        Dim dt As DataTable
+
+        Try
+            sSQL = "SELECT tblProductArea.* " &
+                   "FROM tblProductArea " &
+                   "WHERE tblProductArea.Id = " & iId
+
+            dt = getDataTable(gsConnectionString, sSQL)
+
+            If dt.Rows.Count > 0 Then
+                Return New ProductArea(dt.Rows(0))
+            Else
+                Return Nothing
+            End If
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Function
+
+
 End Class
