@@ -35,7 +35,7 @@
                                     @Translation.Get("Visa endast aktiva")
                                 </td>
                                 <td>
-                                    <input type="checkbox" class="switchcheckbox" id="ActiveOnly" name="ActiveOnly" value="true" @(Model.ActiveOnly ? "checked" : "")/>
+                                    <input type="checkbox" class="switchcheckbox" id="activeOnly" name="ActiveOnly" value="true" @(Model.ActiveOnly ? "checked" : "")/>
                                 </td>
                             </tr>
                         </table>
@@ -44,19 +44,19 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        @Translation.Get("Kundnummer", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Kundnummer")
                                     </th>
                                     <th>
-                                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Namn")
                                     </th>
                                     <th>
-                                        @Translation.Get("Adress", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Adress")
                                     </th>
                                     <th>
-                                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("E-post")
                                     </th>
                                     <th>
-                                        @Translation.Get("Telefon", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Telefon")
                                     </th>
                                 </tr>
                             </thead>
@@ -94,10 +94,14 @@
     var customerId = $("#currentCustomerId").val();
 
     $(function () {
-        $("#currentCustomer").change(function () {
+        $("#currentCustomer").on('change',function () {
             $("#search").submit();
         });
 
+        $('#activeOnly').on('switchChange.bootstrapSwitch',
+            function () {
+                $("#search").submit();
+            });
     });
 
 </script>
