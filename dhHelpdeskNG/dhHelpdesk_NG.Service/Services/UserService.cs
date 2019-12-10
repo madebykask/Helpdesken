@@ -1015,7 +1015,6 @@ namespace DH.Helpdesk.Services.Services
 
             var init = _moduleRepository
                 .GetModules()
-                .ToList()
                 .Select(m => new UserModuleOverview()
                 {
                     User_Id = user,
@@ -1029,7 +1028,7 @@ namespace DH.Helpdesk.Services.Services
                         Name = m.Name,
                         Description = m.Description
                     }
-                });
+                }).ToList();
 
             _userModuleRepository.UpdateUserModules(init.Select(m => new UserModule()
                                                                               {
@@ -1377,21 +1376,19 @@ namespace DH.Helpdesk.Services.Services
         {
             switch (module)
             {
-                case Module.ChangeManagement:
-                    return 3;
+                case Module.Customers:
+                case Module.QuickLinks:
+                    return null;
             }
 
-            return null;
+            return 3;
         }
 
         private bool GetDefaultVisibility(Module module)
         {
             switch (module)
             {
-                case Module.Cases:
-                    return false;
-
-                case Module.Statistics:
+                case Module.ChangeManagement:
                     return false;
             }
 
