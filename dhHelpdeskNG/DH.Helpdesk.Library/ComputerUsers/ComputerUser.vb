@@ -250,7 +250,7 @@
 
     Public Property UserCode() As String
         Get
-            If msUserCode.Length > 20 Then
+            If Not msUserCode Is Nothing AndAlso msUserCode.Length > 20 Then
                 Return msUserCode.Substring(0, 20)
             Else
                 Return msUserCode

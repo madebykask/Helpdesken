@@ -77,11 +77,31 @@ Public Class CaseData
             sSQL = " INSERT INTO tblCaseIsAbout ([Case_Id],[ReportedBy],[Person_Name],[Person_Email],[Person_Phone],[Person_CellPhone],[Region_Id],[Department_Id],[OU_Id],[CostCentre],[Place],[UserCode]"
             sSQL = sSQL & ") Values (" & CStr(iCase_Id) & ", "
 
-            sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(u.UserId, "'", ""), 40) & "', "
-            sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(u.FirstName & u.SurName, "'", ""), 50) & "', " &
-                            getDBStringPrefix() & "'" & Left(Replace(u.EMail, "'", "''"), 100) & "', " &
-                            getDBStringPrefix() & "'" & Replace(Left(u.Phone, 40), "'", "''") & "', " &
-                            getDBStringPrefix() & "'" & Left(u.CellPhone, 30) & "', "
+            If (String.IsNullOrEmpty(u.UserId)) Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(u.UserId, "'", ""), 40) & "', "
+            End If
+            If (String.IsNullOrEmpty(u.FirstName) And String.IsNullOrEmpty(u.SurName)) Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(If(u.FirstName, "") & If(u.SurName, ""), "'", ""), 50) & "', "
+            End If
+            If (String.IsNullOrEmpty(u.EMail)) Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(u.EMail, "'", "''"), 100) & "', "
+            End If
+            If (String.IsNullOrEmpty(u.Phone)) Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & Replace(Left(u.Phone, 40), "'", "''") & "', "
+            End If
+            If (String.IsNullOrEmpty(u.CellPhone)) Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & Left(u.CellPhone, 30) & "', "
+            End If
             If u.Region_Id = 0 Then
                 sSQL = sSQL & "Null, "
             Else
@@ -97,9 +117,21 @@ Public Class CaseData
             Else
                 sSQL = sSQL & u.OU_Id & ", "
             End If
-            sSQL = sSQL & getDBStringPrefix() & "'" & Left(u.CostCentre, 50) & "', " &
-                            getDBStringPrefix() & "'" & Left(u.Location, 100) & "', " &
-                            getDBStringPrefix() & "'" & Left(u.UserCode, 20) & "'"
+            If (String.IsNullOrEmpty(u.CostCentre)) Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & Left(u.CostCentre, 50) & "', "
+            End If
+            If (String.IsNullOrEmpty(u.Location)) Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & Left(u.Location, 100) & "', "
+            End If
+            If (String.IsNullOrEmpty(u.UserCode)) Then
+                sSQL = sSQL & "Null "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & Left(u.UserCode, 50) & "' "
+            End If
             sSQL = sSQL & ")"
 
             If giLoglevel > 0 Then
