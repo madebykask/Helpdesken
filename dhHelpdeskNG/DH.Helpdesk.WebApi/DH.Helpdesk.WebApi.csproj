@@ -192,6 +192,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
+    <Compile Include="Controllers\CaseFavoritesController.cs" />
     <Compile Include="Controllers\CaseLogFilesController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Infrastructure\Owin\LogRequestMiddleware.cs" />

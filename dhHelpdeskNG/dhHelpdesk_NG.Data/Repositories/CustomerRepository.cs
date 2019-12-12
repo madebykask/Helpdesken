@@ -285,13 +285,14 @@ using System;
                             select new
                             {
                                 UserId = u.Id,
-                                Customer = cu,
+                                Customer = c,
+                                CustomerUser = cu,
                                 Settings = s
                             })
                          .ToList();
 
             return entities
-                    .Select(uc => new UserCustomer(uc.UserId, uc.Customer, this.customerSettingsMapper.Map(uc.Settings)))
+                    .Select(uc => new UserCustomer(uc.UserId, uc.CustomerUser, this.customerSettingsMapper.Map(uc.Settings)))
                     .ToList();
         }
 

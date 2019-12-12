@@ -1807,8 +1807,8 @@ table th.thpointer {
 
 .case-overview.page .table-cases,
 .advancedSearch-overview.page .table-cases,
-.inventory-overview .table-cases
-{
+.inventory-overview .table-cases,
+.table-fix {
     table-layout: fixed !important;
 }
 

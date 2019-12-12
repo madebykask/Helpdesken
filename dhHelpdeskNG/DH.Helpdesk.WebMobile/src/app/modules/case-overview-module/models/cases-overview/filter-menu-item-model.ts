@@ -1,7 +1,8 @@
 export class FilterMenuItemModel {
   constructor (
-    public id: number,
+    public id: string,
     public text: string,
-    public selected: boolean) {
+    public selected: boolean,
+    public disabled: boolean = false) {
   }
 }

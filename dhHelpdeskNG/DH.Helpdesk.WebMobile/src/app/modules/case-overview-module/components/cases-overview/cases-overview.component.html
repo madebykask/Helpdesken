@@ -25,9 +25,12 @@
                         [selectedSortFieldOrder]="selectedSortFieldOrder" 
                         [sortFields]="caseSortFields"
                         (sortingChanged)="processSortingChanged($event)"></cases-sort-menu>
-                  </ng-container>                  
+                  </ng-container>
                 </div>
-                <div class="mbsc-col caption bold">{{ headerText }}</div>
+                <div class="mbsc-col caption">
+                  <div class="bold">{{ headerText }}</div>
+                  <div *ngIf="customerText" style="font-size: smaller;">{{ customerText }}</div>
+                </div>
                 <div class="mbsc-col-sm-auto">
                     <div class="mbsc-ic mbsc-ic-fa-search" (click)="showSearchPanel=true"></div>
                 </div>

@@ -12,7 +12,7 @@ import { AppStore, AppStoreKeys } from './store';
 import { CurrentUser } from './models';
 import { takeUntil, take } from 'rxjs/operators';
 import { CaseTemplateModel } from './models/caseTemplate/case-template.model';
-import { FavoriteFilterModel } from './modules/case-overview-module/models/cases-overview/favorite-filter.model';
+import { CustomerFavoriteFilterModel } from './modules/case-overview-module/models/cases-overview/favorite-filter.model';
 
 @Component({
   selector: 'app-root',
@@ -84,7 +84,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private loadSearchFilters() {
     this.searchFilterService.loadFavoriteFilters().pipe(
       take(1)
-    ).subscribe((filters: FavoriteFilterModel[]) => {
+    ).subscribe((filters: CustomerFavoriteFilterModel[]) => {
       this.appStore.set(AppStoreKeys.FavoriteFilters, filters);
     });
   }

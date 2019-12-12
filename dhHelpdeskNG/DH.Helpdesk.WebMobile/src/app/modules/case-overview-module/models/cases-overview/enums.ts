@@ -12,8 +12,8 @@ export enum CaseProgressFilter {
 
 
 export enum CaseStandardSearchFilters {
-  AllCases = 0,
-  MyCases = -1
+  AllCases = '0',
+  MyCases = '-1'
 }
 
 export enum FilterFields {
