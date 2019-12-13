@@ -58,14 +58,14 @@ export class CasesFilterComponent implements OnInit {
     const defaultCustomerId = userData.currentData.selectedCustomerId;
     const isOnlyOneCustomer = this.favoriteFilters.filter(cf => cf.customerId !== -1).length === 1;
 
-/*     if (!isOnlyOneCustomer) {
+    if (!isOnlyOneCustomer) {
       const allCustomersFilter = this.favoriteFilters.find(cf => cf.customerId === -1).favorites[0];
       if (allCustomersFilter) {
       this.menuItems.push(new FilterMenuItemModel('' + allCustomersFilter.id,
         this.translateService.instant(allCustomersFilter.name),
         this.filterId && allCustomersFilter.id === this.filterId));
       }
-    } */
+    }
 
     this.favoriteFilters.filter(cf => cf.customerId === defaultCustomerId).forEach(cf => {
       if (!isOnlyOneCustomer) {
