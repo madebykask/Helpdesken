@@ -305,6 +305,19 @@
             }
         }
 
+        public bool HasCase(int circularId, int caseId)
+        {
+            var result = false;
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+
+                result = circularPartRepository.GetAll().Any(c => c.QuestionnaireCircular_Id == circularId && c.Case_Id == caseId);
+            }
+
+            return result;
+        }
+
         public void DeleteById(int id)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
@@ -638,6 +651,7 @@
                 var questionnaireResultRepository = uof.GetRepository<QuestionnaireResultEntity>();
 
                 var query = from circularPart in circularPartRepository.GetAll().GetCircularCases(circularId)
+                    orderby circularPart.CreatedDate descending 
                     join participant in questionnaireResultRepository.GetAll() on circularPart.Id equals
                         participant.QuestionnaireCircularPartic_Id into group1
                     from g1 in group1.DefaultIfEmpty()

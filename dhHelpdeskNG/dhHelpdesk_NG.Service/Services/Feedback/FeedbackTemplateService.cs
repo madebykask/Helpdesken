@@ -99,9 +99,10 @@ namespace DH.Helpdesk.Services.Services.Feedback
 
             var circular = new CircularForUpdate(dbCircular.Id, dbCircular.CircularName, DateTime.Now, dbCircular.CaseFilter);
             _circularService.UpdateCircular(circular); //also in this method Participant is created.
-			_circularService.AddCaseToCircular(dbCircular.Id, caseId);
+            if(!_circularService.HasCase(dbCircular.Id, caseId)) // should be only 1 part. for feedback
+			    _circularService.AddCaseToCircular(dbCircular.Id, caseId);
 
-			var participant = _circularService.GetNotAnsweredParticipant(dbCircular.Id, caseId);//should be only 1 part. for feedback
+			var participant = _circularService.GetNotAnsweredParticipant(dbCircular.Id, caseId);// should be only 1 part. for feedback
 
             if (participant != null)
             {

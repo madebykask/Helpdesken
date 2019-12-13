@@ -67,5 +67,6 @@ namespace DH.Helpdesk.Services.Services
 
 		void AddCaseToCircular(int circularID, int caseID);
 
-	}
+        bool HasCase(int dbCircularId, int caseId);
+    }
 }
