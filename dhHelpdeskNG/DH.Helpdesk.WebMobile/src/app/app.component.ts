@@ -73,7 +73,8 @@ export class AppComponent implements OnInit, OnDestroy {
   private loadTemplates() {
     if (this.userSettingsService.getUserData().createCasePermission) {
       this.caseTemplateService.loadTemplates().pipe(
-       take(1)
+       take(1),
+       takeUntil(this.destroy$)
      ).subscribe((templates: CaseTemplateModel[]) => {
        this.appStore.set(AppStoreKeys.Templates, templates);
      });
@@ -83,7 +84,8 @@ export class AppComponent implements OnInit, OnDestroy {
   // load search filters
   private loadSearchFilters() {
     this.searchFilterService.loadFavoriteFilters().pipe(
-      take(1)
+      take(1),
+      takeUntil(this.destroy$)
     ).subscribe((filters: CustomerFavoriteFilterModel[]) => {
       this.appStore.set(AppStoreKeys.FavoriteFilters, filters);
     });

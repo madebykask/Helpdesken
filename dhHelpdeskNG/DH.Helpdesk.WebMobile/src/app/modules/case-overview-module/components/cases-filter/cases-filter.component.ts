@@ -58,10 +58,11 @@ export class CasesFilterComponent implements OnInit {
     const defaultCustomerId = userData.currentData.selectedCustomerId;
     const isOnlyOneCustomer = this.favoriteFilters.filter(cf => cf.customerId !== -1).length === 1;
 
+    let tempMenuItems: FilterMenuItemModel[] = [];
     if (!isOnlyOneCustomer) {
       const allCustomersFilter = this.favoriteFilters.find(cf => cf.customerId === -1).favorites[0];
       if (allCustomersFilter) {
-      this.menuItems.push(new FilterMenuItemModel('' + allCustomersFilter.id,
+      tempMenuItems.push(new FilterMenuItemModel('' + allCustomersFilter.id,
         this.translateService.instant(allCustomersFilter.name),
         this.filterId && allCustomersFilter.id === this.filterId));
       }
@@ -69,19 +70,20 @@ export class CasesFilterComponent implements OnInit {
 
     this.favoriteFilters.filter(cf => cf.customerId === defaultCustomerId).forEach(cf => {
       if (!isOnlyOneCustomer) {
-        this.menuItems.push(new FilterMenuItemModel('' + cf.customerId, cf.customerName, false, true));
+        tempMenuItems.push(new FilterMenuItemModel('' + cf.customerId, cf.customerName, false, true));
       }
-      this.menuItems = this.menuItems.concat(cf.favorites.map(f =>
+      tempMenuItems = tempMenuItems.concat(cf.favorites.map(f =>
         new FilterMenuItemModel(f.id, this.translateService.instant(f.name), this.filterId && f.id === this.filterId)));
       });
 
     this.favoriteFilters.filter(cf => cf.customerId > 0 && cf.customerId !== defaultCustomerId).forEach(cf => {
       if (!isOnlyOneCustomer) {
-        this.menuItems.push(new FilterMenuItemModel('' + cf.customerId, cf.customerName, false, true));
+        tempMenuItems.push(new FilterMenuItemModel('' + cf.customerId, cf.customerName, false, true));
       }
-      this.menuItems = this.menuItems.concat(cf.favorites.map(f =>
+      tempMenuItems = tempMenuItems.concat(cf.favorites.map(f =>
         new FilterMenuItemModel(f.id, this.translateService.instant(f.name), this.filterId && f.id === this.filterId)));
      });
+     this.menuItems = tempMenuItems;
   }
 
   applyFilter(selectedItem: FilterMenuItemModel) {

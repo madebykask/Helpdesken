@@ -295,8 +295,7 @@ $mbsc-ios-dark: #47494A !default;
     /* static colors */
     error: #d8332a,
     white-text: #fff,
-    dark-text: #000,
-    light-text: #eee);
+    dark-text: #000);
 }
 
 @mixin mbsc-ios-common($theme, $params) {
@@ -1108,9 +1107,9 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     @font-face {
         font-family: 'icons_mobiscroll';
         src: 
-        url($mbsc-font-path + 'icons_mobiscroll.woff?xhnplr') format('woff'),
+        url($mbsc-font-path + 'icons_mobiscroll.woff?jowasn') format('woff'),
         url($mbsc-font-path + 'icons_mobiscroll.woff') format('woff'),
-        url($mbsc-font-path + 'icons_mobiscroll.ttf?xhnplr') format('truetype');
+        url($mbsc-font-path + 'icons_mobiscroll.ttf?jowasn') format('truetype');
         font-weight: normal;
         font-style: normal;
     }
@@ -1213,10 +1212,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea1c";
 } 
 .mbsc-ic-fa-android::before {
-    content: "\ea1e";
+    content: "\ea1d";
 } 
 .mbsc-ic-fa-angellist::before {
-    content: "\ea1d";
+    content: "\ea1e";
 } 
 .mbsc-ic-fa-angle-double-down::before {
     content: "\ea1f";
@@ -1306,10 +1305,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea3b";
 } 
 .mbsc-ic-fa-at::before {
-    content: "\ea3d";
+    content: "\ea3c";
 } 
 .mbsc-ic-fa-audio-description::before {
-    content: "\ea3c";
+    content: "\ea3d";
 } 
 .mbsc-ic-fa-automobile::before {
     content: "\ea3e";
@@ -1378,10 +1377,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea53";
 } 
 .mbsc-ic-fa-bell-slash-o::before {
-    content: "\ea55";
+    content: "\ea54";
 } 
 .mbsc-ic-fa-bell-slash::before {
-    content: "\ea54";
+    content: "\ea55";
 } 
 .mbsc-ic-fa-bell::before {
     content: "\ea56";
@@ -1405,10 +1404,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea5c";
 } 
 .mbsc-ic-fa-black-tie::before {
-    content: "\ea5e";
+    content: "\ea5d";
 } 
 .mbsc-ic-fa-blind::before {
-    content: "\ea5d";
+    content: "\ea5e";
 } 
 .mbsc-ic-fa-bluetooth-b::before {
     content: "\ea5f";
@@ -1429,10 +1428,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea64";
 } 
 .mbsc-ic-fa-bookmark-o::before {
-    content: "\ea66";
+    content: "\ea65";
 } 
 .mbsc-ic-fa-bookmark::before {
-    content: "\ea65";
+    content: "\ea66";
 } 
 .mbsc-ic-fa-braille::before {
     content: "\ea67";
@@ -1561,10 +1560,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea90";
 } 
 .mbsc-ic-fa-check-circle::before {
-    content: "\ea92";
+    content: "\ea91";
 } 
 .mbsc-ic-fa-check-square-o::before {
-    content: "\ea91";
+    content: "\ea92";
 } 
 .mbsc-ic-fa-check-square::before {
     content: "\ea93";
@@ -1600,16 +1599,16 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ea9d";
 } 
 .mbsc-ic-fa-chrome::before {
-    content: "\ea9f";
-} 
-.mbsc-ic-fa-circle-o-notch::before {
     content: "\ea9e";
 } 
+.mbsc-ic-fa-circle-o-notch::before {
+    content: "\ea9f";
+} 
 .mbsc-ic-fa-circle-o::before {
-    content: "\eaa1";
+    content: "\eaa0";
 } 
 .mbsc-ic-fa-circle-thin::before {
-    content: "\eaa0";
+    content: "\eaa1";
 } 
 .mbsc-ic-fa-circle::before {
     content: "\eaa2";
@@ -1771,10 +1770,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ead6";
 } 
 .mbsc-ic-fa-drivers-license-o::before {
-    content: "\ead8";
+    content: "\ead7";
 } 
 .mbsc-ic-fa-drivers-license::before {
-    content: "\ead7";
+    content: "\ead8";
 } 
 .mbsc-ic-fa-dropbox::before {
     content: "\ead9";
@@ -1846,10 +1845,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eaef";
 } 
 .mbsc-ic-fa-expand::before {
-    content: "\eaf0";
+    content: "\eaf1";
 } 
 .mbsc-ic-fa-expeditedssl::before {
-    content: "\eaf1";
+    content: "\eaf0";
 } 
 .mbsc-ic-fa-external-link-square::before {
     content: "\eaf2";
@@ -1864,10 +1863,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eaf5";
 } 
 .mbsc-ic-fa-eyedropper::before {
-    content: "\eaf7";
+    content: "\eaf6";
 } 
 .mbsc-ic-fa-fa::before {
-    content: "\eaf6";
+    content: "\eaf7";
 } 
 .mbsc-ic-fa-facebook-official::before {
     content: "\eaf8";
@@ -2074,10 +2073,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eb3b";
 } 
 .mbsc-ic-fa-globe::before {
-    content: "\eb3d";
+    content: "\eb3c";
 } 
 .mbsc-ic-fa-google-plus-circle::before {
-    content: "\eb3c";
+    content: "\eb3d";
 } 
 .mbsc-ic-fa-google-plus-square::before {
     content: "\eb3e";
@@ -2134,10 +2133,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eb4f";
 } 
 .mbsc-ic-fa-hand-scissors-o::before {
-    content: "\eb51";
+    content: "\eb50";
 } 
 .mbsc-ic-fa-hand-spock-o::before {
-    content: "\eb50";
+    content: "\eb51";
 } 
 .mbsc-ic-fa-handshake-o::before {
     content: "\eb52";
@@ -2359,10 +2358,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eb9a";
 } 
 .mbsc-ic-fa-map-marker::before {
-    content: "\eb9c";
+    content: "\eb9b";
 } 
 .mbsc-ic-fa-map-o::before {
-    content: "\eb9b";
+    content: "\eb9c";
 } 
 .mbsc-ic-fa-map-pin::before {
     content: "\eb9d";
@@ -2371,16 +2370,16 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eb9e";
 } 
 .mbsc-ic-fa-map::before {
-    content: "\eb9f";
-} 
-.mbsc-ic-fa-mars-double::before {
-    content: "\eba2";
-} 
-.mbsc-ic-fa-mars-stroke-h::before {
     content: "\eba0";
 } 
-.mbsc-ic-fa-mars-stroke-v::before {
+.mbsc-ic-fa-mars-double::before {
+    content: "\eb9f";
+} 
+.mbsc-ic-fa-mars-stroke-h::before {
     content: "\eba1";
+} 
+.mbsc-ic-fa-mars-stroke-v::before {
+    content: "\eba2";
 } 
 .mbsc-ic-fa-mars-stroke::before {
     content: "\eba3";
@@ -2395,10 +2394,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eba6";
 } 
 .mbsc-ic-fa-medium::before {
-    content: "\eba7";
+    content: "\eba8";
 } 
 .mbsc-ic-fa-medkit::before {
-    content: "\eba8";
+    content: "\eba7";
 } 
 .mbsc-ic-fa-meetup::before {
     content: "\eba9";
@@ -2458,10 +2457,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ebbb";
 } 
 .mbsc-ic-fa-neuter::before {
-    content: "\ebbc";
+    content: "\ebbd";
 } 
 .mbsc-ic-fa-newspaper-o::before {
-    content: "\ebbd";
+    content: "\ebbc";
 } 
 .mbsc-ic-fa-object-group::before {
     content: "\ebbe";
@@ -2500,10 +2499,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ebc9";
 } 
 .mbsc-ic-fa-paperclip::before {
-    content: "\ebca";
+    content: "\ebcb";
 } 
 .mbsc-ic-fa-paragraph::before {
-    content: "\ebcb";
+    content: "\ebca";
 } 
 .mbsc-ic-fa-paste::before {
     content: "\ebcc";
@@ -2563,10 +2562,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ebde";
 } 
 .mbsc-ic-fa-plane::before {
-    content: "\ebdf";
+    content: "\ebe0";
 } 
 .mbsc-ic-fa-play-circle-o::before {
-    content: "\ebe0";
+    content: "\ebdf";
 } 
 .mbsc-ic-fa-play-circle::before {
     content: "\ebe1";
@@ -2857,10 +2856,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ec40";
 } 
 .mbsc-ic-fa-stack-overflow::before {
-    content: "\ec41";
+    content: "\ec42";
 } 
 .mbsc-ic-fa-star-half-empty::before {
-    content: "\ec42";
+    content: "\ec41";
 } 
 .mbsc-ic-fa-star-half::before {
     content: "\ec43";
@@ -3130,10 +3129,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\ec9b";
 } 
 .mbsc-ic-fa-user-circle::before {
-    content: "\ec9c";
+    content: "\ec9d";
 } 
 .mbsc-ic-fa-user-md::before {
-    content: "\ec9d";
+    content: "\ec9c";
 } 
 .mbsc-ic-fa-user-o::before {
     content: "\ec9e";
@@ -3169,10 +3168,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eca8";
 } 
 .mbsc-ic-fa-video-camera::before {
-    content: "\eca9";
+    content: "\ecaa";
 } 
 .mbsc-ic-fa-vimeo-square::before {
-    content: "\ecaa";
+    content: "\eca9";
 } 
 .mbsc-ic-fa-vimeo::before {
     content: "\ecab";
@@ -3277,10 +3276,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     content: "\eccc";
 } 
 .mbsc-ic-foundation-foot::before {
-    content: "\eccd";
+    content: "\ecce";
 } 
 .mbsc-ic-ion-close-circled::before {
-    content: "\ecce";
+    content: "\eccd";
 } 
 .mbsc-ic-ion-ios7-arrow-back::before {
     content: "\eccf";
@@ -4491,19 +4490,19 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     $form-text: map-get($colors, form-text);
 
     .mbsc-#{$theme} {
-      .mbsc-input {
+      &.mbsc-input {
         background: $cont-background;
       }
 
-      .mbsc-input .mbsc-control::-webkit-input-placeholder {
+      &.mbsc-input .mbsc-control::-webkit-input-placeholder {
         color: $form-text;
       }
 
-      .mbsc-input .mbsc-control::-ms-input-placeholder {
+      &.mbsc-input .mbsc-control::-ms-input-placeholder {
         color: $form-text;
       }
 
-      .mbsc-input .mbsc-control::-moz-placeholder {
+      &.mbsc-input .mbsc-control::-moz-placeholder {
         color: $form-text;
       }
 
@@ -4515,10 +4514,10 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
         box-shadow: 0 0 0px 1000px #e8f0fe inset;
       }
 
-      .mbsc-input .mbsc-label,
-      .mbsc-progress .mbsc-label,
-      .mbsc-input input,
-      .mbsc-input textarea {
+      &.mbsc-input .mbsc-label,
+      &.mbsc-progress .mbsc-label,
+      &.mbsc-input input,
+      &.mbsc-input textarea {
         color: $text;
       }
 
@@ -4526,20 +4525,22 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
         color: $error;
       }
 
-      .mbsc-control-w:before,
-      .mbsc-control-w:after {
-        border-top: 1px solid $border-color;
+      &.mbsc-input:before,
+      &.mbsc-input:after,
+      &.mbsc-form .mbsc-control-w:before,
+      &.mbsc-form .mbsc-control-w:after {
+        border-color: $border-color;
       }
 
-      .mbsc-control-w.mbsc-err:after,
-      .mbsc-control-w.mbsc-err + .mbsc-err:before,
-      .mbsc-control-w.mbsc-err + .mbsc-divider {
+      &.mbsc-control-w.mbsc-err:after,
+      &.mbsc-control-w.mbsc-err + .mbsc-err:before,
+      &.mbsc-control-w.mbsc-err + .mbsc-divider {
         border-top-color: $error;
       }
 
       /* Box Input and Outline */
-      .mbsc-input-box,
-      .mbsc-input-outline {
+      &.mbsc-input-box,
+      &.mbsc-input-outline {
         &.mbsc-err {
           border-color: $error;
         }
@@ -4550,7 +4551,7 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
       }
 
       /* Outline */
-      .mbsc-input-outline {
+      &.mbsc-input-outline {
 
         /* Row separator */
         &.mbsc-control-w {
@@ -4670,6 +4671,7 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
   /* Inline labels */
 
   .mbsc-label-inline.mbsc-input.mbsc-control-w {
+
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -4709,7 +4711,7 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
       transition: transform .2s;
     }
 
-    .mbsc-label ~ .mbsc-input-wrap {
+    .mbsc-label~.mbsc-input-wrap {
 
       /* WebKit browsers */
       .mbsc-control::-webkit-input-placeholder {
@@ -4732,7 +4734,7 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
       }
     }
 
-    &.mbsc-label-floating-active .mbsc-label ~ .mbsc-input-wrap {
+    &.mbsc-label-floating-active .mbsc-label~.mbsc-input-wrap {
 
       /* WebKit browsers */
       .mbsc-control::-webkit-input-placeholder {
@@ -4760,12 +4762,12 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     }
   }
 
-  .mbsc-ltr .mbsc-label-floating.mbsc-input .mbsc-label {
+  .mbsc-ltr.mbsc-label-floating.mbsc-input .mbsc-label {
     -webkit-transform-origin: top left;
     transform-origin: top left;
   }
 
-  .mbsc-rtl .mbsc-label-floating.mbsc-input .mbsc-label {
+  .mbsc-rtl.mbsc-label-floating.mbsc-input .mbsc-label {
     -webkit-transform-origin: top right;
     transform-origin: top right;
   }
@@ -4773,14 +4775,14 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
   /* file type */
   .mbsc-input-wrap .mbsc-control[type="file"] {
     position: absolute;
+    left: 0;
     opacity: 0;
   }
 }
 
-
 @include exports("input.ios") {
   .mbsc-ios {
-    .mbsc-input {
+    &.mbsc-input {
       display: -webkit-box;
       display: -webkit-flex;
       display: -ms-flexbox;
@@ -4788,7 +4790,7 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
       padding: 0;
     }
 
-    .mbsc-input input {
+    &.mbsc-input input {
       height: 2.75em;
       padding: 0 1em;
       background: transparent;
@@ -4811,18 +4813,17 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
       left: 0;
       right: 0;
       z-index: -1;
-      border-radius: 8px;
     }
 
     /* Textbox, select, textarea */
-    .mbsc-textarea textarea {
+    &.mbsc-textarea textarea {
       height: 3em;
       padding: 0 1em;
       background: transparent;
     }
 
-    .mbsc-input .mbsc-label,
-    .mbsc-progress .mbsc-label {
+    &.mbsc-input .mbsc-label,
+    &.mbsc-progress .mbsc-label {
       -webkit-box-flex: 0;
       -webkit-flex: 0 auto;
       -moz-box-flex: 0;
@@ -4839,18 +4840,18 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
       box-sizing: content-box;
     }
 
-    &.mbsc-ltr .mbsc-input .mbsc-label {
+    &.mbsc-ltr.mbsc-input .mbsc-label {
       padding-left: 1em;
     }
 
-    &.mbsc-rtl .mbsc-input .mbsc-label {
+    &.mbsc-rtl.mbsc-input .mbsc-label {
       padding-right: 1em;
     }
 
-    .mbsc-input input:disabled,
-    .mbsc-input textarea:disabled,
-    .mbsc-input .mbsc-control:disabled ~ input,
-    .mbsc-input .mbsc-control:disabled ~ .mbsc-ic {
+    &.mbsc-input input:disabled,
+    &.mbsc-input textarea:disabled,
+    &.mbsc-input .mbsc-control:disabled ~ input,
+    &.mbsc-input .mbsc-control:disabled ~ .mbsc-ic {
       opacity: .5;
     }
 
@@ -4859,11 +4860,11 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     }
 
     /* Select */
-    &.mbsc-ltr .mbsc-select input {
+    &.mbsc-ltr.mbsc-select input {
       padding-right: 2.25em;
     }
 
-    &.mbsc-rtl .mbsc-select input {
+    &.mbsc-rtl.mbsc-select input {
       padding-left: 2.25em;
     }
 
@@ -4882,7 +4883,7 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
       left: 1em;
     }
 
-    .mbsc-ic-right .mbsc-select-ic {
+    &.mbsc-ic-right .mbsc-select-ic {
       right: 3.4em;
     }
 
@@ -4892,12 +4893,12 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     }
 
     /* Select inline */
-    .mbsc-select-inline .mbsc-select-ic {
+    &.mbsc-select-inline .mbsc-select-ic {
       display: none;
     }
 
     /* Textarea */
-    .mbsc-textarea .mbsc-input-wrap {
+    &.mbsc-textarea .mbsc-input-wrap {
       padding: .625em 0;
     }
 
@@ -4907,66 +4908,67 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
       margin-top: -1px;
     }
 
-    .mbsc-ic-left {
+    &.mbsc-ic-left {
       z-index: 1;
     }
 
-    &.mbsc-ltr .mbsc-ic-left .mbsc-input-wrap,
-    &.mbsc-rtl .mbsc-ic-right .mbsc-input-wrap {
+    &.mbsc-ltr.mbsc-ic-left .mbsc-input-wrap,
+    &.mbsc-rtl.mbsc-ic-right .mbsc-input-wrap {
       padding-left: 2.25em;
     }
 
-    &.mbsc-ltr .mbsc-ic-right .mbsc-input-wrap,
-    &.mbsc-rtl .mbsc-ic-left .mbsc-input-wrap {
+    &.mbsc-ltr.mbsc-ic-right .mbsc-input-wrap,
+    &.mbsc-rtl.mbsc-ic-left .mbsc-input-wrap {
       padding-right: 2.25em;
     }
 
-    &.mbsc-ltr .mbsc-ic-left .mbsc-label {
+    &.mbsc-ltr.mbsc-ic-left .mbsc-label {
       padding-left: 3.25em;
     }
 
-    &.mbsc-rtl .mbsc-ic-left .mbsc-label {
+    &.mbsc-rtl.mbsc-ic-left .mbsc-label {
       padding-right: 3.25em;
     }
 
-    &.mbsc-ltr .mbsc-ic-left .mbsc-label ~ .mbsc-input-wrap {
+    &.mbsc-ltr.mbsc-ic-left .mbsc-label ~ .mbsc-input-wrap {
       padding-left: 0;
     }
 
-    &.mbsc-rtl .mbsc-ic-left .mbsc-label ~ .mbsc-input-wrap {
+    &.mbsc-rtl.mbsc-ic-left .mbsc-label ~ .mbsc-input-wrap {
       padding-right: 0;
     }
 
-    .mbsc-ic-left .mbsc-left-ic,
-    &.mbsc-rtl .mbsc-ic-right .mbsc-right-ic {
+    &.mbsc-ic-left .mbsc-left-ic,
+    &.mbsc-rtl.mbsc-ic-right .mbsc-right-ic {
       right: auto;
       left: .625em;
     }
 
-    .mbsc-ic-right .mbsc-right-ic,
-    &.mbsc-rtl .mbsc-ic-left .mbsc-left-ic {
+    &.mbsc-ic-right .mbsc-right-ic,
+    &.mbsc-rtl.mbsc-ic-left .mbsc-left-ic {
       left: auto;
       right: .625em;
     }
 
     /* Row separator */
-    .mbsc-control-w {
+    &.mbsc-control-w {
       margin-top: -1px;
     }
 
-    .mbsc-control-w:before,
-    .mbsc-control-w:after {
+    &.mbsc-control-w:before,
+    &.mbsc-control-w:after {
       content: "";
       position: absolute;
       right: 0;
       left: 1em;
+      border-top: 1px solid transparent;
     }
 
-    .mbsc-control-w:before {
+    &.mbsc-control-w:before {
       top: 0;
     }
 
-    .mbsc-control-w:after {
+    &.mbsc-control-w:after {
       bottom: 0;
     }
 
@@ -4987,8 +4989,8 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
       left: 0;
     }
 
-    .mbsc-ic-left:before,
-    .mbsc-ic-left:after {
+    &.mbsc-ic-left:before,
+    &.mbsc-ic-left:after {
       left: 3.25em;
     }
 
@@ -5041,7 +5043,7 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     }
 
     /* Stacked label */
-    .mbsc-label-stacked.mbsc-input {
+    &.mbsc-label-stacked.mbsc-input {
       .mbsc-label {
         font-size: .75em;
         position: absolute;
@@ -5053,7 +5055,9 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
       }
 
       .mbsc-label ~ .mbsc-input-wrap {
-        input {
+
+        input,
+        .mbsc-color-input {
           height: 3.75em;
           padding-top: 1.5em;
         }
@@ -5072,7 +5076,7 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
       }
     }
 
-    &.mbsc-ltr .mbsc-label-stacked.mbsc-input {
+    &.mbsc-ltr.mbsc-label-stacked.mbsc-input {
       .mbsc-label {
         left: 1.333334em;
         right: auto;
@@ -5089,7 +5093,7 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
       }
     }
 
-    &.mbsc-rtl .mbsc-label-stacked.mbsc-input {
+    &.mbsc-rtl.mbsc-label-stacked.mbsc-input {
       .mbsc-label {
         left: auto;
         right: 1.333334em;
@@ -5112,7 +5116,7 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     }
 
     /* Floating label */
-    .mbsc-label-floating.mbsc-input {
+    &.mbsc-label-floating.mbsc-input {
       .mbsc-label {
         position: absolute;
         padding: 0;
@@ -5130,7 +5134,9 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
       }
 
       .mbsc-label ~ .mbsc-input-wrap {
-        input {
+
+        input,
+        .mbsc-color-input {
           height: 3.75em;
           padding-top: 1.5em;
         }
@@ -5162,7 +5168,7 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
       }
     }
 
-    &.mbsc-ltr .mbsc-label-floating.mbsc-input {
+    &.mbsc-ltr.mbsc-label-floating.mbsc-input {
       .mbsc-label {
         left: 1em;
       }
@@ -5178,7 +5184,7 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
       }
     }
 
-    &.mbsc-rtl .mbsc-label-floating.mbsc-input {
+    &.mbsc-rtl.mbsc-label-floating.mbsc-input {
       .mbsc-label {
         right: 1em;
       }
@@ -5200,8 +5206,8 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     }
 
     /* Box Input and Outline */
-    .mbsc-input-box,
-    .mbsc-input-outline {
+    &.mbsc-input-box,
+    &.mbsc-input-outline {
 
       /* Row separator */
       &.mbsc-control-w {
@@ -5236,7 +5242,9 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
         }
 
         .mbsc-label ~ .mbsc-input-wrap {
-          input {
+
+          input,
+          .mbsc-color-input {
             height: 3.375em;
             padding-top: 1.25em;
           }
@@ -5262,7 +5270,9 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
         }
 
         .mbsc-label ~ .mbsc-input-wrap {
-          input {
+
+          input,
+          .mbsc-color-input {
             height: 3.375em;
             padding-top: 1.25em;
           }
@@ -5279,15 +5289,19 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
           }
         }
       }
+
+      .mbsc-input-wrap .mbsc-input-fill {
+        border-radius: 8px;
+      }
     }
 
-    &.mbsc-ltr .mbsc-input-box .mbsc-err-msg,
-    &.mbsc-ltr .mbsc-input-outline .mbsc-err-msg {
+    &.mbsc-ltr.mbsc-input-box .mbsc-err-msg,
+    &.mbsc-ltr.mbsc-input-outline .mbsc-err-msg {
       left: 1.333334em;
     }
 
-    &.mbsc-rtl .mbsc-input-box .mbsc-err-msg,
-    &.mbsc-rtl .mbsc-input-outline .mbsc-err-msg {
+    &.mbsc-rtl.mbsc-input-box .mbsc-err-msg,
+    &.mbsc-rtl.mbsc-input-outline .mbsc-err-msg {
       right: 1.333334em;
     }
 
@@ -5298,7 +5312,7 @@ $mbsc-font-path: '@mobiscroll/angular/dist/css/' !default;
     }
 
     /* Outline */
-    .mbsc-input-outline.mbsc-select .mbsc-label ~ .mbsc-input-wrap .mbsc-select-ic {
+    &.mbsc-input-outline.mbsc-select .mbsc-label ~ .mbsc-input-wrap .mbsc-select-ic {
       top: .875em;
     }
   }
@@ -5895,25 +5909,25 @@ $mbsc-mobiscroll-dark: #47494A !default;
 
     $background: map-get($params, background);
     $accent: map-get($params, accent);
+    $text: map-get($params, text);
 
     $colors: mbsc-mobiscroll-colors($params);
     $input-icon: map-get($colors, input-icon);
     $input-box: map-get($colors, input-box);
     $error: map-get($colors, error);
     $color-input: map-get($colors, color-input);
+    $white-text: map-get($colors, light);
 
     .mbsc-#{$theme} {
 
       /* Textbox */
-      .mbsc-input input,
-      .mbsc-input textarea {
+      &.mbsc-input .mbsc-control {
         border-bottom: 1px solid $input-icon;
         color: $color-input;
       }
 
-      .mbsc-input input:focus,
-      .mbsc-input select:focus ~ input .mbsc-input textarea:focus,
-      .mbsc-input textarea:focus {
+      &.mbsc-input .mbsc-control:focus,
+      &.mbsc-input select:focus ~ input .mbsc-input textarea:focus {
         border-color: $accent;
       }
 
@@ -5922,17 +5936,16 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
 
       /* Box Input */
-      .mbsc-input-box {
+      &.mbsc-input-box {
         &.mbsc-input .mbsc-input-wrap {
           background: $input-box;
         }
       }
 
       /* Outline Input */
-      .mbsc-input-outline {
+      &.mbsc-input-outline {
 
-        &.mbsc-input input,
-        &.mbsc-input textarea {
+        &.mbsc-input .mbsc-control {
           border: 1px solid $input-icon;
         }
 
@@ -5940,7 +5953,12 @@ $mbsc-mobiscroll-dark: #47494A !default;
           background: $background;
         }
 
-        &.mbsc-input input:focus,
+        &.mbsc-label-inline.mbsc-input .mbsc-label,
+        &.mbsc-label-floating:not(.mbsc-label-floating-active).mbsc-input .mbsc-label {
+          background: none;
+        }
+
+        &.mbsc-input .mbsc-control:focus,
         &.mbsc-input select:focus ~ input,
         &.mbsc-err input {
           border-color: $accent;
@@ -5951,8 +5969,8 @@ $mbsc-mobiscroll-dark: #47494A !default;
         }
       }
 
-      .mbsc-input.mbsc-err input,
-      .mbsc-input.mbsc-err textarea {
+      &.mbsc-input.mbsc-err input,
+      &.mbsc-input.mbsc-err textarea {
         border-color: $error;
       }
     }
@@ -5965,23 +5983,25 @@ $mbsc-mobiscroll-dark: #47494A !default;
   .mbsc-mobiscroll {
 
     /* Textbox */
-    .mbsc-input input,
-    .mbsc-input textarea {
+    &.mbsc-input input,
+    &.mbsc-input textarea,
+    &.mbsc-color-input {
       height: 2.125em;
       padding: 0 0 1px 0;
       background: transparent;
       font-size: 1em;
     }
 
-    .mbsc-input input:disabled,
-    .mbsc-input textarea:disabled,
-    .mbsc-input .mbsc-control:disabled ~ input,
-    .mbsc-input .mbsc-control:disabled ~ .mbsc-select-ic {
+    &.mbsc-input input:disabled,
+    &.mbsc-input textarea:disabled,
+    &.mbsc-input input:disabled ~ .mbsc-color-input,
+    &.mbsc-input .mbsc-control:disabled ~ input,
+    &.mbsc-input .mbsc-control:disabled ~ .mbsc-select-ic {
       opacity: .4;
     }
 
     /* Input */
-    .mbsc-input {
+    &.mbsc-input {
       margin: 1.5em 1em;
 
       .mbsc-label ~ .mbsc-input-wrap {
@@ -5999,7 +6019,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
     }
 
     /* Textarea */
-    .mbsc-input textarea {
+    &.mbsc-input textarea {
       padding-top: .25em;
     }
 
@@ -6027,7 +6047,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       top: 1.4375em;
     }
 
-    &.mbsc-ltr .mbsc-select {
+    &.mbsc-ltr.mbsc-select {
       input {
         padding-right: 1.25em;
       }
@@ -6046,7 +6066,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    &.mbsc-rtl .mbsc-select {
+    &.mbsc-rtl.mbsc-select {
       input {
         padding-left: 1.25em;
       }
@@ -6071,7 +6091,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
     }
 
     /* LTR left icon */
-    &.mbsc-ltr .mbsc-input.mbsc-ic-left {
+    &.mbsc-ltr.mbsc-input.mbsc-ic-left {
 
       input,
       textarea {
@@ -6090,7 +6110,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
     }
 
     /* LTR right icon */
-    &.mbsc-ltr .mbsc-input.mbsc-ic-right {
+    &.mbsc-ltr.mbsc-input.mbsc-ic-right {
 
       input,
       textarea {
@@ -6104,7 +6124,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
     }
 
     /* RTL left icon */
-    &.mbsc-rtl .mbsc-input.mbsc-ic-left {
+    &.mbsc-rtl.mbsc-input.mbsc-ic-left {
 
       input,
       textarea {
@@ -6123,7 +6143,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
     }
 
     /* RTL right icon */
-    &.mbsc-rtl .mbsc-input.mbsc-ic-right {
+    &.mbsc-rtl.mbsc-input.mbsc-ic-right {
 
       input,
       textarea {
@@ -6136,14 +6156,14 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-input .mbsc-label {
+    &.mbsc-input .mbsc-label {
       position: absolute;
       top: 0;
       font-size: .75em;
     }
 
     /* Inline labels */
-    .mbsc-label-inline.mbsc-input {
+    &.mbsc-label-inline.mbsc-input {
       .mbsc-label {
         line-height: 2em;
       }
@@ -6162,7 +6182,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
     }
 
     /* Floating labels */
-    .mbsc-label-floating.mbsc-input {
+    &.mbsc-label-floating.mbsc-input {
       .mbsc-label {
         font-size: 1em;
         line-height: 2em;
@@ -6175,21 +6195,22 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    &.mbsc-ltr .mbsc-label-floating.mbsc-input.mbsc-ic-left .mbsc-label {
+    &.mbsc-ltr.mbsc-label-floating.mbsc-input.mbsc-ic-left .mbsc-label {
       left: 1.625em;
     }
 
-    &.mbsc-rtl .mbsc-label-floating.mbsc-input.mbsc-ic-left .mbsc-label {
+    &.mbsc-rtl.mbsc-label-floating.mbsc-input.mbsc-ic-left .mbsc-label {
       right: 1.625em;
     }
 
     /* Box Input */
-    .mbsc-input-box {
+    &.mbsc-input-box {
       &.mbsc-input .mbsc-input-wrap {
         border-radius: 4px 4px 0 0;
       }
 
-      &.mbsc-input input {
+      &.mbsc-input input,
+      &.mbsc-input .mbsc-color-input {
         height: 2.25em;
         padding: .0625em 1em;
         border-radius: 4px 4px 0 0;
@@ -6203,7 +6224,8 @@ $mbsc-mobiscroll-dark: #47494A !default;
       &.mbsc-input .mbsc-label ~ .mbsc-input-wrap {
         padding-top: 0;
 
-        input {
+        input,
+        .mbsc-color-input {
           padding-top: 1.25em;
           height: 3.5em;
         }
@@ -6257,7 +6279,8 @@ $mbsc-mobiscroll-dark: #47494A !default;
         .mbsc-label ~ .mbsc-input-wrap {
           padding-top: 0;
 
-          input {
+          input,
+          .mbsc-color-input {
             height: 2.25em;
             padding-top: .0625em;
           }
@@ -6291,7 +6314,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    &.mbsc-ltr .mbsc-input-box {
+    &.mbsc-ltr.mbsc-input-box {
       .mbsc-err-msg {
         left: 1.333334em;
       }
@@ -6366,7 +6389,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    &.mbsc-rtl .mbsc-input-box {
+    &.mbsc-rtl.mbsc-input-box {
       .mbsc-err-msg {
         right: 1.333334em;
       }
@@ -6442,20 +6465,21 @@ $mbsc-mobiscroll-dark: #47494A !default;
     }
 
     /* Outline Input */
-    .mbsc-input-outline {
+    &.mbsc-input-outline {
 
       &.mbsc-input input,
-      &.mbsc-input textarea {
+      &.mbsc-input textarea,
+      &.mbsc-input .mbsc-color-input {
         border-radius: 4px;
+        height: 3.375em;
       }
 
-      &.mbsc-input input {
-        height: 3.375em;
+      &.mbsc-input input,
+      &.mbsc-input .mbsc-color-input {
         padding: .0625em 1em;
       }
 
       &.mbsc-input textarea {
-        height: 3.375em;
         padding: .875em 1em .4375em 1em;
       }
 
@@ -6522,18 +6546,17 @@ $mbsc-mobiscroll-dark: #47494A !default;
       &.mbsc-label-floating.mbsc-input {
         .mbsc-label {
           top: .9375em;
-          padding: 0;
+          padding: 0 .25em;
         }
 
         &.mbsc-label-floating-active .mbsc-label {
           -webkit-transform: translateY(-1.375em) scale(.75);
           transform: translateY(-1.375em) scale(.75);
-          padding: 0 .25em;
         }
       }
     }
 
-    &.mbsc-ltr .mbsc-input-outline {
+    &.mbsc-ltr.mbsc-input-outline {
       .mbsc-err-msg {
         left: 1.416667em;
       }
@@ -6596,23 +6619,15 @@ $mbsc-mobiscroll-dark: #47494A !default;
 
       /* Floating labels */
       &.mbsc-label-floating.mbsc-input .mbsc-label {
-        left: 1em;
-      }
-
-      &.mbsc-label-floating.mbsc-input.mbsc-label-floating-active .mbsc-label {
         left: .875em;
       }
 
       &.mbsc-label-floating.mbsc-input.mbsc-ic-left .mbsc-label {
-        left: 3em;
-      }
-
-      &.mbsc-label-floating.mbsc-input.mbsc-ic-left.mbsc-label-floating-active .mbsc-label {
         left: 2.875em;
       }
     }
 
-    &.mbsc-rtl .mbsc-input-outline {
+    &.mbsc-rtl.mbsc-input-outline {
       .mbsc-err-msg {
         right: 1.416667em;
       }
@@ -6675,18 +6690,10 @@ $mbsc-mobiscroll-dark: #47494A !default;
 
       /* Floating labels */
       &.mbsc-label-floating.mbsc-input .mbsc-label {
-        right: 1em;
-      }
-
-      &.mbsc-label-floating.mbsc-input.mbsc-label-floating-active .mbsc-label {
         right: .875em;
       }
 
       &.mbsc-label-floating.mbsc-input.mbsc-ic-left .mbsc-label {
-        right: 3em;
-      }
-
-      &.mbsc-label-floating.mbsc-input.mbsc-ic-left.mbsc-label-floating-active .mbsc-label {
         right: 2.875em;
       }
     }
@@ -9899,7 +9906,13 @@ $mbsc-mobiscroll-dark: #47494A !default;
   .mbsc-page h3,
   .mbsc-page h4,
   .mbsc-page h5,
-  .mbsc-page h6 {
+  .mbsc-page h6,
+  .mbsc-h1,
+  .mbsc-h2,
+  .mbsc-h3,
+  .mbsc-h4,
+  .mbsc-h5,
+  .mbsc-h6 {
     margin: 0;
     padding: 0;
     color: inherit;
@@ -9907,50 +9920,60 @@ $mbsc-mobiscroll-dark: #47494A !default;
     font-family: inherit;
   }
 
-  .mbsc-page p {
+  .mbsc-page p,
+  .mbsc-p {
     margin: 1em 0;
     padding: 0;
     line-height: 1.5;
   }
 
-  .mbsc-page a {
+  .mbsc-page a,
+  .mbsc-a {
     text-decoration: none;
   }
 
-  .mbsc-page a:hover {
+  .mbsc-page a:hover,
+  .mbsc-a:hover {
     text-decoration: underline;
   }
 
-  .mbsc-page a.mbsc-btn:hover {
+  .mbsc-page a.mbsc-btn:hover,
+  .mbsc-a.mbsc-btn:hover {
     text-decoration: none;
   }
 
-  .mbsc-page h1 {
+  .mbsc-page h1,
+  .mbsc-h1 {
     margin: .347826em 0;
     font-size: 2.875em;
   }
 
-  .mbsc-page h2 {
+  .mbsc-page h2,
+  .mbsc-h2 {
     margin: .470588em 0;
     font-size: 2.125em;
   }
 
-  .mbsc-page h3 {
+  .mbsc-page h3,
+  .mbsc-h3 {
     margin: .666666em 0;
     font-size: 1.5em;
   }
 
-  .mbsc-page h4 {
+  .mbsc-page h4,
+  .mbsc-h4 {
     margin: .8em 0;
     font-size: 1.25em;
   }
 
-  .mbsc-page h5 {
+  .mbsc-page h5,
+  .mbsc-h5 {
     margin: 1.066666em 0;
     font-size: .9375em;
   }
 
-  .mbsc-page h6 {
+  .mbsc-page h6,
+  .mbsc-h6 {
     margin: 1.333333em 0;
     font-size: .75em;
   }
@@ -9983,19 +10006,20 @@ $mbsc-mobiscroll-dark: #47494A !default;
 
   /* Lists */
 
-  .mbsc-page {
+  .mbsc-page ul,
+  .mbsc-page ol,
+  .mbsc-ul,
+  .mbsc-ol {
+    padding: 0;
+    margin: 1em 0 1em 1.25em;
+    line-height: 1.5;
+  }
 
-    ul,
-    ol {
-      padding: 0;
-      margin: 1em 0 1em 1.25em;
-      line-height: 1.5;
-    }
-
-    ul ul,
-    ol ol {
-      margin: 0 0 0 1.25em;
-    }
+  .mbsc-page ul ul,
+  .mbsc-page ol ol,
+  .mbsc-ul .mbsc-ul,
+  .mbsc-ol .mbsc-ol {
+    margin: 0 0 0 1.25em;
   }
 
   /* Font sizes */
@@ -10022,6 +10046,27 @@ $mbsc-mobiscroll-dark: #47494A !default;
 
   .mbsc-txt-muted {
     opacity: .6;
+  }
+
+  /* Line heights */
+  .mbsc-line-height-xs {
+    line-height: 1;
+  }
+
+  .mbsc-line-height-s {
+    line-height: 1.25;
+  }
+
+  .mbsc-line-height-m {
+    line-height: 1.5;
+  }
+
+  .mbsc-line-height-l {
+    line-height: 1.75;
+  }
+
+  .mbsc-line-height-xl {
+    line-height: 2;
   }
 
   /* Font weights */
@@ -10062,6 +10107,10 @@ $mbsc-mobiscroll-dark: #47494A !default;
 
   .mbsc-align-center {
     text-align: center;
+  }
+
+  .mbsc-align-justify {
+    text-align: justify;
   }
 
   /* Float */
@@ -10184,7 +10233,10 @@ $mbsc-mobiscroll-dark: #47494A !default;
     $slider-tooltip: map-get($colors, slider-tooltip);
 
     .mbsc-#{$theme} {
-      &.mbsc-progress {
+
+      &.mbsc-form .mbsc-progress,
+      &.mbsc-input-box.mbsc-progress,
+      &.mbsc-input-outline.mbsc-progress {
         background: $cont-background;
       }
 
@@ -10441,11 +10493,12 @@ $mbsc-mobiscroll-dark: #47494A !default;
 
     .mbsc-progress-track {
       border-radius: 1em;
-      height: .0625em;
+      height: .125em;
     }
 
     .mbsc-progress-bar {
       z-index: 1;
+      border-radius: 1em;
     }
 
     .mbsc-progress-value {
@@ -10463,7 +10516,8 @@ $mbsc-mobiscroll-dark: #47494A !default;
     }
 
     /* Stacked label */
-    .mbsc-label-stacked.mbsc-progress.mbsc-control-w {
+    .mbsc-label-stacked.mbsc-progress.mbsc-control-w,
+    .mbsc-label-floating.mbsc-progress.mbsc-control-w {
       .mbsc-label {
         font-size: .75em;
         position: absolute;
@@ -10483,7 +10537,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
         padding-bottom: 1em;
 
         .mbsc-input-ic {
-          top: 1em;
+          top: 1.0625em;
         }
       }
 
@@ -10671,9 +10725,6 @@ $mbsc-mobiscroll-dark: #47494A !default;
 
 @include exports("slider.ios") {
   .mbsc-ios {
-    .mbsc-slider-handle-cont {
-      top: 0;
-    }
 
     .mbsc-slider-handle {
       top: 50%;
@@ -11033,6 +11084,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
 
   .mbsc-toast.mbsc-fr .mbsc-fr-w {
     background: none;
+    box-shadow: none;
   }
 
   .mbsc-toast.mbsc-fr .mbsc-fr-c.mbsc-wdg-c {
@@ -11072,7 +11124,6 @@ $mbsc-mobiscroll-dark: #47494A !default;
     font-size: 1em;
   }
 }
-
 
 @include exports("notifications.ios") {
   .mbsc-ios {
@@ -11178,18 +11229,20 @@ $mbsc-mobiscroll-dark: #47494A !default;
     $track-background: map-get($colors, track-background);
     $track-border: map-get($colors, track-border);
     $white-text: map-get($colors, white-text);
-    $light-text: map-get($colors, light-text);
     $dark-text: map-get($colors, dark-text);
     $switch-track: map-get($colors, switch-track);
 
     .mbsc-#{$theme} {
+
       &.mbsc-form {
         background: $form-background;
         color: $text;
       }
 
       &.mbsc-form *::-moz-selection,
-      &.mbsc-form *::selection {
+      &.mbsc-control-w *::-moz-selection,
+      &.mbsc-form *::selection,
+      &.mbsc-control-w *::selection {
         color: $form-text;
         background: $form-selection;
       }
@@ -11208,10 +11261,26 @@ $mbsc-mobiscroll-dark: #47494A !default;
         border-top: 1px solid $border-color;
       }
 
-      /* Checkbox, radio */
+      /* Backgrounds */
       &.mbsc-form .mbsc-checkbox,
-      &.mbsc-form .mbsc-radio {
+      &.mbsc-form .mbsc-radio,
+      &.mbsc-form .mbsc-switch,
+      &.mbsc-form .mbsc-segmented,
+      &.mbsc-form .mbsc-stepper-cont,
+      &.mbsc-input-box.mbsc-checkbox,
+      &.mbsc-input-box.mbsc-radio,
+      &.mbsc-input-box.mbsc-switch,
+      &.mbsc-input-box.mbsc-stepper-cont,
+      &.mbsc-input-outline.mbsc-checkbox,
+      &.mbsc-input-outline.mbsc-radio,
+      &.mbsc-input-outline.mbsc-switch,
+      &.mbsc-input-outline.mbsc-stepper-cont {
         background: $cont-background;
+      }
+
+      &.mbsc-form .mbsc-input-box.mbsc-segmented,
+      &.mbsc-form .mbsc-input-box.mbsc-segmented {
+        background: transparent;
       }
 
       /* Checkbox */
@@ -11232,53 +11301,53 @@ $mbsc-mobiscroll-dark: #47494A !default;
         border-right: 0;
       }
 
-      .mbsc-radio input:disabled ~ .mbsc-radio-label {
+      &.mbsc-radio input:disabled ~ .mbsc-radio-label {
         color: $disabled-color;
       }
 
       /* Buttons */
-      .mbsc-btn {
+      &.mbsc-btn {
         background: $button-background;
         color: $accent;
       }
 
-      .mbsc-btn:not(.mbsc-btn-flat):disabled {
+      &.mbsc-btn:not(.mbsc-btn-flat):disabled {
         background: $disabled-background;
         color: $disabled-color;
       }
 
-      .mbsc-btn.mbsc-btn-flat {
+      &.mbsc-btn.mbsc-btn-flat {
         background: transparent;
         border-color: transparent;
       }
 
-      .mbsc-btn-flat:disabled {
+      &.mbsc-btn-flat:disabled {
         background: transparent;
         color: $disabled-color;
       }
 
       /* Button color presets */
-      .mbsc-btn-primary.mbsc-btn,
-      .mbsc-btn-secondary.mbsc-btn,
-      .mbsc-btn-success.mbsc-btn,
-      .mbsc-btn-danger.mbsc-btn,
-      .mbsc-btn-warning.mbsc-btn,
-      .mbsc-btn-info.mbsc-btn,
-      .mbsc-btn-dark.mbsc-btn {
-        color: $light-text;
+      &.mbsc-btn-primary.mbsc-btn,
+      &.mbsc-btn-secondary.mbsc-btn,
+      &.mbsc-btn-success.mbsc-btn,
+      &.mbsc-btn-danger.mbsc-btn,
+      &.mbsc-btn-warning.mbsc-btn,
+      &.mbsc-btn-info.mbsc-btn,
+      &.mbsc-btn-dark.mbsc-btn {
+        color: $white-text;
       }
 
-      .mbsc-btn-light.mbsc-btn {
+      &.mbsc-btn-light.mbsc-btn {
         color: $dark-text;
       }
 
       /* Flat buttons */
-      .mbsc-btn-flat.mbsc-btn {
+      &.mbsc-btn-flat.mbsc-btn {
         background: transparent;
       }
 
       /* Outline buttons */
-      .mbsc-btn-outline.mbsc-btn {
+      &.mbsc-btn-outline.mbsc-btn {
         background: transparent;
         border: 1px solid $form-selection;
         color: $form-selection;
@@ -11289,17 +11358,13 @@ $mbsc-mobiscroll-dark: #47494A !default;
         }
       }
 
-      .mbsc-btn.mbsc-btn-outline:disabled {
+      &.mbsc-btn.mbsc-btn-outline:disabled {
         color: $disabled-color;
         border-color: $disabled-color;
         background: transparent;
       }
 
       /* Switch */
-      &.mbsc-form .mbsc-switch {
-        background: $cont-background;
-      }
-
       .mbsc-switch-track {
         background: $track-background;
         border: .0625em solid $track-border;
@@ -11313,40 +11378,32 @@ $mbsc-mobiscroll-dark: #47494A !default;
         background: $white-text;
       }
 
-      .mbsc-switch input:checked + .mbsc-switch-track {
+      &.mbsc-switch input:checked + .mbsc-switch-track {
         background: $switch-track;
         border-color: $switch-track;
       }
 
       /* Segmented & Stepper */
-      .mbsc-segmented {
-        background-color: $cont-background;
-      }
-
       .mbsc-segmented-content {
         color: $form-selection;
         border: .07142857em solid $form-selection;
         background: $cont-background;
       }
 
-      .mbsc-segmented .mbsc-segmented-item.mbsc-stepper-control.mbsc-active .mbsc-segmented-content,
-      .mbsc-segmented .mbsc-segmented-item input:checked + .mbsc-segmented-content {
+      &.mbsc-segmented .mbsc-segmented-item.mbsc-stepper-control.mbsc-active .mbsc-segmented-content,
+      &.mbsc-segmented .mbsc-segmented-item input:checked + .mbsc-segmented-content {
         background: $form-selection;
         color: $cont-background;
       }
 
-      .mbsc-segmented .mbsc-segmented-item input.mbsc-active + .mbsc-segmented-content {
+      &.mbsc-segmented .mbsc-segmented-item input.mbsc-active + .mbsc-segmented-content {
         background: rgba($accent, .3);
         color: $form-selection;
       }
 
-      .mbsc-stepper-cont {
-        background: $cont-background;
-      }
-
-      .mbsc-segmented input:disabled ~ .mbsc-segmented-item .mbsc-segmented-content,
-      .mbsc-segmented .mbsc-segmented-item.mbsc-stepper-control.mbsc-disabled .mbsc-segmented-content,
-      .mbsc-segmented .mbsc-segmented-item input:disabled + .mbsc-segmented-content {
+      &.mbsc-segmented input:disabled ~ .mbsc-segmented-item .mbsc-segmented-content,
+      &.mbsc-segmented .mbsc-segmented-item.mbsc-stepper-control.mbsc-disabled .mbsc-segmented-content,
+      &.mbsc-segmented .mbsc-segmented-item input:disabled + .mbsc-segmented-content {
         color: $disabled-color;
         border-color: $disabled-color;
       }
@@ -11356,7 +11413,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
         -webkit-text-fill-color: $disabled-color;
       }
 
-      .mbsc-segmented input:disabled:checked + .mbsc-segmented-content {
+      &.mbsc-segmented input:disabled:checked + .mbsc-segmented-content {
         background: $disabled-background;
       }
 
@@ -11389,14 +11446,17 @@ $mbsc-mobiscroll-dark: #47494A !default;
     visibility: hidden;
   }
 
-  .mbsc-form {
+  .mbsc-form,
+  .mbsc-control-w,
+  .mbsc-btn,
+  .mbsc-segmented {
     font-size: 16px;
     font-family: arial, verdana, sans-serif;
+    -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
-    -webkit-text-size-adjust: 100%;
     -ms-touch-action: manipulation;
     touch-action: manipulation;
   }
@@ -11749,21 +11809,21 @@ $mbsc-mobiscroll-dark: #47494A !default;
     margin: 0;
   }
 
-  .mbsc-form .mbsc-stepper-val-right .mbsc-stepper input {
+  .mbsc-ltr.mbsc-stepper-val-right .mbsc-stepper input {
     left: auto;
     right: 0;
   }
 
-  .mbsc-form.mbsc-rtl .mbsc-stepper-val-right .mbsc-stepper input {
+  .mbsc-rtl.mbsc-stepper-val-right .mbsc-stepper input {
     right: auto;
     left: 0;
   }
 
-  .mbsc-form .mbsc-stepper-val-left .mbsc-stepper input {
+  .mbsc-ltr.mbsc-stepper-val-left .mbsc-stepper input {
     left: 0;
   }
 
-  .mbsc-form.mbsc-rtl .mbsc-stepper-val-left .mbsc-stepper input {
+  .mbsc-rtl.mbsc-stepper-val-left .mbsc-stepper input {
     right: 0;
   }
 
@@ -11778,7 +11838,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
     background: transparent;
   }
 
-  .mbsc-form .mbsc-stepper-cont .mbsc-stepper {
+  .mbsc-control-w.mbsc-stepper-cont .mbsc-stepper {
     padding: 0;
   }
 
@@ -11803,6 +11863,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
     text-align: center;
     text-overflow: ellipsis;
     font-size: 1em;
+    font-family: arial, verdana, sans-serif;
     cursor: pointer;
   }
 
@@ -11911,26 +11972,34 @@ $mbsc-mobiscroll-dark: #47494A !default;
       margin: .75em 1em;
     }
 
+    /* Checkbox, switch */
+    &.mbsc-checkbox .mbsc-err-msg,
+    &.mbsc-switch .mbsc-err-msg,
+    &.mbsc-radio .mbsc-err-msg {
+      padding: 0;
+      margin-bottom: -1em;
+    }
+
     /* Checkbox, radio */
-    &.mbsc-form .mbsc-checkbox,
-    &.mbsc-form .mbsc-radio {
+    &.mbsc-ltr.mbsc-checkbox,
+    &.mbsc-ltr.mbsc-radio {
       padding: .875em 3.75em .875em 1em;
     }
 
-    &.mbsc-rtl .mbsc-checkbox,
-    &.mbsc-rtl .mbsc-radio {
+    &.mbsc-rtl.mbsc-checkbox,
+    &.mbsc-rtl.mbsc-radio {
       padding: .875em 1em .875em 3.75em;
     }
 
-    .mbsc-checkbox input:disabled + .mbsc-checkbox-box,
-    .mbsc-checkbox input:disabled ~ .mbsc-label,
-    .mbsc-checkbox input:disabled ~ .mbsc-desc,
-    .mbsc-radio input:disabled + .mbsc-radio-box,
-    .mbsc-radio input:disabled ~ .mbsc-label,
-    .mbsc-radio input:disabled ~ .mbsc-desc,
-    .mbsc-switch input:disabled + .mbsc-switch-track,
-    .mbsc-switch input:disabled ~ .mbsc-label,
-    .mbsc-switch input:disabled ~ .mbsc-desc {
+    &.mbsc-checkbox input:disabled + .mbsc-checkbox-box,
+    &.mbsc-checkbox input:disabled ~ .mbsc-label,
+    &.mbsc-checkbox input:disabled ~ .mbsc-desc,
+    &.mbsc-radio input:disabled + .mbsc-radio-box,
+    &.mbsc-radio input:disabled ~ .mbsc-label,
+    &.mbsc-radio input:disabled ~ .mbsc-desc,
+    &.mbsc-switch input:disabled + .mbsc-switch-track,
+    &.mbsc-switch input:disabled ~ .mbsc-label,
+    &.mbsc-switch input:disabled ~ .mbsc-desc {
       opacity: .3;
     }
 
@@ -11962,7 +12031,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
     }
 
     /* Checkbox color presets */
-    .mbsc-checkbox-primary {
+    &.mbsc-checkbox-primary {
 
       .mbsc-checkbox-box,
       .mbsc-checkbox-box:after {
@@ -11970,7 +12039,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-checkbox-secondary {
+    &.mbsc-checkbox-secondary {
 
       .mbsc-checkbox-box,
       .mbsc-checkbox-box:after {
@@ -11978,7 +12047,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-checkbox-success {
+    &.mbsc-checkbox-success {
 
       .mbsc-checkbox-box,
       .mbsc-checkbox-box:after {
@@ -11986,7 +12055,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-checkbox-danger {
+    &.mbsc-checkbox-danger {
 
       .mbsc-checkbox-box,
       .mbsc-checkbox-box:after {
@@ -11994,7 +12063,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-checkbox-warning {
+    &.mbsc-checkbox-warning {
 
       .mbsc-checkbox-box,
       .mbsc-checkbox-box:after {
@@ -12002,7 +12071,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-checkbox-info {
+    &.mbsc-checkbox-info {
 
       .mbsc-checkbox-box,
       .mbsc-checkbox-box:after {
@@ -12034,32 +12103,32 @@ $mbsc-mobiscroll-dark: #47494A !default;
     }
 
     /* Radio color presets */
-    .mbsc-radio-primary .mbsc-radio-box:after {
+    &.mbsc-radio-primary .mbsc-radio-box:after {
       border-color: $mbsc-ios-primary;
     }
 
-    .mbsc-radio-secondary .mbsc-radio-box:after {
+    &.mbsc-radio-secondary .mbsc-radio-box:after {
       border-color: $mbsc-ios-secondary;
     }
 
-    .mbsc-radio-success .mbsc-radio-box:after {
+    &.mbsc-radio-success .mbsc-radio-box:after {
       border-color: $mbsc-ios-success;
     }
 
-    .mbsc-radio-danger .mbsc-radio-box:after {
+    &.mbsc-radio-danger .mbsc-radio-box:after {
       border-color: $mbsc-ios-danger;
     }
 
-    .mbsc-radio-warning .mbsc-radio-box:after {
+    &.mbsc-radio-warning .mbsc-radio-box:after {
       border-color: $mbsc-ios-warning;
     }
 
-    .mbsc-radio-info .mbsc-radio-box:after {
+    &.mbsc-radio-info .mbsc-radio-box:after {
       border-color: $mbsc-ios-info;
     }
 
     /* Buttons */
-    .mbsc-btn {
+    &.mbsc-btn {
       margin: .5em .25em;
       padding: .625em 1.375em;
       border: 0;
@@ -12074,19 +12143,19 @@ $mbsc-mobiscroll-dark: #47494A !default;
       padding: 0;
     }
 
-    &.mbsc-no-touch .mbsc-btn:not(:disabled):not(.mbsc-active):hover {
+    &.mbsc-no-touch.mbsc-btn:not(:disabled):not(.mbsc-active):hover {
       opacity: .8;
     }
 
-    .mbsc-btn.mbsc-active {
+    &.mbsc-btn.mbsc-active {
       opacity: .6;
     }
 
-    .mbsc-btn-flat.mbsc-active {
+    &.mbsc-btn-flat.mbsc-active {
       opacity: .6;
     }
 
-    .mbsc-btn-flat:disabled {
+    &.mbsc-btn-flat:disabled {
       opacity: .8;
     }
 
@@ -12101,7 +12170,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
     }
 
     /* Button color presets */
-    .mbsc-btn-primary.mbsc-btn {
+    &.mbsc-btn-primary.mbsc-btn {
       background: $mbsc-ios-primary;
 
       &.mbsc-btn-flat {
@@ -12109,7 +12178,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-btn-secondary.mbsc-btn {
+    &.mbsc-btn-secondary.mbsc-btn {
       background: $mbsc-ios-secondary;
 
       &.mbsc-btn-flat {
@@ -12117,7 +12186,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-btn-success.mbsc-btn {
+    &.mbsc-btn-success.mbsc-btn {
       background: $mbsc-ios-success;
 
       &.mbsc-btn-flat {
@@ -12125,7 +12194,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-btn-danger.mbsc-btn {
+    &.mbsc-btn-danger.mbsc-btn {
       background: $mbsc-ios-danger;
 
       &.mbsc-btn-flat {
@@ -12133,7 +12202,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-btn-warning.mbsc-btn {
+    &.mbsc-btn-warning.mbsc-btn {
       background: $mbsc-ios-warning;
 
       &.mbsc-btn-flat {
@@ -12141,7 +12210,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-btn-info.mbsc-btn {
+    &.mbsc-btn-info.mbsc-btn {
       background: $mbsc-ios-info;
 
       &.mbsc-btn-flat {
@@ -12149,7 +12218,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-btn-light.mbsc-btn {
+    &.mbsc-btn-light.mbsc-btn {
       background: $mbsc-ios-light;
 
       &.mbsc-btn-flat {
@@ -12157,7 +12226,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-btn-dark.mbsc-btn {
+    &.mbsc-btn-dark.mbsc-btn {
       background: $mbsc-ios-dark;
 
       &.mbsc-btn-flat {
@@ -12166,17 +12235,17 @@ $mbsc-mobiscroll-dark: #47494A !default;
     }
 
     /* Flat buttons */
-    .mbsc-btn-flat.mbsc-btn {
+    &.mbsc-btn-flat.mbsc-btn {
       background: transparent;
     }
 
     /* Outline buttons */
-    .mbsc-btn-outline.mbsc-btn.mbsc-active {
+    &.mbsc-btn-outline.mbsc-btn.mbsc-active {
       opacity: 1;
     }
 
     /* Outline buttons */
-    .mbsc-btn-outline.mbsc-btn {
+    &.mbsc-btn-outline.mbsc-btn {
       &.mbsc-btn-primary {
         border-color: $mbsc-ios-primary;
         color: $mbsc-ios-primary;
@@ -12259,11 +12328,11 @@ $mbsc-mobiscroll-dark: #47494A !default;
     }
 
     /* Switch */
-    &.mbsc-form .mbsc-switch {
+    &.mbsc-ltr.mbsc-switch {
       padding: .875em 5em .875em 1em;
     }
 
-    &.mbsc-rtl .mbsc-switch {
+    &.mbsc-rtl.mbsc-switch {
       padding: .875em 1em .875em 5em;
     }
 
@@ -12316,44 +12385,44 @@ $mbsc-mobiscroll-dark: #47494A !default;
       margin: -.875em -.875em 0 0;
     }
 
-    .mbsc-switch input:checked + .mbsc-switch-track:after {
+    &.mbsc-switch input:checked + .mbsc-switch-track:after {
       -webkit-transform: scale(0);
       transform: scale(0);
     }
 
     /* swithc color presets */
-    .mbsc-switch-primary.mbsc-switch input:checked + .mbsc-switch-track {
+    &.mbsc-switch-primary.mbsc-switch input:checked + .mbsc-switch-track {
       border-color: $mbsc-ios-primary;
       background: $mbsc-ios-primary;
     }
 
-    .mbsc-switch-secondary.mbsc-switch input:checked + .mbsc-switch-track {
+    &.mbsc-switch-secondary.mbsc-switch input:checked + .mbsc-switch-track {
       border-color: $mbsc-ios-secondary;
       background: $mbsc-ios-secondary;
     }
 
-    .mbsc-switch-success.mbsc-switch input:checked + .mbsc-switch-track {
+    &.mbsc-switch-success.mbsc-switch input:checked + .mbsc-switch-track {
       border-color: $mbsc-ios-success;
       background: $mbsc-ios-success;
     }
 
-    .mbsc-switch-danger.mbsc-switch input:checked + .mbsc-switch-track {
+    &.mbsc-switch-danger.mbsc-switch input:checked + .mbsc-switch-track {
       border-color: $mbsc-ios-danger;
       background: $mbsc-ios-danger;
     }
 
-    .mbsc-switch-warning.mbsc-switch input:checked + .mbsc-switch-track {
+    &.mbsc-switch-warning.mbsc-switch input:checked + .mbsc-switch-track {
       border-color: $mbsc-ios-warning;
       background: $mbsc-ios-warning;
     }
 
-    .mbsc-switch-info.mbsc-switch input:checked + .mbsc-switch-track {
+    &.mbsc-switch-info.mbsc-switch input:checked + .mbsc-switch-track {
       border-color: $mbsc-ios-info;
       background: $mbsc-ios-info;
     }
 
     /* Segmented & Stepper */
-    .mbsc-segmented {
+    &.mbsc-segmented {
       padding: .75em;
     }
 
@@ -12366,7 +12435,6 @@ $mbsc-mobiscroll-dark: #47494A !default;
       margin-left: -.07142857em;
       line-height: 2.142857142857143em;
       padding: 0 .42857em;
-      text-transform: capitalize;
     }
 
     &.mbsc-ltr .mbsc-stepper-minus .mbsc-segmented-content,
@@ -12390,11 +12458,11 @@ $mbsc-mobiscroll-dark: #47494A !default;
       border-bottom-right-radius: .25em;
     }
 
-    .mbsc-stepper-cont {
+    &.mbsc-ltr.mbsc-stepper-cont {
       padding: 1.5em 11.75em 1.5em 1em;
     }
 
-    &.mbsc-rtl .mbsc-stepper-cont {
+    &.mbsc-rtl.mbsc-stepper-cont {
       padding: 1.5em 1em 1.5em 11.75em;
     }
 
@@ -12408,9 +12476,9 @@ $mbsc-mobiscroll-dark: #47494A !default;
       left: 1em;
     }
 
-    .mbsc-segmented input:disabled ~ .mbsc-segmented-item .mbsc-segmented-content,
-    .mbsc-segmented .mbsc-segmented-item.mbsc-stepper-control.mbsc-disabled .mbsc-segmented-content,
-    .mbsc-segmented .mbsc-segmented-item input:disabled + .mbsc-segmented-content {
+    &.mbsc-segmented input:disabled ~ .mbsc-segmented-item .mbsc-segmented-content,
+    &.mbsc-segmented .mbsc-segmented-item.mbsc-stepper-control.mbsc-disabled .mbsc-segmented-content,
+    &.mbsc-segmented .mbsc-segmented-item input:disabled + .mbsc-segmented-content {
       background: none;
     }
 
@@ -12424,7 +12492,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       z-index: 3;
     }
 
-    .mbsc-segmented {
+    &.mbsc-segmented {
 
       /* Stepper color presets */
       .mbsc-segmented-primary {
@@ -12433,13 +12501,13 @@ $mbsc-mobiscroll-dark: #47494A !default;
           color: $mbsc-ios-primary;
         }
 
+        &.mbsc-segmented-item input:checked + .mbsc-segmented-content {
+          background: $mbsc-ios-primary;
+        }
+
         &.mbsc-segmented-item input.mbsc-active + .mbsc-segmented-content {
           color: $mbsc-ios-primary;
           background: rgba($mbsc-ios-primary, .45);
-        }
-
-        &.mbsc-segmented-item input.mbsc-control:checked + .mbsc-segmented-content {
-          background: $mbsc-ios-primary;
         }
       }
 
@@ -12449,13 +12517,13 @@ $mbsc-mobiscroll-dark: #47494A !default;
           color: $mbsc-ios-secondary;
         }
 
+        &.mbsc-segmented-item input:checked + .mbsc-segmented-content {
+          background: $mbsc-ios-secondary;
+        }
+
         &.mbsc-segmented-item input.mbsc-active + .mbsc-segmented-content {
           color: $mbsc-ios-secondary;
           background: rgba($mbsc-ios-secondary, .45);
-        }
-
-        &.mbsc-segmented-item input.mbsc-control:checked + .mbsc-segmented-content {
-          background: $mbsc-ios-secondary;
         }
       }
 
@@ -12465,13 +12533,13 @@ $mbsc-mobiscroll-dark: #47494A !default;
           color: $mbsc-ios-success;
         }
 
+        &.mbsc-segmented-item input:checked + .mbsc-segmented-content {
+          background: $mbsc-ios-success;
+        }
+
         &.mbsc-segmented-item input.mbsc-active + .mbsc-segmented-content {
           color: $mbsc-ios-success;
           background: rgba($mbsc-ios-success, .45);
-        }
-
-        &.mbsc-segmented-item input.mbsc-control:checked + .mbsc-segmented-content {
-          background: $mbsc-ios-success;
         }
       }
 
@@ -12481,13 +12549,13 @@ $mbsc-mobiscroll-dark: #47494A !default;
           color: $mbsc-ios-danger;
         }
 
+        &.mbsc-segmented-item input:checked + .mbsc-segmented-content {
+          background: $mbsc-ios-danger;
+        }
+
         &.mbsc-segmented-item input.mbsc-active + .mbsc-segmented-content {
           color: $mbsc-ios-danger;
           background: rgba($mbsc-ios-danger, .45);
-        }
-
-        &.mbsc-segmented-item input.mbsc-control:checked + .mbsc-segmented-content {
-          background: $mbsc-ios-danger;
         }
       }
 
@@ -12497,13 +12565,13 @@ $mbsc-mobiscroll-dark: #47494A !default;
           color: $mbsc-ios-warning;
         }
 
+        &.mbsc-segmented-item input:checked + .mbsc-segmented-content {
+          background: $mbsc-ios-warning;
+        }
+
         &.mbsc-segmented-item input.mbsc-active + .mbsc-segmented-content {
           color: $mbsc-ios-warning;
           background: rgba($mbsc-ios-warning, .45);
-        }
-
-        &.mbsc-segmented-item input.mbsc-control:checked + .mbsc-segmented-content {
-          background: $mbsc-ios-warning;
         }
       }
 
@@ -12513,13 +12581,13 @@ $mbsc-mobiscroll-dark: #47494A !default;
           color: $mbsc-ios-info;
         }
 
+        &.mbsc-segmented-item input:checked + .mbsc-segmented-content {
+          background: $mbsc-ios-info;
+        }
+
         &.mbsc-segmented-item input.mbsc-active + .mbsc-segmented-content {
           color: $mbsc-ios-info;
           background: rgba($mbsc-ios-info, .45);
-        }
-
-        &.mbsc-segmented-item input.mbsc-control:checked + .mbsc-segmented-content {
-          background: $mbsc-ios-info;
         }
       }
     }
@@ -12564,37 +12632,37 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
 
       /* Stepper color presets*/
-      .mbsc-stepper-primary {
+      &.mbsc-stepper-primary {
         .mbsc-segmented .mbsc-segmented-item:hover .mbsc-segmented-content {
           background: rgba($mbsc-ios-primary, .15);
         }
       }
 
-      .mbsc-stepper-secondary {
+      &.mbsc-stepper-secondary {
         .mbsc-segmented .mbsc-segmented-item:hover .mbsc-segmented-content {
           background: rgba($mbsc-ios-secondary, .15);
         }
       }
 
-      .mbsc-stepper-success {
+      &.mbsc-stepper-success {
         .mbsc-segmented .mbsc-segmented-item:hover .mbsc-segmented-content {
           background: rgba($mbsc-ios-success, .15);
         }
       }
 
-      .mbsc-stepper-danger {
+      &.mbsc-stepper-danger {
         .mbsc-segmented .mbsc-segmented-item:hover .mbsc-segmented-content {
           background: rgba($mbsc-ios-danger, .15);
         }
       }
 
-      .mbsc-stepper-warning {
+      &.mbsc-stepper-warning {
         .mbsc-segmented .mbsc-segmented-item:hover .mbsc-segmented-content {
           background: rgba($mbsc-ios-warning, .15);
         }
       }
 
-      .mbsc-stepper-info {
+      &.mbsc-stepper-info {
         .mbsc-segmented .mbsc-segmented-item:hover .mbsc-segmented-content {
           background: rgba($mbsc-ios-info, .15);
         }
@@ -13277,6 +13345,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
     $checkbox: map-get($colors, checkbox);
 
     .mbsc-#{$theme} {
+
       &.mbsc-form {
         background: $background;
         color: $text;
@@ -13313,7 +13382,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
         border-left: .125em solid $checkbox;
       }
 
-      .mbsc-checkbox input:disabled + .mbsc-checkbox-box {
+      &.mbsc-checkbox input:disabled+.mbsc-checkbox-box {
         background: $input-disabled;
       }
 
@@ -13326,53 +13395,53 @@ $mbsc-mobiscroll-dark: #47494A !default;
         background: $accent;
       }
 
-      .mbsc-radio input:checked + .mbsc-radio-box {
+      &.mbsc-radio input:checked+.mbsc-radio-box {
         background: transparent;
       }
 
-      .mbsc-radio input:disabled + .mbsc-radio-box {
+      &.mbsc-radio input:disabled+.mbsc-radio-box {
         border-color: $input-disabled;
       }
 
-      .mbsc-radio input:disabled + .mbsc-radio-box:after {
+      &.mbsc-radio input:disabled+.mbsc-radio-box:after {
         background: $input-disabled;
       }
 
       /* Buttons */
-      .mbsc-btn {
+      &.mbsc-btn {
         background: $accent;
         color: $btn-light;
       }
 
-      .mbsc-btn:disabled {
+      &.mbsc-btn:disabled {
         background: $btn-disabled;
       }
 
-      &.mbsc-no-touch .mbsc-btn-flat:not(:disabled):not(.mbsc-active):hover {
+      &.mbsc-no-touch.mbsc-btn-flat:not(:disabled):not(.mbsc-active):hover {
         background: rgba($background, .1);
       }
 
-      .mbsc-btn-flat {
+      &.mbsc-btn-flat {
         background: transparent;
         color: $accent;
         border-color: transparent;
       }
 
-      .mbsc-btn-flat.mbsc-btn.mbsc-active {
+      &.mbsc-btn-flat.mbsc-btn.mbsc-active {
         background: rgba($accent, .3)
       }
 
-      .mbsc-btn-flat:disabled {
+      &.mbsc-btn-flat:disabled {
         color: $switch;
         background: transparent;
       }
 
-      .mbsc-btn-light.mbsc-btn {
+      &.mbsc-btn-light.mbsc-btn {
         color: $mbsc-mobiscroll-dark-text;
       }
 
       /* Outline buttons */
-      .mbsc-btn-outline.mbsc-btn {
+      &.mbsc-btn-outline.mbsc-btn {
         border: 1px solid $accent;
         color: $accent;
 
@@ -13392,7 +13461,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
         }
       }
 
-      .mbsc-btn.mbsc-btn-outline:disabled {
+      &.mbsc-btn.mbsc-btn-outline:disabled {
         color: $btn-disabled;
         border-color: $btn-disabled;
         background: transparent;
@@ -13407,19 +13476,19 @@ $mbsc-mobiscroll-dark: #47494A !default;
         background: $switch;
       }
 
-      .mbsc-switch input:checked + .mbsc-switch-track {
+      &.mbsc-switch input:checked+.mbsc-switch-track {
         background: $checked;
       }
 
-      .mbsc-switch input:checked + .mbsc-switch-track .mbsc-switch-handle {
+      &.mbsc-switch input:checked+.mbsc-switch-track .mbsc-switch-handle {
         background: $accent;
       }
 
-      .mbsc-switch input:disabled + .mbsc-switch-track {
+      &.mbsc-switch input:disabled+.mbsc-switch-track {
         background: $input-disabled;
       }
 
-      .mbsc-switch input:disabled + .mbsc-switch-track .mbsc-switch-handle {
+      &.mbsc-switch input:disabled+.mbsc-switch-track .mbsc-switch-handle {
         background: $handle;
       }
 
@@ -13429,23 +13498,23 @@ $mbsc-mobiscroll-dark: #47494A !default;
         color: $accent;
       }
 
-      .mbsc-stepper input {
+      &.mbsc-stepper input {
         color: $text;
       }
 
-      .mbsc-segmented .mbsc-segmented-item.mbsc-stepper-control.mbsc-active .mbsc-segmented-content,
-      .mbsc-segmented .mbsc-segmented-item input:checked + .mbsc-segmented-content {
+      &.mbsc-segmented .mbsc-segmented-item.mbsc-stepper-control.mbsc-active .mbsc-segmented-content,
+      &.mbsc-segmented .mbsc-segmented-item input:checked+.mbsc-segmented-content {
         background: $accent;
         color: $background;
       }
 
-      .mbsc-segmented .mbsc-segmented-item input.mbsc-active + .mbsc-segmented-content {
+      &.mbsc-segmented .mbsc-segmented-item input.mbsc-active+.mbsc-segmented-content {
         background: rgba($accent, .3);
       }
 
-      .mbsc-segmented input:disabled ~ .mbsc-segmented-item .mbsc-segmented-content,
-      .mbsc-segmented .mbsc-segmented-item.mbsc-stepper-control.mbsc-disabled .mbsc-segmented-content,
-      .mbsc-segmented .mbsc-segmented-item input:disabled + .mbsc-segmented-content {
+      &.mbsc-segmented input:disabled~.mbsc-segmented-item .mbsc-segmented-content,
+      &.mbsc-segmented .mbsc-segmented-item.mbsc-stepper-control.mbsc-disabled .mbsc-segmented-content,
+      &.mbsc-segmented .mbsc-segmented-item input:disabled+.mbsc-segmented-content {
         color: $input-disabled;
         border-color: $input-disabled;
       }
@@ -13455,13 +13524,13 @@ $mbsc-mobiscroll-dark: #47494A !default;
         -webkit-text-fill-color: $input-disabled;
       }
 
-      .mbsc-segmented input:disabled:checked + .mbsc-segmented-content {
+      &.mbsc-segmented input:disabled:checked+.mbsc-segmented-content {
         border-color: $btn-disabled;
         background: $btn-disabled;
         color: $btn-light;
       }
 
-      .mbsc-stepper .mbsc-active.mbsc-disabled .mbsc-segmented-content {
+      &.mbsc-stepper .mbsc-active.mbsc-disabled .mbsc-segmented-content {
         background: transparent;
         color: $input-disabled;
       }
@@ -13474,12 +13543,11 @@ $mbsc-mobiscroll-dark: #47494A !default;
 }
 
 
-
 @include exports("forms.mobiscroll") {
+
   .mbsc-mobiscroll {
 
     .mbsc-divider,
-
     .mbsc-form-group-title {
       padding: .5em 1em;
     }
@@ -13502,12 +13570,19 @@ $mbsc-mobiscroll-dark: #47494A !default;
       margin: .75em 1em;
     }
 
+    /* Checkbox, switch, radio */
+    &.mbsc-checkbox .mbsc-err-msg,
+    &.mbsc-switch .mbsc-err-msg,
+    &.mbsc-radio .mbsc-err-msg {
+      padding-top: 0;
+    }
+
     /* Checkbox */
-    &.mbsc-form .mbsc-checkbox {
+    &.mbsc-checkbox {
       padding: 1em 3.125em 1em 1em;
     }
 
-    &.mbsc-form.mbsc-rtl .mbsc-checkbox {
+    &.mbsc-rtl.mbsc-checkbox {
       padding: 1em 1em 1em 3.125em;
     }
 
@@ -13531,36 +13606,36 @@ $mbsc-mobiscroll-dark: #47494A !default;
     }
 
     /* Checkbox color presets */
-    .mbsc-checkbox-primary .mbsc-checkbox-box {
+    &.mbsc-checkbox-primary .mbsc-checkbox-box {
       background: $mbsc-mobiscroll-primary;
     }
 
-    .mbsc-checkbox-secondary .mbsc-checkbox-box {
+    &.mbsc-checkbox-secondary .mbsc-checkbox-box {
       background: $mbsc-mobiscroll-secondary;
     }
 
-    .mbsc-checkbox-success .mbsc-checkbox-box {
+    &.mbsc-checkbox-success .mbsc-checkbox-box {
       background: $mbsc-mobiscroll-success;
     }
 
-    .mbsc-checkbox-danger .mbsc-checkbox-box {
+    &.mbsc-checkbox-danger .mbsc-checkbox-box {
       background: $mbsc-mobiscroll-danger;
     }
 
-    .mbsc-checkbox-warning .mbsc-checkbox-box {
+    &.mbsc-checkbox-warning .mbsc-checkbox-box {
       background: $mbsc-mobiscroll-warning;
     }
 
-    .mbsc-checkbox-info .mbsc-checkbox-box {
+    &.mbsc-checkbox-info .mbsc-checkbox-box {
       background: $mbsc-mobiscroll-info;
     }
 
     /* Radio */
-    .mbsc-radio {
+    &.mbsc-radio {
       padding: 1em 3.125em 1em 1em;
     }
 
-    &.mbsc-rtl .mbsc-radio {
+    &.mbsc-rtl.mbsc-radio {
       padding: 1em 1em 1em 3.125em;
     }
 
@@ -13585,12 +13660,12 @@ $mbsc-mobiscroll-dark: #47494A !default;
       border-radius: .625em;
     }
 
-    .mbsc-radio input:checked + .mbsc-radio-box {
+    &.mbsc-radio input:checked+.mbsc-radio-box {
       background: transparent;
     }
 
     /* Radio color presets */
-    .mbsc-radio-primary {
+    &.mbsc-radio-primary {
       .mbsc-radio-box {
         border-color: $mbsc-mobiscroll-primary;
       }
@@ -13600,7 +13675,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-radio-secondary {
+    &.mbsc-radio-secondary {
       .mbsc-radio-box {
         border-color: $mbsc-mobiscroll-secondary;
       }
@@ -13610,7 +13685,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-radio-success {
+    &.mbsc-radio-success {
       .mbsc-radio-box {
         border-color: $mbsc-mobiscroll-success;
       }
@@ -13620,7 +13695,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-radio-danger {
+    &.mbsc-radio-danger {
       .mbsc-radio-box {
         border-color: $mbsc-mobiscroll-danger;
       }
@@ -13630,7 +13705,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-radio-warning {
+    &.mbsc-radio-warning {
       .mbsc-radio-box {
         border-color: $mbsc-mobiscroll-warning;
       }
@@ -13640,7 +13715,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-radio-info {
+    &.mbsc-radio-info {
       .mbsc-radio-box {
         border-color: $mbsc-mobiscroll-info;
       }
@@ -13651,12 +13726,12 @@ $mbsc-mobiscroll-dark: #47494A !default;
     }
 
     /* Checkbox, Switch, Radio */
-    .mbsc-checkbox input:disabled ~ .mbsc-label,
-    .mbsc-checkbox input:disabled ~ .mbsc-desc,
-    .mbsc-radio input:disabled ~ .mbsc-label,
-    .mbsc-radio input:disabled ~ .mbsc-desc,
-    .mbsc-switch input:disabled ~ .mbsc-label,
-    .mbsc-switch input:disabled ~ .mbsc-desc {
+    &.mbsc-checkbox input:disabled~.mbsc-label,
+    &.mbsc-checkbox input:disabled~.mbsc-desc,
+    &.mbsc-radio input:disabled~.mbsc-label,
+    &.mbsc-radio input:disabled~.mbsc-desc,
+    &.mbsc-switch input:disabled~.mbsc-label,
+    &.mbsc-switch input:disabled~.mbsc-desc {
       opacity: .4;
     }
 
@@ -13668,15 +13743,15 @@ $mbsc-mobiscroll-dark: #47494A !default;
       transition: transform .1s ease-out;
     }
 
-    .mbsc-checkbox input:checked + .mbsc-checkbox-box:after,
-    .mbsc-radio input:checked + .mbsc-radio-box:after {
+    &.mbsc-checkbox input:checked+.mbsc-checkbox-box:after,
+    &.mbsc-radio input:checked+.mbsc-radio-box:after {
       opacity: 1;
       -webkit-transform: scale(1) rotate(-45deg);
       transform: scale(1) rotate(-45deg);
     }
 
     /* Buttons */
-    .mbsc-btn {
+    &.mbsc-btn {
       margin: .5em;
       padding: .6875em;
       font-size: 1em;
@@ -13691,33 +13766,33 @@ $mbsc-mobiscroll-dark: #47494A !default;
       padding: 0 .5em;
     }
 
-    &.mbsc-no-touch .mbsc-btn:not(:disabled):not(.mbsc-active):hover {
+    &.mbsc-no-touch.mbsc-btn:not(:disabled):not(.mbsc-active):hover {
       opacity: .8;
     }
 
-    .mbsc-btn.mbsc-active {
+    &.mbsc-btn.mbsc-active {
       opacity: .6;
     }
 
-    &.mbsc-no-touch .mbsc-btn-flat:not(:disabled):not(.mbsc-active):hover {
+    &.mbsc-no-touch.mbsc-btn-flat:not(:disabled):not(.mbsc-active):hover {
       opacity: 1;
     }
 
-    .mbsc-btn-flat {
+    &.mbsc-btn-flat {
       background: transparent;
       border-color: transparent;
     }
 
-    .mbsc-btn-flat.mbsc-btn.mbsc-active {
+    &.mbsc-btn-flat.mbsc-btn.mbsc-active {
       opacity: 1;
     }
 
-    .mbsc-btn-flat:disabled {
+    &.mbsc-btn-flat:disabled {
       background: transparent;
     }
 
     /* Button color presets */
-    .mbsc-btn-primary.mbsc-btn {
+    &.mbsc-btn-primary.mbsc-btn {
       background: $mbsc-mobiscroll-primary;
 
       &.mbsc-btn-flat {
@@ -13733,7 +13808,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-btn-secondary.mbsc-btn {
+    &.mbsc-btn-secondary.mbsc-btn {
       background: $mbsc-mobiscroll-secondary;
 
       &.mbsc-btn-flat {
@@ -13749,7 +13824,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-btn-success.mbsc-btn {
+    &.mbsc-btn-success.mbsc-btn {
       background: $mbsc-mobiscroll-success;
 
       &.mbsc-btn-flat {
@@ -13765,7 +13840,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-btn-danger.mbsc-btn {
+    &.mbsc-btn-danger.mbsc-btn {
       background: $mbsc-mobiscroll-danger;
 
       &.mbsc-btn-flat {
@@ -13781,7 +13856,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-btn-warning.mbsc-btn {
+    &.mbsc-btn-warning.mbsc-btn {
       background: $mbsc-mobiscroll-warning;
 
       &.mbsc-btn-flat {
@@ -13797,7 +13872,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-btn-info.mbsc-btn {
+    &.mbsc-btn-info.mbsc-btn {
       background: $mbsc-mobiscroll-info;
 
       &.mbsc-btn-flat {
@@ -13813,7 +13888,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-btn-light.mbsc-btn {
+    &.mbsc-btn-light.mbsc-btn {
       background: $mbsc-mobiscroll-light;
 
       &.mbsc-btn-flat {
@@ -13830,7 +13905,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-btn-dark.mbsc-btn {
+    &.mbsc-btn-dark.mbsc-btn {
       background: $mbsc-mobiscroll-dark;
 
       &.mbsc-btn-flat {
@@ -13846,8 +13921,8 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-btn-flat.mbsc-btn,
-    .mbsc-btn-outline.mbsc-btn {
+    &.mbsc-btn-flat.mbsc-btn,
+    &.mbsc-btn-outline.mbsc-btn {
       background: transparent;
     }
 
@@ -13861,12 +13936,12 @@ $mbsc-mobiscroll-dark: #47494A !default;
     }
 
     /* Outline buttons */
-    .mbsc-btn-outline.mbsc-btn.mbsc-active {
+    &.mbsc-btn-outline.mbsc-btn.mbsc-active {
       opacity: 1;
     }
 
     /* Outline buttons */
-    .mbsc-btn-outline.mbsc-btn {
+    &.mbsc-btn-outline.mbsc-btn {
       &.mbsc-btn-primary {
         border-color: $mbsc-mobiscroll-primary;
         color: $mbsc-mobiscroll-primary;
@@ -13942,11 +14017,11 @@ $mbsc-mobiscroll-dark: #47494A !default;
     }
 
     /* Switch */
-    .mbsc-switch {
+    &.mbsc-ltr.mbsc-switch {
       padding: 1em 4.375em 1em 1em;
     }
 
-    &.mbsc-rtl .mbsc-switch {
+    &.mbsc-rtl.mbsc-switch {
       padding: 1em 1em 1em 4.375em;
     }
 
@@ -13982,73 +14057,73 @@ $mbsc-mobiscroll-dark: #47494A !default;
       transform: scale(1);
     }
 
-    .mbsc-switch input:disabled + .mbsc-switch-track {
+    &.mbsc-switch input:disabled+.mbsc-switch-track {
       opacity: .7;
     }
 
     /* Switch color presets */
-    .mbsc-switch.mbsc-switch-primary input:checked {
-      + .mbsc-switch-track {
+    &.mbsc-switch.mbsc-switch-primary input:checked {
+      +.mbsc-switch-track {
         background: lighten($mbsc-mobiscroll-primary, 20%);
       }
 
-      + .mbsc-switch-track .mbsc-switch-handle {
+      +.mbsc-switch-track .mbsc-switch-handle {
         background: $mbsc-mobiscroll-primary;
       }
     }
 
-    .mbsc-switch.mbsc-switch-secondary input:checked {
-      + .mbsc-switch-track {
+    &.mbsc-switch.mbsc-switch-secondary input:checked {
+      +.mbsc-switch-track {
         background: lighten($mbsc-mobiscroll-secondary, 20%);
       }
 
-      + .mbsc-switch-track .mbsc-switch-handle {
+      +.mbsc-switch-track .mbsc-switch-handle {
         background: $mbsc-mobiscroll-secondary;
       }
     }
 
-    .mbsc-switch.mbsc-switch-success input:checked {
-      + .mbsc-switch-track {
+    &.mbsc-switch.mbsc-switch-success input:checked {
+      +.mbsc-switch-track {
         background: lighten($mbsc-mobiscroll-success, 20%);
       }
 
-      + .mbsc-switch-track .mbsc-switch-handle {
+      +.mbsc-switch-track .mbsc-switch-handle {
         background: $mbsc-mobiscroll-success;
       }
     }
 
-    .mbsc-switch.mbsc-switch-danger input:checked {
-      + .mbsc-switch-track {
+    &.mbsc-switch.mbsc-switch-danger input:checked {
+      +.mbsc-switch-track {
         background: lighten($mbsc-mobiscroll-danger, 20%);
       }
 
-      + .mbsc-switch-track .mbsc-switch-handle {
+      +.mbsc-switch-track .mbsc-switch-handle {
         background: $mbsc-mobiscroll-danger;
       }
     }
 
-    .mbsc-switch.mbsc-switch-warning input:checked {
-      + .mbsc-switch-track {
+    &.mbsc-switch.mbsc-switch-warning input:checked {
+      +.mbsc-switch-track {
         background: lighten($mbsc-mobiscroll-warning, 20%);
       }
 
-      + .mbsc-switch-track .mbsc-switch-handle {
+      +.mbsc-switch-track .mbsc-switch-handle {
         background: $mbsc-mobiscroll-warning;
       }
     }
 
-    .mbsc-switch.mbsc-switch-info input:checked {
-      + .mbsc-switch-track {
+    &.mbsc-switch.mbsc-switch-info input:checked {
+      +.mbsc-switch-track {
         background: lighten($mbsc-mobiscroll-info, 20%);
       }
 
-      + .mbsc-switch-track .mbsc-switch-handle {
+      +.mbsc-switch-track .mbsc-switch-handle {
         background: $mbsc-mobiscroll-info;
       }
     }
 
     /* Stepper and Segmented */
-    .mbsc-segmented {
+    &.mbsc-segmented {
       padding: .5em 1em;
     }
 
@@ -14060,11 +14135,11 @@ $mbsc-mobiscroll-dark: #47494A !default;
       text-transform: uppercase;
     }
 
-    .mbsc-stepper-cont {
+    &.mbsc-ltr.mbsc-stepper-cont {
       padding: 1.75em 12.875em 1.75em 1em;
     }
 
-    &.mbsc-rtl .mbsc-stepper-cont {
+    &.mbsc-rtl.mbsc-stepper-cont {
       padding: 1.75em 1em 1.75em 12.875em;
     }
 
@@ -14072,9 +14147,9 @@ $mbsc-mobiscroll-dark: #47494A !default;
       margin-top: -1.125em;
     }
 
-    .mbsc-segmented input:disabled ~ .mbsc-segmented-item .mbsc-segmented-content,
-    .mbsc-segmented .mbsc-segmented-item.mbsc-stepper-control.mbsc-disabled .mbsc-segmented-content,
-    .mbsc-segmented .mbsc-segmented-item input:disabled + .mbsc-segmented-content {
+    &.mbsc-segmented input:disabled~.mbsc-segmented-item .mbsc-segmented-content,
+    &.mbsc-segmented .mbsc-segmented-item.mbsc-stepper-control.mbsc-disabled .mbsc-segmented-content,
+    &.mbsc-segmented .mbsc-segmented-item input:disabled+.mbsc-segmented-content {
       background: transparent;
     }
 
@@ -14085,11 +14160,11 @@ $mbsc-mobiscroll-dark: #47494A !default;
         color: $mbsc-mobiscroll-primary;
       }
 
-      &.mbsc-segmented-item input.mbsc-control:checked + .mbsc-segmented-content {
+      &.mbsc-segmented-item input.mbsc-control:checked+.mbsc-segmented-content {
         background: $mbsc-mobiscroll-primary;
       }
 
-      &.mbsc-segmented-item input.mbsc-active + .mbsc-segmented-content {
+      &.mbsc-segmented-item input.mbsc-active+.mbsc-segmented-content {
         background: rgba($mbsc-mobiscroll-primary, .35)
       }
     }
@@ -14100,11 +14175,11 @@ $mbsc-mobiscroll-dark: #47494A !default;
         color: $mbsc-mobiscroll-secondary;
       }
 
-      &.mbsc-segmented-item input.mbsc-control:checked + .mbsc-segmented-content {
+      &.mbsc-segmented-item input.mbsc-control:checked+.mbsc-segmented-content {
         background: $mbsc-mobiscroll-secondary;
       }
 
-      &.mbsc-segmented-item input.mbsc-active + .mbsc-segmented-content {
+      &.mbsc-segmented-item input.mbsc-active+.mbsc-segmented-content {
         background: rgba($mbsc-mobiscroll-secondary, .35)
       }
     }
@@ -14115,11 +14190,11 @@ $mbsc-mobiscroll-dark: #47494A !default;
         color: $mbsc-mobiscroll-success;
       }
 
-      &.mbsc-segmented-item input.mbsc-control:checked + .mbsc-segmented-content {
+      &.mbsc-segmented-item input.mbsc-control:checked+.mbsc-segmented-content {
         background: $mbsc-mobiscroll-success;
       }
 
-      &.mbsc-segmented-item input.mbsc-active + .mbsc-segmented-content {
+      &.mbsc-segmented-item input.mbsc-active+.mbsc-segmented-content {
         background: rgba($mbsc-mobiscroll-success, .35)
       }
     }
@@ -14130,11 +14205,11 @@ $mbsc-mobiscroll-dark: #47494A !default;
         color: $mbsc-mobiscroll-danger;
       }
 
-      &.mbsc-segmented-item input.mbsc-control:checked + .mbsc-segmented-content {
+      &.mbsc-segmented-item input.mbsc-control:checked+.mbsc-segmented-content {
         background: $mbsc-mobiscroll-danger;
       }
 
-      &.mbsc-segmented-item input.mbsc-active + .mbsc-segmented-content {
+      &.mbsc-segmented-item input.mbsc-active+.mbsc-segmented-content {
         background: rgba($mbsc-mobiscroll-danger, .35)
       }
     }
@@ -14145,11 +14220,11 @@ $mbsc-mobiscroll-dark: #47494A !default;
         color: $mbsc-mobiscroll-warning;
       }
 
-      &.mbsc-segmented-item input.mbsc-control:checked + .mbsc-segmented-content {
+      &.mbsc-segmented-item input.mbsc-control:checked+.mbsc-segmented-content {
         background: $mbsc-mobiscroll-warning;
       }
 
-      &.mbsc-segmented-item input.mbsc-active + .mbsc-segmented-content {
+      &.mbsc-segmented-item input.mbsc-active+.mbsc-segmented-content {
         background: rgba($mbsc-mobiscroll-warning, .35)
       }
     }
@@ -14160,17 +14235,17 @@ $mbsc-mobiscroll-dark: #47494A !default;
         color: $mbsc-mobiscroll-info;
       }
 
-      &.mbsc-segmented-item input.mbsc-control:checked + .mbsc-segmented-content {
+      &.mbsc-segmented-item input.mbsc-control:checked+.mbsc-segmented-content {
         background: $mbsc-mobiscroll-info;
       }
 
-      &.mbsc-segmented-item input.mbsc-active + .mbsc-segmented-content {
+      &.mbsc-segmented-item input.mbsc-active+.mbsc-segmented-content {
         background: rgba($mbsc-mobiscroll-info, .35)
       }
     }
 
     /* Stepper color presets */
-    .mbsc-stepper-primary {
+    &.mbsc-stepper-primary {
       .mbsc-segmented-content {
         border-color: $mbsc-mobiscroll-primary;
         color: $mbsc-mobiscroll-primary;
@@ -14181,7 +14256,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-stepper-secondary {
+    &.mbsc-stepper-secondary {
       .mbsc-segmented-content {
         border-color: $mbsc-mobiscroll-secondary;
         color: $mbsc-mobiscroll-secondary;
@@ -14192,7 +14267,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-stepper-success {
+    &.mbsc-stepper-success {
       .mbsc-segmented-content {
         border-color: $mbsc-mobiscroll-success;
         color: $mbsc-mobiscroll-success;
@@ -14203,7 +14278,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-stepper-danger {
+    &.mbsc-stepper-danger {
       .mbsc-segmented-content {
         border-color: $mbsc-mobiscroll-danger;
         color: $mbsc-mobiscroll-danger;
@@ -14214,7 +14289,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-stepper-warning {
+    &.mbsc-stepper-warning {
       .mbsc-segmented-content {
         border-color: $mbsc-mobiscroll-warning;
         color: $mbsc-mobiscroll-warning;
@@ -14225,7 +14300,7 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
     }
 
-    .mbsc-stepper-info {
+    &.mbsc-stepper-info {
       .mbsc-segmented-content {
         border-color: $mbsc-mobiscroll-info;
         color: $mbsc-mobiscroll-info;
@@ -14276,37 +14351,37 @@ $mbsc-mobiscroll-dark: #47494A !default;
       }
 
       /* Stepper hover color styles */
-      .mbsc-stepper-primary {
+      &.mbsc-stepper-primary {
         .mbsc-stepper .mbsc-segmented-item:hover .mbsc-segmented-content {
           background: rgba($mbsc-mobiscroll-primary, .35)
         }
       }
 
-      .mbsc-stepper-secondary {
+      &.mbsc-stepper-secondary {
         .mbsc-stepper .mbsc-segmented-item:hover .mbsc-segmented-content {
           background: rgba($mbsc-mobiscroll-secondary, .35)
         }
       }
 
-      .mbsc-stepper-success {
+      &.mbsc-stepper-success {
         .mbsc-stepper .mbsc-segmented-item:hover .mbsc-segmented-content {
           background: rgba($mbsc-mobiscroll-success, .35)
         }
       }
 
-      .mbsc-stepper-danger {
+      &.mbsc-stepper-danger {
         .mbsc-stepper .mbsc-segmented-item:hover .mbsc-segmented-content {
           background: rgba($mbsc-mobiscroll-danger, .35)
         }
       }
 
-      .mbsc-stepper-warning {
+      &.mbsc-stepper-warning {
         .mbsc-stepper .mbsc-segmented-item:hover .mbsc-segmented-content {
           background: rgba($mbsc-mobiscroll-warning, .35)
         }
       }
 
-      .mbsc-stepper-info {
+      &.mbsc-stepper-info {
         .mbsc-stepper .mbsc-segmented-item:hover .mbsc-segmented-content {
           background: rgba($mbsc-mobiscroll-info, .35)
         }
@@ -14316,7 +14391,6 @@ $mbsc-mobiscroll-dark: #47494A !default;
 
   @include mbsc-mobiscroll-forms(mobiscroll, (background: $mbsc-mobiscroll-background, text: $mbsc-mobiscroll-text, accent: $mbsc-mobiscroll-accent));
 }
-
 
 
 // navigation component
