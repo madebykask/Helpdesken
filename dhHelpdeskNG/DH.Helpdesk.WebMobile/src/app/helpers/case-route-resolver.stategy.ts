@@ -10,7 +10,7 @@ export class CaseRouteReuseStrategy implements RouteReuseStrategy {
   private static storedRouteHandles = new Map<string, DetachedRouteHandle>();
 
   //supported pages for saving state
-  caseTemplatePath = 'case/template/:templateId';
+  caseTemplatePath = 'case/template/:templateCid/:templateId';
   casePagePath = 'case/:id';
   filePageRoutes = ['case/:caseKey/file', 'case/:caseId/file/:fileId', 'case/:caseId/logfile/:fileId'];
 

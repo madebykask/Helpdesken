@@ -4,10 +4,10 @@
 
 <mbsc-listview [options]="templatesListSettings" #templatesListView="mobiscroll">
   <ng-container *ngFor="let node of templateNodes; trackBy: trackByFn">
-    <mbsc-listview-item *ngIf="!isCategory(node)" (click)="openTemplate(node.id)">{{ node.name }}</mbsc-listview-item>
+    <mbsc-listview-item *ngIf="!isCategory(node)" (click)="openTemplate(node.id, node.customerId)">{{ node.name }}</mbsc-listview-item>
     <mbsc-listview-item *ngIf="isCategory(node)"><span>{{ node.name }}</span>
       <mbsc-listview-sublist>
-        <mbsc-listview-item *ngFor="let template of node.items" (click)="openTemplate(template.id)">
+        <mbsc-listview-item *ngFor="let template of node.items" (click)="openTemplate(template.id, template.customerId)">
           {{ template.name }}
         </mbsc-listview-item>
       </mbsc-listview-sublist>

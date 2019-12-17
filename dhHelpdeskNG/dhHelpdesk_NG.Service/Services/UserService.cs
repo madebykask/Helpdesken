@@ -83,6 +83,7 @@ namespace DH.Helpdesk.Services.Services
         IList<UserWorkingGroup> GetUserWorkingGroups();
         IList<UserWorkingGroup> GetUserWorkingGroupsByWorkgroup(int workingGroupId);
         IList<int> GetUserCustomersIds(int userId);
+        bool UserHasCustomerId(int customerId);
 
         //IList<User> GetUsersForWorkingGroup(int customerId, int workingGroupId, bool includeWorkingGroups = false);
         IList<CustomerUserInfo> GetUsersForWorkingGroup(int workingGroupId);
@@ -1231,6 +1232,11 @@ namespace DH.Helpdesk.Services.Services
                 var customerUserRep = uow.GetRepository<CustomerUser>();
                 return customerUserRep.GetAll().Where(cu => cu.User_Id == userId).Select(cu => cu.Customer_Id).ToList();
             }
+        }
+
+        public bool UserHasCustomerId(int customerId)
+        {
+            return GetUserCustomersIds(customerId).Any(x => x == customerId);
         }
 
         public List<ItemOverview> GetWorkingGroupUsers(int customerId, int? workingGroupId)

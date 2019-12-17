@@ -14,8 +14,8 @@ export class PerfomersService extends HttpApiServiceBase {
             super(http, localStorageService);
     }
 
-    getPerformers(performerUserId?: number, workingGroupId?: number) {
-        let params = { };
+    getPerformers(performerUserId?: number, workingGroupId?: number, customerId?: number) {
+      const params = customerId != null ? { cid: customerId } : {};
         if (performerUserId != null) { Object.assign(params, { performerUserId: performerUserId }); }
         if (workingGroupId != null) { Object.assign(params, { workingGroupId: workingGroupId }); }
         return this.getJson(this.buildResourseUrl('/api/perfomers/options', params, true, true))

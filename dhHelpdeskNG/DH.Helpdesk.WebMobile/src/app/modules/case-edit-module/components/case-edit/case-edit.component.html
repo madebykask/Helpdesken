@@ -28,7 +28,7 @@
   <!-- Case Actions -->
   <div [hidden]="currentTab != tabNames.Actions">
       <div class="md-paging">
-        <case-actions *ngIf="caseActions.length > 0" [caseKey]="caseKey" [items]="caseActions"></case-actions>
+        <case-actions *ngIf="caseActions.length > 0" [caseKey]="caseKey" [customerId]="customerId" [items]="caseActions"></case-actions>
       </div>
   </div>
 
@@ -41,6 +41,7 @@
               <mbsc-form-group-content>
                   <!-- TODO: ComputerUserCategories -->
                   <notifier-search *ngIf="showField(caseFieldsNames.ReportedBy)" id="initiatorNotifier" 
+                      [customerId]="customerId"
                       [categoryField]="caseFieldsNames.UserSearchCategoryId" 
                       [field]="caseFieldsNames.ReportedBy" [notifierType]="notifierTypes.Initiator" [form]="form"></notifier-search>
                   <case-textbox-control *ngIf="showField(caseFieldsNames.PersonName)" [field]="caseFieldsNames.PersonName" [form]="form"></case-textbox-control>
@@ -60,7 +61,9 @@
               <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Regarding) }}</mbsc-form-group-title>
               <mbsc-form-group-content >
                   <!-- TODO: ComputerUserCategories -->
-                  <notifier-search *ngIf="showField(caseFieldsNames.IsAbout_ReportedBy)" id="regardingNotifier" [categoryField]="caseFieldsNames.IsAbout_UserSearchCategoryId" 
+                  <notifier-search *ngIf="showField(caseFieldsNames.IsAbout_ReportedBy)" id="regardingNotifier"
+                      [customerId]="customerId"
+                      [categoryField]="caseFieldsNames.IsAbout_UserSearchCategoryId" 
                       [field]="caseFieldsNames.IsAbout_ReportedBy" [notifierType]="notifierTypes.Regarding" [form]="form"></notifier-search>
                   <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_PersonName)" [field]="caseFieldsNames.IsAbout_PersonName" [form]="form"></case-textbox-control>
                   <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_PersonEmail)" [field]="caseFieldsNames.IsAbout_PersonEmail" [form]="form"></case-textbox-control>
@@ -122,6 +125,7 @@
                           [field]="caseFieldsNames.Filename" 
                           [files]="caseFiles"
                           [caseKey]="caseKey"
+                          [customerId]="customerId"
                           [accessMode]="accessMode"></case-files-control>
               </mbsc-form-group-content>
           </mbsc-form-group>
@@ -159,7 +163,7 @@
           <mbsc-form-group collapsible [open]="isNewCase" #communication *ngIf="isCommunicationSectionVisible">
               <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Communication)}}</mbsc-form-group-title>
               <mbsc-form-group-content>
-                <case-log-input [caseKey]="caseKey" [accessMode]="accessMode" [caseData]="caseData" [form]="form"></case-log-input>
+                <case-log-input [caseKey]="caseKey" [customerId]="customerId" [accessMode]="accessMode" [caseData]="caseData" [form]="form"></case-log-input>
               </mbsc-form-group-content>
           </mbsc-form-group>
 

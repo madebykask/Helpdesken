@@ -5,6 +5,7 @@ import { CaseEventType } from '../../../constants/case-event-type';
 export class CaseActionBaseComponent<TActionData extends CaseActionDataType> {
 
   @Input() caseKey: string;
+  @Input() customerId: number;
   @Input() caseAction: CaseAction<TActionData>;
 
   getActionIcon() {

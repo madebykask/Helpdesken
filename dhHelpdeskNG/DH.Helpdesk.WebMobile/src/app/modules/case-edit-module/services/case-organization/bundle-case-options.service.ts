@@ -15,8 +15,9 @@ export class BundleCaseOptionsService extends HttpApiServiceBase {
             super(http, localStorageService);
     }
 
-    getOptions(filter: BundleOptionsFilter) {
-        return this.postJson(this.buildResourseUrl('/api/caseoptions/bundle', null, true, true), filter)
+    getOptions(filter: BundleOptionsFilter, customerId?: number) {
+      const params = isNaN(customerId) ? {} : {cid: customerId};
+        return this.postJson(this.buildResourseUrl('/api/caseoptions/bundle', params, isNaN(params.cid), true), filter)
         .pipe(
             take(1),
             map((jsOptions: any) => {

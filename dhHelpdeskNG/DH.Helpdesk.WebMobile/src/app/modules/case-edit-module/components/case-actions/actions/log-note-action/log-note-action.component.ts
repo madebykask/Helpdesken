@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit, SimpleChanges, Input } from '@angular/core';
 import { CaseLogActionData } from 'src/app/modules/case-edit-module/models';
 import { LogFile } from 'src/app/modules/case-edit-module/models/case/case-actions-api.model';
 import { CaseActionBaseComponent } from '../case-action-base.component';
@@ -11,7 +11,6 @@ import { LogFileType } from 'src/app/modules/shared-module/constants/logFileType
   styleUrls: ['./log-note-action.component.scss']
 })
 export class LogNoteActionComponent extends CaseActionBaseComponent<CaseLogActionData> implements OnInit {
-
   data: CaseLogActionData;
   logFileType = LogFileType;
 
@@ -30,7 +29,8 @@ export class LogNoteActionComponent extends CaseActionBaseComponent<CaseLogActio
   downloadLogFile(file: LogFile) {
     this.router.navigate(['/case', this.caseKey, 'logfile', file.id], {
       queryParams: {
-        fileName: file.fileName
+        fileName: file.fileName,
+        cid: this.customerId
       }
     });
   }

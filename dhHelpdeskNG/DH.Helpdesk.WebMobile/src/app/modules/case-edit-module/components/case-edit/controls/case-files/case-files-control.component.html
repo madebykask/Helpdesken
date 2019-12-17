@@ -8,6 +8,6 @@
       </mbsc-listview>
   </div>
    
-  <case-files-upload *ngIf="hasFullAccess" [caseKey]='caseKey' (NewFileUploadComplete)="processNewFileUpload($event)"></case-files-upload>
+  <case-files-upload *ngIf="hasFullAccess" [caseKey]='caseKey' [customerId]='customerId' (NewFileUploadComplete)="processNewFileUpload($event)"></case-files-upload>
   
 </div>

@@ -43,7 +43,7 @@ export class NotifierSearchComponent extends SearchInputBaseComponent implements
 
   // virtual method override
   protected searchData(query: any) {
-    const sr = this.notifierService.searchNotifiers(query, this.selectedCategoryId)
+    const sr = this.notifierService.searchNotifiers(query, this.selectedCategoryId, this.customerId);
     return sr;
   }
 

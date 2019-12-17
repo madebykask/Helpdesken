@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
-import { forkJoin, Subject, of, throwError, interval, EMPTY, BehaviorSubject, EmptyError } from 'rxjs';
+import { forkJoin, Subject, of, throwError, interval, EMPTY } from 'rxjs';
 import { switchMap, take, finalize, delay, catchError, map, takeUntil, takeWhile, defaultIfEmpty } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { CommunicationService, Channels, CaseFieldValueChangedEvent, } from 'src/app/services/communication/communication.service';
@@ -27,7 +27,6 @@ import { CaseEditLogic } from '../../logic/case-edit/case-edit.logic';
 import { CaseTemplateFullModel } from 'src/app/models/caseTemplate/case-template-full.model';
 import { CaseTemplateService } from 'src/app/services/case-organization/case-template.service';
 import { FinalActionEnum } from 'src/app/modules/shared-module/constants/finalAction.enum';
-import { NgElement, WithProperties } from '@angular/elements';
 import { LocalStorageService } from 'src/app/services/local-storage';
 import { OUsService } from 'src/app/services/case-organization/ous-service';
 import { TabNames } from '../../constants/tab-names';
@@ -64,6 +63,7 @@ export class CaseEditComponent {
       } else if (this.route.snapshot.paramMap.has('templateId')) {
           this.isNewCase = true;
           this.templateId = +this.route.snapshot.paramMap.get('templateId');
+          this.templateCid = +this.route.snapshot.paramMap.get('templateCid');
       } else {
         throw new Error('Invalid parameters');
       }
@@ -90,6 +90,10 @@ export class CaseEditComponent {
           }
       }
       return accessMode;
+    }
+
+    get customerId() {
+      return this.dataSource.currentCaseCustomerId$.value;
     }
 
     public get canSave() {
@@ -134,6 +138,7 @@ export class CaseEditComponent {
     private isNewCase = false;
     private caseId = 0;
     private templateId = 0;
+    private templateCid = 0;
     private caseData: CaseEditInputModel;
     private caseSections: CaseSectionInputModel[];
     private ownsLock = true;
@@ -153,7 +158,7 @@ export class CaseEditComponent {
           this.loadCaseData(this.caseId);
       } else if (this.templateId > 0) {
           this.isNewCase = true;
-          this.loadTemplate(this.templateId);
+          this.loadTemplate(this.templateId, this.templateCid);
       }
 
       this.translateMessages();
@@ -163,9 +168,6 @@ export class CaseEditComponent {
       this.isLoaded = false;
       const sessionId = this.authStateService.getUser().authData.sessionId;
 
-      const caseLock$ = this.caseLockApiService.acquireCaseLock(caseId, sessionId);
-      const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
-
       const caseData$ =
           this.caseService.getCaseData(caseId)
               .pipe(
@@ -174,20 +176,25 @@ export class CaseEditComponent {
                     this.caseData = data;
                     this.caseKey = this.caseData.id > 0 ? this.caseData.id.toString() : this.caseData.caseGuid.toString();
                     const filter = this.caseDataHelpder.getCaseOptionsFilter(this.caseData);
+                    const options$ = this.caseService.getCaseOptions(filter, this.caseData.customerId);
+                    const caseSections$ = this.caseService.getCaseSections(this.caseData.customerId);
+                    const caseLock$ = this.caseLockApiService.acquireCaseLock(caseId, sessionId, this.caseData.customerId);
 
-                    return this.caseService.getCaseOptions(filter);
+                    return forkJoin([options$, caseSections$, caseLock$]);
                   }),
                   catchError((e) => throwError(e)),
               );
 
-      forkJoin([caseSections$, caseData$, caseLock$]).pipe(
+      caseData$.pipe(
           take(1),
           finalize(() => this.isLoaded = true),
           catchError((e) => throwError(e))
-      ).subscribe(([sectionData, options, caseLock]) => {
-          this.caseLock = caseLock;
-          this.caseSections = sectionData;
-          this.dataSource = new CaseDataStore(options);
+      ).subscribe((caseData) => {
+          const lock = caseData[2];
+          this.caseLock = lock;
+          this.caseSections = caseData[1];
+          const options = caseData[0];
+          this.dataSource = new CaseDataStore(options, this.caseData.customerId);
 
           this.initLock();
           this.processCaseData();
@@ -274,7 +281,7 @@ export class CaseEditComponent {
     }
 
     cleanTempFiles(caseId: number) {
-      this.caseFileService.deleteTemplFiles(caseId).pipe(
+      this.caseFileService.deleteTemplFiles(caseId, this.dataSource.currentCaseCustomerId$.value).pipe(
         take(1)
       ).subscribe();
     }
@@ -323,7 +330,7 @@ export class CaseEditComponent {
         const userData = this.localStorageService.getCurrentUser();
         const ouId = this.caseDataHelpder.getField(caseData, CaseFieldsNames.OrganizationUnitId).value;
         const empty$ = () => EMPTY.pipe(defaultIfEmpty(null));
-        const getOU = (_ouId) => _ouId != null ? this.oUsService.getOU(_ouId) : empty$();
+        const getOU = (_ouId) => _ouId != null ? this.oUsService.getOU(_ouId, caseData.customerId) : empty$();
         getOU(ouId).pipe(
           take(1)
         ).subscribe(ou => {
@@ -340,7 +347,7 @@ export class CaseEditComponent {
               userGuid: userData.currentData.userGuid,
               userRole: userData.currentData.userRole,
               caseStatus: this.caseDataHelpder.getField(caseData, CaseFieldsNames.StateSecondaryId).value || '',
-              customerId: userData.currentData.selectedCustomerId
+              customerId: caseData.customerId
             },
             caseValues: {
               administrator_id: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.PerformerUserId).value },
@@ -481,7 +488,7 @@ export class CaseEditComponent {
     }
 
     private loadWorkflows(caseId: number) {
-      this.caseWorkflowsService.getWorkflows(caseId)
+      this.caseWorkflowsService.getWorkflows(caseId, this.customerId)
       .subscribe(workflows => {
         this.dataSource.workflowsStore$.next(workflows);
       });
@@ -497,29 +504,30 @@ export class CaseEditComponent {
         });
     }
 
-    private loadTemplate(templateId: number) {
-      const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
-
+    private loadTemplate(templateId: number, customerId: number) {
       const caseData$ =
-        this.caseService.getTemplateData(templateId).pipe(
+        this.caseService.getTemplateData(templateId, customerId).pipe(
           take(1),
           switchMap(data => {
             this.caseData = data;
             this.caseKey = this.caseData.caseGuid.toString();
             const filter = this.caseDataHelpder.getCaseOptionsFilter(this.caseData);
+            const caseSections$ = this.caseService.getCaseSections(this.caseData.customerId);
+            const options$ = this.caseService.getCaseOptions(filter, this.caseData.customerId);
 
-            return this.caseService.getCaseOptions(filter);
+            return forkJoin([options$, caseSections$]);
           }),
           catchError((e) => throwError(e)),
       );
 
-      forkJoin([caseSections$, caseData$]).pipe(
+      caseData$.pipe(
           take(1),
           finalize(() => this.isLoaded = true),
           catchError((e) => throwError(e))
-      ).subscribe(([sectionData, options]) => {
-          this.caseSections = sectionData;
-          this.dataSource = new CaseDataStore(options);
+      ).subscribe((caseData) => {
+          this.caseSections = caseData[1];
+          const options = caseData[0];
+          this.dataSource = new CaseDataStore(options, this.caseData.customerId);
 
           this.initLock();
           this.processCaseData();
@@ -567,7 +575,7 @@ export class CaseEditComponent {
     }
 
     private loadCaseActions() {
-      this.caseService.getCaseActions(this.caseId).pipe(
+      this.caseService.getCaseActions(this.caseId, this.customerId).pipe(
         take(1),
         catchError((e) => throwError(e))
       ).subscribe(caseActions => {
@@ -587,7 +595,7 @@ export class CaseEditComponent {
             interval(this.caseLock.timerInterval * 1000).pipe(
                   takeWhile(() => this.ownsLock)
               ).subscribe(_ => {
-                this.caseLockApiService.reExtendedCaseLock(this.caseId, this.caseLock.lockGuid, this.caseLock.extendValue).pipe(
+                this.caseLockApiService.reExtendedCaseLock(this.caseId, this.caseLock.lockGuid, this.caseLock.extendValue, this.customerId).pipe(
                   take(1)
                 ).subscribe(res => {
                     if (!res) {
@@ -624,7 +632,7 @@ export class CaseEditComponent {
       if (this.caseId > 0) {
         if (this.ownsLock) {
           this.ownsLock = false;
-          this.caseLockApiService.unLockCase(this.caseId, this.caseLock.lockGuid).subscribe();
+          this.caseLockApiService.unLockCase(this.caseId, this.caseLock.lockGuid, this.customerId).subscribe();
         }
       }
 

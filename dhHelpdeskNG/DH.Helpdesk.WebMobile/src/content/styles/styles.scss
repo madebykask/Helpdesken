@@ -247,16 +247,19 @@ a {
 }
 
 .case-search-filter {
+  font-family: Helvetica, Arial, sans-serif;
   .mbsc-ms-item {
     padding-left:20px;
     &.mbsc-disabled {
-      padding: 0;
       text-transform: uppercase;
-      background: lightgray;
+      background-color: #efeff4;
       padding-left: 5px;
+      padding-bottom: 5px;
       min-height: 1.5em;
-      font-weight: bolder;
-      font-size: 12px;;
+      font-weight: 400;
+      font-size: 12px;
+      color: #6e6e72;
+      opacity: 1;
     }
   }
 

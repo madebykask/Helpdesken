@@ -13,8 +13,9 @@ export class CaseTypesService extends HttpApiServiceBase {
             super(http, localStorageService);
     }
 
-    getCaseTypes() {
-        return this.getJson(this.buildResourseUrl('/api/casetypes/options', null, true, true))
+    getCaseTypes(customerId?: number) {
+      const params = isNaN(customerId) ? {} : {cid: customerId};
+        return this.getJson(this.buildResourseUrl('/api/casetypes/options', params, isNaN(params.cid), true))
         .pipe(
             take(1),
             map((jsItems: any) => {
@@ -37,8 +38,8 @@ export class CaseTypesService extends HttpApiServiceBase {
         ); // TODO: error handling
     }
 
-    getCaseType(id: number) {
-      return this.getJson(this.buildResourseUrl(`/api/casetypes/${id}` , null, true, true))
+    getCaseType(id: number, customerId: number) {
+      return this.getJson(this.buildResourseUrl(`/api/casetypes/${id}` , { cid: customerId }, false, true))
         .pipe(
             take(1),
             map((jsItem: any) => {

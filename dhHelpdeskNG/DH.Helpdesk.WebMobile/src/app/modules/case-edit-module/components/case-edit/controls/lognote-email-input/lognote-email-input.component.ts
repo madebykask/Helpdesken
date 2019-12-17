@@ -66,7 +66,7 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
   }
 
   protected searchData(query: any) {
-    const sr = this.userService.searchUsersEmails(query);
+    const sr = this.userService.searchUsersEmails(query, this.customerId);
     return sr;
   }
 

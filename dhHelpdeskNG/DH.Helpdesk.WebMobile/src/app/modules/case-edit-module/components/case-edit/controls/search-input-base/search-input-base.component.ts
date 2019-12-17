@@ -17,6 +17,7 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
   @ViewChild('select', { static: false }) select: MbscSelect;
 
   @Input() disabled = false;
+  @Input() protected customerId: number;
 
   selectDataItems: any = [];
 

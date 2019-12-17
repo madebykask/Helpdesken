@@ -11,6 +11,7 @@ namespace DH.Helpdesk.Models.Case
         public List<IBaseCaseField> Fields { get; set; }
 
         public int Id { get; set; }
+        public int CustomerId { get; set; }
         //public bool CanGetRelatedCases { get; set; }
         public decimal CaseNumber { get; set; }
         public Guid CaseGuid { get; set; }

@@ -37,7 +37,8 @@ export class CaseEditLogic {
   public runUpdates(v: CaseFieldValueChangedEvent, dataSource: CaseDataStore, caseData: CaseEditInputModel, form: CaseFormGroup) { // TODO: move to new class
     const reducer = this.getCaseDataReducers(dataSource);
     const filters = this.caseDataHelpder.getFormCaseOptionsFilter(caseData, form);
-    const optionsHelper = this.caseService.getOptionsHelper(filters);
+    const customerId =  dataSource.currentCaseCustomerId$.value;
+    const optionsHelper = this.caseService.getOptionsHelper(filters, customerId);
 
     // NOTE: remember to update case data reducer when adding new fields
     switch (v.name) {
@@ -75,7 +76,7 @@ export class CaseEditLogic {
       }
       case CaseFieldsNames.CaseTypeId: {
         if (v.value) {
-          this.caseTypesService.getCaseType(v.value).pipe(
+          this.caseTypesService.getCaseType(v.value, customerId).pipe(
               take(1)
             ).subscribe(ct => {
               if (ct && ct.performerUserId != null && !this.getField(caseData, CaseFieldsNames.PerformerUserId).setByTemplate) {
@@ -112,7 +113,7 @@ export class CaseEditLogic {
         });
 
         if (!!v.value && form.contains(CaseFieldsNames.StateSecondaryId)) {
-          this.workingGroupsService.getWorkingGroup(v.value).pipe(
+          this.workingGroupsService.getWorkingGroup(v.value, customerId).pipe(
             take(1)
           ).subscribe(wg => {
             if (wg && wg.stateSecondaryId != null) {
@@ -126,7 +127,7 @@ export class CaseEditLogic {
         let sendExternalEmailsControl = form.get(CaseFieldsNames.Log_SendMailToNotifier);
         let externalLogTextControl = form.get(CaseFieldsNames.Log_ExternalText);
         if (v.value) {
-          this.stateSecondariesService.getStateSecondary(v.value)
+          this.stateSecondariesService.getStateSecondary(v.value, customerId)
           .pipe(
             take(1)
           ).subscribe(ss => {
@@ -135,7 +136,7 @@ export class CaseEditLogic {
             }
             const departmentCtrl = form.get(CaseFieldsNames.DepartmentId);
             if (ss.recalculateWatchDate && departmentCtrl.value) {
-                this.caseWatchDateApiService.getWatchDate(departmentCtrl.value).pipe(
+                this.caseWatchDateApiService.getWatchDate(departmentCtrl.value, customerId).pipe(
                   take(1)
                 ).subscribe(date => form.setSafe(CaseFieldsNames.WatchDate, date));
             }
@@ -157,7 +158,7 @@ export class CaseEditLogic {
       }
       case CaseFieldsNames.ProductAreaId: {
         if (v.value) {
-          this.productAreasService.getProductArea(v.value).pipe(
+          this.productAreasService.getProductArea(v.value, customerId).pipe(
             take(1)
           ).subscribe(ct => {
             if (ct && ct.workingGroupId != null) {
@@ -186,7 +187,7 @@ export class CaseEditLogic {
         const notifierType = v.text && v.text.length ? <NotifierType>+v.text : NotifierType.Initiator;
 
         if (!isNaN(userId) && userId > 0) {
-          this.notifierService.getNotifier(v.value).pipe(
+          this.notifierService.getNotifier(v.value, customerId).pipe(
             take(1)
           ).subscribe(x => {
              this.processNotifierChanged(x, notifierType === NotifierType.Regarding, form);

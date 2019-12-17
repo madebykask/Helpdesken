@@ -5,7 +5,6 @@ import { LocalStorageService } from 'src/app/services/local-storage';
 import { CaseEditOutputModel } from '../../../models/case/case-edit-output.model';
 import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/httpServiceBase';
 import { QueryParamsOptions } from 'src/app/modules/shared-module/services/api/query-params-options';
-import { CaseSortFieldModel } from '../../model/case-sort-field.model';
 
 @Injectable({ providedIn: 'root' })
 export class CaseApiService extends HttpApiServiceBase {
@@ -22,16 +21,16 @@ export class CaseApiService extends HttpApiServiceBase {
     return this.getJsonWithParams('/api/case/' + caseId, params); // TODO: error handling
   }
 
-  saveCaseData(data: CaseEditOutputModel): Observable<any> {
-    const requestUrl = this.buildResourseUrl(`/api/case/save${ !data.caseId ? '' : '/' + data.caseId }`, null, true, true);
+  saveCaseData(data: CaseEditOutputModel, customerId: number): Observable<any> {
+    const requestUrl = this.buildResourseUrl(`/api/case/save${ !data.caseId ? '' : '/' + data.caseId }`, { cid: customerId }, false, true);
     return this.postJson<any>(requestUrl, data);
   }
 
-  getCaseSections(): Observable<any> {
-    return this.getJson(this.buildResourseUrl('/api/casesections/get', null, true, true)); // TODO: error handling
+  getCaseSections(customerId: number): Observable<any> {
+    return this.getJson(this.buildResourseUrl('/api/casesections/get', {cid: customerId}, false, true)); // TODO: error handling
   }
 
-  getNewCase(templateId: number): Observable<Array<any>> {
-    return this.getJson<Array<any>>(this.buildResourseUrl(`/api/case/new/${templateId}`, null, true, true));
+  getNewCase(templateId: number, customerId: number): Observable<Array<any>> {
+    return this.getJson<Array<any>>(this.buildResourseUrl(`/api/case/new/${templateId}`, { cid: customerId }, false, true));
   }
 }

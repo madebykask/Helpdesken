@@ -10,9 +10,10 @@ export class UserApiService extends HttpApiServiceBase {
         super(httpClient, localStorageService);
     }
 
-    searchUsersEmails(searchKey: string): Observable<Array<any>> {
+    searchUsersEmails(searchKey: string, customerId: number): Observable<Array<any>> {
       const data = {
-        query: searchKey
+        query: searchKey,
+        cid: customerId
       };
       const url = this.buildResourseUrl('/api/users/searchEmails', data, true, false);
       return this.getJson(url);

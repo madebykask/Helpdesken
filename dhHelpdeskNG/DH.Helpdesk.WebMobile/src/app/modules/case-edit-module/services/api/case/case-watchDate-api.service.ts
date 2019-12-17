@@ -10,7 +10,7 @@ export class CaseWatchDateApiService extends HttpApiServiceBase {
     super(httpClient, localStorageService);
   }
 
-  getWatchDate(departmentId: number) {
-    return this.getJson(this.buildResourseUrl('/api/casewatchdate', { departmentId: departmentId }, true, false));
+  getWatchDate(departmentId: number, customerId: number) {
+    return this.getJson(this.buildResourseUrl('/api/casewatchdate', { departmentId: departmentId, cid: customerId }, false, false));
   }
 }

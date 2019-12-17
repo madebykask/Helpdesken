@@ -34,7 +34,7 @@ const routes: Routes = [
   },
 
   {
-    path: 'template/:templateId',
+    path: 'template/:templateId/:templateCid',
     component: CaseEditComponent
   },
 

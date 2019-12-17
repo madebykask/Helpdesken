@@ -10,8 +10,8 @@ export class UserService {
   constructor(private userApiService: UserApiService) {
   }
 
-  searchUsersEmails(query: string): Observable<Array<EmailsSearchItem>> {
-    return this.userApiService.searchUsersEmails(query).pipe(
+  searchUsersEmails(query: string, customerId: number): Observable<Array<EmailsSearchItem>> {
+    return this.userApiService.searchUsersEmails(query, customerId).pipe(
       take(1),
       map((data: Array<any>) => {
         let id = 0;

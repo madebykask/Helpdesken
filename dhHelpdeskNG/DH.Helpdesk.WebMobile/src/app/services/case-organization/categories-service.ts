@@ -14,8 +14,9 @@ export class CategoriesService extends HttpApiServiceBase {
             super(http, localStorageService);
     }
 
-    getCategories() {
-        return this.getJson(this.buildResourseUrl('/api/categories/options'))
+    getCategories(customerId?: number) {
+      const params = isNaN(customerId) ? {} : {cid: customerId};
+        return this.getJson(this.buildResourseUrl('/api/categories/options', params, isNaN(params.cid)))
         .pipe(
             take(1),
             map((jsItems: any) => {

@@ -17,6 +17,7 @@ import { FileUploadArgs } from '../controls/log-files-upload/log-files-upload.co
 })
 export class CaseLogInputComponent implements OnInit {
   @Input() caseKey: string;
+  @Input() customerId: number;
   @Input() form: CaseFormGroup;
   @Input() caseData: CaseEditInputModel;
   @Input() accessMode: CaseAccessMode;
@@ -178,7 +179,7 @@ export class CaseLogInputComponent implements OnInit {
     const fileName = this.getFiles(type)[index];
 
     // todo:add delete confirmation
-    this.caseLogApiService.deleteTempLogFile(this.caseKey, fileName, type).pipe(
+    this.caseLogApiService.deleteTempLogFile(this.caseKey, fileName, type, this.customerId).pipe(
       take(1)
     ).subscribe(res => {
       if (res) {

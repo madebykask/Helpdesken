@@ -191,7 +191,8 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   }
 
   onItemTap(event) {
-    this.goToCase(this.cases[event.index].id);
+    const selectedCase = this.cases[event.index];
+    this.goToCase(selectedCase.id);
   }
 
   trackByFn(index, item: CaseOverviewItem) {

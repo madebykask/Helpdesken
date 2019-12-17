@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { LocalStorageService } from "../local-storage";
-import { HttpClient } from "@angular/common/http";
-import { map, take } from "rxjs/operators";
-import { MultiLevelOptionItem } from "src/app/modules/shared-module/models";
-import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
-import { ProductAreaInputModel } from "src/app/models/productAreas/productAreaInput.model";
+import { Injectable } from '@angular/core';
+import { LocalStorageService } from '../local-storage';
+import { HttpClient } from '@angular/common/http';
+import { map, take } from 'rxjs/operators';
+import { MultiLevelOptionItem } from 'src/app/modules/shared-module/models';
+import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/httpServiceBase';
+import { ProductAreaInputModel } from 'src/app/models/productAreas/productAreaInput.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProductAreasService extends HttpApiServiceBase {
@@ -13,11 +13,11 @@ export class ProductAreasService extends HttpApiServiceBase {
             super(http, localStorageService);
     }
 
-    getProductAreas(caseTypeId?: number, includeId?: number) {
-        let params = { };
+    getProductAreas(caseTypeId?: number, includeId?: number, customerId?: number) {
+      const params = customerId != null ? { cid: customerId } : {};
         if (caseTypeId != null) { Object.assign(params, { caseTypeId: caseTypeId }); }
         if (includeId != null) { Object.assign(params, { includeId: includeId }); }
-        return this.getJson(this.buildResourseUrl('/api/productareas/options', params, true, true))
+        return this.getJson(this.buildResourseUrl('/api/productareas/options', params, isNaN(params.cid), true))
             .pipe(
                 take(1),
                 map((jsItems: any) => {
@@ -26,7 +26,7 @@ export class ProductAreasService extends HttpApiServiceBase {
                     if (jsArr == null) { return result; }
 
                     const createOption = (jsItem: any): MultiLevelOptionItem => { // TODO: stop condition
-                        let option = new MultiLevelOptionItem(jsItem.id, jsItem.name, jsItem.parentId);
+                        const option = new MultiLevelOptionItem(jsItem.id, jsItem.name, jsItem.parentId);
                         if (jsItem.subProductAreas != null) {
                             option.childs = (jsItem.subProductAreas as Array<any>).map(createOption);
                         }
@@ -37,15 +37,15 @@ export class ProductAreasService extends HttpApiServiceBase {
 
                     return result;
                 })
-            );// TODO: error handling
+            ); // TODO: error handling
     }
 
-    getProductArea(id: number) {
-      return this.getJson(this.buildResourseUrl(`/api/productareas/${id}` , null, true, true))
+    getProductArea(id: number, customerId: number) {
+      return this.getJson(this.buildResourseUrl(`/api/productareas/${id}` , { cid: customerId }, false, true))
       .pipe(
           take(1),
           map((jsItem: any) => {
-            let model = new ProductAreaInputModel();
+            const model = new ProductAreaInputModel();
             model.id = jsItem.id;
             model.parentId = jsItem.parentId;
             model.workingGroupId = jsItem.workingGroupId;

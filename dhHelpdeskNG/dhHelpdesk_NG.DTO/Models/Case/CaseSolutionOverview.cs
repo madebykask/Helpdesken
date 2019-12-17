@@ -21,4 +21,9 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public int ShowOnCaseOverview { get; set; }
         public int? WorkingGroupId { get; set; }
     }
+
+    public class MobileCaseSolutionOverview : CaseSolutionOverview
+    {
+        public int CustomerId { get; set; }
+    }
 }

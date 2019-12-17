@@ -50,17 +50,18 @@ export class CaseTemplateComponent implements OnInit, OnDestroy {
 
   private processTemplates(templates: CaseTemplateModel[]): Array<CaseTemplateNode | CaseTemplateCategoryNode> {
     const templateNodes: CaseTemplateNode[] = [];
+    const cid = this.userSettingsService.getUserData().selectedCustomerId; // TODO: stub until templates for multiply customers is implemented
     const categoryNodes: CaseTemplateCategoryNode[] = [];
     if (templates && templates.length) {
       templates.forEach(t => {
         const categoryId = t.categoryId || 0;
-        const templateNode = new CaseTemplateNode(t.id, t.name);
+        const templateNode = new CaseTemplateNode(t.id, t.name, cid);
         if (categoryId === 0) {
           templateNodes.push(templateNode);
         } else {
           let group = categoryNodes.find(x => x.id === categoryId);
           if (group === null || group === undefined) {
-            group = new CaseTemplateCategoryNode(categoryId, t.categoryName || '');
+            group = new CaseTemplateCategoryNode(categoryId, t.categoryName || '', cid);
             categoryNodes.push(group);
           }
           group.items.push(templateNode);
@@ -76,8 +77,8 @@ export class CaseTemplateComponent implements OnInit, OnDestroy {
     return items.sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  openTemplate(templateId: number) {
-    this.router.navigate(['/case/template', templateId]);
+  openTemplate(templateId: number, customerId: number) {
+    this.router.navigate(['/case/template', customerId, templateId]);
   }
 
   trackByFn(index, item) {

@@ -568,7 +568,8 @@ namespace DH.Helpdesk.Services.Services
                 OtherFields.Administrator,
                 OtherFields.WorkingGroup,
                 OtherFields.WatchDate,
-                TimeLeftColumn
+                TimeLeftColumn,
+                UserFields.Customer
             };
         }
 
