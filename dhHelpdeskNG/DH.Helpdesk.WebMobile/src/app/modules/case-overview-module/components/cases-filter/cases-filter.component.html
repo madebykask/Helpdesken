@@ -1,7 +1,7 @@
-<mbsc-hamburger-nav [options]="filterMenuOptions" [class.selected]="isFilterApplied">
+<mbsc-hamburger-nav [options]="filterMenuOptions" [class.selected]="isFilterApplied" #overviewFilter (onItemTap)="onItemTap($event)">
   <mbsc-nav-item *ngFor="let item of menuItems; trackBy:trackByFn" 
       [id]="item.id"
       [selected]="item.selected"
       [disabled]="item.disabled"
-      (click)="applyFilter(item)">{{ item.text }}</mbsc-nav-item>
+      >{{ item.text }}</mbsc-nav-item>
 </mbsc-hamburger-nav>
