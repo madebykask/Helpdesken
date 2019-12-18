@@ -1,6 +1,6 @@
 {
   "name": "web-mobile",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -55,12 +55,6 @@
     "codelyzer": "^5.1.0",
     "jasmine-core": "^3.3.0",
     "jasmine-spec-reporter": "^4.2.1",
-    "karma": "^4.0.0",
-    "karma-chrome-launcher": "^2.2.0",
-    "karma-cli": "^2.0.0",
-    "karma-coverage-istanbul-reporter": "~2.0.4",
-    "karma-jasmine": "^2.0.1",
-    "karma-jasmine-html-reporter": "^1.4.0",
     "protractor": "^5.4.2",
     "ts-node": "~8.0.2",
     "tslint": "^5.18.0",

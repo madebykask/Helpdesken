@@ -80,9 +80,6 @@ export class CasesFilterComponent implements OnInit {
     this.menuItems.filter(m => m.selected && m.id !== selectedItem.id)
                   .forEach(m => m.selected = false);
     selectedItem.selected = isSelected;
-    if (!isSelected) {
-      this.filterCtrl.instance.deselect(selectedItem.id);
-    }
 
     if (selectedItem && isSelected) {
       this.filterId = selectedItem.id;
