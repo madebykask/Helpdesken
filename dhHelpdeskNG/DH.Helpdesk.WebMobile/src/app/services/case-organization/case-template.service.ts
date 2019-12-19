@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { take, map } from 'rxjs/operators';
-import { CaseTemplateModel } from '../../models/caseTemplate/case-template.model';
+import { CaseTemplateModel, CustomerCaseTemplateModel } from '../../models/caseTemplate/case-template.model';
 import { Observable } from 'rxjs';
 import { CaseTemplateApiService } from '../api/caseTemplate/case-template-api.service';
 import { CaseTemplateFullModel } from 'src/app/models/caseTemplate/case-template-full.model';
@@ -14,9 +14,18 @@ export class CaseTemplateService {
   constructor(private caseTemplateApiService: CaseTemplateApiService ) {
   }
 
-  loadTemplates(): Observable<CaseTemplateModel[]> {
+  loadTemplates(): Observable<CustomerCaseTemplateModel[]> {
     //tood: move to a separate service
-    return this.caseTemplateApiService.getCaseTemplates();
+    return this.caseTemplateApiService.getCaseTemplates()
+    .pipe(
+      take(1),
+      map(data => {
+        return data.map(x => Object.assign(new CustomerCaseTemplateModel(), {
+           ...x,
+            items: x.items.map(i => Object.assign(new CaseTemplateModel(), { ...i }))
+          }));
+      })
+    );
   }
 
   loadTemplate(id: number): Observable<CaseTemplateFullModel> {

@@ -6,7 +6,6 @@ import { LocalStorageService } from '../../local-storage';
 import { HttpClient } from '@angular/common/http';
 import { take, map } from 'rxjs/operators';
 import { CaseTemplateFullModel } from 'src/app/models/caseTemplate/case-template-full.model';
-import { CaseTemplateModel } from 'src/app/models/caseTemplate/case-template.model';
 
 @Injectable({ providedIn: 'root' })
 export class CaseTemplateApiService extends HttpApiServiceBase {
@@ -16,13 +15,7 @@ export class CaseTemplateApiService extends HttpApiServiceBase {
   }
 
   getCaseTemplates(): Observable<Array<any>> {
-    return this.getJson<Array<any>>(this.buildResourseUrl('/api/templates/', { mobileOnly: true }, true, true))
-    .pipe(
-      take(1),
-      map(data => {
-        return data.map(x => Object.assign(new CaseTemplateModel(), { ...x, id: x.caseSolutionId }));
-      })
-    );
+    return this.getJson<Array<any>>(this.buildResourseUrl('/api/templates/', { mobileOnly: true }, true, true));
   }
 
   getCaseTemplate(id: number) {

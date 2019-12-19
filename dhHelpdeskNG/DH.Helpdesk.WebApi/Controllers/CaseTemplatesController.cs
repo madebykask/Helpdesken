@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -8,6 +10,7 @@ using DH.Helpdesk.Common.Extensions.Lists;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.WebApi.Infrastructure;
+using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using DH.Helpdesk.WebApi.Models.Case;
 
 namespace DH.Helpdesk.WebApi.Controllers
@@ -21,6 +24,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IProductAreaService _productAreaService;
         private readonly ICaseTypeService _caseTypeService;
         private readonly IUserService _userService;
+        private readonly ICustomerUserService _customerUserService;
         private readonly IMapper _mapper;
         
         public CaseTemplatesController(IBaseCaseSolutionService caseSolutionService, ITranslateCacheService translateCacheService,
@@ -28,7 +32,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             IProductAreaService productAreaService,
             ICaseTypeService caseTypeService,
             IUserService userService,
-            IMapper mapper)
+            IMapper mapper,
+            ICustomerUserService customerUserService)
         {
             _caseSolutionService = caseSolutionService;
             _translateCacheService = translateCacheService;
@@ -37,23 +42,45 @@ namespace DH.Helpdesk.WebApi.Controllers
             _caseTypeService = caseTypeService;
             _userService = userService;
             _mapper = mapper;
+            _customerUserService = customerUserService;
         }
 
         [HttpGet]
         [Route("")]
-        public async Task<IList<CaseSolutionOverview>> Get([FromUri]int cid, [FromUri]int langId, [FromUri] bool mobileOnly = false)
+        public async Task<IList<CustomerCaseSolution>> Get([FromUri]int langId, [FromUri] bool mobileOnly = false)
         {
-            var caseSolutions = await (mobileOnly
-                ? _caseSolutionService.GetCustomerMobileCaseSolutionsAsync(cid)
-                : _caseSolutionService.GetCustomerCaseSolutionsAsync(cid));
+            var model = new List<CustomerCaseSolution>();
+            var customers = _customerUserService.GetCustomerUsersForHomeIndexPage(UserId);
+            if (!customers.Any())
+                return model;
 
-            var translatedItems = caseSolutions.Apply(item =>
+            var caseSolutions = await _caseSolutionService.GetCustomersMobileCaseSolutionsAsync(customers.Select(c => c.Customer.Customer_Id).ToList());
+
+            var translatedCaseSolutions = caseSolutions.Apply(item =>
             {
                 item.Name = _translateCacheService.GetMasterDataTextTranslation(item.Name, langId);
                 item.CategoryName = _translateCacheService.GetMasterDataTextTranslation(item.CategoryName, langId);
             });
 
-            return translatedItems;
+            model = customers.Where(c => caseSolutions.Any(cs => cs.CustomerId == c.Customer.Customer_Id))
+                .Select(c => new CustomerCaseSolution()
+            {
+                CustomerId = c.Customer.Customer_Id,
+                CustomerName = c.Customer.Customer.Name,
+                Items = new List<CustomerCaseSolutionOverviewItem>()
+            }).ToList();
+
+            model.ForEach(m => m.Items = translatedCaseSolutions.Where(cs => cs.CustomerId == m.CustomerId)
+                .Select(cs => new CustomerCaseSolutionOverviewItem()
+                {
+                    Id = cs.CaseSolutionId,
+                    Name = cs.Name,
+                    CategoryId = cs.CategoryId,
+                    CategoryName = cs.CategoryName
+                })
+                .ToList());
+
+            return model;
         }
 
         [HttpGet]

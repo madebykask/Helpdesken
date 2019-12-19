@@ -10,6 +10,7 @@ import { AuthenticationStateService } from './authentication-state.service';
 import { throwError, Observable, of } from 'rxjs';
 import { CurrentUser } from 'src/app/models';
 import { ErrorHandlingService } from '../logging';
+import { AppStore } from 'src/app/store';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -21,7 +22,8 @@ export class AuthenticationService {
       private authStateService: AuthenticationStateService,
       private authApiService: AuthenticationApiService,
       private userSettingsApiService: UserSettingsApiService,
-      private commService: CommunicationService) {
+      private commService: CommunicationService,
+      private appStore: AppStore) {
      }
 
     login(username: string, password: string): Observable<CurrentUser> {
@@ -65,6 +67,7 @@ export class AuthenticationService {
     logout() {
         // remove user from local storage to log user out
         this.localStorageService.removeCurrentUser();
+        this.appStore.reset();
         // this._logger.log(`Log out action.`);
         this.raiseAuthenticationChanged();
     }

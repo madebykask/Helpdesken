@@ -11,7 +11,7 @@ import { SearchFilterService } from './modules/case-overview-module/services/cas
 import { AppStore, AppStoreKeys } from './store';
 import { CurrentUser } from './models';
 import { takeUntil, take } from 'rxjs/operators';
-import { CaseTemplateModel } from './models/caseTemplate/case-template.model';
+import { CaseTemplateModel, CustomerCaseTemplateModel } from './models/caseTemplate/case-template.model';
 import { CustomerFavoriteFilterModel } from './modules/case-overview-module/models/cases-overview/favorite-filter.model';
 
 @Component({
@@ -75,7 +75,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.caseTemplateService.loadTemplates().pipe(
        take(1),
        takeUntil(this.destroy$)
-     ).subscribe((templates: CaseTemplateModel[]) => {
+     ).subscribe((templates: CustomerCaseTemplateModel[]) => {
        this.appStore.set(AppStoreKeys.Templates, templates);
      });
    }
