@@ -8,6 +8,7 @@ using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case.Logs;
 using DH.Helpdesk.Models.StateSecondaries;
+using DH.Helpdesk.Models.Statuses;
 using DH.Helpdesk.WebApi.Models;
 using DH.Helpdesk.WebApi.Models.Case;
 using LogFileModel = DH.Helpdesk.Models.Case.Logs.LogFileModel;
@@ -45,6 +46,13 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Mapper.Profiles
 
             CreateMap<StateSecondary, StateSecondaryOutputModel>()
                 .ForMember(dest => dest.RecalculateWatchDate, opt => opt.ResolveUsing(src => src.RecalculateWatchDate.ToBool()));
+
+            CreateMap<Status, StatusOutputModel>()
+                .ForMember(dest => dest.IsDefault, opt => opt.ResolveUsing(src => src.IsDefault.ToBool()))
+                .ForMember(dest => dest.IsActive, opt => opt.ResolveUsing(src => src.IsActive.ToBool()))
+                .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(s => s.Customer_Id))
+                .ForMember(dest => dest.WorkingGroupId, opt => opt.MapFrom(s => s.WorkingGroup_Id))
+                .ForMember(dest => dest.StateSecondaryId, opt => opt.MapFrom(s => s.StateSecondary_Id));
 
             CreateMap<CaseType, CaseTypeOverview>()
                 .ForMember(dest => dest.ParentId, opt => opt.ResolveUsing(src => src.Parent_CaseType_Id))

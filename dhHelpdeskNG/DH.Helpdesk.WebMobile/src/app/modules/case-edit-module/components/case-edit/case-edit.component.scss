@@ -34,8 +34,18 @@
 
 ::ng-deep {
   .mbsc-select.mbsc-input {
-    margin:0px!important;
+    /* margin:0px!important; */
     input { border-bottom: 0px!important; }
+  }
+  /* fix for switch color and body, if fixed in new version - remove*/
+  .mbsc-ios {
+    &.mbsc-switch {
+      background-color: white;
+      //margin-top: 0;
+      &:before, &:after {
+        border-color: #ccc;
+      }
+    }
   }
 }
 

@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class StateSecondariesService extends HttpApiServiceBase {
 
-    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService, 
+    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService,
         private caseHelper: OptionsHelper) {
             super(http, localStorageService);
     }

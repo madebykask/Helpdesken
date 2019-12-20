@@ -137,7 +137,7 @@
                   <case-dropdown-control *ngIf="showField(caseFieldsNames.CaseResponsibleUserId)" [field]="caseFieldsNames.CaseResponsibleUserId" [form]="form" [dataSource]="dataSource.responsibleUsersStore$"></case-dropdown-control>
                   <case-dropdown-control *ngIf="showField(caseFieldsNames.PerformerUserId)" [field]="caseFieldsNames.PerformerUserId" [form]="form" [dataSource]="dataSource.performersStore$"></case-dropdown-control>
                   <case-dropdown-control *ngIf="showField(caseFieldsNames.PriorityId)" [field]="caseFieldsNames.PriorityId" [form]="form" [dataSource]="dataSource.prioritiesStore$"></case-dropdown-control>
-                  <case-dropdown-control *ngIf="showField(caseFieldsNames.StatusId)" disabled=true [field]="caseFieldsNames.StatusId" [form]="form" [dataSource]="dataSource.statusesStore$"></case-dropdown-control>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.StatusId)" [field]="caseFieldsNames.StatusId" [form]="form" [dataSource]="dataSource.statusesStore$"></case-dropdown-control>
                   <case-dropdown-control *ngIf="showField(caseFieldsNames.StateSecondaryId)" [field]="caseFieldsNames.StateSecondaryId" [form]="form" [dataSource]="dataSource.stateSecondariesStore$"></case-dropdown-control>
                   <case-dropdown-control *ngIf="showField(caseFieldsNames.Project)" disabled=true [field]="caseFieldsNames.Project" [form]="form" [dataSource]="dataSource.projectsStore$"></case-dropdown-control>
                   <case-dropdown-control *ngIf="showField(caseFieldsNames.Problem)" disabled=true [field]="caseFieldsNames.Problem" [form]="form" [dataSource]="dataSource.problemsStore$"></case-dropdown-control>

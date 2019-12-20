@@ -18,6 +18,7 @@ import { CaseFieldModel, CaseEditInputModel } from '../../models';
 import { DateTime } from 'luxon';
 import { CaseDataStore } from './case-data.store';
 import { CaseFormGroup } from 'src/app/modules/shared-module/models/forms';
+import { StatusesService } from 'src/app/services/case-organization/statuses-service';
 
 @Injectable({ providedIn: 'root' })
 export class CaseEditLogic {
@@ -30,7 +31,8 @@ export class CaseEditLogic {
     private productAreasService: ProductAreasService,
     private notifierService: NotifierService,
     private caseDataHelpder: CaseEditDataHelper,
-    private caseService: CaseService) {
+    private caseService: CaseService,
+    private statusesService: StatusesService) {
 
   }
 
@@ -103,6 +105,21 @@ export class CaseEditLogic {
         ).subscribe((o: MultiLevelOptionItem[]) => {
           reducer.caseDataReducer(CaseFieldsNames.ProductAreaId, { items: o });
         });
+        break;
+      }
+      case CaseFieldsNames.StatusId: {
+        if (!!v.value && form.contains(CaseFieldsNames.StatusId)) {
+          this.statusesService.getStatus(v.value, customerId).pipe(
+            take(1)
+          ).subscribe(status => {
+            if (status && status.stateSecondaryId != null) {
+              form.setSafe(CaseFieldsNames.StateSecondaryId, status.stateSecondaryId);
+            }
+            if (status && status.workingGroupId != null) {
+              form.setSafe(CaseFieldsNames.WorkingGroupId, status.workingGroupId);
+            }
+          });
+        }
         break;
       }
       case CaseFieldsNames.WorkingGroupId: {
