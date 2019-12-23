@@ -112,11 +112,11 @@ export class CaseEditLogic {
           this.statusesService.getStatus(v.value, customerId).pipe(
             take(1)
           ).subscribe(status => {
-            if (status && status.stateSecondaryId != null) {
-              form.setSafe(CaseFieldsNames.StateSecondaryId, status.stateSecondaryId);
-            }
             if (status && status.workingGroupId != null) {
-              form.setSafe(CaseFieldsNames.WorkingGroupId, status.workingGroupId);
+              form.setValueWithNotification(CaseFieldsNames.WorkingGroupId, status.workingGroupId, CaseFieldsNames.StatusId);
+            }
+            if (status && status.stateSecondaryId != null) {
+              form.setValueWithNotification(CaseFieldsNames.StateSecondaryId, status.stateSecondaryId, CaseFieldsNames.StatusId);
             }
           });
         }
@@ -133,8 +133,8 @@ export class CaseEditLogic {
           this.workingGroupsService.getWorkingGroup(v.value, customerId).pipe(
             take(1)
           ).subscribe(wg => {
-            if (wg && wg.stateSecondaryId != null) {
-              form.setSafe(CaseFieldsNames.StateSecondaryId, wg.stateSecondaryId);
+            if (wg && wg.stateSecondaryId != null && v.source !== CaseFieldsNames.StatusId) {
+              form.setValueWithNotification(CaseFieldsNames.StateSecondaryId, wg.stateSecondaryId, CaseFieldsNames.WorkingGroupId);
             }
           });
         }
@@ -148,7 +148,8 @@ export class CaseEditLogic {
           .pipe(
             take(1)
           ).subscribe(ss => {
-            if (ss && ss.workingGroupId != null && form.contains(CaseFieldsNames.WorkingGroupId)) {
+            if (ss && ss.workingGroupId != null && form.contains(CaseFieldsNames.WorkingGroupId)
+                    && v.source !== CaseFieldsNames.StatusId && v.source !== CaseFieldsNames.WorkingGroupId) {
               form.setSafe(CaseFieldsNames.WorkingGroupId, ss.workingGroupId);
             }
             const departmentCtrl = form.get(CaseFieldsNames.DepartmentId);
@@ -259,40 +260,6 @@ export class CaseEditLogic {
     }
   }
 
-/*   private changeRegion(notifierFieldsSetter: NotifierFormFieldsSetter, regionId?: number, departmentId?: number, ouId?: number) {
-    // change first to update form
-    notifierFieldsSetter.setRegion(regionId || '');
-
-     const reducer = this.getCaseDataReducers();
-    const optionsHelper = this.getFormOptionsHelpers(); 
-
-    // change to new region and load departments
-     optionsHelper.getDepartments().pipe(
-      take(1)
-    ).subscribe(deps => {
-      reducer.caseDataReducer(CaseFieldsNames.DepartmentId, { items: deps });
-      this.changeDepartment(notifierFieldsSetter, departmentId, ouId);
-    }); 
-    this.changeDepartment(notifierFieldsSetter, departmentId, ouId);
-  } */
-
-/*   private changeDepartment(notifierFieldsSetter: NotifierFormFieldsSetter, departmentId: number, ouId?: number) {
-
-    notifierFieldsSetter.setDepartment(departmentId || '');
-
-     const reducer = this.getCaseDataReducers();
-    const optionsHelper = this.getFormOptionsHelpers();
-
-    // load OUs
-    optionsHelper.getOUs(departmentId).pipe(
-      take(1)
-    ).subscribe(ous => {
-        reducer.caseDataReducer(CaseFieldsNames.OrganizationUnitId, { items: ous });
-        notifierFieldsSetter.setOU(ouId || '');
-    }); 
-    notifierFieldsSetter.setOU(ouId || '');
-  } */
-
   private resetNotifierFields(formFieldsSetter: NotifierFormFieldsSetter) {
     formFieldsSetter.setReportedBy('');
     formFieldsSetter.setPersonName('');
@@ -308,11 +275,6 @@ export class CaseEditLogic {
   private getCaseDataReducers(dataSource: CaseDataStore): CaseDataReducers {
     return this.сaseDataReducersFactory.createCaseDataReducers(dataSource);
   }
-
-/*   private getFormOptionsHelpers() {
-    const filters = this.caseDataHelpder.getFormCaseOptionsFilter(this.caseData, this.form);
-    return this.caseService.getOptionsHelper(filters);
-  } */
 }
 
 interface IOrganisationData {

@@ -48,6 +48,7 @@ export class CaseSearchFilterChangedEvent {
 export class CaseFieldValueChangedEvent {
   constructor(public value: any,
               public text: string,
-              public name: string) {
+              public name: string,
+              public source: string | null = null) {
   }
 }
