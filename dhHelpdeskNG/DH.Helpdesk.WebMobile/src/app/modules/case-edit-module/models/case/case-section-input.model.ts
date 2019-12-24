@@ -1,17 +1,10 @@
 export class CaseSectionInputModel {
-    id: number;
-    header: string;
-    type: CaseSectionType;
-    isNewCollapsed: boolean;
-    isEditCollapsed: boolean;
-
-    constructor(id: number, header: string, type: CaseSectionType,
-         isNewCollapsed: boolean, isEditCollapsed: boolean) {
-            this.id = id;
-            this.header = header;
-            this.type = type;
-            this.isEditCollapsed = isEditCollapsed;
-            this.isNewCollapsed = isNewCollapsed;
+    constructor(public id: number,
+       public header: string,
+       public type: CaseSectionType,
+       public isNewCollapsed: boolean,
+       public isEditCollapsed: boolean,
+       public caseSectionFields: Array<string>) {
     }
 }
 

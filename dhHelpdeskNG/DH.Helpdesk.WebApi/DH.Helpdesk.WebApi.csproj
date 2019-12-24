@@ -298,6 +298,7 @@
     <Compile Include="Models\ClientLogItemModel.cs" />
     <Compile Include="Models\ExtendCaseLockInput.cs" />
     <Compile Include="Models\LoginUserInputModel.cs" />
+    <Compile Include="Models\Output\CaseSectionOutputModel.cs" />
     <Compile Include="Models\Output\CaseSortFieldModel.cs" />
     <Compile Include="Models\Output\FavoriteFilterField.cs" />
     <Compile Include="Models\Output\NotifierData.cs" />

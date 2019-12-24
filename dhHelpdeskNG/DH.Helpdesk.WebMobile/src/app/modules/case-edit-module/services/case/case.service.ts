@@ -181,7 +181,8 @@ export class CaseService {
               jsSection.sectionHeader,
               jsSection.sectionType,
               jsSection.isNewCollapsed,
-              jsSection.isEditCollapsed);
+              jsSection.isEditCollapsed,
+              jsSection.caseSectionFields);
           });
           return sections;
         }),

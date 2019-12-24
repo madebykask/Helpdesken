@@ -13,7 +13,7 @@ import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
 import { CaseLockApiService } from '../../services/api/case/case-lock-api.service';
 import { CaseSaveService } from '../../services/case';
 import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel,
-   CaseLockModel, CaseAction, CaseActionDataType, CaseFileModel } from '../../models';
+   CaseLockModel, CaseAction, CaseActionDataType, CaseFileModel, ICaseField } from '../../models';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { CaseFilesApiService } from '../../services/api/case/case-files-api.service';
@@ -30,6 +30,9 @@ import { FinalActionEnum } from 'src/app/modules/shared-module/constants/finalAc
 import { LocalStorageService } from 'src/app/services/local-storage';
 import { OUsService } from 'src/app/services/case-organization/ous-service';
 import { TabNames } from '../../constants/tab-names';
+import { OptionItem } from 'src/app/modules/shared-module/models';
+import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
+import { DateTime } from 'luxon';
 
 @Component({
   selector: 'app-case-edit',
@@ -226,6 +229,177 @@ export class CaseEditComponent {
     getSectionHeader(type: CaseSectionType): string {
         if (this.caseSections == null) { return ''; }
         return this.caseSections.find(s => s.type == type).header;
+    }
+
+    getSectionInfo(type?: CaseSectionType): string {
+      const defaultValue = '&nbsp';
+      if (this.caseSections == null) {
+        return defaultValue;
+      }
+      const section = this.caseSections.find(s => s.type == type);
+      if (!section.caseSectionFields || !section.caseSectionFields.length) {
+        return defaultValue;
+      }
+
+      return this.getSectionInfoFields(section);
+    }
+
+    private getSectionInfoFields(section: CaseSectionInputModel): string {
+      const emptyValue = null;
+      const getFromList = (value: any, list: OptionItem[]) => {
+        const item = list.find(o => o.value == value);
+        return item ? item.text : emptyValue;
+      };
+
+      const getDate = (value: string, isShortData: boolean = false) => {
+        return DateUtil.formatDate(value, isShortData ? DateTime.DATE_SHORT : null);
+      };
+
+      const initiatorFields = (name: string, field: ICaseField<any>) => {
+        switch (name) {
+          case CaseFieldsNames.RegionId: {
+            return getFromList(field.value, this.dataSource.regionsStore$.value);
+          }
+          case CaseFieldsNames.DepartmentId: {
+            return getFromList(field.value, this.dataSource.departmentsStore$.value);
+          }
+          case CaseFieldsNames.OrganizationUnitId: {
+            return getFromList(field.value, this.dataSource.oUsStore$.value);
+          }
+        }
+        return field.value;
+      };
+
+      const regardingFields = (name: string, field: ICaseField<any>) => {
+        switch (name) {
+          case CaseFieldsNames.RegionId: {
+            return getFromList(field.value, this.dataSource.regionsStore$.value);
+          }
+          case CaseFieldsNames.DepartmentId: {
+            return getFromList(field.value, this.dataSource.isAboutDepartmentsStore$.value);
+          }
+          case CaseFieldsNames.OrganizationUnitId: {
+            return getFromList(field.value, this.dataSource.isAboutOUsStore$.value);
+          }
+        }
+        return field.value;
+      };
+
+      const caseInfoFields = (name: string, field: ICaseField<any>) => {
+        switch (name) {
+          case CaseFieldsNames.RegTime:
+          case CaseFieldsNames.ChangeTime: {
+            return getDate(field.value);
+          }
+          case CaseFieldsNames.RegistrationSourceCustomer: {
+            return getFromList(field.value, this.dataSource.customerRegistrationSourcesStore$.value);
+          }
+          case CaseFieldsNames.CaseTypeId: {
+            return getFromList(field.value, this.dataSource.caseTypesStore$.value);
+          }
+          case CaseFieldsNames.ProductAreaId: {
+            return getFromList(field.value, this.dataSource.productAreasStore$.value);
+          }
+          case CaseFieldsNames.SystemId: {
+            return getFromList(field.value, this.dataSource.systemsStore$.value);
+          }
+          case CaseFieldsNames.UrgencyId: {
+            return getFromList(field.value, this.dataSource.urgenciesStore$.value);
+          }
+          case CaseFieldsNames.ImpactId: {
+            return getFromList(field.value, this.dataSource.impactsStore$.value);
+          }
+          case CaseFieldsNames.CategoryId: {
+            return getFromList(field.value, this.dataSource.categoriesStore$.value);
+          }
+          case CaseFieldsNames.SupplierId: {
+            return getFromList(field.value, this.dataSource.suppliersStore$.value);
+          }
+          case CaseFieldsNames.AgreedDate: {
+            return getDate(field.value, true);
+          }
+          case CaseFieldsNames.Caption:
+          case CaseFieldsNames.Description: {
+            return field.value ? (<string>field.value).substring(0, 30) : '';
+          }
+          case CaseFieldsNames.Cost: {
+            return field.value; // TODO: add Other cost and currency
+          }
+        }
+        return field.value;
+      };
+
+      const caseManagementFields = (name: string, field: ICaseField<any>) => {
+        switch (name) {
+          case CaseFieldsNames.WorkingGroupId: {
+            return getFromList(field.value, this.dataSource.workingGroupsStore$.value);
+          }
+          case CaseFieldsNames.CaseResponsibleUserId: {
+            return getFromList(field.value, this.dataSource.responsibleUsersStore$.value);
+          }
+          case CaseFieldsNames.PerformerUserId: {
+            return getFromList(field.value, this.dataSource.performersStore$.value);
+          }
+          case CaseFieldsNames.PriorityId: {
+            return getFromList(field.value, this.dataSource.prioritiesStore$.value);
+          }
+          case CaseFieldsNames.StatusId: {
+            return getFromList(field.value, this.dataSource.statusesStore$.value);
+          }
+          case CaseFieldsNames.StateSecondaryId: {
+            return getFromList(field.value, this.dataSource.stateSecondariesStore$.value);
+          }
+          case CaseFieldsNames.Project: {
+            return getFromList(field.value, this.dataSource.projectsStore$.value);
+          }
+          case CaseFieldsNames.Problem: {
+            return getFromList(field.value, this.dataSource.problemsStore$.value);
+          }
+          case CaseFieldsNames.CausingPart: {
+            return getFromList(field.value, this.dataSource.causingPartsStore$.value);
+          }
+          case CaseFieldsNames.Change: {
+            return getFromList(field.value, this.dataSource.changesStore$.value);
+          }
+          case CaseFieldsNames.PlanDate:
+          case CaseFieldsNames.WatchDate: {
+              return getDate(field.value, true);
+          }
+          case CaseFieldsNames.SolutionRate: {
+            return getFromList(field.value, this.dataSource.solutionsRatesStore$.value);
+          }
+        }
+        return field.value;
+      };
+
+      return section.caseSectionFields.map(name => {
+        if (this.caseDataHelpder.hasField(this.caseData, name)) {
+           const field = this.caseDataHelpder.getField(this.caseData, name);
+           if (field.value == null) {
+             return null;
+           }
+           switch (section.type) {
+            case CaseSectionType.Initiator:
+              return initiatorFields(name, field);
+
+            case CaseSectionType.Regarding:
+              return regardingFields(name, field);
+
+            case CaseSectionType.ComputerInfo:
+              return field.value;
+
+            case CaseSectionType.CaseInfo:
+              return caseInfoFields(name, field);
+
+            case CaseSectionType.CaseManagement:
+              return caseManagementFields(name, field);
+
+           }
+           return emptyValue;
+        }
+      })
+      .filter(value => value)
+      .join(' - ');
     }
 
     isSectionOpen(type: CaseSectionType) {

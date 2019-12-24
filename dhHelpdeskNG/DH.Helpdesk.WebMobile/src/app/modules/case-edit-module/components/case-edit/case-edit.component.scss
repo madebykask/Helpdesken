@@ -46,6 +46,18 @@
         border-color: #ccc;
       }
     }
+    .mbsc-form-group-title {
+      &.mbsc-collapsible-header {
+        padding-top: 1.5em;
+        .mbsc-collapsible-icon {
+          top: 58%
+        }
+        .section-info {
+          font-size: xx-small;
+          color: black;
+        }
+      }
+     }
   }
 }
 
