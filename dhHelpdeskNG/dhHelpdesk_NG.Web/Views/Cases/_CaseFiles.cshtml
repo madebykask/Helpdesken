@@ -2,9 +2,9 @@
 @using DH.Helpdesk.Common.Extensions.DateTime
 @using DH.Helpdesk.Dal.Enums
 
-@model DH.Helpdesk.Web.Models.Case.CaseFilesModel     
+@model DH.Helpdesk.Web.Models.Case.CaseFilesModel
 @if (Model != null && Model.Files != null && Model.Files.Any())
-{    
+{
 
     <table id="case_files_table" class="table table-striped" style="margin-top:10px;">
         <thead>
@@ -23,45 +23,48 @@
         </thead>
         <tbody>
             @{
-    var i = 0;
-    var caseInactive = false;
-    caseInactive = (ViewData["CaseInactive"] != null? (bool) ViewData["CaseInactive"]:false);
+                var i = 0;
+                var caseInactive = false;
+                caseInactive = (bool?) ViewData["CaseInactive"] ?? false;
                 var userTimezone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
-    
-    foreach (var file in Model.Files)
-    {
-        var date = TimeZoneInfo.ConvertTimeFromUtc(file.CreatedDate.ToUniversalTime(), userTimezone);
-                <tr data-field="caseFile" data-field-id="@Model.ObjectId" data-field-name="@file.FileName">
-                    <td>
-                        @if (Model.VirtualDirectory)
-                        {
-                            <a target="_blank" onclick="window.dhHelpdesk.logFileAccess(@Model.ObjectId, '@file.FileName', @((int)CaseFileType.CaseFile))" href="@Html.Action("CaseFileLinkVD","FileHandler", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
-                        }
-                        else
-                        {
-                            <a href="@Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
-                        }
-                    </td>
-                    <td>
-                        @date.ToFormattedDateTime()
-                    </td>
-                    <td>
-                        @file.UserName
-                    </td>
-                    <td class="action">
-                        @if (file.CanDelete)
-                        {
-                            if (!caseInactive)
+
+                foreach (var file in Model.Files)
+                {
+                    var date = TimeZoneInfo.ConvertTimeFromUtc(file.CreatedDate.ToUniversalTime(), userTimezone);
+                    <tr data-field="caseFile" data-field-id="@Model.ObjectId" data-field-name="@file.FileName">
+                        <td>
+                            @if (Model.VirtualDirectory)
                             {
-                                <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn bt-small" data-fileName="@file.FileName" data-field="deleteFile" title="@Translation.GetCoreTextTranslation("Ta bort")"><i class="icon-remove"></i></a> 
+                                <a target="_blank" onclick="window.dhHelpdesk.logFileAccess(@Model.ObjectId, '@file.FileName', @((int)CaseFileType.CaseFile))" href="@Html.Action("CaseFileLinkVD","FileHandler", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
                             }
-                           
-                        }
-                    </td>
-                </tr>
-                        i++;
-    }
+                            else
+                            {
+                                <a href="@Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
+                            }
+                        </td>
+                        <td>
+                            @date.ToFormattedDateTime()
+                        </td>
+                        <td>
+                            @file.UserName
+                        </td>
+                        <td class="action">
+                            @if (file.CanDelete)
+                            {
+                                if (!caseInactive)
+                                {
+                                    <a id="@string.Format("delete_casefile_button_{0}", i)" class="btn bt-small" data-fileName="@file.FileName"
+                                       data-field="deleteFile"
+                                       data-temporary="@file.IsTemporary"
+                                       title="@Translation.GetCoreTextTranslation("Ta bort")"><i class="icon-remove"></i></a>
+                                }
+
+                            }
+                        </td>
+                    </tr>
+                    i++;
+                }
             }
         </tbody>
-    </table> 
+    </table>
 }

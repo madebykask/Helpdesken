@@ -355,8 +355,9 @@ function bindDeleteCaseFileBehaviorToDeleteButtons() {
     $('#case_files_table a[id^="delete_casefile_button_"]').click(function () {
         var key = $('#CaseKey').val();
         var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
+        var isTemporary = $(this).data('temporary');
         var pressedDeleteFileButton = this;
-        $.post("/Cases/DeleteCaseFile", { id: key, fileName: fileName }, function () {
+        $.post("/Cases/DeleteCaseFile", { id: key, fileName: fileName, isTemporary: isTemporary }, function () {
             $(pressedDeleteFileButton).parents('tr:first').remove();
             var fileNames = $('#CaseFileNames').val();
             fileNames = fileNames.replace("|" + fileName.trim(), "");

@@ -1317,6 +1317,8 @@ namespace DH.Helpdesk.Web.Controllers
                 /* Used for Extended Case */
                 TempData["Case_Id"] = id;
 
+                _userTemporaryFilesStorage.ResetCacheForObject(id);
+
                 var userId = SessionFacade.CurrentUser.Id;
 
                 var caseLockViewModel = GetCaseLockModel(id, userId, true, activeTab);
@@ -3315,24 +3317,19 @@ namespace DH.Helpdesk.Web.Controllers
             var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
 
             // save case files
-            if (!edit)
+            var temporaryFiles = _userTemporaryFilesStorage.FindFiles(!edit ? case_.CaseGUID.ToString() : case_.Id.ToString(), ModuleName.Cases);
+            var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, utcNow, case_.Id, _workContext.User.UserId)).ToList();
+
+            var paths = new List<KeyValuePair<CaseFileDto, string>>();
+            _caseFileService.AddFiles(newCaseFiles, paths);
+
+            if (!disableLogFileView.Active)
             {
-                var temporaryFiles = _userTemporaryFilesStorage.FindFiles(case_.CaseGUID.ToString(), ModuleName.Cases);
-                var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, utcNow, case_.Id, _workContext.User.UserId)).ToList();
-
-                var paths = new List<KeyValuePair<CaseFileDto, string>>();
-                _caseFileService.AddFiles(newCaseFiles, paths);
-
-                if (!disableLogFileView.Active)
+                foreach (var file in paths)
                 {
-                    foreach (var file in paths)
-                    {
-                        var userId = SessionFacade.CurrentUser?.Id ?? 0;
-                        _fileViewLogService.Log(case_.Id, userId, file.Key.FileName, file.Value, FileViewLogFileSource.Helpdesk, FileViewLogOperation.Add);
-                    }
+                    var userId = SessionFacade.CurrentUser?.Id ?? 0;
+                    _fileViewLogService.Log(case_.Id, userId, file.Key.FileName, file.Value, FileViewLogFileSource.Helpdesk, FileViewLogOperation.Add);
                 }
-
-
             }
 
             #region Save Logs
@@ -3503,6 +3500,7 @@ namespace DH.Helpdesk.Web.Controllers
                 _caseLockService.UnlockCaseByGUID(new Guid(m.caseLock.LockGUID));
 
             // delete temp folders                
+            _userTemporaryFilesStorage.ResetCacheForObject(case_.Id);
             _userTemporaryFilesStorage.ResetCacheForObject(case_.CaseGUID.ToString());
             _userTemporaryFilesStorage.ResetCacheForObject(caseLog.LogGuid.ToString());
 
@@ -6326,23 +6324,6 @@ namespace DH.Helpdesk.Web.Controllers
             return li;
         }
 
-        private IList<CaseFileModel> MakeCaseFileModel(IList<CaseFileDate> files, string savedFiles)
-        {
-            var res = new List<CaseFileModel>();
-            int i = 0;
-
-            var savedFileList = string.IsNullOrEmpty(savedFiles) ? null : savedFiles.Split('|').ToList();
-
-            foreach (var f in files)
-            {
-                i++;
-                var canDelete = !(savedFileList != null && savedFileList.Contains(f.FileName));
-                var cf = new CaseFileModel(i, i, f.FileName, f.FileDate, SessionFacade.CurrentUser.FirstName + " " + SessionFacade.CurrentUser.SurName, canDelete);
-                res.Add(cf);
-            }
-
-            return res;
-        }
 
         private List<ItemOverview> GetMaxRowsFilter()
         {
