@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { CaseEditInputModel, CaseSectionType, CaseFieldModel } from '../../models';
-import { CaseOptionsFilterModel } from 'src/app/modules/shared-module/models';
+import { CaseEditInputModel, CaseSectionType, CaseFieldModel, CaseSectionInputModel, ICaseField } from '../../models';
+import { CaseOptionsFilterModel, OptionItem } from 'src/app/modules/shared-module/models';
 import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
 import { CaseFormGroup } from 'src/app/modules/shared-module/models/forms/case-form-group';
+import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
+import { DateTime } from 'luxon';
+import { CaseDataStore } from './case-data.store';
 
 @Injectable({ providedIn: 'root' })
 export class CaseEditDataHelper {
@@ -56,6 +59,164 @@ export class CaseEditDataHelper {
 
     getFormCaseOptionsFilter(caseData: CaseEditInputModel, form: CaseFormGroup ) {
       return this.createCaseOptionsFilter(caseData, (name: string) => form.getValue(name));
+    }
+
+    getSectionInfoFields(section: CaseSectionInputModel, dataSource: CaseDataStore, caseData: CaseEditInputModel): string {
+      const emptyValue = null;
+      const getFromList = (value: any, list: OptionItem[]) => {
+        const item = list.find(o => o.value == value);
+        return item ? item.text : emptyValue;
+      };
+
+      const getDate = (value: string, isShortData: boolean = false) => {
+        return DateUtil.formatDate(value, isShortData ? DateTime.DATE_SHORT : null);
+      };
+
+      const initiatorFields = (name: string, field: ICaseField<any>) => {
+        switch (name) {
+          case CaseFieldsNames.RegionId: {
+            return getFromList(field.value, dataSource.regionsStore$.value);
+          }
+          case CaseFieldsNames.DepartmentId: {
+            return getFromList(field.value, dataSource.departmentsStore$.value);
+          }
+          case CaseFieldsNames.OrganizationUnitId: {
+            return getFromList(field.value, dataSource.oUsStore$.value);
+          }
+        }
+        return field.value;
+      };
+
+      const regardingFields = (name: string, field: ICaseField<any>) => {
+        switch (name) {
+          case CaseFieldsNames.RegionId: {
+            return getFromList(field.value, dataSource.regionsStore$.value);
+          }
+          case CaseFieldsNames.DepartmentId: {
+            return getFromList(field.value, dataSource.isAboutDepartmentsStore$.value);
+          }
+          case CaseFieldsNames.OrganizationUnitId: {
+            return getFromList(field.value, dataSource.isAboutOUsStore$.value);
+          }
+        }
+        return field.value;
+      };
+
+      const caseInfoFields = (name: string, field: ICaseField<any>) => {
+        switch (name) {
+          case CaseFieldsNames.RegTime:
+          case CaseFieldsNames.ChangeTime: {
+            return getDate(field.value);
+          }
+          case CaseFieldsNames.RegistrationSourceCustomer: {
+            return getFromList(field.value, dataSource.customerRegistrationSourcesStore$.value);
+          }
+          case CaseFieldsNames.CaseTypeId: {
+            return getFromList(field.value, dataSource.caseTypesStore$.value);
+          }
+          case CaseFieldsNames.ProductAreaId: {
+            return getFromList(field.value, dataSource.productAreasStore$.value);
+          }
+          case CaseFieldsNames.SystemId: {
+            return getFromList(field.value, dataSource.systemsStore$.value);
+          }
+          case CaseFieldsNames.UrgencyId: {
+            return getFromList(field.value, dataSource.urgenciesStore$.value);
+          }
+          case CaseFieldsNames.ImpactId: {
+            return getFromList(field.value, dataSource.impactsStore$.value);
+          }
+          case CaseFieldsNames.CategoryId: {
+            return getFromList(field.value, dataSource.categoriesStore$.value);
+          }
+          case CaseFieldsNames.SupplierId: {
+            return getFromList(field.value, dataSource.suppliersStore$.value);
+          }
+          case CaseFieldsNames.AgreedDate: {
+            return getDate(field.value, true);
+          }
+          case CaseFieldsNames.Caption:
+          case CaseFieldsNames.Description: {
+            return field.value ? (<string>field.value).substring(0, 30) : '';
+          }
+          case CaseFieldsNames.Cost: {
+            return field.value; // TODO: add Other cost and currency
+          }
+        }
+        return field.value;
+      };
+
+      const caseManagementFields = (name: string, field: ICaseField<any>) => {
+        switch (name) {
+          case CaseFieldsNames.WorkingGroupId: {
+            return getFromList(field.value, dataSource.workingGroupsStore$.value);
+          }
+          case CaseFieldsNames.CaseResponsibleUserId: {
+            return getFromList(field.value, dataSource.responsibleUsersStore$.value);
+          }
+          case CaseFieldsNames.PerformerUserId: {
+            return getFromList(field.value, dataSource.performersStore$.value);
+          }
+          case CaseFieldsNames.PriorityId: {
+            return getFromList(field.value, dataSource.prioritiesStore$.value);
+          }
+          case CaseFieldsNames.StatusId: {
+            return getFromList(field.value, dataSource.statusesStore$.value);
+          }
+          case CaseFieldsNames.StateSecondaryId: {
+            return getFromList(field.value, dataSource.stateSecondariesStore$.value);
+          }
+          case CaseFieldsNames.Project: {
+            return getFromList(field.value, dataSource.projectsStore$.value);
+          }
+          case CaseFieldsNames.Problem: {
+            return getFromList(field.value, dataSource.problemsStore$.value);
+          }
+          case CaseFieldsNames.CausingPart: {
+            return getFromList(field.value, dataSource.causingPartsStore$.value);
+          }
+          case CaseFieldsNames.Change: {
+            return getFromList(field.value, dataSource.changesStore$.value);
+          }
+          case CaseFieldsNames.PlanDate:
+          case CaseFieldsNames.WatchDate: {
+              return getDate(field.value, true);
+          }
+          case CaseFieldsNames.SolutionRate: {
+            return getFromList(field.value, dataSource.solutionsRatesStore$.value);
+          }
+        }
+        return field.value;
+      };
+
+      return section.caseSectionFields.map(name => {
+        if (this.hasField(caseData, name)) {
+           const field = this.getField(caseData, name);
+           if (field.value == null) {
+             return null;
+           }
+           switch (section.type) {
+            case CaseSectionType.Initiator:
+              return initiatorFields(name, field);
+
+            case CaseSectionType.Regarding:
+              return regardingFields(name, field);
+
+            case CaseSectionType.ComputerInfo:
+              return field.value;
+
+            case CaseSectionType.CaseInfo:
+              return caseInfoFields(name, field);
+
+            case CaseSectionType.CaseManagement:
+              return caseManagementFields(name, field);
+
+           }
+           return emptyValue;
+        }
+      })
+      .filter(value => value)
+      .join(' - ');
     }
 
     private createCaseOptionsFilter(caseData: CaseEditInputModel, getValue: (name: string) => number) {
