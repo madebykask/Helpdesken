@@ -494,47 +494,43 @@
                 source: function (query, process) {
                     lastInitiatorSearchKey = me.generateRandomKey();
 
-                    return $.ajax({
-                        url: searchUserUrl,
-                        type: 'post',
-                        data: { query: query, customerId: $('#NewCase_Customer_Id').val(), searchKey: lastInitiatorSearchKey },
-                        dataType: 'json',
-                        success: function (result) {
-                            if (result.searchKey != lastInitiatorSearchKey)
-                                return;
-                            fieldsVisibility = result.fieldsVisibility;
-                            var resultList = jQuery.map(result.result, function (item) {
+                    return me.runComputerUserSearchDataQuery(query, lastInitiatorSearchKey)
+                        .done(function (result) {
+                        if (result.searchKey !== lastInitiatorSearchKey)
+                            return;
+                        fieldsVisibility = result.fieldsVisibility;
+                        var resultList = jQuery.map(result.result,
+                            function(item) {
                                 var aItem = {
-                                    id: item.Id
-                                    , num: item.UserId
-                                    , name: item.FirstName + ' ' + item.SurName
-                                    , email: item.Email
-                                    , place: item.Location
-                                    , phone: item.Phone
-                                    , usercode: item.UserCode
-                                    , cellphone: item.CellPhone
-                                    , regionid: item.Region_Id
-                                    , regionname: item.RegionName
-                                    , departmentid: item.Department_Id
-                                    , departmentname: item.DepartmentName
-                                    , ouid: item.OU_Id
-                                    , ouname: item.OUName
-                                    , name_family: item.SurName + ' ' + item.FirstName
-                                    , customername: item.CustomerName
-                                    , costcentre: item.CostCentre
+                                    id: item.Id,
+                                    num: item.UserId,
+                                    name: item.FirstName + ' ' + item.SurName,
+                                    email: item.Email,
+                                    place: item.Location,
+                                    phone: item.Phone,
+                                    usercode: item.UserCode,
+                                    cellphone: item.CellPhone,
+                                    regionid: item.Region_Id,
+                                    regionname: item.RegionName,
+                                    departmentid: item.Department_Id,
+                                    departmentname: item.DepartmentName,
+                                    ouid: item.OU_Id,
+                                    ouname: item.OUName,
+                                    name_family: item.SurName + ' ' + item.FirstName,
+                                    customername: item.CustomerName,
+                                    costcentre: item.CostCentre
 
                                 };
                                 return JSON.stringify(aItem);
                             });
-                            if (resultList.length === 0) {
-                                var noRes = {
-                                    name: window.parameters.noResultLabel,
-                                    isNoResult: true
-                                }
-                                resultList.push(JSON.stringify(noRes));
+                        if (resultList.length === 0) {
+                            var noRes = {
+                                name: window.parameters.noResultLabel,
+                                isNoResult: true
                             }
-                            return process(resultList);
+                            resultList.push(JSON.stringify(noRes));
                         }
+                        return process(resultList);
                     });
                 },
 
@@ -616,26 +612,42 @@
                     if (item.isNoResult) {
                         return this.query;
                     }
-                    //console.log(JSON.stringify(item));
-                    $('#NewCase_ReportedBy').val(item.num);
-                    $('#NewCase_PersonsName').val(item.name);
-                    $('#NewCase_PersonsEmail').val(item.email);
-                    $('#NewCase_PersonsPhone').val(item.phone);
-                    $('#NewCase_PersonsCellphone').val(item.cellphone);
-                    $('#NewCase_Place').val(item.place);
-                    $('#NewCase_UserCode').val(item.usercode);
-                    $('#NewCase_Region_Id').val(item.regionid);
-                    $('#NewCase_CostCentre').val(item.costcentre);
-                    $('#NewCase_Department_Id').val(item.departmentid);
-                    
-                    me.setOrganizationData(item.regionid, item.departmentid, item.ouid);
+                    me.updateInitiator(item);
 
                     return item.num;
                 }
             };
 
             return options;
-        }
+    }
+
+    CasePage.prototype.runComputerUserSearchDataQuery = function(query, lastInitiatorSearchKey) {
+        return $.ajax({
+            url: searchUserUrl,
+            type: 'post',
+            data: {
+                query: query,
+                customerId: $('#NewCase_Customer_Id').val(),
+                searchKey: lastInitiatorSearchKey
+            },
+            dataType: 'json'
+        });
+    }
+
+    CasePage.prototype.updateInitiator = function(item) {
+        $('#NewCase_ReportedBy').val(item.num);
+        $('#NewCase_PersonsName').val(item.name);
+        $('#NewCase_PersonsEmail').val(item.email);
+        $('#NewCase_PersonsPhone').val(item.phone);
+        $('#NewCase_PersonsCellphone').val(item.cellphone);
+        $('#NewCase_Place').val(item.place);
+        $('#NewCase_UserCode').val(item.usercode);
+        $('#NewCase_Region_Id').val(item.regionid);
+        $('#NewCase_CostCentre').val(item.costcentre);
+        $('#NewCase_Department_Id').val(item.departmentid);
+
+        this.setOrganizationData(item.regionid, item.departmentid, item.ouid);
+    }
 
         CasePage.prototype._GetComputerSearchOptions = function () {
 
@@ -798,13 +810,14 @@
             });
         }
        
-        CasePage.prototype.init = function () {
+        CasePage.prototype.init = function (settings) {
             var self = this;
             customerId = $('#NewCase_Customer_Id').val();
             self.$regionControl = $('#NewCase_Region_Id');
             self.$departmentControl = $('#NewCase_Department_Id');
             self.$orgUnitControl = $('#NewCase_Ou_Id');
             self.$caseTypeControl = $(document.getElementById("NewCase.CaseType_Id"));
+            self.settings = $.extend({ useInitiatorAutocomplete: true }, settings);
             
             //tab arrows
             $("button.dropdown-toggle[data-toggle=dropdown]").on("click", function (e) {
@@ -879,7 +892,47 @@
                 return true;
             });
 
-            $('#NewCase_ReportedBy').typeahead(self._GetComputerUserSearchOptions()).focus();
+            const reportedBy$ = $('#NewCase_ReportedBy');
+            if (self.settings.useInitiatorAutocomplete) {
+                reportedBy$.typeahead(self._GetComputerUserSearchOptions()).focus();
+            } else {
+                reportedBy$.on('blur', function() {
+                    var value = $(this).val();
+                    if (value && value.length < 2) return;
+
+                    lastInitiatorSearchKey = self.generateRandomKey();
+                    self.runComputerUserSearchDataQuery(value, lastInitiatorSearchKey)
+                        .done(function(result) {
+                            if (result.searchKey !== lastInitiatorSearchKey || result.result.length > 1 || result.result.length === 0)
+                                return;
+                            var resultList = $.map(result.result,
+                                function (item) {
+                                    return {
+                                        id: item.Id,
+                                        num: item.UserId,
+                                        name: item.FirstName + ' ' + item.SurName,
+                                        email: item.Email,
+                                        place: item.Location,
+                                        phone: item.Phone,
+                                        usercode: item.UserCode,
+                                        cellphone: item.CellPhone,
+                                        regionid: item.Region_Id,
+                                        regionname: item.RegionName,
+                                        departmentid: item.Department_Id,
+                                        departmentname: item.DepartmentName,
+                                        ouid: item.OU_Id,
+                                        ouname: item.OUName,
+                                        name_family: item.SurName + ' ' + item.FirstName,
+                                        customername: item.CustomerName,
+                                        costcentre: item.CostCentre
+
+                                    };
+                                });
+                            self.updateInitiator(resultList[0]);
+                        });
+                });
+                reportedBy$.focus();
+            }
             $('#NewCase_InventoryNumber').typeahead(self._GetComputerSearchOptions());
 
             // Remove after implementing http://redmine.fastdev.se/issues/10995

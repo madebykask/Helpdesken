@@ -174,6 +174,17 @@ BEGIN
 	 WHERE [Name] = 'Ärendeöversikt'
 END
 
+
+RAISERROR ('Add UseInitiatorAutocomplete to tblCustomer table', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'UseInitiatorAutocomplete' and sysobjects.name = N'tblCustomer')
+BEGIN
+    ALTER TABLE tblCustomer
+    ADD UseInitiatorAutocomplete bit not null default 1 
+END
+
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.45'
 GO

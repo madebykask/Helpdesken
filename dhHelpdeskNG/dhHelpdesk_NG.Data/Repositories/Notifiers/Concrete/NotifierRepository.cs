@@ -272,7 +272,7 @@ namespace DH.Helpdesk.Dal.Repositories.Notifiers.Concrete
             return notifierWithUserIdOverviews;
         }
 
-        public IQueryable<ComputerUser> Search(int customerId, string searchFor, int? categoryId = null, IList<int> depIds = null)
+        public IQueryable<ComputerUser> Search(int customerId, string searchFor, int? categoryId = null, IList<int> depIds = null, bool exactSearch = false)
         {
             var s = (searchFor?.ToLower() ?? string.Empty).Trim();
             var emptyCategoryId = ComputerUserCategory.EmptyCategoryId;
@@ -294,17 +294,23 @@ namespace DH.Helpdesk.Dal.Repositories.Notifiers.Concrete
                                       categoryId > 0 &&
                                       cu.ComputerUsersCategoryID == categoryId // find users of the specified category
                                   ) &&
-                                  cu.Status != 0 &&
-                                  (cu.UserId.ToLower().Contains(s) || cu.FirstName.ToLower().Contains(s)
-                                   || cu.SurName.ToLower().Contains(s) || cu.Phone.ToLower().Contains(s)
-                                   || cu.Email.ToLower().Contains(s) || cu.UserCode.ToLower().Contains(s)
-                                   || (cu.SurName.ToLower() + " " + cu.FirstName.ToLower()).Contains(s)
-                                   || (cu.FirstName.ToLower() + " " + cu.SurName.ToLower()).Contains(s)));
-
-                                /* Disabled because they shouldn't be searchable*/
-                                //|| cu.Location.ToLower().Contains(s) 
-                                //|| cu.Cellphone.ToLower().Contains(s)
-                                //|| cu.Department.DepartmentName.ToLower().Contains(s));;
+                                  cu.Status != 0);
+            if (exactSearch)
+            {
+                query = query.Where(cu => cu.UserId.ToLower().Equals(s));
+            }
+            else
+            {
+                query = query.Where(cu => (cu.UserId.ToLower().Contains(s) || cu.FirstName.ToLower().Contains(s)
+                                                                           || cu.SurName.ToLower().Contains(s) ||
+                                                                           cu.Phone.ToLower().Contains(s)
+                                                                           || cu.Email.ToLower().Contains(s) ||
+                                                                           cu.UserCode.ToLower().Contains(s)
+                                                                           || (cu.SurName.ToLower() + " " +
+                                                                               cu.FirstName.ToLower()).Contains(s)
+                                                                           || (cu.FirstName.ToLower() + " " +
+                                                                               cu.SurName.ToLower()).Contains(s)));
+            }
 
             return query.OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ThenBy(x => x.Id);
         }

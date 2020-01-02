@@ -26,7 +26,7 @@ namespace DH.Helpdesk.Services.Services
         IList<ComputerUser> GetComputerUsers(int customerId);
         IList<ComputerUser> SearchSortAndGenerateComputerUsers(int customerId, IComputerUserSearch searchComputerUsers);
 
-        IList<UserSearchResults> SearchComputerUsers(int customerId, string searchFor, int? categoryId = null, IList<int> departmentIds = null);
+        IList<UserSearchResults> SearchComputerUsers(int customerId, string searchFor, int? categoryId = null, IList<int> departmentIds = null, bool exactSearch = false);
         Task<List<UserSearchResults>> SearchComputerUsersAsync(int customerId, string searchFor, int? categoryId = null, IList<int> departmentIds = null);
 
         IList<ComputerUserFieldSettings> GetComputerUserFieldSettings(int customerId);
@@ -179,11 +179,11 @@ namespace DH.Helpdesk.Services.Services
             return query.OrderBy(x => x.SurName).ToList();
         }
 
-        public IList<UserSearchResults> SearchComputerUsers(int customerId, string searchFor, int? categoryId = null, IList<int> departmentIds = null)
+        public IList<UserSearchResults> SearchComputerUsers(int customerId, string searchFor, int? categoryId = null, IList<int> departmentIds = null, bool exactSearch = false)
         {
             var selectExp = CreateUsersSearchProjection();
             var searchResults =
-                _computerUserRepository.Search(customerId, searchFor, categoryId, departmentIds)
+                _computerUserRepository.Search(customerId, searchFor, categoryId, departmentIds, exactSearch)
                     .Select(selectExp)
                     .Take(25)
                     .ToList();

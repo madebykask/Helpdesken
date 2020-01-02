@@ -132,6 +132,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             customerToSave.ShowFAQOnExternalStartPage = vmodel.Customer.ShowFAQOnExternalStartPage;
             customerToSave.ShowCoWorkersOnExternalPage = vmodel.Customer.ShowCoWorkersOnExternalPage;
             customerToSave.ShowHelpOnExternalPage = vmodel.Customer.ShowHelpOnExternalPage;
+            customerToSave.UseInitiatorAutocomplete = vmodel.Customer.UseInitiatorAutocomplete;
             customerToSave.UseInternalLogNoteOnExternalPage = vmodel.Customer.UseInternalLogNoteOnExternalPage;
             customerToSave.MyCasesFollower = vmodel.Customer.MyCasesFollower;
             customerToSave.MyCasesInitiator = vmodel.Customer.MyCasesInitiator;

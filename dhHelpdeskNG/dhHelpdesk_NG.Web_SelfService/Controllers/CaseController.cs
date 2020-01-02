@@ -811,6 +811,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var caseFieldSetting = _caseFieldSettingService.ListToShowOnCasePage(customerId, SessionFacade.CurrentLanguageId)
                                                           .Where(c => c.ShowExternal == 1)
                                                           .ToList();
+            
             var fieldsVisibility = new
             {
                 Name = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()),
@@ -819,7 +820,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 Department = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Department_Id.ToString()),
                 UserCode = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.UserCode.ToString())
             };
-            var result = _computerService.SearchComputerUsers(customerId, query);
+            var result = _computerService.SearchComputerUsers(customerId, query, null, null, !SessionFacade.CurrentCustomer.UseInitiatorAutocomplete);
             return Json(new { searchKey = searchKey, result = result, fieldsVisibility = fieldsVisibility });
         }
 

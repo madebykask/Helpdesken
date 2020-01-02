@@ -7688,6 +7688,24 @@ begin
 end
 GO
 
+If not exists (select * from tbltext where id = 2054)
+begin
+	insert into tbltext (id, TextString) VALUES (2054, 'Använd automatiska förslag vid sökning')
+
+	If not exists (select * from tblTextTranslation where text_id = 2054 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2054, 2, 'Use autocomplete to search')
+end
+GO
+
+If not exists (select * from tbltext where id = 2055)
+begin
+	insert into tbltext (id, TextString) VALUES (2055, 'Om ej aktiv, hämtas endast information om anmälaren vid exakt matchning av ID')
+
+	If not exists (select * from tblTextTranslation where text_id = 2055 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2055, 2, 'If disabled, only exact match of user ID fetches the information of the initiator')
+end
+GO
+
 
 
 -- Generate id sequence for customer generated IDs

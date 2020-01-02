@@ -197,6 +197,19 @@
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
+                                        @Translation.GetCoreTextTranslation("Anmälare")
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="customer.UseInitiatorAutocomplete" @(Model.Customer.UseInitiatorAutocomplete ? "checked=checked" : "") value="true" />
+                                        <input type="hidden" name="customer.UseInitiatorAutocomplete" value="0" />
+                                        &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Använd automatiska förslag vid sökning")
+                                        <span class="icon-info-sign ml15" rel="tooltip" 
+                                                           title="" 
+                                                           data-original-title='@Translation.GetCoreTextTranslation("Om ej aktiv, hämtas endast information om anmälaren vid exakt matchning av ID").'></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="span3">
                                         @Translation.GetCoreTextTranslation("Loggpost")
                                     </td>
                                     <td>
@@ -210,7 +223,7 @@
                                         @Translation.GetCoreTextTranslation("Möjligt att aktivera ärende inom")
                                     </td>
                                     <td>
-                                        @Html.TextBoxFor(m => m.CaseComplaintDays, new {style = "width: 40px;"})&nbsp;
+                                        @Html.TextBoxFor(m => m.CaseComplaintDays, new { style = "width: 40px;" })&nbsp;
                                         @Translation.GetCoreTextTranslation("dagar")
                                     </td>
                                 </tr>
