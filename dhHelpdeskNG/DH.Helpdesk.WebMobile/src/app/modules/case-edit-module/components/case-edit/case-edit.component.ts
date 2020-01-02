@@ -149,6 +149,7 @@ export class CaseEditComponent {
     private extendedCaseValidationObserver = this.extendedCaseValidation$.asObservable();
     private extendedCaseSave$ = new Subject<boolean>();
     private extendedCaseSaveObserver = this.extendedCaseSave$.asObservable();
+    private sectionHeadersInfo: { key: CaseSectionType, value: string }[] = [];
 
     ngOnInit() {
       this.commService.publish(Channels.Header, new HeaderEventData(false));
@@ -198,6 +199,7 @@ export class CaseEditComponent {
 
           this.initLock();
           this.processCaseData();
+          this.processSectionHeader();
           this.loadWorkflows(caseId);
           this.loadExtendedCase(this.caseData);
       });
@@ -228,25 +230,17 @@ export class CaseEditComponent {
         return this.caseSections.find(s => s.type == type).header;
     }
 
-    hasSectionInfo(type?: CaseSectionType): boolean {
-      if (this.caseSections == null) {
-        return false;
-      }
-      const section = this.caseSections.find(s => s.type == type);
-      return section.caseSectionFields && section.caseSectionFields.length !== 0;
+    getSectionHeaderInfoText(type: CaseSectionType): string {
+      if (!this.hasSectionHeaderInfo(type)) { return ''; }
+      return this.sectionHeadersInfo.find(s => s.key == type).value;
     }
 
-    getSectionInfo(type?: CaseSectionType): string {
-      const defaultValue = '';
-      if (this.caseSections == null) {
-        return defaultValue;
+    hasSectionHeaderInfo(type: CaseSectionType): boolean {
+      if (this.sectionHeadersInfo == null) {
+        return false;
       }
-      const section = this.caseSections.find(s => s.type == type);
-      if (!section.caseSectionFields || !section.caseSectionFields.length) {
-        return defaultValue;
-      }
-
-      return this.caseDataHelpder.getSectionInfoFields(section, this.dataSource, this.caseData);
+      const section = this.sectionHeadersInfo.find(s => s.key == type);
+      return section.value && section.value.length !== 0;
     }
 
     isSectionOpen(type: CaseSectionType) {
@@ -552,6 +546,7 @@ export class CaseEditComponent {
 
           this.initLock();
           this.processCaseData();
+          this.processSectionHeader();
           this.loadExtendedCase(this.caseData);
       });
     }
@@ -593,6 +588,30 @@ export class CaseEditComponent {
           this.caseFiles = [];
         }
       }
+    }
+
+    private getSectionInfo(type?: CaseSectionType): string {
+      const defaultValue = '';
+      if (this.caseSections == null) {
+        return defaultValue;
+      }
+      const section = this.caseSections.find(s => s.type == type);
+      if (!section.caseSectionFields || !section.caseSectionFields.length) {
+        return defaultValue;
+      }
+
+      return this.caseDataHelpder.getSectionInfoFields(section, this.dataSource, this.caseData);
+    }
+
+    private processSectionHeader() {
+      const headersToProcess = new Array<CaseSectionType>(CaseSectionType.Initiator,
+        CaseSectionType.Regarding,
+        CaseSectionType.CaseInfo,
+        CaseSectionType.ComputerInfo,
+        CaseSectionType.CaseManagement);
+        headersToProcess.forEach(t => {
+          this.sectionHeadersInfo.push({key: t, value: this.getSectionInfo(t)});
+        });
     }
 
     private loadCaseActions() {

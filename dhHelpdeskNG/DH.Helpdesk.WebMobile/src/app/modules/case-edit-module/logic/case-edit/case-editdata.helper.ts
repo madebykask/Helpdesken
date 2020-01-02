@@ -89,13 +89,13 @@ export class CaseEditDataHelper {
 
       const regardingFields = (name: string, field: ICaseField<any>) => {
         switch (name) {
-          case CaseFieldsNames.RegionId: {
+          case CaseFieldsNames.IsAbout_RegionId: {
             return getFromList(field.value, dataSource.regionsStore$.value);
           }
-          case CaseFieldsNames.DepartmentId: {
+          case CaseFieldsNames.IsAbout_DepartmentId: {
             return getFromList(field.value, dataSource.isAboutDepartmentsStore$.value);
           }
-          case CaseFieldsNames.OrganizationUnitId: {
+          case CaseFieldsNames.IsAbout_OrganizationUnitId: {
             return getFromList(field.value, dataSource.isAboutOUsStore$.value);
           }
         }
