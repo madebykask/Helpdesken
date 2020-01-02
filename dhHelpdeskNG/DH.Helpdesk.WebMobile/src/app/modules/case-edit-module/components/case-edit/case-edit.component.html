@@ -37,8 +37,9 @@
     <div class="md-paging">
       <form [formGroup]="form" novalidate>
           <mbsc-form-group collapsible [open]="isNewCase" *ngIf="hasSection(caseSectionTypes.Initiator)">
-            <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Initiator) }}
-              <div class="section-info">{{ getSectionInfo(caseSectionTypes.Initiator) }}</div>
+            <mbsc-form-group-title>
+              <ng-container [ngTemplateOutlet]="hasSectionInfo(caseSectionTypes.Initiator) ? hasInfo : noInfo"
+              [ngTemplateOutletContext]="{name: caseSectionTypes.Initiator}" ></ng-container>
             </mbsc-form-group-title>
               <mbsc-form-group-content>
                   <!-- TODO: ComputerUserCategories -->
@@ -60,8 +61,9 @@
           </mbsc-form-group>
 
           <mbsc-form-group collapsible [open]="isNewCase" #regardingSection *ngIf="hasSection(caseSectionTypes.Regarding)">
-            <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Regarding) }}
-              <div class="section-info">{{ getSectionInfo(caseSectionTypes.Regarding) }}</div>
+            <mbsc-form-group-title>
+              <ng-container [ngTemplateOutlet]="hasSectionInfo(caseSectionTypes.Regarding) ? hasInfo : noInfo"
+                [ngTemplateOutletContext]="{name: caseSectionTypes.Regarding}" ></ng-container>
             </mbsc-form-group-title>
               <mbsc-form-group-content >
                   <!-- TODO: ComputerUserCategories -->
@@ -83,8 +85,9 @@
           </mbsc-form-group>
 
           <mbsc-form-group collapsible [open]="isNewCase" #ComputerInfoSection *ngIf="hasSection(caseSectionTypes.ComputerInfo)">
-            <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.ComputerInfo) }}
-              <div class="section-info">{{ getSectionInfo(caseSectionTypes.ComputerInfo) }}</div>
+            <mbsc-form-group-title>
+              <ng-container [ngTemplateOutlet]="hasSectionInfo(caseSectionTypes.ComputerInfo) ? hasInfo : noInfo"
+              [ngTemplateOutletContext]="{name: caseSectionTypes.ComputerInfo}" ></ng-container>
             </mbsc-form-group-title>
               <mbsc-form-group-content>
                       <case-textbox-control *ngIf="showField(caseFieldsNames.InventoryNumber)" [field]="caseFieldsNames.InventoryNumber" [form]="form"></case-textbox-control>
@@ -94,8 +97,9 @@
           </mbsc-form-group>
 
           <mbsc-form-group collapsible [open]="isNewCase" #caseInfoSection *ngIf="hasSection(caseSectionTypes.CaseInfo)">
-            <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.CaseInfo) }}
-              <div class="section-info">{{ getSectionInfo(caseSectionTypes.CaseInfo) }}</div>
+            <mbsc-form-group-title>
+              <ng-container [ngTemplateOutlet]="hasSectionInfo(caseSectionTypes.CaseInfo) ? hasInfo : noInfo"
+              [ngTemplateOutletContext]="{name: caseSectionTypes.CaseInfo}" ></ng-container>
             </mbsc-form-group-title>
               <mbsc-form-group-content>
                       <case-textbox-control *ngIf="showField(caseFieldsNames.CaseNumber)" [field]="caseFieldsNames.CaseNumber" [form]="form" disabled=true></case-textbox-control>
@@ -139,8 +143,9 @@
           </mbsc-form-group>
 
           <mbsc-form-group collapsible [open]="isNewCase" #caseManagementSection *ngIf="hasSection(caseSectionTypes.CaseManagement)">
-              <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.CaseManagement) }}
-                <div class="section-info">{{ getSectionInfo(caseSectionTypes.CaseManagement) }}</div>
+              <mbsc-form-group-title>
+                <ng-container [ngTemplateOutlet]="hasSectionInfo(caseSectionTypes.CaseManagement) ? hasInfo : noInfo"
+                [ngTemplateOutletContext]="{name: caseSectionTypes.CaseManagement}" ></ng-container>
               </mbsc-form-group-title>
               <mbsc-form-group-content>
                   <case-dropdown-control *ngIf="showField(caseFieldsNames.WorkingGroupId)" [field]="caseFieldsNames.WorkingGroupId" [form]="form" [dataSource]="dataSource.workingGroupsStore$"></case-dropdown-control>
@@ -162,7 +167,7 @@
           </mbsc-form-group>
 
           <mbsc-form-group collapsible [open]="isNewCase" #statusSection *ngIf="showField(caseFieldsNames.FinishingDate) && caseFieldsNames.FinishingDate.value != null">
-            <mbsc-form-group-title>&nbsp;<div>{{ getSectionHeader(caseSectionTypes.Status) }</div>}
+            <mbsc-form-group-title>&nbsp;<div>{{ getSectionHeader(caseSectionTypes.Status) }}</div>
             </mbsc-form-group-title>
               <mbsc-form-group-content>
                   <case-textarea-control *ngIf="showField(caseFieldsNames.FinishingDescription)" [field]="caseFieldsNames.FinishingDescription" [form]="form" [readOnly]="true"></case-textarea-control>
@@ -206,3 +211,11 @@
   </div>
   <case-menu *ngIf="isLoaded && !isLocked" [dataSource]="dataSource.workflowsStore$" (clickWorkflow)="onClickWorkflow($event)"></case-menu>
 </div>
+
+<ng-template #hasInfo let-name="name">
+  {{ getSectionHeader(name) }}
+  <div class="section-info">{{ getSectionInfo(name) }}</div>
+</ng-template>
+<ng-template #noInfo let-name="name">
+  &nbsp;<div>{{ getSectionHeader(name) }}</div>
+</ng-template>

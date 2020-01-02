@@ -228,8 +228,16 @@ export class CaseEditComponent {
         return this.caseSections.find(s => s.type == type).header;
     }
 
+    hasSectionInfo(type?: CaseSectionType): boolean {
+      if (this.caseSections == null) {
+        return false;
+      }
+      const section = this.caseSections.find(s => s.type == type);
+      return section.caseSectionFields && section.caseSectionFields.length !== 0;
+    }
+
     getSectionInfo(type?: CaseSectionType): string {
-      const defaultValue = '&nbsp';
+      const defaultValue = '';
       if (this.caseSections == null) {
         return defaultValue;
       }
