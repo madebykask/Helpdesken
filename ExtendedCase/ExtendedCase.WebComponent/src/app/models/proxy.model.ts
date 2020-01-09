@@ -96,7 +96,7 @@ export class ProxyControl {
     }
 }
 
-export class FormInfo{
+export class FormInfo {
     caseId: number;
     userRole: number;
     caseStatus: number;
@@ -107,6 +107,7 @@ export class FormInfo{
     currentUser: string;
     isCaseLocked: boolean;
     applicationType: string;
+    useInitiatorAutocomplete: boolean;
 
     constructor(formParameters: FormParametersModel) {
         this.userRole = formParameters.assignmentParameters ? cm.parseIntOrDefault(formParameters.assignmentParameters.userRole, 0) : 0;
@@ -119,5 +120,6 @@ export class FormInfo{
         this.currentUser = formParameters.currentUser || '';
         this.isCaseLocked = formParameters.isCaseLocked || false;
         this.applicationType = formParameters.applicationType || '';
+        this.useInitiatorAutocomplete = formParameters.useInitiatorAutocomplete != null ? formParameters.useInitiatorAutocomplete : true;
     }
 }

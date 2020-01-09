@@ -2,6 +2,7 @@
 @using System.Web.Optimization
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Common.Enums
+@using DH.Helpdesk.Common.Extensions.Boolean
 
 @model DH.Helpdesk.SelfService.Models.Case.ExtendedCaseViewModel
 
@@ -67,6 +68,7 @@
         caseId:  @Model.CaseId,
         templateId: @(Model.CaseTemplateId ?? 0),
         customerId: @Model.CustomerId,
+        useInitiatorAutocomplete: @Model.CurrentCustomer.UseInitiatorAutocomplete.ToJavaScriptBool(),
         caseFieldIds: {
             CaseId: "CaseDataModel_Id",
             CustomerId: "CaseDataModel_Customer_Id",

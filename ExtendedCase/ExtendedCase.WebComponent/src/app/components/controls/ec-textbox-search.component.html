@@ -7,25 +7,33 @@
         {{ fieldTemplate.label }}<span [class.required-invalid]="fieldModel.control.invalid">{{ isRequiredLabel }}</span>
     </label>
     <div class="col-md-6">
-        <div class="input-group" [class.ng-invalid]="fieldModel.control.invalid === true">
-            <input [formControlName]="fieldTemplate.id"
-                   [id]="fieldModel.getUiPath()"
-                   [typeahead]="dataSource"
-                   (typeaheadOnSelect)="onSelect($event)"
-                   (typeaheadLoading)="changeTypeaheadLoading($event)"
-                   typeaheadOptionsLimit="7"
-                   typeaheadMinLength="1"
-                   typeaheadWaitMs="100"
-                   (blur)="onBlur($event)"
-                   (keydown)="onStartTyping($event)"
-                   placeholder=""
-                   typeaheadOptionField="text"
-                   class="form-control"
-                   autocomplete="off">
-            <div class="input-group-addon" aria-hidden="true">
-                <span [ngClass]="(typeaheadLoading === true) ? 'glyphicon glyphicon-refresh' : 'glyphicon glyphicon-search'"></span>
+          <ng-container *ngIf="fieldModel.showSearchResults">
+            <div class="input-group" [class.ng-invalid]="fieldModel.control.invalid === true">
+              <input [formControlName]="fieldTemplate.id"
+                    [id]="fieldModel.getUiPath()"
+                    [typeahead]="dataSource"
+                    (typeaheadOnSelect)="onSelect($event)"
+                    (typeaheadLoading)="changeTypeaheadLoading($event)"
+                    typeaheadOptionsLimit="7"
+                    typeaheadMinLength="1"
+                    typeaheadWaitMs="100"
+                    (blur)="onBlur($event)"
+                    (keydown)="onStartTyping($event)"
+                    placeholder=""
+                    typeaheadOptionField="text"
+                    class="form-control"
+                    autocomplete="off">
+              <div class="input-group-addon" aria-hidden="true">
+                  <span [ngClass]="(typeaheadLoading === true) ? 'glyphicon glyphicon-refresh' : 'glyphicon glyphicon-search'"></span>
+              </div>
             </div>
-        </div>
+          </ng-container>
+          <ng-container *ngIf="!fieldModel.showSearchResults">
+            <div>
+              <!-- <input class="form-control" [id]="fieldModel.getUiPath()" (blur)="onBlur($event)"> -->
+              <input hidden [formControlName]="fakeControlName" [id]="fieldModel.getUiPath()" class="form-control" (blur)="onBlur($event)">
+            </div>
+          </ng-container>
         <validation-error [control]="fieldModel.control"></validation-error>
         <validation-warnings [warnings]="fieldModel.warnings"></validation-warnings>
     </div>

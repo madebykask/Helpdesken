@@ -160,7 +160,8 @@ export class SectionInstanceModel {
     - Raise controlValueChanged event: lastValue is used to check if it was a ui change or digest change (programmatic).
       During digest value change (valueBinding func) lastValue is set to new control value which indicates that controlValueChanged event is not required since value was changed programatically.
       During ui change values (lastValue and control.value) will be different and event will be raised to trigger new digest to run since the change was trigger by a user on ui.
-   - Restore to previous value: lastValue is also used as the source of field's previous value when handling controlValueChanged event since the event has only new value in the args and before lastValue is set to new control value the prevValue field is assigned the lastValue (see ExtendedCaseComponent.ts\subscribeValueChangedEvents);
+   - Restore to previous value: lastValue is also used as the source of field's previous value when handling controlValueChanged event since the event 
+    has only new value in the args and before lastValue is set to new control value the prevValue field is assigned the lastValue (see ExtendedCaseComponent.ts\subscribeValueChangedEvents);
   2. PreviousValue field: field is used to store field previous value and its updated automatically when lastValue is changed via setLastValue method.
      PreviousValue is used to be able to restore section values during disabling section (one of the behaviors)
  */
@@ -171,6 +172,7 @@ export abstract class FieldModelBase {
     preFilteredItems: ItemModel[];
     items: ItemModel[];
     warnings: string[];
+    showSearchResults = true;
 
     // state fields
     private _originalValue: any;
@@ -226,7 +228,9 @@ export abstract class FieldModelBase {
     protected abstract changeControlValue(value: any): void;
 
     setPristine(isPristine?: boolean) {
-        if (typeof isPristine !== 'boolean') return;
+        if (typeof isPristine !== 'boolean') {
+           return
+          };
         if (isPristine) {
             this.getControlGroup().markAsPristine();
         } else {
@@ -350,11 +354,11 @@ export class MultiControlFieldModel extends FieldModelBase {
 }
 
 export class ItemModel {
-    constructor(public value: string, public text: string) { }
+  static createEmptyElement(text: string) {
+    return new ItemModel('', text);
+}
 
-    static createEmptyElement(text: string) {
-        return new ItemModel('', text);
-    }
+    constructor(public value: string, public text: string) { }
 }
 
 export class FormControlType {

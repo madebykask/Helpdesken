@@ -4,8 +4,8 @@ import { WindowWrapper } from '../shared/window-wrapper'
 @Injectable()
 export class StorageService {
     private nativeWindow: any;
-    private tokenDataKey: string = 'TokenData';
-    private globalDataKey: string = 'GlobalData';
+    private tokenDataKey = 'TokenData';
+    private globalDataKey = 'GlobalData';
 
     constructor(private windowWrapper: WindowWrapper) {
         this.nativeWindow = windowWrapper.nativeWindow;
@@ -34,33 +34,33 @@ export class StorageService {
         let globalData = this.getGlobalData();
         if (globalData && globalData.hasOwnProperty('CaseId')) {
             caseId = parseInt(globalData.CaseId);
-            if (isNaN(caseId))
+            if (isNaN(caseId)) {
                 caseId = 0;
+            }
         }
         return caseId;
     }
 
     // token data
-    private getTokenData():any {
+    private getTokenData(): any {
         let tokenData: any = null;
-        var val = this.getLocalItem('TokenData');
+        let val = this.getLocalItem('TokenData');
         if (val) {
             try {
                 tokenData = JSON.parse(val);
-            }
-            catch(err) {
+            } catch (err) {
             }
         }
         return tokenData;
     }
 
-    private saveTokenData(data:any) {
+    private saveTokenData(data: any) {
         let val = JSON.stringify(data);
         this.setLocalItem('TokenData', val);
     }
 
     //  global data
-    private getGlobalData():any {
+    private getGlobalData(): any {
         let globalData: any = null;
         let val = this.getSessionItem('GlobalData');
         if (val) {
@@ -74,11 +74,10 @@ export class StorageService {
         return globalData;
     }
 
-    private setGlobalData(data:any) {
-        var val = JSON.stringify(data);
+    private setGlobalData(data: any) {
+        let val = JSON.stringify(data);
         this.setSessionItem('GlobalData', val);
     }
-    
 
     // Local storage
     private setLocalItem(key: string, value: string) {
@@ -88,7 +87,6 @@ export class StorageService {
     private getLocalItem(key: string): string {
         return this.nativeWindow.localStorage.getItem(key);
     }
-
 
     // Session storage
     private setSessionItem(key: string, value: string) {
