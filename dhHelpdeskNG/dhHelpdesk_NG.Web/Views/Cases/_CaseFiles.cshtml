@@ -33,13 +33,21 @@
                     var date = TimeZoneInfo.ConvertTimeFromUtc(file.CreatedDate.ToUniversalTime(), userTimezone);
                     <tr data-field="caseFile" data-field-id="@Model.ObjectId" data-field-name="@file.FileName">
                         <td>
-                            @if (Model.VirtualDirectory)
+                            @*temporary file downloaded only by action, not directly*@
+                            @if (Model.VirtualDirectory && !file.IsTemporary)
                             {
-                                <a target="_blank" onclick="window.dhHelpdesk.logFileAccess(@Model.ObjectId, '@file.FileName', @((int)CaseFileType.CaseFile))" href="@Html.Action("CaseFileLinkVD","FileHandler", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
+                                <a target="_blank" onclick="window.dhHelpdesk.logFileAccess(@Model.ObjectId, '@file.FileName', @((int) CaseFileType.CaseFile))"
+                                   href="@Html.Action("CaseFileLinkVD", "FileHandler",
+                                             new RouteValueDictionary {{"id", Model.ObjectId}, {"fileName", file.FileName}})">
+                                    <i class="icon-file"></i>@file.FileName
+                                </a>
                             }
                             else
                             {
-                                <a href="@Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.ObjectId }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
+                                <a href="@Url.Action("DownloadFile",
+                                             new RouteValueDictionary {{"id", Model.ObjectId}, {"fileName", file.FileName}, {"isTemporary", file.IsTemporary}})">
+                                    <i class="icon-file"></i>@file.FileName
+                                </a>
                             }
                         </td>
                         <td>

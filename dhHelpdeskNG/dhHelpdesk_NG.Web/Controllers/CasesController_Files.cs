@@ -32,7 +32,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             IList<CaseFileModel> caseFiles = new List<CaseFileModel>();
             var files = _userTemporaryFilesStorage.FindFileNamesAndDates(id, ModuleName.Cases);
-            var tempCaseFiles = MakeCaseFileModel(files, savedFiles, true);
+            var tempCaseFiles = CreateCaseFileModel(files, savedFiles, true);
 
             if (!GuidHelper.IsGuid(id))
             {
@@ -286,11 +286,11 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
 		[AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)]
-		public UnicodeFileContentResult DownloadFile(string id, string fileName)
+		public UnicodeFileContentResult DownloadFile(string id, string fileName, bool isTemporary = false)
         {
             byte[] fileContent;
 
-            if (GuidHelper.IsGuid(id))
+            if (GuidHelper.IsGuid(id) || isTemporary)
                 fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases);
             else
             {
@@ -306,7 +306,8 @@ namespace DH.Helpdesk.Web.Controllers
                 if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
                 {
                     var userId = SessionFacade.CurrentUser?.Id ?? 0;
-                    _fileViewLogService.Log(caseId, userId, fileName, model.FilePath, FileViewLogFileSource.Helpdesk, FileViewLogOperation.View);
+                    _fileViewLogService.Log(caseId, userId, fileName, model.FilePath,
+                        FileViewLogFileSource.Helpdesk, FileViewLogOperation.View);
 
                 }
             }
@@ -394,7 +395,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult GetCaseFilesJS(int caseId)
         {
             var files = _caseFileService.FindFileNamesAndDatesByCaseId(caseId);
-            var cfs = MakeCaseFileModel(files, string.Empty);
+            var cfs = CreateCaseFileModel(files, string.Empty);
             var customerId = 0;
             customerId = _caseService.GetCaseById(caseId).Customer_Id;
 
@@ -469,7 +470,7 @@ namespace DH.Helpdesk.Web.Controllers
             return PartialView("_CaseHistory", caseHistoryViewModel);
         }
 
-        private IList<CaseFileModel> MakeCaseFileModel(IList<CaseFileDate> files, string savedFiles, bool isTemporary = false)
+        private IList<CaseFileModel> CreateCaseFileModel(IList<CaseFileDate> files, string savedFiles, bool isTemporary = false)
         {
             var res = new List<CaseFileModel>();
             int i = 0;
