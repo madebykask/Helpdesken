@@ -173,6 +173,14 @@ BEGIN
 	 [Name] = 'Sammanfattning - Ärende'
 	 WHERE [Name] = 'Ärendeöversikt'
 END
+RAISERROR ('Add column UseMobileRouting to tblSettings', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'UseMobileRouting' and sysobjects.name = N'tblSettings')
+BEGIN
+	ALTER TABLE tblSettings
+	ADD UseMobileRouting BIT NOT NULL DEFAULT(0)
+END
+
 
 
 RAISERROR ('Add UseInitiatorAutocomplete to tblCustomer table', 10, 1) WITH NOWAIT

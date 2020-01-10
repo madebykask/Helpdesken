@@ -72,7 +72,9 @@ namespace DH.Helpdesk.Services.Services
             string relatedCasesUserId = null,
             int[] caseIds = null,
             bool countOnly = false);
-    }
+
+		CustomerUserCase[] SearchActiveCustomerUserCases(bool myCases, int currentUserId, int? customerId, string freeText, int from, int count, string orderby = null, bool orderAscending = true);
+	}
 
     public class CaseSearchService : ICaseSearchService
     {
@@ -80,7 +82,8 @@ namespace DH.Helpdesk.Services.Services
         private const string TimeLeftColumnLower = "_temporary_leadtime";
 
         private readonly ICaseSearchRepository _caseSearchRepository;
-        private readonly IProductAreaRepository _productAreaRepository;
+		private readonly ICaseRepository _caseRepository;
+		private readonly IProductAreaRepository _productAreaRepository;
         private readonly ICaseTypeRepository _caseTypeRepository;
         private readonly ILogRepository _logRepository;
         private readonly IProductAreaService _productAreaService;
@@ -95,6 +98,7 @@ namespace DH.Helpdesk.Services.Services
 
 		public CaseSearchService(
             ICaseSearchRepository caseSearchRepository,
+			ICaseRepository caseRepository,
             IProductAreaRepository productAreaRepository,
             ICaseTypeRepository caseTypeRepository,
             ILogRepository logRepository,
@@ -107,7 +111,8 @@ namespace DH.Helpdesk.Services.Services
 			IUserService userService)
 		{
             _caseSearchRepository = caseSearchRepository;
-            _productAreaRepository = productAreaRepository;
+			_caseRepository = caseRepository;
+			_productAreaRepository = productAreaRepository;
             _caseTypeRepository = caseTypeRepository;
             _logRepository = logRepository;
             _globalSettingService = globalSettingService;
@@ -821,11 +826,24 @@ namespace DH.Helpdesk.Services.Services
             return csr;
         }
 
-        #endregion
 
-        #region Helpder Methods
+		public CustomerUserCase[] SearchActiveCustomerUserCases(bool myCases, int currentUserId, int? customerId, string freeText, int from, int count, string orderby = null, bool orderbyAscending = true)
+		{
+			// Internal log access
+			var user = _userService.GetUser(currentUserId);
+			var searchInternalLog = _userPermissionsChecker.UserHasPermission(user, UserPermission.CaseInternalLogPermission);
 
-        private static GlobalEnums.CaseIcon GetCaseIcon(IDataReader dr)
+			var query = _caseRepository.GetActiveCustomerUserCases(myCases, currentUserId, customerId, freeText, from, count, orderby, orderbyAscending, searchInternalLog);
+
+			return query.ToArray();
+		}
+
+
+		#endregion
+
+		#region Helpder Methods
+
+		private static GlobalEnums.CaseIcon GetCaseIcon(IDataReader dr)
         {
             var ret = GlobalEnums.CaseIcon.Normal;
 

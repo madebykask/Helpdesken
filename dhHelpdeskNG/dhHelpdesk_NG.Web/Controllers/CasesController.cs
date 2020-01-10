@@ -974,7 +974,6 @@ namespace DH.Helpdesk.Web.Controllers
         {
             // Save current case
             int caseId = Save(m);
-
             #region Case Split
 
             // Create a split child if specified

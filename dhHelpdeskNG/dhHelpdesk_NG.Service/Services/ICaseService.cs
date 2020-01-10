@@ -122,7 +122,7 @@ namespace DH.Helpdesk.Services.Services
 
         MyCase[] GetMyCases(int userId, int? count = null);
 
-        StateSecondary GetCaseSubStatus(int caseId);
+		StateSecondary GetCaseSubStatus(int caseId);
 
         CustomerCases[] GetCustomersCases(int[] customerIds, int userId);
 

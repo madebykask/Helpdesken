@@ -672,7 +672,7 @@ namespace DH.Helpdesk.Services.Services
             return _caseRepository.GetMyCases(userId, count);
         }
 
-        public StateSecondary GetCaseSubStatus(int caseId)
+		public StateSecondary GetCaseSubStatus(int caseId)
         {
             return _caseRepository.GetCaseSubStatus(caseId);
         }

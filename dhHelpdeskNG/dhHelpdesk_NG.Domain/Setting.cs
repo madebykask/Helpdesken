@@ -151,5 +151,7 @@ namespace DH.Helpdesk.Domain
         public int DefaultCaseTemplateId { get; set; }
         public bool QuickLinkWGRestriction { get; set; }
         public bool AllowMoveCaseToAnyCustomer { get; set; }
-    }
+
+		public bool UseMobileRouting { get; set; }
+	}
 }

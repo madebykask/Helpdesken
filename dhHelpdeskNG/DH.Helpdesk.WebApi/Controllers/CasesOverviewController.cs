@@ -24,6 +24,7 @@ using DH.Helpdesk.Models.CasesOverview;
 using DH.Helpdesk.WebApi.Infrastructure.Authentication;
 using DH.Helpdesk.WebApi.Logic.Case;
 using DH.Helpdesk.WebApi.Models.Output;
+using DH.Helpdesk.Common.Enums.Cases;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -37,14 +38,16 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IUserService _userSerivice;
         private readonly ICustomerService _customerService;
         private readonly ICaseTranslationService _caseTranslationService;
+		private readonly ICaseService _caseService;
 
-        public CasesOverviewController(ICaseSearchService caseSearchService,
+		public CasesOverviewController(ICaseSearchService caseSearchService,
             ICustomerUserService customerUserService,
             ICaseSettingsService caseSettingService,
             ICaseFieldSettingService caseFieldSettingService,
             ICaseTranslationService caseTranslationService,
             IUserService userSerivice,
-            ICustomerService customerService)
+            ICustomerService customerService,
+			ICaseService caseService)
         {
             _caseTranslationService = caseTranslationService;
             _caseSearchService = caseSearchService;
@@ -53,6 +56,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _caseFieldSettingService = caseFieldSettingService;
             _userSerivice = userSerivice;
             _customerService = customerService;
+			_caseService = caseService;
         }
 
         [HttpGet]
@@ -87,97 +91,133 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<SearchResult<CaseSearchResult>> Search([FromUri]int cid, [FromBody]SearchOverviewFilterInputModel input)
+        public async Task<SearchResult<CaseSearchResult>> Search([FromBody]SearchOverviewFilterInputModel input, int? cid = null)
         {
-            var userGroupId = User.Identity.GetGroupId();
-            var userOverview = await _userSerivice.GetUserOverviewAsync(UserId);
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(userOverview.TimeZoneId);
-            var filter = CreateSearchFilter(input, cid);
+			SearchResult<CaseSearchResult> searchResult = null;
+			if (input.CustomersIds.Count == 1) // TODO: fix? 
+			{
+				var userGroupId = User.Identity.GetGroupId();
+				var userOverview = await _userSerivice.GetUserOverviewAsync(UserId);
+				var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(userOverview.TimeZoneId);
+				var filter = CreateSearchFilter(input, cid.Value);
 
-            var customerSettings = await _customerService.GetCustomerAsync(filter.CustomerId);
+				var customerSettings = await _customerService.GetCustomerAsync(filter.CustomerId);
 
-            var currentUserId = filter.UserId;
-            var customerId = filter.CustomerId;
+				var currentUserId = filter.UserId;
+				var customerId = filter.CustomerId;
 
-            //var sm = await InitCaseSearchModel(filter.CustomerId, filter.UserId, filter);
-            var sm = new CaseSearchModel()
-            {
-                CaseSearchFilter = filter,
-                Search = new Search()
-                {
-                    SortBy = GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
-                    Ascending = false
-                }
-            };
+				//var sm = await InitCaseSearchModel(filter.CustomerId, filter.UserId, filter);
+				var sm = new CaseSearchModel()
+				{
+					CaseSearchFilter = filter,
+					Search = new Search()
+					{
+						SortBy = GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
+						Ascending = false
+					}
+				};
 
-            if (!string.IsNullOrWhiteSpace(input.OrderBy))
-                sm.Search.SortBy = input.OrderBy;
+				if (!string.IsNullOrWhiteSpace(input.OrderBy))
+					sm.Search.SortBy = input.OrderBy;
 
-            if (input.Ascending.HasValue)
-                sm.Search.Ascending = input.Ascending.Value;
+				if (input.Ascending.HasValue)
+					sm.Search.Ascending = input.Ascending.Value;
 
 
-            var caseSettings = _caseSettingService.GetCaseSettingsWithUser(filter.CustomerId, filter.UserId, userGroupId);
-            AddMissingCaseSettingsForMobile(caseSettings); //TODO: Temporary  - remove after mobile case settings is implemented
+				var caseSettings = _caseSettingService.GetCaseSettingsWithUser(filter.CustomerId, filter.UserId, userGroupId);
+				AddMissingCaseSettingsForMobile(caseSettings); //TODO: Temporary  - remove after mobile case settings is implemented
 
-            var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(filter.CustomerId);
-            var customerUserSettings = await _customerUserService.GetCustomerUserSettingsAsync(customerId, currentUserId);
+				var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(filter.CustomerId);
+				var customerUserSettings = await _customerUserService.GetCustomerUserSettingsAsync(customerId, currentUserId);
 
-            CaseRemainingTimeData remainingTimeData;
-            CaseAggregateData aggregateData;
+				CaseRemainingTimeData remainingTimeData;
+				CaseAggregateData aggregateData;
 
-            SearchResult<CaseSearchResult> searchResult = null;
 
-            if (input.CountOnly)
-            {
-                // run count only query 
-                searchResult = _caseSearchService.Search(
-                    filter,
-                    caseSettings,
-                    caseFieldSettings.ToArray(),
-                    filter.UserId,
-                    UserName,
-                    userOverview.ShowNotAssignedWorkingGroups,
-                    userGroupId,
-                    customerUserSettings.RestrictedCasePermission,
-                    sm.Search,
-                    customerSettings.WorkingDayStart,
-                    customerSettings.WorkingDayEnd,
-                    userTimeZone,
-                    ApplicationTypes.HelpdeskMobile,
-                    userOverview.ShowSolutionTime,
-                    out remainingTimeData,
-                    out aggregateData,
-                    null,
-                    null,
-                    null,
-                    countOnly: true);
-            }
-            else
-            {
-                // run normal search request
-                searchResult = _caseSearchService.Search(
-                    filter,
-                    caseSettings,
-                    caseFieldSettings.ToArray(),
-                    filter.UserId,
-                    UserName,
-                    userOverview.ShowNotAssignedWorkingGroups,
-                    userGroupId,
-                    customerUserSettings.RestrictedCasePermission,
-                    sm.Search,
-                    customerSettings.WorkingDayStart,
-                    customerSettings.WorkingDayEnd,
-                    userTimeZone,
-                    ApplicationTypes.HelpdeskMobile,
-                    userOverview.ShowSolutionTime,
-                    out remainingTimeData,
-                    out aggregateData);
-            }
 
-            //searchResults = CommonHelper.TreeTranslate(m.cases, f.CustomerId, _productAreaService);
+				if (input.CountOnly)
+				{
+					// run count only query 
+					searchResult = _caseSearchService.Search(
+						filter,
+						caseSettings,
+						caseFieldSettings.ToArray(),
+						filter.UserId,
+						UserName,
+						userOverview.ShowNotAssignedWorkingGroups,
+						userGroupId,
+						customerUserSettings.RestrictedCasePermission,
+						sm.Search,
+						customerSettings.WorkingDayStart,
+						customerSettings.WorkingDayEnd,
+						userTimeZone,
+						ApplicationTypes.HelpdeskMobile,
+						userOverview.ShowSolutionTime,
+						out remainingTimeData,
+						out aggregateData,
+						null,
+						null,
+						null,
+						countOnly: true);
+				}
+				else
+				{
+					// run normal search request
+					searchResult = _caseSearchService.Search(
+						filter,
+						caseSettings,
+						caseFieldSettings.ToArray(),
+						filter.UserId,
+						UserName,
+						userOverview.ShowNotAssignedWorkingGroups,
+						userGroupId,
+						customerUserSettings.RestrictedCasePermission,
+						sm.Search,
+						customerSettings.WorkingDayStart,
+						customerSettings.WorkingDayEnd,
+						userTimeZone,
+						ApplicationTypes.HelpdeskMobile,
+						userOverview.ShowSolutionTime,
+						out remainingTimeData,
+						out aggregateData);
+				}
 
-            //var results = _caseSearchService.Search();
+				//searchResults = CommonHelper.TreeTranslate(m.cases, f.CustomerId, _productAreaService);
+
+				//var results = _caseSearchService.Search();
+			}
+			else
+			{
+				var userId = UserId;
+				var result = _caseSearchService.SearchActiveCustomerUserCases(input.SearchInMyCasesOnly, UserId, null, input.FreeTextSearch, ((input.PageSize??0) * (input.Page ?? 0)), (input.PageSize??10), input.OrderBy, input.Ascending.HasValue ? input.Ascending.Value : true);
+				searchResult = new SearchResult<CaseSearchResult>();
+				foreach (var r in result)
+				{
+					var sr = new CaseSearchResult();
+					sr.Id = r.Id;
+					sr.CaseIcon = r.CaseIcon;
+					sr.SortOrder = input.OrderBy;
+					sr.IsUnread = r.Unread;
+					sr.Columns = new List<Field>();
+					sr.Columns.Add(new Field { Key = "CaseNumber", StringValue = r.CaseNumber.ToString(), DateTimeValue = null, FieldType = FieldTypes.String });
+					sr.Columns.Add(new Field { Key = "ChangeTime", StringValue = r.ChangedDate.ToString("yyyy-MM-dd"), DateTimeValue = r.ChangedDate, FieldType = FieldTypes.Date });
+					sr.Columns.Add(new Field { Key = "Caption", StringValue = r.Subject, FieldType = FieldTypes.String });
+					sr.Columns.Add(new Field { Key = "StateSecondary_Id", StringValue = r.StateSecondaryName, FieldType = FieldTypes.String });
+					sr.Columns.Add(new Field { Key = "WatchDate", StringValue = r.WatchDate.HasValue ? r.WatchDate.Value.ToString("yyyy-MM-dd") : "", DateTimeValue = r.WatchDate, FieldType = FieldTypes.Date });
+
+					if (!string.IsNullOrEmpty(r.PriorityName))
+						sr.Columns.Add(new Field { Key = "Priority_Id", StringValue = r.PriorityName, FieldType = FieldTypes.String, TranslateThis = true });
+					if (!string.IsNullOrEmpty(r.WorkingGroupName))
+						sr.Columns.Add(new Field { Key = "WorkingGroup_Id", StringValue = r.WorkingGroupName, FieldType = FieldTypes.String });
+					if (!string.IsNullOrEmpty(r.PerformerName))
+						sr.Columns.Add(new Field { Key = "Performer_User_Id", StringValue = r.PerformerName, FieldType = FieldTypes.String });
+					sr.Columns.Add(new Field { Key = "CustomerName", StringValue = r.CustomerName, FieldType = FieldTypes.String });
+
+					sr.Columns.Add(new Field { Key = "_temporary_LeadTime", StringValue = "" /*TODO: ?"*/, FieldType = FieldTypes.NullableHours });
+
+					searchResult.Items.Add(sr);
+				}
+			}
             return searchResult;
         }
 

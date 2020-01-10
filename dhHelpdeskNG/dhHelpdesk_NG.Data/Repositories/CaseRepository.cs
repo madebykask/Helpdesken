@@ -5,22 +5,24 @@ using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.Case.Output;
-    using DH.Helpdesk.BusinessData.Models.User.Input;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.Infrastructure.Context;
-    using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
-    using DH.Helpdesk.Domain;
-    using Mappers;
-    using System.Linq.Expressions;
-    using Z.EntityFramework.Plus;
+	using DH.Helpdesk.BusinessData.Models.Case;
+	using DH.Helpdesk.BusinessData.Models.Case.Output;
+	using DH.Helpdesk.BusinessData.Models.User.Input;
+	using DH.Helpdesk.Dal.Infrastructure;
+	using DH.Helpdesk.Dal.Infrastructure.Context;
+	using DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel;
+	using DH.Helpdesk.Domain;
+	using Mappers;
+	using System.Linq.Expressions;
+	using Z.EntityFramework.Plus;
+	using BusinessData.OldComponents;
+	using Common.Linq;
 
-    public interface ICaseRepository : IRepository<Case>
+	public interface ICaseRepository : IRepository<Case>
     {
         IQueryable<Case> GetCustomerCases(int customerId);
         IQueryable<Case> GetDetachedCaseQuery(int id, bool includeLogs = false);
@@ -62,7 +64,10 @@ namespace DH.Helpdesk.Dal.Repositories
         CaseOverview GetCaseOverview(int caseId);
 
         MyCase[] GetMyCases(int userId, int? count = null);
-        IList<Case> GetProblemCases(int problemId);
+
+		IQueryable<CustomerUserCase> GetActiveCustomerUserCases(bool myCases, int currentUserId, int? customerId, string freeTextSearch, int from, int count, string orderby = null, bool orderbyAscending = true, bool searchInternaLog = false);
+
+		IList<Case> GetProblemCases(int problemId);
         IList<int> GetCasesIdsByType(int caseTypeId);
         StateSecondary GetCaseSubStatus(int caseId);
         List<ChildCaseOverview> GetChildCasesFor(int parentCaseId);
@@ -421,7 +426,184 @@ namespace DH.Helpdesk.Dal.Repositories
                                 .ToArray();
         }
 
-        public IList<int> GetCasesIdsByType(int caseTypeId)
+
+		public IQueryable<CustomerUserCase> GetActiveCustomerUserCases(bool myCases, int currentUserId, int? customerId, string freeTextSearch, int from, int count, string orderby = null, bool orderbyAscending = true, bool searchInternalLog = false)
+		{
+			var workingGroupsIds = (from wgsu in this.DataContext.UserWorkingGroups
+									where wgsu.User_Id == currentUserId
+									select wgsu.WorkingGroup_Id)
+									.ToList();
+			var departments = (from du in this.DataContext.DepartmentUsers
+							   where du.User_Id == currentUserId
+							   join d in this.DataContext.Departments on du.Department_Id equals d.Id
+							   join cu in this.DataContext.CustomerUsers on new { d.Customer_Id, du.User_Id } equals new { cu.Customer_Id, cu.User_Id }
+							   select d)
+							  .ToList();
+			var departmentCustomerIds = departments.Select(p => p.Customer_Id).Distinct().ToList();
+			var departmentIds = departments.Select(o => o.Id).ToList();
+
+			var fullAccessCustomers = this.DataContext.CustomerUsers
+				.Where(o => o.User_Id == currentUserId && !departmentCustomerIds.Contains(o.Customer_Id))
+				.Select(o => o.Customer_Id)
+				.Distinct()
+				.ToList();
+
+			var searchFreeText = !string.IsNullOrWhiteSpace(freeTextSearch);
+
+			int? caseId = null;
+			string[] words = new string[0];
+			if (searchFreeText)
+			{
+				int caseNumber = 0;
+				if (int.TryParse(freeTextSearch, out caseNumber))
+				{
+					caseId = this.DataContext.Cases.Where(o => o.CaseNumber == (decimal)caseNumber)
+						.Select(o => o.Id)
+						.SingleOrDefault();
+				}
+				words = freeTextSearch.Split(' ');
+			}
+
+
+			// TODO: handle "text text"
+
+			var entities = from cs in this.DataContext.Cases
+						   join cus in this.DataContext.Customers on cs.Customer_Id equals cus.Id
+						   join cusu in this.DataContext.CustomerUsers on new { User_Id = currentUserId, Customer_Id = cus.Id } equals new { cusu.User_Id, cusu.Customer_Id }
+						   join u in this.DataContext.Users on cusu.User_Id equals u.Id
+						   where (!myCases || cs.Performer_User_Id == currentUserId) &&                                             // My cases logic
+						   (cs.FinishingDate == null && cs.Deleted == 0) &&                                                         // Active logic
+							(!cs.WorkingGroup_Id.HasValue || workingGroupsIds.Contains(cs.WorkingGroup_Id.Value)) &&                // Working group logic
+							(!cs.Department_Id.HasValue || fullAccessCustomers.Contains(cs.Customer_Id) || departmentIds.Contains(cs.Department_Id.Value)) && // Department logic
+							  (!searchFreeText || (                                                                                 // Freetext search, TODO: use text index when active
+								(caseId.HasValue && cs.Id == caseId.Value) ||
+									words.Any(w => cs.ReportedBy.Contains(w) ||
+									cs.PersonsName.Contains(w) ||
+									cs.RegUserName.Contains(w) ||
+									cs.PersonsEmail.Contains(w) ||
+									cs.PersonsPhone.Contains(w) ||
+									cs.PersonsCellphone.Contains(w) ||
+									cs.Place.Contains(w) ||
+									cs.Caption.Contains(w) ||
+									cs.Description.Contains(w) ||
+									cs.Miscellaneous.Contains(w) ||
+									cs.ReferenceNumber.Contains(w) ||
+									cs.InvoiceNumber.Contains(w) ||
+									cs.InventoryNumber.Contains(w) ||
+									( // Department
+										cs.Department != null &&
+										(
+											cs.Department.DepartmentName.Contains(w) ||
+											cs.Department.DepartmentId.Contains(w)
+										)
+									) ||
+									(   // IsAbout
+										cs.IsAbout != null &&
+										(
+											cs.IsAbout.ReportedBy.Contains(w) ||
+											cs.IsAbout.Person_Name.Contains(w) ||
+											cs.IsAbout.UserCode.Contains(w) ||
+											cs.IsAbout.Person_Email.Contains(w) ||
+											cs.IsAbout.Place.Contains(w) ||
+											cs.IsAbout.Person_Cellphone.Contains(w) ||
+											cs.IsAbout.Person_Phone.Contains(w)
+										)
+									) ||
+									(   // Log (TODO: rights?)
+										cs.Logs.Any(l => l.Text_External.Contains(w) || (searchInternalLog ? l.Text_Internal.Contains(w) : false))
+									) ||
+									( // Form field value
+										true // todo implement?	
+									)
+
+						   )))
+						   select new
+						   {
+							   Id = cs.Id,
+							   CaseNumber = cs.CaseNumber,
+							   RegistrationDate = cs.RegTime,
+							   ChangedDate = cs.ChangeTime,
+							   Subject = cs.Caption,
+							   InitiatorName = cs.PersonsName,
+							   Description = cs.Description,
+							   CustomerName = cus.Name,
+							   CustomerId = cus.Id,
+							   WorkingGroupName = cs.Workinggroup.WorkingGroupName,
+							   WorkingGroupId = cs.WorkingGroup_Id,
+							   PriorityName = cs.Priority.Name,
+							   PriorityId = cs.Priority.Id,
+							   PerformerName = cs.Performer_User_Id.HasValue ? cs.Administrator.SurName + " " + cs.Administrator.FirstName : null,
+							   PerformerId = cs.Performer_User_Id,
+							   StateSecondaryId = cs.StateSecondary_Id,
+							   StateSecondary = cs.StateSecondary,
+							   WatchDate = cs.WatchDate,
+							   CaseIcon = cs.FinishingDate != null ? cs.CaseType.RequireApproving == 1 && cs.ApprovedDate == null ? GlobalEnums.CaseIcon.FinishedNotApproved : GlobalEnums.CaseIcon.Finished : GlobalEnums.CaseIcon.Normal,
+							   Unread = cs.Unread == 1 ? true : false
+						   }; 
+
+			if (!string.IsNullOrWhiteSpace(orderby))
+			{
+				switch(orderby)
+				{
+					case "Performer_User_Id":
+						entities = orderbyAscending ? entities.OrderBy(o => o.PerformerId) : entities.OrderByDescending(o => o.PerformerId);
+						break;
+					case "CaseNumber":
+						entities = orderbyAscending ? entities.OrderBy(o => o.CaseNumber) : entities.OrderByDescending(o => o.CaseNumber);
+						break;
+					case "ChangeTime":
+						entities = orderbyAscending ? entities.OrderBy(o => o.ChangedDate) : entities.OrderByDescending(o => o.ChangedDate);
+						break;
+					case "Priority_Id":
+						entities = orderbyAscending ? entities.OrderBy(o => o.PriorityId) : entities.OrderByDescending(o => o.PriorityId);
+						break;
+					case "StateSecondary_Id":
+						entities = orderbyAscending ? entities.OrderBy(o => o.StateSecondaryId) : entities.OrderByDescending(o => o.StateSecondaryId);
+						break;
+					case "_temporary_LeadTime":
+						entities = orderbyAscending ? entities.OrderBy(o => 0) : entities.OrderByDescending(o => 0);
+						break;
+					case "WatchDate":
+						entities = orderbyAscending ? entities.OrderBy(o => o.WatchDate) : entities.OrderByDescending(o => o.WatchDate);
+						break;
+					case "WorkingGroup_Id":
+						entities = orderbyAscending ? entities.OrderBy(o => o.WorkingGroupId) : entities.OrderByDescending(o => o.WorkingGroupId);
+						break;
+				}
+			}
+
+			// filter on customer
+			if (customerId.HasValue)
+			{
+				entities.Where(o => o.CustomerId == customerId.Value);
+			}
+
+
+			entities = entities.Skip(from).Take(count);
+			
+
+			return entities
+				.Select(c => new CustomerUserCase
+				{
+					Id  = c.Id,
+					CaseNumber = c.CaseNumber,
+					RegistrationDate = c.RegistrationDate,
+					ChangedDate = c.ChangedDate,
+					Subject = c.Subject,
+					InitiatorName = c.InitiatorName,
+					Description = c.Description,
+					CustomerName = c.CustomerName,
+					PriorityName = c.PriorityName,
+					WorkingGroupName = c.WorkingGroupName,
+					PerformerName = c.PerformerName,
+					CaseIcon = c.CaseIcon,
+					WatchDate = c.WatchDate,
+					StateSecondaryName = c.StateSecondary.Name,
+					Unread = c.Unread
+				});
+		}
+
+		public IList<int> GetCasesIdsByType(int caseTypeId)
         {
             return DataContext.Cases
                               .Where(c => c.CaseType_Id == caseTypeId)
@@ -606,6 +788,12 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return query.AsNoTracking().FirstOrDefault();
         }
+
+		public class CaseCustomer
+		{
+			public Case Case { get; set; }
+			public Customer Customer { get; set; }
+		}
 
 
         public List<Case> GetTop100CasesToTest()
