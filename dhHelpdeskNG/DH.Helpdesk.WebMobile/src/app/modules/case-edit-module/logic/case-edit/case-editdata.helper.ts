@@ -7,11 +7,13 @@ import { CaseFormGroup } from 'src/app/modules/shared-module/models/forms/case-f
 import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
 import { DateTime } from 'luxon';
 import { CaseDataStore } from './case-data.store';
+import { OptionsHelper } from 'src/app/helpers/options-helper';
 
 @Injectable({ providedIn: 'root' })
 export class CaseEditDataHelper {
 
-  constructor(private translateService: TranslateService) {
+  constructor(private translateService: TranslateService,
+     private dataSourceOptionsHelper: OptionsHelper) {
   }
 
   getCaseTitle(caseData: CaseEditInputModel): string {
@@ -63,10 +65,6 @@ export class CaseEditDataHelper {
 
     getSectionInfoFields(section: CaseSectionInputModel, dataSource: CaseDataStore, caseData: CaseEditInputModel): string {
       const emptyValue = null;
-      const getFromList = (value: any, list: OptionItem[]) => {
-        const item = list.find(o => o.value == value);
-        return item ? item.text : emptyValue;
-      };
 
       const getDate = (value: string, isShortData: boolean = false) => {
         return DateUtil.formatDate(value, isShortData ? DateTime.DATE_SHORT : null);
@@ -75,13 +73,13 @@ export class CaseEditDataHelper {
       const initiatorFields = (name: string, field: ICaseField<any>) => {
         switch (name) {
           case CaseFieldsNames.RegionId: {
-            return getFromList(field.value, dataSource.regionsStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.regionsStore$.value);
           }
           case CaseFieldsNames.DepartmentId: {
-            return getFromList(field.value, dataSource.departmentsStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.departmentsStore$.value);
           }
           case CaseFieldsNames.OrganizationUnitId: {
-            return getFromList(field.value, dataSource.oUsStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.oUsStore$.value);
           }
         }
         return field.value;
@@ -90,13 +88,13 @@ export class CaseEditDataHelper {
       const regardingFields = (name: string, field: ICaseField<any>) => {
         switch (name) {
           case CaseFieldsNames.IsAbout_RegionId: {
-            return getFromList(field.value, dataSource.regionsStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.regionsStore$.value);
           }
           case CaseFieldsNames.IsAbout_DepartmentId: {
-            return getFromList(field.value, dataSource.isAboutDepartmentsStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.isAboutDepartmentsStore$.value);
           }
           case CaseFieldsNames.IsAbout_OrganizationUnitId: {
-            return getFromList(field.value, dataSource.isAboutOUsStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.isAboutOUsStore$.value);
           }
         }
         return field.value;
@@ -109,28 +107,28 @@ export class CaseEditDataHelper {
             return getDate(field.value);
           }
           case CaseFieldsNames.RegistrationSourceCustomer: {
-            return getFromList(field.value, dataSource.customerRegistrationSourcesStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.customerRegistrationSourcesStore$.value);
           }
           case CaseFieldsNames.CaseTypeId: {
-            return getFromList(field.value, dataSource.caseTypesStore$.value);
+            return this.dataSourceOptionsHelper.getFromMultiLevelOptions(field.value, dataSource.caseTypesStore$.value);
           }
           case CaseFieldsNames.ProductAreaId: {
-            return getFromList(field.value, dataSource.productAreasStore$.value);
+            return this.dataSourceOptionsHelper.getFromMultiLevelOptions(field.value, dataSource.productAreasStore$.value);
           }
           case CaseFieldsNames.SystemId: {
-            return getFromList(field.value, dataSource.systemsStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.systemsStore$.value);
           }
           case CaseFieldsNames.UrgencyId: {
-            return getFromList(field.value, dataSource.urgenciesStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.urgenciesStore$.value);
           }
           case CaseFieldsNames.ImpactId: {
-            return getFromList(field.value, dataSource.impactsStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.impactsStore$.value);
           }
           case CaseFieldsNames.CategoryId: {
-            return getFromList(field.value, dataSource.categoriesStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.categoriesStore$.value);
           }
           case CaseFieldsNames.SupplierId: {
-            return getFromList(field.value, dataSource.suppliersStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.suppliersStore$.value);
           }
           case CaseFieldsNames.AgreedDate: {
             return getDate(field.value, true);
@@ -149,41 +147,41 @@ export class CaseEditDataHelper {
       const caseManagementFields = (name: string, field: ICaseField<any>) => {
         switch (name) {
           case CaseFieldsNames.WorkingGroupId: {
-            return getFromList(field.value, dataSource.workingGroupsStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.workingGroupsStore$.value);
           }
           case CaseFieldsNames.CaseResponsibleUserId: {
-            return getFromList(field.value, dataSource.responsibleUsersStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.responsibleUsersStore$.value);
           }
           case CaseFieldsNames.PerformerUserId: {
-            return getFromList(field.value, dataSource.performersStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.performersStore$.value);
           }
           case CaseFieldsNames.PriorityId: {
-            return getFromList(field.value, dataSource.prioritiesStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.prioritiesStore$.value);
           }
           case CaseFieldsNames.StatusId: {
-            return getFromList(field.value, dataSource.statusesStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.statusesStore$.value);
           }
           case CaseFieldsNames.StateSecondaryId: {
-            return getFromList(field.value, dataSource.stateSecondariesStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.stateSecondariesStore$.value);
           }
           case CaseFieldsNames.Project: {
-            return getFromList(field.value, dataSource.projectsStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.projectsStore$.value);
           }
           case CaseFieldsNames.Problem: {
-            return getFromList(field.value, dataSource.problemsStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.problemsStore$.value);
           }
           case CaseFieldsNames.CausingPart: {
-            return getFromList(field.value, dataSource.causingPartsStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.causingPartsStore$.value);
           }
           case CaseFieldsNames.Change: {
-            return getFromList(field.value, dataSource.changesStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.changesStore$.value);
           }
           case CaseFieldsNames.PlanDate:
           case CaseFieldsNames.WatchDate: {
               return getDate(field.value, true);
           }
           case CaseFieldsNames.SolutionRate: {
-            return getFromList(field.value, dataSource.solutionsRatesStore$.value);
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.solutionsRatesStore$.value);
           }
         }
         return field.value;

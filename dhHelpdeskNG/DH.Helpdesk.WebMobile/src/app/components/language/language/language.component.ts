@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
 import { Router } from '@angular/router';
 import { LanguagesApiService } from 'src/app/services/api/language/languages-api.service';
 import { take, finalize, map } from 'rxjs/operators';
-import { OptionItem } from 'src/app/modules/shared-module/models';
-import { MbscListviewOptions, MbscListview } from '@mobiscroll/angular';
+import { MbscListviewOptions } from '@mobiscroll/angular';
 import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrapper';
+import { OptionItem } from 'src/app/modules/shared-module/models';
 
 @Component({
   selector: 'app-language',

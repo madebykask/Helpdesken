@@ -17,7 +17,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MbscModule } from '@mobiscroll/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { CaseFilesControlComponent } from './components/case-edit/controls/case-files/case-files-control.component';
-import { CommonModule } from '@angular/common';
 import { CaseActionsComponent } from './components/case-actions/case-actions.component';
 import { GeneralActionComponent } from './components/case-actions/actions/general-action/general-action.component';
 import { FieldChangeActionComponent } from './components/case-actions/actions/field-change-action/field-change-action.component';
@@ -51,7 +50,6 @@ import { CaseMenuComponent } from './components/case-menu/case-menu.component';
     FilterExtDirective, LognoteEmailInputComponent, CaseMenuComponent
 ],
   imports: [
-    CommonModule,
     MbscModule,
     FormsModule,
     ReactiveFormsModule,
