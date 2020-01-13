@@ -366,7 +366,6 @@
     <Compile Include="Controllers\CasesController_Files.cs" />
     <Compile Include="Controllers\CasesController_MobileRoute.cs" />
     <Compile Include="Controllers\FileAccessController.cs" />
-    <Compile Include="Controllers\HackThisController.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\MixedModeAuthenticationBehavior.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\PrincipalExtensions.cs" />
     <Compile Include="Infrastructure\Behaviors\AdvancedSearchBehavior.cs" />
@@ -4860,7 +4859,6 @@
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
     <Folder Include="rss\" />
     <Folder Include="Views\CasesController_MobileRoute\" />
-    <Folder Include="Views\HackThis\" />
     <Folder Include="Views\LogAccess\" />
     <Folder Include="Views\Password\" />
   </ItemGroup>

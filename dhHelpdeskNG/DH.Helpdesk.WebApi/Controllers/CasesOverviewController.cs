@@ -25,6 +25,7 @@ using DH.Helpdesk.WebApi.Infrastructure.Authentication;
 using DH.Helpdesk.WebApi.Logic.Case;
 using DH.Helpdesk.WebApi.Models.Output;
 using DH.Helpdesk.Common.Enums.Cases;
+using DH.Helpdesk.Services.Utils;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -39,6 +40,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICustomerService _customerService;
         private readonly ICaseTranslationService _caseTranslationService;
 		private readonly ICaseService _caseService;
+		private IHolidayService _holidayService;
 
 		public CasesOverviewController(ICaseSearchService caseSearchService,
             ICustomerUserService customerUserService,
@@ -47,7 +49,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             ICaseTranslationService caseTranslationService,
             IUserService userSerivice,
             ICustomerService customerService,
-			ICaseService caseService)
+			ICaseService caseService,
+			IHolidayService holidayService)
         {
             _caseTranslationService = caseTranslationService;
             _caseSearchService = caseSearchService;
@@ -57,7 +60,9 @@ namespace DH.Helpdesk.WebApi.Controllers
             _userSerivice = userSerivice;
             _customerService = customerService;
 			_caseService = caseService;
-        }
+			_holidayService = holidayService;
+
+		}
 
         [HttpGet]
         [Route("sortingfields")]
@@ -191,6 +196,28 @@ namespace DH.Helpdesk.WebApi.Controllers
 				var userId = UserId;
 				var result = _caseSearchService.SearchActiveCustomerUserCases(input.SearchInMyCasesOnly, UserId, null, input.FreeTextSearch, ((input.PageSize??0) * (input.Page ?? 0)), (input.PageSize??10), input.OrderBy, input.Ascending.HasValue ? input.Ascending.Value : true);
 				searchResult = new SearchResult<CaseSearchResult>();
+
+				//_caseSettingService.Get
+
+
+
+
+				var workTimeCalculators = result.Select(o => o.CustomerID)
+					.Distinct()
+					.Select(o => _customerService.GetCustomer(o))
+					.Select(o => {
+						var from = result.Min(p => p.RegistrationDate);
+						var to = DateTime.UtcNow.AddDays(100);
+						var departmentIds = result.Where(p => p.DepartmentID.HasValue).Select(p => p.DepartmentID.Value).Distinct().ToArray();
+						var workTimeCalculatorFactory = new WorkTimeCalculatorFactory(_holidayService, o.WorkingDayStart, o.WorkingDayEnd, TimeZoneInfo.FindSystemTimeZoneById(o.TimeZoneId));
+						var workTimeCalculator = workTimeCalculatorFactory.Build(from, to, departmentIds);
+						return new { WorkTimeCalculator = workTimeCalculator, CustomerID = o.Id };
+					})
+					.ToDictionary(o => o.CustomerID, o => o.WorkTimeCalculator);
+
+				//var workTimeCalculatorFactory = new WorkTimeCalculatorFactory(_holidayService, 8, 17, TimeZoneInfo.Local);
+
+
 				foreach (var r in result)
 				{
 					var sr = new CaseSearchResult();
@@ -213,7 +240,37 @@ namespace DH.Helpdesk.WebApi.Controllers
 						sr.Columns.Add(new Field { Key = "Performer_User_Id", StringValue = r.PerformerName, FieldType = FieldTypes.String });
 					sr.Columns.Add(new Field { Key = "CustomerName", StringValue = r.CustomerName, FieldType = FieldTypes.String });
 
-					sr.Columns.Add(new Field { Key = "_temporary_LeadTime", StringValue = "" /*TODO: ?"*/, FieldType = FieldTypes.NullableHours });
+					if (r.IncludeInCaseStatistics)
+					{
+						var now = DateTime.UtcNow;
+						if (r.WatchDate.HasValue)
+						{
+							var watchDateDue = r.WatchDate.Value.Date.AddDays(1);
+							int workTime = 0;
+							//// calc time by watching date
+							if (watchDateDue > now)
+							{
+								// #52951 timeOnPause shouldn't calculate when watchdate has value
+								workTime = workTimeCalculators[r.CustomerID].CalculateWorkTime(now, watchDateDue, r.DepartmentID);
+							}
+							else
+							{
+								//// for cases that should be closed in the past
+								// #52951 timeOnPause shouldn't calculate when watchdate has value
+								workTime = -workTimeCalculators[r.CustomerID].CalculateWorkTime(watchDateDue, now, r.DepartmentID);
+							}
+
+							var timeLeft = workTime / 60;
+							var floatingPoint = workTime % 60;
+							var secSortOrder = floatingPoint.ToString();
+
+							if (timeLeft <= 0 && floatingPoint < 0)
+								timeLeft--;
+
+
+							sr.Columns.Add(new Field { Key = "_temporary_LeadTime", StringValue = timeLeft.ToString(), FieldType = FieldTypes.NullableHours });
+						}
+					}
 
 					searchResult.Items.Add(sr);
 				}

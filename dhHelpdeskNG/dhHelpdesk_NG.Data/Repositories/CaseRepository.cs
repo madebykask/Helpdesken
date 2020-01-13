@@ -538,7 +538,10 @@ namespace DH.Helpdesk.Dal.Repositories
 							   StateSecondary = cs.StateSecondary,
 							   WatchDate = cs.WatchDate,
 							   CaseIcon = cs.FinishingDate != null ? cs.CaseType.RequireApproving == 1 && cs.ApprovedDate == null ? GlobalEnums.CaseIcon.FinishedNotApproved : GlobalEnums.CaseIcon.Finished : GlobalEnums.CaseIcon.Normal,
-							   Unread = cs.Unread == 1 ? true : false
+							   Unread = cs.Unread == 1 ? true : false,
+							   IncludeInCaseStatistics = cs.StateSecondary != null ? cs.StateSecondary.IncludeInCaseStatistics == 1 : false,
+							   DepartmentID = cs.Department_Id,
+							   RegTime = cs.RegTime
 						   }; 
 
             // filter on customer
@@ -606,7 +609,10 @@ namespace DH.Helpdesk.Dal.Repositories
 					CaseIcon = c.CaseIcon,
 					WatchDate = c.WatchDate,
 					StateSecondaryName = c.StateSecondary.Name,
-					Unread = c.Unread
+					Unread = c.Unread,
+					DepartmentID = c.DepartmentID,
+					IncludeInCaseStatistics = c.IncludeInCaseStatistics,
+					CustomerID = c.CustomerId
 				});
 		}
 
