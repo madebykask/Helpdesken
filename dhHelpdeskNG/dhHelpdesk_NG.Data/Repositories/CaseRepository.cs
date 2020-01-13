@@ -541,6 +541,12 @@ namespace DH.Helpdesk.Dal.Repositories
 							   Unread = cs.Unread == 1 ? true : false
 						   }; 
 
+            // filter on customer
+            if (customerId.HasValue)
+            {
+                entities = entities.Where(o => o.CustomerId == customerId.Value);
+            }
+
 			if (!string.IsNullOrWhiteSpace(orderby))
 			{
 				switch(orderby)
@@ -569,18 +575,19 @@ namespace DH.Helpdesk.Dal.Repositories
 					case "WorkingGroup_Id":
 						entities = orderbyAscending ? entities.OrderBy(o => o.WorkingGroupId) : entities.OrderByDescending(o => o.WorkingGroupId);
 						break;
+                    default:
+                        //added to avoid "The method 'Skip' is only supported for sorted input in LINQ to Entities. The method 'OrderBy' must be called before the method 'Skip'." error.
+                        entities = entities.OrderBy(o => o.PerformerId);
+                        break;
 				}
 			}
-
-			// filter on customer
-			if (customerId.HasValue)
-			{
-				entities.Where(o => o.CustomerId == customerId.Value);
-			}
-
+            else
+            {
+                //added to avoid "The method 'Skip' is only supported for sorted input in LINQ to Entities. The method 'OrderBy' must be called before the method 'Skip'." error.
+                entities = entities.OrderBy(o => o.PerformerId);
+            }
 
 			entities = entities.Skip(from).Take(count);
-			
 
 			return entities
 				.Select(c => new CustomerUserCase
