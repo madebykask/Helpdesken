@@ -41,7 +41,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICustomerService _customerService;
         private readonly ICaseTranslationService _caseTranslationService;
 		private readonly ICaseService _caseService;
-		private IHolidayService _holidayService;
+		private readonly IHolidayService _holidayService;
 
 		public CasesOverviewController(ICaseSearchService caseSearchService,
             ICustomerUserService customerUserService,
@@ -129,8 +129,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 				if (input.Ascending.HasValue)
 					sm.Search.Ascending = input.Ascending.Value;
 
-
-				var caseSettings = _caseSettingService.GetCaseSettingsWithUser(filter.CustomerId, filter.UserId, userGroupId);
+                var caseSettings = _caseSettingService.GetCaseSettingsWithUser(filter.CustomerId, filter.UserId, userGroupId);
 				AddMissingCaseSettingsForMobile(caseSettings); //TODO: Temporary  - remove after mobile case settings is implemented
 
 				var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(filter.CustomerId);
@@ -139,9 +138,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 				CaseRemainingTimeData remainingTimeData;
 				CaseAggregateData aggregateData;
 
-
-
-				if (input.CountOnly)
+                if (input.CountOnly)
 				{
 					// run count only query 
 					searchResult = _caseSearchService.Search(
@@ -200,9 +197,6 @@ namespace DH.Helpdesk.WebApi.Controllers
 
 				//_caseSettingService.Get
 
-
-
-
 				var workTimeCalculators = result.Select(o => o.CustomerID)
 					.Distinct()
 					.Select(o => _customerService.GetCustomer(o))
@@ -218,7 +212,6 @@ namespace DH.Helpdesk.WebApi.Controllers
 
 				//var workTimeCalculatorFactory = new WorkTimeCalculatorFactory(_holidayService, 8, 17, TimeZoneInfo.Local);
 
-
 				foreach (var r in result)
 				{
 					var sr = new CaseSearchResult();
@@ -227,19 +220,22 @@ namespace DH.Helpdesk.WebApi.Controllers
 					sr.SortOrder = input.OrderBy;
 					sr.IsUnread = r.Unread;
 					sr.Columns = new List<Field>();
-					sr.Columns.Add(new Field { Key = "CaseNumber", StringValue = r.CaseNumber.ToString(), DateTimeValue = null, FieldType = FieldTypes.String });
-					sr.Columns.Add(new Field { Key = "ChangeTime", StringValue = r.ChangedDate.ToString("yyyy-MM-dd"), DateTimeValue = r.ChangedDate, FieldType = FieldTypes.Date });
-					sr.Columns.Add(new Field { Key = "Caption", StringValue = r.Subject, FieldType = FieldTypes.String });
-					sr.Columns.Add(new Field { Key = "StateSecondary_Id", StringValue = r.StateSecondaryName, FieldType = FieldTypes.String });
-					sr.Columns.Add(new Field { Key = "WatchDate", StringValue = r.WatchDate.HasValue ? r.WatchDate.Value.ToString("yyyy-MM-dd") : "", DateTimeValue = r.WatchDate, FieldType = FieldTypes.Date });
+					sr.Columns.Add(new Field { Key = CaseInfoFields.Case, StringValue = r.CaseNumber.ToString(), DateTimeValue = null, FieldType = FieldTypes.String });
+					sr.Columns.Add(new Field { Key = CaseInfoFields.ChangeDate, StringValue = r.ChangedDate.ToString("yyyy-MM-dd"), DateTimeValue = r.ChangedDate, FieldType = FieldTypes.Date });
+					sr.Columns.Add(new Field { Key = CaseInfoFields.Caption, StringValue = r.Subject, FieldType = FieldTypes.String });
+					sr.Columns.Add(new Field { Key = OtherFields.SubState, StringValue = r.StateSecondaryName, FieldType = FieldTypes.String });
+					sr.Columns.Add(new Field { Key = OtherFields.WatchDate, StringValue = r.WatchDate.HasValue ? r.WatchDate.Value.ToString("yyyy-MM-dd") : "", DateTimeValue = r.WatchDate, FieldType = FieldTypes.Date });
+
+                    if (!string.IsNullOrEmpty(r.DepartmentName))
+                        sr.Columns.Add(new Field { Key = UserFields.Department, StringValue = r.DepartmentName, DateTimeValue = null, FieldType = FieldTypes.String });
 
 					if (!string.IsNullOrEmpty(r.PriorityName))
-						sr.Columns.Add(new Field { Key = "Priority_Id", StringValue = r.PriorityName, FieldType = FieldTypes.String, TranslateThis = true });
+						sr.Columns.Add(new Field { Key = OtherFields.Priority, StringValue = r.PriorityName, FieldType = FieldTypes.String, TranslateThis = true });
 					if (!string.IsNullOrEmpty(r.WorkingGroupName))
-						sr.Columns.Add(new Field { Key = "WorkingGroup_Id", StringValue = r.WorkingGroupName, FieldType = FieldTypes.String });
+						sr.Columns.Add(new Field { Key = OtherFields.WorkingGroup, StringValue = r.WorkingGroupName, FieldType = FieldTypes.String });
 					if (!string.IsNullOrEmpty(r.PerformerName))
-						sr.Columns.Add(new Field { Key = "Performer_User_Id", StringValue = r.PerformerName, FieldType = FieldTypes.String });
-					sr.Columns.Add(new Field { Key = "CustomerName", StringValue = r.CustomerName, FieldType = FieldTypes.String });
+						sr.Columns.Add(new Field { Key = OtherFields.Administrator, StringValue = r.PerformerName, FieldType = FieldTypes.String });
+					sr.Columns.Add(new Field { Key = UserFields.Customer, StringValue = r.CustomerName, FieldType = FieldTypes.String });
 
 					var now = DateTime.UtcNow;
 					int? timeLeft = null;

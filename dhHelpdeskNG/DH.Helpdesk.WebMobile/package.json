@@ -7,7 +7,7 @@
         "build": "ng build --stats-json --output-hashing all",
         "build_dev-prod": "ng build --stats-json --prod --configuration=dev-prod --output-hashing all",
         "build_prod": "ng build --prod --configuration=production",
-        "bundle-report": "webpack-bundle-analyzer wwwroot/build/stats.json -m static",
+        "bundle-report": "webpack-bundle-analyzer wwwroot/build/stats-es2015.json -m static",
         "test": "ng test",
         "lint": "ng lint",
         "tslint": "tslint -p tsconfig.json",

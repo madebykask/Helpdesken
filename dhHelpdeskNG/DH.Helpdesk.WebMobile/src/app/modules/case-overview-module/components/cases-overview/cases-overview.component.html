@@ -65,6 +65,11 @@
                           </div>
                       </div>
                       <div class="mbsc-row">
+                          <div class="mbsc-col mbsc-smaller ellipsis">
+                            {{ (case.columns | getByKey: 'Department_Id') || '&nbsp;' }}
+                        </div>
+                      </div>
+                      <div class="mbsc-row">
                           <div class="mbsc-col">
                               <div *ngIf="case.columns | caseHasValue: 'Performer_User_Id'"><i class="mbsc-ic mbsc-ic-fa-user"></i>{{ (case.columns | getByKey: 'Performer_User_Id') || '&nbsp;' }}</div>
                               <div *ngIf="case.columns | caseHasValue: 'WorkingGroup_Id'"><i class="mbsc-ic mbsc-ic-fa-group"></i>{{ (case.columns | getByKey: 'WorkingGroup_Id') || '&nbsp;' }}</div>

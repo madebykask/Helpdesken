@@ -544,6 +544,7 @@ namespace DH.Helpdesk.Dal.Repositories
 							   RegTime = cs.RegTime,
 							   SolutionTime = cs.Priority != null ? cs.Priority.SolutionTime : (int?)null,
 							   ExternalTime = cs.ExternalTime
+                               DepartmentName = cs.Department != null ? cs.Department.DepartmentName : null,
 						   }; 
 
             // filter on customer
@@ -613,6 +614,7 @@ namespace DH.Helpdesk.Dal.Repositories
 					StateSecondaryName = c.StateSecondary.Name,
 					Unread = c.Unread,
 					DepartmentID = c.DepartmentID,
+                    DepartmentName = c.DepartmentName,
 					IncludeInCaseStatistics = c.IncludeInCaseStatistics,
 					CustomerID = c.CustomerId,
 					SolutionTime = c.SolutionTime,
