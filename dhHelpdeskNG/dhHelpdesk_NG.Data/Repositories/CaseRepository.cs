@@ -543,7 +543,7 @@ namespace DH.Helpdesk.Dal.Repositories
 							   DepartmentID = cs.Department_Id,
 							   RegTime = cs.RegTime,
 							   SolutionTime = cs.Priority != null ? cs.Priority.SolutionTime : (int?)null,
-							   ExternalTime = cs.ExternalTime
+							   ExternalTime = cs.ExternalTime,
                                DepartmentName = cs.Department != null ? cs.Department.DepartmentName : null,
 						   }; 
 
