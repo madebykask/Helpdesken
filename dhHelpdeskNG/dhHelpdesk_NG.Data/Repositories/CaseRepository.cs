@@ -442,6 +442,12 @@ namespace DH.Helpdesk.Dal.Repositories
 			var departmentCustomerIds = departments.Select(p => p.Customer_Id).Distinct().ToList();
 			var departmentIds = departments.Select(o => o.Id).ToList();
 
+			var user = this.DataContext.Users.Single(o => o.Id == currentUserId);
+			var isUserOrNormalAdmin = new int[] { UserGroups.Administrator, UserGroups.User }.Contains(user.UserGroup_Id);
+			var showNotAssignedWorkingGroups = !isUserOrNormalAdmin ? true : user.ShowNotAssignedWorkingGroups == 1;
+			var showNotAssignedCases = !isUserOrNormalAdmin ? true : user.ShowNotAssignedCases == 1;
+		
+
 			var fullAccessCustomers = this.DataContext.CustomerUsers
 				.Where(o => o.User_Id == currentUserId && !departmentCustomerIds.Contains(o.Customer_Id))
 				.Select(o => o.Customer_Id)
@@ -472,12 +478,20 @@ namespace DH.Helpdesk.Dal.Repositories
 						   join cusu in this.DataContext.CustomerUsers on new { User_Id = currentUserId, Customer_Id = cus.Id } equals new { cusu.User_Id, cusu.Customer_Id }
 						   join u in this.DataContext.Users on cusu.User_Id equals u.Id
 						   where (!myCases || cs.Performer_User_Id == currentUserId) &&                                             // My cases logic
-						   (cs.FinishingDate == null && cs.Deleted == 0) &&                                                         // Active logic
+						   (cs.FinishingDate == null && cs.Deleted == 0) &&															// Active logic
+						   (showNotAssignedCases || cs.Performer_User_Id.HasValue) &&                                               // Show not assigned cases
+						   (showNotAssignedWorkingGroups || cs.WorkingGroup_Id.HasValue) &&                                         // Show not assigned cases
+						   (!cusu.RestrictedCasePermission ||                                                                       // Restrict to own cases (only for normal admin and user)
+								(user.UserGroup_Id == UserGroups.SystemAdministrator) ||
+								(user.UserGroup_Id == UserGroups.CustomerAdministrator) ||
+								(user.UserGroup_Id == UserGroups.Administrator && cs.Performer_User_Id == user.Id) ||
+								(user.UserGroup_Id == UserGroups.User && cs.ReportedBy.ToLower() == user.UserID.ToLower())
+							) &&
 							(!cs.WorkingGroup_Id.HasValue || workingGroupsIds.Contains(cs.WorkingGroup_Id.Value)) &&                // Working group logic
 							(!cs.Department_Id.HasValue || fullAccessCustomers.Contains(cs.Customer_Id) || departmentIds.Contains(cs.Department_Id.Value)) && // Department logic
 							  (!searchFreeText || (                                                                                 // Freetext search, TODO: use text index when active
 								(caseId.HasValue && cs.Id == caseId.Value) ||
-									words.Any(w => cs.ReportedBy.Contains(w) ||
+									(words.Any(w => cs.ReportedBy.Contains(w) ||
 									cs.PersonsName.Contains(w) ||
 									cs.RegUserName.Contains(w) ||
 									cs.PersonsEmail.Contains(w) ||
@@ -511,10 +525,7 @@ namespace DH.Helpdesk.Dal.Repositories
 									) ||
 									(   // Log (TODO: rights?)
 										cs.Logs.Any(l => l.Text_External.Contains(w) || (searchInternalLog ? l.Text_Internal.Contains(w) : false))
-									) ||
-									( // Form field value
-										true // todo implement?	
-									)
+									))
 
 						   )))
 						   select new
