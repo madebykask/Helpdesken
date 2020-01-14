@@ -7690,10 +7690,10 @@ GO
 
 If not exists (select * from tbltext where id = 2054)
 begin
-	insert into tbltext (id, TextString) VALUES (2054, 'Använd automatiska förslag vid sökning')
+	insert into tbltext (id, TextString) VALUES (2054, 'Visa förslag vid sökning')
 
 	If not exists (select * from tblTextTranslation where text_id = 2054 and Language_Id = 2)
-		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2054, 2, 'Use autocomplete to search')
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2054, 2, 'Show search result')
 end
 GO
 
