@@ -12,7 +12,7 @@ export class LogFileDataResolver implements Resolve<Observable<Blob>> {
   resolve(activatedRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Blob> {
     const caseId = +activatedRoute.paramMap.get('caseId');
     const fileId = +activatedRoute.paramMap.get('fileId');
-    const customerId = +activatedRoute.paramMap.get('cid');
+    const customerId = +activatedRoute.queryParamMap.get('cid');
 
     if (isNaN(caseId) || !caseId) {
       return throwError(`Invalid or missing caseId param. caseId: ${caseId}`);

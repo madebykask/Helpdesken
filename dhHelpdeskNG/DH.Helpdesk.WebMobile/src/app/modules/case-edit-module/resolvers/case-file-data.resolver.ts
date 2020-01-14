@@ -12,7 +12,7 @@ export class CaseFileDataResolver implements Resolve<Observable<Blob>> {
   resolve(activatedRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Blob> {
     const caseId = +activatedRoute.paramMap.get('caseId');
     const caseKey = activatedRoute.paramMap.get('caseKey');
-    const customerId = +activatedRoute.paramMap.get('customerId');
+    const customerId = +activatedRoute.queryParamMap.get('cid');
 
     if (!isNaN(caseId) && caseId > 0) {
       const fileId = +activatedRoute.paramMap.get('fileId');

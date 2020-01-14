@@ -1,12 +1,13 @@
 import { Component, Input, ViewChild, Renderer2, ElementRef } from '@angular/core';
 import { BaseControl } from '../base-control';
-import { takeUntil, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { MbscSelectOptions, MbscSelect } from '@mobiscroll/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { CommunicationService, CaseFieldValueChangedEvent, Channels } from 'src/app/services/communication';
 import { MultiLevelOptionItem } from 'src/app/modules/shared-module/models';
 import { OptionsHelper } from 'src/app/helpers/options-helper';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
     selector: 'case-multi-dropdown-control',
@@ -113,12 +114,15 @@ import { OptionsHelper } from 'src/app/helpers/options-helper';
     }
 
     ngOnDestroy(): void {
-      this.onDestroy();
     }
 
     public get getHeader(): string {
       const defaultValue = '';
       return this.formControl ? this.formControl.label || defaultValue : defaultValue;
+    }
+
+    public openSelect() {
+      this.select.instance.show();
     }
 
     private refreshData(inst, data) {
@@ -127,10 +131,6 @@ import { OptionsHelper } from 'src/app/helpers/options-helper';
         const elem =  (<HTMLElement>inst.markup).querySelector<HTMLInputElement>('input.mbsc-sel-filter-input');
         elem.value = '';
       }
-    }
-
-    public openSelect() {
-      this.select.instance.show();
     }
 
     private setText(value?: number) {
@@ -194,7 +194,7 @@ import { OptionsHelper } from 'src/app/helpers/options-helper';
     private initEvents() {
       // track disabled state in form
       this.formControl.statusChanges.pipe(
-          takeUntil(this.destroy$)
+          untilDestroyed(this)
         ).subscribe(e => {
           if (this.textbox.disabled !== this.isFormControlDisabled) {
             this.updateDisabledState();
@@ -207,7 +207,7 @@ import { OptionsHelper } from 'src/app/helpers/options-helper';
             this.addEmptyIfNotExists(options);
             return options;
           })),
-          takeUntil(this.destroy$)
+          untilDestroyed(this)
         ).subscribe((options) => {
           if (this.select.instance) {
             const data = this.getPreviousData(this.formControl.value);

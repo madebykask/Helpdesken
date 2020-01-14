@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { CaseEditInputModel, CaseAccessMode } from '../../../models';
 import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
-import { MbscListviewOptions, MbscSwitch, MbscFormOptions } from '@mobiscroll/angular';
-import { Subject } from 'rxjs';
+import { MbscListviewOptions, MbscFormOptions } from '@mobiscroll/angular';
 import { CaseLogApiService } from '../../../services/api/case/case-log-api.service';
-import { take, takeUntil } from 'rxjs/internal/operators';
+import { take } from 'rxjs/internal/operators';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 import { CaseFormGroup, CaseFormControl } from 'src/app/modules/shared-module/models/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { LogFileType } from 'src/app/modules/shared-module/constants/logFileType.enum';
@@ -75,7 +75,6 @@ export class CaseLogInputComponent implements OnInit {
   private logFileInternalFormControl: CaseFormControl = null;
   private personsEmailFormControl: CaseFormControl = null;
   private noEmailsText = '';
-  private destroy$ = new Subject();
 
   constructor(private caseLogApiService: CaseLogApiService,
     private translateService: TranslateService) {
@@ -113,7 +112,7 @@ export class CaseLogInputComponent implements OnInit {
       }
       // track send extneral control status change (disabled/enabled
       this.sendExternalEmailsFormControl.statusChanges.pipe(
-        takeUntil(this.destroy$)
+        untilDestroyed(this)
       ).subscribe(e => {
         // process only if disabled state has changed, ignore same values
         const isDisabled = this.sendExternalEmailsFormControl.isDisabled || this.externalLogFormControl.disabled;
@@ -129,7 +128,7 @@ export class CaseLogInputComponent implements OnInit {
 
     if (this.personsEmailFormControl) {
       this.personsEmailFormControl.valueChanges.pipe(
-        takeUntil(this.destroy$)
+        untilDestroyed(this)
         ).subscribe(v => {
           this.updateExternalEmailsText();
         });
@@ -153,8 +152,6 @@ export class CaseLogInputComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   // handles UI switch change by user

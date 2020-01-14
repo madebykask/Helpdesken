@@ -11,6 +11,7 @@ import { CaseFilesUploadComponent } from '../case-files-upload/case-files-upload
 import { TranslateService as NgxTranslateService } from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'case-files-control',
@@ -29,8 +30,6 @@ export class CaseFilesControlComponent {
     enhance: true,
     swipe: false
   };
-
-  private destroy$ = new Subject();
 
   constructor(private caseFilesApiService: CaseFilesApiService,
               private translateService: NgxTranslateService,
@@ -52,7 +51,6 @@ export class CaseFilesControlComponent {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
   }
 
   processNewFileUpload(data: { id: number, name: string }) {
@@ -64,10 +62,16 @@ export class CaseFilesControlComponent {
   downloadFile(item: CaseFileModel) {
     const caseId = +this.caseKey;
     if (!isNaN(caseId) && caseId > 0) {
-      this.router.navigate(['/case', caseId, 'file', item.fileId]);
+      const queryParams = {
+        cid: this.customerId
+      };
+      this.router.navigate(['/case', caseId, 'file', item.fileId], {
+        queryParams: queryParams
+     });
     } else {
       const queryParams = {
         fileName: item.fileName,
+        cid: this.customerId
       };
       const templateId = +this.activatedRoute.snapshot.paramMap.get('templateId');
       if (!isNaN(templateId) && templateId > 0) {
@@ -95,7 +99,8 @@ export class CaseFilesControlComponent {
               }).then(function (result) {
                   if (result) {
                       self.caseFilesApiService.deleteCaseFile(self.caseKey, fileItem.fileId, fileItem.fileName, this.customerId).pipe(
-                          take(1)
+                          take(1),
+                          untilDestroyed(this)
                       ).subscribe(() => {
                           // remove fileItem from the list on success only
                           self.files = self.files.filter(el => el !== fileItem);

@@ -181,7 +181,13 @@ BEGIN
 	ADD UseMobileRouting BIT NOT NULL DEFAULT(0)
 END
 
-
+RAISERROR ('Add column MobileSiteUrl to tblGlobalSettings', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'MobileSiteUrl' and sysobjects.name = N'tblGlobalSettings')
+BEGIN
+	ALTER TABLE tblGlobalSettings
+	ADD MobileSiteUrl NVARCHAR(MAX) NOT NULL DEFAULT('')
+END
 
 RAISERROR ('Add UseInitiatorAutocomplete to tblCustomer table', 10, 1) WITH NOWAIT
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              

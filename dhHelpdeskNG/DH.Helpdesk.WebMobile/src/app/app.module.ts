@@ -48,7 +48,7 @@ import { VersionComponent } from './components/version.component';
      VersionComponent
   ],
   imports: [ 
-    MbscModule, 
+    MbscModule,  
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,

@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
 import { forkJoin, Subject, of, throwError, interval, EMPTY } from 'rxjs';
-import { switchMap, take, finalize, delay, catchError, map, takeUntil, takeWhile, defaultIfEmpty } from 'rxjs/operators';
+import { switchMap, take, finalize, delay, catchError, map, takeWhile, defaultIfEmpty } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { CommunicationService, Channels, CaseFieldValueChangedEvent, } from 'src/app/services/communication/communication.service';
 import { HeaderEventData } from 'src/app/services/communication/data/header-event-data';
@@ -30,6 +30,7 @@ import { FinalActionEnum } from 'src/app/modules/shared-module/constants/finalAc
 import { LocalStorageService } from 'src/app/services/local-storage';
 import { OUsService } from 'src/app/services/case-organization/ous-service';
 import { TabNames } from '../../constants/tab-names';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-case-edit',
@@ -142,7 +143,6 @@ export class CaseEditComponent {
     private caseData: CaseEditInputModel;
     private caseSections: CaseSectionInputModel[];
     private ownsLock = true;
-    private destroy$ = new Subject();
     private caseLock: CaseLockModel = null;
     private isClosing = false;
     private extendedCaseValidation$ = new Subject<boolean>();
@@ -183,6 +183,7 @@ export class CaseEditComponent {
 
                     return forkJoin([options$, caseSections$, caseLock$]);
                   }),
+                  untilDestroyed(this),
                   catchError((e) => throwError(e)),
               );
 
@@ -221,7 +222,8 @@ export class CaseEditComponent {
       if (url == null) { return; }
       of(true).pipe(
         delay(200),
-        take(1)
+        take(1),
+        untilDestroyed(this),
       ).subscribe(() => this.router.navigate([url]));
     }
 
@@ -275,6 +277,7 @@ export class CaseEditComponent {
                   return EMPTY.pipe(defaultIfEmpty(false));
                 }
               }),
+              untilDestroyed(this),
               catchError((e) => {
                 this.alertService.showMessage('Extended Case save was not succeed!', AlertType.Error, 3);
                 return throwError(e);
@@ -285,6 +288,7 @@ export class CaseEditComponent {
           this.alertService.showMessage(errormessage, AlertType.Error, 3);
           return EMPTY.pipe(defaultIfEmpty(false));
         }),
+        untilDestroyed(this),
         catchError((e) => throwError(e))
       ).subscribe((isSaved: boolean) => {
         if (isSaved) {
@@ -297,14 +301,15 @@ export class CaseEditComponent {
 
     cleanTempFiles(caseId: number) {
       this.caseFileService.deleteTemplFiles(caseId, this.dataSource.currentCaseCustomerId$.value).pipe(
-        take(1)
+        take(1),
+        untilDestroyed(this)
       ).subscribe();
     }
 
     onClickWorkflow(id: number) {
       this.caseTemplateService.loadTemplate(id)
       .pipe(
-        takeUntil(this.destroy$)
+        untilDestroyed(this)
       )
       .subscribe((data: CaseTemplateFullModel) => {
         const finalAction = this.caseTemplateService.applyWorkflow(data, this.form);
@@ -347,7 +352,8 @@ export class CaseEditComponent {
         const empty$ = () => EMPTY.pipe(defaultIfEmpty(null));
         const getOU = (_ouId) => _ouId != null ? this.oUsService.getOU(_ouId, caseData.customerId) : empty$();
         getOU(ouId).pipe(
-          take(1)
+          take(1),
+          untilDestroyed(this)
         ).subscribe(ou => {
           const ouParentId = ou != null ? ou.parentId : null;
           this.extendedCase.nativeElement.loadForm = {
@@ -532,12 +538,14 @@ export class CaseEditComponent {
 
             return forkJoin([options$, caseSections$]);
           }),
+          untilDestroyed(this),
           catchError((e) => throwError(e)),
       );
 
       caseData$.pipe(
           take(1),
           finalize(() => this.isLoaded = true),
+          untilDestroyed(this),
           catchError((e) => throwError(e))
       ).subscribe((caseData) => {
           this.caseSections = caseData[1];
@@ -554,7 +562,7 @@ export class CaseEditComponent {
     private subscribeEvents() {
       // drop down value changed
       this.commService.listen(Channels.CaseFieldValueChanged).pipe(
-        takeUntil(this.destroy$)
+        untilDestroyed(this)
       ).subscribe((v: CaseFieldValueChangedEvent) => this.caseEditLogic.runUpdates(v, this.dataSource, this.caseData, this.form));
     }
 
@@ -617,6 +625,7 @@ export class CaseEditComponent {
     private loadCaseActions() {
       this.caseService.getCaseActions(this.caseId, this.customerId).pipe(
         take(1),
+        untilDestroyed(this),
         catchError((e) => throwError(e))
       ).subscribe(caseActions => {
         this.caseActions = caseActions;
@@ -633,10 +642,12 @@ export class CaseEditComponent {
         } else if (this.caseLock.timerInterval > 0) {
             // run extend case lock at specified interval
             interval(this.caseLock.timerInterval * 1000).pipe(
-                  takeWhile(() => this.ownsLock)
+                  takeWhile(() => this.ownsLock),
+                  untilDestroyed(this)
               ).subscribe(_ => {
                 this.caseLockApiService.reExtendedCaseLock(this.caseId, this.caseLock.lockGuid, this.caseLock.extendValue, this.customerId).pipe(
-                  take(1)
+                  take(1),
+                  untilDestroyed(this)
                 ).subscribe(res => {
                     if (!res) {
                       this.ownsLock = false;
@@ -672,19 +683,18 @@ export class CaseEditComponent {
       if (this.caseId > 0) {
         if (this.ownsLock) {
           this.ownsLock = false;
-          this.caseLockApiService.unLockCase(this.caseId, this.caseLock.lockGuid, this.customerId).subscribe();
+          this.caseLockApiService.unLockCase(this.caseId, this.caseLock.lockGuid, this.customerId).pipe(
+            take(1)
+          ).subscribe();
         }
       }
 
       // shall we do extra checks?
       this.alertService.clearMessages();
-      this.destroy$.next();
-      this.destroy$.complete();
       this.extendedCaseValidation$.complete();
       this.extendedCaseSave$.complete();
 
       this.commService.publish(Channels.Header, new HeaderEventData(true));
-
   }
 }
 

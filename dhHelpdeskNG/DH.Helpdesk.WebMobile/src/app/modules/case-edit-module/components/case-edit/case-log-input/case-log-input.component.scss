@@ -29,13 +29,20 @@
     }
   }
   
-  ::ng-deep .mbsc-switch .mbsc-desc { 
-    color:#000;
-    opacity:1;
-    font-size:12px!important;
-    overflow: hidden; 
-    word-break: break-all;
+  ::ng-deep { 
+    .mbsc-switch {
+      .mbsc-log-label {
+        padding-left: .5em;
+      }
+      .mbsc-desc {
+        color:#000;
+        opacity:1;
+        font-size:12px!important;
+        overflow: hidden; 
+        word-break: break-all;
+    }
   }
+}
 
   ::ng-deep .mbsc-label-stacked:before,
   ::ng-deep .mbsc-label-stacked:after

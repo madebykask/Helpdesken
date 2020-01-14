@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { BaseControl } from '../base-control';
 import { takeUntil } from 'rxjs/operators';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
     selector: 'case-switch-control',
@@ -20,7 +21,6 @@ import { takeUntil } from 'rxjs/operators';
     }
 
     ngOnDestroy(): void {
-      this.onDestroy();
     }
 
     private updateDisabledState() {
@@ -30,7 +30,7 @@ import { takeUntil } from 'rxjs/operators';
     private initEvents() {
       // track disabled state in form
       this.formControl.statusChanges.pipe(
-          takeUntil(this.destroy$)
+        untilDestroyed(this)
         ).subscribe(e => {
           if (this.control.disabled !== this.isFormControlDisabled) {
             this.updateDisabledState();
