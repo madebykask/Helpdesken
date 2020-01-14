@@ -26,6 +26,7 @@ using DH.Helpdesk.WebApi.Logic.Case;
 using DH.Helpdesk.WebApi.Models.Output;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Services.Utils;
+using DH.Helpdesk.Common.Tools;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -240,38 +241,56 @@ namespace DH.Helpdesk.WebApi.Controllers
 						sr.Columns.Add(new Field { Key = "Performer_User_Id", StringValue = r.PerformerName, FieldType = FieldTypes.String });
 					sr.Columns.Add(new Field { Key = "CustomerName", StringValue = r.CustomerName, FieldType = FieldTypes.String });
 
-					if (r.IncludeInCaseStatistics)
+					var now = DateTime.UtcNow;
+					int? timeLeft = null;
+					if (r.WatchDate.HasValue)
 					{
-						var now = DateTime.UtcNow;
-						if (r.WatchDate.HasValue)
+						var watchDateDue = r.WatchDate.Value.Date.AddDays(1);
+						int workTime = 0;
+						//// calc time by watching date
+						if (watchDateDue > now)
 						{
-							var watchDateDue = r.WatchDate.Value.Date.AddDays(1);
-							int workTime = 0;
-							//// calc time by watching date
-							if (watchDateDue > now)
-							{
-								// #52951 timeOnPause shouldn't calculate when watchdate has value
-								workTime = workTimeCalculators[r.CustomerID].CalculateWorkTime(now, watchDateDue, r.DepartmentID);
-							}
-							else
-							{
-								//// for cases that should be closed in the past
-								// #52951 timeOnPause shouldn't calculate when watchdate has value
-								workTime = -workTimeCalculators[r.CustomerID].CalculateWorkTime(watchDateDue, now, r.DepartmentID);
-							}
-
-							var timeLeft = workTime / 60;
-							var floatingPoint = workTime % 60;
-							var secSortOrder = floatingPoint.ToString();
-
-							if (timeLeft <= 0 && floatingPoint < 0)
-								timeLeft--;
-
-
-							sr.Columns.Add(new Field { Key = "_temporary_LeadTime", StringValue = timeLeft.ToString(), FieldType = FieldTypes.NullableHours });
+							// #52951 timeOnPause shouldn't calculate when watchdate has value
+							workTime = workTimeCalculators[r.CustomerID].CalculateWorkTime(now, watchDateDue, r.DepartmentID);
 						}
+						else
+						{
+							//// for cases that should be closed in the past
+							// #52951 timeOnPause shouldn't calculate when watchdate has value
+							workTime = -workTimeCalculators[r.CustomerID].CalculateWorkTime(watchDateDue, now, r.DepartmentID);
+						}
+
+						timeLeft = workTime / 60;
+						var floatingPoint = workTime % 60;
+						var secSortOrder = floatingPoint.ToString();
+
+						if (timeLeft <= 0 && floatingPoint < 0)
+							timeLeft--;
+						
+					}
+					else if (r.IncludeInCaseStatistics && r.SolutionTime.HasValue && r.SolutionTime.Value > 0)
+					{
+						var SLAtime = r.SolutionTime;
+						var timeOnPause = r.ExternalTime;
+						var dtFrom = DatesHelper.Min(r.RegistrationDate, now);
+						var dtTo = DatesHelper.Max(r.RegistrationDate, now);
+						var calcTime = workTimeCalculators[r.CustomerID].CalculateWorkTime(dtFrom, dtTo, r.DepartmentID);
+						timeLeft = (SLAtime * 60 - calcTime + timeOnPause) / 60;
+						var floatingPoint = (SLAtime * 60 - calcTime + timeOnPause) % 60;
+
+						if (timeLeft <= 0 && floatingPoint < 0)
+							timeLeft--;
+
 					}
 
+					if (timeLeft.HasValue)
+					{
+						if (timeLeft < 0)
+						{
+							sr.IsUrgent = true;
+						}
+						sr.Columns.Add(new Field { Key = "_temporary_LeadTime", StringValue = timeLeft.ToString(), FieldType = FieldTypes.NullableHours });
+					}
 					searchResult.Items.Add(sr);
 				}
 			}

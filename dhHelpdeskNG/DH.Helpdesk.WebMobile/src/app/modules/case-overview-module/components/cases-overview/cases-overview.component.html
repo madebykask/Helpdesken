@@ -48,7 +48,7 @@
                   <div class="mbsc-grid mbsc-margin mbsc-txt-muted mbsc-bold mbsc-txt-s">
                     <div class="mbsc-row mbsc-no-padding">
                       <div class="mbsc-col-6 case-number">
-                          #{{ (case.columns | getByKey: 'CaseNumber') || '&nbsp;' }}
+                          #{{ (case.columns | getByKey: 'CaseNumber') || '&nbsp;' }} <span style="font-weight: bold">{{ (case.columns | getByKey: 'CustomerName') || '&nbsp;' }}</span>
                       </div>
                       <div class="mbsc-col-6 time">
                           <span><i class="mbsc-ic mbsc-ic-fa-clock-o"></i> {{ (case.columns | getByKey: 'ChangeTime' | dateTimeFormat) || '&nbsp;'}}</span>
@@ -66,7 +66,6 @@
                       </div>
                       <div class="mbsc-row">
                           <div class="mbsc-col">
-                              <div *ngIf="case.columns | caseHasValue: 'CustomerName'"><i class="mbsc-ic mbsc-ic-fa-star"></i>{{ (case.columns | getByKey: 'CustomerName') || '&nbsp;' }}</div>
                               <div *ngIf="case.columns | caseHasValue: 'Performer_User_Id'"><i class="mbsc-ic mbsc-ic-fa-user"></i>{{ (case.columns | getByKey: 'Performer_User_Id') || '&nbsp;' }}</div>
                               <div *ngIf="case.columns | caseHasValue: 'WorkingGroup_Id'"><i class="mbsc-ic mbsc-ic-fa-group"></i>{{ (case.columns | getByKey: 'WorkingGroup_Id') || '&nbsp;' }}</div>
                           </div>

@@ -65,5 +65,8 @@
 		public int? DepartmentID { get; set; }
 
 		public int CustomerID { get; set; }
+
+		public int? SolutionTime { get; set; }
+		public int ExternalTime { get; internal set; }
 	}
 }

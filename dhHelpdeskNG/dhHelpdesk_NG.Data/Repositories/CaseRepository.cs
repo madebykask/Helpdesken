@@ -541,7 +541,9 @@ namespace DH.Helpdesk.Dal.Repositories
 							   Unread = cs.Unread == 1 ? true : false,
 							   IncludeInCaseStatistics = cs.StateSecondary != null ? cs.StateSecondary.IncludeInCaseStatistics == 1 : false,
 							   DepartmentID = cs.Department_Id,
-							   RegTime = cs.RegTime
+							   RegTime = cs.RegTime,
+							   SolutionTime = cs.Priority != null ? cs.Priority.SolutionTime : (int?)null,
+							   ExternalTime = cs.ExternalTime
 						   }; 
 
             // filter on customer
@@ -612,7 +614,9 @@ namespace DH.Helpdesk.Dal.Repositories
 					Unread = c.Unread,
 					DepartmentID = c.DepartmentID,
 					IncludeInCaseStatistics = c.IncludeInCaseStatistics,
-					CustomerID = c.CustomerId
+					CustomerID = c.CustomerId,
+					SolutionTime = c.SolutionTime,
+					ExternalTime = c.ExternalTime
 				});
 		}
 
