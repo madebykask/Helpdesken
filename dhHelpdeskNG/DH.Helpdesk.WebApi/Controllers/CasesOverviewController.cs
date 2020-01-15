@@ -228,6 +228,8 @@ namespace DH.Helpdesk.WebApi.Controllers
 
                     if (!string.IsNullOrEmpty(r.DepartmentName))
                         sr.Columns.Add(new Field { Key = UserFields.Department, StringValue = r.DepartmentName, DateTimeValue = null, FieldType = FieldTypes.String });
+                    if (!string.IsNullOrEmpty(r.InitiatorName))
+                        sr.Columns.Add(new Field { Key = UserFields.Notifier, StringValue = r.InitiatorName, DateTimeValue = null, FieldType = FieldTypes.String });
 
 					if (!string.IsNullOrEmpty(r.PriorityName))
 						sr.Columns.Add(new Field { Key = OtherFields.Priority, StringValue = r.PriorityName, FieldType = FieldTypes.String, TranslateThis = true });

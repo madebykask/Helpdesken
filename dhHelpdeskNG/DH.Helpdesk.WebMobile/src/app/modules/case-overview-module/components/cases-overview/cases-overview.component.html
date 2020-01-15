@@ -65,8 +65,10 @@
                           </div>
                       </div>
                       <div class="mbsc-row">
-                          <div class="mbsc-col mbsc-smaller ellipsis">
-                            {{ (case.columns | getByKey: 'Department_Id') || '&nbsp;' }}
+                          <div class="mbsc-col secondary-info ellipsis">
+                            {{ (case.columns | getByKey: 'Persons_Name') || '' }}
+                            <ng-container *ngIf="((case.columns | caseHasValue: 'Persons_Name') && (case.columns | caseHasValue: 'Department_Id'))"> - </ng-container>
+                            {{ (case.columns | getByKey: 'Department_Id') || '' }}
                         </div>
                       </div>
                       <div class="mbsc-row">

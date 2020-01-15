@@ -568,6 +568,7 @@ namespace DH.Helpdesk.Services.Services
                 CaseInfoFields.ChangeDate,
                 CaseInfoFields.Caption,
                 UserFields.Department,
+                UserFields.Notifier,
                 OtherFields.Priority,
                 //OtherFields.State,
                 OtherFields.SubState,

@@ -1142,7 +1142,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                     {
                         return query.OrderBy(c => c.CaseInfo.ChangeDate).ToList();
                     }
-                    else if (sort.Name == CaseInfoFields.RegistratedBy)
+                    else if (sort.Name == CaseInfoFields.RegisteredBy)
                     {
                         return query.OrderBy(c => c.CaseInfo.RegistratedBy).ToList();
                     }
@@ -1404,7 +1404,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                     {
                         return query.OrderByDescending(c => c.CaseInfo.ChangeDate).ToList();
                     }
-                    else if (sort.Name == CaseInfoFields.RegistratedBy)
+                    else if (sort.Name == CaseInfoFields.RegisteredBy)
                     {
                         return query.OrderByDescending(c => c.CaseInfo.RegistratedBy).ToList();
                     }

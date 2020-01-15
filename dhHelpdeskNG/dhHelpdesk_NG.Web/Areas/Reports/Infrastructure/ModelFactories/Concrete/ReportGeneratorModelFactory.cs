@@ -108,7 +108,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.Case, CaseInfoFields.Case, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.RegistrationDate, CaseInfoFields.RegistrationDate, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.ChangeDate, CaseInfoFields.ChangeDate, headers);
-            FieldSettingsHelper.CreateHeaderIfNeeded(settings.RegistratedBy, CaseInfoFields.RegistratedBy, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.RegistratedBy, CaseInfoFields.RegisteredBy, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.CaseType, CaseInfoFields.CaseType, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.ProductArea, CaseInfoFields.ProductArea, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.System, CaseInfoFields.System, headers);
@@ -218,7 +218,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
             FieldSettingsHelper.CreateValueIfNeeded(settings.Case, CaseInfoFields.Case, fields.Case, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.RegistrationDate, CaseInfoFields.RegistrationDate, fields.RegistrationDate, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.ChangeDate, CaseInfoFields.ChangeDate, fields.ChangeDate, values);
-            FieldSettingsHelper.CreateValueIfNeeded(settings.RegistratedBy, CaseInfoFields.RegistratedBy, fields.RegistratedBy, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.RegistratedBy, CaseInfoFields.RegisteredBy, fields.RegistratedBy, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.CaseType, CaseInfoFields.CaseType, fields.CaseType, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.ProductArea, CaseInfoFields.ProductArea, fields.ProductArea, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.System, CaseInfoFields.System, fields.System, values);
