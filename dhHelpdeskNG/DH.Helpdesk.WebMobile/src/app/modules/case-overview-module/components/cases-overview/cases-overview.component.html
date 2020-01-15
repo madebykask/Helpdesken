@@ -48,7 +48,7 @@
                   <div class="mbsc-grid mbsc-margin mbsc-txt-muted mbsc-bold mbsc-txt-s">
                     <div class="mbsc-row mbsc-no-padding">
                       <div class="mbsc-col-6 case-number">
-                          #{{ (case.columns | getByKey: 'CaseNumber') || '&nbsp;' }} <span style="font-weight: bold">{{ (case.columns | getByKey: 'CustomerName') || '&nbsp;' }}</span>
+                          #{{ (case.columns | getByKey: 'CaseNumber') || '&nbsp;' }} <span style="font-weight: bold">{{ (case.columns | getByKey: 'Customer_Id') || '&nbsp;' }}</span>
                       </div>
                       <div class="mbsc-col-6 time">
                           <span><i class="mbsc-ic mbsc-ic-fa-clock-o"></i> {{ (case.columns | getByKey: 'ChangeTime' | dateTimeFormat) || '&nbsp;'}}</span>
