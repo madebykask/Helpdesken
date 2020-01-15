@@ -81,15 +81,15 @@ namespace DH.Helpdesk.WebApi.Logic.Case
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
         private readonly IStateSecondaryService _stateSecondaryService;
 
-        public CaseFieldsCreator(ICaseFileService caseFileService, 
+        public CaseFieldsCreator(ICaseFileService caseFileService,
             ICaseFieldSettingsHelper caseFieldSettingsHelper,
-            IUserService userService, 
-            IWorkingGroupService workingGroupService, 
+            IUserService userService,
+            IWorkingGroupService workingGroupService,
             ISupplierService supplierService,
-            ICaseTranslationService caseTranslationService, 
+            ICaseTranslationService caseTranslationService,
             IDepartmentService departmentService,
             IPriorityService priorityService,
-            IWatchDateCalendarService watchDateCalendarService, 
+            IWatchDateCalendarService watchDateCalendarService,
             ICaseTypeService caseTypeService,
             IProductAreaService productAreaService,
             ICaseExtraFollowersService caseExtraFollowersService,
@@ -1039,11 +1039,13 @@ namespace DH.Helpdesk.WebApi.Logic.Case
             CustomerSettings customerSettings)
         {
             IBaseCaseField field;
+            var noMailToNotifier = false;
             if (userOverview.CloseCasePermission.ToBool())
             {
                 {
                     field = GetField(
-                        currentCase != null ? currentCase.FinishingDescription : template?.FinishingDescription, customerId,
+                        currentCase != null ? currentCase.FinishingDescription : template?.FinishingDescription,
+                        customerId,
                         languageId,
                         CaseFieldsNamesApi.FinishingDescription, GlobalEnums.TranslationCaseFields.FinishingDescription,
                         CaseSectionType.Communication,
@@ -1063,15 +1065,19 @@ namespace DH.Helpdesk.WebApi.Logic.Case
                     {
                         Name = CaseFieldsNamesApi.ClosingReason,
                         Value = finishingCause,
-                        Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.ClosingReason, languageId, customerId, caseFieldTranslations),
+                        Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.ClosingReason,
+                            languageId, customerId, caseFieldTranslations),
                         Section = CaseSectionType.Communication,
-                        Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.ClosingReason, caseFieldSettings)
+                        Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.ClosingReason,
+                            caseFieldSettings)
                     };
 
-                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.ClosingReason, currentCase?.Id, caseTemplateSettings))
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.ClosingReason,
+                        currentCase?.Id, caseTemplateSettings))
                         AddReadOnlyOption(field.Options);
 
-                    if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.ClosingReason))
+                    if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings,
+                        GlobalEnums.TranslationCaseFields.ClosingReason))
                         AddHiddenOption(field.Options);
 
                     model.Fields.Add(field);
@@ -1082,26 +1088,32 @@ namespace DH.Helpdesk.WebApi.Logic.Case
                     field = new BaseCaseField<DateTime?>()
                     {
                         Name = CaseFieldsNamesApi.FinishingDate,
-                        Value = currentCase != null ? currentCase.FinishingDate : template?.FinishingDate ??
-                                                                                  (template?.FinishingCause_Id != null ? DateTime.UtcNow : new DateTime?()),
-                        Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.FinishingDate, languageId, customerId, caseFieldTranslations),
+                        Value = currentCase != null
+                            ? currentCase.FinishingDate
+                            : template?.FinishingDate ??
+                              (template?.FinishingCause_Id != null ? DateTime.UtcNow : new DateTime?()),
+                        Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.FinishingDate,
+                            languageId, customerId, caseFieldTranslations),
                         Section = CaseSectionType.Communication,
-                        Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.FinishingDate, caseFieldSettings)
+                        Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.FinishingDate,
+                            caseFieldSettings)
                     };
 
-                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate, currentCase?.Id, caseTemplateSettings) ||
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate,
+                            currentCase?.Id, caseTemplateSettings) ||
                         customerSettings.DisableCaseEndDate)
                         AddReadOnlyOption(field.Options);
 
-                    if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.FinishingDate))
+                    if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings,
+                        GlobalEnums.TranslationCaseFields.FinishingDate))
                         AddHiddenOption(field.Options);
 
                     model.Fields.Add(field);
                 }
 
                 var stateSecondaryField = model.Fields.FirstOrDefault(f =>
-                    f.Name.Equals(CaseFieldsNamesApi.StateSecondaryId.ToString(), StringComparison.InvariantCultureIgnoreCase));
-                var noMailToNotifier = false;
+                    f.Name.Equals(CaseFieldsNamesApi.StateSecondaryId.ToString(),
+                        StringComparison.InvariantCultureIgnoreCase));
                 if (stateSecondaryField != null)
                 {
                     var stateSecondaryId = ((BaseCaseField<int?>)stateSecondaryField).Value;
@@ -1111,134 +1123,134 @@ namespace DH.Helpdesk.WebApi.Logic.Case
                         noMailToNotifier = stateSecondary.NoMailToNotifier.ToBool();
                     }
                 }
+            }
 
-                // Log External Emails to (Extra Followers)
+            // Log External Emails to (Extra Followers)
+            {
+                field = new BaseCaseField<bool>()
                 {
-                    field = new BaseCaseField<bool>()
-                    {
-                        Name = CaseFieldsNamesApi.Log_SendMailToNotifier,
-                        Value = true,
-                        Label = _caseTranslationService.TranslateFieldLabel(languageId, "Till"),
-                        Section = CaseSectionType.Communication
-                    };
+                    Name = CaseFieldsNamesApi.Log_SendMailToNotifier,
+                    Value = true,
+                    Label = _caseTranslationService.TranslateFieldLabel(languageId, "Till"),
+                    Section = CaseSectionType.Communication
+                };
 
-                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, currentCase?.Id, caseTemplateSettings)
-                    || noMailToNotifier)
-                        AddReadOnlyOption(field.Options);
+                if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, currentCase?.Id, caseTemplateSettings)
+                || noMailToNotifier)
+                    AddReadOnlyOption(field.Options);
 
-                    if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External))
-                        AddHiddenOption(field.Options);
+                if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External))
+                    AddHiddenOption(field.Options);
 
-                    model.Fields.Add(field);
-                }
+                model.Fields.Add(field);
+            }
 
-                // Log External Emails cc (Extra Followers)
+            // Log External Emails cc (Extra Followers)
+            {
+                field = new BaseCaseField<string>()
                 {
-                    field = new BaseCaseField<string>()
-                    {
-                        Name = CaseFieldsNamesApi.Log_ExternalEmailsCC,
-                        Value = currentCase != null ? GetExtraFollowersEmails(currentCase.Id) : "",
-                        Label = _caseTranslationService.TranslateFieldLabel(languageId, "Kopia"),
-                        Section = CaseSectionType.Communication
-                    };
+                    Name = CaseFieldsNamesApi.Log_ExternalEmailsCC,
+                    Value = currentCase != null ? GetExtraFollowersEmails(currentCase.Id) : "",
+                    Label = _caseTranslationService.TranslateFieldLabel(languageId, "Kopia"),
+                    Section = CaseSectionType.Communication
+                };
 
-                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, currentCase?.Id, caseTemplateSettings))
-                        AddReadOnlyOption(field.Options);
+                if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, currentCase?.Id, caseTemplateSettings))
+                    AddReadOnlyOption(field.Options);
 
-                    if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External))
-                        AddHiddenOption(field.Options);
+                if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External))
+                    AddHiddenOption(field.Options);
 
-                    model.Fields.Add(field);
-                }
+                model.Fields.Add(field);
+            }
 
-                // Log External
+            // Log External
+            {
+                field = new BaseCaseField<string>()
                 {
-                    field = new BaseCaseField<string>()
-                    {
-                        Name = CaseFieldsNamesApi.Log_ExternalText,
-                        Value = template?.Text_External ?? "",
-                        Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Text_External, languageId, customerId, caseFieldTranslations),
-                        Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Text_External, caseFieldSettings),
-                        Section = CaseSectionType.Communication
-                    };
+                    Name = CaseFieldsNamesApi.Log_ExternalText,
+                    Value = template?.Text_External ?? "",
+                    Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Text_External, languageId, customerId, caseFieldTranslations),
+                    Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Text_External, caseFieldSettings),
+                    Section = CaseSectionType.Communication
+                };
 
-                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, currentCase?.Id, caseTemplateSettings))
-                        AddReadOnlyOption(field.Options);
+                if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, currentCase?.Id, caseTemplateSettings))
+                    AddReadOnlyOption(field.Options);
 
-                    if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External))
-                        AddHiddenOption(field.Options);
+                if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External))
+                    AddHiddenOption(field.Options);
 
-                    AddMaxLengthOption(field.Options, 3000);
-                    model.Fields.Add(field);
-                }
+                AddMaxLengthOption(field.Options, 3000);
+                model.Fields.Add(field);
+            }
 
-                // Log Internal
-                if (userOverview.CaseInternalLogPermission.ToBool())
+            // Log Internal
+            if (userOverview.CaseInternalLogPermission.ToBool())
+            {
+                field = new BaseCaseField<string>()
                 {
-                    field = new BaseCaseField<string>()
-                    {
-                        Name = CaseFieldsNamesApi.Log_InternalText,
-                        Value = template?.Text_Internal ?? "",
-                        Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, languageId, customerId, caseFieldTranslations),
-                        Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, caseFieldSettings),
-                        Section = CaseSectionType.Communication
-                    };
+                    Name = CaseFieldsNamesApi.Log_InternalText,
+                    Value = template?.Text_Internal ?? "",
+                    Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, languageId, customerId, caseFieldTranslations),
+                    Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, caseFieldSettings),
+                    Section = CaseSectionType.Communication
+                };
 
-                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, currentCase?.Id, caseTemplateSettings))
-                        AddReadOnlyOption(field.Options);
+                if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, currentCase?.Id, caseTemplateSettings))
+                    AddReadOnlyOption(field.Options);
 
-                    if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_Internal))
-                        AddHiddenOption(field.Options);
+                if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_Internal))
+                    AddHiddenOption(field.Options);
 
-                    AddMaxLengthOption(field.Options, 3000);
-                    model.Fields.Add(field);
-                }
+                AddMaxLengthOption(field.Options, 3000);
+                model.Fields.Add(field);
+            }
 
-                // Log File
+            // Log File
+            {
+                field = new BaseCaseField<string>()
                 {
-                    field = new BaseCaseField<string>()
-                    {
-                        Name = CaseFieldsNamesApi.Log_Filename,
-                        Value = "",
-                        Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Filename, languageId, customerId, caseFieldTranslations),
-                        Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Filename, caseFieldSettings),
-                        Section = CaseSectionType.Communication
-                    };
+                    Name = CaseFieldsNamesApi.Log_Filename,
+                    Value = "",
+                    Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Filename, languageId, customerId, caseFieldTranslations),
+                    Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Filename, caseFieldSettings),
+                    Section = CaseSectionType.Communication
+                };
 
-                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Filename, currentCase?.Id, caseTemplateSettings))
-                        AddReadOnlyOption(field.Options);
+                if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Filename, currentCase?.Id, caseTemplateSettings))
+                    AddReadOnlyOption(field.Options);
 
-                    if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename))
-                        AddHiddenOption(field.Options);
-                    
-                    model.Fields.Add(field);
-                }
+                if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename))
+                    AddHiddenOption(field.Options);
 
+                model.Fields.Add(field);
+            }
+
+            {
+                field = new BaseCaseField<string>()
                 {
-                    field = new BaseCaseField<string>()
-                    {
-                        Name = CaseFieldsNamesApi.Log_Filename_Internal,
-                        Value = "",
-                        Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal, languageId, customerId, caseFieldTranslations),
-                        Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal, caseFieldSettings),
-                        Section = CaseSectionType.Communication
-                    };
+                    Name = CaseFieldsNamesApi.Log_Filename_Internal,
+                    Value = "",
+                    Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal, languageId, customerId, caseFieldTranslations),
+                    Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal, caseFieldSettings),
+                    Section = CaseSectionType.Communication
+                };
 
-                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal, currentCase?.Id, caseTemplateSettings))
-                        AddReadOnlyOption(field.Options);
+                if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal, currentCase?.Id, caseTemplateSettings))
+                    AddReadOnlyOption(field.Options);
 
-                    if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal))
-                        AddHiddenOption(field.Options);
-                    
-                    model.Fields.Add(field);
-                }
+                if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal))
+                    AddHiddenOption(field.Options);
+
+                model.Fields.Add(field);
             }
         }
 
         private int? GetUserSearchCategoryValue(CaseSolution template, IList<CaseFieldSetting> fieldSettings, CaseSectionType sectionType)
         {
             var fieldName = sectionType == CaseSectionType.Regarding
-                ? GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString() 
+                ? GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()
                 : GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString();
 
             //check template first
