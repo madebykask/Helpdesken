@@ -219,6 +219,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 					sr.CaseIcon = r.CaseIcon;
 					sr.SortOrder = input.OrderBy;
 					sr.IsUnread = r.Unread;
+					sr.ShowCustomerName = true;
 					sr.Columns = new List<Field>();
 					sr.Columns.Add(new Field { Key = CaseInfoFields.Case, StringValue = r.CaseNumber.ToString(), DateTimeValue = null, FieldType = FieldTypes.String });
 					sr.Columns.Add(new Field { Key = CaseInfoFields.ChangeDate, StringValue = r.ChangedDate.ToString("yyyy-MM-dd"), DateTimeValue = r.ChangedDate, FieldType = FieldTypes.Date });
@@ -293,6 +294,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 					{
 						sr.Columns.Add(new Field { Key = "_temporary_LeadTime", StringValue = "", FieldType = FieldTypes.NullableHours });
 					}
+
 					searchResult.Items.Add(sr);
 				}
 			}
