@@ -289,6 +289,10 @@ namespace DH.Helpdesk.WebApi.Controllers
 						}
 						sr.Columns.Add(new Field { Key = "_temporary_LeadTime", StringValue = timeLeft.ToString(), FieldType = FieldTypes.NullableHours });
 					}
+					else
+					{
+						sr.Columns.Add(new Field { Key = "_temporary_LeadTime", StringValue = "", FieldType = FieldTypes.NullableHours });
+					}
 					searchResult.Items.Add(sr);
 				}
 			}

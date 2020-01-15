@@ -458,33 +458,44 @@ namespace DH.Helpdesk.Dal.Repositories
 			var searchFreeText = !string.IsNullOrWhiteSpace(freeTextSearch);
 
 			int? caseId = null;
+			bool useCaseNumberSearch = false;
 			string[] words = new string[0];
 			if (searchFreeText)
 			{
-				int caseNumber = 0;
-				if (int.TryParse(freeTextSearch, out caseNumber))
+				var regexCaseNumber = new Regex(@"^\#(?<nr>\d{1,10})$");
+
+				var isCaseNumber = regexCaseNumber.Match(freeTextSearch.Trim());
+				if (isCaseNumber.Success)
 				{
+					var caseNumber = int.Parse(isCaseNumber.Groups["nr"].Value);
+					useCaseNumberSearch = true;
+
 					caseId = this.DataContext.Cases.Where(o => o.CaseNumber == (decimal)caseNumber)
 						.Select(o => o.Id)
 						.SingleOrDefault();
+
+					searchFreeText = false;
 				}
-
-				var wordList = new List<string>();
-
-				var quotes = new Regex("\\\"(?<quote>.*?)\\\""); // Check quoted statements i.e. "my car" volvo saab
-				var matches = quotes.Matches(freeTextSearch);
-				foreach (Match match in matches)
+				else
 				{
-					var fullQuote = match.Captures[0].Value;				// Full quote i.e. "my car"
-					var quote = match.Groups["quote"].Value;				// Content of quote my car
 
-					wordList.Add(quote);									// Content of quote to search list
-					freeTextSearch = freeTextSearch.Replace(fullQuote, ""); // Remove quoted query
+					var wordList = new List<string>();
+
+					var quotes = new Regex("\\\"(?<quote>.*?)\\\""); // Check quoted statements i.e. "my car" volvo saab
+					var matches = quotes.Matches(freeTextSearch);
+					foreach (Match match in matches)
+					{
+						var fullQuote = match.Captures[0].Value;                // Full quote i.e. "my car"
+						var quote = match.Groups["quote"].Value;                // Content of quote my car
+
+						wordList.Add(quote);                                    // Content of quote to search list
+						freeTextSearch = freeTextSearch.Replace(fullQuote, ""); // Remove quoted query
+					}
+
+					wordList.AddRange(freeTextSearch.Split(' ').Where(o => !string.IsNullOrWhiteSpace(o)).ToArray());               // Split remaining unquoted words by space
+
+					words = wordList.ToArray();
 				}
-
-				wordList.AddRange(freeTextSearch.Split(' ').Where(o => !string.IsNullOrWhiteSpace(o)).ToArray());				// Split remaining unquoted words by space
-
-				words = wordList.ToArray();
 			}
 
 
@@ -506,8 +517,9 @@ namespace DH.Helpdesk.Dal.Repositories
 							) &&
 							(!cs.WorkingGroup_Id.HasValue || workingGroupsIds.Contains(cs.WorkingGroup_Id.Value)) &&                // Working group logic
 							(!cs.Department_Id.HasValue || fullAccessCustomers.Contains(cs.Customer_Id) || departmentIds.Contains(cs.Department_Id.Value)) && // Department logic
+							(!useCaseNumberSearch || caseId.HasValue && cs.Id == caseId.Value)	&&															// Case ID logixc
 							  (!searchFreeText || (                                                                                 // Freetext search, TODO: use text index when active
-								(caseId.HasValue && cs.Id == caseId.Value) ||
+								
 									(words.Any(w => cs.ReportedBy.Contains(w) ||
 									cs.PersonsName.Contains(w) ||
 									cs.RegUserName.Contains(w) ||
@@ -516,6 +528,7 @@ namespace DH.Helpdesk.Dal.Repositories
 									cs.PersonsCellphone.Contains(w) ||
 									cs.Place.Contains(w) ||
 									cs.Caption.Contains(w) ||
+									cs.CaseNumber.ToString().Contains(w) ||
 									cs.Description.Contains(w) ||
 									cs.Miscellaneous.Contains(w) ||
 									cs.ReferenceNumber.Contains(w) ||
