@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Dal.Repositories
 	using Z.EntityFramework.Plus;
 	using BusinessData.OldComponents;
 	using Common.Linq;
+	using System.Text.RegularExpressions;
 
 	public interface ICaseRepository : IRepository<Case>
     {
@@ -467,7 +468,23 @@ namespace DH.Helpdesk.Dal.Repositories
 						.Select(o => o.Id)
 						.SingleOrDefault();
 				}
-				words = freeTextSearch.Split(' ');
+
+				var wordList = new List<string>();
+
+				var quotes = new Regex("\\\"(?<quote>.*?)\\\""); // Check quoted statements i.e. "my car" volvo saab
+				var matches = quotes.Matches(freeTextSearch);
+				foreach (Match match in matches)
+				{
+					var fullQuote = match.Captures[0].Value;				// Full quote i.e. "my car"
+					var quote = match.Groups["quote"].Value;				// Content of quote my car
+
+					wordList.Add(quote);									// Content of quote to search list
+					freeTextSearch = freeTextSearch.Replace(fullQuote, ""); // Remove quoted query
+				}
+
+				wordList.AddRange(freeTextSearch.Split(' ').Where(o => !string.IsNullOrWhiteSpace(o)).ToArray());				// Split remaining unquoted words by space
+
+				words = wordList.ToArray();
 			}
 
 
