@@ -516,7 +516,7 @@ namespace DH.Helpdesk.Dal.Repositories
 								(user.UserGroup_Id == UserGroups.User && cs.ReportedBy.ToLower() == user.UserID.ToLower())
 							) &&
 							(!cs.WorkingGroup_Id.HasValue || workingGroupsIds.Contains(cs.WorkingGroup_Id.Value)) &&                // Working group logic
-							(!cs.Department_Id.HasValue || fullAccessCustomers.Contains(cs.Customer_Id) || departmentIds.Contains(cs.Department_Id.Value)) && // Department logic
+							(fullAccessCustomers.Contains(cs.Customer_Id) || departmentIds.Contains(cs.Department_Id.Value)) && // Department logic
 							(!useCaseNumberSearch || caseId.HasValue && cs.Id == caseId.Value)	&&															// Case ID logixc
 							  (!searchFreeText || (                                                                                 // Freetext search, TODO: use text index when active
 								
