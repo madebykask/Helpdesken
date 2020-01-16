@@ -24,6 +24,7 @@
     var downloadCaseFileUrl = Url.Action("DownloadNewCaseFile", "CaseFiles");
     var downloadCaseFileParamUrl = (!string.IsNullOrEmpty(Model.CaseDataModel.CaseFileKey) ? "id=" + Model.CaseDataModel.CaseFileKey + "&" : string.Empty);
     var downloadCaseFileCompleteUrl = downloadCaseFileUrl + "?" + "id=" + "{id}" + "&fileName=" + "{name}";
+    var returnUrl = (string)(ViewBag.ReturnUrl ?? "");
 }
 
 <script type="text/javascript">
@@ -45,7 +46,7 @@
     };
 
     window.caseLogsParameters = {
-        caseDetailsUrl: '@Url.Action("ExtendedCase", "Case")',
+        caseDetailsUrl: '@( string.IsNullOrEmpty(returnUrl) ? Url.Action("ExtendedCase", "Case") : returnUrl )',
         uploadLogFileUrl: '@Url.Action("UploadLogFile", "CaseFiles")',
         getLogFilesUrl: '@Url.Action("GetLogFiles", "CaseFiles")',
         deleteLogFileUrl: '@Url.Action("DeleteLogFile", "CaseFiles")',
@@ -338,7 +339,7 @@
     /* FileUpload */
     @Html.HiddenFor(m => Model.CaseDataModel.CaseFileKey)
 
-    @Html.Hidden("ReturnUrl", (object)ViewBag.ReturnUrl)
+    @Html.Hidden("ReturnUrl", returnUrl)
 }
 
 <div class="container-fluid dh-container">
