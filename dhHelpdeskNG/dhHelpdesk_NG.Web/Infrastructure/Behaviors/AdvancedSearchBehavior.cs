@@ -191,7 +191,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
                 var user = _userService.GetUser(currentUser.Id);
                 if (user != null)
                 {
-                    availableCustomerIds.AddRange(user.Cs.Select(x => x.Id)); //todo: refactor to use correct query
+                    availableCustomerIds.AddRange(user.Cs.Where(c => c.Status ==1).Select(x => x.Id)); //todo: refactor to use correct query
                     availableDepIds.AddRange(user.Departments.Where(x => x.Customer_Id == searchCustomerId).Select(x => x.Id));
                     availableWgIds.AddRange(user.UserWorkingGroups.Select(x => x.WorkingGroup_Id));
 

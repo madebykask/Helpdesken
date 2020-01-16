@@ -23,8 +23,12 @@
                                         class="chosen-select">
                                     @foreach (var c in Model.CaseSearchFilterData.filterCustomers)
                                     {
-                                        var customerId = c.Value.ToInt();
-                                        <option value="@customerId" @customerId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.Customer) style="@(c.Active ? "" : "color: #ccc")">@c.Name</option>
+                                        if (c.Active)
+                                        {
+
+                                            var customerId = c.Value.ToInt();
+                                            <option value="@customerId" @customerId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.Customer) style="@(c.Active ? "" : "color: #ccc")">@c.Name</option>
+                                        }
                                     }
                                 </select>
                                 <select id="lstIncludedCustomers" name="lstIncludedCustomers" 
