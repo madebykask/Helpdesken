@@ -527,6 +527,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var csSelected = user.Cs ?? new List<Customer>();
             var csAvailable = new List<Customer>();
 
+
             foreach (var c in this._customerService.GetAllCustomers())
             {
                 if (!csSelected.Contains(c))
@@ -645,8 +646,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             //}
 
             var customersSelected = user.Cs ?? new List<Customer>();
+            customersSelected = customersSelected.Where(x => x.Status ==1 ).ToList();
+
             var selectedCustomersHash = customersSelected.ToDictionary(it => it.Id, it => true);
-            var customersAvailable = GetAvaliableCustomersFor(user).Where(it => !selectedCustomersHash.ContainsKey(it.Id)).OrderBy(it => it.Name);
+            var customersAvailable = GetAvaliableCustomersFor(user).Where(it => !selectedCustomersHash.ContainsKey(it.Id) && it.Status == 1).OrderBy(it => it.Name);
             var otsSelected = user.OTs ?? new List<OrderType>();
             var otsAvailable = new List<OrderType>();
 
