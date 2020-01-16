@@ -679,7 +679,7 @@ namespace DH.Helpdesk.Services.Services
 
         private IQueryable<CustomerDetails> GetCustomerDetailsQueryable(int id)
         {
-            return _customerRepository.GetMany(c => c.Id == id).AsQueryable()
+            return _customerRepository.GetMany(c => c.Id == id).Where(c => c.Status == 1 ).AsQueryable()
                 .Select(c => new CustomerDetails()
                 {
                     Id = c.Id,

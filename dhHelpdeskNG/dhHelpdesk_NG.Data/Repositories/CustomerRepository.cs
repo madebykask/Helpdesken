@@ -268,7 +268,8 @@ using System;
                                 UserId = cu.User_Id,
                                 CustomerId = c.Id,
                                 CustomerName = c.Name,
-                                CasesCount = DataContext.Cases.Where(x => x.Customer_Id == c.Id).Count()
+                                CasesCount = DataContext.Cases.Where(x => x.Customer_Id == c.Id).Count(),
+                                Active = c.Status
                             })
                          .ToList();
 
@@ -287,12 +288,13 @@ using System;
                                 UserId = u.Id,
                                 Customer = c,
                                 CustomerUser = cu,
-                                Settings = s
+                                Settings = s,
+                                IsActive = c.Status 
                             })
                          .ToList();
 
             return entities
-                    .Select(uc => new UserCustomer(uc.UserId, uc.CustomerUser, this.customerSettingsMapper.Map(uc.Settings)))
+                    .Select(uc => new UserCustomer(uc.UserId, uc.CustomerUser, this.customerSettingsMapper.Map(uc.Settings), uc.Customer.Status))
                     .ToList();
         }
 

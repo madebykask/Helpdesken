@@ -20,7 +20,7 @@
             {
                 CustomerId = customer.Id,
                 CustomerName = customer.Name,
-
+                IsActive = customer.Status != 0,
                 CasesInProgress = customer.Cases.Where(c => c.FinishingDate == null && c.Deleted == 0).Count(),
                 CasesUnreaded = customer.Cases.Where(c => c.Unread == 1 && c.Deleted == 0 && c.FinishingDate == null).Count(),
                 CasesInRest = customer.Cases.Where(c => c.FinishingDate == null && 
@@ -43,7 +43,8 @@
                                                 c.CasesInProgress,
                                                 c.CasesUnreaded,
                                                 c.CasesInRest,
-                                                c.CasesMy)).ToArray();
+                                                c.CasesMy,
+                                                c.IsActive)).ToArray();
 
             return overviews;
         }
