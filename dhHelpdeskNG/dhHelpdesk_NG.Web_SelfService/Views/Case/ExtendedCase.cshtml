@@ -59,7 +59,8 @@
         caseId: Number('@Model.CaseId'),
         logFileKey: '@Model.LogFileGuid',
         isFinished : @Html.Raw(Model.CaseDataModel.IsFinished ? "true" : "false"),
-        logNotesMode: Number('@(Model.ApplicationType == ApplicationType.LineManager || Model.ShowCommunicationForSelfservice ? 1 : 0)')
+        logNotesMode: Number('@(Model.ApplicationType == ApplicationType.LineManager || Model.ShowCommunicationForSelfservice ? 1 : 0)'),
+        caseEmailGuid : '@(ViewBag.caseEmailGuid ?? "")'
     };
 
     window.parameters = {

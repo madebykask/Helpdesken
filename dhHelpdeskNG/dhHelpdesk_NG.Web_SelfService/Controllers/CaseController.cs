@@ -509,6 +509,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             //return url after save
             ViewBag.ReturnUrl = Url.Action("ExtendedCasePublic", new { id });
+            ViewBag.caseEmailGuid = id;
 
             return View("ExtendedCase", model);
         }
