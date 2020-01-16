@@ -1182,18 +1182,74 @@ namespace DH.Helpdesk.Dal.Repositories
                 sb.Append(regionCondition);
             }
 
-            // prio
-            if (!string.IsNullOrWhiteSpace(searchFilter.Priority))
-                sb.Append(" and (tblcase.Priority_Id in (" + searchFilter.Priority.SafeForSqlInject() + "))");
+			// prio
+			if (!string.IsNullOrWhiteSpace(searchFilter.Priority))
+			{
+				var priorityIds = searchFilter.Priority.Split(",").Select(o => int.Parse(o.Trim()))
+					.ToList();
+
+				var searchNull = priorityIds.Any(o => o == int.MinValue);
+				priorityIds.Remove(int.MinValue);
+
+				if (priorityIds.Any() && searchNull)
+				{
+					sb.Append(" and (tblcase.Priority_Id in (" + priorityIds.Select(o => o.ToString()).Aggregate((o,p) => o + ", " + p) + ") OR tblcase.Priority_Id IS NULL)");
+				}
+				else if (priorityIds.Any())
+				{
+					sb.Append(" and (tblcase.Priority_Id in (" + priorityIds.Select(o => o.ToString()).Aggregate((o, p) => o + ", " + p) + "))");
+				}
+				else if (searchNull)
+				{
+					sb.Append(" and (tblcase.Priority_Id IS NULL)");
+				}
+			}
             // katagori / category
             if (!string.IsNullOrWhiteSpace(searchFilter.Category))
                 sb.Append(" and (tblcase.Category_Id in (" + searchFilter.Category.SafeForSqlInject() + "))");
-            // status
-            if (!string.IsNullOrWhiteSpace(searchFilter.Status))
-                sb.Append(" and (tblcase.Status_Id in (" + searchFilter.Status.SafeForSqlInject() + "))");
-            // state secondery
-            if (!string.IsNullOrWhiteSpace(searchFilter.StateSecondary))
-                sb.Append(" and (tblcase.StateSecondary_Id in (" + searchFilter.StateSecondary.SafeForSqlInject() + "))");
+			// status
+			if (!string.IsNullOrWhiteSpace(searchFilter.Status))
+			{
+				var statusIds = searchFilter.Status.Split(",").Select(o => int.Parse(o.Trim())).ToList();
+
+				var searchNull = statusIds.Any(o => o == int.MinValue);
+				statusIds.Remove(int.MinValue);
+
+				if (statusIds.Any() && searchNull)
+				{
+					sb.Append(" and (tblcase.Status_Id in (" + statusIds.Select(o => o.ToString()).Aggregate((o, p) => o + ", " + p) + ") OR tblcase.Status_Id IS NULL)");
+				}
+				else if (statusIds.Any())
+				{
+					sb.Append(" and (tblcase.Status_Id in (" + statusIds.Select(o => o.ToString()).Aggregate((o, p) => o + ", " + p) + "))");
+				}
+				else if (searchNull)
+				{
+					sb.Append(" and (tblcase.Status_Id IS NULL)");
+				}
+			}
+			// state secondery
+			if (!string.IsNullOrWhiteSpace(searchFilter.StateSecondary))
+			{
+
+				var stateSecondaryIds = searchFilter.StateSecondary.Split(",").Select(o => int.Parse(o.Trim())).ToList();
+
+				var searchNull = stateSecondaryIds.Any(o => o == int.MinValue);
+				stateSecondaryIds.Remove(int.MinValue);
+
+				if (stateSecondaryIds.Any() && searchNull)
+				{
+					sb.Append(" and (tblcase.StateSecondary_Id in (" + stateSecondaryIds.Select(o => o.ToString()).Aggregate((o, p) => o + ", " + p) + ") OR tblcase.StateSecondary_Id IS NULL)");
+				}
+				else if (stateSecondaryIds.Any())
+				{
+					sb.Append(" and (tblcase.StateSecondary_Id in (" + stateSecondaryIds.Select(o => o.ToString()).Aggregate((o, p) => o + ", " + p) + "))");
+				}
+				else if (searchNull)
+				{
+					sb.Append(" and (tblcase.StateSecondary_Id IS NULL)");
+				}
+			}
 
             if (searchFilter.CaseRegistrationDateStartFilter.HasValue)
             {
@@ -1359,31 +1415,59 @@ namespace DH.Helpdesk.Dal.Repositories
 
         private string BuildRegionSearchCondition(CaseSearchFilter searchFilter)
         {
-            var condition = string.Empty;
-            var searchScope = searchFilter.InitiatorSearchScope;
-            var regions = searchFilter.Region.SafeForSqlInject();
+			var conditions = new List<string>();
 
-            var conditions = new List<string>();
+			var regionIds = searchFilter.Region.Split(",").Select(o => int.Parse(o.Trim())).ToList();
 
-            // add case search condition
-            if (searchScope == CaseInitiatorSearchScope.User || searchScope == CaseInitiatorSearchScope.UserAndIsAbout)
-            {
-                conditions.Add($" tblCase.Region_Id in ({regions})");
-                conditions.Add($" tblDepartment.Region_Id in ({regions})");
-            }
+			if (regionIds.Count > 0)
+			{
 
-            //add isAbout search condition
-            if (searchScope == CaseInitiatorSearchScope.IsAbout || searchScope == CaseInitiatorSearchScope.UserAndIsAbout)
-            {
-                conditions.Add($"tblCaseIsAbout.Region_Id in ({regions})");
-            }
+				var searchNull = regionIds.Any(o => o == int.MinValue);
+				var condition = string.Empty;
+				var searchScope = searchFilter.InitiatorSearchScope;
 
-            if (conditions.Any())
-            {
-                condition = ConcatConditionsToString(conditions, CaseSearchConstants.Combinator_OR);
-            }
+				regionIds.Remove(int.MinValue);
+				
+				// add case search condition
+				if (regionIds.Any())
+				{
+					var regions = regionIds.Select(o => o.ToString()).Aggregate((o, p) => o + ", " + p);
 
-            return !string.IsNullOrEmpty(condition) ? $" AND ( {condition} )" : string.Empty;
+					if (searchScope == CaseInitiatorSearchScope.User || searchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+					{
+						conditions.Add($" tblCase.Region_Id in ({regions})");
+						conditions.Add($" tblDepartment.Region_Id in ({regions})");
+					}
+
+					//add isAbout search condition
+					if (searchScope == CaseInitiatorSearchScope.IsAbout || searchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+					{
+						conditions.Add($"tblCaseIsAbout.Region_Id in ({regions})");
+					}
+				}
+				if (searchNull)
+				{
+					if (searchScope == CaseInitiatorSearchScope.User || searchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+					{
+						conditions.Add($" tblCase.Region_Id IS NULL");
+						conditions.Add($" tblDepartment.Region_Id IS NULL");
+					}
+
+					//add isAbout search condition
+					if (searchScope == CaseInitiatorSearchScope.IsAbout || searchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+					{
+						conditions.Add($"tblCaseIsAbout.Region_Id IS NULL");
+					}
+				}
+
+				if (conditions.Any())
+				{
+					condition = ConcatConditionsToString(conditions, CaseSearchConstants.Combinator_OR);
+				}
+
+				return !string.IsNullOrEmpty(condition) ? $" AND ( {condition} )" : string.Empty;
+			}
+			return string.Empty;
         }
 
         private string BuildCaseFreeTextSearchConditions(string text)
