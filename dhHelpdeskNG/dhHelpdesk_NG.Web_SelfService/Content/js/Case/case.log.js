@@ -177,7 +177,7 @@ $(function () {
                         function(res) {
                             if (isPopup) {
                                 if (caseEmailGuid != null && caseEmailGuid !== '') {
-                                    window.location.href = caseDetailsUrl + '/' + caseEmailGuid;
+                                    window.location.href = caseDetailsUrl.indexOf(caseEmailGuid) >= 0 ? caseDetailsUrl : (caseDetailsUrl + '/' + caseEmailGuid);
                                 }
                                 else
                                     window.location.href = caseDetailsUrl.indexOf(caseId) >= 0 ? caseDetailsUrl : (caseDetailsUrl + '/' + caseId);
