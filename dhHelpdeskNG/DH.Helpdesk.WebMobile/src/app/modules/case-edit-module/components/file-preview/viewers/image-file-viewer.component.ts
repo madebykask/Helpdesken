@@ -3,8 +3,9 @@ import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrap
 
 @Component({
   selector: 'image-file-viewer',
-  template: `
+  template: `<pinch-zoom>
       <img #img [src]="blobUrl | sanitize:'url'" style="max-width:100%;max-height:100%" border="0" />
+      </pinch-zoom>
   `
 })
 export class ImageFileViewerComponent implements OnInit {

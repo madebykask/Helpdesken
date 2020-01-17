@@ -28,8 +28,8 @@ import { LogFilesUploadComponent } from './components/case-edit/controls/log-fil
 import { CaseLogInputComponent } from './components/case-edit/case-log-input/case-log-input.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { FilePreviewComponent } from './components/file-preview/file-preview.component';
-import { CommonFileViewer } from './components/file-preview/viewers/common-file-viewer.component';
-import { PdfFileViewer } from './components/file-preview/viewers/pdf-file-viewer.component';
+import { CommonFileViewerComponent } from './components/file-preview/viewers/common-file-viewer.component';
+import { PdfFileViewerComponent } from './components/file-preview/viewers/pdf-file-viewer.component';
 import { ImageFileViewerComponent } from './components/file-preview/viewers/image-file-viewer.component';
 import { TextFileViewerComponent } from './components/file-preview/viewers/text-file-viewer.component';
 import { Pdf2FileViewerComponent } from './components/file-preview/viewers/pdf2-file-viewer.component';
@@ -38,6 +38,7 @@ import { NotifierSearchComponent } from './components/case-edit/controls/notifie
 import { FilterExtDirective } from './directives/filter-ext.directive';
 import { LognoteEmailInputComponent } from './components/case-edit/controls/lognote-email-input/lognote-email-input.component';
 import { CaseMenuComponent } from './components/case-menu/case-menu.component';
+import { PinchZoomModule } from 'ngx-pinch-zoom';
 
 @NgModule({
   declarations: [ CaseEditComponent,
@@ -45,7 +46,7 @@ import { CaseMenuComponent } from './components/case-menu/case-menu.component';
     CaseSwitchComponent, CaseTextareaComponent, CaseDateTimeComponent, MailtoticketControlComponent,
     CaseFilesUploadComponent, CaseFilesControlComponent, CaseActionsComponent, CaseActionHostDirective,
     CaseActionContainerComponent, GeneralActionComponent, FieldChangeActionComponent, LogNoteActionComponent, ActionsFilterPipe,
-    CaseLogInputComponent, LogFilesUploadComponent, FilePreviewComponent, PdfFileViewer, CommonFileViewer, ImageFileViewerComponent,
+    CaseLogInputComponent, LogFilesUploadComponent, FilePreviewComponent, PdfFileViewerComponent, CommonFileViewerComponent, ImageFileViewerComponent,
     TextFileViewerComponent, Pdf2FileViewerComponent, Pdf3FileViewerComponent, NotifierSearchComponent, MbscFormGroupExpandDirective,
     FilterExtDirective, LognoteEmailInputComponent, CaseMenuComponent
 ],
@@ -57,8 +58,8 @@ import { CaseMenuComponent } from './components/case-menu/case-menu.component';
     SharedModule,
     FileUploadModule, // todo: check if required?
     PdfViewerModule, // todo: replace with different approach?
-    CaseEditRoutingModule
-
+    CaseEditRoutingModule,
+    PinchZoomModule
   ],
   entryComponents: [FieldChangeActionComponent, LogNoteActionComponent, GeneralActionComponent],
   exports: [],
