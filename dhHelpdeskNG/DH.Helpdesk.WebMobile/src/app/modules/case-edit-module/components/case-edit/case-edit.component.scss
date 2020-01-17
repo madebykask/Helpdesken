@@ -47,6 +47,9 @@
       border: 0;
       border-radius: .25em;
     } */
+    .mbsc-control-w:after {
+      border-top: 0; // fix for double control separators in edit.
+    }
     &.mbsc-switch {
       background-color: white;
       //margin-top: 0;
