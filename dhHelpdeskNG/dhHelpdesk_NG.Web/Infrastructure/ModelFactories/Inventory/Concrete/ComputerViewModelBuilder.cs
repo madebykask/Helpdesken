@@ -416,7 +416,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var contractStatuses =
                 CreateSelectListField(
-                    settings.StateFieldsSettings.StateFieldSetting,
+                    settings.ContractFieldsSettings.ContractStatusFieldSetting,
                     options.ComputerContractStatuses,
                     model.ContractFields.ContractStatusId.ToString());
 
@@ -730,7 +730,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 document);
 
             var contractStatuses = CreateSelectListField(
-                settings.StateFieldsSettings.StateFieldSetting,
+                settings.ContractFieldsSettings.ContractStatusFieldSetting,
                 options.ComputerContractStatuses,
                 null);
 
