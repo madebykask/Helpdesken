@@ -529,7 +529,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
             {
                 foreach (var id in ids)
                 {
-                    if (!string.IsNullOrEmpty(id.Trim()) && int.Parse(id.Trim()) > 0)
+                    if (!string.IsNullOrEmpty(id.Trim()) && (int.Parse(id.Trim()) > 0 || int.Parse(id.Trim()) == int.MinValue))
                     {
                         depIds.Add(int.Parse(id));
                     }
@@ -554,7 +554,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
             {
                 foreach (var id in ids)
                 {
-                    if (!string.IsNullOrEmpty(id.Trim()) && int.Parse(id.Trim()) < 0)
+                    if (!string.IsNullOrEmpty(id.Trim()) && int.Parse(id.Trim()) < 0 && int.Parse(id.Trim()) != int.MinValue)
                     {
                         ouIds.Add(-int.Parse(id));
                     }

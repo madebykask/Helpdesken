@@ -1416,6 +1416,7 @@ namespace DH.Helpdesk.Dal.Repositories
         private string BuildRegionSearchCondition(CaseSearchFilter searchFilter)
         {
 			var conditions = new List<string>();
+			var returnStatement = string.Empty;
 
 			var regionIds = searchFilter.Region.Split(",").Select(o => int.Parse(o.Trim())).ToList();
 
@@ -1424,6 +1425,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
 				var searchNull = regionIds.Any(o => o == int.MinValue);
 				var condition = string.Empty;
+				var nullCondition = string.Empty;
 				var searchScope = searchFilter.InitiatorSearchScope;
 
 				regionIds.Remove(int.MinValue);
@@ -1444,30 +1446,42 @@ namespace DH.Helpdesk.Dal.Repositories
 					{
 						conditions.Add($"tblCaseIsAbout.Region_Id in ({regions})");
 					}
-				}
-				if (searchNull)
-				{
-					if (searchScope == CaseInitiatorSearchScope.User || searchScope == CaseInitiatorSearchScope.UserAndIsAbout)
-					{
-						conditions.Add($" tblCase.Region_Id IS NULL");
-						conditions.Add($" tblDepartment.Region_Id IS NULL");
-					}
 
-					//add isAbout search condition
-					if (searchScope == CaseInitiatorSearchScope.IsAbout || searchScope == CaseInitiatorSearchScope.UserAndIsAbout)
-					{
-						conditions.Add($"tblCaseIsAbout.Region_Id IS NULL");
-					}
-				}
-
-				if (conditions.Any())
-				{
 					condition = ConcatConditionsToString(conditions, CaseSearchConstants.Combinator_OR);
 				}
+				var nullConditions = new List<string>();
+				if (searchNull)
+				{
+					//if (searchScope == CaseInitiatorSearchScope.User || searchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+					//{
+					//	nullConditions.Add($" tblCase.Region_Id IS NULL");
+					//	nullConditions.Add($" tblDepartment.Region_Id IS NULL");
+					//}
 
-				return !string.IsNullOrEmpty(condition) ? $" AND ( {condition} )" : string.Empty;
+					////add isAbout search condition
+					//if (searchScope == CaseInitiatorSearchScope.IsAbout || searchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+					//{
+					//	nullConditions.Add($"tblCaseIsAbout.Region_Id IS NULL");
+					//}
+
+					nullCondition = " tblCase.Region_Id IS NULL";// ConcatConditionsToString(nullConditions, CaseSearchConstants.Combinator_AND);
+				}
+
+
+				if (condition != string.Empty && nullCondition != string.Empty)
+				{	
+					returnStatement = $" AND ( ({condition}) OR ({nullCondition}) )";
+				}
+				else if (condition != string.Empty)
+				{
+					returnStatement = $" AND ( {condition} )";
+				}
+				else if (nullCondition != string.Empty)
+				{
+					returnStatement = $" AND ( {nullCondition} )";
+				}
 			}
-			return string.Empty;
+			return returnStatement;
         }
 
         private string BuildCaseFreeTextSearchConditions(string text)
