@@ -528,7 +528,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var csAvailable = new List<Customer>();
 
 
-            foreach (var c in this._customerService.GetAllCustomers())
+            foreach (var c in this._customerService.GetAllCustomers().Where(o => o.Status == 1))
             {
                 if (!csSelected.Contains(c))
                     csAvailable.Add(c);
@@ -713,7 +713,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             #region Model
 
-            var customerUsers = user.CustomerUsers?.Any() ?? false ? user.CustomerUsers : _userService.GetCustomerUserForUser(userId);
+            var customerUsers = (user.CustomerUsers?.Any() ?? false ? user.CustomerUsers : _userService.GetCustomerUserForUser(userId)).Where(o => o.Customer.Status == 1).ToList();
 
             var model = new UserInputViewModel
             {
@@ -723,7 +723,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 StartPageShowList = lis,
                 CustomerUsers = customerUsers.Where(x => x.Customer_Id > 0).Select(x => x.MapToCustomerUserEdit()).ToList(),
                 Departments = _userService.GetDepartmentsForUser(userId),
-                ListWorkingGroupsForUser = _userService.GetListToUserWorkingGroup(userId),
+                ListWorkingGroupsForUser = _userService.GetListToUserWorkingGroup(userId).Where(o => o.CustomerActive).ToList(),
                 AvailvableTimeZones = TimeZoneInfo.GetSystemTimeZones().Select(it => new SelectListItem() { Value = it.Id, Text = it.DisplayName, Selected = user.TimeZoneId == it.Id }),
 
                 Customers = _customerService.GetAllCustomers().Select(x => new StateSelectListItem
@@ -732,7 +732,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Value = x.Id.ToString(),
 					Active = x.Status == 1
 					
-                }).ToList(),
+                }).Where(o => o.Active).ToList(),
 
                 Domains = _domainService.GetDomains(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {

@@ -761,7 +761,7 @@ namespace DH.Helpdesk.Services.Services
 
             var allowCaseMoveCustomers = 
                 _customerRepository.GetAllowCaseMoveCustomers()
-                    .Where(x => !excludeCustomerIds.Contains(x.Id))
+                    .Where(x => !excludeCustomerIds.Contains(x.Id) && x.Status == 1)
                     .Select(x => new MoveCaseCustomersListItem
                     {
                         Id = x.Id,
