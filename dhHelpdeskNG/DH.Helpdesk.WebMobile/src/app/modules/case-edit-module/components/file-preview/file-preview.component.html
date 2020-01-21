@@ -8,7 +8,7 @@
  
   <!-- Images-->
   <ng-container *ngSwitchCase="contentTypes.Image">
-      <image-file-viewer [fileData]="fileData" [fileName]="fileName"></image-file-viewer>
+      <image-file-viewer [fileData]="fileData" [fileName]="fileName" [height]="previewHeight"></image-file-viewer>
   </ng-container>
 
   <!-- text, html -->

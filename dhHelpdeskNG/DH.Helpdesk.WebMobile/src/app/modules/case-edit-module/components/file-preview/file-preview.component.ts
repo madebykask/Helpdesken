@@ -74,7 +74,7 @@ export class FilePreviewComponent implements OnInit {
   }
 
   private updatePreviewHeight() {
-    this.previewHeight = this.windowWrapper.nativeWindow.innerHeight - 44; //footer menu width
+    this.previewHeight = this.windowWrapper.nativeWindow.innerHeight - 45; //footer menu width
   }
 
 }
