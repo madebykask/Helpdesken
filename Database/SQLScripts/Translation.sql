@@ -7612,9 +7612,14 @@ GO
 
 If not exists (select * from tbltext where id = 2046)
 begin
-	insert into tbltext (id, TextString) VALUES (2046, 'Lösta i tid')
+	insert into tbltext (id, TextString) VALUES (2046, 'Lösta i tid idag')
 	If not exists (select * from tblTextTranslation where text_id = 2046 and Language_Id = 2)
-		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2046, 2, 'Solved in time')
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2046, 2, 'Solved in time today')
+end
+else 
+begin
+   update tbltext set TextString = 'Lösta i tid idag' where id = 2046
+   update tblTextTranslation set TextTranslation = 'Solved in time today' where Text_Id = 2046
 end
 GO
 
