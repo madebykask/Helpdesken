@@ -56,7 +56,7 @@ namespace DH.Helpdesk.Web.Models.Profile
 
         public IList<UserModule> Modules { get; set; } = new List<UserModule>();
 
-        public List<UserProfileCustomerSettings> CustomersSettings { get; set; } = new List<UserProfileCustomerSettings>();
+        public IList<UserProfileCustomerSettings> CustomersSettings { get; set; } = new List<UserProfileCustomerSettings>();
         
         public string SelectedTimeZone { get; set; }
     }
