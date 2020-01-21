@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Renderer2, HostListener } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, Renderer2, HostListener } from '@angular/core';
 import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrapper';
 
 @Component({
   selector: 'image-file-viewer',
-  template: `<pinch-zoom [backgroundColor]="transparent" #pinch>
+  template: `<pinch-zoom backgroundColor="transparent" #pinch>
       <img #img [src]="blobUrl | sanitize:'url'" style="" border="0" (load)="onImageLoad()"/>
       </pinch-zoom>
   `
