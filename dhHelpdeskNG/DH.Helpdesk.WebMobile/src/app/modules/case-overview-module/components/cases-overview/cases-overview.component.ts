@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { finalize, take, distinctUntilChanged, takeUntil, filter, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Subject, forkJoin, throwError } from 'rxjs';
-import { PagingConstants, SortOrder, CaseFieldsNames } from 'src/app/modules/shared-module/constants';
+import { PagingConstants, SortOrder, CaseFieldsNames, CaseOverviewConstants } from 'src/app/modules/shared-module/constants';
 import { CasesOverviewFilter } from '../../models/cases-overview/cases-overview-filter.model';
 import { CaseOverviewItem } from '../../models/cases-overview/cases-overview-item.model';
 import { CasesOverviewService } from '../../services/cases-overview';
@@ -13,7 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { CaseRouteReuseStrategy } from 'src/app/helpers/case-route-resolver.stategy';
 import { SearchFilterService } from '../../services/cases-overview/search-filter.service';
 import { AppStore, AppStoreKeys } from 'src/app/store';
-import { FavoriteFilterModel } from '../../models/cases-overview/favorite-filter.model';
+import { CustomerFavoriteFilterModel } from '../../models/cases-overview/favorite-filter.model';
 import { CaseSortFieldModel } from 'src/app/modules/case-edit-module/services/model/case-sort-field.model';
 import { LocalStorageService } from 'src/app/services/local-storage';
 import { CaseSearchStateModel } from 'src/app/modules/shared-module/models/cases-overview/case-search-state.model';
@@ -26,21 +26,23 @@ import { CaseSearchStateModel } from 'src/app/modules/shared-module/models/cases
 export class CasesOverviewComponent implements OnInit, OnDestroy {
   @ViewChild('searchInput', { static: false }) searchInput: any;
 
-  private selectedFilterId: number;
+  private selectedFilterId: string;
   private filter: CasesOverviewFilter;
   private destroy$ = new Subject();
   private defaultHeaderText = this.ngxTranslateService.instant('Ärendeöversikt');
+  private defaultCustomerText = '';
   private pageSize = 10;
   private DefaultSortField = 'RegTime';
   private DefaultSortOrder = SortOrder.SortDesc;
 
   headerText: string;
+  customerText: string;
   DateTime: DateTime;
   showSearchPanel = false;
   filtersForm: FormGroup;
   cases: CaseOverviewItem[] = [];
   isLoading = false;
-  favoriteFilters: FavoriteFilterModel[] = null;
+  favoriteFilters: CustomerFavoriteFilterModel[] = null;
   selectedSortFieldId: string;
   selectedSortFieldOrder: string;
   caseSortFields: CaseSortFieldModel[];
@@ -78,12 +80,13 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
     //set default values
     this.headerText = this.defaultHeaderText;
+    this.customerText = this.defaultCustomerText;
     this.selectedFilterId = CaseStandardSearchFilters.AllCases;
     this.pageSize = this.caclucatePageSize();
     this.selectedSortFieldId = this.DefaultSortField;
     this.selectedSortFieldOrder = this.DefaultSortOrder;
 
-    const filtersLoaded$ = new Subject<FavoriteFilterModel[]>();
+    const filtersLoaded$ = new Subject<CustomerFavoriteFilterModel[]>();
 
     // get case sort fields
     const sortFields$ = this.casesOverviewService.getCaseSortingFields();
@@ -92,7 +95,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     forkJoin([sortFields$, filtersLoaded$]).pipe(
       take(1),
       catchError(err => throwError(err))
-    ).subscribe(([sortFields, favFilters]: [CaseSortFieldModel[], FavoriteFilterModel[]]) => {
+    ).subscribe(([sortFields, favFilters]: [CaseSortFieldModel[], CustomerFavoriteFilterModel[]]) => {
         // load sort state
         const searchState = this.localStorageService.getCaseSearchState();
         if (searchState) {
@@ -101,12 +104,15 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
             this.selectedSortFieldOrder = searchState.sortOrder || this.DefaultSortOrder;
           }
           // filter state if any
-          const stateFilterId = searchState && searchState.filterId ? +searchState.filterId : +CaseStandardSearchFilters.AllCases;
-          if (!isNaN(stateFilterId) && stateFilterId !== +CaseStandardSearchFilters.AllCases) {
-            const ff = favFilters.find(f => f.id === stateFilterId);
+          const stateFilterId = searchState && searchState.filterId ? searchState.filterId : CaseStandardSearchFilters.AllCases;
+          if (stateFilterId != null && stateFilterId !== CaseStandardSearchFilters.AllCases) {
+            const ff = favFilters.find(cf => cf.favorites.find(f => f.id === stateFilterId));
             if (ff) {
-              this.headerText = ff.name;
+              this.headerText = ff.favorites.find(f => f.id === stateFilterId).name;
+              this.updateCustomerText(stateFilterId);
               this.selectedFilterId = stateFilterId;
+            } else {
+              this.selectedFilterId = favFilters[0].favorites[0].id;
             }
           }
         }
@@ -120,11 +126,11 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     });
 
      // get search filters from app store (loaded on app.component init)
-     this.appStore.select<FavoriteFilterModel[]>(AppStoreKeys.FavoriteFilters).pipe(
+     this.appStore.select<CustomerFavoriteFilterModel[]>(AppStoreKeys.FavoriteFilters).pipe(
       takeUntil(this.destroy$),
       distinctUntilChanged(),
       filter(m => m && m.length > 0)
-    ).subscribe((favFilters: FavoriteFilterModel[]) => {
+    ).subscribe((favFilters: CustomerFavoriteFilterModel[]) => {
         // trigger filters load is complete
         filtersLoaded$.next(favFilters);
         filtersLoaded$.complete();
@@ -135,12 +141,23 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   }
 
   processFilterChanged(filterChangeArg) {
-    this.selectedFilterId = +filterChangeArg.filterId;
+    this.selectedFilterId = filterChangeArg.filterId;
     this.headerText = filterChangeArg.filterName ? this.ngxTranslateService.instant(filterChangeArg.filterName) : this.defaultHeaderText;
+    this.updateCustomerText(this.selectedFilterId);
     this.saveSearchState();
 
     // run new search
     this.runNewSearch();
+  }
+
+  private updateCustomerText(id: string) {
+    const isOnlyOneCustomer = this.appStore.state.favFilters.filter(cf => cf.customerId !== -1).length === 1;
+    const ff = this.appStore.state.favFilters.find(cf => cf.favorites.find(f => f.id === id));
+    if (!isOnlyOneCustomer && ff && ff.customerId > 0) {
+      this.customerText = ff.customerName;
+    } else {
+      this.customerText = this.defaultCustomerText;
+    }
   }
 
   processSortingChanged(sortArgs) {
@@ -174,7 +191,8 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   }
 
   onItemTap(event) {
-    this.goToCase(this.cases[event.index].id);
+    const selectedCase = this.cases[event.index];
+    this.goToCase(selectedCase.id);
   }
 
   trackByFn(index, item: CaseOverviewItem) {
@@ -218,6 +236,8 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   }
 
   private initSearchFilter() {
+    const isMyCasesOnly = this.selectedFilterId === CaseStandardSearchFilters.MyCases ||
+                           this.selectedFilterId.startsWith(CaseOverviewConstants.CaseOverviewCustomerPrefix);
     this.filter = new CasesOverviewFilter();
     this.filter.FreeTextSearch = this.filtersForm.controls.freeSearch.value;
     this.filter.InitiatorSearchScope = +InitiatorSearchScope.UserAndIsAbout;
@@ -225,15 +245,20 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     this.filter.Page = PagingConstants.page;
     this.filter.Ascending = this.selectedSortFieldOrder === SortOrder.SortAsc;
     this.filter.OrderBy = this.selectedSortFieldId;
-    this.filter.SearchInMyCasesOnly = this.selectedFilterId === +CaseStandardSearchFilters.MyCases;
+    this.filter.SearchInMyCasesOnly = isMyCasesOnly;
     this.filter.CaseProgress = CaseProgressFilter.CasesInProgress;
+    // default customers - all available
+    this.filter.CustomersIds = this.appStore.state.favFilters.filter(f => f.customerId > 0).map(f => f.customerId);
 
     // Apply case search favorite filter values
-    if (this.selectedFilterId > 0) {
+    if (this.selectedFilterId !== null && this.selectedFilterId !== CaseStandardSearchFilters.MyCases) {
       //get selected filter info from app store state
-      const filters = this.appStore.state.favFilters.filter(f => f.id === this.selectedFilterId);
-      if (filters && filters.length) {
-        this.searchFilterService.applyFavoriteFilter(this.filter, filters[0]);
+      const ff = this.appStore.state.favFilters.find(cf => cf.favorites.some(f => f.id === this.selectedFilterId));
+      if (ff) {
+        this.filter.CustomersIds = [ ff.customerId ];
+        if (!isMyCasesOnly) {
+          this.searchFilterService.applyFavoriteFilter(this.filter, ff.favorites.find(f => f.id === this.selectedFilterId));
+        }
       }
     }
   }

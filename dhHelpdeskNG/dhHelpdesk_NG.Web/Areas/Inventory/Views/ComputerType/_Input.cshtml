@@ -7,7 +7,7 @@
             <label>@Translation.Get("Datortyp")</label>
         </td>
         <td class="span9">
-            @Html.EditorFor(m => m.Name)
+            @Html.EditorFor(m => m.Name, new { htmlAttributes = new { maxlength = 60 } })
             @Html.ValidationMessageFor(m => m.Name)
         </td>
     </tr>
@@ -16,7 +16,7 @@
             <label>@Translation.Get("Beskrivning")</label>
         </td>
         <td class="span9">
-            @Html.EditorFor(m => m.Description, new {maxlength = 50})
+            @Html.EditorFor(m => m.Description, new { htmlAttributes = new { maxlength = 50 } })
             @Html.ValidationMessageFor(m => m.Description)
         </td>
     </tr>

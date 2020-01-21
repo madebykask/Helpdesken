@@ -68,6 +68,7 @@
     <Compile Include="Converters\TimeZoneToMomentConverter.cs" />
     <Compile Include="Enums\Case\AccessMode.cs" />
     <Compile Include="Enums\Case\RemainingTimes.cs" />
+    <Compile Include="Extensions\CaseFieldsNamesApi.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\UserFormatterExtension.cs" />
     <Compile Include="Models\CaseSearch\SearchModel.cs" />

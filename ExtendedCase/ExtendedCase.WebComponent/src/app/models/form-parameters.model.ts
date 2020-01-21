@@ -8,6 +8,10 @@
     currentUser: string;
     isCaseLocked: boolean;
     applicationType: string;
+    useInitiatorAutocomplete = true;
+
+    constructor() {
+    }
 }
 
 export class FormAssignmentParameters {

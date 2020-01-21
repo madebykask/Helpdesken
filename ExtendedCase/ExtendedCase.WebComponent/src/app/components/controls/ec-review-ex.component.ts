@@ -48,8 +48,7 @@ export class ExtendedCaseReviewComponentEx implements OnChanges {
         if (this.reviewFieldModel.hidden ||
             (cm.isUndefinedNullOrEmpty(this.value1) && cm.isUndefinedNullOrEmpty(this.value2))) {
             this.isHidden = true;
-        }
-        else {
+        } else {
             this.isHidden = false;
         }
     }
@@ -68,7 +67,7 @@ export class ExtendedCaseReviewComponentEx implements OnChanges {
     }
 
     updateValues(result: DigestResult) {
-        //this.logService.debug(`Updating review control values. ReviewFieldId: ${this.reviewFieldTemplate.id}, ReviewSectionId: ${this.reviewSectionTemplate.id}`);
+        // this.logService.debug(`Updating review control values. ReviewFieldId: ${this.reviewFieldTemplate.id}, ReviewSectionId: ${this.reviewSectionTemplate.id}`);
         let values =
             this.fieldTemplate && this.fieldTemplate.valueBinding
                 ? this.getValeBindingValues(result)
@@ -100,8 +99,7 @@ export class ExtendedCaseReviewComponentEx implements OnChanges {
         if (this.reviewFieldTemplate.controlType === FormControlType.CheckboxList) {
             let fieldValueModel = this.formControlsManagerService.getMultiControlValueForSave(this.reviewFieldModel, this.reviewProxyControl);
             value = fieldValueModel.Value;
-        }
-        else if (this.reviewFieldTemplate.controlType === FormControlType.Search ||
+        } else if (this.reviewFieldTemplate.controlType === FormControlType.Search ||
             this.reviewFieldTemplate.controlType === FormControlType.Radio ||
             this.reviewFieldTemplate.controlType === FormControlType.Dropdown ||
             this.reviewFieldTemplate.controlType === FormControlType.Multiselect) {
@@ -112,11 +110,11 @@ export class ExtendedCaseReviewComponentEx implements OnChanges {
 
         return [value, secondaryValue].map(item => cm.isUndefinedOrNull(item) ? '' : item.toString());
     }
-    
+
     selectValue() {
         this.getSelectedValue(this.windowWrapper.nativeWindow, this.valueSpan.nativeElement);
     }
-    
+
     protected getSelectedValue(wnd: any, valueSpanElement: any) {
 
         let range = wnd.document.createRange();

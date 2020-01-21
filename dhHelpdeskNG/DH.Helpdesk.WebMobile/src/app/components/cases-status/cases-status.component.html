@@ -1,11 +1,11 @@
 <ng-container>
-    <mbsc-card>
+    <mbsc-card *ngFor="let cf of filters; trackBy: trackByFiltersFn">
       <mbsc-card-header>
-        <mbsc-card-title>{{ (customer$ | async)?.name }}</mbsc-card-title>
+        <mbsc-card-title>{{ cf.customerName }}</mbsc-card-title>
       </mbsc-card-header>
       <mbsc-card-content>
-        <mbsc-listview [options]="options" (onItemTap)="onItemTap($event)">
-          <mbsc-listview-item *ngFor="let ff of userFilters; trackBy: trackByFn">
+        <mbsc-listview [options]="options" (onItemTap)="onItemTap($event, cf.customerId)">
+          <mbsc-listview-item *ngFor="let ff of customerFilters(cf.customerId); trackBy: trackByFn">
               <span class="status-title" translate>{{ ff.name }}</span>
               <span class="val" *ngIf="!(ff.isLoading$ | async); else loading;">{{ ff.count }}</span>
           </mbsc-listview-item>

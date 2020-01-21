@@ -15,15 +15,16 @@ export class DepartmentsService extends HttpApiServiceBase {
             super(http, localStorageService);
     }
 
-    getDepartmentsByRegion(regionId?: number) {
-        let params = { };
-        if (regionId != null) { params = { regionId: regionId }; }
-        return this.getJson(this.buildResourseUrl('/api/departments/options', params))
+    getDepartmentsByRegion(regionId?: number, customerId?: number) {
+        const params = isNaN(customerId) ? {} : { cid: customerId };
+        if (regionId != null) { Object.assign(params, { regionId: regionId }); }
+
+        return this.getJson(this.buildResourseUrl('/api/departments/options', params, isNaN(params.cid)))
         .pipe(
             take(1),
             map((jsItems: any) => {
                 return this.caseHelper.toOptionItems(jsItems as Array<any>) || new Array<OptionItem>();
             })
-        );// TODO: error handling
+        ); // TODO: error handling
     }
 }

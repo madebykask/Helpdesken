@@ -30,7 +30,7 @@ namespace ExtendedCase.Logic.CustomDataSourceProviders
 
             var dbParameters = queryClr.Params.ToDictionary(x => x.Name, x => x.Value);
 
-            var results = _customDataSourceRepository.GetDataFromQuery(metaDataClr.Query, dbParameters);
+            var results = _customDataSourceRepository.GetDataFromQuery(metaDataClr.Query, metaDataClr.ConnectionString, dbParameters);
             return results;
         }
 
@@ -41,7 +41,8 @@ namespace ExtendedCase.Logic.CustomDataSourceProviders
         private class MetaData
         {
             public string Query { get; set; }
-        }
+			public string ConnectionString { get; set; }
+		}
 
         private class Query
         {

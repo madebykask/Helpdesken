@@ -619,7 +619,8 @@ namespace DH.Helpdesk.Services.Services
                             Id = t.Id,
                             MailId = t.MailId,
                             CaseHistoryId = t.CaseHistory_Id,
-                            EmailAddress = t.EmailAddress
+                            EmailAddress = t.EmailAddress,
+                            CcEmailAddress = t.Cc
                         }).ToList(),
 
                 LogFiles =

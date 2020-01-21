@@ -100,6 +100,7 @@ namespace DH.Helpdesk.Web.Controllers
 	using DH.Helpdesk.Common.Extensions.Boolean;
 	using Common.Tools.Files;
 	using BusinessData.Models.FinishingCause;
+	using Infrastructure.Mvc;
 
 	public partial class CasesController : BaseController
     {
@@ -973,7 +974,6 @@ namespace DH.Helpdesk.Web.Controllers
         {
             // Save current case
             int caseId = Save(m);
-
             #region Case Split
 
             // Create a split child if specified
@@ -1188,10 +1188,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             if (logFiles.Any())
             {
-                var disableLogFileView =
-                    _featureToggleService.Get(
-                        FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-                if (!disableLogFileView.Active)
+                if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
                 {
                     foreach (var f in logFiles)
                     {
@@ -1308,10 +1305,18 @@ namespace DH.Helpdesk.Web.Controllers
         {
             CaseInputViewModel m = null;
 
+            if (!_caseService.IsCaseExist(id))
+            {
+                TempData["NotFound"] = Translation.Get("Ärendet hittades inte!");
+                return View(m);
+            }
+
             if (SessionFacade.CurrentUser != null)
             {
                 /* Used for Extended Case */
                 TempData["Case_Id"] = id;
+
+                _userTemporaryFilesStorage.ResetCacheForObject(id);
 
                 var userId = SessionFacade.CurrentUser.Id;
 
@@ -2906,13 +2911,32 @@ namespace DH.Helpdesk.Web.Controllers
             return PartialView("_MoveCase", model);
         }
 
-        #endregion
+	/*	[HttpGet]
+		//[Route("Files/{type:string}/{id:int}/filename:string}")]
+		public UnicodeFileContentResult CaseFiles(string caseId, string filename)
+		{
+			return DownloadFile(caseId, filename);
+		}
 
-        #region ***Private Methods***
+		public UnicodeFileContentResult CaseLogFiles(string type, string logId, string filename)
+		{
+			LogFileType logFileType;
+			if (Enum.TryParse(type, out logFileType))
+			{
+				return (UnicodeFileContentResult)DownloadLogFile(logId, filename, logFileType);
+			}
 
-        #region --Case Template--
+			throw new ArgumentException("Invalid log file type", "type");
+		}  test */
 
-        private void CheckTemplateParameters(int? templateId, int caseId)
+
+		#endregion
+
+		#region ***Private Methods***
+
+		#region --Case Template--
+
+		private void CheckTemplateParameters(int? templateId, int caseId)
         {
             if (templateId.HasValue)
             {
@@ -3292,24 +3316,19 @@ namespace DH.Helpdesk.Web.Controllers
             var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
 
             // save case files
-            if (!edit)
+            var temporaryFiles = _userTemporaryFilesStorage.FindFiles(!edit ? case_.CaseGUID.ToString() : case_.Id.ToString(), ModuleName.Cases);
+            var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, utcNow, case_.Id, _workContext.User.UserId)).ToList();
+
+            var paths = new List<KeyValuePair<CaseFileDto, string>>();
+            _caseFileService.AddFiles(newCaseFiles, paths);
+
+            if (!disableLogFileView.Active)
             {
-                var temporaryFiles = _userTemporaryFilesStorage.FindFiles(case_.CaseGUID.ToString(), ModuleName.Cases);
-                var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, utcNow, case_.Id, _workContext.User.UserId)).ToList();
-
-                var paths = new List<KeyValuePair<CaseFileDto, string>>();
-                _caseFileService.AddFiles(newCaseFiles, paths);
-
-                if (!disableLogFileView.Active)
+                foreach (var file in paths)
                 {
-                    foreach (var file in paths)
-                    {
-                        var userId = SessionFacade.CurrentUser?.Id ?? 0;
-                        _fileViewLogService.Log(case_.Id, userId, file.Key.FileName, file.Value, FileViewLogFileSource.Helpdesk, FileViewLogOperation.Add);
-                    }
+                    var userId = SessionFacade.CurrentUser?.Id ?? 0;
+                    _fileViewLogService.Log(case_.Id, userId, file.Key.FileName, file.Value, FileViewLogFileSource.Helpdesk, FileViewLogOperation.Add);
                 }
-
-
             }
 
             #region Save Logs
@@ -3480,6 +3499,7 @@ namespace DH.Helpdesk.Web.Controllers
                 _caseLockService.UnlockCaseByGUID(new Guid(m.caseLock.LockGUID));
 
             // delete temp folders                
+            _userTemporaryFilesStorage.ResetCacheForObject(case_.Id);
             _userTemporaryFilesStorage.ResetCacheForObject(case_.CaseGUID.ToString());
             _userTemporaryFilesStorage.ResetCacheForObject(caseLog.LogGuid.ToString());
 
@@ -3792,13 +3812,12 @@ namespace DH.Helpdesk.Web.Controllers
             var logPaths = new List<KeyValuePair<CaseLogFileDto, string>>();
             _logFileService.AddFiles(newLogFiles, logPaths, exFiles, caseLog.Id);
 
-            var disableLogFileView = _featureToggleService.Get(DH.Helpdesk.Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-            if (!disableLogFileView.Active)
+            if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
             {
                 var userId = currentLoggedInUser.Id;
                 foreach (var path in logPaths)
                 {
-                    _fileViewLogService.Log(@case.Id, userId, path.Key.FileName, path.Value, FileViewLogFileSource.Helpdesk, FileViewLogOperation.Add);
+                    _fileViewLogService.Log(oldCase.Id, userId, path.Key.FileName, path.Value, FileViewLogFileSource.Helpdesk, FileViewLogOperation.Add);
                 }
             }
 
@@ -4009,11 +4028,19 @@ namespace DH.Helpdesk.Web.Controllers
             string ret = string.Empty;
             var ids = departments_OrganizationUnits.Split(',');
             var depIds = new List<int>();
-            if (ids.Length > 0)
-            {
-                for (int i = 0; i < ids.Length; i++)
-                    if (!string.IsNullOrEmpty(ids[i].Trim()) && int.Parse(ids[i].Trim()) > 0)
-                        depIds.Add(int.Parse(ids[i]));
+			if (ids.Length > 0)
+			{
+				for (int i = 0; i < ids.Length; i++)
+				{
+					if (!string.IsNullOrEmpty(ids[i].Trim()))
+					{
+						var id = int.Parse(ids[i].Trim());
+						if (id > 0 || id == ObjectExtensions.notAssignedDepartment().Id)
+						{
+							depIds.Add(id);
+						}
+					}
+				}
             }
             if (depIds.Any())
                 ret = string.Join(",", depIds);
@@ -4027,9 +4054,17 @@ namespace DH.Helpdesk.Web.Controllers
             var ouIds = new List<int>();
             if (ids.Length > 0)
             {
-                for (int i = 0; i < ids.Length; i++)
-                    if (!string.IsNullOrEmpty(ids[i].Trim()) && int.Parse(ids[i].Trim()) < 0)
-                        ouIds.Add(-int.Parse(ids[i]));
+				for (int i = 0; i < ids.Length; i++)
+				{
+					if (!string.IsNullOrEmpty(ids[i].Trim()))
+					{
+						var id = int.Parse(ids[i].Trim());
+						if (id < 0 && id != ObjectExtensions.notAssignedDepartment().Id)
+						{
+							ouIds.Add(-id);
+						}
+					}
+				}
             }
             if (ouIds.Any())
                 ret = string.Join(",", ouIds);
@@ -4108,25 +4143,32 @@ namespace DH.Helpdesk.Web.Controllers
                 filterCustomerId = cusId
             };
 
-            //region
-            if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseRegionFilter))
-                fd.filterRegion = _regionService.GetRegions(cusId);
+			//region
+			if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseRegionFilter))
+			{
+				var regions = _regionService.GetRegions(cusId);
+				regions.Insert(0, ObjectExtensions.notAssignedRegion());
+				fd.filterRegion = regions;
+			}
 
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseDepartmentFilter))
             {
-                fd.filterDepartment =
-                    _departmentService.GetDepartmentsByUserPermissions(userId, cusId, false);
+                var departments = _departmentService.GetDepartmentsByUserPermissions(userId, cusId, false);
 
-                if (!fd.filterDepartment.Any())
+                if (!departments.Any())
                 {
-                    fd.filterDepartment =
+					departments =
                         _departmentService.GetDepartments(cusId)
                             .ToList();
                 }
 
-                if (fd.customerSetting != null && fd.customerSetting.ShowOUsOnDepartmentFilter != 0)
-                    fd.filterDepartment = AddOrganizationUnitsToDepartments(fd.filterDepartment);
-            }
+				if (fd.customerSetting != null && fd.customerSetting.ShowOUsOnDepartmentFilter != 0)
+                    departments = AddOrganizationUnitsToDepartments(departments);
+
+				departments.Insert(0, ObjectExtensions.notAssignedDepartment());
+
+				fd.filterDepartment = departments;
+			}
 
             //ärendetyp
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCaseTypeFilter))
@@ -4185,16 +4227,29 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
 
-            //fd.filterCategory = _categoryService.GetActiveCategories(cusId);
-            //prio
-            if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CasePriorityFilter))
-                fd.filterPriority = _priorityService.GetPriorities(cusId);
-            //status
-            if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseStatusFilter))
-                fd.filterStatus = _statusService.GetStatuses(cusId);
-            //understatus
-            if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseStateSecondaryFilter))
-                fd.filterStateSecondary = _stateSecondaryService.GetStateSecondaries(cusId);
+			//fd.filterCategory = _categoryService.GetActiveCategories(cusId);
+			//prio
+			if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CasePriorityFilter))
+			{
+				var priorities = _priorityService.GetPriorities(cusId);
+				priorities.Insert(0, ObjectExtensions.notAssignedPriority());
+				fd.filterPriority = priorities;
+				
+			}
+			//status
+			if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseStatusFilter))
+			{
+				var status = _statusService.GetStatuses(cusId);
+				status.Insert(0, ObjectExtensions.notAssignedStatus());
+				fd.filterStatus = status;
+			}
+			//understatus
+			if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseStateSecondaryFilter))
+			{
+				var stateSecondaries = _stateSecondaryService.GetStateSecondaries(cusId);
+				stateSecondaries.Insert(0, ObjectExtensions.notAssignedStateSecondary());
+				fd.filterStateSecondary = stateSecondaries;
+			}
 
             fd.filterCaseProgress = ObjectExtensions.GetFilterForCases(SessionFacade.CurrentUser.FollowUpPermission, cusId);
             fd.CaseRegistrationDateStartFilter = fd.customerUserSetting.CaseRegistrationDateStartFilter;
@@ -5038,9 +5093,6 @@ namespace DH.Helpdesk.Web.Controllers
 
                     if (caseTemplate.StateSecondary_Id.HasValue)
                         m.case_.StateSecondary_Id = caseTemplate.StateSecondary_Id;
-
-                    // TODO: JWE What is "Verfied"?
-                    //m.case_.Verified = caseTemplate.Verified;
 
                     if (!string.IsNullOrEmpty(caseTemplate.VerifiedDescription))
                         m.case_.VerifiedDescription = caseTemplate.VerifiedDescription;
@@ -6271,23 +6323,6 @@ namespace DH.Helpdesk.Web.Controllers
             return li;
         }
 
-        private IList<CaseFileModel> MakeCaseFileModel(IList<CaseFileDate> files, string savedFiles)
-        {
-            var res = new List<CaseFileModel>();
-            int i = 0;
-
-            var savedFileList = string.IsNullOrEmpty(savedFiles) ? null : savedFiles.Split('|').ToList();
-
-            foreach (var f in files)
-            {
-                i++;
-                var canDelete = !(savedFileList != null && savedFileList.Contains(f.FileName));
-                var cf = new CaseFileModel(i, i, f.FileName, f.FileDate, SessionFacade.CurrentUser.FirstName + " " + SessionFacade.CurrentUser.SurName, canDelete);
-                res.Add(cf);
-            }
-
-            return res;
-        }
 
         private List<ItemOverview> GetMaxRowsFilter()
         {
@@ -6479,6 +6514,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var regions = _regionService.GetRegions(customerId);
             ret.RegionCheck = userCaseSettings.Region != string.Empty;
+			regions.Insert(0, ObjectExtensions.notAssignedRegion());
             ret.Regions = regions;
             ret.SelectedRegion = userCaseSettings.Region;
 
@@ -6498,11 +6534,12 @@ namespace DH.Helpdesk.Web.Controllers
             ret.IsDepartmentChecked = userCaseSettings.Departments != string.Empty;
 
             if (customerSettings != null && customerSettings.ShowOUsOnDepartmentFilter != 0)
-                ret.Departments = AddOrganizationUnitsToDepartments(departments);
-            else
-                ret.Departments = departments;
+                departments = AddOrganizationUnitsToDepartments(departments);
+               
+			departments.Insert(0, ObjectExtensions.notAssignedDepartment());
+			ret.Departments = departments;
 
-            ret.SelectedDepartments = userCaseSettings.Departments;
+			ret.SelectedDepartments = userCaseSettings.Departments;
 
             ret.RegisteredByCheck = userCaseSettings.RegisteredBy != string.Empty;
             ret.RegisteredByUserList = _userService.GetUserOnCases(customerId, IsTakeOnlyActive).MapToSelectList(customerSettings);
@@ -6578,8 +6615,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             var priorities = _priorityService.GetPriorities(customerId).OrderBy(p => p.Code).ToList();
             ret.PriorityCheck = (userCaseSettings.Priority != string.Empty);
-            ret.Priorities = priorities;
-            ret.SelectedPriority = userCaseSettings.Priority;
+			priorities.Insert(0, ObjectExtensions.notAssignedPriority());
+			ret.Priorities = priorities;
+			ret.SelectedPriority = userCaseSettings.Priority;
 
             ret.Categories =
                 _categoryService.GetParentCategoriesWithChildren(customerId, true).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
@@ -6605,11 +6643,13 @@ namespace DH.Helpdesk.Web.Controllers
 
             var states = _statusService.GetStatuses(customerId).OrderBy(s => s.Name).ToList();
             ret.StateCheck = (userCaseSettings.State != string.Empty);
+			states.Insert(0, ObjectExtensions.notAssignedStatus());
             ret.States = states;
             ret.SelectedState = userCaseSettings.State;
 
             var subStates = _stateSecondaryService.GetStateSecondaries(customerId).OrderBy(s => s.Name).ToList();
             ret.SubStateCheck = (userCaseSettings.SubState != string.Empty);
+			subStates.Insert(0, ObjectExtensions.notAssignedStateSecondary());
             ret.SubStates = subStates;
             ret.SelectedSubState = userCaseSettings.SubState;
 

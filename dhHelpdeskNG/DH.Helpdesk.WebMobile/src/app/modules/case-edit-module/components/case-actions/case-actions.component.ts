@@ -8,11 +8,9 @@ import { AuthenticationStateService } from 'src/app/services/authentication';
   styleUrls: ['./case-actions.component.scss'],
 })
 export class CaseActionsComponent implements OnChanges {
-  @Input()
-  caseKey: string;
-
-  @Input()
-  items: Array<CaseAction<CaseActionDataType>>;
+  @Input() caseKey: string;
+  @Input() customerId: number;
+  @Input() items: Array<CaseAction<CaseActionDataType>>;
 
   isLoaded = false;
   grouppedItems: CaseActionsGroup[];

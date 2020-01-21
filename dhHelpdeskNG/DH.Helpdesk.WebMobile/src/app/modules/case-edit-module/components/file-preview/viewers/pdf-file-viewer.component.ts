@@ -11,7 +11,7 @@ import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrap
   `,
   styles: [``]
 })
-export class PdfFileViewer implements OnInit {
+export class PdfFileViewerComponent implements OnInit {
 
   @Input() fileName: string;
   @Input() fileData: Blob;

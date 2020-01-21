@@ -29,15 +29,15 @@ export class ExtendedCaseSectionComponent implements OnInit {
     @Input() sectionTemplate: SectionTemplateModel;
     @Input() sectionModel: SectionModel;
 
-    controlType = new FormControlType();//to  use in html static string
-    
+    controlType = new FormControlType(); // to  use in html static string
+
     constructor(private componentCommService: ComponentCommService, private subscriptionManager: SubscriptionManager,
         private changeDetector: ChangeDetectorRef) {
     }
 
     ngOnInit(): void {
-        //let self = this;
-        //this.subscriptionManager.addSingle('onDigestComplete',
+        // let self = this;
+        // this.subscriptionManager.addSingle('onDigestComplete',
         //    this.componentCommService.digestCompletedSubject$
         //        .subscribe((result: DigestResult) => self.changeDetector.detectChanges()));
 
@@ -58,15 +58,15 @@ export class ExtendedCaseSectionComponent implements OnInit {
     }
 
     onAddSectionInstance() {
-        //validate max sections
+        // validate max sections
         let sectionsMaxCount = this.sectionTemplate.multiSectionAction.maxCount || 0;
         if (sectionsMaxCount > 0 && this.sectionModel.instances.length >= sectionsMaxCount) {
-            //alert(`You have reached maximum number (${sectionsMaxCount}) of allowed sections.`);
+            // alert(`You have reached maximum number (${sectionsMaxCount}) of allowed sections.`);
             return;
         }
 
         let args = new AddSectionInstanceParams(this.sectionModel);
-        this.componentCommService.raiseAddNewSectionInstance(args);    
+        this.componentCommService.raiseAddNewSectionInstance(args);
     }
 
     getAddSectionText() {

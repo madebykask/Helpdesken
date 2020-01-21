@@ -14,6 +14,7 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         CaseSolutionInfo GetGetSolutionInfo(int id, int customerId);
         IQueryable<CaseSolution> GetCustomerCaseSolutions(int customerId);
+        IQueryable<CaseSolution> GetCustomerCaseSolutions(IList<int> customersIds);
         IList<CaseSolutionOverview> GetCaseSolutionsWithConditions(IList<int> Ids);
     }
 
@@ -49,6 +50,17 @@ namespace DH.Helpdesk.Dal.Repositories
                 select cs;
             
             return query;
+        }
+
+        public IQueryable<CaseSolution> GetCustomerCaseSolutions(IList<int> customersIds)
+        {
+            var query =
+                from cs in DataContext.CaseSolutions
+                where customersIds.Contains(cs.Customer_Id) && cs.Status != 0
+                orderby cs.SortOrder
+                select cs;
+            
+            return query.Include(c => c.Customer);
         }
 
         public IList<CaseSolutionOverview> GetCaseSolutionsWithConditions(IList<int> Ids)

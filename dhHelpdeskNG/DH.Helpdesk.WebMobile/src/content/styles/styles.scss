@@ -247,8 +247,20 @@ a {
 }
 
 .case-search-filter {
+  font-family: Helvetica, Arial, sans-serif;
   .mbsc-ms-item {
     padding-left:20px;
+    &.mbsc-disabled {
+      text-transform: uppercase;
+      background-color: #efeff4;
+      padding-left: 5px;
+      padding-bottom: 5px;
+      min-height: 1.5em;
+      font-weight: 400;
+      font-size: 12px;
+      color: #6e6e72;
+      opacity: 1;
+    }
   }
 
   .mbsc-ms-item-sel::before {
@@ -506,6 +518,24 @@ case-menu {
       .mbsc-scv.mbsc-comp {
         margin: 0 0.7em 0.5em auto;
       }
+    }
+  }
+}
+
+case-template {
+  .mbsc-lv-item {
+    &.disabled {
+      text-transform: uppercase;
+      background-color: #efeff4;
+      padding: 5px;
+      min-height: 1.5em;
+      font-weight: 400;
+      font-size: 12px;
+      color: #6e6e72;
+      opacity: 1;
+    }
+    &:before, &:after {
+      left: 0 !important
     }
   }
 }

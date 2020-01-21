@@ -156,7 +156,7 @@ export class ProxyModelBuilder {
                 enumerable: true
             });
 
-        //crrate proxy accessor for each section instance datasource item
+        // create proxy accessor for each section instance datasource item
         if (sectionInstance.dataSources) {
             proxySectionInstance.dataSources = {};
             for (let dataSourceId of Object.keys(sectionInstance.dataSources)) {
@@ -165,7 +165,7 @@ export class ProxyModelBuilder {
                         dataSourceId,
                         {
                             get: () => {
-                                var data = sectionInstance.dataSources[dataSourceId].getData() || [];
+                                let data = sectionInstance.dataSources[dataSourceId].getData() || [];
                                  return data.slice();
                             },
                             enumerable: true
@@ -173,7 +173,7 @@ export class ProxyModelBuilder {
                 }
             }
         }
-        
+
         return proxySectionInstance;
     }
 

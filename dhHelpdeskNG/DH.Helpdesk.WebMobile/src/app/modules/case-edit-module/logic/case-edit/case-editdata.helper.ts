@@ -1,14 +1,19 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { CaseEditInputModel, CaseSectionType, CaseFieldModel } from '../../models';
-import { CaseOptionsFilterModel } from 'src/app/modules/shared-module/models';
+import { CaseEditInputModel, CaseSectionType, CaseFieldModel, CaseSectionInputModel, ICaseField } from '../../models';
+import { CaseOptionsFilterModel, OptionItem } from 'src/app/modules/shared-module/models';
 import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
 import { CaseFormGroup } from 'src/app/modules/shared-module/models/forms/case-form-group';
+import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
+import { DateTime } from 'luxon';
+import { CaseDataStore } from './case-data.store';
+import { OptionsHelper } from 'src/app/helpers/options-helper';
 
 @Injectable({ providedIn: 'root' })
 export class CaseEditDataHelper {
 
-  constructor(private translateService: TranslateService) {
+  constructor(private translateService: TranslateService,
+     private dataSourceOptionsHelper: OptionsHelper) {
   }
 
   getCaseTitle(caseData: CaseEditInputModel): string {
@@ -56,6 +61,160 @@ export class CaseEditDataHelper {
 
     getFormCaseOptionsFilter(caseData: CaseEditInputModel, form: CaseFormGroup ) {
       return this.createCaseOptionsFilter(caseData, (name: string) => form.getValue(name));
+    }
+
+    getSectionInfoFields(section: CaseSectionInputModel, dataSource: CaseDataStore, caseData: CaseEditInputModel): string {
+      const emptyValue = null;
+
+      const getDate = (value: string, isShortData: boolean = false) => {
+        return DateUtil.formatDate(value, isShortData ? DateTime.DATE_SHORT : null);
+      };
+
+      const initiatorFields = (name: string, field: ICaseField<any>) => {
+        switch (name) {
+          case CaseFieldsNames.RegionId: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.regionsStore$.value);
+          }
+          case CaseFieldsNames.DepartmentId: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.departmentsStore$.value);
+          }
+          case CaseFieldsNames.OrganizationUnitId: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.oUsStore$.value);
+          }
+        }
+        return field.value;
+      };
+
+      const regardingFields = (name: string, field: ICaseField<any>) => {
+        switch (name) {
+          case CaseFieldsNames.IsAbout_RegionId: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.regionsStore$.value);
+          }
+          case CaseFieldsNames.IsAbout_DepartmentId: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.isAboutDepartmentsStore$.value);
+          }
+          case CaseFieldsNames.IsAbout_OrganizationUnitId: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.isAboutOUsStore$.value);
+          }
+        }
+        return field.value;
+      };
+
+      const caseInfoFields = (name: string, field: ICaseField<any>) => {
+        switch (name) {
+          case CaseFieldsNames.RegTime:
+          case CaseFieldsNames.ChangeTime: {
+            return getDate(field.value);
+          }
+          case CaseFieldsNames.RegistrationSourceCustomer: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.customerRegistrationSourcesStore$.value);
+          }
+          case CaseFieldsNames.CaseTypeId: {
+            return this.dataSourceOptionsHelper.getFromMultiLevelOptions(field.value, dataSource.caseTypesStore$.value);
+          }
+          case CaseFieldsNames.ProductAreaId: {
+            return this.dataSourceOptionsHelper.getFromMultiLevelOptions(field.value, dataSource.productAreasStore$.value);
+          }
+          case CaseFieldsNames.SystemId: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.systemsStore$.value);
+          }
+          case CaseFieldsNames.UrgencyId: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.urgenciesStore$.value);
+          }
+          case CaseFieldsNames.ImpactId: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.impactsStore$.value);
+          }
+          case CaseFieldsNames.CategoryId: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.categoriesStore$.value);
+          }
+          case CaseFieldsNames.SupplierId: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.suppliersStore$.value);
+          }
+          case CaseFieldsNames.AgreedDate: {
+            return getDate(field.value, true);
+          }
+          case CaseFieldsNames.Caption:
+          case CaseFieldsNames.Description: {
+            return field.value ? (<string>field.value).substring(0, 30) : '';
+          }
+          case CaseFieldsNames.Cost: {
+            return field.value; // TODO: add Other cost and currency
+          }
+        }
+        return field.value;
+      };
+
+      const caseManagementFields = (name: string, field: ICaseField<any>) => {
+        switch (name) {
+          case CaseFieldsNames.WorkingGroupId: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.workingGroupsStore$.value);
+          }
+          case CaseFieldsNames.CaseResponsibleUserId: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.responsibleUsersStore$.value);
+          }
+          case CaseFieldsNames.PerformerUserId: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.performersStore$.value);
+          }
+          case CaseFieldsNames.PriorityId: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.prioritiesStore$.value);
+          }
+          case CaseFieldsNames.StatusId: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.statusesStore$.value);
+          }
+          case CaseFieldsNames.StateSecondaryId: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.stateSecondariesStore$.value);
+          }
+          case CaseFieldsNames.Project: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.projectsStore$.value);
+          }
+          case CaseFieldsNames.Problem: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.problemsStore$.value);
+          }
+          case CaseFieldsNames.CausingPart: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.causingPartsStore$.value);
+          }
+          case CaseFieldsNames.Change: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.changesStore$.value);
+          }
+          case CaseFieldsNames.PlanDate:
+          case CaseFieldsNames.WatchDate: {
+              return getDate(field.value, true);
+          }
+          case CaseFieldsNames.SolutionRate: {
+            return this.dataSourceOptionsHelper.getFromOptions(field.value, dataSource.solutionsRatesStore$.value);
+          }
+        }
+        return field.value;
+      };
+
+      return section.caseSectionFields.map(name => {
+        if (this.hasField(caseData, name)) {
+           const field = this.getField(caseData, name);
+           if (field.value == null) {
+             return null;
+           }
+           switch (section.type) {
+            case CaseSectionType.Initiator:
+              return initiatorFields(name, field);
+
+            case CaseSectionType.Regarding:
+              return regardingFields(name, field);
+
+            case CaseSectionType.ComputerInfo:
+              return field.value;
+
+            case CaseSectionType.CaseInfo:
+              return caseInfoFields(name, field);
+
+            case CaseSectionType.CaseManagement:
+              return caseManagementFields(name, field);
+
+           }
+           return emptyValue;
+        }
+      })
+      .filter(value => value)
+      .join(' - ');
     }
 
     private createCaseOptionsFilter(caseData: CaseEditInputModel, getValue: (name: string) => number) {

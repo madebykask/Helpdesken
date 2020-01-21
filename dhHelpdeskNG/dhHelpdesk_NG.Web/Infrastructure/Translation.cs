@@ -29,7 +29,7 @@ namespace DH.Helpdesk.Web.Infrastructure
         /// <param name="source"></param>
         /// <param name="customerId"></param>
         /// <returns></returns>
-        [System.Obsolete("This is obsolete. Please use either GetMasterDataTranslation, GetCoreTextTranslation, GetForCase, or GetTextTranslationByTextType. This is spotty because it can give translations that isn't necessarily correct (based on texttype) and can give faulty translations")]
+        //[System.Obsolete("This is obsolete. Please use either GetMasterDataTranslation, GetCoreTextTranslation, GetForCase, or GetTextTranslationByTextType. This is spotty because it can give translations that isn't necessarily correct (based on texttype) and can give faulty translations")]
         public static string Get(string translate, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, int customerId = 0)
         {
             translate = Get(translate, SessionFacade.CurrentLanguageId, source, customerId);            

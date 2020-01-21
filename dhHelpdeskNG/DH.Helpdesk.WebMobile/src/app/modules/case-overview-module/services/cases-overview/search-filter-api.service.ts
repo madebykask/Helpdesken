@@ -12,7 +12,7 @@ export class SearchFilterApiService extends HttpApiServiceBase {
   }
 
   getFavoritersFilters(): Observable<any[]> {
-    const url = this.buildResourseUrl('/api/casesoverview/favoritefilters');
+    const url = this.buildResourseUrl('/api/casefavorites/user', null, false, false);
     return this.getJson<any[]>(url, null, false);
   }
 }

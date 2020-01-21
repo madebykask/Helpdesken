@@ -24,6 +24,9 @@ using DH.Helpdesk.Models.CasesOverview;
 using DH.Helpdesk.WebApi.Infrastructure.Authentication;
 using DH.Helpdesk.WebApi.Logic.Case;
 using DH.Helpdesk.WebApi.Models.Output;
+using DH.Helpdesk.Common.Enums.Cases;
+using DH.Helpdesk.Services.Utils;
+using DH.Helpdesk.Common.Tools;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -36,27 +39,31 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly IUserService _userSerivice;
         private readonly ICustomerService _customerService;
-        private readonly ICaseService _caseService;
         private readonly ICaseTranslationService _caseTranslationService;
+		private readonly ICaseService _caseService;
+		private readonly IHolidayService _holidayService;
 
-        public CasesOverviewController(ICaseSearchService caseSearchService,
-            ICaseService caseService,
+		public CasesOverviewController(ICaseSearchService caseSearchService,
             ICustomerUserService customerUserService,
             ICaseSettingsService caseSettingService,
             ICaseFieldSettingService caseFieldSettingService,
             ICaseTranslationService caseTranslationService,
             IUserService userSerivice,
-            ICustomerService customerService)
+            ICustomerService customerService,
+			ICaseService caseService,
+			IHolidayService holidayService)
         {
             _caseTranslationService = caseTranslationService;
-            _caseService = caseService;
             _caseSearchService = caseSearchService;
             _customerUserService = customerUserService;
             _caseSettingService = caseSettingService;
             _caseFieldSettingService = caseFieldSettingService;
             _userSerivice = userSerivice;
             _customerService = customerService;
-        }
+			_caseService = caseService;
+			_holidayService = holidayService;
+
+		}
 
         [HttpGet]
         [Route("sortingfields")]
@@ -82,30 +89,6 @@ namespace DH.Helpdesk.WebApi.Controllers
             return res;
         }
 
-        [HttpGet]
-        [Route("favoritefilters")]
-        public async Task<List<CaseFavoriteFilterModel>> FavoriteFilters(int cid)
-        {
-            var favorites = await _caseService.GetMyFavoritesWithFieldsAsync(cid, UserId);
-
-            //#71782: skip filters with ClosingReason and Closing date since mobile app supports only cases in progress only
-            favorites = 
-                favorites.Where(f => f.Fields != null && 
-                                     (f.Fields.ClosingReasonFilter == null || !f.Fields.ClosingReasonFilter.Any()) && 
-                                     (f.Fields.ClosingDateFilter == null || !f.Fields.ClosingDateFilter.HasValues)).ToList();
-
-            var model = favorites.Any()
-                ? favorites.Select(f => new CaseFavoriteFilterModel()
-                {
-                    Id = f.Id,
-                    Name = f.Name,
-                    Fields = f.Fields.ToDictionary().Select(kv => new ItemOverview(kv.Key, kv.Value)).ToList()
-                }).OrderBy(f => f.Name).ToList()
-                : null;
-
-            return model;
-        }
-
         /// <summary>
         /// List of filtered cases.
         /// Contains data only for case overview.
@@ -114,97 +97,207 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <param name="input"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<SearchResult<CaseSearchResult>> Search([FromUri]int cid, [FromBody]SearchOverviewFilterInputModel input)
+        public async Task<SearchResult<CaseSearchResult>> Search([FromBody]SearchOverviewFilterInputModel input, int? cid = null)
         {
-            var userGroupId = User.Identity.GetGroupId();
-            var userOverview = await _userSerivice.GetUserOverviewAsync(UserId);
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(userOverview.TimeZoneId);
-            var customerSettings = await _customerService.GetCustomerAsync(cid);
+			SearchResult<CaseSearchResult> searchResult = null;
+			if (input.CustomersIds.Count == 1) // TODO: fix? 
+			{
+				var userGroupId = User.Identity.GetGroupId();
+				var userOverview = await _userSerivice.GetUserOverviewAsync(UserId);
+				var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(userOverview.TimeZoneId);
+				var filter = CreateSearchFilter(input, cid.Value);
 
-            var filter = CreateSearchFilter(input, cid);
+				var customerSettings = await _customerService.GetCustomerAsync(filter.CustomerId);
 
-            var currentUserId = filter.UserId;
-            var customerId = filter.CustomerId;
+				var currentUserId = filter.UserId;
+				var customerId = filter.CustomerId;
 
-            //var sm = await InitCaseSearchModel(filter.CustomerId, filter.UserId, filter);
-            var sm = new CaseSearchModel()
-            {
-                CaseSearchFilter = filter,
-                Search = new Search()
-                {
-                    SortBy = GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
-                    Ascending = false
-                }
-            };
+				//var sm = await InitCaseSearchModel(filter.CustomerId, filter.UserId, filter);
+				var sm = new CaseSearchModel()
+				{
+					CaseSearchFilter = filter,
+					Search = new Search()
+					{
+						SortBy = GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
+						Ascending = false
+					}
+				};
 
-            if (!string.IsNullOrWhiteSpace(input.OrderBy))
-                sm.Search.SortBy = input.OrderBy;
+				if (!string.IsNullOrWhiteSpace(input.OrderBy))
+					sm.Search.SortBy = input.OrderBy;
 
-            if (input.Ascending.HasValue)
-                sm.Search.Ascending = input.Ascending.Value;
+				if (input.Ascending.HasValue)
+					sm.Search.Ascending = input.Ascending.Value;
 
-            // TODO: review if it required
-            var caseSettings = _caseSettingService.GetCaseSettingsWithUser(filter.CustomerId, filter.UserId, userGroupId);
-            AddMissingCaseSettingsForMobile(caseSettings); //TODO: Temporary  - remove after mobile case settings is implemented
+                var caseSettings = _caseSettingService.GetCaseSettingsWithUser(filter.CustomerId, filter.UserId, userGroupId);
+				AddMissingCaseSettingsForMobile(caseSettings); //TODO: Temporary  - remove after mobile case settings is implemented
 
-            var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(filter.CustomerId);
-            var customerUserSettings = await _customerUserService.GetCustomerUserSettingsAsync(customerId, currentUserId);
+				var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(filter.CustomerId);
+				var customerUserSettings = await _customerUserService.GetCustomerUserSettingsAsync(customerId, currentUserId);
 
-            CaseRemainingTimeData remainingTimeData;
-            CaseAggregateData aggregateData;
+				CaseRemainingTimeData remainingTimeData;
+				CaseAggregateData aggregateData;
 
-            SearchResult<CaseSearchResult> searchResult = null;
+                if (input.CountOnly)
+				{
+					// run count only query 
+					searchResult = _caseSearchService.Search(
+						filter,
+						caseSettings,
+						caseFieldSettings.ToArray(),
+						filter.UserId,
+						UserName,
+						userOverview.ShowNotAssignedWorkingGroups,
+						userGroupId,
+						customerUserSettings.RestrictedCasePermission,
+						sm.Search,
+						customerSettings.WorkingDayStart,
+						customerSettings.WorkingDayEnd,
+						userTimeZone,
+						ApplicationTypes.HelpdeskMobile,
+						userOverview.ShowSolutionTime,
+						out remainingTimeData,
+						out aggregateData,
+						null,
+						null,
+						null,
+						countOnly: true);
+				}
+				else
+				{
+					// run normal search request
+					searchResult = _caseSearchService.Search(
+						filter,
+						caseSettings,
+						caseFieldSettings.ToArray(),
+						filter.UserId,
+						UserName,
+						userOverview.ShowNotAssignedWorkingGroups,
+						userGroupId,
+						customerUserSettings.RestrictedCasePermission,
+						sm.Search,
+						customerSettings.WorkingDayStart,
+						customerSettings.WorkingDayEnd,
+						userTimeZone,
+						ApplicationTypes.HelpdeskMobile,
+						userOverview.ShowSolutionTime,
+						out remainingTimeData,
+						out aggregateData);
+				}
 
-            if (input.CountOnly)
-            {
-                // run count only query 
-                searchResult = _caseSearchService.Search(
-                    filter,
-                    caseSettings,
-                    caseFieldSettings.ToArray(),
-                    filter.UserId,
-                    UserName,
-                    userOverview.ShowNotAssignedWorkingGroups,
-                    userGroupId,
-                    customerUserSettings.RestrictedCasePermission,
-                    sm.Search,
-                    customerSettings.WorkingDayStart,
-                    customerSettings.WorkingDayEnd,
-                    userTimeZone,
-                    ApplicationTypes.HelpdeskMobile,
-                    userOverview.ShowSolutionTime,
-                    out remainingTimeData,
-                    out aggregateData,
-                    null,
-                    null,
-                    null,
-                    countOnly: true);
-            }
-            else
-            {
-                // run normal search request
-                searchResult = _caseSearchService.Search(
-                    filter,
-                    caseSettings,
-                    caseFieldSettings.ToArray(),
-                    filter.UserId,
-                    UserName,
-                    userOverview.ShowNotAssignedWorkingGroups,
-                    userGroupId,
-                    customerUserSettings.RestrictedCasePermission,
-                    sm.Search,
-                    customerSettings.WorkingDayStart,
-                    customerSettings.WorkingDayEnd,
-                    userTimeZone,
-                    ApplicationTypes.HelpdeskMobile,
-                    userOverview.ShowSolutionTime,
-                    out remainingTimeData,
-                    out aggregateData);
-            }
+				//searchResults = CommonHelper.TreeTranslate(m.cases, f.CustomerId, _productAreaService);
 
-            //searchResults = CommonHelper.TreeTranslate(m.cases, f.CustomerId, _productAreaService);
+				//var results = _caseSearchService.Search();
+			}
+			else
+			{
+				var userId = UserId;
+				var result = _caseSearchService.SearchActiveCustomerUserCases(input.SearchInMyCasesOnly, UserId, null, input.FreeTextSearch, ((input.PageSize??0) * (input.Page ?? 0)), (input.PageSize??10), input.OrderBy, input.Ascending.HasValue ? input.Ascending.Value : true);
+				searchResult = new SearchResult<CaseSearchResult>();
 
-            //var results = _caseSearchService.Search();
+				//_caseSettingService.Get
+
+				var workTimeCalculators = result.Select(o => o.CustomerID)
+					.Distinct()
+					.Select(o => _customerService.GetCustomer(o))
+					.Select(o => {
+						var from = result.Min(p => p.RegistrationDate);
+						var to = DateTime.UtcNow.AddDays(100);
+						var departmentIds = result.Where(p => p.DepartmentID.HasValue).Select(p => p.DepartmentID.Value).Distinct().ToArray();
+						var workTimeCalculatorFactory = new WorkTimeCalculatorFactory(_holidayService, o.WorkingDayStart, o.WorkingDayEnd, TimeZoneInfo.FindSystemTimeZoneById(o.TimeZoneId));
+						var workTimeCalculator = workTimeCalculatorFactory.Build(from, to, departmentIds);
+						return new { WorkTimeCalculator = workTimeCalculator, CustomerID = o.Id };
+					})
+					.ToDictionary(o => o.CustomerID, o => o.WorkTimeCalculator);
+
+				//var workTimeCalculatorFactory = new WorkTimeCalculatorFactory(_holidayService, 8, 17, TimeZoneInfo.Local);
+
+				foreach (var r in result)
+				{
+					var sr = new CaseSearchResult();
+					sr.Id = r.Id;
+					sr.CaseIcon = r.CaseIcon;
+					sr.SortOrder = input.OrderBy;
+					sr.IsUnread = r.Unread;
+					sr.ShowCustomerName = true;
+					sr.Columns = new List<Field>();
+					sr.Columns.Add(new Field { Key = CaseInfoFields.Case, StringValue = r.CaseNumber.ToString(), DateTimeValue = null, FieldType = FieldTypes.String });
+					sr.Columns.Add(new Field { Key = CaseInfoFields.ChangeDate, StringValue = r.ChangedDate.ToString("yyyy-MM-dd"), DateTimeValue = r.ChangedDate, FieldType = FieldTypes.Date });
+					sr.Columns.Add(new Field { Key = CaseInfoFields.Caption, StringValue = r.Subject, FieldType = FieldTypes.String });
+					sr.Columns.Add(new Field { Key = OtherFields.SubState, StringValue = r.StateSecondaryName, FieldType = FieldTypes.String });
+					sr.Columns.Add(new Field { Key = OtherFields.WatchDate, StringValue = r.WatchDate.HasValue ? r.WatchDate.Value.ToString("yyyy-MM-dd") : "", DateTimeValue = r.WatchDate, FieldType = FieldTypes.Date });
+
+                    if (!string.IsNullOrEmpty(r.DepartmentName))
+                        sr.Columns.Add(new Field { Key = UserFields.Department, StringValue = r.DepartmentName, DateTimeValue = null, FieldType = FieldTypes.String });
+                    if (!string.IsNullOrEmpty(r.InitiatorName))
+                        sr.Columns.Add(new Field { Key = UserFields.Notifier, StringValue = r.InitiatorName, DateTimeValue = null, FieldType = FieldTypes.String });
+
+					if (!string.IsNullOrEmpty(r.PriorityName))
+						sr.Columns.Add(new Field { Key = OtherFields.Priority, StringValue = r.PriorityName, FieldType = FieldTypes.String, TranslateThis = true });
+					if (!string.IsNullOrEmpty(r.WorkingGroupName))
+						sr.Columns.Add(new Field { Key = OtherFields.WorkingGroup, StringValue = r.WorkingGroupName, FieldType = FieldTypes.String });
+					if (!string.IsNullOrEmpty(r.PerformerName))
+						sr.Columns.Add(new Field { Key = OtherFields.Administrator, StringValue = r.PerformerName, FieldType = FieldTypes.String });
+					sr.Columns.Add(new Field { Key = UserFields.Customer, StringValue = r.CustomerName, FieldType = FieldTypes.String });
+
+					var now = DateTime.UtcNow;
+					int? timeLeft = null;
+					if (r.WatchDate.HasValue)
+					{
+						var watchDateDue = r.WatchDate.Value.Date.AddDays(1);
+						int workTime = 0;
+						//// calc time by watching date
+						if (watchDateDue > now)
+						{
+							// #52951 timeOnPause shouldn't calculate when watchdate has value
+							workTime = workTimeCalculators[r.CustomerID].CalculateWorkTime(now, watchDateDue, r.DepartmentID);
+						}
+						else
+						{
+							//// for cases that should be closed in the past
+							// #52951 timeOnPause shouldn't calculate when watchdate has value
+							workTime = -workTimeCalculators[r.CustomerID].CalculateWorkTime(watchDateDue, now, r.DepartmentID);
+						}
+
+						timeLeft = workTime / 60;
+						var floatingPoint = workTime % 60;
+						var secSortOrder = floatingPoint.ToString();
+
+						if (timeLeft <= 0 && floatingPoint < 0)
+							timeLeft--;
+						
+					}
+					else if (r.IncludeInCaseStatistics && r.SolutionTime.HasValue && r.SolutionTime.Value > 0)
+					{
+						var SLAtime = r.SolutionTime;
+						var timeOnPause = r.ExternalTime;
+						var dtFrom = DatesHelper.Min(r.RegistrationDate, now);
+						var dtTo = DatesHelper.Max(r.RegistrationDate, now);
+						var calcTime = workTimeCalculators[r.CustomerID].CalculateWorkTime(dtFrom, dtTo, r.DepartmentID);
+						timeLeft = (SLAtime * 60 - calcTime + timeOnPause) / 60;
+						var floatingPoint = (SLAtime * 60 - calcTime + timeOnPause) % 60;
+
+						if (timeLeft <= 0 && floatingPoint < 0)
+							timeLeft--;
+
+					}
+
+					if (timeLeft.HasValue)
+					{
+						if (timeLeft < 0)
+						{
+							sr.IsUrgent = true;
+						}
+						sr.Columns.Add(new Field { Key = "_temporary_LeadTime", StringValue = timeLeft.ToString(), FieldType = FieldTypes.NullableHours });
+					}
+					else
+					{
+						sr.Columns.Add(new Field { Key = "_temporary_LeadTime", StringValue = "", FieldType = FieldTypes.NullableHours });
+					}
+
+					searchResult.Items.Add(sr);
+				}
+			}
             return searchResult;
         }
 
@@ -288,44 +381,8 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             #endregion
 
-            // TODO: review if required
-            //int recPerPage;
-            //int pageStart;
-            //if (int.TryParse(frm.ReturnFormValue(CaseFilterFields.PageSize), out recPerPage) && int.TryParse(frm.ReturnFormValue(CaseFilterFields.PageStart), out pageStart))
-            //{
-            //    f.PageInfo = new PageInfo
-            //    {
-            //        PageSize = recPerPage,
-            //        PageNumber = recPerPage != 0 ? pageStart / recPerPage : 0
-            //    };
-            //    if (!f.IsConnectToParent)
-            //        SessionFacade.CaseOverviewGridSettings.pageOptions.recPerPage = recPerPage;
-            //}
-
-            //from params - frm.ReturnFormValue(CaseFilterFields.CaseTypeIdNameAttribute).convertStringToInt();
-            // TODO: Check 0//from params - frm.ReturnFormValue(CaseFilterFields.ProductAreaIdNameAttribute).ReturnCustomerUserValue();
-            //from params - frm.ReturnFormValue(CaseFilterFields.CategoryNameAttribute);
-            //from params - frm.ReturnFormValue(CaseFilterFields.RegionNameAttribute);
-            //from params - frm.ReturnFormValue(CaseFilterFields.RegisteredByNameAttribute);
-            // from params - frm.ReturnFormValue(CaseFilterFields.WorkingGroupNameAttribute);
-            //from params - frm.ReturnFormValue(CaseFilterFields.ResponsibleNameAttribute);
-            //from params - frm.ReturnFormValue(CaseFilterFields.PerformerNameAttribute);
-
-            //from params - frm.ReturnFormValue(CaseFilterFields.PriorityNameAttribute);
-            //from params - frm.ReturnFormValue(CaseFilterFields.StatusNameAttribute);
-            //from params - frm.ReturnFormValue(CaseFilterFields.StateSecondaryNameAttribute);
-
-            // from params - frm.GetDate(CaseFilterFields.CaseRegistrationDateStartFilterNameAttribute);
-            // from paramsfrm.GetDate(CaseFilterFields.CaseRegistrationDateEndFilterFilterNameAttribute).GetEndOfDay();
-
-            //from params - frm.GetDate(CaseFilterFields.CaseWatchDateStartFilterNameAttribute);
-            // from params - frm.GetDate(CaseFilterFields.CaseWatchDateEndFilterNameAttribute).GetEndOfDay();
-            // from params - frm.GetDate(CaseFilterFields.CaseClosingDateStartFilterNameAttribute);
-            // from params - frm.GetDate(CaseFilterFields.CaseClosingDateEndFilterNameAttribute).GetEndOfDay();
-            //TODO: Check 0 // from params - frm.ReturnFormValue(CaseFilterFields.ClosingReasonNameAttribute).ReturnCustomerUserValue();
-            //from params - frm.IsFormValueTrue("SearchInMyCasesOnly");
-
-            // from params - frm.IsFormValueTrue(CaseFilterFields.IsConnectToParent);
+            if (input.CustomersIds != null && input.CustomersIds.Count == 1)
+                filter.CustomerId = input.CustomersIds.Single();
 
             return filter;
         }

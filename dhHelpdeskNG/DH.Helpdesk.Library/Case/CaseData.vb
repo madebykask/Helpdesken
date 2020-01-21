@@ -7,7 +7,7 @@ Imports DH.Helpdesk.Dal.Repositories
 Imports DH.Helpdesk.Library.SharedFunctions
 Imports DH.Helpdesk.Services.Infrastructure
 Imports DH.Helpdesk.Services.Services
-Imports DH.Helpdesk.Services.Utils
+Imports DH.Helpdesk.Services.utils
 
 Public Class CaseData
     Public Function getTodayPlanDate() As Collection
@@ -77,11 +77,31 @@ Public Class CaseData
             sSQL = " INSERT INTO tblCaseIsAbout ([Case_Id],[ReportedBy],[Person_Name],[Person_Email],[Person_Phone],[Person_CellPhone],[Region_Id],[Department_Id],[OU_Id],[CostCentre],[Place],[UserCode]"
             sSQL = sSQL & ") Values (" & CStr(iCase_Id) & ", "
 
-            sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(u.UserId, "'", ""), 40) & "', "
-            sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(u.FirstName & u.SurName, "'", ""), 50) & "', " &
-                            getDBStringPrefix() & "'" & Left(Replace(u.EMail, "'", "''"), 100) & "', " &
-                            getDBStringPrefix() & "'" & Replace(Left(u.Phone, 40), "'", "''") & "', " &
-                            getDBStringPrefix() & "'" & Left(u.CellPhone, 30) & "', "
+            If (String.IsNullOrEmpty(u.UserId)) Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(u.UserId, "'", ""), 40) & "', "
+            End If
+            If (String.IsNullOrEmpty(u.FirstName) And String.IsNullOrEmpty(u.SurName)) Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(If(u.FirstName, "") & If(u.SurName, ""), "'", ""), 50) & "', "
+            End If
+            If (String.IsNullOrEmpty(u.EMail)) Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(u.EMail, "'", "''"), 100) & "', "
+            End If
+            If (String.IsNullOrEmpty(u.Phone)) Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & Replace(Left(u.Phone, 40), "'", "''") & "', "
+            End If
+            If (String.IsNullOrEmpty(u.CellPhone)) Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & Left(u.CellPhone, 30) & "', "
+            End If
             If u.Region_Id = 0 Then
                 sSQL = sSQL & "Null, "
             Else
@@ -97,9 +117,21 @@ Public Class CaseData
             Else
                 sSQL = sSQL & u.OU_Id & ", "
             End If
-            sSQL = sSQL & getDBStringPrefix() & "'" & Left(u.CostCentre, 50) & "', " &
-                            getDBStringPrefix() & "'" & Left(u.Location, 100) & "', " &
-                            getDBStringPrefix() & "'" & Left(u.UserCode, 20) & "'"
+            If (String.IsNullOrEmpty(u.CostCentre)) Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & Left(u.CostCentre, 50) & "', "
+            End If
+            If (String.IsNullOrEmpty(u.Location)) Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & Left(u.Location, 100) & "', "
+            End If
+            If (String.IsNullOrEmpty(u.UserCode)) Then
+                sSQL = sSQL & "Null "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & Left(u.UserCode, 50) & "' "
+            End If
             sSQL = sSQL & ")"
 
             If giLoglevel > 0 Then
@@ -272,19 +304,19 @@ Public Class CaseData
         Dim sSQL As String
 
         Try
-            Dim workTime as CaseWorkTime = calculateWorkTimeOnChange(objCase)
-            
+            Dim workTime As CaseWorkTime = calculateWorkTimeOnChange(objCase)
+
             sSQL = $"UPDATE tblCase 
                      SET Status=1, 
                          ChangeTime = @changeTime, 
                          ExternalTime = @externalTime, 
                          LeadTime = @leadTime
                      WHERE Id = @caseId"
-            
+
             Dim parameters As New List(Of SqlParameter) From {
                 DbHelper.createDbParameter("@caseId", objCase.Id),
                 DbHelper.createDbParameter("@changeTime", workTime.Now),
-                DbHelper.createDbParameter("@externalTime",workTime.ExternalTime),
+                DbHelper.createDbParameter("@externalTime", workTime.ExternalTime),
                 DbHelper.createDbParameter("@leadTime", workTime.LeadTime)
             }
 
@@ -366,9 +398,12 @@ Public Class CaseData
         Try
 
             ' Skapa nytt ärende
-            sSQL = "INSERT INTO tblCase(CaseGUID, CaseType_Id, Customer_Id, ProductArea_Id,Category_Id, Region_Id, ReportedBy, Department_Id, OU_Id, Persons_Name, " &
-                            "Persons_EMail, Persons_Phone, Persons_CellPhone, Place, UserCode, CostCentre, InventoryNumber, InvoiceNumber, Caption, Description, Miscellaneous, Available, ReferenceNumber, Priority_Id, WorkingGroup_Id, Performer_User_Id, Status_Id, StateSecondary_Id, " &
-                            "WatchDate, RegistrationSource, RegLanguage_Id, RegistrationSourceCustomer_Id, RegUserName, RegTime, ChangeTime) " &
+            sSQL = "INSERT INTO tblCase(CaseGUID, CaseType_Id, Customer_Id, ProductArea_Id,Category_Id, Region_Id, ReportedBy, Department_Id, OU_Id, " &
+                            "Project_Id, System_Id, Urgency_Id, Impact_Id, Supplier_Id, SMS, Cost, OtherCost, Problem_Id, Change_Id, CausingPartId, Verified, VerifiedDescription, SolutionRate," &
+                            "InventoryType, InventoryLocation, Currency, ContactBeforeAction, FinishingDescription, " &
+                            "Persons_Name, Persons_EMail, Persons_Phone, Persons_CellPhone, Place, UserCode, CostCentre, InventoryNumber, InvoiceNumber, " &
+                            "Caption, Description, Miscellaneous, Available, ReferenceNumber, Priority_Id, WorkingGroup_Id, Performer_User_Id, Status_Id, StateSecondary_Id, " &
+                            "WatchDate, PlanDate, AgreedDate, FinishingDate, RegistrationSource, RegLanguage_Id, RegistrationSourceCustomer_Id, RegUserName, RegTime, ChangeTime) " &
                         "VALUES(" &
                             getDBStringPrefix() & "'" & objCase.CaseGUID & "', " &
                             objCase.CaseType_Id & ", " &
@@ -405,7 +440,86 @@ Public Class CaseData
                 sSQL = sSQL & objCase.OU_Id & ", "
             End If
 
-            sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(objCase.Persons_Name, "'", ""), 50) & "', " &
+            If objCase.Project_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Project_Id & ", "
+            End If
+
+            If objCase.System_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.System_Id & ", "
+            End If
+
+            If objCase.Urgency_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Urgency_Id & ", "
+            End If
+
+            If objCase.Impact_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Impact_Id & ", "
+            End If
+
+            If objCase.Supplier_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Supplier_Id & ", "
+            End If
+
+            If objCase.Sms = 0 Then
+                sSQL = sSQL & "0, "
+            Else
+                sSQL = sSQL & objCase.Sms & ", "
+            End If
+
+            If objCase.Cost = 0 Then
+                sSQL = sSQL & "0, "
+            Else
+                sSQL = sSQL & objCase.Cost & ", "
+            End If
+
+            If objCase.OtherCost = 0 Then
+                sSQL = sSQL & "0, "
+            Else
+                sSQL = sSQL & objCase.OtherCost & ", "
+            End If
+
+            If objCase.Problem_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Problem_Id & ", "
+            End If
+
+            If objCase.Change_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Change_Id & ", "
+            End If
+
+            If objCase.CausingPartId = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.CausingPartId & ", "
+            End If
+
+            If objCase.Verified = 0 Then
+                sSQL = sSQL & "0, "
+            Else
+                sSQL = sSQL & objCase.Verified & ", "
+            End If
+
+            sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(objCase.VerifiedDescription, "'", ""), 200) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.SolutionRate, "'", ""), 10) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.InventoryType, "'", ""), 50) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.InventoryLocation, "'", ""), 100) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.Currency, "'", ""), 10) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.ContactBeforeAction, "'", ""), 100) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.FinishingDescription, "'", ""), 200) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.Persons_Name, "'", ""), 50) & "', " &
                             getDBStringPrefix() & "'" & Replace(objCase.Persons_EMail, "'", "''") & "', " &
                             getDBStringPrefix() & "'" & Replace(Left(objCase.Persons_Phone, 40), "'", "''") & "', " &
                             getDBStringPrefix() & "'" & Left(objCase.Persons_CellPhone, 30) & "', " &
@@ -454,6 +568,24 @@ Public Class CaseData
                 sSQL = sSQL & "Null, "
             Else
                 sSQL = sSQL & convertDateTime(objCase.WatchDate, giDBType) & ", "
+            End If
+
+            If objCase.PlanDate = Date.MinValue Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & convertDateTime(objCase.PlanDate, giDBType) & ", "
+            End If
+
+            If objCase.AgreedDate = Date.MinValue Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & convertDateTime(objCase.AgreedDate, giDBType) & ", "
+            End If
+
+            If objCase.FinishingDate = Date.MinValue Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & convertDateTime(objCase.FinishingDate, giDBType) & ", "
             End If
 
             sSQL = sSQL & objCase.RegistrationSource & ", " & objCase.RegLanguage_Id & ", "
@@ -567,15 +699,17 @@ Public Class CaseData
 
         Try
             sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " &
-                        "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
+                       "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
+                       "tblCase.Project_Id, tblCase.System_Id, tblCase.Urgency_Id, tblCase.Impact_Id, tblCase.Supplier_Id, tblCase.SMS, tblCase.VerifiedDescription, tblCase.SolutionRate, " &
+                       "tblCase.InventoryType, tblCase.InventoryLocation, tblCase.Cost, tblCase.OtherCost, tblCase.Currency, tblCase.ContactBeforeAction, tblCase.Change_Id, tblCase.Problem_Id, " &
                        "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, tblUsers.FirstName AS PerformerFirstName, tblUsers.SurName AS PerformerSurName, tblUsers.EMail AS PerformerEMail, " &
-                       "u2.FirstName AS RegUserFirstName, u2.SurName AS RegUserSurName, tblCase.WorkingGroup_Id," &
+                       "u2.FirstName AS RegUserFirstName, u2.SurName AS RegUserSurName, tblCase.WorkingGroup_Id, tblCase.PlanDate, tblCase.CausingPartId, tblCase.AgreedDate, tblCase.Verified, " &
                        "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName, tblPriority.PriorityDescription, " &
                        "tblWorkingGroup.WorkingGroup AS PerformerWorkingGroup, tblWorkingGroup.Id AS PerformerWorkingGroup_Id, tblWorkingGroup.AllocateCaseMail AS PerformerWorkingGroupAllocateCaseMail, " &
                        "tblWorkingGroup_1.WorkingGroup AS CaseWorkingGroup, ISNULL(tblWorkingGroup_1.WorkingGroupEMail, '') AS WorkingGroupEMail, tblWorkingGroup_1.AllocateCaseMail AS AllocateCaseMail, " &
                        "tblCase.RegTime, tblCase.ChangeTime, u3.FirstName AS ChangedName, u3.SurName AS ChangedSurName, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " &
-                       "tblCase.FinishingDate, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
-                       "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.WatchDate, tblCase.RegistrationSource, " &
+                       "tblCase.FinishingDate, tblCase.FinishingDescription, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
+                       "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.WatchDate, tblCase.RegistrationSource, tblCase.RegistrationSourceCustomer_Id, " &
                        "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, tblCase.Available, tblCase.ReferenceNumber, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics, tblCase.ExternalTime, tblCase.LeadTime " &
                    "FROM tblCase " &
                        "INNER JOIN tblCustomer ON tblCase.Customer_Id = tblCustomer.Id " &
@@ -935,32 +1069,197 @@ Public Class CaseData
                     End If
 
                     ' Kontrollera om användaruppgifter ska hämtas
-                    If Not IsDBNull(dr("ReportedBy")) AndAlso Not String.IsNullOrEmpty(DirectCast(dr("ReportedBy"), String)) Then
-                        Dim objComputerUser As ComputerUser = objComputerUserData.getComputerUserByUserId(dr("ReportedBy"), dr("Customer_Id"))
+                    ' Commented: helpdesk don't do this
+                    'If Not IsDBNull(dr("ReportedBy")) AndAlso Not String.IsNullOrEmpty(DirectCast(dr("ReportedBy"), String)) Then
+                    '    Dim objComputerUser As ComputerUser = objComputerUserData.getComputerUserByUserId(dr("ReportedBy"), dr("Customer_Id"))
 
-                        If Not objComputerUser Is Nothing Then
-                            c.ReportedBy = objComputerUser.UserId
-                            c.Persons_Name = objComputerUser.FirstName & " " & objComputerUser.SurName
-                            c.Persons_EMail = objComputerUser.EMail
-                            c.Persons_Phone = objComputerUser.Phone
+                    '    If Not objComputerUser Is Nothing Then
+                    '        c.ReportedBy = objComputerUser.UserId
+                    '        c.Persons_Name = objComputerUser.FirstName & " " & objComputerUser.SurName
+                    '        c.Persons_EMail = objComputerUser.EMail
+                    '        c.Persons_Phone = objComputerUser.Phone
 
-                            If c.Department_Id = 0 Then
-                                If objComputerUser.Department_Id <> 0 Then
-                                    c.Department_Id = objComputerUser.Department_Id
-                                End If
-                            End If
-                        End If
+                    '        If c.Department_Id = 0 Then
+                    '            If objComputerUser.Department_Id <> 0 Then
+                    '                c.Department_Id = objComputerUser.Department_Id
+                    '            End If
+                    '        End If
+                    '    End If
 
+                    'End If
+
+                    If Not IsDBNull(dr("ReportedBy")) Then
+                        c.ReportedBy = dr("ReportedBy")
                     End If
 
+                    'Dim setCurrentUsersWorkingGroup As Integer = 0
+                    'If Not IsDBNull(dr("SetCurrentUsersWorkingGroup")) Then
+                    '    setCurrentUsersWorkingGroup = dr("SetCurrentUsersWorkingGroup")
+                    'End If
 
+                    'If setCurrentUsersWorkingGroup = 1 Then
+                    '    '        var userDefaultWGId = _userService.GetUserDefaultWorkingGroupId(SessionFacade.CurrentUser.Id, Customer.Id);
+                    '    '    m.case_.WorkingGroup_Id = userDefaultWGId;
+                    'Else
+                    If Not IsDBNull(dr("CaseWorkingGroup_Id")) Then
+                        c.WorkingGroup_Id = dr("CaseWorkingGroup_Id")
+                    End If
+                    'End If
+
+                    If Not IsDBNull(dr("Project_Id")) Then
+                        c.Project_Id = dr("Project_Id")
+                    End If
+
+                    'If Not IsDBNull(dr("NoMailToNotifier")) Then
+                    '    c.NoMailToNotifier = dr("NoMailToNotifier")
+                    'End If
+
+                    If Not IsDBNull(dr("PersonsName")) Then
+                        c.Persons_Name = dr("PersonsName")
+                    End If
+
+                    If Not IsDBNull(dr("PersonsPhone")) Then
+                        c.Persons_Phone = dr("PersonsPhone")
+                    End If
+
+                    If Not IsDBNull(dr("PersonsCellPhone")) Then
+                        c.Persons_CellPhone = dr("PersonsCellPhone")
+                    End If
+
+                    If Not IsDBNull(dr("OU_Id")) Then
+                        c.OU_Id = dr("OU_Id")
+                    End If
+
+                    If Not IsDBNull(dr("Place")) Then
+                        c.Place = dr("Place")
+                    End If
+
+                    If Not IsDBNull(dr("UserCode")) Then
+                        c.UserCode = dr("UserCode")
+                    End If
+
+                    If Not IsDBNull(dr("System_Id")) Then
+                        c.System_Id = dr("System_Id")
+                    End If
+
+                    If Not IsDBNull(dr("Urgency_Id")) Then
+                        c.Urgency_Id = dr("Urgency_Id")
+                    End If
+
+                    If Not IsDBNull(dr("Impact_Id")) Then
+                        c.Impact_Id = dr("Impact_Id")
+                    End If
+
+                    If Not IsDBNull(dr("InvoiceNumber")) Then
+                        c.InvoiceNumber = dr("InvoiceNumber")
+                    End If
+
+                    If Not IsDBNull(dr("ReferenceNumber")) Then
+                        c.ReferenceNumber = dr("ReferenceNumber")
+                    End If
+
+                    If Not IsDBNull(dr("Status_Id")) Then
+                        c.Status_Id = dr("Status_Id")
+                    End If
+
+                    If Not IsDBNull(dr("StateSecondary_Id")) Then
+                        c.StateSecondary_Id = dr("StateSecondary_Id")
+                    End If
+
+                    If Not IsDBNull(dr("Verified")) Then
+                        c.Verified = dr("Verified")
+                    End If
+
+                    If Not IsDBNull(dr("VerifiedDescription")) Then
+                        c.VerifiedDescription = dr("VerifiedDescription")
+                    End If
+
+                    If Not IsDBNull(dr("SolutionRate")) Then
+                        c.SolutionRate = dr("SolutionRate")
+                    End If
+
+                    If Not IsDBNull(dr("InventoryNumber")) Then
+                        c.InventoryNumber = dr("InventoryNumber")
+                    End If
+
+                    If Not IsDBNull(dr("InventoryType")) Then
+                        c.InventoryType = dr("InventoryType")
+                    End If
+
+                    If Not IsDBNull(dr("InventoryLocation")) Then
+                        c.InventoryLocation = dr("InventoryLocation")
+                    End If
+
+                    If Not IsDBNull(dr("Supplier_Id")) Then
+                        c.Supplier_Id = dr("Supplier_Id")
+                    End If
+
+                    If Not IsDBNull(dr("SMS")) Then
+                        c.Sms = dr("SMS")
+                    End If
+
+                    If Not IsDBNull(dr("Available")) Then
+                        c.Available = dr("Available")
+                    End If
+
+                    If Not IsDBNull(dr("Cost")) Then
+                        c.Cost = dr("Cost")
+                    End If
+
+                    If Not IsDBNull(dr("OtherCost")) Then
+                        c.OtherCost = dr("OtherCost")
+                    End If
+
+                    If Not IsDBNull(dr("Currency")) Then
+                        c.Currency = dr("Currency")
+                    End If
+
+                    If Not IsDBNull(dr("ContactBeforeAction")) Then
+                        c.ContactBeforeAction = dr("ContactBeforeAction")
+                    End If
+
+                    If Not IsDBNull(dr("Problem_Id")) Then
+                        c.Problem_Id = dr("Problem_Id")
+                    End If
+
+                    If Not IsDBNull(dr("Change_Id")) Then
+                        c.Change_Id = dr("Change_Id")
+                    End If
+
+                    If Not IsDBNull(dr("FinishingDate")) Then
+                        c.FinishingDate = dr("FinishingDate")
+                    End If
+
+                    If Not IsDBNull(dr("FinishingDescription")) Then
+                        c.FinishingDescription = dr("FinishingDescription")
+                    End If
+
+                    If Not IsDBNull(dr("PlanDate")) Then
+                        c.PlanDate = dr("PlanDate")
+                    End If
+
+                    If Not IsDBNull(dr("AgreedDate")) Then
+                        c.AgreedDate = dr("AgreedDate")
+                    End If
+
+                    If Not IsDBNull(dr("CausingPartId")) Then
+                        c.CausingPartId = dr("CausingPartId")
+                    End If
+
+                    If Not IsDBNull(dr("RegistrationSource")) Then
+                        c.RegistrationSourceCustomer_Id = dr("RegistrationSource")
+                    End If
+
+                    If Not IsDBNull(dr("PersonsEmail")) Then
+                        c.Persons_EMail = dr("PersonsEmail")
+                    End If
+
+                    If Not IsDBNull(dr("CostCentre")) Then
+                        c.CostCentre = dr("CostCentre")
+                    End If
 
                     If Not IsDBNull(dr("Region_Id")) Then
                         c.Region_Id = dr("Region_Id")
-                    End If
-
-                    If Not IsDBNull(dr("CaseType_Id")) Then
-                        c.CaseType_Id = dr("CaseType_Id")
                     End If
 
                     If Not IsDBNull(dr("Category_Id")) Then
@@ -1007,6 +1306,78 @@ Public Class CaseData
 
                         End If
 
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_ReportedBy")) Then
+                        c.IsAbout_ReportedBy = dr("IsAbout_ReportedBy")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_PersonsName")) Then
+                        c.IsAbout_PersonsName = dr("IsAbout_PersonsName")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_PersonsEmail")) Then
+                        c.IsAbout_PersonsEmail = dr("IsAbout_PersonsEmail")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_PersonsPhone")) Then
+                        c.IsAbout_PersonsPhone = dr("IsAbout_PersonsPhone")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_PersonsCellPhone")) Then
+                        c.IsAbout_PersonsCellPhone = dr("IsAbout_PersonsCellPhone")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_Region_Id")) Then
+                        c.IsAbout_Region_Id = dr("IsAbout_Region_Id")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_Department_Id")) Then
+                        c.IsAbout_Department_Id = dr("IsAbout_Department_Id")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_OU_Id")) Then
+                        c.IsAbout_OU_Id = dr("IsAbout_OU_Id")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_Place")) Then
+                        c.IsAbout_Place = dr("IsAbout_Place")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_CostCentre")) Then
+                        c.IsAbout_CostCentre = dr("IsAbout_CostCentre")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_UserCode")) Then
+                        c.IsAbout_UserCode = dr("IsAbout_UserCode")
+                    End If
+
+                    If Not IsDBNull(dr("CaseType_Id")) Then
+                        c.CaseType_Id = dr("CaseType_Id")
+                        If (Not c.CaseType_Id = 0) Then
+                            Dim caseTypeData As New CaseTypeData()
+                            Dim caseType As CaseType = caseTypeData.getCaseTypeById(c.CaseType_Id)
+                            If (c.WorkingGroup_Id = 0 And Not caseType.WorkingGroup_Id = 0) Then
+                                c.WorkingGroup_Id = caseType.WorkingGroup_Id
+                            End If
+                            If (c.Performer_User_Id = 0 And Not caseType.User_Id = 0) Then
+                                c.Performer_User_Id = caseType.User_Id
+                            End If
+                        End If
+                    End If
+
+                    If Not IsDBNull(dr("ProductArea_Id")) Then
+                        c.ProductArea_Id = dr("ProductArea_Id")
+                        If (Not c.ProductArea_Id = 0) Then
+                            Dim productAreaData As New ProductAreaData()
+                            Dim productArea As ProductArea = productAreaData.GetProductArea(c.ProductArea_Id)
+                            If (c.WorkingGroup_Id = 0 And Not productArea.WorkingGroup_Id = 0) Then
+                                c.WorkingGroup_Id = productArea.WorkingGroup_Id
+                            End If
+                            If (c.Priority_Id = 0 And Not productArea.Priority_Id = 0) Then
+                                c.Priority_Id = productArea.Priority_Id
+                            End If
+                        End If
                     End If
 
                     If logAdded = True Then
@@ -1215,9 +1586,9 @@ Public Class CaseData
         End Try
     End Sub
 
-    Public Function CheckCaseField(iCustomerId as Integer, sFieldName As String) as Boolean
-        Dim sCmd as String = "SELECT Show FROM dbo.tblCaseFieldSettings WHERE CaseField = @fieldName AND Customer_Id = @customerId"
-        Dim cmdParams as New List(Of SqlParameter) From {
+    Public Function CheckCaseField(iCustomerId As Integer, sFieldName As String) As Boolean
+        Dim sCmd As String = "SELECT Show FROM dbo.tblCaseFieldSettings WHERE CaseField = @fieldName AND Customer_Id = @customerId"
+        Dim cmdParams As New List(Of SqlParameter) From {
                 DbHelper.createDbParameter("customerId", iCustomerId),
                 DbHelper.createDbParameter("fieldName", sFieldName)
         }

@@ -15,8 +15,9 @@ export class OUsService extends HttpApiServiceBase {
             super(http, localStorageService);
     }
 
-    getOUsByDepartment(departmentId: number) {
-        return this.getJson(this.buildResourseUrl('/api/organizationalunits/options', { departmentId: departmentId }))
+    getOUsByDepartment(departmentId: number, customerId?: number) {
+      const params = departmentId != null ? { departmentId: departmentId, cid: isNaN(customerId) ? null : customerId } : {};
+        return this.getJson(this.buildResourseUrl('/api/organizationalunits/options', params, isNaN(params.cid)))
         .pipe(
             take(1),
             map((jsItems: any) => {
@@ -25,8 +26,8 @@ export class OUsService extends HttpApiServiceBase {
         ); // TODO: error handling
     }
 
-    getOU(id: number) {
-      return this.getJson(this.buildResourseUrl(`/api/organizationalunits/${id}` , null, true, true))
+    getOU(id: number, customerId: number) {
+      return this.getJson(this.buildResourseUrl(`/api/organizationalunits/${id}` , { cid: customerId}, false, true))
         .pipe(
             take(1),
             map((jsItem: any) => {

@@ -20,6 +20,9 @@
     public class UserCasePermissionsAttribute : AuthorizeAttribute
     {
         private readonly IUserService _userService;
+        private readonly ICaseService _caseService;
+
+        private bool _isCaseExists { get; set; }
 
         #region ctor()
 
@@ -28,9 +31,10 @@
         }
 
         [Inject]
-        public UserCasePermissionsAttribute(IUserService userService)
+        public UserCasePermissionsAttribute(IUserService userService, ICaseService caseService)
         {
             _userService = userService;
+            _caseService = caseService;
         }
 
         #endregion
@@ -46,10 +50,14 @@
             }
 
             var caseIdParam = httpContext.Request.RequestContext.RouteData.Values["id"] ?? httpContext.Request.Params["id"];
+            _isCaseExists = true;
 
             var caseId = 0;
             if (int.TryParse(caseIdParam?.ToString(), out caseId))
             {
+                if (!_caseService.IsCaseExist(caseId))
+                    return true;
+
                 var isAuthorised = _userService.VerifyUserCasePermissions(user, caseId);
                 return isAuthorised;
             }

@@ -15,6 +15,7 @@ import { LogFileType } from 'src/app/modules/shared-module/constants/logFileType
 export class LogFilesUploadComponent {
 
   @Input() caseKey: string;
+  @Input() customerId: number;
   @Input() type: LogFileType;
   @Output() fileUploaded: EventEmitter<FileUploadArgs> = new EventEmitter<FileUploadArgs>();
 
@@ -30,7 +31,6 @@ export class LogFilesUploadComponent {
   ngOnInit() {
     const accessToken = this.authenticationService.getAuthorizationHeaderValue();
     const userData = this.localStateStorage.getCurrentUser();
-    const cid = userData.currentData.selectedCustomerId;
     this.id = `logfileupload${this.type}`;
 
     // init file uploader
@@ -39,7 +39,7 @@ export class LogFilesUploadComponent {
       filters: [],
       isHTML5: true,
       authToken: accessToken,
-      url: this.caseLogApiService.getUploadLogFileUrl(this.caseKey, cid, this.type)
+      url: this.caseLogApiService.getUploadLogFileUrl(this.caseKey, this.customerId, this.type)
     });
 
     // subscribe to events

@@ -6,6 +6,7 @@ import { MbscSelectOptions, MbscSelect } from '@mobiscroll/angular';
 import { CommunicationService, Channels, CaseFieldValueChangedEvent } from 'src/app/services/communication';
 import { OptionItem } from 'src/app/modules/shared-module/models';
 import { TranslateService } from '@ngx-translate/core';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
     selector: 'case-dropdown-control',
@@ -61,11 +62,14 @@ export class CaseDropdownComponent extends BaseControl<number> {
       this.initDataSource();
       this.init(this.fieldName);
       this.updateDisabledState();
-      if (this.disabled) { // will be removed latter, when all fields are implemented
-        this.formControl.disable({onlySelf: true, emitEvent: false});
-      }
       this.initEvents();
+      setTimeout(() => {
+        if (this.disabled) { // will be removed latter, when all fields are implemented
+          this.formControl.disable({onlySelf: true, emitEvent: false});
+        }
+      });
     }
+
 
     private initDataSource() {
       if (!this.dataSource) {
@@ -76,7 +80,7 @@ export class CaseDropdownComponent extends BaseControl<number> {
     private initEvents() {
       // track disabled state in form
       this.formControl.statusChanges.pipe(
-          takeUntil(this.destroy$)
+        untilDestroyed(this)
         ).subscribe((e: any) => {
           if (this.selectControl.disabled !== this.isFormControlDisabled) {
             this.updateDisabledState();
@@ -89,7 +93,7 @@ export class CaseDropdownComponent extends BaseControl<number> {
           this.addEmptyIfNotExists(options);
           return options;
         })),
-          takeUntil(this.destroy$)
+        untilDestroyed(this)
         ).subscribe((options) => {
           this.localDataSource = options;
           this.resetValueIfNeeded(options);
@@ -117,7 +121,6 @@ export class CaseDropdownComponent extends BaseControl<number> {
     }
 
     ngOnDestroy(): void {
-      this.onDestroy();
     }
 
     trackByFn(index, item: OptionItem) {

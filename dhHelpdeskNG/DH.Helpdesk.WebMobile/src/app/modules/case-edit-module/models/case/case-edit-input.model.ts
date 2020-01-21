@@ -25,6 +25,7 @@ export interface ICaseField<T> extends IFieldBase {
 
 export class CaseEditInputModel {
     id: number;
+    customerId: number;
     caseNumber: number;
     caseGuid: string;
     editMode: CaseAccessMode;

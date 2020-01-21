@@ -2,6 +2,7 @@
 @using System.Web.Optimization
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Common.Enums
+@using DH.Helpdesk.Common.Extensions.Boolean
 
 @model DH.Helpdesk.SelfService.Models.Case.ExtendedCaseViewModel
 
@@ -23,6 +24,7 @@
     var downloadCaseFileUrl = Url.Action("DownloadNewCaseFile", "CaseFiles");
     var downloadCaseFileParamUrl = (!string.IsNullOrEmpty(Model.CaseDataModel.CaseFileKey) ? "id=" + Model.CaseDataModel.CaseFileKey + "&" : string.Empty);
     var downloadCaseFileCompleteUrl = downloadCaseFileUrl + "?" + "id=" + "{id}" + "&fileName=" + "{name}";
+    var returnUrl = (string)(ViewBag.ReturnUrl ?? "");
 }
 
 <script type="text/javascript">
@@ -44,7 +46,7 @@
     };
 
     window.caseLogsParameters = {
-        caseDetailsUrl: '@Url.Action("ExtendedCase", "Case")',
+        caseDetailsUrl: '@( string.IsNullOrEmpty(returnUrl) ? Url.Action("ExtendedCase", "Case") : returnUrl )',
         uploadLogFileUrl: '@Url.Action("UploadLogFile", "CaseFiles")',
         getLogFilesUrl: '@Url.Action("GetLogFiles", "CaseFiles")',
         deleteLogFileUrl: '@Url.Action("DeleteLogFile", "CaseFiles")',
@@ -57,7 +59,8 @@
         caseId: Number('@Model.CaseId'),
         logFileKey: '@Model.LogFileGuid',
         isFinished : @Html.Raw(Model.CaseDataModel.IsFinished ? "true" : "false"),
-        logNotesMode: Number('@(Model.ApplicationType == ApplicationType.LineManager || Model.ShowCommunicationForSelfservice ? 1 : 0)')
+        logNotesMode: Number('@(Model.ApplicationType == ApplicationType.LineManager || Model.ShowCommunicationForSelfservice ? 1 : 0)'),
+        caseEmailGuid : '@(ViewBag.caseEmailGuid ?? "")'
     };
 
     window.parameters = {
@@ -67,6 +70,7 @@
         caseId:  @Model.CaseId,
         templateId: @(Model.CaseTemplateId ?? 0),
         customerId: @Model.CustomerId,
+        useInitiatorAutocomplete: @Model.CurrentCustomer.UseInitiatorAutocomplete.ToJavaScriptBool(),
         caseFieldIds: {
             CaseId: "CaseDataModel_Id",
             CustomerId: "CaseDataModel_Customer_Id",
@@ -336,7 +340,7 @@
     /* FileUpload */
     @Html.HiddenFor(m => Model.CaseDataModel.CaseFileKey)
 
-    @Html.Hidden("ReturnUrl", (object)ViewBag.ReturnUrl)
+    @Html.Hidden("ReturnUrl", returnUrl)
 }
 
 <div class="container-fluid dh-container">

@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Common.Extensions.DateTime
-@model IEnumerable<DH.Helpdesk.BusinessData.Models.DailyReport.Output.DailyReportOverview>
+@model DH.Helpdesk.Web.Models.Widgets.WidgetModel<DH.Helpdesk.BusinessData.Models.DailyReport.Output.DailyReportOverview>
 
-@if (Model != null && Model.Any())
+@if (Model != null && Model.Items.Any())
 {
     <div class="row-fluid">
         <div class="box-box span12">
@@ -9,14 +9,20 @@
                 <div class="start-tile-img label green"><a href="@Url.Action("index", "dailyreport", new {area = ""})"><img src="@Url.Content("~/Content/icons/dailyreport.png")" alt="@Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)" /></a></div><h4>@Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)</h4>
             </div>
             <div class="box-body portlet-content">
-                @foreach (var dailyReport in Model)
+                @foreach (var dailyReport in Model.Items)
                 {
                     <div class="box-post">
                         <div class="label green">@dailyReport.CustomerName | @dailyReport.CreatedDate.ToFormattedDate()</div>
                         <div class="captionrow">@(dailyReport.DailyReportSubject != null ? dailyReport.DailyReportSubject.Subject : null)</div>
                         <div class="textrow">@dailyReport.DailyReportText</div>
                     </div>
-                }            
+                }
+                @if (Model.ShowMore)
+                {
+                    <div class="box-post more">
+                        <a href="@Url.Action("index", "dailyreport", new {area = ""})">>></a>
+                    </div>
+                }
             </div>
         </div>
     </div>

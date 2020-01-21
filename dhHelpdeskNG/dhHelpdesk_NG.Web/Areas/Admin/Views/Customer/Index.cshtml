@@ -22,9 +22,20 @@
                     <div class="filterContent">
                         <table id="">
                             <tr>
+                                <td style="width: 200px">
+                                    @Translation.Get("Sök", Enums.TranslationSource.TextTranslation)
+                                </td>
                                 <td>
                                     @Html.TextBoxFor(model => model.SearchCs, new { maxlength = "50"})
                                     <input type="button" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" onclick="submit();" />
+                                </td>
+                            </tr>
+                            <tr>
+                                 <td style="width: 200px">
+                                    @Translation.Get("Visa endast aktiva")
+                                </td>
+                                <td>
+                                    <input type="checkbox" class="switchcheckbox" id="activeOnly" name="ActiveOnly" value="true" @(Model.ActiveOnly ? "checked" : "")/>
                                 </td>
                             </tr>
                         </table>
@@ -33,40 +44,40 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        @Translation.Get("Kundnummer", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Kundnummer")
                                     </th>
                                     <th>
-                                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Namn")
                                     </th>
                                     <th>
-                                        @Translation.Get("Adress", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Adress")
                                     </th>
                                     <th>
-                                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("E-post")
                                     </th>
                                     <th>
-                                        @Translation.Get("Telefon", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Telefon")
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var items in Model.Customers)
-                                {                            
+                                {
                                     <tr>
                                         <td>
-                                            <a href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.CustomerID)</a>
+                                            <a style="@(items.Status == 1 ? "" : "color: #ccc")" href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.CustomerID)</a>
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.Name)</a>
+                                            <a style="@(items.Status == 1 ? "" : "color: #ccc")" href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.Name)</a>
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.Address)</a>
+                                            <a style="@(items.Status == 1 ? "" : "color: #ccc")" href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.Address)</a>
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.HelpdeskEmail)</a>
+                                            <a style="@(items.Status == 1 ? "" : "color: #ccc")" href="@Url.Action("edit", "customer", new { area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.HelpdeskEmail)</a>
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("edit", "customer", new {area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.Phone)</a>
+                                            <a style="@(items.Status == 1 ? "" : "color: #ccc")" href="@Url.Action("edit", "customer", new {area = "admin", id = items.Id })">@Html.DisplayFor(modelItem => items.Phone)</a>
                                         </td>
                                     </tr>
                                 }
@@ -83,9 +94,14 @@
     var customerId = $("#currentCustomerId").val();
 
     $(function () {
-        $("#currentCustomer").change(function () {
+        $("#currentCustomer").on('change',function () {
             $("#search").submit();
         });
+
+        $('#activeOnly').on('switchChange.bootstrapSwitch',
+            function () {
+                $("#search").submit();
+            });
     });
 
 </script>

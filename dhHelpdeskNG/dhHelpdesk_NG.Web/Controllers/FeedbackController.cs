@@ -265,10 +265,9 @@ namespace DH.Helpdesk.Web.Controllers
                 var dbCircular = _circularService.GetById(model.CircularId.Value);
                 if (dbCircular != null)
                 {
-                    var casesIds = _circularService.GetAllCircularCasesIds(dbCircular.Id);
                     dbCircular.CaseFilter.SelectedProcent = model.SelectedPercent;
 
-                    var circular = new CircularForUpdate(dbCircular.Id, dbCircular.CircularName, DateTime.Now, casesIds,
+                    var circular = new CircularForUpdate(dbCircular.Id, dbCircular.CircularName, DateTime.Now,
                         dbCircular.CaseFilter);
                     _circularService.UpdateCircular(circular);
                 }

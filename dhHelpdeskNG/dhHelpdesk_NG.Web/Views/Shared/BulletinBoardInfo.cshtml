@@ -1,19 +1,30 @@
 ﻿@using DH.Helpdesk.Common.Extensions.DateTime
-@model IEnumerable<DH.Helpdesk.BusinessData.Models.BulletinBoard.Output.BulletinBoardOverview>
+@model DH.Helpdesk.Web.Models.Widgets.WidgetModel<DH.Helpdesk.BusinessData.Models.BulletinBoard.Output.BulletinBoardOverview>
 
-@if (Model != null && Model.Any())
+@if (Model != null && Model.Items.Any())
 {
     <div class="row-fluid">
         <div class="box-box span12">
             <div class="box-header portlet-header">
-                <div class="start-tile-img label blue"><a href="@Url.Action("index", "bulletinboard", new {area = ""})"><img src="@Url.Content("~/Content/icons/bulletinboard.png")" alt="@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)" /></a></div><h4>@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)</h4>
+                <div class="start-tile-img label blue">
+                    <a href="@Url.Action("index", "bulletinboard", new {area = ""})">
+                        <img src="@Url.Content("~/Content/icons/bulletinboard.png")" alt="@Translation.Get("Anslagstavla")"/>
+                    </a>
+                </div>
+                <h4>@Translation.Get("Anslagstavla")</h4>
             </div>
             <div class="box-body portlet-content">
-                @foreach (var bulletinBoard in Model)
+                @foreach (var bulletinBoard in Model.Items)
                 {
-                    <div class="box-post">                        
-                        <div class="label blue">@bulletinBoard.CustomerName | @(bulletinBoard.ShowDate.HasValue? bulletinBoard.ShowDate.Value.ToFormattedDate():"")</div>
+                    <div class="box-post">
+                        <div class="label blue">@bulletinBoard.CustomerName | @(bulletinBoard.ShowDate.HasValue ? bulletinBoard.ShowDate.Value.ToFormattedDate() : "")</div>
                         <div class="textrow">@Html.Raw(bulletinBoard.Text)</div>
+                    </div>
+                }
+                @if (Model.ShowMore)
+                {
+                    <div class="box-post more">
+                        <a href="@Url.Action("index", "bulletinboard", new {area = ""})">>></a>
                     </div>
                 }
             </div>

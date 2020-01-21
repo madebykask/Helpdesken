@@ -1,6 +1,6 @@
 
 export class CaseSearchStateModel {
-  filterId: number | null;
+  filterId: string | null;
   sortField: string;
   sortOrder: string;
 }

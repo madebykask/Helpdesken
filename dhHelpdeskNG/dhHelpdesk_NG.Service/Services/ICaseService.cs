@@ -122,7 +122,7 @@ namespace DH.Helpdesk.Services.Services
 
         MyCase[] GetMyCases(int userId, int? count = null);
 
-        StateSecondary GetCaseSubStatus(int caseId);
+		StateSecondary GetCaseSubStatus(int caseId);
 
         CustomerCases[] GetCustomersCases(int[] customerIds, int userId);
 
@@ -131,6 +131,7 @@ namespace DH.Helpdesk.Services.Services
         int GetCaseRelatedCasesCount(int caseId, int customerId, string userId, UserOverview currentUser);
 
         bool IsRelated(int caseId);
+        bool IsCaseExist(int id);
 
         List<ChildCaseOverview> GetChildCasesFor(int caseId);
 

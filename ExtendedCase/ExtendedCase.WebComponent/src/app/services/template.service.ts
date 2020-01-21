@@ -36,7 +36,7 @@ export class TemplateService {
     toTemplateModel(template: any): FormTemplateModel {
         this.logService.debug('Building template model.');
         let model = new FormTemplateModel();
-        //TODO: add hadOwnProperty check
+        // TODO: add hadOwnProperty check
         model.id = template.id;
         model.name = template.name;
 
@@ -57,15 +57,14 @@ export class TemplateService {
 
             let columnCount = tabElem.columnCount ? parseInt(tabElem.columnCount) : 0;
 
-            //set default value if nan or empty
-            if (!columnCount || isNaN(columnCount) || columnCount > 4 || columnCount < 1)
+            // set default value if nan or empty
+            if (!columnCount || isNaN(columnCount) || columnCount > 4 || columnCount < 1) {
                 columnCount = 2;
-            
+            }
+
             let tab = new TabTemplateModel(tabElem.id, tabElem.name, columnCount,
                 tabElem.hasOwnProperty('hiddenBinding') ? this.getBinding(tabElem.hiddenBinding, template.globalFunctions) : null,
                 tabElem.hasOwnProperty('disabledBinding') ? this.getBinding(tabElem.disabledBinding, template.globalFunctions) : null);
-
-
 
             let sections = tabElem.sections.map((secElem: any) => {
                 let section =
@@ -78,7 +77,7 @@ export class TemplateService {
                         secElem.hasOwnProperty('multiSectionAction') ? secElem.multiSectionAction : null,
                         secElem.hasOwnProperty('populateAction') ? this.getPopulateAction(secElem.populateAction, template.globalFunctions) : null,
                         secElem.hasOwnProperty('enableAction') ? secElem.enableAction : null,
-                        secElem.hasOwnProperty('disabledStateAction') ? this.getDisabledStateBehavior(secElem) : null);  
+                        secElem.hasOwnProperty('disabledStateAction') ? this.getDisabledStateBehavior(secElem) : null);
 
                 if (secElem.hasOwnProperty('type')) {
                     section.type = <SectionType>SectionType[<string>secElem.type];
@@ -140,7 +139,10 @@ export class TemplateService {
                                             null,
                             mode: controlElem.hasOwnProperty('mode') ? controlElem.mode : '',
                             reviewControlId: controlElem.hasOwnProperty('reviewControlId') ? controlElem.reviewControlId : '',
-                            emptyElement: controlElem.hasOwnProperty('emptyElement') ? controlElem.emptyElement : ''
+                            emptyElement: controlElem.hasOwnProperty('emptyElement') ? controlElem.emptyElement : '',
+                            showSearchResultsBinding: controlElem.hasOwnProperty('showSearchResultsBinding') ?
+                                              this.getBinding(controlElem.showSearchResultsBinding, template.globalFunctions) :
+                                              () => true
                         });
 
                         // mark if control is required for first time

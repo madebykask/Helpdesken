@@ -14,6 +14,7 @@ import { CaseActionBaseComponent } from './actions/case-action-base.component';
 export class CaseActionContainerComponent implements OnInit, OnDestroy {
 
     @Input('caseKey') caseKey: string;
+    @Input('customerId') customerId: number;
     @Input('caseAction') caseAction: CaseAction<CaseActionDataType>;
 
     private viewContainer: ViewContainerRef;
@@ -46,6 +47,7 @@ export class CaseActionContainerComponent implements OnInit, OnDestroy {
       //set component properties
       componentInst.caseKey = this.caseKey;
       componentInst.caseAction = this.caseAction;
+      componentInst.customerId = this.customerId;
   }
 
   private resolveComponent(): Type<CaseActionBaseComponent<CaseActionDataType>> {

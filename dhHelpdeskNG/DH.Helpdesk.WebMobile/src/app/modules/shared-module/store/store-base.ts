@@ -6,8 +6,7 @@ export abstract class StoreBase<T> {
   private state$: Observable<T>;
 
   protected constructor (initialState: T) {
-    this.subject = new BehaviorSubject(initialState);
-    this.state$ = this.subject.asObservable();
+    this.reset(initialState);
   }
 
   get state() {
@@ -27,8 +26,12 @@ export abstract class StoreBase<T> {
     );
   }
 
+  protected reset(initialState: T) {
+      this.subject = new BehaviorSubject(initialState);
+      this.state$ = this.subject.asObservable();
+  }
+
   private raiseChanges(newState: T) {
     this.subject.next(newState);
   }
-
 }

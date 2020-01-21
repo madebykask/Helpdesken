@@ -205,6 +205,7 @@ window.extendedCasePage =
             formParameters.userGuid = '';
             formParameters.caseId = self.Case_Field_Init_Values.CaseId;
             formParameters.applicationType = self.ApplicationType;
+            formParameters.useInitiatorAutocomplete = self.UseInitiatorAutocomplete;
 
             $_ex_Container.contentWindow.setInitialData({ step: 0, isNextValidation: false });
 
@@ -494,6 +495,7 @@ window.extendedCasePage =
             self.CurrentUser = params.currentUser;
             self.Current_EC_Path = params.extendedCasePath;
             self.ApplicationType = params.applicationType;
+            self.UseInitiatorAutocomplete = params.useInitiatorAutocomplete;
             self.extendedCaseInvalidMessage = params.extendedCaseInvalidMessage;
             var lastError = params.lastError;
             var lastClickTimeStamp = null;

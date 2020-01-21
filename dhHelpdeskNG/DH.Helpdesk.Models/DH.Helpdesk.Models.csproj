@@ -68,6 +68,7 @@
     <Compile Include="Case\Options\GetCaseOptionsInputModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StateSecondaries\StateSecondaryOutputModel.cs" />
+    <Compile Include="Statuses\StatusOutputModel.cs" />
     <Compile Include="WorkingGroup\WorkingGroupOutputModel.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -563,5 +563,6 @@ begin
 		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(30061, 2, 'Close cases')
 end
 
+
 GO
 

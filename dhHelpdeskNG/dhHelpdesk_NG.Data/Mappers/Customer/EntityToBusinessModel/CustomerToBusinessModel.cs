@@ -9,7 +9,8 @@
         {
             return new CustomerOverview
                        {
-                           Id = entity.Id
+                           Id = entity.Id,
+						   Active = entity.Status == 1
                        };
         }
     }

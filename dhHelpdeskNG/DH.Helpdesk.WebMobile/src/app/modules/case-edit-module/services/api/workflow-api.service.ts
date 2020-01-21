@@ -15,8 +15,8 @@ export class CaseWorkflowsApiService extends HttpApiServiceBase {
     super(http, localStorageService);
   }
 
-  getWorkflows(caseId: number): Observable<any> {
-      return this.getJson(this.buildResourseUrl('/api/workflows/options', { caseId: caseId }, true, true))
+  getWorkflows(caseId: number, customerId: number): Observable<any> {
+      return this.getJson(this.buildResourseUrl('/api/workflows/options', { caseId: caseId, cid: customerId }, false, true))
       .pipe(
           take(1),
           map((jsItems: any) => {

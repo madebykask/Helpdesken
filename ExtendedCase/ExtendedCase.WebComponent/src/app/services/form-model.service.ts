@@ -249,7 +249,7 @@ export class FormModelService {
         fieldModel.control.valueChanges.pipe(
             debounceTime(100))
             .subscribe((value: any) => {
-                this.componentCommService.announceControlValueChanged(new ControlValueChangedParams(controlTpl, fieldModel.control, value, fieldModel));
+                this.componentCommService.announceControlValueChanged(new ControlValueChangedParams(controlTpl, fieldModel.control, value, fieldModel, fieldModel.showSearchResults));
             });
 
         return fieldModel;
@@ -306,9 +306,9 @@ export class FormModelService {
         let fieldControlGroup = fieldModel.getControlGroup();
         if (fieldControlGroup.disabled !== newValue) {
             if (newValue) {
-                fieldControlGroup.disable({ emitEvent: false });
+                fieldControlGroup.disable({ emitEvent: true });
             } else {
-                fieldModel.enable({ emitEvent: false}, true);
+                fieldModel.enable({ emitEvent: true}, true);
             }
             return true;
         }

@@ -7,4 +7,4 @@ export const StorageNameConstants = {
     timezoneName: 'timezoneinfo',
     caseSearchState: 'caseSearchState',
     languages: 'languages'
-}
+};

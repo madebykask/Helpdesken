@@ -245,6 +245,7 @@ export class BaseControlTemplateModel {
     mode: string;
     reviewControlId: string;
     emptyElement: string;
+    showSearchResultsBinding: (m: any, l?: any) => any;
 
     constructor(options: {
         id?: string,
@@ -269,7 +270,8 @@ export class BaseControlTemplateModel {
         warningBinding?: (m: any, l?: any, d?: any) => string,
         mode?: string,
         reviewControlId?: string,
-        emptyElement?: any;
+        emptyElement?: any,
+        showSearchResultsBinding?: (m: any, l?: any) => any;
     } = {}) {
         this.id = options.id || '';
         this.label = options.label || '';
@@ -295,6 +297,7 @@ export class BaseControlTemplateModel {
         this.reviewControlId = options.reviewControlId || '';
         this.isEverValidated = false;
         this.emptyElement = options.emptyElement;
+        this.showSearchResultsBinding = options.showSearchResultsBinding;
     }
 
     get isReview() {

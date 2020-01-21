@@ -83,6 +83,7 @@ namespace DH.Helpdesk.Services.Services
         IList<UserWorkingGroup> GetUserWorkingGroups();
         IList<UserWorkingGroup> GetUserWorkingGroupsByWorkgroup(int workingGroupId);
         IList<int> GetUserCustomersIds(int userId);
+        bool UserHasCustomerId(int customerId);
 
         //IList<User> GetUsersForWorkingGroup(int customerId, int workingGroupId, bool includeWorkingGroups = false);
         IList<CustomerUserInfo> GetUsersForWorkingGroup(int workingGroupId);
@@ -1015,7 +1016,6 @@ namespace DH.Helpdesk.Services.Services
 
             var init = _moduleRepository
                 .GetModules()
-                .ToList()
                 .Select(m => new UserModuleOverview()
                 {
                     User_Id = user,
@@ -1029,7 +1029,7 @@ namespace DH.Helpdesk.Services.Services
                         Name = m.Name,
                         Description = m.Description
                     }
-                });
+                }).ToList();
 
             _userModuleRepository.UpdateUserModules(init.Select(m => new UserModule()
                                                                               {
@@ -1234,6 +1234,11 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
+        public bool UserHasCustomerId(int customerId)
+        {
+            return GetUserCustomersIds(customerId).Any(x => x == customerId);
+        }
+
         public List<ItemOverview> GetWorkingGroupUsers(int customerId, int? workingGroupId)
         {
             using (var uow = _unitOfWorkFactory.Create())
@@ -1377,9 +1382,8 @@ namespace DH.Helpdesk.Services.Services
         {
             switch (module)
             {
+                case Module.Customers:
                 case Module.QuickLinks:
-                    return null;
-                case Module.CaseQuickOpen:
                     return null;
             }
 
@@ -1390,10 +1394,7 @@ namespace DH.Helpdesk.Services.Services
         {
             switch (module)
             {
-                case Module.Cases:
-                    return false;
-
-                case Module.Statistics:
+                case Module.ChangeManagement:
                     return false;
             }
 

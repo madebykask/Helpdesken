@@ -112,7 +112,8 @@ namespace DH.Helpdesk.Services.Services
                     .Select(cus => new CustomerOverview
                     {
                         Id = cus.Id,
-                        Name = cus.Name
+                        Name = cus.Name,
+						Active = cus.Status == 1
                     }).ToList();
 
             return items;

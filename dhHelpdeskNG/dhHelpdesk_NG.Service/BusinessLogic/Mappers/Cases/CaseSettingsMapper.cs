@@ -130,7 +130,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
             var caseNumber = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.Case));
             var registrationDate = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.RegistrationDate));
             var changeDate = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.ChangeDate));
-            var registratedBy = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.RegistratedBy));
+            var registratedBy = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.RegisteredBy));
             var caseType = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.CaseType));
             var productArea = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.ProductArea));
             var system = CreateFieldSetting(fieldSettings.FindByName(CaseInfoFields.System));

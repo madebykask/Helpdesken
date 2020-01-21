@@ -342,6 +342,7 @@
     <Compile Include="Areas\Admin\Controllers\GDPRProgressController.cs" />
     <Compile Include="Areas\Admin\Controllers\ExtendedCaseController.cs" />
     <Compile Include="Areas\Admin\Infrastructure\Mappers\CustomerUserEntityToModelMapper.cs" />
+    <Compile Include="Areas\Admin\Models\StateSelectListItem.cs" />
     <Compile Include="Areas\Inventory\Controllers\InventoryController.cs" />
     <Compile Include="Areas\Inventory\Infrastucture\Extensions\TabSettingExtensions.cs" />
     <Compile Include="Areas\Inventory\Models\BaseEditCustomInventoryModel.cs" />
@@ -363,6 +364,7 @@
     <Compile Include="Components\Contracts\ContractHistoryFormatter.cs" />
     <Compile Include="Components\Contracts\ContractHistoryMarkupBuilder.cs" />
     <Compile Include="Controllers\CasesController_Files.cs" />
+    <Compile Include="Controllers\CasesController_MobileRoute.cs" />
     <Compile Include="Controllers\FileAccessController.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\MixedModeAuthenticationBehavior.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\PrincipalExtensions.cs" />
@@ -429,6 +431,7 @@
     <Compile Include="Models\Questionnaire\Input\QuestionnaireAnswerParams.cs" />
     <Compile Include="Models\Notifiers\ComputerUserCategoryModel.cs" />
     <Compile Include="Models\WebApi\TokenModel.cs" />
+    <Compile Include="Models\Widgets\WidgetModel.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Areas\Invoices\Models\BaseIndexModel.cs" />
     <Compile Include="Areas\Invoices\Models\IndexModelType.cs" />
@@ -1186,6 +1189,7 @@
     <Content Include="Content\js\Faqs\faqsPage.js" />
     <Content Include="Content\js\Feedback\feedback.edit.js" />
     <Content Include="Content\js\Feedback\feedbackStatisticsCases.js" />
+    <Content Include="Content\js\Home\statistics.js" />
     <Content Include="Content\js\Inventory\inventory.search.js" />
     <Content Include="Areas\Inventory\Content\js\inventoryFiles.js" />
     <Content Include="Content\js\moment.js" />
@@ -4854,6 +4858,7 @@
     <Folder Include="FormLibContent\Xmls\Norway\Data\AdditionalPaymentsDeductions\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
     <Folder Include="rss\" />
+    <Folder Include="Views\CasesController_MobileRoute\" />
     <Folder Include="Views\LogAccess\" />
     <Folder Include="Views\Password\" />
   </ItemGroup>

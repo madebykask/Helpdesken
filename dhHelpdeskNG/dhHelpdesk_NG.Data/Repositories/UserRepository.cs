@@ -320,7 +320,8 @@ namespace DH.Helpdesk.Dal.Repositories
                             WorkingGroup_Id = uwg.WorkingGroup_Id,
                             RoleToUWG = uwg.UserRole,
                             IsMemberOfGroup = uwg.IsMemberOfGroup,
-                            IsActive = wg.IsActive != 0
+                            IsActive = wg.IsActive != 0,
+							CustomerActive = wg.Customer.Status == 1
                         };
 
             var queryList = query.OrderBy(x => x.WorkingGroupName).ToList();
@@ -333,7 +334,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         join c in this.DataContext.Customers on cu.Customer_Id equals c.Id
                         join wg in this.DataContext.WorkingGroups on c.Id equals wg.Customer_Id
                         from uwg in this.DataContext.UserWorkingGroups.Where(x => x.WorkingGroup_Id == wg.Id && x.User_Id == userId).DefaultIfEmpty()
-                        group uwg by new { wg.WorkingGroupName, userId, c.Name, wg.Id, uwg.UserRole, uwg.IsMemberOfGroup, CustomerId = c.Id, uwg.IsDefault, wg.IsActive } into g
+                        group uwg by new { wg.WorkingGroupName, userId, c.Name, wg.Id, uwg.UserRole, uwg.IsMemberOfGroup, CustomerId = c.Id, uwg.IsDefault, wg.IsActive, CustomerActive = c.Status == 1 } into g
                         select new CustomerWorkingGroupForUser
                         {
                             WorkingGroupName = g.Key.WorkingGroupName,
@@ -344,7 +345,8 @@ namespace DH.Helpdesk.Dal.Repositories
                             RoleToUWG = (int?)g.Key.UserRole ?? WorkingGroupUserPermission.NO_ACCESS,
                             IsMemberOfGroup = (bool?)g.Key.IsMemberOfGroup ?? false,
                             IsActive = g.Key.IsActive != 0,
-                            CustomerId = g.Key.CustomerId
+                            CustomerId = g.Key.CustomerId,
+							CustomerActive = g.Key.CustomerActive
                         };
 
             var queryList = query.OrderBy(x => x.CustomerName + x.WorkingGroupName).ToList();

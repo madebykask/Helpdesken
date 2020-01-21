@@ -9,6 +9,7 @@ export class CaseOverviewItem {
     tooltip: string;
     isUnread: boolean;
     isUrgent: boolean;
+    showCustomerName: boolean;
     columns: CaseOverviewColumn[];
 }
 

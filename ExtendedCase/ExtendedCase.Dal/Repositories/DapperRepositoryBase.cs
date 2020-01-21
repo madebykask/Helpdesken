@@ -24,9 +24,18 @@ namespace ExtendedCase.Dal.Repositories
 
         #region CreateConnection
 
-        protected IDbConnection CreateConnection()
+        protected IDbConnection CreateConnection(string connectionStringName = null)
         {
-            return _connectionFactory.GetConnection(_connectionStringName);
+			IDbConnection connection;
+			if (string.IsNullOrEmpty(connectionStringName))
+			{
+				connection = _connectionFactory.GetConnection(_connectionStringName);
+			}
+			else
+			{
+				connection = _connectionFactory.GetConnection(connectionStringName);
+			}
+			return connection;
         }
 
         #endregion
@@ -91,20 +100,20 @@ namespace ExtendedCase.Dal.Repositories
             }
         }
 
-        protected IList<TEntity> QueryList<TEntity>(string query, IDictionary<string, string> parametersDict = null, CommandType commandType = CommandType.Text, int timeout = 60)
+        protected IList<TEntity> QueryList<TEntity>(string query, IDictionary<string, string> parametersDict = null, CommandType commandType = CommandType.Text, int timeout = 60, string connectionString = null)
         {
-            using (IDbConnection conn = CreateConnection())
+            using (IDbConnection conn = CreateConnection(connectionString))
             {
                 var result = conn.Query<TEntity>(query, parametersDict?.ToDynamicParameters(), commandTimeout: timeout, commandType: commandType).ToList();
                 return result;
             }
         }
 
-        protected IList<IDictionary<string, string>> QueryDictionaryList(string query, IDictionary<string, string> parametersDict = null, CommandType commandType = CommandType.Text, int timeout = 60)
+        protected IList<IDictionary<string, string>> QueryDictionaryList(string query, IDictionary<string, string> parametersDict = null, CommandType commandType = CommandType.Text, int timeout = 60, string connectionString = null)
         {
             IList<IDictionary<string, string>> results = null;
 
-            using (IDbConnection conn = CreateConnection())
+            using (IDbConnection conn = CreateConnection(connectionString))
             {
                 var dynamicResults = conn.Query(query, parametersDict?.ToDynamicParameters(), commandTimeout: timeout, commandType: commandType) as IEnumerable<IDictionary<string, object>>;
                 if (dynamicResults != null)

@@ -192,8 +192,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
+    <Compile Include="Controllers\CaseFavoritesController.cs" />
     <Compile Include="Controllers\CaseLogFilesController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\StatusesController.cs" />
     <Compile Include="Infrastructure\Owin\LogRequestMiddleware.cs" />
     <Compile Include="Logic\Case\CaseFieldsCreator.cs" />
     <Compile Include="Controllers\CaseHistoryController.cs" />
@@ -291,10 +293,12 @@
     <Compile Include="Models\CaseLockInputModel.cs" />
     <Compile Include="Models\CaseUnLockInputModel.cs" />
     <Compile Include="Models\Case\CaseSolutionModel.cs" />
+    <Compile Include="Models\Case\CaseSolutionOverview.cs" />
     <Compile Include="Models\Case\СaseStatisticsResult.cs" />
     <Compile Include="Models\ClientLogItemModel.cs" />
     <Compile Include="Models\ExtendCaseLockInput.cs" />
     <Compile Include="Models\LoginUserInputModel.cs" />
+    <Compile Include="Models\Output\CaseSectionOutputModel.cs" />
     <Compile Include="Models\Output\CaseSortFieldModel.cs" />
     <Compile Include="Models\Output\FavoriteFilterField.cs" />
     <Compile Include="Models\Output\NotifierData.cs" />

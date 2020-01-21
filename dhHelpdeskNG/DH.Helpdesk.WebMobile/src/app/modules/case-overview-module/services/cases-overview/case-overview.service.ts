@@ -34,6 +34,7 @@ export class CasesOverviewService extends HttpApiServiceBase {
                         _case.caseIcon = item.caseIcon;
                         _case.id = item.id;
                         _case.isUnread = item.isUnread;
+                        _case.showCustomerName = item.showCustomerName;
                         _case.isUrgent = item.isUrgent;
                         _case.columns = new Array<CaseOverviewColumn>();
                         for (const itemCol of item.columns) {

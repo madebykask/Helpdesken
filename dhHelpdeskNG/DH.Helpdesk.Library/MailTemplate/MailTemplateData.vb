@@ -6,14 +6,14 @@ Public Class MailTemplateData
         Dim dt As DataTable
 
         Try
-            sSQL = "SELECT tblMailTemplate.MailId, tblMailTemplate_tblLanguage.Subject, tblMailTemplate_tblLanguage.Body " & _
-                    "FROM tblMailTemplate " & _
-                        "INNER JOIN tblMailTemplate_tblLanguage ON tblMailTemplate.Id=tblMailTemplate_tblLanguage.MailTemplate_Id " & _
-                    "WHERE MailId = " & MailId & _
-                        " AND tblMailTemplate.Customer_Id = " & Customer_Id & _
-                        " AND tblMailTemplate_tblLanguage.Language_Id = " & Language_Id & _
+            sSQL = "SELECT tblMailTemplate.MailId, tblMailTemplate_tblLanguage.Subject, tblMailTemplate_tblLanguage.Body, tblMailTemplate.SendMethod " &
+                    "FROM tblMailTemplate " &
+                        "INNER JOIN tblMailTemplate_tblLanguage ON tblMailTemplate.Id=tblMailTemplate_tblLanguage.MailTemplate_Id " &
+                    "WHERE MailId = " & MailId &
+                        " AND tblMailTemplate.Customer_Id = " & Customer_Id &
+                        " AND tblMailTemplate_tblLanguage.Language_Id = " & Language_Id &
                         " AND tblMailTemplate_tblLanguage.Subject <> '' "
-            
+
             'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
             'Else

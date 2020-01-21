@@ -6,7 +6,7 @@ import { ControlValueChangedParams } from './component-comm.service';
 import { FormTemplateModel, TabTemplateModel, BaseControlTemplateModel,
     CustomQueryDataSourceTemplateModel,  OptionsDataSourceTemplateModel, ControlCustomDataSourceTemplateModel,
     ControlSectionDataSourceTemplateModel, SectionType, IDataSourceParameter} from '../models/template.model';
-import { TabModel, FormModel, SectionModel, SectionInstanceModel, SingleControlFieldModel, FieldModelBase } from '../models/form.model';
+import { TabModel, FormModel, SectionModel, SectionInstanceModel, SingleControlFieldModel, FieldModelBase, FormControlType } from '../models/form.model';
 import { FormModelService } from './form-model.service';
 import { TemplateService } from './template.service';
 import { FormControlsManagerService } from './form-controls-manager.service';
@@ -458,7 +458,8 @@ class DigestProcess {
         return modelChanged;
     }
 
-    private processControlBindings(sectionIndex: number, sectionInstance: SectionInstanceModel, proxySectionInstance: ProxySectionInstance, fieldModel: FieldModelBase): boolean {
+    private processControlBindings(sectionIndex: number, sectionInstance: SectionInstanceModel, proxySectionInstance: ProxySectionInstance,
+                                   fieldModel: FieldModelBase): boolean {
         let modelChanged = false;
         this.logInfo(`processControlBindings for field: '${fieldModel.id}'`);
 
@@ -474,9 +475,12 @@ class DigestProcess {
             let res1 = this.processValueBinding(proxyControl, controlTpl, sectionInstance, fieldPath);
             let res2 = this.processHiddenBinding(proxyControl, controlTpl, sectionInstance);
             let res3 = this.processDisabledBinding(proxyControl, controlTpl, sectionInstance);
-            this.logService.debugFormatted('processControlBindings result : {0}, {1}, {1}', res1, res2, res3);
+            let res4 = controlTpl.controlType === FormControlType.Search ?
+             this.processSearchControlBinding(proxyControl, controlTpl, sectionInstance) :
+             false;
+            this.logService.debugFormatted('processControlBindings result : {0}, {1}, {2}, {3}', res1, res2, res3, res4);
 
-            modelChanged = res1 || res2 || res3;
+            modelChanged = res1 || res2 || res3 || res4;
 
             // run setControlDataSourceOptions only for datasources with static data. In other cases setControlDataSourceOptions is
             // called later after data is recieved.
@@ -552,7 +556,8 @@ class DigestProcess {
         return hasChanged;
     }
 
-    private processDisabledBinding(proxyControl: ProxyControl, controlTemplate: BaseControlTemplateModel, sectionInstance: SectionInstanceModel): boolean {
+    private processDisabledBinding(proxyControl: ProxyControl, controlTemplate: BaseControlTemplateModel,
+                                   sectionInstance: SectionInstanceModel): boolean {
         let hasChanged = false;
         let fieldModel: FieldModelBase = sectionInstance.fields[controlTemplate.id];
         let isDisabled = sectionInstance.disabled;
@@ -567,7 +572,8 @@ class DigestProcess {
         return hasChanged;
     }
 
-    private processHiddenBinding(proxyControl: ProxyControl, controlTemplate: BaseControlTemplateModel, sectionModel: SectionInstanceModel): boolean {
+    private processHiddenBinding(proxyControl: ProxyControl, controlTemplate: BaseControlTemplateModel,
+                                   sectionModel: SectionInstanceModel): boolean {
         let hasChanged = false;
         let fieldModel = sectionModel.fields[controlTemplate.id];
         let isHidden = sectionModel.hidden;
@@ -583,6 +589,24 @@ class DigestProcess {
 
         return hasChanged;
     }
+
+    private processSearchControlBinding(proxyControl: ProxyControl, controlTemplate: BaseControlTemplateModel,
+                                        sectionModel: SectionInstanceModel) {
+        let hasChanged = false;
+        let fieldModel = sectionModel.fields[controlTemplate.id];
+        let showSearchResults = true;
+        if (controlTemplate.showSearchResultsBinding instanceof Function) {
+          this.logDebug(`exec showSearchResultsBinding() for ${controlTemplate.id}`);
+          showSearchResults = controlTemplate.showSearchResultsBinding.call(proxyControl, this.formModel.proxyModel, this.digestUpdateLog);
+        }
+
+        if (fieldModel.showSearchResults !== showSearchResults) {
+            fieldModel.showSearchResults = showSearchResults;
+            hasChanged = true;
+        }
+
+        return hasChanged;
+      }
 
     /// DATASOURCES
     private processCustomDataSources(): Observable<Array<boolean>> {

@@ -11,43 +11,47 @@
         <div class="box-post">
             <table class="table table-striped table-bordered table-hover">
                 <tbody>
-                @foreach (var customer in Model.CustomerCases.OrderBy(x=> x.CustomerName))
-                {     
-                    <tr>
-                        <td>
-                            <a href="@Url.Action("InitFilter", "cases", new { customerId = customer.CustomerId })" class="pull-left">
-                                @customer.CustomerName
-                            </a>
-                            <div class="pull-right">
-                            <a href="@Url.Action("InitFilter", "cases", new { customerId = customer.CustomerId, clearFilters = true, useMyCases = true })" 
-                                    class="start-tile label my" 
-                                    rel="tooltip" 
-                                    data-toggle="tooltip" 
-                                    title="@Translation.Get("Mina ärenden")">
-                                @customer.CasesMy                                           
-                            </a>
-                                                            
-                            <a href="@Url.Action("InitFilter", "cases", new { customerId = customer.CustomerId, clearFilters = true, customFilter = "HoldCases" })" 
-                                    class="start-tile label inrest" 
-                                    rel="tooltip" 
-                                    title="@Translation.Get("Vilande ärenden")">
-                                @customer.CasesInRest
-                            </a>
-                            <a href="@Url.Action("InitFilter", "cases", new { customerId = customer.CustomerId, clearFilters = true, customFilter = "UnreadCases" })" 
-                                    rel="tooltip" 
-                                    class="start-tile label closed" 
-                                    title="@Translation.Get("Olästa ärenden")">
-                                @customer.CasesUnreaded                                          
-                            </a>
-                            <a href="@Url.Action("InitFilter", "cases", new { customerId = customer.CustomerId, clearFilters = true, customFilter = "InProcessCases" })" 
-                                    rel="tooltip" 
-                                    class="start-tile label unread" 
-                                    title="@Translation.Get("Pågående ärenden")">
-                                @customer.CasesInProgress
-                            </a>
-                            </div>
-                        </td>
-                    </tr>
+                @foreach (var customer in Model.CustomerCases.OrderBy(x => x.CustomerName))
+                {
+                    if (customer.Active)
+                    {
+                        <tr>
+                            <td>
+                                <a href="@Url.Action("InitFilter", "cases", new { customerId = customer.CustomerId })" class="pull-left">
+                                    @customer.CustomerName
+                                </a>
+                                <div class="pull-right">
+                                    <a href="@Url.Action("InitFilter", "cases", new { customerId = customer.CustomerId, clearFilters = true, useMyCases = true })"
+                                       class="start-tile label my"
+                                       rel="tooltip"
+                                       data-toggle="tooltip"
+                                       title="@Translation.Get("Mina ärenden")">
+                                        @customer.CasesMy
+                                    </a>
+
+                                    <a href="@Url.Action("InitFilter", "cases", new { customerId = customer.CustomerId, clearFilters = true, customFilter = "HoldCases" })"
+                                       class="start-tile label inrest"
+                                       rel="tooltip"
+                                       title="@Translation.Get("Vilande ärenden")">
+                                        @customer.CasesInRest
+                                    </a>
+                                    <a href="@Url.Action("InitFilter", "cases", new { customerId = customer.CustomerId, clearFilters = true, customFilter = "UnreadCases" })"
+                                       rel="tooltip"
+                                       class="start-tile label closed"
+                                       title="@Translation.Get("Olästa ärenden")">
+                                        @customer.CasesUnreaded
+                                    </a>
+                                    <a href="@Url.Action("InitFilter", "cases", new { customerId = customer.CustomerId, clearFilters = true, customFilter = "InProcessCases" })"
+                                       rel="tooltip"
+                                       class="start-tile label unread"
+                                       title="@Translation.Get("Pågående ärenden")">
+                                        @customer.CasesInProgress
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
                 }
                 </tbody>
             </table>

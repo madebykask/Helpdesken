@@ -65,10 +65,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             IHttpActionResult res = new FileResult(fileContent.FileName, fileContent.Content, Request, inline ?? false);
 
-            var disableLogFileView =
-                _featureToggleService.Get(
-                    FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-            if (!disableLogFileView.Active)
+            if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
             {
                 _fileViewLogService.Log(caseId, UserId, fileContent.FileName.Trim(), fileContent.FilePath, FileViewLogFileSource.WebApi,
                     FileViewLogOperation.View);
@@ -163,9 +160,8 @@ namespace DH.Helpdesk.WebApi.Controllers
 				var path = "";
                 var fileId = _caseFileService.AddFile(caseFileDto, ref path);
 
-				var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-				if (!disableLogFileView.Active)
-				{
+                if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
+                {
 					_fileViewLogService.Log(caseId, UserId, caseFileDto.FileName, path, FileViewLogFileSource.WebApi, FileViewLogOperation.Add);
 				}
 
@@ -204,10 +200,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var caseFileInfo = _caseFileService.GetCaseFile(caseId, fileId);
             _caseFileService.DeleteByCaseIdAndFileName(caseId, basePath, caseFileInfo.FileName);
 
-            var disableLogFileView =
-                _featureToggleService.Get(
-                    FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-            if (!disableLogFileView.Active)
+            if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
             {
                 var path = _filesStorage.ComposeFilePath(ModuleName.Cases, decimal.ToInt32(c.CaseNumber), basePath, "");
                 _fileViewLogService.Log(caseId, UserId, caseFileInfo.FileName, path, FileViewLogFileSource.WebApi,

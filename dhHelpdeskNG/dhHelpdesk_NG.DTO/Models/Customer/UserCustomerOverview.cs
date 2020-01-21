@@ -6,5 +6,6 @@
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public int CasesCount { get; set; }
+        public int Active { get; set; }
     }
 }

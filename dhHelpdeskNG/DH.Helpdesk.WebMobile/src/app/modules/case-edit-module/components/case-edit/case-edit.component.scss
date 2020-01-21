@@ -37,6 +37,43 @@
     margin:0px!important;
     input { border-bottom: 0px!important; }
   }
+  /* fix for switch color and body, if fixed in new version - remove*/
+  .mbsc-ios {
+    /* .mbsc-btn {
+      background: #fff;
+      color: #007bff;
+      margin: .5em .025em;
+      padding: .625em 1.375em;
+      border: 0;
+      border-radius: .25em;
+    } */
+    .mbsc-control-w:after {
+      border-top: 0; // fix for double control separators in edit.
+    }
+    &.mbsc-switch {
+      background-color: white;
+      //margin-top: 0;
+      .mbsc-label, .mbsc-desc {
+        padding-left: .5em;
+      }
+      &:before, &:after {
+        border-color: #ccc;
+      }
+    }
+    .mbsc-form-group-title {
+      &.mbsc-collapsible-header {
+        padding-top: 1.5em;
+        .mbsc-collapsible-icon {
+          top: 58%
+        }
+        .section-info {
+          font-size: xx-small;
+          color: black;
+          text-transform: none;
+        }
+      }
+     }
+  }
 }
 
 .extended-case-container {

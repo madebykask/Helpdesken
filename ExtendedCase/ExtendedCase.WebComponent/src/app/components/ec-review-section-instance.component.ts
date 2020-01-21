@@ -131,8 +131,7 @@ export class ExtendedCaseReviewSectionInstanceComponent implements AfterViewInit
             let allHidden = true;
             this.reviewComponents.forEach((cmp: ExtendedCaseReviewComponentEx) => allHidden = allHidden && cmp.isHidden);
             this.isHidden = allHidden;
-        }
-        else {
+        } else {
             this.isHidden = false;
         }
 

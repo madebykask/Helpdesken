@@ -68,9 +68,9 @@ export class CaseFormGroup extends FormGroup {
     control.setValue(val, { emitEvent: raiseValueChange });
   }
 
-  setValueWithNotification(fieldName: string, value: any) {
+  setValueWithNotification(fieldName: string, value: any, source: string | null = null) {
     this.setSafe(fieldName, value);
-    this.commService.publish(Channels.CaseFieldValueChanged, new CaseFieldValueChangedEvent(value, null, fieldName));
+    this.commService.publish(Channels.CaseFieldValueChanged, new CaseFieldValueChangedEvent(value, null, fieldName, source));
   }
 
   get isSubmitted() {

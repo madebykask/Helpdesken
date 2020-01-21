@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.BusinessData.Models.MailTemplates;
+using DH.Helpdesk.BusinessData.OldComponents;
 
 namespace DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email.Concrete
 {
@@ -35,15 +36,15 @@ namespace DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email.Concrete
             return instance;
         }
 
-        public EmailLog CreatEmailLog(
+        public EmailLog CreateEmailLog(
             int caseHistoryId, 
-            int mailId, 
+            GlobalEnums.MailTemplates mailId, 
             string email, 
             string messageId)
         {
             var instance = new EmailLog(
                             caseHistoryId,
-                            mailId,
+                            (int)mailId,
                             email,
                             messageId);
 

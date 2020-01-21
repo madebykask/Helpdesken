@@ -709,11 +709,11 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             /* TODO: It must change some how find the files from "Reports" path */
             var ret = new CustomSelectList();
             var reportedTimeKey =
-                _featureToggleService.Get(Helpdesk.Common.Constants.FeatureToggleTypes.NEW_REPORTED_TIME_REPORT).Active
+                !_featureToggleService.IsActive(Helpdesk.Common.Constants.FeatureToggleTypes.USE_DEPRICATED_REPORTED_TIME_REPORT)
                     ? "25"
                     : "-9";
             var numberOfCasesKey = 
-                _featureToggleService.Get(Helpdesk.Common.Constants.FeatureToggleTypes.NEW_NUMBER_OF_CASES_REPORT).Active
+                !_featureToggleService.IsActive(Helpdesk.Common.Constants.FeatureToggleTypes.USE_DEPRICATED_NUMBER_OF_CASES_REPORT)
                     ? "26"
                     : "-7";
 

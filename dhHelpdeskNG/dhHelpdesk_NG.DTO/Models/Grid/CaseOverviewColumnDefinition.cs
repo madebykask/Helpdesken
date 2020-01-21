@@ -68,7 +68,7 @@
             LogFields.InternalLogNote,
             "TMDDate",
             CaseInfoFields.UrgentDegree,
-            CaseInfoFields.RegistratedBy,
+            CaseInfoFields.RegisteredBy,
             UserFields.OrdererCode,
             OtherFields.WatchDate,
             OtherFields.Verified,

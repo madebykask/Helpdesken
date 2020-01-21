@@ -12,8 +12,6 @@ export class BaseControl<T> {
 
   formControl: CaseFormControl;
 
-  protected destroy$ = new Subject();
-
   constructor() {
   }
 
@@ -75,8 +73,6 @@ export class BaseControl<T> {
   }
 
   protected onDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
 }

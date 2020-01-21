@@ -57,6 +57,10 @@ mbsc-listview {
       .mbsc-grid {
         .mbsc-row {
           margin-bottom: 0.5em;
+          .secondary-info {
+            padding-left: 1.4em;
+            font-size: 12px;
+          }
           &:nth-of-type(n+2) {
             .mbsc-col-sm-auto {
               display: flex;

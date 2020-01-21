@@ -679,7 +679,7 @@ namespace DH.Helpdesk.Services.Services
 
         private IQueryable<CustomerDetails> GetCustomerDetailsQueryable(int id)
         {
-            return _customerRepository.GetMany(c => c.Id == id).AsQueryable()
+            return _customerRepository.GetMany(c => c.Id == id).Where(c => c.Status == 1 ).AsQueryable()
                 .Select(c => new CustomerDetails()
                 {
                     Id = c.Id,
@@ -746,11 +746,12 @@ namespace DH.Helpdesk.Services.Services
             List<MoveCaseCustomersListItem> res = new List<MoveCaseCustomersListItem>();
             var userCustomers =
                 _customerRepository.CustomersForUser(userId)
+					.Where(o => o.Status == 1)
                     .Select(x => new MoveCaseCustomersListItem
                     {
                         Id = x.Id,
                         Name = x.Name,
-                        IsUserCustomer = true
+                        IsUserCustomer = true,
                     }).ToList();
 
             if (userCustomers.Any())
@@ -760,7 +761,7 @@ namespace DH.Helpdesk.Services.Services
 
             var allowCaseMoveCustomers = 
                 _customerRepository.GetAllowCaseMoveCustomers()
-                    .Where(x => !excludeCustomerIds.Contains(x.Id))
+                    .Where(x => !excludeCustomerIds.Contains(x.Id) && x.Status == 1)
                     .Select(x => new MoveCaseCustomersListItem
                     {
                         Id = x.Id,

@@ -163,7 +163,8 @@
                             "~/Content/js/Licenses/products.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/modules").Include(
-                            "~/Content/js/Users/modules.js"));
+                            "~/Content/js/Users/modules.js",
+                            "~/Content/js/Home/statistics.js"));
 
             bundles.Add(new ScriptBundle(ScriptNames.Select2).Include(
                             "~/Content/js/select2.js"));

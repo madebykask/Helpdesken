@@ -525,7 +525,7 @@ export class FormControlsManagerService {
         return changedItems;
     }
 
-    processFieldWarnings(fieldPath:FormFieldPathModel, formModel: FormModel, digestUpdateLog: DigestUpdateLog): void {
+    processFieldWarnings(fieldPath: FormFieldPathModel, formModel: FormModel, digestUpdateLog: DigestUpdateLog): void {
         // reset warnings
         const fieldModel = formModel.findFormField(fieldPath);
         fieldModel.warnings = new Array<string>();

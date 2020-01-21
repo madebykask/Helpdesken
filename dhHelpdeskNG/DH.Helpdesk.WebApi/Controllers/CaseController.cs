@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
@@ -11,6 +12,7 @@ using DH.Helpdesk.Models.Case.Field;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.WebApi.Infrastructure;
+using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
 using DH.Helpdesk.WebApi.Logic.Case;
 using DH.Helpdesk.WebApi.Models.Case;
@@ -65,16 +67,19 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <param name="sessionId"></param>
         /// <returns></returns>
         [HttpGet]
+        [SkipCustomerAuthorization]
         [CheckUserCasePermissions(CaseIdParamName = "caseId")]
         [Route("{caseId:int}")]
-        public async Task<CaseEditOutputModel> Get([FromUri]int langId, [FromUri]int caseId, [FromUri]int cid, [FromUri]string sessionId = null)
+        public async Task<CaseEditOutputModel> Get([FromUri]int langId, [FromUri]int caseId, [FromUri]string sessionId = null)
         {
             var model = new CaseEditOutputModel();
 
             var userId = UserId;
             var languageId = langId;
             var currentCase = await _caseService.GetDetachedCaseByIdAsync(caseId);
-            var currentCid = cid;
+            var currentCid = currentCase.Customer_Id;
+            if (!_userService.UserHasCustomerId(currentCid))
+                Forbidden("User not authorized.");
 
             if (currentCase.Customer_Id != currentCid)
                 throw new Exception($"Case customer({currentCase.Customer_Id}) and current customer({currentCid}) are different"); //TODO: how to react?
@@ -92,6 +97,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             //TODO: Move to mapper
             model.Id = currentCase.Id;
+            model.CustomerId = currentCase.Customer_Id;
             model.CaseNumber = currentCase.CaseNumber;
             model.CaseGuid = currentCase.CaseGUID;
 
@@ -118,15 +124,15 @@ namespace DH.Helpdesk.WebApi.Controllers
             //    }
             //}
 
-            _caseFieldsCreator.CreateInitiatorSection(cid, customerUserSetting, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model);
-            _caseFieldsCreator.CreateRegardingSection(cid, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model);
-            _caseFieldsCreator.CreateComputerInfoSection(cid, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model);
-            _caseFieldsCreator.CreateCaseInfoSection(cid, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model, customerUserSetting);
-            _caseFieldsCreator.CreateCaseManagementSection(cid, userOverview, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model, customerUserSetting, customerSettings);
-            _caseFieldsCreator.CreateCommunicationSection(cid, userOverview, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model, customerSettings);
+            _caseFieldsCreator.CreateInitiatorSection(currentCid, customerUserSetting, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model);
+            _caseFieldsCreator.CreateRegardingSection(currentCid, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model);
+            _caseFieldsCreator.CreateComputerInfoSection(currentCid, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model);
+            _caseFieldsCreator.CreateCaseInfoSection(currentCid, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model, customerUserSetting);
+            _caseFieldsCreator.CreateCaseManagementSection(currentCid, userOverview, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model, customerUserSetting, customerSettings);
+            _caseFieldsCreator.CreateCommunicationSection(currentCid, userOverview, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model, customerSettings);
 
             //calc case edit mode
-            model.EditMode = _caseEditModeCalcStrategy.CalcEditMode(cid, UserId, currentCase); // remember to apply isCaseLocked check on client
+            model.EditMode = _caseEditModeCalcStrategy.CalcEditMode(currentCid, UserId, currentCase); // remember to apply isCaseLocked check on client
 
             model.ChildCasesIds = _caseService.GetChildCasesFor(caseId).Select(c => c.Id).ToList();
             model.ParentCaseId = _caseService.GetParentInfo(caseId)?.ParentId;
@@ -136,7 +142,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var stateSecondaryId = currentCase?.StateSecondary_Id ?? 0;
 
             model.ExtendedCaseData =
-                GetExtendedCaseModel(cid, currentCase.Id, currentCase.CaseSolution_Id ?? 0, stateSecondaryId, userOverview.UserGUID.ToString(), langId);
+                GetExtendedCaseModel(currentCid, currentCase.Id, currentCase.CaseSolution_Id ?? 0, stateSecondaryId, userOverview.UserGUID.ToString(), langId);
             
             return model;
         }
@@ -167,6 +173,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var model = new CaseEditOutputModel()
             {
                 CaseGuid = Guid.NewGuid(),
+                CustomerId = caseTemplate.Customer_Id,
                 Fields = new List<IBaseCaseField>(),
                 CaseSolution = _mapper.Map<CaseSolutionInfo>(caseTemplate)
             };

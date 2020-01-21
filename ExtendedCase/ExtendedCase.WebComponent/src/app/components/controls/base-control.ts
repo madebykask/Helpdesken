@@ -21,7 +21,7 @@ export class BaseControl {
 
     protected getLabel(): string {
         const isRequired = this.fieldModel.isRequired;
-        //return (typeof isRequired === 'number' && isRequired <= mode) ? '*' : '';
+        // return (typeof isRequired === 'number' && isRequired <= mode) ? '*' : '';
         return (typeof isRequired === 'number') ? '*' : '';
     }
 

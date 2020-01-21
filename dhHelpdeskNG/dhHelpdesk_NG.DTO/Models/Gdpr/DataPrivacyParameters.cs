@@ -19,5 +19,6 @@ namespace DH.Helpdesk.BusinessData.Models.Gdpr
         public bool RemoveCaseAttachments { get; set; }
         public bool RemoveLogAttachments { get; set; }
         public int TaskId { get; set; }
+        public bool RemoveFileViewLogs { get; set; }
     }
 }

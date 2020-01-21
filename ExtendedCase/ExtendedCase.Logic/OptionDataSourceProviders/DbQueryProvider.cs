@@ -31,7 +31,7 @@ namespace ExtendedCase.Logic.OptionDataSourceProviders
 
             var dbParameters = queryClr.Params.ToDictionary(x => x.Name, x => x.Value);
 
-            var dbModel = _optionDataSourceRepository.GetOptionsFromQuery(metaDataClr.Query, dbParameters);
+            var dbModel = _optionDataSourceRepository.GetOptionsFromQuery(metaDataClr.Query, metaDataClr.ConnectionString, dbParameters);
             
             //TODO: mapping
             return dbModel.Select(x => new DataSourceOptionModel { Value = x.Value, Text = x.Text }).ToList();
@@ -44,7 +44,8 @@ namespace ExtendedCase.Logic.OptionDataSourceProviders
         private class MetaData
         {
             public string Query { get; set; }
-        }
+			public string ConnectionString { get; set; }
+		}
 
         private class Query
         {

@@ -9,7 +9,7 @@ import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrap
     </div>
   `
 })
-export class CommonFileViewer implements OnInit {
+export class CommonFileViewerComponent implements OnInit {
 
   @Input() fileName: string;
   @Input() fileData: Blob;

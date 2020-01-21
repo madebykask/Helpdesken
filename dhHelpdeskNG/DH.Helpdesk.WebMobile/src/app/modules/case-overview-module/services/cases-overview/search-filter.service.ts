@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CasesOverviewFilter } from '../../models/cases-overview/cases-overview-filter.model';
-import { FavoriteFilterModel } from '../../models/cases-overview/favorite-filter.model';
+import { FavoriteFilterModel, CustomerFavoriteFilterModel } from '../../models/cases-overview/favorite-filter.model';
 import { FilterFields, CaseStandardSearchFilters } from '../../models/cases-overview/enums';
 import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
 import { SearchFilterApiService } from './search-filter-api.service';
@@ -10,6 +10,7 @@ import * as cm from '../../../shared-module/utils/common-methods';
 import { LocalStorageService } from 'src/app/services/local-storage';
 import { CaseSearchStateModel } from 'src/app/modules/shared-module/models/cases-overview/case-search-state.model';
 import { TranslateService } from '@ngx-translate/core';
+import { CaseOverviewConstants } from 'src/app/modules/shared-module/constants';
 
 @Injectable({ providedIn: 'root' })
 export class SearchFilterService {
@@ -18,31 +19,35 @@ export class SearchFilterService {
               private ngxTranslateService: TranslateService) {
   }
 
-  getFilterIdFromState(): number {
+  getFilterIdFromState(): string {
     const searchState = this.localStorageService.getCaseSearchState();
-    const filterId = searchState && searchState.filterId ? +searchState.filterId : +CaseStandardSearchFilters.AllCases;
-    return !isNaN(filterId) ? filterId : 0;
+    const filterId = searchState && searchState.filterId ? searchState.filterId : CaseStandardSearchFilters.AllCases;
+    return filterId || CaseStandardSearchFilters.AllCases;
   }
 
-  saveFilterIdToState(filterId: number): any {
+  saveFilterIdToState(filterId: string): any {
     const state = this.localStorageService.getCaseSearchState() || new CaseSearchStateModel();
     state.filterId = filterId;
     this.localStorageService.setCaseSearchState(state);
   }
 
-  loadFavoriteFilters(includeStandard: boolean = true): Observable<Array<FavoriteFilterModel>> {
+  loadFavoriteFilters(includeStandard: boolean = true): Observable<Array<CustomerFavoriteFilterModel>> {
     return this.searchFilterApiService.getFavoritersFilters().pipe(
       map((data: any[]) => {
-        let filters = data && data.length ? data.map(f => <FavoriteFilterModel>Object.assign(new FavoriteFilterModel(), {
-          id: f.id,
-          name: f.name,
-          fields: cm.convertNameValueArrayToObject(f.fields)
-        })) : [];
+        let filters = new Array<CustomerFavoriteFilterModel>();
 
-        //add fixed filters if required
-        if (includeStandard) {
-          const standardFilters = this.createDefaultSearchFilters();
-          filters = [...standardFilters, ...filters];
+        const allCustomers = new CustomerFavoriteFilterModel();
+        allCustomers.customerId = -1;
+        allCustomers.customerName = 'All';
+        allCustomers.favorites = this.createDefaultSearchFilters(CaseStandardSearchFilters.MyCases);
+        filters.push(allCustomers);
+
+        if (data && data.length) {
+          filters = filters.concat(data.map(f => <CustomerFavoriteFilterModel>Object.assign(new CustomerFavoriteFilterModel(), {
+            customerId: f.customerId,
+            customerName: f.customerName,
+            favorites: this.createFavoritesFilters(f.favorites, includeStandard, f.customerId)
+          })));
         }
 
         return filters;
@@ -51,16 +56,8 @@ export class SearchFilterService {
     );
   }
 
-  private createDefaultSearchFilters(): FavoriteFilterModel[] {
-    // standard/fix filters will have negative Ids
-    const myCasesFilter = new FavoriteFilterModel();
-    myCasesFilter.id = CaseStandardSearchFilters.MyCases;
-    myCasesFilter.name = this.ngxTranslateService.instant('Mina ärenden'); // My cases
-    return [ myCasesFilter ];
-  }
-
   applyFavoriteFilter(filter: CasesOverviewFilter, selectedFilter: FavoriteFilterModel) {
-    if (selectedFilter || selectedFilter.id > 0 && selectedFilter.fields) {
+    if (selectedFilter || (!isNaN(+selectedFilter.id) && +selectedFilter.id > 0) && selectedFilter.fields) {
       for (const fieldKey of Object.keys(selectedFilter.fields)) {
           const filterField = <FilterFields>FilterFields[fieldKey];
           switch (filterField) {
@@ -165,4 +162,28 @@ export class SearchFilterService {
     return [startDate, endDate];
   }
 
+  private createFavoritesFilters(favorites: any, includeStandard: boolean, customerId: number): FavoriteFilterModel {
+    let filters = favorites && favorites.length ? favorites.map(f => <FavoriteFilterModel>Object.assign(new FavoriteFilterModel(), {
+      id: '' + f.id,
+      name: f.name,
+      fields: cm.convertNameValueArrayToObject(f.fields)
+    })) : [];
+
+    //add fixed filters if required
+    if (includeStandard) {
+      const standardFilters = this.createDefaultSearchFilters(CaseOverviewConstants.CaseOverviewCustomerPrefix + customerId);
+      filters = [...standardFilters, ...filters];
+    }
+    return filters;
+  }
+
+  private createDefaultSearchFilters(id: any): FavoriteFilterModel[] {
+    // standard/fix filters will have negative Ids
+    const myCasesFilter = new FavoriteFilterModel();
+    myCasesFilter.id = id;
+    myCasesFilter.name = this.ngxTranslateService.instant('Mina ärenden'); // My cases
+    return [ myCasesFilter ];
+  }
+
 }
+

@@ -81,5 +81,21 @@
 
             return businessModels;
         }
+
+        public static Participant MapToParticipant(this QuestionnaireCircularPartEntity entity)
+        {
+            var businessModels =
+                        new Participant
+                        {
+                            Guid = entity.Guid,
+                            CaseNumber = entity.Case.CaseNumber,
+                            CaseId = entity.Case.Id,
+                            CaseDescription = entity.Case.Description,
+                            Caption = entity.Case.Caption,
+                            Email = entity.Case.PersonsEmail
+                        };
+
+            return businessModels;
+        }
     }
 }

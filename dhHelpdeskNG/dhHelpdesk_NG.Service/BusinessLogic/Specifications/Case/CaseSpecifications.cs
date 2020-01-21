@@ -574,7 +574,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Case
                     {
                         query = query.OrderBy(c => c.ChangeTime);
                     }
-                    else if (sort.Name == CaseInfoFields.RegistratedBy)
+                    else if (sort.Name == CaseInfoFields.RegisteredBy)
                     {
                         query = query.OrderBy(c => c.User.SurName);
                     }
@@ -792,7 +792,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Case
                     {
                         query = query.OrderByDescending(c => c.ChangeTime);
                     }
-                    else if (sort.Name == CaseInfoFields.RegistratedBy)
+                    else if (sort.Name == CaseInfoFields.RegisteredBy)
                     {
                         query = query.OrderByDescending(c => c.User.SurName);
                     }

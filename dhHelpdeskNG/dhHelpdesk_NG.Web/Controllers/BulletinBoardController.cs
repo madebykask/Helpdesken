@@ -106,17 +106,6 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
-        //public ActionResult Sort(string FieldName)
-        //{
-        //    var model = this.IndexInputViewModel();
-        //    BulletinBoardSearch CS = new BulletinBoardSearch();
-        //    if (SessionFacade.CurrentBulletinBoardSearch!= null)
-        //        CS = SessionFacade.CurrentBulletinBoardSearch;
-        //    CS.Ascending = !CS.Ascending;
-        //    CS.SortBy = FieldName;
-        //    SessionFacade.CurrentBulletinBoardSearch = CS;
-        //    return this.View(model);
-        //}
 
         public void Sort(string fieldName)
         {
@@ -127,15 +116,6 @@ namespace DH.Helpdesk.Web.Controllers
             CS.Ascending = !CS.Ascending;
             CS.SortBy = fieldName;
             SessionFacade.CurrentBulletinBoardSearch = CS;
-
-            //var model = this.IndexInputViewModel();
-            //BulletinBoardSearch CS = new BulletinBoardSearch();
-            //if (SessionFacade.CurrentBulletinBoardSearch != null)
-            //    CS = SessionFacade.CurrentBulletinBoardSearch;
-            //CS.Ascending = !CS.Ascending;
-            //CS.SortBy = FieldName;
-            //SessionFacade.CurrentBulletinBoardSearch = CS;
-            //return this.View(model);
         }
 
         public ActionResult New()

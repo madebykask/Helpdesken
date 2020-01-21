@@ -10,6 +10,7 @@ using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Customer;
 using DH.Helpdesk.BusinessData.Models.FileViewLog;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.BusinessRule;
 using DH.Helpdesk.Common.Enums.Cases;
@@ -345,7 +346,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             // TODO: caseNotifications?
 
-            var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
+            var disableLogFileView = _featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
             //case files
             // todo: Check if new cases should be handled here. Save case files for new cases only!
             if (!isEdit)
@@ -356,7 +357,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 				var paths = new List<KeyValuePair<CaseFileDto, string>>();
                 _caseFileService.AddFiles(newCaseFiles, paths);
 
-				if (!disableLogFileView.Active)
+				if (!disableLogFileView)
 				{
 					foreach (var file in paths)
 					{
@@ -470,7 +471,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             allLogFiles.AddRange(newLogFiles);
 
-            if (!disableLogFileView.Active)
+            if (!disableLogFileView)
             {
                 foreach (var newLogFile in newLogFiles)
                 {

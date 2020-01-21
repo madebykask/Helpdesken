@@ -19,6 +19,7 @@ using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Infrastructure.Mvc;
 using DH.Helpdesk.Web.Models.Case;
 using DH.Helpdesk.Web.Models.CaseLock;
+using Microsoft.Ajax.Utilities;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -29,16 +30,22 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ActionResult Files(string id, string savedFiles)
         {
-            IList<CaseFileModel> caseFiles;
-            if (GuidHelper.IsGuid(id))
-            {
-                var files = _userTemporaryFilesStorage.FindFileNamesAndDates(id, ModuleName.Cases);
-                caseFiles = MakeCaseFileModel(files, savedFiles);
-            }
-            else
+            IList<CaseFileModel> caseFiles = new List<CaseFileModel>();
+            var files = _userTemporaryFilesStorage.FindFileNamesAndDates(id, ModuleName.Cases);
+            var tempCaseFiles = CreateCaseFileModel(files, savedFiles, true);
+
+            if (!GuidHelper.IsGuid(id))
             {
                 var canDelete = SessionFacade.CurrentUser.DeleteAttachedFilePermission.ToBool();
                 caseFiles = _caseFileService.GetCaseFiles(int.Parse(id), canDelete);
+            }
+
+            if (tempCaseFiles != null && tempCaseFiles.Count > 0)
+            {
+                foreach (var tempCaseFile in tempCaseFiles)
+                {
+                    caseFiles.Add(tempCaseFile);
+                }
             }
 
             var customerId = 0;
@@ -122,46 +129,43 @@ namespace DH.Helpdesk.Web.Controllers
             var uploadedData = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
 
-            int caseId = 0;
-            if (GuidHelper.IsGuid(id))
+            //int caseId = 0;
+            //if (GuidHelper.IsGuid(id))
+            //{
+            if (_userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))
             {
-                if (_userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))
-                {
-                    name = DateTime.Now.ToString() + '-' + name;
-                }
-
-                _userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);
+                name = DateTime.Now.ToString() + '-' + name;
             }
-            else if (Int32.TryParse(id, out caseId))
-            {
-                if (_caseFileService.FileExists(int.Parse(id), name))
-                {
-                    name = DateTime.Now.ToString() + '_' + name;
-                }
 
-                var customerId = _caseService.GetCaseCustomerId(caseId);
-                var basePath = _masterDataService.GetFilePath(customerId);
+            _userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);
+            //}
+            //else if (Int32.TryParse(id, out caseId))
+            //{
+            //    if (_caseFileService.FileExists(int.Parse(id), name))
+            //    {
+            //        name = DateTime.Now.ToString() + '_' + name;
+            //    }
 
-                var caseFileDto = new CaseFileDto(
-                    uploadedData,
-                    basePath,
-                    name,
-                    DateTime.Now,
-                    int.Parse(id),
-                    _workContext.User.UserId);
+            //    var customerId = _caseService.GetCaseCustomerId(caseId);
+            //    var basePath = _masterDataService.GetFilePath(customerId);
 
-                var path = "";
-                _caseFileService.AddFile(caseFileDto, ref path);
-                var disableLogFileView =
-                    _featureToggleService.Get(
-                        FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-                if (!disableLogFileView.Active)
-                {
-                    var userId = SessionFacade.CurrentUser?.Id ?? 0;
-                    _fileViewLogService.Log(caseId, userId, caseFileDto.FileName, path, FileViewLogFileSource.Helpdesk,
-                        FileViewLogOperation.Add);
-                }
-            }
+            //    var caseFileDto = new CaseFileDto(
+            //        uploadedData,
+            //        basePath,
+            //        name,
+            //        DateTime.Now,
+            //        int.Parse(id),
+            //        _workContext.User.UserId);
+
+            //    var path = "";
+            //    _caseFileService.AddFile(caseFileDto, ref path);
+            //    if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
+            //    {
+            //        var userId = SessionFacade.CurrentUser?.Id ?? 0;
+            //        _fileViewLogService.Log(caseId, userId, caseFileDto.FileName, path, FileViewLogFileSource.Helpdesk,
+            //            FileViewLogOperation.Add);
+            //    }
+            //}
         }
 
         [HttpPost]
@@ -187,9 +191,9 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public void DeleteCaseFile(string id, string fileName)
+        public void DeleteCaseFile(string id, string fileName, bool isTemporary)
         {
-            if (GuidHelper.IsGuid(id))
+            if (isTemporary)
             {
                 _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Cases);
             }
@@ -207,10 +211,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var extraField = new ExtraFieldCaseHistory {CaseFile = StringTags.Delete + fileName.Trim()};
                 _caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5,
                     out errors, string.Empty, extraField);
-                var disableLogFileView =
-                    _featureToggleService.Get(
-                        FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-                if (!disableLogFileView.Active)
+                if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
                 {
                     var userId = SessionFacade.CurrentUser?.Id ?? 0;
                     var path = _filesStorage.ComposeFilePath(ModuleName.Cases, decimal.ToInt32(c.CaseNumber), basePath, "");
@@ -272,10 +273,7 @@ namespace DH.Helpdesk.Web.Controllers
                             _caseService.SaveCaseHistory(case_, SessionFacade.CurrentUser.Id, adUser,
                                 CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
                         }
-                        var disableLogFileView =
-                            _featureToggleService.Get(
-                                FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-                        if (!disableLogFileView.Active)
+                        if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
                         {
                             var userId = SessionFacade.CurrentUser?.Id ?? 0;
                             var path = _filesStorage.ComposeFilePath(logSubFolder, log.Id, basePath, "");
@@ -288,11 +286,11 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
 		[AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)]
-		public UnicodeFileContentResult DownloadFile(string id, string fileName)
+		public UnicodeFileContentResult DownloadFile(string id, string fileName, bool isTemporary = false)
         {
             byte[] fileContent;
 
-            if (GuidHelper.IsGuid(id))
+            if (GuidHelper.IsGuid(id) || isTemporary)
                 fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases);
             else
             {
@@ -305,11 +303,11 @@ namespace DH.Helpdesk.Web.Controllers
                 var model = _caseFileService.GetFileContentByIdAndFileName(caseId, basePath, fileName);
                 fileContent = model.Content;
 
-                var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-                if (!disableLogFileView.Active)
+                if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
                 {
                     var userId = SessionFacade.CurrentUser?.Id ?? 0;
-                    _fileViewLogService.Log(caseId, userId, fileName, model.FilePath, FileViewLogFileSource.Helpdesk, FileViewLogOperation.View);
+                    _fileViewLogService.Log(caseId, userId, fileName, model.FilePath,
+                        FileViewLogFileSource.Helpdesk, FileViewLogOperation.View);
 
                 }
             }
@@ -348,8 +346,7 @@ namespace DH.Helpdesk.Web.Controllers
                     var model = _logFileService.GetFileContentByIdAndFileName(logId, basePath, fileName,
                         logType);
                     fileContent = model.Content;
-                    var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-                    if (!disableLogFileView.Active)
+                    if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
                     {
                         var userId = SessionFacade.CurrentUser?.Id ?? 0;
                         _fileViewLogService.Log(l.CaseId, userId, fileName, model.FilePath, FileViewLogFileSource.Helpdesk, FileViewLogOperation.View);
@@ -398,7 +395,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult GetCaseFilesJS(int caseId)
         {
             var files = _caseFileService.FindFileNamesAndDatesByCaseId(caseId);
-            var cfs = MakeCaseFileModel(files, string.Empty);
+            var cfs = CreateCaseFileModel(files, string.Empty);
             var customerId = 0;
             customerId = _caseService.GetCaseById(caseId).Customer_Id;
 
@@ -471,6 +468,24 @@ namespace DH.Helpdesk.Web.Controllers
             var model = GetCaseInputViewModel(userId, customerId, caseId, caseLockModel, caseFieldSettings);
             var caseHistoryViewModel = model.CreateHistoryViewModel();
             return PartialView("_CaseHistory", caseHistoryViewModel);
+        }
+
+        private IList<CaseFileModel> CreateCaseFileModel(IList<CaseFileDate> files, string savedFiles, bool isTemporary = false)
+        {
+            var res = new List<CaseFileModel>();
+            int i = 0;
+
+            var savedFileList = string.IsNullOrEmpty(savedFiles) ? null : savedFiles.Split('|').ToList();
+
+            foreach (var f in files)
+            {
+                i++;
+                var canDelete = !(savedFileList != null && savedFileList.Contains(f.FileName));
+                var cf = new CaseFileModel(i, i, f.FileName, f.FileDate, SessionFacade.CurrentUser.FirstName + " " + SessionFacade.CurrentUser.SurName, canDelete, isTemporary);
+                res.Add(cf);
+            }
+
+            return res;
         }
 
         #endregion

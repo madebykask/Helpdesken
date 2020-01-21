@@ -1,4 +1,5 @@
 export class CasesOverviewFilter {
+    CustomersIds: number[] = [];
     Initiator: string;
     InitiatorSearchScope: number;
     CaseTypeId: number;

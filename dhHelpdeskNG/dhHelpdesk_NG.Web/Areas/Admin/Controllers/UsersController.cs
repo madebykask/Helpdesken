@@ -348,6 +348,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             if (SessionFacade.CurrentUser.UserGroupId != (int)UserGroup.SystemAdministrator)
             {
                 var availableCustomersHash = this._userService.GetUser(SessionFacade.CurrentUser.Id).CusomersAvailable.ToDictionary(it => it.Id, it => true);
+
                 CsSelected = CsSelected.Where(availableCustomersHash.ContainsKey).ToArray();
             }
 
@@ -524,13 +525,15 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private UserIndexViewModel IndexInputViewModel()
         {
             var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
-            var csSelected = user.Cs ?? new List<Customer>();
+            var csSelected = user.Cs.Where(c => c.Status == 1) ?? new List<Customer>();
             var csAvailable = new List<Customer>();
 
-            foreach (var c in this._customerService.GetAllCustomers())
+
+            foreach (var c in this._customerService.GetAllCustomers().Where(o => o.Status == 1))
             {
                 if (!csSelected.Contains(c))
                     csAvailable.Add(c);
+                    csAvailable.OrderBy(cu => c.Name);
             }
 
             List<SelectListItem> sli = new List<SelectListItem>();
@@ -645,8 +648,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             //}
 
             var customersSelected = user.Cs ?? new List<Customer>();
+            customersSelected = customersSelected.Where(x => x.Status ==1 ).ToList();
+
             var selectedCustomersHash = customersSelected.ToDictionary(it => it.Id, it => true);
-            var customersAvailable = GetAvaliableCustomersFor(user).Where(it => !selectedCustomersHash.ContainsKey(it.Id)).OrderBy(it => it.Name);
+            var customersAvailable = GetAvaliableCustomersFor(user).Where(it => !selectedCustomersHash.ContainsKey(it.Id) && it.Status == 1).OrderBy(it => it.Name);
             var otsSelected = user.OTs ?? new List<OrderType>();
             var otsAvailable = new List<OrderType>();
 
@@ -710,7 +715,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             #region Model
 
-            var customerUsers = user.CustomerUsers?.Any() ?? false ? user.CustomerUsers : _userService.GetCustomerUserForUser(userId);
+            var customerUsers = (user.CustomerUsers?.Any() ?? false ? user.CustomerUsers : _userService.GetCustomerUserForUser(userId))
+                                                                                           .Where(o => o.Customer.Status == 1).OrderBy(o => o.Customer.Name).ToList();
 
             var model = new UserInputViewModel
             {
@@ -720,14 +726,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 StartPageShowList = lis,
                 CustomerUsers = customerUsers.Where(x => x.Customer_Id > 0).Select(x => x.MapToCustomerUserEdit()).ToList(),
                 Departments = _userService.GetDepartmentsForUser(userId),
-                ListWorkingGroupsForUser = _userService.GetListToUserWorkingGroup(userId),
+                ListWorkingGroupsForUser = _userService.GetListToUserWorkingGroup(userId).Where(o => o.CustomerActive).ToList(),
                 AvailvableTimeZones = TimeZoneInfo.GetSystemTimeZones().Select(it => new SelectListItem() { Value = it.Id, Text = it.DisplayName, Selected = user.TimeZoneId == it.Id }),
 
-                Customers = _customerService.GetCustomers().Select(x => new SelectListItem
+                Customers = _customerService.GetAllCustomers().Select(x => new StateSelectListItem
                 {
                     Text = x.Name,
-                    Value = x.Value
-                }).ToList(),
+                    Value = x.Id.ToString(),
+					Active = x.Status == 1
+					
+                }).Where(o => o.Active).ToList(),
 
                 Domains = _domainService.GetDomains(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
@@ -759,16 +767,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 //    Value = x.Id.ToString()
                 //}).ToList(),
 
-                CsAvailable = customersAvailable.Select(x => new SelectListItem
+                CsAvailable = customersAvailable.Select(x => new StateSelectListItem
                 {
                     Text = x.Name,
-                    Value = x.Id.ToString()
+                    Value = x.Id.ToString(),
+					Active = x.Status == 1
                 }).ToList(),
-                CsSelected = customersSelected.Select(x => new SelectListItem
+                CsSelected = customersSelected.Select(x => new StateSelectListItem
                 {
                     Text = x.Name,
-                    Value = x.Id.ToString()
-                }).OrderBy(it => it.Text).ToList(),
+                    Value = x.Id.ToString(),
+					Active = x.Status == 1
+				}).OrderBy(it => it.Text).ToList(),
                 OTsAvailable = otsAvailable.Select(x => new SelectListItem
                 {
                     Text = x.Name,

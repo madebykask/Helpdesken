@@ -1911,7 +1911,7 @@ namespace DH.Helpdesk.Services.Services
             var caseSolutions = _cache.Get(cacheKey) as IList<CaseSolutionOverview>;
             if (caseSolutions == null)
             {
-                caseSolutions = GetCustomerCaseSolutionsQuery(customerId).ToList();
+                caseSolutions = GetCustomerCaseSolutionsQuery(new List<int> { customerId }).ToList();
 
                 if (caseSolutions.Any())
                     _cache.Set(cacheKey, caseSolutions, Common.Constants.Cache.Duration);

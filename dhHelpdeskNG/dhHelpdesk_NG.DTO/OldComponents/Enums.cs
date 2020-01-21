@@ -32,6 +32,7 @@ namespace DH.Helpdesk.BusinessData.OldComponents
             AssignedCaseToPriority = 13,
             SmsClosedCase = 14,
             CaseIsActivated = 15,
+            ReminderTo = 17,
             OperationLog = 60,
         }
 

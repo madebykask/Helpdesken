@@ -11,7 +11,6 @@ import { CaseLogApiService } from '../api/case/case-log-api.service';
 import { CaseLogModel, CaseHistoryModel } from '../../models/case/case-actions-api.model';
 import { CaseActionsDataService } from './case-actions-data.service';
 import { CaseHistoryApiService } from '../api/case/case-history-api.service';
-import { CaseTemplateApiService } from 'src/app/services/api/caseTemplate/case-template-api.service';
 import { CaseModelBuilder } from '../../models/case/case-model-builder';
 
 @Injectable({ providedIn: 'root' })
@@ -23,12 +22,11 @@ export class CaseService {
     private caseActionsDataService: CaseActionsDataService,
     private caseLogApiService: CaseLogApiService,
     private caseHistoryApiService: CaseHistoryApiService,
-    private caseApiService: CaseApiService,
-    private caseTemplateApiService: CaseTemplateApiService) {
+    private caseApiService: CaseApiService) {
   }
 
-  getTemplateData(templateId: number): Observable<CaseEditInputModel> {
-    return this.caseApiService.getNewCase(templateId)
+  getTemplateData(templateId: number, customerId: number): Observable<CaseEditInputModel> {
+    return this.caseApiService.getNewCase(templateId, customerId)
       .pipe(
         map((caseData: any) => {
           const model = this.caseModelBuilder.createCaseEditInputModel(caseData);
@@ -45,9 +43,9 @@ export class CaseService {
         }));
   }
 
-  getCaseActions(caseId: number): Observable<CaseAction<any>[]> {
-    const caseLogs$ = this.getCaseLogsData(caseId);
-    const caseHistory$ = this.getCaseHistoryData(caseId);
+  getCaseActions(caseId: number, customerId: number): Observable<CaseAction<any>[]> {
+    const caseLogs$ = this.getCaseLogsData(caseId, customerId);
+    const caseHistory$ = this.getCaseHistoryData(caseId, customerId);
 
     return forkJoin([caseLogs$, caseHistory$]).pipe(
       map(([caseLogsData, caseHistoryData]) => {
@@ -55,53 +53,34 @@ export class CaseService {
       }));
   }
 
-  private getCaseLogsData(caseId: number): Observable<CaseLogModel[]> {
-    return this.caseLogApiService.getCaseLogs(caseId)
-      .pipe(
-        take(1),
-        map(data => {
-          const items = data.map(x => this.caseModelBuilder.createCaseLogModel(x));
-          return items;
-        })
-      );
-  }
-
-  private getCaseHistoryData(caseId): Observable<CaseHistoryModel> {
-    return this.caseHistoryApiService.getHistoryEvents(caseId)
-      .pipe(
-        take(1),
-        map(jsonData => this.caseModelBuilder.createCaseHistoryModel(jsonData))
-      );
-  }
-
-  getOptionsHelper(filter: CaseOptionsFilterModel): any {
+  getOptionsHelper(filter: CaseOptionsFilterModel, customerId: number): any {
     const empty$ = () => EMPTY.pipe(defaultIfEmpty(null));
     const fieldExists = (field: any) => field !== undefined;
 
     return {
-      getRegions: () => this.caseOrganizationService.getRegions(),
-      getDepartments: () => fieldExists(filter.RegionId) ? this.caseOrganizationService.getDepartments(filter.RegionId) : empty$(),
+      getRegions: () => this.caseOrganizationService.getRegions(customerId),
+      getDepartments: () => fieldExists(filter.RegionId) ? this.caseOrganizationService.getDepartments(filter.RegionId, customerId) : empty$(),
       getOUs: () => fieldExists(filter.DepartmentId) && filter.DepartmentId != null ?
-        this.caseOrganizationService.getOUs(filter.DepartmentId) : empty$(),
+        this.caseOrganizationService.getOUs(filter.DepartmentId, customerId) : empty$(),
       getIsAboutDepartments: () => fieldExists(filter.IsAboutRegionId) ?
-        this.caseOrganizationService.getDepartments(filter.IsAboutRegionId) : empty$(),
+        this.caseOrganizationService.getDepartments(filter.IsAboutRegionId, customerId) : empty$(),
       getIsAboutOUs: () => fieldExists(filter.IsAboutDepartmentId) && filter.IsAboutDepartmentId != null ?
-        this.caseOrganizationService.getOUs(filter.IsAboutDepartmentId) : empty$(),
-      getCaseTypes: () => fieldExists(filter.CaseTypes) ? this.caseOrganizationService.getCaseTypes() : empty$(),
+        this.caseOrganizationService.getOUs(filter.IsAboutDepartmentId, customerId) : empty$(),
+      getCaseTypes: () => fieldExists(filter.CaseTypes) ? this.caseOrganizationService.getCaseTypes(customerId) : empty$(),
       getProductAreas: (idToInclude?: number) => fieldExists(filter.ProductAreas) ?
-        this.caseOrganizationService.getProductAreas(filter.CaseTypeId, idToInclude) : empty$(),
-      getCategories: () => fieldExists(filter.Categories) ? this.caseOrganizationService.getCategories() : empty$(),
-      getWorkingGroups: () => fieldExists(filter.WorkingGroups) ? this.caseOrganizationService.getWorkingGroups() : empty$(),
-      getClosingReasons: () => fieldExists(filter.ClosingReasons) ? this.caseOrganizationService.getClosingReasons() : empty$(),
+        this.caseOrganizationService.getProductAreas(filter.CaseTypeId, idToInclude, customerId) : empty$(),
+      getCategories: () => fieldExists(filter.Categories) ? this.caseOrganizationService.getCategories(customerId) : empty$(),
+      getWorkingGroups: () => fieldExists(filter.WorkingGroups) ? this.caseOrganizationService.getWorkingGroups(customerId) : empty$(),
+      getClosingReasons: () => fieldExists(filter.ClosingReasons) ? this.caseOrganizationService.getClosingReasons(customerId) : empty$(),
       getPerformers: (includePerfomer: boolean) => fieldExists(filter.Performers)
-        ? this.caseOrganizationService.getPerformers(includePerfomer ? filter.CasePerformerUserId : null, filter.CaseWorkingGroupId)
+        ? this.caseOrganizationService.getPerformers(includePerfomer ? filter.CasePerformerUserId : null, filter.CaseWorkingGroupId, customerId)
         : empty$(),
-      getStateSecondaries: () => fieldExists(filter.StateSecondaries) ? this.caseOrganizationService.getStateSecondaries() : empty$()
+      getStateSecondaries: () => fieldExists(filter.StateSecondaries) ? this.caseOrganizationService.getStateSecondaries(customerId) : empty$()
     };
   }
 
-  getCaseOptions(filter: CaseOptionsFilterModel) {
-    const optionsHelper = this.getOptionsHelper(filter);
+  getCaseOptions(filter: CaseOptionsFilterModel, customerId: number) {
+    const optionsHelper = this.getOptionsHelper(filter, customerId);
 
     const regions$ = optionsHelper.getRegions();
     const departments$ = optionsHelper.getDepartments();
@@ -116,7 +95,7 @@ export class CaseService {
     const perfomers$ = optionsHelper.getPerformers(true);
     const stateSecondaries$ = optionsHelper.getStateSecondaries();
 
-    const bundledOptions$ = this.batchCaseOptionsService.getOptions(filter as BundleOptionsFilter);
+    const bundledOptions$ = this.batchCaseOptionsService.getOptions(filter as BundleOptionsFilter, customerId);
 
     const params = [bundledOptions$, regions$, departments$, oUs$, isAboutDepartments$, isAboutOUs$, caseTypes$,
       productAreas$, categories$, closingReasons$, perfomers$, workingGroups$, stateSecondaries$];
@@ -189,8 +168,8 @@ export class CaseService {
     );
   }
 
-  getCaseSections() {
-    return this.caseApiService.getCaseSections()
+  getCaseSections(customerId: number) {
+    return this.caseApiService.getCaseSections(customerId)
       .pipe(
         take(1),
         map((jsCaseSections: any) => {
@@ -202,11 +181,31 @@ export class CaseService {
               jsSection.sectionHeader,
               jsSection.sectionType,
               jsSection.isNewCollapsed,
-              jsSection.isEditCollapsed);
+              jsSection.isEditCollapsed,
+              jsSection.caseSectionFields);
           });
           return sections;
         }),
         catchError((e) => throwError(e))
+      );
+  }
+
+  private getCaseLogsData(caseId: number, customerId: number): Observable<CaseLogModel[]> {
+    return this.caseLogApiService.getCaseLogs(caseId, customerId)
+      .pipe(
+        take(1),
+        map(data => {
+          const items = data.map(x => this.caseModelBuilder.createCaseLogModel(x));
+          return items;
+        })
+      );
+  }
+
+  private getCaseHistoryData(caseId: number, customerId: number): Observable<CaseHistoryModel> {
+    return this.caseHistoryApiService.getHistoryEvents(caseId, customerId)
+      .pipe(
+        take(1),
+        map(jsonData => this.caseModelBuilder.createCaseHistoryModel(jsonData))
       );
   }
 }

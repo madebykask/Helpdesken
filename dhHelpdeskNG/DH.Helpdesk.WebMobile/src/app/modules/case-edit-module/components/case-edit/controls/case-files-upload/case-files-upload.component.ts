@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FileUploader, FileUploaderOptions, FileItem, ParsedResponseHeaders } from 'ng2-file-upload';
 import { AuthenticationService } from 'src/app/services/authentication';
 import { MbscListviewOptions } from '@mobiscroll/angular';
-import { LocalStorageService } from 'src/app/services/local-storage';
 import { CaseFilesApiService } from 'src/app/modules/case-edit-module/services/api/case/case-files-api.service';
 
 @Component({
@@ -14,6 +13,7 @@ export class CaseFilesUploadComponent {
 
   @Output() NewFileUploadComplete: EventEmitter<any> = new EventEmitter<any>();
   @Input('caseKey') caseKey: string;
+  @Input('customerId') customerId: number;
 
   fileUploader = new FileUploader({});
 
@@ -37,14 +37,12 @@ export class CaseFilesUploadComponent {
   };
 
   constructor(private authenticationService: AuthenticationService,
-              private caseFileApiService: CaseFilesApiService,
-              private localStateStorage: LocalStorageService) {
+              private caseFileApiService: CaseFilesApiService) {
   }
 
   ngOnInit() {
     const accessToken = this.authenticationService.getAuthorizationHeaderValue();
-    const userData = this.localStateStorage.getCurrentUser();
-    const cid = userData.currentData.selectedCustomerId;
+
 
     // init file uploader
     this.fileUploader.setOptions(<FileUploaderOptions>{
@@ -52,7 +50,7 @@ export class CaseFilesUploadComponent {
       filters: [],
       isHTML5: true,
       authToken: accessToken,
-      url: this.caseFileApiService.getCaseFileUploadUrl(this.caseKey, cid)
+      url: this.caseFileApiService.getCaseFileUploadUrl(this.caseKey, this.customerId)
     });
 
     // subscribe to events

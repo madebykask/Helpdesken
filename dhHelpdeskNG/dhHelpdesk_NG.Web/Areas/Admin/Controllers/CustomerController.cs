@@ -102,8 +102,8 @@
                 //model.Customers = this._userService.GetCustomersForUser(SessionFacade.CurrentUser.Id);
             }
 
-            
-
+			model.Customers = model.Customers.Where(o => o.Status == 1).ToList();
+			model.ActiveOnly = true;
 
 
             return this.View(model);
@@ -125,6 +125,10 @@
                 model.Customers = this._customerService.SearchAndGenerateCustomersConnectedToUser(SearchCustomers, SessionFacade.CurrentUser.Id);
             }
 
+			if (SearchCustomers.ActiveOnly)
+				model.Customers = model.Customers.Where(o => o.Status == 1).ToList();
+
+			model.ActiveOnly = SearchCustomers.ActiveOnly;
 
             return this.View(model);
         }
@@ -133,7 +137,7 @@
         public ActionResult New()
         {
             const string DEFAULT_TIMEZONE_ID = "Central Europe Standard Time";
-            var model = this.CustomerInputViewModel(new Customer() { TimeZoneId = DEFAULT_TIMEZONE_ID });
+            var model = this.CustomerInputViewModel(new Customer() { TimeZoneId = DEFAULT_TIMEZONE_ID, Status = 1 });
 
             return this.View(model);
         }
@@ -340,6 +344,7 @@
             customerToSave.OrderPermission = this.returnOrderPermissionForSave(id, vmodel);
             customerToSave.OverwriteFromMasterDirectory = vmodel.Customer.OverwriteFromMasterDirectory;            
             customerToSave.CommunicateWithNotifier = vmodel.Customer.CommunicateWithNotifier;
+			customerToSave.Status = vmodel.Active ? 1 : 0;
 
             var b = this.TryUpdateModel(customerToSave, "customer");
             var setting = this._settingService.GetCustomerSetting(id);
@@ -600,7 +605,8 @@
                 {
                     Text = x.DisplayName,
                     Value = x.Id
-                }).ToList()
+                }).ToList(),
+				Active = customer.Status == 1
             };
 
             #endregion
@@ -818,7 +824,8 @@
                Name = customerName,
                HelpdeskEmail = customerEmail,
                Language_Id = customerToCopy.Language_Id,
-               TimeZoneId = customerToCopy.TimeZoneId
+               TimeZoneId = customerToCopy.TimeZoneId,
+			   Status = customerToCopy.Status
             };
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -1277,8 +1284,8 @@
                     {
                         //Id = id,
                         MailID = mailTemplateToCopy.MailID,
-                        Customer_Id = newCustomerToSave.Id
-
+                        Customer_Id = newCustomerToSave.Id,
+                        SendMethod = mailTemplateToCopy.SendMethod
                     };
 
                     this._mailTemplateService.SaveMailTemplate(mailTemplateToSave, out errors);

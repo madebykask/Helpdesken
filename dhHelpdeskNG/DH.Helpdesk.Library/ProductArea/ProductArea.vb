@@ -29,8 +29,10 @@
             miWorkingGroup_Id = CInt(dr("WorkingGroup_Id"))
         End If
 
-        If Not IsDBNull(dr("StateSecondary_Id")) Then
-            miSubState_Id = CInt(dr("StateSecondary_Id"))
+        If dr.Table.Columns.Contains("StateSecondary_Id") Then
+            If Not IsDBNull(dr("StateSecondary_Id")) Then
+                miSubState_Id = CInt(dr("StateSecondary_Id"))
+            End If
         End If
 
     End Sub

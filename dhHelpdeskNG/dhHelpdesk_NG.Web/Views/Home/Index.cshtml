@@ -57,7 +57,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng")</button>
     </div>
 </div>
 
@@ -87,23 +87,24 @@
         data-usermodules-moduleid="@(GetModuleId(Module.Problems))"
         data-usermodules-position="@(GetModulePosition(Module.Problems))">
         @{
-            Html.RenderPartial("ProblemsInfo", Model.ProblemOverviews);
-        }                                                                        
-    </div>                                        
+            Html.RenderPartial("ProblemsInfo", Model.ProblemModel);
+        }
+    </div>
     <div class="portlet statistics" 
         data-usermodules="item" 
         data-usermodules-moduleid="@(GetModuleId(Module.Statistics))"
         data-usermodules-position="@(GetModulePosition(Module.Statistics))">
-        @{
+        @if (Model.UserModules.Any(u => (Module)u.Module_Id == Module.Statistics && u.isVisible))
+        {
             Html.RenderPartial("StatisticsInfo", Model.StatisticsOverviews);
-        }                                                                                                        
-    </div>                                        
+        }
+    </div>
     <div class="portlet bulletinboard" 
         data-usermodules="item" 
         data-usermodules-moduleid="@(GetModuleId(Module.BulletinBoard))"        
         data-usermodules-position="@(GetModulePosition(Module.BulletinBoard))">
         @{
-            Html.RenderPartial("BulletinBoardInfo", Model.BulletinBoardOverviews);
+            Html.RenderPartial("BulletinBoardInfo", Model.BulletinBoardModel);
         }                                                                                                    
     </div>                                        
     <div class="portlet calendar" 
@@ -111,7 +112,7 @@
         data-usermodules-moduleid="@(GetModuleId(Module.Calendar))"
         data-usermodules-position="@(GetModulePosition(Module.Calendar))">
         @{
-            Html.RenderPartial("CalendarsInfo", Model.CalendarOverviews);
+            Html.RenderPartial("CalendarsInfo", Model.CalendarModel);
         }                                                                        
     </div>                                        
     <div class="portlet faq" 
@@ -119,7 +120,7 @@
         data-usermodules-moduleid="@(GetModuleId(Module.Faq))"
         data-usermodules-position="@(GetModulePosition(Module.Faq))">
         @{
-            Html.RenderPartial("FaqInfo", Model.FaqOverviews);
+            Html.RenderPartial("FaqInfo", Model.FaqModel);
         }                                                                        
     </div>                                        
     <div class="portlet operartionallog" 
@@ -127,7 +128,7 @@
         data-usermodules-moduleid="@(GetModuleId(Module.OperationalLog))"
         data-usermodules-position="@(GetModulePosition(Module.OperationalLog))">
         @{
-            Html.RenderPartial("OperationLogsInfo", Model.OperationLogOverviews);
+            Html.RenderPartial("OperationLogsInfo", Model.OperationLogModel);
         }                                                                                                                                
     </div>                                        
     <div class="portlet dailyreport" 
@@ -135,32 +136,32 @@
         data-usermodules-moduleid="@(GetModuleId(Module.DailyReport))"
         data-usermodules-position="@(GetModulePosition(Module.DailyReport))">
         @{
-            Html.RenderPartial("DailyReportsInfo", Model.DailyReportOverviews);
-        }                                                                                                                                
-    </div>                                        
+            Html.RenderPartial("DailyReportsInfo", Model.DailyReportModel);
+        }
+    </div>
     <div class="portlet quicklinks" 
         data-usermodules="item" 
         data-usermodules-moduleid="@(GetModuleId(Module.QuickLinks))"
         data-usermodules-position="@(GetModulePosition(Module.QuickLinks))">
         @{
             Html.RenderPartial("LinksInfo", Model.LinksInfo);
-        }                                                                                                                                
-    </div>                                        
+        }
+    </div>
     <div class="portlet documents" 
         data-usermodules="item" 
         data-usermodules-moduleid="@(GetModuleId(Module.Documents))"
         data-usermodules-position="@(GetModulePosition(Module.Documents))">
         @{
-            Html.RenderPartial("DocumentsInfo", Model.DocumentOverviews);
-        }                                                                                            
-    </div>                                        
+            Html.RenderPartial("DocumentsInfo", Model.DocumentsModel);
+        }
+    </div>
     <div class="cases" 
         data-usermodules="item" 
         data-usermodules-moduleid="@(GetModuleId(Module.Cases))"
         data-usermodules-position="@(GetModulePosition(Module.Cases))">
         @{
             Html.RenderPartial("MyCasesInfo", Model.MyCases);
-        }                                                                                            
+        }
     </div>
     <div class="cases quick-open"
          data-usermodules="item"
@@ -170,7 +171,7 @@
         {
             Html.RenderPartial("CaseQuickOpen");
         }
-    </div>                                      
+    </div>
 </div>
 @functions
 {
@@ -234,4 +235,20 @@
 
         //UpdateLogo();
     });
+
 </script>
+@if (Model.StatisticsOverviews != null)
+{
+    <script type="text/javascript">
+        dhHelpdesk.statistics.init({
+            dataUrl: '@Url.Action("GetStatistics", "Home")'
+        });
+        var statXhr = dhHelpdesk.statistics.loadStatistics();
+
+        $(function () {
+            statXhr.done(function() {
+                dhHelpdesk.statistics.tryApplyData();
+            });
+        });
+    </script>
+}

@@ -91,6 +91,7 @@
             this.Property(x => x.ShowFAQOnExternalStartPage).IsOptional();
             this.Property(x => x.ShowCoWorkersOnExternalPage).IsRequired();
             this.Property(x => x.ShowHelpOnExternalPage).IsRequired();
+            this.Property(x => x.UseInitiatorAutocomplete).IsRequired();
             this.Property(x => x.UseInternalLogNoteOnExternalPage).IsRequired();
             this.Property(x => x.MyCasesFollower).IsRequired();
             this.Property(x => x.MyCasesInitiator).IsRequired();
@@ -103,6 +104,7 @@
             this.Property(x => x.GroupCaseTemplates).IsRequired();
             this.Property(x => x.FetchPcNumber).IsRequired();
 			this.Property(x => x.TimeZoneId).IsRequired();
+			this.Property(x => x.Status).IsRequired();
 
 			this.ToTable("tblcustomer");
         }

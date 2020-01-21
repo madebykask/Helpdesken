@@ -17,6 +17,7 @@ namespace DH.Helpdesk.Services.Services
         Task<CaseSolution> GetCaseSolutionAsync(int id);
         Task<List<CaseSolutionOverview>> GetCustomerCaseSolutionsAsync(int customerId);
         Task<List<CaseSolutionOverview>> GetCustomerMobileCaseSolutionsAsync(int customerId);
+        Task<List<CaseSolutionOverview>> GetCustomersMobileCaseSolutionsAsync(IList<int> customersIds);
         CaseSolutionCategory GetCaseSolutionCategory(int id);
     }
 
@@ -49,13 +50,19 @@ namespace DH.Helpdesk.Services.Services
        
         public Task<List<CaseSolutionOverview>> GetCustomerCaseSolutionsAsync(int customerId)
         {
-            var caseSolutions = GetCustomerCaseSolutionsQuery(customerId);
+            var caseSolutions = GetCustomerCaseSolutionsQuery(new List<int> { customerId });
             return caseSolutions.ToListAsync();
         }
 
         public Task<List<CaseSolutionOverview>> GetCustomerMobileCaseSolutionsAsync(int customerId)
         {
-            var caseSolutions = GetCustomerCaseSolutionsQuery(customerId, cs => cs.ShowOnMobile == 1);
+            var caseSolutions = GetCustomerCaseSolutionsQuery(new List<int> { customerId }, cs => cs.ShowOnMobile == 1);
+            return caseSolutions.ToListAsync();
+        }
+
+        public Task<List<CaseSolutionOverview>> GetCustomersMobileCaseSolutionsAsync(IList<int> customersIds)
+        {
+            var caseSolutions = GetCustomerCaseSolutionsQuery(customersIds, cs => cs.ShowOnMobile == 1);
             return caseSolutions.ToListAsync();
         }
 
@@ -64,9 +71,11 @@ namespace DH.Helpdesk.Services.Services
             return CaseSolutionCategoryRepository.GetById(id);
         }
 
-        protected IQueryable<CaseSolutionOverview> GetCustomerCaseSolutionsQuery(int customerId, Expression<Func<CaseSolution, bool>> filterExp = null)
+        protected IQueryable<CaseSolutionOverview> GetCustomerCaseSolutionsQuery(IList<int> customersIds, Expression<Func<CaseSolution, bool>> filterExp = null)
         {
-            var queryable = CaseSolutionRepository.GetCustomerCaseSolutions(customerId);
+            var queryable = customersIds.Count == 1 
+                ? CaseSolutionRepository.GetCustomerCaseSolutions(customersIds.Single())
+                : CaseSolutionRepository.GetCustomerCaseSolutions(customersIds);
 
             if (filterExp != null)
             {
@@ -78,6 +87,7 @@ namespace DH.Helpdesk.Services.Services
                     {
                         CaseSolutionId = cs.Id,
                         Name = cs.Name,
+                        CustomerId = cs.Customer_Id,
                         CategoryId = cs.CaseSolutionCategory_Id,
                         CategoryName = cs.CaseSolutionCategory.Name,
                         StateSecondaryId = cs.StateSecondary_Id,

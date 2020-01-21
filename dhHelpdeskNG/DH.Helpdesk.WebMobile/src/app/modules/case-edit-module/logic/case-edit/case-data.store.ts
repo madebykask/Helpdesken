@@ -1,8 +1,9 @@
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { OptionItem, MultiLevelOptionItem, CaseOptions } from 'src/app/modules/shared-module/models';
 
 export class CaseDataStore {
 
+  public currentCaseCustomerId$: BehaviorSubject<number>;
   public workingGroupsStore$: BehaviorSubject<OptionItem[]>;
   public customerRegistrationSourcesStore$: BehaviorSubject<OptionItem[]>;
   public systemsStore$: BehaviorSubject<OptionItem[]>;
@@ -32,7 +33,8 @@ export class CaseDataStore {
   public closingReasonsStore$: BehaviorSubject<MultiLevelOptionItem[]>;
   public workflowsStore$: BehaviorSubject<OptionItem[]>;
 
-  constructor(options: CaseOptions) {
+  constructor(options: CaseOptions, customerId: number) {
+    this.currentCaseCustomerId$ = new BehaviorSubject(customerId);
     this.workingGroupsStore$ = new BehaviorSubject(options.workingGroups);
     this.customerRegistrationSourcesStore$ = new BehaviorSubject(options.customerRegistrationSources);
     this.systemsStore$ = new BehaviorSubject(options.systems);

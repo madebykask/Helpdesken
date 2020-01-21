@@ -254,6 +254,11 @@ namespace DH.Helpdesk.Services.Services
             return _caseRepository.GetDynamicCase(id);
         }
 
+        public bool IsCaseExist(int id)
+        {
+            return _caseRepository.IsCaseExists(id);
+        }
+
         // retrieve extended case form for case 
         public ExtendedCaseDataOverview GetCaseExtendedCaseForm(int caseSolutionId, int customerId, int caseId, string userGuid, int caseStateSecondaryId)
         {
@@ -667,7 +672,7 @@ namespace DH.Helpdesk.Services.Services
             return _caseRepository.GetMyCases(userId, count);
         }
 
-        public StateSecondary GetCaseSubStatus(int caseId)
+		public StateSecondary GetCaseSubStatus(int caseId)
         {
             return _caseRepository.GetCaseSubStatus(caseId);
         }

@@ -27,7 +27,34 @@
                 <div class="tab-content">
                     <div class="tab-pane tab-pane-border active" id="fragment-1">
                         @Html.Partial("AdvancedSearch/_SearchOverview", Model)
-                        <input type="submit" class="submit btn" value="@Translation.GetCoreTextTranslation("Sök")" id="btnSearch" />
+                        <div class="container">
+                            <div class="row">
+                                <div class="span6">
+                                    <input type="submit" class="submit btn" value="@Translation.GetCoreTextTranslation("Sök")" id="btnSearch" />
+                                </div>
+                            </div>
+                            <div class="row">&nbsp;</div>
+                            <div class="row">
+                                <div class="span6">
+                                    @Translation.GetCoreTextTranslation("Poster i sökresultat"): <span data-field="TotalAdvSearchCount">0</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="span6">
+                                    @if (Model.CaseSearchFilterData.filterMaxRows != null)
+                                    {
+                                        <select id="lstfilterMaxRows" name="lstfilterMaxRows" style="width: 70px" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")">
+                                            @foreach (var r in Model.CaseSearchFilterData.filterMaxRows)
+                                            {
+                                                var curId = int.Parse(r.Value);
+                                                <option value="@r.Value" @curId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.MaxRows)> @r.Name </option>
+                                            }
+                                        </select>
+                                        @Translation.GetCoreTextTranslation("poster per kund")
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="tab-content">
@@ -38,7 +65,6 @@
                                     <div class="loader">@Translation.GetCoreTextTranslation("Laddar...")</div>
                                 </div>
                             </div>
-                            <div>@Translation.GetCoreTextTranslation("Poster i sökresultat"): <span data-field="TotalAdvSearchCount">0</span></div>
                             <div class="customer-cases-area">
                                 @foreach (var customer in Model.AllCustomers)
                                 {

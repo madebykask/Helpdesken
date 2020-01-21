@@ -8,7 +8,7 @@
 
         public const string ChangeDate = "ChangeTime";
 
-        public const string RegistratedBy = "User_Id";
+        public const string RegisteredBy = "User_Id";
 
         public const string CaseType = "CaseType_Id";
 

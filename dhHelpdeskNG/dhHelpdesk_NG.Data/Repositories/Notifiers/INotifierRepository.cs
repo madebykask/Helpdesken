@@ -26,7 +26,7 @@ namespace DH.Helpdesk.Dal.Repositories.Notifiers
 
         List<ItemOverview> FindOverviewsByCustomerId(int customerId);
 
-        IQueryable<ComputerUser> Search(int customerId, string searchFor, int? categoryID = null, IList<int> departmentIds = null);
+        IQueryable<ComputerUser> Search(int customerId, string searchFor, int? categoryID = null, IList<int> departmentIds = null, bool exactSearch = false);
 
         SearchResult Search(SearchParameters parameters);
 

@@ -27,15 +27,24 @@
                     </tr>
                     <tr>
                         <td>
-                            @Html.ListBox("CsAvailable", Model.CsAvailable, new { style = "width: 314px; height: 100px" })
-
+                            <select id="CsAvailable" multiple="multiple" name="CsAvailable" style="width: 314px; height: 100px">
+                            @foreach(var customer in Model.CsAvailable)
+                            {
+                                <option value="@customer.Value" style="@(customer.Active ?  "" : "color: #ccc")">@customer.Text</option>
+                            }
+                            </select>
                         </td>
                         <td>
                             <input type="button" value="&gt;" id="addCs" class="btn" /><br />
                             <input type="button" value="&lt;" id="removeCs" class="btn" />
                         </td>
                         <td>
-                            @Html.ListBox("CsSelected", Model.CsSelected, new { style = "width: 314px; height: 100px" })
+                            <select id="CsSelected" multiple="multiple" name="CsSelected" style="width: 314px; height: 100px">
+                            @foreach(var customer in Model.CsSelected)
+                            {
+                                <option value="@customer.Value" style="@(customer.Active ?  "" : "color: #ccc")">@customer.Text</option>
+                            }
+                            </select>
                         </td>
                     </tr>
                 </table>
@@ -46,7 +55,13 @@
                 @Translation.GetCoreTextTranslation("Standardkund") *
             </td>
             <td>
-                @Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new { })
+                <select data-val="true" data-val-number="The field Customer_Id must be a number." data-val-required="Fältet Customer_Id krävs." id="User_Customer_Id" name="User.Customer_Id">
+                    <option value=""></option>
+                   @foreach (var customer in Model.CsSelected)
+                   {
+                     <option value="@customer.Value" style="@(customer.Active ?  "" : "color: #ccc")" @(Model.User.Customer_Id.ToString() == customer.Value ? "selected" : "")>@customer.Text</option>
+                   }
+                </select>
             </td>
         </tr>
         <tr>

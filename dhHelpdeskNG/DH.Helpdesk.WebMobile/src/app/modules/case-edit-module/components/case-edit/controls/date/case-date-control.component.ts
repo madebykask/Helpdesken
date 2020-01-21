@@ -5,6 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 import { DateTime } from 'luxon';
 import { TranslateService } from '@ngx-translate/core';
 import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
     selector: 'case-date-control',
@@ -58,9 +59,7 @@ import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
       this.initEvents();
     }
 
-    ngOnDestroy(): void {
-      this.onDestroy();
-    }
+    ngOnDestroy(): void {}
 
     private updateDisabledState() {
       this.control.disabled = this.isFormControlDisabled || this.disabled;
@@ -69,7 +68,7 @@ import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
     private initEvents() {
       // track disabled state in form
       this.formControl.statusChanges.pipe(
-        takeUntil(this.destroy$)
+        untilDestroyed(this)
       ).subscribe(e => {
         if (this.control.disabled !== this.isFormControlDisabled) {
           this.updateDisabledState();
@@ -77,7 +76,7 @@ import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
       });
 
       this.formControl.valueChanges.pipe(
-          takeUntil(this.destroy$)
+        untilDestroyed(this)
         ).subscribe((v: any) => {
           this.value = v;
         });

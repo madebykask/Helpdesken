@@ -4,19 +4,20 @@ import { Router } from '@angular/router';
 import { MbscListviewOptions } from '@mobiscroll/angular';
 import { SearchFilterService } from 'src/app/modules/case-overview-module/services/cases-overview/search-filter.service';
 import { AppStore, AppStoreKeys } from 'src/app/store';
-import { FavoriteFilterModel } from 'src/app/modules/case-overview-module/models/cases-overview/favorite-filter.model';
-import { BehaviorSubject, Observable, Subject, of, from } from 'rxjs';
-import { CaseStandardSearchFilters, CaseProgressFilter } from 'src/app/modules/case-overview-module/models/cases-overview/enums';
+import { FavoriteFilterModel, CustomerFavoriteFilterModel } from 'src/app/modules/case-overview-module/models/cases-overview/favorite-filter.model';
+import { BehaviorSubject, Subject, from } from 'rxjs';
+import { CaseProgressFilter } from 'src/app/modules/case-overview-module/models/cases-overview/enums';
 import { CasesOverviewFilter } from 'src/app/modules/case-overview-module/models/cases-overview/cases-overview-filter.model';
 import { CasesOverviewService } from 'src/app/modules/case-overview-module/services/cases-overview';
 import { CustomerApiService } from 'src/app/services/api/customer-api.service';
 import { LocalStorageService } from 'src/app/services/local-storage';
-import { CustomerModel } from 'src/app/models/customer/customer.model';
+import { CaseOverviewConstants } from 'src/app/modules/shared-module/constants';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 export class SearchFilterViewData {
   isLoading$ = new BehaviorSubject(true);
 
-  constructor(public id: number, public name: string, public count= 0) {
+  constructor(public id: string, public name: string, public customerId: number, public count= 0) {
   }
 
   setCountResult(val: number) {
@@ -31,9 +32,10 @@ export class SearchFilterViewData {
   styleUrls: ['./cases-status.component.scss']
 })
 export class CasesStatusComponent implements OnInit {
-  private destroy$ = new Subject<any>();
+  private selectedCustomerId: number;
 
   userFilters: SearchFilterViewData[] = [];
+  filters: CustomerFavoriteFilterModel[] = [];
 
   options: MbscListviewOptions = {
     fillAnimation: false,
@@ -43,42 +45,77 @@ export class CasesStatusComponent implements OnInit {
     select: 'off'
   };
 
-  customer$: Observable<CustomerModel>;
-
   constructor(private searchFilterService: SearchFilterService,
               private casesOverviewService: CasesOverviewService,
-              private customerApiService: CustomerApiService,
               private localStorageService: LocalStorageService,
               private appStore: AppStore,
               private router: Router) {
   }
 
   ngOnInit() {
-    const selectedCustomerId = +this.localStorageService.getCurrentUser().currentData.selectedCustomerId;
-    if (selectedCustomerId) {
-      this.customer$ = this.customerApiService.getCustomer(selectedCustomerId).pipe(share());
-    }
+    this.selectedCustomerId = this.localStorageService.getCurrentUser().currentData.selectedCustomerId;
 
     //load search filters
     this.loadSearchFilters();
   }
 
+  ngOnDestroy(): void { }
+
+  onItemTap(e: any, customerId: number) {
+    const customerFilters = this.customerFilters(customerId);
+    const userFilter = customerFilters[e.index];
+    if (userFilter) {
+      this.searchFilterService.saveFilterIdToState(userFilter.id);
+      this.router.navigateByUrl('/casesoverview');
+    }
+  }
+
+  goTo(url: string = null) {
+    this.router.navigateByUrl(url);
+  }
+
+  trackByFn(index, item: SearchFilterViewData) {
+    return item.id;
+  }
+
+  trackByFiltersFn(index, item: CustomerFavoriteFilterModel) {
+    return item.customerId;
+  }
+
+  customerFilters(customerId: number) {
+    return this.userFilters.filter(f => f.customerId === customerId);
+  }
+
   private loadSearchFilters() {
-    this.appStore.select<FavoriteFilterModel[]>(AppStoreKeys.FavoriteFilters).pipe(
-      takeUntil(this.destroy$),
+    this.appStore.select<CustomerFavoriteFilterModel[]>(AppStoreKeys.FavoriteFilters).pipe(
       distinctUntilChanged(),
       filter(Boolean), // aka new Boolean(val) to filter null values
-      switchMap((filters: FavoriteFilterModel[]) => {
+      switchMap((filters: CustomerFavoriteFilterModel[]) => {
+        if (!filters.length) {
+          return from([]);
+        }
         // build menu items
-        this.userFilters = filters.map(f => new SearchFilterViewData(f.id, f.name));
+        let tempFilters = new Array<SearchFilterViewData>();
+        // show first default customer
+        this.filters = filters.filter(cf => cf.customerId > 0 && cf.customerId === this.selectedCustomerId);
+        this.filters = this.filters.concat(filters.filter(cf => cf.customerId > 0 && cf.customerId !== this.selectedCustomerId));
+        this.filters.forEach(cf => {
+         tempFilters = tempFilters.concat(cf.favorites.map(f => new SearchFilterViewData(f.id, f.name, cf.customerId)));
+        });
+        this.userFilters = tempFilters;
+
         // return filters separately to run one by one
-        return from(filters);
+        return from(this.filters);
+      }),
+      switchMap((cf: CustomerFavoriteFilterModel) => {
+        return from(cf.favorites);
       }),
       //filter(f => f.id === -1),!! For DEBUG
-      delay(150)
-    ).subscribe((filterModel: FavoriteFilterModel) => {
+      delay(150),
+      untilDestroyed(this)
+    ).subscribe((ff: FavoriteFilterModel) => {
         //run search
-        this.runFilterSearch(filterModel);
+        this.runFilterSearch(ff);
     });
   }
 
@@ -87,7 +124,8 @@ export class CasesStatusComponent implements OnInit {
     const searchFilter = this.createSearchFilter(filterModel);
 
     this.casesOverviewService.searchCasesCount(searchFilter).pipe(
-      take(1)
+      take(1),
+      untilDestroyed(this)
     ).subscribe(res => {
       //console.log(`>>> search results for filter '${filterModel.id}' arrived: ${res}`);
       this.updateSearchFilterCount({ id: filterModel.id, itemsCount: res});
@@ -96,14 +134,18 @@ export class CasesStatusComponent implements OnInit {
 
   private createSearchFilter(filterModel: FavoriteFilterModel) {
     const filterData = new CasesOverviewFilter();
-    filterData.SearchInMyCasesOnly = filterModel.id === +CaseStandardSearchFilters.MyCases;
+    const isMyCases = filterModel.id.startsWith(CaseOverviewConstants.CaseOverviewCustomerPrefix);
+    filterData.SearchInMyCasesOnly = isMyCases;
     filterData.CaseProgress = CaseProgressFilter.CasesInProgress;
     // set filter params to run count search query only
     filterData.CountOnly = true;
     filterData.Page = 0;
     filterData.PageSize = 0;
+    filterData.CustomersIds = this.appStore.state.favFilters
+                                .filter(cf => cf.customerId > 0 && cf.favorites.some(f => f.id === filterModel.id))
+                                .map(f => f.customerId);
 
-    if (filterModel && filterModel.fields) {
+    if (!isMyCases && filterModel && filterModel.fields) {
       this.searchFilterService.applyFavoriteFilter(filterData, filterModel);
     }
     return filterData;
@@ -117,21 +159,5 @@ export class CasesStatusComponent implements OnInit {
         ff[0].setCountResult(res.itemsCount || 0);
       }
     }
-  }
-
-  onItemTap(e: any) {
-    const userFilter = this.userFilters[e.index];
-    if (userFilter) {
-      this.searchFilterService.saveFilterIdToState(userFilter.id);
-      this.router.navigateByUrl('/casesoverview');
-    }
-  }
-
-  goTo(url: string = null) {
-    this.router.navigateByUrl(url);
-  }
-
-  trackByFn(index, item: SearchFilterViewData) {
-    return item.id;
   }
 }

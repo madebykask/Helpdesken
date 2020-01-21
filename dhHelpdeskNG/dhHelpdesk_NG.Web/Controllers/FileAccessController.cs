@@ -41,8 +41,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public ActionResult LogFileAccess(int caseId, string fileName, CaseFileType type, int? logId = null)
         {
-            var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-            if (!disableLogFileView.Active)
+            if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
             {
                 var c = _caseService.GetCaseBasic(caseId);
                 var filePath = "";

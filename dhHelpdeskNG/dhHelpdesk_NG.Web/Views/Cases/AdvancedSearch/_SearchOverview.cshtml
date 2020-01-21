@@ -23,8 +23,12 @@
                                         class="chosen-select">
                                     @foreach (var c in Model.CaseSearchFilterData.filterCustomers)
                                     {
-                                        var customerId = c.Value.ToInt();
-                                        <option value="@customerId" @customerId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.Customer)>@c.Name</option>
+                                        if (c.Active)
+                                        {
+
+                                            var customerId = c.Value.ToInt();
+                                            <option value="@customerId" @customerId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.Customer) style="@(c.Active ? "" : "color: #ccc")">@c.Name</option>
+                                        }
                                     }
                                 </select>
                                 <select id="lstIncludedCustomers" name="lstIncludedCustomers" 
@@ -33,7 +37,7 @@
                                     @foreach (var c in Model.ExtendedCustomers)
                                     {
                                         var customerId = c.Value.ToInt();
-                                        <option value="@customerId" @customerId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.Customer)>@c.Name</option>
+                                        <option value="@customerId" @customerId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.Customer) style="@(c.Active ? "" : "color: #ccc")">@c.Name</option>
                                     }
                                 </select>
                             </td>
@@ -78,67 +82,6 @@
                             </select>
                         </td>
                     </tr>
-
-                    @if (Model.CaseSearchFilterData.filterMaxRows != null)
-                    {
-                        <tr>
-                            <td>@Translation.GetCoreTextTranslation("Visa")</td>
-                            <td>
-                                <select id="lstfilterMaxRows" name="lstfilterMaxRows" style="width:70px" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")">
-                                    @foreach (var r in Model.CaseSearchFilterData.filterMaxRows)
-                                    {
-                                        var curId = int.Parse(r.Value);
-                                        <option value="@r.Value" @curId.IdIsSelected(Model.CaseSearchFilterData.caseSearchFilter.MaxRows)> @r.Name </option>
-                                    }
-                                </select>
-                                @Translation.GetCoreTextTranslation("poster i sökresultat/Kund")
-                            </td>
-                        </tr>
-                    }
-                    <tr>
-                        <td>@Translation.GetCoreTextTranslation("Utökad sökning")</td>
-                        <td><input type="checkbox" name="@CaseFilterFields.IsExtendedSearch" id="@CaseFilterFields.IsExtendedSearch" value="true" /></td>
-                    </tr>
-                </table>
-            </div>
-            <div class="span6">
-                <table class="tableform">
-                    <tr>
-                        <td>@Translation.GetCoreTextTranslation("Anmälare")</td>
-                        <td>
-                            <input type="text" id="CaseInitiatorFilter" value="@Model.CaseSearchFilterData.CaseInitiatorFilter" name="CaseInitiatorFilter" />
-                            @if (Model.CaseSearchFilterData.IsAboutEnabled)
-                            {
-                                @Html.DropDownListFor(m => m.CaseSearchFilterData.InitiatorSearchScope, CaseInitiatorSearchScope.UserAndIsAbout.ToSelectListItems(), new { @class = "", id = "initiatorSearchScope" })
-                            }
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">@Translation.GetCoreTextTranslation("Ärendenummer")</td>
-                        <td class="span4">
-                            <input type="text" id="txtCaseNumberSearch" value="@Model.CaseSearchFilterData.caseSearchFilter.CaseNumber" name="txtCaseNumberSearch" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">@Translation.GetCoreTextTranslation("Rubrik")</td>
-                        <td class="span4">
-                            <input type="text" id="txtCaptionSearch" value="@Model.CaseSearchFilterData.caseSearchFilter.CaptionSearch" name="txtCaptionSearch" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">@Translation.GetCoreTextTranslation("Fritextfält")</td>
-                        <td class="span4">
-                            <input type="text" id="txtFreeTextSearch" value="@Model.CaseSearchFilterData.caseSearchFilter.FreeTextSearch" name="txtFreeTextSearch" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">@Translation.GetCoreTextTranslation("Bifogad fil")</td>
-                        <td class="span4">
-                            <div>
-                                @Html.CheckBoxFor(m => Model.CaseSearchFilterData.caseSearchFilter.SearchThruFiles, new { id = "chkSearchThruFiles", @class = "switchcheckbox" })
-                            </div>
-                        </td>
-                    </tr>
                     <tr class="date-block">
                         <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Model.CaseSearchFilterData.filterCustomerId)</td>
                         <td>
@@ -151,6 +94,50 @@
                         <td>
                             @Html.EditorFor(m => Model.CaseSearchFilterData.caseSearchFilter.CaseClosingDateStartFilter, "DatePicker", new { id = "AdvSearch_CaseClosingDateStartFilter", name = "CaseClosingDateStartFilter" })
                             @Html.EditorFor(m => Model.CaseSearchFilterData.caseSearchFilter.CaseClosingDateEndFilter, "DatePicker", new { id = "AdvSearch_CaseClosingDateEndFilter", name = "CaseClosingDateEndFilter" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>@Translation.GetCoreTextTranslation("Utökad sökning")</td>
+                        <td><input type="checkbox" name="@CaseFilterFields.IsExtendedSearch" id="@CaseFilterFields.IsExtendedSearch" value="true" /></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="span6">
+                <table class="tableform">
+                    <tr>
+                        <td class="span3">@Translation.GetCoreTextTranslation("Anmälare")</td>
+                        <td class="span3">
+                            <input type="text" id="CaseInitiatorFilter" value="@Model.CaseSearchFilterData.CaseInitiatorFilter" name="CaseInitiatorFilter" />
+                            @if (Model.CaseSearchFilterData.IsAboutEnabled)
+                            {
+                                @Html.DropDownListFor(m => m.CaseSearchFilterData.InitiatorSearchScope, CaseInitiatorSearchScope.UserAndIsAbout.ToSelectListItems(), new { @class = "", id = "initiatorSearchScope" })
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">@Translation.GetCoreTextTranslation("Ärendenummer")</td>
+                        <td class="span3">
+                            <input type="text" id="txtCaseNumberSearch" value="@Model.CaseSearchFilterData.caseSearchFilter.CaseNumber" name="txtCaseNumberSearch" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">@Translation.GetCoreTextTranslation("Rubrik")</td>
+                        <td class="span3">
+                            <input type="text" id="txtCaptionSearch" value="@Model.CaseSearchFilterData.caseSearchFilter.CaptionSearch" name="txtCaptionSearch" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">@Translation.GetCoreTextTranslation("Fritextfält")</td>
+                        <td class="span3">
+                            <input type="text" id="txtFreeTextSearch" value="@Model.CaseSearchFilterData.caseSearchFilter.FreeTextSearch" name="txtFreeTextSearch" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">@Translation.GetCoreTextTranslation("Filinnehåll")</td>
+                        <td class="span3">
+                            <div>
+                                @Html.CheckBoxFor(m => Model.CaseSearchFilterData.caseSearchFilter.SearchThruFiles, new { id = "chkSearchThruFiles", @class = "switchcheckbox" })
+                            </div>
                         </td>
                     </tr>
                 </table>

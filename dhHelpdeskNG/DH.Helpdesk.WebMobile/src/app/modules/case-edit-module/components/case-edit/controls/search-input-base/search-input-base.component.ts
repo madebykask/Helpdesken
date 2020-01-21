@@ -4,6 +4,7 @@ import { Subject, of } from 'rxjs';
 import { takeUntil, debounceTime, switchMap } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { BaseControl } from '../base-control';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 export abstract class SearchInputBaseComponent extends BaseControl<string> {
 
@@ -17,6 +18,7 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
   @ViewChild('select', { static: false }) select: MbscSelect;
 
   @Input() disabled = false;
+  @Input() protected customerId: number;
 
   selectDataItems: any = [];
 
@@ -128,9 +130,7 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
 
     // subscribe to notifier(user) search input
     this.searchSubject.asObservable().pipe(
-      takeUntil(this.destroy$),
       debounceTime(150),
-      //distinfieldanged(),
       switchMap((query: string) => {
         if (query && query.length > 1) {
           this.toggleProgress(true);
@@ -139,7 +139,8 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
         } else {
           return of(null);
         }
-      })
+      }),
+      untilDestroyed(this)
     ).subscribe((data: any[]) => {
       this.toggleProgress(false);
       if (data && data.length) {
@@ -169,7 +170,7 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
   private initEvents() {
     if (this.formControl) {
       this.formControl.statusChanges.pipe(
-        takeUntil(this.destroy$)
+        untilDestroyed(this)
       )
         .subscribe((e: any) => {
           if (this.searchInput.disabled !== this.isFormControlDisabled) {
@@ -212,6 +213,5 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
   }
 
   ngOnDestroy(): void {
-    this.onDestroy();
   }
 }

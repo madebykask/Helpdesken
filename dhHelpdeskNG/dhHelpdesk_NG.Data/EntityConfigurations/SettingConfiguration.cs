@@ -149,8 +149,9 @@
             this.Property(x => x.DefaultCaseTemplateId).IsRequired();
             this.Property(x => x.QuickLinkWGRestriction).IsRequired();
             this.Property(x => x.AllowMoveCaseToAnyCustomer).IsRequired();
+			this.Property(x => x.UseMobileRouting).IsRequired();
 
-            this.ToTable("tblsettings");
+			this.ToTable("tblsettings");
         }
     }
 }

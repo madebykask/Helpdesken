@@ -4,6 +4,10 @@ namespace DH.Helpdesk.BusinessData.Models.Shared.Output
 {
     public class SearchResult<T>
     {
+		public SearchResult(IList<T> t)
+		{
+			Items = t;
+		}
         public SearchResult()
         {
             Items = new List<T>();

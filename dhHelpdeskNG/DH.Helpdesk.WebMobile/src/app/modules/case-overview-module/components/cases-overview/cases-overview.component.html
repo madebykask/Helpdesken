@@ -25,9 +25,12 @@
                         [selectedSortFieldOrder]="selectedSortFieldOrder" 
                         [sortFields]="caseSortFields"
                         (sortingChanged)="processSortingChanged($event)"></cases-sort-menu>
-                  </ng-container>                  
+                  </ng-container>
                 </div>
-                <div class="mbsc-col caption bold">{{ headerText }}</div>
+                <div class="mbsc-col caption">
+                  <div class="bold">{{ headerText }}</div>
+                  <div *ngIf="customerText" style="font-size: smaller;">{{ customerText }}</div>
+                </div>
                 <div class="mbsc-col-sm-auto">
                     <div class="mbsc-ic mbsc-ic-fa-search" (click)="showSearchPanel=true"></div>
                 </div>
@@ -45,7 +48,7 @@
                   <div class="mbsc-grid mbsc-margin mbsc-txt-muted mbsc-bold mbsc-txt-s">
                     <div class="mbsc-row mbsc-no-padding">
                       <div class="mbsc-col-6 case-number">
-                          #{{ (case.columns | getByKey: 'CaseNumber') || '&nbsp;' }}
+                          #{{ (case.columns | getByKey: 'CaseNumber') || '&nbsp;' }} <ng-container *ngIf="case.showCustomerName">{{ (case.columns | getByKey: 'Customer_Id') || '&nbsp;' }}</ng-container>
                       </div>
                       <div class="mbsc-col-6 time">
                           <span><i class="mbsc-ic mbsc-ic-fa-clock-o"></i> {{ (case.columns | getByKey: 'ChangeTime' | dateTimeFormat) || '&nbsp;'}}</span>
@@ -60,6 +63,13 @@
                           <div class="mbsc-col mbsc-bold ellipsis">
                               {{ (case.columns | getByKey: 'Caption') || '&nbsp;' }}
                           </div>
+                      </div>
+                      <div class="mbsc-row">
+                          <div class="mbsc-col secondary-info ellipsis">
+                            {{ (case.columns | getByKey: 'Persons_Name') || '' }}
+                            <ng-container *ngIf="((case.columns | caseHasValue: 'Persons_Name') && (case.columns | caseHasValue: 'Department_Id'))"> - </ng-container>
+                            {{ (case.columns | getByKey: 'Department_Id') || '' }}
+                        </div>
                       </div>
                       <div class="mbsc-row">
                           <div class="mbsc-col">

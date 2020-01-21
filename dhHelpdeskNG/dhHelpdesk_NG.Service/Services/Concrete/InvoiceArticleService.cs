@@ -252,6 +252,13 @@
         public ProcessResult DoInvoiceWork(CaseInvoice[] caseInvoiceData, int caseId, decimal caseNumber, int customerId, int userId, int? orderIdToXML)
         {            
 
+			// Only one invoice data per case
+			if (caseInvoiceData.Any(o => o.IsNew()))
+			{
+				var invoices = _caseInvoiceArticleRepository.GetCaseInvoices(caseId);
+				if (invoices.Any())
+					throw new InvalidOperationException("A invoice already exists for the case");
+			}
             var newOrderId = SaveCaseInvoices(caseInvoiceData, caseId, userId);
             
             if (orderIdToXML.HasValue)

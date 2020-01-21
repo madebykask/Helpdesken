@@ -1438,7 +1438,7 @@ table th.thpointer {
 }
 
     .box-main .accordion {
-        margin-bottom: 20px;
+        margin-bottom: 0;
     }
 
     .box-main .accordion-group {
@@ -1807,8 +1807,8 @@ table th.thpointer {
 
 .case-overview.page .table-cases,
 .advancedSearch-overview.page .table-cases,
-.inventory-overview .table-cases
-{
+.inventory-overview .table-cases,
+.table-fix {
     table-layout: fixed !important;
 }
 
@@ -4153,4 +4153,34 @@ div.chosen-container.chosen-container-single.error .chosen-single {
 #feedback_notes_popup .fb_content {
     overflow-y: auto;
     max-height: 60vh;
+}
+
+#statisticsData table {
+    width: 100%;
+    font-weight: bolder;
+}
+
+/*div#statisticsData {
+    padding-left: 20px;
+}*/
+
+#statisticsData table tr td {
+    width: 25%
+}
+
+#statisticsData table tr:nth-child(2) td{
+    padding-bottom: 5px;
+}
+
+#statisticsData table tr:nth-child(odd) td {
+    font-size: smaller;
+    color: #999;
+}
+
+#statisticsData table tr:nth-child(even) td {
+    font-size: x-large;
+}
+
+.portlet-content .more {
+    text-align: right;
 }

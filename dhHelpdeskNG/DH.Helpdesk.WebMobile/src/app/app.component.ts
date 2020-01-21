@@ -11,8 +11,8 @@ import { SearchFilterService } from './modules/case-overview-module/services/cas
 import { AppStore, AppStoreKeys } from './store';
 import { CurrentUser } from './models';
 import { takeUntil, take } from 'rxjs/operators';
-import { CaseTemplateModel } from './models/caseTemplate/case-template.model';
-import { FavoriteFilterModel } from './modules/case-overview-module/models/cases-overview/favorite-filter.model';
+import { CaseTemplateModel, CustomerCaseTemplateModel } from './models/caseTemplate/case-template.model';
+import { CustomerFavoriteFilterModel } from './modules/case-overview-module/models/cases-overview/favorite-filter.model';
 
 @Component({
   selector: 'app-root',
@@ -73,8 +73,9 @@ export class AppComponent implements OnInit, OnDestroy {
   private loadTemplates() {
     if (this.userSettingsService.getUserData().createCasePermission) {
       this.caseTemplateService.loadTemplates().pipe(
-       take(1)
-     ).subscribe((templates: CaseTemplateModel[]) => {
+       take(1),
+       takeUntil(this.destroy$)
+     ).subscribe((templates: CustomerCaseTemplateModel[]) => {
        this.appStore.set(AppStoreKeys.Templates, templates);
      });
    }
@@ -83,8 +84,9 @@ export class AppComponent implements OnInit, OnDestroy {
   // load search filters
   private loadSearchFilters() {
     this.searchFilterService.loadFavoriteFilters().pipe(
-      take(1)
-    ).subscribe((filters: FavoriteFilterModel[]) => {
+      take(1),
+      takeUntil(this.destroy$)
+    ).subscribe((filters: CustomerFavoriteFilterModel[]) => {
       this.appStore.set(AppStoreKeys.FavoriteFilters, filters);
     });
   }

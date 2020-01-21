@@ -106,7 +106,7 @@ namespace DH.Helpdesk.EmailEngine.Library
                             mailMessage.CC.Add(new MailAddress(address));
                         }
                     }
-                    else if (!string.IsNullOrWhiteSpace(email.Bcc))
+                    if (!string.IsNullOrWhiteSpace(email.Bcc))
                     {
                         var addresses = email.Bcc.Split(',');
                         foreach (var address in addresses)
@@ -114,7 +114,7 @@ namespace DH.Helpdesk.EmailEngine.Library
                             mailMessage.Bcc.Add(new MailAddress(address));
                         }
                     }
-                    else
+                    if (!string.IsNullOrWhiteSpace(email.EmailAddress))
                     {
                         var addresses = email.EmailAddress.Split(',');
                         foreach (var address in addresses)

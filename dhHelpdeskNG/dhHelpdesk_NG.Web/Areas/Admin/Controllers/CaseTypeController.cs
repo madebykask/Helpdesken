@@ -125,18 +125,19 @@
 
         private CaseTypeInputViewModel CreateInputViewModel(CaseType caseType, Customer customer)
         {
-            var parentCount = GetCaseTypeParentsCount(caseType);
+            var parentCount = GetCaseTypeParentsCount(caseType);        
 
             var model = new CaseTypeInputViewModel
             {
                 CanAddSubCaseType = (parentCount < MaxCaseTpyeLevels),
                 CaseType = caseType,
                 Customer = customer,
-                SystemOwners = _userService.GetAdministrators(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                SystemOwners = _userService.GetCustomerActiveUsers(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.SurName + " " + x.FirstName,
                     Value = x.Id.ToString()
                 }).ToList(),
+
                 WorkingGroups = _workingGroupService.GetAllWorkingGroupsForCustomer(customer.Id, true)
             };
 

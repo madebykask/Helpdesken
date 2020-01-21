@@ -48,7 +48,7 @@ export class ComponentCommService {
             commonMethods.areEqualsDeep(lastValue, controlNewValue) ||
             (commonMethods.isUndefinedNullOrEmpty(lastValue) && commonMethods.isUndefinedNullOrEmpty(controlNewValue));
 
-        if (!areEqual) {
+        if (!areEqual || !params.ignoreEqual) {
             this.logService.infoFormatted('[VALUE_CHANGED_EVENT] Raising digest valueChanged event! Control: {0}, LastValue:{1}, ControlNewValue: {2}',
              params.control.id, lastValue, controlNewValue);
             this.controlValueChanged.next(params);
@@ -90,7 +90,7 @@ export class ComponentCommService {
 
 export class ControlValueChangedParams {
     constructor(public control: BaseControlTemplateModel, public formControl: AbstractControl,
-      public value: any, public formModel: FieldModelBase) {
+      public value: any, public formModel: FieldModelBase, public ignoreEqual = true) {
     }
 }
 
@@ -115,6 +115,6 @@ export class AddSectionInstanceParams {
 }
 
 export class DeleteSectionInstanceParams {
-    constructor(public index:number, public sectionInstance: SectionInstanceModel) {
+    constructor(public index: number, public sectionInstance: SectionInstanceModel) {
     }
 }

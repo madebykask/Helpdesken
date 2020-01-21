@@ -22,7 +22,7 @@ namespace DH.Helpdesk.Web.Controllers
     public partial class CasesController
     {
         [System.Web.Http.HttpGet]
-        public ActionResult AdvancedSearch(bool? clearFilters = false, bool doSearchAtBegining = false, bool isExtSearch = false)
+        public ActionResult AdvancedSearch(bool? clearFilters = false, bool doSearchAtBegining = false, bool isExtSearch = false, bool currentUserAdmin = false)
         {
             if (SessionFacade.CurrentUser == null)
             {
@@ -43,7 +43,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var userCustomers =
                 _userService.GetUserProfileCustomersSettings(SessionFacade.CurrentUser.Id)
-                    .Select(c => new ItemOverview(c.CustomerName, c.CustomerId.ToString()))
+                    .Select(c => new ItemOverview(c.CustomerName, c.CustomerId.ToString(), c.Active))
                     .OrderBy(c => c.Name).ToList();
 
             model.UserCustomers = userCustomers;
@@ -63,6 +63,12 @@ namespace DH.Helpdesk.Web.Controllers
             else
             {
                 advancedSearchModel = SessionFacade.CurrentAdvancedSearch;
+            }
+
+            if (currentUserAdmin)
+            {
+                advancedSearchModel.CaseSearchFilter.UserPerformer = currentUserId.ToString();
+                advancedSearchModel.CaseSearchFilter.Customer = "";
             }
 
             model.CaseSearchFilterData =
@@ -89,9 +95,9 @@ namespace DH.Helpdesk.Web.Controllers
             model.DoSearchAtBegining = doSearchAtBegining;
             model.IsExtSearch = isExtSearch;
 
-            var useNewAdvancedSearch = _featureToggleService.Get(FeatureToggleTypes.NEW_ADVANCED_CASE_SEARCH);
+            var useOldAdvancedSearch = _featureToggleService.Get(FeatureToggleTypes.USE_DEPRICATED_ADVANCED_CASE_SEARCH);
             
-            return View(useNewAdvancedSearch.Active ? "AdvancedSearch" : "AdvancedSearch/Index", model);
+            return View(!useOldAdvancedSearch.Active ? "AdvancedSearch" : "AdvancedSearch/Index", model);
         }
 
         [HttpGet]
@@ -185,7 +191,7 @@ namespace DH.Helpdesk.Web.Controllers
                             searchCustomerId,
                             currentCustomerId,
                             currentUser,
-                            extendedCustomers);
+                            extendedCustomers).Data;
 
                     res.Add(new Tuple<List<Dictionary<string, object>>, GridSettingsModel>(sr, gridSettings));
                 }
@@ -203,7 +209,7 @@ namespace DH.Helpdesk.Web.Controllers
                         gridSettings, 
                         searchCustomerId,
                         currentCustomerId,
-                        SessionFacade.CurrentUser);
+                        SessionFacade.CurrentUser).Data;
 
                 res.Add(new Tuple<List<Dictionary<string, object>>, GridSettingsModel>(sr, gridSettings));
             }
@@ -269,11 +275,15 @@ namespace DH.Helpdesk.Web.Controllers
                 filterCustomerId = cusId
             };
 
-            // Case #53981
-            fd.AvailablePerformersList =
-                _userService.GetAllPerformers(cusId).MapToCustomSelectList(fd.caseSearchFilter.UserPerformer, fd.customerSetting);
+			// Case #53981
+			var performers = _userService.GetAllPerformers(cusId);
+			var notAssigned = ObjectExtensions.notAssignedPerformer();
+			performers.Insert(0, new Domain.User { Id = notAssigned.Id, FirstName = notAssigned.FirstName, SurName = notAssigned.SurName });
 
-            if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserPerformer))
+			fd.AvailablePerformersList = performers.MapToCustomSelectList(fd.caseSearchFilter.UserPerformer, fd.customerSetting);
+
+
+			if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserPerformer))
             {
                 fd.lstfilterPerformer = fd.caseSearchFilter.UserPerformer.Split(',').Select(int.Parse).ToArray();
             }
@@ -303,7 +313,9 @@ namespace DH.Helpdesk.Web.Controllers
             fd.filterWorkingGroup.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
 
             //Sub status            
-            fd.filterStateSecondary = _stateSecondaryService.GetStateSecondaries(cusId);
+			var stateSecondaries = _stateSecondaryService.GetStateSecondaries(cusId);
+			stateSecondaries.Insert(0, ObjectExtensions.notAssignedStateSecondary());
+			fd.filterStateSecondary = stateSecondaries;
             fd.filterMaxRows = GetMaxRowsFilter();
 
             return fd;
@@ -343,29 +355,38 @@ namespace DH.Helpdesk.Web.Controllers
             if (HasField(customerfieldSettings, GlobalEnums.TranslationCaseFields.Department_Id))
             {
                 const bool IsTakeOnlyActive = false;
-                specificFilter.DepartmentList = this._departmentService.GetDepartmentsByUserPermissions(
-                    userId,
-                    customerId,
-                    IsTakeOnlyActive);
-                if (!specificFilter.DepartmentList.Any())
+
+				var departments = this._departmentService.GetDepartmentsByUserPermissions(
+					userId,
+					customerId,
+					IsTakeOnlyActive);
+                if (!departments.Any())
                 {
-                    specificFilter.DepartmentList =
+                    departments =
                         this._departmentService.GetDepartments(customerId, ActivationStatus.All)
                             .ToList();
                 }
 
                 if (customerSetting != null && customerSetting.ShowOUsOnDepartmentFilter != 0)
-                    specificFilter.DepartmentList = AddOrganizationUnitsToDepartments(specificFilter.DepartmentList);
-            }
+                    departments = AddOrganizationUnitsToDepartments(departments);
+
+				departments.Insert(0, ObjectExtensions.notAssignedDepartment());
+				specificFilter.DepartmentList = departments;
+
+			}
 
             if (HasField(customerfieldSettings, GlobalEnums.TranslationCaseFields.StateSecondary_Id))
             {
-                specificFilter.StateSecondaryList = this._stateSecondaryService.GetStateSecondaries(customerId);
+				var stateSecondaries = this._stateSecondaryService.GetStateSecondaries(customerId);
+				stateSecondaries.Insert(0, ObjectExtensions.notAssignedStateSecondary());
+				specificFilter.StateSecondaryList = stateSecondaries;
             }
 
             if (HasField(customerfieldSettings, GlobalEnums.TranslationCaseFields.Priority_Id))
             {
-                specificFilter.PriorityList = this._priorityService.GetPriorities(customerId);
+				var priorities = this._priorityService.GetPriorities(customerId);
+				priorities.Insert(0, ObjectExtensions.notAssignedPriority());
+				specificFilter.PriorityList = priorities;
             }
 
             if (HasField(customerfieldSettings, GlobalEnums.TranslationCaseFields.ClosingReason))

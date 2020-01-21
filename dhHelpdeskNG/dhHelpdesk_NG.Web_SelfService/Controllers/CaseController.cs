@@ -225,8 +225,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                 caseId = _caseService.GetCaseIdByEmailGUID(guid);
                 if (caseId == 0)
                 {
-                    ErrorGenerator.MakeError("Link is not valid!");
-                    return RedirectToAction("Index", "Error");
+                    TempData["NotFound"] = "Link is not valid!";
+                    return View(new CaseOverviewModel());
                 }
 
                 // open extended case by guid
@@ -259,8 +259,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             var currentCase = _caseService.GetCaseById(caseId);
             if (currentCase == null)
             {
-                ErrorGenerator.MakeError("Case not found!");
-                return RedirectToAction("Index", "Error");
+                TempData["NotFound"] = "Case not found!";
+                return View(new CaseOverviewModel());
             }
 
             //check if case is among customer cases only if its not anonymous access and not opened via link in email
@@ -509,6 +509,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             //return url after save
             ViewBag.ReturnUrl = Url.Action("ExtendedCasePublic", new { id });
+            ViewBag.caseEmailGuid = id;
 
             return View("ExtendedCase", model);
         }
@@ -811,6 +812,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var caseFieldSetting = _caseFieldSettingService.ListToShowOnCasePage(customerId, SessionFacade.CurrentLanguageId)
                                                           .Where(c => c.ShowExternal == 1)
                                                           .ToList();
+            
             var fieldsVisibility = new
             {
                 Name = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()),
@@ -819,7 +821,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 Department = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Department_Id.ToString()),
                 UserCode = caseFieldSetting.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.UserCode.ToString())
             };
-            var result = _computerService.SearchComputerUsers(customerId, query);
+            var result = _computerService.SearchComputerUsers(customerId, query, null, null, !SessionFacade.CurrentCustomer.UseInitiatorAutocomplete);
             return Json(new { searchKey = searchKey, result = result, fieldsVisibility = fieldsVisibility });
         }
 
@@ -976,7 +978,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             var isAnonymousMode = ConfigurationService.AppSettings.LoginMode == LoginMode.Anonymous;
-            if (!isAnonymousMode && caseId.HasValue && !UserHasAccessToCase(caseModel))
+            var hasAccess = UserHasAccessToCase(caseModel);
+            if (!isAnonymousMode && caseId.HasValue && !hasAccess)
             {
                 ErrorGenerator.MakeError("Case not found among your cases!");
                 return null;
@@ -1117,8 +1120,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 var paths = new List<KeyValuePair<CaseFileDto, string>>();
                 _caseFileService.AddFiles(newCaseFiles, paths);
 
-                var disableLogFileView = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-                if (!disableLogFileView.Active)
+                if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
                 {
                     foreach (var file in paths)
                     {
@@ -1360,8 +1362,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 				var paths = new List<KeyValuePair<CaseLogFileDto, string>>();
 				_logFileService.AddFiles(newLogFiles, paths);
 
-				var disableLogFileView = _featureToggleService.Get(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE);
-				if (!disableLogFileView.Active)
+				if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
 				{
 					foreach (var path in paths)
 					{

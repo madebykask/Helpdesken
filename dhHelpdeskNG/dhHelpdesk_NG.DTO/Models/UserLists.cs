@@ -27,7 +27,8 @@ namespace DH.Helpdesk.BusinessData.Models
         public bool IsActive { get; set; }
 
         public int CustomerId { get; set; }
-    }
+		public bool CustomerActive { get; set; }
+	}
 
     public class LoggedOnUsersOnIndexPage
     {

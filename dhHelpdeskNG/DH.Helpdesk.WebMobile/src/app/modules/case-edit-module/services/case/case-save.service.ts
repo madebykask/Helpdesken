@@ -101,7 +101,7 @@ export class CaseSaveService {
     model.closingReason = this.getNumericValue(form, CaseFieldsNames.ClosingReason);
     model.finishingDate = this.getDateValue(form, CaseFieldsNames.FinishingDate);
 
-    return this.caseApiService.saveCaseData(model);
+    return this.caseApiService.saveCaseData(model, caseInputData.customerId);
   }
 
   private getNumericValue(form: CaseFormGroup, fieldName: string): number {

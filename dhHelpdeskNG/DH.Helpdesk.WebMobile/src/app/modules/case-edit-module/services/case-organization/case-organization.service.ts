@@ -24,43 +24,43 @@ export class CaseOrganizationService {
         private stateSecondariesService: StateSecondariesService) {
     }
 
-    getRegions() {
-        return this.regionService.getRegions();
+    getRegions(customerId?: number) {
+        return this.regionService.getRegions(customerId);
     }
 
-    getDepartments(regionId?: number) {
-        return this.departmentService.getDepartmentsByRegion(regionId);
+    getDepartments(regionId?: number, customerId?: number) {
+        return this.departmentService.getDepartmentsByRegion(regionId, customerId);
     }
 
-    getOUs(departmentId?: number) {
-        return this.oUsService.getOUsByDepartment(departmentId);
+    getOUs(departmentId?: number, customerId?: number) {
+        return this.oUsService.getOUsByDepartment(departmentId, customerId);
     }
 
-    getCaseTypes() {
-        return this.caseTypesService.getCaseTypes();
+    getCaseTypes(customerId?: number) {
+        return this.caseTypesService.getCaseTypes(customerId);
     }
 
-    getProductAreas(caseTypeId?: number, includeId?: number) {
-        return this.productAreasService.getProductAreas(caseTypeId, includeId);
+    getProductAreas(caseTypeId?: number, includeId?: number, customerId?: number) {
+        return this.productAreasService.getProductAreas(caseTypeId, includeId, customerId);
     }
 
-    getCategories() {
-        return this.categoriesService.getCategories();
+    getCategories(customerId?: number) {
+        return this.categoriesService.getCategories(customerId);
     }
 
-    getClosingReasons() {
-        return this.closingReasonsService.getClosingReasons();
+    getClosingReasons(customerId?: number) {
+        return this.closingReasonsService.getClosingReasons(customerId);
     }
 
-    getPerformers(performerUserId?: number, workingGroupId?: number) {
-      return this.perfomersService.getPerformers(performerUserId, workingGroupId);
+    getPerformers(performerUserId?: number, workingGroupId?: number, customerId?: number) {
+      return this.perfomersService.getPerformers(performerUserId, workingGroupId, customerId);
     }
 
-    getWorkingGroups() {
-      return this.workingGroupsService.getWorkingGroups();
+    getWorkingGroups(customerId?: number) {
+      return this.workingGroupsService.getWorkingGroups(customerId);
     }
 
-    getStateSecondaries() {
-      return this.stateSecondariesService.getStateSecondaries();
+    getStateSecondaries(customerId?: number) {
+      return this.stateSecondariesService.getStateSecondaries(customerId);
     }
 }

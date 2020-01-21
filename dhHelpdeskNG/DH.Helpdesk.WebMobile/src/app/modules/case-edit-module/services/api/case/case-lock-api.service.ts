@@ -13,37 +13,37 @@ export class CaseLockApiService extends HttpApiServiceBase {
     super(http, localStorageService);
   }
 
-  acquireCaseLock(caseId: number, sessionId: string): Observable<CaseLockModel> {
+  acquireCaseLock(caseId: number, sessionId: string, customerId: number): Observable<CaseLockModel> {
     const data = {
         caseId: caseId,
         sessionId: sessionId
     };
-    const requestUrl = this.buildResourseUrl('/api/case/lock', null, true, false);
+    const requestUrl = this.buildResourseUrl('/api/case/lock', { cid: customerId }, false, false);
     return this.postJson<CaseLockModel>(requestUrl, data).pipe(
         take(1),
         catchError((e) => throwError(e))
     );
   }
 
-  reExtendedCaseLock(caseId: number, lockGuid: string, extendValue: number): Observable<Boolean> {
+  reExtendedCaseLock(caseId: number, lockGuid: string, extendValue: number, customerId: number): Observable<Boolean> {
       const data = {
           caseId: caseId,
           lockGuid : lockGuid,
           extendValue: extendValue
       };
-      const requestUrl = this.buildResourseUrl('/api/case/extendlock', null, true, false);
+      const requestUrl = this.buildResourseUrl('/api/case/extendlock', { cid: customerId }, false, false);
       return this.postJson<Boolean>(requestUrl, data).pipe(
           take(1),
           map((res: Boolean) => res)
       );
   }
 
-  unLockCase(caseId: number, lockGuid: string): Observable<Boolean> {
+  unLockCase(caseId: number, lockGuid: string, customerId: number): Observable<Boolean> {
       const data = {
         caseId: caseId,
         lockGuid: lockGuid
       };
-      const requestUrl = this.buildResourseUrl('/api/case/unlock', null, true, false);
+      const requestUrl = this.buildResourseUrl('/api/case/unlock', { cid: customerId }, false, false);
       return this.postJson<Boolean>(requestUrl, data).pipe(
           take(1),
           map((res: Boolean) => res)

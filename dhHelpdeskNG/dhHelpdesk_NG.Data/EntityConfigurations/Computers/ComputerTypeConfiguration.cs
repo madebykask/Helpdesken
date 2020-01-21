@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Computers
                 .HasForeignKey(x => x.Customer_Id)
                 .WillCascadeOnDelete(false);
             
-            this.Property(x => x.Name).HasColumnName("ComputerType").IsRequired().HasMaxLength(20);
+            this.Property(x => x.Name).HasColumnName("ComputerType").IsRequired().HasMaxLength(60);
             this.Property(x => x.ComputerTypeDescription).IsRequired().HasMaxLength(50);
 
             this.Property(x => x.CreatedDate).IsRequired();

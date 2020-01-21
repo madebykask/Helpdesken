@@ -16,7 +16,7 @@ namespace DH.Helpdesk.Services.Services
 
         int AddCircular(CircularForInsert businessModel);
 
-        void UpdateCircular(CircularForUpdate businessModel);
+        void UpdateCircular(CircularForUpdate businessModel, List<int> caseIds = null);
 
         CircularForEdit GetById(int id);
 
@@ -57,11 +57,16 @@ namespace DH.Helpdesk.Services.Services
         int SaveAnswers(ParticipantForInsert businessModel);
 
 	    List<BusinessLogic.MapperData.Participant> GetNotAnsweredParticipants(int circularId);
+        BusinessLogic.MapperData.Participant GetNotAnsweredParticipant(int circularId, int caseId);
 
         void SetStatus(int circularId, CircularStates circularState);
         void UpdateParticipantSendDate(Guid participantGuid, DateTime operationDate);
         int GetCircularIdByQuestionnaireId(int questionaireId);
         void SaveFeedbackNote(int questionId, string noteText);
         List<string> GetCircularExtraEmails(int circularId);
+
+		void AddCaseToCircular(int circularID, int caseID);
+
+        bool HasCase(int dbCircularId, int caseId);
     }
 }

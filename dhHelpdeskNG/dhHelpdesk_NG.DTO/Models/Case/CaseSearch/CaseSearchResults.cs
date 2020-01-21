@@ -23,7 +23,8 @@
 
 
         public ExtendedSearchInfo ExtendedSearchInfo { get; set; }
-    }
+		public bool ShowCustomerName { get; set; }
+	}
 
 
 

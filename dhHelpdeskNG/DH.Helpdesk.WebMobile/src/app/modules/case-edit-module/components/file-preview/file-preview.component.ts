@@ -60,7 +60,8 @@ export class FilePreviewComponent implements OnInit {
       // at the moment there's only one way of creating new cases - via new template page
       if (queryParamMap.has('templateId')) {
         const templateId = +queryParamMap.get('templateId');
-        this.router.navigate(['/case/template', templateId]);
+        const templateCid = +queryParamMap.get('templateCid');
+        this.router.navigate(['/case/template', templateCid, templateId]);
       } else {
         this.router.navigate(['/case', paramMap.get('caseKey')]);
       }
@@ -73,7 +74,7 @@ export class FilePreviewComponent implements OnInit {
   }
 
   private updatePreviewHeight() {
-    this.previewHeight = this.windowWrapper.nativeWindow.innerHeight - 44; //footer menu width
+    this.previewHeight = this.windowWrapper.nativeWindow.innerHeight - 45; //footer menu width
   }
 
 }

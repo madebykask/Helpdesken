@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Questionnaire
+﻿using DH.Helpdesk.Common.Tools;
+
+namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Questionnaire
 {
     using System;
     using System.Collections.Generic;
@@ -22,10 +24,11 @@
             this IQueryable<QuestionnaireQuestionResultEntity> query,
             DateTime? dateTime)
         {
-            if (dateTime.HasValue)
-            {
-                query = query.Where(x => x.QuestionnaireResult.QuestionnaireCircularPart.QuestionnaireCircular.CreatedDate >= dateTime);
-            }
+            if (!dateTime.HasValue)
+                return query;
+
+            dateTime = dateTime.GetStartOfDay();
+            query = query.Where(x => x.QuestionnaireResult.QuestionnaireCircularPart.QuestionnaireCircular.CreatedDate >= dateTime);
 
             return query;
         }
@@ -35,12 +38,10 @@
             DateTime? dateTime)
         {
             if (!dateTime.HasValue)
-            {
                 return query;
-            }
 
-            DateTime time = dateTime.Value.AddHours(24);
-            query = query.Where(x => x.QuestionnaireResult.QuestionnaireCircularPart.QuestionnaireCircular.CreatedDate <= time);
+            dateTime = dateTime.GetEndOfDay();
+            query = query.Where(x => x.QuestionnaireResult.QuestionnaireCircularPart.QuestionnaireCircular.CreatedDate <= dateTime);
 
             return query;
         }
@@ -67,10 +68,11 @@
             this IQueryable<QuestionnaireQuestionResultEntity> query,
             DateTime? dateTime)
         {
-            if (dateTime.HasValue)
-            {
-                query = query.Where(x => x.QuestionnaireResult.CreatedDate >= dateTime);
-            }
+            if (!dateTime.HasValue)
+                return query;
+
+            dateTime = dateTime.GetStartOfDay();
+            query = query.Where(x => x.QuestionnaireResult.CreatedDate >= dateTime);
 
             return query;
         }
@@ -80,12 +82,10 @@
             DateTime? dateTime)
         {
             if (!dateTime.HasValue)
-            {
                 return query;
-            }
 
-            DateTime time = dateTime.Value.AddHours(24);
-            query = query.Where(x => x.QuestionnaireResult.CreatedDate <= time);
+            dateTime = dateTime.GetEndOfDay();
+            query = query.Where(x => x.QuestionnaireResult.CreatedDate <= dateTime);
 
             return query;
         }

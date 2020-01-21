@@ -1,11 +1,13 @@
 import { Component, Input, ViewChild, Renderer2, ElementRef } from '@angular/core';
 import { BaseControl } from '../base-control';
-import { MultiLevelOptionItem } from 'src/app/modules/shared-module/models';
-import { takeUntil, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { MbscSelectOptions, MbscSelect } from '@mobiscroll/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { CommunicationService, CaseFieldValueChangedEvent, Channels } from 'src/app/services/communication';
+import { MultiLevelOptionItem } from 'src/app/modules/shared-module/models';
+import { OptionsHelper } from 'src/app/helpers/options-helper';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
     selector: 'case-multi-dropdown-control',
@@ -69,7 +71,7 @@ import { CommunicationService, CaseFieldValueChangedEvent, Channels } from 'src/
       },
       onItemTap: (event, inst) => {
         if (event.value != null) {
-          const chain = this.getOptionsChain(event.value);
+          const chain = this.dataSourceOptionsHelper.getOptionsChain(this.dataSource.value, event.value);
           if (this.hasChilds(chain, chain.length - 1)) {
             const data = this.getNextData(event.value);
             this.refreshData(inst, data);
@@ -94,7 +96,8 @@ import { CommunicationService, CaseFieldValueChangedEvent, Channels } from 'src/
     constructor(private ngxTranslateService: TranslateService,
        private commService: CommunicationService,
        private renderer: Renderer2,
-       private elem: ElementRef) {
+       private elem: ElementRef,
+       private dataSourceOptionsHelper: OptionsHelper) {
       super();
     }
 
@@ -111,12 +114,15 @@ import { CommunicationService, CaseFieldValueChangedEvent, Channels } from 'src/
     }
 
     ngOnDestroy(): void {
-      this.onDestroy();
     }
 
     public get getHeader(): string {
       const defaultValue = '';
       return this.formControl ? this.formControl.label || defaultValue : defaultValue;
+    }
+
+    public openSelect() {
+      this.select.instance.show();
     }
 
     private refreshData(inst, data) {
@@ -127,20 +133,16 @@ import { CommunicationService, CaseFieldValueChangedEvent, Channels } from 'src/
       }
     }
 
-    public openSelect() {
-      this.select.instance.show();
-    }
-
     private setText(value?: number) {
-      this.text = this.getTextChain(value);
+      this.text = this.dataSourceOptionsHelper.getTextChain(this.dataSource.value, value);
     }
 
     private getNextData(value?: number) {
-      if (this.dataSource == null || this.dataSource.value.length === 0) return [];
+      if (this.dataSource == null || this.dataSource.value.length === 0) { return []; }
 
       let tempDataSource = this.dataSource.value;
       if (value != null) {
-        const chain = this.getOptionsChain(value);
+        const chain = this.dataSourceOptionsHelper.getOptionsChain(this.dataSource.value, value);
         if (this.hasChilds(chain, chain.length - 1)) {
           tempDataSource = chain[chain.length - 1].childs;
           this.parentValue = value;
@@ -151,10 +153,10 @@ import { CommunicationService, CaseFieldValueChangedEvent, Channels } from 'src/
     }
 
     private getPreviousData(value?: number) {
-      if (this.dataSource == null || this.dataSource.value.length === 0) return [];
+      if (this.dataSource == null || this.dataSource.value.length === 0) { return []; }
 
       let tempDataSource = this.dataSource.value;
-      const chain = this.getOptionsChain(value);
+      const chain = this.dataSourceOptionsHelper.getOptionsChain(this.dataSource.value, value);
       if (this.hasChilds(chain, chain.length - 2)) {
         tempDataSource = chain[chain.length - 2].childs;
         this.parentValue = chain[chain.length - 2].value;
@@ -184,39 +186,6 @@ import { CommunicationService, CaseFieldValueChangedEvent, Channels } from 'src/
       return chain.length >= 1 && position >= 0 && chain[position].childs != null && chain[position].childs.length;
     }
 
-    private getTextChain(id: any) {
-      if (this.dataSource == null || this.dataSource.value.length === 0) return '';
-
-      const chain = this.getOptionsChain(id);
-      return chain.length > 0 ? chain.map((elem) => elem.text).join(' > ') : '';
-    }
-
-    private getOptionsChain(id: number | string) {
-      if (this.dataSource == null || this.dataSource.value.length === 0) return [];
-
-      let elems = new Array<MultiLevelOptionItem>();
-      const searchNode = (elem: MultiLevelOptionItem, targetId: any): string => {
-        const isText = typeof targetId === 'string';
-        if ((isText && (elem.text === targetId)) || (elem.value === targetId)) {
-          elems.push(elem);
-           return elem.text;
-          }
-        if (elem.childs != null) {
-          for (let i = 0; i < elem.childs.length; i++) {
-            const text = searchNode(elem.childs[i], targetId);
-            if (text != null) {
-              elems.push(elem);
-              return text;
-            }
-          }
-        }
-        return null;
-      };
-      this.dataSource.value.forEach((elem: MultiLevelOptionItem) => searchNode(elem, id));
-      elems = elems.reverse();
-
-      return  elems || [];
-    }
 
     private updateDisabledState() {
       this.textbox.disabled = this.isFormControlDisabled || this.disabled;
@@ -225,7 +194,7 @@ import { CommunicationService, CaseFieldValueChangedEvent, Channels } from 'src/
     private initEvents() {
       // track disabled state in form
       this.formControl.statusChanges.pipe(
-          takeUntil(this.destroy$)
+          untilDestroyed(this)
         ).subscribe(e => {
           if (this.textbox.disabled !== this.isFormControlDisabled) {
             this.updateDisabledState();
@@ -238,7 +207,7 @@ import { CommunicationService, CaseFieldValueChangedEvent, Channels } from 'src/
             this.addEmptyIfNotExists(options);
             return options;
           })),
-          takeUntil(this.destroy$)
+          untilDestroyed(this)
         ).subscribe((options) => {
           if (this.select.instance) {
             const data = this.getPreviousData(this.formControl.value);
@@ -255,7 +224,7 @@ import { CommunicationService, CaseFieldValueChangedEvent, Channels } from 'src/
     }
 
     private resetValueIfNeeded(options: MultiLevelOptionItem[]) {
-      if (this.getOptionsChain(this.formControl.value).length === 0) {
+      if (this.dataSourceOptionsHelper.getOptionsChain(this.dataSource.value, this.formControl.value).length === 0) {
         this.formControl.setValue('');
       }
     }
@@ -271,7 +240,7 @@ import { CommunicationService, CaseFieldValueChangedEvent, Channels } from 'src/
     }
 
     private markIfRoot(inst) {
-      if (inst.markup == null) return;
+      if (inst.markup == null) { return; }
 
       if (!this.hasParent()) {
         inst.markup.classList.add('root');
@@ -281,9 +250,9 @@ import { CommunicationService, CaseFieldValueChangedEvent, Channels } from 'src/
     }
 
     private markIfHasChilds(text: string, inst) {
-      if (inst.markup == null) return;
+      if (inst.markup == null) { return; }
 
-      const chain = this.getOptionsChain(text);
+      const chain = this.dataSourceOptionsHelper.getOptionsChain(this.dataSource.value, text);
       if (this.hasChilds(chain, chain.length - 1)) {
         inst.markup.classList.add('hasChild');
       } else {

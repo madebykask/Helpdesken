@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using DH.Helpdesk.BusinessData.Enums.Email;
 using DH.Helpdesk.Common.Extensions.String;
+using DH.Helpdesk.Common.Extensions.Lists;
 using DH.Helpdesk.Domain;
 using log4net;
 
@@ -45,7 +46,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public EmailResponse SendEmail(MailAddress from, MailAddress recipient, Mail mail, EmailSettings emailsettings)
         {
-            EmailResponse res = emailsettings.Response;
+            var res = emailsettings.Response;
             var sendTime = DateTime.Now;
 
             using (var smtpClient = new SmtpClient(emailsettings.SmtpSettings.Server, emailsettings.SmtpSettings.Port))
@@ -58,7 +59,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
                 smtpClient.EnableSsl = emailsettings.SmtpSettings.IsSecured;
 
-                CultureInfo oldCI = Thread.CurrentThread.CurrentCulture;
+                var oldCI = Thread.CurrentThread.CurrentCulture;
                 Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
                 Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
                 try
@@ -107,6 +108,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 el,
                 item.From,
                 item.To,
+                null,
                 item.Subject,
                 item.Body,
                 item.Fields,
@@ -122,6 +124,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
         public EmailResponse SendEmail(
             string from,
             string to,
+            string cc,
             string subject,
             string body,
             List<Field> fields,
@@ -133,12 +136,12 @@ namespace DH.Helpdesk.Services.Services.Concrete
             string siteHelpdesk = "",
             EmailType emailType = EmailType.ToMail)
         {
-            EmailResponse res = emailsettings.Response;
+            var res = emailsettings.Response;
             var sendTime = DateTime.Now;
 
 
             SmtpClient _smtpClient;
-            CultureInfo oldCI = Thread.CurrentThread.CurrentCulture;
+            var oldCI = Thread.CurrentThread.CurrentCulture;
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
@@ -152,20 +155,20 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 {
                     if (IsValidEmail(from))
                     {
-                        _smtpClient = smtpPort != 0 
-                            ? new SmtpClient(smtpServer, smtpPort) 
+                        _smtpClient = smtpPort != 0
+                            ? new SmtpClient(smtpServer, smtpPort)
                             : new SmtpClient(smtpServer);
 
                         if (!string.IsNullOrEmpty(emailsettings.SmtpSettings.UserName) &&
                             !string.IsNullOrEmpty(emailsettings.SmtpSettings.Pass))
                         {
-                            _smtpClient.Credentials = 
+                            _smtpClient.Credentials =
                                 new NetworkCredential(emailsettings.SmtpSettings.UserName, emailsettings.SmtpSettings.Pass);
                         }
 
                         _smtpClient.EnableSsl = emailsettings.SmtpSettings.IsSecured;
 
-                        var msg = GetMailMessage(from, to, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType);
+                        var msg = GetMailMessage(from, to, cc, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType);
 
                         if (msg.To.Count > 0 || msg.Bcc.Count > 0 || msg.CC.Count > 0)
                         {
@@ -188,7 +191,6 @@ namespace DH.Helpdesk.Services.Services.Concrete
             }
             finally
             {
-                _smtpClient = null;
                 Thread.CurrentThread.CurrentCulture = oldCI;
                 Thread.CurrentThread.CurrentUICulture = oldCI;
             }
@@ -196,16 +198,16 @@ namespace DH.Helpdesk.Services.Services.Concrete
             if (res.NumberOfTry != emailsettings.Response.NumberOfTry && res.NumberOfTry <= MAX_NUMBER_SENDING_EMAIL)
             {
                 emailsettings.Response.NumberOfTry = res.NumberOfTry;
-                res = this.SendEmail(from, to, subject, body, fields, emailsettings, mailMessageId, highPriority, files);
+                res = this.SendEmail(from, to, cc, subject, body, fields, emailsettings, mailMessageId, highPriority, files);
             }
             return res;
-
         }
 
         public EmailResponse SendEmail(
             EmailLog el,
             string from,
             string to,
+            string cc,
             string subject,
             string body,
             List<Field> fields,
@@ -217,14 +219,15 @@ namespace DH.Helpdesk.Services.Services.Concrete
             string siteHelpdesk = "",
             EmailType emailType = EmailType.ToMail)
         {
-            return emailsettings.BatchEmail 
-                ? EnqueueEmail(el, from, to, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType) 
-                : SendEmail(from, to, subject, body, fields, emailsettings, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType);
+            return emailsettings.BatchEmail
+                ? EnqueueEmail(el, from, to, cc, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType)
+                : SendEmail(from, to, cc, subject, body, fields, emailsettings, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType);
         }
 
         private MailMessage GetMailMessage(
             string from,
             string to,
+            string cc,
             string subject,
             string body,
             List<Field> fields,
@@ -247,26 +250,30 @@ namespace DH.Helpdesk.Services.Services.Concrete
             if (highPriority)
                 msg.Priority = MailPriority.High;
 
-            if (IsValidEmail(to))
+            to = string.IsNullOrEmpty(to) ? "" : string.Join(",", to.Split(',', ';').ToDistintList(true).Where(IsValidEmail));
+            cc = string.IsNullOrEmpty(cc) ? "" : string.Join(",", cc.Split(',', ';').ToDistintList(true).Where(IsValidEmail));
+
+            switch (emailType)
             {
-                switch (emailType)
-                {
-                    case EmailType.ToMail:
-                        msg.To.Add(new MailAddress(to));
-                        break;
+                case EmailType.ToMail:
+                    msg.To.Add(to);
+                    if (!string.IsNullOrEmpty(cc))
+                        msg.CC.Add(cc);
+                    break;
 
-                    case EmailType.CcMail:
-                        msg.CC.Add(new MailAddress(to));
-                        break;
+                case EmailType.CcMail:
+                    msg.CC.Add(to);
+                    break;
 
-                    case EmailType.BccMail:
-                        msg.Bcc.Add(new MailAddress(to));
-                        break;
+                case EmailType.BccMail:
+                    msg.Bcc.Add(to);
+                    break;
 
-                    default:
-                        msg.To.Add(new MailAddress(to));
-                        break;
-                }
+                default:
+                    msg.To.Add(to);
+                    if (!string.IsNullOrEmpty(cc))
+                        msg.CC.Add(cc);
+                    break;
             }
 
             var attachFiles = false;
@@ -354,7 +361,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                         if (field.Key == "[#99]")
                             field.StringValue = urlHelpdesk;
                 }
-                
+
             }
 
             msg.Subject = AddInformationToMailBodyAndSubject(subject, fields);
@@ -403,6 +410,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 EmailLog el,
                 string from,
                 string to,
+                string cc,
                 string subject,
                 string body,
                 List<Field> fields,
@@ -419,7 +427,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             try
             {
                 var attachExternalFiles = body.Contains("[#14]");
-                var attachInternalFiles = body.Contains("[#30]"); 
+                var attachInternalFiles = body.Contains("[#30]");
 
                 var externalFiles = new List<string>();
                 var internalFiles = new List<string>();
@@ -433,8 +441,9 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 {
                     internalFiles = files.Where(f => f.IsInternal).Select(f => f.FilePath).ToList();
                 }
-                
-                var msg = GetMailMessage(from, to, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType);
+
+                var msg = GetMailMessage(from, to, cc, subject, body, fields,
+                    mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType);
 
                 el.Body = msg.Body;
                 el.Subject = msg.Subject;
@@ -459,15 +468,15 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public string GetMailMessageId(string helpdeskFromAddress)
         {
-            return "<"  + DateTime.Now.Year.ToString() 
-                        + DateTime.Now.Month.ToString().PadLeft(2, '0')  
-                        + DateTime.Now.Day.ToString().PadLeft(2, '0')  
-                        + DateTime.Now.Hour.ToString().PadLeft(2, '0')  
-                        + DateTime.Now.Minute.ToString().PadLeft(2, '0')  
+            return "<" + DateTime.Now.Year.ToString()
+                        + DateTime.Now.Month.ToString().PadLeft(2, '0')
+                        + DateTime.Now.Day.ToString().PadLeft(2, '0')
+                        + DateTime.Now.Hour.ToString().PadLeft(2, '0')
+                        + DateTime.Now.Minute.ToString().PadLeft(2, '0')
                         + DateTime.Now.Second.ToString().PadLeft(2, '0')
-                        + Guid.NewGuid().ToString().Substring(0, 8)    
+                        + Guid.NewGuid().ToString().Substring(0, 8)
                         + "@"
-                        + helpdeskFromAddress.Replace('@', '.')   
+                        + helpdeskFromAddress.Replace('@', '.')
                     + ">";
         }
 
@@ -478,10 +487,10 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         private string AddInformationToMailBodyAndSubject(string text, List<DH.Helpdesk.Domain.Field> fields)
         {
-            string ret = text; 
+            string ret = text;
 
             if (fields != null)
-                foreach (var f in fields) 
+                foreach (var f in fields)
                 {
                     ret = ret.Replace(f.Key, f.StringValue);
                 }

@@ -6,7 +6,9 @@
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation), "new", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>
+            <li>
+                @Html.ActionLink(Translation.Get("Lägg till") + " " + Translation.Get("E-post mall"), "new", new {customerId = Model.Customer.Id}, new {@class = "btn"})
+            </li>
         </ul>
     </div>
     @Html.Partial("_MasterDataPanel", Model.Customer)
@@ -14,54 +16,54 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+            <li class="active"><a href="#fragment-1">@Translation.Get("E-post mall") - @Model.Customer.Name</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
                 @using (Html.BeginForm("index", "mailtemplate", FormMethod.Post, new { id = "search" }))
                 {
-                    <h4>@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)</h4>
+                    <h4>@Translation.Get("Ärende")</h4>
                     @Html.Partial("_RegularCaseMailTemplates", Model)
 
-                    <h4>@Translation.Get("Ärende", Enums.TranslationSource.TextTranslation) (SMS)</h4>
+                    <h4>@Translation.Get("Ärende") (SMS)</h4>
                     @Html.Partial("_CaseSMSMailTemplates", Model)
                    
                     if (Model.Settings.ModuleOrder == 1)
                     {
-                        <h4>@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)</h4>
+                        <h4>@Translation.Get("Beställning")</h4>
                         @Html.Partial("_OrderTypeMailTemplates", Model)
                     }
                     <!--
                     if (Model.Settings.ModuleAccount == 1)
                     {
-                        <h4>@Translation.Get("Beställning", Enums.TranslationSource.TextTranslation) @Translation.Get("Kontoaktivitet", Enums.TranslationSource.TextTranslation)</h4>
+                        <h4>@Translation.Get("Beställning") @Translation.Get("Kontoaktivitet")</h4>
                         @Html.Partial("_AccountActivityMailTemplates", Model)
                     }
                         -->
                     if (Model.Settings.ModuleChangeManagement == 1)
                     {
                         <h4>
-                            @Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)</h4>
+                            @Translation.Get("Ändringshantering")</h4>
                         @Html.Partial("_ChangesMailTemplates", Model)
                     }
                     
                     if (Model.Settings.ModuleOperationLog == 1)
                     {
                         <h4>
-                            @Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)</h4>
+                            @Translation.Get("Driftlogg")</h4>
                         @Html.Partial("_OperationLogsMailTemplates", Model)
                     }
                     if (Model.Settings.ModuleQuestionnaire == 1)
                     {
                         <h4>
-                            @Translation.Get("Enkät", Enums.TranslationSource.TextTranslation)</h4>
+                            @Translation.Get("Enkät")</h4>
                         @Html.Partial("_SurveyMailTemplates", Model)
                     }
 
                     if (Model.MailTemplates.Count > 0)
                     {
                         <h4>
-                            @Translation.Get("Special", Enums.TranslationSource.TextTranslation)</h4>
+                            @Translation.Get("Special")</h4>
                         @Html.Partial("_SpecialMailTemplates", Model)
                     }
                     

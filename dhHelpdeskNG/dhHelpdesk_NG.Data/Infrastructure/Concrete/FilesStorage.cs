@@ -34,11 +34,11 @@ namespace DH.Helpdesk.Dal.Infrastructure.Concrete
 
         public string SaveFile(byte[] content, string basePath, string fileName, string topic, int entityId)
         {
-            var saveDirectory = ComposeDirectoryPath(basePath, topic, entityId); 
-            if (!Directory.Exists(saveDirectory))
-                Directory.CreateDirectory(saveDirectory);
-
+            //var saveDirectory = ComposeDirectoryPath(basePath, topic, entityId); 
             var savePath = ComposeFilePath(topic, entityId, basePath,  fileName);
+            var directory = Path.GetDirectoryName(savePath);
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
             
             using (var fileStream = new FileStream(savePath, FileMode.CreateNew))
             {

@@ -94,7 +94,9 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             modules.Modules = primaryModules.OrderBy(x => x.Module.Name);
-            var customerSettings = this.userService.GetUserProfileCustomersSettings(user.Id);
+            var customerSettings = this.userService.GetUserProfileCustomersSettings(user.Id)
+                .Where(u => u.Active)
+                .ToList();
             var customerSettingsModel = new UserCustomersSettingsViewModel(customerSettings);
             var model = this.CreateInputViewModel(user, modules, customerSettingsModel);
             
@@ -144,7 +146,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (errors.Count == 0)
             {
                 this.userService.UpdateUserModules(profileUserModel.Modules);
-                this.userService.UpdateUserProfileCustomerSettings(SessionFacade.CurrentUser.Id, profileUserModel.CustomersSettings);
+                this.userService.UpdateUserProfileCustomerSettings(SessionFacade.CurrentUser.Id, profileUserModel.CustomersSettings.ToList());
                 this.workContext.Refresh();
 
                 return this.RedirectToAction("edit", "profile", new { id = userToSave.Id});

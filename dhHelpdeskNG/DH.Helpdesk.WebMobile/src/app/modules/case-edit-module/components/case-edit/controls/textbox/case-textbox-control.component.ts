@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { BaseControl } from '../base-control';
 import { takeUntil } from 'rxjs/operators';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
     selector: 'case-textbox-control',
@@ -33,7 +34,6 @@ import { takeUntil } from 'rxjs/operators';
     }
 
     ngOnDestroy(): void {
-      this.onDestroy();
     }
 
     private updateDisabledState() {
@@ -43,7 +43,7 @@ import { takeUntil } from 'rxjs/operators';
     private initEvents() {
       this.formControl.statusChanges // track disabled state in form
         .pipe(
-          takeUntil(this.destroy$)
+          untilDestroyed(this)
         )
         .subscribe(e => {
           if (this.control.disabled !== this.isFormControlDisabled) {

@@ -52,9 +52,9 @@ namespace ExtendedCase.Dal.Repositories
             return res;
         }
 
-        public IList<DataSourceOption> GetOptionsFromQuery(string sql, IDictionary<string, string> parameters)
+        public IList<DataSourceOption> GetOptionsFromQuery(string sql, string connectionString, IDictionary<string, string> parameters)
         {
-            var res = QueryList<DataSourceOption>(sql, parameters);
+            var res = QueryList<DataSourceOption>(query: sql, parametersDict: parameters, connectionString: connectionString);
             return res;
         }
 
@@ -73,7 +73,7 @@ namespace ExtendedCase.Dal.Repositories
         string GetMetaDataByDataSourceId(string dataSourceId);
 
         IList<DataSourceOption> GetOptionsFromTable(string tableName, string idColumn, string valueColumn, IDictionary<string, string> parameters);
-        IList<DataSourceOption> GetOptionsFromQuery(string sql, IDictionary<string, string> parameters);
+        IList<DataSourceOption> GetOptionsFromQuery(string sql, string connectionString, IDictionary<string, string> parameters);
         IList<DataSourceOption> GetOptionsFromSp(string spName, IDictionary<string, string> parameters);
     }
 }

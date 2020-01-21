@@ -12,10 +12,9 @@ import { CollapsibleDirective } from './directives/collapsible.directive';
   declarations: [ DateTimeFormatPipe, DateFormatPipe, AlertsFilterPipe, TruncatePipe, TruncateTextDirective,
     CollapsibleDirective, NewlinePipe, SanitizePipe ],
   imports: [
-    CommonModule,
     TranslateModule.forChild()
   ],
   exports: [ DateTimeFormatPipe, DateFormatPipe, AlertsFilterPipe, TranslateModule, TruncatePipe,
-    CollapsibleDirective, TruncateTextDirective, NewlinePipe, SanitizePipe]
+    CollapsibleDirective, TruncateTextDirective, NewlinePipe, SanitizePipe, CommonModule]
 })
 export class SharedModule { }

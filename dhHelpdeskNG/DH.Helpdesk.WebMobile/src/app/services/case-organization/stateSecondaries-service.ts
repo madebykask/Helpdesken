@@ -1,23 +1,24 @@
-import { Injectable } from "@angular/core";
-import { LocalStorageService } from "../local-storage";
-import { HttpClient } from "@angular/common/http";
-import { OptionsHelper } from "../../helpers/options-helper";
-import { map, take } from "rxjs/operators";
-import { StateSecondaryInputModel } from "src/app/models/stateSecondaries/stateSecondaryInput.model";
-import { OptionItem } from "src/app/modules/shared-module/models";
-import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
-import { Observable } from "rxjs";
+import { Injectable } from '@angular/core';
+import { LocalStorageService } from '../local-storage';
+import { HttpClient } from '@angular/common/http';
+import { OptionsHelper } from '../../helpers/options-helper';
+import { map, take } from 'rxjs/operators';
+import { StateSecondaryInputModel } from 'src/app/models/stateSecondaries/stateSecondaryInput.model';
+import { OptionItem } from 'src/app/modules/shared-module/models';
+import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/httpServiceBase';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class StateSecondariesService extends HttpApiServiceBase {
 
-    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService, 
+    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService,
         private caseHelper: OptionsHelper) {
             super(http, localStorageService);
     }
 
-    getStateSecondaries() {
-        return this.getJson(this.buildResourseUrl('/api/statesecondaries/options', null, true, true))
+    getStateSecondaries(customerId?: number) {
+      const params = isNaN(customerId) ? {} : {cid: customerId};
+        return this.getJson(this.buildResourseUrl('/api/statesecondaries/options', params, isNaN(params.cid), true))
         .pipe(
             take(1),
             map((jsItems: any) => {
@@ -26,8 +27,8 @@ export class StateSecondariesService extends HttpApiServiceBase {
         ); //TODO: error handling
     }
 
-    getStateSecondary(id: number): Observable<StateSecondaryInputModel> {
-      return this.getJson(this.buildResourseUrl(`/api/statesecondaries/${id}`, null, true, true))
+    getStateSecondary(id: number, customerId: number): Observable<StateSecondaryInputModel> {
+      return this.getJson(this.buildResourseUrl(`/api/statesecondaries/${id}`, { cid: customerId }, false, true))
       .pipe(
           take(1),
           map((jsItems: any) => {

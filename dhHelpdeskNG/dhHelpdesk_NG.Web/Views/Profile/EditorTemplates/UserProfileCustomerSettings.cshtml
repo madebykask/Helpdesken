@@ -1,8 +1,9 @@
 ﻿@model DH.Helpdesk.BusinessData.Models.Users.UserProfileCustomerSettings
-
 <tr>
     <td>
         @Html.HiddenFor(m => m.CustomerId)
+        @Html.HiddenFor(m => m.CustomerName)
+        @Html.HiddenFor(m => m.Active)
         @Html.CheckBoxFor(m => m.ShowOnStartPage)
     </td>
     <td>

@@ -3,8 +3,8 @@
 @if (TempData["Error"] != null)
 {
     <div class="alert alert-error">
-        @Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
-        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+        @Translation.Get("Anslagstavla")
+        @Translation.Get("som används går inte att ta bort")
     </div>    
 }
 
@@ -32,18 +32,18 @@
 <div class="bulletinboard content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)</a></li>
+            <li class="active"><a href="#fragment-1">@Translation.Get("Anslagstavla")</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
-                    <h4>@Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)</h4>
+                    <h4>@Translation.Get("Anslagstavla")</h4>
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Visa fr.o.m", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Visa fr.o.m") *
                                     </td>
                                     <td class="span9">
                                         @Html.EditorFor(model => model.BulletinBoard.ShowDate, "DatePicker", new { id = "divBulletinBoard_ShowDate" }) 
@@ -51,7 +51,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Visa t.o.m", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Visa t.o.m") *
                                     </td>
                                     <td>
                                         @Html.EditorFor(model => model.BulletinBoard.ShowUntilDate, "DatePicker", new { id = "divBulletinBoard_ShowUntilDate" }) 
@@ -59,7 +59,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Anslagstavla") *
                                     </td>
                                     <td>
                                         @Html.TextAreaFor(model => model.BulletinBoard.Text, new { style = "width:600px; height:250px;", @class="richtexteditor"})
@@ -67,12 +67,12 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Visa")
                                     </td>                                    
                                     <td class="checkbox" style="padding-left: 20px">                                        
                                         <input type="checkbox" name="BulletinBoard.ShowOnStartPage" @(Model.BulletinBoard.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" />                                        
                                         <input type="hidden" name="BulletinBoard.ShowOnStartPage" value="0" />                                                                      
-                                        &nbsp;@Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.Get("Visa på startsidan")
                                     </td> 
                                 </tr>
                                 <tr>
@@ -80,31 +80,31 @@
                                     <td class="checkbox" style="padding-left: 20px">                                        
                                         <input type="checkbox" name="BulletinBoard.PublicInformation" @(Model.BulletinBoard.PublicInformation == 1 ? "checked=checked" : "") value ="1" />                                        
                                         <input type="hidden" name="BulletinBoard.PublicInformation" value="0" />                                                                      
-                                        &nbsp;@Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;@Translation.Get("Visa på självservice")
                                     </td>                                    
                                 </tr>
                             </table>
                         </div>
                     </div>
-                    <h4>@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</h4>
+                    <h4>@Translation.Get("Säkerhet")</h4>
                     <div class="row">
                         <div class="span12">
                             <table class="tableform" id="security">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Driftgrupp")
                                     </td>
                                     <td>
-                                        @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Tillgängliga")
                                     </td>
                                     <td></td>
                                     <td>
-                                        @Translation.Get("Valda", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Valda")
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="checkbox" id="LimitWGs"> @Translation.Get("Begränsa rättigheter till", Enums.TranslationSource.TextTranslation)<br>
+                                        <input type="checkbox" id="LimitWGs"> @Translation.Get("Begränsa rättigheter till")<br>
                                         <input type="hidden" id="userGroupId" value="@Model.CurrentUser.UserGroup_Id" />
                                     </td>
                                     <td>
@@ -132,138 +132,146 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+    
+        $('.btn.save').on('click', function () {
+            if (!$(this).attr('disabled')) {
+                $("#WGsSelected option").attr("selected", "selected");
+
+                $("#target").submit();
+            }
+      
+            return false;
+        });
+
+        $("#chkSecurity").click(function () {
+            $("#securityOptions").toggle();
+        });
+   
+        $("#addWGs").click(function () {
+            $("#WGsAvailable option:selected").remove().appendTo("#WGsSelected");
+            $("#WGsAvailable").get(0).selectedIndex = -1;
+            $("#WGsSelected").get(0).selectedIndex = -1;
+            return false;
+        });
+
+        $("#removeWGs").click(function () {
+            $("#WGsSelected option:selected").remove().appendTo("#WGsAvailable");
+            $("#WGsAvailable").get(0).selectedIndex = -1;
+            $("#WGsAvailable").get(0).selectedIndex = -1;
+            if ($("#WGsSelected option").length == 0) {
+                $("#LimitWGs").attr("checked", false);
+                $("#WGsAvailable").attr("disabled", true);
+                $("#WGsSelected").attr("disabled", true);
+                $("#WGsSelected").removeAttr('required');
+                $("#WGsSelected").rules("remove");
+            };
+        
+            return false;
+        });
+
+        $("#divBulletinBoard_ShowDate, #divBulletinBoard_ShowUntilDate").on("change", function() {
+            $("#target").valid();
+        });
+
+        $("#LimitWGs").change(function () {
+            if ($("#LimitWGs").attr("checked")) {
+                $("#WGsAvailable").attr("disabled", false);
+                $("#WGsSelected").attr("disabled", false);
+                $("#WGsSelected").rules("add", {
+                    required: true
+                });
+            } else {
+                $("#WGsSelected option").remove().appendTo("#WGsAvailable");
+                $("#WGsAvailable").attr("disabled", true);
+                $("#WGsSelected").attr("disabled", true);
+
+                $("#WGsSelected").removeAttr('required');
+                $("#WGsSelected").rules("remove");
+            }
+        });
+
+        if ($("#WGsSelected option").length > 0) {
+            $("#LimitWGs").attr("checked", true);
+            $("#WGsAvailable").attr("disabled", false);
+            $("#WGsSelected").attr("disabled", false);
+        } else {
+            if ($("#LimitWGs").attr('checked'))
+            {
+                $("#WGsAvailable").attr("disabled", false);
+                $("#WGsSelected").attr("disabled", false);
+            }
+            else
+            {
+                $("#WGsAvailable").attr("disabled", true);
+                $("#WGsSelected").attr("disabled", true);
+            }   
+        }
+        $("#target").data('validator', null);
+        var validator = $("#target")
+            .submit(function () {
+                // update underlying textarea before submit validation
+                tinyMCE.triggerSave();
+            })
+            .validate({
+                ignore: "",
+                rules: {
+                    "BulletinBoard.Text": 'required',
+                    "BulletinBoard.ShowDate": {
+                        'required': true,
+                        'date': true
+                    },
+                    "BulletinBoard.ShowUntilDate": {
+                        'required': true,
+                        'date': true
+                    },
+                    "WGsSelected": { 'required': $("#LimitWGs").attr('checked') === "checked" }
+                },
+                messages: {
+                    'BulletinBoard.ShowDate': {
+                        required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Visa fr.o.m") ))',
+                        date: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")'
+                    },
+                    'BulletinBoard.ShowUntilDate': {
+                        required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Visa t.o.m") ))',
+                        date: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")'
+                    },
+                    "BulletinBoard.Text": {
+                        required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Anslagstavla") ))'
+                    },
+                    "WGsSelected": {
+                        required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Driftgrupp") ))'
+                    }
+    },
+                errorPlacement: function (error, element) {
+        if (element.is("textarea")) {
+            element.parent().prepend(error);
+        } else if (element.parent().hasClass('date')) {
+            element.parent().append(error);
+        } else {
+            error.insertAfter(element);
+        }
+    },
+                submitHandler: function (form) {
+        form.submit();
+    }
+});
+            validator.focusInvalid = function() {
+                // put focus on tinymce on submit validation
+                if (this.settings.focusInvalid) {
+                    try {
+                        var toFocus = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
+                        if (toFocus.is("textarea")) {
+                            tinyMCE.get(toFocus.attr("id")).focus();
+                        } else {
+                            toFocus.filter(":visible").focus();
+                        }
+                    } catch (e) {
+                        // ignore IE throwing errors when focusing hidden elements
+                    }
+                }
+        };
+
         if ($("#chkSecurity").is(":checked"))
             $("#securityOptions").show();
     });
-
-    $('.btn.save').on('click', function () {
-        if (!$(this).attr('disabled')) {
-            $("#WGsSelected option").attr("selected", "selected");
-
-            $("#target").submit();
-        }
-      
-        return false;
-    });
-
-    $("#chkSecurity").click(function () {
-        $("#securityOptions").toggle();
-    });
-   
-    $("#addWGs").click(function () {
-        $("#WGsAvailable option:selected").remove().appendTo("#WGsSelected");
-        $("#WGsAvailable").get(0).selectedIndex = -1;
-        $("#WGsSelected").get(0).selectedIndex = -1;
-        return false;
-    });
-
-    $("#removeWGs").click(function () {
-        $("#WGsSelected option:selected").remove().appendTo("#WGsAvailable");
-        $("#WGsAvailable").get(0).selectedIndex = -1;
-        $("#WGsAvailable").get(0).selectedIndex = -1;
-        if ($("#WGsSelected option").length == 0) {
-            $("#LimitWGs").attr("checked", false);
-            $("#WGsAvailable").attr("disabled", true);
-            $("#WGsSelected").attr("disabled", true);
-            $("#WGsSelected").removeAttr('required');
-            $("#WGsSelected").rules("remove");
-        };
-        
-        return false;
-    });
-
-    $("#LimitWGs").change(function () {
-        if ($("#LimitWGs").attr("checked")) {
-            $("#WGsAvailable").attr("disabled", false);
-            $("#WGsSelected").attr("disabled", false);
-            $("#WGsSelected").rules("add", {
-                required: true
-            });
-        } else {
-            $("#WGsSelected option").remove().appendTo("#WGsAvailable");
-            $("#WGsAvailable").attr("disabled", true);
-            $("#WGsSelected").attr("disabled", true);
-
-            $("#WGsSelected").removeAttr('required');
-            $("#WGsSelected").rules("remove");
-        }
-    });
-
-    if ($("#WGsSelected option").length > 0) {
-        $("#LimitWGs").attr("checked", true)
-        $("#WGsAvailable").attr("disabled", false);
-        $("#WGsSelected").attr("disabled", false);
-    } else {
-        if ($("#LimitWGs").attr('checked'))
-        {
-            $("#WGsAvailable").attr("disabled", false);
-            $("#WGsSelected").attr("disabled", false);
-        }
-        else
-        {
-            $("#WGsAvailable").attr("disabled", true);
-            $("#WGsSelected").attr("disabled", true);
-        }   
-    }
-
-    var validator = $("#target")
-        .submit(function () {
-            // update underlying textarea before submit validation
-            tinyMCE.triggerSave();
-        })
-        .validate({
-            ignore: "",
-            rules: {
-                "BulletinBoard.Text": 'required',
-                "BulletinBoard.ShowDate": {
-                    date: true
-                },
-                "BulletinBoard.ShowUntilDate": {
-                    date: true
-                },
-                "WGsSelected": { 'required': $("#LimitWGs").attr('checked') == "checked" }
-            },
-            messages: {
-                'BulletinBoard.ShowDate': {
-                    date: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")'
-                },
-                'BulletinBoard.ShowUntilDate': {
-                    date: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")'
-                },
-                "BulletinBoard.Text": {
-                    required: "@Translation.GetForJS("Du måste ange en anslagstavla", Enums.TranslationSource.TextTranslation)"
-                },
-                "WGsSelected": {
-                    required: "@Translation.GetForJS("Du måste ange en driftgrupp", Enums.TranslationSource.TextTranslation)"
-                }
-            },
-            errorPlacement: function (error, element) {
-                if (element.is("textarea")) {
-                    element.parent().prepend(error);
-                } else if (element.parent().hasClass('date')) {
-                    element.parent().append(error);
-                } else {
-                    error.insertAfter(element);
-                }
-            },
-            submitHandler: function (form) {
-                form.submit();
-            }
-        });
-    validator.focusInvalid = function() {
-        // put focus on tinymce on submit validation
-        if (this.settings.focusInvalid) {
-            try {
-                var toFocus = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
-                if (toFocus.is("textarea")) {
-                    tinyMCE.get(toFocus.attr("id")).focus();
-                } else {
-                    toFocus.filter(":visible").focus();
-                }
-            } catch (e) {
-                // ignore IE throwing errors when focusing hidden elements
-            }
-        }
-    };
-
 </script>

@@ -71,6 +71,14 @@
                 @Html.DropDownListFor(model => model.Customer.Language_Id, Model.Languages, "", new { })
             </td>
         </tr>
+        <tr>
+            <td>
+                @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.CheckBoxFor(model => model.Active)
+            </td>
+        </tr>
     </table>
 </div>
 <h4>@Translation.Get("Användare", Enums.TranslationSource.TextTranslation)</h4>

@@ -6,6 +6,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
     public class CaseSolutionOverview
     {
         public int CaseSolutionId { get; set; }
+        public int CustomerId { get; set; }
         public string Name { get; set; }
         public int? CategoryId { get; set; }
         public string CategoryName { get; set; }

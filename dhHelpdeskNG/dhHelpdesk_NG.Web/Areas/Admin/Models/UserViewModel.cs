@@ -114,13 +114,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         /// <summary>
         /// Customers available  for this user
         /// </summary>
-        public IList<SelectListItem> CsAvailable { get; set; }
+        public IList<StateSelectListItem> CsAvailable { get; set; }
 
         /// <summary>
         /// Customers selected for this user
         /// </summary>
-        public IList<SelectListItem> CsSelected { get; set; }
-        public IList<SelectListItem> Customers { get; set; }
+        public IList<StateSelectListItem> CsSelected { get; set; }
+        public IList<StateSelectListItem> Customers { get; set; }
         public IList<SelectListItem> Domains { get; set; }
         public IList<SelectListItem> Languages { get; set; }
         public IList<SelectListItem> OTsAvailable { get; set; }

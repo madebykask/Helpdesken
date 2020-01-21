@@ -27,6 +27,8 @@ export class QueryParamsService {
         parametersModel.userGuid = queryParams['userGuid'] || params.get('userGuid');
         parametersModel.currentUser = queryParams['currentUser'] || params.get('currentUser');
         parametersModel.isCaseLocked = cm.anyToBoolean(queryParams['isCaseLocked'] || params.get('isCaseLocked'));
+        parametersModel.useInitiatorAutocomplete =
+                                        cm.anyToBoolean(queryParams['useInitiatorAutocomplete'] || params.get('useInitiatorAutocomplete'));
 
         let userRole = queryParams['userRole'] || params.get('userRole');
         let caseStatus = parseInt(queryParams['caseStatus'] || params.get('caseStatus'), 10);

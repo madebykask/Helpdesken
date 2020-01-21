@@ -45,15 +45,53 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
         public static WorkingGroupEntity notAssignedWorkingGroup()
         {
-            return new WorkingGroupEntity { Id = int.MinValue, WorkingGroupName = "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --", IsActive = 1 };
+			var notAssigned = notAssignedGeneric();
+			return new WorkingGroupEntity { Id = notAssigned.Key, WorkingGroupName = notAssigned.Value, IsActive = 1 };
         }
 
         public static CustomerUserInfo notAssignedPerformer()
         {
-            return new CustomerUserInfo { Id = int.MinValue, FirstName = "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --", SurName="", IsActive = 1 , Performer = 1};
+			var notAssigned = notAssignedGeneric();
+			return new CustomerUserInfo { Id = notAssigned.Key, FirstName = notAssigned.Value, SurName="", IsActive = 1 , Performer = 1};
         }
 
-        public static IList<Field> GetFilterForCases(int followUpPermission, int customerId)
+		public static Priority notAssignedPriority()
+		{
+			var notAssigned = notAssignedGeneric();
+			return new Priority { Id = notAssigned.Key, Name = notAssigned.Value, IsActive = 1 };
+		}
+
+		public static Status notAssignedStatus()
+		{
+			var notAssigned = notAssignedGeneric();
+			return new Status { Id = notAssigned.Key, Name = notAssigned.Value, IsActive = 1 };
+		}
+
+		public static StateSecondary notAssignedStateSecondary()
+		{
+			var notAssigned = notAssignedGeneric();
+			return new StateSecondary { Id = notAssigned.Key, Name = notAssigned.Value, IsActive = 1 };
+		}
+
+		public static Department notAssignedDepartment()
+		{
+			var notAssigned = notAssignedGeneric();
+			return new Department { Id = notAssigned.Key, DepartmentName = notAssigned.Value, IsActive = 1 };
+		}
+
+		public static Region notAssignedRegion()
+		{
+			var notAssigned = notAssignedGeneric();
+			return new Region { Id = notAssigned.Key, Name = notAssigned.Value, IsActive = 1 };
+		}
+
+
+		private static KeyValuePair<int, string> notAssignedGeneric()
+		{
+			return new KeyValuePair<int, string>(int.MinValue, "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --");
+		}
+
+		public static IList<Field> GetFilterForCases(int followUpPermission, int customerId)
         {
             var ret = new List<Field>();
             ret.Add(new Field { Id = 2, StringValue = Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation) });

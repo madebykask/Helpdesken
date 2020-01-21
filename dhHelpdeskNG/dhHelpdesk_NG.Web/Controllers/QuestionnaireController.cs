@@ -599,7 +599,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public ActionResult EditCircular(CircularModel newCircular, int[] connectedCases, int? backStatusId)
         {
-            var cases = connectedCases == null || connectedCases.Count() == 0
+            var cases = connectedCases == null || !connectedCases.Any()
                             ? new List<int>()
                             : connectedCases.ToList();
 
@@ -626,9 +626,9 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
             {
-                var circular = new CircularForUpdate(newCircular.Id, newCircular.CircularName, DateTime.Now, cases, caseFilter, extraEmails);
+                var circular = new CircularForUpdate(newCircular.Id, newCircular.CircularName, DateTime.Now, caseFilter, extraEmails);
                 circular.MailTemplateId = newCircular.MailTemplateId;
-                this._circularService.UpdateCircular(circular);
+                this._circularService.UpdateCircular(circular, cases);
                 circularId = circular.Id;
             }
 

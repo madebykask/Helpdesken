@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MbscSelect, MbscNavOptions } from '@mobiscroll/angular';
+import { MbscNavOptions } from '@mobiscroll/angular';
 import { takeUntil, distinctUntilChanged, filter  } from 'rxjs/operators';
 import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { AppStore, AppStoreKeys } from 'src/app/store/app-store';
-import { CaseTemplateModel } from 'src/app/models/caseTemplate/case-template.model';
+import { CustomerCaseTemplateModel } from 'src/app/models/caseTemplate/case-template.model';
 
 @Component({
   selector: 'app-footer',
@@ -37,11 +37,11 @@ export class FooterComponent implements OnInit  {
   ngOnInit() {
     // load templates from appStore state
     if (this.userSettingsService.getUserData().createCasePermission) {
-       this.appStore.select<CaseTemplateModel[]>(AppStoreKeys.Templates).pipe(
+       this.appStore.select<CustomerCaseTemplateModel[]>(AppStoreKeys.Templates).pipe(
          distinctUntilChanged(),
          filter(Boolean), // aka new Boolean(val) to filter null values
          takeUntil(this.destroy$)
-      ).subscribe((templates: CaseTemplateModel[]) => {
+      ).subscribe((templates: CustomerCaseTemplateModel[]) => {
         this.canCreateCases$.next(templates && templates.length > 0);
       });
     }

@@ -7546,7 +7546,177 @@ begin
 end
 GO
 
+If not exists (select * from tbltext where id = 2038)
+begin
+	insert into tbltext (id, TextString) VALUES (2038, 'Skicka metod')
+	If not exists (select * from tblTextTranslation where text_id = 2038 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2038, 2, 'Send method')
+end
+GO
 
+If not exists (select * from tbltext where id = 2039)
+begin
+	insert into tbltext (id, TextString) VALUES (2039, 'Separata e-postmeddelanden till alla')
+	If not exists (select * from tblTextTranslation where text_id = 2039 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2039, 2, 'Separate emails to all')
+end
+GO
+
+If not exists (select * from tbltext where id = 2040)
+begin
+	insert into tbltext (id, TextString) VALUES (2040, 'Alla mottagare i en e-post')
+	If not exists (select * from tblTextTranslation where text_id = 2040 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2040, 2, 'All receivers in one email')
+end
+GO
+
+If not exists (select * from tbltext where id = 2041)
+begin
+	insert into tbltext (id, TextString) VALUES (2041, 'Oöppnad')
+	If not exists (select * from tblTextTranslation where text_id = 2041 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2041, 2, 'Unopened')
+end
+GO
+
+If not exists (select * from tbltext where id = 2042)
+begin
+	insert into tbltext (id, TextString) VALUES (2042, 'Vilande')
+	If not exists (select * from tblTextTranslation where text_id = 2042 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2042, 2, 'On hold')
+end
+GO
+
+If not exists (select * from tbltext where id = 2043)
+begin
+	insert into tbltext (id, TextString) VALUES (2043, 'Förfallna')
+	If not exists (select * from tblTextTranslation where text_id = 2043 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2043, 2, 'Overdue')
+end
+GO
+
+If not exists (select * from tbltext where id = 2044)
+begin
+	insert into tbltext (id, TextString) VALUES (2044, 'Förfaller idag')
+	If not exists (select * from tblTextTranslation where text_id = 2044 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2044, 2, 'Due today')
+end
+GO
+
+If not exists (select * from tbltext where id = 2045)
+begin
+	insert into tbltext (id, TextString) VALUES (2045, 'Lösta idag')
+	If not exists (select * from tblTextTranslation where text_id = 2045 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2045, 2, 'Solved today')
+end
+GO
+
+If not exists (select * from tbltext where id = 2046)
+begin
+	insert into tbltext (id, TextString) VALUES (2046, 'Lösta i tid idag')
+	If not exists (select * from tblTextTranslation where text_id = 2046 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2046, 2, 'Solved in time today')
+end
+else 
+begin
+   update tbltext set TextString = 'Lösta i tid idag' where id = 2046
+   update tblTextTranslation set TextTranslation = 'Solved in time today' where Text_Id = 2046
+end
+GO
+
+
+If not exists (select * from tbltext where id = 2047)
+begin
+	insert into tbltext (id, TextString) VALUES (2047, 'Ta bort relaterade poster i filåtkomstlogg')
+	If not exists (select * from tblTextTranslation where text_id = 2047 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2047, 2, 'Remove related entries in File access log')
+end
+GO
+
+If not exists (select * from tbltext where id = 2048)
+begin
+	insert into tbltext (id, TextString) VALUES (2048, 'Filinnehåll')
+
+	If not exists (select * from tblTextTranslation where text_id = 2048 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2048, 2, 'File content')
+end
+GO
+
+If not exists (select * from tbltext where id = 2049)
+begin
+	insert into tbltext (id, TextString) VALUES (2049, 'Ärendet hittades inte!')
+
+	If not exists (select * from tblTextTranslation where text_id = 2049 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2049, 2, 'Case not found')
+end
+GO
+
+If not exists (select * from tbltext where id = 2050)
+begin
+	insert into tbltext (id, TextString) VALUES (2050, 'Olästa')
+
+	If not exists (select * from tblTextTranslation where text_id = 2050 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2050, 2, 'Unread')
+end
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'Unread cases' WHERE Text_Id=547 AND Language_Id=2;
+go
+
+If not exists (select * from tbltext where id = 2051)
+begin
+	insert into tbltext (id, TextString) VALUES (2051, 'poster per kund')
+
+	If not exists (select * from tblTextTranslation where text_id = 2051 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2051, 2, 'records per customer')
+end
+GO
+
+
+If not exists (select * from tbltext where id = 2052)
+begin
+	insert into tbltext (id, TextString) VALUES (2052, 'Visa fler')
+
+	If not exists (select * from tblTextTranslation where text_id = 2052 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2052, 2, 'Show more')
+end
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'In progress' WHERE Text_Id=640 AND Language_Id=2;
+go
+
+If not exists (select * from tbltext where id = 2053)
+begin
+	insert into tbltext (id, TextString) VALUES (2053, 'Nya idag')
+
+	If not exists (select * from tblTextTranslation where text_id = 2053 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2053, 2, 'New today')
+end
+GO
+
+If not exists (select * from tbltext where id = 2054)
+	begin
+		insert into tbltext (id, TextString) VALUES (2054, 'Visa förslag vid sökning')
+
+		If not exists (select * from tblTextTranslation where text_id = 2054 and Language_Id = 2)
+			insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2054, 2, 'Show search result')   
+	end
+	else
+	begin
+
+	 update tblText set TextString = 'Visa förslag vid sökning' where Id = 2054 
+	 update tblTextTranslation set TextTranslation = 'Show search result' where Text_Id = 2054 and Language_Id = 2
+
+end
+GO
+
+If not exists (select * from tbltext where id = 2055)
+begin
+	insert into tbltext (id, TextString) VALUES (2055, 'Om ej aktiv, hämtas endast information om anmälaren vid exakt matchning av ID')
+
+	If not exists (select * from tblTextTranslation where text_id = 2055 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2055, 2, 'If disabled, only exact match of user ID fetches the information of the initiator')
+end
+GO
 
 
 
@@ -7557,6 +7727,7 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 20000 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(20000, 2, 'Start of customer generated ID:s (ignore)')
 GO
+
 
 
 GO
