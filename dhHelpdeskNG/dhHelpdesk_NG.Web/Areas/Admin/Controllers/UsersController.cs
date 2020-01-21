@@ -348,6 +348,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             if (SessionFacade.CurrentUser.UserGroupId != (int)UserGroup.SystemAdministrator)
             {
                 var availableCustomersHash = this._userService.GetUser(SessionFacade.CurrentUser.Id).CusomersAvailable.ToDictionary(it => it.Id, it => true);
+
                 CsSelected = CsSelected.Where(availableCustomersHash.ContainsKey).ToArray();
             }
 
@@ -524,7 +525,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private UserIndexViewModel IndexInputViewModel()
         {
             var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
-            var csSelected = user.Cs ?? new List<Customer>();
+            var csSelected = user.Cs.Where(c => c.Status == 1) ?? new List<Customer>();
             var csAvailable = new List<Customer>();
 
 
@@ -532,6 +533,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             {
                 if (!csSelected.Contains(c))
                     csAvailable.Add(c);
+                    csAvailable.OrderBy(cu => c.Name);
             }
 
             List<SelectListItem> sli = new List<SelectListItem>();
@@ -713,7 +715,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             #region Model
 
-            var customerUsers = (user.CustomerUsers?.Any() ?? false ? user.CustomerUsers : _userService.GetCustomerUserForUser(userId)).Where(o => o.Customer.Status == 1).ToList();
+            var customerUsers = (user.CustomerUsers?.Any() ?? false ? user.CustomerUsers : _userService.GetCustomerUserForUser(userId))
+                                                                                           .Where(o => o.Customer.Status == 1).OrderBy(o => o.Customer.Name).ToList();
 
             var model = new UserInputViewModel
             {
