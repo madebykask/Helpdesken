@@ -46,3 +46,4 @@ dhHelpdeskMobile/.vs/
 **/wwwroot-test/*
 **/*.d.ts
 *.npmrc
+/ExtendedCase/ExtendedCase.Database/ExtendedCase.Database.dbmdl
