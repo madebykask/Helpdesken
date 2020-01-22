@@ -46,7 +46,7 @@ BEGIN
 			FROM [dbo].[tblText] WHERE [Id] = @Id
 		DELETE [dbo].[tblText] WHERE [Id] = @Id
 
-		UPDATE [dbo].[tblTextTranslation] SET [Text_Id] = @NewId WHERE [Id] = @Id
+		UPDATE [dbo].[tblTextTranslation] SET [Text_Id] = @NewId WHERE [Text_Id] = @Id
 
 		FETCH NEXT FROM @MyCursor 
 	    INTO @Id 
@@ -58,6 +58,7 @@ BEGIN
 	ALTER TABLE [dbo].[tblTextTranslation] CHECK CONSTRAINT [FK_tblTextTranslation_tblText]
 END
 commit transaction
+
 
 -- Home
 If not exists (select * from tbltext where id = 30000)
