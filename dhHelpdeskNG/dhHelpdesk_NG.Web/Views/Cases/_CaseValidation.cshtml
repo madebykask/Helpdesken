@@ -111,7 +111,8 @@
             CaseRelationType: "CaseRelationType",
             ExtendedInitiatiorGUID: "ExtendedInitiatorGUID",
             CostCentre: "case__CostCentre",
-            InitiatorCategory: "InitiatorCategory"
+            InitiatorCategory: "InitiatorCategory",
+            InventoryLocation: "case__InventoryLocation"
         },
 
         caseInitValues: {
@@ -137,7 +138,8 @@
             PersonsCellphone: @Html.Raw(Json.Encode(Model.case_.PersonsCellphone)),
             Place: @Html.Raw(Json.Encode(Model.case_.Place)),
             CostCentre: '@Html.Raw(Json.Encode(Model.case_.CostCentre))',
-            Caption: '@Html.Raw(Json.Encode(Model.case_.Caption))'
+            Caption: '@Html.Raw(Json.Encode(Model.case_.Caption))',
+            InventoryLocation: @Html.Raw(Model.case_.InventoryLocation != null ? Json.Encode(Model.case_.InventoryLocation) : ""),
         },
 
         casesScopeInitParameters: {

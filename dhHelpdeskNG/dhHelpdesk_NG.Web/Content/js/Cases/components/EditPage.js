@@ -319,7 +319,8 @@ EditPage.prototype.loadExtendedCase = function () {
                 persons_cellphone: { Value: fieldValues.PersonsCellphone },
                 place: { Value: fieldValues.Place },
                 costcentre: { Value: fieldValues.CostCentre },
-                caption: { Value: fieldValues.Caption }
+                caption: { Value: fieldValues.Caption },
+                inventorylocation: { Value: fieldValues.InventoryLocation }
             }
         }).then(function() {
             self.onExtendedCaseLoaded();
@@ -451,6 +452,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
     var _place = fieldData.place;
     var _costcentre = fieldData.costcentre;
     var _caption = fieldData.caption;
+    var _inventorylocation = fieldData.inventorylocation;
 
     if (_administratorId != undefined)
         $('#' + _caseFields.AdministratorId).val(_administratorId.Value);
@@ -593,6 +595,9 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
 
     if (_costcentre != undefined)
         $('#' + _caseFields.CostCentre).val(_costcentre.Value);
+
+    if (_inventorylocation != undefined)
+        $('#' + _caseFields.InventoryLocation).val(_inventorylocation.Value);
 
 }
 
@@ -1535,7 +1540,7 @@ EditPage.prototype.init = function (p) {
 
 
     /*Debug mode*/
-    //EditPage.prototype.Current_EC_Path = "http://dhhelpdesk-ikea-bschr-v5.datahalland.se/ExtendedCase/?formId=[ExtendedCaseFormId]&autoLoad=1";
+    EditPage.prototype.Current_EC_Path = "http://localhost:8099/ExtendedCase/?formId=[ExtendedCaseFormId]&languageId=[LanguageId]&caseStatus=[CaseStateSecondaryId]&userRole=[CaseWorkingGroupId]&customerId=[CustomerId]&userGuid=[UserGuid]";
 
     /// controls binding
     self.extendedCaseInvalidMessage = p.extendedCaseInvalidMessage;
