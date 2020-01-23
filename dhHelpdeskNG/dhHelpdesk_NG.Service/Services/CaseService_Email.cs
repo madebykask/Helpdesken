@@ -784,7 +784,7 @@ namespace DH.Helpdesk.Services.Services
 
                         var templateFields =
                             _feedbackTemplateService.GetCustomerTemplates(identifiers, case_.Customer_Id,
-                                case_.RegLanguage_Id, case_.Id, cms.AbsoluterUrl);
+                                case_.RegLanguage_Id, case_.Id, case_.CaseType_Id, cms.AbsoluterUrl);
 
                         fields.AddRange(templateFields.Select(tf => tf.MapToFields()));
 
@@ -841,7 +841,8 @@ namespace DH.Helpdesk.Services.Services
 
                 //dont send feedback to admins
                 var identifiersToDel = new List<string>();
-                templateFields = _feedbackTemplateService.GetCustomerTemplates(identifiers, newCase.Customer_Id, newCase.RegLanguage_Id, newCase.Id, cms.AbsoluterUrl);
+                templateFields = _feedbackTemplateService.GetCustomerTemplates(identifiers, newCase.Customer_Id, newCase.RegLanguage_Id,
+                    newCase.Id, newCase.CaseType_Id, cms.AbsoluterUrl);
 
                 foreach (var templateField in templateFields)
                 {

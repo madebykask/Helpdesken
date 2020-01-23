@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using DH.Helpdesk.BusinessData.Enums.MailTemplates;
 using DH.Helpdesk.BusinessData.Models.Feedback;
+using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Write;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
@@ -55,7 +56,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
             return from Match match in result where match.Groups["Identifier"] != null select match.Groups["Identifier"].Value;
         }
 
-        public List<FeedbackField> GetCustomerTemplates(IEnumerable<string> identifiers, int customerId, int languageId, int caseId, string absoluterUrl)
+        public List<FeedbackField> GetCustomerTemplates(IEnumerable<string> identifiers, int customerId, int languageId, int caseId, int caseTypeId, string absoluterUrl)
         {
             var res = new List<FeedbackField>();
 
@@ -63,7 +64,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
 
             if (feedbacks.Any())
             {
-                var fields = feedbacks.Select(f => GetField(f, languageId, caseId, absoluterUrl, customerId)).ToArray();
+                var fields = feedbacks.Select(f => GetField(f, languageId, caseId, absoluterUrl, customerId, caseTypeId)).ToArray();
                 res.AddRange(fields);
             }
 
@@ -79,7 +80,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
                 _circularService.UpdateParticipantSendDate(field.CircularPartGuid, DateTime.Now);
         }
 
-        private FeedbackField GetField(FeedbackFullItem feedback, int languageId, int caseId, string absoluterUrl, int customerId)
+        private FeedbackField GetField(FeedbackFullItem feedback, int languageId, int caseId, string absoluterUrl, int customerId, int caseTypeId)
         {
             var field = new FeedbackField
             {
@@ -95,7 +96,8 @@ namespace DH.Helpdesk.Services.Services.Feedback
             field.CircularId = dbCircular.Id;
 
             var isSuccess = RollDices(dbCircular.CaseFilter.SelectedProcent);
-            if (!isSuccess) return field;
+            var hasCaseType = CheckCaseType(caseTypeId, dbCircular);
+            if (!isSuccess || !hasCaseType) return field;
 
             var circular = new CircularForUpdate(dbCircular.Id, dbCircular.CircularName, DateTime.Now, dbCircular.CaseFilter);
             _circularService.UpdateCircular(circular); //also in this method Participant is created.
@@ -111,6 +113,14 @@ namespace DH.Helpdesk.Services.Services.Feedback
             }
 
             return field;
+        }
+
+        private static bool CheckCaseType(int caseTypeId, CircularForEdit dbCircular)
+        {
+            return (dbCircular.CaseFilter.SelectedCaseTypes == null || !dbCircular.CaseFilter.SelectedCaseTypes.Any()) ||
+                   (dbCircular.CaseFilter.SelectedCaseTypes != null &&
+                    dbCircular.CaseFilter.SelectedCaseTypes.Any() &&
+                    dbCircular.CaseFilter.SelectedCaseTypes.Contains(caseTypeId));
         }
 
         private bool RollDices(int chancePercents)
@@ -161,7 +171,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
     public interface IFeedbackTemplateService
     {
         bool ContainsIdentifiers(string body);
-        List<FeedbackField> GetCustomerTemplates(IEnumerable<string> identifiers, int customerId, int languageId, int caseId, string absoluterUrl);
+        List<FeedbackField> GetCustomerTemplates(IEnumerable<string> identifiers, int customerId, int languageId, int caseId, int caseTypeId, string absoluterUrl);
         IEnumerable<string> FindIdentifiers(string body);
         void UpdateFeedbackStatus(FeedbackField field);
     }

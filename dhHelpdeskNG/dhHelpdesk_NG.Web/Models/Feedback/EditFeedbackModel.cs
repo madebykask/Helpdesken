@@ -12,7 +12,8 @@ namespace DH.Helpdesk.Web.Models.Feedback
 		public EditFeedbackModel()
 		{
 			Options = new List<QuestionnaireQuesOptionModel>();
-		}
+            CaseFilter = new CircularCaseFilter();
+        }
 
 		public int QuestionId { get; set; }
 
@@ -56,6 +57,8 @@ namespace DH.Helpdesk.Web.Models.Feedback
 		public DateTime CreateDate { get; set; }
 
 		public int? CircularId { get; set; }
+
+        public CircularCaseFilter CaseFilter { get; set; }
 
 		public bool ExcludeAdministrators { get; set; }
 
