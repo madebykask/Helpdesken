@@ -39,7 +39,6 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IQestionnaireQuestionService _questionnaireQuestionService;
         private readonly IFeedbackService _feedbackService;
         private readonly ICircularService _circularService;
-        private readonly IInfoService _infoService;
         private readonly GridSettingsService _gridSettingsService;
         private readonly ICaseLockService _caseLockService;
         private readonly ISettingService _settingService;
@@ -48,22 +47,24 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ICaseSettingsService _caseSettingService;
         private readonly IDepartmentService _departmentService;
-        private ICustomerUserService _customerUserService;
+        private readonly ICustomerUserService _customerUserService;
+        private readonly ICaseTypeService _caseTypeService;
 
         public FeedbackController(IMasterDataService masterDataService, IQestionnaireQuestionOptionService questionnaireQuestionOptionService,
             IQestionnaireQuestionService questionnaireQuestionService, IFeedbackService feedbackService, ICircularService circularService,
-            IInfoService infoService, GridSettingsService gridSettingsService, ICaseLockService caseLockService, ISettingService settingService,
-            IGlobalSettingService globalSettingService, ICaseSearchService caseSearchService, ICaseFieldSettingService caseFieldSettingService, ICaseSettingsService caseSettingService,
+            GridSettingsService gridSettingsService, ICaseLockService caseLockService, ISettingService settingService,
+            IGlobalSettingService globalSettingService, ICaseSearchService caseSearchService, ICaseFieldSettingService caseFieldSettingService,
+            ICaseSettingsService caseSettingService,
             IDepartmentService departmentService,
-            ICustomerUserService customerUserService) 
+            ICustomerUserService customerUserService, ICaseTypeService caseTypeService) 
             : base(masterDataService)
         {
             _customerUserService = customerUserService;
+            _caseTypeService = caseTypeService;
             _questionnaireQuestionOptionService = questionnaireQuestionOptionService;
             _questionnaireQuestionService = questionnaireQuestionService;
             _feedbackService = feedbackService;
             _circularService = circularService;
-            _infoService = infoService;
             _gridSettingsService = gridSettingsService;
             _caseLockService = caseLockService;
             _settingService = settingService;
@@ -151,6 +152,7 @@ namespace DH.Helpdesk.Web.Controllers
                         model.CircularId = dbCircular.Id;
                         model.SelectedPercent = dbCircular.CaseFilter.SelectedProcent;
                         model.IsSent = dbCircular.Status == CircularStates.Sent;
+                        model.CaseFilter.SelectedCaseTypes = dbCircular.CaseFilter.SelectedCaseTypes;
                     }
                 }
             }
@@ -199,7 +201,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             _questionnaireQuestionService.AddQuestionnaireQuestion(newFeedbackQuestion);
 
-            CreateCircular(model.SelectedPercent, feedbackId);
+            CreateCircular(model.SelectedPercent, model.CaseFilter, feedbackId);
 
             return RedirectToAction(MvcUrlName.Feedback.Edit, new EditFeedbackParams
             {
@@ -266,6 +268,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (dbCircular != null)
                 {
                     dbCircular.CaseFilter.SelectedProcent = model.SelectedPercent;
+                    dbCircular.CaseFilter.SelectedCaseTypes = model.CaseFilter.SelectedCaseTypes;
 
                     var circular = new CircularForUpdate(dbCircular.Id, dbCircular.CircularName, DateTime.Now,
                         dbCircular.CaseFilter);
@@ -274,7 +277,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
             {
-                CreateCircular(model.SelectedPercent, model.QuestionnaireId);
+                CreateCircular(model.SelectedPercent, model.CaseFilter, model.QuestionnaireId);
             }
 
             return RedirectToAction(MvcUrlName.Feedback.Edit, new EditFeedbackParams
@@ -463,6 +466,18 @@ namespace DH.Helpdesk.Web.Controllers
             });
         }
 
+        [HttpPost]
+        public ActionResult UpdateOptionIcon(UpdateQuestionOptionIconParams data)
+        {
+            var imageSource = Convert.FromBase64String(data.Src);
+            _questionnaireQuestionOptionService.UpdateQuestionnaireQuestionOptionIcon(data.OptionId, imageSource);
+            return Json(new
+            {
+                success = true,
+                data = Convert.ToBase64String(imageSource)
+            });
+        }
+
         #region Private
 
         private JsonCaseIndexViewModel GetJsonCaseIndexViewModel()
@@ -619,15 +634,16 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
 
-        private void CreateCircular(int selectedPercent, int feedbackId)
+        private void CreateCircular(int selectedPercent, CircularCaseFilter caseFilter, int feedbackId)
         {
-            var caseFilter = new BusinessData.Models.Questionnaire.CircularCaseFilter
+            var newCaseFilter = new BusinessData.Models.Questionnaire.CircularCaseFilter
             {
-                SelectedProcent = selectedPercent
+                SelectedProcent = selectedPercent,
+                SelectedCaseTypes = caseFilter.SelectedCaseTypes
             };
 
             var circular = new CircularForInsert("Feedback", feedbackId,
-                CircularStateId.ReadyToSend, DateTime.Now, new List<int>(), caseFilter);
+                CircularStateId.ReadyToSend, DateTime.Now, new List<int>(), newCaseFilter);
 
             _circularService.AddCircular(circular);
         }
@@ -763,19 +779,12 @@ namespace DH.Helpdesk.Web.Controllers
             ViewBag.Languages = new SelectList(languages, "Value", "Name");
             ViewBag.Percents = GetPercents();
             ViewBag.IconsList = GetIcons();
+            ViewBag.CaseTypes = _caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id)
+                .Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() })
+                .ToList();
         }
+
         #endregion
 
-        [HttpPost]
-        public ActionResult UpdateOptionIcon(UpdateQuestionOptionIconParams data)
-        {
-            var imageSource = Convert.FromBase64String(data.Src);
-            _questionnaireQuestionOptionService.UpdateQuestionnaireQuestionOptionIcon(data.OptionId, imageSource);
-            return Json(new
-            {
-                success = true,
-                data = Convert.ToBase64String(imageSource)
-            });
-        }
     }
 }

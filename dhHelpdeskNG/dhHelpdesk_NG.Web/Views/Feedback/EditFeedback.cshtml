@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using DH.Helpdesk.BusinessData.Models.Case.Output
 @using DH.Helpdesk.Common.Constants
 @using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Web
@@ -143,6 +144,27 @@
                                             @Html.DropDownListFor(model => model.SelectedPercent, percents, new {style = "width: 60px"})
                                             @Translation.GetCoreTextTranslation("procent av tillgängliga ärenden")
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span2">
+                                            @Translation.GetCoreTextTranslation("Ärendetyp")
+                                        </td>
+                                        <td class="span5">
+                                            @Html.ListBoxFor(model => model.CaseFilter.SelectedCaseTypes, (IList<SelectListItem>)ViewBag.CaseTypes, new { multiple = "multiple", @class = "chosen-select" })
+                                        </td>
+                                        @*<td class="span6">
+                                            <div id="divCaseTypeSetting" class="btn-group">
+                                                <div class="btn" id="divBreadcrumbs_CaseTypeSetting"></div>
+                                                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="#">@Translation.Get("--")</a></li>
+                                                    @Html.CaseTypeDropdownButtonString((IList<CaseTypeOverview>)ViewBag.CaseTypes, true)
+                                                </ul>
+                                                @Html.HiddenFor(model => model.CaseTypeId)
+                                            </div>
+                                        </td>*@
                                     </tr>
                                     <tr>
                                         <td class="span3">

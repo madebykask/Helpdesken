@@ -73,7 +73,14 @@
                         }
                     }
                 });
-            });
+    });
+
+    //$('#divCaseTypeSetting ul.dropdown-menu li a').click(function (e) {
+    //    e.preventDefault();
+    //    var val = $(this).attr('value');
+    //    $("#divBreadcrumbs_CaseTypeSetting").text(getBreadcrumbs(this) || '--');
+    //    $("#CaseTypeId").val(val);
+    //});
 
     function formatIcon(icon) {
         if (!icon.id) {
@@ -198,6 +205,9 @@
                     img.width(24);
                     img.height(24);
                 }
-            });
         });
+        //var caseTypeValue = +$("#CaseTypeId").val();
+        //var ctrlQuery = "#divCaseTypeSetting ul.dropdown-menu li a[value='" + caseTypeValue + "']";
+        //$("#divBreadcrumbs_CaseTypeSetting").text(caseTypeValue > 0 ? getBreadcrumbs($(ctrlQuery)) : '--');
+    });
 }
