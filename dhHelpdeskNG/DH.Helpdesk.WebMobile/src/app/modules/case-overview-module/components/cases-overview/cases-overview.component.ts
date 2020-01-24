@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { finalize, take, distinctUntilChanged, takeUntil, filter, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { Subject, forkJoin, throwError } from 'rxjs';
+import { Subject, forkJoin, throwError, from } from 'rxjs';
 import { PagingConstants, SortOrder, CaseFieldsNames, CaseOverviewConstants } from 'src/app/modules/shared-module/constants';
 import { CasesOverviewFilter } from '../../models/cases-overview/cases-overview-filter.model';
 import { CaseOverviewItem } from '../../models/cases-overview/cases-overview-item.model';
@@ -140,9 +140,29 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     CaseRouteReuseStrategy.deleteSnaphots();
   }
 
+  public get caseSortFieldsFiltered() {
+    // TODO: Temp code. Remove after Time left sortinп is implemented for multiply customers
+    const isOnlyOneCustomer = this.appStore.state.favFilters.filter(cf => cf.customerId !== -1).length === 1;
+    if (!isOnlyOneCustomer && +this.selectedFilterId <= 0) { // selected filter is for multiply customers
+      const newSortFields = this.caseSortFields.filter(sf => sf.fieldId != '_temporary_LeadTime');
+      return newSortFields;
+    }
+    ////// end of TODO code
+
+    return this.caseSortFields;
+  }
+
   processFilterChanged(filterChangeArg) {
     this.selectedFilterId = filterChangeArg.filterId;
     this.headerText = filterChangeArg.filterName ? this.ngxTranslateService.instant(filterChangeArg.filterName) : this.defaultHeaderText;
+    // TODO: Temp code. Remove after Time left sortinп is implemented for multiply customers
+    const isOnlyOneCustomer = this.appStore.state.favFilters.filter(cf => cf.customerId !== -1).length === 1;
+    if (!isOnlyOneCustomer && +this.selectedFilterId <= 0) { // selected filter is for multiply customers
+      if (this.selectedSortFieldId == '_temporary_LeadTime') {
+        this.selectedSortFieldId = this.caseSortFields[0].fieldId;
+      }
+    }
+    ////// end of TODO code
     this.updateCustomerText(this.selectedFilterId);
     this.saveSearchState();
 
