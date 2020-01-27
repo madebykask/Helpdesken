@@ -47,3 +47,4 @@ dhHelpdeskMobile/.vs/
 **/*.d.ts
 *.npmrc
 /ExtendedCase/ExtendedCase.Database/ExtendedCase.Database.dbmdl
+/ExtendedCase/ExtendedCase.Database/ExtendedCase.Database.dbmdl
