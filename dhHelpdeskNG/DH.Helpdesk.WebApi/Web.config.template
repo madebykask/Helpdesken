@@ -22,10 +22,15 @@
   
   <connectionStrings>
     <!-- Dev -->
-    <add name="HelpdeskSqlServerDbContext" connectionString="Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword};MultipleActiveResultSets=True;" providerName="System.Data.SqlClient" />
+    <!--<add name="HelpdeskSqlServerDbContext" connectionString="Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword};MultipleActiveResultSets=True;" providerName="System.Data.SqlClient" />-->
   </connectionStrings>
   
   <system.web>
+    <pages>
+      <namespaces>
+        <clear/>
+      </namespaces>
+    </pages>
     <compilation debug="true" targetFramework="4.7.2" />
     <httpRuntime maxRequestLength="102400" targetFramework="4.7.2"  />
     <authentication mode="None" />
