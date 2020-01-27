@@ -236,6 +236,7 @@ window.extendedCasePage =
                             place: { Value: fieldValues.Place },
                             costcentre: { Value: fieldValues.CostCentre },
                             caption: { Value: fieldValues.Caption },
+                            inventorylocation: {Value: fieldValues.InventoryLocation}
                         }
                     });
                 promise.then(function () { self.onExtendedCaseLoaded() });
@@ -334,6 +335,7 @@ window.extendedCasePage =
             var _place = fieldData.place;
             var _costcentre = fieldData.costcentre;
             var _caption = fieldData.caption;
+            var _inventorylocation = fieldData.inventorylocation;
 
             if (_adminstratorId != undefined)
                 $('#' + _caseFields.AdministratorId).val(_adminstratorId.Value);
@@ -414,6 +416,9 @@ window.extendedCasePage =
 
             if (_caption != undefined)
                 $('#' + _caseFields.Caption).val(_caption.Value);
+
+            if (_inventorylocation != undefined)
+                $('#' + _caseFields.InventoryLocation).val(_inventorylocation.Value);
         }
 
         ExtendedCasePage.prototype.setCaseStatus = function (status) {

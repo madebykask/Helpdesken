@@ -1540,7 +1540,7 @@ EditPage.prototype.init = function (p) {
 
 
     /*Debug mode*/
-    EditPage.prototype.Current_EC_Path = "http://localhost:8099/ExtendedCase/?formId=[ExtendedCaseFormId]&languageId=[LanguageId]&caseStatus=[CaseStateSecondaryId]&userRole=[CaseWorkingGroupId]&customerId=[CustomerId]&userGuid=[UserGuid]";
+    //EditPage.prototype.Current_EC_Path = "http://localhost:8099/ExtendedCase/?formId=[ExtendedCaseFormId]&languageId=[LanguageId]&caseStatus=[CaseStateSecondaryId]&userRole=[CaseWorkingGroupId]&customerId=[CustomerId]&userGuid=[UserGuid]";
 
     /// controls binding
     self.extendedCaseInvalidMessage = p.extendedCaseInvalidMessage;
