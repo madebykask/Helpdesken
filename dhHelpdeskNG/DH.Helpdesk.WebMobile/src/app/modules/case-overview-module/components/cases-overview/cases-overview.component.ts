@@ -159,7 +159,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     const isOnlyOneCustomer = this.appStore.state.favFilters.filter(cf => cf.customerId !== -1).length === 1;
     if (!isOnlyOneCustomer && +this.selectedFilterId <= 0) { // selected filter is for multiply customers
       if (this.selectedSortFieldId == '_temporary_LeadTime') {
-        this.selectedSortFieldId = this.caseSortFields[0].fieldId;
+        this.selectedSortFieldId = 'CaseNumber';
       }
     }
     ////// end of TODO code
