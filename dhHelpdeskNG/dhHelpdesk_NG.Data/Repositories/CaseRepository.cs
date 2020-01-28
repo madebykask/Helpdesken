@@ -499,8 +499,6 @@ namespace DH.Helpdesk.Dal.Repositories
 			}
 
 
-			// TODO: handle "text text"
-
 			var entities = from cs in this.DataContext.Cases
 						   join cus in this.DataContext.Customers on cs.Customer_Id equals cus.Id
 						   join cusu in this.DataContext.CustomerUsers on new { User_Id = currentUserId, Customer_Id = cus.Id } equals new { cusu.User_Id, cusu.Customer_Id }
@@ -512,13 +510,13 @@ namespace DH.Helpdesk.Dal.Repositories
 						   (!cusu.RestrictedCasePermission ||                                                                       // Restrict to own cases (only for normal admin and user)
 								(user.UserGroup_Id == UserGroups.SystemAdministrator) ||
 								(user.UserGroup_Id == UserGroups.CustomerAdministrator) ||
-								(user.UserGroup_Id == UserGroups.Administrator && cs.Performer_User_Id == user.Id) ||
-								(user.UserGroup_Id == UserGroups.User && cs.ReportedBy.ToLower() == user.UserID.ToLower())
+								(user.UserGroup_Id == UserGroups.Administrator && (cs.Performer_User_Id == user.Id || cs.CaseResponsibleUser_Id == user.Id)) ||
+								(user.UserGroup_Id == UserGroups.User && (cs.ReportedBy.ToLower() == user.UserID.ToLower() || cs.User_Id == user.Id))
 							) &&
 							(!cs.WorkingGroup_Id.HasValue || workingGroupsIds.Contains(cs.WorkingGroup_Id.Value)) &&                // Working group logic
 							(fullAccessCustomers.Contains(cs.Customer_Id) || departmentIds.Contains(cs.Department_Id.Value)) && // Department logic
 							(!useCaseNumberSearch || caseId.HasValue && cs.Id == caseId.Value)	&&															// Case ID logixc
-							  (!searchFreeText || (                                                                                 // Freetext search, TODO: use text index when active
+							  (!searchFreeText || (                                                                                 // Freetext search
 								
 									(words.Any(w => cs.ReportedBy.Contains(w) ||
 									cs.PersonsName.Contains(w) ||
@@ -553,7 +551,7 @@ namespace DH.Helpdesk.Dal.Repositories
 											cs.IsAbout.Person_Phone.Contains(w)
 										)
 									) ||
-									(   // Log (TODO: rights?)
+									(   // Log 
 										cs.Logs.Any(l => l.Text_External.Contains(w) || (searchInternalLog ? l.Text_Internal.Contains(w) : false))
 									))
 
