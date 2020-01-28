@@ -1070,12 +1070,15 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 case "caption":
                     caseModel.Caption = value;
                     break;
-                    //case "log_textinternal":
-                    //    caseModel.log_textinternal = value;
-                    //    break;
-                    //case "case_relation_type":
-                    //    caseModel.case_relation_type = value;
-                    //    break;
+                //case "log_textinternal":
+                //    caseModel.log_textinternal = value;
+                //    break;
+                //case "case_relation_type":
+                //    caseModel.case_relation_type = value;
+                //    break;
+                case "inventorylocation":
+                    caseModel.InventoryLocation = value;
+                    break;
             }
         }
 
