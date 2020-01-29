@@ -112,6 +112,7 @@
             ExtendedInitiatiorGUID: "ExtendedInitiatorGUID",
             CostCentre: "case__CostCentre",
             InitiatorCategory: "InitiatorCategory",
+            InventoryType: "case__InventoryType",
             InventoryLocation: "case__InventoryLocation"
         },
 
@@ -139,6 +140,7 @@
             Place: @Html.Raw(Json.Encode(Model.case_.Place)),
             CostCentre: '@Html.Raw(Json.Encode(Model.case_.CostCentre))',
             Caption: '@Html.Raw(Json.Encode(Model.case_.Caption))',
+            InventoryType: @Html.Raw(Model.case_.InventoryType != null ? Json.Encode(Model.case_.InventoryType) : ""),
             InventoryLocation: @Html.Raw(Model.case_.InventoryLocation != null ? Json.Encode(Model.case_.InventoryLocation) : ""),
         },
 
