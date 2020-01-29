@@ -6,6 +6,7 @@ import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-
 import { BehaviorSubject, Subject } from 'rxjs';
 import { AppStore, AppStoreKeys } from 'src/app/store/app-store';
 import { CustomerCaseTemplateModel } from 'src/app/models/caseTemplate/case-template.model';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-footer',
@@ -18,8 +19,6 @@ export class FooterComponent implements OnInit  {
   isVisible = true;
 
   canCreateCases$ = new BehaviorSubject<boolean>(false);
-
-  private destroy$ = new Subject<any>();
 
   bottomMenuSettings: MbscNavOptions = {
     type: 'bottom',
@@ -40,7 +39,7 @@ export class FooterComponent implements OnInit  {
        this.appStore.select<CustomerCaseTemplateModel[]>(AppStoreKeys.Templates).pipe(
          distinctUntilChanged(),
          filter(Boolean), // aka new Boolean(val) to filter null values
-         takeUntil(this.destroy$)
+         untilDestroyed(this)
       ).subscribe((templates: CustomerCaseTemplateModel[]) => {
         this.canCreateCases$.next(templates && templates.length > 0);
       });
@@ -60,7 +59,5 @@ export class FooterComponent implements OnInit  {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

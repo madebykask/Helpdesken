@@ -6,6 +6,7 @@ import { CaseTemplateModel, CaseTemplateNode, CaseTemplateCategoryNode, Customer
 import { BehaviorSubject, Subject, from } from 'rxjs';
 import { takeUntil, distinctUntilChanged, filter, switchMap } from 'rxjs/operators';
 import { AppStore, AppStoreKeys } from 'src/app/store/app-store';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'case-template',
@@ -27,8 +28,6 @@ export class CaseTemplateComponent implements OnInit, OnDestroy {
   canCreateCases$ = new BehaviorSubject<boolean>(false);
   templateNodes = [];
 
-  private destroy$ = new Subject<any>();
-
   isCategory(node) {
     return node && node instanceof CaseTemplateCategoryNode;
   }
@@ -37,7 +36,7 @@ export class CaseTemplateComponent implements OnInit, OnDestroy {
    if (this.userSettingsService.getUserData().createCasePermission) {
       //load templates from app store - templates are loaded in the footer component first
       this.appStore.select<CustomerCaseTemplateModel[]>(AppStoreKeys.Templates).pipe(
-        takeUntil(this.destroy$),
+        untilDestroyed(this),
         distinctUntilChanged(),
         filter(Boolean), // aka new Boolean(val) to filter null values
       ).subscribe((ct: CustomerCaseTemplateModel[]) => {
@@ -60,19 +59,20 @@ export class CaseTemplateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    // required for untilDestroyed
   }
 
   private processTemplates(customerTemplates: CustomerCaseTemplateModel[]): Array<CaseTemplateNode | CaseTemplateCategoryNode> {
     let resultNodes = new Array<CaseTemplateNode | CaseTemplateCategoryNode>();
     if (customerTemplates && customerTemplates.length) {
+      const userData = this.userSettingsService.getUserData();
       customerTemplates.forEach(ct => {
+        const customerNodes: CaseTemplateNode[] = [];
         const templateNodes: CaseTemplateNode[] = [];
         const categoryNodes: CaseTemplateCategoryNode[] = [];
         if (customerTemplates.length > 1) {
           // add customer header
-          resultNodes.push(new CaseTemplateNode(0, ct.customerName, ct.customerId, true));
+          customerNodes.push(new CaseTemplateNode(0, ct.customerName, ct.customerId, true));
         }
         if (ct.items && ct.items.length) {
           ct.items.forEach(t => {
@@ -91,8 +91,17 @@ export class CaseTemplateComponent implements OnInit, OnDestroy {
             }
           });
         }
-        resultNodes = resultNodes.concat(this.sortByName(templateNodes));
-        resultNodes = resultNodes.concat(this.sortByName(categoryNodes));
+        if (ct.customerId === userData.selectedCustomerId) {
+          // add default first
+          let first = new Array<CaseTemplateNode | CaseTemplateCategoryNode>();
+          first = customerNodes.concat(this.sortByName(templateNodes));
+          first = first.concat(this.sortByName(categoryNodes));
+          resultNodes = first.concat(resultNodes);
+        } else {
+          resultNodes = resultNodes.concat(customerNodes);
+          resultNodes = resultNodes.concat(this.sortByName(templateNodes));
+          resultNodes = resultNodes.concat(this.sortByName(categoryNodes));
+        }
       });
     }
     return resultNodes;
