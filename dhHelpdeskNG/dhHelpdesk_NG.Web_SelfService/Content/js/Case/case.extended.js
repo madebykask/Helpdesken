@@ -236,6 +236,7 @@ window.extendedCasePage =
                             place: { Value: fieldValues.Place },
                             costcentre: { Value: fieldValues.CostCentre },
                             caption: { Value: fieldValues.Caption },
+                            inventorytype: {Value: fieldValues.InventoryType},
                             inventorylocation: {Value: fieldValues.InventoryLocation}
                         }
                     });
@@ -335,6 +336,7 @@ window.extendedCasePage =
             var _place = fieldData.place;
             var _costcentre = fieldData.costcentre;
             var _caption = fieldData.caption;
+            var _inventorytype = fieldData.inventorytype;
             var _inventorylocation = fieldData.inventorylocation;
 
             if (_adminstratorId != undefined)
@@ -416,6 +418,9 @@ window.extendedCasePage =
 
             if (_caption != undefined)
                 $('#' + _caseFields.Caption).val(_caption.Value);
+
+            if (_inventorytype != undefined)
+                $('#' + _caseFields.InventoryType).val(_inventorytype.Value);
 
             if (_inventorylocation != undefined)
                 $('#' + _caseFields.InventoryLocation).val(_inventorylocation.Value);

@@ -104,6 +104,7 @@
             log_InternalText: "CaseDataModel_Text_Internal",
             CostCentre: "CaseDataModel_CostCentre",
             Caption: "CaseDataModel_Caption",
+            InventoryType: "CaseDataModel_InventoryType",
             InventoryLocation: "CaseDataModel_InventoryLocation",
         },
 
@@ -129,7 +130,8 @@
             PersonsCellphone: @Html.Raw(Json.Encode(Model.CaseDataModel.PersonsCellphone)),
             Place: @Html.Raw(Json.Encode(Model.CaseDataModel.Place)),
             CostCentre: '@Model.CaseDataModel.CostCentre',
-            InventoryLocation: @Html.Raw(Json.Encode(Model.CaseDataModel.InventoryLocation)), 
+            InventoryType: @Html.Raw(Json.Encode(Model.CaseDataModel.InventoryType)),
+            InventoryLocation: @Html.Raw(Json.Encode(Model.CaseDataModel.InventoryLocation)),
         },
 
         extendedCaseGuid: '@(Model.ExtendedCaseDataModel.ExtendedCaseGuid)',

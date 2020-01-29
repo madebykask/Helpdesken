@@ -320,6 +320,7 @@ EditPage.prototype.loadExtendedCase = function () {
                 place: { Value: fieldValues.Place },
                 costcentre: { Value: fieldValues.CostCentre },
                 caption: { Value: fieldValues.Caption },
+                inventorytype: { Value: fieldValues.InventoryType },
                 inventorylocation: { Value: fieldValues.InventoryLocation }
             }
         }).then(function() {
@@ -452,6 +453,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
     var _place = fieldData.place;
     var _costcentre = fieldData.costcentre;
     var _caption = fieldData.caption;
+    var _inventorytype = fieldData.inventorytype;
     var _inventorylocation = fieldData.inventorylocation;
 
     if (_administratorId != undefined)
@@ -595,6 +597,9 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
 
     if (_costcentre != undefined)
         $('#' + _caseFields.CostCentre).val(_costcentre.Value);
+
+    if (_inventorytype != undefined)
+        $('#' + _caseFields.InventoryType).val(_inventorytype.Value);
 
     if (_inventorylocation != undefined)
         $('#' + _caseFields.InventoryLocation).val(_inventorylocation.Value);

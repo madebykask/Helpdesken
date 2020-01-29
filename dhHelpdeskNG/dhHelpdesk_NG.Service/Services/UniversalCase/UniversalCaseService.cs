@@ -1076,6 +1076,9 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 //case "case_relation_type":
                 //    caseModel.case_relation_type = value;
                 //    break;
+                case "inventorytype":
+                    caseModel.InventoryType = value;
+                    break;
                 case "inventorylocation":
                     caseModel.InventoryLocation = value;
                     break;

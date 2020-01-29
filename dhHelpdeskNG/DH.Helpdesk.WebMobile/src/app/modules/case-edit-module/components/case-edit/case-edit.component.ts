@@ -393,6 +393,7 @@ export class CaseEditComponent {
               place: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.Place).value },
               costcentre: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.CostCentre).value },
               caption: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.Caption).value },
+              inventorytype: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.ComputerTypeId).value },
               inventorylocation: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.InventoryLocation).value }
             }
           };
@@ -484,6 +485,9 @@ export class CaseEditComponent {
       }
       if (values.caption != null) {
         this.form.setSafe(CaseFieldsNames.Caption, values.caption.Value);
+      }
+      if (values.inventorytype != null) {
+        this.form.setSafe(CaseFieldsNames.ComputerTypeId, values.inventorytype.Value);
       }
       if (values.inventorylocation != null) {
         this.form.setSafe(CaseFieldsNames.InventoryLocation, values.inventorylocation.Value);
