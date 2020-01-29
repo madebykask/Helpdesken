@@ -140,8 +140,8 @@
             Place: @Html.Raw(Json.Encode(Model.case_.Place)),
             CostCentre: '@Html.Raw(Json.Encode(Model.case_.CostCentre))',
             Caption: '@Html.Raw(Json.Encode(Model.case_.Caption))',
-            InventoryType: @Html.Raw(Model.case_.InventoryType != null ? Json.Encode(Model.case_.InventoryType) : ""),
-            InventoryLocation: @Html.Raw(Model.case_.InventoryLocation != null ? Json.Encode(Model.case_.InventoryLocation) : ""),
+            InventoryType: @Html.Raw(Json.Encode(Model.case_.InventoryType)),
+            InventoryLocation: @Html.Raw(Json.Encode(Model.case_.InventoryLocation)),
         },
 
         casesScopeInitParameters: {
