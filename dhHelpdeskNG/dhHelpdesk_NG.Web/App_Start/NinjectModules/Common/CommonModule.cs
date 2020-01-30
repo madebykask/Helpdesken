@@ -145,15 +145,19 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
                 .InSingletonScope();
 
 
-            this.Bind<IBusinessModelToEntityMapper<ExtendedCaseFormModel, ExtendedCaseFormEntity>>()
-                .To<ExtendedCaseFormToEntityMapper>()
+            this.Bind<IBusinessModelToEntityMapper<ExtendedCaseFormForCaseModel, ExtendedCaseFormEntity>>()
+                .To<ExtendedCaseFormForCaseToEntityMapper>()
                 .InSingletonScope();
 
-            this.Bind<IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel>>()
-                .To<ExtendedCaseFormToBusinessModelMapper>()
+            this.Bind<IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormForCaseModel>>()
+                .To<ExtendedCaseFormForCaseToBusinessModelMapper>()
                 .InSingletonScope();
 
-            this.Bind<IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity>>()
+			this.Bind<IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel>>()
+				.To<ExtendedCaseFormToBusinessModelMapper>()
+				.InSingletonScope();
+
+			this.Bind<IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity>>()
                 .To<ExtendedCaseDataToEntityMapper>()
                 .InSingletonScope();
 

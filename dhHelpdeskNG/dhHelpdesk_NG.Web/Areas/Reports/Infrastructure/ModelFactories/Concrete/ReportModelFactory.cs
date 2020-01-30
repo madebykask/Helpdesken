@@ -56,7 +56,8 @@
 
             var ready = new List<ReportType>
                             {                                
-                                ReportType.ReportGenerator                             
+                                ReportType.ReportGenerator  ,
+								ReportType.ReportGeneratorExtendedCase                           
                             };
             // It's a new report, so we need to add it to the tblReport table
             //reports.Add(ReportType.CaseSatisfaction);

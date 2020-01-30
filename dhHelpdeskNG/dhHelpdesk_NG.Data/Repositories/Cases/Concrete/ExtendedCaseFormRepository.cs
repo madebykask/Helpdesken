@@ -4,23 +4,27 @@ using System.Linq;
 
 namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 {
-    using BusinessData.Models.Case;    
-    using Infrastructure;
-    using Domain.ExtendedCaseEntity;
-    
-    //NOTE: This is performance optimised class - pls do not use mappers!
-    public sealed class ExtendedCaseFormRepository : RepositoryBase<ExtendedCaseFormEntity>, IExtendedCaseFormRepository
+	using BusinessData.Models.Case;
+	using Infrastructure;
+	using Domain.ExtendedCaseEntity;
+	using Mappers;
+
+	//NOTE: This is performance optimised class - pls do not use mappers!
+	public sealed class ExtendedCaseFormRepository : RepositoryBase<ExtendedCaseFormEntity>, IExtendedCaseFormRepository
     {
         private readonly IExtendedCaseDataRepository _extendedCaseDataRepository;
+		private readonly IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel> _entityToModelMapper;
 
-        #region ctor()
+		#region ctor()
 
-        public ExtendedCaseFormRepository(
+		public ExtendedCaseFormRepository(
             IDatabaseFactory databaseFactory,
-            IExtendedCaseDataRepository extendedCaseDataRepository)
+            IExtendedCaseDataRepository extendedCaseDataRepository,
+			IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel> entityToModelMapper)
             : base(databaseFactory)
         {
             _extendedCaseDataRepository = extendedCaseDataRepository;
+			_entityToModelMapper = entityToModelMapper;
         }
 
         #endregion
@@ -141,5 +145,40 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             
             return extendedForm;
         }
-    }
+
+		public List<ExtendedCaseFormModel> GetExtendedCaseFormsForCustomer(int customerId)
+		{
+
+			var query = DataContext.ExtendedCaseForms.Where(o => o.CaseSolutions.Any(f => f.Customer_Id == customerId));
+
+			var forms = query.Select(_entityToModelMapper.Map).ToList();
+
+			return forms;
+		}
+
+		public List<ExtendedCaseFormFieldTranslationModel> GetExtendedCaseFormFields(int extendedCaseFormId, int languageID)
+		{
+			var fieldIds = DataContext.ExtendedCaseValues.Where(o => o.ExtendedCaseData.ExtendedCaseFormId == extendedCaseFormId)
+				.Select(o => o.FieldId)
+				.Distinct();
+
+			var fieldTranslations = DataContext.ExtendedCaseTranslations
+				.Where(o => o.LanguageId == languageID)
+				.Join(
+					fieldIds,
+					t => t.Property.ToLower(),
+					f => ("Control." + f.Substring(f.IndexOf(".controls.") + 10, f.Length - f.IndexOf(".controls.") - 9)).ToLower(),
+					(t, f) => new ExtendedCaseFormFieldTranslationModel
+					{
+						FieldId = f,
+						Text = t.Text,
+						LanguageId = t.LanguageId
+					}
+				).ToList();
+
+
+			return fieldTranslations;
+				
+		}
+	}
 }

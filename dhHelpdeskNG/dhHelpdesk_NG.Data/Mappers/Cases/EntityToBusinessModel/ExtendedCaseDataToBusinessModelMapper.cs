@@ -23,7 +23,7 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity
 
             if (entity.ExtendedCaseForm != null)
             {                
-                var formModel = new ExtendedCaseFormModel
+                var formModel = new ExtendedCaseFormForCaseModel
                 {
                     Id = entity.ExtendedCaseForm.Id,
                     Name = entity.ExtendedCaseForm.Name

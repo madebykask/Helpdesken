@@ -346,9 +346,9 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public bool CanGetRelatedCases { get; set; }
 
-        public IList<ExtendedCaseFormModel> ExtendedCases { get; set; }
+        public IList<ExtendedCaseFormForCaseModel> ExtendedCases { get; set; }
 
-        public IList<ExtendedCaseFormModel> ComputerUserCategoryExtendedCases { get; set; }
+        public IList<ExtendedCaseFormForCaseModel> ComputerUserCategoryExtendedCases { get; set; }
 
         public IList<CaseDocumentModel> CaseDocuments { get; set; }
 
@@ -489,7 +489,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public ComputerUserCategory InitiatorComputerUserCategory { get; internal set; }
         public bool InitiatorReadOnly { get; set; }
         
-        public IDictionary<CaseSectionType, ExtendedCaseFormModel> ExtendedCaseSections { get; internal set; }
+        public IDictionary<CaseSectionType, ExtendedCaseFormForCaseModel> ExtendedCaseSections { get; internal set; }
         public ComputerUserCategory RegardingComputerUserCategory { get; internal set; }
         public bool RegardingReadOnly { get; internal set; }
 

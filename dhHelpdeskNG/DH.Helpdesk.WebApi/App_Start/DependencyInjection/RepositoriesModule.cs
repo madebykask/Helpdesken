@@ -179,7 +179,7 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<OrderRepository>().As<IOrderRepository>();
             builder.RegisterType<OrderStateRepository>().As<IOrderStateRepository>();
             builder.RegisterType<ExtendedCaseFormRepository>().As<IExtendedCaseFormRepository>();
-            builder.RegisterType<ExtendedCaseDataRepository>().As<IExtendedCaseDataRepository>();
+			builder.RegisterType<ExtendedCaseDataRepository>().As<IExtendedCaseDataRepository>();
             builder.RegisterType<TextTranslationRepository>().As<ITextTranslationRepository>();
             builder.RegisterType<TextTypeRepository>().As<ITextTypeRepository>();
             builder.RegisterType<ExtendedCaseValueRepository>().As<IExtendedCaseValueRepository>();

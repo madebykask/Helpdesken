@@ -11,6 +11,7 @@
         SaveFiltersUrl: '@Url.Content("~/Reports/Report/SaveReportFilters")',
         GetReportFilterOptionsUrl: '@Url.Content("~/Reports/Report/GetReportFilterOptions")',
         DeleteReportFavoriteUrl: '@Url.Content("~/Reports/Report/DeleteReportFavorite")',
+        GetExtendedCaseFormFields: '@Url.Content("~/Reports/Report/GetFieldsForExtendedCaseForm")',
         CurrentCustomerId: '@Model.CustomerId',
         DateIsEmptyMessage: '@Translation.GetCoreTextTranslation("Var vänlig ange ett datum.")'
     };
@@ -381,7 +382,27 @@
                                     multiple = "multiple",
                                     @class = "multiselect multiselect-search"
                                 })
-
+                        </td>
+                    </tr>
+                    <tr id="reportGeneratorExtendedCaseForms" style="display: none">
+                        <td>@Translation.GetCoreTextTranslation("Utökade ärendeformulär")</td>
+                        <td>
+                                @Html.DropDownListFor(m => m.ReportGeneratorExtendedCaseFormId, Model.ReportGeneratorExtendedCaseForms.Select(o => new SelectListItem() { Text = o.Name, Value = o.ID.ToString() }).ToList(),
+                                new
+                                {
+                                    id = "lstExtendedCaseForms",
+                                })
+                        </td>
+                    </tr>
+                    <tr id="reportGeneratorExtendedCaseFormFields" style="display:none">
+                        <td>@Translation.GetCoreTextTranslation("Utökat ärendeformulär - Fält")</td>
+                        <td>
+                            @Html.DropDownListFor(m => m.ReportGeneratorOptions.ExtendedCaseFormFieldIds, new List<SelectListItem>(), new
+                            {
+                                id = "lstExtendedCaseFormFields",
+                                multiple = "multiple",
+                                @class = "multiselect multiselect-search"
+                            })
                         </td>
                     </tr>
                 </table>

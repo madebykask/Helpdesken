@@ -59,8 +59,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         private const string ReportFolderName = "Reports";
 
         private readonly Dictionary<string, string> _reportTypeNames;
+		private IExtendedCaseService _extendedCaseService;
 
-        public ReportController(
+		public ReportController(
             IMasterDataService masterDataService,
             ISettingService customerSettingService,
             IReportModelFactory reportModelFactory,
@@ -71,7 +72,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             IReportGeneratorModelFactory reportGeneratorModelFactory,
             IReportServiceService reportServiceService,
             ICaseSectionService caseSectionService,
-            IFeatureToggleService featureToggleService)
+            IFeatureToggleService featureToggleService,
+			IExtendedCaseService extendedCaseService)
             : base(masterDataService)
         {
             _reportModelFactory = reportModelFactory;
@@ -84,8 +86,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             _reportServiceService = reportServiceService;
             _caseSectionService = caseSectionService;
             _featureToggleService = featureToggleService;
+			_extendedCaseService = extendedCaseService;
 
-            _reportTypeNames = new Dictionary<string, string>
+			_reportTypeNames = new Dictionary<string, string>
             {
                 //{"-1", "CasesPerCasetype"},
                 //{"-2", "CasesPerDate"},
@@ -339,6 +342,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                     filters.AdministratorIds,
                     filters.CaseStatusIds,
                     filters.CaseTypeIds,
+					filters.ExtendedCaseFormFieldIds,
+					filters.ExtendedCaseFormId,
                     filters.PeriodFrom,
                     filters.PeriodUntil,
                     string.Empty,
@@ -362,7 +367,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                                     filters.AdministratorIds,
                                     filters.CaseStatusIds,
                                     filters.CaseTypeIds,
-                                    filters.PeriodFrom,
+									filters.ExtendedCaseFormFieldIds,
+									filters.ExtendedCaseFormId,
+									filters.PeriodFrom,
                                     filters.PeriodUntil,
                                     string.Empty,
                                     filters.SortField,
@@ -473,6 +480,15 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             return this.PartialView("Reports/FinishingCauseCategoryCustomer", model);
         }
 
+		[HttpPost]
+		[BadRequestOnNotValid]
+		public JsonResult GetFieldsForExtendedCaseForm(int extendedCaseFormId)
+		{
+			var languageID = SessionFacade.CurrentLanguageId;
+			var fields = _extendedCaseService.GetExtendedCaseFormFields(extendedCaseFormId, languageID);
+			return Json(fields);
+		}
+
         [HttpPost]
         [BadRequestOnNotValid]
         public int SaveReportFilters(SaveReportFavoriteModel options)
@@ -565,7 +581,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             {
                 var sectionInfo = _caseSectionService.GetSectionInfoByField(f.Name);
                 var caseSectionName = sectionInfo != null ? Translation.GetCoreTextTranslation(sectionInfo.DefaultName) : "";
-                var fieldName = string.IsNullOrWhiteSpace(caseSectionName) ? Translation.GetCoreTextTranslation(f.Name) : Translation.GetForCase(f.Name, SessionFacade.CurrentCustomer.Id);
+                var fieldName = string.IsNullOrEmpty(caseSectionName) ? Translation.GetCoreTextTranslation(f.Name) : Translation.GetForCase(f.Name, SessionFacade.CurrentCustomer.Id);
                 translatedFields.Add(new ItemOverview
                 (
                     fieldName,
@@ -628,11 +644,20 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             model.ReportFavorites = GetSavedReportFilters(customerId, userId);
             model.ReportViewerData = new ReportPresentationModel();
             model.ReportGeneratorOptions = GetReportGeneratorOptions(customerId);
-            model.ReportGeneratorOptions.FieldIds = new List<int>();
-            return model;
+			model.ReportGeneratorExtendedCaseForms = GetReportGeneratorExtendedCaseForms(customerId);
+			model.ReportGeneratorExtendedCaseFormFields = new List<ExtendedCaseFormFieldTranslationModel>();
+			model.ReportGeneratorOptions.FieldIds = new List<int>();
+			model.ReportGeneratorOptions.ExtendedCaseTranslationFieldIds = new List<string>();
+			return model;
         }
 
-        private ReportGeneratorOptionsModel GetReportGeneratorOptions(int customerId)
+		private List<ExtendedCaseFormModel> GetReportGeneratorExtendedCaseForms(int customerId)
+		{
+			var reports = _extendedCaseService.GetExtendedCaseFormsForCustomer(customerId);
+			return reports.Select(o => new ExtendedCaseFormModel { ID = o.Id, Name = o.Name }).ToList();
+		}
+
+		private ReportGeneratorOptionsModel GetReportGeneratorOptions(int customerId)
         {
             //TODO: this method gets too many options. Only Fields required. Remove other.
             var reportGeneratorFilters = SessionFacade.FindPageFilters<ReportGeneratorFilterModel>(PageName.ReportsReportGenerator)

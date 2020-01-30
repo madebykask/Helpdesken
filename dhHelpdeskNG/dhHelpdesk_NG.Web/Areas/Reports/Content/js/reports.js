@@ -24,6 +24,7 @@
         RegistrationSource: 20,
         ResponseTime: 22,
         ReportGenerator: 18,
+        ReportGeneratorExtendedCase: 30,
         CaseSatisfaction: 23,
         HistoricalReport: 24,
         ReportedTime: 25,
@@ -97,6 +98,7 @@
                     return dhHelpdesk.reports.caseTypeArticleNoReport();
                 case dhHelpdesk.reports.reportType.CaseSatisfaction:
                     return dhHelpdesk.reports.caseSatisfactionReport();
+                case dhHelpdesk.reports.reportType.ReportGeneratorExtendedCase:
                 case dhHelpdesk.reports.reportType.ReportGenerator:
                     return dhHelpdesk.reports.reportGeneratorReport();
                 case dhHelpdesk.reports.reportType.LeadtimeFinishedCases:

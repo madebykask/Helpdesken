@@ -18,7 +18,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
         public ReportGeneratorOptionsModel()
         {
             this.FieldIds = new List<int>();
-            this.DepartmentIds = new List<int>();
+			this.ExtendedCaseFormFieldIds = new List<string>();
+			this.DepartmentIds = new List<int>();
             this.WorkingGroupIds = new List<int>();
             this.CaseTypeIds = new List<int>();   
             this.AdministratorsIds = new List<int>();
@@ -60,8 +61,13 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
         [LocalizedDisplay("Fält")]
         public List<int> FieldIds { get; set; }
 
-        //[NotNull]
-        public MultiSelectList Departments { get; private set; }
+		public List<string> ExtendedCaseFormFieldIds { get; set; }
+
+		public int? ExtendedCaseFormId { get; set; }
+
+
+		//[NotNull]
+		public MultiSelectList Departments { get; private set; }
 
         [LocalizedDisplay("Avdelning påverkad")]
         public List<int> DepartmentIds { get; set; }
@@ -110,8 +116,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
 
         public string SortName { get; set; }
         public SortBy? SortBy { get; set; }
+		public List<string> ExtendedCaseTranslationFieldIds { get; internal set; }
 
-        public ReportGeneratorFilterModel GetFilter()
+		public ReportGeneratorFilterModel GetFilter()
         {
             SortField sortField = null;
 
@@ -128,6 +135,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
                         this.AdministratorsIds,
                         (this.CaseStatusIds == null || this.CaseStatusIds < 0) ? new List<int>() : new List<int> { this.CaseStatusIds.Value }, //service supports multiple statuses but ui not - converting ui input to service supported list
                         this.CaseTypeIds,
+						this.ExtendedCaseFormFieldIds,
+						this.ExtendedCaseFormId,
                         this.PeriodFrom,
                         this.PeriodUntil,
                         this.RecordsOnPage,

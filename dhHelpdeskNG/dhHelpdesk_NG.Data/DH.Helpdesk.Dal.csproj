@@ -146,6 +146,9 @@
     <Compile Include="EntityConfigurations\EmailLogAttemptConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\Case_CaseSection_ExtendedCaseConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\Case_ExtendedCaseDataConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseReportConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseReportFieldConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseTranslationConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseValuesConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseDataConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseFormConfiguration.cs" />
@@ -304,7 +307,7 @@
     <Compile Include="Mappers\CaseDocument\BusinessModelToEntity\CaseDocumentToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\ExtendedCaseDataToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\ExtendedCaseValueToEntityMapper.cs" />
-    <Compile Include="Mappers\Cases\BusinessModelToEntity\ExtendedCaseFormToEntityMapper.cs" />
+    <Compile Include="Mappers\Cases\BusinessModelToEntity\ExtendedCaseFormForCaseToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseSolutionConditionToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CaseNotifierToEntityMapper.cs" />
     <Compile Include="Mappers\Cases\BusinessModelToEntity\CausingPartToEntityMapper.cs" />
@@ -315,7 +318,7 @@
     <Compile Include="Mappers\CaseDocument\EntityToBusinessModel\CaseDocumentToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\ExtendedCaseValueToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\ExtendedCaseDataToBusinessModelMapper.cs" />
-    <Compile Include="Mappers\Cases\EntityToBusinessModel\ExtendedCaseFormToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\Cases\EntityToBusinessModel\ExtendedCaseFormForCaseToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseSolutionConditionToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseLockToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseToBusinessModelMapper.cs" />
@@ -323,6 +326,7 @@
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseToCaseOverviewMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CausingPartToOverviewMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseFilterFavoriteToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\Cases\EntityToBusinessModel\ExtendedCaseFormToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\HistoryToChangeHistoryEntityMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\ChangeFieldSettingsToChangeFieldSettingsEntityMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeDetailedOverviewMapper.cs" />
@@ -489,6 +493,7 @@
     <Compile Include="Repositories\BusinessRules\Concrete\BusinessRuleRepository.cs" />
     <Compile Include="Repositories\BusinessRules\IBusinessRuleRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentTextConditionIdentifierRepository.cs" />
+    <Compile Include="Repositories\Cases\Concrete\ExtendedCaseReportRepository.cs" />
     <Compile Include="Repositories\Computers\Concrete\ComputerStatusRepository.cs" />
     <Compile Include="Repositories\Computers\Concrete\ComputerTabsSettingsRepository.cs" />
     <Compile Include="Repositories\Computers\IComputerStatusRepository.cs" />
@@ -532,6 +537,7 @@
     <Compile Include="Repositories\GDPR\GDPROperationsAuditRespository.cs" />
     <Compile Include="Repositories\GDPR\GDPRTaskRepository.cs" />
     <Compile Include="Repositories\IComputerUserCategoryRepository.cs" />
+    <Compile Include="Repositories\IExtendedCaseReportRepository.cs" />
     <Compile Include="Repositories\IExtendedCaseValueRepository.cs" />
     <Compile Include="Repositories\IExtendedCaseDataRepository.cs" />
     <Compile Include="Repositories\IExtendedCaseFormRepository.cs" />

@@ -66,9 +66,21 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
             CreateCaseInfoHeaders(settings.CaseInfo, headers);
             CreateOtherHeaders(settings.Other, headers);
             CreateLogHeaders(settings.Log, headers);
+			CreateExtendedCaseHeaders(settings.ExtendedCase, headers);
         }
 
-        private static void CreateUserHeaders(UserSettings settings, List<GridColumnHeaderModel> headers)
+		private static void CreateExtendedCaseHeaders(ExtendedCaseSettings extendedCase, List<GridColumnHeaderModel> headers)
+		{
+			if (extendedCase != null && extendedCase.Names != null && extendedCase.Names.Count > 0)
+			{
+				foreach (var name in extendedCase.Names)
+				{
+					headers.Add(new GridColumnHeaderModel(name, name));
+				}
+			}
+		}
+
+		private static void CreateUserHeaders(UserSettings settings, List<GridColumnHeaderModel> headers)
         {
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.User, UserFields.User, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.Notifier, UserFields.Notifier, headers);
@@ -175,11 +187,17 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
             CreateCaseInfoValues(settings.CaseInfo, overview.CaseInfo, values);
             CreateOtherValues(settings.Other, overview.Other, values);
             CreateLogValues(settings.Log, overview.Log, values);
+			CreateExtendedCaseValues(settings.ExtendedCase, overview.ExtendedCase, values);
 
             return new CaseOverviewModel(overview.Id, values);
         }
 
-        private static void CreateUserValues(UserSettings settings, UserOverview fields, List<NewGridRowCellValueModel> values)
+		private static void CreateExtendedCaseValues(ExtendedCaseSettings settings, ExtendedCaseOverview ovewrview, List<NewGridRowCellValueModel> values)
+		{
+			throw new NotImplementedException();
+		}
+
+		private static void CreateUserValues(UserSettings settings, UserOverview fields, List<NewGridRowCellValueModel> values)
         {
             FieldSettingsHelper.CreateValueIfNeeded(settings.User, UserFields.User, fields.User, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.Notifier, UserFields.Notifier, fields.Notifier, values);

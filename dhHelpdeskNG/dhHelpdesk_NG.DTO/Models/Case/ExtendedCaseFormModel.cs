@@ -4,7 +4,7 @@ using DH.Helpdesk.Common.Enums.Cases;
 namespace DH.Helpdesk.BusinessData.Models.Case
 {
     /*TODO: Needs refactoring */
-    public class ExtendedCaseFormModel
+    public class ExtendedCaseFormForCaseModel
     {
         public int CaseId { get; set; }
         public int Id { get; set; }
@@ -23,7 +23,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
     {
         public ExtendedCaseDataModel()
         {
-            FormModel = new ExtendedCaseFormModel();
+            FormModel = new ExtendedCaseFormForCaseModel();
         }
 
         public int Id { get; set; }
@@ -32,7 +32,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
 
-        public ExtendedCaseFormModel FormModel { get; set; }
+        public ExtendedCaseFormForCaseModel FormModel { get; set; }
     }
 
     public class ExtendedCaseValueModel
@@ -44,4 +44,10 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public string SecondaryValue { get; set; }
 
     }
+
+	public class ExtendedCaseFormModel
+	{
+		public string Name { get; set; }
+		public int Id { get; set; }
+	}
 }

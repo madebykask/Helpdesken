@@ -5602,7 +5602,7 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                     else
                     {
-                        m.ExtendedCaseSections = new Dictionary<CaseSectionType, ExtendedCaseFormModel>();
+                        m.ExtendedCaseSections = new Dictionary<CaseSectionType, ExtendedCaseFormForCaseModel>();
                     }
 
                     //var sections = (Dictionary <CaseSectionType, ExtendedCaseFormModel>)_caseService.GetExtendedCaseSectionModels(customerId, caseId);
@@ -5636,7 +5636,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
                 else
                 {
-                    m.ExtendedCaseSections = new Dictionary<CaseSectionType, ExtendedCaseFormModel>();
+                    m.ExtendedCaseSections = new Dictionary<CaseSectionType, ExtendedCaseFormForCaseModel>();
                 }
             }
             /*}
@@ -5702,10 +5702,10 @@ namespace DH.Helpdesk.Web.Controllers
             }).ToList();
         }
 
-        private IList<ExtendedCaseFormModel> GetExtendedCaseFormModel(int customerId, int caseId, int caseSolutionId, int stateSecondaryId,
+        private IList<ExtendedCaseFormForCaseModel> GetExtendedCaseFormModel(int customerId, int caseId, int caseSolutionId, int stateSecondaryId,
             string extendedCasePathMask, int languageId, int userRole, string userGuid)
         {
-            var res = new List<ExtendedCaseFormModel>();
+            var res = new List<ExtendedCaseFormForCaseModel>();
 
             var extendedCaseFormData =
                 _caseService.GetCaseExtendedCaseForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentUser.UserGUID.ToString(), stateSecondaryId);
@@ -5721,7 +5721,7 @@ namespace DH.Helpdesk.Web.Controllers
                 customerId = customerId,
             });
 
-            var model = new ExtendedCaseFormModel
+            var model = new ExtendedCaseFormForCaseModel
             {
                 CaseId = caseId,
                 Id = extendedCaseFormData.ExtendedCaseFormId,
@@ -5733,17 +5733,17 @@ namespace DH.Helpdesk.Web.Controllers
                 //UserRole = caseWorkingGroupId      //majid: Set by querystring at the moment
             };
 
-            return new List<ExtendedCaseFormModel>() { model };
+            return new List<ExtendedCaseFormForCaseModel>() { model };
         }
 
-        private Dictionary<CaseSectionType, ExtendedCaseFormModel> GetExtendedCaseSectionsModel(Case case_, int customerId, string extendedCasePathMask,
+        private Dictionary<CaseSectionType, ExtendedCaseFormForCaseModel> GetExtendedCaseSectionsModel(Case case_, int customerId, string extendedCasePathMask,
             string userGuid, int languageId, int userWorkingGroupId)
         {
             var caseId = case_.Id;
             var caseStateSecondaryId = case_?.StateSecondary?.StateSecondaryId ?? 0;
             var caseWorkingGroupId = case_?.Workinggroup?.WorkingGroupId ?? 0;
 
-            var extendedCaseFormModels = new List<ExtendedCaseFormModel>();
+            var extendedCaseFormModels = new List<ExtendedCaseFormForCaseModel>();
             var exCaseFormsList = _caseService.GetExtendedCaseSectionForms(caseId, customerId);
             foreach (var ecCaseForm in exCaseFormsList)
             {
@@ -5757,7 +5757,7 @@ namespace DH.Helpdesk.Web.Controllers
                     autoLoad = true
                 });
 
-                var exendedForm = new ExtendedCaseFormModel
+                var exendedForm = new ExtendedCaseFormForCaseModel
                 {
                     CaseId = caseId,
                     SectionType = (CaseSectionType)ecCaseForm.SectionType,
@@ -5774,7 +5774,7 @@ namespace DH.Helpdesk.Web.Controllers
                 extendedCaseFormModels.Add(exendedForm);
             }
 
-            var res = new Dictionary<CaseSectionType, ExtendedCaseFormModel>();
+            var res = new Dictionary<CaseSectionType, ExtendedCaseFormForCaseModel>();
             foreach (var sectionType in Enum.GetValues(typeof(CaseSectionType)).Cast<CaseSectionType>())
             {
                 var extendedCaseSectionForm = extendedCaseFormModels.SingleOrDefault(x => x.SectionType == sectionType);

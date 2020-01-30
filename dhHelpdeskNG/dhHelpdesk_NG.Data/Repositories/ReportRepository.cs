@@ -32,7 +32,9 @@ namespace DH.Helpdesk.Dal.Repositories
           List<int> administratorIds,
           List<int> caseStatusIds,
           List<int> caseTypeId,
-          DateTime? periodFrom,
+		  List<string> extendedCaseFormFieldIds,
+		  int? extendedCaseFormId,
+		  DateTime? periodFrom,
           DateTime? periodUntil,
            DateTime? closeFrom,
            DateTime? closeTo);
@@ -46,6 +48,8 @@ namespace DH.Helpdesk.Dal.Repositories
 		  List<int> administratorIds,
 		  List<int> caseStatusIds,
 		  List<int> caseTypeId,
+		  List<string> extendedCaseFormFieldIds,
+		  int? extendedCaseFormId,
 		  DateTime? periodFrom,
 		  DateTime? periodUntil,
 		   DateTime? closeFrom,
@@ -60,6 +64,8 @@ namespace DH.Helpdesk.Dal.Repositories
             List<int> administratorIds,
             List<int> caseStatusIds,
             List<int> caseTypeId,
+			List<string> extendedCaseFormFieldIds,
+			int? extendedCaseFormId,
             DateTime? periodFrom,
             DateTime? periodUntil,
             DateTime? closeFrom,
@@ -82,7 +88,9 @@ namespace DH.Helpdesk.Dal.Repositories
            List<int> administratorIds,
            List<int> caseStatusIds,
            List<int> caseTypeId,
-           DateTime? periodFrom,
+		   List<string> extendedCaseFormFieldIds,
+		   int? extendedCaseFormId,
+		   DateTime? periodFrom,
            DateTime? periodUntil,
            DateTime? closeFrom,
            DateTime? closeTo)
@@ -94,8 +102,10 @@ namespace DH.Helpdesk.Dal.Repositories
                 productAreaIds,
                 administratorIds,
                 caseStatusIds,
-                caseTypeId,
-                periodFrom,
+				caseTypeId,
+				extendedCaseFormFieldIds,
+				extendedCaseFormId,
+				periodFrom,
                 periodUntil,
                 closeFrom,
                 closeTo);
@@ -110,6 +120,8 @@ namespace DH.Helpdesk.Dal.Repositories
 		  List<int> administratorIds,
 		  List<int> caseStatusIds,
 		  List<int> caseTypeId,
+		  List<string> extendedCaseFormFieldIds,
+		  int? extendedCaseFormId,
 		  DateTime? periodFrom,
 		  DateTime? periodUntil,
 		  DateTime? closeFrom,
@@ -123,6 +135,8 @@ namespace DH.Helpdesk.Dal.Repositories
 				administratorIds,
 				caseStatusIds,
 				caseTypeId,
+				extendedCaseFormFieldIds,
+				extendedCaseFormId,
 				periodFrom,
 				periodUntil,
 				closeFrom,
@@ -139,7 +153,9 @@ namespace DH.Helpdesk.Dal.Repositories
            List<int> administratorIds,
            List<int> caseStatusIds,
            List<int> caseTypeId,
-           DateTime? periodFrom,
+		   List<string> extendedCaseFormFieldIds,
+		   int? extendedCaseFormId,
+		   DateTime? periodFrom,
            DateTime? periodUntil,
             DateTime? closeFrom,
             DateTime? closeTo)
@@ -210,6 +226,10 @@ namespace DH.Helpdesk.Dal.Repositories
                         ? query.Where(c => c.FinishingDate.HasValue)
                         : query.Where(c => !c.FinishingDate.HasValue);
                 }
+				if (extendedCaseFormId.HasValue)
+				{
+					query = query.Where(c => c.CaseExtendedCaseDatas.Any(ecd => ecd.ExtendedCaseForm_Id == extendedCaseFormId.Value));
+				}
 
                 var query2 = query.GroupBy(c => new { c.RegTime.Month, c.RegTime.Year },
                     c => c,
@@ -231,6 +251,8 @@ namespace DH.Helpdesk.Dal.Repositories
            List<int> administratorIds,
            List<int> caseStatusIds,
            List<int> caseTypeId,
+		   List<string> extendedCaseFormFieldIds,
+		   int? extendedCaseFormId,
            DateTime? periodFrom,
            DateTime? periodUntil,
            DateTime? closeFrom,
@@ -247,7 +269,7 @@ namespace DH.Helpdesk.Dal.Repositories
 			}
 			var closeToEndOfDay = closeTo?.GetEndOfDay();
 		
-			var result = Search(customerId, departmentIds, ouIds, workingGroupIds, productAreaIds, administratorIds, caseStatusIds, caseTypeId, periodFrom, periodUntil, closeFrom, closeToEndOfDay);
+			var result = Search(customerId, departmentIds, ouIds, workingGroupIds, productAreaIds, administratorIds, caseStatusIds, caseTypeId, extendedCaseFormFieldIds, extendedCaseFormId, periodFrom, periodUntil, closeFrom, closeToEndOfDay);
 			
 			return result;
 		}
@@ -261,6 +283,8 @@ namespace DH.Helpdesk.Dal.Repositories
 		  List<int> administratorIds,
 		  List<int> caseStatusIds,
 		  List<int> caseTypeId,
+		  List<string> extendedCaseFormFieldIds,
+		  int? extendedCaseFormId,
 		  DateTime? periodFrom,
 		  DateTime? periodUntil,
 		  DateTime? closeFrom,
@@ -280,12 +304,12 @@ namespace DH.Helpdesk.Dal.Repositories
 
 			List<ReportGeneratorFields> result;
 
-			result = Search_FeatureTooglePreviousSearch(customerId, departmentIds, ouIds, workingGroupIds, productAreaIds, administratorIds, caseStatusIds, caseTypeId, periodFrom, periodUntil, closeFrom, closeToEndOfDay);
+			result = Search_FeatureTooglePreviousSearch(customerId, departmentIds, ouIds, workingGroupIds, productAreaIds, administratorIds, caseStatusIds, caseTypeId, extendedCaseFormFieldIds, extendedCaseFormId, periodFrom, periodUntil, closeFrom, closeToEndOfDay);
 	
 			return result;
 		}
 
-		private List<ReportGeneratorFields> Search(int customerId, List<int> departmentIds, List<int> ouIds, List<int> workingGroupIds, List<int> productAreaIds, List<int> administratorIds, List<int> caseStatusIds, List<int> caseTypeId, DateTime? periodFrom, DateTime? periodUntil, DateTime? closeFrom, DateTime? closeToEndOfDay)
+		private List<ReportGeneratorFields> Search(int customerId, List<int> departmentIds, List<int> ouIds, List<int> workingGroupIds, List<int> productAreaIds, List<int> administratorIds, List<int> caseStatusIds, List<int> caseTypeId, List<string> extendedCaseFormFieldIds, int? extendedCaseFormId, DateTime? periodFrom, DateTime? periodUntil, DateTime? closeFrom, DateTime? closeToEndOfDay)
 		{
 			List<ReportGeneratorFields> result;
 			using (new OptionHintScope(DataContext))
@@ -348,6 +372,13 @@ namespace DH.Helpdesk.Dal.Repositories
 						? query.Where(c => c.Case.FinishingDate.HasValue)
 						: query.Where(c => !c.Case.FinishingDate.HasValue);
 				}
+
+				if (extendedCaseFormId.HasValue)
+				{
+					query = query.Where(o => o.Case.CaseExtendedCaseDatas.Any(ecd => ecd.ExtendedCaseForm_Id == extendedCaseFormId.Value));
+				}
+
+				var hasExtendedCaseFields = extendedCaseFormFieldIds != null && extendedCaseFormFieldIds.Any();
 
 				var resultQuery = query.Select(c => new ReportGeneratorFields
 				{
@@ -423,7 +454,18 @@ namespace DH.Helpdesk.Dal.Repositories
 					CausingPart = c.Case.CausingPartId.HasValue ? c.Case.CausingPart.Name : "",
 					Problem = c.Case.Problem_Id.HasValue ? c.Case.Problem.Name : "",
 
-					Logs = c.Case.Logs
+					Logs = c.Case.Logs,
+
+					ExtendedCaseValues = 
+						c.Case.CaseExtendedCaseDatas.SelectMany(ecd => ecd.ExtendedCaseData.ExtendedCaseValues
+							.Where(ecv => extendedCaseFormFieldIds.Contains(ecv.FieldId.ToLower()))
+							.Select(ecv => new ExtendedCaseValue
+							{
+								FieldId = ecv.FieldId,
+								Name = ecv.FieldId,
+								Value = !string.IsNullOrEmpty(ecv.SecondaryValue) ? ecv.SecondaryValue : ecv.Value 
+							})
+						)				
 
 				});
 
@@ -458,7 +500,7 @@ namespace DH.Helpdesk.Dal.Repositories
 			return result;
 		}
 
-		private List<ReportGeneratorFields> Search_FeatureTooglePreviousSearch(int customerId, List<int> departmentIds, List<int> ouIds, List<int> workingGroupIds, List<int> productAreaIds, List<int> administratorIds, List<int> caseStatusIds, List<int> caseTypeId, DateTime? periodFrom, DateTime? periodUntil, DateTime? closeFrom, DateTime? closeToEndOfDay)
+		private List<ReportGeneratorFields> Search_FeatureTooglePreviousSearch(int customerId, List<int> departmentIds, List<int> ouIds, List<int> workingGroupIds, List<int> productAreaIds, List<int> administratorIds, List<int> caseStatusIds, List<int> caseTypeId, List<string> extendedCaseFormFieldIds, int? extendedCaseFormId, DateTime? periodFrom, DateTime? periodUntil, DateTime? closeFrom, DateTime? closeToEndOfDay)
 		{
 			List<ReportGeneratorFields> result;
 			using (new OptionHintScope(DataContext))

@@ -7,6 +7,7 @@
         var saveFiltersUrl = window.Params.SaveFiltersUrl;
         var getReportFilterOptionsUrl = window.Params.GetReportFilterOptionsUrl;
         var deleteReportFavoriteUrl = window.Params.DeleteReportFavoriteUrl;
+        var getExtendedCaseFormFields = window.Params.GetExtendedCaseFormFields;
         var stackByDefaultValue = '5';
 
         var reportList = "#lstReports";
@@ -20,7 +21,7 @@
         var productAreaDropDown = "#lstfilterProductArea";
         var currentCustomerId = window.Params.CurrentCustomerId;
         var statusList = "#lstStatus";
-        var reportGeneratorFields = "#reportGeneratorFields";
+        var reportGeneratorFields = "#reportGeneratorCaseFields";
         var caseCloseFrom = "#ReportFilter_CaseClosingDate_FromDate";
         var caseCloseTo = "#ReportFilter_CaseClosingDate_ToDate";
         var caseLogNoteDateFrom = '#ReportFilter_LogNoteDate_FromDate';
@@ -29,6 +30,37 @@
         var reportCategoryDropdownRt = "#lstfilterReportCategoryRt";
         var changeDateFrom = "#ReportFilter_CaseChangeDate_FromDate";
         var changeDateTo = "#ReportFilter_CaseChangeDate_ToDate";
+        var extendedCaseForms = "#reportGeneratorExtendedCaseForms";
+        var lstExtendedCaseForms = "#lstExtendedCaseForms";
+        var lstExtendedCaseFormFields = "#lstExtendedCaseFormFields";
+        var extendedCaseFormFields = "#reportGeneratorExtendedCaseFormFields";
+
+        var extendedCaseFormChanged = function (e) {
+            var id = $(lstExtendedCaseForms).val();
+            if (id != "" && id != null) {
+                $.ajax({
+                    url: getExtendedCaseFormFields,
+                    data: { extendedCaseFormId: id },
+                    type: 'POST',
+                    success: function (d) {
+                        $(extendedCaseFormFields).show();
+                        options = $(lstExtendedCaseFormFields).multiselect()[0].options;
+                        while (options.length != 0)
+                            options.remove(0);
+
+                        var values = $.each(d, function (e, val) {
+                            var option = new Option(val.Text, val.FieldId);
+                            options.add(option);
+                        });
+                        $(lstExtendedCaseFormFields).multiselect('rebuild');
+                        $(lstExtendedCaseFormFields).multiselect('buildDropdown');
+                        
+                    }
+                });
+            }
+        };
+
+        $(extendedCaseForms).on('change', extendedCaseFormChanged);
 
         var reportObjNames = {};
         reportObjNames[dhHelpdesk.reports.reportType.ReportedTime] = 'reportedTimeReport';
@@ -45,6 +77,8 @@
                 caseTypes: [],
                 productAreas: [],
                 fields: [],
+                extendedCaseFormId: null,
+                extendedCaseFormFields: [],
                 administrators: [],
                 caseStatuses: [],
                 regDateFrom: null,
@@ -77,8 +111,15 @@
                 filters.productAreas.push($(this).val());
             });
 
-            $(reportGeneratorFields + " option:selected").each(function () {
-                filters.fields.push($(this).val());
+            $("#lstFields option:selected").each(function () {
+                var v = $(this).val();
+                filters.fields.push(v);
+            });
+
+            filters.extendedCaseFormId = $("#lstExtendedCaseForms").val();
+
+            $("#lstExtendedCaseFormFields option:selected").each(function () {
+                filters.extendedCaseFormFields.push($(this).val());
             });
 
             filters.regDateFrom = $(caseCreateFrom).val();
@@ -188,6 +229,8 @@
                 PeriodFrom: filters.regDateFrom,
                 PeriodUntil: filters.regDateTo,
                 FieldIds: filters.fields,
+                ExtendedCaseFormId: filters.extendedCaseFormId,
+                ExtendedCaseFormFieldIds: filters.extendedCaseFormFields,
                 IsExcel: $(this).data("excel") || false,
                 IsPreview: $(this).data("preview") || false,
                 SortName: "",
@@ -547,6 +590,7 @@
             var $btnExcel = $("#excelReport");
             var $btnShowReport = $("#btnShowReport");
             var $reportGeneratorFields = $("#reportGeneratorFields");
+            var $reportGeneratorExtendedCaseForms = $("#reportGeneratorExtendedCaseForms");
             var $otherReportsContainer = $("#otherReportsContainer");
             var $generateReportContainer = $("#generateReportContainer");
             var $jsReportContainer = $("#jsReportContainer");
@@ -561,7 +605,7 @@
             dhHelpdesk.reports.togglePreviewMode(true);
             dhHelpdesk.reports.resetErrors();
 
-            if (reportId === dhHelpdesk.reports.reportType.ReportGenerator) {
+            if (reportId === dhHelpdesk.reports.reportType.ReportGenerator || reportId === dhHelpdesk.reports.reportType.ReportGeneratorExtendedCase) {
                 $btnPreview.show();
                 $btnShow.show();
                 $btnExcel.show();
@@ -580,6 +624,16 @@
                 $groupBy.hide();
                 $generateReportContainer.html('');
                 $generateReportContainer.show();
+
+                if (reportId === dhHelpdesk.reports.reportType.ReportGeneratorExtendedCase)
+                {
+                    $reportGeneratorExtendedCaseForms.show();
+                }
+                else  {
+                    $reportGeneratorExtendedCaseForms.hide();
+                }
+
+
             } else if (reportId === dhHelpdesk.reports.reportType.HistoricalReport) {
                 $btnPreview.hide();
                 $btnShow.hide();

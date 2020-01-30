@@ -245,15 +245,19 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
                 .As<IEntityToBusinessModelMapper<Case, CaseModel>>()
                 .SingleInstance();
 
-            builder.RegisterType<ExtendedCaseFormToEntityMapper>()
-                .As<IBusinessModelToEntityMapper<ExtendedCaseFormModel, ExtendedCaseFormEntity>>()
+            builder.RegisterType<ExtendedCaseFormForCaseToEntityMapper>()
+                .As<IBusinessModelToEntityMapper<ExtendedCaseFormForCaseModel, ExtendedCaseFormEntity>>()
                 .SingleInstance();
 
-            builder.RegisterType<ExtendedCaseFormToBusinessModelMapper>()
-                .As<IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel>>()
+            builder.RegisterType<ExtendedCaseFormForCaseToBusinessModelMapper>()
+                .As<IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormForCaseModel>>()
                 .SingleInstance();
 
-            builder.RegisterType<ExtendedCaseDataToEntityMapper>()
+			builder.RegisterType<ExtendedCaseFormToBusinessModelMapper>()
+				.As<IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel>>()
+				.SingleInstance();
+
+			builder.RegisterType<ExtendedCaseDataToEntityMapper>()
                 .As<IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity>>()
                 .SingleInstance();
 

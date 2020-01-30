@@ -292,7 +292,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<ICaseSolutionConditionRepository>().To<CaseSolutionConditionRepository>();
             this.Bind<IExtendedCaseFormRepository>().To<ExtendedCaseFormRepository>();
             this.Bind<IExtendedCaseDataRepository>().To<ExtendedCaseDataRepository>();
-            this.Bind<ICaseDocumentRepository>().To<CaseDocumentRepository>();
+			this.Bind<ICaseDocumentRepository>().To<CaseDocumentRepository>();
             this.Bind<ICaseDocumentConditionRepository>().To<CaseDocumentConditionRepository>();
             this.Bind<IExtendedCaseValueRepository>().To<ExtendedCaseValueRepository>();
             //   this.Bind<ICaseDocumentParagraphRepository>().To<CaseDocumentParagraphRepository>();
