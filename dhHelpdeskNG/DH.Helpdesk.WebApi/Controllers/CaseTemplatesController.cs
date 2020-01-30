@@ -70,7 +70,9 @@ namespace DH.Helpdesk.WebApi.Controllers
                 Items = new List<CustomerCaseSolutionOverviewItem>()
             }).ToList();
 
-            model.ForEach(m => m.Items = translatedCaseSolutions.Where(cs => cs.CustomerId == m.CustomerId)
+            model.ForEach(m => m.Items = translatedCaseSolutions
+                    .Where(cs => cs.CustomerId == m.CustomerId)
+                    .OrderBy(c => c.Name)
                 .Select(cs => new CustomerCaseSolutionOverviewItem()
                 {
                     Id = cs.CaseSolutionId,
@@ -80,7 +82,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 })
                 .ToList());
 
-            return model;
+            return model.OrderBy(c => c.CustomerName).ToList();
         }
 
         [HttpGet]
