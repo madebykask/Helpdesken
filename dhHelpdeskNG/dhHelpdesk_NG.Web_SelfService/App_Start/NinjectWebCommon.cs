@@ -263,7 +263,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IOrderStateRepository>().To<OrderStateRepository>();
             kernel.Bind<IExtendedCaseFormRepository>().To<ExtendedCaseFormRepository>();
             kernel.Bind<IExtendedCaseDataRepository>().To<ExtendedCaseDataRepository>();
-            kernel.Bind<ITextTranslationRepository>().To<TextTranslationRepository>();
+			kernel.Bind<ITextTranslationRepository>().To<TextTranslationRepository>();
             kernel.Bind<ITextTypeRepository>().To<TextTypeRepository>();
             kernel.Bind<IExtendedCaseValueRepository>().To<ExtendedCaseValueRepository>();
             kernel.Bind<IApplicationRepository>().To<ApplicationRepository>();

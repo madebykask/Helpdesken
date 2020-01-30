@@ -167,14 +167,15 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
                     q.PlannedActionDate, q.WatchDate, Convert.ToBoolean(q.Verified), q.VerifiedDescription,
                     q.SolutionRate, q.CausingPart, q.Problem),
 
-                q.LogData != null ? new LogsOverview((q.LogData.FinishingType.HasValue && q.FinishingDate.HasValue? closingReasonFullNames[q.LogData.FinishingType.ToString()] : string.Empty), 
-                    q.FinishingDate, q.FinishingDescription, q.AllInternalText, q.AllExtenalText, q.TotalMaterial, q.TotalOverTime, q.TotalPrice, q.TotalWork) : new LogsOverview(string.Empty, null, string.Empty, null, null)
+				q.LogData != null ? new LogsOverview((q.LogData.FinishingType.HasValue && q.FinishingDate.HasValue? closingReasonFullNames[q.LogData.FinishingType.ToString()] : string.Empty), 
+                    q.FinishingDate, q.FinishingDescription, q.AllInternalText, q.AllExtenalText, q.TotalMaterial, q.TotalOverTime, q.TotalPrice, q.TotalWork) : new LogsOverview(string.Empty, null, string.Empty, null, null),
+				q.ExtendedCaseValues != null ? new ExtendedCaseOverview(q.ExtendedCaseValues.Select(ecv => new ExtendedCaseOverviewValue(ecv.FieldId, ecv.Name, ecv.Value)).OrderBy(o => o.Name).ToList()) : null
 
-            )).ToList();
+
+			)).ToList();
            
             return ret;
         }
-
 
         private static UserOverview CreateUserOverview(Case entity)
         {

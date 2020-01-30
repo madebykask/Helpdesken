@@ -20,6 +20,9 @@
         RegistrationSource = 20,
         ResponseTime = 22,
         ReportGenerator = 18,
-        CaseSatisfaction = 23
+		ReportGeneratorExtendedCase = 30,
+		CaseSatisfaction = 23,
+		ExtendedCase = 25,
+		Standard = 24
     }
 }

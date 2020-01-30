@@ -166,8 +166,16 @@
         public decimal TotalPrice { get; set; }
         public int TotalWork { get; set; }
 		public IList<Log> Logs { get; internal set; }
+
+		public IEnumerable<ExtendedCaseValue> ExtendedCaseValues { get; set; }
 	}
 
+	public class ExtendedCaseValue
+	{
+		public string FieldId { get; set; }
+		public string Name { get; set; }
+		public string Value { get; set; }
+	}
     public sealed class ReportGeneratorData
     {
         public ReportGeneratorData(

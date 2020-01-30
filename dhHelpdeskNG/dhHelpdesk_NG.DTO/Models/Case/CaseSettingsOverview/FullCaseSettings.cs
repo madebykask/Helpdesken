@@ -32,5 +32,6 @@
 
         [NotNull]
         public LogSettings Log { get; private set; }
-    }
+		public ExtendedCaseSettings ExtendedCase { get; internal set; }
+	}
 }

@@ -3,9 +3,9 @@
     using BusinessData.Models.Case;
     using DH.Helpdesk.Domain.ExtendedCaseEntity;
 
-    public sealed class ExtendedCaseFormToEntityMapper : IBusinessModelToEntityMapper<ExtendedCaseFormModel, ExtendedCaseFormEntity>
+    public sealed class ExtendedCaseFormForCaseToEntityMapper : IBusinessModelToEntityMapper<ExtendedCaseFormForCaseModel, ExtendedCaseFormEntity>
     {
-        public void Map(ExtendedCaseFormModel businessModel, ExtendedCaseFormEntity entity)
+        public void Map(ExtendedCaseFormForCaseModel businessModel, ExtendedCaseFormEntity entity)
         {
             if (entity == null)
             {

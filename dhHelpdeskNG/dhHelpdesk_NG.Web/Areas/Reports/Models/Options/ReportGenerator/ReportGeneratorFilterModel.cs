@@ -19,6 +19,7 @@
             this.AdministratorIds = new List<int>();
             this.CaseStatusIds = new List<int>();
             this.CaseTypeIds = new List<int>();
+			this.ExtendedCaseFormFieldIds = new List<string>();
         }
 
         public ReportGeneratorFilterModel(
@@ -28,7 +29,9 @@
             List<int> productAreaIds,
             List<int> administratorIds,
             List<int> caseStatusIds,
-            List<int> caseTypeIds, 
+            List<int> caseTypeIds,
+			List<string> extendedCaseFormFieldIds,
+			int? extendedCaseFormId,
             DateTime? periodFrom, 
             DateTime? periodUntil, 
             int recordsOnPage,
@@ -49,6 +52,8 @@
             this.RecordsOnPage = recordsOnPage;
             this.CloseFrom = closeFrom;
             this.CloseTo = closeTo;
+			this.ExtendedCaseFormFieldIds = extendedCaseFormFieldIds;
+			this.ExtendedCaseFormId = extendedCaseFormId;
         }
 
         [NotNull]
@@ -84,8 +89,10 @@
         public int RecordsOnPage { get; private set; }
 
         public SortField SortField { get; private set; }
+		public List<string> ExtendedCaseFormFieldIds { get; private set; }
+		public int? ExtendedCaseFormId { get; private set; }
 
-        public static ReportGeneratorFilterModel CreateDefault()
+		public static ReportGeneratorFilterModel CreateDefault()
         {
             return new ReportGeneratorFilterModel
                        {

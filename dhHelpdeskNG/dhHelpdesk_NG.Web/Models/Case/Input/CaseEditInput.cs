@@ -50,7 +50,7 @@ namespace DH.Helpdesk.Web.Models.Case.Input
         public bool ContainsExtendedCase { get; set; }
         public Guid ExtendedCaseGuid { get; set; }
 
-        public IList<ExtendedCaseFormModel> ExtendedCases { get; set; }
+        public IList<ExtendedCaseFormForCaseModel> ExtendedCases { get; set; }
 
         public CaseLockModel caseLock { get; set; }
 

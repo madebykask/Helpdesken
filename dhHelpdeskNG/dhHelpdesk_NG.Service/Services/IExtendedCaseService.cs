@@ -18,5 +18,9 @@ namespace DH.Helpdesk.Services.Services
 
         IList<string> GetTemplateCaseBindingKeys(int formId);
         IDictionary<string, string> GetTemplateCaseBindingValues(int formId, int extendedCaseDataId);
+
+		List<ExtendedCaseFormModel> GetExtendedCaseFormsForCustomer(int customerId);
+
+		List<ExtendedCaseFormFieldTranslationModel> GetExtendedCaseFormFields(int extendedCaseFormId, int languageID);
     }
 }

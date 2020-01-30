@@ -28,8 +28,11 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
         public ReportPresentationModel ReportViewerData { get; set; }
 
         public ReportGeneratorOptionsModel ReportGeneratorOptions { get; set; }
-        
-    }
+		public List<ExtendedCaseFormModel> ReportGeneratorExtendedCaseForms { get; internal set; }
+
+		public int ReportGeneratorExtendedCaseFormId { get; internal set; }
+		public List<ExtendedCaseFormFieldTranslationModel> ReportGeneratorExtendedCaseFormFields { get; internal set; }
+	}
 
     public sealed class ReportFilterModel : ReportFilter
     {

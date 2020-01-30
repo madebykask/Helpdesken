@@ -10,7 +10,8 @@
                 ComputerOverview computer, 
                 CaseInfoOverview caseInfo, 
                 OtherOverview other, 
-                LogsOverview log)
+				LogsOverview log,
+				ExtendedCaseOverview extendedCaseOverview = null)
         {
             this.Log = log;
             this.Other = other;
@@ -18,6 +19,7 @@
             this.Computer = computer;
             this.User = user;
             this.Id = id;
+			this.ExtendedCase = extendedCaseOverview;
         }
 
         [IsId]
@@ -37,5 +39,6 @@
 
         [NotNull]
         public LogsOverview Log { get; private set; }
-    }
+		public ExtendedCaseOverview ExtendedCase { get; private set; }
+	}
 }

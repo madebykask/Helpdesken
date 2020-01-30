@@ -595,7 +595,12 @@ namespace DH.Helpdesk.Dal.DbContext
 
         public DbSet<ExtendedCaseValueEntity> ExtendedCaseValues { get; set; }
 
-        public DbSet<Case_ExtendedCaseEntity> Case_ExtendedCases { get; set; }
+		public DbSet<ExtendedCaseTranslationEntity> ExtendedCaseTranslations { get; set; }
+
+		public DbSet<ExtendedCaseReport> ExtendedCaseReports { get; set; }
+		public DbSet<ExtendedCaseReportField> ExtendedCaseReportFields { get; set; }
+
+		public DbSet<Case_ExtendedCaseEntity> Case_ExtendedCases { get; set; }
 
         public DbSet<CaseDocumentEntity> CaseDocuments { get; set; }
 
@@ -925,7 +930,8 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new Case_CaseSection_ExtendedCaseConfiguration());
             modelBuilder.Configurations.Add(new ExtendedCaseDataConfiguration());
             modelBuilder.Configurations.Add(new ExtendedCaseValueConfiguration());
-            modelBuilder.Configurations.Add(new Case_ExtendedCaseDataConfiguration());
+			modelBuilder.Configurations.Add(new ExtendedCaseTranslationConfiguration());
+			modelBuilder.Configurations.Add(new Case_ExtendedCaseDataConfiguration());
             modelBuilder.Configurations.Add(new CaseDocumentConfiguration());
             modelBuilder.Configurations.Add(new CaseDocumentConditionConfiguration());
             modelBuilder.Configurations.Add(new CaseDocumentParagraphConfiguration());

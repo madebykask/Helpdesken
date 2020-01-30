@@ -20,5 +20,9 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
         ExtendedCaseDataOverview GetCaseSectionExtendedCaseFormForSolution(int caseSolutionId, int customerId, int sectionType);
         List<ExtendedCaseDataOverview> GetExtendedCaseFormsForSections(int caseId, int customerId);
 
-    }
+		List<ExtendedCaseFormModel> GetExtendedCaseFormsForCustomer(int customerId);
+
+		List<ExtendedCaseFormFieldTranslationModel> GetExtendedCaseFormFields(int extendedCaseFormId, int languageID);
+
+	}
 }

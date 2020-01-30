@@ -88,7 +88,12 @@
                         "{0} - {1}",
                         Translation.Get("Rapport"),
                         Translation.Get("Rapportgenerator"));
-                case ReportType.CaseSatisfaction:
+				case ReportType.ReportGeneratorExtendedCase:
+					return string.Format(
+						"{0} - {1}",
+						Translation.Get("Rapport"),
+						Translation.Get("Rapportgenerator - Utökat ärende"));
+				case ReportType.CaseSatisfaction:
                     return string.Format(
                         "{0} - {1}",
                         Translation.Get("Rapport"),

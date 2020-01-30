@@ -15,6 +15,7 @@ using DH.Helpdesk.BusinessData.Models.MailTemplates;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Extensions.Lists;
 using DH.Helpdesk.Domain.MailTemplates;
+using DH.Helpdesk.Common.Constants;
 
 namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 {
@@ -148,7 +149,12 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                         var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + eLog.Value.EmailLogGUID.ToString();
                         var mailResponse = EmailResponse.GetEmptyEmailResponse();
                         var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
-                        var siteHelpdesk = absoluterUrl + "Cases/edit/" + newCase.Id.ToString();
+
+						var caseEditPath = customerSetting.UseMobileRouting ?
+							CasePaths.EDIT_CASE_MOBILEROUTE :
+							CasePaths.EDIT_CASE_DESKTOP;
+
+                        var siteHelpdesk = absoluterUrl + caseEditPath + newCase.Id.ToString();
                         var emailType = GetEmailType(template.MailTemplate.SendMethod, eLog.Value, extraFollowers.ToArray());
 
                         var res =
@@ -249,7 +255,12 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                 defaultWorkingGroupEmailLog.Log_Id = log.Id;
 
                 var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"] + defaultWorkingGroupEmailLog.EmailLogGUID;
-                var siteHelpdesk = absoluterUrl + "Cases/edit/" + newCase.Id;
+
+				var caseEditPath = customerSetting.UseMobileRouting ?
+					CasePaths.EDIT_CASE_MOBILEROUTE :
+					CasePaths.EDIT_CASE_DESKTOP;
+
+                var siteHelpdesk = absoluterUrl + caseEditPath + newCase.Id;
                 var mailResponse = EmailResponse.GetEmptyEmailResponse();
                 var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
 
@@ -371,7 +382,12 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                         eLog.Value.Log_Id = log.Id;
 
                         var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"] + eLog.Value.EmailLogGUID;
-                        var siteHelpdesk = absoluterUrl + "Cases/edit/" + newCase.Id;
+
+						var caseEditPath = customerSetting.UseMobileRouting ?
+							CasePaths.EDIT_CASE_MOBILEROUTE :
+							CasePaths.EDIT_CASE_DESKTOP;
+
+                        var siteHelpdesk = absoluterUrl + caseEditPath + newCase.Id;
                         var mailResponse = EmailResponse.GetEmptyEmailResponse();
                         var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
                         var emailType = GetEmailType(template.MailTemplate.SendMethod, eLog.Value, cc);

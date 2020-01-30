@@ -38,6 +38,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 	using DH.Helpdesk.Dal.Repositories;
 	using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 	using DH.Helpdesk.BusinessData.Models.Case.CaseOverview;
+	using BusinessData.Models.Case.CaseSettingsOverview;
 
 	public sealed class ReportService : IReportService
     {
@@ -357,6 +358,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             List<int> administratorIds,
             List<int> caseStatusIds,
             List<int> caseTypeIds,
+			List<string> extendedCaseFormFieldIds,
+			int? extendedCaseFormId,
             DateTime? periodFrom,
             DateTime? periodUntil,
             string text,
@@ -401,6 +404,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                             .GetShowable()
                             .MapToCaseSettings(languageId, manualFields);
 
+				
+
                 var caseTypeChainIds = new List<int>();
                 foreach (var caseTypeId in caseTypeIds)
                 {
@@ -435,6 +440,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 												   administratorIds,
 												   caseStatusIds,
 												   caseTypeChainIds,
+												   extendedCaseFormFieldIds,
+												   extendedCaseFormId,
 												   periodFrom,
 												   periodUntil,
 												   closeFrom,
@@ -451,6 +458,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 												   administratorIds,
 												   caseStatusIds,
 												   caseTypeChainIds,
+												   extendedCaseFormFieldIds,
+												   extendedCaseFormId,
 												   periodFrom,
 												   periodUntil,
 												   closeFrom,
@@ -460,6 +469,11 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                 var overviews = caseData.MapToCaseOverviews(_caseTypeRepository, _productAreaRepository, ous, finishingCauses, categories);
 
                 var sortedOverviews = Sort(overviews, sort);
+				settings.ExtendedCase = new ExtendedCaseSettings
+				{
+					Names = caseData.SelectMany(cd => cd.ExtendedCaseValues).GroupBy(o => o.FieldId).Select(o => o.First().Name).ToList()
+				};
+
                 return new ReportGeneratorData(settings, sortedOverviews);
             }
         }
@@ -476,7 +490,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             List<int> administratorIds,
             List<int> caseStatusIds,
             List<int> caseTypeIds,
-            DateTime? periodFrom,
+			List<string> extendedCaseFormFieldIds,
+			int? extendedCaseFormFieldId,
+			DateTime? periodFrom,
             DateTime? periodUntil,
             string text,
             SortField sort,
@@ -511,6 +527,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                                                 administratorIds,
                                                 caseStatusIds,
                                                 caseTypeChainIds,
+												extendedCaseFormFieldIds,
+												extendedCaseFormFieldId,
                                                 periodFrom,
                                                 periodUntil,
                                                 closeFrom,

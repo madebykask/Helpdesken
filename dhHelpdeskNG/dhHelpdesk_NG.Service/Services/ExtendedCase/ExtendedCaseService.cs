@@ -18,7 +18,7 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
         private readonly IExtendedCaseDataRepository _extendedCaseDataRepository;
         private readonly IExtendedCaseFormRepository _extendedCaseFormRepository;
 
-        public ExtendedCaseService(
+		public ExtendedCaseService(
             ICaseSolutionService caseSolutionService,
             IGlobalSettingService globalSettingService,
             IExtendedCaseDataRepository extendedCaseDataRepository,
@@ -143,5 +143,15 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
         {
             return _extendedCaseDataRepository.GetCaseIdByExtendedCaseGuid(uniqueId);
         }
-    }
+
+		public List<ExtendedCaseFormModel> GetExtendedCaseFormsForCustomer(int customerId)
+		{
+			return _extendedCaseFormRepository.GetExtendedCaseFormsForCustomer(customerId);
+		}
+
+		public List<ExtendedCaseFormFieldTranslationModel> GetExtendedCaseFormFields(int extendedCaseFormId, int languageID)
+		{
+			return _extendedCaseFormRepository.GetExtendedCaseFormFields(extendedCaseFormId, languageID);
+		}
+	}
 }
