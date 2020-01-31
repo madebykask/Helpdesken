@@ -787,7 +787,7 @@ namespace DH.Helpdesk.Dal.Repositories
             if (criteria.MyCasesInitiatorDepartmentId.HasValue)
             {
                 var con = string.Empty;
-                con = $"tblCase.[Department_Id] = '{criteria.MyCasesInitiatorDepartmentId.Value}'";
+                con = $"tblCase.[Department_Id] = {criteria.MyCasesInitiatorDepartmentId.Value}";
                 criteriaCondition = criteriaCondition.AddWithSeparator($"({con})", false, " or ");
             }
             
