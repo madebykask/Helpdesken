@@ -192,7 +192,7 @@ using System;
         bool CheckUserCasePermissions(int userId, int caseId, Expression<Func<Case, bool>> casePermissionsFilter = null);
         CustomerUser GetCustomerSettingsByCustomer(int customerId);
 
-        IList<UserCustomerOverview> ListCustomersByUserCases(string userId, string employeeNumber, IList<string> employees, Customer customer);
+        IList<UserCustomerOverview> ListCustomersByUserCases(string userId, string employeeNumber, IList<string> employees, Customer customer, int? initiatorDepartmentId);
         IList<UserCustomerOverview> GetUserCustomersWithCases(int userId);
 
     }
@@ -219,14 +219,14 @@ using System;
             return GetCustomerSettingsQuery(customerId, userId).FirstOrDefaultAsync();
         }
 
-        public IList<UserCustomerOverview> ListCustomersByUserCases(string userId, string employeeNumber, IList<string> employees, Customer customer)
+        public IList<UserCustomerOverview> ListCustomersByUserCases(string userId, string employeeNumber, IList<string> employees, Customer customer, int? initiatorDepartmentId)
         {
             var findByInitiator = customer.MyCasesInitiator;
             var findByRegistrator = customer.MyCasesRegistrator;
             var findByGroupUsers = customer.MyCasesUserGroup;
 
-            var queryable = (from _case in DataContext.Cases
-                             where  (findByInitiator || findByRegistrator || findByGroupUsers) &&
+            var queryable = (from _case in DataContext.Cases.AsNoTracking()
+                             where  (findByInitiator || findByRegistrator || findByGroupUsers || initiatorDepartmentId.HasValue) &&
                                     (
                                         (findByRegistrator && (userId != null && userId.Trim() != "") && _case.RegUserId == userId) ||
                                         (
@@ -242,6 +242,12 @@ using System;
                                             (
                                                 ((_case.ReportedBy == null || _case.ReportedBy.Trim() == "") && _case.RegUserId == userId) ||
                                                 employees.Contains(_case.ReportedBy)
+                                            )
+                                        ) || 
+                                        ( 
+                                            initiatorDepartmentId.HasValue &&
+                                            (
+                                                _case.Department_Id.HasValue && _case.Department_Id.Value == initiatorDepartmentId.Value 
                                             )
                                         )
                                         
