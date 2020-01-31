@@ -779,7 +779,8 @@ namespace DH.Helpdesk.Web.Controllers
             ViewBag.Languages = new SelectList(languages, "Value", "Name");
             ViewBag.Percents = GetPercents();
             ViewBag.IconsList = GetIcons();
-            ViewBag.CaseTypes = _caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id)
+            var caseTypes = _caseTypeService.GetAllCaseTypes(SessionFacade.CurrentCustomer.Id, true, true).ToList();
+            ViewBag.CaseTypes = _caseTypeService.GetChildrenInRow(caseTypes)
                 .Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() })
                 .ToList();
         }
