@@ -64,7 +64,8 @@ namespace DH.Helpdesk.Services.Services
         void Commit();
 
         IList<ComputerUserCategoryOverview> GetComputerUserCategoriesByCustomerID(int customerId, bool includeEmpty = false);
-        ComputerUser GetComputerUserByUserID(string userID);
+        ComputerUser GetComputerUserByUserID(string userId, int? customerId = null);
+        void UpdateNotifierShowOnExtPageDepartmentCases(int[] ids, bool showOnExtPageDepartmentCases);
     }
 
     public class ComputerService : IComputerService
@@ -363,6 +364,7 @@ namespace DH.Helpdesk.Services.Services
             computerUser.UserCode = computerUser.UserCode ?? string.Empty;
             computerUser.UserGUID = computerUser.UserGUID ?? string.Empty;
             computerUser.UserId = computerUser.UserId ?? string.Empty;
+            computerUser.ShowOnExtPageDepartmentCases = computerUser.ShowOnExtPageDepartmentCases;
 
             //if (string.IsNullOrEmpty(computerUser.FirstName))
             //    errors.Add("ComputerUser.FirstName", "Du måste ange ett förnamn");
@@ -397,6 +399,13 @@ namespace DH.Helpdesk.Services.Services
 
             if (errors.Count == 0)
                 this.Commit();
+        }
+
+        public void UpdateNotifierShowOnExtPageDepartmentCases(int[] ids, bool showOnExtPageDepartmentCases)
+        {
+            if (ids == null || !ids.Any()) return;
+
+            _computerUserRepository.UpdateShowOnExtPageDepartmentCasesBatch(ids, showOnExtPageDepartmentCases);
         }
 
         public void SaveComputerUserFieldSetting(IList<ComputerUserFieldSettings> computerUserFieldSetting, out IDictionary<string, string> errors)
@@ -617,9 +626,10 @@ namespace DH.Helpdesk.Services.Services
             return emptyCategory;
         }
 
-        public ComputerUser GetComputerUserByUserID(string reportedBy)
+        public ComputerUser GetComputerUserByUserID(string userId, int? customerId = null)
         {
-            var computerUser = _computerUserRepository.Get(o => o.UserId == reportedBy);
+            var computerUser = _computerUserRepository.Get(o => o.UserId == userId &&
+                                                                (customerId.HasValue && o.Customer_Id == customerId.Value) || !customerId.HasValue);
             return computerUser;
         }
     }

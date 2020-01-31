@@ -158,7 +158,8 @@ namespace DH.Helpdesk.SelfService.Controllers
         {
             _caseControllerBehavior = new CaseControllerBehavior(masterDataService, caseService, caseSearchService,
                 caseSettingService, caseFieldSettingService, 
-                productAreaService, configurationService);
+                productAreaService, configurationService,
+                computerService);
 
             _masterDataService = masterDataService;
             _caseService = caseService;
@@ -1680,6 +1681,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
             }
 
+            if (criteria.MyCasesInitiatorDepartmentId.HasValue && 
+                currentCase.Department_Id == criteria.MyCasesInitiatorDepartmentId.Value)
+                return true;
+
             return false;
         }
 
@@ -1734,6 +1739,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                         return true;
                 }
             }
+
+            if (criteria.MyCasesInitiatorDepartmentId.HasValue && 
+                currentCase.Department_Id == criteria.MyCasesInitiatorDepartmentId.Value)
+                return true;
 
             return false;
         }

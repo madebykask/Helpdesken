@@ -276,21 +276,72 @@
                                     </td>
                                 </tr>
                                 @*<tr>
-                        <td></td>
-                        <td>
-                            @Html.CheckBoxFor(m => m.Customer.MyCasesFollower) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Följare")
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            @Html.CheckBoxFor(m => m.Customer.MyCasesRegarding) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Angående")
-                        </td>
-                    </tr>*@
+            <td></td>
+            <td>
+                @Html.CheckBoxFor(m => m.Customer.MyCasesFollower) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Följare")
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                @Html.CheckBoxFor(m => m.Customer.MyCasesRegarding) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Angående")
+            </td>
+        </tr>*@
                                 <tr>
                                     <td></td>
                                     <td>
                                         @Html.CheckBoxFor(m => Model.Customer.MyCasesUserGroup) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Användargrupp")
+                                    </td>
+                                </tr>
+                                <tr id="initiators">
+                                    <td class="span3">
+                                        <br />
+                                        @Translation.Get("Visa min avdelnings ärenden")
+                                    </td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>@Translation.Get("Tillgängliga")</td>
+                                                <td></td>
+                                                <td>@Translation.Get("Valda")</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <select id="AvailableInitiators" multiple="multiple" name="AvailableInitiators" style="width: 400px; height: 120px">
+                                                        @foreach (var op in Model.AvailableInitiators)
+                                                        {
+                                                            if (!op.Disabled)
+                                                            {
+                                                                <option value="@op.Value" title="@op.Text">@op.Text</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@op.Value" class="DisabledChosen" title="@op.Text">@op.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </td>
+                                                <td style="vertical-align:middle">
+                                                    <input type="button" value="&lt;" class="btn" id="removeInitiators" />
+                                                    <input type="button" value="&gt;" class="btn" id="addInitiators" />
+                                                </td>
+                                                <td>
+                                                    <select id="SelectedInitiators" multiple="multiple" name="SelectedInitiators" style="width: 400px; height: 120px">
+                                                        @foreach (var op in Model.SelectedInitiators)
+                                                        {
+                                                            if (!op.Disabled)
+                                                            {
+                                                                <option value="@op.Value" title="@op.Text">@op.Text</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@op.Value" class="DisabledChosen" title="@op.Text">@op.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </td>
                                 </tr>
                                 <tr id="caseTypes">
@@ -475,6 +526,20 @@
             return false;
         });
 
+        $("#addInitiators").on('click', function () {
+            $("#AvailableInitiators option:selected").remove().appendTo("#SelectedInitiators");
+            $("#AvailableInitiators").get(0).selectedIndex = -1;
+            $("#SelectedInitiators").get(0).selectedIndex = -1;
+            return false;
+        });
+
+        $("#removeInitiators").on('click', function () {
+            $("#SelectedInitiators option:selected").remove().appendTo("#AvailableInitiators");
+            $("#AvailableInitiators").get(0).selectedIndex = -1;
+            $("#SelectedInitiators").get(0).selectedIndex = -1;
+            return false;
+        });
+
         //For next version 5.3.33
         $("#addCaseType").click(function () {
             $("#AvailableCaseTypes option:selected").remove().appendTo("#SelectedCaseTypes");
@@ -513,6 +578,7 @@
             $("#SelectedCategories option").attr("selected", "selected");
             $("#SelectedCaseTypes option").attr("selected", "selected");
             $("#SelectedProductAreas option").attr("selected", "selected");
+            $("#SelectedInitiators option").attr("selected", "selected");
             $("#target").submit();
         }
 

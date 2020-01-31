@@ -20,6 +20,8 @@ namespace DH.Helpdesk.Dal.Repositories.Notifiers
 
         void UpdateNotifier(Notifier notifier);
 
+        void UpdateShowOnExtPageDepartmentCasesBatch(int[] ids, bool showOnExtPageDepartmentCases);
+
         Notifier GetInitiatorInfo(string userId, int customerId, bool activeOnly);
 
         List<NotifierDetailedOverview> FindDetailedOverviewsByCustomerIdOrderedByUserIdAndFirstNameAndLastName(int customerId);

@@ -17,28 +17,28 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
     {
 
         private readonly ICustomerService _customerService;
-        private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ISettingService _settingService;
         private readonly IDocumentService _documentService;
         private readonly ICaseTypeService _caseTypeService;
         private readonly IProductAreaService _productAreaService;
+        private readonly IComputerService _computerService;
 
         public SelfServiceSettingController(
                 ICustomerService customerService,
-                ICaseFieldSettingService caseFieldSettingService,
                 ISettingService settingService,
                 IDocumentService documentService,
                 ICaseTypeService caseTypeService,
                 IProductAreaService productAreaService,
-                IMasterDataService masterDataService)
+                IMasterDataService masterDataService,
+                IComputerService computerService)
             : base(masterDataService)
         {
             this._customerService = customerService;
-            this._caseFieldSettingService = caseFieldSettingService;
             this._settingService = settingService;
             this._documentService = documentService;
             this._caseTypeService = caseTypeService;
             this._productAreaService = productAreaService;
+            _computerService = computerService;
         }
         //
         // GET: /Admin/SelfServiceSetting/
@@ -59,6 +59,23 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Text = x.Name,
                 Value = x.Id.ToString()
             }).ToList();
+
+            var allInitiators = _computerService.GetComputerUsers(customerId);
+            var availableInitiators = allInitiators.Where(c => !c.ShowOnExtPageDepartmentCases)
+                .Select(x => new SelectListItem
+                {
+                    Text = string.Format("{1} {2} - {0}", x.UserId, x.FirstName, x.SurName),
+                    Value = x.Id.ToString()
+                }).OrderBy(a => a.Text)
+                .ToList();
+
+            var selectedInitiators = allInitiators.Where(c => c.ShowOnExtPageDepartmentCases)
+                .Select(x => new SelectListItem
+                {
+                    Text = string.Format("{1} {2} - {0}", x.UserId, x.FirstName, x.SurName),
+                    Value = x.Id.ToString()
+                }).OrderBy(a => a.Text)
+                .ToList();;
 
             var allCaseTypes = _caseTypeService.GetCaseTypesForSetting(customerId);
             var availableCaseTypes = allCaseTypes.Where(c => c.ShowOnExtPageCases == 0).Select(x => new SelectListItem
@@ -94,7 +111,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             if (customer.ShowFAQOnExternalStartPage.HasValue)
               selectedNum = customer.ShowFAQOnExternalStartPage.Value;
 
-            var nums = new List<int> { 1, 5, 10, 50, 100, 1000 };            
+            var nums = new List<int> { 1, 5, 10, 50, 100, 1000 };
             var numbers = nums.Select(x => new SelectListItem
             {
                 Text = x.ToString(),
@@ -107,6 +124,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Customer = customer,
                     AvailableCategories = availableCats,
                     SelectedCategories = selectedCats,
+                    AvailableInitiators = availableInitiators,
+                    SelectedInitiators = selectedInitiators,
                     StartPageFAQNums = numbers,
                     AvailableCaseTypes = availableCaseTypes,
                     SelectedCaseTypes = selectedCaseTypes,
@@ -119,7 +138,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, SelfServiceIndexViewModel vmodel, int[] SelectedCategories, int[] SelectedCaseTypes, int[] SelectedProductAreas)
+        public ActionResult Edit(int id, SelfServiceIndexViewModel vmodel,
+            int[] selectedCategories, 
+            int[] selectedCaseTypes,
+            int[] selectedProductAreas,
+            int[] selectedInitiators)
         {
             var customerToSave = this._customerService.GetCustomer(id);
             customerToSave.PasswordRequiredOnExternalPage = vmodel.Customer.PasswordRequiredOnExternalPage;
@@ -165,7 +188,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             foreach (var cat in allCategories)
             {
-                if (SelectedCategories != null && SelectedCategories.Contains(cat.Id))
+                if (selectedCategories != null && selectedCategories.Contains(cat.Id))
                     cat.ShowOnExternalPage = true;
                 else
                     cat.ShowOnExternalPage = false;
@@ -177,7 +200,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             foreach (var type in allCaseTypes)
             {
-                if (SelectedCaseTypes != null && SelectedCaseTypes.Contains(type.Id))
+                if (selectedCaseTypes != null && selectedCaseTypes.Contains(type.Id))
                     type.ShowOnExtPageCases = 1;
                 else
                     type.ShowOnExtPageCases = 0;
@@ -188,7 +211,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var allProductAreas = _productAreaService.GetProductAreasForSetting(id, false);
             foreach (var prod in allProductAreas)
             {
-                if (SelectedProductAreas != null && SelectedProductAreas.Contains(prod.Id))
+                if (selectedProductAreas != null && selectedProductAreas.Contains(prod.Id))
                     prod.ShowOnExtPageCases = 1;
                 else
                     prod.ShowOnExtPageCases = 0;
@@ -204,6 +227,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                 _productAreaService.SaveProductArea(prod, prodareawgs, caseType_Id, out errors);
             }
+
+            var allInitiators = _computerService.GetComputerUsers(id);
+            _computerService.UpdateNotifierShowOnExtPageDepartmentCases(selectedInitiators, true);
+            _computerService.UpdateNotifierShowOnExtPageDepartmentCases(
+                allInitiators.Select(i => i.Id).Except(selectedInitiators ?? new int[0]).ToArray(),
+                false);
 
             var setting = _settingService.GetCustomerSetting(id);
             if (setting != null)

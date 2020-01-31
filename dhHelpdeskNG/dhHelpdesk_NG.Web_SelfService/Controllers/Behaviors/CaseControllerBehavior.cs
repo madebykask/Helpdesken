@@ -25,6 +25,7 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly IProductAreaService _productAreaService;
         private readonly ISelfServiceConfigurationService _configurationService;
+        private readonly IComputerService _computerService;
 
         #region ctor()
 
@@ -35,7 +36,8 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
             ICaseSettingsService caseSettingsService,
             ICaseFieldSettingService caseFieldSettingService,
             IProductAreaService productAreaService,
-            ISelfServiceConfigurationService configurationService)
+            ISelfServiceConfigurationService configurationService, 
+            IComputerService computerService)
         {
             _masterDataService = masterDataService;
             _caseService = caseService;
@@ -44,6 +46,7 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
             _caseFieldSettingService = caseFieldSettingService;
             _productAreaService = productAreaService;
             _configurationService = configurationService;
+            _computerService = computerService;
         }
 
         #endregion
@@ -52,6 +55,8 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
         {
             var curUser = SessionFacade.CurrentUserIdentity.UserId;
             var userEmployeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
+            var initiator = string.IsNullOrEmpty(curUser) ? null : _computerService.GetComputerUserByUserID(curUser, SessionFacade.CurrentCustomer.Id);
+            var showOnExtPageDepartmentCases = initiator?.ShowOnExtPageDepartmentCases ?? false;
 
             var criteria = new CaseOverviewCriteriaModel()
             {
@@ -60,6 +65,7 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
                 MyCasesFollower = SessionFacade.CurrentCustomer.MyCasesFollower,
                 MyCasesRegarding = SessionFacade.CurrentCustomer.MyCasesRegarding,
                 MyCasesUserGroup = SessionFacade.CurrentCustomer.MyCasesUserGroup,
+                MyCasesInitiatorDepartmentId = showOnExtPageDepartmentCases ? (int?)null : initiator?.Department_Id,
                 UserId = curUser,
                 UserEmployeeNumber = userEmployeeNumber,
                 GroupMember = new List<string>()
