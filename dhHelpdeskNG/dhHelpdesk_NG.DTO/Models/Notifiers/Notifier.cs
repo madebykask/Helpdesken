@@ -110,6 +110,8 @@
         [MaxLength(NotifierConstraint.UserIdMaxLength)]
         public string UserId { get; internal set; }
 
+        public bool? ShowOnExtPageDepartmentCases { get; set; }
+
         #endregion
 
         #region Public Methods and Operators

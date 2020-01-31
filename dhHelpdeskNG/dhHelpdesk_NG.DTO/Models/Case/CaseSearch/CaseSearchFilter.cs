@@ -177,6 +177,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
                     MyCasesRegarding = o.CaseOverviewCriteria.MyCasesRegarding,
                     MyCasesRegistrator = o.CaseOverviewCriteria.MyCasesRegistrator,
                     MyCasesUserGroup = o.CaseOverviewCriteria.MyCasesUserGroup,
+                    MyCasesInitiatorDepartmentId = o.CaseOverviewCriteria.MyCasesInitiatorDepartmentId,
                     UserId = o.CaseOverviewCriteria.UserId,
                     UserEmployeeNumber = o.CaseOverviewCriteria.UserEmployeeNumber,
                     GroupMember = o.CaseOverviewCriteria.GroupMember

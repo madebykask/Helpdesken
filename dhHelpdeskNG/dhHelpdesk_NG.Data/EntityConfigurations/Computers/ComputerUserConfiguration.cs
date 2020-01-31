@@ -89,6 +89,7 @@
                 .WillCascadeOnDelete(false);
 
 			this.Property(o => o.ComputerUsersCategoryID).IsOptional();
+            this.Property(o => o.ShowOnExtPageDepartmentCases).IsRequired();
 
 			this.HasOptional(o => o.ComputerUserCategory).WithMany().HasForeignKey(o => o.ComputerUsersCategoryID).WillCascadeOnDelete(false);
 

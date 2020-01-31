@@ -107,6 +107,8 @@
 
 		public int? ComputerUsersCategoryID { get; set; }
 
+        public bool ShowOnExtPageDepartmentCases { get; set; }
+
 		public virtual ComputerUserCategory ComputerUserCategory { get; set; }
 
 

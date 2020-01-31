@@ -782,7 +782,14 @@ namespace DH.Helpdesk.Dal.Repositories
                 }                    
 
                 criteriaCondition = criteriaCondition.AddWithSeparator($"({con})", false, " or ");
-            } 
+            }
+
+            if (criteria.MyCasesInitiatorDepartmentId.HasValue)
+            {
+                var con = string.Empty;
+                con = $"tblCase.[Department_Id] = '{criteria.MyCasesInitiatorDepartmentId.Value}'";
+                criteriaCondition = criteriaCondition.AddWithSeparator($"({con})", false, " or ");
+            }
             
             if (!string.IsNullOrEmpty(criteriaCondition))
                 sb.Append($" AND ({criteriaCondition})");
@@ -790,7 +797,8 @@ namespace DH.Helpdesk.Dal.Repositories
             /*If there is no selected option, no one show*/
             if (!criteria.MyCasesRegistrator && 
                 !criteria.MyCasesInitiator && 
-                !criteria.MyCasesUserGroup)
+                !criteria.MyCasesUserGroup && 
+                !criteria.MyCasesInitiatorDepartmentId.HasValue)
                 sb.Append(" AND ( 1=2 )");
 
             // arende progress - iShow i gammal helpdesk

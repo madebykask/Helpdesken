@@ -7719,6 +7719,23 @@ end
 GO
 
 
+If not exists (select * from tbltext where id = 2056)
+begin
+	insert into tbltext (id, TextString) VALUES (2056, 'Filinnehåll')
+
+	If not exists (select * from tblTextTranslation where text_id = 2056 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2056, 2, 'File content')
+end
+GO
+
+If not exists (select * from tbltext where id = 2056)
+begin
+	insert into tbltext (id, TextString) VALUES (2056, 'Visa min avdelnings ärenden')
+
+	If not exists (select * from tblTextTranslation where text_id = 2056 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2056, 2, N'View my department''s cases')
+end
+GO
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)

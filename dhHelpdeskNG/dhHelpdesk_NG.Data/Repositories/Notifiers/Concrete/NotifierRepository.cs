@@ -11,6 +11,7 @@ using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.SearchRequestBuilders.Notifiers;
 using DH.Helpdesk.Domain.Computers;
+using Z.EntityFramework.Plus;
 
 namespace DH.Helpdesk.Dal.Repositories.Notifiers.Concrete
 {
@@ -73,7 +74,8 @@ namespace DH.Helpdesk.Dal.Repositories.Notifiers.Concrete
                 CostCentre = notifier.CostCentre,
                 ChangeTime = DateTime.Now,
                 LanguageId = notifier.LanguageId,
-                ComputerUsersCategoryID = notifier.CategoryId
+                ComputerUsersCategoryID = notifier.CategoryId,
+                ShowOnExtPageDepartmentCases = false
             };
 
             this.DataContext.ComputerUsers.Add(notifierEntity);
@@ -499,8 +501,16 @@ namespace DH.Helpdesk.Dal.Repositories.Notifiers.Concrete
             notifierEntity.SOU = notifier.Unit ?? string.Empty;
             notifierEntity.LanguageId = notifier.LanguageId;
             notifierEntity.ComputerUsersCategoryID = notifier.CategoryId;
+            if (notifier.ShowOnExtPageDepartmentCases.HasValue)
+                notifierEntity.ShowOnExtPageDepartmentCases = notifier.ShowOnExtPageDepartmentCases.Value;
 
             this.Update(notifierEntity);
+        }
+
+        public void UpdateShowOnExtPageDepartmentCasesBatch(int[] ids, bool showOnExtPageDepartmentCases)
+        {
+            DataContext.ComputerUsers.Where(f => ids.Contains(f.Id))
+                .Update(x => new ComputerUser() { ShowOnExtPageDepartmentCases = showOnExtPageDepartmentCases });
         }
 
         public Notifier GetInitiatorInfo(string userId, int customerId, bool activeOnly)
