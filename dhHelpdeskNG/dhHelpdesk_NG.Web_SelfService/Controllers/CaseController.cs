@@ -738,8 +738,14 @@ namespace DH.Helpdesk.SelfService.Controllers
                     .Select(e => e.EmployeeNumber)
                     .ToList()
                 : new List<string>();
+
+            var initiator = string.IsNullOrEmpty(userId) ? null : _computerService.GetComputerUserByUserID(userId, SessionFacade.CurrentCustomer.Id);
+            var showOnExtPageDepartmentCases = initiator?.ShowOnExtPageDepartmentCases ?? false;
+            var initiatorDepartmentId = showOnExtPageDepartmentCases ? (int?) null : initiator?.Department_Id;
             
-            var customers = _customerUserService.ListCustomersByUserCases(userId, employeeNumber, employees, SessionFacade.CurrentCustomer);
+            var customers = _customerUserService.ListCustomersByUserCases(userId, employeeNumber, employees,
+                SessionFacade.CurrentCustomer,
+                initiatorDepartmentId);
 
             var model = new MultiCustomerUserFilterModel
             {
