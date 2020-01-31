@@ -13,18 +13,15 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 	public sealed class ExtendedCaseFormRepository : RepositoryBase<ExtendedCaseFormEntity>, IExtendedCaseFormRepository
     {
         private readonly IExtendedCaseDataRepository _extendedCaseDataRepository;
-		private readonly IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel> _entityToModelMapper;
 
-		#region ctor()
+        #region ctor()
 
 		public ExtendedCaseFormRepository(
             IDatabaseFactory databaseFactory,
-            IExtendedCaseDataRepository extendedCaseDataRepository,
-			IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel> entityToModelMapper)
+            IExtendedCaseDataRepository extendedCaseDataRepository)
             : base(databaseFactory)
         {
             _extendedCaseDataRepository = extendedCaseDataRepository;
-			_entityToModelMapper = entityToModelMapper;
         }
 
         #endregion
@@ -146,14 +143,12 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             return extendedForm;
         }
 
-		public List<ExtendedCaseFormModel> GetExtendedCaseFormsForCustomer(int customerId)
+		public List<ExtendedCaseFormEntity> GetExtendedCaseFormsForCustomer(int customerId)
 		{
-
-			var query = DataContext.ExtendedCaseForms.Where(o => o.CaseSolutions.Any(f => f.Customer_Id == customerId));
-
-			var forms = query.Select(_entityToModelMapper.Map).ToList();
-
-			return forms;
+            var query = DataContext.ExtendedCaseForms
+                .Where(o => o.CaseSolutions.Any(f => f.Customer_Id == customerId));
+            
+			return query.ToList();
 		}
 
 		public List<ExtendedCaseFormFieldTranslationModel> GetExtendedCaseFormFields(int extendedCaseFormId, int languageID)
