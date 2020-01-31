@@ -718,16 +718,18 @@ namespace DH.Helpdesk.Web.Controllers
 
             var selectedDp = new List<int>();
 
-            var caseTypesOrginal = _caseTypeService.GetCaseTypes(SessionFacade.CurrentCustomer.Id);
+            var caseTypes = _caseTypeService.GetAllCaseTypes(SessionFacade.CurrentCustomer.Id, true, true).ToList();
+            var caseTypesOrginal = _caseTypeService.GetChildrenInRow(caseTypes);
             var availableCt =
                 caseTypesOrginal.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
 
             var selectedCt = new List<int>();
 
 
-            var productAreaOrginal = this._productAreaService.GetTopProductAreasWithChilds(SessionFacade.CurrentCustomer.Id);
+            var productAreas = _productAreaService.GetTopProductAreasWithChilds(SessionFacade.CurrentCustomer.Id);
+            var productAreasInRow = _productAreaService.GetChildrenInRow(productAreas).ToList();
             var availablePa =
-                productAreaOrginal.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
+                productAreasInRow.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
 
             var selectedPa = new List<int>();
 
