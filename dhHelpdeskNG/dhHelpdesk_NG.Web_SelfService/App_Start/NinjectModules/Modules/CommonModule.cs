@@ -264,6 +264,10 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
                .To<ExtendedCaseFormForCaseToEntityMapper>()
                .InSingletonScope();
 
+            this.Bind<IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel>>()
+                .To<ExtendedCaseFormToBusinessModelMapper>()
+                .InSingletonScope();
+
             this.Bind<IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormForCaseModel>>()
                 .To<ExtendedCaseFormForCaseToBusinessModelMapper>()
                 .InSingletonScope();
