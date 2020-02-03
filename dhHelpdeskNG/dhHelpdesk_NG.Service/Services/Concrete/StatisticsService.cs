@@ -46,6 +46,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(user.TimeZoneId);
 
             var model = new StatisticsOverview();
+            var allStatisticsCount = 0;
+            var inTimeStatisticsCount = 0;
             foreach (var customerId in customers)
             {
                 var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId).ToArray();
@@ -96,14 +98,17 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 filter.CaseProgress = CaseProgressFilter.ClosedCases;
                 filter.CaseClosingDateStartFilter = DateTime.Today.GetStartOfDay();
                 filter.CaseClosingDateEndFilter = DateTime.Today.GetEndOfDay();
-                model.SolvedInTimeToday += CountSolvedInTime(user, filter, caseUserSettings, caseFieldSettings,
+                var statistics = CountSolvedInTime(user, filter, caseUserSettings, caseFieldSettings,
                     customerUserSettings, userTimeZone);
+                allStatisticsCount += statistics.Key;
+                inTimeStatisticsCount += statistics.Value;
             }
+            model.SolvedInTimeToday = allStatisticsCount == 0 ? 0 : ((inTimeStatisticsCount * 100) / allStatisticsCount);
 
             return model;
         }
 
-        private int CountSolvedInTime(UserOverview user, CaseSearchFilter filter, IList<CaseSettings> caseUserSettings,
+        private KeyValuePair<int, int> CountSolvedInTime(UserOverview user, CaseSearchFilter filter, IList<CaseSettings> caseUserSettings,
             CaseFieldSetting[] caseFieldSettings, CustomerUser customerUserSettings, TimeZoneInfo userTimeZone)
         {
             CaseRemainingTimeData remainingTime;
@@ -137,7 +142,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             var statistics = _caseStatisticService.GetForCases(casesIds);
             var inTime = statistics.Count(s => !s.WasSolvedInTime.HasValue || s.WasSolvedInTime.Value.ToBool());
 
-            return !statistics.Any() ? 0 : ((inTime * 100) / statistics.Count);
+            return new KeyValuePair<int, int>(statistics.Count, inTime);
         }
 
         private OverdueValues CountOverdue(UserOverview user, CaseSearchFilter filter,
