@@ -137,7 +137,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             var statistics = _caseStatisticService.GetForCases(casesIds);
             var inTime = statistics.Count(s => !s.WasSolvedInTime.HasValue || s.WasSolvedInTime.Value.ToBool());
 
-            return !statistics.Any() ? 0 : (int)Math.Round((double)(inTime * 100) / statistics.Count);
+            return !statistics.Any() ? 0 : ((inTime * 100) / statistics.Count);
         }
 
         private OverdueValues CountOverdue(UserOverview user, CaseSearchFilter filter,
