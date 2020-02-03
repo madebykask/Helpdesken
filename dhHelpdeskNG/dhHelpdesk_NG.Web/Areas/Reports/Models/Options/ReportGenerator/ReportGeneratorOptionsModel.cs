@@ -3,17 +3,18 @@ using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
+	using System;
+	using System.Collections.Generic;
+	using System.Web.Mvc;
 
-    using DH.Helpdesk.BusinessData.Models.CaseType;
-    using DH.Helpdesk.BusinessData.Models.Shared.Input;
-    using DH.Helpdesk.Common.ValidationAttributes;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
-    using DH.Helpdesk.Web.Models.Shared;
+	using DH.Helpdesk.BusinessData.Models.CaseType;
+	using DH.Helpdesk.BusinessData.Models.Shared.Input;
+	using DH.Helpdesk.Common.ValidationAttributes;
+	using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+	using DH.Helpdesk.Web.Models.Shared;
+	using BusinessData.Models.Reports.Enums;
 
-    public sealed class ReportGeneratorOptionsModel
+	public sealed class ReportGeneratorOptionsModel
     {
         public ReportGeneratorOptionsModel()
         {
@@ -27,6 +28,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
         }
 
         public ReportGeneratorOptionsModel(
+			    
                 MultiSelectList fields, 
                 MultiSelectList departments, 
                 MultiSelectList workingGroups, 
@@ -117,6 +119,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
         public string SortName { get; set; }
         public SortBy? SortBy { get; set; }
 		public List<string> ExtendedCaseTranslationFieldIds { get; internal set; }
+		public int ReportId { get; set; }
 
 		public ReportGeneratorFilterModel GetFilter()
         {
@@ -135,8 +138,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
                         this.AdministratorsIds,
                         (this.CaseStatusIds == null || this.CaseStatusIds < 0) ? new List<int>() : new List<int> { this.CaseStatusIds.Value }, //service supports multiple statuses but ui not - converting ui input to service supported list
                         this.CaseTypeIds,
-						this.ExtendedCaseFormFieldIds,
-						this.ExtendedCaseFormId,
+						this.ReportId == (int)ReportType.ReportGeneratorExtendedCase ? this.ExtendedCaseFormFieldIds : null,
+						this.ReportId == (int)ReportType.ReportGeneratorExtendedCase ? this.ExtendedCaseFormId : null,
                         this.PeriodFrom,
                         this.PeriodUntil,
                         this.RecordsOnPage,

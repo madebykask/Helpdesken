@@ -8,43 +8,44 @@ using DH.Helpdesk.Web.Infrastructure.Attributes;
 
 namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 {
-    using System;
-    using System.Linq;
-    using System.Web.Mvc;
-    using System.Collections.Generic;
-    using System.IO;
+	using System;
+	using System.Linq;
+	using System.Web.Mvc;
+	using System.Collections.Generic;
+	using System.IO;
 
-    using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.BusinessData.Models.Reports.Enums;
-    using DH.Helpdesk.BusinessData.OldComponents;
-    using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Reports.Options;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
-    using DH.Helpdesk.BusinessData.Models.Shared.Input;
-    using DH.Helpdesk.BusinessData.Models.ReportService;
-    using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Services.Services.Reports;
-    using DH.Helpdesk.Web.Areas.Reports.Infrastructure;
-    using DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories;
-    using DH.Helpdesk.Web.Areas.Reports.Models.Options;
-    using DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator;
-    using DH.Helpdesk.Web.Areas.Reports.Models.Reports.ReportGenerator;
-    using DH.Helpdesk.Web.Areas.Reports.Models.ReportService;
-    using DH.Helpdesk.Web.Controllers;
-    using DH.Helpdesk.Web.Enums;
-    using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.ActionFilters;
-    using DH.Helpdesk.Web.Infrastructure.Extensions;
-    using DH.Helpdesk.Web.Infrastructure.Mvc;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Models.Shared;
+	using DH.Helpdesk.Common.Tools;
+	using DH.Helpdesk.Common.Enums;
+	using DH.Helpdesk.BusinessData.Models.Reports.Enums;
+	using DH.Helpdesk.BusinessData.OldComponents;
+	using DH.Helpdesk.BusinessData.Models.Shared;
+	using DH.Helpdesk.BusinessData.Models.Reports.Options;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
+	using DH.Helpdesk.BusinessData.Models.Shared.Input;
+	using DH.Helpdesk.BusinessData.Models.ReportService;
+	using DH.Helpdesk.Services.Services;
+	using DH.Helpdesk.Services.Services.Reports;
+	using DH.Helpdesk.Web.Areas.Reports.Infrastructure;
+	using DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories;
+	using DH.Helpdesk.Web.Areas.Reports.Models.Options;
+	using DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator;
+	using DH.Helpdesk.Web.Areas.Reports.Models.Reports.ReportGenerator;
+	using DH.Helpdesk.Web.Areas.Reports.Models.ReportService;
+	using DH.Helpdesk.Web.Controllers;
+	using DH.Helpdesk.Web.Enums;
+	using DH.Helpdesk.Web.Infrastructure;
+	using DH.Helpdesk.Web.Infrastructure.ActionFilters;
+	using DH.Helpdesk.Web.Infrastructure.Extensions;
+	using DH.Helpdesk.Web.Infrastructure.Mvc;
+	using DH.Helpdesk.Web.Infrastructure.Tools;
+	using DH.Helpdesk.Web.Models.Shared;
 
-    using Microsoft.Reporting.WebForms;
-    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-    using DH.Helpdesk.BusinessData.Enums.Case;
+	using Microsoft.Reporting.WebForms;
+	using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+	using DH.Helpdesk.BusinessData.Enums.Case;
+	using BusinessData.Models.Case.CaseSettingsOverview;
 
-    public sealed class ReportController : UserInteractionController
+	public sealed class ReportController : UserInteractionController
     {
         private readonly IReportModelFactory _reportModelFactory;
         private readonly IReportGeneratorModelFactory _reportGeneratorModelFactory;
@@ -326,6 +327,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                                         ? options.GetFilter()
                                         : SessionFacade.FindPageFilters<ReportGeneratorFilterModel>(PageName.ReportsReportGenerator);
 
+
+
                 SessionFacade.SavePageFilters(PageName.ReportsReportGenerator, filters);
 
 
@@ -354,6 +357,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
                     return this.PartialView("Reports/ReportGeneratorPreview", new ReportGeneratorAggregateModel(previewData));
                 }
+
+				var languageId = SessionFacade.CurrentLanguageId;
 
                 var data = this._reportService.GetReportGeneratorData(
                                     this.OperationContext.CustomerId,
@@ -387,7 +392,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
                 return this.PartialView("Reports/ReportGenerator", model);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 SessionFacade.SavePageFilters(PageName.ReportsReportGenerator, ReportGeneratorFilterModel.CreateDefault());
                 throw;

@@ -2,23 +2,24 @@
 
 namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Enums.Case.Fields;
-    using DH.Helpdesk.BusinessData.Models.Case.CaseOverview;
-    using DH.Helpdesk.BusinessData.Models.Case.CaseSettingsOverview;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
-    using DH.Helpdesk.BusinessData.Models.Reports.Options;
-    using DH.Helpdesk.BusinessData.Models.Shared.Input;
-    using DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator;
-    using DH.Helpdesk.Web.Areas.Reports.Models.Reports.ReportGenerator;
-    using DH.Helpdesk.Web.Infrastructure.Extensions;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Models.Shared;
+	using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+	using DH.Helpdesk.BusinessData.Models.Case.CaseOverview;
+	using DH.Helpdesk.BusinessData.Models.Case.CaseSettingsOverview;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
+	using DH.Helpdesk.BusinessData.Models.Reports.Options;
+	using DH.Helpdesk.BusinessData.Models.Shared.Input;
+	using DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator;
+	using DH.Helpdesk.Web.Areas.Reports.Models.Reports.ReportGenerator;
+	using DH.Helpdesk.Web.Infrastructure.Extensions;
+	using DH.Helpdesk.Web.Infrastructure.Tools;
+	using DH.Helpdesk.Web.Models.Shared;
+	using Services.DisplayValues;
 
-    public sealed class ReportGeneratorModelFactory : IReportGeneratorModelFactory
+	public sealed class ReportGeneratorModelFactory : IReportGeneratorModelFactory
     {
         public ReportGeneratorOptionsModel GetReportGeneratorOptionsModel(ReportGeneratorOptions options, ReportGeneratorFilterModel filters)
         {
@@ -71,11 +72,11 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
 
 		private static void CreateExtendedCaseHeaders(ExtendedCaseSettings extendedCase, List<GridColumnHeaderModel> headers)
 		{
-			if (extendedCase != null && extendedCase.Names != null && extendedCase.Names.Count > 0)
+			if (extendedCase != null && extendedCase.Fields != null && extendedCase.Fields.Count > 0)
 			{
-				foreach (var name in extendedCase.Names)
+				foreach (var field in extendedCase.Fields)
 				{
-					headers.Add(new GridColumnHeaderModel(name, name));
+					headers.Add(new GridColumnHeaderModel(field.Name, field.Name));
 				}
 			}
 		}
@@ -187,14 +188,20 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
             CreateCaseInfoValues(settings.CaseInfo, overview.CaseInfo, values);
             CreateOtherValues(settings.Other, overview.Other, values);
             CreateLogValues(settings.Log, overview.Log, values);
-			CreateExtendedCaseValues(settings.ExtendedCase, overview.ExtendedCase, values);
+			if (settings.ExtendedCase != null && settings.ExtendedCase.Fields != null && settings.ExtendedCase.Fields.Any())
+				CreateExtendedCaseValues(settings.ExtendedCase, overview.ExtendedCase, values);
 
             return new CaseOverviewModel(overview.Id, values);
         }
 
-		private static void CreateExtendedCaseValues(ExtendedCaseSettings settings, ExtendedCaseOverview ovewrview, List<NewGridRowCellValueModel> values)
+		private static void CreateExtendedCaseValues(ExtendedCaseSettings settings, ExtendedCaseOverview overview, List<NewGridRowCellValueModel> values)
 		{
-			throw new NotImplementedException();
+			foreach (var field in settings.Fields)
+			{
+				var value = overview?.Values.SingleOrDefault(o => o.FieldId == field.FieldId)?.Value;
+				var fieldValue = new NewGridRowCellValueModel(field.Name, new StringDisplayValue(value ?? ""));
+				values.Add(fieldValue);
+			}
 		}
 
 		private static void CreateUserValues(UserSettings settings, UserOverview fields, List<NewGridRowCellValueModel> values)

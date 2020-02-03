@@ -1,6 +1,7 @@
 ﻿@using DH.Helpdesk.BusinessData.Models.Shared
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
+@using DH.Helpdesk.Common.Extensions.Object
 @using DH.Helpdesk.BusinessData.OldComponents
 @model DH.Helpdesk.Web.Areas.Reports.Models.ReportService.ReportServiceOverviewModel
 <script type="text/javascript">
@@ -387,7 +388,7 @@
                     <tr id="reportGeneratorExtendedCaseForms" style="display: none">
                         <td>@Translation.GetCoreTextTranslation("Utökade ärendeformulär")</td>
                         <td>
-                                @Html.DropDownListFor(m => m.ReportGeneratorExtendedCaseFormId, Model.ReportGeneratorExtendedCaseForms.Select(o => new SelectListItem() { Text = o.Name, Value = o.ID.ToString() }).ToList(),
+                                @Html.DropDownListFor(m => m.ReportGeneratorExtendedCaseFormId, Model.ReportGeneratorExtendedCaseForms.Select(o => new SelectListItem() { Text = o.Name, Value = o.ID.ToString() }).ToList().Use(o => { o.Insert(0, new SelectListItem() { Text = "", Value = "" }); return o; }),
                                 new
                                 {
                                     id = "lstExtendedCaseForms",

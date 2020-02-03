@@ -3,28 +3,30 @@ using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Services.Services.Reports
 {
-    using System;
-    using System.Collections.Generic;
+	using System;
+	using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.CasesInProgressDay;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.ClosedCasesDay;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCategoryCustomer;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
-    using DH.Helpdesk.BusinessData.Models.Reports.Enums;
-    using DH.Helpdesk.BusinessData.Models.Reports.Options;
-    using DH.Helpdesk.BusinessData.Models.Reports.Print;
-    using DH.Helpdesk.BusinessData.Models.Shared.Input;
-    using DH.Helpdesk.BusinessData.OldComponents;
-    using DH.Helpdesk.Common.Enums;
+	using DH.Helpdesk.BusinessData.Models;
+	using BusinessData.Models.Case.CaseSettingsOverview;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.CasesInProgressDay;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.ClosedCasesDay;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCategoryCustomer;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
+	using DH.Helpdesk.BusinessData.Models.Reports.Enums;
+	using DH.Helpdesk.BusinessData.Models.Reports.Options;
+	using DH.Helpdesk.BusinessData.Models.Reports.Print;
+	using DH.Helpdesk.BusinessData.Models.Shared.Input;
+	using DH.Helpdesk.BusinessData.OldComponents;
+	using DH.Helpdesk.Common.Enums;
+	using BusinessData.Models.Case;
 
-    public interface IReportService
+	public interface IReportService
     {
         List<ReportType> GetAvailableCustomerReports(int customerId);
 
@@ -185,5 +187,5 @@ namespace DH.Helpdesk.Services.Services.Reports
         ReportFavorite GetCustomerReportFavorite(int reportFavoriteId, int customerId, int? userId);
         int SaveCustomerReportFavorite(ReportFavorite reportFavorite);
         void DeleteCustomerReportFavorite(int reportFavoriteId, int customerId, int? userId);
-    }
+	}
 }

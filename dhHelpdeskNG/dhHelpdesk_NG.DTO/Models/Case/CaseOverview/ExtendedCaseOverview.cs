@@ -20,7 +20,6 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseOverview
 		public ExtendedCaseOverviewValue(string fieldId, string name, string value)
 		{
 			FieldId = fieldId;
-			Name = name;
 			Value = value;
 		}
 		public string FieldId { get; set; }
