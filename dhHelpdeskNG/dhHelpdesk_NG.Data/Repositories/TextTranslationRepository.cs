@@ -12,7 +12,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface ITextRepository : IRepository<Text>
     {
-        int GetLastId();
+        int GetLastId(int? maxId = null);
         IEnumerable<Text> GetAllWithTranslation(int? textTypeId = null);
         IEnumerable<TextList> GetAllTexts(int texttypeId, int? defaultLanguage);
         List<TextList> GetAllTextsAndTranslations(int? texttypeId = null);
@@ -25,9 +25,9 @@ namespace DH.Helpdesk.Dal.Repositories
         {
         }
 
-        public int GetLastId()
+        public int GetLastId(int? maxId = null)
         {
-            var lastId = DataContext.Texts.Max(x => x.Id);
+            var lastId = maxId.HasValue ? DataContext.Texts.Where(x => x.Id < maxId.Value).Max(x => x.Id) : DataContext.Texts.Max(x => x.Id);
             return lastId;
         }
 
