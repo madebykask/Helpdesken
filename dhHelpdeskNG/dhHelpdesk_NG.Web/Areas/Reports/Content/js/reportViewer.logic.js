@@ -31,9 +31,11 @@
         var changeDateFrom = "#ReportFilter_CaseChangeDate_FromDate";
         var changeDateTo = "#ReportFilter_CaseChangeDate_ToDate";
         var extendedCaseForms = "#reportGeneratorExtendedCaseForms";
+        var extendedCaseFormFields = "#reportGeneratorExtendedCaseFormFields";
         var lstExtendedCaseForms = "#lstExtendedCaseForms";
         var lstExtendedCaseFormFields = "#lstExtendedCaseFormFields";
-        var extendedCaseFormFields = "#reportGeneratorExtendedCaseFormFields";
+
+        $(lstExtendedCaseFormFields).multiselect('buildSelectAll');
 
         var extendedCaseFormChanged = function (e) {
             var id = $(lstExtendedCaseForms).val();
@@ -58,9 +60,13 @@
                     }
                 });
             }
+            else {
+                $(extendedCaseFormFields).hide();
+                $(extendedCaseFormFields).val('');
+            }
         };
 
-        $(extendedCaseForms).on('change', extendedCaseFormChanged);
+        $(lstExtendedCaseForms).on('change', extendedCaseFormChanged);
 
         var reportObjNames = {};
         reportObjNames[dhHelpdesk.reports.reportType.ReportedTime] = 'reportedTimeReport';
@@ -173,6 +179,9 @@
             applyChosen(caseTypeDropDown, filters.caseTypes);
             applyChosen(productAreaDropDown, filters.productAreas);
 
+            applyChosen(lstExtendedCaseForms, filters.extendedCaseFormId);
+            applyMultiSelect(lstExtendedCaseFormFields, filters.extendedCaseFormFields);
+
             applyMultiSelect("#lstFields", filters.fields);
             applyDropDown(statusList, filters.caseStatuses);
 
@@ -220,6 +229,7 @@
             var filters = getBaseFilters();
             
             var getParams = $.param({
+                ReportId: $('#lstReports').val(),
                 DepartmentIds: filters.departments,
                 WorkingGroupIds: filters.workingGroups,
                 CaseTypeIds: filters.caseTypes,
@@ -591,6 +601,9 @@
             var $btnShowReport = $("#btnShowReport");
             var $reportGeneratorFields = $("#reportGeneratorFields");
             var $reportGeneratorExtendedCaseForms = $("#reportGeneratorExtendedCaseForms");
+            var $lstExtendedCaseForms = $("#lstExtendedCaseForms");
+            var $reportGeneratorExtendedCaseFormFields = $("#reportGeneratorExtendedCaseFormFields");
+            var $lstExtendedCaseFormFields = $("#lstExtendedCaseFormFields");
             var $otherReportsContainer = $("#otherReportsContainer");
             var $generateReportContainer = $("#generateReportContainer");
             var $jsReportContainer = $("#jsReportContainer");
@@ -604,6 +617,9 @@
 
             dhHelpdesk.reports.togglePreviewMode(true);
             dhHelpdesk.reports.resetErrors();
+
+            $lstExtendedCaseForms.val("");
+            $lstExtendedCaseFormFields.val("");
 
             if (reportId === dhHelpdesk.reports.reportType.ReportGenerator || reportId === dhHelpdesk.reports.reportType.ReportGeneratorExtendedCase) {
                 $btnPreview.show();
@@ -625,12 +641,16 @@
                 $generateReportContainer.html('');
                 $generateReportContainer.show();
 
-                if (reportId === dhHelpdesk.reports.reportType.ReportGeneratorExtendedCase)
-                {
+                if (reportId === dhHelpdesk.reports.reportType.ReportGeneratorExtendedCase) {
+
                     $reportGeneratorExtendedCaseForms.show();
                 }
-                else  {
+                else {
+
                     $reportGeneratorExtendedCaseForms.hide();
+                    $reportGeneratorExtendedCaseForms.val('');
+                    $reportGeneratorExtendedCaseFormFields.hide();
+                    $reportGeneratorExtendedCaseFormFields.val('');
                 }
 
 

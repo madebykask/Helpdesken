@@ -39,6 +39,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 	using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 	using DH.Helpdesk.BusinessData.Models.Case.CaseOverview;
 	using BusinessData.Models.Case.CaseSettingsOverview;
+	using BusinessData.Models.Case;
 
 	public sealed class ReportService : IReportService
     {
@@ -52,6 +53,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
         private readonly IProductAreaRepository _productAreaRepository;
         private readonly ICaseTypeRepository _caseTypeRepository;
 		private readonly IFeatureToggleService _featureToggleService;
+		private readonly IExtendedCaseService _extendedCaseService;
 
 		public ReportService(
                 IUnitOfWorkFactory unitOfWorkFactory,
@@ -63,7 +65,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                 IUserService userService,
                 IProductAreaRepository productAreaRepository,
                 ICaseTypeRepository caseTypeRepository,
-				IFeatureToggleService featureToggleService)
+				IFeatureToggleService featureToggleService,
+				IExtendedCaseService extendedCaseService)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.sureyService = sureyService;
@@ -75,6 +78,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             _productAreaRepository = productAreaRepository;
             _caseTypeRepository = caseTypeRepository;
 			_featureToggleService = featureToggleService;
+			_extendedCaseService = extendedCaseService;
 
 		}
 
@@ -440,8 +444,6 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 												   administratorIds,
 												   caseStatusIds,
 												   caseTypeChainIds,
-												   extendedCaseFormFieldIds,
-												   extendedCaseFormId,
 												   periodFrom,
 												   periodUntil,
 												   closeFrom,
@@ -469,10 +471,21 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                 var overviews = caseData.MapToCaseOverviews(_caseTypeRepository, _productAreaRepository, ous, finishingCauses, categories);
 
                 var sortedOverviews = Sort(overviews, sort);
-				settings.ExtendedCase = new ExtendedCaseSettings
+
+				if (extendedCaseFormId.HasValue)
 				{
-					Names = caseData.SelectMany(cd => cd.ExtendedCaseValues).GroupBy(o => o.FieldId).Select(o => o.First().Name).ToList()
-				};
+					var fields = _extendedCaseService.GetExtendedCaseFormFields(extendedCaseFormId.Value, languageId).ToDictionary(o => o.FieldId);
+
+					settings.ExtendedCase = new ExtendedCaseSettings
+					{
+						Fields = extendedCaseFormFieldIds
+							.Select(o => new ExtendedCaseField
+							{
+								FieldId = o,
+								Name = fields[o].Text
+							}).ToList()
+					};
+				}
 
                 return new ReportGeneratorData(settings, sortedOverviews);
             }
@@ -1685,6 +1698,6 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             return ret;
         }
 
-        #endregion
-    }
+		#endregion
+	}
 }
