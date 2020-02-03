@@ -51,6 +51,7 @@
         private readonly ITextTranslationRepository _textTranslationRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITextTypeRepository _textTypeRepository;
+        private const int MobileIdStart = 30000;
 
         public TextTranslationService(
             ITextRepository textRepository,
@@ -232,6 +233,7 @@
             if (string.IsNullOrEmpty(text.TextToTranslate))
                 errors.Add("text.TextToTranslate", "Du måste ange ett ord att översätta");
 
+            //TODO: Optimize - no need to get all translation to client, do search in DB
             var hasDublicate = this.GetAllTexts(text.Type, null)
                             .Any(t => t.TextToTranslate.Equals(text.TextToTranslate));
 
@@ -245,7 +247,7 @@
                 text.ChangedDate = DateTime.Now;
                 text.CreatedDate = DateTime.Now;
 
-                text.Id = this._textRepository.GetLastId() + 1;
+                text.Id = this._textRepository.GetLastId(MobileIdStart) + 1;
 
                 if (text.Id < 5000)
                 {
@@ -273,7 +275,7 @@
 
             text.ChangedDate = DateTime.Now;
             text.CreatedDate = DateTime.Now;
-            text.Id = this._textRepository.GetLastId() + 1;
+            text.Id = this._textRepository.GetLastId(MobileIdStart) + 1;
             
             if (string.IsNullOrEmpty(text.TextToTranslate))
                 errors.Add("text.TextToTranslate", "Du måste ange ett ord att översätta");
