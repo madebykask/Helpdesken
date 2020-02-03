@@ -67,7 +67,10 @@ namespace DH.Helpdesk.Services.Services.CaseStatistic
 
             using (var uow = this._unitOfWorkFactory.Create())
             {
-                return uow.GetRepository<CaseStatistic>().GetAll().AsNoTracking().Where(it => casesIds.Contains(it.CaseId)).ToList();
+                return uow.GetRepository<CaseStatistic>().GetAll().AsNoTracking()
+                    .Where(it => casesIds.Contains(it.CaseId))
+                    .GroupBy(x=>x.CaseId,(key,g)=>g.OrderByDescending(e=>e.Id).FirstOrDefault())
+                        .ToList();
             }
         }
 
