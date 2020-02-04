@@ -5,7 +5,7 @@
   "background_color": "#fff",
   "display": "standalone",
   "scope": "#{Scope}",
-  "start_url": "/",
+  "start_url": "#{SubsiteUrl}",
   "icons": [
     {
       "src": "#{icon72}",

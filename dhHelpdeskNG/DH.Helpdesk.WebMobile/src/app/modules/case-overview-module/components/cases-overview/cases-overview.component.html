@@ -23,7 +23,7 @@
                   <ng-container *ngIf="caseSortFields && caseSortFields.length">
                       <cases-sort-menu [selectedSortField]="selectedSortFieldId" 
                         [selectedSortFieldOrder]="selectedSortFieldOrder" 
-                        [sortFields]="caseSortFields"
+                        [sortFields]="caseSortFieldsFiltered"
                         (sortingChanged)="processSortingChanged($event)"></cases-sort-menu>
                   </ng-container>
                 </div>

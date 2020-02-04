@@ -33,6 +33,10 @@ export class CasesSortMenuComponent implements OnInit {
   menuItems: CasesSortMenuItemModel[] = [];
 
   ngOnInit() {
+    // this.initMenuItems();
+  }
+
+  ngOnChanges(): void {
     this.initMenuItems();
   }
 
