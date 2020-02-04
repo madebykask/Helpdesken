@@ -476,15 +476,30 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 				{
 					var fields = _extendedCaseService.GetExtendedCaseFormFields(extendedCaseFormId.Value, languageId).ToDictionary(o => o.FieldId);
 
-					settings.ExtendedCase = new ExtendedCaseSettings
+					if (extendedCaseFormFieldIds.Any())
 					{
-						Fields = extendedCaseFormFieldIds
-							.Select(o => new ExtendedCaseField
-							{
-								FieldId = o,
-								Name = fields[o].Text
-							}).ToList()
-					};
+						settings.ExtendedCase = new ExtendedCaseSettings
+						{
+							Fields = extendedCaseFormFieldIds
+								.Select(o => new ExtendedCaseField
+								{
+									FieldId = o,
+									Name = fields[o].Text
+								}).ToList()
+						};
+					}
+					else
+					{
+						settings.ExtendedCase = new ExtendedCaseSettings
+						{
+							Fields = fields
+								.Select(o => new ExtendedCaseField
+								{
+									FieldId = o.Value.FieldId,
+									Name = o.Value.Text
+								}).ToList()
+						};
+					}
 				}
 
                 return new ReportGeneratorData(settings, sortedOverviews);

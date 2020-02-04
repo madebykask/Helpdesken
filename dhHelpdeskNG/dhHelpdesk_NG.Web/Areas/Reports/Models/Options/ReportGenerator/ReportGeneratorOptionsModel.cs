@@ -119,7 +119,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
         public string SortName { get; set; }
         public SortBy? SortBy { get; set; }
 		public List<string> ExtendedCaseTranslationFieldIds { get; internal set; }
-		public int ReportId { get; set; }
+		public int ReportTypeId { get; set; }
 
 		public ReportGeneratorFilterModel GetFilter()
         {
@@ -138,8 +138,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
                         this.AdministratorsIds,
                         (this.CaseStatusIds == null || this.CaseStatusIds < 0) ? new List<int>() : new List<int> { this.CaseStatusIds.Value }, //service supports multiple statuses but ui not - converting ui input to service supported list
                         this.CaseTypeIds,
-						this.ReportId == (int)ReportType.ReportGeneratorExtendedCase ? this.ExtendedCaseFormFieldIds : null,
-						this.ReportId == (int)ReportType.ReportGeneratorExtendedCase ? this.ExtendedCaseFormId : null,
+						this.ReportTypeId == (int)ReportType.ReportGeneratorExtendedCase ? this.ExtendedCaseFormFieldIds : null,
+						this.ReportTypeId == (int)ReportType.ReportGeneratorExtendedCase ? this.ExtendedCaseFormId : null,
                         this.PeriodFrom,
                         this.PeriodUntil,
                         this.RecordsOnPage,

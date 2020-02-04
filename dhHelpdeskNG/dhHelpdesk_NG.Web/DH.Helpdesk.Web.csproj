@@ -3463,7 +3463,6 @@
     <Content Include="Areas\Admin\Views\Users\EditorTemplates\CustomerUser.cshtml" />
     <Content Include="Areas\Admin\Views\GlobalSetting\_FilesViewLog.cshtml" />
     <Content Include="Areas\Admin\Views\GlobalSetting\_FileViewLogTable.cshtml" />
-    <Content Include="Areas\Reports\Views\Report\ReportViewer\_ExtendedCaseFormFields.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
