@@ -1702,7 +1702,13 @@ namespace DH.Helpdesk.Services.Services
             // heldesk site
             if (cms != null)
             {
-                var site = cms.AbsoluterUrl + "Cases/edit/" + c.Id.ToString();
+				var setting = _settingService.GetCustomerSetting(c.Customer_Id);
+
+				var editCasePath = setting.UseMobileRouting ?
+					CasePaths.EDIT_CASE_MOBILEROUTE :
+					CasePaths.EDIT_CASE_DESKTOP;
+
+                var site = cms.AbsoluterUrl + editCasePath + c.Id.ToString();
                 var url = "<br><a href='" + site + "'>" + site + "</a>";
                 ret.Add(new Field { Key = "[#99]", StringValue = url });
             }

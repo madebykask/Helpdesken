@@ -3,17 +3,18 @@ Imports System.Data.SqlClient
 Imports DH.Helpdesk.Library
 Imports System.IO
 Imports DH.Helpdesk.Library.SharedFunctions
+Imports DH.Helpdesk.Common.Constants
 
 Module DH_Helpdesk_Schedule
     'Private objLogFile As StreamWriter
-    
-    Public const ConnectionStringName as String = "Helpdesk"
+
+    Public Const ConnectionStringName As String = "Helpdesk"
 
     Public Sub Main()
-        
+
         ' encrypt connection string if exists
         Dim secureConnectionString = ConfigurationManager.AppSettings("SecureConnectionString")
-        If (Not String.IsNullOrEmpty(secureConnectionString) AndAlso Boolean.Parse(secureConnectionString))  Then
+        If (Not String.IsNullOrEmpty(secureConnectionString) AndAlso Boolean.Parse(secureConnectionString)) Then
             Dim fileName = Path.GetFileName(Reflection.Assembly.GetExecutingAssembly().Location)
             SecureConnectionStringSection(fileName)
         End If
@@ -43,13 +44,13 @@ Module DH_Helpdesk_Schedule
             giSendMail = GetSendEmail(aArguments, giSendMail) 'used in 12 mode
 
             'Log cmd line args
-            Try     
+            Try
                 openLogFile()
                 LogToFile(String.Format(
-                    "Cmd Line Args:"  & vbCrlf & vbTab &
-                    "- WorkMode: {0}" & vbCrlf & vbTab &
-                    "- ConnectionString: {1}" & vbCrlf & vbTab &
-                    "- SendMail: {2}" & vbCrlf & vbTab, 
+                    "Cmd Line Args:" & vbCrLf & vbTab &
+                    "- WorkMode: {0}" & vbCrLf & vbTab &
+                    "- ConnectionString: {1}" & vbCrLf & vbTab &
+                    "- SendMail: {2}" & vbCrLf & vbTab,
                     workMode, FormatConnectionString(sConnectionstring), giSendMail), 1)
             Catch ex As Exception
                 LogError(ex.ToString())
@@ -120,7 +121,7 @@ Module DH_Helpdesk_Schedule
                     closeLogFile()
 
             End Select
-           
+
 
         End If
     End Sub
@@ -142,9 +143,9 @@ Module DH_Helpdesk_Schedule
         Dim sendEmail = defaultValue
         If aArguments.Length > 2 Then
             Dim val = GetCmdArgSafe(aArguments, 2)
-            If Integer.TryParse(val, sendEmail) 
+            If Integer.TryParse(val, sendEmail) Then
                 Return sendEmail
-            Else 
+            Else
                 Return defaultValue
             End If
         End If
@@ -157,16 +158,16 @@ Module DH_Helpdesk_Schedule
         End If
         Return connectionString
     End Function
-    Private Sub LogToFile(msg As String, level As Integer) 
+    Private Sub LogToFile(msg As String, level As Integer)
         If level > 0 Then
-            If objLogFile IsNot Nothing 
-                objLogFile.WriteLine("{0}: {1}", Now(),  msg)
+            If objLogFile IsNot Nothing Then
+                objLogFile.WriteLine("{0}: {1}", Now(), msg)
             End If
         End If
     End Sub
-    Private Sub LogError(msg As String) 
-        If objLogFile IsNot Nothing 
-            objLogFile.WriteLine("{0}: {1}", Now(),  msg)
+    Private Sub LogError(msg As String)
+        If objLogFile IsNot Nothing Then
+            objLogFile.WriteLine("{0}: {1}", Now(), msg)
         End If
     End Sub
     Private Sub SecureConnectionStringSection(exeConfigName As String)
@@ -179,7 +180,7 @@ Module DH_Helpdesk_Schedule
         Finally
             closeLogFile()
         End Try
-        
+
     End Sub
     Private Function FormatConnectionString(connectionString As String) As String
         Dim builder = New SqlConnectionStringBuilder(connectionString)
@@ -197,7 +198,7 @@ Module DH_Helpdesk_Schedule
             End If
 
             ' Save the current configuration.
-            config.Save()    
+            config.Save()
         End If
     End Sub
 
@@ -771,7 +772,13 @@ Module DH_Helpdesk_Schedule
                         sMessage = sMessage & "<td " & sStyle & ">" & objCase.Department & "</td>"
 
                         If objGlobalSettings.DBVersion > "5" Then
-                            sLink = "<a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & "/cases/edit/" & objCase.Id & """>" & objCase.Casenumber & "</a>"
+                            Dim editCasePath As String
+                            If objCustomer.UseMobileRouting Then
+                                editCasePath = CasePaths.EDIT_CASE_MOBILEROUTE
+                            Else
+                                editCasePath = CasePaths.EDIT_CASE_DESKTOP
+                            End If
+                            sLink = "<a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & editCasePath & objCase.Id & """>" & objCase.Casenumber & "</a>"
                         Else
                             sLink = "<a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & "/Default.asp?GUID=" & objCase.CaseGUID & """>" & objCase.Casenumber & "</a>"
                         End If

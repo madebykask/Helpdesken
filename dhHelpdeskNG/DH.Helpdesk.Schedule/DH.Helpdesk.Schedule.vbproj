@@ -169,6 +169,10 @@
       <Project>{300807ad-e3da-4bf5-93fc-2503d617edc1}</Project>
       <Name>DH.Helpdesk.Library</Name>
     </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
+      <Project>{90defcb6-e297-4f99-a532-da1e0522aa49}</Project>
+      <Name>DH.Helpdesk.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -300,21 +300,21 @@ Public Class CustomerData
         Dim dr As DataRow
 
         Try
-            sSQL = "SELECT tblCustomer.Id, tblCustomer.CustomerNumber, tblCustomer.Name, tblCustomer.HelpdeskEMail, CaseWorkingGroupSource, Language_Id, " & _
-                        "POP3Server, POP3UserName, POP3Password, POP3Port, POP3DebugLevel, POP3EMailPrefix, WorkingDayStart, WorkingDayEnd, " & _
-                        "tblCaseType.Id AS EMailDefaultCaseType_Id, tblCategory.Id AS EMailDefaultCategory_Id, tblProductArea.Id AS EMailDefaultProductArea_Id, " & _
-                        "tblPriority.Id AS EMailDefaultPriority_Id, tblStatus.Id AS DefaultStatus_Id, tblStateSecondary.Id AS DefaultStateSecondary_Id, " & _
-                        "tblStateSecondary2.Id AS DefaultStateSecondary_Id2, " & _
-                        "tblDepartment.Id AS EMailDefaultDepartment_Id, tblSettings.EmailSubjectPattern, tblSettings.EMailAnswerSeparator, " & _
-                        "tblSettings.XMLFileFolder, tblSettings.XMLLogLevel, tblSettings.XMLAllFiles, MailServerProtocol, EMailRegistrationMailID, tblSettings.EMailImportType, " & _
-                        "tblCustomer.OverWriteFromMasterDirectory, tblSettings.LDAPLogLevel, tblSettings.OpenCase_StateSecondary_Id, " & _
-                        "tblSettings.LDAPUserName, tblSettings.LDAPPassword, tblSettings.LDAPBase, tblSettings.LDAPFilter, " & _
-                        "tblSettings.LDAPSyncType, tblCustomer.Days2WaitBeforeDelete, " & _
-                        "tblSettings.XMLFileFolder, tblCustomer.NDSPath AS LDAPServerName, tblSettings.LDAPAuthenticationType, 0 AS WorkingGroup_Id, " & _
-                        "tblSettings.InventoryDays2WaitBeforeDelete, tblSettings.LDAPAllUsers, tblSettings.EMailAnswerDestination, tblSettings.ModuleOrder, tblSettings.ModuleAccount, tblSettings.PhysicalFilePath, " & _
-                        "tblSettings.InventoryCreate, tblSettings.AllowedEMailRecipients, Null AS WorkingGroupEMail, tblCustomer.CaseStatisticsEMailList, " & _
-                        "tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.DefaultAdministratorExternal, Null AS WorkingGroupDefaultCaseType_Id, tblCustomer.NewCaseEMailList, " & _
-                        "tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, TimeZone_offset, LDAPCreateOrganization "
+            sSQL = "SELECT tblCustomer.Id, tblCustomer.CustomerNumber, tblCustomer.Name, tblCustomer.HelpdeskEMail, CaseWorkingGroupSource, Language_Id, " &
+                        "POP3Server, POP3UserName, POP3Password, POP3Port, POP3DebugLevel, POP3EMailPrefix, WorkingDayStart, WorkingDayEnd, " &
+                        "tblCaseType.Id AS EMailDefaultCaseType_Id, tblCategory.Id AS EMailDefaultCategory_Id, tblProductArea.Id AS EMailDefaultProductArea_Id, " &
+                        "tblPriority.Id AS EMailDefaultPriority_Id, tblStatus.Id AS DefaultStatus_Id, tblStateSecondary.Id AS DefaultStateSecondary_Id, " &
+                        "tblStateSecondary2.Id AS DefaultStateSecondary_Id2, " &
+                        "tblDepartment.Id AS EMailDefaultDepartment_Id, tblSettings.EmailSubjectPattern, tblSettings.EMailAnswerSeparator, " &
+                        "tblSettings.XMLFileFolder, tblSettings.XMLLogLevel, tblSettings.XMLAllFiles, MailServerProtocol, EMailRegistrationMailID, tblSettings.EMailImportType, " &
+                        "tblCustomer.OverWriteFromMasterDirectory, tblSettings.LDAPLogLevel, tblSettings.OpenCase_StateSecondary_Id, " &
+                        "tblSettings.LDAPUserName, tblSettings.LDAPPassword, tblSettings.LDAPBase, tblSettings.LDAPFilter, " &
+                        "tblSettings.LDAPSyncType, tblCustomer.Days2WaitBeforeDelete, " &
+                        "tblSettings.XMLFileFolder, tblCustomer.NDSPath AS LDAPServerName, tblSettings.LDAPAuthenticationType, 0 AS WorkingGroup_Id, " &
+                        "tblSettings.InventoryDays2WaitBeforeDelete, tblSettings.LDAPAllUsers, tblSettings.EMailAnswerDestination, tblSettings.ModuleOrder, tblSettings.ModuleAccount, tblSettings.PhysicalFilePath, " &
+                        "tblSettings.InventoryCreate, tblSettings.AllowedEMailRecipients, Null AS WorkingGroupEMail, tblCustomer.CaseStatisticsEMailList, " &
+                        "tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.DefaultAdministratorExternal, Null AS WorkingGroupDefaultCaseType_Id, tblCustomer.NewCaseEMailList, " &
+                        "tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, TimeZone_offset, LDAPCreateOrganization, tblSettings.UseMobileRouting "
 
             sSQL = sSQL & ", tblSettings.M2TNewCaseMailTo "
 
@@ -357,21 +357,21 @@ Public Class CustomerData
         Dim dr As DataRow
 
         Try
-            sSQL = "SELECT tblCustomer.Id, tblCustomer.CustomerNumber, tblCustomer.Name, tblCustomer.HelpdeskEMail, CaseWorkingGroupSource, Language_Id, " & _
-                        "POP3Server, tblWorkingGroup.POP3UserName, tblWorkingGroup.POP3Password, POP3Port, POP3DebugLevel, POP3EMailPrefix, WorkingDayStart, WorkingDayEnd, " & _
-                        "tblCaseType.Id AS EMailDefaultCaseType_Id, tblCategory.Id AS EMailDefaultCategory_Id, tblWorkingGroup.CreateCase_ProductArea_Id AS EMailDefaultProductArea_Id, " & _
-                        "tblPriority.Id AS EMailDefaultPriority_Id, tblStatus.Id AS DefaultStatus_Id, tblStateSecondary.Id AS DefaultStateSecondary_Id, " & _
-                        "tblStateSecondary2.Id AS DefaultStateSecondary_Id2, " & _
-                        "tblDepartment.Id AS EMailDefaultDepartment_Id, tblSettings.EmailSubjectPattern, tblSettings.EMailAnswerSeparator, " & _
-                        "tblSettings.XMLFileFolder, tblSettings.XMLLogLevel, tblSettings.XMLAllFiles, MailServerProtocol, EMailRegistrationMailID, " & _
-                        "tblCustomer.OverWriteFromMasterDirectory, tblSettings.LDAPLogLevel, tblSettings.OpenCase_StateSecondary_Id, " & _
-                        "tblSettings.LDAPUserName, tblSettings.LDAPPassword, tblSettings.LDAPBase, tblSettings.LDAPFilter, " & _
-                        "tblSettings.LDAPSyncType, tblCustomer.Days2WaitBeforeDelete, " & _
-                        "tblSettings.XMLFileFolder, tblCustomer.NDSPath AS LDAPServerName, tblSettings.LDAPAuthenticationType, tblWorkingGroup.Id AS WorkingGroup_Id, " & _
-                        "tblSettings.InventoryDays2WaitBeforeDelete, tblSettings.LDAPAllUsers, tblSettings.EMailAnswerDestination, tblSettings.EMailImportType, tblSettings.ModuleOrder, tblSettings.ModuleAccount, tblSettings.PhysicalFilePath, " & _
-                        "tblSettings.InventoryCreate, tblSettings.AllowedEMailRecipients, tblWorkingGroup.WorkingGroupEMail, tblCustomer.CaseStatisticsEMailList, " & _
-                        "tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.DefaultAdministratorExternal, tblWorkingGroup.EMailCaseType_Id AS WorkingGroupDefaultCaseType_Id, tblCustomer.NewCaseEMailList, " & _
-                        "tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, TimeZone_offset, LDAPCreateOrganization, tblSettings.M2TNewCaseMailTo "
+            sSQL = "SELECT tblCustomer.Id, tblCustomer.CustomerNumber, tblCustomer.Name, tblCustomer.HelpdeskEMail, CaseWorkingGroupSource, Language_Id, " &
+                        "POP3Server, tblWorkingGroup.POP3UserName, tblWorkingGroup.POP3Password, POP3Port, POP3DebugLevel, POP3EMailPrefix, WorkingDayStart, WorkingDayEnd, " &
+                        "tblCaseType.Id AS EMailDefaultCaseType_Id, tblCategory.Id AS EMailDefaultCategory_Id, tblWorkingGroup.CreateCase_ProductArea_Id AS EMailDefaultProductArea_Id, " &
+                        "tblPriority.Id AS EMailDefaultPriority_Id, tblStatus.Id AS DefaultStatus_Id, tblStateSecondary.Id AS DefaultStateSecondary_Id, " &
+                        "tblStateSecondary2.Id AS DefaultStateSecondary_Id2, " &
+                        "tblDepartment.Id AS EMailDefaultDepartment_Id, tblSettings.EmailSubjectPattern, tblSettings.EMailAnswerSeparator, " &
+                        "tblSettings.XMLFileFolder, tblSettings.XMLLogLevel, tblSettings.XMLAllFiles, MailServerProtocol, EMailRegistrationMailID, " &
+                        "tblCustomer.OverWriteFromMasterDirectory, tblSettings.LDAPLogLevel, tblSettings.OpenCase_StateSecondary_Id, " &
+                        "tblSettings.LDAPUserName, tblSettings.LDAPPassword, tblSettings.LDAPBase, tblSettings.LDAPFilter, " &
+                        "tblSettings.LDAPSyncType, tblCustomer.Days2WaitBeforeDelete, " &
+                        "tblSettings.XMLFileFolder, tblCustomer.NDSPath AS LDAPServerName, tblSettings.LDAPAuthenticationType, tblWorkingGroup.Id AS WorkingGroup_Id, " &
+                        "tblSettings.InventoryDays2WaitBeforeDelete, tblSettings.LDAPAllUsers, tblSettings.EMailAnswerDestination, tblSettings.EMailImportType, tblSettings.ModuleOrder, tblSettings.ModuleAccount, tblSettings.PhysicalFilePath, " &
+                        "tblSettings.InventoryCreate, tblSettings.AllowedEMailRecipients, tblWorkingGroup.WorkingGroupEMail, tblCustomer.CaseStatisticsEMailList, " &
+                        "tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.DefaultAdministratorExternal, tblWorkingGroup.EMailCaseType_Id AS WorkingGroupDefaultCaseType_Id, tblCustomer.NewCaseEMailList, " &
+                        "tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, TimeZone_offset, LDAPCreateOrganization, tblSettings.M2TNewCaseMailTo, tblSettings.UseMobileRouting "
 
             sSQL = sSQL & "FROM tblCustomer " & _
                             "INNER JOIN tblSettings ON tblCustomer.Id = tblSettings.Customer_Id " & _
