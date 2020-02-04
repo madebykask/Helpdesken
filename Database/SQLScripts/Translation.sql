@@ -7728,12 +7728,22 @@ begin
 end
 GO
 
-If not exists (select * from tbltext where id = 2056)
+If not exists (select * from tbltext where id = 2057)
 begin
-	insert into tbltext (id, TextString) VALUES (2056, 'Visa min avdelnings ärenden')
+	insert into tbltext (id, TextString) VALUES (2057, 'Visa min avdelnings ärenden')
 
-	If not exists (select * from tblTextTranslation where text_id = 2056 and Language_Id = 2)
-		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2056, 2, N'View my department''s cases')
+	If not exists (select * from tblTextTranslation where text_id = 2057 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2057, 2, N'View my departments cases')
+end
+GO
+
+
+If not exists (select * from tbltext where id = 2058)
+begin
+	insert into tbltext (id, TextString) VALUES (2058, 'Formulärfält')
+
+	If not exists (select * from tblTextTranslation where text_id = 2058 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2058, 2, N'Form fields')
 end
 GO
 
@@ -7744,6 +7754,8 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 20000 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(20000, 2, 'Start of customer generated ID:s (ignore)')
 GO
+
+
 
 
 
