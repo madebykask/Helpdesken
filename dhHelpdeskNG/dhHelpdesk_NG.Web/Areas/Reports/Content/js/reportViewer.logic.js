@@ -30,10 +30,13 @@
         var reportCategoryDropdownRt = "#lstfilterReportCategoryRt";
         var changeDateFrom = "#ReportFilter_CaseChangeDate_FromDate";
         var changeDateTo = "#ReportFilter_CaseChangeDate_ToDate";
+        var extendedCaseReport = ".reportGeneratorExtendedCase";
         var extendedCaseForms = "#reportGeneratorExtendedCaseForms";
         var extendedCaseFormFields = "#reportGeneratorExtendedCaseFormFields";
         var lstExtendedCaseForms = "#lstExtendedCaseForms";
         var lstExtendedCaseFormFields = "#lstExtendedCaseFormFields";
+
+        var filterExtendedCaseFieldIds = [];
 
         $(lstExtendedCaseFormFields).multiselect('buildSelectAll');
 
@@ -51,7 +54,8 @@
                             options.remove(0);
 
                         var values = $.each(d, function (e, val) {
-                            var option = new Option(val.Text, val.FieldId);
+                            var selected = filterExtendedCaseFieldIds.indexOf(val.FieldId) >= 0;
+                            var option = new Option(val.Text, val.FieldId, selected, selected);
                             options.add(option);
                         });
                         $(lstExtendedCaseFormFields).multiselect('rebuild');
@@ -62,7 +66,7 @@
             }
             else {
                 $(extendedCaseFormFields).hide();
-                $(extendedCaseFormFields).val('');
+                $(lstExtendedCaseFormFields).val('');
             }
         };
 
@@ -179,8 +183,18 @@
             applyChosen(caseTypeDropDown, filters.caseTypes);
             applyChosen(productAreaDropDown, filters.productAreas);
 
+            // Save selected extended case fields (for use after retrieved)
+            filterExtendedCaseFieldIds = filters.extendedCaseFormFields;
+
+            // Set extended case form
             applyChosen(lstExtendedCaseForms, filters.extendedCaseFormId);
-            applyMultiSelect(lstExtendedCaseFormFields, filters.extendedCaseFormFields);
+
+            // Trigger change of extended case form to retrieve fields for form
+            $(lstExtendedCaseForms).change();
+
+            
+
+            //applyMultiSelect(lstExtendedCaseFormFields, filters.extendedCaseFormFields);
 
             applyMultiSelect("#lstFields", filters.fields);
             applyDropDown(statusList, filters.caseStatuses);
@@ -228,8 +242,12 @@
 
             var filters = getBaseFilters();
             
+            var reportTypeId = $('#lstReports option:selected').attr("data-orig-report-id");
+            if (!reportTypeId)
+                reportTypeId = $('#lstReports option:selected').attr("data-id");
+
             var getParams = $.param({
-                ReportId: $('#lstReports').val(),
+                ReportTypeId: reportTypeId,
                 DepartmentIds: filters.departments,
                 WorkingGroupIds: filters.workingGroups,
                 CaseTypeIds: filters.caseTypes,
@@ -601,6 +619,7 @@
             var $btnShowReport = $("#btnShowReport");
             var $reportGeneratorFields = $("#reportGeneratorFields");
             var $reportGeneratorExtendedCaseForms = $("#reportGeneratorExtendedCaseForms");
+            var $reportGeneratorExtendedCase = $(".reportGeneratorExtendedCase");
             var $lstExtendedCaseForms = $("#lstExtendedCaseForms");
             var $reportGeneratorExtendedCaseFormFields = $("#reportGeneratorExtendedCaseFormFields");
             var $lstExtendedCaseFormFields = $("#lstExtendedCaseFormFields");
@@ -643,11 +662,12 @@
 
                 if (reportId === dhHelpdesk.reports.reportType.ReportGeneratorExtendedCase) {
 
-                    $reportGeneratorExtendedCaseForms.show();
+                    $reportGeneratorExtendedCase.show();
+                    $lstExtendedCaseForms.change();
                 }
                 else {
 
-                    $reportGeneratorExtendedCaseForms.hide();
+                    $reportGeneratorExtendedCase.hide();
                     $reportGeneratorExtendedCaseForms.val('');
                     $reportGeneratorExtendedCaseFormFields.hide();
                     $reportGeneratorExtendedCaseFormFields.val('');
@@ -704,6 +724,7 @@
                 $("#btnDeleteFavorite").show();
             } else {
                 //show/hide proper buttons
+                filterExtendedCaseFieldIds = [];
                 $btnSaveFilter.hide();
                 $btnSaveAsFilter.show();
                 $("#btnDeleteFavorite").hide();

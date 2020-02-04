@@ -367,15 +367,22 @@
                 </table>
             </div>
             <div class="span6" id="reportGeneratorFields" style="display: none">
+                <style>
+                    .multiselect
+                    {
+                        margin-bottom: 0px;
+                    }
+                </style>
                 <table class="tableform">
                     <tr>
                         <td colspan="2"></td>
                     </tr>
                     <tr>
-                        <td>
+                        <td style="width:106px">
                             @Translation.GetCoreTextTranslation("Fält")
                         </td>
                         <td>
+
                             @Html.DropDownListFor(m => m.ReportGeneratorOptions.FieldIds, Model.ReportGeneratorOptions.Fields,
                                 new
                                 {
@@ -385,18 +392,22 @@
                                 })
                         </td>
                     </tr>
-                    <tr id="reportGeneratorExtendedCaseForms" style="display: none">
-                        <td>@Translation.GetCoreTextTranslation("Utökade ärendeformulär")</td>
+
+                    <tr id="reportGeneratorExtendedCaseForms" class="reportGeneratorExtendedCase" style="display: none">
+                        <td>
+                            @Translation.GetCoreTextTranslation("Formulär")
+                        </td>
                         <td>
                                 @Html.DropDownListFor(m => m.ReportGeneratorExtendedCaseFormId, Model.ReportGeneratorExtendedCaseForms.Select(o => new SelectListItem() { Text = o.Name, Value = o.ID.ToString() }).ToList().Use(o => { o.Insert(0, new SelectListItem() { Text = "", Value = "" }); return o; }),
                                 new
                                 {
                                     id = "lstExtendedCaseForms",
+                                    style = "width: 300px"
                                 })
                         </td>
                     </tr>
                     <tr id="reportGeneratorExtendedCaseFormFields" style="display:none">
-                        <td>@Translation.GetCoreTextTranslation("Utökat ärendeformulär - Fält")</td>
+                        <td>@Translation.GetCoreTextTranslation("Formulärfält")</td>
                         <td>
                             @Html.DropDownListFor(m => m.ReportGeneratorOptions.ExtendedCaseFormFieldIds, new List<SelectListItem>(), new
                             {
