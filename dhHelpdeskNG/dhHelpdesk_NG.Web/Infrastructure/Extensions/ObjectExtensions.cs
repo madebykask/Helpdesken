@@ -976,7 +976,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             var section = model.CaseSectionModels.SingleOrDefault(x => x.SectionType == (int)type);
             if (section != null)
             {
-                var fields = model.caseFieldSettings.Where(x => section.CaseSectionFields.Contains(x.Id));
+                var fields = new List<CaseFieldSetting>();              
+                    foreach (var f in section.CaseSectionFields)
+                    {
+                        fields.Add(model.caseFieldSettings.SingleOrDefault(x => x.Id == f));
+                    }
+                                  
                 result = GetCaseFieldsValues(model, fields);
             }
             result = result.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
