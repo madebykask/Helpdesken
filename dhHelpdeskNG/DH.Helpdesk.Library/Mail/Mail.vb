@@ -1,19 +1,20 @@
 Imports System.Linq
 Imports System.Net.Mail
+Imports DH.Helpdesk.Common.Constants
 Imports DH.Helpdesk.Dal.Infrastructure
 Imports DH.Helpdesk.Dal.Repositories
 Imports DH.Helpdesk.Domain
 Imports DH.Helpdesk.Library.SharedFunctions
 
 Public Class Mail
-    Public Function sendMail(objCase As CCase, 
-                             objLog As Log, 
-                             objCustomer As Customer, 
-                             sEmailTo As String, 
-                             objmailTemplate As MailTemplate, 
-                             objGlobalSettings As GlobalSettings, 
-                             sMessageId As String, 
-                             sEMailLogGUID As String, 
+    Public Function sendMail(objCase As CCase,
+                             objLog As Log,
+                             objCustomer As Customer,
+                             sEmailTo As String,
+                             objmailTemplate As MailTemplate,
+                             objGlobalSettings As GlobalSettings,
+                             sMessageId As String,
+                             sEMailLogGUID As String,
                              connectionString As String,
                              Optional files As List(Of MailFile) = Nothing
                              ) As String
@@ -98,16 +99,16 @@ Public Class Mail
 
             '[#14]
             Dim bAttachExternalFiles = False
-            If (sBody.Contains("[#14]"))
+            If (sBody.Contains("[#14]")) Then
                 bAttachExternalFiles = True
-                sBody = sBody.Replace("[#14]", string.Empty)
+                sBody = sBody.Replace("[#14]", String.Empty)
             End If
 
             '[#30] - Internal Log files (2attachments mode)
             Dim bAttachInternalFiles = False
-            If (sBody.Contains("[#30]"))
+            If (sBody.Contains("[#30]")) Then
                 bAttachInternalFiles = True
-                sBody = sBody.Replace("[#30]", string.Empty)
+                sBody = sBody.Replace("[#30]", String.Empty)
             End If
 
             '[#15]
@@ -225,7 +226,14 @@ Public Class Mail
                     Dim sLinkText As String = Mid(sBody, iPos1 + 5, iPos2 - iPos1 - 5)
 
                     If objGlobalSettings.DBVersion > "5" Then
-                        sLink = "<br><a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & "/cases/edit/" & objCase.Id & """>" & sLinkText & "</a>"
+
+                        Dim editCasePath As String
+                        If objCustomer.UseMobileRouting Then
+                            editCasePath = CasePaths.EDIT_CASE_MOBILEROUTE
+                        Else
+                            editCasePath = CasePaths.EDIT_CASE_DESKTOP
+                        End If
+                        sLink = "<br><a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & editCasePath & objCase.Id & """>" & sLinkText & "</a>"
                     Else
                         sLink = "<br><a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & "/Default.asp?GUID=" & objCase.CaseGUID & """>" & sLinkText & "</a>"
                     End If
@@ -233,7 +241,13 @@ Public Class Mail
                     sBody = Replace(sBody, sTextToReplace, sLink, 1, 1)
                 Else
                     If objGlobalSettings.DBVersion > "5" Then
-                        sLink = "<br><a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & "/cases/edit/" & objCase.Id & """>" & sProtocol & "://" & objGlobalSettings.ServerName & "/cases/edit/" & objCase.Id & "</a>"
+                        Dim editCasePath As String
+                        If objCustomer.UseMobileRouting Then
+                            editCasePath = CasePaths.EDIT_CASE_MOBILEROUTE
+                        Else
+                            editCasePath = CasePaths.EDIT_CASE_DESKTOP
+                        End If
+                        sLink = "<br><a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & editCasePath & objCase.Id & """>" & sProtocol & "://" & objGlobalSettings.ServerName & editCasePath & objCase.Id & "</a>"
                     Else
                         sLink = "<br><a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & "/Default.asp?GUID=" & objCase.CaseGUID & """>" & sProtocol & "://" & objGlobalSettings.ServerName & "/Default.asp?GUID=" & objCase.CaseGUID & "</a>"
                     End If
@@ -244,11 +258,12 @@ Public Class Mail
 
             sBody = sBody.Replace(vbCrLf, "<br>")
 
-            Dim filesToAttach as List(Of String) = New List(Of String)
+            Dim filesToAttach As List(Of String) = New List(Of String)
 
             'Prepare files to attach. Check internal/external flag
-            If files IsNot Nothing AndAlso files.Any() AndAlso (bAttachExternalFiles OrElse bAttachInternalFiles)
-                For Each attachedFile As String in files.Where(Function(f) bAttachExternalFiles AndAlso f.IsInternal = False OrElse bAttachInternalFiles AndAlso f.IsInternal = True).Select(Function(f) f.FilePath).ToList()
+            If files IsNot Nothing AndAlso files.Any() AndAlso (bAttachExternalFiles OrElse bAttachInternalFiles) Then
+
+                For Each attachedFile As String In files.Where(Function(f) bAttachExternalFiles AndAlso f.IsInternal = False OrElse bAttachInternalFiles AndAlso f.IsInternal = True).Select(Function(f) f.FilePath).ToList()
                     filesToAttach.Add(attachedFile)
                 Next
             End If
@@ -331,12 +346,12 @@ Public Class Mail
 
     End Function
 
-    Public Function Send(sFrom As String, 
-                         sTo As String, 
-                         sSubject As String, 
-                         sBody As String, 
-                         sEMailBodyEncoding As String, 
-                         sSMTPServer As String, 
+    Public Function Send(sFrom As String,
+                         sTo As String,
+                         sSubject As String,
+                         sBody As String,
+                         sEMailBodyEncoding As String,
+                         sSMTPServer As String,
                          sMessageId As String,
                          Optional filesToAttach As List(Of String) = Nothing) As String
 
@@ -369,15 +384,15 @@ Public Class Mail
         Return Send(sFrom, sTo, sSubject, sBody, sEMailBodyEncoding, smtpServer, smtpPort, smtpSecure, smtpUsername, smtpPassword, sMessageId, filesToAttach)
     End Function
 
-    Public Function Send(sFrom As String, 
-                         sTo As String, 
-                         sSubject As String, 
-                         sBody As String, 
-                         sEMailBodyEncoding As String, 
-                         smtpServer As String, 
-                         smtpPort As Integer, 
-                         smtpSecure As Boolean, 
-                         smtpUsername As String, 
+    Public Function Send(sFrom As String,
+                         sTo As String,
+                         sSubject As String,
+                         sBody As String,
+                         sEMailBodyEncoding As String,
+                         smtpServer As String,
+                         smtpPort As Integer,
+                         smtpSecure As Boolean,
+                         smtpUsername As String,
                          smtpPassword As String,
                          sMessageId As String,
                          Optional filesToAttach As List(Of String) = Nothing) As String
@@ -421,10 +436,11 @@ Public Class Mail
         End If
 
         'Attach files to message if any
-        If (filesToAttach IsNot Nothing AndAlso filesToAttach.Any())
-            For Each file as String In filesToAttach
-                If (IO.File.Exists(file))
-                    msg.Attachments.Add(new Attachment(file))
+        If (filesToAttach IsNot Nothing AndAlso filesToAttach.Any()) Then
+
+            For Each file As String In filesToAttach
+                If (IO.File.Exists(file)) Then
+                    msg.Attachments.Add(New Attachment(file))
                 End If
             Next
         End If

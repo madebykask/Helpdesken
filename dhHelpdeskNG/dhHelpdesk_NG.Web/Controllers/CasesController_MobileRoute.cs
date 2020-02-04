@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Web.Infrastructure;
+﻿using DH.Helpdesk.Common.Constants;
+using DH.Helpdesk.Web.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,10 @@ namespace DH.Helpdesk.Web.Controllers
 {
     public partial class CasesController : BaseController
 	{
-		private const string MOBILE_CASE_EDIT = "case/";
-		private const string DESKTOP_CASE_EDIT = "cases/edit/";
 		// GET: r
 
 		[HttpGet]
+		[AllowAnonymous]
 		public ActionResult R(int id)
         {
 			var @case = _caseService.GetCaseBasic(id);
@@ -25,14 +25,16 @@ namespace DH.Helpdesk.Web.Controllers
 			var urlTemplate = "{0}{1}{2}{3}";
 			string path;
 			var protocol = globalSettings.ServerPort == 80 ? "http://" : "https://";
-			if (setting.UseMobileRouting && !string.IsNullOrWhiteSpace(globalSettings.MobileSiteUrl) && IsMobile(userAgent))
+			var isMobile = IsMobile(userAgent);
+
+			if (setting.UseMobileRouting && !string.IsNullOrWhiteSpace(globalSettings.MobileSiteUrl) && isMobile)
 			{
 
-				path = string.Format(urlTemplate, globalSettings.MobileSiteUrl, MOBILE_CASE_EDIT, @case.CaseNumber);
+				path = string.Format(urlTemplate, protocol, globalSettings.MobileSiteUrl, CasePaths.EDIT_CASE_MOBILE, @case.Id);
 			}
 			else
 			{
-				path = string.Format(urlTemplate, globalSettings.ServerName, DESKTOP_CASE_EDIT, @case.Id);
+				path = string.Format(urlTemplate, protocol, globalSettings.ServerName, CasePaths.EDIT_CASE_DESKTOP, @case.Id);
 			}
 
 			return Redirect(path);

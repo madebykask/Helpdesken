@@ -17,6 +17,7 @@ using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.MailTemplates;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Feedback;
+using DH.Helpdesk.Common.Constants;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -771,7 +772,12 @@ namespace DH.Helpdesk.Services.Services
                 {
                     var siteSelfService = ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress] +
                                           eLog.Value.EmailLogGUID;
-                    var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + case_.Id;
+
+					var caseEditPath = customerSetting.UseMobileRouting ?
+						CasePaths.EDIT_CASE_MOBILEROUTE :
+						CasePaths.EDIT_CASE_DESKTOP;
+
+                    var siteHelpdesk = cms.AbsoluterUrl + caseEditPath + case_.Id;
 
                     var fields = stateHelper == 99
                         ? GetCaseFieldsForEmail(case_, log, cms, string.Empty, stateHelper, userTimeZone)

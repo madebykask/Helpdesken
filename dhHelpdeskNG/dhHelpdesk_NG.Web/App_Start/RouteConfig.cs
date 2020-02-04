@@ -18,6 +18,16 @@ namespace DH.Helpdesk.Web
 				"Default",
 				"{controller}/{action}/{id}",
 				new { controller = "Home", action = "Index", id = UrlParameter.Optional });
+
+			routes.MapRoute(
+				"CaseFiles",
+				"cases/casefiles/{caseId}/{filename}",
+				new { controller = "Cases", action = "CaseFiles", caseId = UrlParameter.Optional, filename = UrlParameter.Optional });
+
+			routes.MapRoute(
+				"CaseLogFiles",
+				"cases/caselogfiles/{type}/{logId}/{filename}",
+				new { controller = "Cases", action = "CaseLogFiles", type = UrlParameter.Optional, logId = UrlParameter.Optional, filename = UrlParameter.Optional });
 		}
 	}
 }
