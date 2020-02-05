@@ -773,7 +773,8 @@ namespace DH.Helpdesk.Services.Services
                     var siteSelfService = ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress] +
                                           eLog.Value.EmailLogGUID;
 
-					var caseEditPath = customerSetting.UseMobileRouting ?
+					var globalSetting = _globalSettingService.GetGlobalSettings().First();
+					var caseEditPath = globalSetting.UseMobileRouting ?
 						CasePaths.EDIT_CASE_MOBILEROUTE :
 						CasePaths.EDIT_CASE_DESKTOP;
 
