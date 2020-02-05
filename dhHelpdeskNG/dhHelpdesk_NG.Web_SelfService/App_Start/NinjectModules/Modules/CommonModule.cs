@@ -235,7 +235,11 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
                 .To<CaseSolutionConditionToEntityMapper>()
                 .InSingletonScope();
 
-            this.Bind<IEntityToBusinessModelMapper<CaseSolutionConditionEntity, CaseSolutionConditionModel>>()
+			this.Bind<IEntityToBusinessModelMapper<CaseSolution, CaseSolutionOverview>>()
+			  .To<CaseSolutionToCaseSolutionOverviewMapper>()
+			  .InSingletonScope();
+
+			this.Bind<IEntityToBusinessModelMapper<CaseSolutionConditionEntity, CaseSolutionConditionModel>>()
                 .To<CaseSolutionConditionToBusinessModelMapper>()
                 .InSingletonScope();
 

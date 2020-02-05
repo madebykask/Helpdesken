@@ -3,14 +3,15 @@ using DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator;
 
 namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
 {
-    using System.IO;
-    using System.Collections.Generic;
-    
-    using DH.Helpdesk.BusinessData.Models.ReportService;
-    using DH.Helpdesk.BusinessData.Models.Shared;
-    using Microsoft.Reporting.WebForms;
+	using System.IO;
+	using System.Collections.Generic;
 
-    public sealed class ReportServiceOverviewModel
+	using DH.Helpdesk.BusinessData.Models.ReportService;
+	using DH.Helpdesk.BusinessData.Models.Shared;
+	using Microsoft.Reporting.WebForms;
+	using BusinessData.Models.Case;
+
+	public sealed class ReportServiceOverviewModel
     {   
         public ReportServiceOverviewModel()
         {
@@ -28,7 +29,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
         public ReportPresentationModel ReportViewerData { get; set; }
 
         public ReportGeneratorOptionsModel ReportGeneratorOptions { get; set; }
-		public List<ExtendedCaseFormModel> ReportGeneratorExtendedCaseForms { get; internal set; }
+		public List<ExtendedCaseCaseSolutionModel> ReportGeneratorExtendedCaseForms { get; internal set; }
 
 		public int ReportGeneratorExtendedCaseFormId { get; internal set; }
 		public List<ExtendedCaseFormFieldTranslationModel> ReportGeneratorExtendedCaseFormFields { get; internal set; }

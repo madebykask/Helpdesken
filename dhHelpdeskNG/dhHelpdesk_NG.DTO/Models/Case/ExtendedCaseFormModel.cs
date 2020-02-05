@@ -1,5 +1,6 @@
 ﻿using System;
 using DH.Helpdesk.Common.Enums.Cases;
+using System.Collections.Generic;
 
 namespace DH.Helpdesk.BusinessData.Models.Case
 {
@@ -49,5 +50,13 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 	{
 		public string Name { get; set; }
 		public int Id { get; set; }
+	}
+
+	public class ExtendedCaseFormWithCaseSolutionsModel
+	{
+		public string Name { get; set; }
+		public int Id { get; set; }
+
+		public IEnumerable<CaseSolutionOverview> CaseSolutions { get; set; }
 	}
 }

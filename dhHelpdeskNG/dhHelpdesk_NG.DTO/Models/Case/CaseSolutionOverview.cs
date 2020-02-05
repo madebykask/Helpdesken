@@ -21,5 +21,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public int ShowInsideCase { get; set; }
         public int ShowOnCaseOverview { get; set; }
         public int? WorkingGroupId { get; set; }
-    }
+		public string CaseSolutionCategoryName { get; internal set; }
+		public int? CaseSolutionCategoryId { get; internal set; }
+	}
 }

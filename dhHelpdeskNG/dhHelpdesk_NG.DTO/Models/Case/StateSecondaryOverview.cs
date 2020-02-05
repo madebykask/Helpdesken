@@ -1,4 +1,4 @@
-namespace DH.Helpdesk.BusinessData.Models.Case.CaseHistory
+namespace DH.Helpdesk.BusinessData.Models.Case
 {
     public class StateSecondaryOverview
     {

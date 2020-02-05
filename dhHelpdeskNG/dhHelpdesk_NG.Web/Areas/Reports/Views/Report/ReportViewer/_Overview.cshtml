@@ -398,7 +398,7 @@
                             @Translation.GetCoreTextTranslation("Formulär")
                         </td>
                         <td>
-                                @Html.DropDownListFor(m => m.ReportGeneratorExtendedCaseFormId, Model.ReportGeneratorExtendedCaseForms.Select(o => new SelectListItem() { Text = o.Name, Value = o.ID.ToString() }).ToList().Use(o => { o.Insert(0, new SelectListItem() { Text = "", Value = "" }); return o; }),
+                                @Html.DropDownListFor(m => m.ReportGeneratorExtendedCaseFormId, Model.ReportGeneratorExtendedCaseForms.Select(o => new SelectListItem() { Text = o.Name, Value = o.Id.ToString(), Disabled = o.HasInactiveCaseSolutions }).ToList().Use(o => { o.Insert(0, new SelectListItem() { Text = "", Value = "" }); return o; }),
                                 new
                                 {
                                     id = "lstExtendedCaseForms",

@@ -44,6 +44,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 	using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
 	using DH.Helpdesk.BusinessData.Enums.Case;
 	using BusinessData.Models.Case.CaseSettingsOverview;
+	using BusinessData.Models.Case;
 
 	public sealed class ReportController : UserInteractionController
     {
@@ -650,16 +651,28 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             model.ReportViewerData = new ReportPresentationModel();
             model.ReportGeneratorOptions = GetReportGeneratorOptions(customerId);
 			model.ReportGeneratorExtendedCaseForms = GetReportGeneratorExtendedCaseForms(customerId);
-			model.ReportGeneratorExtendedCaseFormFields = new List<ExtendedCaseFormFieldTranslationModel>();
+			model.ReportGeneratorExtendedCaseFormFields = new List<DH.Helpdesk.Web.Areas.Reports.Models.ReportService.ExtendedCaseFormFieldTranslationModel>();
 			model.ReportGeneratorOptions.FieldIds = new List<int>();
 			model.ReportGeneratorOptions.ExtendedCaseTranslationFieldIds = new List<string>();
 			return model;
         }
 
-		private List<ExtendedCaseFormModel> GetReportGeneratorExtendedCaseForms(int customerId)
+		private List<ExtendedCaseCaseSolutionModel> GetReportGeneratorExtendedCaseForms(int customerId)
 		{
-			var reports = _extendedCaseService.GetExtendedCaseFormsForCustomer(customerId);
-			return reports.Select(o => new ExtendedCaseFormModel { ID = o.Id, Name = o.Name }).ToList();
+			var reports = _extendedCaseService.GetExtendedCaseFormsWithCaseSolutionForCustomer(customerId);
+			var reportModels =  reports.Select(o => 
+			new ExtendedCaseCaseSolutionModel
+			{
+				Id = o.Id,
+				Name = o.CaseSolutions
+					.Select(cs => cs.CaseSolutionCategoryName != null ? cs.CaseSolutionCategoryName + " - " + cs.Name : cs.Name)
+					.Aggregate((a,b) => a + ", " + b),
+				HasInactiveCaseSolutions = o.CaseSolutions.Any(cs => cs.Status != 1)
+			})
+			.OrderBy(o => o.Name)
+			.ToList();
+
+			return reportModels;
 		}
 
 		private ReportGeneratorOptionsModel GetReportGeneratorOptions(int customerId)
