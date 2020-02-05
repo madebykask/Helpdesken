@@ -11,6 +11,7 @@ Public Class GlobalSettings
     Private msEmailBodyEncoding As String
     Private msDBVersion As String
     Private msExternalSite As String
+    Private msUseMobileRouting As Boolean
 #End Region
 
 #Region "Constructors"
@@ -52,6 +53,12 @@ Public Class GlobalSettings
             msExternalSite = ""
         Else
             msExternalSite = dr("ExternalSite")
+        End If
+
+        If IsDBNull(dr("UseMobileRouting")) Then
+            msUseMobileRouting = False
+        Else
+            msUseMobileRouting = dr("UseMobileRouting")
         End If
     End Sub
 
@@ -124,6 +131,15 @@ Public Class GlobalSettings
         End Get
         Set(ByVal Value As String)
             msExternalSite = Value
+        End Set
+    End Property
+
+    Public Property UseMobileRouting() As Boolean
+        Get
+            Return msUseMobileRouting
+        End Get
+        Set(ByVal Value As Boolean)
+            msUseMobileRouting = Value
         End Set
     End Property
 #End Region

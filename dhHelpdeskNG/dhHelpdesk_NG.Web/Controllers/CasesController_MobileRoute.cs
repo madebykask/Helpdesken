@@ -27,7 +27,7 @@ namespace DH.Helpdesk.Web.Controllers
 			var protocol = globalSettings.ServerPort == 80 ? "http://" : "https://";
 			var isMobile = IsMobile(userAgent);
 
-			if (setting.UseMobileRouting && !string.IsNullOrWhiteSpace(globalSettings.MobileSiteUrl) && isMobile)
+			if (globalSettings.UseMobileRouting && !string.IsNullOrWhiteSpace(globalSettings.MobileSiteUrl) && isMobile)
 			{
 
 				path = string.Format(urlTemplate, protocol, globalSettings.MobileSiteUrl, CasePaths.EDIT_CASE_MOBILE, @case.Id);

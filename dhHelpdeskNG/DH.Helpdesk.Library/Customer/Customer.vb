@@ -74,7 +74,6 @@
 
     Private miNewCaseMailTo As Integer
 
-    Private miUseMobileRouting As Boolean
 
 #End Region
 
@@ -289,8 +288,6 @@
             miLDAPCreateOrganization = dr("LDAPCreateOrganization")
 
             miNewCaseMailTo = dr("M2TNewCaseMailTo")
-
-            miUseMobileRouting = dr("UseMobileRouting")
 
         Catch ex As Exception
             Throw ex
@@ -836,15 +833,6 @@
         End Get
         Set(ByVal Value As Integer)
             miNewCaseMailTo = Value
-        End Set
-    End Property
-
-    Public Property UseMobileRouting() As Boolean
-        Get
-            Return miUseMobileRouting
-        End Get
-        Set(value As Boolean)
-            miUseMobileRouting = value
         End Set
     End Property
 

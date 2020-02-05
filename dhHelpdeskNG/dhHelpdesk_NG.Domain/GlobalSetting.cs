@@ -36,5 +36,6 @@ namespace DH.Helpdesk.Domain
         public virtual Language DefaultLanguage { get; set; }
 
 		public string MobileSiteUrl { get; set; }
+		public bool UseMobileRouting { get; set; }
 	}
 }

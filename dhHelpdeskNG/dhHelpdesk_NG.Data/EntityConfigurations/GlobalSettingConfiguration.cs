@@ -46,6 +46,7 @@
 			this.Property(x => x.PerformanceLogSettingsCache).IsRequired();
 
 			this.Property(x => x.MobileSiteUrl).IsRequired();
+			this.Property(x => x.UseMobileRouting).IsRequired();
 
 			this.ToTable("tblglobalsettings");
         }

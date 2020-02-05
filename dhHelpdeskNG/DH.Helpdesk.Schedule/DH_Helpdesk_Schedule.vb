@@ -773,7 +773,7 @@ Module DH_Helpdesk_Schedule
 
                         If objGlobalSettings.DBVersion > "5" Then
                             Dim editCasePath As String
-                            If objCustomer.UseMobileRouting Then
+                            If objGlobalSettings.UseMobileRouting Then
                                 editCasePath = CasePaths.EDIT_CASE_MOBILEROUTE
                             Else
                                 editCasePath = CasePaths.EDIT_CASE_DESKTOP

@@ -29,8 +29,9 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
         private readonly ISettingService _settingService;
         private readonly IEmailSendingSettingsProvider _emailSendingSettingsProvider;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
+		private readonly IGlobalSettingService _globalSettingService;
 
-        private enum CasePaths
+		private enum CasePaths
         {
             EDIT_CASE_MOBILEROUTE,
             EDIT_CASE_DESKTOP
@@ -44,7 +45,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             IUserService userService,
             ISettingService settingService,
             IEmailSendingSettingsProvider emailSendingSettingsProvider,
-            ICaseExtraFollowersService caseExtraFollowersService)
+            ICaseExtraFollowersService caseExtraFollowersService,
+			IGlobalSettingService globalSettingService)
         {
             _emailLogRepository = emailLogRepository;
             _emailService = emailService;
@@ -54,6 +56,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             _settingService = settingService;
             _emailSendingSettingsProvider = emailSendingSettingsProvider;
             _caseExtraFollowersService = caseExtraFollowersService;
+			_globalSettingService = globalSettingService;
         }
 
         public void InformNotifierIfNeeded(
@@ -156,7 +159,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                         var mailResponse = EmailResponse.GetEmptyEmailResponse();
                         var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
 
-						var caseEditPath = customerSetting.UseMobileRouting ?
+						var globalSetting = _globalSettingService.GetGlobalSettings().First();
+						var caseEditPath = globalSetting.UseMobileRouting ?
 							CasePaths.EDIT_CASE_MOBILEROUTE :
 							CasePaths.EDIT_CASE_DESKTOP;
 
@@ -262,7 +266,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 
                 var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"] + defaultWorkingGroupEmailLog.EmailLogGUID;
 
-				var caseEditPath = customerSetting.UseMobileRouting ?
+				var globalSetting = _globalSettingService.GetGlobalSettings().First();
+				var caseEditPath = globalSetting.UseMobileRouting ?
 					CasePaths.EDIT_CASE_MOBILEROUTE :
 					CasePaths.EDIT_CASE_DESKTOP;
 
@@ -389,7 +394,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 
                         var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"] + eLog.Value.EmailLogGUID;
 
-						var caseEditPath = customerSetting.UseMobileRouting ?
+						var globalSetting = _globalSettingService.GetGlobalSettings().First();
+						var caseEditPath = globalSetting.UseMobileRouting ?
 							CasePaths.EDIT_CASE_MOBILEROUTE :
 							CasePaths.EDIT_CASE_DESKTOP;
 

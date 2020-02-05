@@ -101,8 +101,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICategoryRepository _categoryRepository;
         private readonly IEntityToBusinessModelMapper<CaseFilterFavoriteEntity, CaseFilterFavorite> _caseFilterFavoriteToBusinessModelMapper;
         private readonly ICustomerUserRepository _customerUserRepository;
+		private readonly IGlobalSettingService _globalSettingService;
 
-        public CaseService(
+		public CaseService(
             ICaseRepository caseRepository,
             ICaseFileRepository caseFileRepository,
             ICaseHistoryRepository caseHistoryRepository,
@@ -149,7 +150,8 @@ namespace DH.Helpdesk.Services.Services
             ITranslateCacheService translateCacheService,
             ICaseTypeRepository caseTypeRepository,
             ICategoryRepository categoryRepository,
-            ICustomerUserRepository customerUserRepository)
+            ICustomerUserRepository customerUserRepository,
+			IGlobalSettingService globalSettingService)
         {
             _customerUserRepository = customerUserRepository;
             _caseFilterFavoriteToBusinessModelMapper = caseFilterFavoriteToBusinessModelMapper;
@@ -200,7 +202,9 @@ namespace DH.Helpdesk.Services.Services
             _translateCacheService = translateCacheService;
             _caseTypeRepository = caseTypeRepository;
             _categoryRepository = categoryRepository;
-        }
+			_globalSettingService = globalSettingService;
+
+		}
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
         {
@@ -1702,9 +1706,8 @@ namespace DH.Helpdesk.Services.Services
             // heldesk site
             if (cms != null)
             {
-				var setting = _settingService.GetCustomerSetting(c.Customer_Id);
-
-				var editCasePath = setting.UseMobileRouting ?
+				var globalSetting = _globalSettingService.GetGlobalSettings().First();
+				var editCasePath = globalSetting.UseMobileRouting ?
 					CasePaths.EDIT_CASE_MOBILEROUTE :
 					CasePaths.EDIT_CASE_DESKTOP;
 
