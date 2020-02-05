@@ -38,6 +38,16 @@
 
         var filterExtendedCaseFieldIds = [];
 
+        // Make disabled (inactive) options selectable 
+        $(lstExtendedCaseForms + ' option').each(function (i, opt) {
+            if ($(opt).prop('disabled'))
+            {
+                $(opt).removeAttr('disabled');
+                $(opt).css('color', 'lightgray');
+            }
+        });
+
+
         $(lstExtendedCaseFormFields).multiselect('buildSelectAll');
 
         var extendedCaseFormChanged = function (e) {

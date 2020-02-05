@@ -316,6 +316,7 @@
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseExtraFollowersToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseHistoryToCaseHistoryOverviewMapper.cs" />
     <Compile Include="Mappers\CaseDocument\EntityToBusinessModel\CaseDocumentToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseSolutionToCaseSolutionOverviewMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\ExtendedCaseValueToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\ExtendedCaseDataToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\ExtendedCaseFormForCaseToBusinessModelMapper.cs" />
@@ -327,6 +328,7 @@
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CausingPartToOverviewMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\CaseFilterFavoriteToBusinessModelMapper.cs" />
     <Compile Include="Mappers\Cases\EntityToBusinessModel\ExtendedCaseFormToBusinessModelMapper.cs" />
+    <Compile Include="Mappers\Cases\EntityToBusinessModel\StateSecondaryToStateSecondaryOverviewMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\HistoryToChangeHistoryEntityMapper.cs" />
     <Compile Include="Mappers\Changes\BusinessModelToEntity\ChangeFieldSettingsToChangeFieldSettingsEntityMapper.cs" />
     <Compile Include="Mappers\Changes\EntityToBusinessModel\ChangeEntityToChangeDetailedOverviewMapper.cs" />

@@ -229,7 +229,11 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
                 .As<IEntityToBusinessModelMapper<CaseSolutionConditionEntity, CaseSolutionConditionModel>>()
                 .SingleInstance();
 
-            builder.RegisterType<CaseHistoryToCaseHistoryOverviewMapper>()
+			builder.RegisterType<CaseSolutionToCaseSolutionOverviewMapper>()
+				.As<IEntityToBusinessModelMapper<CaseSolution, CaseSolutionOverview>>()
+				.SingleInstance();
+
+			builder.RegisterType<CaseHistoryToCaseHistoryOverviewMapper>()
                 .As<IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview>>()
                 .SingleInstance();
 

@@ -214,8 +214,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             //var reports = this._customerService.GetAllReports();
             //var customerReports = this._customerService.GetCustomerReportList(customer.Id);
 
-            var reports = this._customerService.GetAllReports().Where(r => r.Id == 18);
-            var customerReports = this._customerService.GetCustomerReportList(customer.Id).Where(r => r.ReportId == 18);
+            var reports = this._customerService.GetAllReports().Where(r => r.Id == (int)ReportType.ReportGenerator || r.Id == (int)ReportType.ReportGeneratorExtendedCase);
+            var customerReports = this._customerService.GetCustomerReportList(customer.Id).Where(r => r.ReportId == (int)ReportType.ReportGenerator || r.ReportId == (int)ReportType.ReportGeneratorExtendedCase);
             var reportList = new List<CustomerReportList>();
 
             
@@ -229,41 +229,43 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                 if (rep.Id == 2)
                     o.ReportName = Translation.Get("Rapport - Ledtid (avslutade ärenden)", Enums.TranslationSource.TextTranslation);
-                if (rep.Id == 3)
+                else if (rep.Id == 3)
                     o.ReportName = Translation.Get("Rapport - Ledtid (aktiva ärenden)", Enums.TranslationSource.TextTranslation);
-                if (rep.Id == 4)
+				else if (rep.Id == 4)
                     o.ReportName = Translation.Get("Rapport - Avslutsorsak per avdelning", Enums.TranslationSource.TextTranslation);
-                if (rep.Id == 19)
+				else if (rep.Id == 19)
                     o.ReportName = Translation.Get("Rapport - Avslutskategori per avdelning", Enums.TranslationSource.TextTranslation);
-                if (rep.Id == 5)
+				else if (rep.Id == 5)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Rapport - Avslutade ärenden per dag", Enums.TranslationSource.TextTranslation);
-                if (rep.Id == 6)
+				else if (rep.Id == 6)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Registrerade ärenden", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("dag", Enums.TranslationSource.TextTranslation).ToLower();
-                if (rep.Id == 21)
+				else if (rep.Id == 21)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Registrerade ärenden", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("timme", Enums.TranslationSource.TextTranslation);
-                if (rep.Id == 7)
+				else if (rep.Id == 7)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("dag", Enums.TranslationSource.TextTranslation).ToLower();
-                if (rep.Id == 8)
+				else if (rep.Id == 8)
                     o.ReportName = Translation.Get("Rapport - Servicerapport", Enums.TranslationSource.TextTranslation);
-                if (rep.Id == 15)
+				else if (rep.Id == 15)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("driftgrupp", Enums.TranslationSource.TextTranslation);
-                if (rep.Id == 17)
+				else if (rep.Id == 17)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Registrerade ärenden", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("ärendetyp", Enums.TranslationSource.TextTranslation);
-                if (rep.Id == 9)
+				else if (rep.Id == 9)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Frågeregistrering", Enums.TranslationSource.TextTranslation);
-                if (rep.Id == 14)
+				else if (rep.Id == 14)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("produktområde", Enums.TranslationSource.TextTranslation);
-                if (rep.Id == 16)
+				else if (rep.Id == 16)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("leverantör", Enums.TranslationSource.TextTranslation);
-                if (rep.Id == 13)
+				else if (rep.Id == 13)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Genomsnittlig lösningstid", Enums.TranslationSource.TextTranslation);
-                if (rep.Id == 20)
+				else if (rep.Id == 20)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Källa registrering", Enums.TranslationSource.TextTranslation);
-                if (rep.Id == 22)
+				else if (rep.Id == 22)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Svarstid", Enums.TranslationSource.TextTranslation);
-                if (rep.Id == 18)
+				else if (rep.Id == (int)ReportType.ReportGenerator)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Rapportgenerator", Enums.TranslationSource.TextTranslation);
-                if (rep.Id == (int)ReportType.CaseSatisfaction)
+				else if (rep.Id == (int)ReportType.ReportGeneratorExtendedCase)
+					o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Rapportgenerator", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Utökat ärende", Enums.TranslationSource.TextTranslation);
+				else if (rep.Id == (int)ReportType.CaseSatisfaction)
                     o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Case satisfaction", Enums.TranslationSource.TextTranslation);
 
                 reportList.Add(o);

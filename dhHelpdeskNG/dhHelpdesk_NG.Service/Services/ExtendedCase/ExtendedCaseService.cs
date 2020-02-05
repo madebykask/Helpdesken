@@ -9,6 +9,7 @@ using DH.Helpdesk.Domain.ExtendedCaseEntity;
 using DH.Helpdesk.Services.BusinessLogic.Cases;
 using DH.Helpdesk.Services.Enums;
 using OfficeOpenXml.Table.PivotTable;
+using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Services.Services.ExtendedCase
 {
@@ -18,17 +19,20 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
         private readonly IGlobalSettingService _globalSettingService;
         private readonly IExtendedCaseDataRepository _extendedCaseDataRepository;
         private readonly IExtendedCaseFormRepository _extendedCaseFormRepository;
+		private readonly IEntityToBusinessModelMapper<CaseSolution, CaseSolutionOverview> _caseSolutionToModelMapper;
 
 		public ExtendedCaseService(
             IGlobalSettingService globalSettingService,
             IExtendedCaseDataRepository extendedCaseDataRepository,
             IExtendedCaseFormRepository extendedCaseFormRepository, 
-            IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel> entityToModelMapper)
+            IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel> entityToModelMapper,
+			IEntityToBusinessModelMapper<CaseSolution, CaseSolutionOverview> caseSolutionToModelMapper)
         {
             _globalSettingService = globalSettingService;
             _extendedCaseDataRepository = extendedCaseDataRepository;
             _extendedCaseFormRepository  = extendedCaseFormRepository;
             _entityToModelMapper = entityToModelMapper;
+			_caseSolutionToModelMapper = caseSolutionToModelMapper;
         }
 
         public ExtendedCaseDataModel GenerateExtendedFormModel(InitExtendedForm initData, out string lastError)
@@ -147,10 +151,23 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
 
 		public List<ExtendedCaseFormModel> GetExtendedCaseFormsForCustomer(int customerId)
 		{
-			var form = _extendedCaseFormRepository.GetExtendedCaseFormsForCustomer(customerId)
+			var forms = _extendedCaseFormRepository.GetExtendedCaseFormsForCustomer(customerId)
                 .Select(_entityToModelMapper.Map).ToList();
-            return form;
+            return forms;
         }
+
+		public List<ExtendedCaseFormWithCaseSolutionsModel> GetExtendedCaseFormsWithCaseSolutionForCustomer(int customerId)
+		{
+
+			var forms = _extendedCaseFormRepository.GetExtendedCaseFormsForCustomer(customerId)
+				.Select(o => new ExtendedCaseFormWithCaseSolutionsModel
+				{
+					Id = o.Id,
+					Name = o.Name,
+					CaseSolutions = o.CaseSolutions.Select(_caseSolutionToModelMapper.Map)
+				});
+			return forms.ToList();
+		}
 
 		public List<ExtendedCaseFormFieldTranslationModel> GetExtendedCaseFormFields(int extendedCaseFormId, int languageID)
 		{
