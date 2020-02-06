@@ -39,6 +39,51 @@ END
 
 
 
+DECLARE @MobileType INT
+SET @MobileType = 500
+  BEGIN TRAN
+	If exists (select top 1 * from [dbo].[tblText] where [TextType] <> @MobileType and [Id] > 30000)
+		BEGIN
+
+		DECLARE @MyCursor CURSOR;
+		DECLARE @newId INT
+		DECLARE @moveId INT
+
+		SET @MyCursor = CURSOR FOR
+		SELECT DISTINCT [Id] FROM [dbo].[tblText]
+		WHERE [TextType] <> @MobileType and [Id] > 30000
+
+		OPEN @MyCursor 
+	    FETCH NEXT FROM @MyCursor 
+	    INTO @moveId
+
+		WHILE @@FETCH_STATUS = 0
+		    BEGIN
+
+			SELECT TOP 1 @newId = T.Id+1 FROM tblText T
+			WHERE T.Id < 30000
+			ORDER BY T.Id DESC 
+
+			RAISERROR ('Updating text translation Id = %d to %d.', 10, 1, @moveId, @NewId) WITH NOWAIT
+			INSERT INTO tblText(Id, ChangedByUser_Id, ChangedDate, CreatedDate, TextGUID, TextString, TextType)
+			SELECT @newId,ChangedByUser_Id, ChangedDate, CreatedDate, TextGUID, TextString, TextType FROM tblText T 
+			WHERE T.Id = @moveId 
+
+			UPDATE TT SET Text_Id = @newId FROM tblTextTranslation TT WHERE Text_Id = @moveId
+
+			DELETE FROM tblText WHERE ID = @moveId
+
+			FETCH NEXT FROM @MyCursor 
+		    INTO @moveId 
+		END
+
+		CLOSE @MyCursor;
+	    DEALLOCATE @MyCursor;
+	end
+COMMIT 
+
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.46'
 GO

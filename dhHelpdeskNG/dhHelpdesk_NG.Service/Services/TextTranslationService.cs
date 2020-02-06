@@ -92,7 +92,8 @@
 
         public IList<TextType> GetTextTypesForNewText()
         {
-            return this._textTypeRepository.GetMany(x => x.Id > 0).OrderBy(x => x.Name).ToList();
+			var notForNew = new int[] { (int)TextTypeType.Helpdesk, (int)TextTypeType.Mobile };
+            return this._textTypeRepository.GetMany(x => !notForNew.Contains(x.Id)).OrderBy(x => x.Name).ToList();
         }
 
         public TextType GetTextType(int id)

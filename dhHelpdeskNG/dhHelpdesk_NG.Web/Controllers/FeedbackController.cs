@@ -780,7 +780,7 @@ namespace DH.Helpdesk.Web.Controllers
             ViewBag.Percents = GetPercents();
             ViewBag.IconsList = GetIcons();
             var caseTypes = _caseTypeService.GetAllCaseTypes(SessionFacade.CurrentCustomer.Id, true, true).ToList();
-            ViewBag.CaseTypes = _caseTypeService.GetChildrenInRow(caseTypes)
+            ViewBag.CaseTypes = _caseTypeService.GetChildrenInRow(caseTypes, true)
                 .Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() })
                 .ToList();
         }
