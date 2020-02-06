@@ -61,7 +61,7 @@ namespace DH.Helpdesk.Web.Infrastructure
                 ApplicationFacade.RemoveCaseUserInfo(SessionFacade.CurrentUser.Id);
                 ApplicationFacade.UpdateLoggedInUserActivity(this.Session.SessionID);
             }
-            else
+            else if (!filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), false))
             {
                 throw new Exception("[DEBUG] BusinessLogicException how it can be?");
             }
@@ -70,7 +70,8 @@ namespace DH.Helpdesk.Web.Infrastructure
         //called after a controller action is executed, that is after ~/UserController/index 
         protected override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            if (!ControllerContext.HttpContext.Request.IsAjaxRequest())
+            if (!ControllerContext.HttpContext.Request.IsAjaxRequest() &&
+				!filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), false))
             {
                     //do not use for ajax requests
                 this.SetMasterPageModel(filterContext);
