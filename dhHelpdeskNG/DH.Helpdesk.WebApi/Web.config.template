@@ -26,11 +26,6 @@
   </connectionStrings>
   
   <system.web>
-    <pages>
-      <namespaces>
-        <clear/>
-      </namespaces>
-    </pages>
     <compilation debug="true" targetFramework="4.7.2" />
     <httpRuntime maxRequestLength="102400" targetFramework="4.7.2"  />
     <authentication mode="None" />
