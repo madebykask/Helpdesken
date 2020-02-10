@@ -34,7 +34,7 @@ if  exists (select * from syscolumns inner join sysobjects on sysobjects.id = sy
 		 where syscolumns.name = N'UseMobileRouting' and sysobjects.name = N'tblSettings')
 BEGIN
     ALTER TABLE tblSettings
-    DROP UseMobileRouting 
+    DROP COLUMN UseMobileRouting 
 END
 
 

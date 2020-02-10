@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Security.Principal;
 using System.Threading;
+using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Statistics.Output;
@@ -57,7 +58,6 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IChangeService changeService;
 
         private readonly ILanguageService languageService;
-        private readonly IStatisticsService _statisticsService;
 
         public HomeController(
             IBulletinBoardService bulletinBoardService,
@@ -77,8 +77,7 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseModelFactory caseModelFactory, 
             IModulesInfoFactory modulesInfoFactory, 
             IChangeService changeService,
-            ILanguageService languageService,
-            IStatisticsService statisticsService)
+            ILanguageService languageService)
             : base(masterDataService)
         {
             this.bulletinBoardService = bulletinBoardService;
@@ -98,7 +97,6 @@ namespace DH.Helpdesk.Web.Controllers
             this.modulesInfoFactory = modulesInfoFactory;
             this.changeService = changeService;
             this.languageService = languageService;
-            _statisticsService = statisticsService;
         }
 
         [HttpGet]
@@ -324,17 +322,6 @@ namespace DH.Helpdesk.Web.Controllers
 
             return model;
         }
-
-        public JsonResult GetStatistics()
-        {
-            var customerIdsAll = customerUserService.GetCustomerUsersForHomeIndexPage(SessionFacade.CurrentUser.Id)
-                .Select(c => c.Customer.Customer_Id).ToArray();
-
-            var model = _statisticsService.GetStatistics(customerIdsAll, SessionFacade.CurrentUser);
-
-            return Json(model, JsonRequestBehavior.AllowGet);
-        }
-        
 
         //diagnostic action
         public JsonResult _Ctx()
