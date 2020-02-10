@@ -1630,7 +1630,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             //var userEmployeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
 
             //Hide this to next release #57742
-            if (currentCase.CaseType.ShowOnExtPageCases == 0 || currentCase.ProductArea?.ShowOnExtPageCases == 0)
+            if (currentCase.CaseType.ShowOnExtPageCases == 0 || (currentCase.ProductArea != null && currentCase.ProductArea.ShowOnExtPageCases == 0))
             {
                 _logger.Warn("UserHasAccessToCase: ShowOnExtPageCases == 0");
                 return false;
@@ -1698,7 +1698,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var caseType = _caseTypeService.GetCaseType(currentCase.CaseType_Id);
             var productArea = currentCase.ProductArea_Id.HasValue? _productAreaService.GetProductArea(currentCase.ProductArea_Id.Value) : null;
 
-            if (caseType.ShowOnExtPageCases == 0 || productArea?.ShowOnExtPageCases == 0)
+            if (caseType.ShowOnExtPageCases == 0 || (productArea != null && productArea.ShowOnExtPageCases == 0))
                 return false;
 
             var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();

@@ -628,8 +628,8 @@ namespace DH.Helpdesk.Services.Services
 
         public ComputerUser GetComputerUserByUserID(string userId, int? customerId = null)
         {
-            var computerUser = _computerUserRepository.Get(o => o.UserId == userId &&
-                                                                (customerId.HasValue && o.Customer_Id == customerId.Value) || !customerId.HasValue);
+            var computerUser = _computerUserRepository.Get(o => o.UserId.Equals(userId) &&
+                                                                (customerId.HasValue && o.Customer_Id == customerId.Value || !customerId.HasValue));
             return computerUser;
         }
     }

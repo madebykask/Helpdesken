@@ -53,7 +53,7 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
 
         public CaseOverviewCriteriaModel GetCaseOverviewCriteria()
         {
-            var curUser = SessionFacade.CurrentUserIdentity.UserId;
+            var curUser = SessionFacade.CurrentSystemUser ?? SessionFacade.CurrentUserIdentity.UserId;
             var userEmployeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
             var initiator = string.IsNullOrEmpty(curUser) ? null : _computerService.GetComputerUserByUserID(curUser, SessionFacade.CurrentCustomer.Id);
             var showOnExtPageDepartmentCases = initiator?.ShowOnExtPageDepartmentCases ?? false;
@@ -65,7 +65,7 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
                 MyCasesFollower = SessionFacade.CurrentCustomer.MyCasesFollower,
                 MyCasesRegarding = SessionFacade.CurrentCustomer.MyCasesRegarding,
                 MyCasesUserGroup = SessionFacade.CurrentCustomer.MyCasesUserGroup,
-                MyCasesInitiatorDepartmentId = showOnExtPageDepartmentCases ? (int?)null : initiator?.Department_Id,
+                MyCasesInitiatorDepartmentId = showOnExtPageDepartmentCases ? initiator.Department_Id : null,
                 UserId = curUser,
                 UserEmployeeNumber = userEmployeeNumber,
                 GroupMember = new List<string>()
