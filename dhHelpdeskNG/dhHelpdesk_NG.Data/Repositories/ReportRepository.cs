@@ -367,7 +367,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
 				if (extendedCaseFormId.HasValue)
 				{
-					query = query.Where(o => o.Case.CaseExtendedCaseDatas.Any(ecd => ecd.ExtendedCaseForm_Id == extendedCaseFormId.Value));
+					query = query.Where(o => o.Case.CaseExtendedCaseDatas.Any(ecd => ecd.ExtendedCaseData.ExtendedCaseFormId == extendedCaseFormId.Value));
 				}
 
 				var hasExtendedCaseFields = extendedCaseFormFieldIds != null && extendedCaseFormFieldIds.Any();
