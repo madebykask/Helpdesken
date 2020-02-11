@@ -222,7 +222,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 }
 				if (extendedCaseFormId.HasValue)
 				{
-					query = query.Where(c => c.CaseExtendedCaseDatas.Any(ecd => ecd.ExtendedCaseForm_Id == extendedCaseFormId.Value));
+					query = query.Where(c => c.CaseExtendedCaseDatas.Any(ecd => ecd.ExtendedCaseData.ExtendedCaseFormId == extendedCaseFormId.Value));
 				}
 
                 var query2 = query.GroupBy(c => new { c.RegTime.Month, c.RegTime.Year },
