@@ -154,6 +154,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 		public List<ExtendedCaseFormFieldTranslationModel> GetExtendedCaseFormFields(int extendedCaseFormId, int languageID)
 		{
 			var fieldIds = DataContext.ExtendedCaseValues.Where(o => o.ExtendedCaseData.ExtendedCaseFormId == extendedCaseFormId)
+				.Where(o => !string.IsNullOrEmpty(o.Value) || !string.IsNullOrEmpty(o.SecondaryValue))
 				.Select(o => o.FieldId)
 				.Distinct();
 
@@ -169,7 +170,9 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 						Text = t.Text,
 						LanguageId = t.LanguageId
 					}
-				).ToList();
+				).ToList()
+				.OrderBy(o => o.Text)
+				.ToList();
 
 
 			return fieldTranslations;

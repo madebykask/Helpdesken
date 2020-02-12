@@ -317,7 +317,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             return this.View("Reports/CaseSatisfactionReport", model);
         }
 
-        [HttpGet]
+        [HttpPost]
         [BadRequestOnNotValid]
         [NoCache]
         public ActionResult GetReportGeneratorReport(ReportGeneratorOptionsModel options)

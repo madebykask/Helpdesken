@@ -256,7 +256,7 @@
             if (!reportTypeId)
                 reportTypeId = $('#lstReports option:selected').attr("data-id");
 
-            var getParams = $.param({
+            var getDataForParams = {
                 ReportTypeId: reportTypeId,
                 DepartmentIds: filters.departments,
                 WorkingGroupIds: filters.workingGroups,
@@ -275,17 +275,39 @@
                 SortBy: "",
                 CloseFrom: filters.closeDateFrom,
                 CloseTo: filters.closeDateTo
-            }, true);
+            };
+
+            var getParams = $.param(getDataForParams, true);
 
             var isPreview = ($(this).data("preview") === true);
             if ($(this).data("excel") === true) {
-                window.open(showGeneratedReportUrl + "?" + getParams, "_blank");
+                var w = window.open('', '_blank');
+                w.document.write('<html>');
+                w.document.write('<body>');
+                w.document.write('<form name="excelForm" action="' + showGeneratedReportUrl + '" method="post">');
+                for (var prop in getDataForParams)
+                {
+                    var val = getDataForParams[prop];
+                    if (Array.isArray(val))
+                    {
+                        val.forEach(function (v) {
+                            w.document.write('<input type="text" style="display:none" name="' + prop + '" value="' + v + '"/>');
+                        });
+                    }
+                    else {
+                        w.document.write('<input type="text" style="display:none" name="' + prop + '" value="' + val + '"/>');
+                    }
+                }
+                w.document.write('</form>');
+                w.document.write('</body>');
+                w.document.write('</html>');
+                w.document.excelForm.submit();
             } else {
                 $("#showReportLoader").show();
                 $.ajax(
                 {
                     url: showGeneratedReportUrl,
-                    type: "GET",
+                    type: "POST",
                     traditional: true,
                     data: getParams,
                     dataType: "html",
