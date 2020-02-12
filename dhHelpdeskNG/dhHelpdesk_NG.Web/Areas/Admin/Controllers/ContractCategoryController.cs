@@ -1,4 +1,5 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -77,9 +78,10 @@
         }
 
         [HttpPost]
-        public ActionResult Edit(ContractCategory contractCategory)
+        public ActionResult Edit(ContractCategory contractCategory, int? caseType_Id)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
+            contractCategory.CaseType_Id = caseType_Id;
             this._contractCategoryService.SaveContractCategory(contractCategory, out errors);
 
             if (errors.Count == 0)
@@ -106,16 +108,15 @@
         }
 
         private ContractCategoryInputViewModel CreateInputViewModel(ContractCategory contractCategory, Customer customer)
-        {
+        {           
             var model = new ContractCategoryInputViewModel
             {
                 ContractCategory = contractCategory,
                 Customer = customer,
-                CaseType = this._caseTypeService.GetCaseTypes(customer.Id, true).Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
+                CaseTypes = this._caseTypeService.GetCaseTypesOverviewWithChildren(contractCategory.Customer_Id, true).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList(),
+                CaseType_Id = contractCategory.CaseType_Id == null ? 0 : contractCategory.CaseType_Id.Value ,
+                ParentPath_CaseType = "--",
+                
                 StateSecondary = this._stateSecondaryService.GetActiveStateSecondaries(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -123,6 +124,17 @@
                 }).ToList()
             };
 
+
+            if (model.CaseType_Id > 0)
+            {
+                var c = _caseTypeService.GetCaseType(contractCategory.CaseType_Id.Value);
+                if (c != null)
+                {
+                    c = Translation.TranslateCaseType(c);
+                    model.ParentPath_CaseType = c.getCaseTypeParentPath();
+                    model.ContractCategory.CreateCase_CaseType = c;
+                }                
+            }
             return model;
         }
     }
