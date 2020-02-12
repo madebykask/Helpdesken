@@ -46,7 +46,18 @@
                                         @Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.DropDownListFor(model => model.ContractCategory.CaseType_Id, Model.CaseType, "")
+                                        @*@Html.DropDownListFor(model => model.ContractCategory.CaseType_Id, Model.CaseType, "")*@
+                                        <div id="divCaseType" class="btn-group">
+                                            <div class="btn" id="divBreadcrumbs_CaseType">@Model.ParentPath_CaseType</div>
+                                            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">@Translation.GetCoreTextTranslation("--")</a></li>
+                                                @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
+                                            </ul>
+                                            <input type="hidden" id="CaseType_Id" name="CaseType_Id" value="@Model.CaseType_Id" />                                            
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -75,4 +86,12 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
 
+    $('#divCaseType ul.dropdown-menu li a').click(function (e) {
+        e.preventDefault();
+        var val = $(this).attr('value');
+        $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
+        $("#CaseType_Id").val(val);
+    });
+</script>
