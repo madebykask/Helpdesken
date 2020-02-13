@@ -281,27 +281,40 @@
 
             var isPreview = ($(this).data("preview") === true);
             if ($(this).data("excel") === true) {
-                var w = window.open('', '_blank');
-                w.document.write('<html>');
-                w.document.write('<body>');
-                w.document.write('<form name="excelForm" action="' + showGeneratedReportUrl + '" method="post">');
+
+                var iframe = document.getElementById('excelIframe');
+               
+                if (iframe)
+                {
+                    iframe.parentElement.removeChild(iframe);
+                }
+
+                iframe = document.createElement('iframe');
+                iframe.id = 'excelIframe';
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
+                
+
+                var doc = iframe.contentWindow.document;
+                doc.open();
+
+                doc.write('<form name="excelForm" action="' + showGeneratedReportUrl + '" method="post">');
                 for (var prop in getDataForParams)
                 {
                     var val = getDataForParams[prop];
                     if (Array.isArray(val))
                     {
                         val.forEach(function (v) {
-                            w.document.write('<input type="text" style="display:none" name="' + prop + '" value="' + v + '"/>');
+                            doc.write('<input type="text" style="display:none" name="' + prop + '" value="' + v + '"/>');
                         });
                     }
                     else {
-                        w.document.write('<input type="text" style="display:none" name="' + prop + '" value="' + val + '"/>');
+                        doc.write('<input type="text" style="display:none" name="' + prop + '" value="' + val + '"/>');
                     }
                 }
-                w.document.write('</form>');
-                w.document.write('</body>');
-                w.document.write('</html>');
-                w.document.excelForm.submit();
+                doc.write('</form>');
+
+                doc.excelForm.submit();
             } else {
                 $("#showReportLoader").show();
                 $.ajax(
