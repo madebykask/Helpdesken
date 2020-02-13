@@ -17,14 +17,15 @@ using log4net.Config;
 
 namespace DH.Helpdesk.SelfService
 {
-    using System.Web.Mvc;
-    using System.Web.Optimization;
-    using System.Web.Routing;
+	using System.Net;
+	using System.Web.Mvc;
+	using System.Web.Optimization;
+	using System.Web.Routing;
 
-    // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
-    // visit http://go.microsoft.com/?LinkId=9394801
+	// Note: For instructions on enabling IIS6 or IIS7 classic mode, 
+	// visit http://go.microsoft.com/?LinkId=9394801
 
-    public class MvcApplication : System.Web.HttpApplication
+	public class MvcApplication : System.Web.HttpApplication
     {
         private static ILog _logger;
         const string SessionIdKey = "_sessionId";
@@ -53,7 +54,8 @@ namespace DH.Helpdesk.SelfService
 
         protected void Application_Start()
         {
-            InitLogging();
+			System.Net.ServicePointManager.SecurityProtocol = System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+			InitLogging();
 
             AreaRegistration.RegisterAllAreas();
 
