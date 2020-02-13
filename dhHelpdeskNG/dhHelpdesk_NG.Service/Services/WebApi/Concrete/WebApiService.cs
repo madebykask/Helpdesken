@@ -18,7 +18,7 @@ namespace DH.Helpdesk.Services.Services.WebApi
         {
             _apiInfo = apiInfo;
 
-			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+			
 		}
 
         public async Task<EmployeeModel> GetEmployeeFor(string employeeNumber)
