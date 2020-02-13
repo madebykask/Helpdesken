@@ -17,7 +17,9 @@ namespace DH.Helpdesk.Services.Services.WebApi
         public WebApiService(WebApiCredentialModel apiInfo)
         {
             _apiInfo = apiInfo;
-        }
+
+			System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+		}
 
         public async Task<EmployeeModel> GetEmployeeFor(string employeeNumber)
         {
@@ -41,10 +43,11 @@ namespace DH.Helpdesk.Services.Services.WebApi
             var handler = new HttpClientHandler { Credentials = new NetworkCredential(_apiInfo.UserName, _apiInfo.Password) };
             using (var client = new HttpClient(handler))
             {
-                client.BaseAddress = new Uri(_apiInfo.UriPath);
+				
+
+				client.BaseAddress = new Uri(_apiInfo.UriPath);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
                 var response = await client.GetAsync(string.Format("api/managerEx/{0}", employeeNum));
                 if (response.IsSuccessStatusCode)
                 {
