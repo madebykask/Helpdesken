@@ -72,7 +72,6 @@
     <Reference Include="PostSharp, Version=4.0.38.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL">
       <HintPath>..\packages\PostSharp.4.0.38\lib\net35-client\PostSharp.dll</HintPath>
       <Private>True</Private>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -87,6 +86,7 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Z.EntityFramework.Plus.EF6, Version=1.8.25.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
       <HintPath>..\packages\Z.EntityFramework.Plus.EF6.1.8.25\lib\net45\Z.EntityFramework.Plus.EF6.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

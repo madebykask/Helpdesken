@@ -10,7 +10,7 @@
     <add name="HelpdeskSqlServerDbContext" connectionString="Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};Password=#{DatabasePassword};User ID=#{DatabaseUser};MultipleActiveResultSets=True;Connection Lifetime=3;Max Pool Size=3;" providerName="System.Data.SqlClient" />
   </connectionStrings>
   <startup>
-    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5.2" />
+    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.7.2" />
   </startup>
   <appSettings>
     <add key="Delay" value="60" />
