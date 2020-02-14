@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DH.Helpdesk.SelfService</RootNamespace>
     <AssemblyName>DH.Helpdesk.SelfService</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <SccProjectName>
@@ -759,6 +759,7 @@
     <Content Include="Content\fonts\FontAwesome.otf" />
     <Content Include="Views\Case\_CaseAddFollowers.cshtml" />
     <Content Include="log4net.config" />
+    <None Include="Properties\PublishProfiles\pub.pubxml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="img-profile\SelfService-StartPage.jpg" />
     <Content Include="Scripts\jquery-1.8.3.js" />

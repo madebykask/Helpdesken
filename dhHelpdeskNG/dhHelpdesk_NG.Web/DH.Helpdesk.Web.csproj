@@ -15,7 +15,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DH.Helpdesk.Web</RootNamespace>
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <SccProjectName>
@@ -242,14 +242,10 @@
     <Reference Include="System.Web.DataVisualization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
     <Reference Include="System">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Core">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations">
@@ -261,6 +257,7 @@
     <Reference Include="System.Web.Abstractions">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
@@ -4144,6 +4141,9 @@
     <Content Include="Views\Cases\_Mail2TicketEmails.cshtml" />
     <Content Include="Views\Cases\_CaseLogInputFilesAttachment.cshtml" />
     <Content Include="Views\Cases\_CaseAttachExistFileList.cshtml" />
+    <Content Include="Web.config.template.variables.dev.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">
