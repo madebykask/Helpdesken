@@ -54,7 +54,7 @@ namespace DH.Helpdesk.SelfService
 
         protected void Application_Start()
         {
-			System.Net.ServicePointManager.SecurityProtocol = System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+			//System.Net.ServicePointManager.SecurityProtocol = System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 			InitLogging();
 
             AreaRegistration.RegisterAllAreas();
