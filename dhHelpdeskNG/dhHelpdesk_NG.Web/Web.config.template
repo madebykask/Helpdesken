@@ -42,7 +42,7 @@
     </scripting>
   </system.web.extensions>
   <system.web>
-    <compilation debug="true" targetFramework="4.5.2" />
+    <compilation debug="true" targetFramework="4.7.2" />
     #{if ShowRemoteErrors}<customErrors mode="Off"/>#{/if}
     <pages>
       <namespaces>
@@ -55,7 +55,7 @@
       </namespaces>
     </pages>
     <!-- 50 mb in kilobytes -->
-    <httpRuntime maxRequestLength="5242880" targetFramework="4.5"/>
+    <httpRuntime maxRequestLength="5242880" targetFramework="4.7.2"/>
     
     #{if AuthenticationMode == "application"}
     <authentication mode="Forms">
