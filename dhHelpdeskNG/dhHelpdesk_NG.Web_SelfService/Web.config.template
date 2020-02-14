@@ -156,6 +156,11 @@
         <requestLimits maxAllowedContentLength="38000000" />
       </requestFiltering>
     </security>
+    <httpProtocol>
+      <customHeaders>
+        <add name="X-Frame-Options" value="sameorigin" />
+      </customHeaders>
+    </httpProtocol>
     <handlers>
       <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
       <remove name="OPTIONSVerbHandler" />
