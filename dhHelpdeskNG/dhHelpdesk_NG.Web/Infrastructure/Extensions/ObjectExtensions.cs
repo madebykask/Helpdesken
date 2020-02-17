@@ -972,15 +972,23 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
         public static string getSectionHeaderFields(this CaseInputViewModel model, CaseSectionType type)
         {
+            var orderedFields = new List<Tuple<int, int>>();
             var result = new List<string>();
-            var section = model.CaseSectionModels.SingleOrDefault(x => x.SectionType == (int)type);
+            var section = model.CaseSectionModels.FirstOrDefault(x => x.SectionType == (int)type);
+            var allOrderdFields = SetSectionHeaderOrders(model.caseFieldSettings).ToArray();
+            foreach (var f in section.CaseSectionFields)
+            {
+                var order = Array.IndexOf(allOrderdFields, f);               
+                orderedFields.Add(new Tuple<int, int>(f,order));                
+            }
+
             if (section != null)
             {
                 var fields = new List<CaseFieldSetting>();              
-                    foreach (var f in section.CaseSectionFields)
-                    {
-                        fields.Add(model.caseFieldSettings.SingleOrDefault(x => x.Id == f));
-                    }
+                foreach (var f in orderedFields.OrderBy(o=> o.Item2))
+                {
+                    fields.Add(model.caseFieldSettings.FirstOrDefault(x => x.Id == f.Item1));
+                }
                                   
                 result = GetCaseFieldsValues(model, fields);
             }
@@ -1488,6 +1496,205 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 }
             }
             return item;
+        }
+
+        private static IList<int> SetSectionHeaderOrders(IList<CaseFieldSetting> fieldSettings)
+        {
+            var sectionHeaderFieldsOrder = new List<int>();
+
+            //Initiator 
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ReportedBy.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Region_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Department_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Department_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.OU_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.OU_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.CostCentre.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.CostCentre.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Place.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Place.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.UserCode.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.UserCode.ToString()).ToInt());
+
+            // Regarding 
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString()).ToInt());
+
+            // ComputerInfo
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()).ToInt());
+
+            // CaseInfo
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.CaseNumber.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.CaseNumber.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.RegTime.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.RegTime.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ChangeTime.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ChangeTime.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.User_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.User_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.System_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.System_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Impact_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Category_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Category_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Caption.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Caption.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Description.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Description.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.AgreedDate.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Available.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Available.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Cost.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Cost.ToString()).ToInt());
+
+            // CaseManagement
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Status_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Status_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Project.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Project.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Problem.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Problem.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.CausingPart.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.CausingPart.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Change.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Change.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.PlanDate.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.PlanDate.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.WatchDate.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.WatchDate.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.SolutionRate.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.SolutionRate.ToString()).ToInt());
+
+            //Communication and Status
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.FinishingDate.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.FinishingDate.ToString()).ToInt());
+
+            if (!string.IsNullOrEmpty(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ClosingReason.ToString())))
+                sectionHeaderFieldsOrder.Add(fieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()).ToInt());            
+
+            return sectionHeaderFieldsOrder;
         }
 
         #endregion
