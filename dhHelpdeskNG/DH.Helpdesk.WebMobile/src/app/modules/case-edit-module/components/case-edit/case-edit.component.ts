@@ -625,6 +625,7 @@ export class CaseEditComponent {
         CaseSectionType.CaseInfo,
         CaseSectionType.ComputerInfo,
         CaseSectionType.CaseManagement);
+        this.sectionHeadersInfo = [];
         headersToProcess.forEach(t => {
           this.sectionHeadersInfo.push({key: t, value: this.getSectionInfo(t)});
         });

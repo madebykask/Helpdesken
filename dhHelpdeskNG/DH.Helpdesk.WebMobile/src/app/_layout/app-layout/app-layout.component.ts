@@ -4,6 +4,7 @@ import { CommunicationService, Channels } from 'src/app/services/communication/c
 import { HeaderEventData } from 'src/app/services/communication/data/header-event-data';
 import { takeUntil, delay } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
   selector: 'app-layout',
@@ -11,7 +12,6 @@ import { Subject } from 'rxjs';
   styleUrls: ['./app-layout.component.scss']
 })
 export class AppLayoutComponent implements OnInit, OnDestroy {
-    private destroy$ = new Subject();
     version = config.version;
     isFooterVisible = true;
     pageSettings = {};
@@ -23,7 +23,7 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
         this.commService.listen<HeaderEventData>(Channels.Header)
         .pipe(
           delay(0),
-          takeUntil(this.destroy$)
+          untilDestroyed(this)
         )
         .subscribe(e => {
           this.isFooterVisible = e.isVisible;
@@ -31,7 +31,5 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.destroy$.next();
-        this.destroy$.complete();
     }
 }
