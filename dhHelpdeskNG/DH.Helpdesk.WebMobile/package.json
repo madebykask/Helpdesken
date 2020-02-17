@@ -12,7 +12,8 @@
         "lint": "ng lint",
         "tslint": "tslint -p tsconfig.json",
         "tslint-fix": "tslint --fix -p tsconfig.json",
-        "e2e": "ng e2e"
+        "e2e": "ng e2e",
+        "format": "pretty-quick --staged"
     },
     "private": true,
     "dependencies": {
@@ -55,8 +56,11 @@
         "@types/luxon": "^1.11.1",
         "@types/node": "^10.12.21",
         "codelyzer": "^5.1.0",
+        "husky": "^4.2.3",
         "jasmine-core": "^3.3.0",
         "jasmine-spec-reporter": "^4.2.1",
+        "prettier": "^1.19.1",
+        "pretty-quick": "^2.0.1",
         "protractor": "^5.4.2",
         "ts-node": "~8.0.2",
         "tslint": "^5.18.0",
