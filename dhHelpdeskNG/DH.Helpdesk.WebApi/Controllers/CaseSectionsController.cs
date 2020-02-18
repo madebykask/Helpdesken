@@ -43,11 +43,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             var sections = await _caseSectionService.GetCaseSectionsAsync(cid, langId);
             var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(cid);
             var allOrderedFields =  SetSectionHeaderOrders(caseFieldSettings).ToArray();
-            var orderedFields = new List<Tuple<int, int>>();           
           
 
             sections.ForEach(section =>
             {
+                var orderedFields = new List<Tuple<int, int>>();           
                 var sectionModel = new CaseSectionOutputModel()
                 {
                     CustomerId = section.CustomerId,
@@ -65,24 +65,18 @@ namespace DH.Helpdesk.WebApi.Controllers
 
                 var sectionfields = new List<CaseFieldSetting>();
                 var fields = caseFieldSettings.Where(x => section.CaseSectionFields.Contains(x.Id));
-                if (fields.Any())
-                {
-                    var caseSectionFieldIds = fields.Select(sf => sf.Id).ToList();
-                    foreach (var f in caseSectionFieldIds)
-                    {
-                        var order = Array.IndexOf(allOrderedFields, f);
-                        orderedFields.Add(new Tuple<int, int>(f, order));
-                    }
 
-                    foreach (var f in orderedFields.OrderBy(o => o.Item2))
-                    {
-                        sectionfields.Add(fields.FirstOrDefault(x => x.Id == f.Item1));
-                    }
-                }
-                else
+                var caseSectionFieldIds = fields.Select(sf => sf.Id).ToList();
+                foreach (var f in caseSectionFieldIds)
                 {
-                    sectionfields = fields.ToList();
-                }                                
+                    var order = Array.IndexOf(allOrderedFields, f);
+                    orderedFields.Add(new Tuple<int, int>(f, order));
+                }
+
+                foreach (var f in orderedFields.OrderBy(o => o.Item2))
+                {
+                    sectionfields.Add(fields.FirstOrDefault(x => x.Id == f.Item1));
+                }                            
 
                 sectionModel.CaseSectionFields = sectionfields.Select(f =>
                     {
