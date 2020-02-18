@@ -173,7 +173,6 @@
         <assemblyIdentity name="System.Web.Http.WebHost" publicKeyToken="31bf3856ad364e35" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
       </dependentAssembly>
-      <!-- ADD 2017-08-17 /TAN -->
       <dependentAssembly>
         <assemblyIdentity name="MiniProfiler" publicKeyToken="b44f9351044011a3" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-3.2.0.157" newVersion="3.2.0.157" />
