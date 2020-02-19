@@ -194,6 +194,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 _userOrCustomerChanged = true;
                 var newCustomer = _masterDataService.GetCustomer(customerId);
                 SessionFacade.CurrentCustomer = newCustomer;
+
                 // Customer changed then clear sessions
                 SessionFacade.CurrentCoWorkers = null;
             }

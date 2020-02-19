@@ -85,9 +85,11 @@ namespace DH.Helpdesk.Web.Infrastructure
         {
             if (SessionFacade.CurrentUser != null)
             {
-                SessionFacade.CurrentCustomer =
-                    SessionFacade.CurrentCustomer ??
-                    this._masterDataService.GetCustomer(SessionFacade.CurrentUser.CustomerId);
+				if (SessionFacade.CurrentCustomer == null)
+				{
+					SessionFacade.CurrentCustomer = this._masterDataService.GetCustomer(SessionFacade.CurrentUser.CustomerId);
+					SessionFacade.ClearSearches();
+				}
             }
         }
 
