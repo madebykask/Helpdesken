@@ -96,12 +96,12 @@ function createContractsPage(JQuery) {
                 Departments: $('#lstDepartment').val(),
                 ShowContracts: $('#lstShow').val(),
 
-                StartDateTo: $("#StartDateTo").val(),
-                StartDateFrom: $("#StartDateFrom").val(),
-                EndDateTo: $("#EndDateTo").val(),
-                EndDateFrom: $("#EndDateFrom").val(),
-                NoticeDateTo: $("#NoticeDateTo").val(),
-                NoticeDateFrom: $("#NoticeDateFrom").val(),
+                StartDateTo: $("#SearchFilterModel_StartDateTo").val(),
+                StartDateFrom: $("#SearchFilterModel_StartDateFrom").val(),
+                EndDateTo: $("#SearchFilterModel_EndDateTo").val(),
+                EndDateFrom: $("#SearchFilterModel_EndDateFrom").val(),
+                NoticeDateTo: $("#SearchFilterModel_NoticeDateTo").val(),
+                NoticeDateFrom: $("#SearchFilterModel_NoticeDateFrom").val(),
 
                 SearchText: $('#txtSearch').val(),
                 SortColName: $("#currentSortCol").val() || '',
