@@ -117,7 +117,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 CaseType_Id = contractCategory.CaseType_Id == null ? 0 : contractCategory.CaseType_Id.Value ,
                 ParentPath_CaseType = "--",
                 
-                StateSecondary = this._stateSecondaryService.GetActiveStateSecondaries(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                StateSecondary = this._stateSecondaryService.GetActiveStateSecondaries(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
