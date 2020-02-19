@@ -1246,6 +1246,18 @@ namespace DH.Helpdesk.Web.Infrastructure
             }
         }
 
+		public static void ClearSearches()
+		{
+			SessionFacade.CurrentContractsSearch = null;
+			SessionFacade.CurrentComputerUserSearch = null;
+			SessionFacade.CurrentCaseSolutionSearch = null;
+			SessionFacade.CurrentCaseSearch = null;
+			SessionFacade.CurrentDocumentSearch = null;
+			SessionFacade.CurrentInvoiceArticleProductAreaSearch = null;
+			SessionFacade.CurrentOperationLogSearch = null;
+			SessionFacade.CurrentBulletinBoardSearch = null;
+		}
+
         #endregion
 
         #region Common Methods and Properties

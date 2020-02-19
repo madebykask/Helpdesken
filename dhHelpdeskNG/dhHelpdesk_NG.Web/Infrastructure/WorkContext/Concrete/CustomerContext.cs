@@ -188,6 +188,7 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             }
 
             SessionFacade.CurrentCustomer = customer;
+			SessionFacade.ClearSearches();
             this.Refresh();
         }
 

@@ -376,6 +376,7 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CaseOverviewGridSettings = null;
                 if (!keepAdvancedSearch.HasValue || !keepAdvancedSearch.Value)
                     SessionFacade.CurrentAdvancedSearch = null;
+				SessionFacade.ClearSearches();
             }
             else
             {
@@ -385,7 +386,8 @@ namespace DH.Helpdesk.Web.Controllers
                     SessionFacade.CaseOverviewGridSettings = null;
                     if (!keepAdvancedSearch.HasValue || !keepAdvancedSearch.Value)
                         SessionFacade.CurrentAdvancedSearch = null;
-                }
+					SessionFacade.ClearSearches();
+				}
             }
 
             if (SessionFacade.CurrentCustomer == null)
@@ -4450,6 +4452,10 @@ namespace DH.Helpdesk.Web.Controllers
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
             var acccessToGroups = _userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
             var deps = _departmentService.GetDepartmentsByUserPermissions(userId, customerId);
+
+			//var whiteList = _globalSettingService.GetFileUploadWhiteList();
+			//m.HasFileUploadWhiteList = whiteList != null;
+			//m.FileUploadWhiteList = whiteList;
 
             var currentUser = UsersMapper.MapToUser(SessionFacade.CurrentUser);
 
