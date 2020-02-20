@@ -201,7 +201,7 @@ export class CaseEditComponent {
           this.initLock();
           this.processCaseData();
           this.processSectionHeader();
-          this.loadWorkflows(caseId);
+          this.loadWorkflows(caseId, this.caseData.customerId);
           this.loadExtendedCase(this.caseData);
       });
     }
@@ -516,8 +516,8 @@ export class CaseEditComponent {
       this.navigate('/casesoverview/');
     }
 
-    private loadWorkflows(caseId: number) {
-      this.caseWorkflowsService.getWorkflows(caseId, this.customerId)
+    private loadWorkflows(caseId: number, customerId: number) {
+      this.caseWorkflowsService.getWorkflows(caseId, customerId)
       .subscribe(workflows => {
         this.dataSource.workflowsStore$.next(workflows);
       });
@@ -563,6 +563,7 @@ export class CaseEditComponent {
           this.initLock();
           this.processCaseData();
           this.processSectionHeader();
+          this.loadWorkflows(null, this.caseData.customerId);
           this.loadExtendedCase(this.caseData);
       });
     }
