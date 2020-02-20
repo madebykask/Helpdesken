@@ -16,7 +16,12 @@ export class CaseWorkflowsApiService extends HttpApiServiceBase {
   }
 
   getWorkflows(caseId: number, customerId: number): Observable<any> {
-      return this.getJson(this.buildResourseUrl('/api/workflows/options', { caseId: caseId, cid: customerId }, false, true))
+      let params = { cid: customerId };
+      if (caseId != null){
+        params = Object.assign(params, { caseId: caseId });
+      }
+
+      return this.getJson(this.buildResourseUrl('/api/workflows/options', params, false, true))
       .pipe(
           take(1),
           map((jsItems: any) => {

@@ -11,6 +11,7 @@ using DH.Helpdesk.Services.Enums;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.WebApi.Infrastructure;
+using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -34,12 +35,12 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         [HttpGet]
         [Route("options")]
-        public async Task<IEnumerable<ItemOverview>> Get([FromUri]int cid, [FromUri]int langId, [FromUri]int caseId)
+        public async Task<IEnumerable<ItemOverview>> Get([FromUri]int cid, [FromUri]int langId, [FromUri]int? caseId = null)
         {
             var workflowCaseSolutionIds = _caseSolutionService.GetWorkflowCaseSolutionIds(cid, UserId);
-            var isRelatedCase = caseId > 0 && _caseService.IsRelated(caseId);
+            var isRelatedCase = caseId.HasValue && caseId.Value > 0 && _caseService.IsRelated(caseId.Value);
             var userSettings = await _userSerivice.GetUserOverviewAsync(UserId);
-            var caseEntity = _caseService.GetCaseById(caseId);
+            var caseEntity =  caseId.HasValue ? _caseService.GetCaseById(caseId.Value) : (Case)null;
             var workflowSteps =
                 _caseSolutionService.GetWorkflowSteps(cid, 
                     caseEntity,
