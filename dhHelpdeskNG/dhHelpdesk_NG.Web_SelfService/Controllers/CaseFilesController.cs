@@ -17,6 +17,8 @@ using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.SelfService.Infrastructure.Extensions;
 using DH.Helpdesk.SelfService.Infrastructure.Tools;
 using DH.Helpdesk.Services.Services;
+using System.IO;
+using System;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
@@ -32,8 +34,9 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly IFilesStorage _filesStorage;
 		private readonly IFileViewLogService _fileViewLogService;
 		private readonly IFeatureToggleService _featureToggleService;
+		private readonly IGlobalSettingService _globalSettingsService;
 
-        public CaseFilesController(
+		public CaseFilesController(
             ICaseService caseService,
             ICaseFieldSettingService caseFieldSettingService,
             IMasterDataService masterDataService,
@@ -45,7 +48,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             ISelfServiceConfigurationService configurationService,
 			IFileViewLogService fileViewLogService,
 			IFeatureToggleService featureToggleService,
-            IFilesStorage filesStorage)
+            IFilesStorage filesStorage,
+			IGlobalSettingService globalSettingsService)
             : base(configurationService, masterDataService, caseSolutionService)
         {
             _masterDataService = masterDataService;
@@ -58,7 +62,9 @@ namespace DH.Helpdesk.SelfService.Controllers
 			_fileViewLogService = fileViewLogService;
 			_featureToggleService = featureToggleService;
             _filesStorage = filesStorage;
-        }
+			_globalSettingsService = globalSettingsService;
+
+		}
 
         [HttpGet]
         public FileContentResult DownloadFile(string id, string fileName)
@@ -149,7 +155,13 @@ namespace DH.Helpdesk.SelfService.Controllers
             {
                 if (GuidHelper.IsGuid(id))
                 {
-                    if (_userTemporaryFilesStorage.FileExists(name, id))
+					var extension = Path.GetExtension(name);
+
+					if (!CheckExtensionInWhitelist(extension))
+					{
+						throw new ArgumentException($"File extension not valid for upload (not defined in whitelist): {extension}");
+					}
+					if (_userTemporaryFilesStorage.FileExists(name, id))
                         throw new HttpException((int) HttpStatusCode.Conflict, null);
 
                     _userTemporaryFilesStorage.AddFile(uploadedData, name, id);
@@ -157,7 +169,24 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
         }
 
-        [HttpPost]
+
+		private bool CheckExtensionInWhitelist(string extension)
+		{
+			var whiteList = _globalSettingsService.GetFileUploadWhiteList();
+
+			if (whiteList != null)
+			{
+				extension = extension.Replace(".", "").ToLower();
+				if (!whiteList.Contains(extension))
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		[HttpPost]
         public void DeleteNewCaseFile(string id, string fileName)
         {
             if (GuidHelper.IsGuid(id))

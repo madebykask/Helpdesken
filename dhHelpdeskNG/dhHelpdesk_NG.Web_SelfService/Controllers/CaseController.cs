@@ -2033,6 +2033,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             var traversedData = ProductAreaTreeTranslation(productAreas);
             productAreas = traversedData.Item1.ToList();
 
+			var whiteList = _globalSettingService.GetFileUploadWhiteList();
+
             var model = new NewCaseModel
             {
                 NewCase = new Case { Customer_Id = customerId },
@@ -2088,7 +2090,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                 AttachmentPlacement = customerSettings.AttachmentPlacement,
                 ApplicationType = CurrentApplicationType,
                 ShowCommunicationForSelfService = appSettings.ShowCommunicationForSelfService,
-            };
+				FileUploadWhiteList = whiteList
+			};
 
             if (currentUserIdentity != null)
             {

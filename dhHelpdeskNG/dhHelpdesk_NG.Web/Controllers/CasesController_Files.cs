@@ -197,7 +197,16 @@ namespace DH.Helpdesk.Web.Controllers
         public void UploadLogFile(string id, string name, bool isInternalLog)
         {
             var uploadedFile = Request.Files[0];
-            var uploadedData = new byte[uploadedFile.InputStream.Length];
+
+			// Check file upload while list
+			var extension = Path.GetExtension(uploadedFile.FileName);
+
+			if (!CheckExtensionInWhitelist(extension))
+			{
+				throw new ArgumentException($"File extension not valid for upload (not defined in whitelist): {extension}");
+			}
+
+			var uploadedData = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
 
             if (GuidHelper.IsGuid(id))

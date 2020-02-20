@@ -683,15 +683,19 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     'Attached files processing for Case
-                                    Dim caseFiles As List(Of String) = ProcessMessageAttachments(message, iHTMLFile, objCustomer, objCase.Casenumber.ToString(), Nothing, iPop3DebugLevel)
+                                    Dim caseFiles As List(Of String) = ProcessMessageAttachments(message, iHTMLFile, objCustomer, objCase.Casenumber.ToString(), Nothing, iPop3DebugLevel, objGlobalSettings)
                                     If (caseFiles IsNot Nothing AndAlso caseFiles.Any()) Then
 
+
+
                                         For Each caseFilePath As String In caseFiles
-                                            Dim sFileName = Path.GetFileName(caseFilePath)
+                                            Dim sFileName As String = Path.GetFileName(caseFilePath)
+
                                             objCaseData.saveFileInfo(objCase.Id, sFileName)
 
                                             'Add to files to attach list
                                             attachedFiles.Add(New MailFile(sFileName, caseFilePath, False))
+
                                         Next
                                     End If
 
@@ -926,8 +930,8 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     ' Process attached log files 
-                                    Dim logFiles As List(Of String) = ProcessMessageAttachments(message, iHTMLFile, objCustomer, iLog_Id.ToString(), logSubFolderPrefix, iPop3DebugLevel)
-                                    If (logFiles IsNot Nothing AndAlso logFiles.Any())
+                                    Dim logFiles As List(Of String) = ProcessMessageAttachments(message, iHTMLFile, objCustomer, iLog_Id.ToString(), logSubFolderPrefix, iPop3DebugLevel, objGlobalSettings)
+                                    If (logFiles IsNot Nothing AndAlso logFiles.Any())Then
                                         For Each logFilePath As String In logFiles
                                             Dim sFileName = Path.GetFileName(logFilePath)
                                             objLogData.saveFileInfo(iLog_Id, sFileName, bIsInternalLogFile)
@@ -1077,19 +1081,45 @@ Module DH_Helpdesk_Mail
         Return filePath
     End Function
 
+    Private Function GetFileUploadWhiteList(globalSettings As GlobalSettings) As List(Of String)
+        Dim whiteListStr As String = globalSettings.FileUploadExtensionWhitelist
+        Dim whiteList As List(Of String) = Nothing
+        If (whiteListStr IsNot Nothing) Then
+            whiteList = whiteListStr.Split(";").ToList()
+        End If
+
+        Return whiteList
+    End Function
+
+    Private Function IsExtensionInWhiteList(extension As String, whiteList As List(Of String)) As Boolean
+        Dim okFile As Boolean = True
+        If (whiteList IsNot Nothing) Then
+            If (Not whiteList.Contains(extension)) Then
+                okFile = False
+            End If
+
+        End If
+        Return okFile
+    End Function
+
 
     Private Function ProcessMessageAttachments(message As MailMessage,
                                                iHtmlFile As Integer,
                                                objCustomer As Customer,
                                                objectId As String,  'Case.Id or Log.Id
                                                prefix As String, '"<CaseNumber>" for Case file, "L<LogId>" for Log file
-                                               iPop3DebugLevel As Integer) As List(Of String)
+                                               iPop3DebugLevel As Integer,
+                                               globalSettings As GlobalSettings) As List(Of String)
 
         Dim files As List(Of String) = New List(Of String)
+        Dim deniedFiles As List(Of String) = New List(Of String)
+
+        Dim whiteList As List(Of String) = GetFileUploadWhiteList(globalSettings)
+
 
         Dim tempDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, "Temp", objectId)
         Dim saveDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, If(IsNullOrEmpty(prefix), objectId, prefix & objectId))
-        
+
         If message.Attachments.Count > 6 - iHtmlFile Then
 
             ' Kontrollera om folder existerar
@@ -1106,9 +1136,17 @@ Module DH_Helpdesk_Mail
                 Dim sFileNameTemp As String = msgAttachment.FileName
                 sFileNameTemp = sFileNameTemp.Replace(":", "")
                 sFileNameTemp = URLDecode(sFileNameTemp)
-                ' save temp file
-                Dim sTempFilePath = Path.Combine(tempDirPath, sFileNameTemp)
-                msgAttachment.Save(sTempFilePath)
+
+                Dim extension As String = Path.GetExtension(sFileNameTemp).Replace(".", "").ToLower()
+                If (IsExtensionInWhiteList(extension, whiteList)) Then
+                    ' save temp file
+                    Dim sTempFilePath = Path.Combine(tempDirPath, sFileNameTemp)
+                    msgAttachment.Save(sTempFilePath)
+                Else
+                    deniedFiles.Add(sFileNameTemp)
+                    LogToFile("Blocked file: " & sFileNameTemp, iPop3DebugLevel)
+                End If
+
             Next
 
             'zip files 
@@ -1135,15 +1173,31 @@ Module DH_Helpdesk_Mail
                 Dim sFileName As String = msgAttachment.FileName
                 sFileName = sFileName.Replace(":", "")
                 sFileName = URLDecode(sFileName)
-                
-                Dim sFilePath = Path.Combine(saveDirPath, sFileName)
-                LogToFile("Attached file path: " & sFilePath, iPop3DebugLevel)
-                msgAttachment.Save(sFilePath)
 
-                files.Add(sFilePath)
+                Dim extension As String = Path.GetExtension(sFileName).Replace(".", "").ToLower()
+                If (IsExtensionInWhiteList(extension, whiteList)) Then
+
+                    Dim sFilePath = Path.Combine(saveDirPath, sFileName)
+                    LogToFile("Attached file path: " & sFilePath, iPop3DebugLevel)
+                    msgAttachment.Save(sFilePath)
+
+                    files.Add(sFilePath)
+                Else
+                    deniedFiles.Add(sFileName)
+                    LogToFile("Blocked file: " & sFileName, iPop3DebugLevel)
+                End If
+
             Next
         End If
+        If (deniedFiles.Any()) Then
+            Dim deniedFilesContent As String = deniedFiles.Aggregate(Function(o As String, p As String) o & Environment.NewLine & p)
+            Dim filePath As String = Path.Combine(saveDirPath, "blocked files " & DateTime.UtcNow.ToString("yyyy-MM-dd HH_mm_ss") & ".txt")
+            File.WriteAllText(filePath, deniedFilesContent)
 
+            files.Add(filePath)
+
+            ' TODO: Save blocked files.txt
+        End If
         Return files
     End Function
 

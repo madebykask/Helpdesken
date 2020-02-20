@@ -30,6 +30,9 @@
                 <span id="tooltip-button-wrapper" data-title=''>
                 </span>
             </li>
+            <li id="menu9" style="display: none">
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Ändra") + " " + Translation.GetCoreTextTranslation("filändelser"), "EditFileExtensions", new { }, new { @class = "btn" })
+            </li>
         </ul>
     </div>
 </div>
@@ -54,6 +57,7 @@
             <li id="tab6" onclick="toggleMenuItems(8)">
                 <a href="#fragment-8">@Translation.GetCoreTextTranslation("Filåtkomst")</a>
             </li>
+            <li id="tab5" onclick="toggleMenuItems(9)"><a href="#fragment-9">@Translation.GetCoreTextTranslation("Filändelser")</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
@@ -217,6 +221,42 @@
             <div class="tab-pane tab-pane-border" id="fragment-8">
                 @Html.Action("FilesViewLog")
             </div>
+
+            <!-- File extensions -->
+            <div class="tab-pane tab-pane-border" id="fragment-9">
+                  <table class="tableform">
+                    <tbody>
+                        <tr>
+                            <td class="span4">@Translation.GetCoreTextTranslation("Begränsa filändelser vid uppladdning av filer")</td>
+                            <td>@Html.CheckBox("limitFileUploadExtensions", Model.LimitFileUploadExtensions, new { @class = "switchcheckbox", disabled = "true" })</td>
+                        </tr>
+                    </tbody>
+                </table>
+                @if (Model.LimitFileUploadExtensions)
+                {
+                <table class="table table-striped table-bordered table-hover" id="tblFileExtensions">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Translation.GetCoreTextTranslation("Gilitiga filändelser vid uppladdning av filer")
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.FileUploadWhiteList)
+                        {
+                            <tr>
+                                <td>
+                                    @item
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                }
+            </div>
+
+
 
             <input type="hidden" name="activeTab" id="activeTab" value="@SessionFacade.ActiveTab" />
         </div>

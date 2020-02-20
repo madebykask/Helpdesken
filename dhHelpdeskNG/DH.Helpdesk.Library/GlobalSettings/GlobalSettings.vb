@@ -12,6 +12,7 @@ Public Class GlobalSettings
     Private msDBVersion As String
     Private msExternalSite As String
     Private msUseMobileRouting As Boolean
+    Private msFileUploadExtensionWhitelist As String
 #End Region
 
 #Region "Constructors"
@@ -59,6 +60,12 @@ Public Class GlobalSettings
             msUseMobileRouting = False
         Else
             msUseMobileRouting = dr("UseMobileRouting")
+        End If
+
+        If IsDBNull(dr("FileUploadExtensionWhitelist")) Then
+            msFileUploadExtensionWhitelist = Nothing
+        Else
+            msFileUploadExtensionWhitelist = dr("FileUploadExtensionWhitelist")
         End If
     End Sub
 
@@ -142,5 +149,16 @@ Public Class GlobalSettings
             msUseMobileRouting = Value
         End Set
     End Property
+
+    Public Property FileUploadExtensionWhitelist() As String
+        Get
+            Return msFileUploadExtensionWhitelist
+        End Get
+        Set(ByVal Value As String)
+            msFileUploadExtensionWhitelist = Value
+        End Set
+    End Property
+
+
 #End Region
 End Class

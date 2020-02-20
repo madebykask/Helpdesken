@@ -341,6 +341,7 @@
     <Compile Include="Areas\Admin\Controllers\GDPRProgressController.cs" />
     <Compile Include="Areas\Admin\Controllers\ExtendedCaseController.cs" />
     <Compile Include="Areas\Admin\Infrastructure\Mappers\CustomerUserEntityToModelMapper.cs" />
+    <Compile Include="Areas\Admin\Models\FileUploadExtensionsModel.cs" />
     <Compile Include="Areas\Admin\Models\StateSelectListItem.cs" />
     <Compile Include="Areas\Inventory\Controllers\InventoryController.cs" />
     <Compile Include="Areas\Inventory\Infrastucture\Extensions\TabSettingExtensions.cs" />
@@ -3524,6 +3525,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\EditFileExtensions.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\i18n\ar.js" />
     <Content Include="Scripts\i18n\az.js" />

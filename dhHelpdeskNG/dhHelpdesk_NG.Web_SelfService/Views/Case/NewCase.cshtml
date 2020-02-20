@@ -45,8 +45,21 @@
         saveNewCaseUrl: '@Url.Content("~/Case/NewCase")',
         fetchDepartmentsUrl: '@Url.Content("~/Case/GetDepartmentsByRegion")',
         fetchOUUrl: '@Url.Content("~/Case/GetOrgUnitsByDepartments")',
-        setProductAreaByCaseTypeUrl: '@Url.Content("~/Case/GetProductAreaByCaseType")'
+        setProductAreaByCaseTypeUrl: '@Url.Content("~/Case/GetProductAreaByCaseType")',
+        fileUploadWhiteList: []
     };
+
+    @if (Model.FileUploadWhiteList != null)
+    {
+    foreach (var fileExtension in Model.FileUploadWhiteList)
+    {
+        @:window.appParameters.fileUploadWhiteList.push('@fileExtension');
+        }
+        }
+        else
+        {
+            @:window.appParameters.fileUploadWhiteList = null;
+        }
 
     var workflowsBehaviorParams = {
         isExtendedCase: false,

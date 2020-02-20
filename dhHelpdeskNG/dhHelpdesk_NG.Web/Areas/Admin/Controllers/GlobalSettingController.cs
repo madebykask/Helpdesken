@@ -486,6 +486,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
             var dataPrivacyAccess = _gdprDataPrivacyAccessService.GetByUserId(SessionFacade.CurrentUser.Id);
+			var fileUploadWhiteList = _globalSettingService.GetFileUploadWhiteList();
 
             var model = new GlobalSettingIndexViewModel
             {
@@ -519,6 +520,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
                 HasDataPrivacyAccess = dataPrivacyAccess != null,
+				FileUploadWhiteList = fileUploadWhiteList,
+				LimitFileUploadExtensions = fileUploadWhiteList != null
             };
 
             model.SearchConditions = new List<SelectListItem>();
@@ -1338,7 +1341,48 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return PartialView("_FilesViewLog", model);
         }
 
-        [NoCache]
+
+		public ActionResult EditFileExtensions()
+		{
+			var whiteList = _globalSettingService.GetFileUploadWhiteList();
+
+			var whiteListStr = "";
+
+			if (whiteList != null)
+			{
+				whiteListStr = whiteList.Aggregate((o, p) => o + Environment.NewLine + p);
+			}
+			else
+			{
+				whiteListStr = "";
+			}
+
+			return View("EditFileExtensions", new FileUploadExtensionsModel
+			{
+				UseFileExtensionWhiteList = whiteList != null,
+				FileExtensions = whiteListStr
+			});
+		}
+
+		[HttpPost]
+		public ActionResult EditFileExtensions(bool useFileExtensionWhiteList, string fileExtensions, int texttypeid, int compareMethod)
+		{
+			if (useFileExtensionWhiteList)
+			{
+				var extensions = fileExtensions.Split(new string[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+				_globalSettingService.SetFileUploadWhiteList(extensions);
+			}
+			else
+			{
+				// Disable whitelist
+				_globalSettingService.SetFileUploadWhiteList(null);
+			}
+
+			return this.RedirectToAction("index", "globalsetting", new { texttypeid = texttypeid, compareMethod = compareMethod });
+
+		}
+
+		[NoCache]
         [HttpGet]
         public JsonResult LoadCustomerDepartments(int id)
         {

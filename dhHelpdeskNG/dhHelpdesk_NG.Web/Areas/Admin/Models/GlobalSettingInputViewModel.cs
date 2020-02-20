@@ -37,7 +37,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         public IList<SelectListItem> SearchConditions { get; set; }
 
         public bool HasDataPrivacyAccess { get; set; }
-    }
+		public List<string> FileUploadWhiteList { get; internal set; }
+		public bool LimitFileUploadExtensions { get; internal set; }
+
+	}
 
     public class TranslationGridModel
     {
