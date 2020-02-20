@@ -37,5 +37,7 @@ namespace DH.Helpdesk.Domain
 
 		public string MobileSiteUrl { get; set; }
 		public bool UseMobileRouting { get; set; }
+
+		public string FileUploadExtensionWhitelist { get; set; }
 	}
 }

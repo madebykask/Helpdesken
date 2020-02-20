@@ -510,7 +510,9 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public TimeZoneInfo UserTimeZone { get; set; }
         public bool EnableTwoAttachments { get; internal set; }
-    }
+		public bool HasFileUploadWhiteList { get; internal set; }
+		public List<string> FileUploadWhiteList { get; internal set; }
+	}
 
     public class CaseIndexViewModel
     {

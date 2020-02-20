@@ -4453,9 +4453,9 @@ namespace DH.Helpdesk.Web.Controllers
             var acccessToGroups = _userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
             var deps = _departmentService.GetDepartmentsByUserPermissions(userId, customerId);
 
-			//var whiteList = _globalSettingService.GetFileUploadWhiteList();
-			//m.HasFileUploadWhiteList = whiteList != null;
-			//m.FileUploadWhiteList = whiteList;
+			var whiteList = _globalSettingService.GetFileUploadWhiteList();
+			m.HasFileUploadWhiteList = whiteList != null;
+			m.FileUploadWhiteList = whiteList;
 
             var currentUser = UsersMapper.MapToUser(SessionFacade.CurrentUser);
 

@@ -27,27 +27,40 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            var opt = {
-                twoAttacmentsMode: @(Model.EnableTwoAttachments.ToJavaScriptBool()) 
-            };
+             var opt = {
+                twoAttacmentsMode: @(Model.EnableTwoAttachments.ToJavaScriptBool()),
+                fileUploadWhiteList: []
+            }
+
+                @if(Model.HasFileUploadWhiteList)
+                {
+                    foreach(var fileExtension in Model.FileUploadWhiteList)
+                    {
+                        @:opt.fileUploadWhiteList.push('@fileExtension');
+                    }
+                }
+                else
+                {
+                    @:opt.fileUploadWhiteList = null;
+                }
 
             CaseInitForm(opt);
 
             $("#case-action-save").click(function (e) {
-                e.preventDefault();                
-                //$('#case__StateSecondary_Id').removeAttr('disabled');      
+                e.preventDefault();
+                //$('#case__StateSecondary_Id').removeAttr('disabled');
                 $('#ButtonClick').val('save');
             });
 
             $("#case-action-save-and-close").click(function (e) {
-                e.preventDefault();                
-                //$('#case__StateSecondary_Id').removeAttr('disabled');                
+                e.preventDefault();
+                //$('#case__StateSecondary_Id').removeAttr('disabled');
                 $('#ButtonClick').val('save');
             });
 
             $("#case-action-save-and-new").click(function (e) {
-                e.preventDefault();                
-                //$('#case__StateSecondary_Id').removeAttr('disabled');                
+                e.preventDefault();
+                //$('#case__StateSecondary_Id').removeAttr('disabled');
                 $('#ButtonClick').val('save');
             });
 
@@ -76,7 +89,7 @@
             if (cfc != '')
                 p3 = "&copyFromCaseId=" + cfc
 
-            //location.href = '/Cases/new?customerId=' + ci + p2 + p3 + '&caseLanguageId=' + cli;       
+            //location.href = '/Cases/new?customerId=' + ci + p2 + p3 + '&caseLanguageId=' + cli;
         });
 
         //HIDE SHOW

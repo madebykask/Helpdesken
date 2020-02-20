@@ -894,7 +894,7 @@ function setPcNumber(userId)
 function CaseInitForm(opt) {
 
     var self = this;
-    var options = opt || { twoAttacmentsMode: false }; 
+    var options = opt || { twoAttacmentsMode: false, fileUploadWhiteList: null };
     var twoAttachmentsMode = opt.twoAttacmentsMode; 
 
     $('#CaseLog_TextExternal').focus(function () {
@@ -1558,6 +1558,20 @@ function CaseInitForm(opt) {
         return fileName;
     }
 
+    var isFileInWhiteList = function(filename, whiteList)
+    {
+        if (filename.indexOf('.') !== -1) {
+            var extension = filename.split('.').reverse()[0];
+            if (whiteList.indexOf(extension) >= 0)
+                return true;
+        }
+        else {
+            if (whiteList.indexOf('') >= 0)
+                return true;
+        }
+        return false;
+    }
+
     //////////////////////////////////////////////////////////////////////////
     //////// Attachments /////////////////////////////////////////////////////
     
@@ -1645,6 +1659,20 @@ function CaseInitForm(opt) {
             init: {
                 FileUploaded: function () {
                     getCaseFiles();
+                },
+
+                FilesAdded: function (up, files) {
+                    if (opt.fileUploadWhiteList != null) {
+                        var whiteList = opt.fileUploadWhiteList; 
+
+                        files.forEach(function (e) {
+                            if (!isFileInWhiteList(e.name, whiteList)) {
+                                up.removeFile(e);
+                                alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                            }
+                        })
+
+                    }
                 },
 
                 Error: function (uploader, e) {

@@ -51,20 +51,33 @@
         $(function () {
 
             var opt = {
-             twoAttacmentsMode: @(Model.EnableTwoAttachments.ToJavaScriptBool())
-            };
+                twoAttacmentsMode: @(Model.EnableTwoAttachments.ToJavaScriptBool()),
+                fileUploadWhiteList: []
+            }
+                
+                @if(Model.HasFileUploadWhiteList)
+                {
+                    foreach(var fileExtension in Model.FileUploadWhiteList)
+                    {
+                        @:opt.fileUploadWhiteList.push('@fileExtension');
+                    }
+                }
+                else
+                {
+                    @:opt.fileUploadWhiteList = null;
+                }
 
-            CaseInitForm(opt);
+                CaseInitForm(opt);
 
-            var dc = function(text) {
-                return $("<div>" + text + "<div>");
-            };
+                var dc = function(text) {
+                    return $("<div>" + text + "<div>");
+                };
 
-            var confirmDialog = function(d, onOk, onCancel) {
-                return d.dialog({
-                    title: '@Translation.GetForJS("Meddelande")',
+                var confirmDialog = function(d, onOk, onCancel) {
+                    return d.dialog({
+                        title: '@Translation.GetForJS("Meddelande")',
                     buttons: [
-                        {
+                            {
                             text: '@Translation.GetForJS("OK")',
                             click: function() {
                                 onOk();
@@ -80,14 +93,14 @@
                         }
                     ],
                     modal: true
-                });
-            };
+                    });
+                };
 
-            var messageDialog = function(d) {
-                return d.dialog({
-                    title: '@Translation.GetForJS("Meddelande")',
+                var messageDialog = function(d) {
+                    return d.dialog({
+                        title: '@Translation.GetForJS("Meddelande")',
                     buttons: [
-                        {
+                            {
                             text: '@Translation.GetForJS("Stäng")',
                             click: function() {
                                 d.dialog("close");
@@ -95,48 +108,48 @@
                         }
                     ],
                     modal: true
-                });
-            };
+                    });
+                };
 
-            var emptyFn = function() {};
+                var emptyFn = function() {};
 
             $("#case-action-save").click(function(e) {
-                e.preventDefault();
+                    e.preventDefault();
                 //$('#case__StateSecondary_Id').removeAttr('disabled');
                 $('#ButtonClick').val('save');
-            });
+                });
 
             $("#case-action-save-and-close").click(function(e) {
-                e.preventDefault();
+                    e.preventDefault();
                 //$('#case__StateSecondary_Id').removeAttr('disabled');
 
                 $('#ButtonClick').val('save');
-            });
+                });
 
             $("#case-action-save-and-new").click(function(e) {
 
-                e.preventDefault();
+                    e.preventDefault();
                 $('#ButtonClick').val('save');
-                //$('#case__StateSecondary_Id').removeAttr('disabled');
-            });
+                    //$('#case__StateSecondary_Id').removeAttr('disabled');
+                });
 
             $("#case-action-close").click(function(e) {
-                e.preventDefault();
+                    e.preventDefault();
 
                 $('#ButtonClick').val('save');
 
-                var targetUrl = $(this).attr("href");
-                UnLockCase('@Model.CaseLock.LockGUID', targetUrl);
-            });
+                    var targetUrl = $(this).attr("href");
+                    UnLockCase('@Model.CaseLock.LockGUID', targetUrl);
+                });
 
             $("#case-action-save-close-and-split").click(function(e) {
-                e.preventDefault();
-                //$('#case__StateSecondary_Id').removeAttr('disabled');
+                    e.preventDefault();
+                    //$('#case__StateSecondary_Id').removeAttr('disabled');
 
-                //$('#ButtonClick').val('save');
+                    //$('#ButtonClick').val('save');
 
-                // Todo set new url
-            });
+                    // Todo set new url
+                });
 
             @*$("#case-action-delete").click(function (e) {
                 if (hasNotInvoicedArticles()) {

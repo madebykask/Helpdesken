@@ -13,7 +13,10 @@
         IList<GlobalSetting> GetGlobalSettings();
         void SaveGlobalSetting(GlobalSetting globalSetting, out IDictionary<string, string> errors);
         void Commit();
-    }
+
+		List<string> GetFileUploadWhiteList();
+
+	}
 
     public class GlobalSettingService : IGlobalSettingService
     {
@@ -53,6 +56,17 @@
             if (errors.Count == 0)
                 this.Commit();
         }
+
+		public List<string> GetFileUploadWhiteList()
+		{
+			var whiteList = (List<string>)null;
+			var settings = _globalSettingRepository.Get();
+			if (settings.FileUploadExtensionWhitelist != null)
+			{
+				whiteList = settings.FileUploadExtensionWhitelist.Split(';').Select(o => o.ToLower()).ToList();
+			}
+			return whiteList;
+		}
 
         public void Commit()
         {
