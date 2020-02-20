@@ -124,51 +124,76 @@ namespace DH.Helpdesk.Web.Controllers
 
         [HttpPost]
         public void UploadCaseFile(string id, string name)
-        {
-            var uploadedFile = this.Request.Files[0];
-            var uploadedData = new byte[uploadedFile.InputStream.Length];
-            uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
+		{
+			var uploadedFile = this.Request.Files[0];
 
-            //int caseId = 0;
-            //if (GuidHelper.IsGuid(id))
-            //{
-            if (_userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))
-            {
-                name = DateTime.Now.ToString() + '-' + name;
-            }
+			// Check file upload while list
+			var extension = Path.GetExtension(uploadedFile.FileName);
 
-            _userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);
-            //}
-            //else if (Int32.TryParse(id, out caseId))
-            //{
-            //    if (_caseFileService.FileExists(int.Parse(id), name))
-            //    {
-            //        name = DateTime.Now.ToString() + '_' + name;
-            //    }
+			if (!CheckExtensionInWhitelist(extension))
+			{
+				throw new ArgumentException($"File extension not valid for upload (not defined in whitelist): {extension}");
+			}
 
-            //    var customerId = _caseService.GetCaseCustomerId(caseId);
-            //    var basePath = _masterDataService.GetFilePath(customerId);
+			var uploadedData = new byte[uploadedFile.InputStream.Length];
+			uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
 
-            //    var caseFileDto = new CaseFileDto(
-            //        uploadedData,
-            //        basePath,
-            //        name,
-            //        DateTime.Now,
-            //        int.Parse(id),
-            //        _workContext.User.UserId);
+			//int caseId = 0;
+			//if (GuidHelper.IsGuid(id))
+			//{
+			if (_userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))
+			{
+				name = DateTime.Now.ToString() + '-' + name;
+			}
 
-            //    var path = "";
-            //    _caseFileService.AddFile(caseFileDto, ref path);
-            //    if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
-            //    {
-            //        var userId = SessionFacade.CurrentUser?.Id ?? 0;
-            //        _fileViewLogService.Log(caseId, userId, caseFileDto.FileName, path, FileViewLogFileSource.Helpdesk,
-            //            FileViewLogOperation.Add);
-            //    }
-            //}
-        }
+			_userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);
+			//}
+			//else if (Int32.TryParse(id, out caseId))
+			//{
+			//    if (_caseFileService.FileExists(int.Parse(id), name))
+			//    {
+			//        name = DateTime.Now.ToString() + '_' + name;
+			//    }
 
-        [HttpPost]
+			//    var customerId = _caseService.GetCaseCustomerId(caseId);
+			//    var basePath = _masterDataService.GetFilePath(customerId);
+
+			//    var caseFileDto = new CaseFileDto(
+			//        uploadedData,
+			//        basePath,
+			//        name,
+			//        DateTime.Now,
+			//        int.Parse(id),
+			//        _workContext.User.UserId);
+
+			//    var path = "";
+			//    _caseFileService.AddFile(caseFileDto, ref path);
+			//    if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
+			//    {
+			//        var userId = SessionFacade.CurrentUser?.Id ?? 0;
+			//        _fileViewLogService.Log(caseId, userId, caseFileDto.FileName, path, FileViewLogFileSource.Helpdesk,
+			//            FileViewLogOperation.Add);
+			//    }
+			//}
+		}
+
+		private bool CheckExtensionInWhitelist(string extension)
+		{
+			var whiteList = _globalSettingService.GetFileUploadWhiteList();
+
+			if (whiteList != null)
+			{
+				extension = extension.Replace(".", "").ToLower();
+				if (!whiteList.Contains(extension))
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		[HttpPost]
         public void UploadLogFile(string id, string name, bool isInternalLog)
         {
             var uploadedFile = Request.Files[0];
