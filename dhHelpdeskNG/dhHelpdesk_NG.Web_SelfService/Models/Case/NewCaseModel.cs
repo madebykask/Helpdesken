@@ -100,9 +100,11 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
         public List<FieldSettingJSModel> JsFieldSettings { get; set; }
 
-        #region Methods
+		public List<string> FileUploadWhiteList { get; set; }
 
-        public CaseControlsPanelModel CreateCaseControlsPanelModel(int position = 1)
+		#region Methods
+
+		public CaseControlsPanelModel CreateCaseControlsPanelModel(int position = 1)
         {
             return new CaseControlsPanelModel(position, false);
         }

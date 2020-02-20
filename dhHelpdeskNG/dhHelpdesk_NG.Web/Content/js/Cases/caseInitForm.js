@@ -1766,6 +1766,20 @@ function CaseInitForm(opt) {
                     getLogFiles.call(self, isInternalLog);
                 },
 
+                FilesAdded: function (up, files) {
+                    if (opt.fileUploadWhiteList != null) {
+                        var whiteList = opt.fileUploadWhiteList; 
+
+                        files.forEach(function (e) {
+                            if (!isFileInWhiteList(e.name, whiteList)) {
+                                up.removeFile(e);
+                                alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                            }
+                        })
+
+                    }
+                },
+
                 Error: function (uploader, e) {
                     if (e.status != 409) {
                         return;

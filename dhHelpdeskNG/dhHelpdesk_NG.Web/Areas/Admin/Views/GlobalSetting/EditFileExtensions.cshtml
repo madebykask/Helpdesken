@@ -1,0 +1,77 @@
+﻿
+@using System.Globalization
+@using DH.Helpdesk.Common.Constants
+@using DH.Helpdesk.Web.Areas.Admin.Models
+@model FileUploadExtensionsModel
+
+@{
+    ViewBag.Title = "Edit file extension";
+}
+@using (Html.BeginForm("EditFileExtensions", "globalsetting", new { texttypeid = 0, compareMethod = 1 }, FormMethod.Post, new { id = "target" }))
+{
+
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "EditFileExtension", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { texttypeid = 0, compareMethod = 1 }, new { @class = "btn" })</li>
+            </ul>
+        </div>
+    </div>
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a href="#fragment-4">@Translation.Get("Giltiga filändelser vid uppladdning av filer", Enums.TranslationSource.TextTranslation)</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-4">
+                    <div class="container">
+
+                        <table class="tableform">
+                            <tbody>
+                                <tr>
+                                    <td class="span4">@Translation.GetCoreTextTranslation("Begränsa filändelser vid uppladdning av filer")</td>
+                                    <td>@Html.CheckBoxFor(model => model.UseFileExtensionWhiteList, new { @class = "switchcheckbox" })</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="table table-striped table-bordered table-hover" id="tblFileExtensions" style="@(Model.UseFileExtensionWhiteList ? "" : "display: none;")">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Translation.GetCoreTextTranslation("Gilitiga filändelser vid uppladdning av filer")
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr>
+                                        <td>
+                                            @Html.TextAreaFor(model => model.FileExtensions, new { style = "width:600px; height:300px;", maxlength = "5000" })
+                                        </td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                        
+                        
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+        $(function () {
+            $('#UseFileExtensionWhiteList').on('switchChange.bootstrapSwitch', function (e, data) {
+                var show = data;
+                if (show)
+                    $('#tblFileExtensions').show();
+                else
+                    $('#tblFileExtensions').hide();
+            });
+        });
+        </script>
+
+}
+

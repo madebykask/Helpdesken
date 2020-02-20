@@ -16,6 +16,8 @@
 
 		List<string> GetFileUploadWhiteList();
 
+		void SetFileUploadWhiteList(List<string> fileExtensions);
+
 	}
 
     public class GlobalSettingService : IGlobalSettingService
@@ -68,7 +70,22 @@
 			return whiteList;
 		}
 
-        public void Commit()
+		public void SetFileUploadWhiteList(List<string> fileExtensions)
+		{
+			var settings = _globalSettingRepository.Get();
+			if (fileExtensions != null)
+			{
+				settings.FileUploadExtensionWhitelist = fileExtensions.Aggregate((o, p) => o + ";" + p);
+			}
+			else
+			{
+				// null is disabled
+				settings.FileUploadExtensionWhitelist = null;
+			}
+			Commit();
+		}
+
+		public void Commit()
         {
             this._unitOfWork.Commit();
         }

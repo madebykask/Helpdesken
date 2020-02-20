@@ -17,6 +17,7 @@
         var departmentsUrl = window.appParameters.fetchDepartmentsUrl;
         var OUsUrl = window.appParameters.fetchOUUrl;
         var setProductAreaByCaseTypeUrl = window.appParameters.setProductAreaByCaseTypeUrl;
+        var fileUploadWhiteList = window.appParameters.fileUploadWhiteList;
 
         var customerId;
         var alreadyExistFileIds = [];
@@ -188,6 +189,19 @@
             if (impactSetting == null || (impactSetting != null && !impactSetting.IsVisible))
                 return true;
 
+            return false;
+        }
+
+        var isFileInWhiteList = function (filename, whiteList) {
+            if (filename.indexOf('.') !== -1) {
+                var extension = filename.split('.').reverse()[0];
+                if (whiteList.indexOf(extension) >= 0)
+                    return true;
+            }
+            else {
+                if (whiteList.indexOf('') >= 0)
+                    return true;
+            }
             return false;
         }
 
@@ -380,6 +394,19 @@
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");
                     up.refresh();
+                },
+                FilesAdded: function (up, files) {
+                    if (fileUploadWhiteList != null) {
+                        var whiteList = fileUploadWhiteList;
+
+                        files.forEach(function (e) {
+                            if (!isFileInWhiteList(e.name, whiteList)) {
+                                up.removeFile(e);
+                                alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                            }
+                        })
+
+                    }
                 },
 
                 Error: function (uploader, e) {
