@@ -1191,7 +1191,7 @@ Module DH_Helpdesk_Mail
         End If
         If (deniedFiles.Any()) Then
             Dim deniedFilesContent As String = deniedFiles.Aggregate(Function(o As String, p As String) o & Environment.NewLine & p)
-            Dim filePath As String = Path.Combine(saveDirPath, "blocked files " & DateTime.UtcNow.ToString("yyyy-MM-dd HH_mm_ss") & ".txt")
+            Dim filePath As String = Path.Combine(saveDirPath, "blocked files.txt")
             File.WriteAllText(filePath, deniedFilesContent)
 
             files.Add(filePath)
