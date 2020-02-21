@@ -1976,6 +1976,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(currentCase.Id).Select(x => x.Follower).ToArray();
             var followerUsers = caseFolowerUsers.Any() ? string.Join(";", caseFolowerUsers) + ";" : string.Empty;
 
+			var whiteList = _globalSettingService.GetFileUploadWhiteList();
+
             //
             var model = new CaseOverviewModel
             {
@@ -2006,8 +2008,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                 ShowCaseActionsPanelOnTop = currentCustomer.ShowCaseActionsPanelOnTop,
                 ShowCaseActionsPanelAtBottom = currentCustomer.ShowCaseActionsPanelAtBottom,
                 ApplicationType = CurrentApplicationType,
-                ShowCommunicationForSelfService = appSettings.ShowCommunicationForSelfService
-            };
+                ShowCommunicationForSelfService = appSettings.ShowCommunicationForSelfService,
+				FileUploadWhiteList = whiteList
+			};
             
             return model;
         }

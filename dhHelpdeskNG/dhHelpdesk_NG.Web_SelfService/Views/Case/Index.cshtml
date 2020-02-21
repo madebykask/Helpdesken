@@ -12,6 +12,24 @@
     <link href="@Url.Content("~/Content/css/case-mobile.css")" rel="stylesheet" type="text/css" />
 }
 
+<script type="text/javascript">
+    window.appParameters = {
+        fileUploadWhiteList: []
+    };
+
+    @if (Model.FileUploadWhiteList != null)
+    {
+    foreach (var fileExtension in Model.FileUploadWhiteList)
+    {
+        @:window.appParameters.fileUploadWhiteList.push('@fileExtension');
+        }
+        }
+        else
+        {
+            @:window.appParameters.fileUploadWhiteList = null;
+        }
+</script>
+
 @if (TempData["NotFound"] != null)
 {
     <div class="jumbotron greybar">

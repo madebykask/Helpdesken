@@ -1,8 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FileUploader, FileUploaderOptions, FileItem, ParsedResponseHeaders } from 'ng2-file-upload';
-import { AuthenticationService } from 'src/app/services/authentication';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MbscListviewOptions } from '@mobiscroll/angular';
+import { FileItem, FileUploader, FileUploaderOptions, ParsedResponseHeaders, FileLikeObject } from 'ng2-file-upload';
 import { CaseFilesApiService } from 'src/app/modules/case-edit-module/services/api/case/case-files-api.service';
+import { AuthenticationService } from 'src/app/services/authentication';
+import { map, take } from 'rxjs/operators';
 
 @Component({
   selector: 'case-files-upload',
@@ -14,6 +15,8 @@ export class CaseFilesUploadComponent {
   @Output() NewFileUploadComplete: EventEmitter<any> = new EventEmitter<any>();
   @Input('caseKey') caseKey: string;
   @Input('customerId') customerId: number;
+
+  whiteList: string[] = [];
 
   fileUploader = new FileUploader({});
 
@@ -42,12 +45,12 @@ export class CaseFilesUploadComponent {
 
   ngOnInit() {
     const accessToken = this.authenticationService.getAuthorizationHeaderValue();
-
+    this.caseFileApiService.getFileUploadWhiteList().pipe(take(1), map((o: any) => this.buildWhiteList(o)));
 
     // init file uploader
     this.fileUploader.setOptions(<FileUploaderOptions>{
       autoUpload: true,
-      filters: [],
+      filters: [ { name: 'IsInWhiteList', fn: (item: any) => this.isInWhiteList(item) }],
       isHTML5: true,
       authToken: accessToken,
       url: this.caseFileApiService.getCaseFileUploadUrl(this.caseKey, this.customerId)
@@ -57,6 +60,7 @@ export class CaseFilesUploadComponent {
     this.fileUploader.onBeforeUploadItem = this.onBeforeUpload.bind(this);
     this.fileUploader.onBuildItemForm = this.processFileUploadRequest.bind(this);
     this.fileUploader.onCompleteItem = this.onFileUploadComplete.bind(this);
+    this.fileUploader.onWhenAddingFileFailed = this.onWhenAddingFileFailed.bind(this);
 
     // FileUploader events:
     // this.uploader.onAfterAddingFile(fileItem: FileItem): any;
@@ -77,6 +81,8 @@ export class CaseFilesUploadComponent {
 
   private onBeforeUpload(fileItem: FileItem) {
       //let fi = fileItem;
+      //let wait = true;
+      //return false;
   }
 
   private onFileUploadComplete(fileItem: FileItem, response: string, status: number, headers: ParsedResponseHeaders) {
@@ -99,6 +105,18 @@ export class CaseFilesUploadComponent {
       fileItem.cancel();
     }
     fileItem.remove();
+  }
+
+  private onWhenAddingFileFailed(item: FileLikeObject, filter: any, options: any) : any {
+    alert(`File extension not supported for: ${item.name}`);
+  }
+
+  private isInWhiteList(item: any) : Boolean {
+    return true;
+  }
+
+  private buildWhiteList(item: any) {
+    return true;
   }
 
   getStatusStyles(item: FileItem) {

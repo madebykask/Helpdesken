@@ -9,6 +9,7 @@ $(function () {
         var params = window.caseLogsParameters;
         window.selfService = window.selfService || {};
         window.selfService.caseLog = window.selfService.caseLog || new CaseLog(params);
+        var fileUploadWhiteList = window.appParameters.fileUploadWhiteList;
         
         var uploadLogFileUrl = params.uploadLogFileUrl;
         var logFileKey = params.logFileKey;
@@ -16,6 +17,19 @@ $(function () {
         var fileAlreadyExistsMsg = params.fileAlreadyExistsMsg;
         
         var alreadyExistFileIds = [];
+
+        var isFileInWhiteList = function (filename, whiteList) {
+            if (filename.indexOf('.') !== -1) {
+                var extension = filename.split('.').reverse()[0];
+                if (whiteList.indexOf(extension) >= 0)
+                    return true;
+            }
+            else {
+                if (whiteList.indexOf('') >= 0)
+                    return true;
+            }
+            return false;
+        }
 
         PluploadTranslation($("#caseLog_languageId").val());
 
@@ -41,6 +55,19 @@ $(function () {
                     $(".plupload_buttons").css("display", "inline");
                     $(".plupload_upload_status").css("display", "inline");
                     up.refresh();
+                },
+                FilesAdded: function (up, files) {
+                    if (fileUploadWhiteList != null) {
+                        var whiteList = fileUploadWhiteList;
+
+                        files.forEach(function (e) {
+                            if (!isFileInWhiteList(e.name, whiteList)) {
+                                up.removeFile(e);
+                                alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                            }
+                        })
+
+                    }
                 },
 
                 Error: function (uploader, e) {

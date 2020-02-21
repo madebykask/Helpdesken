@@ -122,6 +122,7 @@ namespace DH.Helpdesk.Web.Controllers
             return PartialView("_CaseLogFiles", model);
         }
 
+
         [HttpPost]
         public void UploadCaseFile(string id, string name)
 		{
@@ -130,7 +131,7 @@ namespace DH.Helpdesk.Web.Controllers
 			// Check file upload while list
 			var extension = Path.GetExtension(uploadedFile.FileName);
 
-			if (!CheckExtensionInWhitelist(extension))
+			if (!_globalSettingService.IsExtensionInWhitelist(extension))
 			{
 				throw new ArgumentException($"File extension not valid for upload (not defined in whitelist): {extension}");
 			}
@@ -177,22 +178,6 @@ namespace DH.Helpdesk.Web.Controllers
 			//}
 		}
 
-		private bool CheckExtensionInWhitelist(string extension)
-		{
-			var whiteList = _globalSettingService.GetFileUploadWhiteList();
-
-			if (whiteList != null)
-			{
-				extension = extension.Replace(".", "").ToLower();
-				if (!whiteList.Contains(extension))
-				{
-					return false;
-				}
-			}
-
-			return true;
-		}
-
 		[HttpPost]
         public void UploadLogFile(string id, string name, bool isInternalLog)
         {
@@ -201,7 +186,7 @@ namespace DH.Helpdesk.Web.Controllers
 			// Check file upload while list
 			var extension = Path.GetExtension(uploadedFile.FileName);
 
-			if (!CheckExtensionInWhitelist(extension))
+			if (!_globalSettingService.IsExtensionInWhitelist(extension))
 			{
 				throw new ArgumentException($"File extension not valid for upload (not defined in whitelist): {extension}");
 			}

@@ -17,7 +17,7 @@
 		List<string> GetFileUploadWhiteList();
 
 		void SetFileUploadWhiteList(List<string> fileExtensions);
-
+		bool IsExtensionInWhitelist(string extension);
 	}
 
     public class GlobalSettingService : IGlobalSettingService
@@ -89,5 +89,21 @@
         {
             this._unitOfWork.Commit();
         }
-    }
+
+		public bool IsExtensionInWhitelist(string extension)
+		{
+			var whiteList = this.GetFileUploadWhiteList();
+
+			if (whiteList != null)
+			{
+				extension = extension.Replace(".", "").ToLower();
+				if (!whiteList.Contains(extension))
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+	}
 }
