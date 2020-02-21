@@ -20,6 +20,7 @@ using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.ActionResults;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
+using System;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -33,6 +34,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICaseFieldSettingService _caseFieldSettingService;
 		private readonly IFeatureToggleService _featureToggleService;
 		private readonly IFileViewLogService _fileViewLogService;
+		private readonly IGlobalSettingService _globalSettingService;
 
 		public CaseLogFilesController(
             ILogFileService logFileService,
@@ -41,7 +43,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             ISettingsLogic settingsLogic, 
             ICaseFieldSettingService caseFieldSettingService,
 			IFeatureToggleService featureToggleService,
-			IFileViewLogService fileViewLogService)
+			IFileViewLogService fileViewLogService,
+			IGlobalSettingService globalSettingService)
         {
             _caseFileService = caseFileService;
             _logFileService = logFileService;
@@ -50,6 +53,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
 			_featureToggleService = featureToggleService;
 			_fileViewLogService = fileViewLogService;
+			_globalSettingService = globalSettingService;
 
 		}
 
@@ -121,8 +125,15 @@ namespace DH.Helpdesk.WebApi.Controllers
                 var fileBytes = await stream.ReadAsByteArrayAsync();
                 var fileName = stream.Headers.ContentDisposition.FileName.Unquote().Trim();
 
-                //fix file name if exists
-                var counter = 1;
+				var extension = Path.GetExtension(fileName);
+
+				if (!_globalSettingService.IsExtensionInWhitelist(extension))
+				{
+					throw new ArgumentException($"File extension not valid for upload (not defined in whitelist): {extension}");
+				}
+
+				//fix file name if exists
+				var counter = 1;
                 var newFileName = fileName;
                 var moduleName = type.GetFolderPrefix();
                 while(_userTemporaryFilesStorage.FileExists(newFileName, caseId, moduleName))

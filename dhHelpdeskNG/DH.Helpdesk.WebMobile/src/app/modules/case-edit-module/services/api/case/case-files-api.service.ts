@@ -40,6 +40,11 @@ export class CaseFilesApiService extends HttpApiServiceBase {
         return this.deleteResource(url);
     }
 
+    getFileUploadWhiteList(): Observable<any> {
+      const url = this.buildResourseUrl('/api/case/file/getFileUploadWhiteList', {}, false, false);
+      return this.postJson<any>(url, null);
+  }
+
     deleteTemplFiles(caseId: number, customerId: number): Observable<any> {
       const url = this.buildResourseUrl(`/api/case/${caseId}/tempfiles`, { cid: customerId }, false, false);
       return this.deleteResource(url);

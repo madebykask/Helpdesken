@@ -139,7 +139,13 @@ namespace DH.Helpdesk.SelfService.Controllers
             {
                 if (GuidHelper.IsGuid(id))
                 {
-                    if (_userTemporaryFilesStorage.FileExists(name, id))
+					var extension = Path.GetExtension(name);
+
+					if (!_globalSettingsService.IsExtensionInWhitelist(extension))
+					{
+						throw new ArgumentException($"File extension not valid for upload (not defined in whitelist): {extension}");
+					}
+					if (_userTemporaryFilesStorage.FileExists(name, id))
                         throw new HttpException((int) HttpStatusCode.Conflict, null);
 
                     _userTemporaryFilesStorage.AddFile(uploadedData, name, id);
@@ -157,7 +163,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 {
 					var extension = Path.GetExtension(name);
 
-					if (!CheckExtensionInWhitelist(extension))
+					if (!_globalSettingsService.IsExtensionInWhitelist(extension))
 					{
 						throw new ArgumentException($"File extension not valid for upload (not defined in whitelist): {extension}");
 					}
@@ -168,23 +174,6 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
             }
         }
-
-
-		private bool CheckExtensionInWhitelist(string extension)
-		{
-			var whiteList = _globalSettingsService.GetFileUploadWhiteList();
-
-			if (whiteList != null)
-			{
-				extension = extension.Replace(".", "").ToLower();
-				if (!whiteList.Contains(extension))
-				{
-					return false;
-				}
-			}
-
-			return true;
-		}
 
 		[HttpPost]
         public void DeleteNewCaseFile(string id, string fileName)
@@ -296,7 +285,14 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             if (GuidHelper.IsGuid(id))
             {
-                var fileContent = Request.GetFileContent();
+				var extension = Path.GetExtension(name);
+
+				if (!_globalSettingsService.IsExtensionInWhitelist(extension))
+				{
+					throw new ArgumentException($"File extension not valid for upload (not defined in whitelist): {extension}");
+				}
+
+				var fileContent = Request.GetFileContent();
 
                 if (_userTemporaryFilesStorage.FileExists(name, id, logSubFolder))
                 {
