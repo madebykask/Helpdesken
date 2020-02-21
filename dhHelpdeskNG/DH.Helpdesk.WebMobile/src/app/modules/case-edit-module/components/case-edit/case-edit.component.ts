@@ -268,11 +268,15 @@ export class CaseEditComponent {
                   this.isLoaded = false;
                   this.isEcLoaded = false;
                   this.currentTab = TabNames.Case;
-                  return this.caseSaveService.saveCase(this.form, this.caseData).pipe(
+                  let caseId = this.caseSaveService.saveCase(this.form, this.caseData).pipe(
                       take(1),
-                      map(() => true),
+                      map((caseId: number) => {
+                        this.caseId = caseId;
+                        return true;
+                      }),
                       catchError((e) => throwError(e))
                   );
+                  return caseId;
                 } else {
                   return EMPTY.pipe(defaultIfEmpty(false));
                 }
@@ -292,7 +296,17 @@ export class CaseEditComponent {
         catchError((e) => throwError(e))
       ).subscribe((isSaved: boolean) => {
         if (isSaved) {
-          reload ? this.ngOnInit() : this.goToCases();
+          if (reload) {
+              if (this.caseData.id == 0) { // New case route to saved case
+                this.router.navigate(['/case', this.caseId ]);
+              }
+              else {
+                this.ngOnInit();
+              }
+            }
+          else {
+            this.goToCases();
+          }
         }
       });
       this.syncExtendedCaseValues();
