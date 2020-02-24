@@ -3,6 +3,7 @@
 @model DH.Helpdesk.Web.Models.HomeIndexViewModel
 @{
     ViewBag.Title = "Helpdesk start page";
+    var showStatisticsWidget = Model.UserModules.Any(u => (Module) u.Module_Id == Module.Statistics && u.isVisible);
 }
 
 @Scripts.Render("~/bundles/modules")
@@ -94,7 +95,7 @@
         data-usermodules="item" 
         data-usermodules-moduleid="@(GetModuleId(Module.Statistics))"
         data-usermodules-position="@(GetModulePosition(Module.Statistics))">
-        @if (Model.UserModules.Any(u => (Module)u.Module_Id == Module.Statistics && u.isVisible))
+        @if (showStatisticsWidget)
         {
             Html.RenderPartial("StatisticsInfo", Model.StatisticsOverviews);
         }
@@ -237,7 +238,7 @@
     });
 
 </script>
-@if (Model.StatisticsOverviews != null)
+@if (showStatisticsWidget)
 {
     <script type="text/javascript">
         dhHelpdesk.statistics.init({
