@@ -179,7 +179,7 @@
             this.Property(x => x.CaseFile).IsOptional();
             this.Property(x => x.LogFile).IsOptional();
             this.Property(x => x.CaseLog).IsOptional();
-            this.Property(x => x.ClosingReason).IsOptional();
+            this.Property(x => x.ClosingReason).IsOptional().HasMaxLength(300);
             this.Property(x => x.CostCentre).IsOptional().HasMaxLength(50);
             this.Property(x => x.IsAbout_Persons_Name).IsOptional().HasMaxLength(50);
             this.Property(x => x.IsAbout_ReportedBy).IsOptional().HasMaxLength(40);
