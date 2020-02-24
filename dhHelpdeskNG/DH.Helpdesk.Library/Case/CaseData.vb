@@ -798,11 +798,17 @@ Public Class CaseData
         Dim dr As DataRow
 
         Try
-            sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " &
+            sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, " &
+                        "tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " &
                         "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
-                        "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, tblUsers.FirstName AS PerformerFirstName, tblUsers.SurName AS PerformerSurName, tblUsers.EMail AS PerformerEMail, " &
+                        "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, " &
+                        "tblUsers.FirstName AS PerformerFirstName, tblUsers.SurName AS PerformerSurName, tblUsers.EMail AS PerformerEMail, " &
                         "u2.FirstName AS RegUserFirstName, u2.SurName AS RegUserSurName, tblCase.WorkingGroup_Id," &
                         "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName,  tblPriority.PriorityDescription, " &
+                        "tblCase.Project_Id, tblCase.System_Id, tblCase.Urgency_Id, tblCase.Impact_Id, tblCase.Supplier_Id, tblCase.SMS, tblCase.VerifiedDescription, " &
+                        "tblCase.SolutionRate, tblCase.InventoryType, tblCase.InventoryLocation, tblCase.Cost, tblCase.OtherCost, tblCase.Currency, tblCase.ContactBeforeAction, " &
+                        "tblCase.Change_Id,  tblCase.Problem_Id, tblCase.FinishingDescription, tblCase.PlanDate, tblCase.CausingPartId, tblCase.AgreedDate, tblCase.Verified, " &
+                        "tblCase.RegistrationSourceCustomer_Id," &
                         "tblCase.RegTime, tblCase.ChangeTime, u3.FirstName AS ChangedName, u3.SurName AS ChangedSurName, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " &
                         "tblWorkingGroup.WorkingGroup AS PerformerWorkingGroup, tblWorkingGroup.Id AS PerformerWorkingGroup_Id, tblWorkingGroup.AllocateCaseMail AS PerformerWorkingGroupAllocateCaseMail, " &
                         "tblWorkingGroup_1.WorkingGroup AS CaseWorkingGroup, ISNULL(tblWorkingGroup_1.WorkingGroupEMail, '') AS WorkingGroupEMail, tblWorkingGroup_1.AllocateCaseMail AS AllocateCaseMail, " &
