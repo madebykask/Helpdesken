@@ -43,6 +43,7 @@ namespace DH.Helpdesk.Services.Services
     {
         private readonly IContractRepository _contractRepository;
         private readonly IContractHistoryRepository _contractHistoryRepository;
+        private readonly IContractLogRepository _contractLogRepository;
         private readonly IContractFieldSettingsRepository _contractFieldSettingsRepository;
         private readonly IContractFileRepository _contractFileRepository;
         private readonly IUnitOfWork _unitOfwork;
@@ -50,12 +51,14 @@ namespace DH.Helpdesk.Services.Services
         public ContractService(
             IContractRepository contractRepository,
             IContractHistoryRepository contractHistoryRepository,
+            IContractLogRepository contractLogRepository,
             IContractFieldSettingsRepository contractFieldSettingsRepository,
             IContractFileRepository contractFileRepository,
             IUnitOfWork unitOfWork)
         {
             _contractRepository = contractRepository;
             _contractHistoryRepository = contractHistoryRepository;
+            _contractLogRepository = contractLogRepository;
             _contractFieldSettingsRepository = contractFieldSettingsRepository;
             _contractFileRepository = contractFileRepository;
             _unitOfwork = unitOfWork;
@@ -419,6 +422,9 @@ namespace DH.Helpdesk.Services.Services
         public void DeleteContract(Contract contract)
         {
             _contractHistoryRepository.Delete(c => c.Contract_Id == contract.Id);
+            _contractHistoryRepository.Commit();
+
+            _contractLogRepository.Delete(c => c.Contract_Id == contract.Id);
             _contractHistoryRepository.Commit();
 
             DeleteAllContractFiles(contract.Id);

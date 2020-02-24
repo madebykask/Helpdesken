@@ -348,6 +348,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface IContractLogRepository : IRepository<ContractLog>
     {
+        ContractLog getContractLogByCaseId(int case_Id);
+        void DeleteContractLogs(ContractLog contractLog);
     }
 
     public class ContractLogRepository : RepositoryBase<ContractLog>, IContractLogRepository
@@ -355,6 +357,15 @@ namespace DH.Helpdesk.Dal.Repositories
         public ContractLogRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
+        }
+        public ContractLog getContractLogByCaseId(int case_Id)
+        {
+            var query = Table.Where(cl => cl.Case_Id == case_Id);
+            return query.FirstOrDefault(); ;
+        }
+        public void DeleteContractLogs(ContractLog contractLog)
+        {
+            Table.Remove(contractLog);
         }
     }
 

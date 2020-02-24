@@ -102,8 +102,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly IEntityToBusinessModelMapper<CaseFilterFavoriteEntity, CaseFilterFavorite> _caseFilterFavoriteToBusinessModelMapper;
         private readonly ICustomerUserRepository _customerUserRepository;
 		private readonly IGlobalSettingService _globalSettingService;
+        private readonly IContractLogRepository _contractLogRepository;
 
-		public CaseService(
+        public CaseService(
             ICaseRepository caseRepository,
             ICaseFileRepository caseFileRepository,
             ICaseHistoryRepository caseHistoryRepository,
@@ -151,7 +152,8 @@ namespace DH.Helpdesk.Services.Services
             ICaseTypeRepository caseTypeRepository,
             ICategoryRepository categoryRepository,
             ICustomerUserRepository customerUserRepository,
-			IGlobalSettingService globalSettingService)
+			IGlobalSettingService globalSettingService,
+            IContractLogRepository contractLogRepository)
         {
             _customerUserRepository = customerUserRepository;
             _caseFilterFavoriteToBusinessModelMapper = caseFilterFavoriteToBusinessModelMapper;
@@ -203,8 +205,8 @@ namespace DH.Helpdesk.Services.Services
             _caseTypeRepository = caseTypeRepository;
             _categoryRepository = categoryRepository;
 			_globalSettingService = globalSettingService;
-
-		}
+            _contractLogRepository = contractLogRepository;
+        }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
         {
@@ -537,6 +539,10 @@ namespace DH.Helpdesk.Services.Services
             // delete Invoice
             _invoiceArticleService.DeleteCaseInvoices(id);
 
+            // delete contract log
+            var contractLog = _contractLogRepository.getContractLogByCaseId(id);
+            if (contractLog != null)
+            _contractLogRepository.Delete(contractLog);
 
             //delete FollowUp
             _caseFollowUpService.DeleteFollowUp(id);
