@@ -29,7 +29,7 @@ export class LogService {
 
     info(msg: string) {
         if (this.isInfo) {
-            console.info('[info]:' + msg);
+            console.log('[info]:' + msg);
         }
     }
 
@@ -55,11 +55,12 @@ export class LogService {
 
     error(msg: string) {
         if (this.isError) {
+            // error shows trace to a calling method, not error stack trace.
             console.error('[error]:' + msg);
         }
     }
 
-    private buildFormattedString(template:string, args:any[]) : string {
+    private buildFormattedString(template: string, args: any[]): string {
         let formattedArgs = this.formatArgs(args);
         let s = cm.formatString(template, formattedArgs);
         return s;
