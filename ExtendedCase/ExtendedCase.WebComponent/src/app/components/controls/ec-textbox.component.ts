@@ -16,7 +16,7 @@ export class ExtendedCaseTextBoxComponent extends BaseControl implements OnInit,
     @Input() form: FormGroup;
     @Input() subtype = '';
     maskTypes = MaskType;
-    controlType = new FormControlType(); //to  use in html static string
+    controlType = new FormControlType(); // to  use in html static string
 
     constructor(componentCommService: ComponentCommService,
         private changeDetector: ChangeDetectorRef) {
@@ -27,11 +27,11 @@ export class ExtendedCaseTextBoxComponent extends BaseControl implements OnInit,
         if (this.subtype === FormControlType.Unit) {
             this.fieldTemplate.addonText = this.fieldTemplate.addonText || 'Unit';
         }
-        //console.log("ngOnChanges " + this.fieldModel.id);
+        // console.log("ngOnChanges " + this.fieldModel.id);
     }
 
     ngDoCheck(): void {
-        //console.log("ngDoCheck " +this.fieldModel.id);
+        // console.log("ngDoCheck " +this.fieldModel.id);
     }
 
     ngOnInit(): void {
