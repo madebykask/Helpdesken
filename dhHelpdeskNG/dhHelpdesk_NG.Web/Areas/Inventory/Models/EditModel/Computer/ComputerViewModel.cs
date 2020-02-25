@@ -1,11 +1,12 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer
 {
-    using System;
+	using System;
 
-    using DH.Helpdesk.Common.Types;
-    using DH.Helpdesk.Common.ValidationAttributes;
+	using DH.Helpdesk.Common.Types;
+	using DH.Helpdesk.Common.ValidationAttributes;
+	using System.Collections.Generic;
 
-    public class ComputerViewModel
+	public class ComputerViewModel
     {
         public ComputerViewModel()
         {
@@ -28,7 +29,8 @@
             OperatingSystemFieldsViewModel operatingSystemFieldsViewModel,
             OrganizationFieldsViewModel organizationFieldsViewModel,
             ProccesorFieldsViewModel proccesorFieldsViewModel,
-            WorkstationFieldsViewModel workstationFieldsViewModel)
+            WorkstationFieldsViewModel workstationFieldsViewModel,
+			List<string> fileUploadWhiteList)
         {
             this.DateFieldsModel = dateFields;
             this.CommunicationFieldsViewModel = communicationFieldsViewModel;
@@ -47,6 +49,7 @@
             this.OrganizationFieldsViewModel = organizationFieldsViewModel;
             this.ProccesorFieldsViewModel = proccesorFieldsViewModel;
             this.WorkstationFieldsViewModel = workstationFieldsViewModel;
+			this.FileUploadWhiteList = fileUploadWhiteList;
         }
 
         [IsId]
@@ -114,7 +117,9 @@
         [NotNull]
         public WorkstationFieldsViewModel WorkstationFieldsViewModel { get;  set; }
 
-        public bool IsForDialog { get; set; }
+		public List<string> FileUploadWhiteList { get; set; }
+
+		public bool IsForDialog { get; set; }
         public string UserId { get; set; }
     }
 }

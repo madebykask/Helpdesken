@@ -3,31 +3,31 @@ using DH.Helpdesk.Web.Common.Tools.Files;
 
 namespace DH.Helpdesk.Web.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Web;
-    using System.Web.Mvc;
-    using System.Web.Routing;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Net;
+	using System.Web;
+	using System.Web.Mvc;
+	using System.Web.Routing;
 
-    using DH.Helpdesk.BusinessData.Models.Projects.Input;
-    using DH.Helpdesk.BusinessData.Models.Projects.Output;
-    using DH.Helpdesk.BusinessData.Models.Shared.Input;
-    using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Enums;
-    using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.Attributes;
-    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Projects;
-    using DH.Helpdesk.Web.Infrastructure.Filters.Projects;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Projects;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Models.Projects;
-    
+	using DH.Helpdesk.BusinessData.Models.Projects.Input;
+	using DH.Helpdesk.BusinessData.Models.Projects.Output;
+	using DH.Helpdesk.BusinessData.Models.Shared.Input;
+	using DH.Helpdesk.Common.Tools;
+	using DH.Helpdesk.Dal.Enums;
+	using DH.Helpdesk.Services.Services;
+	using DH.Helpdesk.Web.Enums;
+	using DH.Helpdesk.Web.Infrastructure;
+	using DH.Helpdesk.Web.Infrastructure.Attributes;
+	using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Projects;
+	using DH.Helpdesk.Web.Infrastructure.Filters.Projects;
+	using DH.Helpdesk.Web.Infrastructure.ModelFactories.Projects;
+	using DH.Helpdesk.Web.Infrastructure.Tools;
+	using DH.Helpdesk.Web.Models.Projects;
+	using System.IO;
 
-    public class ProjectsController : BaseController
+	public class ProjectsController : BaseController
     {
         public const string ProjectTabName = "#fragment-1";
 
@@ -62,8 +62,9 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IMasterDataService masterDataService;
 
         private readonly ISettingService settingService;
+		private readonly IGlobalSettingService _globalSettingService;
 
-        public ProjectsController(
+		public ProjectsController(
             IMasterDataService masterDataService,
             IProjectService projectService,
             IUserService userService,
@@ -78,7 +79,8 @@ namespace DH.Helpdesk.Web.Controllers
             IIndexProjectViewModelFactory indexProjectViewModelFactory,
             IEditorStateCacheFactory userEditorValuesStorageFactory,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
-            ISettingService settingService)
+            ISettingService settingService,
+			IGlobalSettingService globalSettingService)
             : base(masterDataService)
         {
             this.masterDataService = masterDataService;
@@ -94,8 +96,10 @@ namespace DH.Helpdesk.Web.Controllers
             this.updatedProjectScheduleFactory = updatedProjectScheduleFactory;
             this.indexProjectViewModelFactory = indexProjectViewModelFactory;
             this.settingService = settingService;
+			_globalSettingService = globalSettingService;
 
-            this.userEditorValuesStorage = userEditorValuesStorageFactory.CreateForModule(ModuleName.Project);
+
+			this.userEditorValuesStorage = userEditorValuesStorageFactory.CreateForModule(ModuleName.Project);
             this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Project);
         }
 
@@ -220,7 +224,7 @@ namespace DH.Helpdesk.Web.Controllers
             var cs = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
             var users = this.userService.GetCustomerUsers(SessionFacade.CurrentCustomer.Id);
 
-            var viewModel = this.newProjectViewModelFactory.Create(users.MapToSelectList(cs), Guid.NewGuid().ToString());
+            var viewModel = this.newProjectViewModelFactory.Create(users.MapToSelectList(cs), Guid.NewGuid().ToString(), _globalSettingService);
             return this.View(viewModel);
         }
 
@@ -232,7 +236,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 var cs = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
                 var users = this.userService.GetCustomerUsers(SessionFacade.CurrentCustomer.Id);
-                var model = this.newProjectViewModelFactory.Create(users.MapToSelectList(cs), guid);
+                var model = this.newProjectViewModelFactory.Create(users.MapToSelectList(cs), guid, _globalSettingService);
                 model.ProjectEditModel = projectEditModel;
                 return this.View(model);
             }
@@ -357,7 +361,13 @@ namespace DH.Helpdesk.Web.Controllers
                 throw new HttpException((int)HttpStatusCode.NoContent, null);
             }
 
-            var uploadedData = new byte[uploadedFile.InputStream.Length];
+			var extension = Path.GetExtension(name);
+			if (!_globalSettingService.IsExtensionInWhitelist(extension))
+			{
+				throw new ArgumentException($"File extension not valid: {name}");
+			}
+
+			var uploadedData = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
 
             if (this.userTemporaryFilesStorage.FileExists(name, guid))
@@ -449,7 +459,8 @@ namespace DH.Helpdesk.Web.Controllers
                 projectCollaborators,
                 projectSchedules,
                 projectLogs,
-                cases);
+                cases,
+				_globalSettingService);
 
             foreach (var log in viewModel.ProjectLogs)
                 log.ResponsibleUser = (isFirstName ? string.Format("{0} {1}", log.ResponsibleUser, log.ResponsibleUserSurName) :

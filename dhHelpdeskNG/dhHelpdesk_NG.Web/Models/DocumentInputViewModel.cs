@@ -78,5 +78,7 @@ namespace DH.Helpdesk.Web.Models
         public TreeContent DocumentTree { get; set; }
 
         public bool UserHasDocumentAdminPermission { get; set; }
-    }
+
+		public List<string> FileUploadWhiteList { get; set; }
+	}
 }

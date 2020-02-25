@@ -135,6 +135,21 @@
         // Setup html5 version
         PluploadTranslation('@SessionFacade.CurrentLanguageId');
 
+        var fileUploadWhiteList = parameters.fileUploadWhiteList;
+
+        var isFileInWhiteList = function (filename, whiteList) {
+            if (filename.indexOf('.') !== -1) {
+                var extension = filename.split('.').reverse()[0];
+                if (whiteList.indexOf(extension) >= 0)
+                    return true;
+            }
+            else {
+                if (whiteList.indexOf('') >= 0)
+                    return true;
+            }
+            return false;
+        };
+
         $("#uploader").pluploadQueue({
             // General settings
             runtimes: 'html5,html4',
@@ -148,7 +163,20 @@
             init: {
                 FileUploaded: function (uploader, uploadedFile, responseContent) {
                     $('#filesContainer').html(responseContent.response);
-                }
+                },
+                FilesAdded: function (up, files) {
+                    if (fileUploadWhiteList != null) {
+                        var whiteList = fileUploadWhiteList;
+
+                        files.forEach(function (e) {
+                            if (!isFileInWhiteList(e.name, whiteList)) {
+                                up.removeFile(e);
+                                alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                            }
+                        })
+
+                    }
+                },
             },
 
             filters: {

@@ -28,6 +28,7 @@ using DH.Helpdesk.Web.Models.Faq.Output;
 
 using NewFaq = DH.Helpdesk.Services.BusinessModels.Faq.NewFaq;
 using NewFaqFile = DH.Helpdesk.BusinessData.Models.Faq.Input.NewFaqFile;
+using System.IO;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -50,12 +51,13 @@ namespace DH.Helpdesk.Web.Controllers
 
         private const string DefaultSortField = "Text";
         private const SortOrder DefaultSortOrder = SortOrder.Asc;
+		private readonly IGlobalSettingService _globalSettingService;
 
-        #endregion
+		#endregion
 
-        #region ctor
+		#region ctor
 
-        public FaqController(
+		public FaqController(
             IMasterDataService masterDataService,
             IEditFaqModelFactory editFaqModelFactory,
             IFaqCategoryRepository faqCategoryRepository,
@@ -67,7 +69,8 @@ namespace DH.Helpdesk.Web.Controllers
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
             IWorkingGroupRepository workingGroupRepository, 
             ILanguageService languageService, 
-            IUserPermissionsChecker userPermissionsChecker)
+            IUserPermissionsChecker userPermissionsChecker,
+			IGlobalSettingService globalSettingService)
             : base(masterDataService)
         {
             _masterDataService = masterDataService;
@@ -81,8 +84,8 @@ namespace DH.Helpdesk.Web.Controllers
             _workingGroupRepository = workingGroupRepository;
             _userPermissionsChecker = userPermissionsChecker;
             _languageService = languageService;
-
-            _userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Faq);
+			_globalSettingService = globalSettingService;
+			_userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Faq);
         }
 
         #endregion
@@ -200,8 +203,10 @@ namespace DH.Helpdesk.Web.Controllers
 
             var workingGroups = _workingGroupRepository.FindActiveOverviews(currentCustomerId).OrderBy(w => w.Name).ToList();
 
+			var fileUploadWhiteList = _globalSettingService.GetFileUploadWhiteList();
+
             var userHasFaqAdminPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
-            var model = _newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoryId, workingGroups, userHasFaqAdminPermission);
+            var model = _newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoryId, workingGroups, userHasFaqAdminPermission, fileUploadWhiteList);
             ViewData["FN"] = GetFAQFileNames(model.TemporaryId);
 
             return View(model);
@@ -241,6 +246,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var categoriesWithSubcategories = _faqService.GetCategoriesWithSubcategoriesByCustomerId(currentCustomerId, SessionFacade.CurrentLanguageId);
 
+			var fileUploadWhiteList = _globalSettingService.GetFileUploadWhiteList();
 
             var workingGroups = _workingGroupRepository.FindActiveOverviews(currentCustomerId).OrderBy(w => w.Name).ToList();
             if (categoriesWithSubcategories == null || categoriesWithSubcategories.Count < 1)
@@ -251,7 +257,7 @@ namespace DH.Helpdesk.Web.Controllers
             else
             {
                 var userHasFaqAdminPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
-                var model = _newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoriesWithSubcategories.First().Id, workingGroups, userHasFaqAdminPermission);
+                var model = _newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoriesWithSubcategories.First().Id, workingGroups, userHasFaqAdminPermission, fileUploadWhiteList);
                 ViewData["FN"] = GetFAQFileNames(model.TemporaryId);
                 return View(model);
             }
@@ -292,7 +298,9 @@ namespace DH.Helpdesk.Web.Controllers
                             o.Value.ToString())).ToList();
             var languageList = new SelectList(languageOverviews, "Value", "Name");
 
-            var model = _editFaqModelFactory.Create(faq, categoriesWithSubcategories, fileNames, workingGroups, userHasFaqAdminPermission, languageList, languageId, showDetails);
+			var fileUploadWhiteList = _globalSettingService.GetFileUploadWhiteList();
+
+            var model = _editFaqModelFactory.Create(faq, categoriesWithSubcategories, fileNames, workingGroups, userHasFaqAdminPermission, languageList, languageId, showDetails, fileUploadWhiteList);
             ViewData["FN"] = GetFAQFileNames(faq.Id.ToString());
 
             return View(model);
@@ -373,6 +381,12 @@ namespace DH.Helpdesk.Web.Controllers
             var uploadedFile = Request.Files[0];
             var uploadedData = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
+
+			var extension = Path.GetExtension(name);
+			if (!_globalSettingService.IsExtensionInWhitelist(extension))
+			{
+				throw new ArgumentException($"File extension not valid: {name}");
+			}
 
             if (GuidHelper.IsGuid(faqId))
             {

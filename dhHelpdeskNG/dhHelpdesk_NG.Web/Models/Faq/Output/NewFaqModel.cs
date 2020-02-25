@@ -1,16 +1,18 @@
 ﻿namespace DH.Helpdesk.Web.Models.Faq.Output
 {
-    using System;
+	using System;
 
-    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+	using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
+	using System.Collections.Generic;
 
-    public sealed class NewFaqModel
+	public sealed class NewFaqModel
     {
         public NewFaqModel(
             string temporaryId, 
             DropDownWithSubmenusContent categories, 
             DropDownContent workingGroups, 
-            bool userHasFaqAdminPermission)
+            bool userHasFaqAdminPermission,
+			List<string> fileUploadWhiteList)
         {
             this.UserHasFaqAdminPermission = userHasFaqAdminPermission;
             if (string.IsNullOrEmpty(temporaryId))
@@ -31,7 +33,9 @@
             this.Categories = categories;
             this.WorkingGroups = workingGroups;
             this.TemporaryId = temporaryId;
-        }
+			this.FileUploadWhiteList = fileUploadWhiteList;
+
+		}
 
         public string TemporaryId { get; private set; }
 
@@ -40,5 +44,6 @@
         public DropDownWithSubmenusContent Categories { get; private set; }
 
         public bool UserHasFaqAdminPermission { get; private set; }
-    }
+		public List<string> FileUploadWhiteList { get; private set; }
+	}
 }

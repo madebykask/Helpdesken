@@ -2,36 +2,37 @@
 
 namespace DH.Helpdesk.Web.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Web;
-    using System.Web.Mvc;
-    using System.Linq;
+	using System;
+	using System.Collections.Generic;
+	using System.Net;
+	using System.Web;
+	using System.Web.Mvc;
+	using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Enums.Changes;
-    using DH.Helpdesk.BusinessData.Models.Changes.Input;
-    using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure.Context;
-    using DH.Helpdesk.Services.BusinessLogic.OtherTools.Concrete;
-    using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Enums;
-    using DH.Helpdesk.Web.Enums.Changes;
-    using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.ActionFilters;
-    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes;
-    using DH.Helpdesk.Web.Infrastructure.Filters.Changes;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Models.Changes;
-    using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
-    using DH.Helpdesk.Web.Models.Changes.SettingsEdit;
-    using DH.Helpdesk.Common.Enums;
+	using DH.Helpdesk.BusinessData.Enums.Changes;
+	using DH.Helpdesk.BusinessData.Models.Changes.Input;
+	using DH.Helpdesk.Common.Tools;
+	using DH.Helpdesk.Dal.Enums;
+	using DH.Helpdesk.Dal.Infrastructure.Context;
+	using DH.Helpdesk.Services.BusinessLogic.OtherTools.Concrete;
+	using DH.Helpdesk.Services.Services;
+	using DH.Helpdesk.Web.Enums;
+	using DH.Helpdesk.Web.Enums.Changes;
+	using DH.Helpdesk.Web.Infrastructure;
+	using DH.Helpdesk.Web.Infrastructure.ActionFilters;
+	using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes;
+	using DH.Helpdesk.Web.Infrastructure.Filters.Changes;
+	using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes;
+	using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange;
+	using DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange;
+	using DH.Helpdesk.Web.Infrastructure.Tools;
+	using DH.Helpdesk.Web.Models.Changes;
+	using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
+	using DH.Helpdesk.Web.Models.Changes.SettingsEdit;
+	using DH.Helpdesk.Common.Enums;
+	using System.IO;
 
-    public sealed class ChangesController : UserInteractionController
+	public sealed class ChangesController : UserInteractionController
     {
         #region Fields
 
@@ -66,12 +67,13 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IChangeStatusService changeStatusService;
 
         private readonly IWorkContext workContext;
+		private readonly IGlobalSettingService _globalSettingService;
 
-        #endregion
+		#endregion
 
-        #region Constructors and Destructors
+		#region Constructors and Destructors
 
-        public ChangesController(
+		public ChangesController(
             IMasterDataService masterDataService,
             IChangeModelFactory changeModelFactory,
             IChangeService changeService,
@@ -88,7 +90,8 @@ namespace DH.Helpdesk.Web.Controllers
             TemporaryIdProvider temporaryIdProvider, 
             IEmailService emailService, 
             IChangeStatusService changeStatusService, 
-            IWorkContext workContext)
+            IWorkContext workContext,
+			IGlobalSettingService globalSettingService)
             : base(masterDataService)
         {
             this.changeModelFactory = changeModelFactory;
@@ -105,8 +108,10 @@ namespace DH.Helpdesk.Web.Controllers
             this.emailService = emailService;
             this.changeStatusService = changeStatusService;
             this.workContext = workContext;
+			_globalSettingService = globalSettingService;
 
-            this.editorStateCache = editorStateCacheFactory.CreateForModule(ModuleName.Changes);
+
+			this.editorStateCache = editorStateCacheFactory.CreateForModule(ModuleName.Changes);
             this.temporaryFilesCache = temporaryFilesCacheFactory.CreateForModule(ModuleName.Changes);
         }
 
@@ -295,7 +300,7 @@ namespace DH.Helpdesk.Web.Controllers
                 throw new HttpException((int)HttpStatusCode.NotFound, null);
             }
 
-            var model = this.changeModelFactory.Create(response, this.OperationContext);
+            var model = this.changeModelFactory.Create(response, this.OperationContext, _globalSettingService);
             return this.View(model);
         }
 
@@ -478,6 +483,13 @@ namespace DH.Helpdesk.Web.Controllers
             var uploadedFile = this.Request.Files[0];
             var fileContent = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(fileContent, 0, fileContent.Length);
+
+
+			var extension = Path.GetExtension(name);
+			if (!_globalSettingService.IsExtensionInWhitelist(extension))
+			{
+				throw new ArgumentException($"File extension not valid: {name}");
+			}
 
             if (this.temporaryFilesCache.FileExists(name, changeId, subtopic.ToString()))
             {

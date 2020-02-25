@@ -18,6 +18,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq
             bool userHasFaqAdminPermission,
             SelectList languages,
             int languageId,
-            bool showDetails = false);
+            bool showDetails,
+			List<string> fileUploadWhiteList);
     }
 }

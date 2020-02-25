@@ -3,26 +3,28 @@ using DH.Helpdesk.Web.Common.Tools.Files;
 
 namespace DH.Helpdesk.Web.Areas.Licenses.Controllers
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Web;
-    using System.Web.Mvc;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Net;
+	using System.Web;
+	using System.Web.Mvc;
 
-    using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure.Context;
-    using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Services.Services.Licenses;
-    using DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories;
-    using DH.Helpdesk.Web.Areas.Licenses.Models.Licenses;
-    using DH.Helpdesk.Web.Enums;
-    using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.ActionFilters;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.BusinessData.Models.Shared;  
+	using DH.Helpdesk.Common.Tools;
+	using DH.Helpdesk.Dal.Enums;
+	using DH.Helpdesk.Dal.Infrastructure.Context;
+	using DH.Helpdesk.Services.Services;
+	using DH.Helpdesk.Services.Services.Licenses;
+	using DH.Helpdesk.Web.Areas.Licenses.Infrastructure.ModelFactories;
+	using DH.Helpdesk.Web.Areas.Licenses.Models.Licenses;
+	using DH.Helpdesk.Web.Enums;
+	using DH.Helpdesk.Web.Infrastructure;
+	using DH.Helpdesk.Web.Infrastructure.ActionFilters;
+	using DH.Helpdesk.Web.Infrastructure.Tools;
+	using DH.Helpdesk.BusinessData.Models.Shared;
+	using System.IO;
+	using System;
 
-    public sealed class LicensesController : BaseController
+	public sealed class LicensesController : BaseController
     {
         private readonly ILicensesService licensesService;
 
@@ -33,14 +35,16 @@ namespace DH.Helpdesk.Web.Areas.Licenses.Controllers
         private readonly ITemporaryFilesCache filesStore;
 
         private readonly IEditorStateCache filesStateStore;
+		private readonly IGlobalSettingService _globalSettingService;
 
-        public LicensesController(
+		public LicensesController(
                 IMasterDataService masterDataService, 
                 ILicensesService licensesService, 
                 IWorkContext workContext, 
                 ILicensesModelFactory licensesModelFactory, 
                 IEditorStateCacheFactory editorStateCacheFactory,
-                ITemporaryFilesCacheFactory temporaryFilesCacheFactory)
+                ITemporaryFilesCacheFactory temporaryFilesCacheFactory,
+				IGlobalSettingService globalSettingService)
             : base(masterDataService)
         {
             this.licensesService = licensesService;
@@ -48,7 +52,10 @@ namespace DH.Helpdesk.Web.Areas.Licenses.Controllers
             this.licensesModelFactory = licensesModelFactory;            
             this.filesStateStore = editorStateCacheFactory.CreateForModule(ModuleName.Licenses);
             this.filesStore = temporaryFilesCacheFactory.CreateForModule(ModuleName.Licenses);
-        }
+
+			_globalSettingService = globalSettingService;
+
+		}
 
         [HttpGet]
         public ViewResult Index()
@@ -100,9 +107,11 @@ namespace DH.Helpdesk.Web.Areas.Licenses.Controllers
                 }
 
                 this.filesStateStore.ClearObjectDeletedFiles(licenseId.Value);
-            }            
+            }
 
-            var model = this.licensesModelFactory.GetEditModel(data);
+			var fileUploadWhiteList = _globalSettingService.GetFileUploadWhiteList();
+
+            var model = this.licensesModelFactory.GetEditModel(data, fileUploadWhiteList);
             return this.View(model);
         }
 
@@ -188,6 +197,12 @@ namespace DH.Helpdesk.Web.Areas.Licenses.Controllers
             {
                 throw new HttpException((int)HttpStatusCode.NotFound, null); 
             }
+
+			var extension = Path.GetExtension(name);
+			if (!_globalSettingService.IsExtensionInWhitelist(extension))
+			{
+				throw new ArgumentException($"File extension not valid: {name}");
+			}
 
             var fileContent = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(fileContent, 0, fileContent.Length);

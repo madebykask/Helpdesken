@@ -13,6 +13,7 @@
             List<CategoryWithSubcategories> categories, 
             int categoryId, 
             List<ItemOverview> workingGroups,
-            bool userHasFaqAdminPermission);
+            bool userHasFaqAdminPermission,
+			List<string> fileUploadWhiteList);
     }
 }

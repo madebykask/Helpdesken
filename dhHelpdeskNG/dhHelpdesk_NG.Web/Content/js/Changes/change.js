@@ -10,6 +10,20 @@
     if (!parameters.evaluationSubtopic) throw new Error('evaluationSubtopic must be specified.');
     if (!parameters.registrationRejectValue) throw new Error('registrationRejectValue must be specified.');
     if (!parameters.analyzeRejectValue) throw new Error('analyzeRejectValue must be specified.');
+    var fileUploadWhiteList = parameters.fileUploadWhiteList;
+
+    var isFileInWhiteList = function (filename, whiteList) {
+        if (filename.indexOf('.') !== -1) {
+            var extension = filename.split('.').reverse()[0];
+            if (whiteList.indexOf(extension) >= 0)
+                return true;
+        }
+        else {
+            if (whiteList.indexOf('') >= 0)
+                return true;
+        }
+        return false;
+    };
 
     $('#general_inventory_dialog_open_button').click(function() {
         $('#general_inventory_dialog').dialog('open');
@@ -23,7 +37,20 @@
         init: {
             FileUploaded: function(uploader, uploadedFile, responseContent) {
                 $('#registration_files_container').html(responseContent.response);
-            }
+            },
+            FilesAdded: function (up, files) {
+                if (fileUploadWhiteList != null) {
+                    var whiteList = fileUploadWhiteList;
+
+                    files.forEach(function (e) {
+                        if (!isFileInWhiteList(e.name, whiteList)) {
+                            up.removeFile(e);
+                            alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                        }
+                    })
+
+                }
+            },
         }
     });
 
@@ -35,7 +62,20 @@
         init: {
             FileUploaded: function(uploader, uploadedFile, responseContent) {
                 $('#analyze_files_container').html(responseContent.response);
-            }
+            },
+            FilesAdded: function (up, files) {
+                if (fileUploadWhiteList != null) {
+                    var whiteList = fileUploadWhiteList;
+
+                    files.forEach(function (e) {
+                        if (!isFileInWhiteList(e.name, whiteList)) {
+                            up.removeFile(e);
+                            alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                        }
+                    })
+
+                }
+            },
         }
     });
 
@@ -47,7 +87,20 @@
         init: {
             FileUploaded: function(uploader, uploadedFile, responseContent) {
                 $('#implementation_files_container').html(responseContent.response);
-            }
+            },
+            FilesAdded: function (up, files) {
+                if (fileUploadWhiteList != null) {
+                    var whiteList = fileUploadWhiteList;
+
+                    files.forEach(function (e) {
+                        if (!isFileInWhiteList(e.name, whiteList)) {
+                            up.removeFile(e);
+                            alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                        }
+                    })
+
+                }
+            },
         }
     });
 
@@ -59,7 +112,20 @@
         init: {
             FileUploaded: function(uploader, uploadedFile, responseContent) {
                 $('#evaluation_files_container').html(responseContent.response);
-            }
+            },
+            FilesAdded: function (up, files) {
+                if (fileUploadWhiteList != null) {
+                    var whiteList = fileUploadWhiteList;
+
+                    files.forEach(function (e) {
+                        if (!isFileInWhiteList(e.name, whiteList)) {
+                            up.removeFile(e);
+                            alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                        }
+                    })
+
+                }
+            },
         }
     });
 

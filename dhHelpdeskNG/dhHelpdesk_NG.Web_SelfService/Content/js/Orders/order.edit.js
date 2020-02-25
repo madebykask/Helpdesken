@@ -13,7 +13,20 @@
             ///////////////////////////////////////////////////////////////////////////////Old code
             var lastInitiatorSearchKey = "";
 
-            
+            var fileUploadWhiteList = window.parameters.fileUploadWhiteList;
+
+            var isFileInWhiteList = function (filename, whiteList) {
+                if (filename.indexOf('.') !== -1) {
+                    var extension = filename.split('.').reverse()[0];
+                    if (whiteList.indexOf(extension) >= 0)
+                        return true;
+                }
+                else {
+                    if (whiteList.indexOf('') >= 0)
+                        return true;
+                }
+                return false;
+            };
 
             $("#fileName_files_uploader").pluploadQueue({
 
@@ -25,7 +38,19 @@
                 multiple_queues: true,
                 
                 init: {
-                    FilesAdded: function(up, files) {
+                    FilesAdded: function (up, files) {
+                        if (fileUploadWhiteList != null) {
+                            var whiteList = fileUploadWhiteList;
+
+                            files.forEach(function (e) {
+                                if (!isFileInWhiteList(e.name, whiteList)) {
+                                    up.removeFile(e);
+                                    alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                                }
+                            })
+
+                        }
+
                         if (up.files.length >= up.settings.max_files) {
                             up.splice(up.settings.max_files);
                             if (typeof up.settings.browse_button === "string") {

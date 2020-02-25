@@ -16,7 +16,8 @@
             List<CategoryWithSubcategories> categories, 
             int categoryId, 
             List<ItemOverview> workingGroups,
-            bool userHasFaqAdminPermission)
+            bool userHasFaqAdminPermission,
+			List<string> fileUploadWhiteList)
         {
             var categoryDropDownItems =
                categories.Select(this.CategoryToDropDownItem).ToList();
@@ -26,7 +27,7 @@
 
             var workingGroupDropDownItems = workingGroups.Select(g => new DropDownItem(g.Name, g.Value)).ToList();
             var workingGroupDropDownContent = new DropDownContent(workingGroupDropDownItems);
-            return new NewFaqModel(temporaryId, categoryDropDownContent, workingGroupDropDownContent, userHasFaqAdminPermission);
+            return new NewFaqModel(temporaryId, categoryDropDownContent, workingGroupDropDownContent, userHasFaqAdminPermission, fileUploadWhiteList);
         }
 
         private DropDownWithSubmenusItem CategoryToDropDownItem(CategoryWithSubcategories categoryWithSubcategories)

@@ -1,16 +1,17 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Projects.Concrete
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Web.Mvc;
 
-    using DH.Helpdesk.BusinessData.Models.Projects.Output;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Models.Case;
-    using DH.Helpdesk.Web.Models.Projects;
+	using DH.Helpdesk.BusinessData.Models.Projects.Output;
+	using DH.Helpdesk.Domain;
+	using DH.Helpdesk.Web.Models.Case;
+	using DH.Helpdesk.Web.Models.Projects;
+	using Services.Services;
 
-    public class UpdatedProjectViewModelFactory : IUpdatedProjectViewModelFactory
+	public class UpdatedProjectViewModelFactory : IUpdatedProjectViewModelFactory
     {
         public UpdatedProjectViewModel Create(
             ProjectOverview projectOverview,
@@ -18,7 +19,8 @@
             List<ProjectCollaboratorOverview> collaboratorOverviews,
             List<ProjectScheduleOverview> schedules,
             List<ProjectLogOverview> logs,
-            List<Case> cases)
+            List<Case> cases,
+			IGlobalSettingService globalSettingService)
         {
             var project = MapProjectOverview(projectOverview);
 
@@ -34,6 +36,7 @@
             var newScheduleEditModel = new NewProjectScheduleEditModel();
             newScheduleEditModel.ProjectScheduleEditModel = new ProjectScheduleEditModel { ProjectId = projectOverview.Id };
 
+			var whiteList = globalSettingService.GetFileUploadWhiteList();
             return new UpdatedProjectViewModel
                        {
                            ProjectEditModel = project,
@@ -43,7 +46,8 @@
                            ProjectLogs = logs,
                            CaseOverviews = cases.Select(MapCase).ToList(),
                            NewProjectScheduleEditModel = newScheduleEditModel,
-                           Guid = project.Id
+                           Guid = project.Id,
+						   FileUploadWhiteList = whiteList
                        };
         }
 
@@ -105,7 +109,7 @@
                 Caption = caseEntity.Caption,
                 RegistrationDate = DateTime.SpecifyKind(caseEntity.RegTime, DateTimeKind.Utc).ToShortDateString(),
                 Initiator = caseEntity.PersonsName,
-                Administrator = caseEntity.Administrator.SurName + " " + caseEntity.Administrator.FirstName,
+                Administrator = caseEntity.Administrator != null ? caseEntity.Administrator.SurName + " " + caseEntity.Administrator.FirstName : "",
                 Department = caseEntity.Department.DepartmentName,
                 //WatchDate = caseEntity.WatchDate.HasValue ? DateTime.SpecifyKind(caseEntity.WatchDate.Value, DateTimeKind.Utc).ToShortDateString() : string.Empty,
                 //CaseType = caseEntity.CaseType.Name,

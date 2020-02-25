@@ -29,7 +29,7 @@
             return new LicensesContentModel(licenses);
         }
 
-        public LicenseEditModel GetEditModel(LicenseData data)
+        public LicenseEditModel GetEditModel(LicenseData data, List<string> fileUploadWhiteList)
         {
             var products = WebMvcHelper.CreateListField(data.Products, data.License.ProductId);
             var regions = WebMvcHelper.CreateListField(data.Regions, data.License.RegionId);
@@ -57,7 +57,8 @@
                                 departments, 
                                 vendors,
                                 upgradeLicenss,
-                                files);
+                                files,
+								fileUploadWhiteList);
         }
 
         public LicenseModel GetBusinessModel(LicenseEditModel editModel)

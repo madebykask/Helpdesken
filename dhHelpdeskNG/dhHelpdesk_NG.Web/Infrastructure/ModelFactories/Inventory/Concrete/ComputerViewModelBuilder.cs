@@ -29,7 +29,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
         public ComputerViewModel BuildViewModel(
             BusinessData.Models.Inventory.Edit.Computer.ComputerForRead model,
             ComputerEditOptions options,
-            ComputerFieldsSettingsForModelEdit settings)
+            ComputerFieldsSettingsForModelEdit settings,
+			List<string> fileUploadWhiteList)
         {
             var createdDate =
                 CreateDateTimeField(settings.DateFieldsSettings.CreatedDateFieldSetting, model.CreatedDate);
@@ -524,7 +525,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 operatingSystemsViewModel,
                 organizationViewModel,
                 processorViewModel,
-                workstationViewModel)
+                workstationViewModel,
+				fileUploadWhiteList)
                        {
                            Id = model.Id,
                            CreatedDate = createdDate,
@@ -533,7 +535,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                        };
         }
 
-        public ComputerViewModel BuildViewModel(ComputerEditOptions options, ComputerFieldsSettingsForModelEdit settings, int currentCustomerId)
+        public ComputerViewModel BuildViewModel(ComputerEditOptions options, ComputerFieldsSettingsForModelEdit settings, int currentCustomerId, List<string> fileUploadWhiteList)
         {
             var name = CreateStringField(settings.WorkstationFieldsSettings.ComputerNameFieldSetting, null);
             var manufacturer = CreateStringField(settings.WorkstationFieldsSettings.ManufacturerFieldSetting, null);
@@ -791,7 +793,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 operatingSystemsViewModel,
                 organizationViewModel,
                 processorViewModel,
-                workstationViewModel)
+                workstationViewModel,
+				fileUploadWhiteList)
                        {
                            CustomerId = currentCustomerId,
                            DocumentFileKey = Guid.NewGuid().ToString()

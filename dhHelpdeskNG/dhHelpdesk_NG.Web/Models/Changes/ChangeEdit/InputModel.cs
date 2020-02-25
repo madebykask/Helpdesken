@@ -1,9 +1,10 @@
 ﻿namespace DH.Helpdesk.Web.Models.Changes.ChangeEdit
 {
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.Common.ValidationAttributes;
+	using DH.Helpdesk.BusinessData.Models;
+	using DH.Helpdesk.Common.ValidationAttributes;
+	using System.Collections.Generic;
 
-    public sealed class InputModel
+	public sealed class InputModel
     {
         #region Constructors and Destructors
 
@@ -22,7 +23,8 @@
             EvaluationModel evaluation,
             LogModel log,
             HistoryModel history, 
-            OperationContext context)
+            OperationContext context,
+			List<string> fileUploadWhiteList)
         {
             this.Context = context;
             this.IsNew = isNew;
@@ -35,6 +37,7 @@
             this.Evaluation = evaluation;
             this.Log = log;
             this.History = history;
+			this.FileUploadWhiteList = fileUploadWhiteList;
         }
 
         #endregion
@@ -69,6 +72,8 @@
         [NotNull]
         public OperationContext Context { get; private set; }
 
-        #endregion
-    }
+		public List<string> FileUploadWhiteList { get; set; }
+
+		#endregion
+	}
 }

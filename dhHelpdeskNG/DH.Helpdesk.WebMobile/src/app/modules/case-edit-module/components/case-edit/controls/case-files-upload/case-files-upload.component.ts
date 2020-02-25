@@ -45,12 +45,15 @@ export class CaseFilesUploadComponent {
 
   ngOnInit() {
     const accessToken = this.authenticationService.getAuthorizationHeaderValue();
-    this.caseFileApiService.getFileUploadWhiteList().pipe(take(1), map((o: any) => this.buildWhiteList(o)));
+    this.caseFileApiService.getFileUploadWhiteList().pipe(map((o: any) => { 
+      alert (o);
+      return this.buildWhiteList(o); 
+    }));
 
     // init file uploader
     this.fileUploader.setOptions(<FileUploaderOptions>{
       autoUpload: true,
-      filters: [ { name: 'IsInWhiteList', fn: (item: any) => this.isInWhiteList(item) }],
+      filters: [ { name: 'IsInWhiteList', fn: this.isInWhiteList } ],
       isHTML5: true,
       authToken: accessToken,
       url: this.caseFileApiService.getCaseFileUploadUrl(this.caseKey, this.customerId)

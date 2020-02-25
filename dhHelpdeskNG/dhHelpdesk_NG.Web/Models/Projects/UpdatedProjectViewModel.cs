@@ -23,5 +23,7 @@
         public List<CaseOverview> CaseOverviews { get; set; }
 
         public NewProjectScheduleEditModel NewProjectScheduleEditModel { get; set; }
-    }
+
+		public List<string> FileUploadWhiteList { get; set; }
+	}
 }

@@ -176,6 +176,7 @@ function FAQInitForm() {
     PluploadTranslation($('#CurLanguageId').val());
 
     $('#upload_FAQfiles_popup').on('show', function () {
+
         _plupload = $('#FAQfile_uploader').pluploadQueue({
             runtimes: 'html5,html4',
             url: '/FAQ/UploadFile',
@@ -228,6 +229,34 @@ function FAQInitForm() {
             init: {
                 FileUploaded: function () {
                     getFAQFiles();
+                },
+                FilesAdded: function (up, files) {
+                    var fileUploadWhiteList = window.parameters.fileUploadWhiteList;
+
+                    if (fileUploadWhiteList != null) {
+                        var whiteList = fileUploadWhiteList;
+
+                        var isFileInWhiteList = function (filename, whiteList) {
+                            if (filename.indexOf('.') !== -1) {
+                                var extension = filename.split('.').reverse()[0];
+                                if (whiteList.indexOf(extension) >= 0)
+                                    return true;
+                            }
+                            else {
+                                if (whiteList.indexOf('') >= 0)
+                                    return true;
+                            }
+                            return false;
+                        }
+
+                        files.forEach(function (e) {
+                            if (!isFileInWhiteList(e.name, whiteList)) {
+                                up.removeFile(e);
+                                alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                            }
+                        })
+
+                    }
                 },
 
                 Error: function (uploader, e) {

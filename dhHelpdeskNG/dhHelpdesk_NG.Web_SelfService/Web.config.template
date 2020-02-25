@@ -24,11 +24,7 @@
     <accessManagment>
       <api uriPath="#{AMUrl}" username="#{AmUsers}" password="#{AmPassword}" />
       <countries>
-        <country helpdeskCustomerId="1" employeePrefix="00" code="GL" />
-        <country helpdeskCustomerId="28" employeePrefix="00" code="GL" />
-        <country helpdeskCustomerId="29" employeePrefix="05" code="NL" />
-        <country helpdeskCustomerId="30" employeePrefix="08" code="UK" />
-        <country helpdeskCustomerId="31" employeePrefix="11" code="IE" />
+        <country helpdeskCustomerId="1" employeePrefix="00" code="SV" />
       </countries>
     </accessManagment>
   </formLibConfigurable>
