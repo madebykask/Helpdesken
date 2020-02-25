@@ -383,6 +383,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IUserEmailsSearchService>().To<UserEmailsSearchService>();
             kernel.Bind<IFileIndexingRepository>().To<FileIndexingRepository>();
             kernel.Bind<IFeatureToggleService>().To<FeatureToggleService>();
+			kernel.Bind<IContractLogRepository>().To<ContractLogRepository>();
 
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();

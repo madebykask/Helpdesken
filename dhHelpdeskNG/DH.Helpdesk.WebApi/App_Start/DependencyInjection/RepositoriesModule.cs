@@ -239,6 +239,7 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<FileIndexingRepository>().As<IFileIndexingRepository>();
             builder.RegisterType<FeatureToggleRepository>().As<IFeatureToggleRepository>();
 			builder.RegisterType<FileViewLogRepository>().As<IFileViewLogRepository>();
+			builder.RegisterType<ContractLogRepository>().As<IContractLogRepository>();
 		}
     }
 }
