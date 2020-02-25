@@ -28,7 +28,8 @@ namespace DH.Helpdesk.Web.Areas.Licenses.Models.Licenses
                 SelectList departments, 
                 SelectList vendors, 
                 SelectList upgradeLicenses,
-                AttachedFilesModel files)
+                AttachedFilesModel files,
+				List<string> fileUploadWhiteList)
         {
             this.UpgradeLicenses = upgradeLicenses;
             this.Id = id;
@@ -48,6 +49,8 @@ namespace DH.Helpdesk.Web.Areas.Licenses.Models.Licenses
 
             this.NewFiles = new List<WebTemporaryFile>();
             this.DeletedFiles = new List<string>();
+
+			this.FileUploadWhiteList = fileUploadWhiteList;
         }
 
         public LicenseEditModel()
@@ -139,5 +142,7 @@ namespace DH.Helpdesk.Web.Areas.Licenses.Models.Licenses
                 return EntityModelType.Licenses;
             }
         }
-    }
+
+		public List<string> FileUploadWhiteList { get; private set; }
+	}
 }

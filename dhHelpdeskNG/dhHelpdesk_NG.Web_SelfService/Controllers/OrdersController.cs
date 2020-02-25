@@ -27,6 +27,7 @@ using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
 using DH.Helpdesk.Services.BusinessLogic.OtherTools.Concrete;
 using DH.Helpdesk.Services.Services.Concrete;
 using static DH.Helpdesk.SelfService.Infrastructure.Enums;
+using System.IO;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
@@ -47,8 +48,9 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly TemporaryIdProvider _temporaryIdProvider;
         private readonly IOrderTypeService _orderTypeService;
         private readonly IDocumentService _documentService;
+		private readonly IGlobalSettingService _globalSettingService;
 
-        public OrdersController(IMasterDataService masterDataService,
+		public OrdersController(IMasterDataService masterDataService,
             ISelfServiceConfigurationService configurationService,
             ICaseSolutionService caseSolutionService,
             IOrdersService ordersService,
@@ -65,7 +67,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             IEmailService emailService,
             TemporaryIdProvider temporaryIdProvider,
             IOrderTypeService orderTypeService,
-            IDocumentService documentService)
+            IDocumentService documentService,
+			IGlobalSettingService globalSettingService)
             : base(configurationService, masterDataService, caseSolutionService)
         {
             _ordersService = ordersService;
@@ -81,6 +84,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             _temporaryIdProvider = temporaryIdProvider;
             _orderTypeService = orderTypeService;
             _documentService = documentService;
+			_globalSettingService = globalSettingService;
 
             _filesStateStore = editorStateCacheFactory.CreateForModule(ModuleName.Orders);
             _filesStore = temporaryFilesCacheFactory.CreateForModule(ModuleName.Orders);
@@ -193,7 +197,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                                                 userData,
                                                 settings.CreateCaseFromOrder,
                                                 SessionFacade.CurrentCustomerID,
-                                                orderTypeForCreateOrderId);
+                                                orderTypeForCreateOrderId,
+												_globalSettingService);
 
             model.OrderTypeId = lowestchildordertypeid;
 
@@ -263,7 +268,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var userHasAdminOrderPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentLocalUser), UserPermission.AdministerOrderPermission);
 
-            var model = _orderModelFactory.Create(response, SessionFacade.CurrentCustomerID);
+            var model = _orderModelFactory.Create(response, SessionFacade.CurrentCustomerID, _globalSettingService);
             model.UserHasAdminOrderPermission = userHasAdminOrderPermission;
 
             return View(model);
@@ -351,7 +356,13 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (fileContent == null)
                 throw new HttpException((int)HttpStatusCode.NotFound, null);
 
-            if (_filesStore.FileExists(name, entityId, subtopic.ToString()))
+			var extension = Path.GetExtension(name);
+			if (!_globalSettingService.IsExtensionInWhitelist(extension))
+			{
+				throw new ArgumentException($"File extension not valid for upload: {name}");
+			}
+
+			if (_filesStore.FileExists(name, entityId, subtopic.ToString()))
                 throw new HttpException((int)HttpStatusCode.Conflict, null);
 
             _filesStore.AddFile(fileContent, name, entityId, subtopic.ToString());

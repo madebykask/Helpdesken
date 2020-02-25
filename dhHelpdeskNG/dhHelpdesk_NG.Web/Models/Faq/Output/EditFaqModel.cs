@@ -26,7 +26,8 @@ namespace DH.Helpdesk.Web.Models.Faq.Output
             bool userHasFaqAdminPermission,
             int languageId,
             SelectList languages,
-            bool showDetails = false)
+            bool showDetails,
+			List<string> fileUploadWhiteList)
         {
             this.UserHasFaqAdminPermission = userHasFaqAdminPermission;
             //if (id <= 0)
@@ -73,7 +74,9 @@ namespace DH.Helpdesk.Web.Models.Faq.Output
             this.LanguageId = languageId;
             this.Languages = languages;
             this.ShowDetails = showDetails;
-        }
+			this.FileUploadWhiteList = fileUploadWhiteList;
+
+		}
 
         #endregion
 
@@ -108,7 +111,8 @@ namespace DH.Helpdesk.Web.Models.Faq.Output
         public SelectList Languages { get; set; }
 
         public bool ShowDetails { get; set; }
+		public List<string> FileUploadWhiteList { get; private set; }
 
-        #endregion
-    }
+		#endregion
+	}
 }

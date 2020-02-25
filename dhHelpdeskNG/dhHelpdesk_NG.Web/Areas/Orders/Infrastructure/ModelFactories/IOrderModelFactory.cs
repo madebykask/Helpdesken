@@ -1,10 +1,11 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories
 {
-    using DH.Helpdesk.BusinessData.Models.Orders.Order;
-    using DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit;
+	using DH.Helpdesk.BusinessData.Models.Orders.Order;
+	using DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit;
+	using Services.Services;
 
-    public interface IOrderModelFactory
+	public interface IOrderModelFactory
     {
-        FullOrderEditModel Create(FindOrderResponse response, int customerId);
+        FullOrderEditModel Create(FindOrderResponse response, int customerId, IGlobalSettingService globalSettingService);
     }
 }

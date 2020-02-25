@@ -33,6 +33,10 @@
                                     <td class="span4">@Translation.GetCoreTextTranslation("Begränsa filändelser vid uppladdning av filer")</td>
                                     <td>@Html.CheckBoxFor(model => model.UseFileExtensionWhiteList, new { @class = "switchcheckbox" })</td>
                                 </tr>
+                                <tr>
+                                    <td>@Translation.Get("Återställ standardvärden för systemet", Enums.TranslationSource.TextTranslation)</td>
+                                    <td><a href="" id="btnResetDefaultWhiteList" class="btn">@Translation.Get("Återställ", Enums.TranslationSource.TextTranslation)</a></td>
+                                </tr>
                             </tbody>
                         </table>
 
@@ -70,6 +74,23 @@
                 else
                     $('#tblFileExtensions').hide();
             });
+            $('#btnResetDefaultWhiteList').on('click', function (event) {
+                var shouldReset = confirm('@Translation.Get("Detta kommer att återställa standardlistan på giltiga filändelser för systemet. Vill du fortsätta?", Enums.TranslationSource.TextTranslation)');
+                if (shouldReset) {
+                    $.ajax({
+                        url: '/admin/globalsetting/GetSystemDefaultWhiteList',
+                        dataType: 'json', 
+                        success: function (data) {
+                            var str = "";
+                            data.forEach(function (d) {
+                                str += d + "\r\n";
+                            });
+                            $('#FileExtensions').val(str);
+                        }
+                    });
+                }
+                event.preventDefault();
+            })
         });
         </script>
 

@@ -1,12 +1,13 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.ExistingChange.Concrete
 {
-    using System.Globalization;
+	using System.Globalization;
 
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.Services.Response.Changes;
-    using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
+	using DH.Helpdesk.BusinessData.Models;
+	using DH.Helpdesk.Services.Response.Changes;
+	using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
+	using Services.Services;
 
-    public sealed class ChangeModelFactory : IChangeModelFactory
+	public sealed class ChangeModelFactory : IChangeModelFactory
     {
         #region Fields
 
@@ -26,11 +27,11 @@
 
         private readonly IRegistrationModelFactory registrationModelFactory;
 
-        #endregion
+		#endregion
 
-        #region Constructors and Destructors
+		#region Constructors and Destructors
 
-        public ChangeModelFactory(
+		public ChangeModelFactory(
             IAnalyzeModelFactory analyzeModelFactory,
             IEvaluationModelFactory evaluationModelFactory,
             IGeneralModelFactory generalModelFactory,
@@ -56,7 +57,8 @@
 
         public InputModel Create(
                 FindChangeResponse response,
-                OperationContext context)
+                OperationContext context,
+				IGlobalSettingService globalSettingsService)
         {
             var textId = response.EditData.Change.Id.ToString(CultureInfo.InvariantCulture);
 
@@ -68,6 +70,7 @@
             var evaluation = this.evaluationModelFactory.Create(response);
             var log = this.logModelFactory.Create(response);
             var history = this.historyModelFactory.Create(response);
+			var fileUploadWhiteList = globalSettingsService.GetFileUploadWhiteList();
 
             return new InputModel(
                 false,
@@ -80,7 +83,8 @@
                 evaluation,
                 log,
                 history,
-                context);
+                context,
+				fileUploadWhiteList);
         }
 
         #endregion

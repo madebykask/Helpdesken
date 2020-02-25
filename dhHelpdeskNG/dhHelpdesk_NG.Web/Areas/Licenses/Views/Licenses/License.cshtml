@@ -12,7 +12,7 @@
                 languageId: '@SessionFacade.CurrentLanguageId',
                 id: '@Model.Files.EntityId',
                 uploadFileUrl: '@Url.Action("UploadFile")',
-                deleteFileUrl: '@Url.Action("DeleteFile")',                
+                deleteFileUrl: '@Url.Action("DeleteFile")',
             };
 
             applyBehavior(parameters);
@@ -21,8 +21,22 @@
         window.parameters = {
               regionControlName: "#RegionId",
               departmentControlName: "#DepartmentId",
-              refreshDepartmentUrl: '@Url.Content("~/Licenses/Licenses/GetJsonDepartmentsFor")'
+              refreshDepartmentUrl: '@Url.Content("~/Licenses/Licenses/GetJsonDepartmentsFor")',
+              fileUploadWhiteList: []
         };
+
+
+        @if (Model.FileUploadWhiteList != null)
+        {
+            foreach(var extension in Model.FileUploadWhiteList)
+            {
+                @:window.parameters.fileUploadWhiteList.push('@extension');
+            }
+        }
+        else
+        {
+            @:window.parameters.fileUploadWhiteList = null;
+        }
 
     </script>    
     

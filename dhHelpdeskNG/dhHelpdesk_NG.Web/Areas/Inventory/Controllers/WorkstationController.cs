@@ -44,6 +44,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 	using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 	using Dal.Enums;
 	using Infrastructure.Attributes;
+	using System.IO;
 
 	public class WorkstationController : InventoryBaseController
     {
@@ -56,8 +57,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         private readonly ITemporaryFilesCache _filesStore;
         private readonly IOrdersService _ordersService;
         private readonly ISettingService _settingsService;
+		private readonly IGlobalSettingService _globalSettingService;
 
-        public WorkstationController(
+		public WorkstationController(
             IMasterDataService masterDataService,
             IInventoryService inventoryService,
             IInventorySettingsService inventorySettingsService,
@@ -71,7 +73,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             IExcelFileComposer excelFileComposer,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
             IOrdersService ordersService,
-            ISettingService settingsService)
+            ISettingService settingsService,
+			IGlobalSettingService globalSettingService)
             : base(masterDataService, exportFileNameFormatter, excelFileComposer, organizationService, placeService)
         {
             _filesStore = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Inventory);
@@ -83,7 +86,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             _userPermissionsChecker = userPermissionsChecker;
             _ordersService = ordersService;
             _settingsService = settingsService;
-        }
+			_globalSettingService = globalSettingService;
+
+		}
 
         [HttpGet]
 		[UserPermissions(UserPermission.InventoryViewPermission)]
@@ -169,9 +174,13 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 _inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
                     SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId, readOnly);
 
-            var computerEditModel = _computerViewModelBuilder.BuildViewModel(model, options, settings);
+			var whiteList = _globalSettingService.GetFileUploadWhiteList();
+
+			var computerEditModel = _computerViewModelBuilder.BuildViewModel(model, options, settings, whiteList);
             computerEditModel.IsForDialog = dialog;
             computerEditModel.UserId = userId;
+
+			
 
             var viewModel = new ComputerEditViewModel(id, computerEditModel)
             {
@@ -180,7 +189,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 UserId = userId,
                 TabSettings = tabSettings,
                 CurrentLanguageId = SessionFacade.CurrentLanguageId,
-                CustomerId = SessionFacade.CurrentCustomer.Id
+                CustomerId = SessionFacade.CurrentCustomer.Id,
+				FileUploadWhiteList = whiteList
             };
 
             return View(viewModel);
@@ -195,8 +205,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var uploadedFile = Request.Files[0];
             if (uploadedFile == null)
                 throw new HttpException((int)HttpStatusCode.NotFound, null);
-            
-            var fileContent = uploadedFile.GetFileContent();
+
+			var extension = Path.GetExtension(name);
+			if (!_globalSettingService.IsExtensionInWhitelist(extension))
+			{
+				throw new ArgumentException($"File extension not valid: {name}");
+			}
+
+
+			var fileContent = uploadedFile.GetFileContent();
 
             if (GuidHelper.IsGuid(id))
             {
@@ -290,10 +307,13 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId);
 
+			var whiteList = _globalSettingService.GetFileUploadWhiteList();
+
             var viewModel = _computerViewModelBuilder.BuildViewModel(
                 options,
                 settings,
-                SessionFacade.CurrentCustomer.Id);
+                SessionFacade.CurrentCustomer.Id,
+				whiteList);
 
             if (orderId.HasValue)
                 ApplyOrderFields(orderId.Value, viewModel);

@@ -5,6 +5,22 @@
 
     PluploadTranslation(parameters.languageId);
 
+    var fileUploadWhiteList = window.parameters.fileUploadWhiteList;
+
+    var isFileInWhiteList = function (filename, whiteList) {
+        if (filename.indexOf('.') !== -1) {
+            var extension = filename.split('.').reverse()[0];
+            if (whiteList.indexOf(extension) >= 0)
+                return true;
+        }
+        else {
+            if (whiteList.indexOf('') >= 0)
+                return true;
+        }
+        return false;
+    };
+
+
     $('#license_files_uploader').pluploadQueue({
         url: parameters.uploadFileUrl,
         multipart_params: { entityId: parameters.id },
@@ -13,7 +29,20 @@
         init: {
             FileUploaded: function (uploader, uploadedFile, responseContent) {
                 $('#license_files_container').html(responseContent.response);
-            }
+            },
+            FilesAdded: function (up, files) {
+                if (fileUploadWhiteList != null) {
+                    var whiteList = fileUploadWhiteList;
+
+                    files.forEach(function (e) {
+                        if (!isFileInWhiteList(e.name, whiteList)) {
+                            up.removeFile(e);
+                            alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                        }
+                    })
+
+                }
+            },
         }
     });
 

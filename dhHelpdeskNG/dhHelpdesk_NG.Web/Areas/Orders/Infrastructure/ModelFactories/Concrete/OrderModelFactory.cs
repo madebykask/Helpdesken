@@ -7,36 +7,39 @@ using DH.Helpdesk.Web.Models;
 
 namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
 {
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Linq;
 
-    using BusinessData.Enums.Orders;
-    using BusinessData.Models.Orders.Order;
-    using BusinessData.Models.Orders.Order.OrderEditFields;
-    using BusinessData.Models.Orders.Order.OrderEditSettings;
-    using Models.Order.FieldModels;
-    using Models.Order.OrderEdit;
+	using BusinessData.Enums.Orders;
+	using BusinessData.Models.Orders.Order;
+	using BusinessData.Models.Orders.Order.OrderEditFields;
+	using BusinessData.Models.Orders.Order.OrderEditSettings;
+	using Models.Order.FieldModels;
+	using Models.Order.OrderEdit;
+	using Services.Services;
 
-    public class OrderModelFactory : IOrderModelFactory
+	public class OrderModelFactory : IOrderModelFactory
     {
         private readonly IConfigurableFieldModelFactory _configurableFieldModelFactory;
 
         private readonly IHistoryModelFactory _historyModelFactory;
+		private readonly IGlobalSettingService _globalSettingService;
 
-        public OrderModelFactory(
+		public OrderModelFactory(
                 IConfigurableFieldModelFactory configurableFieldModelFactory, 
                 IHistoryModelFactory historyModelFactory)
         {
             _configurableFieldModelFactory = configurableFieldModelFactory;
             _historyModelFactory = historyModelFactory;
-        }
+		}
 
-        public FullOrderEditModel Create(FindOrderResponse response, int customerId)
+        public FullOrderEditModel Create(FindOrderResponse response, int customerId, IGlobalSettingService globalSettingService)
         {
             var orderId = response.EditData.Order.Id;
             var textOrderId = orderId.ToString(CultureInfo.InvariantCulture);
             var history = _historyModelFactory.Create(response);
+			var fileUploadWhiteList = globalSettingService.GetFileUploadWhiteList();
 
             return new FullOrderEditModel(
                 CreateDeliveryEditModel(response.EditSettings.Delivery, response.EditData.Order.Delivery,
@@ -59,7 +62,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 customerId,
                 response.EditData.Order.OrderTypeId,
                 false,
-                history) {Statuses = response.EditOptions.Statuses};
+                history,
+				fileUploadWhiteList) {Statuses = response.EditOptions.Statuses};
         }
 
         private DeliveryEditModel CreateDeliveryEditModel(                                

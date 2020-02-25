@@ -1,13 +1,14 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Changes.ChangeEdit.NewChange.Concrete
 {
-    using System.Collections.Generic;
+	using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.Domain.Changes;
-    using DH.Helpdesk.Services.Response.Changes;
-    using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
+	using DH.Helpdesk.BusinessData.Models;
+	using DH.Helpdesk.Domain.Changes;
+	using DH.Helpdesk.Services.Response.Changes;
+	using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
+	using Services.Services;
 
-    public sealed class NewChangeModelFactory : INewChangeModelFactory
+	public sealed class NewChangeModelFactory : INewChangeModelFactory
     {
         #region Fields
 
@@ -18,21 +19,25 @@
         private readonly INewOrdererModelFactory newOrdererModelFactory;
 
         private readonly INewRegistrationModelFactory newRegistrationModelFactory;
+		private readonly IGlobalSettingService _globalSettingsService;
 
-        #endregion
+		#endregion
 
-        #region Constructors and Destructors
+		#region Constructors and Destructors
 
-        public NewChangeModelFactory(
+		public NewChangeModelFactory(
             INewOrdererModelFactory newOrdererModelFactory,
             INewGeneralModelFactory newGeneralModelFactory,
             INewRegistrationModelFactory newRegistrationModelFactory,
-            INewLogModelFactory newLogModelFactory)
+            INewLogModelFactory newLogModelFactory,
+			IGlobalSettingService globalSettingService)
         {
             this.newOrdererModelFactory = newOrdererModelFactory;
             this.newGeneralModelFactory = newGeneralModelFactory;
             this.newRegistrationModelFactory = newRegistrationModelFactory;
             this.newLogModelFactory = newLogModelFactory;
+
+			_globalSettingsService = globalSettingService;
         }
 
         #endregion
@@ -58,8 +63,9 @@
                                     response.EditOptions);
 
             var log = this.newLogModelFactory.Create(temporatyId, response.EditSettings.Log, response.EditOptions);
+			var fileUploadWhiteList = _globalSettingsService.GetFileUploadWhiteList();
 
-            return new InputModel(true, temporatyId, orderer, general, registration, null, null, null, log, null, context);
+            return new InputModel(true, temporatyId, orderer, general, registration, null, null, null, log, null, context, fileUploadWhiteList);
         }
 
         #endregion

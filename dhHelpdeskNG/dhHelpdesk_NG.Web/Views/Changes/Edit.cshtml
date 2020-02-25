@@ -19,11 +19,25 @@
             implementationSubtopic: '@Subtopic.Implementation',
             evaluationSubtopic: '@Subtopic.Evaluation',
             registrationRejectValue: '@StepStatus.Rejected',
-            analyzeRejectValue: '@StepStatus.Rejected'
+            analyzeRejectValue: '@StepStatus.Rejected',
+            fileUploadWhiteList: []
         };
 
+        @if (Model.FileUploadWhiteList != null)
+        {
+
+            foreach (var extension in Model.FileUploadWhiteList)
+            {
+            @:parameters.fileUploadWhiteList.push('@extension');
+            }
+        }
+        else
+        {
+            @:parameters.fileUploadWhiteList = null;
+        }
+
         applyChangeBehavior(parameters);
-    });
+        });
 </script>
 
 @using (Html.BeginForm("Edit", "Changes", FormMethod.Post, new { id = "change_form" }))

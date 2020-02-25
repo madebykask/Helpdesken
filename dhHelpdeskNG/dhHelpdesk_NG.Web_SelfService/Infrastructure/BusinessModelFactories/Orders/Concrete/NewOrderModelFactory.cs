@@ -10,6 +10,7 @@ using DH.Helpdesk.Domain.Orders;
 using DH.Helpdesk.SelfService.Infrastructure.Extensions;
 using DH.Helpdesk.SelfService.Models.Orders.OrderEdit;
 using DH.Helpdesk.SelfService.Models.Orders.FieldModels;
+using DH.Helpdesk.Services.Services;
 
 namespace DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders.Concrete
 {
@@ -23,8 +24,9 @@ namespace DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders.C
         }
 
         public FullOrderEditModel Create(string temporatyId, NewOrderEditData data,
-            OrderUserData userContext, bool createCaseFromOrder, int customerId, int? orderTypeId)
+            OrderUserData userContext, bool createCaseFromOrder, int customerId, int? orderTypeId, IGlobalSettingService globalSettingService)
         {
+			var whiteList = globalSettingService.GetFileUploadWhiteList();
             return new FullOrderEditModel(
                 CreateDeliveryEditModel(data.EditSettings.Delivery, data.EditOptions),
                 CreateGeneralEditModel(data.EditSettings.General, data.EditOptions),
@@ -39,7 +41,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders.C
                 temporatyId,
                 customerId,
                 orderTypeId,
-                true)
+                true,
+				whiteList)
             {
                 CreateCase = createCaseFromOrder,
                 Statuses = data.EditOptions.Statuses,

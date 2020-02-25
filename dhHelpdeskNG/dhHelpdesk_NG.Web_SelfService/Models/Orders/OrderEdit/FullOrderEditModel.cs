@@ -29,7 +29,8 @@ namespace DH.Helpdesk.SelfService.Models.Orders.OrderEdit
                     string id,
                     int customerId,
                     int? orderTypeId, 
-                    bool isNew)
+                    bool isNew,
+					List<string> fileUploadWhiteList)
         {
             IsNew = isNew;
             Delivery = delivery;
@@ -45,6 +46,7 @@ namespace DH.Helpdesk.SelfService.Models.Orders.OrderEdit
             Id = id;
             CustomerId = customerId;
             OrderTypeId = orderTypeId;
+			FileUploadWhiteList = fileUploadWhiteList;
 
             NewFiles = new List<WebTemporaryFile>();
             DeletedFiles = new List<string>();
@@ -115,5 +117,6 @@ namespace DH.Helpdesk.SelfService.Models.Orders.OrderEdit
         public OrderStatusItem[] Statuses { get; set; }
 
         public Tuple<int?, string> OrderTypeDocument { get; set; }
-    }
+		public List<string> FileUploadWhiteList { get; private set; }
+	}
 }

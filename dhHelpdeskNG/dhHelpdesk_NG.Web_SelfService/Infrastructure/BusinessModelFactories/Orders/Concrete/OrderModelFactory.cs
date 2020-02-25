@@ -11,6 +11,7 @@ using DH.Helpdesk.Domain.Orders;
 using DH.Helpdesk.SelfService.Infrastructure.Extensions;
 using DH.Helpdesk.SelfService.Models.Orders.FieldModels;
 using DH.Helpdesk.SelfService.Models.Orders.OrderEdit;
+using DH.Helpdesk.Services.Services;
 
 namespace DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders.Concrete
 {
@@ -26,12 +27,15 @@ namespace DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders.C
             _configurableFieldModelFactory = configurableFieldModelFactory;
         }
 
-        public FullOrderEditModel Create(FindOrderResponse response, int customerId)
+        public FullOrderEditModel Create(FindOrderResponse response, int customerId, IGlobalSettingService globalSettingService)
         {
             var orderId = response.EditData.Order.Id;
             var textOrderId = orderId.ToString(CultureInfo.InvariantCulture);
 
-            return new FullOrderEditModel(
+			var whiteList = globalSettingService.GetFileUploadWhiteList();
+
+
+			return new FullOrderEditModel(
                 CreateDeliveryEditModel(response.EditSettings.Delivery, response.EditData.Order.Delivery,
                     response.EditOptions),
                 CreateGeneralEditModel(response.EditSettings.General, response.EditData.Order.General,
@@ -51,7 +55,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders.C
                 textOrderId,
                 customerId,
                 response.EditData.Order.OrderTypeId,
-                false)
+                false,
+				whiteList)
             { Statuses = response.EditOptions.Statuses };
         }
 

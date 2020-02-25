@@ -37,14 +37,16 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IUserPermissionsChecker _userPermissionsChecker;
         private readonly ISettingService _settingService;
+		private readonly IGlobalSettingService _globalSettingService;
 
-        public DocumentController(
+		public DocumentController(
             IDocumentService documentService,
             IUserService userService,
             IWorkingGroupService workingGroupService,
             IMasterDataService masterDataService,
             IUserPermissionsChecker userPermissionsChecker,
-            ISettingService settingService)
+            ISettingService settingService,
+			IGlobalSettingService globalSettingService)
             : base(masterDataService)
         {
             this._documentService = documentService;
@@ -52,7 +54,9 @@ namespace DH.Helpdesk.Web.Controllers
             this._workingGroupService = workingGroupService;
             this._userPermissionsChecker = userPermissionsChecker;
             this._settingService = settingService;
-        }
+			this._globalSettingService = globalSettingService;
+
+		}
 
         [HttpPost]
         public void RememberTab(string topic, string tab)
@@ -94,6 +98,13 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 var file = this.Request.Files[0];
                 string fileName = Path.GetFileName(file.FileName);
+
+				var extension = Path.GetExtension(fileName);
+				if (!_globalSettingService.IsExtensionInWhitelist(extension))
+				{
+					throw new ArgumentException($"File extension not valid: {fileName}");
+				}
+
                 string contentType = file.ContentType;
                 int intDocLen = file.ContentLength;
                 byte[] docBuffer = new byte[intDocLen];
@@ -354,6 +365,7 @@ namespace DH.Helpdesk.Web.Controllers
             model.DocSearch = ds;
 
             model.UserHasDocumentAdminPermission = userHasDocumentAdminPermission;
+			model.FileUploadWhiteList = _globalSettingService.GetFileUploadWhiteList();
             return model;
         }
 
@@ -547,6 +559,7 @@ namespace DH.Helpdesk.Web.Controllers
             };
 
             model.UserHasDocumentAdminPermission = userHasDocumentAdminPermission;
+			model.FileUploadWhiteList = _globalSettingService.GetFileUploadWhiteList();
             //model.ShowOnStartPage = document.ShowOnStartPage;
 
             return model;

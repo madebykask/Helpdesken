@@ -25,14 +25,19 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
     public class NewOrderModelFactory : INewOrderModelFactory
     {
         private readonly IConfigurableFieldModelFactory _configurableFieldModelFactory;
+		private readonly IGlobalSettingService _globalSettingService;
 
-        public NewOrderModelFactory(IConfigurableFieldModelFactory configurableFieldModelFactory)
+		public NewOrderModelFactory(IConfigurableFieldModelFactory configurableFieldModelFactory, IGlobalSettingService globalSettingService)
         {
             _configurableFieldModelFactory = configurableFieldModelFactory;
-        }
+			_globalSettingService = globalSettingService;
+
+		}
 
         public FullOrderEditModel Create(string temporatyId, NewOrderEditData data, IWorkContext workContext, int? orderTypeId)
         {
+			var fileUploadWhiteList = _globalSettingService.GetFileUploadWhiteList();
+
             return new FullOrderEditModel(
                 CreateDeliveryEditModel(data.EditSettings.Delivery, data.EditOptions),
                 CreateGeneralEditModel(data.EditSettings.General, data.EditOptions),
@@ -48,7 +53,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
                 workContext.Customer.CustomerId,
                 orderTypeId,
                 true,
-                null)
+                null,
+				fileUploadWhiteList)
             {
                 CreateCase = workContext.Customer.Settings.CreateCaseFromOrder,
                 Statuses = data.EditOptions.Statuses,

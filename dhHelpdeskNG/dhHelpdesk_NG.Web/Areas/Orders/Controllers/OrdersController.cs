@@ -5,36 +5,37 @@ using DH.Helpdesk.Web.Infrastructure.Order;
 
 namespace DH.Helpdesk.Web.Areas.Orders.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Web;
-    using System.Web.Mvc;
-    using BusinessData.Enums.Orders;
-    using BusinessData.Models.Orders.Index;
-    using DH.Helpdesk.Common.Tools;
-    using Dal.Enums;
-    using Dal.Infrastructure.Context;
-    using Services.BusinessLogic.OtherTools.Concrete;
-    using Services.Services;
-    using Services.Services.Orders;
-    using Infrastructure.ModelFactories;
-    using Models.Index;
-    using Models.Order.FieldModels;
-    using Models.Order.OrderEdit;
-    using Enums;
-    using Web.Infrastructure;
-    using Web.Infrastructure.ActionFilters;
-    using Web.Infrastructure.Tools;
-    using Services.BusinessLogic.Admin.Users;
-    using Services.BusinessLogic.Mappers.Users;
-    using BusinessData.Enums.Admin.Users;
-    using BusinessData.Models.Case;
-    using Web.Infrastructure.Extensions;
-    using Services.Services.Concrete;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Net;
+	using System.Web;
+	using System.Web.Mvc;
+	using BusinessData.Enums.Orders;
+	using BusinessData.Models.Orders.Index;
+	using DH.Helpdesk.Common.Tools;
+	using Dal.Enums;
+	using Dal.Infrastructure.Context;
+	using Services.BusinessLogic.OtherTools.Concrete;
+	using Services.Services;
+	using Services.Services.Orders;
+	using Infrastructure.ModelFactories;
+	using Models.Index;
+	using Models.Order.FieldModels;
+	using Models.Order.OrderEdit;
+	using Enums;
+	using Web.Infrastructure;
+	using Web.Infrastructure.ActionFilters;
+	using Web.Infrastructure.Tools;
+	using Services.BusinessLogic.Admin.Users;
+	using Services.BusinessLogic.Mappers.Users;
+	using BusinessData.Enums.Admin.Users;
+	using BusinessData.Models.Case;
+	using Web.Infrastructure.Extensions;
+	using Services.Services.Concrete;
+	using System.IO;
 
-    public class OrdersController : BaseController
+	public class OrdersController : BaseController
     {
         private readonly IOrdersService _ordersService;
         private readonly IWorkContext _workContext;
@@ -54,6 +55,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
         private readonly IDocumentService _documentService;
         private readonly IOrganizationService _organizationService;
 		private readonly IOrganizationJsonService _organizationJsonService;
+		private readonly IGlobalSettingService _globalSettingService;
 
 		public OrdersController(
                 IMasterDataService masterDataService,
@@ -74,7 +76,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
                 ISettingService settingService,
                 IDocumentService documentService,
                 IOrganizationService organizationService,
-				IOrganizationJsonService organizationJsonService)
+				IOrganizationJsonService organizationJsonService,
+				IGlobalSettingService globalSettingService)
             : base(masterDataService)
         {
             _ordersService = ordersService;
@@ -96,7 +99,9 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
 
             _filesStateStore = editorStateCacheFactory.CreateForModule(ModuleName.Orders);
             _filesStore = temporaryFilesCacheFactory.CreateForModule(ModuleName.Orders);
-        }
+			_globalSettingService = globalSettingService;
+
+		}
 
         [HttpGet]
         public ActionResult Index()
@@ -263,7 +268,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
                                                      cs.ModuleInventory.ToBool() &&
                                                      _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
 
-            var model = _orderModelFactory.Create(response, _workContext.Customer.CustomerId);
+            var model = _orderModelFactory.Create(response, _workContext.Customer.CustomerId, _globalSettingService);
             model.UserHasAdminOrderPermission = userHasAdminOrderPermission;
             model.IsReturnToCase = retToCase;
             model.UserHasCreateWorkstationPermission = userHasCreateWorkstationPermission;
@@ -358,6 +363,12 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
                 throw new HttpException((int)HttpStatusCode.NotFound, null);
             }
 
+			var extension = Path.GetExtension(name);
+			if (!_globalSettingService.IsExtensionInWhitelist(extension))
+			{
+				throw new ArgumentException($"File extension not valid: {name}");
+			}
+
             var fileContent = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(fileContent, 0, fileContent.Length);
 
@@ -448,7 +459,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
             {
                 throw new HttpException((int)HttpStatusCode.NotFound, null);
             }
-            var model = _orderModelFactory.Create(response, _workContext.Customer.CustomerId);
+            var model = _orderModelFactory.Create(response, _workContext.Customer.CustomerId, _globalSettingService);
             var helper = new OrderExportHelper();
             var fileContent = helper.GetOrderExportText(model);
             var fileName = string.Format("O-{0}_{1}.txt", model.General.OrderNumber.Value, DateTime.Now.ToShortDateString());

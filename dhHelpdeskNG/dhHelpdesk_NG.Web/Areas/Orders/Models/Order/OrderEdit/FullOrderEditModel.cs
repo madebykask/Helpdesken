@@ -34,7 +34,8 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
                     int customerId,
                     int? orderTypeId, 
                     bool isNew,
-                    HistoryModel history)
+                    HistoryModel history,
+					List<string> fileUploadWhiteList)
         {
             IsNew = isNew;
             Delivery = delivery;
@@ -51,6 +52,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
             CustomerId = customerId;
             OrderTypeId = orderTypeId;
             History = history;
+			FileUploadWhiteList = fileUploadWhiteList;
 
             NewFiles = new List<WebTemporaryFile>();
             DeletedFiles = new List<string>();
@@ -128,5 +130,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
         public OrderStatusItem[] Statuses { get; set; }
 
         public Tuple<int?, string> OrderTypeDocument { get; set; }
-    }
+		public List<string> FileUploadWhiteList { get; private set; }
+	}
 }

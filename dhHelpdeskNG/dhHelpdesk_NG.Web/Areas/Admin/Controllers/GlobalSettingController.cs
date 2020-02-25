@@ -1341,6 +1341,43 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return PartialView("_FilesViewLog", model);
         }
 
+		private readonly string[] DEFAULT_FILEUPLOAD_WHITELIST = new string[]
+		{
+			"7z",
+			"avi",
+			"bmp",
+			"doc",
+			"docx",
+			"gif",
+			"jpeg",
+			"jpg",
+			"log",
+			"mov",
+			"mp4",
+			"mpeg",
+			"mpg",
+			"odt",
+			"pdf",
+			"png",
+			"pps",
+			"ppt",
+			"pptx",
+			"rtf",
+			"tga",
+			"tif",
+			"tiff",
+			"txt",
+			"txt",
+			"xls",
+			"xlsx",
+			"zip"
+		};
+
+		[HttpGet]
+		public JsonResult GetSystemDefaultWhiteList()
+		{
+			return Json(DEFAULT_FILEUPLOAD_WHITELIST, JsonRequestBehavior.AllowGet);
+		}
 
 		public ActionResult EditFileExtensions()
 		{

@@ -30,8 +30,21 @@
                 deleteLogUrl: '@Url.Action("DeleteLog")',
                 logSubtopic: '@Subtopic.Log',
                 fileNameSubtopic: '@Subtopic.FileName',
-                noMoreFilesText: '@Translation.GetForJS("Inga fler filer tillåts")'
+                noMoreFilesText: '@Translation.GetForJS("Inga fler filer tillåts")',
+                fileUploadWhiteList: []
             };
+
+            @if(Model.FileUploadWhiteList != null)
+            {
+                foreach(var extension in Model.FileUploadWhiteList)
+                {
+                    @:parameters.fileUploadWhiteList.push('@extension');
+                }
+            }
+            else
+            {
+                @:parameters.fileUploadWhiteList = null;
+            }
 
             applyOrderBehavior(parameters);
         });

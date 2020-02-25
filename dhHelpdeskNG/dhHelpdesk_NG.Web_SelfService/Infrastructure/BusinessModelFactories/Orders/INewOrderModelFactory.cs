@@ -2,6 +2,7 @@
 using DH.Helpdesk.Dal.Infrastructure.Context;
 using DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders.Concrete;
 using DH.Helpdesk.SelfService.Models.Orders.OrderEdit;
+using DH.Helpdesk.Services.Services;
 
 namespace DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders
 {
@@ -13,6 +14,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.BusinessModelFactories.Orders
                         OrderUserData userContext,
                         bool createCaseFromOrder,
                         int customerId,
-                        int? orderTypeId);
+                        int? orderTypeId,
+						IGlobalSettingService globalSettingService);
     }
 }

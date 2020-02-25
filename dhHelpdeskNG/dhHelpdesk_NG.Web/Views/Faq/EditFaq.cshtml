@@ -11,6 +11,21 @@
     $(document).ready(function () {
         FAQInitForm();
     });
+
+    window.parameters = (window.parameters == null ? {} : window.parameters);
+    window.parameters.fileUploadWhiteList = [];
+
+    @if (Model.FileUploadWhiteList != null)
+    {
+        foreach(var extension in Model.FileUploadWhiteList)
+        {
+            @:window.parameters.fileUploadWhiteList.push('@extension');
+        }
+    }
+    else
+    {
+        @:window.parameters.fileUploadWhiteList = null;
+    }
 </script>
 
 

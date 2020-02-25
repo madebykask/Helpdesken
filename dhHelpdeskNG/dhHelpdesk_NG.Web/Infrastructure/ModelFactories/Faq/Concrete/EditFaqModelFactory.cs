@@ -21,7 +21,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq.Concrete
             bool userHasFaqAdminPermission,
             SelectList languages,
             int languageId,
-            bool showDetails = false)
+            bool showDetails,
+			List<string> fileUploadWhiteList)
         {
             var categoryDropDownItems = categories.Select(this.CategoryToDropDownItem).ToList();
 
@@ -56,7 +57,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq.Concrete
                 userHasFaqAdminPermission,
                 languageId,
                 languages,
-                showDetails);
+                showDetails,
+				fileUploadWhiteList);
         }
 
         private DropDownWithSubmenusItem CategoryToDropDownItem(CategoryWithSubcategories categoryWithSubcategories)
