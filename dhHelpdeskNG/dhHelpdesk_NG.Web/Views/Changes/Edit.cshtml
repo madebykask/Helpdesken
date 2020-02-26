@@ -20,7 +20,8 @@
             evaluationSubtopic: '@Subtopic.Evaluation',
             registrationRejectValue: '@StepStatus.Rejected',
             analyzeRejectValue: '@StepStatus.Rejected',
-            fileUploadWhiteList: []
+            fileUploadWhiteList: [],
+            invalidFileExtensionText: '@Html.Raw(Translation.GetForJS("har inte en giltig filändelse."))'
         };
 
         @if (Model.FileUploadWhiteList != null)

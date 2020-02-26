@@ -21,13 +21,14 @@
         downloadContractFileUrl: '@Url.Action("DownloadFile")',
         downloadContractFileParamUrl: '@(!string.IsNullOrEmpty(Model.ContractFileKey) ? "id=" + Model.ContractFileKey + "&" : string.Empty)',
         deleteContractFileUrl: '@Url.Action("DeleteContractFile")',
-        fileUploadWhiteList: []
+        fileUploadWhiteList: [],
+        invalidFileExtensionText: '@Html.Raw(Translation.GetForJS("har inte en giltig filändelse."))'
     };
 
     @if (Model.FileUploadWhiteList != null)
     {
         foreach(var extension in Model.FileUploadWhiteList)
-        { 
+        {
         @:window.appParameters.fileUploadWhiteList.push('@extension');
         }
     }

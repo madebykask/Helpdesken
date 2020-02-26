@@ -93,7 +93,8 @@
             });
         };
 
-        fileUploadWhiteList = window.appParameters.fileUploadWhiteList;
+        var fileUploadWhiteList = window.appParameters.fileUploadWhiteList;
+        var invalidFileExtensionText = window.appParameters.invalidFileExtensionText;
         $('#Contract_uploader').pluploadQueue({
             runtimes: 'html5,html4',
             url: uploadContractFileUrl,
@@ -123,7 +124,7 @@
                         files.forEach(function (e) {
                             if (!isFileInWhiteList(e.name, whiteList)) {
                                 up.removeFile(e);
-                                alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                                alert(e.name + ' ' + invalidFileExtensionText);
                             }
                         })
 

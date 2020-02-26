@@ -191,8 +191,10 @@ namespace DH.Helpdesk.Web.Areas.Orders.Controllers
             var data = _ordersService.GetNewOrderEditData(_workContext.Customer.CustomerId, orderTypeForCteateOrderId, lowestchildordertypeid, false);
             var temporaryId = _temporaryIdProvider.ProvideTemporaryId();
 
-            var model = 
-                _newOrderModelFactory.Create(temporaryId, data, _workContext, orderTypeForCteateOrderId);
+			var fileUploadWhiteList = _globalSettingService.GetFileUploadWhiteList();
+
+			var model = 
+                _newOrderModelFactory.Create(temporaryId, data, _workContext, orderTypeForCteateOrderId, fileUploadWhiteList);
 
             model.OrderTypeId = lowestchildordertypeid;
 

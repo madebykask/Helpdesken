@@ -15,7 +15,8 @@
                 string temporatyId, 
                 GetNewChangeEditDataResponse response,
                 OperationContext context,
-                IList<ChangeStatusEntity> statuses);
+                IList<ChangeStatusEntity> statuses,
+				List<string> fileUploadWhiteList);
 
         #endregion
     }

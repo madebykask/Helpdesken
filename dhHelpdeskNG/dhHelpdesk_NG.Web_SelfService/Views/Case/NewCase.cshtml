@@ -46,7 +46,8 @@
         fetchDepartmentsUrl: '@Url.Content("~/Case/GetDepartmentsByRegion")',
         fetchOUUrl: '@Url.Content("~/Case/GetOrgUnitsByDepartments")',
         setProductAreaByCaseTypeUrl: '@Url.Content("~/Case/GetProductAreaByCaseType")',
-        fileUploadWhiteList: []
+        fileUploadWhiteList: [],
+        invalidFileExtensionText: '@Html.Raw(Translation.GetForJS("har inte en giltig filändelse."))'
     };
 
     @if (Model.FileUploadWhiteList != null)

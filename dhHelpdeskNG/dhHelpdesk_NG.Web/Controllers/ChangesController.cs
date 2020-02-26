@@ -409,11 +409,13 @@ namespace DH.Helpdesk.Web.Controllers
             var temporaryId = this.temporaryIdProvider.ProvideTemporaryId();
             var response = this.changeService.GetNewChangeEditData(this.OperationContext);
             var statuses = this.changeStatusService.GetChangeStatuses(this.OperationContext.CustomerId);
+			var fileUploadWhiteList = _globalSettingService.GetFileUploadWhiteList();
             var model = this.newChangeModelFactory.Create(
                                             temporaryId, 
                                             response, 
                                             this.OperationContext,
-                                            statuses);
+                                            statuses,
+											fileUploadWhiteList);
             return this.View(model);
         }
 
