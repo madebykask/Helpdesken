@@ -20,8 +20,21 @@
         fileAlreadyExistsMsg: '@Html.Raw(Translation.GetForJS("File already exists", Enums.TranslationSource.TextTranslation))',
         downloadContractFileUrl: '@Url.Action("DownloadFile")',
         downloadContractFileParamUrl: '@(!string.IsNullOrEmpty(Model.ContractFileKey) ? "id=" + Model.ContractFileKey + "&" : string.Empty)',
-        deleteContractFileUrl: '@Url.Action("DeleteContractFile")'
+        deleteContractFileUrl: '@Url.Action("DeleteContractFile")',
+        fileUploadWhiteList: []
     };
+
+    @if (Model.FileUploadWhiteList != null)
+    {
+        foreach(var extension in Model.FileUploadWhiteList)
+        { 
+        @:window.appParameters.fileUploadWhiteList.push('@extension');
+        }
+    }
+    else
+    {
+        @:window.appParameters.fileUploadWhiteList = null;
+    }
 </script>
 
 
