@@ -33,9 +33,14 @@
                                     <td class="span4">@Translation.GetCoreTextTranslation("Begränsa filändelser vid uppladdning av filer")</td>
                                     <td>@Html.CheckBoxFor(model => model.UseFileExtensionWhiteList, new { @class = "switchcheckbox" })</td>
                                 </tr>
-                                <tr>
-                                    <td>@Translation.Get("Återställ standardvärden för systemet", Enums.TranslationSource.TextTranslation)</td>
-                                    <td><a href="" id="btnResetDefaultWhiteList" class="btn">@Translation.Get("Återställ", Enums.TranslationSource.TextTranslation)</a></td>
+                                <tr id="rowResetFileExtensions" style="@(Model.UseFileExtensionWhiteList ? "" : "display: none;")">
+                                    <td>@Translation.Get("Återställ standardvärdena för filändelser", Enums.TranslationSource.TextTranslation)</td>
+                                    <td>
+                                        <a href="" id="btnResetDefaultWhiteList" class="btn deleteDialog" buttonTypes="YesNo" deleteDialogText="@Translation.Get("Detta kommer att återställa standardlistan på giltiga filändelser för systemet. Vill du fortsätta?", Enums.TranslationSource.TextTranslation)">@Translation.Get("Återställ", Enums.TranslationSource.TextTranslation)</a>
+                                        <input type="hidden" id="DeleteDialogYesButtonText" value="@Translation.Get("Ja", Enums.TranslationSource.TextTranslation)"/>
+                                        <input type="hidden" id="DeleteDialogNoButtonText" value="@Translation.Get("Nej", Enums.TranslationSource.TextTranslation)"/>
+                                        <input type="hidden" id="deleteDialogForm" value=""/>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -51,7 +56,7 @@
                             <tbody>
                                     <tr>
                                         <td>
-                                            @Html.TextAreaFor(model => model.FileExtensions, new { style = "width:600px; height:300px;", maxlength = "5000" })
+                                            @Html.TextAreaFor(model => model.FileExtensions, new { style = "width:600px; height:300px;", maxlength = "5000", required="true" })
                                         </td>
                                     </tr>
                             </tbody>
@@ -67,28 +72,47 @@
 
         <script type="text/javascript">
         $(function () {
+
+            var validator = $("#target").validate({
+                rules: {
+                    "FileExtensions": {
+                        required: true
+                    }
+                },
+                messages: {
+                    "FileExtensions": {
+                        required: "@Translation.GetForJS("Du måste ange giltiga filändelser")"
+                    }
+                },
+                submitHandler: function (form, ev) {
+                    if (ev.target.id != 'deleteDialogForm')
+                        form.submit();
+                }
+            });
+
             $('#UseFileExtensionWhiteList').on('switchChange.bootstrapSwitch', function (e, data) {
                 var show = data;
-                if (show)
+                if (show) {
                     $('#tblFileExtensions').show();
-                else
-                    $('#tblFileExtensions').hide();
-            });
-            $('#btnResetDefaultWhiteList').on('click', function (event) {
-                var shouldReset = confirm('@Translation.Get("Detta kommer att återställa standardlistan på giltiga filändelser för systemet. Vill du fortsätta?", Enums.TranslationSource.TextTranslation)');
-                if (shouldReset) {
-                    $.ajax({
-                        url: '/admin/globalsetting/GetSystemDefaultWhiteList',
-                        dataType: 'json', 
-                        success: function (data) {
-                            var str = "";
-                            data.forEach(function (d) {
-                                str += d + "\r\n";
-                            });
-                            $('#FileExtensions').val(str);
-                        }
-                    });
+                    $('#rowResetFileExtensions').show();
                 }
+                else {
+                    $('#tblFileExtensions').hide();
+                    $('#rowResetFileExtensions').hide();
+                }
+            });
+            $('#deleteDialogForm').submit(function (event) {
+                $.ajax({
+                    url: '/admin/globalsetting/GetSystemDefaultWhiteList',
+                    dataType: 'json', 
+                    success: function (data) {
+
+                        var str = data.join('\n');
+                        $('#FileExtensions').val(str);
+                        validator.form();
+                    }
+                });
+                
                 event.preventDefault();
             })
         });

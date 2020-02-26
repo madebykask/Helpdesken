@@ -29,7 +29,7 @@ using DH.Helpdesk.Web.Infrastructure.CaseOverview;
 using DH.Helpdesk.Web.Infrastructure.Grid;
 using DH.Helpdesk.Web.Models.Case;
 using DH.Helpdesk.Web.Models.Case.Output;
-
+using System.IO;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -45,8 +45,9 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly GridSettingsService _gridSettingsService;
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly CaseOverviewGridSettingsService _caseOverviewSettingsService;
+		private readonly IGlobalSettingService _globalSettingService;
 
-        public ContractsController(
+		public ContractsController(
             IUserService userService,
             IContractCategoryService contractCategoryService,
             ICustomerService customerService,
@@ -57,7 +58,8 @@ namespace DH.Helpdesk.Web.Controllers
             GridSettingsService gridSettingsService,
             ICaseFieldSettingService caseFieldSettingService,
             CaseOverviewGridSettingsService caseOverviewSettingsService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+			IGlobalSettingService globalSettingService)
 
             : base(masterDataService)
         {
@@ -71,6 +73,7 @@ namespace DH.Helpdesk.Web.Controllers
             _gridSettingsService = gridSettingsService;
             _caseFieldSettingService = caseFieldSettingService;
             _caseOverviewSettingsService = caseOverviewSettingsService;
+			_globalSettingService = globalSettingService;
         }
 
         [UserPermissions(UserPermission.ContractPermission)]
@@ -588,6 +591,8 @@ namespace DH.Helpdesk.Web.Controllers
             }).ToList();
             model.FollowUpResponsibleUsers.Insert(0, emptyChoice);
 
+			model.FileUploadWhiteList = _globalSettingService.GetFileUploadWhiteList();
+
             return model;
         }
 
@@ -779,6 +784,12 @@ namespace DH.Helpdesk.Web.Controllers
         [UserPermissions(UserPermission.ContractPermission)]
         public void UploadContractFile(string id, string name)
         {
+			var extension = Path.GetExtension(name);
+			if (!_globalSettingService.IsExtensionInWhitelist(extension))
+			{
+				throw new ArgumentException($"File extension is not valid: {name}");
+			}
+
             var uploadedFile = this.Request.Files[0];
             var uploadedData = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);

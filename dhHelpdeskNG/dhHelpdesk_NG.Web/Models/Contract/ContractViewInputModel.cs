@@ -68,5 +68,7 @@ namespace DH.Helpdesk.Web.Models.Contract
 
         public string ChangedDate { get; set; }
 
-    }
+		public List<string> FileUploadWhiteList { get; set; }
+
+	}
 }
