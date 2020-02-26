@@ -29,15 +29,13 @@
             INewOrdererModelFactory newOrdererModelFactory,
             INewGeneralModelFactory newGeneralModelFactory,
             INewRegistrationModelFactory newRegistrationModelFactory,
-            INewLogModelFactory newLogModelFactory,
-			IGlobalSettingService globalSettingService)
+            INewLogModelFactory newLogModelFactory)
         {
             this.newOrdererModelFactory = newOrdererModelFactory;
             this.newGeneralModelFactory = newGeneralModelFactory;
             this.newRegistrationModelFactory = newRegistrationModelFactory;
             this.newLogModelFactory = newLogModelFactory;
 
-			_globalSettingsService = globalSettingService;
         }
 
         #endregion
@@ -48,7 +46,8 @@
                         string temporatyId, 
                         GetNewChangeEditDataResponse response,
                         OperationContext context,
-                        IList<ChangeStatusEntity> statuses)
+                        IList<ChangeStatusEntity> statuses,
+						List<string> fileUploadWhiteList)
         {
             var orderer = this.newOrdererModelFactory.Create(response.EditSettings.Orderer, response.EditOptions);
             var general = this.newGeneralModelFactory.Create(
@@ -63,7 +62,6 @@
                                     response.EditOptions);
 
             var log = this.newLogModelFactory.Create(temporatyId, response.EditSettings.Log, response.EditOptions);
-			var fileUploadWhiteList = _globalSettingsService.GetFileUploadWhiteList();
 
             return new InputModel(true, temporatyId, orderer, general, registration, null, null, null, log, null, context, fileUploadWhiteList);
         }

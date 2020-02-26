@@ -52,9 +52,10 @@
 
             var opt = {
                 twoAttacmentsMode: @(Model.EnableTwoAttachments.ToJavaScriptBool()),
-                fileUploadWhiteList: []
+                fileUploadWhiteList: [],
+                invalidFileExtensionText: '@Html.Raw(Translation.GetForJS("har inte en giltig filändelse."))'
             }
-                
+
                 @if(Model.HasFileUploadWhiteList)
                 {
                     foreach(var fileExtension in Model.FileUploadWhiteList)

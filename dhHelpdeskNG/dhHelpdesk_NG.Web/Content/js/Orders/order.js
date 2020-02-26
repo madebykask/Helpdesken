@@ -8,6 +8,7 @@
     if (!parameters.fileNameSubtopic) throw new Error('fileNameSubtopic must be specified.');
 
     var fileUploadWhiteList = parameters.fileUploadWhiteList;
+    var invalidFileExtensionText = parameters.invalidFileExtensionText;
 
     var isFileInWhiteList = function (filename, whiteList) {
         if (filename.indexOf('.') !== -1) {
@@ -38,7 +39,7 @@
                     files.forEach(function (e) {
                         if (!isFileInWhiteList(e.name, whiteList)) {
                             up.removeFile(e);
-                            alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                            alert(e.name + ' ' + invalidFileExtensionText);
                         }
                     })
 

@@ -1558,6 +1558,7 @@ function CaseInitForm(opt) {
         return fileName;
     }
 
+    var invalidFileExtensionText = opt.invalidFileExtensionText;
     var isFileInWhiteList = function(filename, whiteList)
     {
         if (filename.indexOf('.') !== -1) {
@@ -1668,7 +1669,7 @@ function CaseInitForm(opt) {
                         files.forEach(function (e) {
                             if (!isFileInWhiteList(e.name, whiteList)) {
                                 up.removeFile(e);
-                                alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                                alert(e.name + ' ' + invalidFileExtensionText);
                             }
                         })
 
@@ -1773,7 +1774,7 @@ function CaseInitForm(opt) {
                         files.forEach(function (e) {
                             if (!isFileInWhiteList(e.name, whiteList)) {
                                 up.removeFile(e);
-                                alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                                alert(e.name + ' ' + invalidFileExtensionText);
                             }
                         })
 

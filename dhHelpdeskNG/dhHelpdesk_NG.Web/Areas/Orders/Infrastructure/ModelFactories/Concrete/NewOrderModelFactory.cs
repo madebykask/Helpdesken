@@ -27,16 +27,13 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
         private readonly IConfigurableFieldModelFactory _configurableFieldModelFactory;
 		private readonly IGlobalSettingService _globalSettingService;
 
-		public NewOrderModelFactory(IConfigurableFieldModelFactory configurableFieldModelFactory, IGlobalSettingService globalSettingService)
+		public NewOrderModelFactory(IConfigurableFieldModelFactory configurableFieldModelFactory)
         {
             _configurableFieldModelFactory = configurableFieldModelFactory;
-			_globalSettingService = globalSettingService;
-
 		}
 
-        public FullOrderEditModel Create(string temporatyId, NewOrderEditData data, IWorkContext workContext, int? orderTypeId)
+        public FullOrderEditModel Create(string temporatyId, NewOrderEditData data, IWorkContext workContext, int? orderTypeId, List<string> fileUploadWhiteList)
         {
-			var fileUploadWhiteList = _globalSettingService.GetFileUploadWhiteList();
 
             return new FullOrderEditModel(
                 CreateDeliveryEditModel(data.EditSettings.Delivery, data.EditOptions),

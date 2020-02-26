@@ -14,6 +14,7 @@
             var lastInitiatorSearchKey = "";
 
             var fileUploadWhiteList = window.parameters.fileUploadWhiteList;
+            var invalidFileExtensionText = window.parameters.invalidFileExtensionText;
 
             var isFileInWhiteList = function (filename, whiteList) {
                 if (filename.indexOf('.') !== -1) {
@@ -45,7 +46,7 @@
                             files.forEach(function (e) {
                                 if (!isFileInWhiteList(e.name, whiteList)) {
                                     up.removeFile(e);
-                                    alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                                    alert(e.name + ' ' + invalidFileExtensionText);
                                 }
                             })
 

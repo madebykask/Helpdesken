@@ -10,6 +10,7 @@ $(function () {
         window.selfService = window.selfService || {};
         window.selfService.caseLog = window.selfService.caseLog || new CaseLog(params);
         var fileUploadWhiteList = window.appParameters.fileUploadWhiteList;
+        var invalidFileExtensionText = window.appParameters.invalidFileExtensionText;
         
         var uploadLogFileUrl = params.uploadLogFileUrl;
         var logFileKey = params.logFileKey;
@@ -63,7 +64,7 @@ $(function () {
                         files.forEach(function (e) {
                             if (!isFileInWhiteList(e.name, whiteList)) {
                                 up.removeFile(e);
-                                alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                                alert(e.name + ' ' + invalidFileExtensionText);
                             }
                         })
 

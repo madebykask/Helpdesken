@@ -18,6 +18,7 @@
         var OUsUrl = window.appParameters.fetchOUUrl;
         var setProductAreaByCaseTypeUrl = window.appParameters.setProductAreaByCaseTypeUrl;
         var fileUploadWhiteList = window.appParameters.fileUploadWhiteList;
+        var invalidFileExtensionText = window.appParameters.invalidFileExtensionText;
 
         var customerId;
         var alreadyExistFileIds = [];
@@ -402,7 +403,7 @@
                         files.forEach(function (e) {
                             if (!isFileInWhiteList(e.name, whiteList)) {
                                 up.removeFile(e);
-                                alert(e.name + ' does not have a valid extension.'); // TODO: translate
+                                alert(e.name + ' ' + invalidFileExtensionText);
                             }
                         })
 
