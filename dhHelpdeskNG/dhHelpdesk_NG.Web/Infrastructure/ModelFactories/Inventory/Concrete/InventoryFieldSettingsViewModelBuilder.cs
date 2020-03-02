@@ -37,6 +37,8 @@
             var changedDate = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.ChangedDateFieldSetting);
             var syncDate = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.SyncDateFieldSetting);
 
+            var type = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.TypeFieldSetting);
+
             //hide xml for date fields
             createdDate.HideXml = true;
             changedDate.HideXml = true;
@@ -56,7 +58,8 @@
                 info,
                 createdDate,
                 changedDate,
-                syncDate);
+                syncDate,
+                type);
 
             var inventoryDynamicFieldSettings =
                 response.InventoryDynamicFieldSettings
@@ -92,6 +95,7 @@
             var createdDate = InventoryFieldSettingModel.GetDefault(12, InventoryFieldNames.CreatedDate);
             var changedDate = InventoryFieldSettingModel.GetDefault(12, InventoryFieldNames.ChangedDate);
             var syncDate = InventoryFieldSettingModel.GetDefault(12, InventoryFieldNames.SyncDate);
+            var type = InventoryFieldSettingModel.GetDefault(null, InventoryFieldNames.Type);
 
             //hide xml for date fields
             createdDate.HideXml = true;
@@ -112,7 +116,8 @@
                 info,
                 createdDate,
                 changedDate,
-                syncDate);
+                syncDate,
+                type);
 
             var inventoryTypeModel = InventoryTypeModel.CreateDefault();
             var newDynamicFieldSettingViewModel = CreateNewInventoryDynamicFieldSettingViewModel(groupModels);

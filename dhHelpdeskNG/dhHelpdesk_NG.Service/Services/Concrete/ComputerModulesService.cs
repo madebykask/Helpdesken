@@ -116,9 +116,9 @@ namespace DH.Helpdesk.Services.Services.Concrete
             return operatingSystems;
         }
 
-        public List<ItemOverview> GetComputerTypes(int customerId)
+        public List<ItemOverview> GetComputerTypes(int customerId, int? inventoryId = null)
         {
-            var computerTypes = this.computerTypeRepository.FindOverviews(customerId);
+            var computerTypes = this.computerTypeRepository.FindOverviews(customerId, inventoryId);
             return computerTypes;
         }
 

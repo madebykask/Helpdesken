@@ -50,19 +50,20 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             };
         }
 
-        public List<ItemOverview> FindOverviews(int customerId)
+        public List<ItemOverview> FindOverviews(int customerId, int? inventoryId)
         {
-            var overviews =
+            var query =
                 DbSet.AsNoTracking()
-                    .Where(c => c.InventoryType_Id == null && c.Customer_Id == customerId)
-                    .Select(c => new ItemOverview()
+                    .Where(c => c.Customer_Id == customerId);
+                query = inventoryId.HasValue ?
+                        query.Where(c => c.InventoryType_Id == inventoryId) :
+                        query.Where(c => c.InventoryType_Id == null);
+
+            return query.Select(c => new ItemOverview
                     {
                         Name = c.Name,
                         Value = c.Id.ToString()
-                    })
-                    .ToList();
-
-            return overviews;
+                    }).ToList();
         }
     }
 }

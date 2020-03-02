@@ -29,5 +29,7 @@
         public static readonly string ChangedDate = "Ändrad datum";
 
         public static readonly string SyncDate = "Synkroniserad datum";
+
+        public static readonly string Type = "Typ";
     }
 }

@@ -28,19 +28,14 @@
 
     public class CustomInventoryController : InventoryBaseController
     {
-        private readonly IInventorySettingsService inventorySettingsService;
-
-        private readonly IInventoryService inventoryService;
-
-        private readonly IInventoryViewModelBuilder inventoryViewModelBuilder;
-
-        private readonly IDynamicsFieldsModelBuilder dynamicsFieldsModelBuilder;
-
-        private readonly IInventoryModelBuilder inventoryModelBuilder;
-
-        private readonly IInventoryValueBuilder inventoryValueBuilder;
-
+        private readonly IInventorySettingsService _inventorySettingsService;
+        private readonly IInventoryService _inventoryService;
+        private readonly IInventoryViewModelBuilder _inventoryViewModelBuilder;
+        private readonly IDynamicsFieldsModelBuilder _dynamicsFieldsModelBuilder;
+        private readonly IInventoryModelBuilder _inventoryModelBuilder;
+        private readonly IInventoryValueBuilder _inventoryValueBuilder;
         private readonly IUserPermissionsChecker _userPermissionsChecker;
+        private readonly IComputerModulesService _computerModulesService;
 
         public CustomInventoryController(
             IMasterDataService masterDataService,
@@ -54,23 +49,25 @@
             IDynamicsFieldsModelBuilder dynamicsFieldsModelBuilder,
             IInventoryModelBuilder inventoryModelBuilder,
             IInventoryValueBuilder inventoryValueBuilder,
-            IUserPermissionsChecker userPermissionsChecker)
+            IUserPermissionsChecker userPermissionsChecker,
+            IComputerModulesService computerModulesService)
             : base(masterDataService, exportFileNameFormatter, excelFileComposer, organizationService, placeService)
         {
-            this.inventorySettingsService = inventorySettingsService;
-            this.inventoryService = inventoryService;
-            this.inventoryViewModelBuilder = inventoryViewModelBuilder;
-            this.dynamicsFieldsModelBuilder = dynamicsFieldsModelBuilder;
-            this.inventoryModelBuilder = inventoryModelBuilder;
-            this.inventoryValueBuilder = inventoryValueBuilder;
+            this._inventorySettingsService = inventorySettingsService;
+            this._inventoryService = inventoryService;
+            this._inventoryViewModelBuilder = inventoryViewModelBuilder;
+            this._dynamicsFieldsModelBuilder = dynamicsFieldsModelBuilder;
+            this._inventoryModelBuilder = inventoryModelBuilder;
+            this._inventoryValueBuilder = inventoryValueBuilder;
             this._userPermissionsChecker = userPermissionsChecker;
+            _computerModulesService = computerModulesService;
         }
 
         [HttpGet]
         public ViewResult Index(int inventoryTypeId)
         {
             var inventoryTypes =
-                this.inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id, true, CreateInventoryTypeSeparatorItem());
+                this._inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id, true, CreateInventoryTypeSeparatorItem());
 
             SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter(inventoryTypeId));
             var currentFilter =
@@ -78,7 +75,7 @@
                 ?? InventorySearchFilter.CreateDefault(inventoryTypeId);
 
             var departments = OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
-            var fieldsSettings = inventorySettingsService.GetInventoryFieldSettingsOverviewForFilter(inventoryTypeId);
+            var fieldsSettings = _inventorySettingsService.GetInventoryFieldSettingsOverviewForFilter(inventoryTypeId);
 
             var userHasInventoryAdminPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
 
@@ -108,20 +105,20 @@
         [HttpGet]
         public ViewResult New(int inventoryTypeId)
         {
-            InventoryType inventoryType = this.inventoryService.GetInventoryType(inventoryTypeId);
+            InventoryType inventoryType = this._inventoryService.GetInventoryType(inventoryTypeId);
             InventoryFieldSettingsForModelEditResponse settings =
-                this.inventorySettingsService.GetInventoryFieldSettingsForModelEdit(inventoryTypeId);
+                this._inventorySettingsService.GetInventoryFieldSettingsForModelEdit(inventoryTypeId);
             InventoryEditOptions options = this.GetInventoryInventoryEditOptions(SessionFacade.CurrentCustomer.Id);
-            List<TypeGroupModel> typeGroupModels = this.inventoryService.GetTypeGroupModels(inventoryTypeId);
+            List<TypeGroupModel> typeGroupModels = this._inventoryService.GetTypeGroupModels(inventoryTypeId);
 
-            InventoryViewModel inventoryViewModel = this.inventoryViewModelBuilder.BuildViewModel(
+            InventoryViewModel inventoryViewModel = this._inventoryViewModelBuilder.BuildViewModel(
                 options,
                 settings.InventoryFieldSettingsForModelEdit,
                 inventoryTypeId,
                 SessionFacade.CurrentCustomer.Id);
 
             List<DynamicFieldModel> dynamicFieldsModel =
-                this.dynamicsFieldsModelBuilder.BuildViewModel(settings.InventoryDynamicFieldSettingForModelEditData);
+                this._dynamicsFieldsModelBuilder.BuildViewModel(settings.InventoryDynamicFieldSettingForModelEditData);
 
             var viewModel = new InventoryEditViewModel(0, inventoryViewModel, dynamicFieldsModel, typeGroupModels);
             viewModel.InventoryName = inventoryType.Name;
@@ -135,13 +132,13 @@
             InventoryViewModel inventoryViewModel,
             List<DynamicFieldModel> allModels)
         {
-            InventoryForInsert businessModel = this.inventoryModelBuilder.BuildForAdd(
+            InventoryForInsert businessModel = this._inventoryModelBuilder.BuildForAdd(
                 inventoryViewModel,
                 OperationContext);
-            this.inventoryService.AddInventory(businessModel);
+            this._inventoryService.AddInventory(businessModel);
             List<InventoryValueForWrite> dynamicBusinessModels =
-                this.inventoryValueBuilder.BuildForWrite(businessModel.Id, allModels);
-            this.inventoryService.AddDynamicFieldsValuesInventory(dynamicBusinessModels);
+                this._inventoryValueBuilder.BuildForWrite(businessModel.Id, allModels);
+            this._inventoryService.AddDynamicFieldsValuesInventory(dynamicBusinessModels);
 
             return this.RedirectToAction("Index", new { inventoryTypeId = inventoryViewModel.InventoryTypeId });
         }
@@ -149,7 +146,7 @@
         [HttpPost]
         public RedirectToRouteResult Delete(int inventoryTypeId, int id)
         {
-            this.inventoryService.DeleteInventory(id);
+            this._inventoryService.DeleteInventory(id);
 
             return this.RedirectToAction("Index", new { inventoryTypeId });
         }
@@ -164,7 +161,7 @@
             var gridModel = CreateInventoryGridModel(inventoryFilter, inventoryTypeId, true);
 
             // todo move into invetory overview query
-            var inventoryType = inventoryService.GetInventoryType(inventoryTypeId);
+            var inventoryType = _inventoryService.GetInventoryType(inventoryTypeId);
             
             var file = CreateExcelReport(inventoryType.Name, gridModel.Headers, gridModel.Inventories);
             return file;
@@ -176,13 +173,16 @@
             var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
             var readOnly = !userHasInventoryAdminPermission && dialog;
 
-            InventoryOverviewResponse model = this.inventoryService.GetInventory(id);
-            InventoryFieldSettingsForModelEditResponse settings = this.inventorySettingsService.GetInventoryFieldSettingsForModelEdit(inventoryTypeId, readOnly);
-            InventoryEditOptions options = this.GetInventoryInventoryEditOptions(SessionFacade.CurrentCustomer.Id);
-            List<TypeGroupModel> typeGroupModels = this.inventoryService.GetTypeGroupModels(inventoryTypeId);
+            var model = this._inventoryService.GetInventory(id);
+            var settings = this._inventorySettingsService.GetInventoryFieldSettingsForModelEdit(inventoryTypeId, readOnly);
+            var options = this.GetInventoryInventoryEditOptions(SessionFacade.CurrentCustomer.Id);
+            var typeGroupModels = this._inventoryService.GetTypeGroupModels(inventoryTypeId);
 
-            InventoryViewModel inventoryViewModel = this.inventoryViewModelBuilder.BuildViewModel(model.Inventory, options, settings.InventoryFieldSettingsForModelEdit);
-            List<DynamicFieldModel> dynamicFieldsModel = this.dynamicsFieldsModelBuilder.BuildViewModel(model.DynamicData, settings.InventoryDynamicFieldSettingForModelEditData, id);
+            var inventoryComputerTypes = _computerModulesService.GetComputerTypes(SessionFacade.CurrentCustomer.Id, inventoryTypeId);
+            ViewBag.HasType = inventoryComputerTypes.Any();
+
+            var inventoryViewModel = this._inventoryViewModelBuilder.BuildViewModel(model.Inventory, options, settings.InventoryFieldSettingsForModelEdit);
+            var dynamicFieldsModel = this._dynamicsFieldsModelBuilder.BuildViewModel(model.DynamicData, settings.InventoryDynamicFieldSettingForModelEditData, id);
             inventoryViewModel.IsForDialog = dialog;
 
             var viewModel = new InventoryEditViewModel(id, inventoryViewModel, dynamicFieldsModel, typeGroupModels)
@@ -200,9 +200,9 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult Edit(InventoryViewModel inventoryViewModel, List<DynamicFieldModel> allModels)
         {
-            InventoryForUpdate businessModel = this.inventoryModelBuilder.BuildForUpdate(inventoryViewModel, OperationContext);
-            List<InventoryValueForWrite> dynamicBusinessModels = this.inventoryValueBuilder.BuildForWrite(inventoryViewModel.Id, allModels);
-            this.inventoryService.UpdateInventory(businessModel, dynamicBusinessModels, inventoryViewModel.InventoryTypeId);
+            InventoryForUpdate businessModel = this._inventoryModelBuilder.BuildForUpdate(inventoryViewModel, OperationContext);
+            List<InventoryValueForWrite> dynamicBusinessModels = this._inventoryValueBuilder.BuildForWrite(inventoryViewModel.Id, allModels);
+            this._inventoryService.UpdateInventory(businessModel, dynamicBusinessModels, inventoryViewModel.InventoryTypeId);
 
             if (inventoryViewModel.IsForDialog)
             {
@@ -226,11 +226,11 @@
         private InventoryGridModel CreateInventoryGridModel(InventorySearchFilter filter, int inventoryTypeId, bool takeAllRecords = false)
         {
             var settings =
-                inventorySettingsService.GetInventoryFieldSettingsOverview(inventoryTypeId);
+                _inventorySettingsService.GetInventoryFieldSettingsOverview(inventoryTypeId);
 
             /*-1: take all records */
             var inventoriesFilter = filter.CreateRequest(inventoryTypeId, takeAllRecords);
-            var inventories = inventoryService.GetInventories(inventoriesFilter);
+            var inventories = _inventoryService.GetInventories(inventoriesFilter);
 
             var viewModel = InventoryGridModel.BuildModel(inventories, settings, inventoryTypeId, filter.SortField);
             return viewModel;

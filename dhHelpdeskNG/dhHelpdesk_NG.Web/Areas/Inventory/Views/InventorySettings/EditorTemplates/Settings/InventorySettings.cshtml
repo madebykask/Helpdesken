@@ -1,5 +1,8 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.Inventory.InventoryFieldSettingsViewModel
+@{
+    var hasTypeField = ViewBag.HasType ?? false;
+}
 <script>
     $(function () {
 
@@ -52,6 +55,9 @@
         </tr>
         <tr>
             @Html.EditorFor(m => m.DefaultSettings.TheftMarkFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
+        </tr>
+        <tr @(hasTypeField ? "" : "style=display:none")>
+            @Html.EditorFor(m => m.DefaultSettings.TypeFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
         </tr>
         <tr>
             <td colspan="10" class="header">@Translation.GetCoreTextTranslation("Inventering")</td>

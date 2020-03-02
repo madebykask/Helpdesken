@@ -45,6 +45,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         private readonly IInventoryFieldsSettingsBuilder _inventoryFieldsSettingsBuilder;
         private readonly ILanguageService _languageService;
         private readonly IUserPermissionsChecker _userPermissionsChecker;
+        private readonly IComputerModulesService _computerModulesService;
 
         public InventorySettingsController(
             IMasterDataService masterDataService,
@@ -59,7 +60,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             IPrinterFieldsSettingsBuilder printerFieldsSettingsBuilder,
             IInventoryFieldsSettingsBuilder inventoryFieldsSettingsBuilder,
             IUserPermissionsChecker userPermissionsChecker,
-            ILanguageService languageService)
+            ILanguageService languageService,
+            IComputerModulesService computerModulesService)
             : base(masterDataService)
         {
             this._inventoryService = inventoryService;
@@ -73,6 +75,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             this._printerFieldsSettingsBuilder = printerFieldsSettingsBuilder;
             this._inventoryFieldsSettingsBuilder = inventoryFieldsSettingsBuilder;
             this._languageService = languageService;
+            _computerModulesService = computerModulesService;
             this._userPermissionsChecker = userPermissionsChecker;
         }
 
@@ -237,6 +240,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var model = this._inventorySettingsService.GetInventoryFieldSettingsForEdit(inventoryTypeId);
             var typeGroups = this._inventoryService.GetTypeGroupModels(inventoryTypeId);
             var inventoryTypeModel = this._inventoryService.GetInventoryType(inventoryTypeId);
+            var inventoryComputerTypes = _computerModulesService.GetComputerTypes(SessionFacade.CurrentCustomer.Id, inventoryTypeId);
+            ViewBag.HasType = inventoryComputerTypes.Any();
 
             var viewModel = this._inventoryFieldSettingsEditViewModelBuilder.BuildViewModel(inventoryTypeModel, model, typeGroups);
             return this.PartialView("InventorySettings", viewModel);
