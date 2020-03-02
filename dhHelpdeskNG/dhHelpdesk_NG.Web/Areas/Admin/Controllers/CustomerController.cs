@@ -342,7 +342,6 @@
             }
 
             customerToSave.OrderPermission = this.returnOrderPermissionForSave(id, vmodel);
-            customerToSave.OverwriteFromMasterDirectory = vmodel.Customer.OverwriteFromMasterDirectory;            
             customerToSave.CommunicateWithNotifier = vmodel.Customer.CommunicateWithNotifier;
 			customerToSave.Status = vmodel.Active ? 1 : 0;
 
@@ -364,7 +363,7 @@
                 setting.DefaultAdministratorExternal = vmodel.Setting.DefaultAdministratorExternal;
                 setting.CreateCaseFromOrder = vmodel.Setting.CreateCaseFromOrder;
                 setting.CreateComputerFromOrder = vmodel.Setting.CreateComputerFromOrder;
-                setting.ComplexPassword = vmodel.Setting.ComplexPassword;
+                setting.MinRegWorkingTime = vmodel.Setting.MinRegWorkingTime;
                 setting.IsUserFirstLastNameRepresentation = vmodel.UserFirstLastNameRepresentationId == UserFirstLastNameModes.LastFirstNameMode ? 0 : 1;
                 setting.CalcSolvedInTimeByLatestSLADate = vmodel.Setting.CalcSolvedInTimeByLatestSLADate;
                 setting.BatchEmail = vmodel.Setting.BatchEmail;
