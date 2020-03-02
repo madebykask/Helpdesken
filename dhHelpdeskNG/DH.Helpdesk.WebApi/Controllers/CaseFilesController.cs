@@ -249,10 +249,10 @@ namespace DH.Helpdesk.WebApi.Controllers
 
 		[HttpPost]
 		[Route("file/getFileUploadWhiteList")]
-		public List<string> GetFileUploadWhiteList()
+		public IHttpActionResult GetFileUploadWhiteList()
 		{
 			var whiteList = _globalSettingService.GetFileUploadWhiteList();
-			return whiteList;
+			return Ok(whiteList.ToArray());
 		}
 
 		#region Private Methods

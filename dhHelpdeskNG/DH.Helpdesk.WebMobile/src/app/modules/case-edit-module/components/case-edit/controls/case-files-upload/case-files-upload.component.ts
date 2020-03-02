@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MbscListviewOptions } from '@mobiscroll/angular';
 import { FileItem, FileUploader, FileUploaderOptions, ParsedResponseHeaders, FileLikeObject } from 'ng2-file-upload';
 import { CaseFilesApiService } from 'src/app/modules/case-edit-module/services/api/case/case-files-api.service';
+import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from 'src/app/services/authentication';
 import { map, take } from 'rxjs/operators';
 
@@ -40,20 +41,22 @@ export class CaseFilesUploadComponent {
   };
 
   constructor(private authenticationService: AuthenticationService,
-              private caseFileApiService: CaseFilesApiService) {
+              private caseFileApiService: CaseFilesApiService,
+              private translateService: TranslateService) {
   }
 
   ngOnInit() {
     const accessToken = this.authenticationService.getAuthorizationHeaderValue();
-    this.caseFileApiService.getFileUploadWhiteList().pipe(map((o: any) => { 
-      alert (o);
-      return this.buildWhiteList(o); 
-    }));
+    this.caseFileApiService.getFileUploadWhiteList().pipe(
+      take(1),
+    ).subscribe((whiteList: string[]) => {
+      this.whiteList = whiteList;
+    });
 
     // init file uploader
     this.fileUploader.setOptions(<FileUploaderOptions>{
       autoUpload: true,
-      filters: [ { name: 'IsInWhiteList', fn: this.isInWhiteList } ],
+      filters: [ { name: 'IsInWhiteList', fn: (o) => this.isInWhiteList(o.name, this.whiteList) } ],
       isHTML5: true,
       authToken: accessToken,
       url: this.caseFileApiService.getCaseFileUploadUrl(this.caseKey, this.customerId)
@@ -110,15 +113,22 @@ export class CaseFilesUploadComponent {
     fileItem.remove();
   }
 
-  private onWhenAddingFileFailed(item: FileLikeObject, filter: any, options: any) : any {
-    alert(`File extension not supported for: ${item.name}`);
+  private onWhenAddingFileFailed(item: FileLikeObject, filter: any, options: any): any {
+    alert(item.name + ' ' + this.translateService.instant('har inte en giltig filändelse'));
   }
 
-  private isInWhiteList(item: any) : Boolean {
-    return true;
-  }
+  private isInWhiteList(item: string, whiteList: string[]): Boolean {
+    if (whiteList != null) {
+      const lastDot = item.lastIndexOf('.');
+      if (lastDot >= 0 && item.length > (lastDot + 1)) {
+        const extension = item.substring(lastDot + 1).toLowerCase();
 
-  private buildWhiteList(item: any) {
+        if (whiteList.indexOf(extension) >= 0) {
+          return true;
+        }
+      }
+      return false;
+    }
     return true;
   }
 

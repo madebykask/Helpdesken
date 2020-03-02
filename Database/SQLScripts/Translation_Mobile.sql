@@ -668,6 +668,15 @@ If not exists (select * from tblTextTranslation where text_id = 30061 and Langua
 begin
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(30061, 2, 'Close cases')
 end
+--
+If not exists (select * from tbltext where id = 30062)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (30062, 'har inte en giltig filändelse', @MobileType)
+end
+If not exists (select * from tblTextTranslation where text_id = 30062 and Language_Id = 2)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(30062, 2, 'does not have a valid file extension')
+end
 
 
 
