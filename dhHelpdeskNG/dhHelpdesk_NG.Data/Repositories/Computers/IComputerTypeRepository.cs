@@ -16,7 +16,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
 
         void Update(ComputerModule businessModel);
 
-        List<ItemOverview> FindOverviews(int customerId);
+        List<ItemOverview> FindOverviews(int customerId, int? inventoryId);
         ComputerTypeOverview Get(int id);
     }
 }

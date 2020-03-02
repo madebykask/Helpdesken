@@ -22,7 +22,8 @@
             InventoryFieldSettingModel infoFieldSettingModel,
             InventoryFieldSettingModel createdDateFieldSettingModel,
             InventoryFieldSettingModel changedDateFieldSettingModel,
-            InventoryFieldSettingModel syncDateFieldSettingModel)
+            InventoryFieldSettingModel syncDateFieldSettingModel,
+            InventoryFieldSettingModel typeFieldSettingModel)
         {
             this.DepartmentFieldSettingModel = departmentFieldSettingModel;
             this.NameFieldSettingModel = nameFieldSettingModel;
@@ -38,6 +39,7 @@
             this.CreatedDateFieldSettingModel = createdDateFieldSettingModel;
             this.ChangedDateFieldSettingModel = changedDateFieldSettingModel;
             this.SyncDateFieldSettingModel = syncDateFieldSettingModel;
+            this.TypeFieldSettingModel = typeFieldSettingModel;
         }
 
         [NotNull]
@@ -57,6 +59,9 @@
 
         [NotNull]
         public InventoryFieldSettingModel TheftMarkFieldSettingModel { get; set; }
+
+        [NotNull]
+        public InventoryFieldSettingModel TypeFieldSettingModel { get; set; }
 
         [NotNull]
         public InventoryFieldSettingModel BarCodeFieldSettingModel { get; set; }

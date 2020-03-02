@@ -24,9 +24,11 @@
 
         public static readonly int Info = -11;
 
-        public static readonly int CreatedDate = -12;
+        public static readonly int Type = -12;
 
-        public static readonly int ChangedDate = -13;
+        public static readonly int CreatedDate = -13;
+
+        public static readonly int ChangedDate = -14;
 
         public static readonly int SyncDate = -15;
     }

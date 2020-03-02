@@ -48,7 +48,9 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var info = MapInventoryFieldSettingModel(defaultFieldSettingsModel.InfoFieldSettingModel);
             var createdDate = MapInventoryFieldSettingModel(defaultFieldSettingsModel.CreatedDateFieldSettingModel);
             var changedDate = MapInventoryFieldSettingModel(defaultFieldSettingsModel.ChangedDateFieldSettingModel);
-            var syncDate = MapInventoryFieldSettingModel(defaultFieldSettingsModel.SyncDateFieldSettingModel); 
+            var syncDate = MapInventoryFieldSettingModel(defaultFieldSettingsModel.SyncDateFieldSettingModel);
+
+            var type = MapInventoryFieldSettingModel(defaultFieldSettingsModel.TypeFieldSettingModel);
 
             var defaultFieldSettings = new DefaultFieldSettings(
                 department,
@@ -64,7 +66,8 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 info,
                 createdDate,
                 changedDate,
-                syncDate);
+                syncDate,
+                type);
 
             return defaultFieldSettings;
         }

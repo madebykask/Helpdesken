@@ -89,6 +89,7 @@
             CreateSettingIfNeeded(InventoryFieldNames.Place, InventoryFields.Place, inventoryTypeId, settingNames, settings);
             CreateSettingIfNeeded(InventoryFieldNames.Workstation, InventoryFields.Workstation, inventoryTypeId, settingNames, settings);
             CreateSettingIfNeeded(InventoryFieldNames.Info, InventoryFields.Info, inventoryTypeId, settingNames, settings);
+            CreateSettingIfNeeded(InventoryFieldNames.Type, InventoryFields.Type, inventoryTypeId, settingNames, settings);
         }
 
         private static void CreateSettingIfNeeded(

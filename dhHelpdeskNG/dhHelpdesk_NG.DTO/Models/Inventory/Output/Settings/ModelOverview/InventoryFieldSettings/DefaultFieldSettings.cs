@@ -18,7 +18,8 @@
             FieldSettingOverview infoFieldSetting,
             FieldSettingOverview createdDateFieldSetting,
             FieldSettingOverview changedDateFieldSetting,
-            FieldSettingOverview syncDateFieldSetting)
+            FieldSettingOverview syncDateFieldSetting,
+            FieldSettingOverview typeFieldSetting)
         {
             this.DepartmentFieldSetting = departmentFieldSetting;
             this.NameFieldSetting = nameFieldSetting;
@@ -34,6 +35,7 @@
             this.CreatedDateFieldSetting = createdDateFieldSetting;
             this.ChangedDateFieldSetting = changedDateFieldSetting;
             this.SyncDateFieldSetting = syncDateFieldSetting;
+            this.TypeFieldSetting = typeFieldSetting;
         }
 
         [NotNull]
@@ -68,6 +70,9 @@
 
         [NotNull]
         public FieldSettingOverview InfoFieldSetting { get; private set; }
+
+        [NotNull]
+        public FieldSettingOverview TypeFieldSetting { get; private set; }
 
         [NotNull]
         public FieldSettingOverview CreatedDateFieldSetting { get; private set; }
