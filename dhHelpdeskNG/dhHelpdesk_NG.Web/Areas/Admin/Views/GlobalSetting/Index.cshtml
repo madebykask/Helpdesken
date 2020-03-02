@@ -57,7 +57,7 @@
             <li id="tab6" onclick="toggleMenuItems(8)">
                 <a href="#fragment-8">@Translation.GetCoreTextTranslation("Filåtkomst")</a>
             </li>
-            <li id="tab5" onclick="toggleMenuItems(9)"><a href="#fragment-9">@Translation.GetCoreTextTranslation("Filändelser")</a></li>
+            <li id="tab5" onclick="toggleMenuItems(9)"><a href="#fragment-9">@(Translation.GetCoreTextTranslation("filändelser").First().ToString().ToUpper() + Translation.GetCoreTextTranslation("filändelser").Substring(1))</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
@@ -80,7 +80,7 @@
                     </thead>
                     <tbody>
                         @foreach (var item in Model.GlobalSettings)
-                        {
+    {
                             <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.ApplicationName)
@@ -110,7 +110,7 @@
                     </thead>
                     <tbody>
                         @foreach (var item in Model.HolidayHeaders)
-                        {
+    {
                             <tr>
                                 <td>
                                     <a href="@Url.Action("editholiday", "globalsetting", new { id = item.Value })">@item.Text</a>

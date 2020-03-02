@@ -7747,6 +7747,60 @@ begin
 end
 GO
 
+If not exists (select * from tbltext where id = 2059)
+begin
+	insert into tbltext (id, TextString) VALUES (2059, 'har inte en giltig filändelse.')
+
+	If not exists (select * from tblTextTranslation where text_id = 2059 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2059, 2, N'has not a valid file extension.')
+end
+GO
+
+If not exists (select * from tbltext where id = 2060)
+begin
+	insert into tbltext (id, TextString) VALUES (2060, 'Giltiga filändelser vid uppladdning av filer')
+
+	If not exists (select * from tblTextTranslation where text_id = 2060 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2060, 2, N'Valid file extensions when uploading files')
+end
+GO
+
+If not exists (select * from tbltext where id = 2061)
+begin
+	insert into tbltext (id, TextString) VALUES (2061, 'Begränsa filändelser vid uppladdning av filer')
+
+	If not exists (select * from tblTextTranslation where text_id = 2061 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2061, 2, N'Limit file extensions when uploading files')
+end
+GO
+
+If not exists (select * from tbltext where id = 2062)
+begin
+	insert into tbltext (id, TextString) VALUES (2062, 'filändelser')
+
+	If not exists (select * from tblTextTranslation where text_id = 2062 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2062, 2, N'file extensions')
+end
+GO
+
+If not exists (select * from tbltext where id = 2063)
+begin
+	insert into tbltext (id, TextString) VALUES (2063, 'Återställ standardvärden för filändelser')
+
+	If not exists (select * from tblTextTranslation where text_id = 2063 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2063, 2, N'Reset standard values for file extensions')
+end
+GO
+
+If not exists (select * from tbltext where id = 2064)
+begin
+	insert into tbltext (id, TextString) VALUES (2064, 'Detta kommer att återställa standardlistan på giltiga filändelser för systemet. Vill du fortsätta?')
+
+	If not exists (select * from tblTextTranslation where text_id = 2064 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2064, 2, N'This will reset the current values with the standard valid file extensions for the system. Do you want to continue?')
+end
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')
