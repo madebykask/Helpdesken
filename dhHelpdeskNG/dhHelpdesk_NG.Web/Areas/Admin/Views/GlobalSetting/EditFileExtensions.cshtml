@@ -34,7 +34,7 @@
                                     <td>@Html.CheckBoxFor(model => model.UseFileExtensionWhiteList, new { @class = "switchcheckbox" })</td>
                                 </tr>
                                 <tr id="rowResetFileExtensions" style="@(Model.UseFileExtensionWhiteList ? "" : "display: none;")">
-                                    <td>@Translation.Get("Återställ standardvärdena för filändelser", Enums.TranslationSource.TextTranslation)</td>
+                                    <td>@Translation.Get("Återställ standardvärden för filändelser", Enums.TranslationSource.TextTranslation)</td>
                                     <td>
                                         <a href="" id="btnResetDefaultWhiteList" class="btn deleteDialog" buttonTypes="YesNo" deleteDialogText="@Translation.Get("Detta kommer att återställa standardlistan på giltiga filändelser för systemet. Vill du fortsätta?", Enums.TranslationSource.TextTranslation)">@Translation.Get("Återställ", Enums.TranslationSource.TextTranslation)</a>
                                         <input type="hidden" id="DeleteDialogYesButtonText" value="@Translation.Get("Ja", Enums.TranslationSource.TextTranslation)"/>
@@ -49,7 +49,7 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        @Translation.GetCoreTextTranslation("Gilitiga filändelser vid uppladdning av filer")
+                                        @Translation.Get("Giltiga filändelser vid uppladdning av filer", Enums.TranslationSource.TextTranslation)
                                     </th>
                                 </tr>
                             </thead>

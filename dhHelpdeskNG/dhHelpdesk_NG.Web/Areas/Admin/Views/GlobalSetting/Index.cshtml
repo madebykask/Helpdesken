@@ -227,7 +227,7 @@
                   <table class="tableform">
                     <tbody>
                         <tr>
-                            <td class="span4">@Translation.GetCoreTextTranslation("Begränsa filändelser vid uppladdning av filer")</td>
+                            <td class="span4">@Translation.Get("Begränsa filändelser vid uppladdning av filer", Enums.TranslationSource.TextTranslation)</td>
                             <td>@Html.CheckBox("limitFileUploadExtensions", Model.LimitFileUploadExtensions, new { @class = "switchcheckbox", disabled = "true" })</td>
                         </tr>
                     </tbody>
@@ -238,7 +238,7 @@
                     <thead>
                         <tr>
                             <th>
-                                @Translation.GetCoreTextTranslation("Gilitiga filändelser vid uppladdning av filer")
+                                @Translation.Get("Giltiga filändelser vid uppladdning av filer", Enums.TranslationSource.TextTranslation)
                             </th>
                         </tr>
                     </thead>

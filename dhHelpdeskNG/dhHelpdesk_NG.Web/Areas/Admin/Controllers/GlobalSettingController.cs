@@ -1393,7 +1393,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			{
 				whiteListStr = "";
 			}
-
+			SessionFacade.ActiveTab = "#fragment-9";
 			return View("EditFileExtensions", new FileUploadExtensionsModel
 			{
 				UseFileExtensionWhiteList = whiteList != null,

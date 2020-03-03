@@ -7749,10 +7749,10 @@ GO
 
 If not exists (select * from tbltext where id = 2059)
 begin
-	insert into tbltext (id, TextString) VALUES (2059, 'har inte en giltig filändelse.')
+	insert into tbltext (id, TextString) VALUES (2059, 'har inte en giltig filändelse')
 
 	If not exists (select * from tblTextTranslation where text_id = 2059 and Language_Id = 2)
-		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2059, 2, N'has not a valid file extension.')
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2059, 2, N'has not a valid file extension')
 end
 GO
 

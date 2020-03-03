@@ -14,7 +14,7 @@
 
     window.parameters = (window.parameters == null ? {} : window.parameters);
     window.parameters.fileUploadWhiteList = [];
-    window.parameters.invalidFileExtensionText = '@Html.Raw(Translation.GetForJS("har inte en giltig filändelse."))';
+    window.parameters.invalidFileExtensionText = '@Html.Raw(Translation.GetForJS("har inte en giltig filändelse"))';
 
     @if (Model.FileUploadWhiteList != null)
     {
