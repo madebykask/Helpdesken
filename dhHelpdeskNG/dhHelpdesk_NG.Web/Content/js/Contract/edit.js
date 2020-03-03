@@ -108,7 +108,7 @@
                 FilesAdded: function (up, files) {
                     var isFileInWhiteList = function (filename, whiteList) {
                         if (filename.indexOf('.') !== -1) {
-                            var extension = filename.split('.').reverse()[0];
+                            var extension = filename.split('.').reverse()[0].toLowerCase();
                             if (whiteList.indexOf(extension) >= 0)
                                 return true;
                         }
