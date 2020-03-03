@@ -703,7 +703,7 @@ namespace DH.Helpdesk.Dal.Repositories
             tables.Add("left outer join tblCategory on tblCase.category_Id = tblCategory.Id ");
             tables.Add("left outer join tblStateSecondary on tblCase.StateSecondary_Id = tblStateSecondary.Id ");
             tables.Add("left outer join tblPriority on tblCase.Priority_Id = tblPriority.Id ");
-            tables.Add("inner join tblCaseType on tblCase.CaseType_Id = tblCaseType.Id ");
+            tables.Add("left outer join tblCaseType on tblCase.CaseType_Id = tblCaseType.Id ");
             tables.Add("left outer join tblUsers as tblUsers2 on tblCase.[User_Id] = tblUsers2.Id ");
             tables.Add("left outer join tblUsers as tblUsers3 on tblCase.CaseResponsibleUser_Id = tblUsers3.Id ");
             tables.Add("left outer join tblProblem on tblCase.Problem_Id = tblProblem.Id ");

@@ -39,6 +39,143 @@ END
 
 
 
+RAISERROR ('Add clustered index to tblDepartment', 10, 1) WITH NOWAIT
+if not exists (select * from sys.indexes WHERE name='IDX_tblDepartment_PK_Clust' AND object_id = OBJECT_ID('dbo.tblDepartment'))
+BEGIN
+    CREATE UNIQUE CLUSTERED INDEX [IDX_tblDepartment_PK_Clust] ON [dbo].[tblDepartment]
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+END
+
+
+RAISERROR ('Add clustered index to tblUsers', 10, 1) WITH NOWAIT
+if not exists (select * from sys.indexes WHERE name='IDX_tblUsers_PK_Clust' AND object_id = OBJECT_ID('dbo.tblUsers'))
+BEGIN
+    CREATE UNIQUE CLUSTERED INDEX [IDX_tblUsers_PK_Clust] ON [dbo].[tblUsers]
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+END
+
+RAISERROR ('Add clustered index to tblProjectSchedule', 10, 1) WITH NOWAIT
+if not exists (select * from sys.indexes WHERE name='IDX_tblProjectSchedule_PK_Clust' AND object_id = OBJECT_ID('dbo.tblProjectSchedule'))
+BEGIN
+    CREATE UNIQUE CLUSTERED INDEX [IDX_tblProjectSchedule_PK_Clust] ON [dbo].[tblProjectSchedule]
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+END
+
+RAISERROR ('Add clustered index to tblCaseSettings', 10, 1) WITH NOWAIT
+if not exists (select * from sys.indexes WHERE name='IDX_tblCaseSettings_PK_Clust' AND object_id = OBJECT_ID('dbo.tblCaseSettings'))
+BEGIN
+    CREATE UNIQUE CLUSTERED INDEX [IDX_tblCaseSettings_PK_Clust] ON [dbo].[tblCaseSettings]
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+END
+
+RAISERROR ('Add clustered index to tblUsergroups', 10, 1) WITH NOWAIT
+if not exists (select * from sys.indexes WHERE name='IDX_tblUsergroups_PK_Clust' AND object_id = OBJECT_ID('dbo.tblUsergroups'))
+BEGIN
+    CREATE UNIQUE CLUSTERED INDEX [IDX_tblUsergroups_PK_Clust] ON [dbo].[tblUsergroups]
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+END
+
+RAISERROR ('Add clustered index to tblCase', 10, 1) WITH NOWAIT
+if not exists (select * from sys.indexes WHERE name='IDX_tblCase_PK_Clust' AND object_id = OBJECT_ID('dbo.tblCase'))
+BEGIN
+    CREATE UNIQUE CLUSTERED INDEX [IDX_tblCase_PK_Clust] ON [dbo].[tblCase]
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+END
+
+RAISERROR ('Add clustered index to tblCustomer', 10, 1) WITH NOWAIT
+if not exists (select * from sys.indexes WHERE name='IDX_tblCustomer_PK_Clust' AND object_id = OBJECT_ID('dbo.tblCustomer'))
+BEGIN
+    CREATE UNIQUE CLUSTERED INDEX [IDX_tblCustomer_PK_Clust] ON [dbo].[tblCustomer]
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+END
+
+RAISERROR ('Add clustered index to tblProjectCollaborator', 10, 1) WITH NOWAIT
+if not exists (select * from sys.indexes WHERE name='IDX_tblProjectCollaborator_PK_Clust' AND object_id = OBJECT_ID('dbo.tblProjectCollaborator'))
+BEGIN
+    CREATE UNIQUE CLUSTERED INDEX [IDX_tblProjectCollaborator_PK_Clust] ON [dbo].[tblProjectCollaborator]
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+END
+
+RAISERROR ('Add clustered index to tblProjectLog', 10, 1) WITH NOWAIT
+if not exists (select * from sys.indexes WHERE name='IDX_tblProjectLog_PK_Clust' AND object_id = OBJECT_ID('dbo.tblProjectLog'))
+BEGIN
+    CREATE UNIQUE CLUSTERED INDEX [IDX_tblProjectLog_PK_Clust] ON [dbo].[tblProjectLog]
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+END
+
+RAISERROR ('Add clustered index to tblProject', 10, 1) WITH NOWAIT
+if not exists (select * from sys.indexes WHERE name='IDX_tblProject_PK_Clust' AND object_id = OBJECT_ID('dbo.tblProject'))
+BEGIN
+    CREATE UNIQUE CLUSTERED INDEX [IDX_tblProject_PK_Clust] ON [dbo].[tblProject]
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+END
+
+RAISERROR ('Add clustered index to tblSettings', 10, 1) WITH NOWAIT
+if not exists (select * from sys.indexes WHERE name='IDX_tblSettings_PK_Clust' AND object_id = OBJECT_ID('dbo.tblSettings'))
+BEGIN
+    CREATE UNIQUE CLUSTERED INDEX [IDX_tblSettings_PK_Clust] ON [dbo].[tblSettings]
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+END
+
+RAISERROR ('Add clustered index to tblLog', 10, 1) WITH NOWAIT
+if not exists (select * from sys.indexes WHERE name='IDX_tblLog_PK_Clust' AND object_id = OBJECT_ID('dbo.tblLog'))
+BEGIN
+    CREATE UNIQUE CLUSTERED INDEX [IDX_tblLog_PK_Clust] ON [dbo].[tblLog]
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+END
+
+RAISERROR ('Add clustered index to tblLogProgram', 10, 1) WITH NOWAIT
+if not exists (select * from sys.indexes WHERE name='IDX_tblLogProgram_PK_Clust' AND object_id = OBJECT_ID('dbo.tblLogProgram'))
+BEGIN
+    CREATE UNIQUE CLUSTERED INDEX [IDX_tblLogProgram_PK_Clust] ON [dbo].[tblLogProgram]
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+END
+
+RAISERROR ('Add clustered index to tblCaseHistory', 10, 1) WITH NOWAIT
+if not exists (select * from sys.indexes WHERE name='IDX_tblCaseHistory_PK_Clust' AND object_id = OBJECT_ID('dbo.tblCaseHistory'))
+BEGIN
+    CREATE UNIQUE CLUSTERED INDEX [IDX_tblCaseHistory_PK_Clust] ON [dbo].[tblCaseHistory]
+	(
+		[Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+END
+
+RAISERROR ('Add tblCase index to tblCaseIsAbout', 10, 1) WITH NOWAIT
+if not exists (select * from sys.indexes WHERE name='IDX_tblCaseIsAbout_Case' AND object_id = OBJECT_ID('dbo.tblCaseIsAbout'))
+BEGIN
+	CREATE UNIQUE NONCLUSTERED INDEX [IDX_tblCaseIsAbout_Case] ON [dbo].[tblCaseIsAbout]
+	(
+		[Case_Id] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+END
+
+
 DECLARE @MobileType INT
 SET @MobileType = 500
   BEGIN TRAN
