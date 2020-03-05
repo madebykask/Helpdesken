@@ -1346,6 +1346,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			"7z",
 			"avi",
 			"bmp",
+			"csv",
 			"doc",
 			"docx",
 			"gif",

@@ -199,15 +199,15 @@
         $('input[name=fileUploadedName]').change(function (e) {
             var fileName = e.target.files[0].name;
 
-            if (!isFileInWhiteList(fileName, fileUploadWhiteList)) {
+            if (fileUploadWhiteList != null && !isFileInWhiteList(fileName, fileUploadWhiteList)) {
                 $('input[name=fileUploadedName]').val('');
-                alert('File does not have a valid file extension'); // TODO: translate
+                alert(fileName + ' ' + '@Html.Raw(Translation.GetForJS("har inte en giltig filändelse"))');
                 return false;
             }
 
         });
     });
-   
+
         var validator = $("#target").validate({
             rules: {
                 "Document.Name": {
@@ -235,7 +235,7 @@
             //            submitHandler: function (form) {
             //                form.submit();
             //            }
-        });    
+        });
 
     function submitForm() {
         $("#UsSelected option").attr("selected", "selected");
@@ -278,6 +278,6 @@
                 window.location.reload()
             });
         }
-    }      
+    }
 
 </script>

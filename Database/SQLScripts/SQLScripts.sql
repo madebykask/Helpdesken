@@ -1,4 +1,4 @@
-﻿--update DB from 5.3.44 to 5.3.46 version
+﻿--update DB from 5.3.45 to 5.3.46 version
 
 RAISERROR ('Add ShowOnExtPageDepartmentCases to tblComputerUsers table', 10, 1) WITH NOWAIT
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
