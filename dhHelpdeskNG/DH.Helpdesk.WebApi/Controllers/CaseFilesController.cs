@@ -252,7 +252,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 		public IHttpActionResult GetFileUploadWhiteList()
 		{
 			var whiteList = _globalSettingService.GetFileUploadWhiteList();
-			return Ok(whiteList.ToArray());
+			return Ok(whiteList == null ? null : whiteList.ToArray());
 		}
 
 		#region Private Methods

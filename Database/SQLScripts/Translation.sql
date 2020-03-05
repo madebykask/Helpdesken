@@ -7801,6 +7801,16 @@ begin
 end
 GO
 
+If not exists (select * from tbltext where id = 2065)
+begin
+	insert into tbltext (id, TextString) VALUES (2065, 'Du måste ange giltiga filändelser')
+
+	If not exists (select * from tblTextTranslation where text_id = 2065 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2065, 2, N'You have to specify valid file extensions')
+end
+GO
+
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')
@@ -7808,8 +7818,6 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 20000 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(20000, 2, 'Start of customer generated ID:s (ignore)')
 GO
-
-
 
 
 

@@ -232,7 +232,7 @@ function FAQInitForm() {
                 },
                 FilesAdded: function (up, files) {
                     var fileUploadWhiteList = window.parameters.fileUploadWhiteList;
-                    var invalidFileExtensionText = window.paramaters.invalidFileExtensionText;
+                    var invalidFileExtensionText = window.parameters.invalidFileExtensionText;
 
                     if (fileUploadWhiteList != null) {
                         var whiteList = fileUploadWhiteList;
