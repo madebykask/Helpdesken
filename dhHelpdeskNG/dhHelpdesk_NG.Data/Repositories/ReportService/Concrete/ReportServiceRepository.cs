@@ -376,6 +376,71 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
             return result.ToList();
         }
 
+        public IList<SolvedInTimeDataResult> GetSolvedInTimeData(SolvedInTimeDataFilter filter)
+        {
+            var query = DataContext.Cases.AsNoTracking()
+               .Where(c => c.Customer_Id == filter.CustomerID);
+
+            if (filter.RegisterFrom.HasValue)
+                query = query.Where(c => c.RegTime >= filter.RegisterFrom.Value);
+
+            if (filter.RegisterTo.HasValue)
+                query = query.Where(c => c.RegTime <= filter.RegisterTo.Value);
+
+            if (filter.Administrators != null && filter.Administrators.Any())
+                query = query.Where(c => c.Performer_User_Id.HasValue && filter.Administrators.Contains(c.Performer_User_Id.Value));
+
+            if (filter.CloseFrom.HasValue)
+                query = query.Where(c => c.FinishingDate >= filter.CloseFrom.Value);
+
+            if (filter.CloseTo.HasValue)
+                query = query.Where(c => c.FinishingDate <= filter.CloseTo.Value);
+
+            if (filter.Departments != null && filter.Departments.Any())
+                query = query.Where(c =>
+                    c.Department_Id.HasValue && filter.Departments.Contains(c.Department_Id.Value));
+
+            if ((filter.WorkingGroups == null || !filter.WorkingGroups.Any()) && !filter.IncludeCasesWithNoWorkingGroup)
+                // prevent fetch data
+                return new List<SolvedInTimeDataResult>();
+
+            if (filter.IncludeCasesWithNoWorkingGroup)
+                query = query.Where(c => !c.WorkingGroup_Id.HasValue ||
+                                         (c.WorkingGroup_Id.HasValue && filter.WorkingGroups.Contains(c.WorkingGroup_Id.Value)));
+            else
+                query = query.Where(c =>
+                    c.WorkingGroup_Id.HasValue && filter.WorkingGroups.Contains(c.WorkingGroup_Id.Value));
+
+            if (filter.CaseTypes != null && filter.CaseTypes.Any())
+                query = query.Where(c => filter.CaseTypes.Contains(c.CaseType_Id));
+
+            if (filter.ProductAreas != null && filter.ProductAreas.Any())
+                query = query.Where(c => c.ProductArea_Id.HasValue && filter.ProductAreas.Contains(c.ProductArea_Id.Value));
+
+            query = query.Where(c => c.FinishingDate.HasValue);
+
+            IQueryable<SolvedInTimeDataResult> result = null;
+            switch (filter.GroupBy)
+            {
+                case SolvedInTimeGroup.CaseType_Id:
+                    result = query.GroupBy(c => new { c.CaseType_Id, c.CaseType.Name })
+                        .Select(cg => new SolvedInTimeDataResult
+                        {
+                            Id = cg.Key.CaseType_Id,
+                            Label = cg.Key.Name,
+                            Total = cg.Count(),
+                            SolvedInTimeTotal = cg.Join(DataContext.CaseStatistics, c => c.Id, cs => cs.CaseId, (c, cs) => cs)
+                                    .Count(cs => cs.WasSolvedInTime.HasValue || cs.WasSolvedInTime.Value == 1)
+                        });
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return result.ToList();
+        }
+
         private object GetNullableValue<T>(T value)
         {
             if (value == null)

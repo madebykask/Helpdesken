@@ -1,4 +1,8 @@
-﻿using DH.Helpdesk.BusinessData.Models.User.Input;
+﻿using System;
+using System.Collections.Generic;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.User.Input;
+using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Services.Services
 {

@@ -28,6 +28,7 @@
         var caseLogNoteDateTo = '#ReportFilter_LogNoteDate_ToDate';
         var reportCategoryDropdown = "#lstfilterReportCategory";
         var reportCategoryDropdownRt = "#lstfilterReportCategoryRt";
+        var reportCategoryDropdownSt = "#lstfilterReportCategory_SolvedInTime";
         var changeDateFrom = "#ReportFilter_CaseChangeDate_FromDate";
         var changeDateTo = "#ReportFilter_CaseChangeDate_ToDate";
         var extendedCaseReport = ".reportGeneratorExtendedCase";
@@ -85,6 +86,7 @@
         var reportObjNames = {};
         reportObjNames[dhHelpdesk.reports.reportType.ReportedTime] = 'reportedTimeReport';
         reportObjNames[dhHelpdesk.reports.reportType.NumberOfCases] = 'numberOfCasesReport';
+        reportObjNames[dhHelpdesk.reports.reportType.SolvedInTime] = 'solvedInTimeReport';
 
         window.dhHelpdesk = window.dhHelpdesk || {};
         window.dhHelpdesk.reports = window.dhHelpdesk.reports || {};
@@ -397,13 +399,16 @@
             var emptyControls = [];
             var invalidControls = [];
             if (isRegDateRequiredOnly) {
-                emptyControls.push(validatePair($createDateFrom, $createDateTo));
+                if (!$createDateFrom.is(':hidden') && !$createDateFrom.is(':disabled'))
+                    emptyControls.push(validatePair($createDateFrom, $createDateTo));
             } else {
-                emptyControls.push(validatePair($createDateFrom, $createDateTo));
-                emptyControls.push(validatePair($closeDateFrom, $closeDateTo));
-                if (!$changeDateFrom.is(':hidden'))
+                if (!$createDateFrom.is(':hidden') && !$createDateFrom.is(':disabled'))
+                    emptyControls.push(validatePair($createDateFrom, $createDateTo));
+                if (!$closeDateFrom.is(':hidden') && !$closeDateFrom.is(':disabled'))
+                    emptyControls.push(validatePair($closeDateFrom, $closeDateTo));
+                if (!$changeDateFrom.is(':hidden') && !$changeDateFrom.is(':disabled'))
                     emptyControls.push(validatePair($changeDateFrom, $changeDateTo));
-                if (!$logNoteDateFrom.is(':hidden'))
+                if (!$logNoteDateFrom.is(':hidden') && !$logNoteDateFrom.is(':disabled'))
                     emptyControls.push(validatePair($logNoteDateFrom, $logNoteDateTo));
             }
 
@@ -440,6 +445,7 @@
             var status = '';
             var reportCategory = '';
             var reportCategoryRt = '';
+            var reportCategorySt = '';
 
             customer = currentCustomerId;
 
@@ -467,6 +473,7 @@
 
             reportCategory = $(reportCategoryDropdown + ' option:selected').val();
             reportCategoryRt = $(reportCategoryDropdownRt + ' option:selected').val();
+            reportCategorySt = $(reportCategoryDropdownSt + ' option:selected').val();
 
             var regDateFrom = $(caseCreateFrom).val();
             var regDateTo = $(caseCreateTo).val();
@@ -489,6 +496,7 @@
                 'closeDateTo': closeDateTo,
                 'reportCategory': reportCategory,
                 'reportCategoryRt': reportCategoryRt,
+                'reportCategorySt': reportCategorySt
             }
         }
 
@@ -531,11 +539,14 @@
             var groupBy = null;
             var $reportCategory = $(reportCategoryDropdown);
             var $reportCategoryRt = $(reportCategoryDropdownRt);
+            var $reportCategorySt = $(reportCategoryDropdownSt);
 
             if ($reportCategory.is(':visible')) {
                 groupBy = $reportCategory.val();
             } else if ($reportCategoryRt.is(':visible')) {
                 groupBy = $reportCategoryRt.val();
+            } else if ($reportCategorySt.is(':visible')) {
+                groupBy = $reportCategorySt.val();
             }
 
             var status = $(statusList + ' option:selected').val();
@@ -589,6 +600,7 @@
                     break;
                 case dhHelpdesk.reports.reportType.ReportedTime:
                 case dhHelpdesk.reports.reportType.NumberOfCases:
+                case dhHelpdesk.reports.reportType.SolvedInTime: 
                     dhHelpdesk.reports.onJSReportShow.call(this, e, reportObjNames[reportId]);
                     break;
                 default:
@@ -641,6 +653,7 @@
                     'filter.CloseTo': params.closeDateTo,
                     'filter.ReportCategory': params.reportCategory,
                     'filter.ReportCategoryRt': params.reportCategoryRt,
+                    'filter.ReportCategorySt': params.reportCategorySt,
                     curTime: new Date().getTime()
                 },
                 function (reportPresentation) {
@@ -676,6 +689,9 @@
             var $groupBy = $('#groupBy');
             var $logNoteDateFields = $('#logNoteDateFields');
             var $historicalFilters = $('#historicalFilters');
+            var $statusFilter = $('#lstStatus');
+            var $caseRegistrationFromDate = $('#CaseRegistrationFromDate');
+            var $caseRegistrationToDate = $('#CaseRegistrationToDate');
 
             var historicalReportControls = [$btnShowReport, $groupBy, $jsReportContainer, $historicalFilters];
 
@@ -701,6 +717,12 @@
                 $jsReportContainer.hide();
                 $stackBy.val('');
                 $stackBy.prop('disabled', true);
+                $caseRegistrationFromDate.find('input').prop('disabled', false);
+                $caseRegistrationFromDate.datepicker();
+                $caseRegistrationToDate.find('input').prop('disabled', false);
+                $caseRegistrationToDate.datepicker();
+                $statusFilter.prop('disabled', false);
+                $statusFilter.val('');
                 $groupBy.hide();
                 $generateReportContainer.html('');
                 $generateReportContainer.show();
@@ -741,6 +763,12 @@
                 $reportGeneratorFields.hide();
                 $('#reportPresentationArea').html('');
                 $generateReportContainer.hide();
+                $caseRegistrationFromDate.find('input').prop('disabled', false);
+                $caseRegistrationFromDate.datepicker();
+                $caseRegistrationFromDate.find('input').prop('disabled', false);
+                $caseRegistrationFromDate.datepicker();
+                $statusFilter.prop('disabled', false);
+                $statusFilter.val('');
                 $stackBy.val('');
                 $stackBy.prop('disabled', true);
                 $groupBy.hide();
@@ -757,6 +785,18 @@
                 }
                 if (reportId === dhHelpdesk.reports.reportType.NumberOfCases) {
                     $otherReportsContainer.hide();
+                    $jsReportContainer.show();
+                    window.dhHelpdesk.reports[reportObjNames[reportId]].init();
+                }
+                if (reportId === dhHelpdesk.reports.reportType.SolvedInTime) {
+                    $statusFilter.val(dhHelpdesk.reports.statuses.ClosedCases);
+                    $statusFilter.prop('disabled', true);
+                    $caseRegistrationFromDate.datepicker('update', '');
+                    $caseRegistrationToDate.datepicker('update', '');
+                    $caseRegistrationFromDate.find('input').prop('disabled', true);
+                    $caseRegistrationFromDate.datepicker('remove');
+                    $caseRegistrationToDate.find('input').prop('disabled', true);
+                    $caseRegistrationToDate.datepicker('remove');
                     $jsReportContainer.show();
                     window.dhHelpdesk.reports[reportObjNames[reportId]].init();
                 }
@@ -886,22 +926,30 @@
 
         dhHelpdesk.reports.showExtraParameters = function (reportName) {
   
-            switch (reportName) {
+            switch (reportName) { 
                 case "NumberOfCases":
                     $("#lstfilterReportCategory").show();
                     $("#lstfilterReportCategoryRt").hide();
                     $("#lstfilterReportCategory_repl").hide();
+                    $("#lstfilterReportCategory_SolvedInTime").hide();
                     break;
 
                 case "ReportedTime":
                     $("#lstfilterReportCategory").hide();
                     $("#lstfilterReportCategoryRt").show();
                     $("#lstfilterReportCategory_repl").hide();
+                    $("#lstfilterReportCategory_SolvedInTime").hide();
                     break;
-
+                case "SolvedInTimeReport":
+                    $("#lstfilterReportCategory").hide();
+                    $("#lstfilterReportCategoryRt").hide();
+                    $("#lstfilterReportCategory_repl").hide();
+                    $("#lstfilterReportCategory_SolvedInTime").show();
+                    break;
                 default:
                     $("#lstfilterReportCategory").hide();
                     $("#lstfilterReportCategoryRt").hide();
+                    $("#lstfilterReportCategory_SolvedInTime").hide();
                     $("#lstfilterReportCategory_repl").show();
                     break;
             }

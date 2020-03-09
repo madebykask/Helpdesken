@@ -7810,6 +7810,19 @@ begin
 end
 GO
 
+If not exists (select * from tbltext where id = 2066)
+	insert into tbltext (id, TextString, TextType) VALUES (2066, 'SolvedInTimeReport', 1)
+GO
+
+If not exists (select * from tbltext where id = 2067)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (2067, 'Finishing Month', 1)
+end
+
+If not exists (select * from tbltext where id = 2068)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (2068, 'Finishing Year', 1)
+end
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)

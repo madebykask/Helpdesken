@@ -333,6 +333,7 @@
                             "~/Scripts/chart.min.js",
                             "~/Areas/Reports/Content/js/chartjs-plugin-colorschemes.min.js",
                             "~/Areas/Reports/Content/js/chartjs-plugin-datalabels.min.js",
+                            "~/Areas/Reports/Content/js/reports.solvedInTime.js",
                             "~/Areas/Reports/Content/js/reports.historical.js",
                             "~/Areas/Reports/Content/js/reports.reportedTime.js",
                             "~/Areas/Reports/Content/js/reports.numberOfCases.js"));

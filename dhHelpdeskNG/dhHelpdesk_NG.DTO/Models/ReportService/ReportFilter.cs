@@ -30,7 +30,7 @@ namespace DH.Helpdesk.BusinessData.Models.ReportService
 
         public List<ListItem> ReportCategory { get; set; }
         public List<ListItem> ReportCategoryRt { get; set; }
-
+        public List<ListItem> ReportCategorySolvedInTime { get; set; }
     }
-       
+
 }

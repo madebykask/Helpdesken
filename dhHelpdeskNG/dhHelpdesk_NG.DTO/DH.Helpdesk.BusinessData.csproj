@@ -160,6 +160,7 @@
     <Compile Include="Enums\Orders\Subtopic.cs" />
     <Compile Include="Enums\Projects\ProjectFields.cs" />
     <Compile Include="Enums\Reports\NumberOfCasesGroup.cs" />
+    <Compile Include="Enums\Reports\SolvedInTimeGroup.cs" />
     <Compile Include="Enums\SortOrder.cs" />
     <Compile Include="Enums\Users\StartPage.cs" />
     <Compile Include="Enums\Users\TimeZoneAutodetectResult.cs" />
@@ -548,6 +549,8 @@
     <Compile Include="Models\ReportService\NumberOfCasesDataFilter.cs" />
     <Compile Include="Models\ReportService\ReportedTimeDataFilter.cs" />
     <Compile Include="Models\ReportService\ReportedTimeDataResult.cs" />
+    <Compile Include="Models\ReportService\SolvedInTimeDataFilter.cs" />
+    <Compile Include="Models\ReportService\SolvedInTimeDataResult.cs" />
     <Compile Include="Models\Shared\EntityWithEmail.cs" />
     <Compile Include="Models\UrgencyOverview.cs" />
     <Compile Include="Models\SystemOverview.cs" />

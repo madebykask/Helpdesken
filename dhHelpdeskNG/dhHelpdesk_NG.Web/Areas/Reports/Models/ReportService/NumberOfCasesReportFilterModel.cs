@@ -4,4 +4,9 @@
     {
         public int GroupBy { get; set; }
     }
+
+    public class SolvedInTimeReportFilterModel : CommonReportFilterModel
+    {
+        public int GroupBy { get; set; }
+    }
 }

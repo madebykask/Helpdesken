@@ -98,6 +98,20 @@
                                     }
                                 }
                             </select>
+                            <select id="lstfilterReportCategory_SolvedInTime" name="lstfilterReportCategory_SolvedInTime" data-field="lstfilterReportCategory_SolvedInTime" style="width: 300px;"
+                                    data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" )>
+                                @if (Model.ReportFilter.ReportCategorySolvedInTime != null)
+                                {
+                                    foreach (var r in Model.ReportFilter.ReportCategorySolvedInTime)
+                                    {
+                                        var curId = 0;
+                                        int.TryParse(r.Id, out curId);
+                                        <option value="@r.Id" @(r.IsActive ? "" : "class='DisabledChosen'")>
+                                            @r.Value
+                                        </option>
+                                    }
+                                }
+                            </select>
 
                             <select id="lstfilterReportCategory_repl" style="width: 300px;" @(Model.ReportFilter.ReportCategory == null ? "" : " display: none") disabled></select>
 
@@ -128,7 +142,7 @@
                                 <select id="lstStatus" name="lstStatus" data-field="status" style="width: 300px;">
                                     @foreach (var s in Model.ReportFilter.Status.Items)
                                     {
-                                        int statusId = int.Parse(s.Id);
+                                        var statusId = int.Parse(s.Id);
                                         <option value="@s.Id" @statusId.IdIsSelected(selectedItems)>
                                             @s.Value
                                         </option>

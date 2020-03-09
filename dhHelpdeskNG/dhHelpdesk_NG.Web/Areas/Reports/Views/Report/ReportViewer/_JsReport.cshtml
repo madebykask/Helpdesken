@@ -15,5 +15,10 @@
         window.dhHelpdesk.reports.numberOfCasesReport = numberOfCasesReport({
             dataUrl: '@Url.Action("GetNumberOfCasesData", "Services", new { area = "reports" })',
         });
+
+        window.dhHelpdesk.reports.solvedInTimeReport = solvedInTimeReport({
+            dataUrl: '@Url.Action("GetSolvedInTimeData", "Services", new { area = "reports" })',
+        });
+
     })
 </script>
