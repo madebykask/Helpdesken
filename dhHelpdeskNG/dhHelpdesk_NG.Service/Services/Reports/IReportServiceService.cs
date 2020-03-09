@@ -12,5 +12,6 @@ namespace DH.Helpdesk.Services.Services.Reports
 		IList<HistoricalDataResult> GetHistoricalData(HistoricalDataFilter filter, int userId);
         IList<ReportedTimeDataResult> GetReportedTimeData(ReportedTimeDataFilter filter, int userId);
         IList<NumberOfCaseDataResult> GetNumberOfCasesData(NumberOfCasesDataFilter filter, int userId);
+        IList<SolvedInTimeDataResult> GetSolvedInTimeData(SolvedInTimeDataFilter dataFilter, int currentUserId);
     }
 }

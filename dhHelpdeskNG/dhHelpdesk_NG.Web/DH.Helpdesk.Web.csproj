@@ -695,6 +695,7 @@
     <Content Include="Areas\Invoices\Scripts\Pages\invoicesOverview.js" />
     <Content Include="Areas\Reports\Content\js\chartjs-plugin-colorschemes.min.js" />
     <Content Include="Areas\Reports\Content\js\chartjs-plugin-datalabels.min.js" />
+    <Content Include="Areas\Reports\Content\js\reports.solvedInTime.js" />
     <Content Include="Areas\Reports\Content\js\reports.historical.js" />
     <Content Include="Areas\Reports\Content\js\reports.numberOfCases.js" />
     <Content Include="Areas\Reports\Content\js\reports.reportedTime.js" />

@@ -728,6 +728,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 FirstUserNameOrientation = firstUserNameOrientation,
                 ReportCategory = GetReportGroups(),
                 ReportCategoryRt = GetReportGroupsRt(),
+                ReportCategorySolvedInTime = GetReportGroupsSolvedInTime(),
                 StackByList = stackByList,
                 GroupByList = groupByList
             };
@@ -776,6 +777,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 new KeyValuePair<string, string>("-8", "AvgResolutionTime"),
                 new KeyValuePair<string, string>(reportedTimeKey, "ReportedTime"),
                 new KeyValuePair<string, string>("24", "HistoricalReport"),
+                new KeyValuePair<string, string>("27", "SolvedInTimeReport"),
             };
 
             // List new report first (order by name) then old reports (order by name)
@@ -894,6 +896,24 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 .ToList();
         }
 
+        private List<ListItem> GetReportGroupsSolvedInTime()
+        {
+            return new[]
+            {
+                new ListItem("1", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()), false),
+                new ListItem("3", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.Department_Id.ToString()), false),
+                new ListItem("4", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()), false),
+                new ListItem("5", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()), false),
+                new ListItem("7", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()), false),
+                new ListItem("8", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()), false),
+                new ListItem("9", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()), false),
+                new ListItem("14", GetReportFormTranslation(ReportItemNames.FinishingMonth), false),
+                new ListItem("15", GetReportFormTranslation(ReportItemNames.FinishingYear), false),
+
+            }.OrderBy(l => l.Value)
+                .ToList();
+        }
+
         private static string GetReportFormTranslation(string value)
         {
             if (value.Equals(ReportItemNames.RegistrationDate))
@@ -908,6 +928,11 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 return Translation.GetMasterDataTranslation(ReportItemNames.RegistrationHour);
             if (value.Equals(ReportItemNames.LogNoteDate))
                 return Translation.GetMasterDataTranslation(ReportItemNames.LogNoteDate);
+            if (value.Equals(ReportItemNames.FinishingMonth))
+                return Translation.GetMasterDataTranslation(ReportItemNames.FinishingMonth);
+            if (value.Equals(ReportItemNames.FinishingYear))
+                return Translation.GetMasterDataTranslation(ReportItemNames.FinishingYear);
+
 
             var defaultValue = string.Empty;
             if (value.Equals(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()))

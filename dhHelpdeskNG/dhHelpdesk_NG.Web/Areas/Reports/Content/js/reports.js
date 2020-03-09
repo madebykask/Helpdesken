@@ -28,7 +28,13 @@
         CaseSatisfaction: 23,
         HistoricalReport: 24,
         ReportedTime: 25,
-        NumberOfCases: 26
+        NumberOfCases: 26,
+        SolvedInTime: 27
+    }
+
+    dhHelpdesk.reports.statuses = {
+        CasesInProgress: 2,
+        ClosedCases: 1
     }
 
     dhHelpdesk.reports.utils = {

@@ -8,5 +8,7 @@
         public const string RegistrationWeekday = "Registration Weekday";
         public const string RegistrationHour = "Registration Hour";
         public const string LogNoteDate = "Log Note Date";
+        public const string FinishingMonth = "Finishing Month";
+        public const string FinishingYear = "Finishing Year";
     }
 }

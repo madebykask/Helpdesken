@@ -9,5 +9,6 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService
 		IList<HistoricalDataResult> GetHistoricalData(HistoricalDataFilter filter);
         IList<ReportedTimeDataResult> GetReportedTimeData(ReportedTimeDataFilter filter);
         IList<NumberOfCaseDataResult> GetNumberOfCasesData(NumberOfCasesDataFilter filter);
+        IList<SolvedInTimeDataResult> GetSolvedInTimeData(SolvedInTimeDataFilter filter);
     }
 }

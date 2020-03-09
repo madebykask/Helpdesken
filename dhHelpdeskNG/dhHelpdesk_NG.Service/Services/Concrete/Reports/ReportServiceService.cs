@@ -146,6 +146,19 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             return result;
         }
 
+        public IList<SolvedInTimeDataResult> GetSolvedInTimeData(SolvedInTimeDataFilter filter, int userId)
+        {
+            var user = _userService.GetUser(userId);
+
+            filter.IncludeCasesWithNoWorkingGroup = CanSeeCasesWithEmptyWorkingGroups(filter.WorkingGroups, user);
+            filter.IncludeCasesWithNoDepartments = false;
+            filter.WorkingGroups = GetWorkingGroups(filter.WorkingGroups, filter.CustomerID, user);
+            filter.Departments = GetDepartments(filter.Departments, filter.CustomerID, userId);
+
+            var result = _reportServiceRepository.GetSolvedInTimeData(filter);
+            return result;
+        }
+
         #endregion
 
         #region Private Methods and Operators

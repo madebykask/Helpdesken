@@ -182,7 +182,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             //var endOfWorkingDay =  TimeZoneInfo.ConvertTime(new DateTime(now.Year, now.Month, now.Day, _workContext.Customer.WorkingDayEnd, 0, 0, DateTimeKind.Unspecified), userTimeZone);
 
             //var workingHoursLeftToday = Convert.ToInt32(Math.Round((endOfWorkingDay - now).TotalHours));
-            int workingHoursCount = 24;
+            var workingHoursCount = 24;
             if (_workContext.Customer.WorkingDayEnd > _workContext.Customer.WorkingDayStart)
             {
                 workingHoursCount = _workContext.Customer.WorkingDayEnd - _workContext.Customer.WorkingDayStart;
