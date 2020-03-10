@@ -74,6 +74,12 @@
 
     Private miNewCaseMailTo As Integer
 
+    ' Ews Exchange Web Services
+    Private msEwsApplicationId As String
+    Private msEwsClientSecret As String
+    Private msEwsTenantId As String
+    Private mbUseEws As Boolean
+
 
 #End Region
 
@@ -280,6 +286,18 @@
                 miRegistrationSourceCustomer_Id = dr("RegistrationSourceCustomer_Id")
             End If
 
+
+            If Not IsDBNull(dr("EwsApplicationId")) Then
+                msEwsApplicationId = dr("EwsApplicationId")
+            End If
+            If Not IsDBNull(dr("EwsClientSecret")) Then
+                msEwsClientSecret = dr("EwsClientSecret")
+            End If
+            If Not IsDBNull(dr("EwsTenantId")) Then
+                msEwsTenantId = dr("EwsTenantId")
+            End If
+            mbUseEws = dr("UseEws")
+
             miModuleOrder = dr("ModuleOrder")
             miModuleAccount = dr("ModuleAccount")
 
@@ -292,7 +310,7 @@
         Catch ex As Exception
             Throw ex
         End Try
-       
+
     End Sub
 
 #End Region
@@ -833,6 +851,43 @@
         End Get
         Set(ByVal Value As Integer)
             miNewCaseMailTo = Value
+        End Set
+    End Property
+
+
+    Public Property EwsApplicationId As String
+        Get
+            Return msEwsApplicationId
+        End Get
+        Set(ByVal Value As String)
+            msEwsApplicationId = Value
+        End Set
+    End Property
+
+    Public Property EwsClientSecret As String
+        Get
+            Return msEwsClientSecret
+        End Get
+        Set(ByVal Value As String)
+            msEwsClientSecret = Value
+        End Set
+    End Property
+
+    Public Property EwsTenantId As String
+        Get
+            Return msEwsTenantId
+        End Get
+        Set(ByVal Value As String)
+            msEwsTenantId = Value
+        End Set
+    End Property
+
+    Public Property UseEws As Boolean
+        Get
+            Return mbUseEws
+        End Get
+        Set(ByVal Value As Boolean)
+            mbUseEws = Value
         End Set
     End Property
 
