@@ -15,6 +15,7 @@
             string manufacturer,
             string serialNumber,
             string theftMark,
+            int? computerTypeId,
             string barCode,
             DateTime? purchaseDate,
             string info,
@@ -26,7 +27,7 @@
             int? buildingId,
             int? floorId,
             DateTime? syncChangeDate)
-            : base(departmentId, roomId, name, model, manufacturer, serialNumber, theftMark, barCode, purchaseDate, info)
+            : base(departmentId, roomId, name, model, manufacturer, serialNumber, theftMark, computerTypeId, barCode, purchaseDate, info)
         {
             this.Id = id;
             this.CreatedDate = createdDate;

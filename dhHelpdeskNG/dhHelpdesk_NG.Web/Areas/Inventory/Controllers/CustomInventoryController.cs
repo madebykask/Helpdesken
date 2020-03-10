@@ -108,7 +108,7 @@
             InventoryType inventoryType = this._inventoryService.GetInventoryType(inventoryTypeId);
             InventoryFieldSettingsForModelEditResponse settings =
                 this._inventorySettingsService.GetInventoryFieldSettingsForModelEdit(inventoryTypeId);
-            InventoryEditOptions options = this.GetInventoryInventoryEditOptions(SessionFacade.CurrentCustomer.Id);
+            InventoryEditOptions options = this.GetInventoryInventoryEditOptions(SessionFacade.CurrentCustomer.Id, inventoryTypeId);
             List<TypeGroupModel> typeGroupModels = this._inventoryService.GetTypeGroupModels(inventoryTypeId);
 
             InventoryViewModel inventoryViewModel = this._inventoryViewModelBuilder.BuildViewModel(
@@ -175,7 +175,7 @@
 
             var model = this._inventoryService.GetInventory(id);
             var settings = this._inventorySettingsService.GetInventoryFieldSettingsForModelEdit(inventoryTypeId, readOnly);
-            var options = this.GetInventoryInventoryEditOptions(SessionFacade.CurrentCustomer.Id);
+            var options = this.GetInventoryInventoryEditOptions(SessionFacade.CurrentCustomer.Id, inventoryTypeId);
             var typeGroupModels = this._inventoryService.GetTypeGroupModels(inventoryTypeId);
 
             var inventoryComputerTypes = _computerModulesService.GetComputerTypes(SessionFacade.CurrentCustomer.Id, inventoryTypeId);
@@ -212,15 +212,16 @@
             return this.RedirectToAction("Index", new { inventoryTypeId = inventoryViewModel.InventoryTypeId });
         }
 
-        private InventoryEditOptions GetInventoryInventoryEditOptions(int customerId)
+        private InventoryEditOptions GetInventoryInventoryEditOptions(int customerId, int? inventoryTypeId)
         {
             List<ItemOverview> departments =
                 this.OrganizationService.GetDepartments(customerId).OrderBy(x => x.Name).ToList();
             List<ItemOverview> buildings = this.PlaceService.GetBuildings(customerId).OrderBy(x => x.Name).ToList();
             List<ItemOverview> floors = this.PlaceService.GetFloors(customerId).OrderBy(x => x.Name).ToList();
             List<ItemOverview> rooms = this.PlaceService.GetRooms(customerId).OrderBy(x => x.Name).ToList();
+            List<ItemOverview> computerTypes = this.PlaceService.GetComputerTypes(customerId, inventoryTypeId).OrderBy(x => x.Name).ToList();
 
-            return new InventoryEditOptions(departments, buildings, floors, rooms);
+            return new InventoryEditOptions(departments, buildings, floors, rooms, computerTypes);
         }
 
         private InventoryGridModel CreateInventoryGridModel(InventorySearchFilter filter, int inventoryTypeId, bool takeAllRecords = false)

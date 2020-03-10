@@ -14,13 +14,14 @@
             string manufacturer,
             string serialNumber,
             string theftMark,
+            int? computerTypeId,
             string barCode,
             DateTime? purchaseDate,
             string info,
             DateTime createdDate,
             int inventoryTypeId,
             int? changeByUserId)
-            : base(departmentId, roomId, name, model, manufacturer, serialNumber, theftMark, barCode, purchaseDate, info
+            : base(departmentId, roomId, name, model, manufacturer, serialNumber, theftMark, computerTypeId, barCode, purchaseDate, info
                 )
         {
             this.CreatedDate = createdDate;

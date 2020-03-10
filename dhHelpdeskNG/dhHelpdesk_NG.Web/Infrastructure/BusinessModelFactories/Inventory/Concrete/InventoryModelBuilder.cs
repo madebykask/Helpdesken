@@ -23,6 +23,8 @@
             var manufacturer = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Manufacturer);
             var serialNumber = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.SerialNumber);
             var theftMark = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.TheftMark);
+            var computerTypeId = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.Type);
+
 
             var barCode = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.BarCode);
             var purchaseDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.PurchaseDate);
@@ -40,6 +42,7 @@
                 manufacturer,
                 serialNumber,
                 theftMark,
+                computerTypeId,
                 barCode,
                 purchaseDate,
                 info,
@@ -64,6 +67,7 @@
             var manufacturer = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Manufacturer);
             var serialNumber = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.SerialNumber);
             var theftMark = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.TheftMark);
+            var computerTypeId = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.Type);
 
             var barCode = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.BarCode);
             var purchaseDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.PurchaseDate);
@@ -80,6 +84,7 @@
                 manufacturer,
                 serialNumber,
                 theftMark,
+                computerTypeId,
                 barCode,
                 purchaseDate,
                 info,
@@ -106,6 +111,7 @@
                 null,
                 null,
                 null,
+                null,
                 dateAndTime,
                 inventoryTypeId,
                 userId);
@@ -116,6 +122,7 @@
         {
             return new InventoryForUpdate(
                 id,
+                null,
                 null,
                 null,
                 null,

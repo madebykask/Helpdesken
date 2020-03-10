@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Domain.Inventory
 {
+    using Computers;
     using global::System;
 
     public class Inventory : Entity
@@ -15,6 +16,7 @@
         public string Manufacturer { get; set; }
         public string SerialNumber { get; set; }
         public string TheftMark { get; set; }
+        public int? ComputerType_Id { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? PurchaseDate { get; set; }
@@ -24,5 +26,6 @@
         public virtual Room Room { get; set; }
         public virtual Department Department { get; set; }
         public virtual User ChangedByUser { get; set; }
+        public virtual ComputerType ComputerType { get; set; }
     }
 }
