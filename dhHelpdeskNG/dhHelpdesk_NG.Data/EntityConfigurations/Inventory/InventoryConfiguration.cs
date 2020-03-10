@@ -34,6 +34,12 @@
             this.Property(x => x.Manufacturer).IsRequired().HasMaxLength(50);
             this.Property(x => x.SerialNumber).IsRequired().HasMaxLength(50);
             this.Property(x => x.TheftMark).IsRequired().HasMaxLength(20);
+
+            this.HasOptional(x => x.ComputerType)
+                .WithMany()
+                .HasForeignKey(x => x.ComputerType_Id)
+                .WillCascadeOnDelete(false);
+
             this.Property(x => x.BarCode).IsRequired().HasMaxLength(20);
             this.Property(x => x.PurchaseDate).IsOptional();
             this.Property(x => x.Info).IsOptional().HasMaxLength(1000);

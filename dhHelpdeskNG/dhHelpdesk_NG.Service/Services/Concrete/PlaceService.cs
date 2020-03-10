@@ -16,6 +16,8 @@
         List<ItemOverview> GetRooms(int customerId);
 
         List<ItemOverview> GetRooms(int customerId, int? floorId);
+
+        List<ItemOverview> GetComputerTypes(int customerId, int? InventoryTypeId);
     }
 
     public class PlaceService : IPlaceService
@@ -26,14 +28,18 @@
 
         private readonly IRoomRepository roomRepository;
 
+        private readonly IComputerModulesService computerTypeRepository;
+
         public PlaceService(
             IBuildingRepository buildingRepository,
             IFloorRepository floorRepository,
-            IRoomRepository roomRepository)
+            IRoomRepository roomRepository,
+            IComputerModulesService computerTypeRepository)
         {
             this.buildingRepository = buildingRepository;
             this.floorRepository = floorRepository;
             this.roomRepository = roomRepository;
+            this.computerTypeRepository = computerTypeRepository;
         }
 
         public List<ItemOverview> GetBuildings(int customerId)
@@ -63,6 +69,13 @@
             return !floorId.HasValue
                 ? this.GetRooms(customerId)
                 : this.roomRepository.FindOverviews(customerId, floorId.Value);
+        }
+
+        public List<ItemOverview> GetComputerTypes(int customerId, int? InventoryTypeId)
+        {
+            return !InventoryTypeId.HasValue
+                ? this.GetComputerTypes(customerId, InventoryTypeId)
+                : this.computerTypeRepository.GetComputerTypes(customerId, InventoryTypeId.Value);
         }
     }
 }

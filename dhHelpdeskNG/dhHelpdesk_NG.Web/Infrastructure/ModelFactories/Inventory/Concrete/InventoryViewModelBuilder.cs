@@ -25,6 +25,9 @@
             var manufacturer = CreateStringField(settings.DefaultSettings.ManufacturerFieldSetting, model.Manufacturer);
             var serial = CreateStringField(settings.DefaultSettings.SerialNumberFieldSetting, model.SerialNumber);
             var theftMark = CreateStringField(settings.DefaultSettings.TheftMarkFieldSetting, model.TheftMark);
+            var type = CreateNullableIntegerField(
+                settings.DefaultSettings.TypeFieldSetting,
+                model.ComputerTypeId);
             var barCode = CreateStringField(settings.DefaultSettings.BarCodeFieldSetting, model.BarCode);
             var purchaseDate = CreateNullableDateTimeField(
                 settings.DefaultSettings.PurchaseDateFieldSetting,
@@ -56,6 +59,12 @@
                 options.Departments,
                 model.DepartmentId.ToString());
 
+            var computerTypes = CreateSelectList(
+            settings.DefaultSettings.TypeFieldSetting,
+            options.ComputerTypes,
+            model.ComputerTypeId.ToString());
+
+
             var createdDate = CreateNullableDateTimeField(settings.DefaultSettings.CreatedDate, model.CreatedDate);
             var changedDate = CreateNullableDateTimeField(settings.DefaultSettings.ChangedDate, model.ChangeDate);
             var syncDate = CreateNullableDateTimeField(settings.DefaultSettings.SyncDate, model.SyncChangeDate);
@@ -70,6 +79,7 @@
                 manufacturer,
                 serial,
                 theftMark,
+                type,
                 barCode,
                 purchaseDate,
                 workstation,
@@ -83,7 +93,8 @@
                 departments,
                 buildings,
                 floors,
-                rooms);
+                rooms,
+                computerTypes);
 
             return new InventoryViewModel(model.InventoryTypeId, defaultFieldsViewModel)
                        {
@@ -105,6 +116,7 @@
             var manufacturer = CreateStringField(settings.DefaultSettings.ManufacturerFieldSetting, null);
             var serial = CreateStringField(settings.DefaultSettings.SerialNumberFieldSetting, null);
             var theftMark = CreateStringField(settings.DefaultSettings.TheftMarkFieldSetting, null);
+            var type = CreateNullableIntegerField(settings.DefaultSettings.TypeFieldSetting, null);
             var barCode = CreateStringField(settings.DefaultSettings.BarCodeFieldSetting, null);
             var purchaseDate = CreateNullableDateTimeField(settings.DefaultSettings.PurchaseDateFieldSetting, null);
             var workstation = CreateStringField(settings.DefaultSettings.WorkstationFieldSetting, null);
@@ -121,6 +133,11 @@
                 options.Departments,
                 null);
 
+            var computerTypes = CreateSelectList(
+             settings.DefaultSettings.TypeFieldSetting,
+             options.ComputerTypes,
+             null);
+
             var defaultFieldsModel = new DefaultFieldsModel(
                 departmentId,
                 null,
@@ -131,6 +148,7 @@
                 manufacturer,
                 serial,
                 theftMark,
+                type,
                 barCode,
                 purchaseDate,
                 workstation,
@@ -144,7 +162,8 @@
                 departments,
                 buildings,
                 floors,
-                rooms);
+                rooms,
+                computerTypes);
 
             return new InventoryViewModel(inventoryTypeId, defaultFieldsViewModel);
         }

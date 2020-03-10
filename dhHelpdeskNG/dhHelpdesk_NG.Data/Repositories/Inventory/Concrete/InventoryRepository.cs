@@ -76,6 +76,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         x.Key.Entity.Manufacturer,
                         x.Key.Entity.SerialNumber,
                         x.Key.Entity.TheftMark,
+                        x.Key.Entity.ComputerType_Id,
                         x.Key.Entity.BarCode,
                         x.Key.Entity.PurchaseDate,
                         x.Key.Entity.Info,

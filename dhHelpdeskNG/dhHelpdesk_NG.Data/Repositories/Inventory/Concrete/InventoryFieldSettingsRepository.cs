@@ -185,6 +185,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         manufacturer,
                         serialNumber,
                         theftMark,
+                        type,
                         barCode,
                         purchaseDate,
                         place,

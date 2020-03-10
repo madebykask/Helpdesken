@@ -1,5 +1,6 @@
 ﻿namespace DH.Helpdesk.Domain.Computers
 {
+    using Inventory;
     using global::System;
 
     public class ComputerType : Entity
@@ -12,5 +13,6 @@
         public int? InventoryType_Id { get; set; }
 
         public virtual Customer Customer { get; set; }
+        public virtual Inventory inventory { get; set; }
     }
 }

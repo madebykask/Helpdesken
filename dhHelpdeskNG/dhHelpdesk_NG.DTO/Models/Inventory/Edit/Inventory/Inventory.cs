@@ -15,6 +15,7 @@
             string manufacturer,
             string serialNumber,
             string theftMark,
+            int? computerTypeId,
             string barCode,
             DateTime? purchaseDate,
             string info)
@@ -26,6 +27,7 @@
             this.Manufacturer = manufacturer;
             this.SerialNumber = serialNumber;
             this.TheftMark = theftMark;
+            this.ComputerTypeId = computerTypeId;
             this.BarCode = barCode;
             this.PurchaseDate = purchaseDate;
             this.Info = info;
@@ -48,6 +50,9 @@
         public string SerialNumber { get; private set; }
 
         public string TheftMark { get; private set; }
+
+        [IsId]
+        public int? ComputerTypeId { get; private set; }
 
         public string BarCode { get; private set; }
 

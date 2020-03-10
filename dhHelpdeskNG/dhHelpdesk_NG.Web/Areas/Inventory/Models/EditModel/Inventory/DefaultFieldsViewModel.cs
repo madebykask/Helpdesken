@@ -15,13 +15,15 @@
             SelectList departments,
             SelectList buildings,
             SelectList floors,
-            SelectList rooms)
+            SelectList rooms,
+            SelectList computerTypes)
         {
             this.DefaultFieldsModel = defaultFieldsModel;
             this.Departments = departments;
             this.Buildings = buildings;
             this.Floors = floors;
             this.Rooms = rooms;
+            this.ComputerTypes = computerTypes;
         }
 
         [NotNull]
@@ -38,5 +40,8 @@
 
         [NotNull]
         public SelectList Rooms { get; set; }
+
+        [NotNull]
+        public SelectList ComputerTypes { get; set; }
     }
 }

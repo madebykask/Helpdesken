@@ -20,6 +20,7 @@
             ConfigurableFieldModel<string> manufacturer,
             ConfigurableFieldModel<string> serialNumber,
             ConfigurableFieldModel<string> theftMark,
+            ConfigurableFieldModel<int?> type,
             ConfigurableFieldModel<string> barCode,
             ConfigurableFieldModel<DateTime?> purchaseDate,
             ConfigurableFieldModel<string> computerName,
@@ -37,6 +38,7 @@
             this.Manufacturer = manufacturer;
             this.SerialNumber = serialNumber;
             this.TheftMark = theftMark;
+            this.Type = type;
             this.BarCode = barCode;
             this.PurchaseDate = purchaseDate;
             this.ComputerName = computerName;
@@ -69,6 +71,8 @@
 
         [NotNull]
         public ConfigurableFieldModel<string> TheftMark { get; set; }
+
+        public ConfigurableFieldModel<int?> Type { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> BarCode { get; set; }

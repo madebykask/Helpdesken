@@ -11,6 +11,7 @@
             InventoryFieldSettingForModelEdit manufacturerFieldSetting,
             InventoryFieldSettingForModelEdit serialNumberFieldSetting,
             InventoryFieldSettingForModelEdit theftMarkFieldSetting,
+            InventoryFieldSettingForModelEdit typeFieldSetting,
             InventoryFieldSettingForModelEdit barCodeFieldSetting,
             InventoryFieldSettingForModelEdit purchaseDateFieldSetting,
             InventoryFieldSettingForModelEdit placeFieldSetting,
@@ -27,6 +28,7 @@
             this.ManufacturerFieldSetting = manufacturerFieldSetting;
             this.SerialNumberFieldSetting = serialNumberFieldSetting;
             this.TheftMarkFieldSetting = theftMarkFieldSetting;
+            this.TypeFieldSetting = typeFieldSetting;
             this.BarCodeFieldSetting = barCodeFieldSetting;
             this.PurchaseDateFieldSetting = purchaseDateFieldSetting;
             this.PlaceFieldSetting = placeFieldSetting;
@@ -55,6 +57,9 @@
 
         [NotNull]
         public InventoryFieldSettingForModelEdit TheftMarkFieldSetting { get; private set; }
+
+        [NotNull]
+        public InventoryFieldSettingForModelEdit TypeFieldSetting { get; private set; }
 
         [NotNull]
         public InventoryFieldSettingForModelEdit BarCodeFieldSetting { get; private set; }
