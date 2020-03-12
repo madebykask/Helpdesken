@@ -152,6 +152,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ILanguageService _languageService;
         private readonly IGlobalSettingService _globalSettingService;
         private readonly IMailTemplateService _mailTemplateService;
+        private readonly IMail2TicketService _mail2TicketService;
         private readonly ICausingPartService _causingPartService;
         private readonly IInvoiceArticlesModelFactory _invoiceArticlesModelFactory;
         private readonly ICaseNotifierModelFactory _caseNotifierModelFactory;
@@ -252,6 +253,7 @@ namespace DH.Helpdesk.Web.Controllers
             IRegistrationSourceCustomerService registrationSourceCustomerService,
             ICaseLockService caseLockService,
             IMailTemplateService mailTemplateService,
+            IMail2TicketService mail2TicketService,
             IWatchDateCalendarService watchDateCalendarServcie,
             ICausingPartService causingPartService,
             IInvoiceArticlesModelFactory invoiceArticlesModelFactory,
@@ -329,6 +331,7 @@ namespace DH.Helpdesk.Web.Controllers
             _caseLockService = caseLockService;
             _watchDateCalendarService = watchDateCalendarServcie;
             _mailTemplateService = mailTemplateService;
+            _mail2TicketService = mail2TicketService;
             _causingPartService = causingPartService;
             _reportServiceService = reportServiceService;
             _invoiceArticlesModelFactory = invoiceArticlesModelFactory;
@@ -1145,7 +1148,7 @@ namespace DH.Helpdesk.Web.Controllers
             string err = "";
 
             var tmpLog = _logService.GetLogById(id);
-            var logFiles = _logService.GetLogFilesByLogId(id);
+            var logFiles = _logService.GetLogFilesByLogId(id);           
 
             var logFileStr = string.Empty;
             if (logFiles.Any())
@@ -1161,6 +1164,11 @@ namespace DH.Helpdesk.Web.Controllers
                     return this.RedirectToAction("editlog", "cases", new { id = id, customerId = SessionFacade.CurrentCustomer.Id });
                 }
             }
+
+            var mail2tickets = _mail2TicketService.GetCaseMail2Tickets(caseId);
+            var mail2Ticket = mail2tickets.Where(x => x.Log_Id == id);
+            if (mail2Ticket != null)
+                _mail2TicketService.DeleteByLogId(id);
 
             var c = _caseService.GetCaseById(caseId);
             var basePath = _masterDataService.GetFilePath(c.Customer_Id);

@@ -11,6 +11,7 @@ namespace DH.Helpdesk.Services.Services
     {
         IList<Mail2Ticket> GetCaseMail2Tickets(int caseId);
         Task<List<Mail2Ticket>> GetCaseMail2TicketsAsync(int caseId);
+        void DeleteByLogId(int id);
     }
 
     public class Mail2TicketService : IMail2TicketService
@@ -35,6 +36,11 @@ namespace DH.Helpdesk.Services.Services
         public Task<List<Mail2Ticket>> GetCaseMail2TicketsAsync(int caseId)
         {
             return _mail2TicketRepository.GetMany(m => m.Case_Id == caseId).AsQueryable().ToListAsync();
+        }
+
+        public void DeleteByLogId(int id)
+        {
+            _mail2TicketRepository.DeleteByLogId(id);
         }
     }
 }
