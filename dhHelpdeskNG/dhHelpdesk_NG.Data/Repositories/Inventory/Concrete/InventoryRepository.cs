@@ -446,6 +446,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             entity.Manufacturer = businessModel.Manufacturer ?? string.Empty;
             entity.SerialNumber = businessModel.SerialNumber ?? string.Empty;
             entity.TheftMark = businessModel.TheftMark ?? string.Empty;
+            entity.ComputerType_Id = businessModel.ComputerTypeId;
             entity.BarCode = businessModel.BarCode ?? string.Empty;
             entity.PurchaseDate = businessModel.PurchaseDate;
             entity.Info = businessModel.Info ?? string.Empty;
