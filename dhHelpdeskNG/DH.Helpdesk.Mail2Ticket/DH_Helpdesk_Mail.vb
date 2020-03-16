@@ -326,7 +326,6 @@ Module DH_Helpdesk_Mail
                                           objCustomer.POP3Port,
                                           objCustomer.POP3UserName,
                                           objCustomer.EMailFolder,
-                                          objCustomer.EMailFolderArchive,
                                           objCustomer.EwsApplicationId,
                                           objCustomer.EwsClientSecret,
                                           objCustomer.EwsTenantId)
@@ -1145,7 +1144,7 @@ Module DH_Helpdesk_Mail
     End Function
 
 
-    Private Async Function ReadEwsFolder(server As String, port As Integer, userName As String, emailFolder As String, emailArchiveFolder As String, applicationId As String, clientSecret As String, tenantId As String) As Task(Of List(Of MailMessage))
+    Private Async Function ReadEwsFolder(server As String, port As Integer, userName As String, emailFolder As String, applicationId As String, clientSecret As String, tenantId As String) As Task(Of List(Of MailMessage))
 
         Dim ewsScopes As String() = New String() {"https://outlook.office.com/.default"}
         Dim app As IConfidentialClientApplication = ConfidentialClientApplicationBuilder.Create(applicationId).WithAuthority(AzureCloudInstance.AzurePublic, tenantId).WithClientSecret(clientSecret).Build()
@@ -1181,6 +1180,7 @@ Module DH_Helpdesk_Mail
                                                                                                   Microsoft.Exchange.WebServices.Data.ItemSchema.Subject,
                                                                                                   Microsoft.Exchange.WebServices.Data.ItemSchema.Attachments,
                                                                                                   Microsoft.Exchange.WebServices.Data.EmailMessageSchema.InternetMessageId,
+                                                                                                  Microsoft.Exchange.WebServices.Data.EmailMessageSchema.InReplyTo,
                                                                                                   Microsoft.Exchange.WebServices.Data.ItemSchema.DateTimeReceived))
 
         Dim messages As List(Of MailMessage) = New List(Of MailMessage)()
@@ -1193,6 +1193,9 @@ Module DH_Helpdesk_Mail
                 message.MessageId = New MessageId(mail.InternetMessageId)
                 message.EwsID = mail.Id
                 message.From.Add(New MailAddress(mail.From.Address, mail.From.Name))
+                If (mail.InReplyTo IsNot Nothing) Then
+                    message.InReplyTo.Add(New MessageId(mail.InReplyTo))
+                End If
 
                 For Each recpt As MailAddress In (From r As Microsoft.Exchange.WebServices.Data.EmailAddress In mail.ToRecipients
                                                   Select New MailAddress(r.Address, r.Name))
