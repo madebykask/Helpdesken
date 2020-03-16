@@ -282,6 +282,23 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                                                       ?.Name ?? "");
                     result = result.OrderBy(d => d.Label).ToList();
                     break;
+                case SolvedInTimeGroup.ProductArea_Id:
+                    var productAreas = _productAreaService.GetTopProductAreasWithChilds(SessionFacade.CurrentCustomer.Id, false);
+                    TranslateProductAreas(productAreas, 0);
+                    var productAreasFullNames = _productAreaService.GetChildrenInRow(productAreas.OrderBy(p => p.Name).ToList()).ToList();
+                    result.ForEach(p => p.Label = productAreasFullNames
+                                                      .SingleOrDefault(c => c.Id == p.Id)
+                                                      ?.Name ?? "");
+                    result = result.OrderBy(d => d.Label).ToList();
+                    break;
+                case SolvedInTimeGroup.FinishingMonth:
+                    result.ForEach(p => { p.Label = GetMonthName(p.Id); });
+                    result = result.OrderBy(d => d.Id).ToList();
+                    break;
+                case SolvedInTimeGroup.FinishingYear:
+                    result.ForEach(p => { p.Label = p.Id.ToString(); });
+                    result = result.OrderBy(d => d.Id).ToList();
+                    break;
                 default:
                     result = result.OrderBy(d => d.Label).ToList();
                     break;
