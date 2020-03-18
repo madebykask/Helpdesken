@@ -27,5 +27,7 @@
         public const string CausingPart = "CausingPart";
 
         public const string Problem = "Problem";
+
+        public const string Project = "Project";
     }
 }

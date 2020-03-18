@@ -402,6 +402,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 columns.Add("tblCase.Cost");
                 columns.Add("tblCase.CostCentre");
                 columns.Add("tblCase.PlanDate");
+                columns.Add("tblProject.Name as Project");
 
                 if (customerSettings != null)
                 {
@@ -685,6 +686,7 @@ namespace DH.Helpdesk.Dal.Repositories
             tables.Add("left outer join tblUsers on tblUsers.Id = tblCase.Performer_User_Id ");
             tables.Add("left outer join tblCaseIsAbout on tblCaseIsAbout.Case_Id = tblCase.Id ");
             tables.Add("left outer join tblCaseFollowUps on tblCaseFollowUps.Case_Id = tblCase.Id ");
+            tables.Add("left outer join tblProject on tblProject.Id = tblCase.Project_Id ");
 
             if (customerSetting != null)
             {

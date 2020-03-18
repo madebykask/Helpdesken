@@ -18,7 +18,8 @@
             FieldOverviewSetting verifiedDescription, 
             FieldOverviewSetting solutionRate, 
             FieldOverviewSetting causingPart,
-            FieldOverviewSetting problem)
+            FieldOverviewSetting problem,
+            FieldOverviewSetting project)
         {
             this.CausingPart = causingPart;
             this.SolutionRate = solutionRate;
@@ -33,6 +34,7 @@
             this.Responsible = responsible;
             this.WorkingGroup = workingGroup;
             this.Problem = problem;
+            this.Project = project;
         }
 
         [NotNull]
@@ -73,5 +75,8 @@
 
         [NotNull]
         public FieldOverviewSetting Problem { get; private set; }
+
+        [NotNull]
+        public FieldOverviewSetting Project { get; private set; }
     }
 }

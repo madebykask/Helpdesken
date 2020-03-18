@@ -78,7 +78,8 @@
             
             UserFields.IsAbout_User,
             UserFields.IsAbout_Persons_Name,
-            OtherFields.Problem
+            OtherFields.Problem,
+            OtherFields.Project  
         };
 
         #endregion

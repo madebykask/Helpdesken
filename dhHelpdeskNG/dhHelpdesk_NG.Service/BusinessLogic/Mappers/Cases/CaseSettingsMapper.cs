@@ -194,6 +194,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
             var solutionRate = CreateFieldSetting(fieldSettings.FindByName(OtherFields.SolutionRate));
             var causingPart = CreateFieldSetting(fieldSettings.FindByName(OtherFields.CausingPart));
             var problem = CreateFieldSetting(fieldSettings.FindByName(OtherFields.Problem));
+            var project = CreateFieldSetting(fieldSettings.FindByName(OtherFields.Project));
 
             return new OtherSettings(
                         workingGroup,
@@ -208,7 +209,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
                         verifiedDescription,
                         solutionRate,
                         causingPart,
-                        problem);
+                        problem,
+                        project);
         }
 
         private static LogSettings CreateLogSettings(NamedObjectCollection<CaseSettingsMapData> fieldSettings)
