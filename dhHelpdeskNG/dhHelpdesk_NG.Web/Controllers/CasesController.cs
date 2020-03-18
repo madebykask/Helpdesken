@@ -1676,7 +1676,8 @@ namespace DH.Helpdesk.Web.Controllers
                 Status_Id = _case.Status_Id,
                 StatusName = _case.Status?.Name,
                 WorkingGroup_Id = _case.WorkingGroup_Id,
-                WorkingGroupName = _case.Workinggroup?.WorkingGroupName
+                WorkingGroupName = _case.Workinggroup?.WorkingGroupName,
+                Project_Id = _case.Project_Id
             };
 
             LogManager.Session.Debug($"GetCaseInfo: case should be updated.");
