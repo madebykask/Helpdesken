@@ -1275,7 +1275,7 @@
             CreateValueIfNeeded(
                 settings.DefaultSettings.ManufacturerFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Inventory.InventoryFields.Manufacturer,
-                (StringDisplayValue)overview.Model,
+                (StringDisplayValue)overview.Manufacturer,
                 values);
             CreateValueIfNeeded(
                 settings.DefaultSettings.SerialNumberFieldSetting,
