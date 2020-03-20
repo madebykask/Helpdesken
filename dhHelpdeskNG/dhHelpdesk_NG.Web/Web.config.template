@@ -54,7 +54,7 @@
         <add namespace="System.Web.WebPages"/>
       </namespaces>
     </pages>
-    <!-- 50 mb in kilobytes -->
+    <!-- 50 mb in kilobytes --><!-- commit -->
     <httpRuntime maxRequestLength="5242880" targetFramework="4.7.2"/>
     
     #{if AuthenticationMode == "application"}
