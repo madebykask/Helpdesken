@@ -35,7 +35,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 if (EmailHelper.IsValid(extraFollower))
                 {
-                    var existFollower = existFollowers.SingleOrDefault(x => x.Follower.Equals(extraFollower));
+                    var existFollower = existFollowers.FirstOrDefault(x => x.Follower.Equals(extraFollower));
                     if (existFollower != null)
                     {
                         allFollowers.Add(new CaseExtraFollower
