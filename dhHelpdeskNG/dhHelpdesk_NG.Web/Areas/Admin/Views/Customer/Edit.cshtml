@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using DH.Helpdesk.Common.Enums
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.CustomerInputViewModel
 @{
     ViewBag.Title = "Edit";
@@ -8,13 +9,13 @@
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
-                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.Customer.Id }, new { onclick = "submitForm();return false;", @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", null, new { @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Spara"), "edit", new { id = Model.Customer.Id }, new { onclick = "submitForm();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Avbryt"), "index", null, new { @class = "btn" })</li>
                 @if (Model.Customer.Id != null)
                 {
-                    if (SessionFacade.CurrentUser.UserGroupId == 4)
+                    if (SessionFacade.CurrentUser.UserGroupId == UserGroups.SystemAdministrator)
                     {
-                        <li><a data-toggle="modal" href="#divCopyCustomer" title="@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)" class="btn">@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>
+                        <li><a data-toggle="modal" href="#divCopyCustomer" title="@Translation.Get("Kopiera")" class="btn">@Translation.Get("Kopiera")</a></li>
                     }   
                 }
             </ul>

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿using DH.Helpdesk.Common.Enums;
+
+namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -370,7 +372,10 @@
             }
 
             IDictionary<string, string> errors;
-            this._customerService.SaveEditCustomer(customerToSave, setting, UsSelected, customer.Language_Id, out errors);
+            var saveUsers = SessionFacade.CurrentUser.UserGroupId == UserGroups.SystemAdministrator;
+            this._customerService.SaveEditCustomer(customerToSave, setting, UsSelected, customer.Language_Id, 
+                saveUsers,
+                out errors);
             if (errors.Count == 0)
             {
                 return this.RedirectToAction("edit", "customer");
@@ -1315,7 +1320,7 @@
                
             }
 
-            this._customerService.SaveEditCustomer(newCustomerToSave, newCustomerSetting, null, newCustomerToSave.Language_Id, out errors);
+            this._customerService.SaveEditCustomer(newCustomerToSave, newCustomerSetting, null, newCustomerToSave.Language_Id, true, out errors);
 
 
             return newCustomerToSave.Id;
