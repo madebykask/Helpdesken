@@ -43,7 +43,7 @@ namespace DH.Helpdesk.Services.Services
         void SaveCaseFieldSettingsForCustomer(Customer customer, IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLanguages, int[] us, List<CaseFieldSetting> CaseFieldSettings, int LanguageId, out IDictionary<string, string> errors);
         void SaveCaseFieldSettingsForCustomerCopy(int customerId, int languageId, CaseFieldSetting caseFieldSetting, out IDictionary<string, string> errors);
         void SaveCaseFieldSettingsLangForCustomerCopy(CaseFieldSettingLanguage caseFieldSettingLanguage, out IDictionary<string, string> errors);
-        void SaveEditCustomer(Customer customer, Setting setting, int[] us, int LanguageId, out IDictionary<string, string> errors);
+        void SaveEditCustomer(Customer customer, Setting setting, int[] us, int languageId, bool saveUsers, out IDictionary<string, string> errors);
         void SaveEditCustomer(Customer customer, out IDictionary<string, string> errors);
         void SaveNewCustomerToGetId(Customer customer, out IDictionary<string, string> errors);
         void Commit();
@@ -233,7 +233,7 @@ namespace DH.Helpdesk.Services.Services
             return DeleteMessage.Error;
         }
 
-        public void SaveEditCustomer(Customer customer, Setting setting, int[] us, int LanguageId, out IDictionary<string, string> errors)
+        public void SaveEditCustomer(Customer customer, Setting setting, int[] us, int languageId, bool saveUsers, out IDictionary<string, string> errors)
         {
             if (customer == null)
                 throw new ArgumentNullException("customer");
@@ -277,24 +277,28 @@ namespace DH.Helpdesk.Services.Services
 
             #region Users
 
-            if (customer.Users != null)
-                foreach (var delete in customer.Users.ToList())
-                    customer.Users.Remove(delete);
-            else
-                customer.Users = new List<User>();
-
-            if (us != null)
+            if (saveUsers)
             {
-                foreach (int id in us)
-                {
-                    var u = _userRepository.GetById(id);
+                // TODO: delete and save only changed values, not all. - perfomance issue
+                if (customer.Users != null)
+                    foreach (var delete in customer.Users.ToList())
+                        customer.Users.Remove(delete);
+                else
+                    customer.Users = new List<User>();
 
-                    if (u != null)
-                        customer.Users.Add(u);
+                if (us != null)
+                {
+                    foreach (var id in us)
+                    {
+                        var u = _userRepository.GetById(id);
+
+                        if (u != null)
+                            customer.Users.Add(u);
+                    }
                 }
             }
 
-            #endregion            
+            #endregion
 
             if (customer.Id == 0)
                 _customerRepository.Add(customer);
@@ -306,9 +310,6 @@ namespace DH.Helpdesk.Services.Services
 
             if (setting != null)
                 _settingService.SaveSettingForCustomerEdit(setting, out errors);
-
-
-
         }
 
         public void SaveEditCustomer(Customer customer, out IDictionary<string, string> errors)

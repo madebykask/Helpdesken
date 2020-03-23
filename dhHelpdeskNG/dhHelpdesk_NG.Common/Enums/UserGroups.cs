@@ -8,6 +8,6 @@
 
         public const int CustomerAdministrator = 3;
 
-        public const int SystemAdministrator = 4;        
+        public const int SystemAdministrator = 4;
     }
 }
