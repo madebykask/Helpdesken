@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using DH.Helpdesk.Common.Enums
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.CustomerIndexViewModel
 @{
     ViewBag.Title = "Customer";
@@ -6,14 +7,17 @@
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("kund", Enums.TranslationSource.TextTranslation), "new", null, new { @class = "btn" })</li>
+            @if (SessionFacade.CurrentUser.UserGroupId == UserGroups.SystemAdministrator)
+            {
+                <li>@Html.ActionLink(Translation.Get("Lägg till") + " " + Translation.Get("kund"), "new", null, new {@class = "btn"})</li>
+            }
         </ul>
     </div>
 </div>
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Kund", Enums.TranslationSource.TextTranslation)</a></li>
+            <li class="active"><a href="#fragment-1">@Translation.Get("Kund")</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
@@ -23,11 +27,11 @@
                         <table id="">
                             <tr>
                                 <td style="width: 200px">
-                                    @Translation.Get("Sök", Enums.TranslationSource.TextTranslation)
+                                    @Translation.Get("Sök")
                                 </td>
                                 <td>
                                     @Html.TextBoxFor(model => model.SearchCs, new { maxlength = "50"})
-                                    <input type="button" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" onclick="submit();" />
+                                    <input type="button" id="searchQueryBtn" value="@Translation.Get("Sök")" class="btn" onclick="submit();" />
                                 </td>
                             </tr>
                             <tr>
