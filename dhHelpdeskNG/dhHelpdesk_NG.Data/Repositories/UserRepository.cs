@@ -2,6 +2,7 @@
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.BusinessData.Models.Users.Input;
+using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Linq;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Users;
@@ -45,8 +46,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IList<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId);
         IList<LoggedOnUsersOnIndexPage> LoggedOnUsers();
 
-        IList<User> GetUsersForUserSettingList(UserSearch searchUser);
-        IList<User> GetUsersForUserSettingListByUserGroup(UserSearch searchUser);
+        IList<User> GetUsersForUserSettingList(UserSearch searchUser, IList<int> customersIds, bool excludeSystemAdministrator = false);
         UserLoginInfo GetUserLoginInfo(string userId);
         Task<UserOverview> GetByUserIdAsync(string userId, string passw);
         DateTime GetPasswordChangedDate(int id);
@@ -353,49 +353,14 @@ namespace DH.Helpdesk.Dal.Repositories
             return queryList;
         }
 
-        public IList<User> GetUsersForUserSettingList(UserSearch searchUser)
+        public IList<User> GetUsersForUserSettingList(UserSearch searchUser, IList<int> customersIds, bool excludeSystemAdministrator = false)
         {
             var query = from u in this.DataContext.Users
                         join cu in this.DataContext.CustomerUsers on u.Id equals cu.User_Id into cuGroup
                         from cuOJ in cuGroup.DefaultIfEmpty()
-                        where ((cuOJ != null && cuOJ.Customer_Id == searchUser.CustomerId))
+                        where ((cuOJ != null && customersIds.Contains(cuOJ.Customer_Id)) &&
+                               (!excludeSystemAdministrator || (excludeSystemAdministrator && (cuOJ.User.UserGroup_Id != UserGroups.SystemAdministrator))))
                         select u;
-
-
-            if (searchUser.StatusId == 2)
-                query = query.Where(x => x.IsActive == 0);
-            else if (searchUser.StatusId == 1)
-                query = query.Where(x => x.IsActive == 1); //&& x.Customer_Id == searchUser.CustomerId
-            else if (searchUser.StatusId == 3)
-                query = query.Where(x => x.IsActive == 1 || x.IsActive == 0);
-
-
-            if (!string.IsNullOrWhiteSpace(searchUser.SearchUs))
-            {
-                string s = searchUser.SearchUs.ToLower();
-                query = query.Where(x => x.UserID.ToLower().Contains(s)
-                    || x.ArticleNumber.ToLower().Contains(s)
-                    || x.CellPhone.ToLower().Contains(s)
-                    || x.Email.ToLower().Contains(s)
-                    || x.FirstName.ToLower().Contains(s)
-                    || x.Phone.ToLower().Contains(s)
-                    || x.SurName.ToLower().Contains(s)
-                    || x.UserGroup.Name.ToLower().Contains(s));
-            }
-
-            return query.OrderBy(x => x.SurName).ThenBy(x => x.FirstName).Distinct().ToList();
-            //return query.OrderBy(x => x.UserID).Distinct().ToList();
-        }
-
-        public IList<User> GetUsersForUserSettingListByUserGroup(UserSearch searchUser)
-        {
-
-            var query = from u in this.DataContext.Users
-                        join cu in this.DataContext.CustomerUsers on u.Id equals cu.User_Id into cuGroup
-                        from cuOJ in cuGroup.DefaultIfEmpty()
-                        where ((cuOJ != null && cuOJ.Customer_Id == searchUser.CustomerId) && cuOJ.User.UserGroup_Id != 4)
-                        select u;
-
 
             if (searchUser.StatusId == 2)
                 query = query.Where(x => x.IsActive == 0);
@@ -404,10 +369,9 @@ namespace DH.Helpdesk.Dal.Repositories
             else if (searchUser.StatusId == 3)
                 query = query.Where(x => x.IsActive == 1 || x.IsActive == 0);
 
-
             if (!string.IsNullOrWhiteSpace(searchUser.SearchUs))
             {
-                string s = searchUser.SearchUs.ToLower();
+                var s = searchUser.SearchUs.ToLower();
                 query = query.Where(x => x.UserID.ToLower().Contains(s)
                     || x.ArticleNumber.ToLower().Contains(s)
                     || x.CellPhone.ToLower().Contains(s)
@@ -419,7 +383,6 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             return query.OrderBy(x => x.SurName).ThenBy(x => x.FirstName).Distinct().ToList();
-            //return query.OrderBy(x => x.UserID).Distinct().ToList();
         }
 
         public IList<LoggedOnUsersOnIndexPage> LoggedOnUsers()

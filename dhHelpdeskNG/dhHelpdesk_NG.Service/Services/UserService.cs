@@ -76,8 +76,7 @@ namespace DH.Helpdesk.Services.Services
         IList<User> GetAllPerformers(int customerId);
         IList<CustomerUserInfo> GetAvailablePerformersForWorkingGroup(int customerId, int? workingGroup = null);
 
-        IList<User> SearchSortAndGenerateUsers(UserSearch SearchUsers);
-        IList<User> SearchSortAndGenerateUsersByUserGroup(UserSearch SearchUsers);
+        IList<User> SearchSortAndGenerateUsers(UserSearch searchUsers, IList<int> customersIds = null, bool excludeSystemAdministrator = false);
         IList<UserGroup> GetUserGroups();
         IList<UserRole> GetUserRoles();
         IList<UserWorkingGroup> GetUserWorkingGroups();
@@ -476,14 +475,10 @@ namespace DH.Helpdesk.Services.Services
             return GetAvailablePerformersOrUserId(customerId);
         }
 
-        public IList<User> SearchSortAndGenerateUsers(UserSearch searchUsers)
+        public IList<User> SearchSortAndGenerateUsers(UserSearch searchUsers, IList<int> customersIds = null, bool excludeSystemAdministrator = false)
         {
-            return _userRepository.GetUsersForUserSettingList(searchUsers).OrderBy(x => x.FirstName).ToList();
-        }
-
-        public IList<User> SearchSortAndGenerateUsersByUserGroup(UserSearch searchUsers)
-        {
-            return _userRepository.GetUsersForUserSettingListByUserGroup(searchUsers).OrderBy(x => x.FirstName).ToList();
+            customersIds = customersIds ?? new List<int> {searchUsers.CustomerId};
+            return _userRepository.GetUsersForUserSettingList(searchUsers, customersIds, excludeSystemAdministrator).OrderBy(x => x.FirstName).ToList();
         }
 
         public IList<UserGroup> GetUserGroups()

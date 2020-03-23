@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.BusinessData.Models.User;
+using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Web.Models.Shared;
@@ -84,35 +85,21 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         public ActionResult Index()
         {
             var model = this.IndexInputViewModel();
-            var userSearch = (UserSearch)this.Session["UserSearch"];
 
             if (this.Session["UserSearch"] == null)
             {
-                if (SessionFacade.CurrentUser.UserGroupId == 3)
-                {
-                    model.UserOverviewList.Users = this._userService.GetUsersByUserGroup(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
-                }
-                else
-                {
-                    model.UserOverviewList.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
-                }
-                //model.UserOverviewList.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
-                //model.UserOverviewList.Users = this._userService.GetUsers().OrderBy(x => x.UserID).ToList();
+                // TODO: add all customers support if "All Customers selected by default"
+                model.UserOverviewList.Users = SessionFacade.CurrentUser.UserGroupId == UserGroups.CustomerAdministrator ?
+                    this._userService.GetUsersByUserGroup(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList() :
+                    this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
                 model.UserOverviewList.Sorting = new UserSort { FieldName = "", IsAsc = true };
-                //model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
             }
             else
             {
                 var filter = (UserSearch)this.Session["UserSearch"];
                 model.Filter = filter;
-                if (SessionFacade.CurrentUser.UserGroupId == 3)
-                {
-                    model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsersByUserGroup(filter);
-                }
-                else
-                {
-                    model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsers(filter);
-                }
+                model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsers(filter, new List<int> { filter.CustomerId },
+                    SessionFacade.CurrentUser.UserGroupId == UserGroups.CustomerAdministrator);
 
                 model.UserOverviewList.Sorting = new UserSort { FieldName = "", IsAsc = true };
                 model.StatusUsers.FirstOrDefault(x => x.Value == filter.StatusId.ToString()).Selected = true;
@@ -140,27 +127,22 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             {
                 model.UserOverviewList.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
                 model.UserOverviewList.Sorting = new UserSort { FieldName = "", IsAsc = true };
-                //model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
             }
+            var customersIds = filter.CustomerId == -1
+                ? model.CsSelected.Select(c => int.Parse(c.Value))
+                : new[] {filter.CustomerId};
+
+            model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsers(filter, customersIds.ToList(),
+                SessionFacade.CurrentUser.UserGroupId == UserGroups.CustomerAdministrator);
 
             if (this.Session["UserSearch"] == null && filter.SearchUs != null)
             {
-                model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsers(filter);
                 model.UserOverviewList.Sorting = new UserSort { FieldName = "", IsAsc = true };
             }
             else
             {
-
                 model.Filter = filter;
                 this.Session["UserSearch"] = filter;
-                if (SessionFacade.CurrentUser.UserGroupId == 3)
-                {
-                    model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsersByUserGroup(filter);
-                }
-                else
-                {
-                    model.UserOverviewList.Users = this._userService.SearchSortAndGenerateUsers(filter);
-                }
             }
 
             if (userSearch != null)
@@ -182,16 +164,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             {
                 model.Users = this._userService.GetAllUsers().OrderBy(x => x.UserID).ToList();
                 model.Sorting = new UserSort { FieldName = fieldName, IsAsc = !isAsc };
-                //model.Users = this._userService.GetUsers(SessionFacade.CurrentCustomer.Id).OrderBy(x => x.UserID).ToList();
             }
+            var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
+            var csSelected = user.Cs.Where(c => c.Status == 1).ToList();
+
+            var customersIds = filter.CustomerId == -1
+                ? csSelected.Select(c => c.Id)
+                : new[] {filter.CustomerId};
+            model.Users = this._userService.SearchSortAndGenerateUsers(filter, customersIds.ToList(),
+                SessionFacade.CurrentUser.UserGroupId == UserGroups.CustomerAdministrator);
             if (this.Session["UserSearch"] == null && filter.SearchUs != null)
             {
-                model.Users = this._userService.SearchSortAndGenerateUsers(filter);
                 model.Sorting = new UserSort { FieldName = fieldName, IsAsc = !isAsc };
-            }
-            else
-            {
-                model.Users = this._userService.SearchSortAndGenerateUsers(filter);
             }
 
             model.Users = this.SortUsers(model.Users, fieldName, isAsc);
@@ -502,14 +486,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             var model = new List<LoggedInUsers>();
             SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId = selectedCustomerId;
-            if (selectedCustomerId.HasValue)
-            {
+            if (selectedCustomerId.HasValue && selectedCustomerId.Value != -1)
                 model = ApplicationFacade.GetLoggedInUsers(selectedCustomerId.Value).ToList();
-            }
             else
-            {
                 model = ApplicationFacade.GetAllLoggedInUsers().ToList();
-            }
 
             return PartialView("Index/_OnlineUserList", model);
         }
@@ -525,61 +505,54 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private UserIndexViewModel IndexInputViewModel()
         {
             var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
-            var csSelected = user.Cs.Where(c => c.Status == 1) ?? new List<Customer>();
-            var csAvailable = new List<Customer>();
+            var csSelected = user.Cs.Where(c => c.Status == 1).ToList();
 
-
-            foreach (var c in this._customerService.GetAllCustomers().Where(o => o.Status == 1))
-            {
-                if (!csSelected.Contains(c))
-                    csAvailable.Add(c);
-                    csAvailable.OrderBy(cu => c.Name);
-            }
-
-            List<SelectListItem> sli = new List<SelectListItem>();
+            var sli = new List<SelectListItem>();
             sli.Add(new SelectListItem()
             {
-                Text = Translation.Get("Aktiva", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Aktiva"),
                 Value = "1",
                 Selected = false
             });
             sli.Add(new SelectListItem()
             {
-                Text = Translation.Get("Inaktiva", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Inaktiva"),
                 Value = "2",
                 Selected = false
             });
             sli.Add(new SelectListItem()
             {
-                Text = Translation.Get("Alla", Enums.TranslationSource.TextTranslation),
+                Text = Translation.Get("Alla"),
                 Value = "3",
                 Selected = false
             });
 
             //Locked Cases                        
-            int AdminUsersPageLockedCasesTabSelectedCustomerId = 0;
+            var adminUsersPageLockedCasesTabSelectedCustomerId = 0;
             if (!SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId.HasValue)
             {
                 SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId = SessionFacade.CurrentUser.CustomerId;
             }
 
-            AdminUsersPageLockedCasesTabSelectedCustomerId = SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId.Value;
-            var lockedCasesModel = this.GetLockedCaseModel(AdminUsersPageLockedCasesTabSelectedCustomerId);
+            adminUsersPageLockedCasesTabSelectedCustomerId = SessionFacade.AdminUsersPageLockedCasesTabSelectedCustomerId.Value;
+            var lockedCasesModel = this.GetLockedCaseModel(adminUsersPageLockedCasesTabSelectedCustomerId);
 
-            int AdminUsersPageLoggedInUsersTabSelectedCustomerId = 0;
+            var adminUsersPageLoggedInUsersTabSelectedCustomerId = 0;
             if (!SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId.HasValue)
             {
                 SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId = SessionFacade.CurrentUser.CustomerId;
             }
 
-            AdminUsersPageLoggedInUsersTabSelectedCustomerId = SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId.Value;
+            adminUsersPageLoggedInUsersTabSelectedCustomerId = SessionFacade.AdminUsersPageLoggedInUsersTabSelectedCustomerId.Value;
             var model = new UserIndexViewModel
             {
                 User = user,
                 StatusUsers = sli,
                 LockedCaseModel = lockedCasesModel,
-                ListLoggedInUsers = AdminUsersPageLoggedInUsersTabSelectedCustomerId == 0 ? ApplicationFacade.GetAllLoggedInUsers() : ApplicationFacade.GetLoggedInUsers(AdminUsersPageLoggedInUsersTabSelectedCustomerId),
-                Filter = new UserSearch { CustomerId = AdminUsersPageLockedCasesTabSelectedCustomerId },
+                ListLoggedInUsers = adminUsersPageLoggedInUsersTabSelectedCustomerId == 0 ?
+                    ApplicationFacade.GetAllLoggedInUsers() :
+                    ApplicationFacade.GetLoggedInUsers(adminUsersPageLoggedInUsersTabSelectedCustomerId),
+                Filter = new UserSearch { CustomerId = adminUsersPageLockedCasesTabSelectedCustomerId },
                 CsSelected = csSelected.Select(x => new SelectListItem
                 {
                     Text = x.Name,
@@ -587,9 +560,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 })
                 .OrderBy(c => c.Text)
                 .ToList(),
-                OnlineUsersTabSelectedCustomerId = AdminUsersPageLoggedInUsersTabSelectedCustomerId,
+                OnlineUsersTabSelectedCustomerId = adminUsersPageLoggedInUsersTabSelectedCustomerId,
                 UserOverviewList = new UserList()
             };
+
+            if (SessionFacade.CurrentUser.UserGroupId == UserGroups.SystemAdministrator)
+            {
+                model.CsSelected.Insert(0, new SelectListItem
+                {
+                    Text = Translation.Get("Alla kunder"),
+                    Value = "-1",
+                });
+            }
 
             return model;
         }
@@ -599,13 +581,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var user = this._userService.GetUser(SessionFacade.CurrentUser.Id);
 
             var csSelected = user.Cs ?? new List<Customer>();
-            var csAvailable = new List<Customer>();
-
-            foreach (var c in this._customerService.GetAllCustomers())
-            {
-                if (!csSelected.Contains(c))
-                    csAvailable.Add(c);
-            }
 
             var customerList = csSelected.Select(x => new SelectListItem
             {
