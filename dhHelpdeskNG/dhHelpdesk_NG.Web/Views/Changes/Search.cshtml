@@ -88,15 +88,15 @@
                 @Html.DropDownListFor(m => m.StatusValue, Model.Status)
             </td>
         </tr>
-        <tr>
+        @*<tr>
             <td class="span3">
                 @Translation.Get("Antal per sida")
-                @*@Html.LabelFor(m => m.RecordsOnPage)*@
+                Html.LabelFor(m => m.RecordsOnPage)
             </td>
             <td>
                 @Html.TextBoxFor(m => m.RecordsOnPage)
             </td>
-        </tr>
+        </tr>*@
         <tr>
             <td class="span3">
                 &nbsp;
