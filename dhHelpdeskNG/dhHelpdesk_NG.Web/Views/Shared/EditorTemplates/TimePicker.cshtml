@@ -1,5 +1,5 @@
 ﻿
-@model DateTime?
+@model string
 
 @{
     var controlId = ViewData["Id"];
@@ -19,12 +19,18 @@
     htmlAttributes.Add("id", controlId);
     htmlAttributes.Add("class", "input-small-important");
 
-    string time = null;
+    string time = " ";
 
-    if (Model.HasValue)
+    if (Model != null)
     {
-        time = Model.Value.ToString("HH:mm");
+        time = Model;
     }
+
+
+    //if (Model.HasValue)
+    //{
+    //    time = Model.Value.ToString("HH:mm");
+    //}
 }
 
 <script type="text/javascript">

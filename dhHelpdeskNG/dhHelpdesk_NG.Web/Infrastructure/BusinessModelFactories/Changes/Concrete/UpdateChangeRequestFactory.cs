@@ -102,16 +102,22 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes.Concrete
                 if (startDate.HasValue)
                 {
                     var startTime =
-                        ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.StartDateAndTime.Container.Time);
+                        ConfigurableFieldModel<string>.GetValueOrDefault(model.StartDateAndTime.Container.Time);
 
-                    if (startTime.HasValue)
+                    if (!string.IsNullOrEmpty(startTime))
                     {
+                        var sT = startTime.Split(':');
+                        int startTimeHour = 0;
+                        int startTimeMinute = 0;
+                        Int32.TryParse(sT[0], out startTimeHour);
+                        Int32.TryParse(sT[1], out startTimeMinute);
+
                         startDateAndTime = new DateTime(
                             startDate.Value.Year,
                             startDate.Value.Month,
                             startDate.Value.Day,
-                            startTime.Value.Hour,
-                            startTime.Value.Minute,
+                            startTimeHour,
+                            startTimeMinute,
                             0);
                     }
                     else
@@ -134,16 +140,22 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes.Concrete
                 if (finishDate.HasValue)
                 {
                     var finishTime =
-                        ConfigurableFieldModel<DateTime?>.GetValueOrDefault(model.FinishDateAndTime.Container.Time);
+                        ConfigurableFieldModel<string>.GetValueOrDefault(model.FinishDateAndTime.Container.Time);
 
-                    if (finishTime.HasValue)
+                    if (!string.IsNullOrEmpty(finishTime))
                     {
+                        var fT = finishTime.Split(':');
+                        int finishTimeHour = 0;
+                        int finishTimeMinute = 0;
+                        Int32.TryParse(fT[0], out finishTimeHour);
+                        Int32.TryParse(fT[1], out finishTimeMinute);
+
                         finishDateAndTime = new DateTime(
                             finishDate.Value.Year,
                             finishDate.Value.Month,
                             finishDate.Value.Day,
-                            finishTime.Value.Hour,
-                            finishTime.Value.Minute,
+                            finishTimeHour,
+                            finishTimeMinute,
                             0);
                     }
                     else

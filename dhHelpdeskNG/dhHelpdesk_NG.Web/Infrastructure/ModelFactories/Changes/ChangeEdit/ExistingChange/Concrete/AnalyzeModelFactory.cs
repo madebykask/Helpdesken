@@ -11,6 +11,7 @@
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
     using DH.Helpdesk.Web.Models.Changes.ChangeEdit;
     using DH.Helpdesk.Web.Models.Shared;
+    using System;
 
     public sealed class AnalyzeModelFactory : IAnalyzeModelFactory
     {
@@ -95,13 +96,24 @@
             var startDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(
                 settings.StartDate,
                 analyze.StartDate);
+            var startTime = new ConfigurableFieldModel<string>()
+            {
+                Caption = startDate.Caption,
+                IsRequired = startDate.IsRequired,
+                Show = startDate.Show
+            };
 
-            var startTime = startDate;
-
+            if (startDate.Value != null)
+            {
+                var analyzeStartTime = startDate.Value.Value.ToShortTimeString(); 
+                 startTime = this.configurableFieldModelFactory.CreateNullableTimeField(
+                    settings.StartDate,
+                    analyzeStartTime);                
+            }
             ConfigurableContainerModel<DateAndTimeModel> startDateAndTime;
 
             if (settings.StartDate.Show)
-            {
+            {                
                 var dateAndTime = new DateAndTimeModel(startDate, startTime);
                 startDateAndTime = new ConfigurableContainerModel<DateAndTimeModel>(
                     settings.StartDate.Caption,
@@ -115,8 +127,18 @@
             var finishDate = this.configurableFieldModelFactory.CreateNullableDateTimeField(
                 settings.FinishDate,
                 analyze.FinishDate);
+            var finishTime = new ConfigurableFieldModel<string>()
+                                  { Caption = finishDate.Caption,
+                                    IsRequired = finishDate.IsRequired,
+                                    Show = finishDate.Show};
 
-            var finishTime = finishDate;
+            if (finishDate.Value != null)
+            {
+                var analyzeFinishTime = finishDate.Value.Value.ToShortTimeString();
+                finishTime = this.configurableFieldModelFactory.CreateNullableTimeField(
+                    settings.FinishDate,
+                    analyzeFinishTime);
+            }
 
             ConfigurableContainerModel<DateAndTimeModel> fininshDateAndTime;
 

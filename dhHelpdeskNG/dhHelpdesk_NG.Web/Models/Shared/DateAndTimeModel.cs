@@ -13,7 +13,7 @@
         {
         }
 
-        public DateAndTimeModel(ConfigurableFieldModel<DateTime?> date, ConfigurableFieldModel<DateTime?> time)
+        public DateAndTimeModel(ConfigurableFieldModel<DateTime?> date, ConfigurableFieldModel<string> time)
         {
             this.Date = date;
             this.Time = time;
@@ -27,7 +27,7 @@
         public ConfigurableFieldModel<DateTime?> Date { get; set; }
 
         [NotNull]
-        public ConfigurableFieldModel<DateTime?> Time { get; set; }
+        public ConfigurableFieldModel<string> Time { get; set; }
 
         #endregion
     }
