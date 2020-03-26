@@ -163,6 +163,13 @@
                 : new ConfigurableFieldModel<DateTime?>(setting.Caption, value, setting.Required);
         }
 
+        public ConfigurableFieldModel<string> CreateNullableTimeField(FieldEditSetting setting, string value)
+        {
+            return !setting.Show
+                ? ConfigurableFieldModel<string>.CreateUnshowable()
+                : new ConfigurableFieldModel<string>(setting.Caption, value, setting.Required);
+        }
+
         public ConfigurableFieldModel<SelectList> CreateSelectListField(
             FieldEditSetting setting,
             List<ItemOverview> items,

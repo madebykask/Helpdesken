@@ -38,6 +38,8 @@
 
         ConfigurableFieldModel<DateTime?> CreateNullableDateTimeField(FieldEditSetting setting, DateTime? value);
 
+        ConfigurableFieldModel<string> CreateNullableTimeField(FieldEditSetting setting, string value);
+
         ConfigurableFieldModel<SelectList> CreateSelectListField(
             FieldEditSetting setting,
             List<ItemOverview> items,
