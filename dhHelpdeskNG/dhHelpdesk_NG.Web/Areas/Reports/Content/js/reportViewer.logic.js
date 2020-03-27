@@ -692,6 +692,13 @@
             var $statusFilter = $('#lstStatus');
             var $caseRegistrationFromDate = $('#CaseRegistrationFromDate');
             var $caseRegistrationToDate = $('#CaseRegistrationToDate');
+            var $caseClosingFromDate = $('#CaseClosingFromDate');
+            var $caseClosingToDate = $('#CaseClosingToDate');
+
+            var forceDateFrom = new Date();
+            forceDateFrom.setMonth(forceDateFrom.getMonth() - 1);
+            var forceDateTo = new Date();
+
 
             var historicalReportControls = [$btnShowReport, $groupBy, $jsReportContainer, $historicalFilters];
 
@@ -721,6 +728,8 @@
                 $caseRegistrationFromDate.datepicker();
                 $caseRegistrationToDate.find('input').prop('disabled', false);
                 $caseRegistrationToDate.datepicker();
+                $caseClosingFromDate.datepicker('setDate', null);
+                $caseClosingToDate.datepicker('setDate', null);
                 $statusFilter.prop('disabled', false);
                 $statusFilter.val('');
                 $groupBy.hide();
@@ -730,6 +739,8 @@
                 if (reportId === dhHelpdesk.reports.reportType.ReportGeneratorExtendedCase) {
 
                     $reportGeneratorExtendedCase.show();
+                    $caseClosingFromDate.datepicker('setDate', null);
+                    $caseClosingToDate.datepicker('setDate', null);
                     $lstExtendedCaseForms.change();
                 }
                 else {
@@ -750,6 +761,8 @@
                 $otherReportsContainer.hide();
                 $extraParameters.hide();
                 $logNoteDateFields.hide();
+                $caseClosingFromDate.datepicker('setDate', null);
+                $caseClosingToDate.datepicker('setDate', null);
                 $.each(historicalReportControls, function (i, v) { v.show(); });
                 $stackBy.val(stackByDefaultValue);
                 $stackBy.prop('disabled', false);
@@ -765,8 +778,10 @@
                 $generateReportContainer.hide();
                 $caseRegistrationFromDate.find('input').prop('disabled', false);
                 $caseRegistrationFromDate.datepicker();
-                $caseRegistrationFromDate.find('input').prop('disabled', false);
-                $caseRegistrationFromDate.datepicker();
+                $caseRegistrationToDate.find('input').prop('disabled', false);
+                $caseRegistrationToDate.datepicker();
+                $caseClosingFromDate.datepicker('setDate', null);
+                $caseClosingToDate.datepicker('setDate', null);
                 $statusFilter.prop('disabled', false);
                 $statusFilter.val('');
                 $stackBy.val('');
@@ -778,12 +793,16 @@
                 $jsReportContainer.hide();
                 $otherReportsContainer.show();
                 if (reportId === dhHelpdesk.reports.reportType.ReportedTime) {
+                    $caseClosingFromDate.datepicker('setDate', null);
+                    $caseClosingToDate.datepicker('setDate', null);
                     $logNoteDateFields.show();
                     $otherReportsContainer.hide();
                     $jsReportContainer.show();
                     window.dhHelpdesk.reports[reportObjNames[reportId]].init();
                 }
                 if (reportId === dhHelpdesk.reports.reportType.NumberOfCases) {
+                    $caseClosingFromDate.datepicker('setDate', null);
+                    $caseClosingToDate.datepicker('setDate', null);
                     $otherReportsContainer.hide();
                     $jsReportContainer.show();
                     window.dhHelpdesk.reports[reportObjNames[reportId]].init();
@@ -797,6 +816,8 @@
                     $caseRegistrationFromDate.datepicker('remove');
                     $caseRegistrationToDate.find('input').prop('disabled', true);
                     $caseRegistrationToDate.datepicker('remove');
+                    $caseClosingFromDate.datepicker("setDate", forceDateFrom);
+                    $caseClosingToDate.datepicker("setDate", forceDateTo);
                     $jsReportContainer.show();
                     window.dhHelpdesk.reports[reportObjNames[reportId]].init();
                 }
