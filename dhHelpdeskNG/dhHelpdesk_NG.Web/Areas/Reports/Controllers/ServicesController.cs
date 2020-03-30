@@ -332,7 +332,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                         {
                             new
                             {
-                                label = Translation.GetCoreTextTranslation("Antal"),
+                                label = "%",
                                 data = result.Select(r => r.Total == 0 ? 0 : ((r.SolvedInTimeTotal * 100) / r.Total))
                             }
                         }
