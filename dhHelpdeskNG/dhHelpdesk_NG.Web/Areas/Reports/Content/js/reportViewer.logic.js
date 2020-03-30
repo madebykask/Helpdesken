@@ -36,6 +36,8 @@
         var extendedCaseFormFields = "#reportGeneratorExtendedCaseFormFields";
         var lstExtendedCaseForms = "#lstExtendedCaseForms";
         var lstExtendedCaseFormFields = "#lstExtendedCaseFormFields";
+        var lstGroupBy = '#lstGroupBy';
+        var lstStackBy = '#lstStackBy';
 
         var filterExtendedCaseFieldIds = [];
 
@@ -106,7 +108,7 @@
                 regDateFrom: null,
                 regDateTo: null,
                 closeDateFrom: null,
-                closeDateTo : null
+                closeDateTo: null
             };
 
             $(departmentDropDown + " option:selected").each(function () {
@@ -204,8 +206,6 @@
             // Trigger change of extended case form to retrieve fields for form
             $(lstExtendedCaseForms).change();
 
-            
-
             //applyMultiSelect(lstExtendedCaseFormFields, filters.extendedCaseFormFields);
 
             applyMultiSelect("#lstFields", filters.fields);
@@ -216,6 +216,19 @@
 
             $(caseCloseFrom).val(filters.closeDateFrom);
             $(caseCloseTo).val(filters.closeDateTo);
+
+            $(reportCategoryDropdown).val(filters.reportCategory);
+            $(reportCategoryDropdownRt).val(filters.reportCategoryRt);
+            $(reportCategoryDropdownSt).val(filters.reportCategorySt);
+
+            $(lstGroupBy).val(filters.groupBy);
+            $(lstStackBy).val(filters.stackBy);
+            $(caseLogNoteDateFrom).val(filters.logNoteDateFrom);
+            $(caseLogNoteDateTo).val(filters.logNoteDateTo);
+            $(changeDateFrom).val(filters.historicalChangeDateFrom);
+            $(changeDateTo).val(filters.historicalChangeDateTo);
+
+            applyChosen(historicalWorkingGroups, filters.historicalWorkingGroups);
         };
 
         dhHelpdesk.reports.loadFilter = function (filterId) {
@@ -235,6 +248,7 @@
                 var filters = $.parseJSON(data.Filters);
                 switch (filters.version) {
                     case "1":
+                    case "2":
                         {
                             dhHelpdesk.reports.applyFilterV1(filters);
                         }
@@ -576,8 +590,8 @@
                 historicalWorkingGroups.push($(this).val());
             });
 
-            var groupBy = $('#lstGroupBy').val();
-            var stackBy = $('#lstStackBy').val();
+            var groupBy = $(lstGroupBy).val();
+            var stackBy = $(lstStackBy).val();
 
             var historicalChangeDateFrom = $(changeDateFrom).val();
             var historicalChangeDateTo = $(changeDateTo).val();
@@ -592,8 +606,44 @@
             });
         }
 
+        dhHelpdesk.reports.getAllFiltersForFavorite = function(reportId) {
+            var baseFilters = getBaseFilters(); // legacy favorites support TODO: fix mess with a lot of filters methods and namings 
+            var filters = $.extend(baseFilters,
+                {
+                    reportCategory: null,
+                    reportCategoryRt: null,
+                    reportCategorySt: null,
+                    groupBy: null,
+                    stackBy: null,
+                    logNoteDateFrom: null,
+                    logNoteDateTo: null,
+                    historicalChangeDateFrom: null,
+                    historicalChangeDateTo: null,
+                    historicalWorkingGroups: []
+                });
+            filters.reportCategory = $(reportCategoryDropdown).val();
+            filters.reportCategoryRt = $(reportCategoryDropdownRt).val();
+            filters.reportCategorySt = $(reportCategoryDropdownSt).val();
+            filters.groupBy = $(lstGroupBy).val();
+            filters.stackBy = $(lstStackBy).val();
+            filters.logNoteDateFrom = $(caseLogNoteDateFrom).val();
+            filters.logNoteDateTo = $(caseLogNoteDateTo).val();
+            filters.historicalChangeDateFrom = $(changeDateFrom).val();
+            filters.historicalChangeDateTo = $(changeDateTo).val();
+
+            var historicalWorkingGroups = [];
+            $(historicalWorkingGroupDropDown + ' option:selected').each(function () {
+                historicalWorkingGroups.push($(this).val());
+            });
+            filters.historicalWorkingGroups = historicalWorkingGroups;
+            return filters;
+
+        }
+
         dhHelpdesk.reports.onShowReport = function (e) {
-            var reportId = $('#lstReports').find('option:selected').data('id');
+            var control$ = $('#lstReports').find('option:selected');
+            var origReportId = control$.data("origReportId");
+            var reportId = origReportId || control$.data('id');
             switch (reportId) {
                 case dhHelpdesk.reports.reportType.HistoricalReport: 
                     dhHelpdesk.reports.onHistoricalShow.call(this, e);
@@ -698,7 +748,6 @@
             var forceDateFrom = new Date();
             forceDateFrom.setMonth(forceDateFrom.getMonth() - 1);
             var forceDateTo = new Date();
-
 
             var historicalReportControls = [$btnShowReport, $groupBy, $jsReportContainer, $historicalFilters];
 
@@ -836,7 +885,7 @@
                 $("#btnDeleteFavorite").hide();
             }
             
-            dhHelpdesk.reports.showExtraParameters($(reportList + " option:selected").attr("data-identity"));
+            dhHelpdesk.reports.showExtraParameters(reportId);
         };
 
         dhHelpdesk.reports.deleteFavorite = function () {
@@ -862,7 +911,7 @@
         };
 
         dhHelpdesk.reports.onSave = function (e, data, saveAs) {
-            var currentVersion = "1";
+            var currentVersion = "2";
             saveAs = saveAs || false;
             var $reportsControl = $("#lstReports");
             var selectedReport = $reportsControl.find("option:selected");
@@ -890,7 +939,7 @@
             });
 
             $modal.find("#btnSaveFilter").off("click").on("click", function (e) {
-                var filters = getBaseFilters();
+                var filters = dhHelpdesk.reports.getAllFiltersForFavorite();
                 filters.version = currentVersion;
                 var id = saveAs ? null : selectedReport.data("id"); //if saving new - no id
                 var originalReportId = selectedReport.data("origReportId") ? selectedReport.data("origReportId") : selectedReport.data("id");
@@ -945,23 +994,23 @@
             $("#excelReport").each(function () { this.disabled = state; });
         }
 
-        dhHelpdesk.reports.showExtraParameters = function (reportName) {
+        dhHelpdesk.reports.showExtraParameters = function (reportId) {
   
-            switch (reportName) { 
-                case "NumberOfCases":
+            switch (reportId) { 
+                case dhHelpdesk.reports.reportType.NumberOfCases:
                     $("#lstfilterReportCategory").show();
                     $("#lstfilterReportCategoryRt").hide();
                     $("#lstfilterReportCategory_repl").hide();
                     $("#lstfilterReportCategory_SolvedInTime").hide();
                     break;
 
-                case "ReportedTime":
+                case dhHelpdesk.reports.reportType.ReportedTime:
                     $("#lstfilterReportCategory").hide();
                     $("#lstfilterReportCategoryRt").show();
                     $("#lstfilterReportCategory_repl").hide();
                     $("#lstfilterReportCategory_SolvedInTime").hide();
                     break;
-                case "SolvedInTimeReport":
+                case dhHelpdesk.reports.reportType.SolvedInTime:
                     $("#lstfilterReportCategory").hide();
                     $("#lstfilterReportCategoryRt").hide();
                     $("#lstfilterReportCategory_repl").hide();
