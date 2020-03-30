@@ -52,18 +52,15 @@
                         </tr>
                     }
 
-                    @if (Model.ReportFilter.GroupByList != null)
-                    {
-                        <tr id="groupBy" style="display: none">
-                            <td>
-                                @Translation.GetCoreTextTranslation("Gruppera")
-                            </td>
-                            <td>
-                                @Html.DropDownListFor(m => m.ReportFilter.Selected.GroupById, Model.ReportFilter.GroupByList, null,
-                                    new { id = "lstGroupBy", style = "width: 300px;" })
-                            </td>
-                        </tr>
-                    }
+                    <tr id="groupBy" style="display: none">
+                        <td>
+                            @Translation.GetCoreTextTranslation("Gruppera")
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.ReportFilter.Selected.GroupById, Model.ReportFilter.GroupByList, null,
+                                new { id = "lstGroupBy", style = "width: 300px;" })
+                        </td>
+                    </tr>
 
                     <tr id="reportCategoryParam">
                         <td>
