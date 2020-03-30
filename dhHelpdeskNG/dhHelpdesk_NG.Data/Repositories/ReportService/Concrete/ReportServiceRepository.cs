@@ -27,6 +27,7 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
 
     public class ReportServiceRepository : IReportServiceRepository
     {
+
         private class IdName
         {
             public int? Id { get; set; }
@@ -430,102 +431,39 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
             {
                 case SolvedInTimeGroup.CaseType_Id:
                     result = query.GroupBy(c => new IdName { Id = c.CaseType_Id, Name = c.CaseType.Name })
-                        .Select(cg => new SolvedInTimeDataResult
-                        {
-                            Id = cg.Key.Id ?? 0,
-                            Label = cg.Key.Name,
-                            Total = cg.Count(),
-                            SolvedInTimeTotal = cg.Join(DataContext.CaseStatistics, c => c.Id, cs => cs.CaseId, (c, cs) => cs)
-                                .Count(cs => cs.WasSolvedInTime.HasValue || cs.WasSolvedInTime.Value == 1)
-                        });
+                        .Select(CountSolvedInTime());
                     break;
                 case SolvedInTimeGroup.Department_Id:
                     result = query.GroupBy(c => new IdName { Id = c.Department_Id, Name = c.Department.DepartmentName })
-                        .Select(cg => new SolvedInTimeDataResult
-                        {
-                            Id = cg.Key.Id ?? 0,
-                            Label = cg.Key.Name,
-                            Total = cg.Count(),
-                            SolvedInTimeTotal = cg.Join(DataContext.CaseStatistics, c => c.Id, cs => cs.CaseId, (c, cs) => cs)
-                                .Count(cs => cs.WasSolvedInTime.HasValue || cs.WasSolvedInTime.Value == 1)
-                        });
+                        .Select(CountSolvedInTime());
                     break;
                 case SolvedInTimeGroup.Priority_Id:
                     result = query.GroupBy(c => new IdName { Id = c.Priority_Id, Name = c.Priority.Name })
-                        .Select(cg => new SolvedInTimeDataResult
-                        {
-                            Id = cg.Key.Id ?? 0,
-                            Label = cg.Key.Name,
-                            Total = cg.Count(),
-                            SolvedInTimeTotal = cg.Join(DataContext.CaseStatistics, c => c.Id, cs => cs.CaseId, (c, cs) => cs)
-                                .Count(cs => cs.WasSolvedInTime.HasValue || cs.WasSolvedInTime.Value == 1)
-                        });
+                        .Select(CountSolvedInTime());
                     break;
                 case SolvedInTimeGroup.ProductArea_Id:
                     result = query.GroupBy(c => new IdName { Id = c.ProductArea_Id, Name = c.ProductArea.Name })
-                        .Select(cg => new SolvedInTimeDataResult
-                        {
-                            Id = cg.Key.Id ?? 0,
-                            Label = cg.Key.Name,
-                            Total = cg.Count(),
-                            SolvedInTimeTotal = cg.Join(DataContext.CaseStatistics, c => c.Id, cs => cs.CaseId, (c, cs) => cs)
-                                .Count(cs => cs.WasSolvedInTime.HasValue || cs.WasSolvedInTime.Value == 1)
-                        });
+                        .Select(CountSolvedInTime());
                     break;
                 case SolvedInTimeGroup.RegistrationSourceCustomer:
                     result = query.GroupBy(c => new IdName { Id = c.RegistrationSourceCustomer_Id,  Name = c.RegistrationSourceCustomer.SourceName })
-                        .Select(cg => new SolvedInTimeDataResult
-                        {
-                            Id = cg.Key.Id ?? 0,
-                            Label = cg.Key.Name,
-                            Total = cg.Count(),
-                            SolvedInTimeTotal = cg.Join(DataContext.CaseStatistics, c => c.Id, cs => cs.CaseId, (c, cs) => cs)
-                                .Count(cs => cs.WasSolvedInTime.HasValue || cs.WasSolvedInTime.Value == 1)
-                        });
+                        .Select(CountSolvedInTime());
                     break;
                 case SolvedInTimeGroup.StateSecondary_Id:
                     result = query.GroupBy(c => new IdName { Id = c.StateSecondary_Id,  Name = c.StateSecondary.Name })
-                        .Select(cg => new SolvedInTimeDataResult
-                        {
-                            Id = cg.Key.Id ?? 0,
-                            Label = cg.Key.Name,
-                            Total = cg.Count(),
-                            SolvedInTimeTotal = cg.Join(DataContext.CaseStatistics, c => c.Id, cs => cs.CaseId, (c, cs) => cs)
-                                .Count(cs => cs.WasSolvedInTime.HasValue || cs.WasSolvedInTime.Value == 1)
-                        });
+                        .Select(CountSolvedInTime());
                     break;
                 case SolvedInTimeGroup.WorkingGroup_Id:
                     result = query.GroupBy(c => new IdName { Id = c.WorkingGroup_Id,  Name = c.Workinggroup.WorkingGroupName })
-                        .Select(cg => new SolvedInTimeDataResult
-                        {
-                            Id = cg.Key.Id ?? 0,
-                            Label = cg.Key.Name,
-                            Total = cg.Count(),
-                            SolvedInTimeTotal = cg.Join(DataContext.CaseStatistics, c => c.Id, cs => cs.CaseId, (c, cs) => cs)
-                                .Count(cs => cs.WasSolvedInTime.HasValue || cs.WasSolvedInTime.Value == 1)
-                        });
+                        .Select(CountSolvedInTime());
                     break;
                 case SolvedInTimeGroup.FinishingMonth:
                     result = query.GroupBy(c => new IdName { Id = c.FinishingDate.Value.Month,  Name = "" })
-                        .Select(cg => new SolvedInTimeDataResult
-                        {
-                            Id = cg.Key.Id ?? 0,
-                            Label = cg.Key.Name,
-                            Total = cg.Count(),
-                            SolvedInTimeTotal = cg.Join(DataContext.CaseStatistics, c => c.Id, cs => cs.CaseId, (c, cs) => cs)
-                                .Count(cs => cs.WasSolvedInTime.HasValue || cs.WasSolvedInTime.Value == 1)
-                        });
+                        .Select(CountSolvedInTime());
                     break;
                 case SolvedInTimeGroup.FinishingYear:
                     result = query.GroupBy(c => new IdName { Id = c.FinishingDate.Value.Year,  Name = "" })
-                        .Select(cg => new SolvedInTimeDataResult
-                        {
-                            Id = cg.Key.Id ?? 0,
-                            Label = cg.Key.Name,
-                            Total = cg.Count(),
-                            SolvedInTimeTotal = cg.Join(DataContext.CaseStatistics, c => c.Id, cs => cs.CaseId, (c, cs) => cs)
-                                .Count(cs => cs.WasSolvedInTime.HasValue || cs.WasSolvedInTime.Value == 1)
-                        });
+                        .Select(CountSolvedInTime());
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -1180,6 +1118,19 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                 _whereStr += string.Format("AND tblCase.FinishingDate <= '{0}' ", filters.CaseClosingDate.ToDate.Value.GetEndOfDay());
 
             return _whereStr;
+        }
+
+        private Expression<Func<IGrouping<IdName, Case>, SolvedInTimeDataResult>> CountSolvedInTime()
+        {
+            return cg => new SolvedInTimeDataResult
+            {
+                Id = cg.Key.Id ?? 0,
+                Label = cg.Key.Name,
+                Total = cg.Count(),
+                SolvedInTimeTotal = cg.GroupJoin(DataContext.CaseStatistics, c => c.Id, cs => cs.CaseId,
+                        (c, cs) => cs.OrderByDescending(e => e.Id).FirstOrDefault())
+                    .Count(cs => !cs.WasSolvedInTime.HasValue || cs.WasSolvedInTime.Value == 1)
+            };
         }
     }
 }
