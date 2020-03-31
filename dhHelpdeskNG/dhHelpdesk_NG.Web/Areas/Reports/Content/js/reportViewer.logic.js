@@ -776,10 +776,12 @@
                 $caseRegistrationFromDate.find('input').prop('disabled', false);               
                 $caseRegistrationToDate.find('input').prop('disabled', false);
                 $caseRegistrationFromDate.datepicker({
-                    format: 'yyyy-mm-dd'
+                    format: 'yyyy-mm-dd',
+                    clearBtn: true
                 });
                 $caseRegistrationToDate.datepicker({
-                    format: 'yyyy-mm-dd'
+                    format: 'yyyy-mm-dd',
+                    clearBtn: true
                 });
                 $caseClosingFromDate.datepicker('setDate', null);
                 $caseClosingToDate.datepicker('setDate', null);
@@ -793,10 +795,12 @@
 
                     $reportGeneratorExtendedCase.show();
                     $caseRegistrationFromDate.datepicker({
-                        format: 'yyyy-mm-dd'
+                        format: 'yyyy-mm-dd',
+                        clearBtn: true
                     });
                     $caseRegistrationToDate.datepicker({
-                        format: 'yyyy-mm-dd'
+                        format: 'yyyy-mm-dd',
+                        clearBtn: true
                     });
                     $caseClosingFromDate.datepicker('setDate', null);
                     $caseClosingToDate.datepicker('setDate', null);
@@ -822,11 +826,13 @@
                 $logNoteDateFields.hide();
                 $caseRegistrationFromDate.find('input').prop('disabled', false);                
                 $caseRegistrationFromDate.datepicker({
-                    format: 'yyyy-mm-dd'
+                    format: 'yyyy-mm-dd',
+                    clearBtn: true
                 });
                 $caseRegistrationToDate.find('input').prop('disabled', false);                
                 $caseRegistrationToDate.datepicker({
-                    format: 'yyyy-mm-dd'
+                    format: 'yyyy-mm-dd',
+                    clearBtn: true
                 });
                 $caseClosingFromDate.datepicker('setDate', null);
                 $caseClosingToDate.datepicker('setDate', null);
@@ -845,11 +851,13 @@
                 $generateReportContainer.hide();
                 $caseRegistrationFromDate.find('input').prop('disabled', false);                
                 $caseRegistrationFromDate.datepicker({
-                    format: 'yyyy-mm-dd'
+                    format: 'yyyy-mm-dd',
+                    clearBtn: true
                 });
                 $caseRegistrationToDate.find('input').prop('disabled', false);                
                 $caseRegistrationToDate.datepicker({
-                    format: 'yyyy-mm-dd'
+                    format: 'yyyy-mm-dd',
+                    clearBtn: true
                 });
                 $caseClosingFromDate.datepicker('setDate', null);
                 $caseClosingToDate.datepicker('setDate', null);
@@ -865,10 +873,12 @@
                 $otherReportsContainer.show();
                 if (reportId === dhHelpdesk.reports.reportType.ReportedTime) {
                     $caseRegistrationFromDate.datepicker({
-                        format: 'yyyy-mm-dd'
+                        format: 'yyyy-mm-dd',
+                        clearBtn: true
                     });
                     $caseRegistrationToDate.datepicker({
-                        format: 'yyyy-mm-dd'
+                        format: 'yyyy-mm-dd',
+                        clearBtn: true
                     });
                     $caseClosingFromDate.datepicker('setDate', null);
                     $caseClosingToDate.datepicker('setDate', null);
@@ -879,10 +889,12 @@
                 }
                 if (reportId === dhHelpdesk.reports.reportType.NumberOfCases) {
                     $caseRegistrationFromDate.datepicker({
-                        format: 'yyyy-mm-dd'
+                        format: 'yyyy-mm-dd',
+                        clearBtn: true
                     });
                     $caseRegistrationToDate.datepicker({
-                        format: 'yyyy-mm-dd'
+                        format: 'yyyy-mm-dd',
+                        clearBtn: true
                     });
                     $caseClosingFromDate.datepicker('setDate', null);
                     $caseClosingToDate.datepicker('setDate', null);
@@ -903,7 +915,7 @@
                     $caseClosingToDate.datepicker("setDate", forceDateTo);
                     $jsReportContainer.show();
                     window.dhHelpdesk.reports[reportObjNames[reportId]].init();
-                }
+                }                
             }
 
             if (isSavedFilter) {
