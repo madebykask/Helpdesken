@@ -181,7 +181,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             model.SortField = new Models.Shared.SortFieldModel();
             // TODO: Temporary RecordsOnPage set by hardcode 
-            model.RecordsOnPage = 10;
+            model.RecordsOnPage = 100;
 
             var filters = SessionFacade.FindPageFilters<ChangesFilter>(PageName.Changes);
             if (filters == null)
