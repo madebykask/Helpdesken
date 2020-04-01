@@ -43,6 +43,9 @@
             bundles.Add(new StyleBundle("~/img-profile/css").Include(
                             "~/img-profile/profile.css"));
 
+            bundles.Add(new StyleBundle("~/timepicker/css").Include(
+                           "~/Content/css/bootstrap-timepicker.min.css"));
+
             bundles.Add(new StyleBundle("~/Content/bundles/css").Include(
                             "~/Content/css/*.css",
                             "~/Content/themes/base/minified/jquery-ui.min.css",
