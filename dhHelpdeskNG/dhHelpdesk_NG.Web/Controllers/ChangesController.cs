@@ -182,11 +182,13 @@ namespace DH.Helpdesk.Web.Controllers
             model.SortField = new Models.Shared.SortFieldModel();
             // TODO: Temporary RecordsOnPage set by hardcode 
             model.RecordsOnPage = 100;
+            if(model.StatusValue == null)
+            model.StatusValue = ChangeStatus.Active;
 
             var filters = SessionFacade.FindPageFilters<ChangesFilter>(PageName.Changes);
             if (filters == null)
                 filters = ChangesFilter.CreateDefault();
-            //filters.Status = model.StatusValue;
+            filters.Status = model.StatusValue;
             SessionFacade.SavePageFilters(PageName.Changes, filters);
 
             return this.PartialView(model);
@@ -443,7 +445,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         [HttpGet]
         [ChildActionOnly]
-        public PartialViewResult Search()
+        public PartialViewResult Search(SearchModel searchModel)
         {
             var filters = SessionFacade.FindPageFilters<ChangesFilter>(PageName.Changes);
             if (filters == null)
