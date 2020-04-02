@@ -186,7 +186,7 @@ namespace DH.Helpdesk.Web.Controllers
             var filters = SessionFacade.FindPageFilters<ChangesFilter>(PageName.Changes);
             if (filters == null)
                 filters = ChangesFilter.CreateDefault();
-            filters.Status = model.StatusValue;
+            //filters.Status = model.StatusValue;
             SessionFacade.SavePageFilters(PageName.Changes, filters);
 
             return this.PartialView(model);

@@ -15,6 +15,7 @@
 {
     @Html.HiddenFor(m => m.SortField.Name, new { id = "sortFieldName" })
     @Html.HiddenFor(m => m.SortField.SortBy, new { id = "sortFieldBy" })
+    @*@Html.HiddenFor(m => Model.Statuses.Value)*@
     
     <table class="tableform">
         @if (Model.Statuses.Show)
@@ -97,6 +98,7 @@
                 @Html.TextBoxFor(m => m.RecordsOnPage)
             </td>
         </tr>*@
+        @Html.HiddenFor(m => m.RecordsOnPage)
         <tr>
             <td class="span3">
                 &nbsp;
