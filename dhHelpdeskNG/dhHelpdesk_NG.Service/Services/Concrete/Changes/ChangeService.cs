@@ -443,8 +443,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
             var owners = changeGroups;
             var affectedProcesses = changeGroups;
             var workingGroups = _workingGroupRepository.FindActiveOverviews(context.CustomerId);
-            var administrators = _userRepository.FindActiveOverviews(context.CustomerId);
-            var responsibles = _userRepository.FindActiveOverviews(context.CustomerId);
+            var administrators = _userRepository.FindUsersWithPermissionsForCustomers(new[] { context.CustomerId });
+            var responsibles = _userRepository.FindUsersWithPermissionsForCustomers(new[] { context.CustomerId });
 
             var settings = GetSearchSettings(context.CustomerId, context.LanguageId);
             var options = new SearchOptions(statuses, objects, owners, affectedProcesses, workingGroups, administrators, responsibles);
