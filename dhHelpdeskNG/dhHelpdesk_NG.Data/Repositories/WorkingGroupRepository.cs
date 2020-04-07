@@ -64,7 +64,9 @@ namespace DH.Helpdesk.Dal.Repositories
             var overviews = workingGroups.Select(g => new { Name = g.WorkingGroupName, Value = g.Id }).ToList();
 
             return
-                overviews.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture))).ToList();
+                overviews.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture)))
+                .OrderBy(o => o.Name)
+                .ToList();
         }
 
         public List<IdAndNameOverview> FindActiveIdAndNameOverviews(int customerId)
