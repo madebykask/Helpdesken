@@ -678,6 +678,8 @@ function InitDataTable(tableUniqId, perText, showingText, options, onError, empt
         //'sError': (onError && typeof onError === "function") ? 'none' : 'throw',
         "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
         "sPaginationType": "bootstrap",
+        "pageLength": 10,
+        "stateSave": true,
         "oLanguage": {
             "sLengthMenu": "_MENU_ " + perText,
             "sInfo": showingText + " _PAGE_ / _PAGES_",
