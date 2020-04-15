@@ -1368,7 +1368,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			"tif",
 			"tiff",
 			"txt",
-			"txt",
 			"xls",
 			"xlsx",
 			"zip"
