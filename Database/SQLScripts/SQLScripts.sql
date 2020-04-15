@@ -29,6 +29,14 @@ BEGIN
     ADD UseMobileRouting bit not null default 0 
 END*/
 
+RAISERROR ('Add FileUploadExtensionWhitelist to tblGlobalSettings', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'FileUploadExtensionWhitelist' and sysobjects.name = N'tblGlobalSettings')
+BEGIN
+    ALTER TABLE tblGlobalSettings
+    ADD FileUploadExtensionWhitelist nvarchar(3072)  
+END
+
 RAISERROR ('Remove UseMobileRouting on tblSettings', 10, 1) WITH NOWAIT
 if  exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
 		 where syscolumns.name = N'UseMobileRouting' and sysobjects.name = N'tblSettings')
