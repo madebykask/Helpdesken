@@ -21,13 +21,13 @@ LEFT JOIN tblReport_tblCustomer RC ON RC.Customer_Id = C.Id AND RC.Report_Id = 3
 WHERE RC.Report_Id IS NULL
 
 
-RAISERROR ('Add UseMobileRouting to tblGlobalSettings', 10, 1) WITH NOWAIT
+/*RAISERROR ('Add UseMobileRouting to tblGlobalSettings', 10, 1) WITH NOWAIT
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
 		 where syscolumns.name = N'UseMobileRouting' and sysobjects.name = N'tblGlobalSettings')
 BEGIN
     ALTER TABLE tblGlobalSettings
     ADD UseMobileRouting bit not null default 0 
-END
+END*/
 
 RAISERROR ('Remove UseMobileRouting on tblSettings', 10, 1) WITH NOWAIT
 if  exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
@@ -157,14 +157,14 @@ BEGIN
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 END
 
-RAISERROR ('Add clustered index to tblCaseHistory', 10, 1) WITH NOWAIT
+/*RAISERROR ('Add clustered index to tblCaseHistory', 10, 1) WITH NOWAIT
 if not exists (select * from sys.indexes WHERE name='IDX_tblCaseHistory_PK_Clust' AND object_id = OBJECT_ID('dbo.tblCaseHistory'))
 BEGIN
     CREATE UNIQUE CLUSTERED INDEX [IDX_tblCaseHistory_PK_Clust] ON [dbo].[tblCaseHistory]
 	(
 		[Id] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-END
+END*/
 
 RAISERROR ('Add tblCase index to tblCaseIsAbout', 10, 1) WITH NOWAIT
 if not exists (select * from sys.indexes WHERE name='IDX_tblCaseIsAbout_Case' AND object_id = OBJECT_ID('dbo.tblCaseIsAbout'))
