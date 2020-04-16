@@ -7824,6 +7824,13 @@ begin
 	insert into tbltext (id, TextString, TextType) VALUES (2068, 'Finishing Year', 1)
 end
 
+If not exists (select * from tbltext where id = 2069)
+	insert into tbltext (id, TextString, TextType) VALUES (2069, 'Lösta i tid', 0)
+
+	If not exists (select * from tblTextTranslation where text_id = 2069 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2069, 2, N'SolvedInTimeReport')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')
