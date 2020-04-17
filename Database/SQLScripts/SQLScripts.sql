@@ -21,13 +21,13 @@ LEFT JOIN tblReport_tblCustomer RC ON RC.Customer_Id = C.Id AND RC.Report_Id = 3
 WHERE RC.Report_Id IS NULL
 
 
-/*RAISERROR ('Add UseMobileRouting to tblGlobalSettings', 10, 1) WITH NOWAIT
+RAISERROR ('Add UseMobileRouting to tblGlobalSettings', 10, 1) WITH NOWAIT
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
 		 where syscolumns.name = N'UseMobileRouting' and sysobjects.name = N'tblGlobalSettings')
 BEGIN
     ALTER TABLE tblGlobalSettings
     ADD UseMobileRouting bit not null default 0 
-END*/
+END
 
 RAISERROR ('Add FileUploadExtensionWhitelist to tblGlobalSettings', 10, 1) WITH NOWAIT
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
@@ -37,13 +37,13 @@ BEGIN
     ADD FileUploadExtensionWhitelist nvarchar(3072)  
 END
 
-RAISERROR ('Remove UseMobileRouting on tblSettings', 10, 1) WITH NOWAIT
+/*RAISERROR ('Remove UseMobileRouting on tblSettings', 10, 1) WITH NOWAIT
 if  exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
 		 where syscolumns.name = N'UseMobileRouting' and sysobjects.name = N'tblSettings')
 BEGIN
     ALTER TABLE tblSettings
     DROP COLUMN UseMobileRouting 
-END
+END*/
 
 
 
