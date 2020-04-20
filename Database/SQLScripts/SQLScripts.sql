@@ -227,6 +227,29 @@ SET @MobileType = 500
 	end
 COMMIT 
 
+RAISERROR ('Add EwsApplicationId to tblSettings', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'EwsApplicationId' and sysobjects.name = N'tblSettings')
+BEGIN
+    ALTER TABLE tblSettings
+    ADD EwsApplicationId NVARCHAR(200)
+END
+
+RAISERROR ('Add EwsClientSecret to tblSettings', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'EwsClientSecret' and sysobjects.name = N'tblSettings')
+BEGIN
+    ALTER TABLE tblSettings
+    ADD EwsClientSecret NVARCHAR(200)
+END
+
+RAISERROR ('Add EwsTenantId to tblSettings', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'EwsTenantId' and sysobjects.name = N'tblSettings')
+BEGIN
+    ALTER TABLE tblSettings
+    ADD EwsTenantId NVARCHAR(200)
+END
 
 
 -- Last Line to update database version
