@@ -843,7 +843,7 @@ namespace DH.Helpdesk.Services.Services
 
             if (mailTemplateId == (int)GlobalEnums.MailTemplates.ClosedCase)
             {
-                var adminEmails = newCase.Customer.UsersAvailable.Where(x => x.UserGroup_Id != UserGroups.User).Select(x => x.Email).ToList();
+                var adminEmails = newCase.Customer.Users.Where(x => x.UserGroup_Id != UserGroups.User).Select(x => x.Email).ToList();
                 var identifiers = _feedbackTemplateService.FindIdentifiers(body).ToList();
 
                 //dont send feedback to admins
