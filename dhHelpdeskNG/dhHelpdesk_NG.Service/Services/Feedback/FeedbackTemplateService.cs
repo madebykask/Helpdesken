@@ -51,7 +51,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
 
         public IEnumerable<string> FindIdentifiers(string body)
         {
-            var regex = new Regex(@"\[#F(?<Identifier>(?:.)*)\]");
+            var regex = new Regex(@"\[#F(?<Identifier>(?:.)*?)\]");
             var result = regex.Matches(body);
             return from Match match in result where match.Groups["Identifier"] != null select match.Groups["Identifier"].Value;
         }
