@@ -251,6 +251,13 @@ BEGIN
     ADD EwsTenantId NVARCHAR(200)
 END
 
+RAISERROR ('Add UseEws to tblSettings', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'UseEws' and sysobjects.name = N'tblSettings')
+BEGIN
+    ALTER TABLE tblSettings
+    ADD UseEws bit not null default 0
+END
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.46'
