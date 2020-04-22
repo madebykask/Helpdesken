@@ -1149,7 +1149,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.ChangeTime.ToString())
                 {
-                    result.Add(model.case_.ChangeTime.ToString());
+                    result.Add(model.case_.ChangeTime.ToLocalTime().ToString());
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.User_Id.ToString())
                 {
