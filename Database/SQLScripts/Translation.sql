@@ -7825,18 +7825,22 @@ begin
 end
 
 If not exists (select * from tbltext where id = 2069)
+begin
 	insert into tbltext (id, TextString, TextType) VALUES (2069, 'Lösta i tid', 0)
 
 	If not exists (select * from tblTextTranslation where text_id = 2069 and Language_Id = 2)
 		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2069, 2, N'SolvedInTimeReport')
+end
 GO
 
 If not exists (select * from tbltext where TextString = 'Alla kunder')
+begin
     If not exists (select * from tbltext where id = 2070)
 	insert into tbltext (id, TextString, TextType) VALUES (2070, 'Alla kunder', 0)
 
 	If not exists (select * from tblTextTranslation where text_id = 2070 and Language_Id = 2)
 		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2070, 2, N'All customers')
+end
 GO
 
 -- Generate id sequence for customer generated IDs
