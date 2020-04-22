@@ -259,6 +259,22 @@ BEGIN
     ADD UseEws bit not null default 0
 END
 
+RAISERROR ('Add ShowExternal to tblInventoryTypeProperty', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'ShowExternal' and sysobjects.name = N'tblInventoryTypeProperty')
+BEGIN
+    ALTER TABLE tblInventoryTypeProperty
+    ADD ShowExternal int not null default 0
+END
+
+RAISERROR ('Add ShowInListExternal to tblInventoryTypeProperty', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'ShowInListExternal' and sysobjects.name = N'tblInventoryTypeProperty')
+BEGIN
+    ALTER TABLE tblInventoryTypeProperty
+    ADD ShowInListExternal int not null default 0
+END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.46'
 GO
