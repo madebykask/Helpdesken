@@ -37,13 +37,32 @@ BEGIN
     ADD FileUploadExtensionWhitelist nvarchar(3072)  
 END
 
-/*RAISERROR ('Remove UseMobileRouting on tblSettings', 10, 1) WITH NOWAIT
+RAISERROR ('Remove default constraint on UseMobileRouting', 10, 1) WITH NOWAIT
+IF EXISTS (SELECT dc.name FROM sys.default_constraints dc 
+	JOIN sys.columns c ON c.default_object_id = dc.object_id
+	WHERE c.[name] LIKE 'UseMobileRouting'
+	AND dc.parent_object_id = OBJECT_ID('dbo.tblSettings'))
+BEGIN
+	DECLARE @sql NVARCHAR(MAX)
+
+	SELECT TOP 1 @sql = N'alter table dbo.tblSettings drop constraint ['+dc.NAME+N']'
+	from sys.default_constraints dc
+	JOIN sys.columns c
+		ON c.default_object_id = dc.object_id
+	WHERE 
+		dc.parent_object_id = OBJECT_ID('dbo.tblSettings')
+	AND c.name LIKE 'UseMobileRouting'
+
+	EXECUTE(@sql)
+END 
+
+RAISERROR ('Remove UseMobileRouting on tblSettings', 10, 1) WITH NOWAIT
 if  exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
 		 where syscolumns.name = N'UseMobileRouting' and sysobjects.name = N'tblSettings')
 BEGIN
     ALTER TABLE tblSettings
     DROP COLUMN UseMobileRouting 
-END*/
+END
 
 
 
