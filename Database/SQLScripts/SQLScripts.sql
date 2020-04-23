@@ -275,6 +275,25 @@ BEGIN
     ADD ShowInListExternal int not null default 0
 END
 
+RAISERROR ('Add InventoryGUID to tblInventory', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'InventoryGUID' and sysobjects.name = N'tblInventory')
+BEGIN
+    ALTER TABLE tblInventory
+    ADD InventoryGUID int not null default newid()
+END
+
+RAISERROR ('Add ComputerType_Id to tblInventory', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'ComputerType_Id' and sysobjects.name = N'tblInventory')
+BEGIN
+    ALTER TABLE tblInventory
+    WITH CHECK ADD  CONSTRAINT [FK_tblInventory_tblComputerType] FOREIGN KEY([ComputerType_Id])
+REFERENCES [dbo].[tblComputerType] ([Id])
+END
+
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.46'
 GO
