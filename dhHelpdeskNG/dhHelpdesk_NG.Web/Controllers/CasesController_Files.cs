@@ -128,8 +128,10 @@ namespace DH.Helpdesk.Web.Controllers
 		{
 			var uploadedFile = this.Request.Files[0];
 
-			// Check file upload while list
-			var extension = Path.GetExtension(uploadedFile.FileName);
+            // Check file upload while list
+            var fName = (uploadedFile.FileName != "" ) ? uploadedFile.FileName : name; 
+
+            var extension = Path.GetExtension(fName);
 
 			if (!_globalSettingService.IsExtensionInWhitelist(extension))
 			{
@@ -183,8 +185,10 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var uploadedFile = Request.Files[0];
 
-			// Check file upload while list
-			var extension = Path.GetExtension(uploadedFile.FileName);
+            // Check file upload while list
+            var fName = (uploadedFile.FileName != "") ? uploadedFile.FileName : name;
+
+            var extension = Path.GetExtension(fName);
 
 			if (!_globalSettingService.IsExtensionInWhitelist(extension))
 			{

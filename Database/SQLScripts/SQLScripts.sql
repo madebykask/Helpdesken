@@ -21,13 +21,13 @@ LEFT JOIN tblReport_tblCustomer RC ON RC.Customer_Id = C.Id AND RC.Report_Id = 3
 WHERE RC.Report_Id IS NULL
 
 
-/*RAISERROR ('Add UseMobileRouting to tblGlobalSettings', 10, 1) WITH NOWAIT
+RAISERROR ('Add UseMobileRouting to tblGlobalSettings', 10, 1) WITH NOWAIT
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
 		 where syscolumns.name = N'UseMobileRouting' and sysobjects.name = N'tblGlobalSettings')
 BEGIN
     ALTER TABLE tblGlobalSettings
     ADD UseMobileRouting bit not null default 0 
-END*/
+END
 
 RAISERROR ('Add FileUploadExtensionWhitelist to tblGlobalSettings', 10, 1) WITH NOWAIT
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
@@ -36,6 +36,25 @@ BEGIN
     ALTER TABLE tblGlobalSettings
     ADD FileUploadExtensionWhitelist nvarchar(3072)  
 END
+
+RAISERROR ('Remove default constraint on UseMobileRouting', 10, 1) WITH NOWAIT
+IF EXISTS (SELECT dc.name FROM sys.default_constraints dc 
+	JOIN sys.columns c ON c.default_object_id = dc.object_id
+	WHERE c.[name] LIKE 'UseMobileRouting'
+	AND dc.parent_object_id = OBJECT_ID('dbo.tblSettings'))
+BEGIN
+	DECLARE @sql NVARCHAR(MAX)
+
+	SELECT TOP 1 @sql = N'alter table dbo.tblSettings drop constraint ['+dc.NAME+N']'
+	from sys.default_constraints dc
+	JOIN sys.columns c
+		ON c.default_object_id = dc.object_id
+	WHERE 
+		dc.parent_object_id = OBJECT_ID('dbo.tblSettings')
+	AND c.name LIKE 'UseMobileRouting'
+
+	EXECUTE(@sql)
+END 
 
 RAISERROR ('Remove UseMobileRouting on tblSettings', 10, 1) WITH NOWAIT
 if  exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
@@ -48,7 +67,7 @@ END
 
 
 RAISERROR ('Add clustered index to tblDepartment', 10, 1) WITH NOWAIT
-if not exists (select * from sys.indexes WHERE name='IDX_tblDepartment_PK_Clust' AND object_id = OBJECT_ID('dbo.tblDepartment'))
+if not exists (select * from sys.indexes WHERE [type]=1 AND object_id = OBJECT_ID('dbo.tblDepartment'))
 BEGIN
     CREATE UNIQUE CLUSTERED INDEX [IDX_tblDepartment_PK_Clust] ON [dbo].[tblDepartment]
 	(
@@ -58,7 +77,7 @@ END
 
 
 RAISERROR ('Add clustered index to tblUsers', 10, 1) WITH NOWAIT
-if not exists (select * from sys.indexes WHERE name='IDX_tblUsers_PK_Clust' AND object_id = OBJECT_ID('dbo.tblUsers'))
+if not exists (select * from sys.indexes  WHERE [type]=1  AND object_id = OBJECT_ID('dbo.tblUsers'))
 BEGIN
     CREATE UNIQUE CLUSTERED INDEX [IDX_tblUsers_PK_Clust] ON [dbo].[tblUsers]
 	(
@@ -67,7 +86,7 @@ BEGIN
 END
 
 RAISERROR ('Add clustered index to tblProjectSchedule', 10, 1) WITH NOWAIT
-if not exists (select * from sys.indexes WHERE name='IDX_tblProjectSchedule_PK_Clust' AND object_id = OBJECT_ID('dbo.tblProjectSchedule'))
+if not exists (select * from sys.indexes WHERE [type]=1  AND object_id = OBJECT_ID('dbo.tblProjectSchedule'))
 BEGIN
     CREATE UNIQUE CLUSTERED INDEX [IDX_tblProjectSchedule_PK_Clust] ON [dbo].[tblProjectSchedule]
 	(
@@ -76,7 +95,7 @@ BEGIN
 END
 
 RAISERROR ('Add clustered index to tblCaseSettings', 10, 1) WITH NOWAIT
-if not exists (select * from sys.indexes WHERE name='IDX_tblCaseSettings_PK_Clust' AND object_id = OBJECT_ID('dbo.tblCaseSettings'))
+if not exists (select * from sys.indexes WHERE [type]=1  AND object_id = OBJECT_ID('dbo.tblCaseSettings'))
 BEGIN
     CREATE UNIQUE CLUSTERED INDEX [IDX_tblCaseSettings_PK_Clust] ON [dbo].[tblCaseSettings]
 	(
@@ -85,7 +104,7 @@ BEGIN
 END
 
 RAISERROR ('Add clustered index to tblUsergroups', 10, 1) WITH NOWAIT
-if not exists (select * from sys.indexes WHERE name='IDX_tblUsergroups_PK_Clust' AND object_id = OBJECT_ID('dbo.tblUsergroups'))
+if not exists (select * from sys.indexes  WHERE [type]=1  AND object_id = OBJECT_ID('dbo.tblUsergroups'))
 BEGIN
     CREATE UNIQUE CLUSTERED INDEX [IDX_tblUsergroups_PK_Clust] ON [dbo].[tblUsergroups]
 	(
@@ -94,7 +113,7 @@ BEGIN
 END
 
 RAISERROR ('Add clustered index to tblCase', 10, 1) WITH NOWAIT
-if not exists (select * from sys.indexes WHERE name='IDX_tblCase_PK_Clust' AND object_id = OBJECT_ID('dbo.tblCase'))
+if not exists (select * from sys.indexes  WHERE [type]=1  AND object_id = OBJECT_ID('dbo.tblCase'))
 BEGIN
     CREATE UNIQUE CLUSTERED INDEX [IDX_tblCase_PK_Clust] ON [dbo].[tblCase]
 	(
@@ -103,7 +122,7 @@ BEGIN
 END
 
 RAISERROR ('Add clustered index to tblCustomer', 10, 1) WITH NOWAIT
-if not exists (select * from sys.indexes WHERE name='IDX_tblCustomer_PK_Clust' AND object_id = OBJECT_ID('dbo.tblCustomer'))
+if not exists (select * from sys.indexes  WHERE [type]=1  AND object_id = OBJECT_ID('dbo.tblCustomer'))
 BEGIN
     CREATE UNIQUE CLUSTERED INDEX [IDX_tblCustomer_PK_Clust] ON [dbo].[tblCustomer]
 	(
@@ -112,7 +131,7 @@ BEGIN
 END
 
 RAISERROR ('Add clustered index to tblProjectCollaborator', 10, 1) WITH NOWAIT
-if not exists (select * from sys.indexes WHERE name='IDX_tblProjectCollaborator_PK_Clust' AND object_id = OBJECT_ID('dbo.tblProjectCollaborator'))
+if not exists (select * from sys.indexes  WHERE [type]=1  AND object_id = OBJECT_ID('dbo.tblProjectCollaborator'))
 BEGIN
     CREATE UNIQUE CLUSTERED INDEX [IDX_tblProjectCollaborator_PK_Clust] ON [dbo].[tblProjectCollaborator]
 	(
@@ -121,7 +140,7 @@ BEGIN
 END
 
 RAISERROR ('Add clustered index to tblProjectLog', 10, 1) WITH NOWAIT
-if not exists (select * from sys.indexes WHERE name='IDX_tblProjectLog_PK_Clust' AND object_id = OBJECT_ID('dbo.tblProjectLog'))
+if not exists (select * from sys.indexes  WHERE [type]=1  AND object_id = OBJECT_ID('dbo.tblProjectLog'))
 BEGIN
     CREATE UNIQUE CLUSTERED INDEX [IDX_tblProjectLog_PK_Clust] ON [dbo].[tblProjectLog]
 	(
@@ -130,7 +149,7 @@ BEGIN
 END
 
 RAISERROR ('Add clustered index to tblProject', 10, 1) WITH NOWAIT
-if not exists (select * from sys.indexes WHERE name='IDX_tblProject_PK_Clust' AND object_id = OBJECT_ID('dbo.tblProject'))
+if not exists (select * from sys.indexes  WHERE [type]=1  AND object_id = OBJECT_ID('dbo.tblProject'))
 BEGIN
     CREATE UNIQUE CLUSTERED INDEX [IDX_tblProject_PK_Clust] ON [dbo].[tblProject]
 	(
@@ -139,7 +158,7 @@ BEGIN
 END
 
 RAISERROR ('Add clustered index to tblSettings', 10, 1) WITH NOWAIT
-if not exists (select * from sys.indexes WHERE name='IDX_tblSettings_PK_Clust' AND object_id = OBJECT_ID('dbo.tblSettings'))
+if not exists (select * from sys.indexes  WHERE [type]=1  AND object_id = OBJECT_ID('dbo.tblSettings'))
 BEGIN
     CREATE UNIQUE CLUSTERED INDEX [IDX_tblSettings_PK_Clust] ON [dbo].[tblSettings]
 	(
@@ -148,7 +167,7 @@ BEGIN
 END
 
 RAISERROR ('Add clustered index to tblLog', 10, 1) WITH NOWAIT
-if not exists (select * from sys.indexes WHERE name='IDX_tblLog_PK_Clust' AND object_id = OBJECT_ID('dbo.tblLog'))
+if not exists (select * from sys.indexes  WHERE [type]=1  AND object_id = OBJECT_ID('dbo.tblLog'))
 BEGIN
     CREATE UNIQUE CLUSTERED INDEX [IDX_tblLog_PK_Clust] ON [dbo].[tblLog]
 	(
@@ -157,7 +176,7 @@ BEGIN
 END
 
 RAISERROR ('Add clustered index to tblLogProgram', 10, 1) WITH NOWAIT
-if not exists (select * from sys.indexes WHERE name='IDX_tblLogProgram_PK_Clust' AND object_id = OBJECT_ID('dbo.tblLogProgram'))
+if not exists (select * from sys.indexes  WHERE [type]=1  AND object_id = OBJECT_ID('dbo.tblLogProgram'))
 BEGIN
     CREATE UNIQUE CLUSTERED INDEX [IDX_tblLogProgram_PK_Clust] ON [dbo].[tblLogProgram]
 	(
@@ -165,14 +184,14 @@ BEGIN
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 END
 
-/*RAISERROR ('Add clustered index to tblCaseHistory', 10, 1) WITH NOWAIT
-if not exists (select * from sys.indexes WHERE name='IDX_tblCaseHistory_PK_Clust' AND object_id = OBJECT_ID('dbo.tblCaseHistory'))
+RAISERROR ('Add clustered index to tblCaseHistory', 10, 1) WITH NOWAIT
+if not exists (select * from sys.indexes WHERE [type]=1  AND object_id = OBJECT_ID('dbo.tblCaseHistory'))
 BEGIN
     CREATE UNIQUE CLUSTERED INDEX [IDX_tblCaseHistory_PK_Clust] ON [dbo].[tblCaseHistory]
 	(
 		[Id] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-END*/
+END
 
 RAISERROR ('Add tblCase index to tblCaseIsAbout', 10, 1) WITH NOWAIT
 if not exists (select * from sys.indexes WHERE name='IDX_tblCaseIsAbout_Case' AND object_id = OBJECT_ID('dbo.tblCaseIsAbout'))
@@ -227,7 +246,78 @@ SET @MobileType = 500
 	end
 COMMIT 
 
+RAISERROR ('Add EwsApplicationId to tblSettings', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'EwsApplicationId' and sysobjects.name = N'tblSettings')
+BEGIN
+    ALTER TABLE tblSettings
+    ADD EwsApplicationId NVARCHAR(200)
+END
 
+RAISERROR ('Add EwsClientSecret to tblSettings', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'EwsClientSecret' and sysobjects.name = N'tblSettings')
+BEGIN
+    ALTER TABLE tblSettings
+    ADD EwsClientSecret NVARCHAR(200)
+END
+
+RAISERROR ('Add EwsTenantId to tblSettings', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'EwsTenantId' and sysobjects.name = N'tblSettings')
+BEGIN
+    ALTER TABLE tblSettings
+    ADD EwsTenantId NVARCHAR(200)
+END
+
+RAISERROR ('Add UseEws to tblSettings', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'UseEws' and sysobjects.name = N'tblSettings')
+BEGIN
+    ALTER TABLE tblSettings
+    ADD UseEws bit not null default 0
+END
+
+RAISERROR ('Add ShowExternal to tblInventoryTypeProperty', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'ShowExternal' and sysobjects.name = N'tblInventoryTypeProperty')
+BEGIN
+    ALTER TABLE tblInventoryTypeProperty
+    ADD ShowExternal int not null default 0
+END
+
+RAISERROR ('Add ShowInListExternal to tblInventoryTypeProperty', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'ShowInListExternal' and sysobjects.name = N'tblInventoryTypeProperty')
+BEGIN
+    ALTER TABLE tblInventoryTypeProperty
+    ADD ShowInListExternal int not null default 0
+END
+
+RAISERROR ('Add InventoryGUID to tblInventory', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'InventoryGUID' and sysobjects.name = N'tblInventory')
+BEGIN
+    ALTER TABLE tblInventory
+    ADD InventoryGUID uniqueidentifier  not null default newid()
+END
+
+RAISERROR ('Add ComputerType_Id to tblInventory', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'ComputerType_Id' and sysobjects.name = N'tblInventory')
+BEGIN
+    ALTER TABLE tblInventory
+	ADD ComputerType_Id int  null
+END
+
+RAISERROR ('Add ComputerType_Id FOREIGN KEY to tblInventory', 10, 1) WITH NOWAIT
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'ComputerType_Id' and sysobjects.name = N'tblInventory')
+BEGIN
+    ALTER TABLE tblInventory	
+    WITH CHECK ADD  CONSTRAINT [FK_tblInventory_tblComputerType] FOREIGN KEY([ComputerType_Id])
+REFERENCES [dbo].[tblComputerType] ([Id])
+END
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.46'

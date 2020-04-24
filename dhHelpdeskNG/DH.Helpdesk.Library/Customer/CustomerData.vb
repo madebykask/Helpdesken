@@ -31,15 +31,15 @@ Public Class CustomerData
                     sSQL = sSQL & "tblSettings.POP3UserName, tblSettings.POP3Password, tblProductArea.Id AS EMailDefaultProductArea_Id, Null AS WorkingGroupEMail, Null AS WorkingGroupDefaultCaseType_Id, "
                 End If
 
-                sSQL = sSQL & "tblCaseType.Id AS EMailDefaultCaseType_Id, tblPriority.Id AS EMailDefaultPriority_Id, tblCategory.Id AS EMailDefaultCategory_Id, " & _
-                            "tblStatus.Id AS DefaultStatus_Id, tblStateSecondary.Id AS DefaultStateSecondary_Id, tblStateSecondary2.Id AS DefaultStateSecondary_Id2, " & _
-                           "Null AS EMailDefaultDepartment_Id, tblSettings.EmailSubjectPattern, tblSettings.EMailAnswerSeparator, " & _
-                           "tblSettings.XMLLogLevel, tblSettings.XMLAllFiles, MailServerProtocol, EMailRegistrationMailID, tblSettings.EMailImportType, " & _
-                           "tblCustomer.OverWriteFromMasterDirectory, " & _
-                           "tblSettings.LDAPLogLevel, tblSettings.OpenCase_StateSecondary_Id, " & _
-                           "tblSettings.LDAPSyncType, tblCustomer.Days2WaitBeforeDelete, tblSettings.LDAPAuthenticationType, 0 AS WorkingGroup_Id, " & _
-                           "tblSettings.InventoryDays2WaitBeforeDelete, tblSettings.LDAPAllUsers, tblSettings.EMailAnswerDestination, tblSettings.ModuleOrder, tblSettings.ModuleAccount, tblSettings.PhysicalFilePath, " & _
-                           "tblSettings.InventoryCreate, tblSettings.AllowedEMailRecipients, tblCustomer.CaseStatisticsEMailList, tblSettings.EMailFolder, tblSettings.EMailFolderArchive, " & _
+                sSQL = sSQL & "tblCaseType.Id AS EMailDefaultCaseType_Id, tblPriority.Id AS EMailDefaultPriority_Id, tblCategory.Id AS EMailDefaultCategory_Id, " &
+                            "tblStatus.Id AS DefaultStatus_Id, tblStateSecondary.Id AS DefaultStateSecondary_Id, tblStateSecondary2.Id AS DefaultStateSecondary_Id2, " &
+                           "Null AS EMailDefaultDepartment_Id, tblSettings.EmailSubjectPattern, tblSettings.EMailAnswerSeparator, " &
+                           "tblSettings.XMLLogLevel, tblSettings.XMLAllFiles, MailServerProtocol, EMailRegistrationMailID, tblSettings.EMailImportType, " &
+                           "tblCustomer.OverWriteFromMasterDirectory, " &
+                           "tblSettings.LDAPLogLevel, tblSettings.OpenCase_StateSecondary_Id, " &
+                           "tblSettings.LDAPSyncType, tblCustomer.Days2WaitBeforeDelete, tblSettings.LDAPAuthenticationType, 0 AS WorkingGroup_Id, " &
+                           "tblSettings.InventoryDays2WaitBeforeDelete, tblSettings.LDAPAllUsers, tblSettings.EMailAnswerDestination, tblSettings.ModuleOrder, tblSettings.ModuleAccount, tblSettings.PhysicalFilePath, " &
+                           "tblSettings.InventoryCreate, tblSettings.AllowedEMailRecipients, tblCustomer.CaseStatisticsEMailList, tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId, tblSettings.UseEws, " &
                            "tblSettings.DefaultAdministratorExternal, tblCustomer.NewCaseEMailList, tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination "
 
                 If Id <> 0 Then

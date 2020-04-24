@@ -1145,11 +1145,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.RegTime.ToString())
                 {
-                    result.Add(model.case_.RegTime.ToString());
+                    result.Add(model.case_.RegTime.ToLocalTime().ToString());
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.ChangeTime.ToString())
                 {
-                    result.Add(model.case_.ChangeTime.ToString());
+                    result.Add(model.case_.ChangeTime.ToLocalTime().ToString());
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.User_Id.ToString())
                 {
@@ -1185,13 +1185,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     var cur = model.caseTypes.SingleOrDefault(d => d.Id == model.case_.CaseType_Id);
                     if (cur != null)
-                        result.Add(cur.Name);
+                        result.Add(Translation.Get(cur.Name));
                     else
                     {
                         var curCt = GetCaseType(model.caseTypes, model.case_.CaseType_Id);
                         if (curCt != null)
                         {
-                            result.Add(curCt.Name);
+                            result.Add(Translation.Get(curCt.Name));
                         }
                     }
                 }
@@ -1199,7 +1199,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     var cur = model.productAreas.SingleOrDefault(d => d.Id == model.case_.ProductArea_Id);
                     if (cur != null)
-                        result.Add(cur.Name);
+                        result.Add(Translation.Get(cur.Name));
                     else
                     {
                         if (model.case_.ProductArea_Id.HasValue)
@@ -1207,7 +1207,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                             var curPa = GetProductAreaOverview(model.productAreas, model.case_.ProductArea_Id.Value);
                             if (curPa != null)
                             {
-                                result.Add(curPa.Name);
+                                result.Add(Translation.Get(curPa.Name));
                             }
                         }
                     }

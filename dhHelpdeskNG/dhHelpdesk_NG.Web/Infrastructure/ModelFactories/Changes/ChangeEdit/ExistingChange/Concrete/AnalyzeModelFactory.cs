@@ -97,8 +97,7 @@
                 settings.StartDate,
                 analyze.StartDate);
             var startTime = new ConfigurableFieldModel<string>()
-            {
-                Caption = startDate.Caption,
+            {              
                 IsRequired = startDate.IsRequired,
                 Show = startDate.Show
             };
@@ -128,7 +127,7 @@
                 settings.FinishDate,
                 analyze.FinishDate);
             var finishTime = new ConfigurableFieldModel<string>()
-                                  { Caption = finishDate.Caption,
+                                 { 
                                     IsRequired = finishDate.IsRequired,
                                     Show = finishDate.Show};
 
