@@ -663,6 +663,13 @@
             }
 
         },
+        errorPlacement: function (error, element) {
+            if (element.parent().hasClass('date')) {
+                element.parent().append(error);
+            } else {
+                error.insertAfter(element);
+            }
+        },
         messages: {
             "ContractNumber": {
                 required: "@Translation.Get("Nummer", Enums.TranslationSource.TextTranslation) @Translation.Get("måste anges")"

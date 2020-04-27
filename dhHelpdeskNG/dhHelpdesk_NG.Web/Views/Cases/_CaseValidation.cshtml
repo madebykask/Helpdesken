@@ -440,6 +440,8 @@
                 if (element.is("select.chosen-single-select")) {
                     error.insertAfter($("#" + element.attr("id") + "_chosen"));
                     error.css("width","315px");
+                } else if (element.parent().hasClass('date')) {
+                    element.parent().append(error);
                 } else {
                     error.insertAfter(element);
                 }
