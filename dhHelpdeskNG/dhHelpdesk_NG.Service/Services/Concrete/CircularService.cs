@@ -657,7 +657,7 @@
                     from g1 in group1.DefaultIfEmpty()
                     where g1 == null
                     select circularPart;
-                connectedCases  = query.SingleOrDefault(p => p.Case_Id == caseId).MapToParticipant();
+                connectedCases  = query.SingleOrDefault(p => p.Case_Id == caseId)?.MapToParticipant();
             }
 
             return connectedCases;
