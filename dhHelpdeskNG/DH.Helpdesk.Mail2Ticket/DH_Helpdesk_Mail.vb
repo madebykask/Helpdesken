@@ -321,7 +321,13 @@ Module DH_Helpdesk_Mail
                         colPrio = objPriorityData.GetPriorityByCustomerId(objCustomer.Id)
 
                         eMailConnectionType = objCustomer.MailServerProtocol
+
+                        Dim ip As String = ""
+
                         If objCustomer.UseEws Then
+                            If IsNullOrEmpty(objCustomer.EMailFolder) Then
+                                objCustomer.EMailFolder = "Inbox" 'Set Default To inbox If NULL
+                            End If
                             Dim task As Task(Of List(Of MailMessage)) = ReadEwsFolder(objCustomer.POP3Server,
                                           objCustomer.POP3Port,
                                           objCustomer.POP3UserName,
@@ -343,14 +349,13 @@ Module DH_Helpdesk_Mail
                                 IMAPclient.LogWriter = New Rebex.FileLogWriter(sIMAPIClientLogPath, Rebex.LogLevel.Debug)
                             End If
 
-                            Dim ip As String = ""
                             Dim host As System.Net.IPHostEntry = System.Net.Dns.GetHostEntry(objCustomer.POP3Server)
 
                             If Not host Is Nothing Then
                                 ip = host.AddressList(0).ToString()
                             End If
 
-                            LogToFile("Connecting to " & objCustomer.POP3Server & " (" & ip & "):" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName, iPop3DebugLevel)
+                            'LogToFile("Connecting to " & objCustomer.POP3Server & " (" & ip & "):" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName, iPop3DebugLevel)
 
                             If objCustomer.POP3Port = 993 Then
                                 IMAPclient.Connect(objCustomer.POP3Server.ToString(), objCustomer.POP3Port, Nothing, ImapSecurity.Implicit)
@@ -395,9 +400,13 @@ Module DH_Helpdesk_Mail
                                 LogToFile("Login " & objCustomer.POP3UserName, iPop3DebugLevel)
                                 IMAPclient.Login(objCustomer.POP3UserName, objCustomer.POP3Password)
                             ElseIf eMailConnectionType = MailConnectionType.Ews Then
+                                LogToFile("Login " & objCustomer.POP3UserName, iPop3DebugLevel)
                             End If
 
                         End If
+
+                        LogToFile("Connecting to " & objCustomer.POP3Server & " (" & ip & "):" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName & ", EWS Mode: " & objCustomer.UseEws, iPop3DebugLevel)
+
 
                         If eMailConnectionType = MailConnectionType.Pop3 Then
                             ' Inget stöd för POP3 längre
@@ -1162,12 +1171,23 @@ Module DH_Helpdesk_Mail
 
         Dim inbox As Microsoft.Exchange.WebServices.Data.Folder = Nothing
 
+        'Subfolders in inbox
+        Dim customEmailFolder As Microsoft.Exchange.WebServices.Data.FindFoldersResults = service.FindFolders(Microsoft.Exchange.WebServices.Data.WellKnownFolderName.Inbox, New Microsoft.Exchange.WebServices.Data.FolderView(100))
+
         For Each folder As Microsoft.Exchange.WebServices.Data.Folder In folders
             If folder.DisplayName = emailFolder Then ' TODO: Read box specified in settings
                 inbox = folder
                 Exit For
             End If
         Next
+        If customEmailFolder IsNot Nothing Then
+            For Each f As Microsoft.Exchange.WebServices.Data.Folder In customEmailFolder
+                If f.DisplayName = emailFolder Then ' Read folder specified in tblsettings
+                    inbox = f
+                    Exit For
+                End If
+            Next
+        End If
 
         If inbox Is Nothing Then
             Throw New ArgumentException("No folder for email was found")
