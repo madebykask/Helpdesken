@@ -31,12 +31,6 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
 		private readonly IGlobalSettingService _globalSettingService;
 
-		private enum CasePaths
-        {
-            EDIT_CASE_MOBILEROUTE,
-            EDIT_CASE_DESKTOP
-        }
-
         public CaseMailer(
             IEmailLogRepository emailLogRepository,
             IEmailService emailService,
