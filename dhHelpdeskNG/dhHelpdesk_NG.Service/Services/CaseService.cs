@@ -1718,7 +1718,7 @@ namespace DH.Helpdesk.Services.Services
 					CasePaths.EDIT_CASE_DESKTOP;
 
                 var site = cms.AbsoluterUrl + editCasePath + c.Id.ToString();
-                var url = "<br><a href='" + site + "'>" + site + "</a><br/>";
+                var url = "<br><a href='" + site + "'>" + site + "</a>";
                 ret.Add(new Field { Key = "[#99]", StringValue = url });
             }
 
