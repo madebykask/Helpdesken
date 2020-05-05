@@ -340,7 +340,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                     int Pos2 = body.IndexOf(str2);
                     LinkText = body.Substring(Pos1, Pos2 - Pos1);
 
-                    urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+                    urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a><br/>";
 
                     var regex = new Regex(Regex.Escape(LinkText + "[/#99]"));
                     body = regex.Replace(body, string.Empty, 1);
@@ -352,7 +352,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             }
             else
             {
-                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
+                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a><br/>";
 
                 if (fields != null)
                 {
