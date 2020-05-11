@@ -333,7 +333,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                             new
                             {
                                 label = "%",
-                                data = result.Select(r => r.Total == 0 ? 0 : ((r.SolvedInTimeTotal * 100) / r.Total))
+                                data = result.Select(r => r.Total == 0 ? 0 : ((r.SolvedInTimeTotal * 100) / r.Total)),
+                                rawData = result.Select(r => new { label = r.Label, solvedInTimeTotal = r.SolvedInTimeTotal, total = r.Total })
                             }
                         }
                     }

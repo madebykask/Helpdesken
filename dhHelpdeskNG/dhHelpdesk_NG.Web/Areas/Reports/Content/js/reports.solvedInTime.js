@@ -33,8 +33,10 @@
                                 datalabels: {
                                     anchor: 'end',
                                     align: 'end',
-                                    formatter: function(value, context) {
-                                        return value + '%';
+                                    formatter: function (value, context) {
+                                        var rawData = context.dataset.rawData[context.dataIndex];
+                                        var values = rawData ?' (' + rawData.solvedInTimeTotal + '/' + rawData.total + ')' : '';
+                                        return value + '%' + values;
                                     }
                                 }
                             },
