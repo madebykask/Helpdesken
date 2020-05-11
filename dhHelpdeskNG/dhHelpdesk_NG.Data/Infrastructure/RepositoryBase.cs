@@ -237,12 +237,15 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// <param name="where">
         ///     The where.
         /// </param>
+        /// <param name="isAttached">
+        /// false - AsNoTracking applied
+        /// </param>
         /// <returns>
         ///     The result.
         /// </returns>
-        public virtual IEnumerable<T> GetMany(Expression<Func<T, bool>> where)
+        public virtual IEnumerable<T> GetMany(Expression<Func<T, bool>> where, bool isAttached = true)
         {
-            return _dbset.Where(where);
+            return isAttached ? _dbset.Where(where) : _dbset.AsNoTracking().Where(where);
         }
 
         /// <summary>

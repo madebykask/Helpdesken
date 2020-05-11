@@ -23,7 +23,8 @@ namespace DH.Helpdesk.Services.Services
     {
         IDictionary<string, string> Validate(ComputerUsersBlackList computerUsersBlackList);
 
-        IList<ComputerUser> GetComputerUsers(int customerId);
+        IList<ComputerUser> GetComputerUsers(int customerId, bool? showOnExtPageDepartmentCases = null);
+        IList<ComputerUserShort> GetComputerUsersShort(int customerId, bool? showOnExtPageDepartmentCases = null);
         IList<ComputerUser> SearchSortAndGenerateComputerUsers(int customerId, IComputerUserSearch searchComputerUsers);
 
         IList<UserSearchResults> SearchComputerUsers(int customerId, string searchFor, int? categoryId = null, IList<int> departmentIds = null, bool exactSearch = false);
@@ -117,10 +118,36 @@ namespace DH.Helpdesk.Services.Services
             return errors;
         }
 
-        public IList<ComputerUser> GetComputerUsers(int customerId)
+        public IList<ComputerUser> GetComputerUsers(int customerId, bool? showOnExtPageDepartmentCases = null)
         {
-            return _computerUserRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.SyncChangedDate).ToList();
+            return _computerUserRepository.GetMany(x => x.Customer_Id == customerId &&
+                                                        ((showOnExtPageDepartmentCases.HasValue && x.ShowOnExtPageDepartmentCases == showOnExtPageDepartmentCases) ||
+                                                        !showOnExtPageDepartmentCases.HasValue),
+                                            false)
+                .AsQueryable()
+                .OrderBy(x => x.SyncChangedDate)
+                .ToList();
         }
+
+        public IList<ComputerUserShort> GetComputerUsersShort(int customerId, bool? showOnExtPageDepartmentCases = null)
+        {
+            return _computerUserRepository.GetMany(x => x.Customer_Id == customerId &&
+                                                        ((showOnExtPageDepartmentCases.HasValue && x.ShowOnExtPageDepartmentCases == showOnExtPageDepartmentCases) ||
+                                                         !showOnExtPageDepartmentCases.HasValue),
+                        false)
+                .AsQueryable()
+                .Select(x => new ComputerUserShort()
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    SurName = x.SurName,
+                    UserId = x.UserId,
+                    ShowOnExtPageDepartmentCases = x.ShowOnExtPageDepartmentCases
+                })
+                .OrderBy(x => x.UserId)
+                .ToList();
+        }
+
 
         public IList<ComputerUserFieldSettingsLanguage> GetComputerUserFieldSettingsWithLanguages(int customerId, int languageId)
         {

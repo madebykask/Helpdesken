@@ -22,9 +22,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
         Task<T> GetAsync(Expression<Func<T, bool>> where);
         TResult Get<TResult>(Expression<Func<T, bool>> where, Expression<Func<T, TResult>> selector);
         IEnumerable<T> GetAll();
-        IEnumerable<T> GetMany(Expression<Func<T, bool>> where);
-
-       
+        IEnumerable<T> GetMany(Expression<Func<T, bool>> where, bool isAttached = true);
 
         void Commit();
     }

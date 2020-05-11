@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 
 using DH.Helpdesk.BusinessData.Models.Case.Input;
 using DH.Helpdesk.BusinessData.Models.Notifiers;
 using DH.Helpdesk.BusinessData.Models.Shared;
-
+using DH.Helpdesk.Dal.DbQueryExecutor;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.SearchRequestBuilders.Notifiers;
@@ -509,8 +510,13 @@ namespace DH.Helpdesk.Dal.Repositories.Notifiers.Concrete
 
         public void UpdateShowOnExtPageDepartmentCasesBatch(int[] ids, bool showOnExtPageDepartmentCases)
         {
-            DataContext.ComputerUsers.Where(f => ids.Contains(f.Id))
-                .Update(x => new ComputerUser() { ShowOnExtPageDepartmentCases = showOnExtPageDepartmentCases });
+            if (ids == null || !ids.Any()) return;
+
+            var idsStr = string.Join(",", ids);
+            DataContext.Database.ExecuteSqlCommand(
+                "Update tblComputerUsers set ShowOnExtPageDepartmentCases = @showOnExtPageDepartmentCases Where Id in (" +
+                idsStr + ")",
+                new SqlParameter("@showOnExtPageDepartmentCases", showOnExtPageDepartmentCases));
         }
 
         public Notifier GetInitiatorInfo(string userId, int customerId, bool activeOnly)
