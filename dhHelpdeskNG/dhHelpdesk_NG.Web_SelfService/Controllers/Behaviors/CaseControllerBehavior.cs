@@ -13,6 +13,7 @@ using DH.Helpdesk.SelfService.Infrastructure.Helpers;
 using DH.Helpdesk.SelfService.Models;
 using DH.Helpdesk.SelfService.Models.Case;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Common.Constants;
 
 namespace DH.Helpdesk.SelfService.Controllers.Behaviors
 {
@@ -26,6 +27,7 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
         private readonly IProductAreaService _productAreaService;
         private readonly ISelfServiceConfigurationService _configurationService;
         private readonly IComputerService _computerService;
+        private readonly IFeatureToggleService _featureToggleService;
 
         #region ctor()
 
@@ -37,7 +39,8 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
             ICaseFieldSettingService caseFieldSettingService,
             IProductAreaService productAreaService,
             ISelfServiceConfigurationService configurationService, 
-            IComputerService computerService)
+            IComputerService computerService,
+            IFeatureToggleService featureToggleService)
         {
             _masterDataService = masterDataService;
             _caseService = caseService;
@@ -47,6 +50,8 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
             _productAreaService = productAreaService;
             _configurationService = configurationService;
             _computerService = computerService;
+            _featureToggleService = featureToggleService;
+
         }
 
         #endregion
@@ -57,7 +62,10 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
             var userEmployeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
             var initiator = string.IsNullOrEmpty(curUser) ? null : _computerService.GetComputerUserByUserID(curUser, SessionFacade.CurrentCustomer.Id);
             var showOnExtPageDepartmentCases = initiator?.ShowOnExtPageDepartmentCases ?? false;
-
+            if (_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_SELFSERVICE_SETTING_VIEW_DEPARTMENT_CASES))
+            {
+                 showOnExtPageDepartmentCases = false;
+            }
             var criteria = new CaseOverviewCriteriaModel()
             {
                 MyCasesRegistrator = SessionFacade.CurrentCustomer.MyCasesRegistrator,
