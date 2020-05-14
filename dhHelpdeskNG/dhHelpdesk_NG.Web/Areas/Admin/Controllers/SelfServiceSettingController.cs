@@ -9,8 +9,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-using DH.Helpdesk.Common.Constants;
-using DH.Helpdesk.Domain.Computers;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {    
@@ -24,7 +22,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ICaseTypeService _caseTypeService;
         private readonly IProductAreaService _productAreaService;
         private readonly IComputerService _computerService;
-        private readonly IFeatureToggleService _featureToggleService;
 
         public SelfServiceSettingController(
                 ICustomerService customerService,
@@ -33,7 +30,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 ICaseTypeService caseTypeService,
                 IProductAreaService productAreaService,
                 IMasterDataService masterDataService,
-                IFeatureToggleService featureToggleService,
                 IComputerService computerService)
             : base(masterDataService)
         {
@@ -42,7 +38,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this._documentService = documentService;
             this._caseTypeService = caseTypeService;
             this._productAreaService = productAreaService;
-            _featureToggleService = featureToggleService;
             _computerService = computerService;
         }
         //
@@ -65,28 +60,27 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Value = x.Id.ToString()
             }).ToList();
 
-            var availableInitiators = new List<SelectListItem>();
-            var selectedInitiators = new List<SelectListItem>();
+            var allInitiators = _computerService.GetComputerUsersShort(customerId)
+                .OrderBy(a => a.FirstName)
+                .ThenBy(a => a.SurName)
+                .ThenBy(a => a.UserId)
+                .ToList();
+            var availableInitiators = allInitiators.Where(c => !c.ShowOnExtPageDepartmentCases)
+                .Select(x => new SelectListItem
+                {
+                    Text = string.Format("{1} {2} - {0}", x.UserId, x.FirstName, x.SurName),
+                    Value = x.Id.ToString()
+                })
+                .ToList();
 
-            if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_SELFSERVICE_SETTING_VIEW_DEPARTMENT_CASES))
-            { 
-                var allInitiators = _computerService.GetComputerUsers(customerId);
-                 availableInitiators = allInitiators.Where(c => !c.ShowOnExtPageDepartmentCases)
-                    .Select(x => new SelectListItem
-                    {
-                        Text = string.Format("{1} {2} - {0}", x.UserId, x.FirstName, x.SurName),
-                        Value = x.Id.ToString()
-                    }).OrderBy(a => a.Text)
-                    .ToList();
+            var selectedInitiators = allInitiators.Where(c => c.ShowOnExtPageDepartmentCases)
+                .Select(x => new SelectListItem
+                {
+                    Text = string.Format("{1} {2} - {0}", x.UserId, x.FirstName, x.SurName),
+                    Value = x.Id.ToString()
+                })
+                .ToList();;
 
-                 selectedInitiators = allInitiators.Where(c => c.ShowOnExtPageDepartmentCases)
-                    .Select(x => new SelectListItem
-                    {
-                        Text = string.Format("{1} {2} - {0}", x.UserId, x.FirstName, x.SurName),
-                        Value = x.Id.ToString()
-                    }).OrderBy(a => a.Text)
-                    .ToList(); ;
-            }
             var allCaseTypes = _caseTypeService.GetCaseTypesForSetting(customerId);
             var availableCaseTypes = allCaseTypes.Where(c => c.ShowOnExtPageCases == 0).Select(x => new SelectListItem
             {
@@ -237,16 +231,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                 _productAreaService.SaveProductArea(prod, prodareawgs, caseType_Id, out errors);
             }
-            if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_SELFSERVICE_SETTING_VIEW_DEPARTMENT_CASES))
-            {
-                var allInitiators = _computerService.GetComputerUsers(id);
-                _computerService.UpdateNotifierShowOnExtPageDepartmentCases(selectedInitiators, true);
-                _computerService.UpdateNotifierShowOnExtPageDepartmentCases(
-                    allInitiators.Select(i => i.Id).Except(selectedInitiators ?? new int[0]).ToArray(),
-                    false);
-            }
+
+            var oldSelectedInitiators = _computerService.GetComputerUsers(id, true)
+                .Select(i => i.Id).ToArray();
+            var toSelectInitiators = selectedInitiators.Where(i => !oldSelectedInitiators.Contains(i))
+                .ToArray();
+            _computerService.UpdateNotifierShowOnExtPageDepartmentCases(toSelectInitiators, true);
+
+            var toUnselectInitiators = oldSelectedInitiators.Except(selectedInitiators)
                 .ToArray();
             _computerService.UpdateNotifierShowOnExtPageDepartmentCases(toUnselectInitiators, false);
+
             var setting = _settingService.GetCustomerSetting(id);
             if (setting != null)
             {

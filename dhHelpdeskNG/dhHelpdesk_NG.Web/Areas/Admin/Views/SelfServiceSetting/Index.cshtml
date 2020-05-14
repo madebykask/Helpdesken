@@ -293,7 +293,6 @@
                                         @Html.CheckBoxFor(m => Model.Customer.MyCasesUserGroup) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Användargrupp")
                                     </td>
                                 </tr>
-                                @if (Model.AvailableInitiators.Any()) { 
                                 <tr id="initiators">
                                     <td class="span3">
                                         <br />
@@ -342,10 +341,9 @@
                                                     </select>
                                                 </td>
                                             </tr>
-                                           
                                         </table>
                                     </td>
-                                </tr> }
+                                </tr>
                                 <tr id="caseTypes">
                                     <td class="span3">
                                         <br />
