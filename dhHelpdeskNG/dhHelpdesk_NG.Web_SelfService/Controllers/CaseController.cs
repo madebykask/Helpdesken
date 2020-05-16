@@ -159,7 +159,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             _caseControllerBehavior = new CaseControllerBehavior(masterDataService, caseService, caseSearchService,
                 caseSettingService, caseFieldSettingService, 
                 productAreaService, configurationService,
-                computerService);
+                computerService, featureToggleService);
 
             _masterDataService = masterDataService;
             _caseService = caseService;

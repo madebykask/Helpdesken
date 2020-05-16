@@ -31,12 +31,13 @@ namespace DH.Helpdesk.SelfService.Controllers
             ICaseFieldSettingService caseFieldSettingService,
             IProductAreaService productAreaService,
             ISelfServiceConfigurationService configurationService,
-            IComputerService computerService)
+            IComputerService computerService,
+            IFeatureToggleService featureToggleService)
         {
             _masterDataService = masterDataService;
             _caseControllerBehavior = new CaseControllerBehavior(masterDataService, caseService, caseSearchService,
                 caseSettingsService, caseFieldSettingService,
-                productAreaService, configurationService, computerService);
+                productAreaService, configurationService, computerService, featureToggleService);
         }
         
         #endregion

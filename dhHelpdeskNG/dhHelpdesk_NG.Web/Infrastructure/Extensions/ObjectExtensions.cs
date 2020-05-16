@@ -976,14 +976,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             var result = new List<string>();
             var section = model.CaseSectionModels.FirstOrDefault(x => x.SectionType == (int)type);
             var allOrderdFields = SetSectionHeaderOrders(model.caseFieldSettings).ToArray();
-            foreach (var f in section.CaseSectionFields)
-            {
-                var order = Array.IndexOf(allOrderdFields, f);               
-                orderedFields.Add(new Tuple<int, int>(f,order));                
-            }
-
             if (section != null)
             {
+                foreach (var f in section.CaseSectionFields)
+                {
+                var order = Array.IndexOf(allOrderdFields, f);               
+                orderedFields.Add(new Tuple<int, int>(f,order));
+                }
+            
                 var fields = new List<CaseFieldSetting>();              
                 foreach (var f in orderedFields.OrderBy(o=> o.Item2))
                 {
