@@ -17,7 +17,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Computers
             
             this.Property(x => x.Name).HasColumnName("ComputerType").IsRequired().HasMaxLength(60);
             this.Property(x => x.ComputerTypeDescription).IsRequired().HasMaxLength(50);
-            this.HasRequired(x => x.inventory)
+            this.HasOptional(x => x.Inventory)
                .WithMany()
                .HasForeignKey(x => x.InventoryType_Id)
                .WillCascadeOnDelete(false);

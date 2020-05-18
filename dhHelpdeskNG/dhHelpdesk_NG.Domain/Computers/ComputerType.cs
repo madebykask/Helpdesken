@@ -13,6 +13,6 @@
         public int? InventoryType_Id { get; set; }
 
         public virtual Customer Customer { get; set; }
-        public virtual Inventory inventory { get; set; }
+        public virtual Inventory Inventory { get; set; }
     }
 }
