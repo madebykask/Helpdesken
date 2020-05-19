@@ -1,8 +1,8 @@
 ﻿--update DB from 5.3.46 to 5.3.47 version
 
 RAISERROR ('Add ComputerType_Id FOREIGN KEY to tblInventory', 10, 1) WITH NOWAIT
-if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
-		 where syscolumns.name = N'ComputerType_Id' and sysobjects.name = N'tblInventory')
+if not exists (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_tblInventory_tblComputerType]') 
+             AND parent_object_id = OBJECT_ID(N'[dbo].[tblInventory]'))
 BEGIN
     ALTER TABLE tblInventory	
     WITH CHECK ADD  CONSTRAINT [FK_tblInventory_tblComputerType] FOREIGN KEY([ComputerType_Id])
