@@ -265,50 +265,41 @@ namespace DH.Helpdesk.Services.Services
             return _caseRepository.IsCaseExists(id);
         }
 
-        // retrieve extended case form for case 
+        // retrieve extended case form for case       
         public ExtendedCaseDataOverview GetCaseExtendedCaseForm(int caseSolutionId, int customerId, int caseId, string userGuid, int caseStateSecondaryId)
         {
-            if (caseSolutionId == 0)
-                return null;
-
-            var caseSolution = _caseSolutionRepository.GetGetSolutionInfo(caseSolutionId, customerId);
-            if (caseSolution == null)
-                return null;
+            var caseSolution = caseSolutionId > 0
+                ? _caseSolutionRepository.GetGetSolutionInfo(caseSolutionId, customerId)
+                : null;
 
             var stateSecondaryId =
                 caseStateSecondaryId > 0
                     ? _stateSecondaryRepository.GetById(caseStateSecondaryId).StateSecondaryId
                     : 0;
 
-            if (caseSolutionId > 0)
-            {
-                //fallback to casesolution.StateSecondaryId if case is new
-                if (caseStateSecondaryId == 0 && caseSolution.StateSecondaryId > 0)
-                {
-                    stateSecondaryId = _stateSecondaryRepository.GetById(caseSolution.StateSecondaryId).StateSecondaryId;
-                }
-            }
+            //fallback to casesolution.StateSecondaryId if case is new
+            if (caseStateSecondaryId == 0 && caseSolution != null && caseSolution.StateSecondaryId > 0)
+                stateSecondaryId = _stateSecondaryRepository.GetById(caseSolution.StateSecondaryId).StateSecondaryId;
 
             var extendedCaseFormData =
                 caseId == 0
                     ? _extendedCaseFormRepository.GetExtendedCaseFormForSolution(caseSolutionId, customerId)
                     : _extendedCaseFormRepository.GetExtendedCaseFormForCase(caseId, customerId);
 
-            if (extendedCaseFormData != null)
+            if (extendedCaseFormData == null) return extendedCaseFormData;
+
+            extendedCaseFormData.StateSecondaryId = stateSecondaryId;
+
+            if (string.IsNullOrWhiteSpace(extendedCaseFormData.ExtendedCaseFormName))
             {
-                extendedCaseFormData.StateSecondaryId = stateSecondaryId;
+                extendedCaseFormData.ExtendedCaseFormName = caseSolution != null ? caseSolution.Name : string.Empty;
+            }
 
-                if (string.IsNullOrWhiteSpace(extendedCaseFormData.ExtendedCaseFormName))
-                {
-                    extendedCaseFormData.ExtendedCaseFormName = caseSolution.Name;
-                }
-
-                //create extendedcase empty record
-                if (caseId == 0)
-                {
-                    extendedCaseFormData.ExtendedCaseGuid =
-                        _extendedCaseFormRepository.CreateExtendedCaseData(extendedCaseFormData.ExtendedCaseFormId, userGuid);
-                }
+            //create extendedcase empty record
+            if (caseId == 0)
+            {
+                extendedCaseFormData.ExtendedCaseGuid =
+                    _extendedCaseFormRepository.CreateExtendedCaseData(extendedCaseFormData.ExtendedCaseFormId, userGuid);
             }
 
             return extendedCaseFormData;

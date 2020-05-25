@@ -3278,13 +3278,13 @@ namespace DH.Helpdesk.Web.Controllers
 
             #region ExtendedCase sections
 
-            if (!edit)
+            if (m.ContainsExtendedCase)
             {
                 /* Create Relationship between Case & ExtendedCase*/
                 if (m.ExtendedCaseGuid != Guid.Empty)
                 {
                     var exData = _caseService.GetExtendedCaseData(m.ExtendedCaseGuid);
-                    _caseService.CreateExtendedCaseRelationship(case_.Id, exData.Id);
+                    _caseService.CreateExtendedCaseRelationship(case_.Id, exData.Id, exData.ExtendedCaseFormId);
                 }
                 if (m.case_.ReportedBy != null && m.ExtendedInitiatorGUID.HasValue)
                 {
@@ -3297,7 +3297,7 @@ namespace DH.Helpdesk.Web.Controllers
                     _caseService.CreateExtendedCaseSectionRelationship(case_.Id, exData.Id, CaseSectionType.Regarding, curCustomer.Id);
                 }
             }
-            else // If edit existing case
+            if(edit) // If edit existing case
             {
                 if (m.ExtendedInitiatorGUID.HasValue)
                 {

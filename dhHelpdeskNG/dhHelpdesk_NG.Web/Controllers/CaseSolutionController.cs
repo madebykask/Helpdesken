@@ -35,6 +35,7 @@ namespace DH.Helpdesk.Web.Controllers
     {
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ICaseSolutionService _caseSolutionService;
+        private readonly ICaseService _caseService;
         private readonly ICaseTypeService _caseTypeService;
         private readonly ICategoryService _categoryService;
         private readonly IFinishingCauseService _finishingCauseService;
@@ -67,6 +68,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICacheProvider _cache;
         private readonly ICaseSolutionConditionService _caseSolutionConditionService;
         private IComputerService _computerService;
+        private readonly IGlobalSettingService _globalSettingService;
 
 
         private const int MAX_QUICK_BUTTONS_COUNT = 5;
@@ -76,6 +78,7 @@ namespace DH.Helpdesk.Web.Controllers
         public CaseSolutionController(
             ICaseFieldSettingService caseFieldSettingService,
             ICaseSolutionService caseSolutionService,
+            ICaseService caseService,
             ICaseTypeService caseTypeService,
             ICategoryService categoryService,
             IFinishingCauseService finishingCauseService,
@@ -108,12 +111,14 @@ namespace DH.Helpdesk.Web.Controllers
             IWatchDateCalendarService watchDateCalendarService,
             ICacheProvider cache,
             ICaseSolutionConditionService caseSolutionConditionService,
-            IComputerService computerService)
+            IComputerService computerService,
+            IGlobalSettingService globalSettingService)
             : base(masterDataService)
         {
             _computerService = computerService;
             this._caseFieldSettingService = caseFieldSettingService;
             this._caseSolutionService = caseSolutionService;
+            this._caseService = caseService;
             this._caseTypeService = caseTypeService;
             this._categoryService = categoryService;
             this._finishingCauseService = finishingCauseService;
@@ -145,6 +150,8 @@ namespace DH.Helpdesk.Web.Controllers
             this._cache = cache;
             this._caseSolutionConditionService = caseSolutionConditionService;
             _watchDateCalendarService = watchDateCalendarService;
+            this._globalSettingService = globalSettingService;
+
         }
 
         #region Template 
@@ -1257,11 +1264,16 @@ namespace DH.Helpdesk.Web.Controllers
                 caseSolution.WorkingGroup_Id = null;
             }
 
+            var extendedCases = new List<ExtendedCaseFormForCaseModel>();
+            if (caseSolution.ShowInsideCase == 1) {
+                extendedCases = GetExtendedCases(id, 0).ToList();
+            }
+
             return this.Json(
                 new
                 {
                     dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern,
-
+                    extendedCases = (extendedCases != null && extendedCases.Any()) ? extendedCases : null,
                     caseSolution.CaseWorkingGroup_Id,
 
                     caseSolution.PersonsName,
@@ -3350,6 +3362,104 @@ namespace DH.Helpdesk.Web.Controllers
             return caseSolutionSchedule;
         }
 
+        private IList<ExtendedCaseFormForCaseModel> GetExtendedCases(int caseSolutionId , int caseId)
+        {
+            #region Extended Case
+
+            var extendedCases = new List<ExtendedCaseFormForCaseModel>();
+            try
+            {
+                string extendedCasePathMask = _globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
+
+                if (!string.IsNullOrEmpty(extendedCasePathMask))
+                {
+                    int userRole = 0;
+
+                    //#58691
+                    //If user is Admin - send in another Number 
+                    //3 = Kundadministratör
+                    //4 = Administratör
+                    if (SessionFacade.CurrentUser.UserGroupId >= 3)
+                    {
+                        userRole = 99;
+                    }
+                    else
+                    {
+                        //Take the highest workinggroupId with "Admin" access (UserRole)
+                        int userWorkingGroupId = 0;
+                        var userWorkingGroup =
+                            _workingGroupService.GetWorkingGroupsAdmin(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id)
+                                .OrderByDescending(x => x.WorkingGroupId)
+                                .FirstOrDefault();
+
+                        if (userWorkingGroup != null)
+                        {
+                            userWorkingGroupId = userWorkingGroup.WorkingGroupId;
+                        }
+                        userRole = userWorkingGroupId;
+                    }
+
+                    //CHECK HOW TO HANDLE WHEN FROM EMAIL
+                    //At the moment we are only fetching 1 extended case since it is only programmed that way in editPage.js
+                    // var stateSecondaryId = m?.case_?.StateSecondary_Id ?? 0;
+
+                    extendedCases =
+                        GetExtendedCaseFormModel(SessionFacade.CurrentCustomer.Id, caseId, caseSolutionId, 0, extendedCasePathMask,
+                            SessionFacade.CurrentLanguageId, userRole, SessionFacade.CurrentUser.UserGUID.ToString()).ToList();
+
+                    var ContainsExtendedCase = extendedCases != null && extendedCases.Any();
+
+                    //for hidden
+                    if (ContainsExtendedCase)
+                    {
+                        var ExtendedCaseGuid = extendedCases.FirstOrDefault().ExtendedCaseGuid;
+                    }
+                }
+
+                return extendedCases;
+            }
+            catch (Exception)
+            {
+                //TODO:
+                throw;
+            }
+
+            #endregion //Extended Case
+        }
+
+        private IList<ExtendedCaseFormForCaseModel> GetExtendedCaseFormModel(int customerId, int caseId, int caseSolutionId, int stateSecondaryId,
+    string extendedCasePathMask, int languageId, int userRole, string userGuid)
+        {
+            var res = new List<ExtendedCaseFormForCaseModel>();
+
+            var extendedCaseFormData =
+                _caseService.GetCaseExtendedCaseForm(caseSolutionId, customerId, caseId, SessionFacade.CurrentUser.UserGUID.ToString(), stateSecondaryId);
+
+            if (extendedCaseFormData == null)
+                return res;
+
+            var extendedCasePath = ExtendedCaseUrlBuilder.BuildExtendedCaseUrl(extendedCasePathMask, new ExtededCaseUrlParams
+            {
+                caseStatus = extendedCaseFormData.StateSecondaryId,
+                userRole = userRole,
+                userGuid = userGuid,
+                customerId = customerId,
+            });
+
+            var model = new ExtendedCaseFormForCaseModel
+            {
+                CaseId = caseId,
+                Id = extendedCaseFormData.ExtendedCaseFormId,
+                ExtendedCaseGuid = extendedCaseFormData.ExtendedCaseGuid,
+                Name = extendedCaseFormData.ExtendedCaseFormName,
+                Path = extendedCasePath,
+                LanguageId = languageId,
+                //CaseStatus = caseStateSecondaryId, //majid: Set by querystring at the moment
+                //UserRole = caseWorkingGroupId      //majid: Set by querystring at the moment
+            };
+
+            return new List<ExtendedCaseFormForCaseModel>() { model };
+        }
         #endregion
     }
 }

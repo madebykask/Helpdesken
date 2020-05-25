@@ -26,7 +26,7 @@
     <div class="content onemenu editcase" id="mm1">
         <div class="container">
             <ul class="nav nav-tabs" id="tabsArea">
-                <li data-active-tab="case-tab" class="@((Model.ActiveTab == "" || Model.ActiveTab == CaseTabs.CaseTab) ? "active" : "")">
+                <li id="caseTabContainer" data-active-tab="case-tab" class="@((Model.ActiveTab == "" || Model.ActiveTab == CaseTabs.CaseTab) ? "active" : "")">
 
                     @if (Model.CaseTemplateName != null && Model.ExtendedCases == null)
                     {
@@ -45,7 +45,7 @@
                 </li>
                 @if (Model.IsItParentCase())
                 {
-                    <li>
+                    <li id="childCaseTabContainer">
                         <a href="#childcases-tab" title="@string.Format("{0}/{1} {2}", Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Count, Translation.GetCoreTextTranslation("avslutade").ToLower())">
                             @string.Format("{0} ({1}/{2} {3})", Translation.GetCoreTextTranslation("Underärenden"), Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Count, Translation.GetCoreTextTranslation("avslutade").ToLower())
                         </a>
@@ -56,7 +56,7 @@
                 {
                     if (Model.DynamicCase.ViewMode == 0)
                     {
-                        <li>
+                        <li id="dynamicCaseTabContainer">
                             <a href="#dh-form-area" id="loadContainer" class="eform" data-state="">@(Translation.GetCoreTextTranslation(Model.DynamicCase.FormName))</a>
                         </li>
 
@@ -127,7 +127,7 @@
                     </li>
                 }
             </ul>
-            <div class="tab-content">
+            <div class="tab-content" id="mainTabContainer">
                 <div class="tab-pane tab-pane-border @((Model.ActiveTab == "" || Model.ActiveTab == CaseTabs.CaseTab) ? "active" : "")" id="case">
                     <div class="container">
                         @Html.HiddenFor(model => model.case_.Id, new { data_field = "caseId" })
@@ -170,6 +170,11 @@
                         @Html.HiddenFor(model => model.ContainsExtendedCase)
                         @Html.HiddenFor(model => model.ExtendedCaseGuid)
 
+                        @foreach (var key in Model.StatusBar.Keys)
+                        {
+                            @Html.HiddenFor(model => model.StatusBar[key]);                           
+                        }                                                  
+                                              
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
                         @Html.Hidden("CurLanguageId", SessionFacade.CurrentLanguageId)
@@ -2287,8 +2292,7 @@
                 {
                     foreach (var extendedCase in Model.ExtendedCases)
                     {
-
-                        <div id="container_@extendedCase.Id" class="tab-pane tab-pane-border @((Model.ActiveTab.StartsWith(CaseTabs.ExtendedCaseTab)) ? "active" : "")">
+                        <div id="container_@extendedCase.Id" class="extended-case-tab tab-pane tab-pane-border @((Model.ActiveTab.StartsWith(CaseTabs.ExtendedCaseTab)) ? "active" : "")">
                             <div class="container">
                                 @Html.Partial("_CaseInformation", Model, new ViewDataDictionary { { "Headline", Translation.GetMasterDataTranslation(extendedCase.Name) } })
                                 @*<div>@extendedCase.Version</div>*@

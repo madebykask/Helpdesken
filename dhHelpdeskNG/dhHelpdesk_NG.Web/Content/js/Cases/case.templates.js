@@ -769,7 +769,86 @@ var ApplyTemplate = function (data, doOverwrite) {
         el = $("#case__Verified");
         SetCheckboxValueIfElVisible(el, val);
     }
+    
 
+    //Extended Case
+    if (data.extendedCases) {
+        var lastECId = '';
+        var lastECPath = '';
+        var lastECGuid = '';
+        var lastECLanguage = 1;
+        var lastECCaseId = $('#case__Id').val();
+        var curCaseId = $('#case__Id').val();
+        for (var i = 0; i < data.extendedCases.length ; i++) {
+            var ex = data.extendedCases[i];
+            var newTab =
+            "<li data-active-tab='extendedcase-tab' >" +
+                " <a href='#container_" + ex.Id + "' id='extendedcase-tab' class='extendedcase' " +
+                  "data-id='" + ex.Id + "' data-state=''>" +
+                   ex.Name +
+                   "<i id='exTabIndicator_" + ex.Id + "' class='tab-indicator' style='display:none'> &nbsp;</i>" +
+                "</a>" +
+            "</li>";
+
+            if ($("#dynamicCaseTabContainer").length > 0)
+            { $(newTab).insertAfter($("#dynamicCaseTabContainer")); }
+            else if ($("#childCaseTabContainer").length > 0)
+            { $(newTab).insertAfter($("#childCaseTabContainer")); }
+            else if ($("#caseTabContainer").length > 0)
+            { $(newTab).insertAfter($("#caseTabContainer")); }
+
+            $('#tabsArea a[href="#container_' + ex.Id + '"]').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+            })
+
+            var headLine = ex.Name;
+            var statusBar = [];
+            var inputs = document.getElementsByTagName("input");
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].name.indexOf('StatusBar') == 0) {
+                    statusBar.push(inputs[i]);
+                }
+            }
+            var items = "";
+            if (statusBar.length > 0) {
+                for (var i = 0; i < statusBar.length; i++) {
+                    items += statusBar[i].value;
+                }
+            }
+            var newContent =
+                "<div id='container_" + ex.Id + "' class='extended-case-tab tab-pane tab-pane-border'>" +
+                    "<div class='container' id='exCaseContent'>" +
+                        "<h4 style='font-weight:normal !important; font-size:11px !important;'>" +
+                         "<strong>" + headLine + "</strong>" +
+                         (statusBar.length > 0 ? " <text> | </text>" : " <text>&nbsp;</text>") +
+                         items +
+                        "</h4>"
+            "</div>" +
+        "</div>";
+
+            $("#mainTabContainer").append(newContent);
+
+            lastECId = ex.Id;
+            lastECPath = ex.Path;
+            lastECGuid = ex.ExtendedCaseGuid;
+            lastECLanguage = ex.LanguageId;
+        }
+
+        setTimeout(function () {
+            EditPage.prototype.Current_EC_FormId = lastECId;
+            EditPage.prototype.Current_EC_Path = "http://localhost:8099" + lastECPath;
+            EditPage.prototype.Current_EC_Guid = lastECGuid;
+            EditPage.prototype.Current_EC_LanguageId = lastECLanguage;
+            EditPage.prototype.loadExtendedCaseIfNeeded();
+            window.para
+        }, 1000);
+    }// End if extendedcase   
+    else {
+        if ($("#extendedcase-tab").length > 0)
+            $("#extendedcase-tab").remove();
+    }
+  
     //reset case template values after loading template data. Added 3sec delay in case some UI events are not complete...
     setTimeout(function() {
             $("#CaseTemplate_Performer_Id").val("");
@@ -1079,7 +1158,8 @@ function GetTemplateData(id) {
 
             finalActionId = caseTemplate["SaveAndClose"];
             var showOverwriteWarning = false;
-            if (!caseTemplate) {
+            if (!caseTemplate || (caseTemplate.extendedCases && $("#extendedcase-tab").length > 0)) {
+                //alert("Already exists")
                 return;
             }
 

@@ -280,13 +280,15 @@ EditPage.prototype.loadExtendedCase = function () {
     var self = this;
     var $_ex_Container = self.getExtendedCaseContainer();
     var formParameters = $_ex_Container.contentWindow.getFormParameters();
+    var window_params = window.parameters;
+
     formParameters.languageId = self.Current_EC_LanguageId;
     formParameters.extendedCaseGuid = self.Current_EC_Guid;
-    formParameters.caseId = self.p.currentCaseId;
-    formParameters.currentUser = self.p.currentUserName;
-    formParameters.applicationType = self.p.applicationType;
+    formParameters.caseId = window_params.currentCaseId;
+    formParameters.currentUser = window_params.currentUserName;
+    formParameters.applicationType = window_params.applicationType;
 
-    var isLockedValue = window.parameters.isCaseLocked || '';
+    var isLockedValue = window_params.isCaseLocked || '';
     formParameters.isCaseLocked = isLockedValue.toLowerCase() === 'true'; //important to pass boolean type value
 
     var fieldValues = self.Case_Field_Init_Values;
@@ -343,7 +345,8 @@ EditPage.prototype.isExtendedCaseValid = function (showToast, isOnNext) {
     var self = this;
 
     //only if extended case exist
-    if (self.p.containsExtendedCase === "True") {
+    
+    if (window.parameters.containsExtendedCase === "True") {
 
 
         //if no input param sent in, set show toast to true
@@ -401,7 +404,7 @@ EditPage.prototype.setNextStep = function () {
 
     var self = this;
 
-    if (self.p.containsExtendedCase == "True") {
+    if (window.parameters.containsExtendedCase == "True") {
         var nextStep = 0;
         var tempId = $("#steps option:selected");
         nextStep = parseInt($("#steps option:selected").attr('data-next-step')) || 0;
@@ -618,6 +621,8 @@ EditPage.prototype.propagateLogNote = function () {
 
 EditPage.prototype.onExtendedCaseLoaded = function () {
     var self = this;
+    window.parameters.containsExtendedCase = "True";
+    $("#ContainsExtendedCase").val("True");
     var $indicator = $(self.ExTab_Indicator_Prefix + self.Current_EC_FormId);
     /*Disabled because form is not ready yet - Majid/Alex */
     //self.setNextStep();
@@ -993,6 +998,8 @@ EditPage.prototype.doTotalValidationAndSave = function (submitUrl) {
         var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
         promise.then(
             function (res) {
+                if (res != null)
+                    $("#ExtendedCaseGuid").val(res.extendedCaseGuid);
                 self.doSaveCase(submitUrl);
             },
             function (err) {
@@ -1545,7 +1552,7 @@ EditPage.prototype.init = function (p) {
 
 
     /*Debug mode*/
-    //EditPage.prototype.Current_EC_Path = "http://localhost:8099/ExtendedCase/?formId=[ExtendedCaseFormId]&languageId=[LanguageId]&caseStatus=[CaseStateSecondaryId]&userRole=[CaseWorkingGroupId]&customerId=[CustomerId]&userGuid=[UserGuid]";
+    EditPage.prototype.Current_EC_Path = "http://localhost:8099/ExtendedCase/?formId=[ExtendedCaseFormId]&languageId=[LanguageId]&caseStatus=[CaseStateSecondaryId]&userRole=[CaseWorkingGroupId]&customerId=[CustomerId]&userGuid=[UserGuid]";
 
     /// controls binding
     self.extendedCaseInvalidMessage = p.extendedCaseInvalidMessage;
@@ -1806,7 +1813,7 @@ EditPage.prototype.init = function (p) {
     });
 
     self.$caseTab.click(function (ev) {
-        if (self.p.containsExtendedCase == "True") {
+        if (window.parameters.containsExtendedCase == "True") {
             if (ev.target.className == "case") {
                 self.$activeTabHolder.val('case-tab');
                 self.syncCaseFromExCaseIfExists();
@@ -1889,7 +1896,7 @@ EditPage.prototype.init = function (p) {
 
     self.$selectListStep.on('change', function () {
         //only if extended case exist
-        if (self.p.containsExtendedCase != "False") {
+        if (window.parameters.containsExtendedCase != "False") {
             self.setNextStep();
         }
     });
