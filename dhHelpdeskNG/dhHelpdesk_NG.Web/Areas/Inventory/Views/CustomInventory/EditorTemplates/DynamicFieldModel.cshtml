@@ -29,8 +29,8 @@
                     break;
                 case FieldTypes.Text:
                     @(Model.IsReadOnly
-                        ? Html.TextBoxFor(m => m.Value, new {@readonly = true})
-                        : Html.TextBoxFor(m => m.Value, new Dictionary<string, object> {{"data-dh-is-use-maxlength", Model.IsUseMaxSize}, {"data-dh-maxlength", Model.MaxSize}}))
+                        ? Html.TextBoxFor(m => m.Value, new { @readonly = true})
+                        : Html.TextBoxFor(m => m.Value, new {data_dh_is_use_maxlength = Model.IsUseMaxSize, data_dh_maxlength = Model.MaxSize }))
                     @Html.ValidationMessageFor(m => m.Value)
                     @Html.HiddenFor(m => m.IsUseMaxSize)
                     @Html.HiddenFor(m => m.MaxSize)

@@ -286,7 +286,7 @@ namespace DH.Helpdesk.Services.Services
                     ? _extendedCaseFormRepository.GetExtendedCaseFormForSolution(caseSolutionId, customerId)
                     : _extendedCaseFormRepository.GetExtendedCaseFormForCase(caseId, customerId);
 
-            if (extendedCaseFormData == null) return extendedCaseFormData;
+            if (extendedCaseFormData == null) return null;
 
             extendedCaseFormData.StateSecondaryId = stateSecondaryId;
 

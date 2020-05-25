@@ -180,8 +180,6 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             computerEditModel.IsForDialog = dialog;
             computerEditModel.UserId = userId;
 
-			
-
             var viewModel = new ComputerEditViewModel(id, computerEditModel)
             {
                 UserHasInventoryAdminPermission = userHasInventoryAdminPermission,

@@ -100,7 +100,7 @@
 
     foreach (var group in groups)
     {
-        int id = group;
+        var id = group;
         var dynamicFieldModels = Model.DynamicFieldModels.Where(x => x.GroupId == id).OrderBy(x => x.Position).ToList();
 
         if (!dynamicFieldModels.Any())
@@ -108,19 +108,25 @@
             continue;
         }
 
-        TypeGroupModel groupName = Model.TypeGroupModels.FirstOrDefault(x => x.Id == group);
+        var groupName = Model.TypeGroupModels.FirstOrDefault(x => x.Id == group);
 
-        string header = groupName != null ? groupName.Name : string.Empty;
+        var header = groupName != null ? groupName.Name : string.Empty;
         <h4>@Html.DisplayFor(m => header)</h4>
 
         <div class="row">
             <div class="span12">
                 <table class="tableform">
-                    @for (int i = 0; i < allModels.Count; i++)
+                    @for (var i = 0; i < allModels.Count; i++)
                     {
                         if (dynamicFieldModels.Contains(allModels[i]))
                         {
-                            @Html.EditorFor(m => allModels[i], "DynamicFieldModel", new { Id = i })
+                            @Html.EditorFor(m => allModels[i],
+                                "DynamicFieldModel",
+                                string.Format("allModels[{0}]", i.ToString()),
+                                new
+                               {
+                                   Id = i
+                               })
                         }
                     }
                 </table>
