@@ -57,7 +57,18 @@
             <table class="tableform">
                 @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.BarCode, "CustomTypesFields/Text")
                 @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.PurchaseDate, "CustomTypesFields/Date", new { id = "inventory_edit_purchasedate_date_datepicker" })
-                @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Info, "CustomTypesFields/WideText")
+               @* @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Info, "CustomTypesFields/WideText")*@
+            </table>
+        </div>
+    </div>
+}
+@if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Info.Show)
+{
+    <h4>@Translation.GetCoreTextTranslation("Övrigt")</h4>
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+               @Html.EditorFor(m => m.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.Info, "CustomTypesFields/WideText")
             </table>
         </div>
     </div>
