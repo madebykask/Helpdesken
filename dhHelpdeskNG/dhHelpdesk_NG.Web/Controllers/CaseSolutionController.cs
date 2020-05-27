@@ -1272,6 +1272,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.Json(
                 new
                 {
+                    caseSolution.Id,
                     dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern,
                     extendedCases = (extendedCases != null && extendedCases.Any()) ? extendedCases : null,
                     caseSolution.CaseWorkingGroup_Id,

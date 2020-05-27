@@ -773,12 +773,13 @@ var ApplyTemplate = function (data, doOverwrite) {
 
     //Extended Case
     if (data.extendedCases) {
+        el = $("#CaseSolution_Id");
+        el.val(data.Id);
+
         var lastECId = '';
         var lastECPath = '';
         var lastECGuid = '';
         var lastECLanguage = 1;
-        var lastECCaseId = $('#case__Id').val();
-        var curCaseId = $('#case__Id').val();
         for (var i = 0; i < data.extendedCases.length ; i++) {
             var ex = data.extendedCases[i];
             var newTab =
@@ -846,10 +847,10 @@ var ApplyTemplate = function (data, doOverwrite) {
             window.para
         }, 1000);
     }// End if extendedcase   
-    else {
-        if ($("#extendedcase-tab").length > 0)
-            $("#extendedcase-tab").remove();
-    }
+    //else {
+    //    if ($("#extendedcase-tab").length > 0)
+    //        $("#extendedcase-tab").remove();
+    //}
   
     //reset case template values after loading template data. Added 3sec delay in case some UI events are not complete...
     setTimeout(function() {
