@@ -91,6 +91,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
         private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
         private readonly IOrderFieldSettingsRepository _orderFieldSettingsRepository;
 
+        private readonly IOrderStateRepository _orderStateRepository;
+
         public OrdersService(
                 IUnitOfWorkFactory unitOfWorkFactory, 
                 IOrderFieldSettingsService orderFieldSettingsService, 
@@ -118,7 +120,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 IPriorityService priorityService,
                 IMasterDataService masterDataService,
                 IWorkingGroupService workingGroupService,
-                IRegistrationSourceCustomerService registrationSourceCustomerService, IOrderFieldSettingsRepository orderFieldSettingsRepository)
+                IRegistrationSourceCustomerService registrationSourceCustomerService,
+                IOrderFieldSettingsRepository orderFieldSettingsRepository,
+                IOrderStateRepository orderStateRepository)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _orderFieldSettingsService = orderFieldSettingsService;
@@ -148,6 +152,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             _workingGroupService = workingGroupService;
             _registrationSourceCustomerService = registrationSourceCustomerService;
             _orderFieldSettingsRepository = orderFieldSettingsRepository;
+            _orderStateRepository = orderStateRepository;
         }
 
         public OrdersFilterData GetOrdersFilterData(int customerId, int userId, out int[] selectedStatuses)
@@ -398,6 +403,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 var orderHistoryRep = uow.GetRepository<OrderHistoryEntity>();
                 var programRep = uow.GetRepository<Program>();
 
+                var orderState = new OrderState();
+
                 var customerSetting = _settingService.GetCustomerSetting(request.CustomerId);
                 var smtpInfo = new MailSMTPSetting(customerSetting.SMTPServer, customerSetting.SMTPPort, customerSetting.SMTPUserName, customerSetting.SMTPPassWord, customerSetting.IsSMTPSecured);
 
@@ -456,7 +463,13 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     {
                         firstLevelParentId = entity.OrderType_Id.Value;
                     }
-                    
+                   
+                    if (request.Order.General.StatusId != existingOrder.General.StatusId)
+                    {
+                        var statusId = request.Order.General.StatusId ?? default(int);
+                        orderState = _orderStateRepository.GetById(statusId);
+                    }
+
                     var settings = this._orderFieldSettingsService.GetOrderEditSettings(request.CustomerId, firstLevelParentId, uow, useExternal);
                     this._orderRestorer.Restore(request.Order, existingOrder, settings);
                     this._updateOrderRequestValidator.Validate(request.Order, existingOrder, settings);
@@ -495,6 +508,25 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 if (request.InformReceiver)
                 {
                     SendOrderNotification(request, historyEntity, entity, smtpInfo, request.Order.Receiver.ReceiverEmail);
+                }
+
+                if(orderState != null)
+                {
+                    var orderFollowers = orderState.EMailList ?? string.Empty;
+                    var valuesSplitter = ",";
+                    var pairSplitter = ";";
+                    var eMails = orderFollowers
+                        .Split(new[] { pairSplitter }, StringSplitOptions.None)
+                        .Where(s => !string.IsNullOrWhiteSpace(s))
+                        .Select(s =>
+                        {
+                            var values = s.Split(new[] { valuesSplitter }, StringSplitOptions.None);
+                            return values[0];
+                        }).ToList();
+                    foreach(var eMail in eMails)
+                    {
+                        SendOrderNotification(request, historyEntity, entity, smtpInfo, eMail);
+                    }                    
                 }
 
                 if (request.CreateCase)
