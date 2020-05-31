@@ -1013,6 +1013,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         private static List<string> GetCaseFieldsValues(CaseInputViewModel model, IEnumerable<CaseFieldSetting> fields)
         {
             var result = new List<string>();
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+
             foreach (var caseFieldSetting in fields)
             {
                 #region Initiator
@@ -1144,12 +1146,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     result.Add(model.case_.CaseNumber.ToString());
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.RegTime.ToString())
-                {
-                    result.Add(model.case_.RegTime.ToLocalTime().ToString());
+                {                    
+                    result.Add(TimeZoneInfo.ConvertTimeFromUtc(model.case_.RegTime, userTimeZone).ToString());
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.ChangeTime.ToString())
                 {
-                    result.Add(model.case_.ChangeTime.ToLocalTime().ToString());
+                    result.Add(TimeZoneInfo.ConvertTimeFromUtc(model.case_.ChangeTime, userTimeZone).ToString());
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.User_Id.ToString())
                 {
