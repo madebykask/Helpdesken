@@ -234,12 +234,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 CreateStringField(
                     settings.InventoryFieldsSettings.BarCodeFieldSetting,
                     model.InventoryFields.BarCode);
-            var purchaseDate =
-                CreateNullableDateTimeField(
-                    settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
-                    model.InventoryFields.PurchaseDate);
 
-            var inventoryFieldModel = new InventoryFieldsModel(barCode, purchaseDate);
+            var inventoryFieldModel = new InventoryFieldsModel(barCode);
 
             #endregion
 
@@ -399,6 +395,11 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 CreateStringField(
                     settings.ContractFieldsSettings.AccountingDimension5FieldSetting,
                     model.ContractFields.AccountingDimension5);
+            var purchaseDate =
+                CreateNullableDateTimeField(
+                    settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
+                    model.InventoryFields.PurchaseDate);
+
 
             var document = CreateStringField(settings.ContractFieldsSettings.DocumentFieldSetting, model.ContractFields.Document);
 
@@ -413,7 +414,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 accounting3,
                 accounting4,
                 accounting5, 
-                document);
+                document,
+                purchaseDate);
 
             var contractStatuses =
                 CreateSelectListField(
@@ -647,11 +649,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var memoryViewModel = new MemoryFieldsViewModel(memoryFieldsModel, memories);
 
             var barCode = CreateStringField(settings.InventoryFieldsSettings.BarCodeFieldSetting, null);
-            var purchaseDate = CreateNullableDateTimeField(
-                settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
-                null);
 
-            var inventoryFieldModel = new InventoryFieldsModel(barCode, purchaseDate);
+            var inventoryFieldModel = new InventoryFieldsModel(barCode);
 
             var chassis = CreateStringField(settings.ChassisFieldsSettings.ChassisFieldSetting, null);
 
@@ -717,7 +716,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var accounting4 = CreateStringField(settings.ContractFieldsSettings.AccountingDimension4FieldSetting, null);
             var accounting5 = CreateStringField(settings.ContractFieldsSettings.AccountingDimension5FieldSetting, null);
             var document = CreateStringField(settings.ContractFieldsSettings.DocumentFieldSetting, null);
-            
+            var purchaseDate = CreateNullableDateTimeField(settings.InventoryFieldsSettings.PurchaseDateFieldSetting, null);
+
             var contractFieldsModel = new ContractFieldsModel(
                 contractStatus,
                 contractNumber,
@@ -729,7 +729,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 accounting3,
                 accounting4,
                 accounting5,
-                document);
+                document,
+                purchaseDate);
 
             var contractStatuses = CreateSelectListField(
                 settings.ContractFieldsSettings.ContractStatusFieldSetting,

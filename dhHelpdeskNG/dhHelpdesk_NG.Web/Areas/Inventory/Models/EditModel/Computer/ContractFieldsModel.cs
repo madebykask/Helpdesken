@@ -21,13 +21,15 @@
             ConfigurableFieldModel<string> accountingDimension3,
             ConfigurableFieldModel<string> accountingDimension4,
             ConfigurableFieldModel<string> accountingDimension5,
-            ConfigurableFieldModel<string> document)
+            ConfigurableFieldModel<string> document,
+            ConfigurableFieldModel<DateTime?> purchaseDate)
         {
             this.ContractStatusId = contractStatusId;
             this.ContractNumber = contractNumber;
             this.ContractStartDate = contractStartDate;
             this.ContractEndDate = contractEndDate;
             this.PurchasePrice = purchasePrice;
+            this.PurchaseDate = purchaseDate;
             this.AccountingDimension1 = accountingDimension1;
             this.AccountingDimension2 = accountingDimension2;
             this.AccountingDimension3 = accountingDimension3;
@@ -50,6 +52,9 @@
 
         [NotNull]
         public ConfigurableFieldModel<int> PurchasePrice { get; set; }
+
+        [NotNull]
+        public ConfigurableFieldModel<DateTime?> PurchaseDate { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> AccountingDimension1 { get; set; }

@@ -10,16 +10,13 @@
         {
         }
 
-        public InventoryFieldsModel(ConfigurableFieldModel<string> barCode, ConfigurableFieldModel<DateTime?> purchaseDate)
+        public InventoryFieldsModel(ConfigurableFieldModel<string> barCode)
         {
             this.BarCode = barCode;
-            this.PurchaseDate = purchaseDate;
         }
 
         [NotNull]
         public ConfigurableFieldModel<string> BarCode { get; set; }
 
-        [NotNull]
-        public ConfigurableFieldModel<DateTime?> PurchaseDate { get; set; }
     }
 }

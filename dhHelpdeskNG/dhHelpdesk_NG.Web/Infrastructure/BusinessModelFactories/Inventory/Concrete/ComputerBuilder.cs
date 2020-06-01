@@ -17,7 +17,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
         {
             var workstation = CreateWorkstation(model.WorkstationFieldsViewModel);
             var chassis = CreateChassis(model.ChassisFieldsModel);
-            var inventering = CreateInventering(model.InventoryFieldsModel);
+            var inventering = CreateInventering(model.InventoryFieldsModel, model.ContractFieldsViewModel.ContractFieldsModel.PurchaseDate);
             var operatingSystem = CreateOperatingSystem(model.OperatingSystemFieldsViewModel);
             var processor = CreateProcessor(model.ProccesorFieldsViewModel);
             var memory = CreateMemory(model.MemoryFieldsViewModel);
@@ -61,7 +61,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
         {
             var workstation = CreateWorkstation(model.WorkstationFieldsViewModel);
             var chassis = CreateChassis(model.ChassisFieldsModel);
-            var inventering = CreateInventering(model.InventoryFieldsModel);
+            var inventering = CreateInventering(model.InventoryFieldsModel, model.ContractFieldsViewModel.ContractFieldsModel.PurchaseDate);
 
             var operatingSystem = CreateOperatingSystem(
                 model.OperatingSystemFieldsViewModel);
@@ -159,7 +159,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             return new ChassisFields(chassis);
         }
 
-        private static InventoryFields CreateInventering(InventoryFieldsModel fieldsModel)
+        private static InventoryFields CreateInventering(InventoryFieldsModel fieldsModel, ConfigurableFieldModel<DateTime?> purchaseDateModel)
         {
             if (fieldsModel == null)
             {
@@ -167,7 +167,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             }
 
             var barCode = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.BarCode);
-            var purchaseDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.PurchaseDate);
+            var purchaseDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(purchaseDateModel);
 
             var fields = new InventoryFields(barCode, purchaseDate);
 
