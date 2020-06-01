@@ -337,6 +337,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return cfs.ToList().getCaseSettingsValue(valueToFind).Id.ToString();
         }
 
+        public static bool getCaseFieldSettingIsActive(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
+        {
+            return cfs.ToList().getCaseSettingsValue(valueToFind).IsActive;
+        }
+
         public static string getCaseFieldSettingWithLanguage_LanguageId(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind)
         {
             return cfsl.ToList().getCaseFieldSettingsLanguageValue(valueToFind).Language_Id.ToString();
