@@ -81,11 +81,12 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             return overviews;
         }
 
-        public List<InventoryValue> GetData(List<int> ids)
+        public List<InventoryValue> GetData(List<int> ids, int? inventoryTypeId = null)
         {
-            var entities =
-                this.DbSet.Where(x => ids.Contains(x.Inventory_Id) && x.InventoryTypeProperty.ShowInList == 1)
-                    .Select(x => new { Entity = x, x.InventoryTypeProperty.PropertyType })
+            var query = this.DbSet.Where(x => ids.Contains(x.Inventory_Id) && x.InventoryTypeProperty.ShowInList == 1);
+            if (inventoryTypeId.HasValue)
+                query = query.Where(x => x.InventoryTypeProperty.InventoryType_Id == inventoryTypeId.Value);
+            var entities = query.Select(x => new { Entity = x, x.InventoryTypeProperty.PropertyType })
                     .ToList();
 
             var overviews =

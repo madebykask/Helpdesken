@@ -17,7 +17,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
 
         List<InventoryValue> GetData(int id);
 
-        List<InventoryValue> GetData(List<int> ids);
+        List<InventoryValue> GetData(List<int> ids, int? inventoryTypeId = null);
 
         void DeleteByInventoryTypePropertyId(int inventoryTypePropertyId);
 
