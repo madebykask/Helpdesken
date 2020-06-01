@@ -325,7 +325,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             var totalPercent = total == 0 ? 0 : ((totalSolvedInTime * 100) / total);
             var responce =  new
                 {
-                    totalLabel = string.Format("{0}: {1}%", Translation.GetCoreTextTranslation("Lösta i tid"), totalPercent),
+                    totalLabel = string.Format("{0}: {1}% ({2}/{3})", Translation.GetCoreTextTranslation("Lösta i tid"), totalPercent, totalSolvedInTime, total),
                     data = new {
                         labels = result.Select(o => o.Label ?? "").ToList(),
                         datasets = new[]
