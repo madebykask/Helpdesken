@@ -1339,15 +1339,21 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Status_Id.ToString())
                 {
-                    var cur = model.statuses.SingleOrDefault(r => r.Id == model.case_.Status_Id);
-                    if (cur != null)
-                        result.Add(Translation.GetCoreTextTranslation(cur.Name));
+                    if (model.statuses != null)
+                    {
+                        var cur = model.statuses.SingleOrDefault(r => r.Id == model.case_.Status_Id);
+                        if (cur != null)
+                            result.Add(Translation.GetCoreTextTranslation(cur.Name));
+                    }
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())
                 {
-                    var cur = model.stateSecondaries.SingleOrDefault(r => r.Id == model.case_.StateSecondary_Id);
-                    if (cur != null)
-                        result.Add(Translation.GetCoreTextTranslation(cur.Name));
+                    if (model.stateSecondaries != null)
+                    {
+                        var cur = model.stateSecondaries.SingleOrDefault(r => r.Id == model.case_.StateSecondary_Id);
+                        if (cur != null)
+                            result.Add(Translation.GetCoreTextTranslation(cur.Name));
+                    }
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Project.ToString())
                 {
