@@ -648,14 +648,14 @@
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
-                var questionnaireResultRepository = uof.GetRepository<QuestionnaireResultEntity>();
+                //var questionnaireResultRepository = uof.GetRepository<QuestionnaireResultEntity>();
 
                 var query = from circularPart in circularPartRepository.GetAll().GetCircularCases(circularId)
                     orderby circularPart.CreatedDate descending 
-                    join participant in questionnaireResultRepository.GetAll() on circularPart.Id equals
-                        participant.QuestionnaireCircularPartic_Id into group1
-                    from g1 in group1.DefaultIfEmpty()
-                    where g1 == null
+                    //join participant in questionnaireResultRepository.GetAll() on circularPart.Id equals
+                      //  participant.QuestionnaireCircularPartic_Id into group1
+                    //from g1 in group1.DefaultIfEmpty()
+                    //where g1 == null
                     select circularPart;
                 connectedCases  = query.SingleOrDefault(p => p.Case_Id == caseId)?.MapToParticipant();
             }
