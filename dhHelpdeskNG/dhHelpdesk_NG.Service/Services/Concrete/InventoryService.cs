@@ -832,7 +832,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
             var ids = models.Select(x => x.Id).ToList();
 
-            var dynamicData = _inventoryTypePropertyValueRepository.GetData(ids, filter.InventoryTypeId);
+            var dynamicData = _inventoryTypePropertyValueRepository.GetData(ids);
 
             var response = new InventoriesOverviewResponse(models, dynamicData);
 
