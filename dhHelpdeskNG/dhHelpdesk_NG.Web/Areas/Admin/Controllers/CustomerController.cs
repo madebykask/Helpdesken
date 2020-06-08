@@ -969,7 +969,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                 foreach (var cfsl in caseFieldSettingsLangToCopy)
                 {
-
                     foreach (var cfs in caseFieldSettingsForNewCustomer)
                     {
                         if (cfsl.Name == cfs.Name)
@@ -986,11 +985,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                             break;
                         }
-
                     }
-                }                
+                }
             }
-
 
             // Get ComputerUserFieldSettings
             var computerUserFieldSettingsToCopy = this._computerService.GetComputerUserFieldSettings(customerToCopy.Id);
@@ -1049,8 +1046,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             }
 
-            
-
             //Get CustomerUser to copy
             var customerUserToCopy = this._customerUserService.GetCustomerUsersForCustomer(customerToCopy.Id);
 
@@ -1067,11 +1062,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 this._customerUserService.SaveCustomerUserForCopy(newCustomerCustomerUser, out errors);
             }
 
-
+            //Get CustomerUser to copy
+            newCustomerToSave.UsersAvailable = customerToCopy.UsersAvailable;
 
             //Get Casetype to copy
             var caseTypesToCopy = this._caseTypeService.GetCaseTypes(customerToCopy.Id).Where(x=> x.Parent_CaseType_Id == null);
-            
 
             foreach (var ct in caseTypesToCopy)
             {
@@ -1091,12 +1086,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 newCustomerCaseType.RelatedField = String.Empty;
                 newCustomerCaseType.Parent_CaseType_Id = null;
 
-                
                 this._caseTypeService.SaveCaseType(newCustomerCaseType, out errors);
 
                 // Save sub case types
                 CopyCaseTypeChildren(ct.SubCaseTypes.ToList(), newCustomerToSave.Id, newCustomerCaseType.Id);
-
             };
 
             //Get Category to copy
@@ -1136,7 +1129,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 this._priorityService.SavePriority(newCustomerPriority, out errors);
 
             }
-
 
             //Get Product area to copy
             var productAreasToCopy = this._productAreaService.GetAllProductAreas(customerToCopy.Id);
@@ -1278,7 +1270,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
             //Get Mailtemplate
-            for (int i = 1; i < 100; i++)
+            for (var i = 1; i < 100; i++)
             {
                 var mailTemplateToCopy = this._mailTemplateService.GetMailTemplateForCopyCustomer(i, customerToCopy.Id);
 
@@ -1316,7 +1308,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                     }
                 }
-
                
             }
 
