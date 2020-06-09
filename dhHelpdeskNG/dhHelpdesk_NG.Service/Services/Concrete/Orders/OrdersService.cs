@@ -431,6 +431,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     entity.CreatedByUser_Id = request.UserId;
                     entity.ChangedDate = request.DateAndTime;
                     ordersRep.Add(entity);
+                    var statusId = entity.OrderState_Id ?? default(int);
+                    orderState = _orderStateRepository.GetById(statusId);
                 }
                 else
                 {
