@@ -1020,6 +1020,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             var result = new List<string>();
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
 
+            fields = fields.Where(f => f.IsActive).ToList();
+
             foreach (var caseFieldSetting in fields)
             {
                 #region Initiator
