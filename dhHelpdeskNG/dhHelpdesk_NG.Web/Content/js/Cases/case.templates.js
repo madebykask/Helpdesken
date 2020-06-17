@@ -562,6 +562,9 @@ var ApplyTemplate = function (data, doOverwrite) {
         $("#case__WorkingGroup_Id").val("");
         //#13311(redmine) Case template_list of administrators doesn't narrows depending on the choice of working group
         //cfg['doNotTriggerEvent'] = true;
+        $('#Performer_Id').one('applyValue', function () {
+            $(this).val(data.PerformerUser_Id);
+        });
         SetValueIfElVisible(el, val, cfg);
         if (el && (el.val() == "" || cfg.doOverwrite)) {
             //Todo: refactor
@@ -844,7 +847,6 @@ var ApplyTemplate = function (data, doOverwrite) {
             EditPage.prototype.Current_EC_Guid = lastECGuid;
             EditPage.prototype.Current_EC_LanguageId = lastECLanguage;
             EditPage.prototype.loadExtendedCaseIfNeeded();
-            window.para
         }, 1000);
     }// End if extendedcase   
     //else {
