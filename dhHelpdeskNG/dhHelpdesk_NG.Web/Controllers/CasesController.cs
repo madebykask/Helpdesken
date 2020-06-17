@@ -33,6 +33,7 @@ using DH.Helpdesk.Web.Common.Models.CaseSearch;
 using DH.Helpdesk.Web.Infrastructure.Behaviors;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
+using DH.Helpdesk.BusinessData.Models.Case.Input;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -4937,6 +4938,46 @@ namespace DH.Helpdesk.Web.Controllers
             m.Languages = _languageService.GetActiveLanguages();
 
             var responsibleUsersList = _userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
+
+            var performersListForSearch = _userService.GetAvailablePerformersOrUserId(customerId, null, true);
+            m.performersToSearch = new List<CasePerformersSearch>();
+
+            foreach (var performer in performersListForSearch)
+            {
+                if (performer.WorkingGroups.Count >= 1)
+                {
+                    for (int i = 0; i <= performer.WorkingGroups.Count -1 ; i++)
+                    {
+                        var userWorkingGroupMember = _userService.GetUserWorkingGroupById(performer.Id, performer.WorkingGroups[i].WorkingGroupId).IsMemberOfGroup;
+                        var wgCustomerId = _workingGroupService.GetWorkingGroup(performer.WorkingGroups[i].WorkingGroupId).Customer_Id;
+                        var isWgAcrive = _workingGroupService.GetWorkingGroup(performer.WorkingGroups[i].WorkingGroupId).IsActive;
+                        if (wgCustomerId == customerId && isWgAcrive == 1 && userWorkingGroupMember)
+                        {
+                            var performerToSearch = new CasePerformersSearch
+                            (
+                                performer.Id,
+                                performer.FirstName,
+                                performer.SurName,
+                                _workingGroupService.GetWorkingGroup(performer.WorkingGroups[i].WorkingGroupId).WorkingGroupName,
+                                performer.WorkingGroups[i].WorkingGroupId
+                            );
+                            m.performersToSearch.Add(performerToSearch);
+                        }
+                    }
+                }
+                else
+                {
+                    var performerToSearch = new CasePerformersSearch
+                   (
+                       performer.Id,
+                       performer.FirstName,
+                       performer.SurName,
+                       null,
+                       0
+                   );
+                    m.performersToSearch.Add(performerToSearch);
+                } 
+            }
 
             m.FollowersModel =
                 m.SendToDialogModel =

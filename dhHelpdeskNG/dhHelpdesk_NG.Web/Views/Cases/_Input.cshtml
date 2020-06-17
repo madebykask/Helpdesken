@@ -1691,6 +1691,32 @@
                                                     @Html.HiddenFor(m => m.Performer_Id)
                                                 }
                                             </td>
+
+                                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))
+                                            {
+
+                                                <td valign="bottom">
+                                                    <div style="position:relative;">
+                                                        <span id="performersWithWg" style="display: none;position:absolute; left:45px;">
+                                                            <select id="administratorSearchWithWg" data-field="administrator" class="chosen-select">
+                                                                <option value="">&nbsp;</option>
+                                                                @foreach (var e in Model.performersToSearch)
+                                                                {
+                                                                    var option = e.FirstName + " " + e.LastName + " - " + e.WorkingGroupName;
+                                                                    <option value="@e.UserId,@e.WorkingGroupId">@option</option>
+                                                                }
+                                                            </select>
+                                                        </span>
+                                                        <a href="#" id="performerSearch" data-field="administrator" style="" title="" class="btn"><i class="icon-search"></i></a>
+                                                    </div>
+                                                </td>                                               
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    <a href="#" id="performerSearch" data-field="administrator" style="" title="" class="btn disabled"><i class="icon-search"></i></a>
+                                                </td>
+                                            }
                                         </tr>
                                         <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Priority_Id, CaseSolutionFields.Priority)">
                                             <td>
@@ -1814,7 +1840,7 @@
                                             if (Model.projects.Any())
                                             {
                                                 <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Project, CaseSolutionFields.Project)">
-                                                    <td>      
+                                                    <td>
                                                         @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Project, "Project")
                                                     </td>
                                                     <td>
@@ -1885,7 +1911,6 @@
                                                 </tr>
                                             }
                                         }
-
 
                                         <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart)">
                                             <td>
@@ -1971,7 +1996,6 @@
                                             </td>
                                             <td>
                                                 @*@Html.EditorFor(m => m.case_.PlanDate, "DatePicker", new { id = "divCase__PlanDate" })*@
-
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.PlanDate, CaseSolutionFields.PlanDate))
                                                 {
 
@@ -1982,7 +2006,6 @@
                                                 {
                                                     @Html.EditorFor(m => m.case_.PlanDate, "DateReadOnly")
                                                 }
-
                                             </td>
                                         </tr>
                                         <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.WatchDate, CaseSolutionFields.WatchDate)">
@@ -2006,7 +2029,6 @@
                                                 {
                                                     @Html.EditorFor(m => m.case_.WatchDate, "DateReadOnly", new { id = "divCase__WatchDate", @class = "readonlyWatchdate" })
                                                 }
-
                                             </td>
                                         </tr>
                                         <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Verified, CaseSolutionFields.Verified)">

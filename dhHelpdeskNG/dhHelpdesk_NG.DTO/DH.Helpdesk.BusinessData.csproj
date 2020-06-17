@@ -206,6 +206,7 @@
     <Compile Include="Models\Case\ExtendedCaseFormFieldTranslationModel.cs" />
     <Compile Include="Models\Case\ExtendedCaseReportFieldModel.cs" />
     <Compile Include="Models\Case\ExtendedCaseReportModel.cs" />
+    <Compile Include="Models\Case\Input\CasePerformersSearch.cs" />
     <Compile Include="Models\Case\LogFileContent.cs" />
     <Compile Include="Models\Case\Output\CustomerCasesStatus.cs" />
     <Compile Include="Models\Case\Output\CustomerUserCase.cs" />
