@@ -122,7 +122,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             projects = SetNameOriation(projects, isFirstName);
             
-            var users = this.userService.GetCustomerUsers(SessionFacade.CurrentCustomer.Id).MapToSelectList(cs);
+            var users = this.userService.GetCustomerUserInfos(SessionFacade.CurrentCustomer.Id).MapToSelectList(cs);
            
             var viewModel = this.indexProjectViewModelFactory.Create(projects, users, filter);
             return this.View(viewModel);
@@ -222,7 +222,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult NewProject()
         {
             var cs = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
-            var users = this.userService.GetCustomerUsers(SessionFacade.CurrentCustomer.Id);
+            var users = this.userService.GetCustomerUserInfos(SessionFacade.CurrentCustomer.Id);
 
             var viewModel = this.newProjectViewModelFactory.Create(users.MapToSelectList(cs), Guid.NewGuid().ToString(), _globalSettingService);
             return this.View(viewModel);
@@ -235,7 +235,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (!this.ModelState.IsValid)
             {
                 var cs = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
-                var users = this.userService.GetCustomerUsers(SessionFacade.CurrentCustomer.Id);
+                var users = this.userService.GetCustomerUserInfos(SessionFacade.CurrentCustomer.Id);
                 var model = this.newProjectViewModelFactory.Create(users.MapToSelectList(cs), guid, _globalSettingService);
                 model.ProjectEditModel = projectEditModel;
                 return this.View(model);
@@ -450,7 +450,7 @@ namespace DH.Helpdesk.Web.Controllers
             
             var cases = this.caseService.GetProjectCases(SessionFacade.CurrentCustomer.Id, id).ToList();            
             var cs = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
-            var users = this.userService.GetCustomerUsers(SessionFacade.CurrentCustomer.Id);
+            var users = this.userService.GetCustomerUserInfos(SessionFacade.CurrentCustomer.Id);
             var isFirstName = (cs.IsUserFirstLastNameRepresentation == 1);
 
             var viewModel = this.updatedProjectViewModelFactory.Create(

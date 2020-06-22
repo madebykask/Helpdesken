@@ -61,7 +61,7 @@ namespace DH.Helpdesk.Services.Services
         IList<User> GetUsersByUserGroup(int customerId);
         IList<User> GetAdminstratorsForSMS(int customerId, int active = 1);
 
-        IList<CustomerUserInfo> GetCustomerUsers(int customerId);
+        IList<CustomerUserInfo> GetCustomerUserInfos(int customerId);
 
         /// <summary>
         /// Fetches active users with performer flag.
@@ -180,7 +180,7 @@ namespace DH.Helpdesk.Services.Services
 
         List<User> GetActiveUsers();
         List<User> GetAllUsers();
-        List<User> GetCustomerActiveUsers(int customerId);
+        List<User> GetCustomerUsers(int customerId, bool activeOnly = true);
 
         List<CustomerSettings> GetUserCustomersSettings(int userId);
 
@@ -409,7 +409,7 @@ namespace DH.Helpdesk.Services.Services
         }
 
         // perf optimised for dropdowns - returns only basic info
-        public IList<CustomerUserInfo> GetCustomerUsers(int customerId)
+        public IList<CustomerUserInfo> GetCustomerUserInfos(int customerId)
         {
             var query = 
                 _userRepository.GetUsers(customerId)
@@ -1181,7 +1181,7 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        public List<User> GetCustomerActiveUsers(int customerId)
+        public List<User> GetCustomerUsers(int customerId, bool activeOnly = true)
         {
             using (var uow = _unitOfWorkFactory.Create())
             {
@@ -1190,8 +1190,10 @@ namespace DH.Helpdesk.Services.Services
                 var userRep = uow.GetRepository<User>();
 
                 var customers = customerRep.GetAll().GetById(customerId);
-                var customerUsers = customerUserRep.GetAll();               
-                var users = userRep.GetAll().GetActive();
+                var customerUsers = customerUserRep.GetAll();
+                var users = userRep.GetAll();
+                if (activeOnly)
+                    users = users.GetActive();
 
                 return UsersMapper.MapToCustomerUsers(customers, users, customerUsers);
             }

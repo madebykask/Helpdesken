@@ -515,7 +515,7 @@ namespace DH.Helpdesk.Web.Controllers
             var contractcategories = _contractCategoryService.GetContractCategories(customerId).OrderBy(a => a.Name).ToList();
             var suppliers = _supplierService.GetActiveSuppliers(customerId);
             var departments = _departmentService.GetDepartmentsForUser(customerId, SessionFacade.CurrentUser.Id);
-            var users = _userService.GetCustomerActiveUsers(customerId);
+            var users = _userService.GetCustomerUsers(customerId);
 
             var emptyChoice = new SelectListItem() { Selected = true, Text = "", Value = string.Empty };
 
