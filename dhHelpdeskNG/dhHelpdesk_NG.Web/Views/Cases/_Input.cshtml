@@ -1697,7 +1697,8 @@
 
                                                 <td valign="bottom">
                                                     <div style="position:relative;">
-                                                        <span id="performersWithWg" style="display: none;position:absolute; left:45px;">
+                                                        <a href="#" id="performerSearch" data-field="administrator" style="" title="" class="btn"><i class="icon-search"></i></a>
+                                                        <span id="performersWithWg" style="display: none;position:absolute; left:45px; bottom:-2px;">
                                                             <select id="administratorSearchWithWg" data-field="administrator" class="chosen-select">
                                                                 <option value="">&nbsp;</option>
                                                                 @foreach (var e in Model.performersToSearch)
@@ -1706,8 +1707,7 @@
                                                                     <option value="@e.UserId,@e.WorkingGroupId">@option</option>
                                                                 }
                                                             </select>
-                                                        </span>
-                                                        <a href="#" id="performerSearch" data-field="administrator" style="" title="" class="btn"><i class="icon-search"></i></a>
+                                                        </span>                                                        
                                                     </div>
                                                 </td>                                               
                                             }
