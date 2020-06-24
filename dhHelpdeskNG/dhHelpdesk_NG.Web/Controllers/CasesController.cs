@@ -4940,45 +4940,8 @@ namespace DH.Helpdesk.Web.Controllers
             var responsibleUsersList = _userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
 
             var performersListForSearch = _userService.GetAvailablePerformersOrUserId(customerId, null, true);
-            m.performersToSearch = new List<CasePerformersSearch>();
-
-            foreach (var performer in performersListForSearch)
-            {
-                if (performer.WorkingGroups.Count >= 1)
-                {
-                    for (int i = 0; i <= performer.WorkingGroups.Count -1 ; i++)
-                    {
-                        var userWorkingGroupMember = _userService.GetUserWorkingGroupById(performer.Id, performer.WorkingGroups[i].WorkingGroupId).IsMemberOfGroup;
-                        var wgCustomerId = _workingGroupService.GetWorkingGroup(performer.WorkingGroups[i].WorkingGroupId).Customer_Id;
-                        var isWgAcrive = _workingGroupService.GetWorkingGroup(performer.WorkingGroups[i].WorkingGroupId).IsActive;
-                        if (wgCustomerId == customerId && isWgAcrive == 1 && userWorkingGroupMember)
-                        {
-                            var performerToSearch = new CasePerformersSearch
-                            (
-                                performer.Id,
-                                performer.FirstName,
-                                performer.SurName,
-                                _workingGroupService.GetWorkingGroup(performer.WorkingGroups[i].WorkingGroupId).WorkingGroupName,
-                                performer.WorkingGroups[i].WorkingGroupId
-                            );
-                            m.performersToSearch.Add(performerToSearch);
-                        }
-                    }
-                }
-                else
-                {
-                    var performerToSearch = new CasePerformersSearch
-                   (
-                       performer.Id,
-                       performer.FirstName,
-                       performer.SurName,
-                       null,
-                       0
-                   );
-                    m.performersToSearch.Add(performerToSearch);
-                } 
-            }
-
+            m.performersToSearch = cratePerformerforSearchList(customerId, performersListForSearch);
+           
             m.FollowersModel =
                 m.SendToDialogModel =
                     _sendToDialogModelFactory.CreateNewSendToDialogModel(
@@ -6935,7 +6898,49 @@ namespace DH.Helpdesk.Web.Controllers
 
             return CaseFieldStatusType.Editable;
         }
-
+        private List<CasePerformersSearch> cratePerformerforSearchList(int customerId, IList<BusinessData.Models.User.CustomerUserInfo> performers)
+        {
+            var performersToSearch = new List<CasePerformersSearch>();
+            var customerWg = _workingGroupService.GetAllWorkingGroupsForCustomer(customerId);
+            var foundWg = false;
+            foreach(var user in performers)
+            {
+                foundWg = false;
+                foreach (var uwg in user.WorkingGroups)
+                {
+                    if (uwg.IsMemberOfGroup)
+                    {
+                        var wg = customerWg.FirstOrDefault(w => w.Id == uwg.WorkingGroupId && w.IsActive != 0);
+                        if (wg != null)
+                        {
+                            var newRecord = new CasePerformersSearch
+                              (
+                                  user.Id,
+                                  user.FirstName,
+                                  user.SurName,
+                                  wg.WorkingGroupName,
+                                  wg.Id
+                              );
+                            performersToSearch.Add(newRecord);
+                            foundWg = true;
+                        }                       
+                    }
+                }
+                if (!foundWg)
+                {
+                    var newRecord = new CasePerformersSearch
+                               (
+                                   user.Id,
+                                   user.FirstName,
+                                   user.SurName,
+                                   null,
+                                   0
+                               );
+                    performersToSearch.Add(newRecord);
+                }
+            }
+            return performersToSearch;           
+        }
         #endregion
 
         #region --General--
