@@ -832,9 +832,16 @@
             $('#divProductArea ul.dropdown-menu li a').click(function (e) {
                 e.preventDefault();
                 var val = $(this).attr('value');
+                var isMandatory = $('#isMandatory').val();
+                if (isMandatory) {
+                    
+                    $('#divProductArea > ul.dropdown-menu').children().first().hide();
+                }
                 $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
                 var ee = document.getElementById("NewCase_ProductArea_Id");
                 ee.setAttribute('value', val);
+
+                
             });
         }
        
@@ -991,6 +998,10 @@
                             var emptyElement = $('#divProductArea > ul.dropdown-menu').children().first();
                             $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(emptyElement));
                             $("#NewCase_ProductArea_Id").val("").trigger('change');
+                        }
+                        var isMandatory = $('#isMandatory').val();
+                        if (isMandatory) {
+                            $('#divProductArea > ul.dropdown-menu').children().first().hide();
                         }
                         bindProductAreasEvents();
                     }

@@ -164,7 +164,7 @@
                     @*@Html.HiddenFor(model => model.NewCase.Supplier_Id)*@
                     @Html.HiddenFor(model => model.NewCase.Change_Id)
                     @Html.HiddenFor(model => model.NewCase.FinishingDescription)
-                    @Html.HiddenFor(model => model.NewCase.ProductArea_Id)
+                    @*@Html.HiddenFor(model => model.NewCase.ProductArea_Id)*@
 
                     @Html.HiddenFor(model => model.NewCase.IsAbout.ReportedBy)
                     @Html.HiddenFor(model => model.NewCase.IsAbout.Person_Name)
@@ -452,7 +452,7 @@
                                             </div>
                                         </div>
                                     }
-                                    <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()" />
+                                    
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()">
@@ -463,6 +463,14 @@
                                                     <button class="btn btn-default dropdown-toggle hasAttribute" data-toggle="dropdown" standardName="@GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()">
                                                         <span class="caret"></span>
                                                     </button>
+                                                    @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
+                                                    {
+                                                        <input type="hidden" id="isMandatory" value="true" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="hidden" id="isMandatory" value="false" />  
+                                                    }
                                                     <ul class="dropdown-menu">
                                                         <li><a href="#" value="">@Translation.Get("--")</a></li>
                                                         @Html.ProductAreaDropdownButtonString(Model.ProductAreas)
