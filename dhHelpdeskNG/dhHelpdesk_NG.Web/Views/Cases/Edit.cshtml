@@ -26,23 +26,13 @@
 
 @section Styles
 {
-    @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
-    {
-        @Styles.Render("~/cases/dynamic-cases")
-    }
+    @Styles.Render("~/cases/dynamic-cases")
 }
 
 @section Scripts
 {
-    @if (Model.DynamicCase != null || Model.ContainsExtendedCase || Model.HasExtendedComputerUsers)
-    {
-        @Scripts.Render("~/Content/js/iframeResizer")
-    }
-
-    @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
-    {
-        @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
-    }
+    @Scripts.Render(BundleConfig.ScriptNames.IFrameResizer)
+    @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
 
     @Scripts.Render("~/bundles/cases/edit")
 
