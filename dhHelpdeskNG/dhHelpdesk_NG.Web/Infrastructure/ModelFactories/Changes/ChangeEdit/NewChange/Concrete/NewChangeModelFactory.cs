@@ -12,14 +12,10 @@
     {
         #region Fields
 
-        private readonly INewGeneralModelFactory newGeneralModelFactory;
-
-        private readonly INewLogModelFactory newLogModelFactory;
-
-        private readonly INewOrdererModelFactory newOrdererModelFactory;
-
-        private readonly INewRegistrationModelFactory newRegistrationModelFactory;
-		private readonly IGlobalSettingService _globalSettingsService;
+        private readonly INewGeneralModelFactory _newGeneralModelFactory;
+        private readonly INewLogModelFactory _newLogModelFactory;
+        private readonly INewOrdererModelFactory _newOrdererModelFactory;
+        private readonly INewRegistrationModelFactory _newRegistrationModelFactory;
 
 		#endregion
 
@@ -31,11 +27,10 @@
             INewRegistrationModelFactory newRegistrationModelFactory,
             INewLogModelFactory newLogModelFactory)
         {
-            this.newOrdererModelFactory = newOrdererModelFactory;
-            this.newGeneralModelFactory = newGeneralModelFactory;
-            this.newRegistrationModelFactory = newRegistrationModelFactory;
-            this.newLogModelFactory = newLogModelFactory;
-
+            this._newOrdererModelFactory = newOrdererModelFactory;
+            this._newGeneralModelFactory = newGeneralModelFactory;
+            this._newRegistrationModelFactory = newRegistrationModelFactory;
+            this._newLogModelFactory = newLogModelFactory;
         }
 
         #endregion
@@ -49,19 +44,19 @@
                         IList<ChangeStatusEntity> statuses,
 						List<string> fileUploadWhiteList)
         {
-            var orderer = this.newOrdererModelFactory.Create(response.EditSettings.Orderer, response.EditOptions);
-            var general = this.newGeneralModelFactory.Create(
+            var orderer = this._newOrdererModelFactory.Create(response.EditSettings.Orderer, response.EditOptions);
+            var general = this._newGeneralModelFactory.Create(
                                     response.EditSettings.General, 
                                     response.EditOptions,
                                     context,
                                     statuses);
 
-            var registration = this.newRegistrationModelFactory.Create(
+            var registration = this._newRegistrationModelFactory.Create(
                                     temporatyId,
                                     response.EditSettings.Registration, 
                                     response.EditOptions);
 
-            var log = this.newLogModelFactory.Create(temporatyId, response.EditSettings.Log, response.EditOptions);
+            var log = this._newLogModelFactory.Create(temporatyId, response.EditSettings.Log, response.EditOptions);
 
             return new InputModel(true, temporatyId, orderer, general, registration, null, null, null, log, null, context, fileUploadWhiteList);
         }

@@ -24,8 +24,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
         private readonly IConfigurableFieldModelFactory _configurableFieldModelFactory;
 
         private readonly IHistoryModelFactory _historyModelFactory;
-		private readonly IGlobalSettingService _globalSettingService;
-
 		public OrderModelFactory(
                 IConfigurableFieldModelFactory configurableFieldModelFactory, 
                 IHistoryModelFactory historyModelFactory)

@@ -12,9 +12,6 @@ namespace DH.Helpdesk.Web.Models.Contract
 
     public class ContractsSettingViewModel
     {
-        private Customer customer;
-
-
         public ContractsSettingViewModel()
         {
             Languages = new List<SelectListItem>();

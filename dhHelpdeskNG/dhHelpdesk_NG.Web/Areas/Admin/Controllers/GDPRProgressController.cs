@@ -10,7 +10,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
     public class GDPRProgressController : Controller  // keep Controller as a base class for faster performance
     {
         private readonly IGDPRTasksService _gdprTasksService;
-        private readonly IGDPROperationsService _gdprOperationsService;
 
         #region ctor()
 

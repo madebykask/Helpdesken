@@ -25,7 +25,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.Invoice
 
     public static class InvoiceArticleProductAreaFilterMapper
     {
-        private static string _SEPARATOR = ",";
         public static InvoiceArticleProductAreaSelectedFilter MapToSelectedFilter(this InvoiceArticleProductAreaFilterJSModel articleAndProdAreaFilter)
         {
             var ret = new InvoiceArticleProductAreaSelectedFilter();
