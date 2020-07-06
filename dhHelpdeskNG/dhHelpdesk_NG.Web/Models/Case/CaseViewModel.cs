@@ -268,7 +268,7 @@ namespace DH.Helpdesk.Web.Models.Case
         /// <summary>
         /// Available  "Performs and working groups to search" for the case
         /// </summary>
-        public List<CasePerformersSearch> performersToSearch { get; set;}
+        public List<CasePerformersSearch> PerformersToSearch { get; set;}
 
         /// <summary>
         /// user id for "Responsible" field

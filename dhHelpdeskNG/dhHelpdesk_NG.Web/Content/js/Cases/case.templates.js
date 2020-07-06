@@ -703,7 +703,7 @@ var ApplyTemplate = function (data, doOverwrite) {
 
     if (!isNullOrEmpty(data.CausingPartId)) {
         val = data.CausingPartId || '';
-        el = $("#case__CausingPartId").chosen();
+        el = $("#case__CausingPartId");
         SetSingleSelectValueIfElVisible(el, val, cfg);
     }
 
@@ -1179,7 +1179,7 @@ function GetTemplateData(id) {
             }
 
             var overwriteDirectly = caseTemplate["OverWritePopUp"];            
-            if (overwriteDirectly != undefined && overwriteDirectly != null && overwriteDirectly != 0)
+            if (overwriteDirectly != undefined && overwriteDirectly !== 0)
                 window.ApplyTemplate(caseTemplate, true);
             else {
                 if (showOverwriteWarning) {
@@ -1241,7 +1241,7 @@ function isFieldVisible($el) {
     const $row = $el.closest('tr');
     if ($row.length && $row[0].style.display === 'none') return false;
 
-    const style = getComputedStyle($el[0]);
+    const style = getComputedStyle($el.data('chosen') ? $el.data('chosen').container[0] : $el[0]);
     if (style.display === 'none') return false;
     if (style.visibility !== 'visible') return false;
     

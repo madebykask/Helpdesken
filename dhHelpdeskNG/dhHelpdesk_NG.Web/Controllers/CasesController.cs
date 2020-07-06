@@ -1333,7 +1333,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var caseLockViewModel = GetCaseLockModel(id, userId, true, activeTab);
 
                 //todo: check if GetCaseById can be used in model!
-                int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : _caseService.GetCaseCustomerId(id);
+                var customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : _caseService.GetCaseCustomerId(id);
 
                 var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
                 m = this.GetCaseInputViewModel(userId, customerId, id, caseLockViewModel, caseFieldSettings, redirectFrom, backUrl, null, null, updateState);
@@ -1368,7 +1368,6 @@ namespace DH.Helpdesk.Web.Controllers
                     m.AccountId = account.Item1;
                     m.AccountActivityId = account.Item2;
                 }
-
 
                 // User has not access to case
                 if (m.EditMode == AccessMode.NoAccess)
@@ -4939,7 +4938,7 @@ namespace DH.Helpdesk.Web.Controllers
             var responsibleUsersList = _userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
 
             var performersListForSearch = _userService.GetAvailablePerformersOrUserId(customerId, null, true);
-            m.performersToSearch = cratePerformerforSearchList(customerId, performersListForSearch);
+            m.PerformersToSearch = createPerformerforSearchList(customerId, performersListForSearch);
            
             m.FollowersModel =
                 m.SendToDialogModel =
@@ -6897,7 +6896,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             return CaseFieldStatusType.Editable;
         }
-        private List<CasePerformersSearch> cratePerformerforSearchList(int customerId, IList<BusinessData.Models.User.CustomerUserInfo> performers)
+        private List<CasePerformersSearch> createPerformerforSearchList(int customerId, IList<BusinessData.Models.User.CustomerUserInfo> performers)
         {
             var performersToSearch = new List<CasePerformersSearch>();
             var customerWg = _workingGroupService.GetAllWorkingGroupsForCustomer(customerId);
@@ -6938,7 +6937,11 @@ namespace DH.Helpdesk.Web.Controllers
                     performersToSearch.Add(newRecord);
                 }
             }
-            return performersToSearch;           
+            return performersToSearch
+                .OrderBy(p => p.FirstName)
+                .ThenBy(p => p.LastName)
+                .ThenBy(p => p.WorkingGroupName)
+                .ToList();
         }
         #endregion
 

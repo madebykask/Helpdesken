@@ -1701,7 +1701,7 @@
                                                         <span id="performersWithWg" style="display: none;position:absolute; left:45px; bottom:-2px;">
                                                             <select id="administratorSearchWithWg" data-field="administrator" class="chosen-select">
                                                                 <option value="">&nbsp;</option>
-                                                                @foreach (var e in Model.performersToSearch)
+                                                                @foreach (var e in Model.PerformersToSearch)
                                                                 {
                                                                     var option = e.FirstName + " " + e.LastName + " - " + e.WorkingGroupName;
                                                                     <option value="@e.UserId,@e.WorkingGroupId">@option</option>
