@@ -2,22 +2,8 @@
 import { ComponentCommService, PopulateSectionParams, EnableSectionParams, AddSectionInstanceParams, DeleteSectionInstanceParams } from '../services/component-comm.service';
 import { SectionModel, SectionInstanceModel, FieldModelBase, FormControlType } from '../models/form.model';
 import { SectionTemplateModel, SectionType, BaseControlTemplateModel } from '../models/template.model';
-import { LogService } from '../services/log.service';
-import { ExtendedCaseTextBoxComponent } from './controls/ec-textbox.component';
-import { ExtendedUnknowControlComponent } from './controls/ec-unknown.component';
-import { ExtendedCaseLabelComponent } from './controls/ec-label.component';
-import { ExtendedCaseTextBoxSearchComponent } from './controls/ec-textbox-search.component';
-import { ExtendedCaseTextAreaComponent } from './controls/ec-textarea.component';
-import { ExtendedCaseCheckboxComponent } from './controls/ec-checkbox.component';
-import { ExtendedCaseDateComponent } from './controls/ec-date.component';
-import { ExtendedCaseDropdownComponent } from './controls/ec-dropdown.component';
-import { ExtendedCaseRadioComponent } from './controls/ec-radio.component';
-import { ExtendedCaseCheckboxListComponent } from './controls/ec-checkbox-list.component';
-import { ExtendedCaseMultiselectComponent } from './controls/ec-multiselect.component';
-import { ExtendedCaseReviewComponent } from './controls/ec-review.component';
-import { ExtendedCaseHtmlComponent } from './controls/ec-html.component';
-import { DigestResult } from '../models/digest.model';
 import { SubscriptionManager } from '../shared/subscription-manager';
+import { ExtendedCaseTextBoxComponent, ExtendedCaseLabelComponent, ExtendedCaseTextBoxSearchComponent, ExtendedCaseTextAreaComponent, ExtendedCaseDropdownComponent, ExtendedCaseMultiselectComponent, ExtendedCaseDateComponent, ExtendedCaseCheckboxListComponent, ExtendedCaseCheckboxComponent, ExtendedCaseRadioComponent, ExtendedCaseReviewComponent, ExtendedCaseHtmlComponent, ExtendedUnknowControlComponent } from './controls';
 
 
 @Component({
@@ -53,7 +39,7 @@ export class ExtendedCaseSectionComponent implements OnInit {
         this.componentCommService.raiseEnableSectionEvent(args);
     }
 
-    getFormField(sectionIndex:number, controlId: string): FieldModelBase {
+    getFormField(sectionIndex: number, controlId: string): FieldModelBase {
         return this.sectionModel.instances[sectionIndex].fields[controlId];
     }
 
@@ -77,13 +63,13 @@ export class ExtendedCaseSectionComponent implements OnInit {
         return actionText;
     }
 
-    showActionsPanel():boolean {
+    showActionsPanel(): boolean {
         return this.sectionTemplate.multiSectionAction && this.sectionTemplate.multiSectionAction.allowMultipleSections;
     }
 
-    showDeleteSectionInstanceButton(index:number) : boolean {
+    showDeleteSectionInstanceButton(index: number): boolean {
         return this.sectionTemplate.multiSectionAction &&
-            this.sectionTemplate.multiSectionAction.allowMultipleSections && 
+            this.sectionTemplate.multiSectionAction.allowMultipleSections &&
             index > 0;
     }
 

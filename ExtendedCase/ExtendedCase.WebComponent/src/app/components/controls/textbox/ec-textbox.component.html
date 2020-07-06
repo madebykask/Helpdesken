@@ -1,0 +1,36 @@
+﻿<ng-container [formGroup]="form" *ngIf="!fieldModel.hidden">
+    <div class="col-md-6 control-label" *ngIf="fieldTemplate.isLabelHtml" >
+        <span [innerHtml]="fieldTemplate.label"></span>
+        <span [class.required-invalid]="fieldModel.control.invalid">{{ isRequiredLabel }}</span>
+    </div>
+    <label [attr.for]="fieldModel.getUiPath()" class="col-md-6 control-label" *ngIf="!fieldTemplate.isLabelHtml">
+        {{ fieldTemplate.label }}<span [class.required-invalid]="fieldModel.control.invalid">{{ isRequiredLabel }}</span>
+    </label>
+    <div class="col-md-6" [ngSwitch]="subtype">
+        <div *ngSwitchCase="controlType.type.Amount" [class.input-group]="fieldTemplate.addonText.length > 0">
+            <input [mask]="{ type: maskTypes.Decimal }" [formControlName]="fieldTemplate.id" [id]="fieldModel.getUiPath()" class="form-control">
+            <div *ngIf="fieldTemplate.addonText.length > 0" class="input-group-addon" aria-hidden="true">{{ fieldTemplate.addonText }}</div>
+        </div>
+        <div *ngSwitchCase="controlType.type.Percentage" class="input-group">
+            <input [mask]="{ type: maskTypes.Percentage }" [formControlName]="fieldTemplate.id" [id]="fieldModel.getUiPath()" class="form-control">
+            <div class="input-group-addon" aria-hidden="true">%</div>
+        </div>
+        <div *ngSwitchCase="controlType.type.Unit" [class.input-group]="fieldTemplate.addonText.length > 0">
+            <input [mask]="{ type: maskTypes.NumbersOnly }" [formControlName]="fieldTemplate.id" [id]="fieldModel.getUiPath()" class="form-control">
+            <div *ngIf="fieldTemplate.addonText.length > 0" class="input-group-addon" aria-hidden="true">{{ fieldTemplate.addonText }}</div>
+        </div>
+        <div *ngSwitchDefault [class.input-group]="fieldTemplate.addonText.length > 0">
+            <input [formControlName]="fieldTemplate.id" [id]="fieldModel.getUiPath()" class="form-control">
+            <div *ngIf="fieldTemplate.addonText.length > 0" class="input-group-addon" aria-hidden="true">{{ fieldTemplate.addonText }}</div>
+        </div>
+        <div *ngSwitchCase="controlType.type.Number" [class.input-group]="fieldTemplate.addonText.length > 0" class="control-number">
+            <input [mask]="{ type: maskTypes.NumbersOnly }" [formControlName]="fieldTemplate.id" [id]="fieldModel.getUiPath()" class="form-control">
+            <div *ngIf="fieldTemplate.addonText.length > 0" class="input-group-addon" aria-hidden="true">{{ fieldTemplate.addonText }}</div>
+        </div>
+        <div *ngSwitchCase="controlType.type.AltNumber" class="control-number">
+            <input type="number" min="0" step="1" [formControlName]="fieldTemplate.id" [id]="fieldModel.getUiPath()" class="form-control altnumber">
+        </div>
+        <validation-error [control]="fieldModel.control"></validation-error>
+        <validation-warnings [warnings]="fieldModel.warnings"></validation-warnings>
+    </div>
+</ng-container> 
