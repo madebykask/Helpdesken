@@ -62,7 +62,7 @@ export class StorageService {
     //  global data
     private getGlobalData(): any {
         let globalData: any = null;
-        let val = this.getSessionItem('GlobalData');
+        let val = this.getSessionItem(this.globalDataKey);
         if (val) {
             try {
                 globalData = JSON.parse(val);
@@ -76,7 +76,7 @@ export class StorageService {
 
     private setGlobalData(data: any) {
         let val = JSON.stringify(data);
-        this.setSessionItem('GlobalData', val);
+        this.setSessionItem(this.globalDataKey, val);
     }
 
     // Local storage

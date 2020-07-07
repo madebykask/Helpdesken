@@ -12,6 +12,7 @@ using ExtendedCase.Logic;
 using ExtendedCase.Logic.Di;
 using ExtendedCase.WebApi.Di;
 using ExtendedCase.WebApi.ExceptionHandling;
+using ExtendedCase.WebApi.Infrastructure.Cors;
 
 namespace ExtendedCase.WebApi
 {
@@ -81,8 +82,9 @@ namespace ExtendedCase.WebApi
 
         private static void SetCors(HttpConfiguration config)
         {
-            var corsAttr = new EnableCorsAttribute("*", "*", "*");
-            config.EnableCors(corsAttr);
+            //var corsAttr = new EnableCorsAttribute("*", "*", "*");
+            config.SetCorsPolicyProviderFactory(new WebApiCorsPolicyProviderFactory());
+            config.EnableCors();
         }
     }
 }

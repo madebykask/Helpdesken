@@ -15,7 +15,7 @@ export class ExtendedCaseTextAreaComponent extends BaseControl implements OnInit
     @Input() form: FormGroup;
 
     constructor(componentCommService: ComponentCommService,
-        private changeDetector: ChangeDetectorRef) {
+        changeDetector: ChangeDetectorRef) {
         super(componentCommService, changeDetector);
     }
 

@@ -31,7 +31,7 @@ export class ExtendedCaseTextBoxSearchComponent extends BaseControl implements O
 
     constructor(componentCommService: ComponentCommService,
         private formControlsManager: FormControlsManagerService,
-        private logService: LogService, private changeDetector: ChangeDetectorRef) {
+        private logService: LogService, changeDetector: ChangeDetectorRef) {
         super(componentCommService, changeDetector);
     }
 

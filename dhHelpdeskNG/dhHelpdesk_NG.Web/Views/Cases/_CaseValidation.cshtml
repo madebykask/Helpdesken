@@ -8,6 +8,7 @@
     window.parameters = {
         isCaseLocked: '@Model.CaseLock.IsLocked',
         currentCaseId: '@Model.case_.Id',
+        currentCaseGuid: '@Model.case_.CaseGUID',
         currentCaseNumber: '@Model.case_.CaseNumber',
         customerId: '@Model.case_.Customer_Id',
         parentCaseId: '@(Model.ParentCaseInfo != null ? Model.ParentCaseInfo.ParentId.ToString() : "null")',
@@ -119,6 +120,7 @@
         caseInitValues: {
             AdministratorId: '@Model.Performer_Id',
             CaseId: '@Model.case_.Id',
+            CaseKey: '@Model.CaseKey',
             CustomerId: '@Model.case_.Customer_Id',
             ReportedBy: @Html.Raw(Json.Encode(Model.case_.ReportedBy)),
             PersonsName: @Html.Raw(Json.Encode(Model.case_.PersonsName)),

@@ -15,7 +15,7 @@ export class ExtendedCaseCheckboxListComponent extends BaseControl implements On
     @Input() form: FormGroup;
 
     constructor(componentCommService: ComponentCommService,
-        private changeDetector: ChangeDetectorRef) {
+        changeDetector: ChangeDetectorRef) {
         super(componentCommService, changeDetector);
     }
 

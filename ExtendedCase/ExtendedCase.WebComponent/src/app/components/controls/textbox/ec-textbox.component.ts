@@ -19,7 +19,7 @@ export class ExtendedCaseTextBoxComponent extends BaseControl implements OnInit,
     controlType = new FormControlType(); // to  use in html static string
 
     constructor(componentCommService: ComponentCommService,
-        private changeDetector: ChangeDetectorRef) {
+        changeDetector: ChangeDetectorRef) {
         super(componentCommService, changeDetector);
     }
 

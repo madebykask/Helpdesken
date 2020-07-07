@@ -204,6 +204,7 @@ window.extendedCasePage =
             formParameters.currentUser = self.CurrentUser;
             formParameters.userGuid = '';
             formParameters.caseId = self.Case_Field_Init_Values.CaseId;
+            formParameters.caseGuid = self.Case_Field_Init_Values.caseGuid;
             formParameters.applicationType = self.ApplicationType;
             formParameters.useInitiatorAutocomplete = self.UseInitiatorAutocomplete;
 

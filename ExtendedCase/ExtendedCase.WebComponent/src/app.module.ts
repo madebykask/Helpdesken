@@ -36,6 +36,7 @@ import { ErrorHandlingService } from './app/services/error-handling.service';
 import { ClientLogApiService } from './app/services/data/client-log-api.service';
 import { ClipboardModule } from 'ngx-clipboard';
 
+import { FileUploadModule } from 'ng2-file-upload';
 import { createCustomElement } from '@angular/elements';
 import { DynamicModule } from 'ng-dynamic-component';
 
@@ -48,7 +49,7 @@ import { ExtendedCaseTextBoxComponent, ExtendedUnknowControlComponent, ExtendedC
       ExtendedCaseTextBoxSearchComponent, ExtendedCaseTextAreaComponent, ExtendedCaseDropdownComponent,
       ExtendedCaseMultiselectComponent, ExtendedCaseDateComponent, ExtendedCaseCheckboxListComponent,
       ExtendedCaseCheckboxComponent, ExtendedCaseRadioComponent, ExtendedCaseReviewComponent, ExtendedCaseHtmlComponent,
-      ExtendedCaseReviewComponentEx } from './app/components/controls';
+      ExtendedCaseReviewComponentEx, ExtendedCaseFileUploadComponent } from './app/components/controls';
 
 @NgModule({
     imports: [BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule, ReactiveFormsModule,
@@ -59,17 +60,19 @@ import { ExtendedCaseTextBoxComponent, ExtendedUnknowControlComponent, ExtendedC
         RouterModule.forRoot(routes),
         SelectModule,
         ClipboardModule,
+        FileUploadModule,
         DynamicModule.withComponents([ExtendedCaseTextBoxComponent, ExtendedUnknowControlComponent, ExtendedCaseLabelComponent,
             ExtendedCaseTextBoxSearchComponent, ExtendedCaseTextAreaComponent, ExtendedCaseDropdownComponent,
             ExtendedCaseMultiselectComponent, ExtendedCaseDateComponent, ExtendedCaseCheckboxListComponent,
-            ExtendedCaseCheckboxComponent, ExtendedCaseRadioComponent, ExtendedCaseReviewComponent, ExtendedCaseHtmlComponent])
+            ExtendedCaseCheckboxComponent, ExtendedCaseRadioComponent, ExtendedCaseReviewComponent, ExtendedCaseHtmlComponent,
+            ExtendedCaseFileUploadComponent])
         ],
     declarations: [ExtendedCaseElementComponent, ExtendedCaseComponent, ExtendedCaseFormsListComponent, ExtendedCaseTabComponent,
         ExtendedCaseSectionComponent, ExtendedCaseReviewSectionComponent,
         ExtendedCaseTextBoxComponent, ExtendedCaseLabelComponent, ExtendedCaseTextBoxSearchComponent,
         ExtendedCaseTextAreaComponent, ExtendedCaseCheckboxComponent, ExtendedCaseDateComponent,
         ExtendedCaseDropdownComponent, ExtendedCaseRadioComponent, AlertComponent, ProgressComponent,
-        ExtendedCaseCheckboxListComponent, ExtendedCaseMultiselectComponent, ExtendedCaseReviewComponent,
+        ExtendedCaseCheckboxListComponent, ExtendedCaseFileUploadComponent, ExtendedCaseMultiselectComponent, ExtendedCaseReviewComponent,
         ExtendedCaseReviewComponentEx, ExtendedCaseReviewSectionInstanceComponent, ExtendedCaseHtmlComponent, ValidationErrorComponent,
         ValidationWarningComponent, Mask, TrimValueAccessor, ToNGSelectOptions, AlertsFilter, SafeHtml, SafeStyle,
         ExtendedUnknowControlComponent],

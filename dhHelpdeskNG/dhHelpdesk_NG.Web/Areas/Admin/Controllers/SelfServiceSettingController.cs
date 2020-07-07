@@ -158,6 +158,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             int[] selectedProductAreas,
             int[] selectedInitiators)
         {
+            selectedInitiators = selectedInitiators ?? new int[]{};
             var customerToSave = this._customerService.GetCustomer(id);
             customerToSave.PasswordRequiredOnExternalPage = vmodel.Customer.PasswordRequiredOnExternalPage;
             customerToSave.ShowBulletinBoardOnExtPage = vmodel.Customer.ShowBulletinBoardOnExtPage;

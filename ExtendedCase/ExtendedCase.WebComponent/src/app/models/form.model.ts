@@ -384,6 +384,7 @@ export class FormControlType {
     static Number = 'number';
     static AltNumber = 'altnumber';
     static Html = 'html';
+    static FileUpload = 'fileupload';
 
-    type = FormControlType;// workaroud to  use in html template
+    type = FormControlType; // workaroud to  use in html template
 }

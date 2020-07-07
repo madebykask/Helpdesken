@@ -3,7 +3,7 @@ import { ComponentCommService, PopulateSectionParams, EnableSectionParams, AddSe
 import { SectionModel, SectionInstanceModel, FieldModelBase, FormControlType } from '../models/form.model';
 import { SectionTemplateModel, SectionType, BaseControlTemplateModel } from '../models/template.model';
 import { SubscriptionManager } from '../shared/subscription-manager';
-import { ExtendedCaseTextBoxComponent, ExtendedCaseLabelComponent, ExtendedCaseTextBoxSearchComponent, ExtendedCaseTextAreaComponent, ExtendedCaseDropdownComponent, ExtendedCaseMultiselectComponent, ExtendedCaseDateComponent, ExtendedCaseCheckboxListComponent, ExtendedCaseCheckboxComponent, ExtendedCaseRadioComponent, ExtendedCaseReviewComponent, ExtendedCaseHtmlComponent, ExtendedUnknowControlComponent } from './controls';
+import { ExtendedCaseTextBoxComponent, ExtendedCaseLabelComponent, ExtendedCaseTextBoxSearchComponent, ExtendedCaseTextAreaComponent, ExtendedCaseDropdownComponent, ExtendedCaseMultiselectComponent, ExtendedCaseDateComponent, ExtendedCaseCheckboxListComponent, ExtendedCaseCheckboxComponent, ExtendedCaseRadioComponent, ExtendedCaseReviewComponent, ExtendedCaseHtmlComponent, ExtendedUnknowControlComponent, ExtendedCaseFileUploadComponent } from './controls';
 
 
 @Component({
@@ -125,7 +125,8 @@ export class ExtendedCaseSectionComponent implements OnInit {
                 return ExtendedCaseReviewComponent;
             case FormControlType.Html:
                 return ExtendedCaseHtmlComponent;
-
+            case FormControlType.FileUpload:
+              return ExtendedCaseFileUploadComponent;
             default:
                 return ExtendedUnknowControlComponent;
         }

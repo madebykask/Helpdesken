@@ -19,6 +19,7 @@ namespace ExtendedCase.WebApi.Di
             builder.RegisterType<CustomDataSourceService>().As<ICustomDataSourceService>().InstancePerRequest();
             builder.RegisterType<HelpdeskCaseSevice>().As<IHelpdeskCaseSevice>().InstancePerRequest();
             builder.RegisterType<ClientLogService>().As<IClientLogService>().InstancePerRequest();
+            builder.RegisterType<GlobalSettingsService>().As<IGlobalSettingsService>().InstancePerRequest();
 
             //options providers
             builder.RegisterType<OptionDataSourceProviderFactory>().As<IOptionDataSourceProviderFactory>().InstancePerRequest();

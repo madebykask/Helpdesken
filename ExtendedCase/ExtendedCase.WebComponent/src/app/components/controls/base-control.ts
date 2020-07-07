@@ -11,8 +11,9 @@ export class BaseControl {
     protected isRequiredLabel = '';
     private subscription: Subscription;
 
-    constructor(protected componentCommService: ComponentCommService, changeDetector: ChangeDetectorRef = null) {
+    constructor(protected componentCommService: ComponentCommService, protected changeDetector: ChangeDetectorRef = null) {
         const obs$ = merge(this.componentCommService.validationModeChange$, this.componentCommService.digestCompletedSubject$);
+
         this.subscription = obs$.subscribe(() => {
             this.isRequiredLabel = this.getLabel();
             if (changeDetector) { changeDetector.markForCheck(); }

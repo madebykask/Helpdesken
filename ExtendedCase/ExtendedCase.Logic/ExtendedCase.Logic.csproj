@@ -44,6 +44,7 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -58,6 +59,7 @@
     <Compile Include="Mapping\Profiles\EntityToModelMappingProfile.cs" />
     <Compile Include="Mapping\Profiles\ModelToEntitiesMappingProfile.cs" />
     <Compile Include="Services\ClientLogService.cs" />
+    <Compile Include="Services\GlobalSettingsService.cs" />
     <Compile Include="Services\HelpdeskCaseSevice.cs" />
     <Compile Include="Services\Mappers\EntitiesToModelMapper.cs" />
     <Compile Include="Services\Mappers\ModelToEntitiesMapper.cs" />
@@ -76,6 +78,7 @@
     <Compile Include="Services\CustomDataSourceService.cs" />
     <Compile Include="Services\FormService.cs" />
     <Compile Include="Services\OptionDataSourceService.cs" />
+    <Compile Include="Utils\Files\TemporaryFilesCache.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

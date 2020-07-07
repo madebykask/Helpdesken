@@ -285,6 +285,7 @@ EditPage.prototype.loadExtendedCase = function () {
     formParameters.languageId = self.Current_EC_LanguageId;
     formParameters.extendedCaseGuid = self.Current_EC_Guid;
     formParameters.caseId = window_params.currentCaseId;
+    formParameters.caseGuid = window_params.caseGuid;
     formParameters.currentUser = window_params.currentUserName;
     formParameters.applicationType = window_params.applicationType;
 

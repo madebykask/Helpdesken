@@ -30,7 +30,7 @@ export class ExtendedCaseDateComponent extends BaseControl implements OnInit, Af
     parentSelectors: Array<any>;
 
     constructor(componentCommService: ComponentCommService, public element: ElementRef,
-            private changeDetector: ChangeDetectorRef, @Inject(AppConfig) private config: IAppConfig) {
+            changeDetector: ChangeDetectorRef, @Inject(AppConfig) private config: IAppConfig) {
             super(componentCommService, changeDetector);
     }
 
