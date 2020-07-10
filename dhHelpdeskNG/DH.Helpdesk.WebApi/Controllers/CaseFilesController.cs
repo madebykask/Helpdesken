@@ -112,13 +112,10 @@ namespace DH.Helpdesk.WebApi.Controllers
 					throw new ArgumentException($"File extension not valid for upload (not defined in whitelist): {extension}");
 				}
 
-				var counter = 1;
-				var newFileName = fileName;
-				while (_userTemporaryFilesStorage.FileExists(fileName, caseKey.ToString()))
-				{
-					newFileName = $"{Path.GetFileNameWithoutExtension(fileName)} ({counter++}){Path.GetExtension(fileName)}";
-				}
-				fileName = newFileName;
+                if (_userTemporaryFilesStorage.FileExists(fileName, caseKey.ToString()))
+                {
+                    fileName = $"{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")} - {fileName}";
+                }
 
 				_userTemporaryFilesStorage.AddFile(fileBytes, fileName, caseKey.ToString());
 				return Ok(fileName);
@@ -160,13 +157,10 @@ namespace DH.Helpdesk.WebApi.Controllers
 				}
 
 				//fix file name if exists
-				var counter = 1;
-				var newFileName = fileName;
-				while (_caseFileService.FileExists(caseId, newFileName))
+				if (_caseFileService.FileExists(caseId, fileName))
 				{
-					newFileName = $"{Path.GetFileNameWithoutExtension(fileName)} ({counter++}){Path.GetExtension(fileName)}";
-				}
-				fileName = newFileName;
+                    fileName = $"{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")} - {fileName}";
+                }
 
 				var caseFileDto = new CaseFileDto(
 					fileBytes,

@@ -6,7 +6,7 @@ import { TabTemplateModel, SectionTemplateModel, SectionType } from '../models/t
 @Component({
     selector: 'ec-tab',
     templateUrl: './ec-tab.component.html',
-    //changeDetection: ChangeDetectionStrategy.OnPush
+    // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExtendedCaseTabComponent {
     @Input() tabTemplate: TabTemplateModel;
@@ -14,8 +14,8 @@ export class ExtendedCaseTabComponent {
     @Input() formModel: FormModel;
 
     constructor(private componentCommService: ComponentCommService) {
-        //private changeDetector: ChangeDetectorRef) {
-        //changeDetector.detach();
+        // private changeDetector: ChangeDetectorRef) {
+        // changeDetector.detach();
     }
 
     isReviewSection(section: SectionTemplateModel) {

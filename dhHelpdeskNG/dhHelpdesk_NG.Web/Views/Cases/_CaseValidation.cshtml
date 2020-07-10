@@ -120,6 +120,7 @@
         caseInitValues: {
             AdministratorId: '@Model.Performer_Id',
             CaseId: '@Model.case_.Id',
+            CaseGuid: '@Model.case_.CaseGUID.ToString()',
             CaseKey: '@Model.CaseKey',
             CustomerId: '@Model.case_.Customer_Id',
             ReportedBy: @Html.Raw(Json.Encode(Model.case_.ReportedBy)),
@@ -144,6 +145,7 @@
             Caption: '@Html.Raw(Json.Encode(Model.case_.Caption))',
             InventoryType: @Html.Raw(Json.Encode(Model.case_.InventoryType)),
             InventoryLocation: @Html.Raw(Json.Encode(Model.case_.InventoryLocation)),
+            CaseFiles: '@Html.Raw(Model.CaseFilesModel.Files != null ? Json.Encode(Model.CaseFilesModel.Files.Select(f => new { f.Id, f.FileName })) : "")'
         },
 
         casesScopeInitParameters: {

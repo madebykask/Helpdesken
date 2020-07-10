@@ -1,6 +1,7 @@
 import { FormParametersModel } from './form-parameters.model';
 import { FormFieldPathModel } from './form-field-path.model';
 import * as cm from '../utils/common-methods';
+import { CaseFileModel } from './case-file.model';
 
 export class ProxyModel {
     tabs: any;
@@ -98,6 +99,8 @@ export class ProxyControl {
 
 export class FormInfo {
     caseId: number;
+    caseGuid: string;
+    caseNumber: string;
     userRole: number;
     caseStatus: number;
     customerId: number;
@@ -108,6 +111,7 @@ export class FormInfo {
     isCaseLocked: boolean;
     applicationType: string;
     useInitiatorAutocomplete: boolean;
+    caseFiles: CaseFileModel[];
 
     constructor(formParameters: FormParametersModel) {
         this.userRole = formParameters.assignmentParameters ? cm.parseIntOrDefault(formParameters.assignmentParameters.userRole, 0) : 0;
@@ -121,5 +125,8 @@ export class FormInfo {
         this.isCaseLocked = formParameters.isCaseLocked || false;
         this.applicationType = formParameters.applicationType || '';
         this.useInitiatorAutocomplete = formParameters.useInitiatorAutocomplete != null ? formParameters.useInitiatorAutocomplete : true;
+        this.caseGuid = formParameters.caseGuid || '';
+        this.caseNumber = formParameters.caseNumber || '';
+        this.caseFiles = formParameters.caseFiles || new Array<CaseFileModel>();
     }
 }

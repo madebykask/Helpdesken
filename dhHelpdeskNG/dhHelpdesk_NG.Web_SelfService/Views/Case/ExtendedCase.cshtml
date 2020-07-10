@@ -111,7 +111,8 @@
         caseInitValues: {
             AdministratorId: '@Model.CaseDataModel.Performer_User_Id',
             CaseId: '@Model.CaseDataModel.Id',
-            caseGuid: '@Model.CaseDataModel.CaseGUID.ToString()',
+            CaseGuid: '@Model.CaseDataModel.CaseGUID.ToString()',
+            CaseNumber: '@Model.CaseDataModel.CaseNumber.ToString()',
             CustomerId: '@Model.CaseDataModel.Customer_Id',
             ReportedBy: @Html.Raw(Json.Encode(Model.CaseDataModel.ReportedBy)),
             PersonsName: @Html.Raw(Json.Encode(Model.CaseDataModel.PersonsName)),
@@ -133,6 +134,7 @@
             CostCentre: '@Model.CaseDataModel.CostCentre',
             InventoryType: @Html.Raw(Json.Encode(Model.CaseDataModel.InventoryType)),
             InventoryLocation: @Html.Raw(Json.Encode(Model.CaseDataModel.InventoryLocation)),
+            /*CaseFiles: Model.CaseDataModel.CaseFiles*/
         },
 
         extendedCaseGuid: '@(Model.ExtendedCaseDataModel.ExtendedCaseGuid)',

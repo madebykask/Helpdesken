@@ -20,6 +20,9 @@ namespace ExtendedCase.WebApi.Di
             builder.RegisterType<HelpdeskCaseSevice>().As<IHelpdeskCaseSevice>().InstancePerRequest();
             builder.RegisterType<ClientLogService>().As<IClientLogService>().InstancePerRequest();
             builder.RegisterType<GlobalSettingsService>().As<IGlobalSettingsService>().InstancePerRequest();
+            builder.RegisterType<CaseFileService>().As<ICaseFileService>().InstancePerRequest();
+            builder.RegisterType<FilesStorageService>().As<IFilesStorageService>().InstancePerRequest();
+            builder.RegisterType<SettingsService>().As<ISettingsService>().InstancePerRequest();
 
             //options providers
             builder.RegisterType<OptionDataSourceProviderFactory>().As<IOptionDataSourceProviderFactory>().InstancePerRequest();

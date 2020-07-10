@@ -5,6 +5,7 @@
 
                 <ec-section *ngIf="section.column === column && !isReviewSection(section)"
                             [sectionTemplate]="section"
+                            [formInfo]="formModel.proxyModel.formInfo"
                             [sectionModel]="tabModel.sections[section.id]" 
                             [attr.name]="section.id"></ec-section>
 

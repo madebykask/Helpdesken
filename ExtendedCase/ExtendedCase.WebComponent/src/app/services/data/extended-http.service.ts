@@ -23,12 +23,20 @@ export class ExtendedHttpService {
                 catchError((error: any) => throwError(error))
             );
     }
+
     postJsonNoContent(url: string, data: any, headers?: any): Observable<Object> {
         // fixed issue https://github.com/angular/angular/issues/18680 - remove after fix
         return this.http
             .post(url, JSON.stringify(data), { headers: this.getHeaders(headers), responseType: 'text' }).pipe(
                 catchError((error: any) => throwError(error))
             );
+    }
+
+    deleteJson<TResponse>(url: string, headers?: any): Observable<TResponse> {
+      return this.http
+          .delete<TResponse>(url, { headers: this.getHeaders(headers) }).pipe(
+              catchError((error: any) => throwError(error))
+          );
     }
 
     private getHeaders(headers?: any): HttpHeaders {

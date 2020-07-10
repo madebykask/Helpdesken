@@ -842,8 +842,8 @@ var ApplyTemplate = function (data, doOverwrite) {
         setTimeout(function () {
             EditPage.prototype.Current_EC_FormId = lastECId;
             //debug Mode
-            // EditPage.prototype.Current_EC_Path = "http://localhost:8099" + lastECPath;
             EditPage.prototype.Current_EC_Path = lastECPath;
+            //EditPage.prototype.Current_EC_Path = "http://localhost:8099";
             EditPage.prototype.Current_EC_Guid = lastECGuid;
             EditPage.prototype.Current_EC_LanguageId = lastECLanguage;
             EditPage.prototype.loadExtendedCaseIfNeeded();

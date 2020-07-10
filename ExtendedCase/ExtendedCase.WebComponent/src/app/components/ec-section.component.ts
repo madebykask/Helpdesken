@@ -1,9 +1,13 @@
 ﻿import { Component, Input, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ComponentCommService, PopulateSectionParams, EnableSectionParams, AddSectionInstanceParams, DeleteSectionInstanceParams } from '../services/component-comm.service';
-import { SectionModel, SectionInstanceModel, FieldModelBase, FormControlType } from '../models/form.model';
+import { SectionModel, SectionInstanceModel, FieldModelBase, FormControlType, FormModel } from '../models/form.model';
 import { SectionTemplateModel, SectionType, BaseControlTemplateModel } from '../models/template.model';
 import { SubscriptionManager } from '../shared/subscription-manager';
-import { ExtendedCaseTextBoxComponent, ExtendedCaseLabelComponent, ExtendedCaseTextBoxSearchComponent, ExtendedCaseTextAreaComponent, ExtendedCaseDropdownComponent, ExtendedCaseMultiselectComponent, ExtendedCaseDateComponent, ExtendedCaseCheckboxListComponent, ExtendedCaseCheckboxComponent, ExtendedCaseRadioComponent, ExtendedCaseReviewComponent, ExtendedCaseHtmlComponent, ExtendedUnknowControlComponent, ExtendedCaseFileUploadComponent } from './controls';
+import { ExtendedCaseTextBoxComponent, ExtendedCaseLabelComponent, ExtendedCaseTextBoxSearchComponent,
+   ExtendedCaseTextAreaComponent, ExtendedCaseDropdownComponent, ExtendedCaseMultiselectComponent, ExtendedCaseDateComponent,
+    ExtendedCaseCheckboxListComponent, ExtendedCaseCheckboxComponent, ExtendedCaseRadioComponent, ExtendedCaseReviewComponent,
+     ExtendedCaseHtmlComponent, ExtendedUnknowControlComponent, ExtendedCaseFileUploadComponent } from './controls';
+import { FormInfo } from '@app/models/proxy.model';
 
 
 @Component({
@@ -14,6 +18,7 @@ import { ExtendedCaseTextBoxComponent, ExtendedCaseLabelComponent, ExtendedCaseT
 export class ExtendedCaseSectionComponent implements OnInit {
     @Input() sectionTemplate: SectionTemplateModel;
     @Input() sectionModel: SectionModel;
+    @Input() formInfo: FormInfo;
 
     controlType = new FormControlType(); // to  use in html static string
 

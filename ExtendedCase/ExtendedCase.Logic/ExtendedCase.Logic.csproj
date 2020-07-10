@@ -58,11 +58,14 @@
     <Compile Include="Di\AutofacDalModule.cs" />
     <Compile Include="Mapping\Profiles\EntityToModelMappingProfile.cs" />
     <Compile Include="Mapping\Profiles\ModelToEntitiesMappingProfile.cs" />
+    <Compile Include="Services\CaseFileService.cs" />
     <Compile Include="Services\ClientLogService.cs" />
+    <Compile Include="Services\FilesStorageService.cs" />
     <Compile Include="Services\GlobalSettingsService.cs" />
     <Compile Include="Services\HelpdeskCaseSevice.cs" />
     <Compile Include="Services\Mappers\EntitiesToModelMapper.cs" />
     <Compile Include="Services\Mappers\ModelToEntitiesMapper.cs" />
+    <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Utils\DbQueryHelper.cs" />
     <Compile Include="CustomDataSourceProviders\DbQueryProvider.cs" />
     <Compile Include="CustomDataSourceProviders\CustomDataSourceProviderFactory.cs" />

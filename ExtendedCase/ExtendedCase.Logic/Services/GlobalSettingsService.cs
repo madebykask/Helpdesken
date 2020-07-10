@@ -10,6 +10,7 @@ namespace ExtendedCase.Logic.Services
     public interface IGlobalSettingsService
     {
         IList<string> GetFileUploadWhiteList();
+        string GetAttachedFileFolder();
         bool IsExtensionInWhitelist(string extension);
     }
 
@@ -41,6 +42,11 @@ namespace ExtendedCase.Logic.Services
 
             extension = extension.Replace(".", "").ToLower();
             return whiteList.Contains(extension);
+        }
+
+        public string GetAttachedFileFolder()
+        {
+            return _globalSettingRepository.GetAttachedFileFolder();
         }
     }
 }

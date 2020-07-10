@@ -29,7 +29,7 @@
                 </div>
                 <div class="form-inline form-group" *ngFor="let controlTpl of sectionTemplate.controls; trackBy: trackByControlId">
                     <ndc-dynamic [ndcDynamicComponent]="getControlByType(controlTpl.controlType)"
-                                 [ndcDynamicInputs]="{ fieldTemplate: controlTpl, form: sectionInstance.group, fieldModel: getFormField(i, controlTpl.id), subtype: controlTpl.controlType}">
+                                 [ndcDynamicInputs]="{ fieldTemplate: controlTpl, form: sectionInstance.group, fieldModel: getFormField(i, controlTpl.id), subtype: controlTpl.controlType, formInfo: formInfo}">
                     </ndc-dynamic>
                 <!--<div class="form-inline form-group" *ngFor="let controlTpl of sectionTemplate.controls; trackBy: trackByControlId" [ngSwitch]="controlTpl.controlType">
                     <ec-textbox *ngSwitchCase="controlType.type.Textbox" [fieldTemplate]="controlTpl" [form]="sectionInstance.group" [fieldModel]="getFormField(i, controlTpl.id)"></ec-textbox>

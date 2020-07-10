@@ -14,7 +14,7 @@ export class FormModel {
     template: FormTemplateModel;
     // formState: FormStateModel;
 
-    constructor(template:FormTemplateModel) {
+    constructor(template: FormTemplateModel) {
         this.template = template;
         this.dataSources = {};
     }
@@ -28,7 +28,7 @@ export class FormModel {
             .forEach((fieldModel, fieldPath) => fieldModel.acceptChanges());
     }
 
-    findSectionSafe(tabId: string, sectionId: string) : SectionModel {
+    findSectionSafe(tabId: string, sectionId: string): SectionModel {
         let section: SectionModel = null;
 
         if (this.tabs.hasOwnProperty(tabId)) {
@@ -61,15 +61,15 @@ export class CustomDataSourceModel {
         this.id = id;
     }
 
-    getData() : any[] {
+    getData(): any[] {
         return this.data;
     }
 
-    setData(data: any[]) : void {
+    setData(data: any[]): void {
         this.data = data;
     }
 
-    clearData() : void {
+    clearData(): void {
         this.data = [];
     }
 }

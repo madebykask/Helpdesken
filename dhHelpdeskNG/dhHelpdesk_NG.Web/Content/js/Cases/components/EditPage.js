@@ -285,7 +285,8 @@ EditPage.prototype.loadExtendedCase = function () {
     formParameters.languageId = self.Current_EC_LanguageId;
     formParameters.extendedCaseGuid = self.Current_EC_Guid;
     formParameters.caseId = window_params.currentCaseId;
-    formParameters.caseGuid = window_params.caseGuid;
+    formParameters.caseNumber = window_params.currentCaseNumber;
+    formParameters.caseGuid = window_params.currentCaseGuid;
     formParameters.currentUser = window_params.currentUserName;
     formParameters.applicationType = window_params.applicationType;
 
@@ -324,7 +325,8 @@ EditPage.prototype.loadExtendedCase = function () {
                 costcentre: { Value: fieldValues.CostCentre },
                 caption: { Value: fieldValues.Caption },
                 inventorytype: { Value: fieldValues.InventoryType },
-                inventorylocation: { Value: fieldValues.InventoryLocation }
+                inventorylocation: { Value: fieldValues.InventoryLocation },
+                case_files: { Value: fieldValues.CaseFiles }
             }
         }).then(function() {
             self.onExtendedCaseLoaded();
@@ -1553,7 +1555,7 @@ EditPage.prototype.init = function (p) {
 
 
     /*Debug mode*/
-    //EditPage.prototype.Current_EC_Path = "http://localhost:8099/ExtendedCase/?formId=[ExtendedCaseFormId]&languageId=[LanguageId]&caseStatus=[CaseStateSecondaryId]&userRole=[CaseWorkingGroupId]&customerId=[CustomerId]&userGuid=[UserGuid]";
+    //EditPage.prototype.Current_EC_Path = "http://localhost:8099" + p.extendedCasePath.replace('ExtendedCase/', '');
 
     /// controls binding
     self.extendedCaseInvalidMessage = p.extendedCaseInvalidMessage;

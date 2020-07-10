@@ -18,6 +18,10 @@ namespace ExtendedCase.Logic.Di
             builder.RegisterType<CustomDataSourceRepository>().As<ICustomDataSourceRepository>().InstancePerRequest();
             builder.RegisterType<TranslationRepository>().As<ITranslationRepository>().InstancePerRequest();
             builder.RegisterType<GlobalSettingRepository>().As<IGlobalSettingRepository>().InstancePerRequest();
+            builder.RegisterType<CaseFileRepository>().As<ICaseFileRepository>().InstancePerRequest();
+            builder.RegisterType<SettingsRepository>().As<ISettingsRepository>().InstancePerRequest();
+            
+            
         }
     }
 }

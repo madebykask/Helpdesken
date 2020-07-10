@@ -43,6 +43,7 @@ import { ProgressComponent } from './shared/progress.component';
 import * as moment from 'moment';
 import { IAppConfig } from '../shared/app-config/app-config.interface';
 import { VERSION } from '../../../config/version';
+import { CaseFileModel } from '@app/models/case-file.model';
 
 @Component({
     selector: 'extended-case-element',
@@ -53,6 +54,10 @@ import { VERSION } from '../../../config/version';
         QueryParamsService, FormControlsManagerService, ProxyModelBuilder, FormStateService]
 })
 export class ExtendedCaseElementComponent {
+
+    public get version() {
+      return VERSION.fullVersion;
+    }
     @ViewChild(ProgressComponent, {static: false}) private progressComponent: ProgressComponent;
 
     formParameters: FormParametersModel; // parameters initially received from query string, possible to change from parent window
@@ -68,6 +73,10 @@ export class ExtendedCaseElementComponent {
     private subscriptionManager = new SubscriptionManager();
     private caseLoadCompleteSubject: Subject<any> = new Subject<any>();
     private initialData: ICaseInitialData;
+
+    ///////////////////////////////////////////////////////////////////////////// Playground below
+
+    private toggleProgress = false;
 
     constructor(
         private templateService: TemplateService,
@@ -111,10 +120,6 @@ export class ExtendedCaseElementComponent {
         }
 
         this.subscriptionManager.removeAll();
-    }
-
-    public get version() {
-      return VERSION.fullVersion;
     }
 
     getFormParameters(): FormParametersModel {
@@ -221,7 +226,7 @@ export class ExtendedCaseElementComponent {
         }
 
         let authToken = this.storageService.getAuthToken();
-        let caseId = this.storageService.getCaseId();
+        let caseId = this.formModel.proxyModel.formInfo.caseId; // this.storageService.getCaseId();
 
         // update form fields values
         let fieldsValues = this.formControlsManagerService.getFormFieldValues(this.formModel);
@@ -349,10 +354,12 @@ export class ExtendedCaseElementComponent {
         let caseValuesKeyedCollection = new KeyedCollection<FieldValueModel>();
         caseValuesKeyedCollection.init(caseValues);
 
+        this.initCaseFiles(caseValues);
+
         if (this.formParameters.extendedCaseGuid && this.formParameters.extendedCaseGuid.length > 0) {
 
             let authToken = this.storageService.getAuthToken();
-            let helpdeskCaseId = this.storageService.getCaseId();
+            let helpdeskCaseId = this.formParameters.caseId; // this.storageService.getCaseId();
 
             this.subscriptionManager.addSingle('loadFormData',
                 this.loadSaveFormDataService.loadFormData(this.formParameters.extendedCaseGuid, helpdeskCaseId, authToken)
@@ -360,7 +367,7 @@ export class ExtendedCaseElementComponent {
                         this.formData = data;
 
                         if (caseValues) {
-                            this.formData.CaseFieldsValues = caseValuesKeyedCollection;
+                          this.formData.CaseFieldsValues = caseValuesKeyedCollection;
                         }
 
                         this.loadMetaData();
@@ -378,6 +385,18 @@ export class ExtendedCaseElementComponent {
 
             this.loadMetaData();
         }
+    }
+
+    private initCaseFiles(caseValues: IMap<FieldValueModel>) {
+      // This method now used only on initial open, but not on syncronization. If update of files required on sync action use it also in doUpdateCaseFieldValues
+      if (caseValues.case_files != null) {
+        const caseValuesObj = JSON.parse(caseValues.case_files.Value) as Array<{ Id: number, FileName: string }>;
+        if (caseValuesObj != null) {
+          this.formParameters.caseFiles = caseValuesObj.map(cv => new CaseFileModel(cv.Id, cv.FileName));
+        } else {
+          this.formParameters.caseFiles = new Array<CaseFileModel>();
+        }
+      }
     }
 
     private loadMetaData() {
@@ -479,7 +498,7 @@ export class ExtendedCaseElementComponent {
     }
 
     // method is required to run digest after multiple fields have been updated with prefilled updateLog with changes.
-    private runDigestAfterFieldsUpdate(changedFields: ChangedFieldItem[], isNewFields: boolean = false) {
+    private runDigestAfterFieldsUpdate(changedFields: ChangedFieldItem[], isNewFields = false) {
         this.logService.debugFormatted('[!]runDigestAfterFieldsUpdate. Changed fields: {0}', changedFields);
         this.changeDetector.detach();
 
@@ -696,10 +715,6 @@ export class ExtendedCaseElementComponent {
             this.config.validationMode = isNextValidation ? ValidateOn.OnNext : ValidateOn.OnSave;
         }
     }
-
-    ///////////////////////////////////////////////////////////////////////////// Playground below
-
-    private toggleProgress = false;
 
     test(): void {
         // this.toggleProgress = !this.toggleProgress;
