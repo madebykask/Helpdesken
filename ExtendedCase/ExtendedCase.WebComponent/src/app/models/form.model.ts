@@ -146,7 +146,7 @@ export class SectionInstanceModel {
         this.section = section;
     }
 
-    get id():string {
+    get id(): string {
         return this._instanceId.toString();
     }
 
@@ -182,6 +182,8 @@ export abstract class FieldModelBase {
     private _originalAdditionalData = '';
     private _additionalData = '';
     private _prevAdditionalData = '';
+
+    private _uiPath = '';
 
     template: BaseControlTemplateModel;
     sectionInstance: SectionInstanceModel;
@@ -287,8 +289,11 @@ export abstract class FieldModelBase {
     }
 
     getUiPath(): string {
+        if (this._uiPath !== '') { return this._uiPath; }
+
         let fieldPath = this.getFieldPath();
-        return `${fieldPath.tabId}_${fieldPath.sectionId}_${fieldPath.sectionInstanceIndex}_${this.id}`;
+        this._uiPath = `${fieldPath.tabId}_${fieldPath.sectionId}_${fieldPath.sectionInstanceIndex}_${this.id}`;
+        return this._uiPath;
     }
 
     abstract get isReview(): boolean;

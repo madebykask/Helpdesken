@@ -6,9 +6,13 @@
   <label [attr.for]="fieldModel.getUiPath()" class="col-md-6 control-label" *ngIf="!fieldTemplate.isLabelHtml">
       {{ fieldTemplate.label }}<span [class.required-invalid]="fieldModel.control.invalid">{{ isRequiredLabel }}</span>
   </label>
-  <div class="row">
+  <div class="row"> 
     <div class="col-md-12">
-      <div ng2FileDrop
+
+      <validation-error [control]="fieldModel.control"></validation-error>
+      <validation-warnings [warnings]="fieldModel.warnings"></validation-warnings>
+
+      <div ng2FileDrop *ngIf="!fieldModel.control.disabled"
           [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
           (fileOver)="fileOverBase($event)"
           [uploader]="fileUploader"
@@ -19,9 +23,9 @@
       <div class="file-list">
         <div *ngFor="let item of files; trackBy: identify"
           class="file-item"
-          (click)="downloadFile(item)">
+          >
           <span class="glyphicon glyphicon-paperclip" ></span>
-          <span class="filename" >{{ item.fileName }}</span>
+          <span class="filename" ><a href="javascript:return false;" (click)="downloadFile(item)">{{ item.fileName }}</a></span>
           <span class="glyphicon glyphicon-remove delete"
             (click)="deleteFile(item)"></span>
         </div>
@@ -31,13 +35,11 @@
         </div>
       </div>
 
-      <label for="fileupload">
-        <input type="file"  id="fileupload" name="fileupload" class="fileupload"
+      <label for="{{ fieldModel.getUiPath() }}" *ngIf="!fieldModel.control.disabled">
+        <input type="file" id="{{ fieldModel.getUiPath() }}" name="{{ fieldModel.getUiPath() }}" class="fileupload"
           ng2FileSelect [uploader]="fileUploader" multiple />
         <span type="button" class="btn btn-default btn-sm">Add</span>
       </label>
-  <!--       <validation-error [control]="fieldModel.control"></validation-error>
-        <validation-warnings [warnings]="fieldModel.warnings"></validation-warnings> -->
     </div>
   </div>
 </ng-container> 

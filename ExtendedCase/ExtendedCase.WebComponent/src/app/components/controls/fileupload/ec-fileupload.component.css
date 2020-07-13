@@ -44,4 +44,5 @@ input.fileupload {
 
 .file-drop.well {
   margin: 0;
+  text-align: center;
 }
