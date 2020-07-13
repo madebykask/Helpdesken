@@ -10,6 +10,7 @@ using ExtendedCase.Common.Enums;
 using ExtendedCase.Logic.Services;
 using ExtendedCase.Logic.Utils.Files;
 using ExtendedCase.Models.Files;
+using ExtendedCase.WebApi.Infrastructure.Results;
 
 namespace ExtendedCase.WebApi.Controllers
 {
@@ -118,6 +119,31 @@ namespace ExtendedCase.WebApi.Controllers
             }
 
             return BadRequest("Failed to upload a file");
+        }
+
+        [HttpGet]
+        [Route("{caseId:int}/file/{fileId:int}")] //ex: /api/Case/123/File/1203?cid=1&caseNumber=zzzz
+        public Task<IHttpActionResult> DownloadExistingFile([FromUri] int caseId, [FromUri] int fileId, [FromUri] int cid, [FromUri] string caseNumber, bool? inline = false)
+        {
+            var fileContent = _caseFileService.GetCaseFile(cid, caseId, fileId, caseNumber, true); //TODO: async
+
+            IHttpActionResult res = new FileResult(fileContent.FileName, fileContent.Content, Request, inline ?? false);
+
+            //if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
+            //{
+            //    _fileViewLogService.Log(caseId, UserId, fileContent.FileName.Trim(), fileContent.FilePath, FileViewLogFileSource.WebApi,
+            //        FileViewLogOperation.View);
+            //}
+            return Task.FromResult(res);
+        }
+
+        [HttpGet]
+        [Route("{caseKey:guid}/file")]
+        public Task<IHttpActionResult> DownloadTempFile([FromUri] Guid caseKey, [FromUri] string fileName, [FromUri] int cid, bool? inline = false)
+        {
+            var fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, caseKey.ToString(), "");
+            IHttpActionResult res = new FileResult(fileName, fileContent, Request, inline ?? false);
+            return Task.FromResult(res);
         }
 
         [HttpDelete]

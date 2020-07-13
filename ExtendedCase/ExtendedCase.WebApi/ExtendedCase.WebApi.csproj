@@ -139,6 +139,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\Configuration\ConfigurationProvider.cs" />
+    <Compile Include="Infrastructure\Results\FileResult.cs" />
     <Compile Include="Infrastructure\TokenProviders\HttpApiTokenProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

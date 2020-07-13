@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ExtendedCase.Models.Files;
 
 namespace ExtendedCase.Logic.Services
 {
@@ -12,6 +13,8 @@ namespace ExtendedCase.Logic.Services
     {
         void DeleteFile(string topic, int entityId, string basePath, string fileName);
         string SaveFile(byte[] content, string basePath, string fileName, string topic, int entityId);
+        FileContentModel GetFileContent(string topic, int entityId, string basePath, string fileName);
+        string GetCaseFilePath(string topic, int entityId, string basePath, string fileName);
     }
 
     public class FilesStorageService: IFilesStorageService
@@ -51,6 +54,24 @@ namespace ExtendedCase.Logic.Services
         private string ComposeDirectoryPath(string basePath, string topic, int entityId)
         {            
             return Path.Combine(basePath, topic + entityId.ToString(CultureInfo.InvariantCulture));
+        }
+
+        public FileContentModel GetFileContent(string topic, int entityId, string basePath, string fileName)
+        {
+            var filePath = ComposeFilePath(topic, entityId, basePath,  fileName);  
+            var content = File.ReadAllBytes(filePath);
+            var model = new FileContentModel
+            {
+                FilePath = filePath,
+                Content = content
+            };
+            return model;
+        }
+
+        public string GetCaseFilePath(string topic, int entityId, string basePath, string fileName)
+        {
+            var filePath = ComposeFilePath(topic, entityId, basePath, fileName);
+            return filePath;
         }
     }
 }

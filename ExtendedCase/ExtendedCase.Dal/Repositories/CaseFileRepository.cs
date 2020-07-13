@@ -14,6 +14,7 @@ namespace ExtendedCase.Dal.Repositories
         bool FileExists(int caseId, string fileName);
         int SaveCaseFile(CaseFile caseFile);
         bool DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
+        CaseFile GetFileInfo(int caseId, int fileId);
     }
 
     public class CaseFileRepository:  HelpdeskRespositoryBase, ICaseFileRepository
@@ -60,6 +61,16 @@ namespace ExtendedCase.Dal.Repositories
             var id = QuerySingle<int>(sql, args);
 
             return id;
+        }
+
+
+        public CaseFile GetFileInfo(int caseId, int fileId)
+        {
+            const string sql = @"SELECT Id, Case_Id, FileName, UserId, CreatedDate FROM [dbo].[tblcasefile] WHERE Case_Id = @caseId AND Id = @id";
+            var result = QuerySingle<CaseFile>(sql, new { caseId = caseId, id = fileId});
+
+            return result;
+
         }
     }
 }

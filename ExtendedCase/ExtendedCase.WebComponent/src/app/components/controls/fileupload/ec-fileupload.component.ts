@@ -84,26 +84,12 @@ export class ExtendedCaseFileUploadComponent extends BaseControl {
 
   downloadFile(item: CaseFileModel) {
     // const caseId = +this.caseGuid;
-    if (!isNaN(this.formInfo.caseId) && this.formInfo.caseId > 0) {
-      const queryParams = {
-        cid: this.formInfo.customerId
-      };
-/*       this.router.navigate(['/case', this.caseId, 'file', item.fileId], {
-        queryParams: queryParams
-      }); */
-    } else {
-      const queryParams = {
-        fileName: item.fileName,
-        cid: this.formInfo.customerId
-      };
-/*       const templateId = +this.activatedRoute.snapshot.paramMap.get('templateId');
-      if (!isNaN(templateId) && templateId > 0) {
-        queryParams['templateId'] = templateId;
-      } */
-/*       this.router.navigate(['/case', this.caseGuid, 'file'], {
-        queryParams: queryParams
-     }); */
-    }
+    ((!isNaN(this.formInfo.caseId) && this.formInfo.caseId > 0) ?
+     this.caseFilesService.downloadCaseFile(this.formInfo.caseId, item.fileId, this.formInfo.caseNumber, this.formInfo.customerId) :
+     this.caseFilesService.downloadTempCaseFile(this.formInfo.caseGuid, item.fileName, this.formInfo.customerId))
+     .subscribe(b => {
+       this.download(b, item);
+     });
   }
 
   deleteFile(item: CaseFileModel) {
@@ -123,6 +109,33 @@ export class ExtendedCaseFileUploadComponent extends BaseControl {
 
   get files() {
     return this.fieldModel.control.value ? JSON.parse(this.fieldModel.control.value) as Array<CaseFileModel> : new Array<CaseFileModel>();
+  }
+
+  private download(fileData: Blob, file: CaseFileModel) {
+    let newBlob = new Blob([fileData], { type: 'application/octet-stream' });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(newBlob);
+      return;
+    }
+
+    // For other browsers:
+    // Create a link pointing to the ObjectURL containing the blob.
+    const data = window.URL.createObjectURL(newBlob);
+
+    let link = document.createElement('a');
+    link.href = data;
+    link.download = file.fileName;
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(data);
+      link.remove();
+    }, 100);
   }
 
   private validateAndUpdateFiles() {

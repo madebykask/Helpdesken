@@ -48,7 +48,9 @@
     <Compile Include="DataSourceOptionModel.cs" />
     <Compile Include="ExtendedCaseFormModel.cs" />
     <Compile Include="ExtendedCaseDataModel.cs" />
+    <Compile Include="Files\CaseFileContent.cs" />
     <Compile Include="Files\CaseFileDto.cs" />
+    <Compile Include="Files\FileContentModel.cs" />
     <Compile Include="FormDataSaveInputModel.cs" />
     <Compile Include="FormMetaDataModel.cs" />
     <Compile Include="IClientLogEntry.cs" />

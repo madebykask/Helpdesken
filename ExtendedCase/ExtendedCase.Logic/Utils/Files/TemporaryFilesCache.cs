@@ -15,6 +15,7 @@ namespace ExtendedCase.Logic.Utils.Files
         bool FileExists(string fileName, string objectId, params string[] subtopics);
         void AddFile(byte[] content, string fileName, string objectId, params string[] subtopics);
         void DeleteFile(string fileName, string objectId, params string[] subtopics);
+        byte[] GetFileContent(string fileName, string objectId, params string[] subtopics);
     }
 
     public class TemporaryFilesCache : ITemporaryFilesCache
@@ -47,11 +48,11 @@ namespace ExtendedCase.Logic.Utils.Files
             }
         }
 
-        //private void DeleteFile(string fileName, int objectId, params string[] subtopics)
-        //{
-        //    var textId = objectId.ToString(CultureInfo.InvariantCulture);
-        //    this.DeleteFile(fileName, textId, subtopics);
-        //}
+        public byte[] GetFileContent(string fileName, string objectId, params string[] subtopics)
+        {
+            var filePath = this.ComposeFilePath(fileName, objectId, subtopics);
+            return File.ReadAllBytes(filePath);
+        }
 
         public void DeleteFile(string fileName, string objectId, params string[] subtopics)
         {
