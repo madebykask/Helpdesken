@@ -268,7 +268,7 @@ export class CaseEditComponent {
                   this.isLoaded = false;
                   this.isEcLoaded = false;
                   this.currentTab = TabNames.Case;
-                  let caseId = this.caseSaveService.saveCase(this.form, this.caseData).pipe(
+                  return this.caseSaveService.saveCase(this.form, this.caseData).pipe(
                       take(1),
                       map((caseId: number) => {
                         this.caseId = caseId;
@@ -276,7 +276,6 @@ export class CaseEditComponent {
                       }),
                       catchError((e) => throwError(e))
                   );
-                  return caseId;
                 } else {
                   return EMPTY.pipe(defaultIfEmpty(false));
                 }
@@ -299,12 +298,10 @@ export class CaseEditComponent {
           if (reload) {
               if (this.caseData.id == 0) { // New case route to saved case
                 this.router.navigate(['/case', this.caseId ]);
-              }
-              else {
+              } else {
                 this.ngOnInit();
               }
-            }
-          else {
+            } else {
             this.goToCases();
           }
         }
@@ -376,6 +373,8 @@ export class CaseEditComponent {
               languageId: userData.currentData.selectedLanguageId,
               extendedCaseGuid: caseData.extendedCaseData.extendedCaseGuid,
               caseId: caseData.id,
+              caseNumber: caseData.caseNumber.toString(),
+              caseGuid: caseData.caseGuid,
               applicationType: 'helpdesk',
               isCaseLocked: this.isLocked,
               // currentUser: userData.currentData.EmployeeNumber, not used in helpdesk
@@ -408,7 +407,8 @@ export class CaseEditComponent {
               costcentre: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.CostCentre).value },
               caption: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.Caption).value },
               inventorytype: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.ComputerTypeId).value },
-              inventorylocation: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.InventoryLocation).value }
+              inventorylocation: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.InventoryLocation).value },
+              case_files: { Value: this.caseFiles }
             }
           };
         });

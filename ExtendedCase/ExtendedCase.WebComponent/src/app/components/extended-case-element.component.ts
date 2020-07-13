@@ -389,8 +389,13 @@ export class ExtendedCaseElementComponent {
 
     private initCaseFiles(caseValues: IMap<FieldValueModel>) {
       // This method now used only on initial open, but not on syncronization. If update of files required on sync action use it also in doUpdateCaseFieldValues
-      if (caseValues.case_files) {
-        const caseValuesObj = JSON.parse(caseValues.case_files.Value) as Array<{ Id: number, FileName: string }>;
+      if (caseValues.case_files != null) {
+        let caseValuesObj = null;
+        try {
+          caseValuesObj = JSON.parse(caseValues.case_files.Value) as Array<{ Id: number, FileName: string }>;
+        } catch (error) {
+          this.logService.debug('CaseFiles: case_files is not valid JSON. leaving null')
+        }
         if (caseValuesObj != null) {
           this.formParameters.caseFiles = caseValuesObj.map(cv => new CaseFileModel(cv.Id, cv.FileName));
         } else {

@@ -134,7 +134,7 @@
             CostCentre: '@Model.CaseDataModel.CostCentre',
             InventoryType: @Html.Raw(Json.Encode(Model.CaseDataModel.InventoryType)),
             InventoryLocation: @Html.Raw(Json.Encode(Model.CaseDataModel.InventoryLocation)),
-            /*CaseFiles: Model.CaseDataModel.CaseFiles*/
+            CaseFiles: '@Html.Raw(Model.CaseDataModel.CaseFiles != null ? Json.Encode(Model.CaseDataModel.CaseFiles.Select(f => new { f.Id, f.FileName })) : "")'
         },
 
         extendedCaseGuid: '@(Model.ExtendedCaseDataModel.ExtendedCaseGuid)',
