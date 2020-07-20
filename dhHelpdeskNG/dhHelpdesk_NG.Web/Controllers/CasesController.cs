@@ -933,10 +933,7 @@ namespace DH.Helpdesk.Web.Controllers
         [ValidateInput(false)]
         public RedirectResult NewAndClose(CaseEditInput m, int? templateId, string BackUrl)
         {
-            var newChild = false;
-
-            if (m.case_.Id == 0 && m.ParentId != null)
-                newChild = true;
+            var newChild = m.case_.Id == 0 && m.ParentId != null;
 
             m.ActiveTab = "";
 

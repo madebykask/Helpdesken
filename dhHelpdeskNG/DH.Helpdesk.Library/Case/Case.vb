@@ -103,6 +103,7 @@ Imports System.Data
     Private msIsAbout_Place As String
     Private msIsAbout_CostCentre As String
     Private msIsAbout_UserCode As String
+    Private msExtendedCaseFormId As Nullable(Of Integer)
 
 #End Region
 
@@ -571,6 +572,12 @@ Imports System.Data
             miVerified = 0
         Else
             miVerified = dr("Verified")
+        End If
+
+        If Not dr.Table.Columns.Contains("ExtendedCaseForms_Id") OrElse IsDBNull(dr("ExtendedCaseForms_Id")) Then
+            msExtendedCaseFormId = 0
+        Else
+            msExtendedCaseFormId = dr("ExtendedCaseForms_Id")
         End If
 
         miIncludeInCaseStatistics = dr("IncludeInCaseStatistics")
@@ -1465,6 +1472,15 @@ Imports System.Data
         End Get
         Set(ByVal Value As Integer)
             miVerified = Value
+        End Set
+    End Property
+
+    Public Property ExtendedCaseFormId() As Nullable(Of Integer)
+        Get
+            Return msExtendedCaseFormId
+        End Get
+        Set(ByVal value As Nullable(Of Integer))
+            msExtendedCaseFormId = value
         End Set
     End Property
 

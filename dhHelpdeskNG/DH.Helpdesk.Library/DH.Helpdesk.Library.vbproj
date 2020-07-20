@@ -112,6 +112,8 @@
     <Compile Include="DbHelper.vb" />
     <Compile Include="Department\Department.vb" />
     <Compile Include="Department\DepartmentData.vb" />
+    <Compile Include="ExtendedCaseData\ExtendedCaseData.vb" />
+    <Compile Include="ExtendedCaseData\ExtendedCaseService.vb" />
     <Compile Include="GlobalSettings\GlobalSettings.vb" />
     <Compile Include="GlobalSettings\GlobalSettingsData.vb" />
     <Compile Include="Holiday\Holiday.vb" />
@@ -204,6 +206,7 @@
       <Name>DH.Helpdesk.Services</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

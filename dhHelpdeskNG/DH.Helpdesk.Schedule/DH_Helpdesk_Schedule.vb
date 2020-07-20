@@ -308,6 +308,7 @@ Module DH_Helpdesk_Schedule
         Dim objCaseData As New CaseData
         Dim objCaseSolution As CCase
         Dim objCase As CCase
+        Dim objExtendedCaseService As New ExtendedCaseService
         Dim objCustomerData As New CustomerData
         Dim objCustomer As Customer
         Dim objUserData As New UserData
@@ -370,6 +371,11 @@ Module DH_Helpdesk_Schedule
 
                     objLogData.createEMailLog(iCaseHistory_Id, objUser.EMail, SharedFunctions.EMailType.EMailAssignCasePerformer, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                 End If
+            End If
+
+            If objCaseSolution.ExtendedCaseFormId.HasValue And objCaseSolution.ExtendedCaseFormId.Value > 0 Then
+                Dim extendedCaseDataId = objExtendedCaseService.CreateExtendedCaseData(objCaseSolution.ExtendedCaseFormId.Value)
+                objCaseData.CreateExtendedCaseConnection(objCase.Id, objCaseSolution.ExtendedCaseFormId.Value, extendedCaseDataId)
             End If
 
         Next

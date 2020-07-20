@@ -961,11 +961,12 @@ Public Class CaseData
 
         Try
             sSQL = "SELECT tblCaseSolution.*, tblCaseSolutionSchedule.ScheduleType, tblCaseSolutionSchedule.ScheduleDay, tblCaseSolutionSchedule.ScheduleWatchDate, " &
-                        "tblCustomer.Language_Id, tblDepartment.Region_Id " &
+                        "tblCustomer.Language_Id, tblDepartment.Region_Id, tblCaseSolution_ExtendedCaseForms.ExtendedCaseForms_Id " &
                       "FROM tblCaseSolution " &
                        "INNER JOIN tblCaseSolutionSchedule ON tblCaseSolution.Id = tblCaseSolutionSchedule.CaseSolution_Id " &
                        "INNER JOIN tblCustomer ON tblCaseSolution.Customer_Id=tblCustomer.Id " &
                         "LEFT JOIN tblDepartment ON tblCaseSolution.Department_Id=tblDepartment.Id " &
+                        "LEFT JOIN tblCaseSolution_ExtendedCaseForms ON tblCaseSolution.Id=tblCaseSolution_ExtendedCaseForms.CaseSolution_Id " &
                       "WHERE ScheduleTime=" & iTime & " AND tblCaseSolution.Status = 1"
 
             If giLoglevel > 0 Then
@@ -1358,6 +1359,10 @@ Public Class CaseData
                         c.IsAbout_UserCode = dr("IsAbout_UserCode")
                     End If
 
+                    If Not IsDBNull(dr("ExtendedCaseForms_Id")) Then
+                        c.ExtendedCaseFormId = dr("ExtendedCaseForms_Id")
+                    End If
+
                     If Not IsDBNull(dr("CaseType_Id")) Then
                         c.CaseType_Id = dr("CaseType_Id")
                         If (Not c.CaseType_Id = 0) Then
@@ -1723,6 +1728,30 @@ Public Class CaseData
 
     End Function
 
+    Public Sub CreateExtendedCaseConnection(caseId As Integer, extendedCaseFormId As Integer, extendedCaseDataId As Integer)
+        Dim sSQL = ""
+
+        Try
+
+            sSQL = "INSERT INTO tblCase_ExtendedCaseData(Case_Id, ExtendedCaseData_Id, ExtendedCaseForm_Id) " &
+                   "VALUES(@caseId, @extendedCaseFormId, @extendedCaseDataId)"
+
+            Dim sqlParameters As New List(Of SqlParameter) From {
+                    DbHelper.createDbParameter("@caseId", caseId),
+                    DbHelper.createDbParameter("@extendedCaseFormId", extendedCaseFormId),
+                    DbHelper.createDbParameter("@extendedCaseDataId", extendedCaseDataId)
+                    }
+
+            DbHelper.executeNonQuery(gsConnectionString, sSQL, CommandType.Text, sqlParameters.ToArray())
+        Catch ex As Exception
+
+            If giLoglevel > 0 Then
+                objLogFile.WriteLine(Now() & ", ERROR CreateExtendedCaseConnection " & ex.Message.ToString & ", " & sSQL)
+            End If
+
+            Throw ex
+        End Try
+    End Sub
 
     Private Function GetDate(dtDate As Date) As String
         GetDate = dtDate.Year.ToString & "-" & dtDate.Month.ToString.PadLeft(2, "0") & "-" & dtDate.Day.ToString.PadLeft(2, "0")
