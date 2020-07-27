@@ -65,6 +65,7 @@ export class CaseSolution {
     caseSolutionId: number;
     name: string;
     stateSecondaryId: number;
+    defaultTab: string;
 }
 
 export class ExtendedCaseData {

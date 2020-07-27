@@ -150,6 +150,7 @@ export class CaseEditComponent {
     private extendedCaseSave$ = new Subject<boolean>();
     private extendedCaseSaveObserver = this.extendedCaseSave$.asObservable();
     private sectionHeadersInfo: { key: CaseSectionType, value: string }[] = [];
+    private caseTabName = 'case-tab';
 
     ngOnInit() {
       this.commService.publish(Channels.Header, new HeaderEventData(false));
@@ -188,21 +189,24 @@ export class CaseEditComponent {
               );
 
       caseData$.pipe(
+          map((caseData) => {
+            const lock = caseData[2];
+            this.caseLock = lock;
+            this.caseSections = caseData[1];
+            const options = caseData[0];
+            this.dataSource = new CaseDataStore(options, this.caseData.customerId);
+
+            this.initLock();
+            this.processCaseData();
+            this.processSectionHeader();
+            return caseData;
+          }),
           take(1),
           finalize(() => this.isLoaded = true),
           catchError((e) => throwError(e))
       ).subscribe((caseData) => {
-          const lock = caseData[2];
-          this.caseLock = lock;
-          this.caseSections = caseData[1];
-          const options = caseData[0];
-          this.dataSource = new CaseDataStore(options, this.caseData.customerId);
-
-          this.initLock();
-          this.processCaseData();
-          this.processSectionHeader();
-          this.loadWorkflows(caseId, this.caseData.customerId);
-          this.loadExtendedCase(this.caseData);
+        this.loadWorkflows(caseId, this.caseData.customerId);
+        this.loadExtendedCase(this.caseData);
       });
     }
 
@@ -228,8 +232,8 @@ export class CaseEditComponent {
     }
 
     getSectionHeader(type: CaseSectionType): string {
-        if (this.caseSections == null) { return ''; }
-        return this.caseSections.find(s => s.type == type).header;
+      if (this.caseSections == null) { return ''; }
+      return this.caseSections.find(s => s.type == type).header;
     }
 
     getSectionHeaderInfoText(type: CaseSectionType): string {
@@ -377,6 +381,7 @@ export class CaseEditComponent {
               caseGuid: caseData.caseGuid,
               applicationType: 'helpdesk',
               isCaseLocked: this.isLocked,
+              isMobile: true,
               // currentUser: userData.currentData.EmployeeNumber, not used in helpdesk
               userGuid: userData.currentData.userGuid,
               userRole: userData.currentData.userRole,
@@ -411,6 +416,11 @@ export class CaseEditComponent {
               case_files: { Value: this.caseFiles }
             }
           };
+          if (caseData.caseSolution &&
+            caseData.caseSolution.defaultTab != null &&
+            caseData.caseSolution.defaultTab !== this.caseTabName) {
+             this.tabClick(this.tabNames.ExtendedCase);
+         }
         });
       }
     }
@@ -565,11 +575,7 @@ export class CaseEditComponent {
       );
 
       caseData$.pipe(
-          take(1),
-          finalize(() => this.isLoaded = true),
-          untilDestroyed(this),
-          catchError((e) => throwError(e))
-      ).subscribe((caseData) => {
+        map((caseData) => {
           this.caseSections = caseData[1];
           const options = caseData[0];
           this.dataSource = new CaseDataStore(options, this.caseData.customerId);
@@ -577,6 +583,13 @@ export class CaseEditComponent {
           this.initLock();
           this.processCaseData();
           this.processSectionHeader();
+          return caseData;
+        }),
+        take(1),
+        finalize(() => this.isLoaded = true),
+        untilDestroyed(this),
+        catchError((e) => throwError(e))
+      ).subscribe((caseData) => {
           this.loadWorkflows(null, this.caseData.customerId);
           this.loadExtendedCase(this.caseData);
       });
@@ -618,6 +631,12 @@ export class CaseEditComponent {
         } else {
           this.caseFiles = [];
         }
+      }
+
+      if (this.caseData.caseSolution &&
+         this.caseData.caseSolution.defaultTab != null &&
+         this.caseData.caseSolution.defaultTab !== '') {
+          this.tabClick(this.tabNames.ExtendedCase);
       }
     }
 
