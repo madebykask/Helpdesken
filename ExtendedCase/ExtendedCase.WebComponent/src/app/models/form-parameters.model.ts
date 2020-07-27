@@ -13,6 +13,7 @@ export class FormParametersModel {
     isCaseLocked: boolean;
     applicationType: string;
     useInitiatorAutocomplete = true;
+    isMobile = false;
 
     caseFiles: CaseFileModel[];
 

@@ -12,7 +12,7 @@
       <validation-error [control]="fieldModel.control"></validation-error>
       <validation-warnings [warnings]="fieldModel.warnings"></validation-warnings>
 
-      <div ng2FileDrop *ngIf="!fieldModel.control.disabled && formInfo.applicationType !== 'HelpdeskMobile'"
+      <div ng2FileDrop *ngIf="!fieldModel.control.disabled && !formInfo.isMobile"
           [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
           (fileOver)="fileOverBase($event)"
           [uploader]="fileUploader"

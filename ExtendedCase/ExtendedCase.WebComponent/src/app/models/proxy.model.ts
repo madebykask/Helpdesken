@@ -111,6 +111,7 @@ export class FormInfo {
     isCaseLocked: boolean;
     applicationType: string;
     useInitiatorAutocomplete: boolean;
+    isMobile: boolean;
     caseFiles: CaseFileModel[];
 
     constructor(formParameters: FormParametersModel) {
@@ -128,5 +129,6 @@ export class FormInfo {
         this.caseGuid = formParameters.caseGuid || '';
         this.caseNumber = formParameters.caseNumber || '';
         this.caseFiles = formParameters.caseFiles || new Array<CaseFileModel>();
+        this.isMobile = formParameters.isMobile || false;
     }
 }
