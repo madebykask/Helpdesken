@@ -47,7 +47,9 @@
         fetchOUUrl: '@Url.Content("~/Case/GetOrgUnitsByDepartments")',
         setProductAreaByCaseTypeUrl: '@Url.Content("~/Case/GetProductAreaByCaseType")',
         fileUploadWhiteList: [],
-        invalidFileExtensionText: '@Html.Raw(Translation.GetForJS("har inte en giltig filändelse"))'
+        invalidFileExtensionText: '@Html.Raw(Translation.GetForJS("har inte en giltig filändelse"))',
+        requiredMessage: '@Html.Raw(Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) + ' '  +
+                                    Translation.GetForJS("must be specified"))'
     };
 
     @if (Model.FileUploadWhiteList != null)
@@ -476,6 +478,8 @@
                                                         @Html.ProductAreaDropdownButtonString(Model.ProductAreas)
                                                     </ul>
                                                     @Html.HiddenFor(model => model.NewCase.ProductArea_Id)
+                                                    @*<input type="hidden" id="NewCase.ProductArea_Id" name="NewCase.ProductArea_Id" value="@Model.NewCase.ProductArea_Id.supressZero()" />*@
+
                                                 </div>
                                             </div>
                                         </div>
@@ -1119,7 +1123,7 @@
                         required: FieldIsRequired(
                             "@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())")
                     },
-                    "NewCase.ProductArea_Id": {
+                    "NewCase_ProductArea_Id": {
                         required: FieldIsRequired(
                             "@Model.CaseFieldSettings.CaseFieldSettingExternalRequiredCheck(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())")
                     },
@@ -1271,7 +1275,7 @@
                             "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " +
                                 requiredText
                     },
-                    "NewCase.ProductArea_Id": {
+                    "NewCase_ProductArea_Id": {
                         required:
                             "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " +
                                 requiredText
