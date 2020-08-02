@@ -875,6 +875,7 @@ Public Class CaseData
 
     Public Function saveCaseHistory(ByVal iCase_Id As Integer, ByVal sCreatedByUser As String) As Integer
         Dim sSQL As String
+
         Dim sCaseHistoryGUID As String
 
         Try
@@ -882,28 +883,44 @@ Public Class CaseData
             sCaseHistoryGUID = System.Guid.NewGuid.ToString()
 
             ' Lägg in den nya posten i historiken
-            sSQL = "INSERT INTO tblCaseHistory(CaseHistoryGUID, Case_Id ,ReportedBy ,Persons_Name,Persons_EMail,Persons_Phone,Persons_CellPhone," &
-                                                "Customer_Id,Region_Id,Department_Id,OU_Id,Place,UserCode,CostCentre,InventoryNumber,InventoryType,InventoryLocation, " &
-                                                "Casenumber,User_Id,IPAddress,CaseType_Id,ProductArea_Id,ProductAreaSetDate,Category_Id,Supplier_Id,InvoiceNumber, " &
-                                                "ReferenceNumber,Caption,Description,Miscellaneous,ContactBeforeAction,SMS,Available,Cost,OtherCost,Currency," &
-                                                "Performer_User_Id,CaseResponsibleUser_Id,Priority_Id,Status_Id,StateSecondary_Id,ExternalTime,Project_Id, " &
-                                                "PlanDate,ApprovedDate,ApprovedBy_User_Id,WatchDate,LockCaseToWorkingGroup_Id,WorkingGroup_Id,FinishingDate, " &
-                                                "FollowUpDate,RegistrationSource,RelatedCaseNumber,Problem_Id," &
-                                                "Deleted,Status,RegLanguage_Id,RegUserId,RegUserDomain,RegistrationSourceCustomer_Id, CreatedDate,CreatedByUser, LeadTime ) " &
-                    " SELECT '" & sCaseHistoryGUID & "', " & iCase_Id & " ,ReportedBy ,Persons_Name,Persons_EMail,Persons_Phone,Persons_CellPhone," &
-                                                "Customer_Id,Region_Id,Department_Id,OU_Id,Place,UserCode,CostCentre,InventoryNumber,InventoryType,InventoryLocation, " &
-                                                "Casenumber,User_Id,IPAddress,CaseType_Id,ProductArea_Id,ProductAreaSetDate,Category_Id,Supplier_Id,InvoiceNumber, " &
-                                                "ReferenceNumber,Caption,Description,Miscellaneous,ContactBeforeAction,SMS,Available,Cost,OtherCost,Currency," &
-                                                "Performer_User_Id,CaseResponsibleUser_Id,Priority_Id,Status_Id,StateSecondary_Id,ExternalTime,Project_Id, " &
-                                                "PlanDate,ApprovedDate,ApprovedBy_User_Id,WatchDate,LockCaseToWorkingGroup_Id,WorkingGroup_Id,FinishingDate, " &
-                                                "FollowUpDate,RegistrationSource,RelatedCaseNumber,Problem_Id," &
-                                                "Deleted,Status,RegLanguage_Id,RegUserId,RegUserDomain, RegistrationSourceCustomer_Id, getutcdate(),'" & Replace(sCreatedByUser, "'", "''") & "', tblCase.LeadTime  FROM tblCase WHERE Id=" & iCase_Id
+            'sSQL = "INSERT INTO tblCaseHistory(CaseHistoryGUID, Case_Id ,ReportedBy ,Persons_Name,Persons_EMail,Persons_Phone,Persons_CellPhone," &
+            '                                    "Customer_Id,Region_Id,Department_Id,OU_Id,Place,UserCode,CostCentre,InventoryNumber,InventoryType,InventoryLocation, " &
+            '                                    "Casenumber,User_Id,IPAddress,CaseType_Id,ProductArea_Id,ProductAreaSetDate,Category_Id,Supplier_Id,InvoiceNumber, " &
+            '                                    "ReferenceNumber,Caption,Description,Miscellaneous,ContactBeforeAction,SMS,Available,Cost,OtherCost,Currency," &
+            '                                    "Performer_User_Id,CaseResponsibleUser_Id,Priority_Id,Status_Id,StateSecondary_Id,ExternalTime,Project_Id, " &
+            '                                    "PlanDate,ApprovedDate,ApprovedBy_User_Id,WatchDate,LockCaseToWorkingGroup_Id,WorkingGroup_Id,FinishingDate, " &
+            '                                    "FollowUpDate,RegistrationSource,RelatedCaseNumber,Problem_Id," &
+            '                                    "Deleted,Status,RegLanguage_Id,RegUserId,RegUserDomain,RegistrationSourceCustomer_Id, CreatedDate,CreatedByUser, LeadTime ) " &
+            '        " SELECT '" & sCaseHistoryGUID & "', " & iCase_Id & " ,ReportedBy ,Persons_Name,Persons_EMail,Persons_Phone,Persons_CellPhone," &
+            '                                    "Customer_Id,Region_Id,Department_Id,OU_Id,Place,UserCode,CostCentre,InventoryNumber,InventoryType,InventoryLocation, " &
+            '                                    "Casenumber,User_Id,IPAddress,CaseType_Id,ProductArea_Id,ProductAreaSetDate,Category_Id,Supplier_Id,InvoiceNumber, " &
+            '                                    "ReferenceNumber,Caption,Description,Miscellaneous,ContactBeforeAction,SMS,Available,Cost,OtherCost,Currency," &
+            '                                    "Performer_User_Id,CaseResponsibleUser_Id,Priority_Id,Status_Id,StateSecondary_Id,ExternalTime,Project_Id, " &
+            '                                    "PlanDate,ApprovedDate,ApprovedBy_User_Id,WatchDate,LockCaseToWorkingGroup_Id,WorkingGroup_Id,FinishingDate, " &
+            '                                    "FollowUpDate,RegistrationSource,RelatedCaseNumber,Problem_Id," &
+            '                                    "Deleted,Status,RegLanguage_Id,RegUserId,RegUserDomain, RegistrationSourceCustomer_Id, getutcdate(),'" & Replace(sCreatedByUser, "'", "''") & "', tblCase.LeadTime  FROM tblCase WHERE Id=" & iCase_Id
+
+            sSQL = "INSERT INTO tblCaseHistory(CaseHistoryGUID, Case_Id, ReportedBy, Persons_Name, Persons_EMail, Persons_Phone, Persons_CellPhone, Customer_Id, Region_Id, Department_Id, OU_Id, Place, UserCode, InventoryNumber, InventoryType," &
+                          "InventoryLocation, Casenumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, ReferenceNumber, Caption, Description, " &
+                          "Miscellaneous, ContactBeforeAction, SMS, AgreedDate, Available, Cost, OtherCost, Currency, Performer_User_Id, CaseResponsibleUser_Id, Priority_Id, Status_Id, StateSecondary_Id, ExternalTime, Project_Id, " &
+                          "ProjectSchedule_Id, Verified, VerifiedDescription, SolutionRate, PlanDate, ApprovedDate, ApprovedBy_User_Id, WatchDate, LockCaseToWorkingGroup_Id, WorkingGroup_Id, FinishingDate, FinishingDescription, FollowUpDate, " &
+                          "RegistrationSource, RelatedCaseNumber, Problem_Id, Change_Id, Deleted, Status, RegLanguage_Id, RegUserId, RegUserDomain, ProductAreaQuestionVersion_Id, LeadTime, CreatedDate, CreatedByUser, CausingPartId, " &
+                          "DefaultOwnerWG_Id, CaseFile, LogFile, CaseLog, ClosingReason, RegistrationSourceCustomer_Id, CostCentre, IsAbout_Persons_Name, IsAbout_ReportedBy, IsAbout_Persons_Phone, IsAbout_UserCode, " &
+                          "IsAbout_Department_Id, CreatedByApp, LatestSLACountDate, ActionLeadTime, ActionExternalTime, CaseExtraFollowers, IsAbout_Persons_EMail, IsAbout_Persons_CellPhone, IsAbout_Region_Id, IsAbout_OU_Id, " &
+                          "IsAbout_CostCentre, IsAbout_Place) " &
+                       "SELECT top 1 '" & sCaseHistoryGUID & "', Case_Id, ReportedBy, Persons_Name, Persons_EMail, Persons_Phone, Persons_CellPhone, Customer_Id, Region_Id, Department_Id, OU_Id, Place, UserCode, InventoryNumber, InventoryType," &
+                              "InventoryLocation, Casenumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, ReferenceNumber, Caption, Description, " &
+                              "Miscellaneous, ContactBeforeAction, SMS, AgreedDate, Available, Cost, OtherCost, Currency, Performer_User_Id, CaseResponsibleUser_Id, Priority_Id, Status_Id, StateSecondary_Id, ExternalTime, Project_Id, " &
+                              "ProjectSchedule_Id, Verified, VerifiedDescription, SolutionRate, PlanDate, ApprovedDate, ApprovedBy_User_Id, WatchDate, LockCaseToWorkingGroup_Id, WorkingGroup_Id, FinishingDate, FinishingDescription, FollowUpDate, " &
+                              "RegistrationSource, RelatedCaseNumber, Problem_Id, Change_Id, Deleted, Status, RegLanguage_Id, RegUserId, RegUserDomain, ProductAreaQuestionVersion_Id, LeadTime, getutcdate(), '" & Replace(sCreatedByUser, "'", "''") & "', CausingPartId, " &
+                              "DefaultOwnerWG_Id, CaseFile, LogFile, CaseLog, ClosingReason, RegistrationSourceCustomer_Id, CostCentre, IsAbout_Persons_Name, IsAbout_ReportedBy, IsAbout_Persons_Phone, IsAbout_UserCode, " &
+                              "IsAbout_Department_Id, CreatedByApp, LatestSLACountDate, ActionLeadTime, ActionExternalTime, CaseExtraFollowers, IsAbout_Persons_EMail, IsAbout_Persons_CellPhone, IsAbout_Region_Id, IsAbout_OU_Id, " &
+                              "IsAbout_CostCentre, IsAbout_Place " &
+                       "From tblCaseHistory Where Case_Id = " & iCase_Id & " order by CreatedDate desc"
+
 
             'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
 
             Return getCaseHistoryIdByGUID(sCaseHistoryGUID)
         Catch ex As Exception
