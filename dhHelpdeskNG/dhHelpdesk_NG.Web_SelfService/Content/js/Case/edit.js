@@ -835,7 +835,7 @@
                 if (val == undefined)
                     val = "";
                 var isMandatory = $('#isMandatory').val();
-                if (isMandatory) {
+                if (isMandatory == 'true') {
                     $("#NewCase_ProductArea_Id").rules("add", {
                         required: true,
                         messages: {
@@ -1005,16 +1005,7 @@
                             var emptyElement = $('#divProductArea > ul.dropdown-menu').children().first();
                             $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(emptyElement));
                             $("#NewCase_ProductArea_Id").val("").trigger('change');
-                        }                       
-                        var isMandatory = $('#isMandatory').val();
-                        if (isMandatory && $("#NewCase_ProductArea_Id").val() == undefined) {
-                            $("#NewCase_ProductArea_Id").rules("add", {
-                                required: true,
-                                messages: {
-                                    required: requiredMessage
-                                }
-                            });
-                        }
+                        }                                               
                         bindProductAreasEvents();
                     }
                 }, 'json');
