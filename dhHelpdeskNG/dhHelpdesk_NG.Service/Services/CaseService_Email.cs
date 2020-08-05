@@ -841,12 +841,16 @@ namespace DH.Helpdesk.Services.Services
             var templateFields = new List<FeedbackField>();
             var emailsToCheck = filterFieldsEmails ?? new List<string>();
 
+            var initiatorEmail = newCase.PersonsEmail;
+
             if (mailTemplateId == (int)GlobalEnums.MailTemplates.ClosedCase)
             {
                 var adminEmails = newCase.Customer.Users.Where(x => x.UserGroup_Id != UserGroups.User)
                     .Select(x => x.Email)
                     .Distinct()
                     .ToList();
+                var inisiatorIsAdmin = adminEmails.Exists(x => x.ToLower() == initiatorEmail.ToLower());
+
                 var identifiers = _feedbackTemplateService.FindIdentifiers(body).ToList();
 
                 //dont send feedback to admins
@@ -856,9 +860,10 @@ namespace DH.Helpdesk.Services.Services
 
                 foreach (var templateField in templateFields)
                 {
-                    if (applyFeedbackFilter &&
+                    if ((applyFeedbackFilter &&
                         (emailsToCheck.Contains(recepient, StringComparer.OrdinalIgnoreCase) ||
-                         templateField.ExcludeAdministrators && adminEmails.Any(x => x.Equals(recepient))))
+                         templateField.ExcludeAdministrators && adminEmails.Any(x => x.Equals(recepient))) )
+                         || (!applyFeedbackFilter && inisiatorIsAdmin))
                     {
                         identifiersToDel.Add(templateField.Key);
                     }
