@@ -135,12 +135,12 @@ export class CaseEditComponent {
     caseActions: CaseAction<CaseActionDataType>[] = [];
     notifierTypes = NotifierType;
     isCommunicationSectionVisible = false;
+    caseData: CaseEditInputModel;
 
-    private isNewCase = false;
+    isNewCase = false;
     private caseId = 0;
     private templateId = 0;
     private templateCid = 0;
-    private caseData: CaseEditInputModel;
     private caseSections: CaseSectionInputModel[];
     private ownsLock = true;
     private caseLock: CaseLockModel = null;
@@ -536,7 +536,7 @@ export class CaseEditComponent {
       return '';
     }
 
-    private goToCases() {
+    goToCases() {
       this.navigate('/casesoverview/');
     }
 
@@ -635,7 +635,8 @@ export class CaseEditComponent {
 
       if (this.caseData.caseSolution &&
          this.caseData.caseSolution.defaultTab != null &&
-         this.caseData.caseSolution.defaultTab !== '') {
+         this.caseData.caseSolution.defaultTab !== '' &&
+         this.caseData.caseSolution.defaultTab !== this.caseTabName) {
           this.tabClick(this.tabNames.ExtendedCase);
       }
     }
