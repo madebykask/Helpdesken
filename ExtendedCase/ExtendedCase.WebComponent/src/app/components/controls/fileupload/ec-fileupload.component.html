@@ -32,6 +32,12 @@
         <div *ngFor="let item of fileUploader.queue" class="file-item uploading">
           <span class="glyphicon glyphicon-paperclip"></span>
           <span class="filename" [ngStyle]="getStatusStyles(item)">{{ item?.file?.name }}</span>
+          <span class="float-right">
+            <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+            <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+            <span *ngIf="item.isError" (click)="deleteError(item)"><i class="glyphicon glyphicon-remove"></i></span> 
+            <div *ngIf="item.isUploading" class="loader"></div>
+          </span>
         </div>
       </div>
 

@@ -442,6 +442,17 @@
             }
         }
     }
+
+    .float-right {
+      float: right;
+    }
+
+    .loader {
+      background-image: url("../img/bars.gif");
+      height: 26px;
+      width: 30px;
+      margin-top: -5px;
+    }
   }
 }
 

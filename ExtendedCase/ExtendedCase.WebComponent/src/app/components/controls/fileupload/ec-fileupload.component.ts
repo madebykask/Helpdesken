@@ -53,6 +53,7 @@ export class ExtendedCaseFileUploadComponent extends BaseControl {
     // this.fileUploader.onBuildItemForm = this.processFileUploadRequest.bind(this);
     this.fileUploader.onCompleteItem = this.onFileUploadComplete.bind(this);
     this.fileUploader.onWhenAddingFileFailed = this.onWhenAddingFileFailed.bind(this);
+    this.fileUploader.onErrorItem = this.onError.bind(this);
 
     this.validateAndUpdateFiles();
   }
@@ -105,6 +106,10 @@ export class ExtendedCaseFileUploadComponent extends BaseControl {
           this.changeDetector.markForCheck();
         }
       });
+  }
+
+  deleteError(item: FileItem) {
+    this.fileUploader.removeFromQueue(item);
   }
 
   get files() {
@@ -190,6 +195,14 @@ export class ExtendedCaseFileUploadComponent extends BaseControl {
 
   private onWhenAddingFileFailed(item: FileLikeObject, filter: any, options: any): any {
     alert(`Failed loading file ${item.name}.`);
+  }
+
+  private onError(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
+    if (status === 413) {
+      alert(`Error. File is too big: ${item.file.name}.`);
+    } else {
+      alert(`Error. Failed loading file ${item.file.name}.`);
+    }
   }
 
   private getUploadUrl() {
