@@ -988,6 +988,16 @@
 
         function saveNewCase() {
             var productAreaValidation = isProductAreaValid();
+            var isMandatory = $('#isMandatory').val();
+            if (isMandatory == 'true') {
+                $("#NewCase_ProductArea_Id").rules("add", {
+                    required: true,
+                    messages: {
+                        required:  "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.NewCase.Customer_Id) " +
+                                requiredText
+                    }
+                });
+            }
             var formValidation = isFormValid();
 
             if (!productAreaValidation || !formValidation) {
