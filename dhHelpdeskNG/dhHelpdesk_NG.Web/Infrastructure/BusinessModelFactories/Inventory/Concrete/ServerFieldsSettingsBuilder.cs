@@ -80,6 +80,9 @@
                 room,
                 location);
 
+            var document = this.settingBuilder.MapFieldSetting(settings.DocumentFieldsSettingsModel.DocumentFieldSettingModel);
+            var documentFieldsSettings = new DocumentFieldsSettings(document);
+
             var network = this.settingBuilder.MapFieldSetting(settings.CommunicationFieldsSettingsModel.NetworkAdapterFieldSettingModel);
             var ipaddress = this.settingBuilder.MapFieldSetting(settings.CommunicationFieldsSettingsModel.IPAddressFieldSettingModel);
             var macAddress = this.settingBuilder.MapFieldSetting(settings.CommunicationFieldsSettingsModel.MacAddressFieldSettingModel);
@@ -101,6 +104,7 @@
                 operatingSystemFieldsSettings,
                 memoryFieldsSettings,
                 placeFieldsSettings,
+                documentFieldsSettings,
                 proccesorFieldsSettings,
                 communicationFieldsSettings);
 

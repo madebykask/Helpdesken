@@ -24,6 +24,8 @@
         public string Manufacturer { get; set; }
         public string Miscellaneous { get; set; }
         public string Owner { get; set; }
+        public string ServerFileName { get; set; }
+        public byte[] ServerDocument { get; set; }
         public string ProductKey { get; set; }
         public string RegistrationCode { get; set; }
         public string SerialNumber { get; set; }

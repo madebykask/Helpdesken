@@ -16,6 +16,7 @@
             OperatingSystemFields operatingSystemFields,
             MemoryFields memoryFields,
             PlaceFields placeFields,
+            DocumentFields documentFields,
             ProcessorFields proccesorFields,
             CommunicationFields communicationFields)
         {
@@ -28,6 +29,7 @@
             this.OperatingSystemFields = operatingSystemFields;
             this.MemoryFields = memoryFields;
             this.PlaceFields = placeFields;
+            this.DocumentFields =  documentFields;
             this.ProccesorFields = proccesorFields;
             this.CommunicationFields = communicationFields;
         }
@@ -63,6 +65,8 @@
 
         [NotNull]
         public PlaceFields PlaceFields { get; private set; }
+
+        public DocumentFields DocumentFields { get; private set; }
 
         [NotNull]
         public CommunicationFields CommunicationFields { get; private set; }

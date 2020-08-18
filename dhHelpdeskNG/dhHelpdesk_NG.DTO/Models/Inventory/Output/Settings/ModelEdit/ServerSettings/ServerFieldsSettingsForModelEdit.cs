@@ -18,6 +18,7 @@
             OperatingSystemFieldsSettings operatingSystemFieldsSettings,
             ProcessorFieldsSettings proccesorFieldsSettings,
             PlaceFieldsSettings placeFieldsSettings, 
+            DocumentFieldsSettings documentFieldsSettings,
             CommunicationFieldsSettings communicationFieldsSettings)
         {
             this.GeneralFieldsSettings = generalFieldsSettings;
@@ -30,6 +31,7 @@
             this.OperatingSystemFieldsSettings = operatingSystemFieldsSettings;
             this.ProccesorFieldsSettings = proccesorFieldsSettings;
             this.PlaceFieldsSettings = placeFieldsSettings;
+            this.DocumentFieldsSettings = documentFieldsSettings;
             this.CommunicationFieldsSettings = communicationFieldsSettings;
         }
 
@@ -62,6 +64,8 @@
 
         [NotNull]
         public PlaceFieldsSettings PlaceFieldsSettings { get; private set; }
+
+        public DocumentFieldsSettings DocumentFieldsSettings { get; private set; }
 
         [NotNull]
         public CommunicationFieldsSettings CommunicationFieldsSettings { get; private set; }

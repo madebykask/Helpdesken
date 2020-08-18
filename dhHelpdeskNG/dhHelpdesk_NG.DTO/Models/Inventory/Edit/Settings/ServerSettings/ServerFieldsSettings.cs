@@ -22,6 +22,7 @@
             OperatingSystemFieldsSettings operatingSystemFieldsSettings,
             ProcessorFieldsSettings proccesorFieldsSettings,
             PlaceFieldsSettings placeFieldsSettings,
+            DocumentFieldsSettings documentFieldsSettings,
             CommunicationFieldsSettings communicationFieldsSettings)
         {
             this.State = modelState;
@@ -35,6 +36,7 @@
             this.OperatingSystemFieldsSettings = operatingSystemFieldsSettings;
             this.ProccesorFieldsSettings = proccesorFieldsSettings;
             this.PlaceFieldsSettings = placeFieldsSettings;
+            this.DocumentFieldsSettings = documentFieldsSettings;
             this.CommunicationFieldsSettings = communicationFieldsSettings;
         }
 
@@ -79,6 +81,9 @@
         public PlaceFieldsSettings PlaceFieldsSettings { get; private set; }
 
         [NotNull]
+        public DocumentFieldsSettings DocumentFieldsSettings { get; private set; }
+
+        [NotNull]
         public CommunicationFieldsSettings CommunicationFieldsSettings { get; private set; }
 
         public static ServerFieldsSettings CreateUpdated(
@@ -94,6 +99,7 @@
             OperatingSystemFieldsSettings operatingSystemFieldsSettings,
             MemoryFieldsSettings memoryFieldsSettings,
             PlaceFieldsSettings placeFieldsSettings,
+            DocumentFieldsSettings documentFieldsSettings,
             ProcessorFieldsSettings proccesorFieldsSettings,
             CommunicationFieldsSettings communicationFieldsSettings)
         {
@@ -109,6 +115,7 @@
                 operatingSystemFieldsSettings,
                 proccesorFieldsSettings,
                 placeFieldsSettings,
+                documentFieldsSettings,
                 communicationFieldsSettings)
                                     {
                                         ChangedDate = changedDate,
@@ -129,6 +136,7 @@
             OperatingSystemFieldsSettings operatingSystemFieldsSettings,
             MemoryFieldsSettings memoryFieldsSettings,
             PlaceFieldsSettings placeFieldsSettings,
+            DocumentFieldsSettings documentFieldsSettings,
             ProcessorFieldsSettings proccesorFieldsSettings,
             CommunicationFieldsSettings communicationFieldsSettings)
         {
@@ -144,6 +152,7 @@
                 operatingSystemFieldsSettings,
                 proccesorFieldsSettings,
                 placeFieldsSettings,
+                documentFieldsSettings,
                 communicationFieldsSettings);
 
             return businessModel;

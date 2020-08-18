@@ -682,6 +682,21 @@ namespace DH.Helpdesk.Services.Services.Concrete
             }
         }
 
+        public DocumentFile GetServerFile(int id)
+        {
+            return _serverRepository.GetFile(id);
+        }
+
+        public void SaveServerFile(int id, string fileName, byte[] data)
+        {
+            _serverRepository.SaveFile(id, fileName, data);
+        }
+
+        public void DeleteServerFile(int id)
+        {
+            _serverRepository.DeleteFile(id);
+        }
+
         public ServerForRead GetServer(int id)
         {
             return _serverRepository.FindById(id);
@@ -948,6 +963,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
             _operationObjectRepository.Update(updatedOperationObject);
             _operationObjectRepository.Commit();
         }
+
+       
 
         #endregion
     }

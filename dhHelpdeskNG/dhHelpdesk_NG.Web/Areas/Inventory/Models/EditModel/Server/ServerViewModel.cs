@@ -4,6 +4,7 @@
 
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Shared;
+    using System.Collections.Generic;
 
     public class ServerViewModel
     {
@@ -23,7 +24,9 @@
             CommunicationFieldsViewModel communicationFieldsViewModel,
             OperatingSystemFieldsViewModel operatingSystemFieldsViewModel,
             ProccesorFieldsViewModel proccesorFieldsViewModel,
-            PlaceFieldsViewModel placeFieldsViewModel)
+            PlaceFieldsViewModel placeFieldsViewModel,
+            DocumentFieldsModel documentFields,
+            List<string> fileUploadWhiteList)
         {
             this.IsOperationObject = isOperationObject;
             this.GeneralFieldsModel = generalFields;
@@ -37,6 +40,8 @@
             this.OperatingSystemFieldsViewModel = operatingSystemFieldsViewModel;
             this.ProccesorFieldsViewModel = proccesorFieldsViewModel;
             this.PlaceFieldsViewModel = placeFieldsViewModel;
+            this.DocumentFieldsModel = documentFields;
+            this.FileUploadWhiteList = fileUploadWhiteList;
         }
 
         [IsId]
@@ -84,6 +89,12 @@
         [NotNull]
         public PlaceFieldsViewModel PlaceFieldsViewModel { get;  set; }
 
+        public DocumentFieldsModel DocumentFieldsModel { get; set; }
+
+        public List<string> FileUploadWhiteList { get; set; }
+
         public bool IsForDialog { get; set; }
+
+        public string DocumentFileKey { get; set; }
     }
 }

@@ -95,6 +95,11 @@ namespace DH.Helpdesk.Services.Services
 
         void UpdateServer(ServerForUpdate businessModel, OperationContext context);
 
+        DocumentFile GetServerFile(int id);
+
+        void SaveServerFile(int id, string fileName, byte[] data);
+        void DeleteServerFile(int id);
+
         ServerForRead GetServer(int id);
 
         List<OperationServerLogOverview> GetOperationServerLogOverviews(int id, int customerId);

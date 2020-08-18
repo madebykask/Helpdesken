@@ -133,6 +133,12 @@
             @Html.EditorFor(m => m.PlaceFieldsSettingsModel.LocationFieldSettingModel, "Settings/FieldSettingModel")
         </tr>
         <tr>
+            <td colspan="6" class="header">@Translation.Get("Dokument")</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.DocumentFieldsSettingsModel.DocumentFieldSettingModel, "Settings/FieldSettingModel")
+        </tr>
+        <tr>
             <td colspan="6" class="header">@Translation.Get("Status")</td>
         </tr>
         <tr>

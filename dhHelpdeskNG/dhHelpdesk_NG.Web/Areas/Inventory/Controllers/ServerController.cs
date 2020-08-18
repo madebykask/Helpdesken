@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.Common.Constants;
+using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 {
@@ -28,6 +29,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
     using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
     using DH.Helpdesk.BusinessData.Enums.Admin.Users;
+    using Infrastructure.Attributes;
+    using System;
+    using System.Web;
+    using System.Net;
+    using System.IO;
+    using Infrastructure.Extensions;
+    using Helpdesk.Common.Tools;
+    using Enums;
+    using Common.Tools.Files;
 
     public class ServerController : InventoryBaseController
     {
@@ -43,6 +53,11 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
         private readonly IUserPermissionsChecker _userPermissionsChecker;
 
+        private readonly IGlobalSettingService _globalSettingService;
+
+        private readonly ITemporaryFilesCache _filesStore;
+
+
         public ServerController(
             IMasterDataService masterDataService,
             IInventoryService inventoryService,
@@ -54,15 +69,19 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             IServerBuilder serverBuilder,
             IExcelFileComposer excelFileComposer,
             IUserPermissionsChecker userPermissionsChecker,
-            IExportFileNameFormatter exportFileNameFormatter)
+            IExportFileNameFormatter exportFileNameFormatter,
+            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
+            IGlobalSettingService globalSettingService)
             : base(masterDataService, exportFileNameFormatter, excelFileComposer, organizationService, placeService)
         {
+            _filesStore = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Inventory);
             this.inventoryService = inventoryService;
             this.inventorySettingsService = inventorySettingsService;
             this.computerModulesService = computerModulesService;
             this.serverViewModelBuilder = serverViewModelBuilder;
             this.serverBuilder = serverBuilder;
             this._userPermissionsChecker = userPermissionsChecker;
+            this._globalSettingService = globalSettingService;
         }
 
         [HttpGet]
@@ -106,10 +125,13 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId);
 
+            var whiteList = _globalSettingService.GetFileUploadWhiteList();
+
             ServerViewModel viewModel = this.serverViewModelBuilder.BuildViewModel(
                 options,
                 settings,
-                SessionFacade.CurrentCustomer.Id);
+                SessionFacade.CurrentCustomer.Id,
+                whiteList);
 
             return this.View(viewModel);
         }
@@ -130,17 +152,23 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
             var readOnly = !userHasInventoryAdminPermission && dialog;
 
+            var whiteList = _globalSettingService.GetFileUploadWhiteList();
+
             ServerForRead model = this.inventoryService.GetServer(id);
             ServerEditOptions options = this.GetServerEditOptions(SessionFacade.CurrentCustomer.Id);
             ServerFieldsSettingsForModelEdit settings = inventorySettingsService.GetServerFieldSettingsForModelEdit(
                 SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId, readOnly);
 
-            ServerViewModel serverEditModel = this.serverViewModelBuilder.BuildViewModel(model, options, settings);
+            ServerViewModel serverEditModel = this.serverViewModelBuilder.BuildViewModel(model, options, settings, whiteList);
             serverEditModel.IsForDialog = dialog;
+
+            
+
             var viewModel = new ServerEditViewModel(id, serverEditModel)
             {
                 UserHasInventoryAdminPermission = userHasInventoryAdminPermission,
-                IsForDialog = dialog
+                IsForDialog = dialog,
+                FileUploadWhiteList = whiteList
             };
 
             return this.View(viewModel);
@@ -157,6 +185,89 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 return RedirectToAction("Edit", new { id = serverViewModel.Id, dialog = serverViewModel.IsForDialog });
             }
             return this.RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [UserPermissions(UserPermission.InventoryViewPermission)]
+        public JsonResult UploadFile(string id, string name)
+        {
+            var fileName = Uri.UnescapeDataString(name);
+
+            var uploadedFile = Request.Files[0];
+            if (uploadedFile == null)
+                throw new HttpException((int)HttpStatusCode.NotFound, null);
+
+            var extension = Path.GetExtension(name);
+            if (!_globalSettingService.IsExtensionInWhitelist(extension))
+            {
+                throw new ArgumentException($"File extension not valid: {name}");
+            }
+
+
+            var fileContent = uploadedFile.GetFileContent();
+
+            if (GuidHelper.IsGuid(id))
+            {
+                _filesStore.ResetCacheForObject(id);
+                _filesStore.AddFile(fileContent, name, id);
+            }
+            else
+            {
+                var computerId = Int32.Parse(id);
+                inventoryService.SaveServerFile(computerId, fileName, fileContent);
+            }
+
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        [UserPermissions(UserPermission.InventoryViewPermission)]
+        public ActionResult DeleteFile(string id, string name)
+        {
+            var fileName = Uri.UnescapeDataString(name);
+            if (GuidHelper.IsGuid(id))
+            {
+                _filesStore.DeleteFile(fileName, id);
+            }
+            else
+            {
+                inventoryService.DeleteServerFile(Int32.Parse(id));
+            }
+
+            return Json(new { success = true });
+        }
+
+        //Server/DownloadFile?id=<guid>&fileName=dfdf.jpg
+        //Server/DownloadFile?id=id
+        [HttpGet]
+        [UserPermissions(UserPermission.InventoryViewPermission)]
+        public ActionResult DownloadFile(string id, string name)
+        {
+            var fileName = Uri.UnescapeDataString(name);
+
+            byte[] fileContent;
+            if (GuidHelper.IsGuid(id))
+            {
+                //todo: check file download in IE
+                if (!_filesStore.FileExists(fileName, id))
+                    throw new HttpException((int)HttpStatusCode.NotFound, null);
+
+                fileContent = _filesStore.GetFileContent(fileName, id);
+            }
+            else
+            {
+                var computerId = Int32.Parse(id);
+                var file = inventoryService.GetServerFile(computerId);
+                fileName = file.FileName;
+                fileContent = file?.Content;
+            }
+
+            if (fileContent == null)
+            {
+                return HttpNotFound();
+            }
+
+            return File(fileContent, MimeType.BinaryFile, Server.UrlEncode(fileName));
         }
 
         [HttpPost]

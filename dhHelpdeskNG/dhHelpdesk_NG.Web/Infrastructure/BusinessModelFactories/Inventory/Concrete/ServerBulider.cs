@@ -23,6 +23,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var communication = CreateCommunication(model.CommunicationFieldsViewModel);
             var other = CreateOther(model.OtherFieldsModel);
             var place = CreatePlace(model.PlaceFieldsViewModel);
+            var document = CreateDocument(model.DocumentFieldsModel);
 
             var fieldsModel = new ServerForUpdate(
                 model.Id,
@@ -35,6 +36,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 operatingSystem,
                 memory,
                 place,
+                document,
                 processor,
                 communication,
                 context.DateAndTime,
@@ -55,6 +57,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var communication = CreateCommunication(model.CommunicationFieldsViewModel);
             var other = CreateOther(model.OtherFieldsModel);
             var place = CreatePlace(model.PlaceFieldsViewModel);
+            var document = CreateDocument(model.DocumentFieldsModel);
 
             var fieldsModel = new ServerForInsert(
                 model.IsOperationObject,
@@ -66,6 +69,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 operatingSystem,
                 memory,
                 place,
+                document,
                 processor,
                 communication,
                 context.CustomerId,
@@ -233,6 +237,18 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var fields = new PlaceFields(room, location);
 
             return fields;
+        }
+
+        private static DocumentFields CreateDocument(DocumentFieldsModel fieldsModel)
+        {
+            if (fieldsModel == null)
+            {
+                return DocumentFields.CreateDefault();
+            }
+
+            var documnet = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.Document);
+
+            return new DocumentFields(documnet);
         }
 
         private static StateFields CreateState(StateFieldsModel fieldsModel)

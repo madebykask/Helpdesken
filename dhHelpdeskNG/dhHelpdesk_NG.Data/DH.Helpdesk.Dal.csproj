@@ -252,6 +252,7 @@
     <Compile Include="Enums\Inventory\Server\GeneralFields.cs" />
     <Compile Include="Enums\Inventory\Server\OtherFields.cs" />
     <Compile Include="Enums\Inventory\Server\StateFields.cs" />
+    <Compile Include="Enums\Inventory\Server\DocumentFields.cs" />
     <Compile Include="Enums\Inventory\Server\StorageFields.cs" />
     <Compile Include="Enums\Inventory\Shared\ChassisFields.cs" />
     <Compile Include="Enums\Inventory\Shared\InventoryFields.cs" />
