@@ -808,8 +808,9 @@ namespace DH.Helpdesk.Services.Services
 
                     var body = mailTpl.Body;
                     //exclude admin specific fields (fieldTemplate.ExcludeAdministrators) or those provided with filterFieldsEmails
-                    var applyFeedbackFilter = mailTpl.MailTemplate.SendMethod == EmailSendMethod.SeparateEmails;
-                    var feedBackFields = GetFeedbackFields(mailTemplateId, case_, cms, fields, eLog.Key,
+                    // var applyFeedbackFilter = mailTpl.MailTemplate.SendMethod == EmailSendMethod.SeparateEmails;
+                    var applyFeedbackFilter = true;
+                     var feedBackFields = GetFeedbackFields(mailTemplateId, case_, cms, fields, eLog.Key,
                         ref body, filterFieldsEmails, applyFeedbackFilter);
                     fieldsToUpdate.AddRange(feedBackFields);
 
@@ -848,8 +849,7 @@ namespace DH.Helpdesk.Services.Services
                 var adminEmails = newCase.Customer.Users.Where(x => x.UserGroup_Id != UserGroups.User)
                     .Select(x => x.Email)
                     .Distinct()
-                    .ToList();
-                var inisiatorIsAdmin = adminEmails.Exists(x => x.ToLower() == initiatorEmail.ToLower());
+                    .ToList();                
 
                 var identifiers = _feedbackTemplateService.FindIdentifiers(body).ToList();
 
@@ -860,10 +860,9 @@ namespace DH.Helpdesk.Services.Services
 
                 foreach (var templateField in templateFields)
                 {
-                    if ((applyFeedbackFilter &&
+                    if (applyFeedbackFilter &&
                         (emailsToCheck.Contains(recepient, StringComparer.OrdinalIgnoreCase) ||
-                         templateField.ExcludeAdministrators && adminEmails.Any(x => x.Equals(recepient))) )
-                         || (!applyFeedbackFilter && inisiatorIsAdmin))
+                         templateField.ExcludeAdministrators && adminEmails.Any(x => x.Equals(recepient))))
                     {
                         identifiersToDel.Add(templateField.Key);
                     }
