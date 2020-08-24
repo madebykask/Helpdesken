@@ -61,7 +61,7 @@ namespace ExtendedCase.WebApi.Controllers
                 var extension = Path.GetExtension(fileName);
 
                 if (!_globalSettingService.IsExtensionInWhitelist(extension))
-                    throw new ArgumentException($"File extension not valid for upload (not defined in whitelist): {extension}");
+                    throw new HttpResponseException(HttpStatusCode.Forbidden);
 
                 if (_userTemporaryFilesStorage.FileExists(fileName, caseKey.ToString()))
                     fileName = $"{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")} - {fileName}";
@@ -100,7 +100,7 @@ namespace ExtendedCase.WebApi.Controllers
                 var extension = Path.GetExtension(fileName);
 
                 if (!_globalSettingService.IsExtensionInWhitelist(extension))
-                    throw new ArgumentException($"File extension not valid for upload (not defined in whitelist): {extension}");
+                    throw new HttpResponseException(HttpStatusCode.Forbidden);
 
                 if (_caseFileService.FileExists(caseId, fileName))
                     fileName = $"{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")} - {fileName}";

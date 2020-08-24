@@ -20,6 +20,7 @@ import { LogService } from '@app/services/log.service';
 export class ExtendedCaseFileUploadComponent extends BaseControl {
   @Input() fieldModel: SingleControlFieldModel;
   @Input() form: FormGroup;
+  @Input() whiteList: string[] = [];
 
   fileUploader = new FileUploader({});
   hasBaseDropZoneOver = false;
@@ -116,6 +117,21 @@ export class ExtendedCaseFileUploadComponent extends BaseControl {
     return this.fieldModel.control.value ? JSON.parse(this.fieldModel.control.value) as Array<CaseFileModel> : new Array<CaseFileModel>();
   }
 
+  private isInWhiteList(item: string, whiteList: string[]): Boolean {
+    if (whiteList != null) {
+      const lastDot = item.lastIndexOf('.');
+      if (lastDot >= 0 && item.length > (lastDot + 1)) {
+        const extension = item.substring(lastDot + 1).toLowerCase();
+
+        if (whiteList.indexOf(extension) >= 0) {
+          return true;
+        }
+      }
+      return false;
+    }
+    return true;
+  }
+
   private download(fileData: Blob, file: CaseFileModel) {
     let newBlob = new Blob([fileData], { type: 'application/octet-stream' });
 
@@ -200,6 +216,8 @@ export class ExtendedCaseFileUploadComponent extends BaseControl {
   private onError(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
     if (status === 413) {
       alert(`Error. File is too big: ${item.file.name}.`);
+    } else if (status === 403) {
+      alert(`Error. ${item.file.name} has invalid file extension.`);
     } else {
       alert(`Error. Failed loading file ${item.file.name}.`);
     }
