@@ -14,7 +14,8 @@
                 @Html.EditorFor(m => m.CommunicationFieldsModel.IPAddress, "Fields/Text")
                 @Html.EditorFor(m => m.CommunicationFieldsModel.MacAddress, "Fields/Text")
                 @Html.EditorFor(m => m.CommunicationFieldsModel.IsRAS, "Fields/Flag")
-                @Html.EditorFor(m => m.CommunicationFieldsModel.NovellClient, "Fields/Text")
+                @Html.EditorFor(m => m.CommunicationFieldsModel.NovellClient, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "data-val-length", "Max 100 tecken" }, { "data-val-length-max", "100" }} })
+                
             </table>
         </div>
     </div>

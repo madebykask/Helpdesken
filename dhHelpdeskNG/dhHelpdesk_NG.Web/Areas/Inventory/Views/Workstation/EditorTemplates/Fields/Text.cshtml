@@ -9,9 +9,18 @@
 @{
     var inputAttributes = (Dictionary<string, object>)ViewData["inputAttributes"];
     Dictionary<string, object> htmlAttributes;
+    var hasMaxLen = false;
+    var maxLenVal = "";
     if (inputAttributes != null)
     {
         htmlAttributes = new Dictionary<string, object>(inputAttributes.Count + 1);
+
+        if (inputAttributes.Keys.Contains("data-val-length-max"))
+        {
+            hasMaxLen = true;
+            maxLenVal = inputAttributes["data-val-length-max"].ToString();
+        }
+
 
         foreach (var inputAttribute in inputAttributes)
         {
@@ -26,8 +35,24 @@
     htmlAttributes.Add("data-dh-is-required", Model.IsRequired);
 
 
-    var validationMessage = string.Format(" {0} {1}", Html.PureFieldCaption(Model), Translation.Get("måste anges"));
-     
+
+    var validationMessage = "";
+    if (Model.IsRequired)
+    {
+        validationMessage = string.Format(" {0} {1}", Html.PureFieldCaption(Model), Translation.Get("måste anges"));
+    }
+
+    if (hasMaxLen)
+    {
+        if (validationMessage == "")
+        {
+            validationMessage = string.Format(" {0} {1} {2}", Html.PureFieldCaption(Model), Translation.Get("max length is"), maxLenVal);
+        }
+        else
+        {
+            validationMessage += string.Format(" {0} {1}", Translation.Get("Ange högst {0} tecken."), maxLenVal);
+        }
+    }
  }
 <tr>
     <td class="span3">
