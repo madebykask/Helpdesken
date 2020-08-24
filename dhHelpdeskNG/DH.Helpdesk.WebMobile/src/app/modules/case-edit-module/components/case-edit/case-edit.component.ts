@@ -13,7 +13,7 @@ import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
 import { CaseLockApiService } from '../../services/api/case/case-lock-api.service';
 import { CaseSaveService } from '../../services/case';
 import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel,
-   CaseLockModel, CaseAction, CaseActionDataType, CaseFileModel } from '../../models';
+   CaseLockModel, CaseAction, CaseActionDataType, CaseFileModel, ExCaseFileModel } from '../../models';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { CaseFilesApiService } from '../../services/api/case/case-files-api.service';
@@ -413,7 +413,7 @@ export class CaseEditComponent {
               caption: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.Caption).value },
               inventorytype: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.ComputerTypeId).value },
               inventorylocation: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.InventoryLocation).value },
-              case_files: { Value: this.caseFiles }
+              case_files: { Value: JSON.stringify((this.caseFiles || []).map(f => new ExCaseFileModel(f.fileId, f.fileName))) }
             }
           };
           if (caseData.caseSolution &&
