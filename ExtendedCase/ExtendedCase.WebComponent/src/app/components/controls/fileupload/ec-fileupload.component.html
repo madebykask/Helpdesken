@@ -17,7 +17,7 @@
           (fileOver)="fileOverBase($event)"
           [uploader]="fileUploader"
           class="file-drop well my-drop-zone">
-        Drop files here
+          {{ fieldTemplate.addonText.length > 0 ? fieldTemplate.addonText : 'Drop files here'}}
       </div>
 
       <div class="file-list">
