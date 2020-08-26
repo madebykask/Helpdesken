@@ -620,17 +620,43 @@ namespace DH.Helpdesk.Web.Controllers
             sm.CaseSearchFilter = f;
             if (SessionFacade.CaseOverviewGridSettings == null)
             {
-                SessionFacade.CaseOverviewGridSettings = f.IsConnectToParent
-                    ? _gridSettingsService.GetForCustomerUserGrid(
+                if (f.IsConnectToParent)
+                {
+                    var connectToParentGrid = _gridSettingsService.GetForCustomerUserGrid(
                         SessionFacade.CurrentCustomer.Id,
                         SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.Id,
-                        GridSettingsService.CASE_CONNECTPARENT_GRID_ID)
-                    : _gridSettingsService.GetForCustomerUserGrid(
+                        GridSettingsService.CASE_CONNECTPARENT_GRID_ID);
+                    var userSelectedGrid = _gridSettingsService.GetForCustomerUserGrid(
                         SessionFacade.CurrentCustomer.Id,
                         SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.Id,
                         GridSettingsService.CASE_OVERVIEW_GRID_ID);
+
+                    var notexists = connectToParentGrid.columnDefs.Where(a => !userSelectedGrid.columnDefs.Any(b => b.name == a.name)).ToList();
+                    var difference = userSelectedGrid.columnDefs.Where(a => !connectToParentGrid.columnDefs.Any(b => b.name == a.name)).ToList();
+
+                    if(notexists != null)
+                    {
+                        int i = 0;
+                        foreach (var c in notexists)
+                        {
+                            connectToParentGrid.columnDefs.Remove(c);                            
+                            connectToParentGrid.columnDefs.Add(difference[i]);
+                            i++;
+                        }
+                    }
+                    SessionFacade.CaseOverviewGridSettings = connectToParentGrid;
+                }
+                else
+                {
+                    SessionFacade.CaseOverviewGridSettings = _gridSettingsService.GetForCustomerUserGrid(
+                        SessionFacade.CurrentCustomer.Id,
+                        SessionFacade.CurrentUser.UserGroupId,
+                        SessionFacade.CurrentUser.Id,
+                        GridSettingsService.CASE_OVERVIEW_GRID_ID);
+                }
+                
             }
             else
             {
@@ -653,9 +679,10 @@ namespace DH.Helpdesk.Web.Controllers
                         SessionFacade.CurrentUser.Id,
                         SessionFacade.CurrentUser.UserGroupId);
                 }
-            }
+            }    
+                               
             var m = new CaseSearchResultModel
-            {
+            {             
                 GridSettings = f.IsConnectToParent
                     ? _caseOverviewSettingsService.GetSettings(
                         SessionFacade.CurrentCustomer.Id,
@@ -666,7 +693,10 @@ namespace DH.Helpdesk.Web.Controllers
                         SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.Id)
             };
+            
+
             var gridSettings = SessionFacade.CaseOverviewGridSettings;
+
             sm.Search.SortBy = gridSettings.sortOptions.sortBy;
             sm.Search.Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc;
 
@@ -1432,6 +1462,29 @@ namespace DH.Helpdesk.Web.Controllers
                         SessionFacade.CurrentUser.UserGroupId,
                         userId,
                         GridSettingsService.CASE_CONNECTPARENT_GRID_ID);
+
+                    var connectToParentGrid = gridSettings;
+                    var userSelectedGrid = _gridSettingsService.GetForCustomerUserGrid(
+                            SessionFacade.CurrentCustomer.Id,
+                            SessionFacade.CurrentUser.UserGroupId,
+                            SessionFacade.CurrentUser.Id,
+                            GridSettingsService.CASE_OVERVIEW_GRID_ID);
+
+                    var notexists = connectToParentGrid.columnDefs.Where(a => !userSelectedGrid.columnDefs.Any(b => b.name == a.name)).ToList();
+                    var difference = userSelectedGrid.columnDefs.Where(a => !connectToParentGrid.columnDefs.Any(b => b.name == a.name)).ToList();
+
+                    if (notexists != null)
+                    {
+                        int i = 0;
+                        foreach (var c in notexists)
+                        {
+                            connectToParentGrid.columnDefs.Remove(c);
+                            connectToParentGrid.columnDefs.Add(difference[i]);
+                            i++;
+                        }
+                    }
+                    gridSettings = connectToParentGrid;
+
                     m.ConnectToParentModel.PageSettings = new PageSettingsModel()
                     {
                         searchFilter = JsonCaseSearchFilterData.MapFrom(m.ConnectToParentModel.CaseSetting),

@@ -488,6 +488,28 @@ namespace DH.Helpdesk.Web.Controllers
                             SessionFacade.CurrentUser.Id,
                             GridSettingsService.CASE_CONNECTPARENT_GRID_ID);
 
+            var connectToParentGrid = gridSettings;
+            var userSelectedGrid = _gridSettingsService.GetForCustomerUserGrid(
+                            SessionFacade.CurrentCustomer.Id,
+                            SessionFacade.CurrentUser.UserGroupId,
+                            SessionFacade.CurrentUser.Id,
+                            GridSettingsService.CASE_OVERVIEW_GRID_ID);
+
+            var notexists = connectToParentGrid.columnDefs.Where(a => !userSelectedGrid.columnDefs.Any(b => b.name == a.name)).ToList();
+            var difference = userSelectedGrid.columnDefs.Where(a => !connectToParentGrid.columnDefs.Any(b => b.name == a.name)).ToList();
+
+            if (notexists != null)
+            {
+                int i = 0;
+                foreach (var c in notexists)
+                {
+                    connectToParentGrid.columnDefs.Remove(c);
+                    connectToParentGrid.columnDefs.Add(difference[i]);
+                    i++;
+                }
+            }
+            gridSettings = connectToParentGrid;
+
             var m = new JsonCaseIndexViewModel
             {
                 PageSettings = new PageSettingsModel
