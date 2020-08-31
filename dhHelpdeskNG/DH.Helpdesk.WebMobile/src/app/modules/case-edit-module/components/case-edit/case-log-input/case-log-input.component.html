@@ -55,7 +55,7 @@
             <mbsc-listview-item *ngFor="let file of filesInternal;" icon="fa-paperclip">{{ file }}</mbsc-listview-item>
         </mbsc-listview>
     </div>
-    <log-files-upload *ngIf="hasFullAccess" [caseKey]="caseKey" [type]="logFileType.Internal" (fileUploaded)="processFileUploaded($event)"></log-files-upload>
+    <log-files-upload *ngIf="hasFullAccess" [caseKey]="caseKey" [type]="logFileType.Internal" (fileUploaded)="processFileUploaded($event)" [customerId]="customerId"></log-files-upload>
   </ng-container>
 </ng-container>
   
