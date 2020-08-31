@@ -63,7 +63,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
       if (!this.isLoading) {
         if (this.filter) {
           this.filter.Page += 1;
-          this.restartTimer();
+          this.search().subscribe();
         }
       }
     }
@@ -245,14 +245,14 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
       this.initiatedTimer = true;
       timer(0, refreshInterval || 10000)
         .pipe(
-          takeUntil(this.destroy$),
-          takeUntil(this.stopRefresh$),
-          repeatWhen(() => this.startRefresh$),
           switchMap(data => {
             this.filter.Page = PagingConstants.page;
             this.resetCases();
             return this.search();
-          }))
+          }),
+          takeUntil(this.destroy$),
+          takeUntil(this.stopRefresh$),
+          repeatWhen(() => this.startRefresh$))
         .subscribe(() => {
           if (!refreshInterval) {
             this.stopRefresh$.next(); //if no refreshInterval stop timer after first load
