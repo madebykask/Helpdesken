@@ -21,7 +21,7 @@ module.exports = WebpackMerge.smart(CommonConfig({ env: CONSTANTS.MODE,  outputD
         devtool: 'source-map',
         output: {
             path: outputDir,
-            publicPath: 'mobile/',
+            publicPath: '/',
             filename: '[name].[hash].js',
             chunkFilename: '[id].[hash].chunk.js'
         },
