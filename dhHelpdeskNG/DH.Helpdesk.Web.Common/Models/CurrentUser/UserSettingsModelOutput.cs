@@ -14,5 +14,6 @@ namespace DH.Helpdesk.Web.Common.Models.CurrentUser
         public bool OwnCasesOnly { get; set; }
         public bool CreateCasePermission { get; set; }
         public bool DeleteAttachedFiles { get; set; }
+        public int CaseOverviewRefreshInterval { get; set; }
     }
 }
