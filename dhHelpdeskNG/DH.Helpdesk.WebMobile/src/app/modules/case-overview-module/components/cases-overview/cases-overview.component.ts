@@ -64,7 +64,6 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
         if (this.filter) {
           this.filter.Page += 1;
           this.restartTimer();
-          this.search().subscribe();
         }
       }
     }
@@ -265,6 +264,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   }
 
   private restartTimer() {
+    // restarts search initiated in runNewSearch
     this.stopRefresh$.next();
     this.startRefresh$.next();
   }
