@@ -18,6 +18,7 @@ export class UserData {
   userTimeZone?: string;
   createCasePermission: boolean;
   canDeleteAttachedFiles: boolean;
+  caseOverviewRefreshInterval?: number;
 }
 
 export class CurrentUser {
