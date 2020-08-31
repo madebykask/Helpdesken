@@ -199,7 +199,7 @@ export class ExtendedCaseFileUploadComponent extends BaseControl {
   }
 
   private setFiles(files: CaseFileModel[]) {
-    this.fieldModel.setControlValue(JSON.stringify(files));
+    this.fieldModel.setControlValue(files && files.length ? JSON.stringify(files) : '');
   }
 
   private processFileUploadDelete(fileItem: FileItem) {
