@@ -191,7 +191,7 @@
     <link href="@Url.Content("~/Content/css/ex-case-mobile.css")" rel="stylesheet" type="text/css" />
 }*@
 
-@if (Model.ShowCaseActionsPanelOnTop)
+@if (Model.ShowCaseActionsPanelOnTop & Model.CaseDataModel.FinishingDate == null)
 {
     @Html.Partial("_CaseControlPanel", Model.CreateExtendedCaseControlsPanelModel())
 }
@@ -439,7 +439,7 @@
     }
 </div>
 
-@if (Model.ShowCaseActionsPanelAtBottom)
+@if (Model.ShowCaseActionsPanelAtBottom & Model.CaseDataModel.FinishingDate == null)
 {
     @Html.Partial("_CaseControlPanel", Model.CreateExtendedCaseControlsPanelModel(2))
 }
@@ -471,7 +471,8 @@
     @* show log notes only for LineManager or if ShowCommunicationForSelfservice is enabled in web.config*@
     @if (Model.CaseId > 0 &&
          (Model.ApplicationType == ApplicationType.LineManager ||
-          Model.ApplicationType == ApplicationType.SelfService && Model.ShowCommunicationForSelfservice))
+          Model.ApplicationType == ApplicationType.SelfService && Model.ShowCommunicationForSelfservice)
+          && Model.CaseDataModel.FinishingDate == null)
     {
         @Html.Partial("_Communication", Model.CaseLogsModel, new ViewDataDictionary(ViewData) { { "readonly", Model.CaseDataModel.IsFinished } })
         if (Model.CaseLogsModel.IsAttachmentsAllowed)
