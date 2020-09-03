@@ -3531,6 +3531,7 @@
     <Content Include="Areas\Admin\Views\GlobalSetting\EditFileExtensions.cshtml" />
     <Content Include="Areas\Inventory\Views\Server\EditorTemplates\Documents.cshtml" />
     <Content Include="Areas\Inventory\Views\Server\_InventoryFiles.cshtml" />
+    <Content Include="Areas\Inventory\Views\InventorySettings\EditorTemplates\Settings\DisplayFieldSettingModel.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\i18n\ar.js" />
     <Content Include="Scripts\i18n\az.js" />
@@ -5036,6 +5037,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Inventory\Scripts\" />
+    <Folder Include="Areas\Inventory\Views\InventorySettings\Display Templates\Settings\" />
     <Folder Include="FormLibContent\Xmls\Norway\Data\AdditionalPaymentsDeductions\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
     <Folder Include="rss\" />

@@ -65,6 +65,7 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
             MapStorageFieldsSettings(businessModel.StorageFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
             MapCommunicationFieldsSettings(businessModel.CommunicationFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
             MapOtherFieldsSettings(businessModel.OtherFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
+            MapDocumentFieldsSettings(businessModel.DocumentFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
             MapPlaceFieldsSettings(businessModel.PlaceFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
             MapStateFieldsSettings(businessModel.StateFieldsSettings, fieldSettingCollection, languageTextId, businessModel.ChangedDate);
         }
@@ -337,6 +338,15 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
             MapFieldSetting(updatedSettings.URLFieldSetting, entity.FindByName(OtherFields.URL), languageTextId, changedDate);
             MapFieldSetting(updatedSettings.URL2FieldSetting, entity.FindByName(OtherFields.URL2), languageTextId, changedDate);
             MapFieldSetting(updatedSettings.OwnerFieldSetting, entity.FindByName(OtherFields.Owner), languageTextId, changedDate);
+        }
+
+        private static void MapDocumentFieldsSettings(
+            BusinessData.Models.Inventory.Edit.Settings.ServerSettings.DocumentFieldsSettings updatedSettings,
+            NamedObjectCollection<ServerFieldSettings> entity,
+            string languageTextId,
+            DateTime changedDate)
+        {
+            MapFieldSetting(updatedSettings.DocuemntFieldSetting, entity.FindByName(DocumentFields.Document), languageTextId, changedDate);            
         }
 
         private static void MapPlaceFieldsSettings(
