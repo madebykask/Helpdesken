@@ -8,6 +8,7 @@ import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
 import { DateTime } from 'luxon';
 import { CaseDataStore } from './case-data.store';
 import { OptionsHelper } from 'src/app/helpers/options-helper';
+import { isNumeric } from 'rxjs/internal/util/isNumeric';
 
 @Injectable({ providedIn: 'root' })
 export class CaseEditDataHelper {
@@ -47,6 +48,14 @@ export class CaseEditDataHelper {
     }
     const fields = caseData.fields.filter(f => f.name === name);
     return fields.length <= 0 ? null : fields[0];
+  }
+
+  getIdField(caseData: CaseEditInputModel, name: string): CaseFieldModel<any> {
+    const valueField = this.getField(caseData, name);
+    if (valueField && isNumeric(valueField.value)) {
+      valueField.value = valueField.value.toString();
+    }
+    return valueField;
   }
 
     // returns value from caseData, not formControl

@@ -31,6 +31,7 @@ import { LocalStorageService } from 'src/app/services/local-storage';
 import { OUsService } from 'src/app/services/case-organization/ous-service';
 import { TabNames } from '../../constants/tab-names';
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { isNumeric } from 'rxjs/internal/util/isNumeric';
 
 @Component({
   selector: 'app-case-edit',
@@ -388,22 +389,23 @@ export class CaseEditComponent {
               caseStatus: this.caseDataHelpder.getField(caseData, CaseFieldsNames.StateSecondaryId).value || '',
               customerId: caseData.customerId
             },
-            caseValues: {
-              administrator_id: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.PerformerUserId).value },
+            caseValues: { // EC uses strict comparision of values. so if value here is number, but in datasource is string - no item is selected
+              // keep all ids as a string
+              administrator_id: { Value: this.caseDataHelpder.getIdField(caseData, CaseFieldsNames.PerformerUserId).value },
               reportedby: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.ReportedBy).value },
               persons_name: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.PersonName).value },
               persons_phone: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.PersonPhone).value },
               usercode: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.UserCode).value },
-              region_id: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.RegionId).value },
-              department_id: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.DepartmentId).value },
-              ou_id_1: { Value: ouParentId },
-              ou_id_2: { Value: ouId },
-              productarea_id: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.ProductAreaId).value },
-              status_id: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.StatusId).value },
-              subStatus_id: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.StateSecondaryId).value },
+              region_id: { Value: this.caseDataHelpder.getIdField(caseData, CaseFieldsNames.RegionId).value },
+              department_id: { Value: this.caseDataHelpder.getIdField(caseData, CaseFieldsNames.DepartmentId).value },
+              ou_id_1: { Value: isNumeric(ouParentId) ? ouParentId.toString() : ouParentId },
+              ou_id_2: { Value: isNumeric(ouId) ? ouId.toString() : ouId },
+              productarea_id: { Value: this.caseDataHelpder.getIdField(caseData, CaseFieldsNames.ProductAreaId).value },
+              status_id: { Value: this.caseDataHelpder.getIdField(caseData, CaseFieldsNames.StatusId).value },
+              subStatus_id: { Value: this.caseDataHelpder.getIdField(caseData, CaseFieldsNames.StateSecondaryId).value },
               plandate: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.PlanDate).value },
               watchdate: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.WatchDate).value },
-              priority_id: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.PriorityId).value },
+              priority_id: { Value: this.caseDataHelpder.getIdField(caseData, CaseFieldsNames.PriorityId).value },
               log_textinternal: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.Log_InternalText).value },
               case_relation_type: { Value: this.getCaseRelationType(caseData) },
               persons_email: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.PersonEmail).value },
