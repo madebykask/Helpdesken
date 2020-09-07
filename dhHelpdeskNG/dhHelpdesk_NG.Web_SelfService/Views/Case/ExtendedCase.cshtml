@@ -111,7 +111,7 @@
         caseInitValues: {
             AdministratorId: '@Model.CaseDataModel.Performer_User_Id',
             CaseId: '@Model.CaseDataModel.Id',
-            CaseGuid: '@Model.CaseDataModel.CaseGUID.ToString()',
+            CaseGuid: '@Model.CaseDataModel.CaseFileKey',
             CaseNumber: '@Model.CaseDataModel.CaseNumber.ToString()',
             CustomerId: '@Model.CaseDataModel.Customer_Id',
             ReportedBy: @Html.Raw(Json.Encode(Model.CaseDataModel.ReportedBy)),

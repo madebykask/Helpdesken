@@ -166,7 +166,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             _logService = logService;
             _caseFieldSettingService = caseFieldSettingService;
             _infoService = infoService;
-            _userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create("Case");
+            _userTemporaryFilesStorage = userTemporaryFilesStorageFactory.Create(ModuleName.Cases);
             _caseFileService = caseFileService;
             _regionService = regionService;
             _departmentService = departmentService;
