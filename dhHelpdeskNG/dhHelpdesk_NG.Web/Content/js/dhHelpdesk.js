@@ -140,6 +140,7 @@ function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFi
                 $ctl.append('<option value="' + data.list[i].id + '">' + data.list[i].name + '</option>');
             }
             $ctl.val(selected);
+            $ctl.trigger('applyValue');
         }
     });
 }

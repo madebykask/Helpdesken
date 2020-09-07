@@ -1,4 +1,6 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Server.ServerEditViewModel
 
 @{
@@ -52,6 +54,8 @@
     @Html.EditorFor(m => m.ServerViewModel.CommunicationFieldsViewModel)
     @Html.EditorFor(m => m.ServerViewModel.OtherFieldsModel)
     @Html.EditorFor(m => m.ServerViewModel.PlaceFieldsViewModel)
+    @Html.EditorFor(m => m.ServerViewModel, "Documents")
+    @Html.HiddenFor(m => m.ServerViewModel.DocumentFileKey)
 
     if (Model.ServerViewModel.CreatedDate.Show || Model.ServerViewModel.ChangedDate.Show || syncChangeFieldModel.Show)
     {
@@ -107,4 +111,50 @@
             </table>
         </div>
     </div>
+}
+
+@section Scripts
+{  
+    <script type="text/javascript">
+
+        window.parameters = (window.parameters == null ? {} : window.parameters);
+        window.parameters.fileUploadWhiteList = [];
+        window.parameters.invalidFileExtensionText = '@Html.Raw(Translation.GetForJS("har inte en giltig filändelse"))';
+        //window.parameters.fileUploadWhiteList = null;
+
+        @if (Model.FileUploadWhiteList != null)
+        {
+            foreach(var extension in Model.FileUploadWhiteList)
+            {
+                @:window.parameters.fileUploadWhiteList.push('@extension');
+            }
+        }
+        else
+        {
+            @:window.parameters.fileUploadWhiteList = null;
+        }        
+    </script>
+    @if (Model.ServerViewModel.DocumentFieldsModel.Document.Show)
+    {
+        @Html.Partial("_InventoryFiles")
+        @Scripts.Render(BundleConfig.ScriptNames.InventoryFiles)
+        <script type="text/javascript">
+
+            var inventoryFilesOptions = {
+                id: @Model.Id.ToString(),
+                attachedFileName: '@Model.ServerViewModel.DocumentFieldsModel.Document.Value',//edit
+                documentFileKey: '@Model.ServerViewModel.DocumentFileKey',
+                uploadDocumentFileUrl: '@Url.Action("UploadFile", "Server")',
+                fileDownloadUrlMask: '@Url.Action("DownloadFile", "Server")',
+                fileDeleteUrl: '@Url.Action("DeleteFile", "Server")'
+            };
+
+            $(function(jQuery) {
+                // create instance and init
+                window.inventoryFiles = new InventoryFiles(jQuery);
+                window.inventoryFiles.init(inventoryFilesOptions);
+
+            });
+        </script>
+    }
 }

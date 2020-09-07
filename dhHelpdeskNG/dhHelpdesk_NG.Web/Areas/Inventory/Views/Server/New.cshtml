@@ -1,4 +1,7 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web
+@using DH.Helpdesk.Web.Infrastructure
+
 @model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Server.ServerViewModel
 @{
     Layout = "~/Areas/Inventory/Views/Shared/_EditLayout.cshtml";
@@ -8,7 +11,7 @@
 {
     <ul class="secnav">
         <li id="menu1">
-            <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#server_edit_form').submit(); "/>
+            <input type="submit" value="@Translation.Get("Spara")" class="btn" onclick=" $('#server_edit_form').submit(); " />
         </li>
         <li id="menu2">@Html.ActionLink(Translation.Get("Avbryt"), "Index", null, new { @class = "btn" })</li>
     </ul>
@@ -35,5 +38,54 @@
         @Html.EditorFor(m => m.CommunicationFieldsViewModel)
         @Html.EditorFor(m => m.OtherFieldsModel)
         @Html.EditorFor(m => m.PlaceFieldsViewModel)
+        @Html.EditorFor(m => m, "Documents")
+        @Html.HiddenFor(m => m.DocumentFileKey)
     }
+
 }
+
+@section Scripts{
+    <script type="text/javascript">
+        window.parameters = (window.parameters == null ? {} : window.parameters);
+        window.parameters.fileUploadWhiteList = [];
+
+        window.parameters.invalidFileExtensionText = '@Html.Raw(Translation.GetForJS("har inte en giltig filändelse"))';
+        //window.parameters.fileUploadWhiteList = null;
+
+        @if (Model.FileUploadWhiteList != null)
+        {
+            foreach(var extension in Model.FileUploadWhiteList)
+            {
+                @:window.parameters.fileUploadWhiteList.push('@extension');
+            }
+        }
+        else
+        {
+            @:window.parameters.fileUploadWhiteList = null;
+        }
+    </script>
+
+    @if (Model.DocumentFieldsModel.Document.Show)
+    {
+        @Html.Partial("_InventoryFiles")
+        @Scripts.Render(BundleConfig.ScriptNames.InventoryFiles)
+        <script type="text/javascript">
+
+            var inventoryFilesOptions = {
+                id: @Model.Id.ToString(),
+                attachedFileName: '',//new
+                documentFileKey: '@Model.DocumentFileKey',
+                uploadDocumentFileUrl: '@Url.Action("UploadFile", "Server")',
+                fileDownloadUrlMask: '@Url.Action("DownloadFile", "Server")',
+                fileDeleteUrl: '@Url.Action("DeleteFile", "Server")'
+            };
+
+            $(function(jQuery) {
+                // create instance and init
+                window.inventoryFiles = new InventoryFiles(jQuery);
+                window.inventoryFiles.init(inventoryFilesOptions);
+
+            });
+        </script>
+    }
+ }

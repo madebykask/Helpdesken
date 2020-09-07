@@ -348,8 +348,10 @@
     <Compile Include="Areas\Inventory\Models\BaseEditCustomInventoryModel.cs" />
     <Compile Include="Areas\Inventory\Models\BaseEditPrinterModel.cs" />
     <Compile Include="Areas\Inventory\Models\EditModel\Printer\PrinterEditViewModel.cs" />
+    <Compile Include="Areas\Inventory\Models\EditModel\Server\DocumentFieldsModel.cs" />
     <Compile Include="Areas\Inventory\Models\EditModel\Settings\Computer\TabSettingModel.cs" />
     <Compile Include="Areas\Inventory\Models\EditModel\Settings\Computer\WorkstationTabsSettingsModel.cs" />
+    <Compile Include="Areas\Inventory\Models\EditModel\Settings\Server\DocumentFieldsSettingsModel.cs" />
     <Compile Include="Areas\Inventory\Models\InventoryTypesViewModel.cs" />
     <Compile Include="Areas\Inventory\Models\RelatedCasesModels\CustomInventoryRelatedCasesModel.cs" />
     <Compile Include="Areas\Inventory\Models\RelatedCasesModels\PrinterRelatedCasesModel.cs" />
@@ -3527,6 +3529,9 @@
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
     <Content Include="Areas\Admin\Views\GlobalSetting\EditFileExtensions.cshtml" />
+    <Content Include="Areas\Inventory\Views\Server\EditorTemplates\Documents.cshtml" />
+    <Content Include="Areas\Inventory\Views\Server\_InventoryFiles.cshtml" />
+    <Content Include="Areas\Inventory\Views\InventorySettings\EditorTemplates\Settings\DisplayFieldSettingModel.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\i18n\ar.js" />
     <Content Include="Scripts\i18n\az.js" />

@@ -71,7 +71,6 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
             if (aryNums.Length > 0)
             {
                 var retIds = new List<string>();
-                var index = 0;
                 foreach (var num in aryNums)
                 {
                     var curId = int.MinValue;
@@ -94,7 +93,6 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
             if (aryNums.Length > 0)
             {
                 var retIds = new List<string>();
-                var index = 0;
                 foreach (var num in aryNums)
                 {
                     var curId = int.MinValue;

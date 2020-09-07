@@ -1,0 +1,48 @@
+input.fileupload {  
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.row {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.my-drop-zone { border: dotted 3px lightgray; }
+.nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
+.another-file-over-class { border: dotted 3px green; }
+
+.file-item {
+  cursor: pointer;
+  display: block;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: 2px 0;
+}
+
+.file-item .delete {
+  text-align: right;
+  float: right;
+  cursor: pointer;
+}
+
+.file-item .glyphicon-paperclip {
+  margin-right: 5px;
+}
+
+.file-item.uploading {
+
+}
+
+.file-list {
+  padding: 10px 0;
+}
+
+.file-drop.well {
+  margin: 0;
+  text-align: center;
+}

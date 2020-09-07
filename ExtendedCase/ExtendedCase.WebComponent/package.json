@@ -62,11 +62,13 @@
     "moment": "^2.24.0",
     "ng-dynamic-component": "^5.0.0",
     "ng-select": "^1.0.2",
+    "ng2-file-upload": "^1.4.0",
     "ngx-bootstrap": "^5.3.2",
     "ngx-clipboard": "^12.2.0",
     "ngx-moment": "^3.4.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.2",
+    "rxjs-compat": "^6.6.0",
     "url-search-params-polyfill": "^7.0.0",
     "zone.js": "^0.10.1"
   },

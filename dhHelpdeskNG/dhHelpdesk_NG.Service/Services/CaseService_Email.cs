@@ -808,8 +808,9 @@ namespace DH.Helpdesk.Services.Services
 
                     var body = mailTpl.Body;
                     //exclude admin specific fields (fieldTemplate.ExcludeAdministrators) or those provided with filterFieldsEmails
-                    var applyFeedbackFilter = mailTpl.MailTemplate.SendMethod == EmailSendMethod.SeparateEmails;
-                    var feedBackFields = GetFeedbackFields(mailTemplateId, case_, cms, fields, eLog.Key,
+                    // var applyFeedbackFilter = mailTpl.MailTemplate.SendMethod == EmailSendMethod.SeparateEmails;
+                    var applyFeedbackFilter = true;
+                     var feedBackFields = GetFeedbackFields(mailTemplateId, case_, cms, fields, eLog.Key,
                         ref body, filterFieldsEmails, applyFeedbackFilter);
                     fieldsToUpdate.AddRange(feedBackFields);
 
@@ -841,12 +842,15 @@ namespace DH.Helpdesk.Services.Services
             var templateFields = new List<FeedbackField>();
             var emailsToCheck = filterFieldsEmails ?? new List<string>();
 
+            var initiatorEmail = newCase.PersonsEmail;
+
             if (mailTemplateId == (int)GlobalEnums.MailTemplates.ClosedCase)
             {
                 var adminEmails = newCase.Customer.Users.Where(x => x.UserGroup_Id != UserGroups.User)
                     .Select(x => x.Email)
                     .Distinct()
-                    .ToList();
+                    .ToList();                
+
                 var identifiers = _feedbackTemplateService.FindIdentifiers(body).ToList();
 
                 //dont send feedback to admins

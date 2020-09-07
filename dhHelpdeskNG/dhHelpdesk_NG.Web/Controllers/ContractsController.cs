@@ -196,6 +196,28 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CurrentUser.Id,
                 GridSettingsService.CASE_CONTRACT_CASES_GRID);
 
+            var contractCasesGrid = gridSettings;
+            var userSelectedGrid = _gridSettingsService.GetForCustomerUserGrid(
+                    SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentUser.UserGroupId,
+                    SessionFacade.CurrentUser.Id,
+                    GridSettingsService.CASE_OVERVIEW_GRID_ID);
+
+            var notexists = contractCasesGrid.columnDefs.Where(a => !userSelectedGrid.columnDefs.Any(b => b.name == a.name)).ToList();
+            var difference = userSelectedGrid.columnDefs.Where(a => !contractCasesGrid.columnDefs.Any(b => b.name == a.name)).ToList();
+
+            if (notexists != null)
+            {
+                int i = 0;
+                foreach (var c in notexists)
+                {
+                    contractCasesGrid.columnDefs.Remove(c);
+                    contractCasesGrid.columnDefs.Add(difference[i]);
+                    i++;
+                }
+            }
+            gridSettings = contractCasesGrid;
+
             model.ContractCases = new JsonCaseIndexViewModel
             {
                 PageSettings = new PageSettingsModel
@@ -515,7 +537,7 @@ namespace DH.Helpdesk.Web.Controllers
             var contractcategories = _contractCategoryService.GetContractCategories(customerId).OrderBy(a => a.Name).ToList();
             var suppliers = _supplierService.GetActiveSuppliers(customerId);
             var departments = _departmentService.GetDepartmentsForUser(customerId, SessionFacade.CurrentUser.Id);
-            var users = _userService.GetCustomerActiveUsers(customerId);
+            var users = _userService.GetCustomerUsers(customerId);
 
             var emptyChoice = new SelectListItem() { Selected = true, Text = "", Value = string.Empty };
 

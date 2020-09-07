@@ -11,6 +11,7 @@
         public partial struct ScriptNames
         {
             public const string DynamicCase = "~/bundles/dynamic-case";
+            public const string IFrameResizer = "~/bundles/iframeResizer";
             public const string AttributesValidation = "~/bundles/jqueryattrval";
             public const string InventoryUserSearch = ("~/bundles/inventory/inventorysearch");
             public const string CaseIntLogEmailSearch = ("~/bundles/case/caseintlogemailsearch");
@@ -67,7 +68,7 @@
             bundles.Add(new ScriptBundle(ScriptNames.DynamicCase).Include(
                             "~/Content/js/DynamicCase/container.js"));
 
-            bundles.Add(new ScriptBundle("~/Content/js/iframeResizer").Include(
+            bundles.Add(new ScriptBundle(ScriptNames.IFrameResizer).Include(
                             "~/Content/js/DynamicCase/iframeResizer.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/common").Include(

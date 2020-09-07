@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace DH.Helpdesk.Web.Common.Extensions
 {
@@ -115,6 +116,11 @@ namespace DH.Helpdesk.Web.Common.Extensions
             }
 
             return newStr;
+        }
+
+        public static string HtmlEncode(this string src)
+        {
+            return HttpUtility.HtmlEncode(src);
         }
     }
 }

@@ -100,7 +100,7 @@
             this.Property(x => x.MACAddress).IsRequired().HasMaxLength(20);
             this.Property(x => x.RAS).IsRequired();
 
-            this.Property(x => x.NovellClient).IsRequired().HasMaxLength(50);
+            this.Property(x => x.NovellClient).IsRequired().HasMaxLength(100);
             this.Property(x => x.HardDrive).HasColumnName("Harddrive").IsRequired().HasMaxLength(50);
             this.Property(x => x.VideoCard).IsRequired().HasMaxLength(100);
             this.Property(x => x.SoundCard).IsRequired().HasMaxLength(100);

@@ -25,6 +25,7 @@
             var other = CreateOtherSettings(entity);
             var place = CreatePlaceSettings(entity);
             var state = CreateStateSettings(entity);
+            var document = CreateDocumentSettings(entity);
 
             var settings = ServerFieldsSettings.CreateForEdit(
                 general,
@@ -36,6 +37,7 @@
                 os,
                 memory,
                 place,
+                document,
                 processor,
                 communication);
 
@@ -152,6 +154,15 @@
             var location = CreateFieldSetting(entity.FindByName(PlaceFields.Location));
 
             var settings = new PlaceFieldsSettings(room, location);
+
+            return settings;
+        }
+
+        private static DocumentFieldsSettings CreateDocumentSettings(NamedObjectCollection<FieldSettingMapperData> entity)
+        {
+            var document = CreateFieldSetting(entity.FindByName(DocumentFields.Document));
+
+            var settings = new DocumentFieldsSettings(document);
 
             return settings;
         }

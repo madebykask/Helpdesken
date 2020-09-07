@@ -33,6 +33,7 @@ using DH.Helpdesk.Web.Common.Models.CaseSearch;
 using DH.Helpdesk.Web.Infrastructure.Behaviors;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
+using DH.Helpdesk.BusinessData.Models.Case.Input;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -189,7 +190,6 @@ namespace DH.Helpdesk.Web.Controllers
 
         #endregion
 
-        private readonly int DefaultMaxRows = 10;
         private readonly int DefaultCaseLockBufferTime = 30; // Second
         private readonly int DefaultExtendCaseLockTime = 60; // Second
 
@@ -620,17 +620,43 @@ namespace DH.Helpdesk.Web.Controllers
             sm.CaseSearchFilter = f;
             if (SessionFacade.CaseOverviewGridSettings == null)
             {
-                SessionFacade.CaseOverviewGridSettings = f.IsConnectToParent
-                    ? _gridSettingsService.GetForCustomerUserGrid(
+                if (f.IsConnectToParent)
+                {
+                    var connectToParentGrid = _gridSettingsService.GetForCustomerUserGrid(
                         SessionFacade.CurrentCustomer.Id,
                         SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.Id,
-                        GridSettingsService.CASE_CONNECTPARENT_GRID_ID)
-                    : _gridSettingsService.GetForCustomerUserGrid(
+                        GridSettingsService.CASE_CONNECTPARENT_GRID_ID);
+                    var userSelectedGrid = _gridSettingsService.GetForCustomerUserGrid(
                         SessionFacade.CurrentCustomer.Id,
                         SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.Id,
                         GridSettingsService.CASE_OVERVIEW_GRID_ID);
+
+                    var notexists = connectToParentGrid.columnDefs.Where(a => !userSelectedGrid.columnDefs.Any(b => b.name == a.name)).ToList();
+                    var difference = userSelectedGrid.columnDefs.Where(a => !connectToParentGrid.columnDefs.Any(b => b.name == a.name)).ToList();
+
+                    if(notexists != null)
+                    {
+                        int i = 0;
+                        foreach (var c in notexists)
+                        {
+                            connectToParentGrid.columnDefs.Remove(c);                            
+                            connectToParentGrid.columnDefs.Add(difference[i]);
+                            i++;
+                        }
+                    }
+                    SessionFacade.CaseOverviewGridSettings = connectToParentGrid;
+                }
+                else
+                {
+                    SessionFacade.CaseOverviewGridSettings = _gridSettingsService.GetForCustomerUserGrid(
+                        SessionFacade.CurrentCustomer.Id,
+                        SessionFacade.CurrentUser.UserGroupId,
+                        SessionFacade.CurrentUser.Id,
+                        GridSettingsService.CASE_OVERVIEW_GRID_ID);
+                }
+                
             }
             else
             {
@@ -653,9 +679,10 @@ namespace DH.Helpdesk.Web.Controllers
                         SessionFacade.CurrentUser.Id,
                         SessionFacade.CurrentUser.UserGroupId);
                 }
-            }
+            }    
+                               
             var m = new CaseSearchResultModel
-            {
+            {             
                 GridSettings = f.IsConnectToParent
                     ? _caseOverviewSettingsService.GetSettings(
                         SessionFacade.CurrentCustomer.Id,
@@ -666,7 +693,10 @@ namespace DH.Helpdesk.Web.Controllers
                         SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.Id)
             };
+            
+
             var gridSettings = SessionFacade.CaseOverviewGridSettings;
+
             sm.Search.SortBy = gridSettings.sortOptions.sortBy;
             sm.Search.Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc;
 
@@ -933,10 +963,7 @@ namespace DH.Helpdesk.Web.Controllers
         [ValidateInput(false)]
         public RedirectResult NewAndClose(CaseEditInput m, int? templateId, string BackUrl)
         {
-            var newChild = false;
-
-            if (m.case_.Id == 0 && m.ParentId != null)
-                newChild = true;
+            var newChild = m.case_.Id == 0 && m.ParentId != null;
 
             m.ActiveTab = "";
 
@@ -1333,7 +1360,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var caseLockViewModel = GetCaseLockModel(id, userId, true, activeTab);
 
                 //todo: check if GetCaseById can be used in model!
-                int customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : _caseService.GetCaseCustomerId(id);
+                var customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : _caseService.GetCaseCustomerId(id);
 
                 var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
                 m = this.GetCaseInputViewModel(userId, customerId, id, caseLockViewModel, caseFieldSettings, redirectFrom, backUrl, null, null, updateState);
@@ -1368,7 +1395,6 @@ namespace DH.Helpdesk.Web.Controllers
                     m.AccountId = account.Item1;
                     m.AccountActivityId = account.Item2;
                 }
-
 
                 // User has not access to case
                 if (m.EditMode == AccessMode.NoAccess)
@@ -1436,6 +1462,29 @@ namespace DH.Helpdesk.Web.Controllers
                         SessionFacade.CurrentUser.UserGroupId,
                         userId,
                         GridSettingsService.CASE_CONNECTPARENT_GRID_ID);
+
+                    var connectToParentGrid = gridSettings;
+                    var userSelectedGrid = _gridSettingsService.GetForCustomerUserGrid(
+                            SessionFacade.CurrentCustomer.Id,
+                            SessionFacade.CurrentUser.UserGroupId,
+                            SessionFacade.CurrentUser.Id,
+                            GridSettingsService.CASE_OVERVIEW_GRID_ID);
+
+                    var notexists = connectToParentGrid.columnDefs.Where(a => !userSelectedGrid.columnDefs.Any(b => b.name == a.name)).ToList();
+                    var difference = userSelectedGrid.columnDefs.Where(a => !connectToParentGrid.columnDefs.Any(b => b.name == a.name)).ToList();
+
+                    if (notexists != null)
+                    {
+                        int i = 0;
+                        foreach (var c in notexists)
+                        {
+                            connectToParentGrid.columnDefs.Remove(c);
+                            connectToParentGrid.columnDefs.Add(difference[i]);
+                            i++;
+                        }
+                    }
+                    gridSettings = connectToParentGrid;
+
                     m.ConnectToParentModel.PageSettings = new PageSettingsModel()
                     {
                         searchFilter = JsonCaseSearchFilterData.MapFrom(m.ConnectToParentModel.CaseSetting),
@@ -4938,6 +4987,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             var responsibleUsersList = _userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
 
+            var performersListForSearch = _userService.GetAvailablePerformersOrUserId(customerId, null, true);
+            m.PerformersToSearch = createPerformerforSearchList(customerId, performersListForSearch);
+           
             m.FollowersModel =
                 m.SendToDialogModel =
                     _sendToDialogModelFactory.CreateNewSendToDialogModel(
@@ -6894,7 +6946,53 @@ namespace DH.Helpdesk.Web.Controllers
 
             return CaseFieldStatusType.Editable;
         }
-
+        private List<CasePerformersSearch> createPerformerforSearchList(int customerId, IList<BusinessData.Models.User.CustomerUserInfo> performers)
+        {
+            var performersToSearch = new List<CasePerformersSearch>();
+            var customerWg = _workingGroupService.GetAllWorkingGroupsForCustomer(customerId);
+            var foundWg = false;
+            foreach(var user in performers)
+            {
+                foundWg = false;
+                foreach (var uwg in user.WorkingGroups)
+                {
+                    if (uwg.IsMemberOfGroup)
+                    {
+                        var wg = customerWg.FirstOrDefault(w => w.Id == uwg.WorkingGroupId && w.IsActive != 0);
+                        if (wg != null)
+                        {
+                            var newRecord = new CasePerformersSearch
+                              (
+                                  user.Id,
+                                  user.FirstName,
+                                  user.SurName,
+                                  wg.WorkingGroupName,
+                                  wg.Id
+                              );
+                            performersToSearch.Add(newRecord);
+                            foundWg = true;
+                        }                       
+                    }
+                }
+                if (!foundWg)
+                {
+                    var newRecord = new CasePerformersSearch
+                               (
+                                   user.Id,
+                                   user.FirstName,
+                                   user.SurName,
+                                   null,
+                                   0
+                               );
+                    performersToSearch.Add(newRecord);
+                }
+            }
+            return performersToSearch
+                .OrderBy(p => p.FirstName)
+                .ThenBy(p => p.LastName)
+                .ThenBy(p => p.WorkingGroupName)
+                .ToList();
+        }
         #endregion
 
         #region --General--

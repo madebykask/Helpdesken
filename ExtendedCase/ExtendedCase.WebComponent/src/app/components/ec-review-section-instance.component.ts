@@ -1,19 +1,19 @@
-﻿import { Component, ChangeDetectorRef, Output, Input, OnChanges, OnInit, AfterViewInit, ViewChildren, QueryList, DoCheck } from '@angular/core'
+﻿import { Component, ChangeDetectorRef, Input, ViewChildren, QueryList } from '@angular/core'
 import { ProxyModel } from '../models/proxy.model'
 
 import { FormModelService } from '../services/form-model.service';
-import { ExtendedCaseReviewComponentEx } from '../components/controls/ec-review-ex.component';
-import { FormModel, SectionModel, SectionInstanceModel, FieldModelBase } from '../models/form.model';
+import { SectionInstanceModel, FieldModelBase } from '../models/form.model';
 import { SectionTemplateModel, BaseControlTemplateModel } from '../models/template.model';
 
 import { DigestResult } from '../models/digest.model';
 import { LogService } from '../services/log.service';
+import { ExtendedCaseReviewComponentEx } from './controls';
 
 @Component({
     selector: 'ec-review-section-instance',
     templateUrl: './ec-review-section-instance.component.html'
 })
-export class ExtendedCaseReviewSectionInstanceComponent implements AfterViewInit {
+export class ExtendedCaseReviewSectionInstanceComponent {
 
     @Input() reviewSectionInstance: SectionInstanceModel;
     @Input() sectionTemplate: SectionTemplateModel;
@@ -25,7 +25,7 @@ export class ExtendedCaseReviewSectionInstanceComponent implements AfterViewInit
     @ViewChildren(ExtendedCaseReviewComponentEx)
     reviewComponents: QueryList<ExtendedCaseReviewComponentEx>;
 
-    get reviewSectionTemplate() : SectionTemplateModel {
+    get reviewSectionTemplate(): SectionTemplateModel {
         return this.reviewSectionInstance.section.template;
     }
 
@@ -38,13 +38,13 @@ export class ExtendedCaseReviewSectionInstanceComponent implements AfterViewInit
 
         this.updateChildReviewControls(null);
 
-        //required to update section visibility 
+        // required to update section visibility
         this.changeDetector.detectChanges();
-        
-        //subscribe to review section child controls' QueryList collection change to update controls values when section is made visible
+
+        // subscribe to review section child controls' QueryList collection change to update controls values when section is made visible
         this.reviewComponents.changes.subscribe((o: any) => {
             if (o && o.length) {
-                //console.log('@@@ review section child items changed');
+                // console.log('@@@ review section child items changed');
                 this.updateChildReviewControls(null);
                 this.changeDetector.detectChanges();
             }
@@ -64,14 +64,16 @@ export class ExtendedCaseReviewSectionInstanceComponent implements AfterViewInit
     }
 
     updateChildReviewControls(digestResult: DigestResult) {
-        //console.log(`@@@ instance.updateChildReviewControls called. reviewSectionId: ${this.reviewSectionTemplate.id}, ChildCmp_Length: ${this.reviewComponents.length}`);
+        // console.log(`@@@ instance.updateChildReviewControls called. reviewSectionId: ${this.reviewSectionTemplate.id}, ChildCmp_Length: ${this.reviewComponents.length}`);
 
-        //handle deleted section instance
-        if (!this.reviewSectionInstance.section)
+        // handle deleted section instance
+        if (!this.reviewSectionInstance.section) {
             return;
+        }
 
         if (this.reviewComponents && this.reviewComponents.length) {
-            //this.logService.debugFormatted('reviewSectionInstance.updateChildReviewControls(): updating child review controls. ReviewSectionId: {0}, Childs: {1}', this.reviewSectionTemplate.id, this.reviewComponents.length);
+            // this.logService.debugFormatted('reviewSectionInstance.updateChildReviewControls():
+            // updating child review controls. ReviewSectionId: {0}, Childs: {1}', this.reviewSectionTemplate.id, this.reviewComponents.length);
             this.reviewComponents.forEach((cmp: ExtendedCaseReviewComponentEx) => cmp.updateValues(digestResult));
         }
 
@@ -79,7 +81,7 @@ export class ExtendedCaseReviewSectionInstanceComponent implements AfterViewInit
     }
 
     getReviewSectionFields(reviewSection: SectionInstanceModel): { reviewFieldModel: FieldModelBase, controlTemplate: BaseControlTemplateModel }[] {
-        //this.logService.debugFormatted('@@@ instance.getReviewSectionFields called for ReviewSectionId: {0}', this.reviewSectionTemplate.id);
+        // this.logService.debugFormatted('@@@ instance.getReviewSectionFields called for ReviewSectionId: {0}', this.reviewSectionTemplate.id);
         let items: { reviewFieldModel: FieldModelBase, controlTemplate: BaseControlTemplateModel }[] = [];
 
         if (this.sectionTemplate.reviewControls) {
@@ -88,7 +90,7 @@ export class ExtendedCaseReviewSectionInstanceComponent implements AfterViewInit
 
             for (let reviewField of reviewFields) {
                 let ctrlTpl = this.findControlTemplateById(reviewField.id);
-               
+
                 items.push({
                     reviewFieldModel: reviewField,
                     controlTemplate: ctrlTpl
@@ -98,11 +100,12 @@ export class ExtendedCaseReviewSectionInstanceComponent implements AfterViewInit
 
             for (let controlTpl of this.sectionTemplate.controls) {
                 let fieldModel = reviewSection.fields[controlTpl.reviewControlId];
-                if (fieldModel && controlTpl)
+                if (fieldModel && controlTpl) {
                     items.push({
                         reviewFieldModel: fieldModel,
                         controlTemplate: controlTpl
                     });
+                }
             }
         }
 

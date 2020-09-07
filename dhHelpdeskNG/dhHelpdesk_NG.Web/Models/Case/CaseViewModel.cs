@@ -32,6 +32,7 @@ using DH.Helpdesk.Web.Models.Invoice;
 using DH.Helpdesk.Web.Models.Shared;
 
 using ParentCaseInfo = DH.Helpdesk.Web.Models.Case.ChildCase.ParentCaseInfo;
+using DH.Helpdesk.BusinessData.Models.Case.Input;
 
 namespace DH.Helpdesk.Web.Models.Case
 {
@@ -263,6 +264,11 @@ namespace DH.Helpdesk.Web.Models.Case
         /// Available  "Adminstrators" for the case
         /// </summary>
         public SelectList Performers { get; set; }
+
+        /// <summary>
+        /// Available  "Performs and working groups to search" for the case
+        /// </summary>
+        public List<CasePerformersSearch> PerformersToSearch { get; set;}
 
         /// <summary>
         /// user id for "Responsible" field

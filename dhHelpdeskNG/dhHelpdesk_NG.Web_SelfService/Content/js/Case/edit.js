@@ -19,7 +19,7 @@
         var setProductAreaByCaseTypeUrl = window.appParameters.setProductAreaByCaseTypeUrl;
         var fileUploadWhiteList = window.appParameters.fileUploadWhiteList;
         var invalidFileExtensionText = window.appParameters.invalidFileExtensionText;
-
+        var requiredMessage = window.appParameters.requiredMessage;
         var customerId;
         var alreadyExistFileIds = [];
         var attrApplyClass = "hasAttribute";
@@ -832,9 +832,23 @@
             $('#divProductArea ul.dropdown-menu li a').click(function (e) {
                 e.preventDefault();
                 var val = $(this).attr('value');
+                if (val == undefined)
+                    val = "";
+                var isMandatory = $('#isMandatory').val();
+                if (isMandatory == 'true') {
+                    $("#NewCase_ProductArea_Id").rules("add", {
+                        required: true,
+                        messages: {
+                            required: requiredMessage
+                        }
+                    });
+                }
                 $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(this));
+                
                 var ee = document.getElementById("NewCase_ProductArea_Id");
                 ee.setAttribute('value', val);
+                $(ee).trigger('change');
+                
             });
         }
        
@@ -991,7 +1005,7 @@
                             var emptyElement = $('#divProductArea > ul.dropdown-menu').children().first();
                             $("#divBreadcrumbs_ProductArea").text(getBreadcrumbs(emptyElement));
                             $("#NewCase_ProductArea_Id").val("").trigger('change');
-                        }
+                        }                                               
                         bindProductAreasEvents();
                     }
                 }, 'json');

@@ -206,6 +206,7 @@
     <Compile Include="Models\Case\ExtendedCaseFormFieldTranslationModel.cs" />
     <Compile Include="Models\Case\ExtendedCaseReportFieldModel.cs" />
     <Compile Include="Models\Case\ExtendedCaseReportModel.cs" />
+    <Compile Include="Models\Case\Input\CasePerformersSearch.cs" />
     <Compile Include="Models\Case\LogFileContent.cs" />
     <Compile Include="Models\Case\Output\CustomerCasesStatus.cs" />
     <Compile Include="Models\Case\Output\CustomerUserCase.cs" />
@@ -351,14 +352,18 @@
     <Compile Include="Models\Grid\GridColumnDefinition.cs" />
     <Compile Include="Models\Grid\GridSettingsModel.cs" />
     <Compile Include="Models\IdName.cs" />
+    <Compile Include="Models\Inventory\Edit\Server\DocumentFields.cs" />
     <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\WorkstationTabsSettings.cs" />
     <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\TabSetting.cs" />
+    <Compile Include="Models\Inventory\Edit\Settings\ServerSettings\DocumentFieldsSettings.cs" />
     <Compile Include="Models\Inventory\Input\InventoryStandardTypeSettings.cs" />
     <Compile Include="Models\Inventory\InventorySearchResult.cs" />
     <Compile Include="Models\Inventory\Output\Computer\ComputerFile.cs" />
     <Compile Include="Models\Inventory\Output\Computer\ComputerTypeOverview.cs" />
     <Compile Include="Models\Inventory\Output\InventoryTypeOverview.cs" />
+    <Compile Include="Models\Inventory\Output\Server\DocumentFile.cs" />
     <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\DocumentFieldsSettings.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ServerSettings\DocumentFieldsSettings.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceOrderFile.cs" />
     <Compile Include="Models\Invoice\InvoiceArticleProductAreaSelectedFilter.cs" />
     <Compile Include="Models\Invoice\InvoiceArticleProductArea.cs" />

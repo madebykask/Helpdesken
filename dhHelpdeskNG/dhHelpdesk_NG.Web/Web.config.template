@@ -55,7 +55,7 @@
       </namespaces>
     </pages>
     <!-- 50 mb in kilobytes --><!-- commit -->
-    <httpRuntime maxRequestLength="5242880" targetFramework="4.7.2"/>
+    <httpRuntime maxRequestLength="52428800" targetFramework="4.7.2"/>
     
     #{if AuthenticationMode == "application"}
     <authentication mode="Forms">
@@ -89,7 +89,7 @@
     <security>
       <requestFiltering allowDoubleEscaping="true">
         <!-- for iis 7 >. 50 mb in bytes -->
-        <requestLimits maxAllowedContentLength="5242880" />
+        <requestLimits maxAllowedContentLength="52428800" />
       </requestFiltering>
     </security>
     <validation validateIntegratedModeConfiguration="false"/>

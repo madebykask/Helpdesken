@@ -13,7 +13,7 @@ import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
 import { CaseLockApiService } from '../../services/api/case/case-lock-api.service';
 import { CaseSaveService } from '../../services/case';
 import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel,
-   CaseLockModel, CaseAction, CaseActionDataType, CaseFileModel } from '../../models';
+   CaseLockModel, CaseAction, CaseActionDataType, CaseFileModel, ExCaseFileModel } from '../../models';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { CaseFilesApiService } from '../../services/api/case/case-files-api.service';
@@ -135,12 +135,12 @@ export class CaseEditComponent {
     caseActions: CaseAction<CaseActionDataType>[] = [];
     notifierTypes = NotifierType;
     isCommunicationSectionVisible = false;
+    caseData: CaseEditInputModel;
 
-    private isNewCase = false;
+    isNewCase = false;
     private caseId = 0;
     private templateId = 0;
     private templateCid = 0;
-    private caseData: CaseEditInputModel;
     private caseSections: CaseSectionInputModel[];
     private ownsLock = true;
     private caseLock: CaseLockModel = null;
@@ -150,6 +150,7 @@ export class CaseEditComponent {
     private extendedCaseSave$ = new Subject<boolean>();
     private extendedCaseSaveObserver = this.extendedCaseSave$.asObservable();
     private sectionHeadersInfo: { key: CaseSectionType, value: string }[] = [];
+    private caseTabName = 'case-tab';
 
     ngOnInit() {
       this.commService.publish(Channels.Header, new HeaderEventData(false));
@@ -188,21 +189,24 @@ export class CaseEditComponent {
               );
 
       caseData$.pipe(
+          map((caseData) => {
+            const lock = caseData[2];
+            this.caseLock = lock;
+            this.caseSections = caseData[1];
+            const options = caseData[0];
+            this.dataSource = new CaseDataStore(options, this.caseData.customerId);
+
+            this.initLock();
+            this.processCaseData();
+            this.processSectionHeader();
+            return caseData;
+          }),
           take(1),
           finalize(() => this.isLoaded = true),
           catchError((e) => throwError(e))
       ).subscribe((caseData) => {
-          const lock = caseData[2];
-          this.caseLock = lock;
-          this.caseSections = caseData[1];
-          const options = caseData[0];
-          this.dataSource = new CaseDataStore(options, this.caseData.customerId);
-
-          this.initLock();
-          this.processCaseData();
-          this.processSectionHeader();
-          this.loadWorkflows(caseId, this.caseData.customerId);
-          this.loadExtendedCase(this.caseData);
+        this.loadWorkflows(caseId, this.caseData.customerId);
+        this.loadExtendedCase(this.caseData);
       });
     }
 
@@ -228,8 +232,8 @@ export class CaseEditComponent {
     }
 
     getSectionHeader(type: CaseSectionType): string {
-        if (this.caseSections == null) { return ''; }
-        return this.caseSections.find(s => s.type == type).header;
+      if (this.caseSections == null) { return ''; }
+      return this.caseSections.find(s => s.type == type).header;
     }
 
     getSectionHeaderInfoText(type: CaseSectionType): string {
@@ -268,7 +272,7 @@ export class CaseEditComponent {
                   this.isLoaded = false;
                   this.isEcLoaded = false;
                   this.currentTab = TabNames.Case;
-                  let caseId = this.caseSaveService.saveCase(this.form, this.caseData).pipe(
+                  return this.caseSaveService.saveCase(this.form, this.caseData).pipe(
                       take(1),
                       map((caseId: number) => {
                         this.caseId = caseId;
@@ -276,7 +280,6 @@ export class CaseEditComponent {
                       }),
                       catchError((e) => throwError(e))
                   );
-                  return caseId;
                 } else {
                   return EMPTY.pipe(defaultIfEmpty(false));
                 }
@@ -299,12 +302,10 @@ export class CaseEditComponent {
           if (reload) {
               if (this.caseData.id == 0) { // New case route to saved case
                 this.router.navigate(['/case', this.caseId ]);
-              }
-              else {
+              } else {
                 this.ngOnInit();
               }
-            }
-          else {
+            } else {
             this.goToCases();
           }
         }
@@ -376,8 +377,11 @@ export class CaseEditComponent {
               languageId: userData.currentData.selectedLanguageId,
               extendedCaseGuid: caseData.extendedCaseData.extendedCaseGuid,
               caseId: caseData.id,
+              caseNumber: caseData.caseNumber.toString(),
+              caseGuid: caseData.caseGuid,
               applicationType: 'helpdesk',
               isCaseLocked: this.isLocked,
+              isMobile: true,
               // currentUser: userData.currentData.EmployeeNumber, not used in helpdesk
               userGuid: userData.currentData.userGuid,
               userRole: userData.currentData.userRole,
@@ -408,9 +412,15 @@ export class CaseEditComponent {
               costcentre: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.CostCentre).value },
               caption: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.Caption).value },
               inventorytype: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.ComputerTypeId).value },
-              inventorylocation: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.InventoryLocation).value }
+              inventorylocation: { Value: this.caseDataHelpder.getField(caseData, CaseFieldsNames.InventoryLocation).value },
+              case_files: { Value: JSON.stringify((this.caseFiles || []).map(f => new ExCaseFileModel(f.fileId, f.fileName))) }
             }
           };
+          if (caseData.caseSolution &&
+            caseData.caseSolution.defaultTab != null &&
+            caseData.caseSolution.defaultTab !== this.caseTabName) {
+             this.tabClick(this.tabNames.ExtendedCase);
+         }
         });
       }
     }
@@ -526,7 +536,7 @@ export class CaseEditComponent {
       return '';
     }
 
-    private goToCases() {
+    goToCases() {
       this.navigate('/casesoverview/');
     }
 
@@ -565,11 +575,7 @@ export class CaseEditComponent {
       );
 
       caseData$.pipe(
-          take(1),
-          finalize(() => this.isLoaded = true),
-          untilDestroyed(this),
-          catchError((e) => throwError(e))
-      ).subscribe((caseData) => {
+        map((caseData) => {
           this.caseSections = caseData[1];
           const options = caseData[0];
           this.dataSource = new CaseDataStore(options, this.caseData.customerId);
@@ -577,6 +583,13 @@ export class CaseEditComponent {
           this.initLock();
           this.processCaseData();
           this.processSectionHeader();
+          return caseData;
+        }),
+        take(1),
+        finalize(() => this.isLoaded = true),
+        untilDestroyed(this),
+        catchError((e) => throwError(e))
+      ).subscribe((caseData) => {
           this.loadWorkflows(null, this.caseData.customerId);
           this.loadExtendedCase(this.caseData);
       });
@@ -618,6 +631,13 @@ export class CaseEditComponent {
         } else {
           this.caseFiles = [];
         }
+      }
+
+      if (this.caseData.caseSolution &&
+         this.caseData.caseSolution.defaultTab != null &&
+         this.caseData.caseSolution.defaultTab !== '' &&
+         this.caseData.caseSolution.defaultTab !== this.caseTabName) {
+          this.tabClick(this.tabNames.ExtendedCase);
       }
     }
 

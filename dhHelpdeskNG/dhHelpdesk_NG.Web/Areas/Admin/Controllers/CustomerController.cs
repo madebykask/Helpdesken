@@ -104,8 +104,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 //model.Customers = this._userService.GetCustomersForUser(SessionFacade.CurrentUser.Id);
             }
 
-			model.Customers = model.Customers.Where(o => o.Status == 1).ToList();
-			model.ActiveOnly = true;
+            model.Customers = model.Customers.Where(o => o.Status == 1).ToList();
+            model.ActiveOnly = true;
 
 
             return this.View(model);
@@ -127,10 +127,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 model.Customers = this._customerService.SearchAndGenerateCustomersConnectedToUser(SearchCustomers, SessionFacade.CurrentUser.Id);
             }
 
-			if (SearchCustomers.ActiveOnly)
-				model.Customers = model.Customers.Where(o => o.Status == 1).ToList();
+            if (SearchCustomers.ActiveOnly)
+                model.Customers = model.Customers.Where(o => o.Status == 1).ToList();
 
-			model.ActiveOnly = SearchCustomers.ActiveOnly;
+            model.ActiveOnly = SearchCustomers.ActiveOnly;
 
             return this.View(model);
         }
@@ -155,7 +155,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             {
                 Customer_Id = customer.Id,
                 ModuleCase = 1,
-                CaseComplaintDays = 14             
+                CaseComplaintDays = 14
             };
 
             this._customerService.SaveCustomerSettings(customer, newCustomerSetting, null, customer.Language_Id, out errors);
@@ -202,7 +202,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 newCustomerCaseFieldSettings.ChangedDate = DateTime.UtcNow;
                 newCustomerCaseFieldSettings.CreatedDate = DateTime.UtcNow;
                 newCustomerCaseFieldSettings.CaseFieldSettingsGUID = Guid.NewGuid();
-              
+
 
                 this._customerService.SaveCaseFieldSettingsForCustomerCopy(customer.Id, customer.Language_Id, newCustomerCaseFieldSettings, out errors);
             }
@@ -331,10 +331,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Edit(
-            int id, 
-            Customer customer, 
-            FormCollection coll, 
-            CustomerInputViewModel vmodel, 
+            int id,
+            Customer customer,
+            FormCollection coll,
+            CustomerInputViewModel vmodel,
             int[] UsSelected)
         {
             var customerToSave = this._customerService.GetCustomer(id);
@@ -345,7 +345,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             customerToSave.OrderPermission = this.returnOrderPermissionForSave(id, vmodel);
             customerToSave.CommunicateWithNotifier = vmodel.Customer.CommunicateWithNotifier;
-			customerToSave.Status = vmodel.Active ? 1 : 0;
+            customerToSave.Status = vmodel.Active ? 1 : 0;
 
             var b = this.TryUpdateModel(customerToSave, "customer");
             var setting = this._settingService.GetCustomerSetting(id);
@@ -373,7 +373,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             IDictionary<string, string> errors;
             var saveUsers = SessionFacade.CurrentUser.UserGroupId == UserGroups.SystemAdministrator;
-            this._customerService.SaveEditCustomer(customerToSave, setting, UsSelected, customer.Language_Id, 
+            this._customerService.SaveEditCustomer(customerToSave, setting, UsSelected, customer.Language_Id,
                 saveUsers,
                 out errors);
             if (errors.Count == 0)
@@ -416,16 +416,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             #region Generals
 
-            var usSelected = customer.Id != 0 ? this._userService.GetCustomerActiveUsers(customer.Id) : new List<User>();
+            var usSelected = customer.Id != 0 ? this._userService.GetCustomerUsers(customer.Id, false) : new List<User>();
+            var usSelectedIds = usSelected.Select(u => u.Id);
             var usAvailable = new List<User>();
 
             if (customer.Id != 0)
             {
-                foreach (var us in this._userService.GetAllUsers())
-                {
-                    if (!usSelected.Select(u => u.Id).Contains(us.Id))
-                        usAvailable.Add(us);
-                }
+                usAvailable.AddRange(this._userService.GetAllUsers().Where(us => !usSelectedIds.Contains(us.Id)));
             }
 
             #endregion
@@ -486,68 +483,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             #endregion
 
-            //#region Reports
-
-            //var reports = _customerService.GetAllReports();
-            //var customerReports = _customerService.GetCustomerReportList(customer.Id);
-            //var reportList = new List<CustomerReportList>();
-
-            //foreach (var rep in reports)
-            //{
-            //    var o = new CustomerReportList
-            //    {
-            //        ReportId = rep.Id,
-            //    };
-
-            //    if (rep.Id == 2)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Ledtid (avslutade ärenden)", Enums.TranslationSource.TextTranslation);
-            //    if (rep.Id == 3)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Ledtid (aktiva ärenden)", Enums.TranslationSource.TextTranslation);
-            //    if (rep.Id == 4)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Avslutsorsak per avdelning", Enums.TranslationSource.TextTranslation);
-            //    if (rep.Id == 19)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Avslutskategori per avdelning", Enums.TranslationSource.TextTranslation);
-            //    if (rep.Id == 5)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Avslutade ärenden per dag", Enums.TranslationSource.TextTranslation);
-            //    if (rep.Id == 6)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Registrerade ärenden", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("dag", Enums.TranslationSource.TextTranslation).ToLower();
-            //    if (rep.Id == 21)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Registrerade ärenden", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("timme", Enums.TranslationSource.TextTranslation);
-            //    if (rep.Id == 7)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("dag", Enums.TranslationSource.TextTranslation).ToLower();
-            //    if (rep.Id == 8)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Servicerapport", Enums.TranslationSource.TextTranslation);
-            //    if (rep.Id == 15)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("driftgrupp", Enums.TranslationSource.TextTranslation);
-            //    if (rep.Id == 17)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Registrerade ärenden", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("ärendetyp", Enums.TranslationSource.TextTranslation);
-            //    if (rep.Id == 9)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Frågeregistrering", Enums.TranslationSource.TextTranslation);
-            //    if (rep.Id == 14)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("produktområde", Enums.TranslationSource.TextTranslation);
-            //    if (rep.Id == 16)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Ärendetyp", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("leverantör", Enums.TranslationSource.TextTranslation);
-            //    if (rep.Id == 13)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Genomsnittlig lösningstid", Enums.TranslationSource.TextTranslation);
-            //    if (rep.Id == 20)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Källa registrering", Enums.TranslationSource.TextTranslation);
-            //    if (rep.Id == 22)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Svarstid", Enums.TranslationSource.TextTranslation);
-            //    if (rep.Id == 18)
-            //        o.ReportName = Translation.Get("Rapport", Enums.TranslationSource.TextTranslation) + " - " + Translation.Get("Rapportgenerator", Enums.TranslationSource.TextTranslation);
-
-            //    reportList.Add(o);
-            //}
-
-            //foreach (var report in customerReports)
-            //{
-            //    int index = reportList.FindIndex(x => x.ReportId == report.ReportId);
-            //    if (index > 0)
-            //        reportList[index].ActiveOnPage = report.ActiveOnPage;
-            //}
-
-            //#endregion
-
             #region Model
 
             var settings = this._settingService.GetCustomerSetting(customer.Id) ?? new Setting();
@@ -555,8 +490,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                                           .ToList();
             var availableUsersModel = new CustomSelectList();
             availableUsersModel.Items.AddItems(availableUsers);
-            var selectedUsers = usSelected.Select(x => new ListItem(x.Id.ToString(), x.SurName + " " + x.FirstName, Convert.ToBoolean(x.IsActive)))
-                                          .ToList();
+            var selectedUsers = usSelected
+                .Select(x => new ListItem(x.Id.ToString(), x.SurName + " " + x.FirstName, Convert.ToBoolean(x.IsActive)))
+                .ToList();
             var selectedUsersModel = new CustomSelectList();
             selectedUsersModel.Items.AddItems(selectedUsers);
 
@@ -610,7 +546,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Text = x.DisplayName,
                     Value = x.Id
                 }).ToList(),
-				Active = customer.Status == 1
+                Active = customer.Status == 1
             };
 
             #endregion
@@ -626,7 +562,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 model.OrderPermission = 1;
             }
 
-           
+
             #endregion
 
             return model;
@@ -822,14 +758,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var customerToCopy = this._customerService.GetCustomer(id);
             var customerToCopySettings = this._settingService.GetCustomerSetting(customerToCopy.Id);
 
-            var newCustomerToSave = new Customer() 
+            var newCustomerToSave = new Customer()
             {
-               CustomerID = customerNumber,
-               Name = customerName,
-               HelpdeskEmail = customerEmail,
-               Language_Id = customerToCopy.Language_Id,
-               TimeZoneId = customerToCopy.TimeZoneId,
-			   Status = customerToCopy.Status
+                CustomerID = customerNumber,
+                Name = customerName,
+                HelpdeskEmail = customerEmail,
+                Language_Id = customerToCopy.Language_Id,
+                TimeZoneId = customerToCopy.TimeZoneId,
+                Status = customerToCopy.Status
             };
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -879,7 +815,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 DontConnectUserToWorkingGroup = customerToCopySettings.DontConnectUserToWorkingGroup,
                 LogLevel = customerToCopySettings.LogLevel,
                 StateSecondaryReminder = customerToCopySettings.StateSecondaryReminder,
-                StateSecondaryFormat =customerToCopySettings.StateSecondaryFormat,
+                StateSecondaryFormat = customerToCopySettings.StateSecondaryFormat,
                 MinPasswordLength = customerToCopySettings.MinPasswordLength,
                 MinRegWorkingTime = customerToCopySettings.MinRegWorkingTime,
                 InvoiceType = customerToCopySettings.InvoiceType,
@@ -955,7 +891,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 newCustomerCaseFieldSettings.EMailIdentifier = cfs.EMailIdentifier;
                 newCustomerCaseFieldSettings.ChangedDate = curTime;
                 newCustomerCaseFieldSettings.CaseFieldSettingsGUID = Guid.NewGuid();
-                
+
                 this._customerService.SaveCaseFieldSettingsForCustomerCopy(newCustomerToSave.Id, newCustomerToSave.Language_Id, newCustomerCaseFieldSettings, out errors);
             }
 
@@ -969,7 +905,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                 foreach (var cfsl in caseFieldSettingsLangToCopy)
                 {
-
                     foreach (var cfs in caseFieldSettingsForNewCustomer)
                     {
                         if (cfsl.Name == cfs.Name)
@@ -986,11 +921,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                             break;
                         }
-
                     }
-                }                
+                }
             }
-
 
             // Get ComputerUserFieldSettings
             var computerUserFieldSettingsToCopy = this._computerService.GetComputerUserFieldSettings(customerToCopy.Id);
@@ -1049,8 +982,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             }
 
-            
-
             //Get CustomerUser to copy
             var customerUserToCopy = this._customerUserService.GetCustomerUsersForCustomer(customerToCopy.Id);
 
@@ -1067,11 +998,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 this._customerUserService.SaveCustomerUserForCopy(newCustomerCustomerUser, out errors);
             }
 
-
+            //Get CustomerUser to copy
+            newCustomerToSave.UsersAvailable = customerToCopy.UsersAvailable;
 
             //Get Casetype to copy
-            var caseTypesToCopy = this._caseTypeService.GetCaseTypes(customerToCopy.Id).Where(x=> x.Parent_CaseType_Id == null);
-            
+            var caseTypesToCopy = this._caseTypeService.GetCaseTypes(customerToCopy.Id).Where(x => x.Parent_CaseType_Id == null);
 
             foreach (var ct in caseTypesToCopy)
             {
@@ -1091,12 +1022,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 newCustomerCaseType.RelatedField = String.Empty;
                 newCustomerCaseType.Parent_CaseType_Id = null;
 
-                
                 this._caseTypeService.SaveCaseType(newCustomerCaseType, out errors);
 
                 // Save sub case types
                 CopyCaseTypeChildren(ct.SubCaseTypes.ToList(), newCustomerToSave.Id, newCustomerCaseType.Id);
-
             };
 
             //Get Category to copy
@@ -1137,7 +1066,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             }
 
-
             //Get Product area to copy
             var productAreasToCopy = this._productAreaService.GetAllProductAreas(customerToCopy.Id);
 
@@ -1152,7 +1080,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                 this._productAreaService.SaveProductArea(newCustomerProductArea, null, 0, out errors);
             }
-            
+
             //Get StateSecondary to copy
             var stateSecondariesToCopy = this._stateSecondaryService.GetStateSecondaries(customerToCopy.Id).ToList();
 
@@ -1278,7 +1206,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
             //Get Mailtemplate
-            for (int i = 1; i < 100; i++)
+            for (var i = 1; i < 100; i++)
             {
                 var mailTemplateToCopy = this._mailTemplateService.GetMailTemplateForCopyCustomer(i, customerToCopy.Id);
 
@@ -1298,7 +1226,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     foreach (var l in language)
                     {
                         var mailTemplateLanguageToCopy = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(customerToCopy.Id, l.Id, mailTemplateToCopy.Id);
-                        
+
                         if (mailTemplateLanguageToCopy != null)
                         {
                             var newMailTemplateLanguage = new MailTemplateLanguageEntity
@@ -1317,7 +1245,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     }
                 }
 
-               
             }
 
             this._customerService.SaveEditCustomer(newCustomerToSave, newCustomerSetting, null, newCustomerToSave.Language_Id, true, out errors);
@@ -1346,7 +1273,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 newCustomerCaseType.Selectable = ct.Selectable;
                 newCustomerCaseType.ITILProcess = 0;
                 newCustomerCaseType.RelatedField = String.Empty;
-                newCustomerCaseType.Parent_CaseType_Id = parentId;                
+                newCustomerCaseType.Parent_CaseType_Id = parentId;
 
                 this._caseTypeService.SaveCaseType(newCustomerCaseType, out errors);
 

@@ -132,7 +132,7 @@
                 CanAddSubCaseType = (parentCount < MaxCaseTpyeLevels),
                 CaseType = caseType,
                 Customer = customer,
-                SystemOwners = _userService.GetCustomerActiveUsers(customer.Id).Select(x => new SelectListItem
+                SystemOwners = _userService.GetCustomerUsers(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.SurName + " " + x.FirstName,
                     Value = x.Id.ToString()

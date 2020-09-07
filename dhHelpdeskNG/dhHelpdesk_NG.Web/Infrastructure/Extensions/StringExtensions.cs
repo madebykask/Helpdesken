@@ -337,6 +337,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 case 13:
                     ret = Translation.GetCoreTextTranslation("Prioritet");
                     break;
+                case 17:
+                    ret = Translation.GetCoreTextTranslation("Påminnelse");
+                    break;
                 default:
                     if (value > 99 && customMailTemplates.Any())
                     {

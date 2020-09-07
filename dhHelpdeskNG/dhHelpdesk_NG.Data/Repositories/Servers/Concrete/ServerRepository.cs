@@ -7,7 +7,8 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.Dal;
     using DH.Helpdesk.Dal.Infrastructure;
-   
+    using BusinessData.Models.Inventory.Output.Server;
+
     public class ServerRepository : Repository<Helpdesk.Domain.Servers.Server>, IServerRepository
     {
         public ServerRepository(IDatabaseFactory databaseFactory)
@@ -35,6 +36,42 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
             Map(entity, businessModel);
             entity.ChangedDate = businessModel.ChangedDate;
             entity.ChangedByUser_Id = businessModel.ChangedByUserId;
+        }
+
+        public DocumentFile GetFile(int contractId)
+        {
+            var serverFile =
+                DbSet.Where(x => x.Id == contractId).Select(x => new DocumentFile()
+                {
+                    FileName = x.ServerFileName,
+                    Content = x.ServerDocument
+                }).FirstOrDefault();
+
+            return serverFile;
+        }
+
+        public void SaveFile(int id, string fileName, byte[] data)
+        {
+            var entity = this.DbSet.Find(id);
+            if (entity != null)
+            {
+                entity.ServerFileName = fileName;
+                entity.ServerDocument = data;
+
+                Commit();
+            }
+        }
+
+        public void DeleteFile(int id)
+        {
+            var entity = this.DbSet.Find(id);
+            if (entity != null)
+            {
+                entity.ServerFileName = null;
+                entity.ServerDocument = null;
+
+                Commit();
+            }
         }
 
         public string FindOperationObjectName(int id)
@@ -131,6 +168,8 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
                     anonymus.FloorId,
                     anonymus.Entity.Room_Id,
                     anonymus.Entity.Location),
+                new BusinessData.Models.Inventory.Edit.Server.DocumentFields(anonymus.Entity.ServerFileName),
+                //new BusinessData.Models.Inventory.Edit.Server.DocumentFields(anonymus.Entity.ServerDocument),
                 new BusinessData.Models.Inventory.Edit.Shared.ProcessorFields(anonymus.Entity.Processor_Id),
                 new BusinessData.Models.Inventory.Edit.Server.CommunicationFields(
                     anonymus.Entity.NIC_Id,

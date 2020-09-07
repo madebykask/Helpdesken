@@ -14,7 +14,7 @@
   </connectionStrings>
 
   <appSettings>
-
+    <add key="dh_filesDirectory" value="#{FilesDirectory}" />
   </appSettings>
 
   <helpdeskApiSettings webApiBaseUri="#{HelpdeskApiUri}" />

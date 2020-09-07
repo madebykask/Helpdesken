@@ -25,8 +25,6 @@ namespace DH.Helpdesk.Web.Areas.Orders.Infrastructure.ModelFactories.Concrete
     public class NewOrderModelFactory : INewOrderModelFactory
     {
         private readonly IConfigurableFieldModelFactory _configurableFieldModelFactory;
-		private readonly IGlobalSettingService _globalSettingService;
-
 		public NewOrderModelFactory(IConfigurableFieldModelFactory configurableFieldModelFactory)
         {
             _configurableFieldModelFactory = configurableFieldModelFactory;

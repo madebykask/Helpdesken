@@ -16,7 +16,10 @@
         "types": [
           "node"
         ],
-        "baseUrl": ""
+        "baseUrl": "",
+        "paths": {
+          "@app/*": ["src/app/*"]
+        }
       },
       "compileOnSave": false,
       "buildOnSave": false,

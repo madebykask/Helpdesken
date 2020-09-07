@@ -14,7 +14,7 @@ export class FormModel {
     template: FormTemplateModel;
     // formState: FormStateModel;
 
-    constructor(template:FormTemplateModel) {
+    constructor(template: FormTemplateModel) {
         this.template = template;
         this.dataSources = {};
     }
@@ -28,7 +28,7 @@ export class FormModel {
             .forEach((fieldModel, fieldPath) => fieldModel.acceptChanges());
     }
 
-    findSectionSafe(tabId: string, sectionId: string) : SectionModel {
+    findSectionSafe(tabId: string, sectionId: string): SectionModel {
         let section: SectionModel = null;
 
         if (this.tabs.hasOwnProperty(tabId)) {
@@ -61,15 +61,15 @@ export class CustomDataSourceModel {
         this.id = id;
     }
 
-    getData() : any[] {
+    getData(): any[] {
         return this.data;
     }
 
-    setData(data: any[]) : void {
+    setData(data: any[]): void {
         this.data = data;
     }
 
-    clearData() : void {
+    clearData(): void {
         this.data = [];
     }
 }
@@ -146,7 +146,7 @@ export class SectionInstanceModel {
         this.section = section;
     }
 
-    get id():string {
+    get id(): string {
         return this._instanceId.toString();
     }
 
@@ -182,6 +182,8 @@ export abstract class FieldModelBase {
     private _originalAdditionalData = '';
     private _additionalData = '';
     private _prevAdditionalData = '';
+
+    private _uiPath = '';
 
     template: BaseControlTemplateModel;
     sectionInstance: SectionInstanceModel;
@@ -287,8 +289,11 @@ export abstract class FieldModelBase {
     }
 
     getUiPath(): string {
+        if (this._uiPath !== '') { return this._uiPath; }
+
         let fieldPath = this.getFieldPath();
-        return `${fieldPath.tabId}_${fieldPath.sectionId}_${fieldPath.sectionInstanceIndex}_${this.id}`;
+        this._uiPath = `${fieldPath.tabId}_${fieldPath.sectionId}_${fieldPath.sectionInstanceIndex}_${this.id}`;
+        return this._uiPath;
     }
 
     abstract get isReview(): boolean;
@@ -384,6 +389,7 @@ export class FormControlType {
     static Number = 'number';
     static AltNumber = 'altnumber';
     static Html = 'html';
+    static FileUpload = 'fileupload';
 
-    type = FormControlType;// workaroud to  use in html template
+    type = FormControlType; // workaroud to  use in html template
 }

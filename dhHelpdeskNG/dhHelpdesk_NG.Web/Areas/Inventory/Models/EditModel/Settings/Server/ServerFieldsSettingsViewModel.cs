@@ -24,6 +24,7 @@
             OperatingSystemFieldsSettingsModel operatingSystemFieldsSettingsModel,
             ProccesorFieldsSettingsModel proccesorFieldsSettingsModel,
             PlaceFieldsSettingsModel placeFieldsSettingsModel,
+            DocumentFieldsSettingsModel documentFieldsSettingsModel,
             CommunicationFieldsSettingsModel communicationFieldsSettingsModel)
         {
             this.LanguageId = langaugeId;
@@ -38,6 +39,7 @@
             this.OperatingSystemFieldsSettingsModel = operatingSystemFieldsSettingsModel;
             this.ProccesorFieldsSettingsModel = proccesorFieldsSettingsModel;
             this.PlaceFieldsSettingsModel = placeFieldsSettingsModel;
+            this.DocumentFieldsSettingsModel = documentFieldsSettingsModel;
             this.CommunicationFieldsSettingsModel = communicationFieldsSettingsModel;
         }
 
@@ -76,6 +78,8 @@
 
         [NotNull]
         public PlaceFieldsSettingsModel PlaceFieldsSettingsModel { get;  set; }
+
+        public DocumentFieldsSettingsModel DocumentFieldsSettingsModel { get; set; }
 
         [NotNull]
         public CommunicationFieldsSettingsModel CommunicationFieldsSettingsModel { get;  set; }

@@ -1329,6 +1329,8 @@ function CaseInitForm(opt) {
         var dontConnectUserToWorkingGroup = Number($('#CaseMailSetting_DontConnectUserToWorkingGroup').val() || '0');
         if (dontConnectUserToWorkingGroup === 0) {
             CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#Performer_Id', $('#DepartmentFilterFormat').val());
+        } else {
+            $('#Performer_Id').off('applyValue');
         }
         if (source !== 'case__StateSecondary_Id') {
             //set state secondary

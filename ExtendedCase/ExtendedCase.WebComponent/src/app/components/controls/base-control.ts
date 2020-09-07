@@ -4,15 +4,18 @@ import { Input, ChangeDetectorRef } from '@angular/core';
 import { BaseControlTemplateModel } from '../../models/template.model';
 import { FieldModelBase } from '../../models/form.model';
 import { ComponentCommService } from '../../services/component-comm.service';
+import { FormInfo } from '@app/models/proxy.model';
 
 export class BaseControl {
     @Input() fieldTemplate: BaseControlTemplateModel;
     @Input() fieldModel: FieldModelBase;
+    @Input() formInfo: FormInfo;
     protected isRequiredLabel = '';
     private subscription: Subscription;
 
-    constructor(protected componentCommService: ComponentCommService, changeDetector: ChangeDetectorRef = null) {
+    constructor(protected componentCommService: ComponentCommService, protected changeDetector: ChangeDetectorRef = null) {
         const obs$ = merge(this.componentCommService.validationModeChange$, this.componentCommService.digestCompletedSubject$);
+
         this.subscription = obs$.subscribe(() => {
             this.isRequiredLabel = this.getLabel();
             if (changeDetector) { changeDetector.markForCheck(); }

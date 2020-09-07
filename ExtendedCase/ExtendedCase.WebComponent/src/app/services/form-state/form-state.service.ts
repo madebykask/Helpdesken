@@ -10,14 +10,15 @@ export class FormStateService {
 
     constructor() {
 
-        //add state loaders
+        // add state loaders
         this.stateLoaders.push(new SectionEnableStateLoader());
     }
 
     // applies form state from db to form model
-    applyFormState(formModel: FormModel, formState:FormStateModel) {
-        if (!formState.Items)
+    applyFormState(formModel: FormModel, formState: FormStateModel) {
+        if (!formState.Items) {
             return;
+        }
 
         for (let stateItem of formState.Items) {
             for (let stateLoader of this.stateLoaders) {
@@ -28,7 +29,7 @@ export class FormStateService {
 
     // saves state from model to formState model
     updateFormState(formModel: FormModel, formState: FormStateModel): void {
-        
+
         let items: FormStateItem[] = [];
 
         for (let stateLoader of this.stateLoaders) {
@@ -39,7 +40,7 @@ export class FormStateService {
             }
         }
 
-        //update form state with modified state values
+        // update form state with modified state values
         for (let item of items) {
             formState.updateStateItem(item);
         }

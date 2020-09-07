@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { finalize, take, distinctUntilChanged, takeUntil, filter, catchError } from 'rxjs/operators';
+import { finalize, take, distinctUntilChanged, takeUntil, filter, catchError, switchMap, repeatWhen, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { Subject, forkJoin, throwError, from } from 'rxjs';
+import { Subject, forkJoin, throwError, from, of, timer, Subscription } from 'rxjs';
 import { PagingConstants, SortOrder, CaseFieldsNames, CaseOverviewConstants } from 'src/app/modules/shared-module/constants';
 import { CasesOverviewFilter } from '../../models/cases-overview/cases-overview-filter.model';
 import { CaseOverviewItem } from '../../models/cases-overview/cases-overview-item.model';
@@ -17,6 +17,8 @@ import { CustomerFavoriteFilterModel } from '../../models/cases-overview/favorit
 import { CaseSortFieldModel } from 'src/app/modules/case-edit-module/services/model/case-sort-field.model';
 import { LocalStorageService } from 'src/app/services/local-storage';
 import { CaseSearchStateModel } from 'src/app/modules/shared-module/models/cases-overview/case-search-state.model';
+import { AuthenticationStateService } from 'src/app/services/authentication';
+import { CurrentUser } from 'src/app/models';
 
 @Component({
   selector: 'app-cases-overview',
@@ -28,12 +30,16 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
   private selectedFilterId: string;
   private filter: CasesOverviewFilter;
-  private destroy$ = new Subject();
+  private readonly destroy$ = new Subject();
+  private readonly startRefresh$ = new Subject<void>();
+  private readonly stopRefresh$ = new Subject<void>();
   private defaultHeaderText = this.ngxTranslateService.instant('Ärendeöversikt');
   private defaultCustomerText = '';
   private pageSize = 10;
   private DefaultSortField = 'RegTime';
   private DefaultSortOrder = SortOrder.SortDesc;
+  private currentUser: CurrentUser;
+  private initiatedTimer = false;
 
   headerText: string;
   customerText: string;
@@ -57,7 +63,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
       if (!this.isLoading) {
         if (this.filter) {
           this.filter.Page += 1;
-          this.search();
+          this.search().subscribe();
         }
       }
     }
@@ -69,7 +75,9 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
               private appStore: AppStore,
               private localStorageService: LocalStorageService,
               private searchFilterService: SearchFilterService,
-              private ngxTranslateService: TranslateService) {
+              private ngxTranslateService: TranslateService,
+              private authStateService: AuthenticationStateService) {
+    this.currentUser =  this.authStateService.getUser();
   }
 
   ngOnInit() {
@@ -93,6 +101,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
     // run initial search after filter state (sorting, filters) is fully loaded
     forkJoin([sortFields$, filtersLoaded$]).pipe(
+      takeUntil(this.destroy$),
       take(1),
       catchError(err => throwError(err))
     ).subscribe(([sortFields, favFilters]: [CaseSortFieldModel[], CustomerFavoriteFilterModel[]]) => {
@@ -222,12 +231,42 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+    this.stopRefresh$.complete();
+    this.startRefresh$.complete();
   }
 
   private runNewSearch() {
     this.initSearchFilter();
-    this.resetCases();
-    this.search();
+
+    const refreshInterval = this.currentUser && this.currentUser.currentData.caseOverviewRefreshInterval ?
+     this.currentUser.currentData.caseOverviewRefreshInterval * 1000 :
+     null;
+    if (!this.initiatedTimer) {
+      this.initiatedTimer = true;
+      timer(0, refreshInterval || 10000)
+        .pipe(
+          switchMap(data => {
+            this.filter.Page = PagingConstants.page;
+            this.resetCases();
+            return this.search();
+          }),
+          takeUntil(this.destroy$),
+          takeUntil(this.stopRefresh$),
+          repeatWhen(() => this.startRefresh$))
+        .subscribe(() => {
+          if (!refreshInterval) {
+            this.stopRefresh$.next(); //if no refreshInterval stop timer after first load
+          }
+        });
+    } else {
+      this.restartTimer(); //restart timer
+    }
+  }
+
+  private restartTimer() {
+    // restarts search initiated in runNewSearch
+    this.stopRefresh$.next();
+    this.startRefresh$.next();
   }
 
   private saveSearchState() {
@@ -243,16 +282,16 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
   private search() {
     this.isLoading = true;
-    this.casesOverviewService.searchCases(this.filter).pipe(
+    return this.casesOverviewService.searchCases(this.filter).pipe(
         take(1),
-        finalize(() => this.isLoading = false),
-        // catchError(err => {}) // TODO:
-      ).subscribe(
-        data => {
+        map(data => {
           if (data != null && data.length > 0) {
             this.cases = this.cases.concat(data);
           }
-        });
+        }),
+        finalize(() => this.isLoading = false),
+        // catchError(err => {}) // TODO:
+      );
   }
 
   private initSearchFilter() {

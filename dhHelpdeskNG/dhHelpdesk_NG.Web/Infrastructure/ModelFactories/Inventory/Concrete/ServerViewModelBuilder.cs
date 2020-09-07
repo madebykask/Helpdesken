@@ -5,6 +5,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
     using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Server;
     using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Shared;
     using DH.Helpdesk.Web.Areas.Inventory.Models.OptionsAggregates;
+    using System;
+    using System.Collections.Generic;
 
     public class ServerViewModelBuilder : IServerViewModelBuilder
     {
@@ -18,7 +20,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
         public ServerViewModel BuildViewModel(
             ServerForRead model,
             ServerEditOptions options,
-            ServerFieldsSettingsForModelEdit settings)
+            ServerFieldsSettingsForModelEdit settings,
+            List<string> fileUploadWhiteList)
         {
             var createdDate =
                 this.configurableFieldModelBuilder.CreateDateTimeField(
@@ -173,6 +176,13 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var placeFieldsViewModel = new PlaceFieldsViewModel(placeFieldsModel, buildings, floors, rooms);
 
+            var document =
+                this.configurableFieldModelBuilder.CreateStringField(
+                    settings.DocumentFieldsSettings.DocumentFieldSetting,
+                    model.DocumentFields.Document);
+
+            var documentFieldModel = new DocumentFieldsModel(document);
+
             var info =
                 this.configurableFieldModelBuilder.CreateStringField(
                     settings.OtherFieldsSettings.InfoFieldSetting,
@@ -237,13 +247,16 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 communicationViewModel,
                 operatingSystemsViewModel,
                 processorViewModel,
-                placeFieldsViewModel) { Id = model.Id, CreatedDate = createdDate, ChangedDate = changedDate };
+                placeFieldsViewModel,
+                documentFieldModel,
+                fileUploadWhiteList) { Id = model.Id, CreatedDate = createdDate, ChangedDate = changedDate };
         }
 
         public ServerViewModel BuildViewModel(
             ServerEditOptions options,
             ServerFieldsSettingsForModelEdit settings,
-            int currentCustomerId)
+            int currentCustomerId,
+            List<string> fileUploadWhiteList)
         {
             var name =
                 this.configurableFieldModelBuilder.CreateStringField(
@@ -392,6 +405,13 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var placeFieldsViewModel = new PlaceFieldsViewModel(placeFieldsModel, buildings, floors, rooms);
 
+            var document =
+               this.configurableFieldModelBuilder.CreateStringField(
+                   settings.DocumentFieldsSettings.DocumentFieldSetting,
+                   null);
+
+            var documentFieldsModel = new DocumentFieldsModel(document);
+
             var info = this.configurableFieldModelBuilder.CreateStringField(
                 settings.OtherFieldsSettings.InfoFieldSetting,
                 null);
@@ -455,7 +475,9 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 communicationViewModel,
                 operatingSystemsViewModel,
                 processorViewModel,
-                placeFieldsViewModel) { CustomerId = currentCustomerId };
+                placeFieldsViewModel,
+                documentFieldsModel,
+                fileUploadWhiteList) { CustomerId = currentCustomerId, DocumentFileKey = Guid.NewGuid().ToString() };
         }
     }
 }

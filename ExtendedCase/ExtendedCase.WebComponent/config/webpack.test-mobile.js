@@ -12,6 +12,7 @@ let CONSTANTS = {
   VERSION: JSON.stringify(packageJSON.version),
   MODE: 'prod',
   BASEAPIURL: '${ECApiUrl}'
+  //BASEAPIURL: 'http://dev.helpdesk.internal.datahalland.se/ExtendedCaseApi'
 }
 
 const outputDir = Helpers.root('dist');
@@ -21,7 +22,7 @@ module.exports = WebpackMerge.smart(CommonConfig({ env: CONSTANTS.MODE,  outputD
         devtool: 'source-map',
         output: {
             path: outputDir,
-            publicPath: '/',
+            publicPath: '/mobile/',
             filename: '[name].[hash].js',
             chunkFilename: '[id].[hash].chunk.js'
         },

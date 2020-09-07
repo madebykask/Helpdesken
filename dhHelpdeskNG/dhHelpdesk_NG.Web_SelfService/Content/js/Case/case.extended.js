@@ -204,6 +204,8 @@ window.extendedCasePage =
             formParameters.currentUser = self.CurrentUser;
             formParameters.userGuid = '';
             formParameters.caseId = self.Case_Field_Init_Values.CaseId;
+            formParameters.caseNumber = self.Case_Field_Init_Values.CaseNumber;
+            formParameters.caseGuid = self.Case_Field_Init_Values.CaseGuid;
             formParameters.applicationType = self.ApplicationType;
             formParameters.useInitiatorAutocomplete = self.UseInitiatorAutocomplete;
 
@@ -237,7 +239,8 @@ window.extendedCasePage =
                             costcentre: { Value: fieldValues.CostCentre },
                             caption: { Value: fieldValues.Caption },
                             inventorytype: {Value: fieldValues.InventoryType},
-                            inventorylocation: {Value: fieldValues.InventoryLocation}
+                            inventorylocation: { Value: fieldValues.InventoryLocation },
+                            case_files: { Value: fieldValues.CaseFiles }
                         }
                     });
                 promise.then(function () { self.onExtendedCaseLoaded() });

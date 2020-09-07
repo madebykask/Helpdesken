@@ -9,6 +9,10 @@ using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Web.Common.Tools.Files
 {
+    /// <summary>
+    /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /// !!!!! Part of this file was a copied to ExtendedCase.Logic.Utils.Files. Don't forget to update it also
+    /// </summary>
     public sealed class TemporaryFilesCache : ITemporaryFilesCache
     {
         #region Fields

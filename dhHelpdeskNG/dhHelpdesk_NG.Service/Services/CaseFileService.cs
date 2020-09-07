@@ -12,7 +12,7 @@ namespace DH.Helpdesk.Services.Services
 {
     public interface ICaseFileService
     {
-        CaseFileContent GetCaseFile(int customerId, int caseId, int fileId, bool embedImmges = false);
+        CaseFileContent GetCaseFile(int customerId, int caseId, int fileId, bool embedImages = false);
         FileContentModel GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
         CaseFileModel GetCaseFile(int caseId, int fileId);
         IList<string> FindFileNamesByCaseId(int caseId);
@@ -49,14 +49,14 @@ namespace DH.Helpdesk.Services.Services
             return fileInfo;
         }
 
-        public CaseFileContent GetCaseFile(int customerId, int caseId, int fileId, bool embedImmges = false)
+        public CaseFileContent GetCaseFile(int customerId, int caseId, int fileId, bool embedImages)
         {
             var basePath = GetFileAttachFolderPath(customerId);
             var res = _caseFileRepository.GetCaseFileContent(caseId, fileId, basePath);
 
             var caseFilePath = _caseFileRepository.GetCaseFilePath(caseId, fileId, basePath);
             res.FilePath = caseFilePath;
-            if (embedImmges && Path.GetExtension(res.FileName ?? string.Empty).Equals(".htm", StringComparison.OrdinalIgnoreCase))
+            if (embedImages && Path.GetExtension(res.FileName ?? string.Empty).Equals(".htm", StringComparison.OrdinalIgnoreCase))
                 res.Content = EmbedFilesIntoHtml(caseFilePath, res.Content);
             
             return res;

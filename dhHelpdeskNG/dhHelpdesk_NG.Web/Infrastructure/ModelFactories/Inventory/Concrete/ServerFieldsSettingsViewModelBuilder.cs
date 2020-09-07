@@ -94,6 +94,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var room = this.settingModelBuilder.MapFieldSetting(settings.PlaceFieldsSettings.RoomFieldSetting);
             var location = this.settingModelBuilder.MapFieldSetting(settings.PlaceFieldsSettings.LocationFieldSetting);
             var placeFieldsSettingsModel = new PlaceFieldsSettingsModel(room, location);
+            var document = this.settingModelBuilder.MapFieldSetting(settings.DocumentFieldsSettings.DocuemntFieldSetting);
+            var documentFieldsSettingsModel = new DocumentFieldsSettingsModel(document);
 
             var network =
                 this.settingModelBuilder.MapFieldSetting(
@@ -122,6 +124,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 operatingSystemFieldsSettingsModel,
                 proccesorFieldsSettingsModel,
                 placeFieldsSettingsModel,
+                documentFieldsSettingsModel,
                 communicationFieldsSettingsModel);
 
             return viewModel;

@@ -4,23 +4,13 @@
 
 @section Styles
 {
-    @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
-    {
-        @Styles.Render("~/cases/dynamic-cases")
-    }
+    @Styles.Render("~/cases/dynamic-cases")
 }
 
 @section Scripts {
     
-    @if (Model.DynamicCase != null || Model.ContainsExtendedCase || Model.HasExtendedComputerUsers)
-    {
-        @Scripts.Render("~/Content/js/iframeResizer")
-    }
-    
-    @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
-    {
-        @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
-    }
+    @Scripts.Render(BundleConfig.ScriptNames.IFrameResizer)
+    @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
 
     @Scripts.Render("~/bundles/cases/new")
 
@@ -122,7 +112,7 @@
         <div class="secnavs fixed">
             <div class="pull-left">
                 <ul class="secnav">
-                    @if (Model.templateistrue != 1)
+                    @if (Model.templateistrue != 1 || (!Model.IsItChildCase() && Model.WorkflowSteps.Count() > 0) )
                     {
                         <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn save", id = "case-action-save" })</li>
                     }
@@ -133,10 +123,10 @@
                         <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + "/" + Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn save-new", id = "case-action-save-and-new" })</li>
                     }
 
-                    @if (!Model.IsItChildCase() && Model.WorkflowSteps.Count() > 0)
+                    @*@if (!Model.IsItChildCase() && Model.WorkflowSteps.Count() > 0)
                     {
                         <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn save", id = "case-action-save" })</li>
-                    }
+                    }*@
                     @if (Model.CaseTemplateSplitToCaseSolutionID.HasValue)
                     {
                         <li>@Html.ActionLink(Translation.Get("Save and split", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn new-close-split", id = "case-action-save-close-and-split", href="#"})</li>

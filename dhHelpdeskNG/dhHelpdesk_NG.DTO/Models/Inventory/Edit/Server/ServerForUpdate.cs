@@ -18,6 +18,7 @@
             OperatingSystemFields operatingSystemFields,
             MemoryFields memoryFields,
             PlaceFields placeFields,
+            DocumentFields documentFields,
             ProcessorFields proccesorFields,
             CommunicationFields communicationFields,
             DateTime changedDate,
@@ -32,6 +33,7 @@
                 operatingSystemFields,
                 memoryFields,
                 placeFields,
+                documentFields,
                 proccesorFields,
                 communicationFields)
         {

@@ -127,6 +127,9 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ClientLogController.cs" />
     <Compile Include="Controllers\ExtendedCaseApiControllerBase.cs" />
+    <Compile Include="Controllers\FilesController.cs" />
+    <Compile Include="Infrastructure\Cors\WebApiCorsPolicyProvider.cs" />
+    <Compile Include="Infrastructure\Cors\WebApiCorsPolicyProviderFactory.cs" />
     <Compile Include="Infrastructure\Filters\TokensInterceptionFilter.cs" />
     <Compile Include="Controllers\CustomDataSourceDataController.cs" />
     <Compile Include="Controllers\OptionDataSourceDataController.cs" />
@@ -136,6 +139,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\Configuration\ConfigurationProvider.cs" />
+    <Compile Include="Infrastructure\Results\FileResult.cs" />
     <Compile Include="Infrastructure\TokenProviders\HttpApiTokenProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

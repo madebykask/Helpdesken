@@ -50,12 +50,14 @@
     <Compile Include="..\..\dhHelpdeskNG\CommonAssembly\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Data\CaseFile.cs" />
     <Compile Include="Data\EntityBase.cs" />
     <Compile Include="Data\ExtendedCaseData.cs" />
     <Compile Include="Data\ExtendedCaseFieldValue.cs" />
     <Compile Include="Data\ExtendedCaseFormFull.cs" />
     <Compile Include="Data\ExtendedCaseFormStateItem.cs" />
     <Compile Include="Data\FormMetaData.cs" />
+    <Compile Include="Repositories\CaseFileRepository.cs" />
     <Compile Include="Repositories\DapperRepositoryBase.cs" />
     <Compile Include="Connection\DbConnections.cs" />
     <Compile Include="Repositories\CustomDataSourceRepository.cs" />
@@ -65,8 +67,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\DapperExtensions.cs" />
     <Compile Include="Repositories\FormRepository.cs" />
+    <Compile Include="Repositories\GlobalSettingRepository.cs" />
     <Compile Include="Repositories\HelpdeskRespositoryBase.cs" />
     <Compile Include="Repositories\OptionDataSourceRepository.cs" />
+    <Compile Include="Repositories\SettingsRepository.cs" />
     <Compile Include="Repositories\TranslationRepository.cs" />
   </ItemGroup>
   <ItemGroup>

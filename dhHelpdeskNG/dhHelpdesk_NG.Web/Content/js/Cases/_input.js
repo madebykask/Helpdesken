@@ -100,6 +100,49 @@ $(function () {
     });
     */
 
+    $("#performerSearch").on("click", function (e) {
+        e.preventDefault();
+        $('#performersWithWg').show();
+        $("#administratorSearchWithWg").val("").trigger('chosen:updated');
+    });
+
+    $("#administratorSearchWithWg").on('change', function (evt, params) {
+        var selectedValue = params.selected;
+        var fields = selectedValue.split(',');
+        var performerId = fields[0];
+        var PerformerWGId = fields[1];
+
+        var performerUserId$ = $('#Performer_Id');
+        var existsPerformerId = $('#Performer_Id option[value=' + performerId + ']').length;
+        //if (existsPerformerId > 0)
+            performerUserId$.val(performerId);
+
+        var workingGroupId$ = $('#case__WorkingGroup_Id');
+        var exists = $('#case__WorkingGroup_Id option[value=' + PerformerWGId + ']').length;
+        if (exists > 0 && PerformerWGId > 0) {
+            if (workingGroupId$.val() !== PerformerWGId) {
+                performerUserId$.one('applyValue', function () {
+                    $(this).val(performerId);
+                });
+            }
+            workingGroupId$
+                .val(PerformerWGId).change();
+           
+        }
+        if (PerformerWGId == 0) {
+            if (workingGroupId$.val() !== PerformerWGId) {
+                performerUserId$.one('applyValue', function () {
+                    $(this).val(performerId);
+                });
+            }
+            workingGroupId$.val("").change();
+        }
+
+        if (selectedValue != "")
+            $("#performersWithWg").hide();        
+    });
+    
+
     $("a.btn.show-inventory").on("click", function (e) {
         if (window.parameters.user.hasInventoryViewPermission == "True") {
             $.ajax({

@@ -32,6 +32,14 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
             return value.ToString(); 
         }
 
+        public static string supressZero(this int? value)
+        {
+            if (value == 0 || value == null)
+                return string.Empty;
+
+            return value.ToString();
+        }
+
         public static string IntToYES_NO(this int value)
         {
             var ret = string.Empty;
