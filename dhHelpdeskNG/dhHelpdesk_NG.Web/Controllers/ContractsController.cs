@@ -203,19 +203,17 @@ namespace DH.Helpdesk.Web.Controllers
                     SessionFacade.CurrentUser.Id,
                     GridSettingsService.CASE_OVERVIEW_GRID_ID);
 
-            var notexists = contractCasesGrid.columnDefs.Where(a => !userSelectedGrid.columnDefs.Any(b => b.name == a.name)).ToList();
-            var difference = userSelectedGrid.columnDefs.Where(a => !contractCasesGrid.columnDefs.Any(b => b.name == a.name)).ToList();
+            var existingColumns = contractCasesGrid.columnDefs.Where(a => userSelectedGrid.columnDefs.Any(b => b.name == a.name)).ToList();
+            var otherColumns = userSelectedGrid.columnDefs.Where(a => !existingColumns.Any(b => b.name == a.name)).ToList();
 
-            if (notexists != null)
+            var maxColumns = 7;
+            if (existingColumns.Count < maxColumns)
             {
-                int i = 0;
-                foreach (var c in notexists)
-                {
-                    contractCasesGrid.columnDefs.Remove(c);
-                    contractCasesGrid.columnDefs.Add(difference[i]);
-                    i++;
-                }
+                var missingAmount = Math.Abs(maxColumns - existingColumns.Count);
+                existingColumns.AddRange(otherColumns.Take(missingAmount));
+                contractCasesGrid.columnDefs = existingColumns;
             }
+
             gridSettings = contractCasesGrid;
 
             model.ContractCases = new JsonCaseIndexViewModel

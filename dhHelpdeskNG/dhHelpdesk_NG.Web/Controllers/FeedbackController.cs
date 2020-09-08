@@ -494,20 +494,18 @@ namespace DH.Helpdesk.Web.Controllers
                             SessionFacade.CurrentUser.UserGroupId,
                             SessionFacade.CurrentUser.Id,
                             GridSettingsService.CASE_OVERVIEW_GRID_ID);
+           
+            var existingColumns = connectToParentGrid.columnDefs.Where(a => userSelectedGrid.columnDefs.Any(b => b.name == a.name)).ToList();
+            var otherColumns = userSelectedGrid.columnDefs.Where(a => !existingColumns.Any(b => b.name == a.name)).ToList();
 
-            var notexists = connectToParentGrid.columnDefs.Where(a => !userSelectedGrid.columnDefs.Any(b => b.name == a.name)).ToList();
-            var difference = userSelectedGrid.columnDefs.Where(a => !connectToParentGrid.columnDefs.Any(b => b.name == a.name)).ToList();
-
-            if (notexists != null)
+            var maxColumns = 7;
+            if (existingColumns.Count < maxColumns)
             {
-                int i = 0;
-                foreach (var c in notexists)
-                {
-                    connectToParentGrid.columnDefs.Remove(c);
-                    connectToParentGrid.columnDefs.Add(difference[i]);
-                    i++;
-                }
+                var missingAmount = Math.Abs(maxColumns - existingColumns.Count);
+                existingColumns.AddRange(otherColumns.Take(missingAmount));
+                connectToParentGrid.columnDefs = existingColumns;
             }
+
             gridSettings = connectToParentGrid;
 
             var m = new JsonCaseIndexViewModel
