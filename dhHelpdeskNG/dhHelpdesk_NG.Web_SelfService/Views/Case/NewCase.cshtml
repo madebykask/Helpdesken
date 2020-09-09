@@ -454,7 +454,8 @@
                                             </div>
                                         </div>
                                     }
-                                    
+                                    <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()" />
+
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()">
@@ -484,6 +485,7 @@
                                             </div>
                                         </div>
                                     }
+                                    @Html.HiddenFor(model => model.NewCase.ProductArea_Id)
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.System_Id.ToString()))
                                     {
