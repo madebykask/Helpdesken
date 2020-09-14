@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Common.Constants;
+﻿using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
@@ -140,7 +141,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [BadRequestOnNotValid]
         public RedirectToRouteResult New(ServerViewModel serverViewModel)
         {
-            ServerForInsert businessModel = this.serverBuilder.BuildForAdd(serverViewModel, this.OperationContext);
+            var computerFile = LoadTempFile(serverViewModel.DocumentFileKey); 
+            ServerForInsert businessModel = this.serverBuilder.BuildForAdd(serverViewModel, this.OperationContext, computerFile);
             this.inventoryService.AddServer(businessModel, this.OperationContext);
 
             return this.RedirectToAction("Index");
@@ -357,6 +359,26 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
             var viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
             return viewModel;
+        }
+
+        private ComputerFile LoadTempFile(string documentFileKey, bool deleteTempFile = true)
+        {
+            ComputerFile computerFile = null;
+            if (!string.IsNullOrEmpty(documentFileKey))
+            {
+                var fileName = _filesStore.FindFileNames(documentFileKey).FirstOrDefault();
+                if (!string.IsNullOrEmpty(fileName))
+                {
+                    var fileContent = _filesStore.GetFileContent(fileName, documentFileKey);
+                    computerFile = new ComputerFile(fileName, fileContent);
+                }
+
+                if (deleteTempFile)
+                {
+                    _filesStore.ResetCacheForObject(documentFileKey);
+                }
+            }
+            return computerFile;
         }
     }
 }

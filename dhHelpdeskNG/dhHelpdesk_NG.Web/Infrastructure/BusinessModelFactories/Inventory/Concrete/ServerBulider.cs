@@ -1,3 +1,5 @@
+using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
+
 namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concrete
 {
     using System;
@@ -45,7 +47,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             return fieldsModel;
         }
 
-        public ServerForInsert BuildForAdd(ServerViewModel model, OperationContext context)
+        public ServerForInsert BuildForAdd(ServerViewModel model, OperationContext context, ComputerFile computerFile)
         {
             var general = CreateGeneral(model.GeneralFieldsModel);
             var chassis = CreateChassis(model.ChassisFieldsModel);
@@ -73,6 +75,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 processor,
                 communication,
                 context.CustomerId,
+                computerFile,
                 context.DateAndTime,
                 context.UserId);
 

@@ -24,6 +24,13 @@ namespace DH.Helpdesk.Dal.Repositories.Servers.Concrete
             entity.CreatedDate = businessModel.CreatedDate;
             entity.ChangedByUser_Id = businessModel.ChangedByUserId;
 
+            //save file
+            if (businessModel.File != null)
+            {
+                entity.ServerFileName = businessModel.File.FileName;
+                entity.ServerDocument = businessModel.File.Content;
+            }
+
             entity.ChangedDate = businessModel.CreatedDate; // todo
 
             this.DbSet.Add(entity);

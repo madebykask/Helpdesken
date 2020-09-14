@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server
+﻿using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
+
+namespace DH.Helpdesk.BusinessData.Models.Inventory.Edit.Server
 {
     using System;
 
@@ -21,6 +23,7 @@
             ProcessorFields proccesorFields,
             CommunicationFields communicationFields,
             int customerId,
+            ComputerFile file,
             DateTime createdDate,
             int? changedByUserId)
             : base(
@@ -40,6 +43,7 @@
             this.CustomerId = customerId;
             this.CreatedDate = createdDate;
             this.ChangedByUserId = changedByUserId;
+            this.File = file;
         }
 
         [IsId]
@@ -49,5 +53,7 @@
 
         [IsId]
         public int? ChangedByUserId { get; private set; }
+
+        public ComputerFile File { get; private set; }
     }
 }

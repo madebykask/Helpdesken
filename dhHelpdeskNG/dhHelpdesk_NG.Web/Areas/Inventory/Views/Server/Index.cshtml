@@ -10,11 +10,11 @@
         @if (Model.UserHasInventoryAdminPermission)
         {
             <li>
-                @Html.ActionLink(Translation.Get("Ny server"), "New", "Server", new { @class = "btn" })
+                @Html.ActionLink(Translation.Get("Ny server"), "New", new { controller = "Server" }, new { @class = "btn" })
             </li>
         }
         <li>
-            @Html.ActionLink(Translation.Get("Excel"), "ExportGridToExcelFile", "Server", new { @class = "btn", id = "excel_report_inventory_button" })
+            @Html.ActionLink(Translation.Get("Excel"), "ExportGridToExcelFile", new { controller = "Server" }, new { @class = "btn", id = "excel_report_inventory_button" })
         </li>
     </ul>
 }
