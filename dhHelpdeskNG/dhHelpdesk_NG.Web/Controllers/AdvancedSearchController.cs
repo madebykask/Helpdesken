@@ -15,6 +15,8 @@ using DH.Helpdesk.Web.Models.Case;
 using System.Collections.Generic;
 using DH.Helpdesk.Dal.Repositories.FileIndexing;
 using System.Threading.Tasks;
+using DH.Helpdesk.Common.Logger;
+using DH.Helpdesk.Web.Infrastructure.Logger;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -23,6 +25,7 @@ namespace DH.Helpdesk.Web.Controllers
     [SessionState(SessionStateBehavior.ReadOnly)]
     public class AdvancedSearchController : Controller
     {
+        private readonly ILoggerService _logger = LogManager.Error;
         private readonly AdvancedSearchBehavior _advancedSearchBehavior;
         private readonly ISettingService _settingService;
         private readonly GridSettingsService _gridSettingsService;
@@ -89,6 +92,7 @@ namespace DH.Helpdesk.Web.Controllers
 			catch (FileIndexingException ex)
 			{
 				var customer = _customerService.GetCustomer(customerId);
+                _logger.Error(ex);
 				//Response.StatusCode = 500;
 				return Json(new { errorMsg = $"Can not search in files for customer { customer?.Name ?? "[unkown]" } ({customerId})" });
 			}
