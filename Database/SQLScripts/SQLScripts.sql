@@ -20,6 +20,27 @@ BEGIN
     ADD ServerDocument image   
 END
 
+--Begin tran
+DECLARE @LoopVar int
+
+SET @LoopVar = (SELECT MIN(Id) FROM dbo.tblCustomer)
+WHILE @LoopVar is not null
+BEGIN
+  -- Do Stuff with current value of @LoopVar
+  If exists (select ServerField from dbo.tblServerFieldSettings where Customer_Id = @LoopVar and ServerField = 'ServerName' )    
+  begin
+	  If not exists (select ServerField from dbo.tblServerFieldSettings where Customer_Id = @LoopVar and ServerField = 'ServerFileName' )
+		  begin
+		  Insert into dbo.tblServerFieldSettings (Customer_Id, ServerField, Show, [Label], Label_ENG, [Required], ShowInList, CreatedDate, ChangedDate )
+		  values (@LoopVar, 'ServerFileName', 0, 'Dokument', 'Document' ,0, 0, GETDATE(), GETDATE())
+		  end
+  end
+  --Ok, done, now get the next value
+  SET @LoopVar = (SELECT MIN(Id) FROM dbo.tblCustomer
+    WHERE @LoopVar < Id)
+END
+--ROLLBACK 
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.48'
 GO
