@@ -1,4 +1,4 @@
-﻿--update DB from 5.3.47 to 5.3.48 version
+﻿--update DB from 5.3.48 to 5.3.49 version
 
 RAISERROR('Increase NovelClient column lenght in tblComputer', 10, 1) WITH NOWAIT
 ALTER TABLE dbo.tblComputer
@@ -42,6 +42,6 @@ END
 --ROLLBACK 
 
   -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.48'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.49'
 GO
 
