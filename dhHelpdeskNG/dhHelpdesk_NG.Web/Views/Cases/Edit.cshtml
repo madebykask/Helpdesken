@@ -180,6 +180,18 @@
         });
     </script>
 
+        @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
+        {
+            <script type="text/javascript">
+                    $(function () {
+                        var currentpage = new dhform({
+                            url: '@Model.DynamicCase.BuildUrl()',
+                            modal: '@Model.DynamicCase.ViewMode'
+                        });
+                    });
+            </script>
+        }
+
 }
 <div id="caseContainer">
 
