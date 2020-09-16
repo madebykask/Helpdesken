@@ -1754,7 +1754,7 @@ Public Class CaseData
         Try
 
             sSQL = "INSERT INTO tblCase_ExtendedCaseData(Case_Id, ExtendedCaseData_Id, ExtendedCaseForm_Id) " &
-                   "VALUES(@caseId, @extendedCaseFormId, @extendedCaseDataId)"
+                   "VALUES(@caseId, @extendedCaseDataId ,@extendedCaseFormId)"
 
             Dim sqlParameters As New List(Of SqlParameter) From {
                     DbHelper.createDbParameter("@caseId", caseId),
