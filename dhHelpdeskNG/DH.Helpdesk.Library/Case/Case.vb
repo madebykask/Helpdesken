@@ -103,7 +103,9 @@ Imports System.Data
     Private msIsAbout_Place As String
     Private msIsAbout_CostCentre As String
     Private msIsAbout_UserCode As String
+    Private mCaseSolution_Id As Integer
     Private msExtendedCaseFormId As Nullable(Of Integer)
+
 
 #End Region
 
@@ -584,6 +586,12 @@ Imports System.Data
 
         miExternalTime = dr("ExternalTime")
         miLeadTime = dr("LeadTime")
+
+        If IsDBNull(dr("CaseSolution_Id")) Then
+            miVerified = 0
+        Else
+            miVerified = dr("CaseSolution_Id")
+        End If
 
     End Sub
 
@@ -1483,6 +1491,16 @@ Imports System.Data
             msExtendedCaseFormId = value
         End Set
     End Property
+
+    Public Property CaseSolution_Id() As Integer
+        Get
+            Return mCaseSolution_Id
+        End Get
+        Set(ByVal Value As Integer)
+            mCaseSolution_Id = Value
+        End Set
+    End Property
+
 
 #End Region
 
