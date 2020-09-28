@@ -1742,7 +1742,11 @@ Module DH_Helpdesk_Mail
                         Using stringReader As New StringReader(StrContent)
                             Dim parsedList
                             Try
-                                parsedList = HTMLWorker.ParseToList(stringReader, Nothing)
+                                Dim providers As New Dictionary(Of String, Object)()
+                                providers.Add(HTMLWorker.IMG_PROVIDER, New CustomItextImageProvider())
+                                parsedList = HTMLWorker.ParseToList(stringReader, Nothing, providers)
+
+                                'parsedList = HTMLWorker.ParseToList(stringReader, Nothing)
 
                             Catch ex As Exception
                                 LogError("Error " & sMediaType & ", " & ex.Message.ToString)
@@ -1750,8 +1754,8 @@ Module DH_Helpdesk_Mail
                                 Throw
                             End Try
 
-                            For Each item As Object In parsedList
-                                document.Add(DirectCast(item, IElement))
+                            For Each item As IElement In parsedList
+                                document.Add(item)
                             Next
                             document.Close()
                         End Using
@@ -1821,7 +1825,7 @@ Module DH_Helpdesk_Mail
 
         MyWebBrowser.ScriptErrorsSuppressed = True
 
-        While (MyWebBrowser.ReadyState <> System.Windows.Forms.WebBrowserReadyState.Complete Or MyWebBrowser.IsBusy = True) And DateDiff(DateInterval.Second, startTime, DateTime.Now()) < 10
+        While (MyWebBrowser.ReadyState <> System.Windows.Forms.WebBrowserReadyState.Complete Or MyWebBrowser.IsBusy = True) And DateDiff(DateInterval.Second, startTime, DateTime.Now()) <10
             System.Windows.Forms.Application.DoEvents()
         End While
 
@@ -2030,6 +2034,22 @@ Module DH_Helpdesk_Mail
 
     End Function
 
+    Public Class CustomItextImageProvider
+        Implements IImageProvider
+
+        Public Function IImageProvider_GetImage(src As String, imageProperties As IDictionary(Of String, String), chain As ChainedProperties, doc As IDocListener) As iTextSharp.text.Image Implements IImageProvider.GetImage
+
+            Dim imageLocation As String = ""
+            If Not imageProperties.TryGetValue("src", imageLocation) Then
+                Return Nothing
+            End If
+
+            Dim image As iTextSharp.text.Image = iTextSharp.text.Image.GetInstance(imageLocation)
+
+            Return image
+        End Function
+    End Class
+
 End Module
 
 Public Class EwsMailMessage
@@ -2046,3 +2066,5 @@ Public Class EwsMailMessage
     End Property
 
 End Class
+
+
