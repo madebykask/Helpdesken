@@ -14,7 +14,16 @@ Imports DH.Helpdesk.BusinessData.OldComponents.GlobalEnums
 Imports Microsoft.Identity.Client
 Imports System.Threading.Tasks
 Imports Rebex.Mime.Headers
-
+Imports System.Collections.Generic
+Imports System.Web
+Imports System.Web.UI
+Imports System.Web.UI.WebControls
+Imports iTextSharp.text
+Imports iTextSharp.text.html.simpleparser
+Imports iTextSharp.text.pdf
+Imports iTextSharp.text.html
+Imports Microsoft.VisualBasic
+Imports iTextSharp.xmp.impl
 
 Module DH_Helpdesk_Mail
     'Dim msDeniedHtmlBodyString As String
@@ -724,12 +733,20 @@ Module DH_Helpdesk_Mail
 
                                     'Save 
                                     Dim sHTMLFileName As String = createHtmlFileFromMail(message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
+                                    Dim sPDFFileName As String = createPdfFileFromMail(message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
 
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
                                         iHTMLFile = 1
 
                                         ' Lägg in i databasen
                                         objCaseData.saveFileInfo(objCase.Id, "html/" & sHTMLFileName)
+                                    End If
+
+                                    If Not IsNullOrEmpty(sPDFFileName) Then
+                                        iHTMLFile = 1
+
+                                        ' Lägg in i databasen                                       
+                                        objCaseData.saveFileInfo(objCase.Id, "html/" & sPDFFileName)
                                     End If
 
                                     'Attached files processing for Case
@@ -1644,6 +1661,113 @@ Module DH_Helpdesk_Mail
         Return sFileName
     End Function
 
+    Private Function createPdfFileFromMail(ByVal message As Rebex.Mail.MailMessage,
+                                            ByVal sFolder As String,
+                                            ByVal sCaseNumber As String) As String
+
+        Dim sBodyHtml As String = ""
+        Dim sFileName As String = ""
+        Dim pdfFileName As String = ""
+        Dim sMediaType As String = ""
+        Dim sContentId As String = ""
+        Dim sContentLocation As String = ""
+        Dim iFileCount As Integer = 0
+        Dim sFileExtension As String = ""
+
+        Try
+            If Not message Is Nothing Then
+                If message.HasBodyHtml Then
+
+                    sBodyHtml = message.BodyHtml
+                    sBodyHtml = Regex.Replace(sBodyHtml, "<base.*?>", "")
+
+                    If Directory.Exists(sFolder) = False Then
+                        Directory.CreateDirectory(sFolder)
+                    End If
+
+                    If Directory.Exists(sFolder & "\html") = False Then
+                        Directory.CreateDirectory(sFolder & "\html")
+                    End If
+
+                    'If Directory.Exists(sFolder & "\pdf") = False Then
+                    '    Directory.CreateDirectory(sFolder & "\pdf")
+                    'End If
+
+                    ' Skapa fil                   
+                    pdfFileName = sCaseNumber & ".pdf"
+
+                    ' Kontrollera om det finns några resurser
+                    Dim resCol As Rebex.Mail.LinkedResourceCollection = message.Resources
+
+                    For k As Integer = 0 To resCol.Count - 1
+                        Dim res As Rebex.Mail.LinkedResource = resCol(k)
+
+                        sMediaType = res.MediaType
+
+                        If sMediaType.Contains("image") Then
+
+                            If Not res.ContentId Is Nothing Then
+                                ' Byt ut cid: i htmlbody
+                                sContentId = res.ContentId.ToString
+                                sContentId = sContentId.Replace("<", "")
+                                sContentId = sContentId.Replace(">", "")
+
+                                sContentId = "cid:" & sContentId
+
+                                sFileExtension = sMediaType.Replace("image/", "")
+                                iFileCount = iFileCount + 1
+
+                                'sContentLocation = res.ContentLocation.ToString
+                                ' Spara filen
+                                'res.Save(sFolder & "\pdf\" & iFileCount & "." & sFileExtension)
+                                sBodyHtml = sBodyHtml.Replace(sContentId, sFolder & "\html\" & iFileCount & "." & sFileExtension)
+                            Else
+                                    sFileExtension = sMediaType.Replace("image/", "")
+                                iFileCount = iFileCount + 1
+
+                                ' Spara filen
+                                'res.Save(sFolder & "\pdf\" & iFileCount & "." & sFileExtension)
+
+                                sBodyHtml = sBodyHtml.Replace(sContentId, sFolder & "\html\" & iFileCount & "." & sFileExtension)
+                            End If
+                        End If
+                    Next
+                    Dim StrContent As String
+                    StrContent = sBodyHtml
+                    Dim document As New Document(PageSize.A4, 80, 50, 30, 65)
+                    Using fs As New FileStream(sFolder & "\html\" & sCaseNumber & ".pdf", FileMode.Create)
+                        Dim instance = PdfWriter.GetInstance(document, fs)
+                        instance.CloseStream = False
+                        document.Open()
+                        Using stringReader As New StringReader(StrContent)
+                            Dim parsedList
+                            Try
+                                parsedList = HTMLWorker.ParseToList(stringReader, Nothing)
+
+                            Catch ex As Exception
+                                LogError("Error " & sMediaType & ", " & ex.Message.ToString)
+                                'Rethrow
+                                Throw
+                            End Try
+
+                            For Each item As Object In parsedList
+                                document.Add(DirectCast(item, IElement))
+                            Next
+                            document.Close()
+                        End Using
+                    End Using
+                End If
+            End If
+
+        Catch ex As Exception
+            LogError("Error createHtmlFileFromMail MediaType: " & sMediaType & ", " & ex.Message.ToString)
+
+            'Rethrow
+            Throw
+        End Try
+
+        Return pdfFileName
+    End Function
     Private Sub openLogFile()
 
         If objLogFile IsNot Nothing Then
