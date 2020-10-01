@@ -104,7 +104,6 @@ Imports System.Data
     Private msIsAbout_CostCentre As String
     Private msIsAbout_UserCode As String
     Private mCaseSolution_Id As Integer
-    Private mCurrentCaseSolution_Id As Integer
     Private msExtendedCaseFormId As Nullable(Of Integer)
 
 
@@ -592,12 +591,6 @@ Imports System.Data
             miVerified = 0
         Else
             miVerified = dr("CaseSolution_Id")
-        End If
-
-        If IsDBNull(dr("CurrentCaseSolution_Id")) Then
-            miVerified = 0
-        Else
-            miVerified = dr("CurrentCaseSolution_Id")
         End If
 
     End Sub
@@ -1508,14 +1501,7 @@ Imports System.Data
         End Set
     End Property
 
-    Public Property CurrentCaseSolution_Id() As Integer
-        Get
-            Return mCurrentCaseSolution_Id
-        End Get
-        Set(ByVal Value As Integer)
-            mCurrentCaseSolution_Id = Value
-        End Set
-    End Property
+
 #End Region
 
 End Class

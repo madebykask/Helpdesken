@@ -403,7 +403,7 @@ Public Class CaseData
                             "InventoryType, InventoryLocation, Currency, ContactBeforeAction, FinishingDescription, " &
                             "Persons_Name, Persons_EMail, Persons_Phone, Persons_CellPhone, Place, UserCode, CostCentre, InventoryNumber, InvoiceNumber, " &
                             "Caption, Description, Miscellaneous, Available, ReferenceNumber, Priority_Id, WorkingGroup_Id, Performer_User_Id, Status_Id, StateSecondary_Id, " &
-                            "WatchDate, PlanDate, AgreedDate, FinishingDate, RegistrationSource, RegLanguage_Id, RegistrationSourceCustomer_Id, RegUserName, CaseSolution_Id, CurrentCaseSolution_Id, RegTime, ChangeTime) " &
+                            "WatchDate, PlanDate, AgreedDate, FinishingDate, RegistrationSource, RegLanguage_Id, RegistrationSourceCustomer_Id, RegUserName, CaseSolution_Id, RegTime, ChangeTime) " &
                         "VALUES(" &
                             getDBStringPrefix() & "'" & objCase.CaseGUID & "', " &
                             objCase.CaseType_Id & ", " &
@@ -604,12 +604,6 @@ Public Class CaseData
                 sSQL = sSQL & objCase.CaseSolution_Id & ", "
             End If
 
-            If objCase.CurrentCaseSolution_Id = 0 Then
-                sSQL = sSQL & "Null, "
-            Else
-                sSQL = sSQL & objCase.CurrentCaseSolution_Id & ", "
-            End If
-
             sSQL = sSQL & "getutcdate(), getutcdate())"
 
             'If giDBType = 0 Then
@@ -720,7 +714,7 @@ Public Class CaseData
                        "tblWorkingGroup.WorkingGroup AS PerformerWorkingGroup, tblWorkingGroup.Id AS PerformerWorkingGroup_Id, tblWorkingGroup.AllocateCaseMail AS PerformerWorkingGroupAllocateCaseMail, " &
                        "tblWorkingGroup_1.WorkingGroup AS CaseWorkingGroup, ISNULL(tblWorkingGroup_1.WorkingGroupEMail, '') AS WorkingGroupEMail, tblWorkingGroup_1.AllocateCaseMail AS AllocateCaseMail, " &
                        "tblCase.RegTime, tblCase.ChangeTime, u3.FirstName AS ChangedName, u3.SurName AS ChangedSurName, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " &
-                       "tblCase.CaseSolution_Id, tblCase.CurrentCaseSolution_Id, tblCase.FinishingDate, tblCase.FinishingDescription, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
+                       "tblCase.CaseSolution_Id,tblCase.FinishingDate, tblCase.FinishingDescription, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
                        "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.WatchDate, tblCase.RegistrationSource, tblCase.RegistrationSourceCustomer_Id, " &
                        "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, tblCase.Available, tblCase.ReferenceNumber, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics, tblCase.ExternalTime, tblCase.LeadTime " &
                    "FROM tblCase " &
@@ -824,7 +818,7 @@ Public Class CaseData
                         "tblCase.RegTime, tblCase.ChangeTime, u3.FirstName AS ChangedName, u3.SurName AS ChangedSurName, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " &
                         "tblWorkingGroup.WorkingGroup AS PerformerWorkingGroup, tblWorkingGroup.Id AS PerformerWorkingGroup_Id, tblWorkingGroup.AllocateCaseMail AS PerformerWorkingGroupAllocateCaseMail, " &
                         "tblWorkingGroup_1.WorkingGroup AS CaseWorkingGroup, ISNULL(tblWorkingGroup_1.WorkingGroupEMail, '') AS WorkingGroupEMail, tblWorkingGroup_1.AllocateCaseMail AS AllocateCaseMail, " &
-                        "tblCase.CaseSolution_Id, tblCase.CurrentCaseSolution_Id, tblCase.FinishingDate, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
+                        "tblCase.CaseSolution_Id, tblCase.FinishingDate, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
                         "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.RegistrationSource, tblCase.WatchDate, tblCase.Available, tblCase.ReferenceNumber, " &
                         "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics, tblCase.ExternalTime, tblCase.LeadTime " &
                     "FROM tblCase " &
@@ -1097,8 +1091,6 @@ Public Class CaseData
                     c = New CCase
 
                     c.CaseSolution_Id = dr("Id")
-                    c.CurrentCaseSolution_Id = dr("Id")
-
                     c.RegistrationSource = 4
                     c.RegLanguage_Id = dr("Language_Id")
 
