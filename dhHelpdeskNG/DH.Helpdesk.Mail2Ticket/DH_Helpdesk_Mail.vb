@@ -1764,7 +1764,7 @@ Module DH_Helpdesk_Mail
             End If
 
         Catch ex As Exception
-            LogError("Error createHtmlFileFromMail MediaType: " & sMediaType & ", " & ex.Message.ToString)
+            LogError("Error createPdfFileFromMail MediaType: " & sMediaType & ", " & ex.Message.ToString)
 
             'Rethrow
             Throw
