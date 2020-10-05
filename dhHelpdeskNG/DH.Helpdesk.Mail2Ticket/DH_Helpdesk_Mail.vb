@@ -2053,9 +2053,13 @@ Module DH_Helpdesk_Mail
 
             Dim image As iTextSharp.text.Image = iTextSharp.text.Image.GetInstance(imageLocation)
 
-            image.ScaleToFit(_document.PageSize.Width - 140, _document.PageSize.Height - 100)
-            image.SetAbsolutePosition(1, 1)
-            'image.ScaleToFit(500.0F, 30.0F) ' test scale
+            Dim maxWidth As Single = _document.PageSize.Width - _document.LeftMargin - _document.RightMargin
+            Dim maxHeight As Single = _document.PageSize.Height - _document.BottomMargin - _document.TopMargin
+            If image.Height >= maxHeight Or image.Width >= maxWidth Then
+                image.ScaleToFit(maxWidth, maxHeight)
+                'image.ScaleToFit(500.0F, 30.0F) ' test scale
+            End If
+            'image.SetAbsolutePosition(1, 1)
 
             Return image
         End Function
