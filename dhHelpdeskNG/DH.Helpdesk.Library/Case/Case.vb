@@ -291,43 +291,43 @@ Imports System.Data
             msIsAbout_ReportedBy = ""
         Else
             msIsAbout_ReportedBy = dr("IsAbout_ReportedBy")
-        End If
+            End If
 
         If Not dr.Table.Columns.Contains("IsAbout_Persons_Name") OrElse IsDBNull(dr("IsAbout_Persons_Name")) Then
             msIsAbout_PersonsName = ""
         Else
             msIsAbout_PersonsName = dr("IsAbout_Persons_Name")
-        End If
+            End If
 
         If Not dr.Table.Columns.Contains("IsAbout_Persons_Phone") OrElse IsDBNull(dr("IsAbout_Persons_Phone")) Then
             msIsAbout_PersonsPhone = ""
         Else
             msIsAbout_PersonsPhone = dr("IsAbout_Persons_Phone")
-        End If
+            End If
 
         If Not dr.Table.Columns.Contains("IsAbout_Persons_CellPhone") OrElse IsDBNull(dr("IsAbout_Persons_CellPhone")) Then
             msIsAbout_PersonsCellPhone = ""
         Else
             msIsAbout_PersonsCellPhone = dr("IsAbout_Persons_CellPhone")
-        End If
+            End If
 
         If Not dr.Table.Columns.Contains("IsAbout_Persons_EMail") OrElse IsDBNull(dr("IsAbout_Persons_EMail")) Then
             msIsAbout_PersonsEmail = ""
         Else
             msIsAbout_PersonsEmail = dr("IsAbout_Persons_EMail")
-        End If
+            End If
 
         If Not dr.Table.Columns.Contains("IsAbout_Place") OrElse IsDBNull(dr("IsAbout_Place")) Then
             msIsAbout_Place = ""
         Else
             msIsAbout_Place = dr("IsAbout_Place")
-        End If
+            End If
 
         If Not dr.Table.Columns.Contains("IsAbout_UserCode") OrElse IsDBNull(dr("IsAbout_UserCode")) Then
             msIsAbout_UserCode = ""
         Else
             msIsAbout_UserCode = dr("IsAbout_UserCode")
-        End If
+            End If
 
         If Not dr.Table.Columns.Contains("IsAbout_CostCentre") OrElse IsDBNull(dr("IsAbout_CostCentre")) Then
             msIsAbout_CostCentre = ""
@@ -431,7 +431,7 @@ Imports System.Data
         End If
 
         If Not IsDBNull(dr("WatchDate")) Then
-            mdtWatchDate = dr("WatchDate")
+            mdtWatchdate = dr("WatchDate")
         End If
 
         If Not IsDBNull(dr("WorkingGroupEMail")) Then
