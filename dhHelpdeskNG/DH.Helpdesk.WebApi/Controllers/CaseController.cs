@@ -102,9 +102,9 @@ namespace DH.Helpdesk.WebApi.Controllers
             model.CaseGuid = currentCase.CaseGUID;
 
             //case solution
-            if (currentCase.CurrentCaseSolution_Id.HasValue)
+            if (currentCase.CaseSolution_Id.HasValue)
             {
-                var caseSolutionId = currentCase.CurrentCaseSolution_Id.Value;
+                var caseSolutionId = currentCase.CaseSolution_Id.Value;
                 var caseSolution = _caseSolutionService.GetCaseSolution(caseSolutionId);
                 //_caseSolutionSettingService.GetCaseSolutionSettingOverviews(caseSolutionId);//TODO: Case solution settings participate in visibility check
                 if (caseSolution != null)
