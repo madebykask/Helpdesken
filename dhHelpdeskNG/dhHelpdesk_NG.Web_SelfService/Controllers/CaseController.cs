@@ -504,7 +504,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 return RedirectToAction("Index", "Error");
             }
 
-            var model = GetExtendedCaseViewModel(null, caseId);
+            var model = GetExtendedCaseViewModel(null, caseId, true);
             if (ErrorGenerator.HasError())
                 return RedirectToAction("Index", "Error");
 
@@ -947,7 +947,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             model.FinishingType_Id = caseTemplate.FinishingCause_Id.IfNullThenElse(model.FinishingType_Id);
         }
 
-        private ExtendedCaseViewModel GetExtendedCaseViewModel(int? caseTemplateId = null, int? caseId = null)
+        private ExtendedCaseViewModel GetExtendedCaseViewModel(int? caseTemplateId = null, int? caseId = null, bool allowAnonymousAccess = false)
         {
             if (caseTemplateId.IsNew() && caseId.IsNew())
             {
@@ -980,7 +980,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             var isAnonymousMode = ConfigurationService.AppSettings.LoginMode == LoginMode.Anonymous;
-            var allowAnonymousAccess = !caseId.HasValue;
             if (!isAnonymousMode && !allowAnonymousAccess)
             {
                 var hasAccess = UserHasAccessToCase(caseModel);
@@ -1673,14 +1672,14 @@ namespace DH.Helpdesk.SelfService.Controllers
             {
                 if (criteria.GroupMember != null && criteria.GroupMember.Any())
                 {
-                    if ((string.IsNullOrEmpty(currentCase.ReportedBy) && !(currentCase.RegUserId == null) &&
+                    if ((string.IsNullOrEmpty(currentCase.ReportedBy) && currentCase.RegUserId != null &&
                         currentCase.RegUserId.Equals(criteria.UserId, StringComparison.CurrentCultureIgnoreCase)) ||
                         criteria.GroupMember.Where(m => m.Equals(currentCase.ReportedBy, StringComparison.CurrentCultureIgnoreCase)).Any())
                         return true;
                 }
                 else
                 {
-                    if (string.IsNullOrEmpty(currentCase.ReportedBy) && !(currentCase.RegUserId == null) &&
+                    if (string.IsNullOrEmpty(currentCase.ReportedBy) && currentCase.RegUserId != null &&
                         currentCase.RegUserId.Equals(criteria.UserId, StringComparison.CurrentCultureIgnoreCase))
                         return true;
                 }
