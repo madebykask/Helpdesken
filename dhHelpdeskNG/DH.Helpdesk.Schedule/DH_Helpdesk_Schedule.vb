@@ -373,10 +373,14 @@ Module DH_Helpdesk_Schedule
                 End If
             End If
 
-            If objCaseSolution.ExtendedCaseFormId.HasValue And objCaseSolution.ExtendedCaseFormId.Value > 0 Then
-                Dim extendedCaseDataId = objExtendedCaseService.CreateExtendedCaseData(objCaseSolution.ExtendedCaseFormId.Value)
-                objCaseData.CreateExtendedCaseConnection(objCase.Id, objCaseSolution.ExtendedCaseFormId.Value, extendedCaseDataId)
+
+            If Not objCaseSolution.ExtendedCaseFormId Is Nothing Then
+                If objCaseSolution.ExtendedCaseFormId.HasValue And objCaseSolution.ExtendedCaseFormId.Value > 0 Then
+                    Dim extendedCaseDataId = objExtendedCaseService.CreateExtendedCaseData(objCaseSolution.ExtendedCaseFormId.Value)
+                    objCaseData.CreateExtendedCaseConnection(objCase.Id, objCaseSolution.ExtendedCaseFormId.Value, extendedCaseDataId)
+                End If
             End If
+
 
         Next
         'End If
