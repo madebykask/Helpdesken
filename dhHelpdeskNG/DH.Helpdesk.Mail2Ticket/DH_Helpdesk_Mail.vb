@@ -1722,7 +1722,7 @@ Module DH_Helpdesk_Mail
                                 'res.Save(sFolder & "\pdf\" & iFileCount & "." & sFileExtension)
                                 sBodyHtml = sBodyHtml.Replace(sContentId, sFolder & "\html\" & iFileCount & "." & sFileExtension)
                             Else
-                                    sFileExtension = sMediaType.Replace("image/", "")
+                                sFileExtension = sMediaType.Replace("image/", "")
                                 iFileCount = iFileCount + 1
 
                                 ' Spara filen
@@ -1743,7 +1743,7 @@ Module DH_Helpdesk_Mail
                             Dim parsedList
                             Try
                                 Dim providers As New Dictionary(Of String, Object)()
-                                providers.Add(HTMLWorker.IMG_PROVIDER, New CustomItextImageProvider())
+                                providers.Add(HTMLWorker.IMG_PROVIDER, New CustomItextImageProvider(document))
                                 parsedList = HTMLWorker.ParseToList(stringReader, Nothing, providers)
 
                                 'parsedList = HTMLWorker.ParseToList(stringReader, Nothing)
@@ -2037,6 +2037,13 @@ Module DH_Helpdesk_Mail
     Public Class CustomItextImageProvider
         Implements IImageProvider
 
+        Private ReadOnly _document As Document
+
+        Public Sub New(doc As Document)
+            _document = doc
+        End Sub
+
+
         Public Function IImageProvider_GetImage(src As String, imageProperties As IDictionary(Of String, String), chain As ChainedProperties, doc As IDocListener) As iTextSharp.text.Image Implements IImageProvider.GetImage
 
             Dim imageLocation As String = ""
@@ -2045,6 +2052,10 @@ Module DH_Helpdesk_Mail
             End If
 
             Dim image As iTextSharp.text.Image = iTextSharp.text.Image.GetInstance(imageLocation)
+
+            image.ScaleToFit(_document.PageSize.Width - 140, _document.PageSize.Height - 100)
+            image.SetAbsolutePosition(1, 1)
+            'image.ScaleToFit(500.0F, 30.0F) ' test scale
 
             Return image
         End Function
