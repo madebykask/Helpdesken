@@ -1733,6 +1733,7 @@ Module DH_Helpdesk_Mail
                         End If
                     Next
                     Dim StrContent As String
+                    sBodyHtml = sBodyHtml.Replace("<o:p>&nbsp;</o:p>", "<br/>")
                     StrContent = sBodyHtml
                     Dim document As New Document(PageSize.A4, 80, 50, 30, 65)
                     Using fs As New FileStream(sFolder & "\html\" & sCaseNumber & ".pdf", FileMode.Create)
