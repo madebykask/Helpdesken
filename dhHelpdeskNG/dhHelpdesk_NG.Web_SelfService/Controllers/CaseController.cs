@@ -980,7 +980,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             var isAnonymousMode = ConfigurationService.AppSettings.LoginMode == LoginMode.Anonymous;
-            if (!isAnonymousMode && !allowAnonymousAccess)
+            if (!isAnonymousMode && !allowAnonymousAccess && caseId.HasValue)
             {
                 var hasAccess = UserHasAccessToCase(caseModel);
                 if (!hasAccess)
