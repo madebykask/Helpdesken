@@ -735,18 +735,18 @@ Module DH_Helpdesk_Mail
                                     Dim sHTMLFileName As String = createHtmlFileFromMail(message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
                                     Dim sPDFFileName As String = createPdfFileFromMail(message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
 
-                                    If Not IsNullOrEmpty(sHTMLFileName) Then
-                                        iHTMLFile = 1
+                                    'If Not IsNullOrEmpty(sHTMLFileName) Then
+                                    '    iHTMLFile = 1
 
-                                        ' Lägg in i databasen
-                                        objCaseData.saveFileInfo(objCase.Id, "html/" & sHTMLFileName)
-                                    End If
+                                    '    ' Lägg in i databasen
+                                    '    objCaseData.saveFileInfo(objCase.Id, "html/" & sHTMLFileName)
+                                    'End If
 
                                     If Not IsNullOrEmpty(sPDFFileName) Then
                                         iHTMLFile = 1
 
                                         ' Lägg in i databasen                                       
-                                        objCaseData.saveFileInfo(objCase.Id, "html/" & sPDFFileName)
+                                        objCaseData.saveFileInfo(objCase.Id, "pdf/" & sPDFFileName)
                                     End If
 
                                     'Attached files processing for Case
@@ -1685,91 +1685,60 @@ Module DH_Helpdesk_Mail
                         Directory.CreateDirectory(sFolder)
                     End If
 
-                    If Directory.Exists(sFolder & "\html") = False Then
-                        Directory.CreateDirectory(sFolder & "\html")
+                    If Directory.Exists(sFolder & "\pdf") = False Then
+                        Directory.CreateDirectory(sFolder & "\pdf")
                     End If
-
-                    'If Directory.Exists(sFolder & "\pdf") = False Then
-                    '    Directory.CreateDirectory(sFolder & "\pdf")
-                    'End If
 
                     ' Skapa fil                   
                     pdfFileName = sCaseNumber & ".pdf"
 
-                    ' Kontrollera om det finns några resurser
-                    Dim resCol As Rebex.Mail.LinkedResourceCollection = message.Resources
+                    'Winovative
 
-                    For k As Integer = 0 To resCol.Count - 1
-                        Dim res As Rebex.Mail.LinkedResource = resCol(k)
+                    Dim htmlToPdfConverter As New Winnovative.HtmlToPdfConverter()
 
-                        sMediaType = res.MediaType
+                    ' Set license key received after purchase to use the converter in licensed mode
+                    ' Leave it not set to use the converter in demo mode
+                    htmlToPdfConverter.LicenseKey = "xUtbSltKWkpbW0RaSllbRFtYRFNTU1M="
 
-                        If sMediaType.Contains("image") Then
+                    ' Set PDF page size which can be a predefined size like A4 or a custom size in points 
+                    ' Leave it not set to have a default A4 PDF page
+                    'htmlToPdfConverter.PdfDocumentOptions.PdfPageSize = SelectedPdfPageSize()
 
-                            If Not res.ContentId Is Nothing Then
-                                ' Byt ut cid: i htmlbody
-                                sContentId = res.ContentId.ToString
-                                sContentId = sContentId.Replace("<", "")
-                                sContentId = sContentId.Replace(">", "")
+                    ' Convert HTML to PDF using the settings above
+                    Dim outPdfFile As String = sFolder & "\pdf\" & sCaseNumber & ".pdf"
+                    Try
 
-                                sContentId = "cid:" & sContentId
+                        Dim url As String = sFolder & "\html\" & sCaseNumber & ".htm"
 
-                                sFileExtension = sMediaType.Replace("image/", "")
-                                iFileCount = iFileCount + 1
+                        ' Convert the HTML page given by an URL to a PDF document in a memory buffer
+                        Dim outPdfBuffer() As Byte = htmlToPdfConverter.ConvertUrl(url)
 
-                                'sContentLocation = res.ContentLocation.ToString
-                                ' Spara filen
-                                'res.Save(sFolder & "\pdf\" & iFileCount & "." & sFileExtension)
-                                sBodyHtml = sBodyHtml.Replace(sContentId, sFolder & "\html\" & iFileCount & "." & sFileExtension)
-                            Else
-                                sFileExtension = sMediaType.Replace("image/", "")
-                                iFileCount = iFileCount + 1
+                        ' Write the memory buffer in a PDF file
+                        System.IO.File.WriteAllBytes(outPdfFile, outPdfBuffer)
 
-                                ' Spara filen
-                                'res.Save(sFolder & "\pdf\" & iFileCount & "." & sFileExtension)
+                    Catch ex As Exception
+                        ' The HTML to PDF conversion failed                       
+                        LogError(String.Format("HTML to PDF Error. {0}", ex.Message))
+                    End Try
 
-                                sBodyHtml = sBodyHtml.Replace(sContentId, sFolder & "\html\" & iFileCount & "." & sFileExtension)
-                            End If
-                        End If
-                    Next
-                    Dim StrContent As String
-                    sBodyHtml = sBodyHtml.Replace("<o:p>&nbsp;</o:p>", "<br/>")
-                    StrContent = sBodyHtml
-                    Dim document As New Document(PageSize.A4, 80, 50, 30, 65)
-                    Using fs As New FileStream(sFolder & "\html\" & sCaseNumber & ".pdf", FileMode.Create)
-                        Dim instance = PdfWriter.GetInstance(document, fs)
-                        instance.CloseStream = False
-                        document.Open()
-                        Using stringReader As New StringReader(StrContent)
-                            Dim parsedList
-                            Try
-                                Dim providers As New Dictionary(Of String, Object)()
-                                providers.Add(HTMLWorker.IMG_PROVIDER, New CustomItextImageProvider(document))
-                                parsedList = HTMLWorker.ParseToList(stringReader, Nothing, providers)
-
-                                'parsedList = HTMLWorker.ParseToList(stringReader, Nothing)
-
-                            Catch ex As Exception
-                                LogError("Error " & sMediaType & ", " & ex.Message.ToString)
-                                'Rethrow
-                                Throw
-                            End Try
-
-                            For Each item As IElement In parsedList
-                                document.Add(item)
-                            Next
-                            document.Close()
-                        End Using
-                    End Using
+                    ' Open the created PDF document in default PDF viewer
+                    'Try
+                    '    Process.Start(outPdfFile)
+                    'Catch ex As Exception
+                    '    LogError(String.Format("Cannot open created PDF file '{0}'. {1}", outPdfFile, ex.Message))
+                    'End Try
                 End If
             End If
 
         Catch ex As Exception
-            LogError("Error createHtmlFileFromMail MediaType: " & sMediaType & ", " & ex.Message.ToString)
+            LogError("Error createPDFFileFromMail MediaType: " & sMediaType & ", " & ex.Message.ToString)
 
             'Rethrow
             Throw
         End Try
+
+        'delete htm file
+        File.Delete(sFolder & "\html\" & sCaseNumber & ".htm")
 
         Return pdfFileName
     End Function
