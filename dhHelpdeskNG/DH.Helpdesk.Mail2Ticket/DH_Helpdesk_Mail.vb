@@ -989,11 +989,20 @@ Module DH_Helpdesk_Mail
                                     Dim logSubFolderPrefix = If(bIsInternalLogFile, "LL", "L") ' LL - Internal log subfolder, L - external log subfolder
 
                                     Dim sHTMLFileName As String = createHtmlFileFromMail(message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
-                                    If Not IsNullOrEmpty(sHTMLFileName) Then
+                                    Dim sPDFFileName As String = createPdfFileFromMail(message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
+
+                                    'If Not IsNullOrEmpty(sHTMLFileName) Then
+                                    '    iHTMLFile = 1
+
+                                    '    ' Lägg in i databasen
+                                    '    objLogData.saveFileInfo(iLog_Id, "html/" & sHTMLFileName, bIsInternalLogFile)
+                                    'End If
+
+                                    If Not IsNullOrEmpty(sPDFFileName) Then
                                         iHTMLFile = 1
 
                                         ' Lägg in i databasen
-                                        objLogData.saveFileInfo(iLog_Id, "html/" & sHTMLFileName, bIsInternalLogFile)
+                                        objLogData.saveFileInfo(iLog_Id, "pdf/" & sPDFFileName, bIsInternalLogFile)
                                     End If
 
                                     ' Process attached log files 
@@ -1737,8 +1746,10 @@ Module DH_Helpdesk_Mail
             Throw
         End Try
 
-        'delete htm file
+        'delete html Directory htm file
+
         File.Delete(sFolder & "\html\" & sCaseNumber & ".htm")
+        Directory.Delete(sFolder & "\html")
 
         Return pdfFileName
     End Function
