@@ -353,13 +353,13 @@ namespace DH.Helpdesk.Dal.Repositories
                     if (customerSettings.IsUserFirstLastNameRepresentation == 1)
                     {
                         columns.Add("coalesce(tblUsers.FirstName, '') + ' ' + coalesce(tblUsers.SurName, '') as Performer_User_Id");
-                        columns.Add("IsNull(tblCase.RegUserName, coalesce(tblUsers2.FirstName, '') + ' ' + coalesce(tblUsers2.SurName, '')) as User_Id");
+                        columns.Add("CASE WHEN tblCase.User_Id IS NULL THEN IsNull(tblCase.RegUserName, coalesce(tblCase.RegUserId, '')) ELSE coalesce(tblUsers2.FirstName, '') + ' ' + coalesce(tblUsers2.SurName, '') END as User_Id");
                         columns.Add("coalesce(tblUsers3.FirstName, '') + ' ' + coalesce(tblUsers3.SurName, '') as CaseResponsibleUser_Id");
                     }
                     else
                     {
                         columns.Add("coalesce(tblUsers.SurName, '') + ' ' + coalesce(tblUsers.FirstName, '') as Performer_User_Id");
-                        columns.Add("IsNull(tblCase.RegUserName, coalesce(tblUsers2.SurName, '') + ' ' + coalesce(tblUsers2.FirstName, '')) as User_Id");
+                        columns.Add("CASE WHEN tblCase.User_Id IS NULL THEN IsNull(tblCase.RegUserName, coalesce(tblCase.RegUserId, '')) ELSE coalesce(tblUsers2.SurName, '') + ' ' + coalesce(tblUsers2.FirstName, '') END as User_Id");
                         columns.Add("coalesce(tblUsers3.SurName, '') + ' ' + coalesce(tblUsers3.FirstName, '') as CaseResponsibleUser_Id");
                     }
 
