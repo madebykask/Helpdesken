@@ -111,7 +111,7 @@
             else
             {
                 this.TempData.Add("Error", "");
-                return this.RedirectToAction("edit", "system", new { area = "admin", customerid = system.Customer_Id });
+                return this.RedirectToAction("edit", "system", new { area = "admin", id = id });
             }
         }
 
