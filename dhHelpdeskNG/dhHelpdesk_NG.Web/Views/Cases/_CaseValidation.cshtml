@@ -145,7 +145,7 @@
             Caption: '@Html.Raw(Json.Encode(Model.case_.Caption))',
             InventoryType: @Html.Raw(Json.Encode(Model.case_.InventoryType)),
             InventoryLocation: @Html.Raw(Json.Encode(Model.case_.InventoryLocation)),
-            CaseFiles: '@Html.Raw(Model.CaseFilesModel.Files != null ? Json.Encode(Model.CaseFilesModel.Files.Select(f => new { f.Id, f.FileName })) : "")'
+            CaseFiles: '@Html.Raw(Model.CaseFilesModel?.Files != null ? Json.Encode(Model.CaseFilesModel.Files.Select(f => new { f.Id, f.FileName })) : "")'
         },
 
         casesScopeInitParameters: {
