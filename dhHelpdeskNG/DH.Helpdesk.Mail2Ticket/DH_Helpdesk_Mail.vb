@@ -1747,12 +1747,48 @@ Module DH_Helpdesk_Mail
         End Try
 
         'delete html Directory htm file
-
-        File.Delete(sFolder & "\html\" & sCaseNumber & ".htm")
-        Directory.Delete(sFolder & "\html")
+        DeleteFilesInsideFolder(sFolder & "\html", True)
 
         Return pdfFileName
     End Function
+    Sub DeleteFilesInsideFolder(ByVal target_folder_path As String, ByVal also_delete_sub_folders As Boolean)
+
+        ' loop through each file in the target directory
+        For Each file_path As String In Directory.GetFiles(target_folder_path)
+
+            ' delete the file if possible...otherwise skip it
+            Try
+                File.Delete(file_path)
+            Catch ex As Exception
+
+            End Try
+
+        Next
+
+
+        ' if sub-folders should be deleted
+        If also_delete_sub_folders Then
+
+            ' loop through each file in the target directory
+            For Each sub_folder_path As String In Directory.GetDirectories(target_folder_path)
+
+                ' delete the sub-folder if possible...otherwise skip it
+                Try
+                    Directory.Delete(sub_folder_path, also_delete_sub_folders)
+                Catch ex As Exception
+
+                End Try
+
+            Next
+            ' delete the Target-folder if possible...otherwise skip it
+            Try
+                Directory.Delete(target_folder_path, also_delete_sub_folders)
+            Catch ex As Exception
+
+            End Try
+        End If
+
+    End Sub
     Private Sub openLogFile()
 
         If objLogFile IsNot Nothing Then
