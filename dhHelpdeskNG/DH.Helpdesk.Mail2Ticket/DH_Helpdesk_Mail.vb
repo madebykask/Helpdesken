@@ -18,12 +18,8 @@ Imports System.Collections.Generic
 Imports System.Web
 Imports System.Web.UI
 Imports System.Web.UI.WebControls
-Imports iTextSharp.text
-Imports iTextSharp.text.html.simpleparser
-Imports iTextSharp.text.pdf
-Imports iTextSharp.text.html
 Imports Microsoft.VisualBasic
-Imports iTextSharp.xmp.impl
+Imports Winnovative
 
 Module DH_Helpdesk_Mail
     'Dim msDeniedHtmlBodyString As String
@@ -735,19 +731,23 @@ Module DH_Helpdesk_Mail
                                     Dim sHTMLFileName As String = createHtmlFileFromMail(message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
                                     Dim sPDFFileName As String = createPdfFileFromMail(message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
 
-                                    'If Not IsNullOrEmpty(sHTMLFileName) Then
-                                    '    iHTMLFile = 1
-
-                                    '    ' Lägg in i databasen
-                                    '    objCaseData.saveFileInfo(objCase.Id, "html/" & sHTMLFileName)
-                                    'End If
-
                                     If Not IsNullOrEmpty(sPDFFileName) Then
                                         iHTMLFile = 1
 
                                         ' Lägg in i databasen                                       
                                         objCaseData.saveFileInfo(objCase.Id, "pdf/" & sPDFFileName)
                                     End If
+
+                                    If Not IsNullOrEmpty(sHTMLFileName) Then
+                                        'iHTMLFile = 1
+
+                                        ' Lägg in i databasen
+                                        'objCaseData.saveFileInfo(objCase.Id, "html/" & sHTMLFileName)
+
+                                        DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html", True)
+                                    End If
+
+
 
                                     'Attached files processing for Case
                                     Dim caseFiles As List(Of String) = ProcessMessageAttachments(message, iHTMLFile, objCustomer, objCase.Casenumber.ToString(), Nothing, iPop3DebugLevel, objGlobalSettings)
@@ -991,18 +991,20 @@ Module DH_Helpdesk_Mail
                                     Dim sHTMLFileName As String = createHtmlFileFromMail(message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
                                     Dim sPDFFileName As String = createPdfFileFromMail(message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
 
-                                    'If Not IsNullOrEmpty(sHTMLFileName) Then
-                                    '    iHTMLFile = 1
-
-                                    '    ' Lägg in i databasen
-                                    '    objLogData.saveFileInfo(iLog_Id, "html/" & sHTMLFileName, bIsInternalLogFile)
-                                    'End If
-
                                     If Not IsNullOrEmpty(sPDFFileName) Then
                                         iHTMLFile = 1
 
                                         ' Lägg in i databasen
                                         objLogData.saveFileInfo(iLog_Id, "pdf/" & sPDFFileName, bIsInternalLogFile)
+                                    End If
+
+                                    If Not IsNullOrEmpty(sHTMLFileName) Then
+                                        'iHTMLFile = 1
+
+                                        ' Lägg in i databasen
+                                        'objCaseData.saveFileInfo(objCase.Id, "html/" & sHTMLFileName)
+
+                                        DeleteFilesInsideFolder(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html", True)
                                     End If
 
                                     ' Process attached log files 
@@ -1596,6 +1598,25 @@ Module DH_Helpdesk_Mail
 
         Try
             If Not message Is Nothing Then
+
+                Dim from As String = message.From.ToString
+                Dim fromEmail As String = parseEMailAddress(message.From.ToString())
+                Dim sent As String = message.Date.ToString
+                Dim reciepent As String = message.To.ToString
+                Dim reciepentEmail As String = parseEMailAddress(message.To.ToString())
+                Dim Cc As String = message.CC.ToString
+                Dim subject As String = message.Subject
+                Dim mh As MimeHeaderCollection = message.Headers
+
+
+                Dim headerHtml As String = "<!DOCTYPE html><html><body><article><header>" &
+                                            "<p style=" & "font-size:120%;" & "><strong>From:</strong> " & from & "<" & fromEmail & ">" & "</p>" &
+                                            "<p style=" & "font-size:120%;" & "><strong>Sent:</strong> " & sent & "</p>" &
+                                            "<p style=" & "font-size:120%;" & "><strong>To:</strong> " & reciepent & "<" & reciepentEmail & ">" & "</p>" &
+                                            "<p style=" & "font-size:120%;" & "><strong>Cc:</strong> " & Cc & "</p>" &
+                                            "<p style=" & "font-size:120%;" & "><strong>Subject:</strong> " & subject & "</p>" &
+                                           "</header></article></body></html>"
+
                 If message.HasBodyHtml Then
 
                     sBodyHtml = message.BodyHtml
@@ -1652,10 +1673,15 @@ Module DH_Helpdesk_Mail
                     Next
 
                     Dim objFile As StreamWriter
+                    Dim objHeaderFile As StreamWriter
 
                     objFile = New StreamWriter(sFolder & "\html\" & sFileName, False, System.Text.UnicodeEncoding.Unicode)
                     objFile.Write(sBodyHtml)
                     objFile.Close()
+
+                    objHeaderFile = New StreamWriter(sFolder & "\html\" & "HeaderFile.htm", False, System.Text.UnicodeEncoding.Unicode)
+                    objHeaderFile.Write(headerHtml)
+                    objHeaderFile.Close()
 
                 End If
             End If
@@ -1712,6 +1738,17 @@ Module DH_Helpdesk_Mail
                     ' Set PDF page size which can be a predefined size like A4 or a custom size in points 
                     ' Leave it not set to have a default A4 PDF page
                     'htmlToPdfConverter.PdfDocumentOptions.PdfPageSize = SelectedPdfPageSize()
+                    ' Enable header in the generated PDF document
+                    htmlToPdfConverter.PdfDocumentOptions.ShowHeader = True
+
+                    ' Optionally add a space between header and the page body
+                    ' The spacing for first page and the subsequent pages can be set independently
+                    ' Leave this option not set for no spacing
+                    htmlToPdfConverter.PdfDocumentOptions.Y = Single.Parse(5)
+                    htmlToPdfConverter.PdfDocumentOptions.TopSpacing = Single.Parse(0)
+
+
+                    DrawHeader(sFolder & "\html\" & "HeaderFile.htm", htmlToPdfConverter, True)
 
                     ' Convert HTML to PDF using the settings above
                     Dim outPdfFile As String = sFolder & "\pdf\" & sCaseNumber & ".pdf"
@@ -1747,7 +1784,7 @@ Module DH_Helpdesk_Mail
         End Try
 
         'delete html Directory htm file
-        DeleteFilesInsideFolder(sFolder & "\html", True)
+        'DeleteFilesInsideFolder(sFolder & "\html", True)
 
         Return pdfFileName
     End Function
@@ -1815,6 +1852,43 @@ Module DH_Helpdesk_Mail
         objLogFile = New StreamWriter(sFilePath, True)
 
     End Sub
+    Private Sub DrawHeader(htmlHeader As String, ByVal htmlToPdfConverter As HtmlToPdfConverter, ByVal drawHeaderLine As Boolean)
+        Dim headerHtmlUrl As String = htmlHeader
+
+        ' Set the header height in points
+        htmlToPdfConverter.PdfHeaderOptions.HeaderHeight = 60
+
+        ' Set header background color
+        'htmlToPdfConverter.PdfHeaderOptions.HeaderBackColor = Color.White
+
+        ' Create a HTML element to be added in header
+        Dim headerHtml As New HtmlToPdfElement(headerHtmlUrl)
+
+        ' Set the HTML element to fit the container height
+        headerHtml.FitHeight = True
+
+        ' Add HTML element to header
+        htmlToPdfConverter.PdfHeaderOptions.AddElement(headerHtml)
+
+        If drawHeaderLine Then
+            ' Calculate the header width based on PDF page size and margins
+            Dim headerWidth As Single = htmlToPdfConverter.PdfDocumentOptions.PdfPageSize.Width - htmlToPdfConverter.PdfDocumentOptions.LeftMargin - htmlToPdfConverter.PdfDocumentOptions.RightMargin
+
+            ' Calculate header height
+            Dim headerHeight As Single = htmlToPdfConverter.PdfHeaderOptions.HeaderHeight
+
+            ' Create a line element for the bottom of the header
+            Dim headerLine As New LineElement(0, headerHeight - 1, headerWidth, headerHeight - 1)
+
+            ' Set line color
+            'headerLine.ForeColor = Color.Gray
+
+            ' Add line element to the bottom of the header
+            htmlToPdfConverter.PdfHeaderOptions.AddElement(headerLine)
+        End If
+    End Sub
+
+
     Private Sub closeLogFile()
         If objLogFile IsNot Nothing Then
             Try
@@ -1842,7 +1916,7 @@ Module DH_Helpdesk_Mail
 
         MyWebBrowser.ScriptErrorsSuppressed = True
 
-        While (MyWebBrowser.ReadyState <> System.Windows.Forms.WebBrowserReadyState.Complete Or MyWebBrowser.IsBusy = True) And DateDiff(DateInterval.Second, startTime, DateTime.Now()) <10
+        While (MyWebBrowser.ReadyState <> System.Windows.Forms.WebBrowserReadyState.Complete Or MyWebBrowser.IsBusy = True) And DateDiff(DateInterval.Second, startTime, DateTime.Now()) < 10
             System.Windows.Forms.Application.DoEvents()
         End While
 
@@ -2050,37 +2124,6 @@ Module DH_Helpdesk_Mail
         Return ret
 
     End Function
-
-    Public Class CustomItextImageProvider
-        Implements IImageProvider
-
-        Private ReadOnly _document As Document
-
-        Public Sub New(doc As Document)
-            _document = doc
-        End Sub
-
-
-        Public Function IImageProvider_GetImage(src As String, imageProperties As IDictionary(Of String, String), chain As ChainedProperties, doc As IDocListener) As iTextSharp.text.Image Implements IImageProvider.GetImage
-
-            Dim imageLocation As String = ""
-            If Not imageProperties.TryGetValue("src", imageLocation) Then
-                Return Nothing
-            End If
-
-            Dim image As iTextSharp.text.Image = iTextSharp.text.Image.GetInstance(imageLocation)
-
-            Dim maxWidth As Single = _document.PageSize.Width - _document.LeftMargin - _document.RightMargin
-            Dim maxHeight As Single = _document.PageSize.Height - _document.BottomMargin - _document.TopMargin
-            If image.Height >= maxHeight Or image.Width >= maxWidth Then
-                image.ScaleToFit(maxWidth, maxHeight)
-                'image.ScaleToFit(500.0F, 30.0F) ' test scale
-            End If
-            'image.SetAbsolutePosition(1, 1)
-
-            Return image
-        End Function
-    End Class
 
 End Module
 
