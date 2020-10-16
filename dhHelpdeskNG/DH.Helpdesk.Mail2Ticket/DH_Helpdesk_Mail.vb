@@ -735,7 +735,7 @@ Module DH_Helpdesk_Mail
                                         iHTMLFile = 1
 
                                         ' Lägg in i databasen                                       
-                                        objCaseData.saveFileInfo(objCase.Id, "pdf/" & sPDFFileName)
+                                        objCaseData.saveFileInfo(objCase.Id, "Mail/" & sPDFFileName)
                                     End If
 
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
@@ -995,7 +995,7 @@ Module DH_Helpdesk_Mail
                                         iHTMLFile = 1
 
                                         ' Lägg in i databasen
-                                        objLogData.saveFileInfo(iLog_Id, "pdf/" & sPDFFileName, bIsInternalLogFile)
+                                        objLogData.saveFileInfo(iLog_Id, "Mail/" & sPDFFileName, bIsInternalLogFile)
                                     End If
 
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
@@ -1599,23 +1599,23 @@ Module DH_Helpdesk_Mail
         Try
             If Not message Is Nothing Then
 
-                Dim from As String = message.From.ToString
-                Dim fromEmail As String = parseEMailAddress(message.From.ToString())
-                Dim sent As String = message.Date.ToString
-                Dim reciepent As String = message.To.ToString
-                Dim reciepentEmail As String = parseEMailAddress(message.To.ToString())
-                Dim Cc As String = message.CC.ToString
-                Dim subject As String = message.Subject
-                Dim mh As MimeHeaderCollection = message.Headers
+                'Dim from As String = message.From.ToString
+                'Dim fromEmail As String = parseEMailAddress(message.From.ToString())
+                'Dim sent As String = message.Date.ToString
+                'Dim reciepent As String = message.To.ToString
+                'Dim reciepentEmail As String = parseEMailAddress(message.To.ToString())
+                'Dim Cc As String = message.CC.ToString
+                'Dim subject As String = message.Subject
+                'Dim mh As MimeHeaderCollection = message.Headers
 
 
-                Dim headerHtml As String = "<!DOCTYPE html><html><body><article><header>" &
-                                            "<p style=" & "font-size:120%;" & "><strong>From:</strong> " & from & "<" & fromEmail & ">" & "</p>" &
-                                            "<p style=" & "font-size:120%;" & "><strong>Sent:</strong> " & sent & "</p>" &
-                                            "<p style=" & "font-size:120%;" & "><strong>To:</strong> " & reciepent & "<" & reciepentEmail & ">" & "</p>" &
-                                            "<p style=" & "font-size:120%;" & "><strong>Cc:</strong> " & Cc & "</p>" &
-                                            "<p style=" & "font-size:120%;" & "><strong>Subject:</strong> " & subject & "</p>" &
-                                           "</header></article></body></html>"
+                'Dim headerHtml As String = "<!DOCTYPE html><html><body style=" & "font-family: 'Times New Roman'; font-size: 18px" & ">" &
+                '                            "<p><strong>From:</strong> " & from & "&#60;" & fromEmail & "&#62;" & "</p>" &
+                '                            "<p><strong>Sent:</strong> " & sent & "</p>" &
+                '                            "<p><strong>To:</strong> " & reciepent & "&#60;" & reciepentEmail & "&#62;" & "</p>" &
+                '                            "<p><strong>Cc:</strong> " & Cc & "</p>" &
+                '                            "<p><strong>Subject:</strong> " & subject & "</p>" &
+                '                           "</body></html>"
 
                 If message.HasBodyHtml Then
 
@@ -1673,15 +1673,15 @@ Module DH_Helpdesk_Mail
                     Next
 
                     Dim objFile As StreamWriter
-                    Dim objHeaderFile As StreamWriter
+                    'Dim objHeaderFile As StreamWriter
 
                     objFile = New StreamWriter(sFolder & "\html\" & sFileName, False, System.Text.UnicodeEncoding.Unicode)
                     objFile.Write(sBodyHtml)
                     objFile.Close()
 
-                    objHeaderFile = New StreamWriter(sFolder & "\html\" & "HeaderFile.htm", False, System.Text.UnicodeEncoding.Unicode)
-                    objHeaderFile.Write(headerHtml)
-                    objHeaderFile.Close()
+                    'objHeaderFile = New StreamWriter(sFolder & "\html\" & "HeaderFile.htm", False, System.Text.UnicodeEncoding.Unicode)
+                    'objHeaderFile.Write(headerHtml)
+                    'objHeaderFile.Close()
 
                 End If
             End If
@@ -1720,8 +1720,8 @@ Module DH_Helpdesk_Mail
                         Directory.CreateDirectory(sFolder)
                     End If
 
-                    If Directory.Exists(sFolder & "\pdf") = False Then
-                        Directory.CreateDirectory(sFolder & "\pdf")
+                    If Directory.Exists(sFolder & "\Mail") = False Then
+                        Directory.CreateDirectory(sFolder & "\Mail")
                     End If
 
                     ' Skapa fil                   
@@ -1739,19 +1739,19 @@ Module DH_Helpdesk_Mail
                     ' Leave it not set to have a default A4 PDF page
                     'htmlToPdfConverter.PdfDocumentOptions.PdfPageSize = SelectedPdfPageSize()
                     ' Enable header in the generated PDF document
-                    htmlToPdfConverter.PdfDocumentOptions.ShowHeader = True
+                    'htmlToPdfConverter.PdfDocumentOptions.ShowHeader = True
 
                     ' Optionally add a space between header and the page body
                     ' The spacing for first page and the subsequent pages can be set independently
                     ' Leave this option not set for no spacing
-                    htmlToPdfConverter.PdfDocumentOptions.Y = Single.Parse(5)
-                    htmlToPdfConverter.PdfDocumentOptions.TopSpacing = Single.Parse(0)
+                    'htmlToPdfConverter.PdfDocumentOptions.Y = Single.Parse(5)
+                    'htmlToPdfConverter.PdfDocumentOptions.TopSpacing = Single.Parse(0)
 
 
-                    DrawHeader(sFolder & "\html\" & "HeaderFile.htm", htmlToPdfConverter, True)
+                    'DrawHeader(sFolder & "\html\" & "HeaderFile.htm", htmlToPdfConverter, True)
 
                     ' Convert HTML to PDF using the settings above
-                    Dim outPdfFile As String = sFolder & "\pdf\" & sCaseNumber & ".pdf"
+                    Dim outPdfFile As String = sFolder & "\Mail\" & sCaseNumber & ".pdf"
                     Try
 
                         Dim url As String = sFolder & "\html\" & sCaseNumber & ".htm"
