@@ -92,6 +92,8 @@ namespace DH.Helpdesk.Web.Infrastructure
 
         private const string _SHOW_ACTIVE_CASE_TYPES_IN_ADMIN = "SHOW_ACTIVE_CASE_TYPES_IN_ADMIN";
 
+        private const string _SHOW_ACTIVE_SYSTEMS_IN_ADMIN = "SHOW_ACTIVE_SYSTEMS_IN_ADMIN";
+
         private const string _SHOW_ACTIVE_WORKING_GROUPS_IN_ADMIN = "SHOW_ACTIVE_WORKING_GROUPS_IN_ADMIN";
 
         private const string _SHOW_ACTIVE_CAUSING_PARTS_IN_ADMIN = "_SHOW_ACTIVE_CAUSING_PARTS_IN_ADMIN";
@@ -694,6 +696,24 @@ namespace DH.Helpdesk.Web.Infrastructure
             set
             {
                 SaveSetKeyValue(_SHOW_ACTIVE_CASE_TYPES_IN_ADMIN, value);
+            }
+        }
+
+        public static bool ShowOnlyActiveSystemsInAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_SHOW_ACTIVE_SYSTEMS_IN_ADMIN] != null)
+                {
+                    return (bool)HttpContext.Current.Session[_SHOW_ACTIVE_SYSTEMS_IN_ADMIN];
+                }
+
+                return true;
+            }
+
+            set
+            {
+                SaveSetKeyValue(_SHOW_ACTIVE_SYSTEMS_IN_ADMIN, value);
             }
         }
 

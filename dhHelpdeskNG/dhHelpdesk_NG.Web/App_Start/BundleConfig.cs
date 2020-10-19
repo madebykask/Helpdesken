@@ -426,6 +426,10 @@
             "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
             "~/Areas/Admin/Content/js/Supplier/index.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/admin/System/index").Include(
+                "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
+                "~/Areas/Admin/Content/js/System/index.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/admin/Priority/index").Include(
             "~/Areas/Admin/Content/js/Common/ToggableInactiveList.js",
             "~/Areas/Admin/Content/js/Priority/index.js"));

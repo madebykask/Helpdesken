@@ -11,13 +11,16 @@
     </div>
     @Html.Partial("_MasterDataPanel", Model.Customer)
 </div>
-<div class="content">
+@Scripts.Render("~/bundles/admin/System/index")
+<div class="content system admin">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
             <li class="active"><a href="#fragment-1">@Translation.Get("System", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <span>@Translation.Get("Visa endast aktiva")</span>
+                <input type="checkbox" class="switchcheckbox showonly-active" @(Model.IsShowOnlyActive ? "checked" : string.Empty)>
                 <table class="table table-striped table-bordered table-hover" id="tblsystem">
                     <thead>
                         <tr>
@@ -29,9 +32,9 @@
                     <tbody>
                         @foreach (var item in Model.System)
                         {
-                            <tr>
+                            <tr class="@(item.Status == 0 ? "inactive" : "")">
                                 <td>
-                                    <a href="@Url.Action("edit", "system", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.SystemName)</a>
+                                    <a href="@Url.Action("edit", "system", new {area = "admin", id = item.Id})">@Html.DisplayFor(modelItem => item.SystemName)</a>
                                 </td>
                             </tr>
                         }

@@ -41,7 +41,7 @@
                         @foreach (var item in Model.Suppliers)
                         {
                             var isInactive = item.IsActive == 0; 
-                            <tr class="@(isInactive?"inactive":"")">                            
+                            <tr class="@(isInactive?"inactive":"")">
                                 <td>
                                     <a href="@Url.Action("edit", "supplier", new { area = "admin", id = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
                                 </td>
