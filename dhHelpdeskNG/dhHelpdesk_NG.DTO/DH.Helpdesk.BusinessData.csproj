@@ -203,6 +203,7 @@
     <Compile Include="Models\Case\CaseTemplateData.cs" />
     <Compile Include="Models\Case\ExtendedCaseFormCaseSolutionModel.cs" />
     <Compile Include="Models\Case\ExtendedCaseDataOverview.cs" />
+    <Compile Include="Models\Case\ExtendedCaseFormSectionTranslationModel.cs" />
     <Compile Include="Models\Case\ExtendedCaseFormFieldTranslationModel.cs" />
     <Compile Include="Models\Case\ExtendedCaseReportFieldModel.cs" />
     <Compile Include="Models\Case\ExtendedCaseReportModel.cs" />

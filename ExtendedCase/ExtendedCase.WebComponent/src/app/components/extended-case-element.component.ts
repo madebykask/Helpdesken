@@ -354,7 +354,7 @@ export class ExtendedCaseElementComponent {
         let caseValuesKeyedCollection = new KeyedCollection<FieldValueModel>();
         caseValuesKeyedCollection.init(caseValues);
 
-        if(caseValues !== undefined) {
+        if (caseValues !== undefined) {
         this.initCaseFiles(caseValues);
         }
 

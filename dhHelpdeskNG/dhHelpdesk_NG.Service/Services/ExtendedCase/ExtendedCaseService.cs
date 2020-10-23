@@ -173,5 +173,10 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
 		{
 			return _extendedCaseFormRepository.GetExtendedCaseFormFields(extendedCaseFormId, languageID);
 		}
-	}
+
+        public List<ExtendedCaseFormSectionTranslationModel> GetExtendedCaseFormSections(int extendedCaseFormId, int languageID)
+        {
+            return _extendedCaseFormRepository.GetExtendedCaseFormSections(extendedCaseFormId, languageID);
+        }
+    }
 }
