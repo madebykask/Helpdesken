@@ -4860,7 +4860,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m.caseFieldSettings.ShowOnPage(TranslationCaseFields.System_Id))
             {
-                m.systems = _systemService.GetSystems(customerId);
+                m.systems = _systemService.GetSystems(customerId, true, m.case_.System_Id);
             }
 
             if (m.caseFieldSettings.ShowOnPage(TranslationCaseFields.Urgency_Id))

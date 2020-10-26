@@ -253,6 +253,7 @@ export class CaseEditDataHelper {
       filter.Statuses = this.hasField(caseData, CaseFieldsNames.StatusId);
       filter.Suppliers = this.hasField(caseData, CaseFieldsNames.SupplierId); // Supplier_Country_Id
       filter.Systems = this.hasField(caseData, CaseFieldsNames.SystemId);
+      filter.SystemId = getValue(CaseFieldsNames.SystemId);
       filter.Urgencies = this.hasField(caseData, CaseFieldsNames.UrgencyId);
       filter.WorkingGroups = this.hasField(caseData, CaseFieldsNames.WorkingGroupId);
       filter.CaseTypes = this.hasField(caseData, CaseFieldsNames.CaseTypeId);

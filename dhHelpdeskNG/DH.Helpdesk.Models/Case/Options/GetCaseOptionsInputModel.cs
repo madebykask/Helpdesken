@@ -7,6 +7,7 @@
 
         public bool CustomerRegistrationSources { get; set; }
         public bool Systems { get; set; }
+        public int? SystemId { get; set; }
         public bool Urgencies { get; set; }
         public bool Impacts { get; set; }
         public bool Suppliers { get; set; }

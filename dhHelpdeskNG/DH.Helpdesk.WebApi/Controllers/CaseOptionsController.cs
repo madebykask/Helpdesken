@@ -86,7 +86,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             if (input.Systems)
             {
-                model.Systems = _systemService.GetSystems(customerId).Select(d => new ItemOverview(d.SystemName, d.Id.ToString())).ToList();
+                model.Systems = _systemService.GetSystems(customerId, true, input.SystemId).Select(d => new ItemOverview(d.SystemName, d.Id.ToString())).ToList();
             }
 
             if (input.Urgencies)

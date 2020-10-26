@@ -2987,7 +2987,9 @@ namespace DH.Helpdesk.Web.Controllers
                 Text = x.Customer.Name + " / " + x.Name.ToString(),
                 Value = x.Id.ToString(),
                 Disabled = (x.Status == 0),
-                Selected = (caseSolution.SplitToCaseSolutionDescendants != null ? (caseSolution.SplitToCaseSolutionDescendants.Where(a => a.SplitToCaseSolution_Id == x.Id).Any() == true ? true : false) : false)
+                Selected = (caseSolution.SplitToCaseSolutionDescendants != null ? 
+                    caseSolution.SplitToCaseSolutionDescendants.Where(a => a.SplitToCaseSolution_Id == x.Id).Any() : 
+                    false)
              }).ToList();
 
             var userSearchCategories = _computerService.GetComputerUserCategoriesByCustomerID(curCustomerId, true);
@@ -3043,7 +3045,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 IsAbout_OUs = isAbout_OrganizationUnits,
 
-                Systems = this._systemService.GetSystems(curCustomerId).Select(x => new SelectListItem
+                Systems = this._systemService.GetSystems(curCustomerId, true, caseSolution.System_Id).Select(x => new SelectListItem
                 {
                     Text = x.SystemName,
                     Value = x.Id.ToString()
