@@ -507,7 +507,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                     }
                 }
             }
-            //fields.OrderBy(f => f.Text);
+
+            fields = fields.OrderBy(f => f.Text).ToList();
             return Json(fields);
 		}
 

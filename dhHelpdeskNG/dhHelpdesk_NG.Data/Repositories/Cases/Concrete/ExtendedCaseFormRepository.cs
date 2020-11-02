@@ -214,10 +214,10 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         {
                             var firstFieldId = section.SectionId.Replace("1", "0");
                             var firstSection = sectionTranslations.Where(f => f.SectionId == firstFieldId).FirstOrDefault();                            
-                            firstSection.Text = (mSectionNumber).ToString() + " - " + firstSection.Text;                            
+                            firstSection.Text = firstSection.Text + " " + (mSectionNumber).ToString();                            
                         }
 
-                        section.Text = (mSectionNumber + 1).ToString() + " - " + section.Text;                    
+                        section.Text = section.Text + " " + (mSectionNumber + 1).ToString();                    
                     }                
             }            
             return sectionTranslations;
