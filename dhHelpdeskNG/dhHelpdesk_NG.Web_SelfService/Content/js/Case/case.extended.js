@@ -463,6 +463,15 @@ window.extendedCasePage =
             var url = self.SAVE_CASE_URL;
             var $exCaseContainer = self.getExtendedCaseContainer();
 
+            if (recaptchaKey != "") {
+                var res = captchaChecker();
+                if (res == "") {
+                    ShowToastMessage(recaptchaMessage, "warning", false);
+                    $('html,body').animate({ scrollTop: 9999 }, 'slow');
+                    return;
+                }
+            }
+            
             self.setCaseStatus(self.CASE_IN_SAVING);
 
             if (!self.isNullOrUndefined($exCaseContainer)) {

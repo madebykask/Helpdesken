@@ -14,6 +14,10 @@
         public static readonly string ConfirmMsgAfterCaseRegistration = "ConfirmMsgAfterCaseRegistration";
         public static readonly string ShowCommunicationForSelfService = "ShowCommunicationForSelfService";
 
+        public static readonly string ReCaptchaSiteKey = "reCaptchaSiteKey";
+        public static readonly string ReCaptchaSecretKey = "reCaptchaSecretKey";
+
+
         public static readonly string SSOLog = "SSOLog";
         public static readonly string ApplicationId = "ApplicationId";
         public static readonly string SelfServiceAddress = "dh_selfserviceaddress";
