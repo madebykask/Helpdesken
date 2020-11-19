@@ -780,6 +780,12 @@ If not exists (select * from tblTextTranslation where text_id = 2015 and Languag
     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2015, 1, 'Fakturering')
 --GO
 
+If not exists (select * from tbltext where id = 2016 AND TextType = @textType)
+	insert into tbltext (id, TextString, TextType) VALUES (2016, 'Please confirm that you are not a robot.', @textType)
+--GO
+If not exists (select * from tblTextTranslation where text_id = 2016 and Language_Id = 1)
+    insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2016, 1, 'Vänligen bekräfta att du inte är en robot.')
+--GO
 
 GO
 -- NOTE: Please check Translations.sql to avoid tblText.Id collision
