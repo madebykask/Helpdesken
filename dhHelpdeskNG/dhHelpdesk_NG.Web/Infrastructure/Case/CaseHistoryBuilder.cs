@@ -1059,7 +1059,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
                             caption = cur.CaseLog.Substring(StringTags.Add.Length)
                                 .Replace(StringTags.ExternalLog,
                                     Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ": ")
-                                .Replace(StringTags.InternalLog, "\n" +
+                                .Replace(StringTags.InternalLog, Environment.NewLine +
                                                                  Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ": ");
                         }
                         else
@@ -1069,18 +1069,18 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
                             caption = cur.CaseLog.Substring(StringTags.Delete.Length)
                                 .Replace(StringTags.ExternalLog,
                                     Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ": ")
-                                .Replace(StringTags.InternalLog, "\n" +
+                                .Replace(StringTags.InternalLog, Environment.NewLine +
                                                                  Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ": ")
-                                .Replace(StringTags.LogFile, "\n" +
-                                                             Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ": <br /> &nbsp; - ")
-                                .Replace(StringTags.Seperator, "\n &nbsp; - ");
+                                .Replace(StringTags.LogFile, Environment.NewLine +
+                                                             Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ":" + Environment.NewLine + " &nbsp; - ")
+                                .Replace(StringTags.Seperator, Environment.NewLine + " &nbsp; - ");
                         }
                         else
                         {
                             sb.Append(bs + Translation.Get("Ärendelogg") + be);
                             caption = cur.CaseLog.Replace(StringTags.ExternalLog,
                                     Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ": ")
-                                .Replace(StringTags.InternalLog, "\n" +
+                                .Replace(StringTags.InternalLog, Environment.NewLine +
                                                                  Translation.Get(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + ": ");
                         }
                     }
@@ -1088,7 +1088,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
                         caption = ey;
 
                     sb.Append(tdOpenMarkup);
-                    sb.Append(caption.RemoveHtmlTags().HtmlEncode());
+                    sb.Append(HttpUtility.HtmlEncode(caption).Replace(Environment.NewLine, "<br/>").Replace("\n", "<br/>").RemoveHtmlTags());
                     sb.Append(tdCloseMarkup);
                     sb.Append("</tr>");
                 }
