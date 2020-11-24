@@ -3072,6 +3072,24 @@ body.login {
     }
 }
 
+@media (max-width:716px) {
+   #target .secnavs.fixed {
+        top: 88px;
+    }
+}
+
+@media (max-width:1596px) {
+    #target .content {
+        margin: 140px 20px 0px 20px;
+    }
+}
+
+@media (max-width:1277px) {
+    #target .content {
+        margin: 170px 20px 0px 20px;
+    }
+}
+
 /***************************CONTENT**************************************************/
 .mt20 {
     margin-top: 20px;
