@@ -1088,7 +1088,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
                         caption = ey;
 
                     sb.Append(tdOpenMarkup);
-                    sb.Append(HttpUtility.HtmlEncode(caption).Replace(Environment.NewLine, "<br/>").Replace("\n", "<br/>").RemoveHtmlTags());
+                    sb.Append(HttpUtility.HtmlEncode(caption).Replace(Environment.NewLine, "<br/>").Replace("\n", "<br/>"));
                     sb.Append(tdCloseMarkup);
                     sb.Append("</tr>");
                 }
