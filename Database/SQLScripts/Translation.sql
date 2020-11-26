@@ -7845,7 +7845,7 @@ GO
 
 if exists (Select * from tblTextTranslation where Text_Id = 426 and Language_Id = 2 and TextTranslation = 'that are used can not be removed')
 BEGIN
-	UPDATE tblTextTranslation SET TextTranslation = N'that are used can not be removed' where Text_Id = 426 and Language_Id = 2
+	UPDATE tblTextTranslation SET TextTranslation = N'that are used cannot be removed' where Text_Id = 426 and Language_Id = 2
 END
 GO
 
