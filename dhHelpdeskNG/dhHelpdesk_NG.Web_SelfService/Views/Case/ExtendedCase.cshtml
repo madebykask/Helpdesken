@@ -30,6 +30,11 @@
 
     var recaptchaSiteKey = ConfigurationManager.AppSettings[AppSettingsKey.ReCaptchaSiteKey] != null ?
                            ConfigurationManager.AppSettings[AppSettingsKey.ReCaptchaSiteKey].ToString() : "";
+    if (recaptchaSiteKey == "#{reCaptchaSiteKey}")
+    {
+        recaptchaSiteKey = "";
+    }
+
 }
 
 <script type="text/javascript">
