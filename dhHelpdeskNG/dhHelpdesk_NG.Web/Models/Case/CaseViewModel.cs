@@ -209,6 +209,9 @@ namespace DH.Helpdesk.Web.Models.Case
             get { return case_?.CaseNumber ?? 0; }
         }
 
+        public IList<string> WhiteFilesList { get; set; }
+        public int MaxFileSize { get; set; }
+
         public IList<CaseHistoryOverview> CaseHistories { get; set; }
         public CaseLog CaseLog { get; set; }
         public SendToDialogModel SendToDialogModel { get; set; }

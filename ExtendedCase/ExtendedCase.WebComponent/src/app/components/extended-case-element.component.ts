@@ -355,7 +355,7 @@ export class ExtendedCaseElementComponent {
         caseValuesKeyedCollection.init(caseValues);
 
         if (caseValues !== undefined) {
-        this.initCaseFiles(caseValues);
+          this.initCaseFiles(caseValues);
         }
 
         if (this.formParameters.extendedCaseGuid && this.formParameters.extendedCaseGuid.length > 0) {
@@ -403,6 +403,15 @@ export class ExtendedCaseElementComponent {
         } else {
           this.formParameters.caseFiles = new Array<CaseFileModel>();
         }
+      }
+      if (caseValues.whiteFilesList != null) {
+        let whiteFilesListObj = null;
+        try {
+          whiteFilesListObj = JSON.parse(caseValues.whiteFilesList.Value) as Array<string>;
+        } catch (error) {
+          this.logService.debug('whiteFilesList: whiteFilesList is not valid JSON. leaving null')
+        }
+        this.formParameters.whiteFilesList = whiteFilesListObj != null ? whiteFilesListObj : null;
       }
     }
 

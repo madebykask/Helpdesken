@@ -1098,6 +1098,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                 CaseLogsModel = GetCaseLogsModel(initData.CaseId)
             };
 
+            model.WhiteFilesList = _globalSettingService.GetFileUploadWhiteList();
+            model.MaxFileSize = 0;
+
             if (string.IsNullOrEmpty(model.ExtendedCaseDataModel.FormModel.Name))
             {
                 if (caseTemplate == null)

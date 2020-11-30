@@ -16,6 +16,8 @@ export class FormParametersModel {
     isMobile = false;
 
     caseFiles: CaseFileModel[];
+    whiteFilesList: string[];
+    maxFileSize: number;
 
     constructor() {
     }

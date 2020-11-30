@@ -208,6 +208,8 @@ window.extendedCasePage =
             formParameters.caseGuid = self.Case_Field_Init_Values.CaseGuid;
             formParameters.applicationType = self.ApplicationType;
             formParameters.useInitiatorAutocomplete = self.UseInitiatorAutocomplete;
+            formParameters.whiteFilesList = self.WhiteFilesList;
+            formParameters.maxFileSize = self.MaxFileSize;
 
             $_ex_Container.contentWindow.setInitialData({ step: 0, isNextValidation: false });
 
@@ -519,6 +521,8 @@ window.extendedCasePage =
             self.ApplicationType = params.applicationType;
             self.UseInitiatorAutocomplete = params.useInitiatorAutocomplete;
             self.extendedCaseInvalidMessage = params.extendedCaseInvalidMessage;
+            self.WhiteFilesList = param.WhiteFilesList;
+            self.maxFileSize = param.MaxFileSize;
             var lastError = params.lastError;
             var lastClickTimeStamp = null;
             var nextAllowedClickDelay = 5000;

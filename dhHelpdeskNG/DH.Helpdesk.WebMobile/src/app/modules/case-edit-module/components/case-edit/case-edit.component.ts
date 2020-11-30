@@ -57,7 +57,8 @@ export class CaseEditComponent {
                 private caseEditLogic: CaseEditLogic,
                 private caseTemplateService: CaseTemplateService,
                 private localStorageService: LocalStorageService,
-                private oUsService: OUsService) {
+                private oUsService: OUsService,
+                private caseFileApiService: CaseFilesApiService) {
       // read route params
       if (this.route.snapshot.paramMap.has('id')) {
           this.isNewCase = false;
@@ -367,10 +368,13 @@ export class CaseEditComponent {
         const ouId = this.caseDataHelpder.getField(caseData, CaseFieldsNames.OrganizationUnitId).value;
         const empty$ = () => EMPTY.pipe(defaultIfEmpty(null));
         const getOU = (_ouId) => _ouId != null ? this.oUsService.getOU(_ouId, caseData.customerId) : empty$();
-        getOU(ouId).pipe(
+        const getWhiteList = this.caseFileApiService.getFileUploadWhiteList();
+        forkJoin([getOU(ouId), getWhiteList]).pipe(
           take(1),
           untilDestroyed(this)
-        ).subscribe(ou => {
+        ).subscribe(data => {
+          const ou =  data[0];
+          const whiteList = data[1] || [];
           const ouParentId = ou != null ? ou.parentId : null;
           this.extendedCase.nativeElement.loadForm = {
             formParameters: {
@@ -387,7 +391,9 @@ export class CaseEditComponent {
               userGuid: userData.currentData.userGuid,
               userRole: userData.currentData.userRole,
               caseStatus: this.caseDataHelpder.getField(caseData, CaseFieldsNames.StateSecondaryId).value || '',
-              customerId: caseData.customerId
+              customerId: caseData.customerId,
+              whiteFilesList: whiteList,
+              maxFileSize: 0
             },
             caseValues: { // EC uses strict comparision of values. so if value here is number, but in datasource is string - no item is selected
               // keep all ids as a string

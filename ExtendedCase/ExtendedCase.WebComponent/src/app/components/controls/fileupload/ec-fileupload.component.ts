@@ -4,12 +4,16 @@ import { FormGroup } from '@angular/forms';
 import { ComponentCommService } from '@app/services/component-comm.service';
 import { SingleControlFieldModel } from '@app/models/form.model';
 import { FileUploader, FileUploaderOptions, FileItem, ParsedResponseHeaders, FileLikeObject } from 'ng2-file-upload';
-import { take } from 'rxjs/operators';
 import { AppConfig } from '@app/shared/app-config/app-config';
 import { IAppConfig } from '@app/shared/app-config/app-config.interface';
 import { CaseFileModel } from '@app/models/case-file.model';
 import { CaseFilesService } from '@app/services/case-files.service';
 import { LogService } from '@app/services/log.service';
+
+enum FilterNames {
+  IsInWhiteList = 'IsInWhiteList',
+  IsInSize = 'IsInSize',
+}
 
 @Component({
   selector: 'ec-fileupload',
@@ -20,10 +24,10 @@ import { LogService } from '@app/services/log.service';
 export class ExtendedCaseFileUploadComponent extends BaseControl {
   @Input() fieldModel: SingleControlFieldModel;
   @Input() form: FormGroup;
-  @Input() whiteList: string[] = [];
 
   fileUploader = new FileUploader({});
   hasBaseDropZoneOver = false;
+
 
   constructor(@Inject(AppConfig) private config: IAppConfig,
               componentCommService: ComponentCommService,
@@ -43,7 +47,10 @@ export class ExtendedCaseFileUploadComponent extends BaseControl {
     // init file uploader
     this.fileUploader.setOptions(<FileUploaderOptions>{
       autoUpload: true,
-      // filters: [ { name: 'IsInWhiteList', fn: (o) => this.isInWhiteList(o.name, this.whiteList) } ],
+      filters: [ 
+        { name: FilterNames.IsInWhiteList, fn: (o) => this.isInWhiteList(o.name, this.formInfo.whiteFilesList) },
+        { name: FilterNames.IsInSize, fn: (o) => this.isInSize(o.size, this.formInfo.maxFileSize) }
+       ],
       isHTML5: true,
       // authToken: accessToken,
       url: this.getUploadUrl()
@@ -117,7 +124,7 @@ export class ExtendedCaseFileUploadComponent extends BaseControl {
     return this.fieldModel.control.value ? JSON.parse(this.fieldModel.control.value) as Array<CaseFileModel> : new Array<CaseFileModel>();
   }
 
-  private isInWhiteList(item: string, whiteList: string[]): Boolean {
+  private isInWhiteList(item: string, whiteList: string[]) {
     if (whiteList != null) {
       const lastDot = item.lastIndexOf('.');
       if (lastDot >= 0 && item.length > (lastDot + 1)) {
@@ -128,6 +135,13 @@ export class ExtendedCaseFileUploadComponent extends BaseControl {
         }
       }
       return false;
+    }
+    return true;
+  }
+
+  private isInSize(size: number, maxFileSize: number) {
+    if (!!maxFileSize && typeof maxFileSize === 'number') {
+      return maxFileSize >= size;
     }
     return true;
   }
@@ -210,7 +224,22 @@ export class ExtendedCaseFileUploadComponent extends BaseControl {
   }
 
   private onWhenAddingFileFailed(item: FileLikeObject, filter: any, options: any): any {
-    alert(`Failed loading file ${item.name}.`);
+    let errorMsg = `Failed loading file ${item.name}.`;
+    if (filter) {
+      switch (filter.name) {
+        case FilterNames.IsInWhiteList: {
+          errorMsg = `File extension is not in whitelist: ${item.name}.`
+          break;
+        }
+        case FilterNames.IsInSize: {
+          errorMsg = `File too large: ${item.name}.`
+          break;
+        }
+        default:
+          break;
+      }
+    }
+    alert(errorMsg);
   }
 
   private onError(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {

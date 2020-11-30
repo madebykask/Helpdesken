@@ -289,6 +289,8 @@ EditPage.prototype.loadExtendedCase = function () {
     formParameters.caseGuid = window_params.currentCaseGuid;
     formParameters.currentUser = window_params.currentUserName;
     formParameters.applicationType = window_params.applicationType;
+    formParameters.whiteFilesList = window_params.whiteFilesList;
+    formParameters.maxFileSize = window_params.maxFileSize;
 
     var isLockedValue = window_params.isCaseLocked || '';
     formParameters.isCaseLocked = isLockedValue.toLowerCase() === 'true'; //important to pass boolean type value

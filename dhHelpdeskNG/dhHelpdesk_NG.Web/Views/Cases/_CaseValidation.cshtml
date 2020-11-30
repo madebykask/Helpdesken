@@ -3,6 +3,7 @@
 @using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Common.Enums.Settings
 @using DH.Helpdesk.Common.Extensions.Boolean
+@using DH.Helpdesk.Common.Extensions.Lists
 
 <script type="text/javascript">
     window.parameters = {
@@ -12,6 +13,8 @@
         currentCaseNumber: '@Model.case_.CaseNumber',
         customerId: '@Model.case_.Customer_Id',
         parentCaseId: '@(Model.ParentCaseInfo != null ? Model.ParentCaseInfo.ParentId.ToString() : "null")',
+        whiteFilesList: @Html.Raw(Json.Encode(Model.WhiteFilesList)),
+        maxFileSize: @Model.MaxFileSize,
         isAnyNotClosedChild: '@Model.IsAnyNotClosedChild().ToString()',
         backUrl: '@Model.BackUrl',
         productAreaErrorMessage:

@@ -30,6 +30,9 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public ExtendedCaseDataModel ExtendedCaseDataModel { get; set; }
         public OU CaseOU { get; set; } 
 
+        public IList<string> WhiteFilesList { get; set; }
+        public int MaxFileSize { get; set; }
+
         public ProcessResult Result { get; set; }
 
         public bool ShowRegistrationMessage { get; set; }

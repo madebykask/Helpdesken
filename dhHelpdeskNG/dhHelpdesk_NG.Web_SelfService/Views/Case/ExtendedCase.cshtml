@@ -5,6 +5,7 @@
 @using DH.Helpdesk.Common.Extensions.Boolean
 @using System.Configuration;
 @using DH.Helpdesk.Common.Enums;
+@using DH.Helpdesk.Common.Extensions.Lists
 
 @model DH.Helpdesk.SelfService.Models.Case.ExtendedCaseViewModel
 
@@ -81,6 +82,8 @@
         templateId: @(Model.CaseTemplateId ?? 0),
         customerId: @Model.CustomerId,
         useInitiatorAutocomplete: @Model.CurrentCustomer.UseInitiatorAutocomplete.ToJavaScriptBool(),
+        whiteFilesList: @Html.Raw(Json.Encode(Model.WhiteFilesList)),
+        maxFileSize: @Model.MaxFileSize,
         caseFieldIds: {
             CaseId: "CaseDataModel_Id",
             CustomerId: "CaseDataModel_Customer_Id",
