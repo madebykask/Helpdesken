@@ -393,7 +393,7 @@ export class CaseEditComponent {
               caseStatus: this.caseDataHelpder.getField(caseData, CaseFieldsNames.StateSecondaryId).value || '',
               customerId: caseData.customerId,
               whiteFilesList: whiteList,
-              maxFileSize: 0
+              maxFileSize: 36700160
             },
             caseValues: { // EC uses strict comparision of values. so if value here is number, but in datasource is string - no item is selected
               // keep all ids as a string

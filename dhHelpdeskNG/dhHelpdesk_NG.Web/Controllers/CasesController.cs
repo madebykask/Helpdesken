@@ -4604,7 +4604,7 @@ namespace DH.Helpdesk.Web.Controllers
             m.ParantPath_OU = ParentPathDefaultValue;
             m.MinWorkingTime = customerSetting.MinRegWorkingTime;
             m.WhiteFilesList = _globalSettingService.GetFileUploadWhiteList();
-            m.MaxFileSize = 0;
+            m.MaxFileSize = 36700160;
             m.CaseFilesModel = new CaseFilesModel();
             m.CaseFileNames = GetCaseFileNames(caseId);
             m.LogFilesModel = null; //not used on case page

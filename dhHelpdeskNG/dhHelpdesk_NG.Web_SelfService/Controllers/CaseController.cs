@@ -1099,7 +1099,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             };
 
             model.WhiteFilesList = _globalSettingService.GetFileUploadWhiteList();
-            model.MaxFileSize = 0;
+            model.MaxFileSize = 36700160;
 
             if (string.IsNullOrEmpty(model.ExtendedCaseDataModel.FormModel.Name))
             {
