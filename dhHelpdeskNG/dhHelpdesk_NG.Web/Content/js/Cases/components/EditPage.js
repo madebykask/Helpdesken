@@ -933,6 +933,7 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
                 SourceId: (form.elements[fieldIds.SourceId] == undefined) ? null : form.elements[fieldIds.SourceId].value,
                 CaseTypeId: (form.elements[fieldIds.CaseTypeId] == undefined) ? null : form.elements[fieldIds.CaseTypeId].value,
                 ProductAreaId: (form.elements[fieldIds.ProductAreaId] == undefined) ? null : form.elements[fieldIds.ProductAreaId].value,
+                SystemId: (form.elements[fieldIds.SystemId] == undefined) ? null : form.elements[fieldIds.SystemId].value,
                 CategoryId: (form.elements[fieldIds.CategoryId] == undefined) ? null : form.elements[fieldIds.CategoryId].value,
                 SupplierId: (form.elements[fieldIds.SupplierId] == undefined) ? null : form.elements[fieldIds.SupplierId].value,
                 WorkingGroupId: (form.elements[fieldIds.WorkingGroupId] == undefined) ? null : form.elements[fieldIds.WorkingGroupId].value,

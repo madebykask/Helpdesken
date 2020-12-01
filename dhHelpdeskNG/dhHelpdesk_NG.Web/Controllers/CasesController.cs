@@ -4035,6 +4035,14 @@ namespace DH.Helpdesk.Web.Controllers
                                             Enums.TranslationSource.CaseTranslation,
                                             fields.CustomerId)));
             }
+            if (fields.SystemId.HasValue)
+            {
+                var system = _systemService.GetSystem(fields.SystemId.Value);
+                if (system != null && system.Status == 0)
+                    ret.Add(string.Format("[{0}]", Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(),
+                                            Enums.TranslationSource.CaseTranslation,
+                                            fields.CustomerId)));
+            }
             if (fields.SupplierId.HasValue)
             {
                 var supplier = _supplierService.GetSupplier(fields.SupplierId.Value);
