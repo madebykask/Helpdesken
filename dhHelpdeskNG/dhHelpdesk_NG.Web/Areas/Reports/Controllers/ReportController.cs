@@ -492,7 +492,24 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 		{
 			var languageID = SessionFacade.CurrentLanguageId;
 			var fields = _extendedCaseService.GetExtendedCaseFormFields(extendedCaseFormId, languageID);
-			return Json(fields);
+			var sections = _extendedCaseService.GetExtendedCaseFormSections(extendedCaseFormId, languageID);
+
+            if (fields != null && sections != null)
+            {
+                foreach (var field in fields)
+                {
+                    foreach (var section in sections)
+                    {
+                        if (field.FieldId == section.SectionId)
+                        {
+                           field.Text = section.Text + " - " + field.Text;                           
+                        }                            
+                    }
+                }
+            }
+
+            fields = fields.OrderBy(f => f.Text).ToList();
+            return Json(fields);
 		}
 
         [HttpPost]

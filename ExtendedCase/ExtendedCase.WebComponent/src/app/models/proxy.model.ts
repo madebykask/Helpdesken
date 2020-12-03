@@ -113,6 +113,8 @@ export class FormInfo {
     useInitiatorAutocomplete: boolean;
     isMobile: boolean;
     caseFiles: CaseFileModel[];
+    whiteFilesList: string[];
+    maxFileSize: number;
 
     constructor(formParameters: FormParametersModel) {
         this.userRole = formParameters.assignmentParameters ? cm.parseIntOrDefault(formParameters.assignmentParameters.userRole, 0) : 0;
@@ -129,6 +131,8 @@ export class FormInfo {
         this.caseGuid = formParameters.caseGuid || '';
         this.caseNumber = formParameters.caseNumber || '';
         this.caseFiles = formParameters.caseFiles || new Array<CaseFileModel>();
+        this.whiteFilesList = formParameters.whiteFilesList || new Array<string>();
+        this.maxFileSize = formParameters.maxFileSize || 0;
         this.isMobile = formParameters.isMobile || false;
     }
 }

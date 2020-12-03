@@ -55,6 +55,7 @@
             CreateMissingOtherFieldsSettings(customerId, settingNames, settings);
             CreateMissingPlaceFieldsSettings(customerId, settingNames, settings);
             CreateMissingStateFieldsSettings(customerId, settingNames, settings);
+            CreateMissingDocumentFieldsSettings(customerId, settingNames, settings);
 
             dbcontext.Commit();
             base.OnEntry(args);
@@ -185,6 +186,14 @@
             CreateSettingIfNeeded(StateFields.CreatedDate, customerId, settingNames, settings);
             CreateSettingIfNeeded(StateFields.ChangedDate, customerId, settingNames, settings);
             CreateSettingIfNeeded(StateFields.SyncChangeDate, customerId, settingNames, settings);
+        }
+
+        private static void CreateMissingDocumentFieldsSettings(
+            int customerId,
+            List<string> settingNames,
+            DbSet<ServerFieldSettings> settings)
+        {
+            CreateSettingIfNeeded(DocumentFields.Document, customerId, settingNames, settings);
         }
 
         private static void CreateSettingIfNeeded(

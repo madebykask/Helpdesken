@@ -23,6 +23,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 		List<ExtendedCaseFormEntity> GetExtendedCaseFormsForCustomer(int customerId);
 
 		List<ExtendedCaseFormFieldTranslationModel> GetExtendedCaseFormFields(int extendedCaseFormId, int languageID);
+		List<ExtendedCaseFormSectionTranslationModel> GetExtendedCaseFormSections(int extendedCaseFormId, int languageID);
 
-	}
+    }
 }

@@ -289,6 +289,8 @@ EditPage.prototype.loadExtendedCase = function () {
     formParameters.caseGuid = window_params.currentCaseGuid;
     formParameters.currentUser = window_params.currentUserName;
     formParameters.applicationType = window_params.applicationType;
+    formParameters.whiteFilesList = window_params.whiteFilesList;
+    formParameters.maxFileSize = window_params.maxFileSize;
 
     var isLockedValue = window_params.isCaseLocked || '';
     formParameters.isCaseLocked = isLockedValue.toLowerCase() === 'true'; //important to pass boolean type value
@@ -931,6 +933,7 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
                 SourceId: (form.elements[fieldIds.SourceId] == undefined) ? null : form.elements[fieldIds.SourceId].value,
                 CaseTypeId: (form.elements[fieldIds.CaseTypeId] == undefined) ? null : form.elements[fieldIds.CaseTypeId].value,
                 ProductAreaId: (form.elements[fieldIds.ProductAreaId] == undefined) ? null : form.elements[fieldIds.ProductAreaId].value,
+                SystemId: (form.elements[fieldIds.SystemId] == undefined) ? null : form.elements[fieldIds.SystemId].value,
                 CategoryId: (form.elements[fieldIds.CategoryId] == undefined) ? null : form.elements[fieldIds.CategoryId].value,
                 SupplierId: (form.elements[fieldIds.SupplierId] == undefined) ? null : form.elements[fieldIds.SupplierId].value,
                 WorkingGroupId: (form.elements[fieldIds.WorkingGroupId] == undefined) ? null : form.elements[fieldIds.WorkingGroupId].value,

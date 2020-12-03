@@ -4,16 +4,23 @@
 @using DH.Helpdesk.Common.Constants
 @using DH.Helpdesk.Common.Enums.Cases
 @using DH.Helpdesk.Common.Extensions.Boolean
+@using System.Configuration;
+@using DH.Helpdesk.Common.Enums;
 
 @model DH.Helpdesk.SelfService.Models.Case.NewCaseModel
 
 @{
     var jsSerializer = new JavaScriptSerializer();
+    var recaptchaSiteKey = ConfigurationManager.AppSettings[AppSettingsKey.ReCaptchaSiteKey] != null ?
+                            ConfigurationManager.AppSettings[AppSettingsKey.ReCaptchaSiteKey].ToString() : "";
+    if (recaptchaSiteKey == "#{reCaptchaSiteKey}")
+    {
+        recaptchaSiteKey = "";
+    }
 }
 
 @functions
-{
-    private MvcHtmlString CaseFieldCaption(GlobalEnums.TranslationCaseFields field, bool withManadatory = true)
+{ private MvcHtmlString CaseFieldCaption(GlobalEnums.TranslationCaseFields field, bool withManadatory = true)
     {
         return Html.CaseFieldCaption(
             Model.CaseFieldSettings,
@@ -22,8 +29,7 @@
             Model.NewCase.Customer_Id,
             SessionFacade.CurrentLanguageId,
             withManadatory);
-    }
-}
+    } }
 
 <script type="text/javascript">
     window.appOptions = '@Html.Raw(jsSerializer.Serialize(Model.JsApplicationOptions))';
@@ -90,14 +96,12 @@
 
 @if (Model.ShowCaseActionsPanelOnTop)
 {
-    @Html.Partial("_CaseControlPanel", Model.CreateCaseControlsPanelModel())
-}
+    @Html.Partial("_CaseControlPanel", Model.CreateCaseControlsPanelModel())}
 
 <div class="container-fluid dh-container">
     @if (!string.IsNullOrEmpty(Model.Information))
     {
-        <label class="alert alert-info cursor-default order-description">@Html.Raw(Model.Information)</label>
-    }
+        <label class="alert alert-info cursor-default order-description">@Html.Raw(Model.Information)</label>}
     <ul class="nav nav-tabs" id="NewCaseTab">
         <li id="NewCaseT" class="active">
             <a href="#fragment-1"> @Translation.Get("New Case") </a>
@@ -122,7 +126,6 @@
                 {
                     @Html.HiddenFor(l => Model.NewCase.RegLanguage_Id)
                     @Html.HiddenFor(k => Model.CaseFileKey)
-
                     @Html.HiddenFor(model => model.NewCase.Id)
                     @Html.HiddenFor(model => model.NewCase.CaseGUID)
                     @Html.HiddenFor(model => model.NewCase.Customer_Id)
@@ -162,12 +165,8 @@
                     @Html.HiddenFor(model => model.NewCase.FinishingDescription)
                     @Html.HiddenFor(model => model.NewCase.PlanDate)
                     @Html.HiddenFor(model => model.NewCase.Performer_User_Id)
-                    @*@Html.HiddenFor(model => model.NewCase.InvoiceNumber)*@
-                    @*@Html.HiddenFor(model => model.NewCase.Supplier_Id)*@
                     @Html.HiddenFor(model => model.NewCase.Change_Id)
                     @Html.HiddenFor(model => model.NewCase.FinishingDescription)
-                    @*@Html.HiddenFor(model => model.NewCase.ProductArea_Id)*@
-
                     @Html.HiddenFor(model => model.NewCase.IsAbout.ReportedBy)
                     @Html.HiddenFor(model => model.NewCase.IsAbout.Person_Name)
                     @Html.HiddenFor(model => model.NewCase.IsAbout.Person_Email)
@@ -179,29 +178,19 @@
                     @Html.HiddenFor(model => model.NewCase.IsAbout.CostCentre)
                     @Html.HiddenFor(model => model.NewCase.IsAbout.Place)
                     @Html.HiddenFor(model => model.NewCase.IsAbout.UserCode)
-
                     @Html.HiddenFor(model => model.NewCase.CaseSolution_Id)
                     @Html.HiddenFor(model => model.NewCase.CurrentCaseSolution_Id)
-
                     @Html.HiddenFor(model => model.CaseLog.TextExternal)
                     @Html.HiddenFor(model => model.CaseLog.TextInternal)
                     @Html.HiddenFor(model => model.CaseLog.FinishingType)
-
                     @Html.HiddenFor(model => model.CaseMailSetting.SendMailAboutNewCaseTo)
                     @Html.HiddenFor(model => model.CaseMailSetting.HelpdeskMailFromAdress)
                     @Html.HiddenFor(model => model.CaseMailSetting.AbsoluterUrl)
                     @Html.HiddenFor(model => model.CaseMailSetting.DontConnectUserToWorkingGroup)
-
-                    @*@Html.HiddenFor(model => model.NewCase.AgreedDate) *@
-
                     @Html.HiddenFor(model => model.DepartmentFilterFormat, new { data_field = "departmentFilterFormat" })
-
                     @Html.Hidden("case_languageId", Model.CurrentLanguageId)
 
-                    @Html.HiddenFor(model => model.SelectedWorkflowStep)
-
-                    <!-- User Information-->
-                    if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.UserInformation))
+                    @Html.HiddenFor(model => model.SelectedWorkflowStep) <!-- User Information--> if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.UserInformation))
                     {
                         <h4 style="@Model.DisplayUserInfo()">@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.Initiator, CaseSectionsEnglish.InitiatorHeader)</h4>
                         <div class="row">
@@ -216,8 +205,7 @@
                                             <div class="col-md-9">
                                                 @Model.NewCase.Customer.Name
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.ReportedBy.ToString()">
@@ -227,8 +215,7 @@
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(model => model.NewCase.ReportedBy, new { maxlength = "40", autocomplete = "Off", @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ReportedBy.ToString() })
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Persons_Name.ToString()">
@@ -243,11 +230,9 @@
                                                         <a href="#case_add_followers_btn" role="button" class="btn btn-default case-usersearch-btn hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()">@Translation.Get("Add followers")</a>
                                                         @* @Html.TextAreaFor(model => model.FollowerUsers, new { id = "fakeCaseFollowerUsersInput", @class = "case-usersearch-textarea hasAttribute", standardName = GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString() }) *@
                                                     </span>
-                                                    <div id="fakeCaseFollowerUsersInput" contenteditable="true" class="case-send-emails-div case-usersearch-textarea"></div>
-                                                }
+                                                    <div id="fakeCaseFollowerUsersInput" contenteditable="true" class="case-send-emails-div case-usersearch-textarea"></div>}
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()">
@@ -257,8 +242,7 @@
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(p => Model.NewCase.PersonsEmail, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_EMail.ToString() })
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()">
@@ -268,8 +252,7 @@
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(p => Model.NewCase.PersonsPhone, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Phone.ToString() })
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()">
@@ -279,8 +262,7 @@
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(c => Model.NewCase.PersonsCellphone, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString() })
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Region_Id.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Region_Id.ToString()">
@@ -299,8 +281,7 @@
                                                     }
                                                 </select>
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Department_Id.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Department_Id.ToString()">
@@ -319,8 +300,7 @@
                                                     }
                                                 </select>
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.OU_Id.ToString()))
                                     {
@@ -340,8 +320,7 @@
                                                     }
                                                 </select>
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.CostCentre.ToString()))
                                     {
@@ -353,8 +332,7 @@
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(i => Model.NewCase.CostCentre, new { @class = "hasAttribute", maxlength = "50", standardName = GlobalEnums.TranslationCaseFields.CostCentre.ToString() })
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Place.ToString()))
                                     {
@@ -365,8 +343,7 @@
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(p => Model.NewCase.Place, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Place.ToString() })
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.UserCode.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.UserCode.ToString()">
@@ -376,15 +353,10 @@
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(u => Model.NewCase.UserCode, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.UserCode.ToString() })
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
                                 </div>
                             </div>
-                        </div>
-                    }
-
-                    <!-- Computer Information -->
-                    if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.ComputerInformation))
+                        </div> } <!-- Computer Information --> if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.ComputerInformation))
                     {
                         <h4 style="@Model.DisplayComputerInfo()">@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.ComputerInfo, CaseSectionsEnglish.ComputerInfoHeader)</h4>
                         <div class="row">
@@ -399,8 +371,7 @@
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(i => Model.NewCase.InventoryNumber, new { @class = "hasAttribute", maxlength = "60", standardName = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), autocomplete = "off" })
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()">
@@ -410,8 +381,7 @@
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(i => Model.NewCase.InventoryType, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString() })
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()">
@@ -421,15 +391,10 @@
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(i => Model.NewCase.InventoryLocation, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.InventoryLocation.ToString() })
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
                                 </div>
                             </div>
-                        </div>
-                    }
-
-                    <!-- Case Info Fields -->
-                    if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseInfo))
+                        </div> } <!-- Case Info Fields --> if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseInfo))
                     {
                         <h4 style="@Model.DisplayCaseInfo()">@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.CaseInfo, CaseSectionsEnglish.CaseInfoHeader) </h4>
                         <div class="row">
@@ -452,8 +417,7 @@
                                                     <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()" />
                                                 </div>
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
                                     <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()" />
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()))
@@ -468,12 +432,10 @@
                                                     </button>
                                                     @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                     {
-                                                        <input type="hidden" id="isMandatory" value="true" />
-                                                    }
+                                                        <input type="hidden" id="isMandatory" value="true" /> }
                                                     else
                                                     {
-                                                        <input type="hidden" id="isMandatory" value="false" />  
-                                                    }
+                                                        <input type="hidden" id="isMandatory" value="false" />}
                                                     <ul class="dropdown-menu">
                                                         <li><a href="#" value="">@Translation.Get("--")</a></li>
                                                         @Html.ProductAreaDropdownButtonString(Model.ProductAreas)
@@ -482,8 +444,7 @@
                                                     @*<input type="hidden" id="NewCase.ProductArea_Id" name="NewCase.ProductArea_Id" value="@Model.NewCase.ProductArea_Id.supressZero()" />*@
                                                 </div>
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
                                     @Html.HiddenFor(model => model.NewCase.ProductArea_Id)
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.System_Id.ToString()))
@@ -502,8 +463,7 @@
                                                     }
                                                 </select>
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()))
                                     {
@@ -512,12 +472,10 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Urgency_Id, false)
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
-                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar">*</span>
-                                                }
+                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar">*</span> }
                                                 else
                                                 {
-                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar" style="display: none">*</span>
-                                                }
+                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar" style="display: none">*</span>}
                                             </label>
                                             <div class="col-md-9">
                                                 <select id="NewCase_Urgency_Id" name="NewCase.Urgency_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()">
@@ -531,8 +489,7 @@
                                                     }
                                                 </select>
                                             </div>
-                                        </div>
-                                    }
+                                        </div> }
                                     else
                                     {
                                         <div id="relatedFieldBlock-@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="form-group row @GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" style="display: none">
@@ -540,12 +497,10 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Urgency_Id, false)
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
-                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar">*</span>
-                                                }
+                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar">*</span> }
                                                 else
                                                 {
-                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar" style="display: none">*</span>
-                                                }
+                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar" style="display: none">*</span>}
                                             </label>
                                             <div class="col-md-9">
                                                 <select id="NewCase_Urgency_Id" name="NewCase.Urgency_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()">
@@ -559,8 +514,7 @@
                                                     }
                                                 </select>
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
 
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()))
@@ -570,12 +524,10 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Impact_Id, false)
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Impact_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
-                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar">*</span>
-                                                }
+                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar">*</span> }
                                                 else
                                                 {
-                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar" style="display: none">*</span>
-                                                }
+                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar" style="display: none">*</span>}
                                             </label>
                                             <div class="col-md-9">
                                                 <select id="NewCase_Impact_Id" name="NewCase.Impact_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()">
@@ -590,8 +542,7 @@
                                                 </select>
 
                                             </div>
-                                        </div>
-                                    }
+                                        </div> }
                                     else
                                     {
                                         <div id="relatedFieldBlock-@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="form-group row @GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" style='display: none'>
@@ -599,12 +550,10 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Impact_Id, false)
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.Impact_Id.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
-                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar">*</span>
-                                                }
+                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar">*</span> }
                                                 else
                                                 {
-                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar" style="display: none">*</span>
-                                                }
+                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar" style="display: none">*</span>}
                                             </label>
                                             <div class="col-md-9">
                                                 <select id="NewCase_Impact_Id" name="NewCase.Impact_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()">
@@ -618,8 +567,7 @@
                                                     }
                                                 </select>
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Category_Id.ToString()))
                                     {
@@ -640,8 +588,7 @@
                                                     @Html.HiddenFor(model => model.NewCase.Category_Id)
                                                 </div>
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()))
                                     {
@@ -659,10 +606,8 @@
                                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Supplier_Id.ToString())>@e.Name</option>
                                                         }
                                                     </select>
-                                                </div>
-                                            }
-                                        </div>
-                                    }
+                                                </div>}
+                                        </div>}
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()))
                                     {
@@ -673,8 +618,7 @@
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(i => Model.NewCase.InvoiceNumber, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString() })
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()))
                                     {
@@ -683,14 +627,12 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ReferenceNumber)
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
-                                                    <span class="mandatorystar">*</span>
-                                                }
+                                                    <span class="mandatorystar">*</span>}
                                             </label>
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(r => Model.NewCase.ReferenceNumber, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString() })
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Caption.ToString()))
                                     {
@@ -701,8 +643,7 @@
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(c => Model.NewCase.Caption, new { maxlength = "100", @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Caption.ToString() })
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Description.ToString()))
                                     {
@@ -713,8 +654,7 @@
                                             <div class="col-md-9">
                                                 @Html.TextAreaFor(d => Model.NewCase.Description, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Description.ToString() })
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()))
                                     {
@@ -725,28 +665,25 @@
                                             <div class="col-md-9">
                                                 @Html.TextAreaFor(m => Model.NewCase.Miscellaneous, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Miscellaneous.ToString() })
                                             </div>
-                                        </div>
-                                    }
-
-                                    @*@if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()))
+                                        </div> } @*@if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()))
                                         {
-                                            <div class="form-group row @GlobalEnums.TranslationCaseFields.Priority_Id.ToString()">
-                                                <label class="col-md-3">
-                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Priority_Id)
-                                                </label>
-                                                <div class="col-md-9">
-                                                    <select id="NewCase_Priority_Id" name="NewCase.Priority_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Priority_Id.ToString()">
-                                                        <option value="">&nbsp;</option>
-                                                        @if (Model.Priorities != null)
+                                        <div class="form-group row @GlobalEnums.TranslationCaseFields.Priority_Id.ToString()">
+                                            <label class="col-md-3">
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Priority_Id)
+                                            </label>
+                                            <div class="col-md-9">
+                                                <select id="NewCase_Priority_Id" name="NewCase.Priority_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Priority_Id.ToString()">
+                                                    <option value="">&nbsp;</option>
+                                                    @if (Model.Priorities != null)
+                                                    {
+                                                        foreach (var e in Model.Priorities.Where(c => c.IsActive == 1))
                                                         {
-                                                            foreach (var e in Model.Priorities.Where(c => c.IsActive == 1))
-                                                            {
-                                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Priority_Id.ToString())>@e.Name</option>
-                                                            }
+                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Priority_Id.ToString())>@e.Name</option>
                                                         }
-                                                    </select>
-                                                </div>
+                                                    }
+                                                </select>
                                             </div>
+                                        </div>
                                         }*@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()))
                                     {
@@ -759,8 +696,7 @@
                                                 @Translation.Get("Should the initiator be contacted before action?")
                                                 <input type="hidden" name="NewCase.ContactBeforeAction" value="0" />
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.SMS.ToString()))
                                     {
@@ -773,8 +709,7 @@
                                                 @Translation.Get("Send SMS when case is closed")
                                                 <input type="hidden" name="NewCase.SMS" value="0" />
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.AgreedDate.ToString()))
                                     {
@@ -792,15 +727,12 @@
                                                 @*@Html.DisplayFor(a => _agreeDate)*@
                                                 @if (AgreedDateIsReadOnly)
                                                 {
-                                                    @Html.EditorFor(m => Model.NewCase.AgreedDate, "DatePicker", new { id = "AgreedDate", disabled = "disabled", inputAttributes = htmlAttrs })
-                                                }
+                                                    @Html.EditorFor(m => Model.NewCase.AgreedDate, "DatePicker", new { id = "AgreedDate", disabled = "disabled", inputAttributes = htmlAttrs }) }
                                                 else
                                                 {
-                                                    @Html.EditorFor(m => Model.NewCase.AgreedDate, "DatePicker", new { id = "AgreedDate", inputAttributes = htmlAttrs })
-                                                }
+                                                    @Html.EditorFor(m => Model.NewCase.AgreedDate, "DatePicker", new { id = "AgreedDate", inputAttributes = htmlAttrs })}
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Available.ToString()))
                                     {
@@ -812,8 +744,7 @@
                                                 @Html.TextBoxFor(m => Model.NewCase.Available, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Available.ToString() })
                                                 @*@Translation.Get("Initiator is available during the following times")*@
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Cost.ToString()))
                                     {
@@ -849,23 +780,34 @@
                                                     </tr>
                                                 </table>
                                             </div>
-                                        </div>
-                                    }
+                                        </div>}
                                     @if (Model.AttachmentPlacement == 0 & Model.FieldSettings.Any(f => f.Name.Equals(GlobalEnums.TranslationCaseFields.Filename.ToString())))
                                     {
                                         @Html.Partial("_FilesAttachButtons", new ViewDataDictionary(ViewData)
-                                        {
-                                            {"fieldCaption", CaseFieldCaption(GlobalEnums.TranslationCaseFields.Filename, false) },
-                                            {"hasFiles", Model.NewCase.CaseFiles != null && Model.NewCase.CaseFiles.Any()}
-                                        })
-                                    }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                {
+{"fieldCaption", CaseFieldCaption(GlobalEnums.TranslationCaseFields.Filename, false) },
+{"hasFiles", Model.NewCase.CaseFiles != null && Model.NewCase.CaseFiles.Any()}
+})}
                                     <div class="form-group row">
                                         <label class="col-md-3"></label>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    }
+                        </div> }
+
+
+
+                    if (Model.NewCase.Id == 0 && (recaptchaSiteKey != "" || recaptchaSiteKey != null))
+                    {
+                        <div class="row">
+                            <div class="col-md-3 dh-col">
+                                <div class="container form-horizontal">
+                                    <div id="cap1"></div>
+                                    <div class="validation-message" style="margin:10px"></div>
+                                </div>
+                            </div>
+                        </div>}
+
                 }
             </div>
 
@@ -875,20 +817,18 @@
             <div id="attachment-tab" class="tab-pane" style="overflow:hidden;">
                 <div class="container-fluid dh-container">
                     @Html.Partial("_FilesAttachButtons", new ViewDataDictionary(ViewData)
-                    {
-                        {"fieldCaption", null },
-                        {"hasFiles", Model.NewCase.CaseFiles != null && Model.NewCase.CaseFiles.Any()}
-                    })
+            {
+                                    {"fieldCaption", null },
+                                    {"hasFiles", Model.NewCase.CaseFiles != null && Model.NewCase.CaseFiles.Any()}
+                                })
                 </div>
-            </div>
-        }
+            </div>}
     </div>
 </div>
 
 @if (Model.ShowCaseActionsPanelAtBottom)
 {
-    @Html.Partial("_CaseControlPanel", Model.CreateCaseControlsPanelModel(2))
-}
+    @Html.Partial("_CaseControlPanel", Model.CreateCaseControlsPanelModel(2))}
 
 @section Dialogs {
     @Html.Partial("ModalDialogs/_UploadFilePopup", "upload_files_popup")
@@ -920,10 +860,14 @@
 
 @section Scripts {
     @Scripts.Render("~/Content/js/Case/newCase")
-
-    <script type="text/javascript">
+    @if (recaptchaSiteKey != "")
+    {
+        <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+    }
+        <script type="text/javascript">
 
         var requiredText = '@Translation.GetForJS("must be specified")';
+        var recaptchaMessage = '@Translation.GetForJS("Check the captcha")';
         var productAreaErrMessage =
             '@Html.Raw(Translation.GetForJS("The case could not be saved because the lowest possible level on the field") + " [" +
                        Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID) + "] " +
@@ -934,6 +878,24 @@
         var $selectedWorkflow = null;
         var $selectListStep = null;
         var $buttonsToDisable = null;
+
+        var captchaChecker = function () { };
+        var recaptcha_widget;
+        var onloadCallback = function () {
+            if ($('#cap1').length) {
+                recaptcha_widget = grecaptcha.render('cap1', {
+                    'sitekey': '@recaptchaSiteKey',
+                    'theme': 'light'
+                });
+            }
+
+            captchaChecker = function () {
+                return grecaptcha.getResponse(recaptcha_widget);
+            }
+
+        };
+
+
 
         $(function() {
             $mainForm = $("#newCaseForm");
@@ -1042,6 +1004,14 @@
         }
 
         function doSaveCase() {
+
+            var res = captchaChecker();
+            if (res == "") {
+                ShowToastMessage(recaptchaMessage, "warning", false);
+                $('html,body').animate({ scrollTop: 9999 }, 'slow');
+                return;
+            }
+
             $mainForm.attr("action", '@Url.Action("NewCase", "Case")');
             $('.disabled').removeAttr('disabled');
             $buttonsToDisable.prop('disabled', true);
@@ -1415,6 +1385,7 @@
                     }
                 }
             });
+
         }
 
 
@@ -1425,7 +1396,7 @@
             }
             return ret;
         }
-    </script>
-}
+        </script>
+    }
 
 

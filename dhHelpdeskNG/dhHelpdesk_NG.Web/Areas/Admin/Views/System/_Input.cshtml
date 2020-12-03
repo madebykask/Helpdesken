@@ -4,24 +4,24 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("System", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+            <li class="active"><a href="#fragment-1">@Translation.Get("System") - @Model.Customer.Name</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
                     @if (TempData["Error"] != null)
                     {
-                        <div class="alert alert-error">@Translation.Get("System", Enums.TranslationSource.TextTranslation)
-                            @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+                        <div class="alert alert-error">@Translation.Get("System")
+                            @Translation.Get("som används går inte att ta bort")
                         </div>    
                     }
-                    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+                    <h4>@Translation.Get("Allmänt")</h4>
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("System", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("System")
                                     </td>
                                     <td class="span9">
                                         @Html.TextBoxFor(model => model.System.SystemName, new { maxlength = "50" })
@@ -29,7 +29,7 @@
                                 </tr>
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Version", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Version")
                                     </td>
                                     <td class="span9">
                                         @Html.TextBoxFor(model => model.System.Version, new { maxlength = "50" })
@@ -37,7 +37,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Operativsystem", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Operativsystem")
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(model => model.System.OS_Id, Model.OperatingSystem, "")
@@ -45,7 +45,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Brådskandegrad", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Brådskandegrad")
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(model => model.System.Urgency_Id, Model.Urgencies, "")
@@ -53,7 +53,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Leverantör", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Leverantör")
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(model => model.System.Supplier_Id, Model.Suppliers, "")
@@ -61,7 +61,7 @@
                                 </tr>
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Licens", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Licens")
                                     </td>
                                     <td class="span9">
                                         @Html.TextBoxFor(model => model.System.License, new { maxlength = "50" })
@@ -69,7 +69,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Prioritet")
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => model.System.Priority, new { style = "width:30px;", maxlength = "4" })
@@ -77,7 +77,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Övrigt")
                                     </td>
                                     <td>
                                         @Html.TextAreaFor(model => model.System.Info, new { style = "width:600px; height:125px;", maxlength = "500" })
@@ -85,22 +85,33 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Länk dokument", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Länk dokument")
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => model.System.DocumentPath, new { maxlength = "50" })
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Aktiv")
+                                    </td>
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="system.Status" @(Model.System.Status == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="system.Status" value="0" />
+                                        </label>
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>
-                    <h4>@Translation.Get("Organisation", Enums.TranslationSource.TextTranslation)</h4>
+                    <h4>@Translation.Get("Organisation")</h4>
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Domän", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Domän")
                                     </td>
                                     <td class="span9">
                                         @Html.DropDownListFor(model => model.System.Domain_Id, Model.Domains, "")
@@ -108,7 +119,7 @@
                                 </tr>
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Ägare", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Ägare")
                                     </td>
                                     <td class="span9">
                                         @Html.TextBoxFor(model => model.System.Owner, new { maxlength = "50" })
@@ -117,21 +128,21 @@
                             </table>
                         </div>
                     </div>
-                    <h4>@Translation.Get("Kontakt", Enums.TranslationSource.TextTranslation)</h4>
+                    <h4>@Translation.Get("Kontakt")</h4>
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Kontakt", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Kontakt")
                                     </td>
                                     <td class="span9">
-                                        <label class="radio inline">@Html.RadioButton("optContact", 1, true, new { onclick = "changeContactView()"})  @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation) </label> <label class="radio inline">@Html.RadioButton("optContact", 2, new { onclick = "changeContactView()"}) @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)</label>
+                                        <label class="radio inline">@Html.RadioButton("optContact", 1, true, new { onclick = "changeContactView()"})  @Translation.Get("Handläggare") </label> <label class="radio inline">@Html.RadioButton("optContact", 2, new { onclick = "changeContactView()"}) @Translation.Get("Anmälare")</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Systemägare", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Systemägare")
                                     </td>
                                     <td class="span9" id="ddlSystemOwner" style="display:block">
                                         @Html.DropDownListFor(model => model.System.SystemOwnerUser_Id, Model.Administrators, "")
@@ -142,7 +153,7 @@
                                 </tr> 
                                 <tr>
                                     <td>
-                                        @Translation.Get("Systemansvarig", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Systemansvarig")
                                     </td>
                                     <td id="ddlSystemResponsibleUser" style="display:block">
                                         @Html.DropDownListFor(model => model.System.SystemResponsibleUser_Id, Model.Administrators, "")
@@ -153,7 +164,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Vice systemansvarig", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Vice systemansvarig")
                                     </td>
                                     <td id="ddlViceSystemResponsibleUser" style="display:block">
                                         @Html.DropDownListFor(model => model.System.ViceSystemResponsibleUser_Id, Model.Administrators, "") 
@@ -165,13 +176,13 @@
                             </table>
                         </div>
                     </div>
-                    <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
+                    <h4>@Translation.Get("Övrigt")</h4>
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Namn")
                                     </td>
                                     <td class="span9">
                                         @Html.TextBoxFor(model => model.System.ContactName, new { maxlength = "50" })
@@ -179,7 +190,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("Telefon", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Telefon")
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => model.System.ContactPhone, new { maxlength = "50" })
@@ -187,7 +198,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("E-post")
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => model.System.ContactEMail, new { maxlength = "50" })
@@ -217,10 +228,10 @@
             },
             messages: {
                 "System.SystemName": {
-                    required: "@Translation.GetForJS("Du måste ange ett systemnamn", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS("Du måste ange ett systemnamn")"
                 },
                 "System.Priority": {
-                    required: "@Translation.GetForJS("Du måste ange en prioritet", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS("Du måste ange en prioritet")"
                 }
             },
             submitHandler: function (form) {

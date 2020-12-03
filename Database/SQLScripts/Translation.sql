@@ -7843,6 +7843,12 @@ begin
 end
 GO
 
+if exists (Select * from tblTextTranslation where Text_Id = 426 and Language_Id = 2 and TextTranslation = 'that are used can not be removed')
+BEGIN
+	UPDATE tblTextTranslation SET TextTranslation = N'that are used cannot be removed' where Text_Id = 426 and Language_Id = 2
+END
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')

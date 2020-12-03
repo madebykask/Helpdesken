@@ -29,6 +29,7 @@
         public string SystemResponsibleUserId { get; set; }
         public string Version { get; set; }
         public string License { get; set; }
+        public int Status { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual Supplier Supplier { get; set; }

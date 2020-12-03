@@ -1088,16 +1088,24 @@
                                             <td colspan="2">
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.System_Id, CaseSolutionFields.System))
                                                 {
-                                                    <select id="case__System_Id" name="case_.System_Id">
-                                                        <option value="">&nbsp;</option>
-                                                        @if (Model.systems != null)
+                                                <select id="case__System_Id" name="case_.System_Id">
+                                                    <option value="">&nbsp;</option>
+                                                    @if (Model.systems != null)
+                                                    {
+                                                        foreach (var e in Model.systems)
                                                         {
-                                                            foreach (var e in Model.systems)
+                                                            if (e.Id == Model.case_.System_Id && e.Status == 0)
+                                                            {
+                                                <option disabled value="@e.Id" @e.Id.IdIsSelected(Model.case_.System_Id.ToString())>@e.SystemName</option>
+                                                            }
+                                                            else
                                                             {
                                                                 <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.System_Id.ToString())>@e.SystemName</option>
                                                             }
+
                                                         }
-                                                    </select>
+                                                    }
+                                                </select>
                                                 }
                                                 else
                                                 {

@@ -475,18 +475,26 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 				if (extendedCaseFormId.HasValue)
 				{
 					var fields = _extendedCaseService.GetExtendedCaseFormFields(extendedCaseFormId.Value, languageId).ToDictionary(o => o.FieldId);
+                    var sections = _extendedCaseService.GetExtendedCaseFormSections(extendedCaseFormId.Value, languageId).ToDictionary(o => o.SectionId);                    
 
 					if (extendedCaseFormFieldIds.Any())
 					{
-						settings.ExtendedCase = new ExtendedCaseSettings
-						{
-							Fields = extendedCaseFormFieldIds
-								.Select(o => new ExtendedCaseField
-								{
-									FieldId = o,
-									Name = fields[o].Text
-								}).ToList()
-						};
+                        settings.ExtendedCase = new ExtendedCaseSettings
+                        {
+                            Fields = extendedCaseFormFieldIds
+                                .Select(o => new ExtendedCaseField
+                                {
+                                    FieldId = o,
+                                    Name = sections[o].Text + " - " + fields[o].Text
+                                }).OrderBy(s => s.Name).ToList(),
+
+                            Sections = extendedCaseFormFieldIds
+                                .Select(o => new ExtendedCaseSection
+                                {
+                                    SectionId = o,
+                                    Name = sections[o].Text
+                                }).ToList()
+                        };
 					}
 					else
 					{
@@ -496,9 +504,16 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 								.Select(o => new ExtendedCaseField
 								{
 									FieldId = o.Value.FieldId,
-									Name = o.Value.Text
-								}).ToList()
-						};
+									Name = sections[o.Value.FieldId].Text + " - " + o.Value.Text
+								}).OrderBy(s => s.Name).ToList(),
+
+                            Sections = sections
+                                .Select(o => new ExtendedCaseSection
+                                {
+                                    SectionId = o.Value.SectionId,
+                                    Name = o.Value.Text
+                                }).ToList()
+                        };
 					}
 				}
 

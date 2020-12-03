@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿using DH.Helpdesk.Web.Infrastructure;
+
+namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -40,7 +42,7 @@
             var customer = this._customerService.GetCustomer(customerId);
             var systems = this._systemService.GetSystems(customer.Id);
 
-            var model = new SystemIndexViewModel { System = systems, Customer = customer };
+            var model = new SystemIndexViewModel { System = systems, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveSystemsInAdmin };
 
             return this.View(model);
         }
@@ -48,7 +50,7 @@
         public ActionResult New(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
-            var system = new System { Customer_Id = customer.Id, Id = 0 };
+            var system = new System { Customer_Id = customer.Id, Id = 0, Status = 1};
            
             var model = this.CreateInputViewModel(system, customer);
 
@@ -111,8 +113,14 @@
             else
             {
                 this.TempData.Add("Error", "");
-                return this.RedirectToAction("edit", "system", new { area = "admin", customerid = system.Customer_Id });
+                return this.RedirectToAction("edit", "system", new { area = "admin", id = id });
             }
+        }
+
+        public JsonResult SetShowOnlyActiveSystemsInAdmin(bool value)
+        {
+            SessionFacade.ShowOnlyActiveSystemsInAdmin = value;
+            return this.Json(new { result = "success" });
         }
 
         private SystemInputViewModel CreateInputViewModel(System system, Customer customer)

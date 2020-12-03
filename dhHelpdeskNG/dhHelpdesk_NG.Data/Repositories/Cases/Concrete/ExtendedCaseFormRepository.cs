@@ -178,5 +178,61 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 			return fieldTranslations;
 				
 		}
+
+        public List<ExtendedCaseFormSectionTranslationModel> GetExtendedCaseFormSections(int extendedCaseFormId, int languageID)
+        {
+            var fieldIds = DataContext.ExtendedCaseValues.Where(o => o.ExtendedCaseData.ExtendedCaseFormId == extendedCaseFormId)
+                .Where(o => !string.IsNullOrEmpty(o.Value) || !string.IsNullOrEmpty(o.SecondaryValue))
+                .Select(o => o.FieldId)
+                .Distinct();         
+
+            var sectionTranslations = DataContext.ExtendedCaseTranslations.AsEnumerable()
+                .Where(o => o.LanguageId == languageID)
+                .Join(
+                    fieldIds,
+                    t => t.Property.ToLower(),
+                    s => ("Section." + GetSectionName(s)).ToLower(),
+                    (t, s) => new ExtendedCaseFormSectionTranslationModel
+                    {
+                        SectionId = s,
+                        Text = t.Text,
+                        LanguageId = t.LanguageId
+                    }
+                ).ToList()
+                //.GroupBy(x => x.Text).Select(x => x.First())
+                .OrderBy(o => o.Text)
+                .ToList();
+
+
+            foreach (var section in sectionTranslations)
+            {                
+                    var MultisectionNumber = section.SectionId.Substring(section.SectionId.IndexOf("[") + 1, 1);
+                    int mSectionNumber = int.Parse(MultisectionNumber);
+                    if (mSectionNumber != 0)
+                    {
+                        if (mSectionNumber == 1)
+                        {
+                            var firstFieldId = section.SectionId.Replace("1", "0");
+                            var firstSection = sectionTranslations.Where(f => f.SectionId == firstFieldId).FirstOrDefault();                            
+                            firstSection.Text = firstSection.Text + " " + (mSectionNumber).ToString();                            
+                        }
+
+                        section.Text = section.Text + " " + (mSectionNumber + 1).ToString();                    
+                    }                
+            }            
+            return sectionTranslations;
+
+        }
+
+        private string GetSectionName(string FieldId){                       
+            var prefix = ".sections.";
+            var prefixLen = prefix.Length;
+            var startPrefix = FieldId.IndexOf(prefix);
+            var startSectionText = FieldId.Remove(0, startPrefix + prefixLen); //"ValAvveckling.instances[0].controls.Kommentarer";            
+            var firstDelimiter = startSectionText.IndexOf(".");
+            var sectionName = startSectionText.Substring(0, firstDelimiter);
+          
+            return sectionName;
+            }
 	}
 }

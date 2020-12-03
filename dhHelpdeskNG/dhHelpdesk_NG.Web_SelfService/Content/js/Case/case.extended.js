@@ -208,6 +208,8 @@ window.extendedCasePage =
             formParameters.caseGuid = self.Case_Field_Init_Values.CaseGuid;
             formParameters.applicationType = self.ApplicationType;
             formParameters.useInitiatorAutocomplete = self.UseInitiatorAutocomplete;
+            formParameters.whiteFilesList = self.whiteFilesList;
+            formParameters.maxFileSize = self.maxFileSize;
 
             $_ex_Container.contentWindow.setInitialData({ step: 0, isNextValidation: false });
 
@@ -463,6 +465,15 @@ window.extendedCasePage =
             var url = self.SAVE_CASE_URL;
             var $exCaseContainer = self.getExtendedCaseContainer();
 
+            if (recaptchaKey != "") {
+                var res = captchaChecker();
+                if (res == "") {
+                    ShowToastMessage(recaptchaMessage, "warning", false);
+                    $('html,body').animate({ scrollTop: 9999 }, 'slow');
+                    return;
+                }
+            }
+            
             self.setCaseStatus(self.CASE_IN_SAVING);
 
             if (!self.isNullOrUndefined($exCaseContainer)) {
@@ -510,6 +521,8 @@ window.extendedCasePage =
             self.ApplicationType = params.applicationType;
             self.UseInitiatorAutocomplete = params.useInitiatorAutocomplete;
             self.extendedCaseInvalidMessage = params.extendedCaseInvalidMessage;
+            self.whiteFilesList = params.whiteFilesList;
+            self.maxFileSize = params.maxFileSize;
             var lastError = params.lastError;
             var lastClickTimeStamp = null;
             var nextAllowedClickDelay = 5000;

@@ -540,10 +540,10 @@ namespace DH.Helpdesk.Services.Services
             _caseExtraFollowersService.DeleteByCase(id);
 
             if (c.CaseSectionExtendedCaseDatas != null && c.CaseSectionExtendedCaseDatas.Any())
-            {
+            {                
                 c.CaseSectionExtendedCaseDatas.Clear();
+                DeletetblCase_tblCaseSection_ExtendedCaseData(id);
             }
-            
             ret = c.CaseGUID;
 
             DeleteCaseById(id);
@@ -1162,6 +1162,15 @@ namespace DH.Helpdesk.Services.Services
             using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 uow.GetRepository<Case_ExtendedCaseEntity>().DeleteWhere(it => it.Case_Id == caseId);
+                uow.Save();
+            }
+        }
+
+        private void DeletetblCase_tblCaseSection_ExtendedCaseData(int caseId)
+        {
+            using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                uow.GetRepository<Case_CaseSection_ExtendedCase>().DeleteWhere(it => it.Case_Id == caseId);
                 uow.Save();
             }
         }

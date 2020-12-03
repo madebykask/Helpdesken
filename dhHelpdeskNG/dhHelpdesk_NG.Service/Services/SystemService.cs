@@ -13,7 +13,7 @@
 
     public interface ISystemService
     {
-        IList<Domain.System> GetSystems(int customerId);
+        IList<Domain.System> GetSystems(int customerId, bool activeOnly = false, int? includeId = null);
         List<ItemOverview> GetOperatingSystem();
         Domain.System GetSystem(int id);
 
@@ -51,14 +51,20 @@
             this._operatingSystemRepository = operatingSystemRepository;
         }
 
-        public IList<Domain.System> GetSystems(int customerId)
+        public IList<Domain.System> GetSystems(int customerId, bool activeOnly = false, int? includeId = null)
         {
-            return this._systemRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.SystemName).ToList();
+            var status = activeOnly ? 1 : 0;
+            return this._systemRepository.GetMany(x => x.Customer_Id == customerId &&
+                                                       ((activeOnly && x.Status == status) || !activeOnly || x.Id == includeId))
+                                        .OrderBy(x => x.SystemName)
+                                        .ToList();
         }
 
         public IList<Domain.System> GetSystemResponsibles(int customerId)
         {
-            return this._systemRepository.GetMany(x => x.Customer_Id == customerId && x.ContactPhone != null && x.ContactPhone.Length > 5).OrderBy(x => x.ContactName).ToList();
+            return this._systemRepository.GetMany(x => x.Customer_Id == customerId && x.ContactPhone != null && x.ContactPhone.Length > 5)
+                .OrderBy(x => x.ContactName)
+                .ToList();
         }
 
         public Domain.System GetSystem(int id)

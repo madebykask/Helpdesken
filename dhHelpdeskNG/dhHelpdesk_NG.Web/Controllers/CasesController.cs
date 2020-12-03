@@ -4035,6 +4035,14 @@ namespace DH.Helpdesk.Web.Controllers
                                             Enums.TranslationSource.CaseTranslation,
                                             fields.CustomerId)));
             }
+            if (fields.SystemId.HasValue)
+            {
+                var system = _systemService.GetSystem(fields.SystemId.Value);
+                if (system != null && system.Status == 0)
+                    ret.Add(string.Format("[{0}]", Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(),
+                                            Enums.TranslationSource.CaseTranslation,
+                                            fields.CustomerId)));
+            }
             if (fields.SupplierId.HasValue)
             {
                 var supplier = _supplierService.GetSupplier(fields.SupplierId.Value);
@@ -4603,6 +4611,8 @@ namespace DH.Helpdesk.Web.Controllers
             m.ParantPath_Category = ParentPathDefaultValue;
             m.ParantPath_OU = ParentPathDefaultValue;
             m.MinWorkingTime = customerSetting.MinRegWorkingTime;
+            m.WhiteFilesList = _globalSettingService.GetFileUploadWhiteList();
+            m.MaxFileSize = 36700160;
             m.CaseFilesModel = new CaseFilesModel();
             m.CaseFileNames = GetCaseFileNames(caseId);
             m.LogFilesModel = null; //not used on case page
@@ -4860,7 +4870,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m.caseFieldSettings.ShowOnPage(TranslationCaseFields.System_Id))
             {
-                m.systems = _systemService.GetSystems(customerId);
+                m.systems = _systemService.GetSystems(customerId, true, m.case_.System_Id);
             }
 
             if (m.caseFieldSettings.ShowOnPage(TranslationCaseFields.Urgency_Id))

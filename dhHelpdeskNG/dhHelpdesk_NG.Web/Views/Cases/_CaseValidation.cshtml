@@ -3,6 +3,7 @@
 @using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Common.Enums.Settings
 @using DH.Helpdesk.Common.Extensions.Boolean
+@using DH.Helpdesk.Common.Extensions.Lists
 
 <script type="text/javascript">
     window.parameters = {
@@ -12,6 +13,8 @@
         currentCaseNumber: '@Model.case_.CaseNumber',
         customerId: '@Model.case_.Customer_Id',
         parentCaseId: '@(Model.ParentCaseInfo != null ? Model.ParentCaseInfo.ParentId.ToString() : "null")',
+        whiteFilesList: @Html.Raw(Json.Encode(Model.WhiteFilesList)),
+        maxFileSize: @Model.MaxFileSize,
         isAnyNotClosedChild: '@Model.IsAnyNotClosedChild().ToString()',
         backUrl: '@Model.BackUrl',
         productAreaErrorMessage:
@@ -83,6 +86,7 @@
             SourceId: "CustomerRegistrationSourceId",
             CaseTypeId: "case__CaseType_Id",
             ProductAreaId: "case__ProductArea_Id",
+            SystemId: "case__System_Id",
             CategoryId: "case__Category_Id",
             SupplierId: "case__Supplier_Id",
             WorkingGroupId: "case__WorkingGroup_Id",
@@ -145,7 +149,7 @@
             Caption: '@Html.Raw(Json.Encode(Model.case_.Caption))',
             InventoryType: @Html.Raw(Json.Encode(Model.case_.InventoryType)),
             InventoryLocation: @Html.Raw(Json.Encode(Model.case_.InventoryLocation)),
-            CaseFiles: '@Html.Raw(Model.CaseFilesModel.Files != null ? Json.Encode(Model.CaseFilesModel.Files.Select(f => new { f.Id, f.FileName })) : "")'
+            CaseFiles: '@Html.Raw(Model.CaseFilesModel != null && Model.CaseFilesModel.Files != null ? Json.Encode(Model.CaseFilesModel.Files.Select(f => new { f.Id, f.FileName })) : "")'
         },
 
         casesScopeInitParameters: {

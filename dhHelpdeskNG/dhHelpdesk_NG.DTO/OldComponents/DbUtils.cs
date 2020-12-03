@@ -153,6 +153,7 @@
                 else
                     return string.Empty;
             }
+
             public static string SafeForSqlInjectForInOperator(this string valueToCheck)
             {
                 if (!string.IsNullOrWhiteSpace(valueToCheck))

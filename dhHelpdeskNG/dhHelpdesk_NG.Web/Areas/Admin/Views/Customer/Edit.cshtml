@@ -43,16 +43,20 @@
             var cname = document.getElementById("customername").value;
             var cemail = document.getElementById("customeremail").value;
 
-            $.post('/customer/CopyCustomer/', { id: id, customerNumber: cnumber, customerName: cname, customerEmail: cemail }, function (data) {
-                location.href = "/admin/customer/edit/" + data;
-            });
+            $.post('/customer/CopyCustomer/',
+                { id: id, customerNumber: cnumber, customerName: cname, customerEmail: cemail },
+                function(data) {
+                    location.href = "/admin/customer/edit/" + data;
+                });
 
         }
 
         function submitForm() {
-
-            for (var i = 0; i < document.getElementById("UsSelected").length; i++) {
-                document.getElementById("UsSelected")[i].selected = true;
+            var usSelectedCtrl = document.getElementById("UsSelected");
+            if (usSelectedCtrl && usSelectedCtrl.length) {
+                for (var i = 0; i < usSelectedCtrl.length; i++) {
+                    usSelectedCtrl[i].selected = true;
+                }
             }
 
             $("#target").submit();

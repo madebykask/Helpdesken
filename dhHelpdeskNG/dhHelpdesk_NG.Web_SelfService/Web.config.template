@@ -57,6 +57,11 @@
     #{else}
     <add key="ShowCommunicationForSelfService" value="false" />
     #{/if}
+
+    #{if IsRecaptchaConfigurable}
+    <add key="reCaptchaSiteKey" value="#{reCaptchaSiteKey}" />
+    <add key="reCaptchaSecretKey" value="#{reCaptchaSecretKey}" />
+    #{/if}
     #{if IsSingleSignOnConfigurable}
     <!-- Single Sign Keis-->
     

@@ -8,5 +8,6 @@
     {
         public Customer Customer { get; set; }
         public IList<Helpdesk.Domain.System> System { get; set; }
+        public bool IsShowOnlyActive { get; set; }
     }
 }

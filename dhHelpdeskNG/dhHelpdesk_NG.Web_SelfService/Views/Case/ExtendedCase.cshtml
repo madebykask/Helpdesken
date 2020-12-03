@@ -3,6 +3,9 @@
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Common.Extensions.Boolean
+@using System.Configuration;
+@using DH.Helpdesk.Common.Enums;
+@using DH.Helpdesk.Common.Extensions.Lists
 
 @model DH.Helpdesk.SelfService.Models.Case.ExtendedCaseViewModel
 
@@ -25,6 +28,14 @@
     var downloadCaseFileParamUrl = (!string.IsNullOrEmpty(Model.CaseDataModel.CaseFileKey) ? "id=" + Model.CaseDataModel.CaseFileKey + "&" : string.Empty);
     var downloadCaseFileCompleteUrl = downloadCaseFileUrl + "?" + "id=" + "{id}" + "&fileName=" + "{name}";
     var returnUrl = (string)(ViewBag.ReturnUrl ?? "");
+
+    var recaptchaSiteKey = ConfigurationManager.AppSettings[AppSettingsKey.ReCaptchaSiteKey] != null ?
+                           ConfigurationManager.AppSettings[AppSettingsKey.ReCaptchaSiteKey].ToString() : "";
+    if (recaptchaSiteKey == "#{reCaptchaSiteKey}")
+    {
+        recaptchaSiteKey = "";
+    }
+
 }
 
 <script type="text/javascript">
@@ -71,6 +82,8 @@
         templateId: @(Model.CaseTemplateId ?? 0),
         customerId: @Model.CustomerId,
         useInitiatorAutocomplete: @Model.CurrentCustomer.UseInitiatorAutocomplete.ToJavaScriptBool(),
+        whiteFilesList: @Html.Raw(Json.Encode(Model.WhiteFilesList)),
+        maxFileSize: @Model.MaxFileSize,
         caseFieldIds: {
             CaseId: "CaseDataModel_Id",
             CustomerId: "CaseDataModel_Customer_Id",
@@ -188,8 +201,8 @@
 </script>
 
 @*@section Styles {
-    <link href="@Url.Content("~/Content/css/ex-case-mobile.css")" rel="stylesheet" type="text/css" />
-}*@
+        <link href="@Url.Content("~/Content/css/ex-case-mobile.css")" rel="stylesheet" type="text/css" />
+    }*@
 
 @if (Model.ShowCaseActionsPanelOnTop & Model.CaseDataModel.FinishingDate == null)
 {
@@ -390,6 +403,15 @@
                     @Html.Partial("_CaseInformation", Model, new ViewDataDictionary(ViewData) { { "Headline", Translation.Get(Model.ExtendedCaseDataModel.FormModel.Name) } })
                     @*Extended case placement*@
                 </div>
+                @if (Model.CaseId == 0 && (recaptchaSiteKey != "" || recaptchaSiteKey != null))
+                {
+                    <div class="col-md-3 dh-col">
+                        <div class="container form-horizontal">
+                            <div id="cap1"></div>
+                            <div class="validation-message" style="margin:10px"></div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
         @if (Model.AttachmentPlacement == 1 &&
@@ -401,26 +423,26 @@
                     <div class="col-md-12" style="margin-top: 20px; margin-bottom: 0px !important;">
                         @if (Model.CaseId == 0)
                         {
-                            <a href="#upload_files_popup" id="" role="button" class="btn btn-default hasAttribute" data-toggle="modal" 
+                            <a href="#upload_files_popup" id="" role="button" class="btn btn-default hasAttribute" data-toggle="modal"
                                standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add")</a>
 
-                            <a id="addCaseFileFromClipboard" role="button" class="btn btn-default hasAttribute" 
+                            <a id="addCaseFileFromClipboard" role="button" class="btn btn-default hasAttribute"
                                standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard")</a>
                         }
                         <table id="NewCasefiles_table" class="table table-striped" style="margin-top: 10px;">
                             <tbody>
-                            @if (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null && Model.CaseDataModel.CaseFiles.Count > 0)
-                            {
-                                foreach (var item in Model.CaseDataModel.CaseFiles)
+                                @if (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null && Model.CaseDataModel.CaseFiles.Count > 0)
                                 {
-                                    <tr>
-                                        <td>
-                                            <i class="glyphicon glyphicon-file">&nbsp;</i>
-                                            <a style="color: blue" href="@downloadCaseFileCompleteUrl.Replace("{name}", item.FileName).Replace("{id}", Model.CaseId.ToString())">@item.FileName</a>
-                                        </td>
-                                    </tr>
+                                    foreach (var item in Model.CaseDataModel.CaseFiles)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <i class="glyphicon glyphicon-file">&nbsp;</i>
+                                                <a style="color: blue" href="@downloadCaseFileCompleteUrl.Replace("{name}", item.FileName).Replace("{id}", Model.CaseId.ToString())">@item.FileName</a>
+                                            </td>
+                                        </tr>
+                                    }
                                 }
-                            }
                             </tbody>
                         </table>
                     </div>
@@ -446,11 +468,34 @@
 
 @section Scripts
 {
-    @Scripts.Render("~/Content/js/Case/extendedCase") 
-
+    @Scripts.Render("~/Content/js/Case/extendedCase")
+    @if (recaptchaSiteKey != "")
+    {
+        <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+    }
     <script type="text/javascript">
+
+        var recaptchaKey = '@recaptchaSiteKey';
+
+        var captchaChecker = function () { };
+        var recaptcha_widget;
+        var onloadCallback = function () {
+            if ($('#cap1').length) {
+                recaptcha_widget = grecaptcha.render('cap1', {
+                    'sitekey': '@recaptchaSiteKey',
+                    'theme': 'light'
+                });
+            }
+
+            captchaChecker = function () {
+                return grecaptcha.getResponse(recaptcha_widget);
+            }
+
+        };
+        var recaptchaMessage = '@Translation.GetForJS("Please confirm that you are not a robot.")';
+
         $(function () {
-            //init extended case page js instance 
+            //init extended case page js instance
             window.extendedCasePage.init(window.parameters);
 
             var onWorkflowStepChangedCallback = function (data) {
@@ -462,7 +507,7 @@
 
             //init case edit.js page instance
             window.casePage.init();
-        });    
+        });
     </script>
 }
 
@@ -477,8 +522,8 @@
         @Html.Partial("_Communication", Model.CaseLogsModel, new ViewDataDictionary(ViewData) { { "readonly", Model.CaseDataModel.IsFinished } })
         if (Model.CaseLogsModel.IsAttachmentsAllowed)
         {
-             @Html.Partial("ModalDialogs/_UploadFilePopup", "Log_upload_files_popup")
-             isClipboardPopupRequired = true;
+            @Html.Partial("ModalDialogs/_UploadFilePopup", "Log_upload_files_popup")
+            isClipboardPopupRequired = true;
         }
     }
 
@@ -486,7 +531,7 @@
     {
         @Html.Partial("ModalDialogs/_CaseLogNotePopup", Model.CaseLogsModel)
     }
-    
+
     @if (isClipboardPopupRequired)
     {
         @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")

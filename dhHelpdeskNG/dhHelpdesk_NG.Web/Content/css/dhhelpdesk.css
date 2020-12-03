@@ -1914,6 +1914,9 @@ input[type="checkbox"],
     max-width: 300px;
     min-width: 300px;
     text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .multiselect-search {
@@ -3069,6 +3072,24 @@ body.login {
     }
 }
 
+@media (max-width:716px) {
+   #target .secnavs.fixed {
+        top: 88px;
+    }
+}
+
+@media (max-width:1596px) {
+    #target .content {
+        margin: 140px 20px 0px 20px;
+    }
+}
+
+@media (max-width:1277px) {
+    #target .content {
+        margin: 170px 20px 0px 20px;
+    }
+}
+
 /***************************CONTENT**************************************************/
 .mt20 {
     margin-top: 20px;
@@ -3633,7 +3654,8 @@ a.inactive {
 .operationlogcategory.admin.content .inactive *,
 .emailgroup.admin.content .inactive *,
 .program.admin.content .inactive *,
-.order-type.admin.content .inactive * {
+.order-type.admin.content .inactive *,
+.system.admin.content .inactive * {
     color: lightgray;
 }
 

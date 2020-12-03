@@ -60,6 +60,7 @@
             this.Property(x => x.SystemOwnerUserId).IsOptional().HasMaxLength(50);
             this.Property(x => x.SystemResponsibleUser_Id).IsOptional();
             this.Property(x => x.Urgency_Id).IsOptional();
+            this.Property(x => x.Status).IsRequired();
             this.Property(x => x.ViceSystemResponsibleUser_Id).IsOptional();
             this.Property(x => x.ContactName).IsOptional().HasMaxLength(50);
             this.Property(x => x.ContactEMail).IsOptional().HasMaxLength(50);

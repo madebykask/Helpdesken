@@ -1098,6 +1098,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                 CaseLogsModel = GetCaseLogsModel(initData.CaseId)
             };
 
+            model.WhiteFilesList = _globalSettingService.GetFileUploadWhiteList();
+            model.MaxFileSize = 36700160;
+
             if (string.IsNullOrEmpty(model.ExtendedCaseDataModel.FormModel.Name))
             {
                 if (caseTemplate == null)
@@ -1947,7 +1950,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var regions = _regionService.GetRegions(currentCase.Customer_Id);
             var suppliers = _supplierService.GetSuppliers(currentCase.Customer_Id);
-            var systems = _systemService.GetSystems(currentCase.Customer_Id);
+            var systems = _systemService.GetSystems(currentCase.Customer_Id, true, currentCase.System_Id);
 
             if (currentCase.CaseType != null)
             {
@@ -2057,7 +2060,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 OrganizationUnits = _orgService.GetOUs(customerId).ToList(),
                 CaseTypes = caseTypes,
                 ProductAreas = productAreas,
-                Systems = _systemService.GetSystems(customerId),
+                Systems = _systemService.GetSystems(customerId, true),
                 Urgencies = _urgencyService.GetUrgencies(customerId),
                 Impacts = _impactService.GetImpacts(customerId),
                 Categories = _categoryService.GetActiveParentCategories(customerId),

@@ -375,10 +375,7 @@ namespace DH.Helpdesk.Dal.Repositories
 				if (!hasExtendedCaseFields)
 					extendedCaseFormFieldIds = new List<string>();
 
-				var getAllExtendedCaseValues = false;
-				if (extendedCaseFormId.HasValue && !hasExtendedCaseFields)
-					getAllExtendedCaseValues = true;
-
+				var getAllExtendedCaseValues = extendedCaseFormId.HasValue && !hasExtendedCaseFields;
 
 				var resultQuery = query.Select(c => new ReportGeneratorFields
 				{
@@ -415,7 +412,11 @@ namespace DH.Helpdesk.Dal.Repositories
 					Case = c.Case.CaseNumber,
 					RegistrationDate = c.Case.RegTime,
 					ChangeDate = c.Case.ChangeTime,
-					RegistratedBy = c.Case.User_Id.HasValue ? c.Case.User.FirstName + " " + c.Case.User.SurName : "",
+					RegistratedBy = c.Case.User_Id.HasValue ? 
+                        c.Case.User.FirstName + " " + c.Case.User.SurName : 
+                        !string.IsNullOrEmpty(c.Case.RegUserName) ? 
+                            c.Case.RegUserName :
+                            !string.IsNullOrEmpty(c.Case.RegUserId) ? c.Case.RegUserId : "",
 					CaseType = c.Case.CaseType_Id,
 					ProductArea = c.Case.ProductArea_Id.HasValue ? c.Case.ProductArea_Id.ToString() : "",
 					System = c.Case.System_Id.HasValue ? c.Case.System.SystemName : "",

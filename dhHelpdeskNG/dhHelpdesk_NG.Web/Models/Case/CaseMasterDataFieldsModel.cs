@@ -13,6 +13,7 @@
         public int? SourceId { get; set; }
         public int? CaseTypeId { get; set; }
         public int? ProductAreaId { get; set; }
+        public int? SystemId { get; set; }
         public int? CategoryId { get; set; }
         public int? SupplierId { get; set; }
         public int? WorkingGroupId { get; set; }

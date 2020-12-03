@@ -3,6 +3,7 @@ export class BundleOptionsFilter {
     CaseCausingPartId?: number;
     CustomerRegistrationSources?: boolean;
     Systems?: boolean;
+    SystemId?: number;
     Urgencies?: boolean;
     Impacts?: boolean;
     Suppliers?: boolean;

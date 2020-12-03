@@ -71,7 +71,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
 
 					var serverPrefix = serverName == null ? "" : serverName + ".";
-					var query = $"SELECT System.ItemName, System.ItemFolderPathDisplay FROM {serverPrefix}SystemIndex WHERE CONTAINS(*, '\"{searchText.SafeForSqlInject()}\"', 1033) RANK BY COERCION(Absolute, 1) AND SCOPE='file:{catalogName}'";
+					var query = $"SELECT System.ItemName, System.ItemFolderPathDisplay FROM {serverPrefix}SystemIndex WHERE CONTAINS(*, '\"{searchText.SafeForSqlInject().Replace("\"", "")}\"', 1033) RANK BY COERCION(Absolute, 1) AND SCOPE='file:{catalogName}'";
 					var adapter = new OleDbDataAdapter(query, _INDEXING_SERVICE_PROVIDER_CONNECTION_STRING);
 					var dataSet = new DataSet();
 					if (adapter.Fill(dataSet) > 0)
