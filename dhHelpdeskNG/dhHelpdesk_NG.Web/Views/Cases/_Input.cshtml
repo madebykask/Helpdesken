@@ -1088,13 +1088,13 @@
                                             <td colspan="2">
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.System_Id, CaseSolutionFields.System))
                                                 {
-                                                <select id="case__System_Id" name="case_.System_Id">
+                                                <select id="case__System_Id" name="case_.System_Id" class="system">
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.systems != null)
                                                     {
                                                         foreach (var e in Model.systems.Where(e => e.Status == 1 || Model.case_.System_Id == e.Id))
                                                         {                                                           
-                                                           <option value="@e.Id" class="@(e.Status != 1 ? "inactive" : string.Empty)" @e.Id.IdIsSelected(Model.case_.System_Id.ToString())>@e.SystemName</option>                                                           
+                                                          <option value="@e.Id" class="@(e.Status != 1 ? "inactive" : string.Empty)" @e.Id.IdIsSelected(Model.case_.System_Id.ToString())>@e.SystemName</option>                                                           
                                                         }
                                                     }
                                                 </select>
