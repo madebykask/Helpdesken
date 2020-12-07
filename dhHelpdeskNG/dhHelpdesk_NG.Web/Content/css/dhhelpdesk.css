@@ -1864,6 +1864,10 @@ select.working-group option.inactive {
     color: lightgray;
 }
 
+select.system option.inactive {
+    color: lightgray;
+}
+
 /*** editcase.caselog begin ***/
 .table.caselog .case-icon {
     padding: 0 14px;
