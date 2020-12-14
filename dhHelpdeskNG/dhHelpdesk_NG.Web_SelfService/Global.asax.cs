@@ -33,8 +33,11 @@ namespace DH.Helpdesk.SelfService
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
+            if (IsMicrosoftMode())
+            {
+                filters.Add(new AuthorizeAttribute());
+            }
         }
-
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
@@ -275,6 +278,12 @@ namespace DH.Helpdesk.SelfService
         {
             var appSettingsProvider = new ApplicationSettingsProvider();
             return appSettingsProvider.LoginMode == LoginMode.SSO;
+        }
+
+        private static bool IsMicrosoftMode()
+        {
+            var appSettingsProvider = new ApplicationSettingsProvider();
+            return appSettingsProvider.LoginMode == LoginMode.Microsoft;
         }
 
         private void RefreshSessionId()

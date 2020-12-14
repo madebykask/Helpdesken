@@ -48,160 +48,154 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             _masterDataService = masterDataService;
         }
 
-        
-    //called before a controller action is executed, that is before ~/HomeController/index 
-    protected override void OnActionExecuting(ActionExecutingContext filterContext)
-    {
+
+        //called before a controller action is executed, that is before ~/HomeController/index 
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
             //Debugger.Launch();
 
             if (!CheckUserAccessToUrl(filterContext))
-        {
-            SessionFacade.UserHasAccess = false;
-            ErrorGenerator.MakeError("Url is not valid!");
-            filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
-            return;
-        }
-
-        var customerId = -1;
-        TempData["ShowLanguageSelect"] = true;
-        SessionFacade.LastError = null;
-        var lastError = new ErrorModel(string.Empty);
-        _userOrCustomerChanged = false;
-
-        var appSettings = ConfigurationService.AppSettings;
-        var loginMode = appSettings.LoginMode;
-            if (loginMode == LoginMode.Microsoft && !Request.IsAuthenticated)
             {
-                HttpContext.GetOwinContext().Authentication.Challenge(
-                    new AuthenticationProperties { RedirectUri = "/" },
-                    OpenIdConnectAuthenticationDefaults.AuthenticationType);
+                SessionFacade.UserHasAccess = false;
+                ErrorGenerator.MakeError("Url is not valid!");
+                filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                 return;
             }
+
+            var customerId = -1;
+            TempData["ShowLanguageSelect"] = true;
+            SessionFacade.LastError = null;
+            var lastError = new ErrorModel(string.Empty);
+            _userOrCustomerChanged = false;
+
+            var appSettings = ConfigurationService.AppSettings;
+            var loginMode = appSettings.LoginMode;
+ 
             var res = SetCustomer(filterContext, out lastError);
 
-        //todo: move to OnSessionEnd
-        //if (!res && isSsoMode && federatedAuthenticationSettings.LogoutCustomerOnSessionExpire)
-        //{
-        //    ManualDependencyResolver.Get<IFederatedAuthenticationService>().SignOut(Request.Url.AbsolutePath);
-        //}
+            //todo: move to OnSessionEnd
+            //if (!res && isSsoMode && federatedAuthenticationSettings.LogoutCustomerOnSessionExpire)
+            //{
+            //    ManualDependencyResolver.Get<IFederatedAuthenticationService>().SignOut(Request.Url.AbsolutePath);
+            //}
 
-        if (!res && lastError != null)
-        {
-            SessionFacade.UserHasAccess = false;
-            ErrorGenerator.MakeError(lastError);
-            filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
-            return;
-        }
-        customerId = SessionFacade.CurrentCustomerID;
-
-        SetLanguage();
-        
-
-        if (SessionFacade.CurrentUserIdentity == null)
-        {
-            if (loginMode == LoginMode.SSO)
-            {
-                var userIdentity = TrySSOLogin(User, out lastError);
-                if (lastError != null)
-                {
-                    SessionFacade.UserHasAccess = false;
-                    ErrorGenerator.MakeError(lastError);
-                    filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
-                    return;
-                }
-
-                SessionFacade.CurrentSystemUser = userIdentity.UserId;
-                SessionFacade.CurrentUserIdentity = userIdentity;
-                SessionFacade.UserHasAccess = true;
-            } // SSO Login
-
-            else if (loginMode == LoginMode.Windows)
-            {
-
-                SessionFacade.CurrentCoWorkers = null;
-                var userIdentity = TryWindowsLogin(customerId, out lastError);
-                if (lastError != null)
-                {
-                    SessionFacade.UserHasAccess = false;
-                    ErrorGenerator.MakeError(lastError);
-                    filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
-                    return;
-                }
-
-                SessionFacade.CurrentSystemUser = userIdentity.UserId;
-                SessionFacade.CurrentUserIdentity = userIdentity;
-                SessionFacade.UserHasAccess = true;
-            }
-            else if (loginMode == LoginMode.Microsoft)
-            {
-
-                SessionFacade.CurrentCoWorkers = null;
-                var userIdentity = TryMicrosoftLogin(customerId, out lastError);
-                if (lastError != null)
-                {
-                    SessionFacade.UserHasAccess = false;
-                    ErrorGenerator.MakeError(lastError);
-                    filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
-                    return;
-                }
-
-                SessionFacade.CurrentSystemUser = userIdentity.UserId;
-                SessionFacade.CurrentUserIdentity = userIdentity;
-                SessionFacade.UserHasAccess = true;
-            }
-            else
-            {
-                SessionFacade.CurrentCoWorkers = null;
-                var userIdentity = TryAnonymousLogin(customerId, out lastError);
-                if (lastError != null)
-                {
-                    SessionFacade.UserHasAccess = false;
-                    ErrorGenerator.MakeError(lastError);
-                    filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
-                    return;
-                }
-
-                SessionFacade.CurrentSystemUser = userIdentity.UserId;
-                SessionFacade.CurrentUserIdentity = userIdentity;
-                SessionFacade.UserHasAccess = true;
-            }
-
-            _userOrCustomerChanged = true;
-        } //User Session was null
-
-
-        if (_userOrCustomerChanged)
-        {
-            SessionFacade.CurrentCoWorkers = null;
-
-            // load user info according database info (tblComputerUser)
-            LoadUserInfo();
-
-            //load user info from tblUsers if such user exist
-            LoadLocalUserInfo();
-        }
-
-        //LogWithContext("OnActionExecuting: user and customer has been loaded.");
-
-        if (SessionFacade.CurrentCustomer.RestrictUserToGroupOnExternalPage)
-        {
-            SetUserRestriction(customerId, out lastError);
-            if (lastError != null)
+            if (!res && lastError != null)
             {
                 SessionFacade.UserHasAccess = false;
                 ErrorGenerator.MakeError(lastError);
                 filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                 return;
             }
+            customerId = SessionFacade.CurrentCustomerID;
+
+            SetLanguage();
+
+
+            if (SessionFacade.CurrentUserIdentity == null)
+            {
+                if (loginMode == LoginMode.SSO)
+                {
+                    var userIdentity = TrySSOLogin(User, out lastError);
+                    if (lastError != null)
+                    {
+                        SessionFacade.UserHasAccess = false;
+                        ErrorGenerator.MakeError(lastError);
+                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                        return;
+                    }
+
+                    SessionFacade.CurrentSystemUser = userIdentity.UserId;
+                    SessionFacade.CurrentUserIdentity = userIdentity;
+                    SessionFacade.UserHasAccess = true;
+                } // SSO Login
+
+                else if (loginMode == LoginMode.Windows)
+                {
+
+                    SessionFacade.CurrentCoWorkers = null;
+                    var userIdentity = TryWindowsLogin(customerId, out lastError);
+                    if (lastError != null)
+                    {
+                        SessionFacade.UserHasAccess = false;
+                        ErrorGenerator.MakeError(lastError);
+                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                        return;
+                    }
+
+                    SessionFacade.CurrentSystemUser = userIdentity.UserId;
+                    SessionFacade.CurrentUserIdentity = userIdentity;
+                    SessionFacade.UserHasAccess = true;
+                }
+                else if (loginMode == LoginMode.Microsoft)
+                {
+
+                    SessionFacade.CurrentCoWorkers = null;
+                    var userIdentity = TryMicrosoftLogin(customerId, out lastError);
+                    if (lastError != null)
+                    {
+                        SessionFacade.UserHasAccess = false;
+                        ErrorGenerator.MakeError(lastError);
+                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                        return;
+                    }
+
+                    SessionFacade.CurrentSystemUser = userIdentity.UserId;
+                    SessionFacade.CurrentUserIdentity = userIdentity;
+                    SessionFacade.UserHasAccess = true;
+                }
+                else
+                {
+                    SessionFacade.CurrentCoWorkers = null;
+                    var userIdentity = TryAnonymousLogin(customerId, out lastError);
+                    if (lastError != null)
+                    {
+                        SessionFacade.UserHasAccess = false;
+                        ErrorGenerator.MakeError(lastError);
+                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                        return;
+                    }
+
+                    SessionFacade.CurrentSystemUser = userIdentity.UserId;
+                    SessionFacade.CurrentUserIdentity = userIdentity;
+                    SessionFacade.UserHasAccess = true;
+                }
+
+                _userOrCustomerChanged = true;
+            } //User Session was null
+
+
+            if (_userOrCustomerChanged)
+            {
+                SessionFacade.CurrentCoWorkers = null;
+
+                // load user info according database info (tblComputerUser)
+                LoadUserInfo();
+
+                //load user info from tblUsers if such user exist
+                LoadLocalUserInfo();
+            }
+
+            //LogWithContext("OnActionExecuting: user and customer has been loaded.");
+
+            if (SessionFacade.CurrentCustomer.RestrictUserToGroupOnExternalPage)
+            {
+                SetUserRestriction(customerId, out lastError);
+                if (lastError != null)
+                {
+                    SessionFacade.UserHasAccess = false;
+                    ErrorGenerator.MakeError(lastError);
+                    filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                    return;
+                }
+            }
+
+            ViewBag.IsLineManagerApplication = IsLineManagerApplication();
+            ViewBag.ApplicationType = _configurationService.AppSettings.ApplicationType;
+
+            SetTextTranslation(filterContext);
         }
 
-        ViewBag.IsLineManagerApplication = IsLineManagerApplication();
-        ViewBag.ApplicationType = _configurationService.AppSettings.ApplicationType;
-
-        SetTextTranslation(filterContext);
-    }
-
-    private bool SetCustomer(ActionExecutingContext filterContext, out ErrorModel lastMessage)
+        private bool SetCustomer(ActionExecutingContext filterContext, out ErrorModel lastMessage)
         {
             var customerId = -1;
             lastMessage = null;
@@ -209,7 +203,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             customerId = RetrieveCustomer(filterContext, sessionCustomerId);
 
             if (SessionFacade.CurrentCustomer == null && customerId == -1)
-            {                
+            {
                 //filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                 lastMessage = new ErrorModel(101, "Customer Id can't be empty!");
                 return false;
@@ -229,14 +223,14 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
             if (SessionFacade.CurrentCustomer == null)
             {
-                SessionFacade.UserHasAccess = false;                                
+                SessionFacade.UserHasAccess = false;
                 lastMessage = new ErrorModel(101, string.Format("Customer is not valid!", customerId));
-                return false;                
+                return false;
             }
-            
-            SessionFacade.UserHasAccess = true;            
+
+            SessionFacade.UserHasAccess = true;
             SessionFacade.CurrentCustomerID = SessionFacade.CurrentCustomer.Id;
-            
+
             //set customerId cookie
             ControllerContext.HttpContext.SetCustomerIdCookie(SessionFacade.CurrentCustomer.Id);
 
@@ -246,9 +240,9 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         private int RetrieveCustomer(ActionExecutingContext filterContext, int sessionCustomerId)
         {
             var ret = -1;
-            
+
             var passedCustomerId = Request.QueryString["customerId"];
-            
+
             if (!string.IsNullOrEmpty(passedCustomerId))
             {
                 int tempId = 0;
@@ -263,7 +257,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     return -1;
                 }
             }
-            
+
             if (filterContext.ActionParameters.Keys.Contains("id", StringComparer.OrdinalIgnoreCase))
             {
                 var _id = filterContext.ActionParameters["id"];
@@ -279,7 +273,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     }
                 }
             }
-            
+
             //try to get customerId from query string
             if (sessionCustomerId < 0 && ret < 0)
             {
@@ -287,7 +281,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
                 int paramCustomerId = -1;
                 int.TryParse(val, out paramCustomerId);
-                
+
                 // if failed from qs try to load from session cookie. Case - when was signed out from page without customerId in url
                 if (paramCustomerId <= 0)
                 {
@@ -310,7 +304,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
         private void SetLanguage()
         {
-            if (SessionFacade.AllLanguages == null)            
+            if (SessionFacade.AllLanguages == null)
                 SessionFacade.AllLanguages = GetActiveLanguages();
 
             var requestLanguageId = Request.QueryString.Get("language");
@@ -337,7 +331,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         private void LoadUserInfo()
         {
             if (SessionFacade.CurrentCustomer != null &&
-                SessionFacade.CurrentUserIdentity != null && 
+                SessionFacade.CurrentUserIdentity != null &&
                 string.IsNullOrEmpty(SessionFacade.CurrentUserIdentity.FirstName) &&
                 string.IsNullOrEmpty(SessionFacade.CurrentUserIdentity.LastName) &&
                 string.IsNullOrEmpty(SessionFacade.CurrentUserIdentity.Email))
@@ -364,12 +358,12 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 {
                     SessionFacade.CurrentUserIdentity.UserId
                 };
-                if(!string.IsNullOrWhiteSpace(SessionFacade.CurrentUserIdentity.Domain)) userNamesToCheck.Add($@"{SessionFacade.CurrentUserIdentity.Domain}\{SessionFacade.CurrentUserIdentity.UserId}");
+                if (!string.IsNullOrWhiteSpace(SessionFacade.CurrentUserIdentity.Domain)) userNamesToCheck.Add($@"{SessionFacade.CurrentUserIdentity.Domain}\{SessionFacade.CurrentUserIdentity.UserId}");
                 if (userNames.Length > 1) userNamesToCheck.Add(userNames[userNames.Length - 1]);
 
                 foreach (var userName in userNamesToCheck)
                 {
-                    if(string.IsNullOrWhiteSpace(userName)) continue;
+                    if (string.IsNullOrWhiteSpace(userName)) continue;
 
                     var user = _masterDataService.GetUserForLogin(userName);
                     if (user != null && _masterDataService.IsCustomerUser(SessionFacade.CurrentCustomer.Id, user.Id))
@@ -381,7 +375,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             }
             SessionFacade.CurrentLocalUser = null;
         }
-        
+
 
         private UserIdentity TrySSOLogin(System.Security.Principal.IPrincipal user, out ErrorModel lastError)
         {
@@ -393,7 +387,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             {
                 string claimData = "";
                 bool isFirst = true;
-                
+
                 var claimDomain = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimDomain);
                 var claimUserId = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimUserId);
                 var claimEmployeeNumber = AppConfigHelper.GetAppSetting(FederationServiceKeys.ClaimEmployeeNumber);
@@ -464,12 +458,12 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     _masterDataService.SaveSSOLog(ssoLog);
 
                 if (string.IsNullOrEmpty(userIdentity.UserId))
-                {     
+                {
                     lastError = new ErrorModel(107, "You don't have access to the portal. (User Id is not specified)");
                     return userIdentity;
-                }                
+                }
             }
-            
+
             return userIdentity;
         }
 
@@ -477,7 +471,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         {
             lastError = null;
             UserIdentity userIdentity = null;
-            var employeeNum = string.Empty;            
+            var employeeNum = string.Empty;
             string userId = DEFAULT_ANONYMOUS_USER_ID; // shall we get login user? global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
             var defaultUserId = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultUserId);
             if (!string.IsNullOrEmpty(defaultUserId))
@@ -486,8 +480,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             var defaultEmployeeNumber = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultEmployeeNumber);
             if (!string.IsNullOrEmpty(defaultEmployeeNumber))
                 employeeNum = defaultEmployeeNumber;
-            
-            string userDomain = string.Empty;            
+
+            string userDomain = string.Empty;
             var initiator = _masterDataService.GetInitiatorByUserId(userId, customerId);
             userIdentity = new UserIdentity()
             {
@@ -499,7 +493,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 Phone = initiator?.Phone,
                 Email = initiator?.Email
             };
-            
+
             return userIdentity;
         }
 
@@ -508,7 +502,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             lastError = null;
             UserIdentity userIdentity = null;
             //var user = System.Security.Principal.WindowsIdentity.GetCurrent(); // do not use WindowsIdentity!
-            var user = HttpContext.User.Identity; 
+            var user = HttpContext.User.Identity;
             var employeeNum = string.Empty;
 
             string fullName = user.Name;
@@ -541,14 +535,14 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         private UserIdentity TryMicrosoftLogin(int customerId, out ErrorModel lastError)
         {
             lastError = null;
-            UserIdentity userIdentity = null;           
+            UserIdentity userIdentity = null;
 
             var userClaims = User.Identity as System.Security.Claims.ClaimsIdentity;
-           
+
             var user = HttpContext.User.Identity;
             var employeeNum = string.Empty;
 
-            string fullName = user.Name;
+            string fullName = userClaims?.FindFirst("name")?.Value; //user.Name; TODO: Check why name is empty for user, but not for claims
             string userId = fullName.GetUserFromAdPath();
 
             var defaultUserId = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultUserId);
@@ -579,33 +573,33 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         {
             lastError = null;
             var employeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
-            
+
             if (!UserBelongedToCurrentCustomer(employeeNumber))
             {
                 SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
-                lastError = new ErrorModel(103, "You don't have access to the portal. (User is not manager for country)");                                        
+                lastError = new ErrorModel(103, "You don't have access to the portal. (User is not manager for country)");
                 return;
             }
 
-            if (SessionFacade.CurrentCoWorkers == null || 
+            if (SessionFacade.CurrentCoWorkers == null ||
                 (SessionFacade.CurrentCoWorkers != null && SessionFacade.CurrentCoWorkers.Count == 0))
             {
                 if (string.IsNullOrEmpty(employeeNumber))
                 {
-                    lastError = new ErrorModel(104, "You don't have access to the portal. (Employee Number is not specified)");                                        
+                    lastError = new ErrorModel(104, "You don't have access to the portal. (Employee Number is not specified)");
                     return;
                 }
-               
+
                 var useApi = SessionFacade.CurrentCustomer.FetchDataFromApiOnExternalPage;
                 var apiCredential = WebApiConfig.GetAmApiInfo();
                 var employee = _masterDataService.GetEmployee(customerId, employeeNumber, useApi, apiCredential);
-                
+
                 if (employee != null && employee.IsManager)
                 {
                     SessionFacade.CurrentCoWorkers = employee.Subordinates;
                 }
                 else
-                {                    
+                {
                     SessionFacade.CurrentCoWorkers = new List<SubordinateResponseItem>();
                     lastError = new ErrorModel(102, "You don't have access to the portal. (User is not manager)");
                     return;
@@ -615,7 +609,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
         public ActionResult ChangeLanguage(string language, string currentUrl, string lastParams)
         {
-            if(SessionFacade.AllLanguages != null)
+            if (SessionFacade.AllLanguages != null)
             {
                 List<LanguageOverview> allLang = SessionFacade.AllLanguages.ToList();
                 var lId = allLang.Where(a => a.LanguageId == language).Select(a => a.Id).SingleOrDefault();
@@ -625,14 +619,14 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             currentUrl += "?language=" + language;
 
             var allParam = lastParams.Split('&');
-            foreach(var param in allParam)
+            foreach (var param in allParam)
             {
-                if((!string.IsNullOrEmpty(param)) && (!param.ToLower().Contains("language=")))
+                if ((!string.IsNullOrEmpty(param)) && (!param.ToLower().Contains("language=")))
                     currentUrl += "&" + param;
             }
 
             return Redirect(currentUrl);
-        }       
+        }
 
         protected bool UserBelongedToCurrentCustomer(string employeeNumber)
         {
@@ -673,7 +667,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             base.OnActionExecuted(filterContext);
 
             // Last correct url used for back from Error page
-            if(SessionFacade.LastError == null)
+            if (SessionFacade.LastError == null)
                 SessionFacade.LastCorrectUrl =
                     filterContext.HttpContext.Request.Url.AbsoluteUri;
         }
@@ -705,7 +699,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
         private void SessionCheck(ActionExecutingContext filterContext)
         {
-            if(SessionFacade.CurrentUser != null)
+            if (SessionFacade.CurrentUser != null)
             {
                 SessionFacade.CurrentCustomer = SessionFacade.CurrentCustomer ?? _masterDataService.GetCustomer(SessionFacade.CurrentUser.CustomerId);
             }
@@ -719,12 +713,12 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 SelectedLanguageId = SessionFacade.CurrentLanguageId
             };
 
-            if(SessionFacade.CurrentUser != null)
+            if (SessionFacade.CurrentUser != null)
             {
                 masterViewModel.Customers = _masterDataService.GetCustomers(SessionFacade.CurrentUser.Id);
             }
 
-            if(SessionFacade.CurrentCustomer != null)
+            if (SessionFacade.CurrentCustomer != null)
             {
                 masterViewModel.SelectedCustomerId = SessionFacade.CurrentCustomer.Id;
                 masterViewModel.CustomerSetting = _masterDataService.GetCustomerSettings(SessionFacade.CurrentCustomer.Id);
@@ -739,8 +733,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             {
                 if (SessionFacade.TextTranslation == null)
                 {
-                    SessionFacade.TextTranslation = IsLineManagerApplication() 
-                        ? _masterDataService.GetTranslationTexts(TranslationType.SelfService).ToList() 
+                    SessionFacade.TextTranslation = IsLineManagerApplication()
+                        ? _masterDataService.GetTranslationTexts(TranslationType.SelfService).ToList()
                         : _masterDataService.GetTranslationTexts().ToList();
                 }
 
@@ -760,12 +754,12 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         private bool CheckUserAccessToUrl(ActionExecutingContext filterContext)
         {
             var urlSettings = _configurationService.UrlSettings;
-            
+
             if (urlSettings?.DeniedUrls == null || !urlSettings.DeniedUrls.Any())
                 return true;
 
             foreach (var url in urlSettings.DeniedUrls)
-            {                
+            {
                 if (IsStringMatch(url, filterContext.HttpContext.Request.RawUrl))
                 {
                     foreach (var allowUrl in urlSettings.AllowedUrls)
@@ -775,9 +769,9 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     }
 
                     return false;
-                }                    
+                }
             }
-            
+
             return true;
         }
 
@@ -787,7 +781,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
             var _pattern = pattern.ToLower();
             var _compareStr = compareStr.ToLower();
-            
+
             var _patternWithoutStar = _pattern.Replace("*", "");
             if (_pattern.EndsWith("*"))
             {
@@ -799,7 +793,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     purePattern = _patternWithoutStar.Remove(_patternWithoutStar.Length - 1);
 
                     patternWithSlash = $"{purePattern}/";
-                    patternWithQuestionMark = $"{purePattern}?";                    
+                    patternWithQuestionMark = $"{purePattern}?";
                     if (_compareStr.StartsWith(patternWithSlash) || _compareStr.StartsWith(patternWithQuestionMark))
                         return true;
                 }
@@ -816,7 +810,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     return true;
             }
 
-            
+
             if (_pattern.EndsWith("{guid}"))
             {
                 var _patternWithoutGuid = _patternWithoutStar.Replace("{guid}", "");
@@ -824,16 +818,16 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     return false;
 
                 var rightSide = _compareStr.Remove(0, _patternWithoutGuid.Length);
-                Guid param; 
+                Guid param;
                 try
                 {
                     if (Guid.TryParse(rightSide, out param))
                         return true;
                 }
-                catch 
+                catch
                 {
                     return false;
-                }                
+                }
             }
 
             if (_pattern.EndsWith("{int}"))
@@ -857,7 +851,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
             return _pattern.Equals(_compareStr, StringComparison.CurrentCultureIgnoreCase);
         }
-        
+
         //keep for diagnostics purposes
         private void LogWithContext(string msg)
         {
