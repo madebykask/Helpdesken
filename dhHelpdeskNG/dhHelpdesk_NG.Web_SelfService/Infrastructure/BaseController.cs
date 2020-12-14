@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Security.Claims;
+using System.Web;
 using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.Models.ADFS.Input;
 using DH.Helpdesk.BusinessData.Models.Employee;
@@ -21,6 +22,8 @@ using DH.Helpdesk.SelfService.Infrastructure.Helpers;
 using DH.Helpdesk.SelfService.Models;
 using DH.Helpdesk.Services.Services;
 using log4net;
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.OpenIdConnect;
 
 namespace DH.Helpdesk.SelfService.Infrastructure
 {
@@ -33,11 +36,11 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         private readonly IMasterDataService _masterDataService;
         private bool _userOrCustomerChanged;
         private List<LanguageOverview> _languages;
-        
+
         protected ISelfServiceConfigurationService ConfigurationService => _configurationService;
 
 
-        public BaseController(ISelfServiceConfigurationService configurationService, 
+        public BaseController(ISelfServiceConfigurationService configurationService,
             IMasterDataService masterDataService,
             ICaseSolutionService caseSolutionService)
         {
@@ -45,119 +48,60 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             _masterDataService = masterDataService;
         }
 
-        //called before a controller action is executed, that is before ~/HomeController/index 
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
+        
+    //called before a controller action is executed, that is before ~/HomeController/index 
+    protected override void OnActionExecuting(ActionExecutingContext filterContext)
+    {
             //Debugger.Launch();
 
             if (!CheckUserAccessToUrl(filterContext))
+        {
+            SessionFacade.UserHasAccess = false;
+            ErrorGenerator.MakeError("Url is not valid!");
+            filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+            return;
+        }
+
+        var customerId = -1;
+        TempData["ShowLanguageSelect"] = true;
+        SessionFacade.LastError = null;
+        var lastError = new ErrorModel(string.Empty);
+        _userOrCustomerChanged = false;
+
+        var appSettings = ConfigurationService.AppSettings;
+        var loginMode = appSettings.LoginMode;
+            if (loginMode == LoginMode.Microsoft && !Request.IsAuthenticated)
             {
-                SessionFacade.UserHasAccess = false;
-                ErrorGenerator.MakeError("Url is not valid!");
-                filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                HttpContext.GetOwinContext().Authentication.Challenge(
+                    new AuthenticationProperties { RedirectUri = "/" },
+                    OpenIdConnectAuthenticationDefaults.AuthenticationType);
                 return;
             }
-
-            var customerId = -1;
-            TempData["ShowLanguageSelect"] = true;
-            SessionFacade.LastError = null;
-            var lastError = new ErrorModel(string.Empty);
-            _userOrCustomerChanged = false;
-
-            var appSettings = ConfigurationService.AppSettings;
-            var loginMode = appSettings.LoginMode;
-
             var res = SetCustomer(filterContext, out lastError);
-            
-            //todo: move to OnSessionEnd
-            //if (!res && isSsoMode && federatedAuthenticationSettings.LogoutCustomerOnSessionExpire)
-            //{
-            //    ManualDependencyResolver.Get<IFederatedAuthenticationService>().SignOut(Request.Url.AbsolutePath);
-            //}
 
-            if (!res && lastError != null)
+        //todo: move to OnSessionEnd
+        //if (!res && isSsoMode && federatedAuthenticationSettings.LogoutCustomerOnSessionExpire)
+        //{
+        //    ManualDependencyResolver.Get<IFederatedAuthenticationService>().SignOut(Request.Url.AbsolutePath);
+        //}
+
+        if (!res && lastError != null)
+        {
+            SessionFacade.UserHasAccess = false;
+            ErrorGenerator.MakeError(lastError);
+            filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+            return;
+        }
+        customerId = SessionFacade.CurrentCustomerID;
+
+        SetLanguage();
+        
+
+        if (SessionFacade.CurrentUserIdentity == null)
+        {
+            if (loginMode == LoginMode.SSO)
             {
-                SessionFacade.UserHasAccess = false;
-                ErrorGenerator.MakeError(lastError);
-                filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
-                return;
-            }
-            customerId = SessionFacade.CurrentCustomerID;
-
-            SetLanguage();
-
-            if (SessionFacade.CurrentUserIdentity == null)
-            {                
-                if (loginMode == LoginMode.SSO)
-                {
-                    var userIdentity = TrySSOLogin(User, out lastError);
-                    if (lastError != null)
-                    {
-                        SessionFacade.UserHasAccess = false;
-                        ErrorGenerator.MakeError(lastError);
-                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
-                        return;
-                    }
-
-                    SessionFacade.CurrentSystemUser = userIdentity.UserId;
-                    SessionFacade.CurrentUserIdentity = userIdentity;
-                    SessionFacade.UserHasAccess = true;
-                } // SSO Login
-
-                else if (loginMode == LoginMode.Windows)
-                {
-
-                    SessionFacade.CurrentCoWorkers = null;
-                    var userIdentity = TryWindowsLogin(customerId, out lastError);
-                    if (lastError != null)
-                    {
-                        SessionFacade.UserHasAccess = false;
-                        ErrorGenerator.MakeError(lastError);
-                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
-                        return;
-                    }
-
-                    SessionFacade.CurrentSystemUser = userIdentity.UserId;
-                    SessionFacade.CurrentUserIdentity = userIdentity;
-                    SessionFacade.UserHasAccess = true;                    
-                }
-                else
-                {
-                    SessionFacade.CurrentCoWorkers = null;
-                    var userIdentity = TryAnonymousLogin(customerId, out lastError);
-                    if (lastError != null)
-                    {
-                        SessionFacade.UserHasAccess = false;
-                        ErrorGenerator.MakeError(lastError);
-                        filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
-                        return;
-                    }
-
-                    SessionFacade.CurrentSystemUser = userIdentity.UserId;
-                    SessionFacade.CurrentUserIdentity = userIdentity;
-                    SessionFacade.UserHasAccess = true;
-                }
-
-                _userOrCustomerChanged = true;
-            } //User Session was null
-
-
-            if (_userOrCustomerChanged)
-            {
-                SessionFacade.CurrentCoWorkers = null;
-
-                // load user info according database info (tblComputerUser)
-                LoadUserInfo();
-
-                //load user info from tblUsers if such user exist
-                LoadLocalUserInfo();
-            }
-
-            //LogWithContext("OnActionExecuting: user and customer has been loaded.");
-
-            if (SessionFacade.CurrentCustomer.RestrictUserToGroupOnExternalPage)
-            {
-                SetUserRestriction(customerId, out lastError);
+                var userIdentity = TrySSOLogin(User, out lastError);
                 if (lastError != null)
                 {
                     SessionFacade.UserHasAccess = false;
@@ -165,15 +109,99 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
                     return;
                 }
+
+                SessionFacade.CurrentSystemUser = userIdentity.UserId;
+                SessionFacade.CurrentUserIdentity = userIdentity;
+                SessionFacade.UserHasAccess = true;
+            } // SSO Login
+
+            else if (loginMode == LoginMode.Windows)
+            {
+
+                SessionFacade.CurrentCoWorkers = null;
+                var userIdentity = TryWindowsLogin(customerId, out lastError);
+                if (lastError != null)
+                {
+                    SessionFacade.UserHasAccess = false;
+                    ErrorGenerator.MakeError(lastError);
+                    filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                    return;
+                }
+
+                SessionFacade.CurrentSystemUser = userIdentity.UserId;
+                SessionFacade.CurrentUserIdentity = userIdentity;
+                SessionFacade.UserHasAccess = true;
+            }
+            else if (loginMode == LoginMode.Microsoft)
+            {
+
+                SessionFacade.CurrentCoWorkers = null;
+                var userIdentity = TryMicrosoftLogin(customerId, out lastError);
+                if (lastError != null)
+                {
+                    SessionFacade.UserHasAccess = false;
+                    ErrorGenerator.MakeError(lastError);
+                    filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                    return;
+                }
+
+                SessionFacade.CurrentSystemUser = userIdentity.UserId;
+                SessionFacade.CurrentUserIdentity = userIdentity;
+                SessionFacade.UserHasAccess = true;
+            }
+            else
+            {
+                SessionFacade.CurrentCoWorkers = null;
+                var userIdentity = TryAnonymousLogin(customerId, out lastError);
+                if (lastError != null)
+                {
+                    SessionFacade.UserHasAccess = false;
+                    ErrorGenerator.MakeError(lastError);
+                    filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                    return;
+                }
+
+                SessionFacade.CurrentSystemUser = userIdentity.UserId;
+                SessionFacade.CurrentUserIdentity = userIdentity;
+                SessionFacade.UserHasAccess = true;
             }
 
-            ViewBag.IsLineManagerApplication = IsLineManagerApplication();
-            ViewBag.ApplicationType = _configurationService.AppSettings.ApplicationType;
+            _userOrCustomerChanged = true;
+        } //User Session was null
 
-            SetTextTranslation(filterContext);
+
+        if (_userOrCustomerChanged)
+        {
+            SessionFacade.CurrentCoWorkers = null;
+
+            // load user info according database info (tblComputerUser)
+            LoadUserInfo();
+
+            //load user info from tblUsers if such user exist
+            LoadLocalUserInfo();
         }
 
-        private bool SetCustomer(ActionExecutingContext filterContext, out ErrorModel lastMessage)
+        //LogWithContext("OnActionExecuting: user and customer has been loaded.");
+
+        if (SessionFacade.CurrentCustomer.RestrictUserToGroupOnExternalPage)
+        {
+            SetUserRestriction(customerId, out lastError);
+            if (lastError != null)
+            {
+                SessionFacade.UserHasAccess = false;
+                ErrorGenerator.MakeError(lastError);
+                filterContext.Result = new RedirectResult(Url.Action("Index", "Error"));
+                return;
+            }
+        }
+
+        ViewBag.IsLineManagerApplication = IsLineManagerApplication();
+        ViewBag.ApplicationType = _configurationService.AppSettings.ApplicationType;
+
+        SetTextTranslation(filterContext);
+    }
+
+    private bool SetCustomer(ActionExecutingContext filterContext, out ErrorModel lastMessage)
         {
             var customerId = -1;
             lastMessage = null;
@@ -481,6 +509,43 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             UserIdentity userIdentity = null;
             //var user = System.Security.Principal.WindowsIdentity.GetCurrent(); // do not use WindowsIdentity!
             var user = HttpContext.User.Identity; 
+            var employeeNum = string.Empty;
+
+            string fullName = user.Name;
+            string userId = fullName.GetUserFromAdPath();
+
+            var defaultUserId = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultUserId);
+            if (!string.IsNullOrEmpty(defaultUserId))
+                userId = defaultUserId;
+
+            var defaultEmployeeNumber = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultEmployeeNumber);
+            if (!string.IsNullOrEmpty(defaultEmployeeNumber))
+                employeeNum = defaultEmployeeNumber;
+
+            string userDomain = fullName.GetDomainFromAdPath();
+            var initiator = _masterDataService.GetInitiatorByUserId(userId, customerId);
+            userIdentity = new UserIdentity()
+            {
+                UserId = userId,
+                Domain = userDomain,
+                FirstName = initiator?.FirstName,
+                LastName = initiator?.LastName,
+                EmployeeNumber = employeeNum,
+                Phone = initiator?.Phone,
+                Email = initiator?.Email
+            };
+
+            return userIdentity;
+        }
+
+        private UserIdentity TryMicrosoftLogin(int customerId, out ErrorModel lastError)
+        {
+            lastError = null;
+            UserIdentity userIdentity = null;           
+
+            var userClaims = User.Identity as System.Security.Claims.ClaimsIdentity;
+           
+            var user = HttpContext.User.Identity;
             var employeeNum = string.Empty;
 
             string fullName = user.Name;
