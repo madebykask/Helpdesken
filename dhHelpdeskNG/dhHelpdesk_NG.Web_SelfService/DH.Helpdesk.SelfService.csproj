@@ -989,7 +989,6 @@
     </Content>
     <Content Include="Views\Case\ModalDialogs\_UploadFilePopup.cshtml" />
     <Content Include="Views\Case\_FilesAttachButtons.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DH.Helpdesk.Web.Common\DH.Helpdesk.Web.Common.csproj">
