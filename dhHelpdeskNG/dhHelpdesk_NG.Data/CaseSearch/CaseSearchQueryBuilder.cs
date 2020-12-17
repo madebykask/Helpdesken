@@ -759,8 +759,11 @@ namespace DH.Helpdesk.Dal.Repositories
             {
                 var con = string.Empty;
 
-                if (!string.IsNullOrEmpty(criteria.UserId))
+                if (!string.IsNullOrEmpty(criteria.UserId))        
                     con = $"tblCase.[ReportedBy] = '{criteria.UserId.SafeForSqlInject()}'";
+
+                if (!string.IsNullOrEmpty(criteria.PersonEmail))
+                    con = con.AddWithSeparator($"tblCase.[Persons_EMail] = '{criteria.PersonEmail.SafeForSqlInject()}'", false, " or ");
 
                 if (!string.IsNullOrEmpty(criteria.UserEmployeeNumber))
                     con = con.AddWithSeparator($"tblCase.[ReportedBy] = '{criteria.UserEmployeeNumber.SafeForSqlInject()}'", false, " or ");

@@ -1644,6 +1644,13 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();
 
+            // Only when it is microsoft authentication
+            if(ConfigurationService.AppSettings.LoginMode == LoginMode.Microsoft)
+            {
+                criteria.PersonEmail = criteria.UserId;
+            }
+             
+
             /*User creator*/
             if (criteria.MyCasesRegistrator && !string.IsNullOrEmpty(criteria.UserId) && !string.IsNullOrEmpty(currentCase.RegUserId))
             {
@@ -1667,6 +1674,15 @@ namespace DH.Helpdesk.SelfService.Controllers
 
                 if (!string.IsNullOrEmpty(criteria.UserEmployeeNumber) &&
                     currentCase.ReportedBy.Equals(criteria.UserEmployeeNumber, StringComparison.CurrentCultureIgnoreCase))
+                    return true;
+            }
+
+            // Only when it is microsoft authentication
+            if (criteria.MyCasesInitiator && !string.IsNullOrEmpty(currentCase.PersonsEmail) &&
+                !string.IsNullOrEmpty(criteria.PersonEmail))
+            {                
+                if (!string.IsNullOrEmpty(criteria.PersonEmail) &&
+                    currentCase.PersonsEmail.Equals(criteria.PersonEmail, StringComparison.CurrentCultureIgnoreCase))
                     return true;
             }
 
@@ -1709,6 +1725,12 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();
 
+            // Only when it is microsoft authentication
+            if (ConfigurationService.AppSettings.LoginMode == LoginMode.Microsoft)
+            {
+                criteria.PersonEmail = criteria.UserId;
+            }
+
             /*User creator*/
             if (criteria.MyCasesRegistrator && !string.IsNullOrEmpty(criteria.UserId) && !string.IsNullOrEmpty(currentCase.RegUserId))
             {
@@ -1726,6 +1748,15 @@ namespace DH.Helpdesk.SelfService.Controllers
 
                 if (!string.IsNullOrEmpty(criteria.UserEmployeeNumber) &&
                     currentCase.ReportedBy.Equals(criteria.UserEmployeeNumber, StringComparison.CurrentCultureIgnoreCase))
+                    return true;
+            }
+
+            // Only when it is microsoft authentication
+            if (criteria.MyCasesInitiator && !string.IsNullOrEmpty(currentCase.PersonsEmail) &&
+                !string.IsNullOrEmpty(criteria.PersonEmail))
+            {
+                if (!string.IsNullOrEmpty(criteria.PersonEmail) &&
+                    currentCase.PersonsEmail.Equals(criteria.PersonEmail, StringComparison.CurrentCultureIgnoreCase))
                     return true;
             }
 

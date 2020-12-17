@@ -543,7 +543,9 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             var employeeNum = string.Empty;
 
             string fullName = userClaims?.FindFirst("name")?.Value; //user.Name; TODO: Check why name is empty for user, but not for claims
-            string userId = fullName.GetUserFromAdPath();
+            string mailAddress = userClaims?.FindFirst("preferred_username")?.Value;
+            var initiator = _masterDataService.GetInitiatorByMail(mailAddress, customerId);
+            string userId = mailAddress;
 
             var defaultUserId = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultUserId);
             if (!string.IsNullOrEmpty(defaultUserId))
@@ -553,12 +555,12 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             if (!string.IsNullOrEmpty(defaultEmployeeNumber))
                 employeeNum = defaultEmployeeNumber;
 
-            string userDomain = fullName.GetDomainFromAdPath();
-            var initiator = _masterDataService.GetInitiatorByUserId(userId, customerId);
+            //string userDomain = fullName.GetDomainFromAdPath();
+            //var initiator = _masterDataService.GetInitiatorByUserId(userId, customerId);
             userIdentity = new UserIdentity()
             {
                 UserId = userId,
-                Domain = userDomain,
+                Domain = "",
                 FirstName = initiator?.FirstName,
                 LastName = initiator?.LastName,
                 EmployeeNumber = employeeNum,

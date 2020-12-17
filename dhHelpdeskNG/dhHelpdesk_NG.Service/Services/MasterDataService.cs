@@ -45,6 +45,7 @@ namespace DH.Helpdesk.Services.Services
         string GetFilePath(int customerId);
         string GetVirtualDirectoryPath(int customerId);
         Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true);
+        Notifier GetInitiatorByMail(string mailAddress, int customerId, bool activeOnly = true);
         EmployeeModel GetEmployee(int customerId, string employeeNumber, bool useApi = false, WebApiCredentialModel credentialModel = null);
         void UpdateUserLogin(LogProgram logProgram);
         IList<UserPermission> GetUserPermissions(int userId);
@@ -174,6 +175,11 @@ namespace DH.Helpdesk.Services.Services
         public Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true)
         {
             return _computerUserRepository.GetInitiatorByUserId(userId, customerId, activeOnly);
+        }
+
+        public Notifier GetInitiatorByMail(string mailAddress, int customerId, bool activeOnly = true)
+        {
+            return _computerUserRepository.GetInitiatorByMail(mailAddress, customerId, activeOnly);
         }
 
         // TODO: review how it is used. Now it is put for every user in a session - potential memory leak on high load. Use cache instead

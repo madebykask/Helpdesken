@@ -16,6 +16,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public bool MyCasesUserGroup { get; set; }
 
         public string UserId { get; set; }
+        public string PersonEmail { get; set; }
         public string UserEmployeeNumber { get; set; }
         public int? MyCasesInitiatorDepartmentId { get; set; }
 

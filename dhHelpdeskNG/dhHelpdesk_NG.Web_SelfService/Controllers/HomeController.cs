@@ -31,14 +31,6 @@ namespace DH.Helpdesk.SelfService.Controllers
         //diagnostic action
         public JsonResult _Ctx()
         {
-
-            //if (!Request.IsAuthenticated)
-            //{
-            //    HttpContext.GetOwinContext().Authentication.Challenge(
-            //        new AuthenticationProperties { RedirectUri = "/" },
-            //        OpenIdConnectAuthenticationDefaults.AuthenticationType);
-            //}
-
             var winIdentity = WindowsIdentity.GetCurrent();
 
             return Json(new
