@@ -61,7 +61,7 @@
         public ActionResult New(Region region)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._regionService.SaveRegion(region, out errors);
+            this._regionService.SaveRegion(region, region.Customer_Id, out errors);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "region", new { customerid = region.Customer_Id });
@@ -94,7 +94,7 @@
             regionToUpdate.IsDefault = region.IsDefault;
             regionToUpdate.Code = region.Code;
             regionToUpdate.LanguageId = region.LanguageId;
-            this._regionService.SaveRegion(regionToUpdate, out errors);
+            this._regionService.SaveRegion(regionToUpdate, region.Customer_Id, out errors);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "region", new { customerId = region.Customer_Id });
