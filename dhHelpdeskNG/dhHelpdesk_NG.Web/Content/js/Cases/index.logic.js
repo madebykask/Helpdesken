@@ -78,7 +78,7 @@ function getCollapseCaption(cap) {
         if (self.settings.refreshContent > 0) {
             setInterval(function () {
                 self.autoReloadCheck.call(self);
-            }, 500);
+            }, 5000);
         }
 
         //// Bind elements
