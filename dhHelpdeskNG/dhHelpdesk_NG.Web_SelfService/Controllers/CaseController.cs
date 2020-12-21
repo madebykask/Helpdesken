@@ -2135,6 +2135,8 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             if (currentUserIdentity != null)
             {
+
+                var isMicrosoftMode = ConfigurationService.AppSettings.LoginMode == LoginMode.Microsoft;
                 model.NewCase =
                     _caseService.InitCase(currentCustomer.Id,
                         0,
@@ -2153,7 +2155,12 @@ namespace DH.Helpdesk.SelfService.Controllers
 
                 // populate notifier fields
                 var notifier = _computerService.GetInitiatorByUserId(currentUserIdentity.UserId, customerId);
-                if (notifier != null)
+                if (isMicrosoftMode)
+                {
+                    notifier = _masterDataService.GetInitiatorByMail(currentUserIdentity.UserId, customerId);
+                }
+
+                    if (notifier != null)
                 {
                     model.NewCase.ReportedBy = notifier.UserId;
                     model.NewCase.PersonsName = $"{notifier.FirstName} {notifier.LastName}".Trim();
