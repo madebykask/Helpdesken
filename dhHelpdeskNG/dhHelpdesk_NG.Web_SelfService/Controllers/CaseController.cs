@@ -2158,9 +2158,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                 if (isMicrosoftMode && notifier == null)
                 {
                     notifier = _masterDataService.GetInitiatorByMail(currentUserIdentity.UserId, customerId);
+                    model.NewCase.PersonsEmail = currentUserIdentity.UserId;
                 }
 
-                    if (notifier != null)
+                if (notifier != null)
                 {
                     model.NewCase.ReportedBy = notifier.UserId;
                     model.NewCase.PersonsName = $"{notifier.FirstName} {notifier.LastName}".Trim();
