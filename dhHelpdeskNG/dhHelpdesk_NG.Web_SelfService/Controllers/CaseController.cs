@@ -2155,7 +2155,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
                 // populate notifier fields
                 var notifier = _computerService.GetInitiatorByUserId(currentUserIdentity.UserId, customerId);
-                if (isMicrosoftMode)
+                if (isMicrosoftMode && notifier == null)
                 {
                     notifier = _masterDataService.GetInitiatorByMail(currentUserIdentity.UserId, customerId);
                 }
