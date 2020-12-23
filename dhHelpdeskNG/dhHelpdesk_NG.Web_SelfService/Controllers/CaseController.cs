@@ -50,6 +50,8 @@ namespace DH.Helpdesk.SelfService.Controllers
 	using Common.Extensions.Integer;
 	using Models.Message;
 	using Services.Infrastructure;
+    using Newtonsoft.Json.Linq;
+    using System.Configuration;
 
     public class CaseController : BaseController
     {
@@ -789,16 +791,27 @@ namespace DH.Helpdesk.SelfService.Controllers
                 ApplyTemplate(caseTemplate, newCase, true);
             }
 
-            Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog, out caseNum);
+            var isCaptchaValid = IsCaptchaValid();          
 
-            if (ConfigurationService.AppSettings.ShowConfirmAfterCaseRegistration)
+            if (ModelState.IsValid && isCaptchaValid)
             {
-                return RedirectToCaseConfirmation("Your case has been successfully registered.", $"You can follow up your case status via this number: {caseNum}");
+                Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog, out caseNum);
+
+                if (ConfigurationService.AppSettings.ShowConfirmAfterCaseRegistration)
+                {
+                    return RedirectToCaseConfirmation("Your case has been successfully registered.", $"You can follow up your case status via this number: {caseNum}");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
+                }
             }
             else
             {
-                return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
+                ErrorGenerator.MakeError("Google Recaptcha is not valid", 210);
+                return RedirectToAction("Index", "Error");
             }
+                
         }
 
         [HttpPost]
@@ -1805,6 +1818,18 @@ namespace DH.Helpdesk.SelfService.Controllers
             return result;
         }
 
+        private bool IsCaptchaValid()
+        {
+            //Validate Google recaptcha here
+            var response = Request["g-recaptcha-response"];
+            string secretKey = ConfigurationManager.AppSettings[AppSettingsKey.ReCaptchaSecretKey];
+            var client = new WebClient();
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+           
+            return status;
+        }
         private int Save(
                 Case newCase, 
                 CaseMailSetting caseMailSetting, 
@@ -2158,6 +2183,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 if (isMicrosoftMode && notifier == null)
                 {
                     notifier = _masterDataService.GetInitiatorByMail(currentUserIdentity.UserId, customerId);
+                    model.NewCase.RegUserId = null;
                     model.NewCase.PersonsEmail = currentUserIdentity.UserId;
                 }
 
