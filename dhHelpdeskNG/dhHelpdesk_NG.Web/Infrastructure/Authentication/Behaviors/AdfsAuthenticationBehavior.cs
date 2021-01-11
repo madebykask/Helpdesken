@@ -102,9 +102,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
             }
 
             var output = claimDataBld.ToString();
+            output = Truncate(output, 4000);
             return output;
         }
-
+        private string Truncate(string value, int maxLength)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            return value.Length <= maxLength ? value : value.Substring(0, maxLength);
+        }
         #endregion
     }
 }
