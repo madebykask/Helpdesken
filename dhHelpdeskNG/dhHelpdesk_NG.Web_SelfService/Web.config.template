@@ -120,6 +120,7 @@
 
     <authorization>
       <allow users="*" />
+      <deny users="?"/>
     </authorization>
     <!--<authentication mode="None" />-->
     <httpRuntime targetFramework="4.7.2" requestValidationMode="4.7.2" />
@@ -208,7 +209,7 @@
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-9.0.0.0" newVersion="9.0.0.0" />
+        <bindingRedirect oldVersion="0.0.0.0-10.0.0.0" newVersion="10.0.0.0" />
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="System.Data" publicKeyToken="b77a5c561934e089" culture="neutral" />
