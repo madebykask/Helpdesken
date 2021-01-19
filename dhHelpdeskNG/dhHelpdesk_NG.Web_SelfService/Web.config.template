@@ -120,7 +120,6 @@
 
     <authorization>
       <allow users="*" />
-      <deny users="?"/>
     </authorization>
     <!--<authentication mode="None" />-->
     <httpRuntime targetFramework="4.7.2" requestValidationMode="4.7.2" />
