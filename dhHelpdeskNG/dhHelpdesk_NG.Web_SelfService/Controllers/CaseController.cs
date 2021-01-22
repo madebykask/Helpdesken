@@ -790,10 +790,32 @@ namespace DH.Helpdesk.SelfService.Controllers
                 var caseTemplate = _caseSolutionService.GetCaseSolution(templateId);
                 ApplyTemplate(caseTemplate, newCase, true);
             }
+                    
+            var isCaptchaActive = IsCaptchaActive();
+            var isCaptchaValid = IsCaptchaValid();
 
-            var isCaptchaValid = IsCaptchaValid();          
+            if (isCaptchaActive)
+            {
+                if (ModelState.IsValid && isCaptchaValid)
+                {
+                    Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog, out caseNum);
 
-            if (ModelState.IsValid && isCaptchaValid)
+                    if (ConfigurationService.AppSettings.ShowConfirmAfterCaseRegistration)
+                    {
+                        return RedirectToCaseConfirmation("Your case has been successfully registered.", $"You can follow up your case status via this number: {caseNum}");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
+                    }
+                }
+                else
+                {
+                    ErrorGenerator.MakeError("Google Recaptcha is not valid", 210);
+                    return RedirectToAction("Index", "Error");
+                }
+            }
+            else
             {
                 Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog, out caseNum);
 
@@ -805,13 +827,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 {
                     return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
                 }
-            }
-            else
-            {
-                ErrorGenerator.MakeError("Google Recaptcha is not valid", 210);
-                return RedirectToAction("Index", "Error");
-            }
-                
+            }            
         }
 
         [HttpPost]
@@ -1818,6 +1834,19 @@ namespace DH.Helpdesk.SelfService.Controllers
             return result;
         }
 
+        private bool IsCaptchaActive()
+        {
+            var recaptchaSiteKey = ConfigurationManager.AppSettings[AppSettingsKey.ReCaptchaSiteKey] != null ?
+                           ConfigurationManager.AppSettings[AppSettingsKey.ReCaptchaSiteKey].ToString() : "";
+            if (recaptchaSiteKey == "#{reCaptchaSiteKey}")
+            {
+                recaptchaSiteKey = "";
+            }
+            if (recaptchaSiteKey != "")
+                return true;
+
+            return false;
+        }
         private bool IsCaptchaValid()
         {
             //Validate Google recaptcha here
@@ -1830,6 +1859,7 @@ namespace DH.Helpdesk.SelfService.Controllers
            
             return status;
         }
+       
         private int Save(
                 Case newCase, 
                 CaseMailSetting caseMailSetting, 
