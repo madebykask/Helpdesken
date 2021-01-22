@@ -544,8 +544,12 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
             string fullName = userClaims?.FindFirst("name")?.Value; //user.Name; TODO: Check why name is empty for user, but not for claims
             string mailAddress = userClaims?.FindFirst("preferred_username")?.Value;
+           
             var initiator = _masterDataService.GetInitiatorByMail(mailAddress, customerId);
+
             var userId = initiator?.UserId ?? mailAddress;
+            if (string.IsNullOrEmpty(initiator?.UserId))
+                userId = mailAddress;
 
             var defaultUserId = ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId];
             if (!string.IsNullOrEmpty(defaultUserId))
