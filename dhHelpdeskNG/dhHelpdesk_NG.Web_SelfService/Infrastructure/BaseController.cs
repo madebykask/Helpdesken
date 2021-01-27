@@ -548,7 +548,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             var initiator = _masterDataService.GetInitiatorByMail(mailAddress, customerId);
 
             var userId = initiator?.UserId ?? mailAddress;
-            if (string.IsNullOrEmpty(initiator?.UserId))
+            if (string.IsNullOrWhiteSpace(initiator?.UserId))
                 userId = mailAddress;
 
             var defaultUserId = ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId];
