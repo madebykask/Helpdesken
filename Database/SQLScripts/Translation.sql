@@ -7843,6 +7843,16 @@ begin
 end
 GO
 
+If not exists (select * from tbltext where TextString = 'och')
+begin
+    If not exists (select * from tbltext where id = 2071)
+	insert into tbltext (id, TextString, TextType) VALUES (2071, 'och', 0)
+
+	If not exists (select * from tblTextTranslation where text_id = 2071 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2071, 2, N'and')
+end
+GO
+
 if exists (Select * from tblTextTranslation where Text_Id = 426 and Language_Id = 2 and TextTranslation = 'that are used can not be removed')
 BEGIN
 	UPDATE tblTextTranslation SET TextTranslation = N'that are used cannot be removed' where Text_Id = 426 and Language_Id = 2
