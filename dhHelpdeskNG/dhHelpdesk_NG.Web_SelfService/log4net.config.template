@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <log4net>
   <appender name="RollingLogFileAppender" type="log4net.Appender.RollingFileAppender">
-    <file value="../Logs/Logs.log" />
+    <file value="Logs/Logs.log" />
     <appendToFile value="true" />
     <rollingStyle value="Date" />
     <datePattern value="-yyyy-MM-dd.lo\g" />
@@ -13,7 +13,7 @@
   </appender>
   <appender name="SessionRollingFileAppender" type="log4net.Appender.RollingFileAppender">
     <lockingmodel type="log4net.Appender.FileAppender+MinimalLock" />
-    <param name="File" value="../Logs/session.log" />
+    <param name="File" value="Logs/session.log" />
     <param name="AppendToFile" value="true" />
     <param name="MaximumFileSize" value="1000KB" />
     <param name="MaxSizeRollBackups" value="5" />
