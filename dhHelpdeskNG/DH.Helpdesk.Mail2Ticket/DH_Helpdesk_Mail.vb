@@ -1183,7 +1183,6 @@ Module DH_Helpdesk_Mail
 
     Private Async Function ReadEwsFolder(server As String, port As Integer, userName As String, emailFolder As String, applicationId As String, clientSecret As String, tenantId As String) As Task(Of List(Of MailMessage))
 
-        userName = "acc.helpdesk@o365.hostnet.se"
         Dim ewsScopes As String() = New String() {"https://outlook.office.com/.default"}
         Dim app As IConfidentialClientApplication = ConfidentialClientApplicationBuilder.Create(applicationId).WithAuthority(AzureCloudInstance.AzurePublic, tenantId).WithClientSecret(clientSecret).Build()
 
