@@ -1183,6 +1183,7 @@ Module DH_Helpdesk_Mail
 
     Private Async Function ReadEwsFolder(server As String, port As Integer, userName As String, emailFolder As String, applicationId As String, clientSecret As String, tenantId As String) As Task(Of List(Of MailMessage))
 
+        userName = "acc.helpdesk@o365.hostnet.se"
         Dim ewsScopes As String() = New String() {"https://outlook.office.com/.default"}
         Dim app As IConfidentialClientApplication = ConfidentialClientApplicationBuilder.Create(applicationId).WithAuthority(AzureCloudInstance.AzurePublic, tenantId).WithClientSecret(clientSecret).Build()
 
@@ -1199,8 +1200,16 @@ Module DH_Helpdesk_Mail
 
         Dim inbox As Microsoft.Exchange.WebServices.Data.Folder = Nothing
 
-        'Subfolders in inbox
-        Dim customEmailFolder As Microsoft.Exchange.WebServices.Data.FindFoldersResults = service.FindFolders(Microsoft.Exchange.WebServices.Data.WellKnownFolderName.Inbox, New Microsoft.Exchange.WebServices.Data.FolderView(100))
+        Dim customEmailFolder As Microsoft.Exchange.WebServices.Data.FindFoldersResults = Nothing
+
+        Try
+            'Subfolders in inbox
+            customEmailFolder = service.FindFolders(Microsoft.Exchange.WebServices.Data.WellKnownFolderName.Inbox, New Microsoft.Exchange.WebServices.Data.FolderView(100))
+        Catch ex As Exception
+            LogError("Error readMailBox: " & ex.Message.ToString)
+            'rethrow
+            Throw
+        End Try
 
         For Each folder As Microsoft.Exchange.WebServices.Data.Folder In folders
             If folder.DisplayName = emailFolder Then ' TODO: Read box specified in settings
