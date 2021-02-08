@@ -5,7 +5,7 @@
     <div class="alert alert-error">
         @Translation.Get("Anslagstavla")
         @Translation.Get("som används går inte att ta bort")
-    </div>    
+    </div>
 }
 
 <script language="javascript">
@@ -16,7 +16,7 @@
             var f = function (e) {
                 var content = editor.getContent();
                 if (content.length > editor.settings.maxLength) {
-                    $('.btn.save').attr('disabled', true)
+                    $('.btn.save').attr('disabled', true);
                 }
                 else {
                     $('.btn.save').attr('disabled', false);
@@ -46,7 +46,7 @@
                                         @Translation.Get("Visa fr.o.m") *
                                     </td>
                                     <td class="span9">
-                                        @Html.EditorFor(model => model.BulletinBoard.ShowDate, "DatePicker", new { id = "divBulletinBoard_ShowDate" }) 
+                                        @Html.EditorFor(model => model.BulletinBoard.ShowDate, "DatePicker", new { id = "divBulletinBoard_ShowDate" })
                                     </td>
                                 </tr>
                                 <tr>
@@ -54,7 +54,7 @@
                                         @Translation.Get("Visa t.o.m") *
                                     </td>
                                     <td>
-                                        @Html.EditorFor(model => model.BulletinBoard.ShowUntilDate, "DatePicker", new { id = "divBulletinBoard_ShowUntilDate" }) 
+                                        @Html.EditorFor(model => model.BulletinBoard.ShowUntilDate, "DatePicker", new { id = "divBulletinBoard_ShowUntilDate" })
                                     </td>
                                 </tr>
                                 <tr>
@@ -62,26 +62,26 @@
                                         @Translation.Get("Anslagstavla") *
                                     </td>
                                     <td>
-                                        @Html.TextAreaFor(model => model.BulletinBoard.Text, new { style = "width:600px; height:250px;", @class="richtexteditor"})
+                                        @Html.TextAreaFor(model => model.BulletinBoard.Text, new { style = "width:600px; height:250px;", @class = "richtexteditor" })
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         @Translation.Get("Visa")
-                                    </td>                                    
-                                    <td class="checkbox" style="padding-left: 20px">                                        
-                                        <input type="checkbox" name="BulletinBoard.ShowOnStartPage" @(Model.BulletinBoard.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" />                                        
-                                        <input type="hidden" name="BulletinBoard.ShowOnStartPage" value="0" />                                                                      
+                                    </td>
+                                    <td class="checkbox" style="padding-left: 20px">
+                                        <input type="checkbox" name="BulletinBoard.ShowOnStartPage" @(Model.BulletinBoard.ShowOnStartPage == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="BulletinBoard.ShowOnStartPage" value="0" />
                                         &nbsp;@Translation.Get("Visa på startsidan")
-                                    </td> 
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td></td>
-                                    <td class="checkbox" style="padding-left: 20px">                                        
-                                        <input type="checkbox" name="BulletinBoard.PublicInformation" @(Model.BulletinBoard.PublicInformation == 1 ? "checked=checked" : "") value ="1" />                                        
-                                        <input type="hidden" name="BulletinBoard.PublicInformation" value="0" />                                                                      
+                                    <td class="checkbox" style="padding-left: 20px">
+                                        <input type="checkbox" name="BulletinBoard.PublicInformation" @(Model.BulletinBoard.PublicInformation == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="BulletinBoard.PublicInformation" value="0" />
                                         &nbsp;@Translation.Get("Visa på självservice")
-                                    </td>                                    
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -108,17 +108,17 @@
                                         <input type="hidden" id="userGroupId" value="@Model.CurrentUser.UserGroup_Id" />
                                     </td>
                                     <td>
-                                        @Html.ListBox("WGsAvailable", Model.WGsAvailable, new { style = "width: 340px; height: 150px" })                               
+                                        @Html.ListBox("WGsAvailable", Model.WGsAvailable, new { style = "width: 340px; height: 150px" })
                                     </td>
                                     <td>
-                                        <input type="button" value="&gt;" id="addWGs" class="btn"/><br />
-                                        <input type="button" value="&lt;" id="removeWGs" class="btn"/>                                        
+                                        <input type="button" value="&gt;" id="addWGs" class="btn" /><br />
+                                        <input type="button" value="&lt;" id="removeWGs" class="btn" />
                                     </td>
                                     <td>
                                         @Html.ListBox("WGsSelected", Model.WGsSelected, new { style = "width: 340px; height: 150px" })
                                     </td>
                                 </tr>
-                                
+
                             </table>
                             @Html.HiddenFor(model => model.BulletinBoard.Customer_Id)
                             @Html.HiddenFor(model => model.BulletinBoard.Id)
@@ -132,21 +132,21 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-    
+
         $('.btn.save').on('click', function () {
             if (!$(this).attr('disabled')) {
                 $("#WGsSelected option").attr("selected", "selected");
 
                 $("#target").submit();
             }
-      
+
             return false;
         });
 
         $("#chkSecurity").click(function () {
             $("#securityOptions").toggle();
         });
-   
+
         $("#addWGs").click(function () {
             $("#WGsAvailable option:selected").remove().appendTo("#WGsSelected");
             $("#WGsAvailable").get(0).selectedIndex = -1;
@@ -165,12 +165,14 @@
                 $("#WGsSelected").removeAttr('required');
                 $("#WGsSelected").rules("remove");
             };
-        
+
             return false;
         });
 
         $("#divBulletinBoard_ShowDate, #divBulletinBoard_ShowUntilDate").on("change", function() {
-            $("#target").valid();
+            var validator = $("#target").data('validator');
+            var controlId = "#" + this.id + " input:first";
+            validator.element(controlId);
         });
 
         $("#LimitWGs").change(function () {
@@ -204,7 +206,7 @@
             {
                 $("#WGsAvailable").attr("disabled", true);
                 $("#WGsSelected").attr("disabled", true);
-            }   
+            }
         }
         $("#target").data('validator', null);
         var validator = $("#target")
@@ -241,20 +243,20 @@
                     "WGsSelected": {
                         required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Driftgrupp") ))'
                     }
-    },
+                },
                 errorPlacement: function (error, element) {
-        if (element.is("textarea")) {
-            element.parent().prepend(error);
-        } else if (element.parent().hasClass('date')) {
-            element.parent().append(error);
-        } else {
-            error.insertAfter(element);
-        }
-    },
+                    if (element.is("textarea")) {
+                        element.parent().prepend(error);
+                    } else if (element.parent().hasClass('date')) {
+                        element.parent().append(error);
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
                 submitHandler: function (form) {
-        form.submit();
-    }
-});
+                    form.submit();
+                }
+            });
             validator.focusInvalid = function() {
                 // put focus on tinymce on submit validation
                 if (this.settings.focusInvalid) {
