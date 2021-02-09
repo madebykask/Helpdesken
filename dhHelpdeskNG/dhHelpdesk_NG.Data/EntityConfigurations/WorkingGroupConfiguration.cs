@@ -41,7 +41,7 @@
             this.Property(x => x.IsDefaultCalendar).IsRequired();
             this.Property(x => x.IsDefaultOperationLog).IsRequired();
             this.Property(x => x.WorkingGroupName).IsRequired().HasMaxLength(50).HasColumnName("WorkingGroup");
-            this.Property(x => x.POP3Password).IsOptional().HasMaxLength(20);
+            this.Property(x => x.POP3Password).IsOptional().HasMaxLength(40);
             this.Property(x => x.POP3UserName).IsOptional().HasMaxLength(50);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
