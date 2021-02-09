@@ -1405,7 +1405,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.case_.CaseType_Id = 0;
                     m.case_.CaseSolution_Id = 0;
                     currentCase.CaseSolution_Id = 0;
-                    m.ActiveTab = (m.ActiveTab == "") ? GetActiveTab(m.case_.CaseSolution_Id, id) : activeTab; //Fallback to casesolution
+                    m.ActiveTab = "";
                     m.ContainsExtendedCase = false;
                     m.case_.ProductArea_Id = null;
                     m.case_.Category_Id = null;
