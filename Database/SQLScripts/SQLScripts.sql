@@ -15,7 +15,7 @@ if exists (select * from syscolumns inner join sysobjects on sysobjects.id = sys
 		 where syscolumns.name = N'POP3Password' and sysobjects.name = N'tblWorkingGroup')
 BEGIN
     ALTER TABLE tblWorkingGroup	
-    alter column POP3Password nvarchar (40) not null
+    alter column POP3Password nvarchar (40) null
 END
 
   -- Last Line to update database version
