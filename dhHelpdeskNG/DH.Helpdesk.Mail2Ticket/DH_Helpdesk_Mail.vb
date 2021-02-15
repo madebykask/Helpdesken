@@ -1182,7 +1182,6 @@ Module DH_Helpdesk_Mail
 
 
     Private Async Function ReadEwsFolderAsync(server As String, port As Integer, userName As String, emailFolder As String, applicationId As String, clientSecret As String, tenantId As String) As Task(Of List(Of MailMessage))
-
         Dim ewsScopes As String() = New String() {"https://outlook.office.com/.default"}
         Dim app As IConfidentialClientApplication = ConfidentialClientApplicationBuilder.Create(applicationId).WithAuthority(AzureCloudInstance.AzurePublic, tenantId).WithClientSecret(clientSecret).Build()
 
@@ -1196,7 +1195,7 @@ Module DH_Helpdesk_Mail
         service.ImpersonatedUserId = New ImpersonatedUserId(ConnectingIdType.SmtpAddress, userName)
 
         Dim inbox As Folder
-        If emailFolder = DefaultMailFolderName Then
+        If emailFolder.Equals(DefaultMailFolderName, StringComparison.InvariantCultureIgnoreCase) Then
             'Dim folderId As FolderId = New FolderId(WellKnownFolderName.MsgFolderRoot, userName)
             inbox = Folder.Bind(service, WellKnownFolderName.Inbox)
         Else
@@ -1235,6 +1234,11 @@ Module DH_Helpdesk_Mail
                                                   Select New MailAddress(r.Address, r.Name))
                     message.To.Add(recpt)
                 Next
+
+                If String.IsNullOrWhiteSpace(mail.Subject) Then
+                    Throw New MissingFieldException("Missing mail subject for email: " & message.From.Item(0).Address)
+                End If
+
                 message.Subject = mail.Subject
                 If mail.Body.BodyType = BodyType.HTML Then
                     message.BodyHtml = mail.Body.Text
