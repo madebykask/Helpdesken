@@ -131,7 +131,16 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
+
+        $.validator.addMethod('dateGreaterThan', function (value, element, param) {
+            var fromDate = $("#divBulletinBoard_ShowDate").datepicker('getDate');
+            var endDate = $("#divBulletinBoard_ShowUntilDate").datepicker('getDate');
+            if (Date.parse(endDate) >= Date.parse(fromDate)) {
+                return isValid;
+            }
+
+        }, '@Translation.GetForJS("Var vänlig ange ett giltigt datum")');
 
         $('.btn.save').on('click', function () {
             if (!$(this).attr('disabled')) {
@@ -169,7 +178,8 @@
             return false;
         });
 
-        $("#divBulletinBoard_ShowDate, #divBulletinBoard_ShowUntilDate").on("change", function() {
+        $("#divBulletinBoard_ShowDate").on("change", function () {
+
             var validator = $("#target").data('validator');
             var controlId = "#" + this.id + " input:first";
             validator.element(controlId);
@@ -224,7 +234,8 @@
                     },
                     "BulletinBoard.ShowUntilDate": {
                         'required': true,
-                        'date': true
+                        'date': true,
+                        'dateGreaterThan': true
                     },
                     "WGsSelected": { 'required': $("#LimitWGs").attr('checked') === "checked" }
                 },
@@ -235,7 +246,8 @@
                     },
                     'BulletinBoard.ShowUntilDate': {
                         required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Visa t.o.m") ))',
-                        date: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")'
+                        date: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")',
+                        dateGreaterThan: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")'
                     },
                     "BulletinBoard.Text": {
                         required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Anslagstavla") ))'
