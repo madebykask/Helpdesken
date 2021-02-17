@@ -141,7 +141,7 @@
         $("#WGsSelected option:selected").remove().appendTo("#WGsAvailable");
         $("#WGsAvailable").get(0).selectedIndex = -1;
         $("#WGsAvailable").get(0).selectedIndex = -1;
-        if ($("#WGsSelected option").length == 0) {  
+        if ($("#WGsSelected option").length == 0) {
             $("#LimitWGs").attr("checked", false);
             $("#WGsAvailable").attr("disabled", true);
             $("#WGsSelected").attr("disabled", true);
@@ -182,6 +182,14 @@
             $("#WGsSelected").attr("disabled", true);
         }
     }
+    $.validator.addMethod('dateGreaterThan', function (value, element, param) {
+        var fromDate = $("#divCalendar_ShowFromDate").datepicker('getDate');
+        var endDate = $("#divCalendar_ShowUntilDate").datepicker('getDate');
+        if (Date.parse(endDate) >= Date.parse(fromDate)) {
+            return isValid;
+        }
+
+    }, '@Translation.GetForJS("Var vänlig ange ett giltigt datum")');
 
     var validator = $("#target")
         .submit(function () {
@@ -192,12 +200,38 @@
             ignore: "",
             rules: {
                 "Calendar.Text": 'required',
+                "Calendar.CalendarDate": {
+                    'required': true,
+                    'date': true
+                },
+                "Calendar.ShowFromDate": {
+                    'required': true,
+                    'date': true
+                },
+                "Calendar.ShowUntilDate": {
+                    'required': true,
+                    'date': true,
+                    'dateGreaterThan': true
+                },
                 "WGsSelected": { 'required': $("#LimitWGs").attr('checked') == "checked" }
             },
             messages: {
                 "Calendar.Text": {
                     required: "@Translation.GetForJS("Du måste ange en text", Enums.TranslationSource.TextTranslation)"
-            },
+                },
+                'Calendar.CalendarDate': {
+                    required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Skapad datum") ))',
+                    date: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")'
+                },
+                'Calendar.ShowFromDate': {
+                    required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Visa fr.o.m") ))',
+                    date: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")',
+                },
+                'Calendar.ShowUntilDate': {
+                    required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Visa t.o.m") ))',
+                    date: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")',
+                    dateGreaterThan: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")'
+                },
                 "WGsSelected": {
                     required: "@Translation.GetForJS("Du måste ange en driftgrupp", Enums.TranslationSource.TextTranslation)"
         }
