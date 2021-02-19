@@ -182,14 +182,6 @@
             $("#WGsSelected").attr("disabled", true);
         }
     }
-    $.validator.addMethod('dateGreaterThan', function (value, element, param) {
-        var fromDate = $("#divCalendar_ShowFromDate").datepicker('getDate');
-        var endDate = $("#divCalendar_ShowUntilDate").datepicker('getDate');
-        if (Date.parse(endDate) >= Date.parse(fromDate)) {
-            return isValid;
-        }
-
-    }, '@Translation.GetForJS("Var vänlig ange ett giltigt datum")');
 
     var validator = $("#target")
         .submit(function () {
@@ -200,6 +192,7 @@
             ignore: "",
             rules: {
                 "Calendar.Text": 'required',
+                "Calendar.Caption": 'required',
                 "Calendar.CalendarDate": {
                     'required': true,
                     'date': true
@@ -217,7 +210,10 @@
             },
             messages: {
                 "Calendar.Text": {
-                    required: "@Translation.GetForJS("Du måste ange en text", Enums.TranslationSource.TextTranslation)"
+                    required: '@Translation.GetForJS("Du måste ange en text", Enums.TranslationSource.TextTranslation)'
+                },
+                "Calendar.Caption": {
+                    required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Rubrik") ))'
                 },
                 'Calendar.CalendarDate': {
                     required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Skapad datum") ))',
@@ -233,7 +229,7 @@
                     dateGreaterThan: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")'
                 },
                 "WGsSelected": {
-                    required: "@Translation.GetForJS("Du måste ange en driftgrupp", Enums.TranslationSource.TextTranslation)"
+                    required: '@Translation.GetForJS("Du måste ange en driftgrupp", Enums.TranslationSource.TextTranslation)'
         }
     },
         errorPlacement: function (error, element) {
@@ -248,7 +244,17 @@
     submitHandler: function (form) {
         form.submit();
     }
-    });
+        });
+    $.validator.addMethod('dateGreaterThan', function (value, element, param) {
+        var fromDate = $("#divCalendar_ShowFromDate").datepicker('getDate');
+        var endDate = $("#divCalendar_ShowUntilDate").datepicker('getDate');
+        if (Date.parse(endDate) >= Date.parse(fromDate)) {
+            return true;
+        }
+        return false;
+
+    }, '@Translation.GetForJS("Var vänlig ange ett giltigt datum")');
+
     validator.focusInvalid = function() {
         // put focus on tinymce on submit validation
         if (this.settings.focusInvalid) {

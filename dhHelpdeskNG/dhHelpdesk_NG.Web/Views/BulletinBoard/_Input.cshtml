@@ -137,8 +137,9 @@
             var fromDate = $("#divBulletinBoard_ShowDate").datepicker('getDate');
             var endDate = $("#divBulletinBoard_ShowUntilDate").datepicker('getDate');
             if (Date.parse(endDate) >= Date.parse(fromDate)) {
-                return isValid;
+                return true;
             }
+            return false;
 
         }, '@Translation.GetForJS("Var vänlig ange ett giltigt datum")');
 
