@@ -1776,7 +1776,8 @@ Module DH_Helpdesk_Mail
 
                     ' Set license key received after purchase to use the converter in licensed mode
                     ' Leave it not set to use the converter in demo mode
-                    htmlToPdfConverter.LicenseKey = "xUtbSltKWkpbW0RaSllbRFtYRFNTU1M="
+                    'htmlToPdfConverter.LicenseKey = "xUtbSltKWkpbW0RaSllbRFtYRFNTU1M="
+                    htmlToPdfConverter.LicenseKey = "K6W2pLWksra3tqS1saq0pLe1qrW2qr29vb2ktA=="
 
                     ' Set PDF page size which can be a predefined size like A4 or a custom size in points 
                     ' Leave it not set to have a default A4 PDF page

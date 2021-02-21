@@ -136,9 +136,8 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="wnvhtmltopdf, Version=11.19.0.0, Culture=neutral, PublicKeyToken=b12703d35a33ff98, processorArchitecture=MSIL">
-      <HintPath>..\packages\wnvhtmlconvert.11.19\lib\net40\wnvhtmltopdf.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="wnvhtmltopdf, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b12703d35a33ff98, processorArchitecture=MSIL">
+      <HintPath>..\packages\wnvhtmlconvert.15.0.0\lib\net40\wnvhtmltopdf.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
