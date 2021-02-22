@@ -26,6 +26,14 @@ BEGIN
     alter column RegUserId nvarchar (200) null
 END
 
+RAISERROR ('Extend Body of MailTemplate_Language lenght to 4000 char', 10, 1) WITH NOWAIT
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'Body' and sysobjects.name = N'tblMailTemplate_tblLanguage')
+BEGIN
+    ALTER TABLE tblMailTemplate_tblLanguage	
+    alter column Body nvarchar (4000) null
+END
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.50'
 GO

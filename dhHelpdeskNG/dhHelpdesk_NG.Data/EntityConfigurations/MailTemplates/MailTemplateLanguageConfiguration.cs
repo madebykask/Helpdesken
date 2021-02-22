@@ -24,7 +24,7 @@
 
             this.Property(tl => tl.MailTemplateName).IsOptional().HasMaxLength(50);
             this.Property(tl => tl.Subject).IsRequired().HasMaxLength(200);
-            this.Property(tl => tl.Body).IsRequired().HasMaxLength(2000);
+            this.Property(tl => tl.Body).IsRequired().HasMaxLength(4000);
             this.Property(tl => tl.MailFooter).IsOptional().HasMaxLength(500);
 
             this.ToTable("tblMailTemplate_tblLanguage");
