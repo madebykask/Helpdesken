@@ -126,7 +126,7 @@
             this.Property(x => x.RegistrationSource).IsRequired();
             this.Property(x => x.RegLanguage_Id).IsRequired();
             this.Property(x => x.RegUserDomain).IsOptional().HasMaxLength(20);
-            this.Property(x => x.RegUserId).IsOptional().HasMaxLength(20);
+            this.Property(x => x.RegUserId).IsOptional().HasMaxLength(200);
             this.Property(x => x.RegUserName).IsOptional();
             this.Property(x => x.RelatedCaseNumber).IsRequired();
             this.Property(x => x.ReportedBy).IsOptional().HasMaxLength(40);

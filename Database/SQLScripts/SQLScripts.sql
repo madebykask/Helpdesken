@@ -18,6 +18,14 @@ BEGIN
     alter column POP3Password nvarchar (40) null
 END
 
+RAISERROR ('Extend RegUserId lenght to 200 char', 10, 1) WITH NOWAIT
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'RegUserId' and sysobjects.name = N'tblCase')
+BEGIN
+    ALTER TABLE tblCase	
+    alter column RegUserId nvarchar (200) null
+END
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.50'
 GO

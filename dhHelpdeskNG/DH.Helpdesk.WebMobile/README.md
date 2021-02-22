@@ -1,5 +1,12 @@
 # DH Helpdesk Mobile Web
 
+# First install node.js version 10.18.1
+# run npm i
+# run npm install -g @angular/cli
+# run command npm run ng build
+# npm run ng serve
+# run DH.Helpdesk.WebApi
+
 ## To update mobiscroll package:
 1) make sure that ../src/lib/mobiscroll exists with content
 2) run command: mobiscroll config angular --no-npm
