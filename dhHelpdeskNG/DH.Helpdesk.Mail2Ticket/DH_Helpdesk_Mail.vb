@@ -28,7 +28,7 @@ Imports Rebex
 Imports Winnovative
 
 Module DH_Helpdesk_Mail
-    Private Const DefaultMailFolderName As String = "Inbox"
+    Private Const InboxMailFolderName As String = "Inbox"
     'Dim msDeniedHtmlBodyString As String
     Dim iSequenceNumber As ImapMessageSet
     Dim msDeniedHtmlBodyString As String
@@ -338,7 +338,7 @@ Module DH_Helpdesk_Mail
 
                         If objCustomer.UseEws Then
                             If IsNullOrEmpty(objCustomer.EMailFolder) Then
-                                objCustomer.EMailFolder = DefaultMailFolderName 'Set Default To inbox If NULL
+                                objCustomer.EMailFolder = InboxMailFolderName 'Set Default To inbox If NULL
                             End If
                             Dim task As Task(Of List(Of MailMessage)) = ReadEwsFolderAsync(objCustomer.POP3Server,
                                                                                       objCustomer.POP3Port,
@@ -1195,7 +1195,7 @@ Module DH_Helpdesk_Mail
         service.ImpersonatedUserId = New ImpersonatedUserId(ConnectingIdType.SmtpAddress, userName)
 
         Dim inbox As Folder
-        If emailFolder.Equals(DefaultMailFolderName, StringComparison.InvariantCultureIgnoreCase) Then
+        If emailFolder.Equals(InboxMailFolderName, StringComparison.InvariantCultureIgnoreCase) Then
             'Dim folderId As FolderId = New FolderId(WellKnownFolderName.MsgFolderRoot, userName)
             inbox = Folder.Bind(service, WellKnownFolderName.Inbox)
         Else
@@ -1207,8 +1207,16 @@ Module DH_Helpdesk_Mail
         End If
 
         Dim items As FindItemsResults(Of Item) = inbox.FindItems(New ItemView(10000))
+        Dim messages As List(Of MailMessage) = New List(Of MailMessage)()
 
-        service.LoadPropertiesForItems(items, New PropertySet(EmailMessageSchema.From,
+        If items Is Nothing Or Not items.Any() Then
+            Return messages
+        End If
+
+        Dim response = service.LoadPropertiesForItems(items, New PropertySet(EmailMessageSchema.From,
+                                                                                                  EmailMessageSchema.ToRecipients,
+                                                                                                  EmailMessageSchema.CcRecipients,
+                                                                                                  EmailMessageSchema.BccRecipients,
                                                                                                   ItemSchema.Body,
                                                                                                   ItemSchema.Subject,
                                                                                                   ItemSchema.Attachments,
@@ -1216,11 +1224,13 @@ Module DH_Helpdesk_Mail
                                                                                                   EmailMessageSchema.InReplyTo,
                                                                                                   ItemSchema.DateTimeReceived))
 
-        Dim messages As List(Of MailMessage) = New List(Of MailMessage)()
-
         For Each item As Item In items
             If item.GetType() Is GetType(EmailMessage) Then
                 Dim mail As EmailMessage = item
+                If String.IsNullOrWhiteSpace(mail.Subject) Then
+                    LogError("Missing mail subject for email: " & mail.From.Address)
+                    Continue For
+                End If
 
                 Dim message As EwsMailMessage = New EwsMailMessage()
                 message.MessageId = New MessageId(mail.InternetMessageId)
@@ -1235,9 +1245,10 @@ Module DH_Helpdesk_Mail
                     message.To.Add(recpt)
                 Next
 
-                If String.IsNullOrWhiteSpace(mail.Subject) Then
-                    Throw New MissingFieldException("Missing mail subject for email: " & message.From.Item(0).Address)
-                End If
+                For Each recpt As MailAddress In (From r As EmailAddress In mail.CcRecipients
+                                                  Select New MailAddress(r.Address, r.Name))
+                    message.CC.Add(recpt)
+                Next
 
                 message.Subject = mail.Subject
                 If mail.Body.BodyType = BodyType.HTML Then
@@ -1284,18 +1295,27 @@ Module DH_Helpdesk_Mail
     End Function
 
     Private Function FindEwsFolder(emailFolder As String, service As ExchangeService) As Folder
+        Dim emailFolders As String()
+        Dim isInbox As Boolean
+        If emailFolder.IndexOf("/"c) >= 0 Then
+            emailFolders = emailFolder.Split("/"c)
+            isInbox = emailFolders.First().Equals(InboxMailFolderName, StringComparison.InvariantCultureIgnoreCase)
+            emailFolder = emailFolders.Last()
+        End If
+
         Dim inbox As Folder
         Dim folders As FindFoldersResults
-        Try
-            folders = service.FindFolders(WellKnownFolderName.MsgFolderRoot, New FolderView(100))
-        Catch ex As Exception
-            LogError("Error readMailBox: " & ex.Message.ToString)
-            'rethrow
-            Throw
-        End Try
+        If Not isInbox Then
+            Try
+                folders = service.FindFolders(WellKnownFolderName.MsgFolderRoot, New FolderView(100))
+            Catch ex As Exception
+                LogError("Error readMailBox: " & ex.Message.ToString)
+                'rethrow
+                Throw
+            End Try
+        End If
 
         Dim customEmailFolder As FindFoldersResults
-
         Try
             'Subfolders in inbox
             customEmailFolder = service.FindFolders(WellKnownFolderName.Inbox, New FolderView(100))
