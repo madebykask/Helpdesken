@@ -338,10 +338,20 @@
 
 <script type="text/javascript">
 
-    //prevent from loading on page load 
+    //prevent from loading on page load
     window.tinymceDefaultOptions.initOnPageLoad = false;
     window.tinymceDefaultOptions.maxLength = 4000;
     window.tinymceDefaultOptions.showMaxLimitErrorMessage = false;
+
+    $.validator.addMethod('dateGreaterThan', function (value, element, param) {
+        var fromDate = $("#divOperationLog_ShowDate").datepicker('getDate');
+        var endDate = $("#divOperationLog_ShowUntilDate").datepicker('getDate');
+    if (Date.parse(endDate) >= Date.parse(fromDate)) {
+        return true;
+    }
+    return false;
+
+    }, '@Translation.GetForJS("Var vänlig ange ett giltigt datum")');
 
     $(function () {
 
@@ -480,7 +490,16 @@
                 "OperationLog.LogTextExternal": {
                     //required: true,
                     maxlength: 4000
-                }
+                },
+                "OperationLog.ShowDate": {
+                    'required': true,
+                    'date': true
+                },
+                "OperationLog.ShowUntilDate": {
+                    'required': true,
+                    'date': true,
+                    'dateGreaterThan': true
+                },
             },
 
             messages: {
@@ -491,15 +510,22 @@
                     required: "@Translation.GetForJS("Du måste ange en beskrivning")",
                     maxlength: "@Translation.GetForJS("Max antal tecken har överskridits")"
                 },
-
                 "OperationLog.LogAction": {
                     required: "@Translation.GetForJS("Du måste ange") @Translation.GetForJS("Åtgärd")",
                     maxlength: "@Translation.GetForJS("Max antal tecken har överskridits")"
                 },
-
                 "OperationLog.LogTextExternal": {
                     required: "@Translation.GetForJS("Du måste ange") @Translation.GetForJS("Extern beskrivning")",
                     maxlength: "@Translation.GetForJS("Max antal tecken har överskridits")"
+                },
+                'OperationLog.ShowDate': {
+                        required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Visa fr.o.m") ))',
+                        date: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")'
+                },
+                'OperationLog.ShowUntilDate': {
+                    required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Visa t.o.m") ))',
+                    date: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")',
+                    dateGreaterThan: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")'
                 }
             },
 
