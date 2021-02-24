@@ -73,7 +73,10 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
             //4. Save case
             IDictionary<string, string> errors;
             var extraInfo = CaseExtraInfo.CreateHelpdesk5();
-            
+
+            if (@case.CaseExtendedCaseDatas != null)
+                _caseService.DeleteExCaseWhenCaseMove(caseId);
+
             //SAVE CASE
             _caseService.SaveCase(@case, null, userId, null, extraInfo, out errors);
 
