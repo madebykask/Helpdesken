@@ -7389,70 +7389,70 @@ GO
 
 --New texts/translations 2021-02-24
 If not exists (select * from tbltext where id = 2006)
-	insert into tbltext (id, TextString, TextType) VALUES (2006, 'Ärende är inte giltigt')
+	insert into tbltext (id, TextString) VALUES (2006, 'Ärende är inte giltigt')
 GO
 If not exists (select * from tblTextTranslation where text_id = 2006 and Language_Id = 2)
     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2006, 2, 'Case is not valid')
 GO
 
 If not exists (select * from tbltext where id = 2007)
-	insert into tbltext (id, TextString, TextType) VALUES (2007, 'Anmälare')
+	insert into tbltext (id, TextString) VALUES (2007, 'Anmälare')
 GO
 If not exists (select * from tblTextTranslation where text_id = 2007 and Language_Id = 2)
     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2007, 2, 'Initiator')
 GO
 
 If not exists (select * from tbltext where id = 2008)
-	insert into tbltext (id, TextString, TextType) VALUES (2008, 'Angående')
+	insert into tbltext (id, TextString) VALUES (2008, 'Angående')
 GO
 If not exists (select * from tblTextTranslation where text_id = 2008 and Language_Id = 2)
     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2008, 2, 'Regarding')
 GO
 
 If not exists (select * from tbltext where id = 2009)
-	insert into tbltext (id, TextString, TextType) VALUES (2009, 'Datorinformation')
+	insert into tbltext (id, TextString) VALUES (2009, 'Datorinformation')
 GO
 If not exists (select * from tblTextTranslation where text_id = 2009 and Language_Id = 2)
     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2009, 2, 'Computer information')
 GO
 
 If not exists (select * from tbltext where id = 2010)
-	insert into tbltext (id, TextString, TextType) VALUES (2010, 'Ärendeinformation')
+	insert into tbltext (id, TextString) VALUES (2010, 'Ärendeinformation')
 GO
 If not exists (select * from tblTextTranslation where text_id = 2010 and Language_Id = 2)
     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2010, 2, 'Case Information')
 GO
 
 If not exists (select * from tbltext where id = 2011)
-	insert into tbltext (id, TextString, TextType) VALUES (2011, 'Ärendehantering')
+	insert into tbltext (id, TextString) VALUES (2011, 'Ärendehantering')
 GO
 If not exists (select * from tblTextTranslation where text_id = 2011 and Language_Id = 2)
     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2011, 2, 'Case management')
 GO
 
 If not exists (select * from tbltext where id = 2012)
-	insert into tbltext (id, TextString, TextType) VALUES (2012, 'Kommunikation')
+	insert into tbltext (id, TextString) VALUES (2012, 'Kommunikation')
 GO
 If not exists (select * from tblTextTranslation where text_id = 2012 and Language_Id = 2)
     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2012, 2, 'Communication')
 GO
 
 If not exists (select * from tbltext where id = 2013)
-	insert into tbltext (id, TextString, TextType) VALUES (2013, 'Status')
+	insert into tbltext (id, TextString) VALUES (2013, 'Status')
 GO
 If not exists (select * from tblTextTranslation where text_id = 2013 and Language_Id = 2)
     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2013, 2, 'Status')
 GO
 
 If not exists (select * from tbltext where id = 2014)
-	insert into tbltext (id, TextString, TextType) VALUES (2014, 'Fakturor')
+	insert into tbltext (id, TextString) VALUES (2014, 'Fakturor')
 GO
 If not exists (select * from tblTextTranslation where text_id = 2014 and Language_Id = 2)
     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2014, 2, 'Invoice')
 GO
 
 If not exists (select * from tbltext where id = 2015)
-	insert into tbltext (id, TextString, TextType) VALUES (2015, 'Fakturering')
+	insert into tbltext (id, TextString) VALUES (2015, 'Fakturering')
 GO
 If not exists (select * from tblTextTranslation where text_id = 2015 and Language_Id = 2)
     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2015, 2, 'Invoicing')
