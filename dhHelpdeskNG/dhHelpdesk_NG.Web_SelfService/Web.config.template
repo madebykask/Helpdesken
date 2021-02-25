@@ -86,6 +86,15 @@
     <add key="AM_Api_Password" value="#{AmApiPassword}" />
 
     #{/if}
+    #{if MicrosoftAuthConfigurable}
+    <add key="webpages:Enabled" value="false" />
+    <add key="ClientId" value="#{ClientId}" /> 
+    <add key="Tenant" value="#{Tenant}" /> <!--If your application supports My organization only, replace this value with the Tenant Id or Tenant name (for example, contoso.onmicrosoft.com)
+    If your application supports Accounts in any organizational directory, replace this value with "organizations"
+    If your application supports All Microsoft account users, replace this value with "common"-->
+    <add key="Authority" value="#{Authority}" />
+    <add key="RedirectUri" value="#{RedirectUri}" />
+    #{/if}
   </appSettings>
 
   <!--
@@ -199,7 +208,7 @@
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-9.0.0.0" newVersion="9.0.0.0" />
+        <bindingRedirect oldVersion="0.0.0.0-10.0.0.0" newVersion="10.0.0.0" />
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="System.Data" publicKeyToken="b77a5c561934e089" culture="neutral" />

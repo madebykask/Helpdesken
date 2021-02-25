@@ -50,6 +50,8 @@ namespace DH.Helpdesk.SelfService.Controllers
 	using Common.Extensions.Integer;
 	using Models.Message;
 	using Services.Infrastructure;
+    using Newtonsoft.Json.Linq;
+    using System.Configuration;
 
     public class CaseController : BaseController
     {
@@ -788,17 +790,44 @@ namespace DH.Helpdesk.SelfService.Controllers
                 var caseTemplate = _caseSolutionService.GetCaseSolution(templateId);
                 ApplyTemplate(caseTemplate, newCase, true);
             }
+                    
+            var isCaptchaActive = IsCaptchaActive();
+            var isCaptchaValid = IsCaptchaValid();
 
-            Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog, out caseNum);
-
-            if (ConfigurationService.AppSettings.ShowConfirmAfterCaseRegistration)
+            if (isCaptchaActive)
             {
-                return RedirectToCaseConfirmation("Your case has been successfully registered.", $"You can follow up your case status via this number: {caseNum}");
+                if (ModelState.IsValid && isCaptchaValid)
+                {
+                    Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog, out caseNum);
+
+                    if (ConfigurationService.AppSettings.ShowConfirmAfterCaseRegistration)
+                    {
+                        return RedirectToCaseConfirmation("Your case has been successfully registered.", $"You can follow up your case status via this number: {caseNum}");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
+                    }
+                }
+                else
+                {
+                    ErrorGenerator.MakeError("Google Recaptcha is not valid", 210);
+                    return RedirectToAction("Index", "Error");
+                }
             }
             else
             {
-                return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
-            }
+                Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog, out caseNum);
+
+                if (ConfigurationService.AppSettings.ShowConfirmAfterCaseRegistration)
+                {
+                    return RedirectToCaseConfirmation("Your case has been successfully registered.", $"You can follow up your case status via this number: {caseNum}");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "case", new { id = newCase.Id, showRegistrationMessage = true });
+                }
+            }            
         }
 
         [HttpPost]
@@ -1644,6 +1673,13 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();
 
+            // Only when it is microsoft authentication
+            if(ConfigurationService.AppSettings.LoginMode == LoginMode.Microsoft)
+            {
+                criteria.PersonEmail = criteria.UserId;
+            }
+             
+
             /*User creator*/
             if (criteria.MyCasesRegistrator && !string.IsNullOrEmpty(criteria.UserId) && !string.IsNullOrEmpty(currentCase.RegUserId))
             {
@@ -1667,6 +1703,15 @@ namespace DH.Helpdesk.SelfService.Controllers
 
                 if (!string.IsNullOrEmpty(criteria.UserEmployeeNumber) &&
                     currentCase.ReportedBy.Equals(criteria.UserEmployeeNumber, StringComparison.CurrentCultureIgnoreCase))
+                    return true;
+            }
+
+            // Only when it is microsoft authentication
+            if (criteria.MyCasesInitiator && !string.IsNullOrEmpty(currentCase.PersonsEmail) &&
+                !string.IsNullOrEmpty(criteria.PersonEmail))
+            {                
+                if (!string.IsNullOrEmpty(criteria.PersonEmail) &&
+                    currentCase.PersonsEmail.Equals(criteria.PersonEmail, StringComparison.CurrentCultureIgnoreCase))
                     return true;
             }
 
@@ -1709,6 +1754,12 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();
 
+            // Only when it is microsoft authentication
+            if (ConfigurationService.AppSettings.LoginMode == LoginMode.Microsoft)
+            {
+                criteria.PersonEmail = criteria.UserId;
+            }
+
             /*User creator*/
             if (criteria.MyCasesRegistrator && !string.IsNullOrEmpty(criteria.UserId) && !string.IsNullOrEmpty(currentCase.RegUserId))
             {
@@ -1726,6 +1777,15 @@ namespace DH.Helpdesk.SelfService.Controllers
 
                 if (!string.IsNullOrEmpty(criteria.UserEmployeeNumber) &&
                     currentCase.ReportedBy.Equals(criteria.UserEmployeeNumber, StringComparison.CurrentCultureIgnoreCase))
+                    return true;
+            }
+
+            // Only when it is microsoft authentication
+            if (criteria.MyCasesInitiator && !string.IsNullOrEmpty(currentCase.PersonsEmail) &&
+                !string.IsNullOrEmpty(criteria.PersonEmail))
+            {
+                if (!string.IsNullOrEmpty(criteria.PersonEmail) &&
+                    currentCase.PersonsEmail.Equals(criteria.PersonEmail, StringComparison.CurrentCultureIgnoreCase))
                     return true;
             }
 
@@ -1774,6 +1834,32 @@ namespace DH.Helpdesk.SelfService.Controllers
             return result;
         }
 
+        private bool IsCaptchaActive()
+        {
+            var recaptchaSiteKey = ConfigurationManager.AppSettings[AppSettingsKey.ReCaptchaSiteKey] != null ?
+                           ConfigurationManager.AppSettings[AppSettingsKey.ReCaptchaSiteKey].ToString() : "";
+            if (recaptchaSiteKey == "#{reCaptchaSiteKey}")
+            {
+                recaptchaSiteKey = "";
+            }
+            if (recaptchaSiteKey != "")
+                return true;
+
+            return false;
+        }
+        private bool IsCaptchaValid()
+        {
+            //Validate Google recaptcha here
+            var response = Request["g-recaptcha-response"];
+            string secretKey = ConfigurationManager.AppSettings[AppSettingsKey.ReCaptchaSecretKey];
+            var client = new WebClient();
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(result);
+            var status = (bool)obj.SelectToken("success");
+           
+            return status;
+        }
+       
         private int Save(
                 Case newCase, 
                 CaseMailSetting caseMailSetting, 
@@ -2104,6 +2190,8 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             if (currentUserIdentity != null)
             {
+
+                var isMicrosoftMode = ConfigurationService.AppSettings.LoginMode == LoginMode.Microsoft;
                 model.NewCase =
                     _caseService.InitCase(currentCustomer.Id,
                         0,
@@ -2122,6 +2210,13 @@ namespace DH.Helpdesk.SelfService.Controllers
 
                 // populate notifier fields
                 var notifier = _computerService.GetInitiatorByUserId(currentUserIdentity.UserId, customerId);
+                if (isMicrosoftMode && notifier == null)
+                {
+                    notifier = _masterDataService.GetInitiatorByMail(currentUserIdentity.UserId, customerId);
+                    model.NewCase.RegUserId = null;
+                    model.NewCase.PersonsEmail = currentUserIdentity.UserId;
+                }
+
                 if (notifier != null)
                 {
                     model.NewCase.ReportedBy = notifier.UserId;

@@ -28,7 +28,7 @@ namespace DH.Helpdesk.Services.Services
 
         void DeleteRegion(int id);
 
-        void SaveRegion(Region region, out IDictionary<string, string> errors);
+        void SaveRegion(Region region, int customerId, out IDictionary<string, string> errors);
         void Commit();
 
         List<ItemOverview> FindByCustomerId(int customerId);
@@ -117,7 +117,7 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        public void SaveRegion(Region region, out IDictionary<string, string> errors)
+        public void SaveRegion(Region region, int customerId, out IDictionary<string, string> errors)
         {
             if (region == null)
                 throw new ArgumentNullException("region");
@@ -136,7 +136,7 @@ namespace DH.Helpdesk.Services.Services
                 this._regionRepository.Update(region);
 
             if (region.IsDefault == 1)
-                this._regionRepository.ResetDefault(region.Id);
+                this._regionRepository.ResetDefault(region.Id, customerId);
 
             if (errors.Count == 0)
                 this.Commit();

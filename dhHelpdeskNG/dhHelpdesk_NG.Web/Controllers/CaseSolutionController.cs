@@ -3018,7 +3018,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 Priorities = this._priorityService.GetPriorities(curCustomerId).Where(x => x.IsActive == 1).Select(x => new SelectListItem
                 {
-                    Text = x.Name,
+                    Text = Translation.GetMasterDataTranslation(x.Name),
                     Value = x.Id.ToString()
                 }).ToList(),
 
@@ -3065,13 +3065,13 @@ namespace DH.Helpdesk.Web.Controllers
 
                 Status = this._statusService.GetActiveStatuses(curCustomerId).Select(x => new SelectListItem
                 {
-                    Text = x.Name,
+                    Text = Translation.GetMasterDataTranslation(x.Name),
                     Value = x.Id.ToString()
                 }).ToList(),
 
                 StateSecondaries = this._stateSecondaryService.GetActiveStateSecondaries(curCustomerId).Select(x => new SelectListItem
                 {
-                    Text = x.Name,
+                    Text = Translation.GetMasterDataTranslation(x.Name),
                     Value = x.Id.ToString()
                 }).ToList(),
 

@@ -36,6 +36,8 @@ namespace DH.Helpdesk.Dal.Repositories.Notifiers
 
         Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly);
 
+        Notifier GetInitiatorByMail(string mailAddress, int customerId, bool activeOnly);
+
         bool IsInitiatorUserIdUnique(string userId, int initiatorId, int customerId, bool activeOnly);
 
         int GetExistingNotifierIdByUserId(string userId, int customerId);

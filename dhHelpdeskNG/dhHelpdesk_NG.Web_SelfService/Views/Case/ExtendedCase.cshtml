@@ -405,12 +405,7 @@
                 </div>
                 @if (Model.CaseId == 0 && (recaptchaSiteKey != "" || recaptchaSiteKey != null))
                 {
-                    <div class="col-md-3 dh-col">
-                        <div class="container form-horizontal">
-                            <div id="cap1"></div>
-                            <div class="validation-message" style="margin:10px"></div>
-                        </div>
-                    </div>
+                    <div id="cap1" class="g-recaptcha" data-sitekey=@recaptchaSiteKey></div>                    
                 }
             </div>
         </div>

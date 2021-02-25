@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<log4net debug="false">
-  <appender name="RollingFileAppender" type="log4net.Appender.RollingFileAppender">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<log4net>
+  <appender name="RollingLogFileAppender" type="log4net.Appender.RollingFileAppender">
     <file value="Logs/Logs.log" />
     <appendToFile value="true" />
     <rollingStyle value="Date" />
@@ -21,18 +21,12 @@
       <conversionPattern value="%date{dd MMM yyyy HH:mm:ss} - %m%n" />
     </layout>
   </appender>
-  <logger name="AppErrorLog">
+  <logger name="AppErrorLog"> 
     <level value="ALL" />
-    <appender-ref ref="RollingFileAppender" />
+    <appender-ref ref="RollingLogFileAppender" />
   </logger>
-
   <logger name="SessionLog">
-    <level value="ALL" />
+    <level value="WARN" />
     <appender-ref ref="SessionRollingFileAppender" />
   </logger>
-  <root>
-    <!-- Value of priority may be ALL, DEBUG, INFO, WARN, ERROR, FATAL, OFF -->
-    <priority value="WARN" />
-    <appender-ref ref="RollingFileAppender" />
-  </root>
 </log4net>

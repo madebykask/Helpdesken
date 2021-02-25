@@ -16,7 +16,7 @@
         List<ItemOverview> FindByCustomerId(int customerId);
         int? GetDefaultRegion(int customerId);
         IList<Region> GetRegionsWithDepartments(int customerId);
-        void ResetDefault(int exclude);
+        void ResetDefault(int excludeId, int customerId);
         int GetRegionLanguage(int regiondid);
     }
 
@@ -59,12 +59,12 @@
                 this.DataContext.Regions.Where(r => r.Customer_Id == customerId && r.IsActive != 0 && r.IsDefault == 1)
                     .Select(r => r.Id).SingleOrDefault();
 
-            return regionId <= 0 ? null : regionId;                
+            return regionId <= 0 ? null : regionId;
         }
 
-        public void ResetDefault(int exclude)
+        public void ResetDefault(int excludeId, int customerId)
         {
-            foreach (Region obj in this.GetMany(s => s.IsDefault == 1 && s.Id != exclude))
+            foreach (var obj in this.GetMany(s => s.IsDefault == 1 && s.Id != excludeId && s.Customer_Id == customerId))
             {
                 obj.IsDefault = 0;
                 this.Update(obj);

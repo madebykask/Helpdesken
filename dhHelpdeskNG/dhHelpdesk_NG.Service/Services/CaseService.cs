@@ -549,7 +549,12 @@ namespace DH.Helpdesk.Services.Services
             DeleteCaseById(id);
             return ret;
         }
-
+        public void DeleteExCaseWhenCaseMove(int id)
+        {
+            DeleteExtendedCase(id);
+            //To do : when move case delete section as well if exists
+            //DeletetblCase_tblCaseSection_ExtendedCaseData(id);
+        }
 
         public int LookupLanguage(int custid, string notid, int regid, int depid, string notifierid)
         {

@@ -1403,6 +1403,10 @@ namespace DH.Helpdesk.Web.Controllers
                     m.MovedFromCustomerId = m.case_.Customer_Id;
                     m.case_.Customer_Id = moveToCustomerId.Value;
                     m.case_.CaseType_Id = 0;
+                    m.case_.CaseSolution_Id = 0;
+                    currentCase.CaseSolution_Id = 0;
+                    m.ActiveTab = "";
+                    m.ContainsExtendedCase = false;
                     m.case_.ProductArea_Id = null;
                     m.case_.Category_Id = null;
                     m.case_.Change_Id = null;
@@ -3494,8 +3498,10 @@ namespace DH.Helpdesk.Web.Controllers
             #endregion
 
             if (movedFromCustomerId.HasValue)
-            {
+            {                
                 var fromBasePath = _masterDataService.GetFilePath(movedFromCustomerId.Value);
+                _caseService.DeleteExCaseWhenCaseMove(case_.Id);
+
                 if (!fromBasePath.Equals(basePath, StringComparison.CurrentCultureIgnoreCase))
                 {
                     _caseFileService.MoveCaseFiles(case_.CaseNumber.ToString(), fromBasePath, basePath);

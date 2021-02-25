@@ -15,13 +15,20 @@ Imports Microsoft.Identity.Client
 Imports System.Threading.Tasks
 Imports Rebex.Mime.Headers
 Imports System.Collections.Generic
+Imports System.Net
+Imports System.Reflection
 Imports System.Web
 Imports System.Web.UI
 Imports System.Web.UI.WebControls
+Imports System.Windows.Forms
+Imports ICSharpCode.SharpZipLib.Zip
+Imports Microsoft.Exchange.WebServices.Data
 Imports Microsoft.VisualBasic
+Imports Rebex
 Imports Winnovative
 
 Module DH_Helpdesk_Mail
+    Private Const InboxMailFolderName As String = "Inbox"
     'Dim msDeniedHtmlBodyString As String
     Dim iSequenceNumber As ImapMessageSet
     Dim msDeniedHtmlBodyString As String
@@ -48,7 +55,7 @@ Module DH_Helpdesk_Mail
 
         Dim secureConnectionString As String = GetAppSettingValue("SecureConnectionString")
         If (Not IsNullOrEmpty(secureConnectionString) AndAlso secureConnectionString.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase)) Then
-            Dim fileName = Path.GetFileName(Reflection.Assembly.GetExecutingAssembly().Location)
+            Dim fileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location)
             ToggleConfigEncryption(fileName)
         End If
         ' 5: SyncByWorkingGroup
@@ -169,7 +176,7 @@ Module DH_Helpdesk_Mail
                 workingModeArg, logConnectionString, logFolderArg, logIdentifierArg, productAreaSepArg, bEnableNewEmailProcessing), 1)
 
             'start processing
-            readMailBox(sConnectionstring, workingMode)
+            ReadMailBox(sConnectionstring, workingMode)
 
         Catch ex As Exception
             LogError(ex.ToString())
@@ -221,7 +228,7 @@ Module DH_Helpdesk_Mail
     End Function
 
 
-    Public Function readMailBox(ByVal sConnectionstring As String, ByVal iSyncType As SyncType) As Integer
+    Public Function ReadMailBox(ByVal sConnectionstring As String, ByVal iSyncType As SyncType) As Integer
         Dim objGlobalSettingsData As New GlobalSettingsData
         Dim objGlobalSettings As GlobalSettings
         Dim objCustomerData As New CustomerData
@@ -331,15 +338,15 @@ Module DH_Helpdesk_Mail
 
                         If objCustomer.UseEws Then
                             If IsNullOrEmpty(objCustomer.EMailFolder) Then
-                                objCustomer.EMailFolder = "Inbox" 'Set Default To inbox If NULL
+                                objCustomer.EMailFolder = InboxMailFolderName 'Set Default To inbox If NULL
                             End If
-                            Dim task As Task(Of List(Of MailMessage)) = ReadEwsFolder(objCustomer.POP3Server,
-                                          objCustomer.POP3Port,
-                                          objCustomer.POP3UserName,
-                                          objCustomer.EMailFolder,
-                                          objCustomer.EwsApplicationId,
-                                          objCustomer.EwsClientSecret,
-                                          objCustomer.EwsTenantId)
+                            Dim task As Task(Of List(Of MailMessage)) = ReadEwsFolderAsync(objCustomer.POP3Server,
+                                                                                      objCustomer.POP3Port,
+                                                                                      objCustomer.POP3UserName,
+                                                                                      objCustomer.EMailFolder,
+                                                                                      objCustomer.EwsApplicationId,
+                                                                                      objCustomer.EwsClientSecret,
+                                                                                      objCustomer.EwsTenantId)
 
                             task.Wait()
 
@@ -351,10 +358,10 @@ Module DH_Helpdesk_Mail
 
                             ' Enable IMAPI Client Logging
                             If bEnableIMAPIClientLog AndAlso Not IsNullOrEmpty(sIMAPIClientLogPath) Then
-                                IMAPclient.LogWriter = New Rebex.FileLogWriter(sIMAPIClientLogPath, Rebex.LogLevel.Debug)
+                                IMAPclient.LogWriter = New FileLogWriter(sIMAPIClientLogPath, Rebex.LogLevel.Debug)
                             End If
 
-                            Dim host As System.Net.IPHostEntry = System.Net.Dns.GetHostEntry(objCustomer.POP3Server)
+                            Dim host As IPHostEntry = Dns.GetHostEntry(objCustomer.POP3Server)
 
                             If Not host Is Nothing Then
                                 ip = host.AddressList(0).ToString()
@@ -728,8 +735,8 @@ Module DH_Helpdesk_Mail
                                     LogToFile("Create Case:" & objCase.Casenumber & ", Attachments:" & message.Attachments.Count, iPop3DebugLevel)
 
                                     'Save 
-                                    Dim sHTMLFileName As String = createHtmlFileFromMail(message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
-                                    Dim sPDFFileName As String = createPdfFileFromMail(message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
+                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
+                                    Dim sPDFFileName As String = CreatePdfFileFromMail(message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
 
                                     If Not IsNullOrEmpty(sPDFFileName) Then
                                         iHTMLFile = 1
@@ -988,8 +995,8 @@ Module DH_Helpdesk_Mail
                                     Dim bIsInternalLogFile = isInternalLogUsed AndAlso isTwoAttachmentsActive ' Mark file as internal only 2attachments is enabled
                                     Dim logSubFolderPrefix = If(bIsInternalLogFile, "LL", "L") ' LL - Internal log subfolder, L - external log subfolder
 
-                                    Dim sHTMLFileName As String = createHtmlFileFromMail(message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
-                                    Dim sPDFFileName As String = createPdfFileFromMail(message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
+                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
+                                    Dim sPDFFileName As String = CreatePdfFileFromMail(message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
 
                                     If Not IsNullOrEmpty(sPDFFileName) Then
                                         iHTMLFile = 1
@@ -1138,7 +1145,7 @@ Module DH_Helpdesk_Mail
     End Function
 
 
-    Private Async Function DeleteEwsMail(message As EwsMailMessage, server As String, port As Integer, userName As String, emailFolder As String, emailArchiveFolder As String, applicationId As String, clientSecret As String, tenantId As String) As Task
+    Private Async Function DeleteEwsMail(message As EwsMailMessage, server As String, port As Integer, userName As String, emailFolder As String, emailArchiveFolder As String, applicationId As String, clientSecret As String, tenantId As String) As System.Threading.Tasks.Task
 
         Dim ewsScopes As String() = New String() {"https://outlook.office.com/.default"}
         Dim app As IConfidentialClientApplication = ConfidentialClientApplicationBuilder.Create(applicationId).WithAuthority(AzureCloudInstance.AzurePublic, tenantId).WithClientSecret(clientSecret).Build()
@@ -1146,96 +1153,84 @@ Module DH_Helpdesk_Mail
         Dim task As Task(Of AuthenticationResult) = app.AcquireTokenForClient(ewsScopes).ExecuteAsync()
         Dim result As AuthenticationResult = Await task
 
-        Dim service As Microsoft.Exchange.WebServices.Data.ExchangeService = New Microsoft.Exchange.WebServices.Data.ExchangeService()
+        Dim service As ExchangeService = New ExchangeService()
         ' TODO: Port? Maybe not
         service.Url = New Uri(server)
-        service.Credentials = New Microsoft.Exchange.WebServices.Data.OAuthCredentials(result.AccessToken)
-        service.ImpersonatedUserId = New Microsoft.Exchange.WebServices.Data.ImpersonatedUserId(Microsoft.Exchange.WebServices.Data.ConnectingIdType.SmtpAddress, userName)
+        service.Credentials = New OAuthCredentials(result.AccessToken)
+        service.ImpersonatedUserId = New ImpersonatedUserId(ConnectingIdType.SmtpAddress, userName)
 
         If (emailArchiveFolder IsNot Nothing And emailArchiveFolder <> "") Then
 
-            Dim folders As Microsoft.Exchange.WebServices.Data.FindFoldersResults = service.FindFolders(Microsoft.Exchange.WebServices.Data.WellKnownFolderName.MsgFolderRoot, New Microsoft.Exchange.WebServices.Data.FolderView(100))
+            Dim folders As FindFoldersResults = service.FindFolders(WellKnownFolderName.MsgFolderRoot, New FolderView(100))
 
-            Dim archive As Microsoft.Exchange.WebServices.Data.Folder = Nothing
+            Dim archive As Folder = folders.FirstOrDefault(Function(folder) folder.DisplayName = emailArchiveFolder)
 
-            For Each folder As Microsoft.Exchange.WebServices.Data.Folder In folders
-                If folder.DisplayName = emailArchiveFolder Then ' TODO: Read box specified in settings
-                    archive = folder
-                    Exit For
-                End If
-            Next
-
-            Dim ids = New List(Of Microsoft.Exchange.WebServices.Data.ItemId)
+            Dim ids = New List(Of ItemId)
             ids.Add(message.EwsID)
             service.CopyItems(ids, archive.Id, False)
         End If
 
-        Dim deleteIds As List(Of Microsoft.Exchange.WebServices.Data.ItemId) = New List(Of Microsoft.Exchange.WebServices.Data.ItemId)()
+        Dim deleteIds As List(Of ItemId) = New List(Of ItemId)()
         deleteIds.Add(message.EwsID)
         service.DeleteItems(deleteIds,
-                            Microsoft.Exchange.WebServices.Data.DeleteMode.HardDelete,
-                            Microsoft.Exchange.WebServices.Data.SendCancellationsMode.SendToNone,
-                            Microsoft.Exchange.WebServices.Data.AffectedTaskOccurrence.AllOccurrences)
+                            DeleteMode.HardDelete,
+                            SendCancellationsMode.SendToNone,
+                            AffectedTaskOccurrence.AllOccurrences)
 
         'service.CopyItems()
     End Function
 
 
-    Private Async Function ReadEwsFolder(server As String, port As Integer, userName As String, emailFolder As String, applicationId As String, clientSecret As String, tenantId As String) As Task(Of List(Of MailMessage))
-
+    Private Async Function ReadEwsFolderAsync(server As String, port As Integer, userName As String, emailFolder As String, applicationId As String, clientSecret As String, tenantId As String) As Task(Of List(Of MailMessage))
         Dim ewsScopes As String() = New String() {"https://outlook.office.com/.default"}
         Dim app As IConfidentialClientApplication = ConfidentialClientApplicationBuilder.Create(applicationId).WithAuthority(AzureCloudInstance.AzurePublic, tenantId).WithClientSecret(clientSecret).Build()
 
         Dim task As Task(Of AuthenticationResult) = app.AcquireTokenForClient(ewsScopes).ExecuteAsync()
         Dim result As AuthenticationResult = Await task
 
-        Dim service As Microsoft.Exchange.WebServices.Data.ExchangeService = New Microsoft.Exchange.WebServices.Data.ExchangeService()
+        Dim service As ExchangeService = New ExchangeService()
         ' TODO: Port? Maybe not
         service.Url = New Uri(server)
-        service.Credentials = New Microsoft.Exchange.WebServices.Data.OAuthCredentials(result.AccessToken)
-        service.ImpersonatedUserId = New Microsoft.Exchange.WebServices.Data.ImpersonatedUserId(Microsoft.Exchange.WebServices.Data.ConnectingIdType.SmtpAddress, userName)
+        service.Credentials = New OAuthCredentials(result.AccessToken)
+        service.ImpersonatedUserId = New ImpersonatedUserId(ConnectingIdType.SmtpAddress, userName)
 
-        Dim folders As Microsoft.Exchange.WebServices.Data.FindFoldersResults = service.FindFolders(Microsoft.Exchange.WebServices.Data.WellKnownFolderName.MsgFolderRoot, New Microsoft.Exchange.WebServices.Data.FolderView(100))
-
-        Dim inbox As Microsoft.Exchange.WebServices.Data.Folder = Nothing
-
-        'Subfolders in inbox
-        Dim customEmailFolder As Microsoft.Exchange.WebServices.Data.FindFoldersResults = service.FindFolders(Microsoft.Exchange.WebServices.Data.WellKnownFolderName.Inbox, New Microsoft.Exchange.WebServices.Data.FolderView(100))
-
-        For Each folder As Microsoft.Exchange.WebServices.Data.Folder In folders
-            If folder.DisplayName = emailFolder Then ' TODO: Read box specified in settings
-                inbox = folder
-                Exit For
-            End If
-        Next
-        If customEmailFolder IsNot Nothing Then
-            For Each f As Microsoft.Exchange.WebServices.Data.Folder In customEmailFolder
-                If f.DisplayName = emailFolder Then ' Read folder specified in tblsettings
-                    inbox = f
-                    Exit For
-                End If
-            Next
+        Dim inbox As Folder
+        If emailFolder.Equals(InboxMailFolderName, StringComparison.InvariantCultureIgnoreCase) Then
+            'Dim folderId As FolderId = New FolderId(WellKnownFolderName.MsgFolderRoot, userName)
+            inbox = Folder.Bind(service, WellKnownFolderName.Inbox)
+        Else
+            inbox = FindEwsFolder(emailFolder, service)
         End If
 
         If inbox Is Nothing Then
             Throw New ArgumentException("No folder for email was found")
         End If
 
-        Dim items As Microsoft.Exchange.WebServices.Data.FindItemsResults(Of Microsoft.Exchange.WebServices.Data.Item) = inbox.FindItems(New Microsoft.Exchange.WebServices.Data.ItemView(10000))
-
-        service.LoadPropertiesForItems(items, New Microsoft.Exchange.WebServices.Data.PropertySet(Microsoft.Exchange.WebServices.Data.EmailMessageSchema.From,
-                                                                                                  Microsoft.Exchange.WebServices.Data.ItemSchema.Body,
-                                                                                                  Microsoft.Exchange.WebServices.Data.ItemSchema.Subject,
-                                                                                                  Microsoft.Exchange.WebServices.Data.ItemSchema.Attachments,
-                                                                                                  Microsoft.Exchange.WebServices.Data.EmailMessageSchema.InternetMessageId,
-                                                                                                  Microsoft.Exchange.WebServices.Data.EmailMessageSchema.InReplyTo,
-                                                                                                  Microsoft.Exchange.WebServices.Data.ItemSchema.DateTimeReceived))
-
+        Dim items As FindItemsResults(Of Item) = inbox.FindItems(New ItemView(10000))
         Dim messages As List(Of MailMessage) = New List(Of MailMessage)()
 
-        For Each item As Microsoft.Exchange.WebServices.Data.Item In items
-            If item.GetType() Is GetType(Microsoft.Exchange.WebServices.Data.EmailMessage) Then
-                Dim mail As Microsoft.Exchange.WebServices.Data.EmailMessage = item
+        If items Is Nothing Or Not items.Any() Then
+            Return messages
+        End If
+
+        Dim response = service.LoadPropertiesForItems(items, New PropertySet(EmailMessageSchema.From,
+                                                                                                  EmailMessageSchema.ToRecipients,
+                                                                                                  EmailMessageSchema.CcRecipients,
+                                                                                                  EmailMessageSchema.BccRecipients,
+                                                                                                  ItemSchema.Body,
+                                                                                                  ItemSchema.Subject,
+                                                                                                  ItemSchema.Attachments,
+                                                                                                  EmailMessageSchema.InternetMessageId,
+                                                                                                  EmailMessageSchema.InReplyTo,
+                                                                                                  ItemSchema.DateTimeReceived))
+
+        For Each item As Item In items
+            If item.GetType() Is GetType(EmailMessage) Then
+                Dim mail As EmailMessage = item
+                If String.IsNullOrWhiteSpace(mail.Subject) Then
+                    LogError("Missing mail subject for email: " & mail.From.Address)
+                    Continue For
+                End If
 
                 Dim message As EwsMailMessage = New EwsMailMessage()
                 message.MessageId = New MessageId(mail.InternetMessageId)
@@ -1245,12 +1240,18 @@ Module DH_Helpdesk_Mail
                     message.InReplyTo.Add(New MessageId(mail.InReplyTo))
                 End If
 
-                For Each recpt As MailAddress In (From r As Microsoft.Exchange.WebServices.Data.EmailAddress In mail.ToRecipients
+                For Each recpt As MailAddress In (From r As EmailAddress In mail.ToRecipients
                                                   Select New MailAddress(r.Address, r.Name))
                     message.To.Add(recpt)
                 Next
+
+                For Each recpt As MailAddress In (From r As EmailAddress In mail.CcRecipients
+                                                  Select New MailAddress(r.Address, r.Name))
+                    message.CC.Add(recpt)
+                Next
+
                 message.Subject = mail.Subject
-                If mail.Body.BodyType = Microsoft.Exchange.WebServices.Data.BodyType.HTML Then
+                If mail.Body.BodyType = BodyType.HTML Then
                     message.BodyHtml = mail.Body.Text
                 Else
                     message.BodyText = mail.Body.Text
@@ -1258,12 +1259,30 @@ Module DH_Helpdesk_Mail
 
                 If mail.Attachments.Any() Then
                     For Each attach As Microsoft.Exchange.WebServices.Data.Attachment In mail.Attachments
-                        If attach.GetType() = GetType(Microsoft.Exchange.WebServices.Data.FileAttachment) Then
-                            attach.Load()
+                        If attach.GetType() = GetType(FileAttachment) Then
+                            Try
+                                attach.Load()
+                            Catch ex As Exception
+                                LogError("Error loading attachment: " & ex.Message.ToString)
+                                'rethrow
+                                Throw
+                            End Try
 
-                            Dim fileAttach As Microsoft.Exchange.WebServices.Data.FileAttachment = attach
-                            Dim newAttachment As Attachment = New Attachment(New MemoryStream(fileAttach.Content), fileAttach.Name)
-                            message.Attachments.Add(newAttachment)
+                            Dim fileAttach As FileAttachment = attach
+                            If Not attach.IsInline Then
+                                Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(fileAttach.Content), fileAttach.Name)
+                                message.Attachments.Add(newAttachment)
+                            Else
+                                Dim newResource As LinkedResource = New LinkedResource(New MemoryStream(fileAttach.Content), fileAttach.Name, fileAttach.ContentType)
+                                If Not fileAttach.ContentId Is Nothing Then
+                                    newResource.ContentId = fileAttach.ContentId
+                                End If
+                                If Not fileAttach.ContentLocation Is Nothing Then
+                                    newResource.ContentLocation = fileAttach.ContentLocation
+                                End If
+                                message.Resources.Add(newResource)
+                            End If
+
                         End If
                     Next
                 End If
@@ -1273,6 +1292,51 @@ Module DH_Helpdesk_Mail
         Next
 
         Return messages
+    End Function
+
+    Private Function FindEwsFolder(emailFolder As String, service As ExchangeService) As Folder
+        Dim emailFolders As String()
+        Dim isInbox As Boolean
+        If emailFolder.IndexOf("/"c) >= 0 Then
+            emailFolders = emailFolder.Split("/"c)
+            isInbox = emailFolders.First().Equals(InboxMailFolderName, StringComparison.InvariantCultureIgnoreCase)
+            emailFolder = emailFolders.Last()
+        End If
+
+        Dim inbox As Folder
+        Dim folders As FindFoldersResults
+        If Not isInbox Then
+            Try
+                folders = service.FindFolders(WellKnownFolderName.MsgFolderRoot, New FolderView(100))
+            Catch ex As Exception
+                LogError("Error readMailBox: " & ex.Message.ToString)
+                'rethrow
+                Throw
+            End Try
+        End If
+
+        Dim customEmailFolder As FindFoldersResults
+        Try
+            'Subfolders in inbox
+            customEmailFolder = service.FindFolders(WellKnownFolderName.Inbox, New FolderView(100))
+        Catch ex As Exception
+            LogError("Error readMailBox: " & ex.Message.ToString)
+            'rethrow
+            Throw
+        End Try
+
+        inbox = folders.FirstOrDefault(Function(folder) folder.DisplayName = emailFolder)
+
+        If customEmailFolder IsNot Nothing Then
+            For Each f As Folder In customEmailFolder
+                If f.DisplayName = emailFolder Then ' Read folder specified in tblsettings
+                    inbox = f
+                    Exit For
+                End If
+            Next
+        End If
+
+        Return inbox
     End Function
 
     Private Function CheckIfTwoAttachmentsModeEnabled(objCaseData As CaseData, iCustomerID As Integer) As Boolean
@@ -1346,7 +1410,6 @@ Module DH_Helpdesk_Mail
 
         Dim whiteList As List(Of String) = GetFileUploadWhiteList(globalSettings)
 
-
         Dim tempDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, "Temp", objectId)
         Dim saveDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, If(IsNullOrEmpty(prefix), objectId, prefix & objectId))
 
@@ -1362,7 +1425,7 @@ Module DH_Helpdesk_Mail
             End If
 
             'Save to temp dir
-            For Each msgAttachment As Attachment In message.Attachments
+            For Each msgAttachment As Rebex.Mail.Attachment In message.Attachments
                 Dim sFileNameTemp As String = msgAttachment.FileName
                 sFileNameTemp = sFileNameTemp.Replace(":", "")
                 sFileNameTemp = URLDecode(sFileNameTemp)
@@ -1399,7 +1462,7 @@ Module DH_Helpdesk_Mail
             End If
 
             'Save to temp dir
-            For Each msgAttachment As Attachment In message.Attachments
+            For Each msgAttachment As Rebex.Mail.Attachment In message.Attachments
                 Dim sFileName As String = msgAttachment.FileName
                 sFileName = sFileName.Replace(":", "")
                 sFileName = URLDecode(sFileName)
@@ -1584,7 +1647,7 @@ Module DH_Helpdesk_Mail
 
     End Function
 
-    Private Function createHtmlFileFromMail(ByVal message As Rebex.Mail.MailMessage,
+    Private Function CreateHtmlFileFromMail(ByVal message As MailMessage,
                                             ByVal sFolder As String,
                                             ByVal sCaseNumber As String) As String
 
@@ -1634,10 +1697,10 @@ Module DH_Helpdesk_Mail
                     sFileName = sCaseNumber & ".htm"
 
                     ' Kontrollera om det finns några resurser
-                    Dim resCol As Rebex.Mail.LinkedResourceCollection = message.Resources
+                    Dim resCol As LinkedResourceCollection = message.Resources
 
                     For k As Integer = 0 To resCol.Count - 1
-                        Dim res As Rebex.Mail.LinkedResource = resCol(k)
+                        Dim res As LinkedResource = resCol(k)
 
                         sMediaType = res.MediaType
 
@@ -1666,7 +1729,7 @@ Module DH_Helpdesk_Mail
                                 ' Spara filen
                                 res.Save(sFolder & "\html\" & iFileCount & "." & sFileExtension)
 
-                                sContentLocation = res.ContentLocation.ToString
+                                sContentLocation = IIf(String.IsNullOrWhiteSpace(res.ContentLocation), String.Empty, res.ContentLocation)
                                 sBodyHtml = sBodyHtml.Replace(sContentLocation, iFileCount & "." & sFileExtension)
                             End If
                         End If
@@ -1675,7 +1738,7 @@ Module DH_Helpdesk_Mail
                     Dim objFile As StreamWriter
                     'Dim objHeaderFile As StreamWriter
 
-                    objFile = New StreamWriter(sFolder & "\html\" & sFileName, False, System.Text.UnicodeEncoding.Unicode)
+                    objFile = New StreamWriter(sFolder & "\html\" & sFileName, False, UnicodeEncoding.Unicode)
                     objFile.Write(sBodyHtml)
                     objFile.Close()
 
@@ -1696,7 +1759,7 @@ Module DH_Helpdesk_Mail
         Return sFileName
     End Function
 
-    Private Function createPdfFileFromMail(ByVal message As Rebex.Mail.MailMessage,
+    Private Function CreatePdfFileFromMail(ByVal message As MailMessage,
                                             ByVal sFolder As String,
                                             ByVal sCaseNumber As String) As String
 
@@ -1729,11 +1792,12 @@ Module DH_Helpdesk_Mail
 
                     'Winovative
 
-                    Dim htmlToPdfConverter As New Winnovative.HtmlToPdfConverter()
+                    Dim htmlToPdfConverter As New HtmlToPdfConverter()
 
                     ' Set license key received after purchase to use the converter in licensed mode
                     ' Leave it not set to use the converter in demo mode
-                    htmlToPdfConverter.LicenseKey = "xUtbSltKWkpbW0RaSllbRFtYRFNTU1M="
+                    'htmlToPdfConverter.LicenseKey = "xUtbSltKWkpbW0RaSllbRFtYRFNTU1M="
+                    htmlToPdfConverter.LicenseKey = "K6W2pLWksra3tqS1saq0pLe1qrW2qr29vb2ktA=="
 
                     ' Set PDF page size which can be a predefined size like A4 or a custom size in points 
                     ' Leave it not set to have a default A4 PDF page
@@ -1760,7 +1824,7 @@ Module DH_Helpdesk_Mail
                         Dim outPdfBuffer() As Byte = htmlToPdfConverter.ConvertUrl(url)
 
                         ' Write the memory buffer in a PDF file
-                        System.IO.File.WriteAllBytes(outPdfFile, outPdfBuffer)
+                        File.WriteAllBytes(outPdfFile, outPdfBuffer)
 
                     Catch ex As Exception
                         ' The HTML to PDF conversion failed                       
@@ -1901,14 +1965,14 @@ Module DH_Helpdesk_Mail
     End Sub
 
     Private Sub createZipFile(ByVal sSourceDir As String, ByVal sFileName As String)
-        Dim fz As New ICSharpCode.SharpZipLib.Zip.FastZip
+        Dim fz As New FastZip
         fz.CreateZip(sFileName, sSourceDir, True, "", "")
         fz = Nothing
     End Sub
 
     Private Function convertHTMLtoText(ByVal sHTML As String) As String
         Dim startTime As DateTime
-        Dim MyWebBrowser As New System.Windows.Forms.WebBrowser
+        Dim MyWebBrowser As New WebBrowser
 
         startTime = DateTime.Now()
 
@@ -1916,8 +1980,8 @@ Module DH_Helpdesk_Mail
 
         MyWebBrowser.ScriptErrorsSuppressed = True
 
-        While (MyWebBrowser.ReadyState <> System.Windows.Forms.WebBrowserReadyState.Complete Or MyWebBrowser.IsBusy = True) And DateDiff(DateInterval.Second, startTime, DateTime.Now()) < 10
-            System.Windows.Forms.Application.DoEvents()
+        While (MyWebBrowser.ReadyState <> WebBrowserReadyState.Complete Or MyWebBrowser.IsBusy = True) And DateDiff(DateInterval.Second, startTime, DateTime.Now()) < 10
+            Application.DoEvents()
         End While
 
         Try
@@ -2130,12 +2194,12 @@ End Module
 Public Class EwsMailMessage
     Inherits MailMessage
 
-    Private miId As Microsoft.Exchange.WebServices.Data.ItemId
-    Public Property EwsID() As Microsoft.Exchange.WebServices.Data.ItemId
+    Private miId As ItemId
+    Public Property EwsID() As ItemId
         Get
             Return miId
         End Get
-        Set(ByVal value As Microsoft.Exchange.WebServices.Data.ItemId)
+        Set(ByVal value As ItemId)
             miId = value
         End Set
     End Property

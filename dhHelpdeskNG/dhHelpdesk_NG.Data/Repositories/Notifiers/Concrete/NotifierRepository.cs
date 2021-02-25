@@ -576,6 +576,52 @@ namespace DH.Helpdesk.Dal.Repositories.Notifiers.Concrete
             return null;
         }
 
+        public Notifier GetInitiatorByMail(string mailAddress, int customerId, bool activeOnly)
+        {
+            var notifier = FindByMail(mailAddress, customerId, activeOnly);
+
+            if (notifier != null)
+            {
+                var res = Notifier.CreateNew(
+                    customerId,
+                    notifier.UserId,
+                    notifier.Domain_Id,
+                    notifier.LogonName,
+                    notifier.FirstName,
+                    notifier.Initials,
+                    notifier.SurName,
+                    notifier.DisplayName,
+                    notifier.Location,
+                    notifier.Phone,
+                    notifier.Cellphone,
+                    notifier.Email,
+                    notifier.UserCode,
+                    notifier.PostalAddress,
+                    notifier.Postalcode,
+                    notifier.City,
+                    notifier.Title,
+                    notifier.Department_Id,
+                    string.Empty,
+                    notifier.OU_Id,
+                    notifier.CostCentre,
+                    notifier.Division_Id,
+                    notifier.ManagerComputerUser_Id,
+                    notifier.ComputerUserGroup_Id,
+                    string.Empty,
+                    false,
+                    true,
+                    notifier.RegTime,
+                    notifier.LanguageId,
+                    notifier.ComputerUsersCategoryID);
+                res.Id = notifier.Id;
+
+                return res;
+            }
+            
+
+            return null;
+        }
+
         public bool IsInitiatorUserIdUnique(string userId, int initiatorId, int customerId, bool activeOnly)
         {
             var initiators = initiatorId > 0 ? DataContext.ComputerUsers.Where(x => x.Id != initiatorId) : DataContext.ComputerUsers;
@@ -609,6 +655,24 @@ namespace DH.Helpdesk.Dal.Repositories.Notifiers.Concrete
                 notifier =
                     DataContext.ComputerUsers.FirstOrDefault(cu => cu.Customer_Id == customerId &&
                                                                    cu.UserId.ToLower() == userId.ToLower() &&
+                                                                   (!activeOnly || cu.Status != 0));
+            }
+
+            return notifier;
+        }
+
+        private ComputerUser FindByMail(string mailAddress, int customerId, bool activeOnly)
+        {
+            var notifier =
+                DataContext.ComputerUsers.FirstOrDefault(cu => cu.Customer_Id == customerId &&
+                                                               cu.Email.ToLower() == mailAddress.ToLower() &&
+                                                               (!activeOnly || cu.Status != 0));
+
+            if (notifier == null)
+            {
+                notifier =
+                    DataContext.ComputerUsers.FirstOrDefault(cu => cu.Customer_Id == customerId &&
+                                                                   cu.Email.ToLower() == mailAddress.ToLower() &&
                                                                    (!activeOnly || cu.Status != 0));
             }
 

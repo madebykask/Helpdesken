@@ -234,6 +234,7 @@ using System;
                                             findByInitiator &&
                                             (
                                                 ((userId != null && userId.Trim() != "") && _case.ReportedBy == userId) ||
+                                                ((userId != null && userId.Trim() != "") && _case.PersonsEmail == userId) ||
                                                 ((employeeNumber != null && employeeNumber.Trim() != "") && _case.ReportedBy == employeeNumber)
                                             )
 

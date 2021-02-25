@@ -42,6 +42,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public string Initiator { get; set; }
 		public CaseInitiatorSearchScope InitiatorSearchScope { get; set; }
 
+
         public string Category { get; set; }
         public string WorkingGroup { get; set; }
         public string Priority { get; set; }
@@ -179,6 +180,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
                     MyCasesUserGroup = o.CaseOverviewCriteria.MyCasesUserGroup,
                     MyCasesInitiatorDepartmentId = o.CaseOverviewCriteria.MyCasesInitiatorDepartmentId,
                     UserId = o.CaseOverviewCriteria.UserId,
+                    PersonEmail = o.CaseOverviewCriteria.PersonEmail,
                     UserEmployeeNumber = o.CaseOverviewCriteria.UserEmployeeNumber,
                     GroupMember = o.CaseOverviewCriteria.GroupMember
                 };

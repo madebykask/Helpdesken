@@ -109,6 +109,8 @@ namespace DH.Helpdesk.Services.Services
 
         Guid Delete(int id, string basePath, int? parentCaseId);
 
+        void DeleteExCaseWhenCaseMove(int id);
+
         /// <summary>
         /// The get case overview.
         /// </summary>

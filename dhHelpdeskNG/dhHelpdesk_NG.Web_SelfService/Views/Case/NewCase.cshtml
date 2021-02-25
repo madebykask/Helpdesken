@@ -129,6 +129,9 @@
                     @Html.HiddenFor(model => model.NewCase.Id)
                     @Html.HiddenFor(model => model.NewCase.CaseGUID)
                     @Html.HiddenFor(model => model.NewCase.Customer_Id)
+                    @Html.HiddenFor(model => model.NewCase.Region_Id)
+                    @Html.HiddenFor(model => model.NewCase.Department_Id)
+                    @Html.HiddenFor(model => model.NewCase.OU_Id)
                     @Html.HiddenFor(model => model.NewCase.User_Id)
                     @Html.HiddenFor(model => model.NewCase.IpAddress)
                     @Html.HiddenFor(model => model.NewCase.Deleted)
@@ -164,6 +167,10 @@
                     @Html.HiddenFor(model => model.NewCase.FinishingDate)
                     @Html.HiddenFor(model => model.NewCase.FinishingDescription)
                     @Html.HiddenFor(model => model.NewCase.PlanDate)
+                    @Html.HiddenFor(model => model.NewCase.Place)
+                    @Html.HiddenFor(model => model.NewCase.Available)
+                    @Html.HiddenFor(model => model.NewCase.UserCode)
+                    @Html.HiddenFor(model => model.NewCase.ReferenceNumber)
                     @Html.HiddenFor(model => model.NewCase.Performer_User_Id)
                     @Html.HiddenFor(model => model.NewCase.Change_Id)
                     @Html.HiddenFor(model => model.NewCase.FinishingDescription)
@@ -799,14 +806,8 @@
 
                     if (Model.NewCase.Id == 0 && (recaptchaSiteKey != "" || recaptchaSiteKey != null))
                     {
-                        <div class="row">
-                            <div class="col-md-3 dh-col">
-                                <div class="container form-horizontal">
-                                    <div id="cap1"></div>
-                                    <div class="validation-message" style="margin:10px"></div>
-                                </div>
-                            </div>
-                        </div>}
+                        <div id="cap1" class="g-recaptcha" data-sitekey=@recaptchaSiteKey></div>                      
+                    }
 
                 }
             </div>

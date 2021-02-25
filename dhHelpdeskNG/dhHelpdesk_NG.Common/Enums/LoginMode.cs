@@ -18,6 +18,8 @@ namespace DH.Helpdesk.Common.Enums
         //[Description("singlesignon")]
         SSO,
 
+        Microsoft,
+
         Anonymous
     }
 }

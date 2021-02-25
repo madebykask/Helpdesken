@@ -63,33 +63,24 @@ namespace DH.Helpdesk.Dal.Infrastructure.Concrete
             var fromDirPath = ComposeFilePath(topic, entityId, sourceBasePath, string.Empty);
             var targetDirPath = ComposeFilePath(topic, entityId, targetBasePath, string.Empty);
 
-            if (Directory.Exists(fromDirPath))
+            var targetInfo = new DirectoryInfo(targetDirPath);
+            if (targetInfo.Exists == false)
+                Directory.CreateDirectory(targetDirPath);
+
+            var sourceInfo = new DirectoryInfo(fromDirPath);
+            if (sourceInfo.Exists)
             {
-                if (!Directory.Exists(targetDirPath))
-                    Directory.CreateDirectory(targetDirPath);
-                
+                var sourceSubDirs = sourceInfo.GetDirectories();
+                var files = Directory.GetFiles(fromDirPath);
+                MoveFiles(targetDirPath, files);
 
-                if (Directory.Exists(targetDirPath))
+                foreach (var subdir in sourceSubDirs)
                 {
-                    var files = Directory.GetFiles(fromDirPath);
-                    foreach (var file in files)
-                        if (!FilteredFiles.Contains(Path.GetFileName(file.ToLower())))
-                            File.Move(file, file.Replace(sourceBasePath, targetBasePath));
-
-                    var subDir1 = Path.Combine(fromDirPath, "html");
-                    if (Directory.Exists(subDir1))
+                    var targetSubDirPath = Path.Combine(targetDirPath, subdir.Name);
+                    if (!Directory.Exists(targetSubDirPath))
                     {
-                        var targetSubDir1 = subDir1.Replace(sourceBasePath, targetBasePath);
-                        if (!Directory.Exists(targetSubDir1))                        
-                            Directory.CreateDirectory(targetSubDir1);                        
-
-                        if (Directory.Exists(targetSubDir1))
-                        {
-                            var subFiles = Directory.GetFiles(subDir1);
-                            foreach (var file in subFiles)
-                                if (!FilteredFiles.Contains(Path.GetFileName(file.ToLower())))
-                                    File.Move(file, file.Replace(sourceBasePath, targetBasePath));
-                        }
+                        var subFiles = Directory.GetFiles(subdir.FullName);
+                        MoveFiles(targetSubDirPath, subFiles);
                     }
                 }
             }
@@ -115,6 +106,23 @@ namespace DH.Helpdesk.Dal.Infrastructure.Concrete
         private string ComposeDirectoryPath(string basePath, string topic, string entityId)
         {
             return Path.Combine(basePath, topic + entityId);
+        }
+
+        private void MoveFiles(string targetDirPath, IEnumerable<string> files)
+        {
+            foreach (var file in files)
+            {
+                if (string.IsNullOrWhiteSpace(file)) continue;
+
+                var name = Path.GetFileName(file);
+                var destFile = Path.Combine(targetDirPath, name);
+                if (!FilteredFiles.Contains(Path.GetFileName(file.ToLower())))
+                {
+                    if (!Directory.Exists(targetDirPath))
+                        Directory.CreateDirectory(targetDirPath);
+                    File.Move(file, destFile);
+                }
+            }
         }
     }
 }

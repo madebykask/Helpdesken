@@ -76,9 +76,9 @@ function getCollapseCaption(cap) {
             refreshContent: appSettings.refreshContent
         };
         if (self.settings.refreshContent > 0) {
-            setInterval(function () {
+            self.settings.refreshInterval = setInterval(function () {
                 self.autoReloadCheck.call(self);
-            }, 500);
+            }, 5000);
         }
 
         //// Bind elements
@@ -176,6 +176,10 @@ function getCollapseCaption(cap) {
                         params.push({ name: "order", value: data.order.length === 1 ? data.columns[data.order[0].column].data : "" });
                         params.push({ name: "dir", value: data.order.length === 1 ? data.order[0].dir : "" });
                         return params;
+                    },
+                    error: function (xhr, textStatus, error) {
+                        console.log("Error occured on loading SearchAjax");
+                        clearInterval(self.settings.refreshInterval);
                     },
                     dataSrc: "data"
                 },

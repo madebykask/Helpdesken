@@ -208,6 +208,9 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
                                                         int showNotAssignedWorkingGroups = 1)
         {
             var currentUser = searchParams.IdentityUser;
+           
+            var appSettings = _configurationService.AppSettings;
+            var loginMode = appSettings.LoginMode;           
 
             var search = new Search
             {
@@ -225,6 +228,10 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
                 RegUserId = currentUser,
                 CaseOverviewCriteria = GetCaseOverviewCriteria()
             };
+            if (loginMode == LoginMode.Microsoft)
+            {
+                searchFilter.CaseOverviewCriteria.PersonEmail = currentUser;
+            }
 
             CaseRemainingTimeData remainingTimeData;
             CaseAggregateData aggregateData;
