@@ -195,7 +195,8 @@
                 "Calendar.Caption": 'required',
                 "Calendar.CalendarDate": {
                     'required': true,
-                    'date': true
+                    'date': true,
+                    'dateInBetween': true
                 },
                 "Calendar.ShowFromDate": {
                     'required': true,
@@ -218,7 +219,8 @@
                 },
                 'Calendar.CalendarDate': {
                     required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Skapad datum") ))',
-                    date: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")'
+                    date: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")',
+                    dateInBetween: '@Translation.GetForJS("Var vänlig ange ett giltigt datum")'
                 },
                 'Calendar.ShowFromDate': {
                     required: '@( string.Format("{0} {1}", Translation.GetForJS("Du måste ange"), Translation.GetForJS("Visa fr.o.m") ))',
@@ -247,6 +249,7 @@
         form.submit();
     }
         });
+
     $.validator.addMethod('dateGreaterThan', function (value, element, param) {
         var fromDate = $("#divCalendar_ShowFromDate").datepicker('getDate');
         var endDate = $("#divCalendar_ShowUntilDate").datepicker('getDate');
@@ -257,12 +260,25 @@
 
     }, '@Translation.GetForJS("Var vänlig ange ett giltigt datum")');
 
-        $.validator.addMethod('checkStartDate', function (value, element, param) {
-        var today = $("#divCalendar_CalendarDate").datepicker('getDate');
+    $.validator.addMethod('checkStartDate', function (value, element, param) {
+    var theDate = $("#divCalendar_CalendarDate").datepicker('getDate');
+    var fromDate = $("#divCalendar_ShowFromDate").datepicker('getDate');
+        if (Date.parse(fromDate) <= Date.parse(theDate)) {
+        return true;
+    }
+    return false;
+
+    }, '@Translation.GetForJS("Var vänlig ange ett giltigt datum")');
+
+    $.validator.addMethod('dateInBetween', function (value, element, param) {
+
+        var theDate = $("#divCalendar_CalendarDate").datepicker('getDate');
         var fromDate = $("#divCalendar_ShowFromDate").datepicker('getDate');
-        if (Date.parse(fromDate) >= Date.parse(today)) {
+        var endDate = $("#divCalendar_ShowUntilDate").datepicker('getDate');
+        if ((Date.parse(theDate) >= Date.parse(fromDate)) && (Date.parse(theDate) <= Date.parse(endDate))) {
             return true;
         }
+
         return false;
 
     }, '@Translation.GetForJS("Var vänlig ange ett giltigt datum")');
