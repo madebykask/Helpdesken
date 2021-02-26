@@ -264,9 +264,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 if (mailTemplateLanguage.MailTemplateName != null)
                     mailtemplatelanguageToSave.MailTemplateName = mailTemplateLanguage.MailTemplateName;
             }
-
+            //Textarea maxlenth does not work as expected, this is to check the actual characterlengt 
+            //int bodyLength = mailTemplateLanguage.Body.Length;
             this._mailTemplateService.SaveMailTemplateLanguage(mailtemplatelanguageToSave, update, out errors);
-
+            
             if (errors.Count == 0)
                 // return this.RedirectToAction("edit", "mailtemplate", new { customerId = customer.Id, id = id, languageId = mailTemplateLanguage.Language_Id });
                 return this.RedirectToAction("index", "mailtemplate", new { customerId = customerId });
