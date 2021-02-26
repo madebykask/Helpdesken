@@ -245,6 +245,9 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = 'Closing description' WHERE Text_Id=171 AND Language_Id=2;
 GO
 
+UPDATE tblText Set TextString = 'Det går inte att ta bort en kategori som är kopplad till en eller flera FAQ' WHERE Id=174 AND TextType = 0;
+GO
+
 UPDATE tblTextTranslation Set TextTranslation = 'You cannot delete a category that is connected to an FAQ' WHERE Text_Id=174 AND Language_Id=2;
 GO
 
