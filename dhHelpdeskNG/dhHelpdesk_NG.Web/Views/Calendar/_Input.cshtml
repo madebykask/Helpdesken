@@ -271,11 +271,11 @@
     }, '@Translation.GetForJS("Var vänlig ange ett giltigt datum")');
 
     $.validator.addMethod('dateInBetween', function (value, element, param) {
-        var today = new Date().toLocaleDateString();
+
         var theDate = $("#divCalendar_CalendarDate").datepicker('getDate');
         var fromDate = $("#divCalendar_ShowFromDate").datepicker('getDate');
         var endDate = $("#divCalendar_ShowUntilDate").datepicker('getDate');
-        if ((Date.parse(theDate) >= Date.parse(fromDate)) && (Date.parse(theDate) <= Date.parse(endDate)) && (Date.parse(theDate) >= Date.parse(today))){
+        if ((Date.parse(theDate) >= Date.parse(fromDate)) && (Date.parse(theDate) <= Date.parse(endDate))) {
             return true;
         }
 
