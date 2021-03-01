@@ -234,39 +234,33 @@
                 },
                 "WGsSelected": {
                     required: '@Translation.GetForJS("Du måste ange en driftgrupp", Enums.TranslationSource.TextTranslation)'
-        }
-    },
-        errorPlacement: function (error, element) {
-        if (element.is("textarea")) {
-            element.parent().prepend(error);
-        } else if (element.parent().hasClass('date')) {
-            element.parent().append(error);
-        } else {
-            error.insertAfter(element);
-        }
-    },
-    submitHandler: function (form) {
-        form.submit();
-    }
+                }
+            },
+            errorPlacement: function (error, element) {
+                if (element.is("textarea")) {
+                    element.parent().prepend(error);
+                } else if (element.parent().hasClass('date')) {
+                    element.parent().append(error);
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
         });
 
     $.validator.addMethod('dateGreaterThan', function (value, element, param) {
         var fromDate = $("#divCalendar_ShowFromDate").datepicker('getDate');
         var endDate = $("#divCalendar_ShowUntilDate").datepicker('getDate');
-        if (Date.parse(endDate) >= Date.parse(fromDate)) {
-            return true;
-        }
-        return false;
+        return Date.parse(endDate) >= Date.parse(fromDate);
 
     }, '@Translation.GetForJS("Var vänlig ange ett giltigt datum")');
 
     $.validator.addMethod('checkStartDate', function (value, element, param) {
-    var theDate = $("#divCalendar_CalendarDate").datepicker('getDate');
-    var fromDate = $("#divCalendar_ShowFromDate").datepicker('getDate');
-        if (Date.parse(fromDate) <= Date.parse(theDate)) {
-        return true;
-    }
-    return false;
+        var theDate = $("#divCalendar_CalendarDate").datepicker('getDate');
+        var fromDate = $("#divCalendar_ShowFromDate").datepicker('getDate');
+        return Date.parse(fromDate) <= Date.parse(theDate));
 
     }, '@Translation.GetForJS("Var vänlig ange ett giltigt datum")');
 
@@ -275,11 +269,7 @@
         var theDate = $("#divCalendar_CalendarDate").datepicker('getDate');
         var fromDate = $("#divCalendar_ShowFromDate").datepicker('getDate');
         var endDate = $("#divCalendar_ShowUntilDate").datepicker('getDate');
-        if ((Date.parse(theDate) >= Date.parse(fromDate)) && (Date.parse(theDate) <= Date.parse(endDate))) {
-            return true;
-        }
-
-        return false;
+        return (Date.parse(theDate) >= Date.parse(fromDate)) && (Date.parse(theDate) <= Date.parse(endDate));
 
     }, '@Translation.GetForJS("Var vänlig ange ett giltigt datum")');
 
