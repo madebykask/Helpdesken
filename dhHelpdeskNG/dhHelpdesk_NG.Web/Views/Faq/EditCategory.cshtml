@@ -26,7 +26,7 @@
                     <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), "edit", null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                     @*<li><input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" /></li>*@
              
-                    if (this.Model.HasFaqs)
+                    if (Model.HasFaqs || Model.HasSubcategories)
                     {
                         <li>
                                 @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "#", new { id = Model.Id },
