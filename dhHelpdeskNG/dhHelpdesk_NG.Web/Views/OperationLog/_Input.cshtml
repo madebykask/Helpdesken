@@ -346,11 +346,7 @@
     $.validator.addMethod('dateGreaterThan', function (value, element, param) {
         var fromDate = $("#divOperationLog_ShowDate").datepicker('getDate');
         var endDate = $("#divOperationLog_ShowUntilDate").datepicker('getDate');
-    if (Date.parse(endDate) >= Date.parse(fromDate)) {
-        return true;
-    }
-    return false;
-
+        return Date.parse(endDate) >= Date.parse(fromDate);
     }, '@Translation.GetForJS("Var vänlig ange ett giltigt datum")');
 
     $(function () {
@@ -501,7 +497,13 @@
                     'dateGreaterThan': true
                 },
             },
-
+            errorPlacement: function (error, element) {
+                if (element.parent().hasClass('date')) {
+                    element.parent().append(error);
+                } else {
+                    error.insertAfter(element);
+                }
+            },
             messages: {
                 "OperationLog.OperationObject_Id": {
                     required: "@Translation.GetForJS("OperlationLog object Id is required")"
