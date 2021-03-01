@@ -260,7 +260,7 @@
     $.validator.addMethod('checkStartDate', function (value, element, param) {
         var theDate = $("#divCalendar_CalendarDate").datepicker('getDate');
         var fromDate = $("#divCalendar_ShowFromDate").datepicker('getDate');
-        return Date.parse(fromDate) <= Date.parse(theDate));
+        return Date.parse(fromDate) <= Date.parse(theDate);
 
     }, '@Translation.GetForJS("Var vänlig ange ett giltigt datum")');
 
