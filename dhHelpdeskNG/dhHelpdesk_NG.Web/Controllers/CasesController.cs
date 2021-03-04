@@ -1513,6 +1513,13 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseMailSetting.DontSendMailToNotifier = m.CaseMailSetting.DontSendMailToNotifier == false;
             m.IsReturnToCase = retToCase;
 
+            //If case has been moved to customer with no access, extended case has been removed and therefore active tab should be "case-tab"
+            //Template still has DefaultTab "extendedcase-tab" in db (tblcasesolution)
+            if (m.ExtendedCases.Count == 0)
+            {
+                m.ActiveTab = "";
+            }
+
             return this.View(m);
         }
 
