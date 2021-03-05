@@ -39,7 +39,11 @@ namespace DH.Helpdesk.Dal.Infrastructure.Concrete
             var directory = Path.GetDirectoryName(savePath);
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
-            
+
+            if (File.Exists(savePath))
+            {
+                File.Delete(savePath);
+            }
             using (var fileStream = new FileStream(savePath, FileMode.CreateNew))
             {
                 fileStream.Write(content, 0, content.Length);
