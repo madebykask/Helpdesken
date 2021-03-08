@@ -524,6 +524,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var model = GetExtendedCaseViewModel(caseTemplateId, caseId);
             if (ErrorGenerator.HasError())
                 return RedirectToAction("Index", "Error");
+            RouteData.Values.Remove("caseId"); //hack to prevent ambient params in Url.Action in view
 
             if (!caseId.IsNew())
             {
@@ -533,10 +534,25 @@ namespace DH.Helpdesk.SelfService.Controllers
                     model.ShowRegistrationMessage = true;
                     model.CaseRegistrationMessage = GetCaseRegistrationMessage(SessionFacade.CurrentLanguageId);
                 }
+
+                int caseExistId = caseId ?? 0;
+                if (caseExistId != 0)
+                {
+                    //New to get the case also even if it's an extended case
+                    var currentCase = _caseService.GetCaseById(caseExistId);
+                    var languageId = SessionFacade.CurrentLanguageId;
+                    var currentCaseModel = GetCaseReceiptModel(currentCase, languageId);
+                    model.CaseOverviewModel = currentCaseModel;
+                   
+                }
+                return View("ExtendedCaseWithCase", model);
+            }
+            else
+            {
+                return View("ExtendedCase", model);
             }
 
-            RouteData.Values.Remove("caseId"); //hack to prevent ambient params in Url.Action in view
-            return View("ExtendedCase", model);
+            
         }
 
         [HttpPost]

@@ -10,6 +10,7 @@ namespace DH.Helpdesk.SelfService.Models.Case
 {       
     public class ExtendedCaseViewModel
     {
+        public CaseOverviewModel CaseOverviewModel { get; set; }
         public ExtendedCaseViewModel()
         {
             CaseOU = null;
