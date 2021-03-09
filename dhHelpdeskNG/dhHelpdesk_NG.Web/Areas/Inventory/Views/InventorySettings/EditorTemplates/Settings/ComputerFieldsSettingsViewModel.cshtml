@@ -195,13 +195,16 @@
             @Html.EditorFor(m => m.ContractFieldsSettingsModel.AccountingDimension5FieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            @Html.EditorFor(m => m.ContractFieldsSettingsModel.DocumentsFieldSettingModel, "Settings/FieldSettingForComputerModel")
-        </tr>
-        <tr>
             <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Övrigt")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.OtherFieldsSettingsModel.InfoFieldSettingModel, "Settings/FieldSettingForComputerModel")
+        </tr>
+        <tr>
+            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Dokument")</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.ContractFieldsSettingsModel.DocumentsFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
             <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Användaruppgifter")</td>
