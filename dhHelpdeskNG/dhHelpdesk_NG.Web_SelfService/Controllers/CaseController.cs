@@ -808,10 +808,10 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
                     
             var isCaptchaActive = IsCaptchaActive();
-            var isCaptchaValid = IsCaptchaValid();
 
             if (isCaptchaActive)
             {
+                var isCaptchaValid = IsCaptchaValid();
                 if (ModelState.IsValid && isCaptchaValid)
                 {
                     Save(newCase, caseMailSetting, caseFileKey, followerUsers, caseLog, out caseNum);
