@@ -1515,10 +1515,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             //If case has been moved to customer with no access, extended case has been removed and therefore active tab should be "case-tab"
             //Template still has DefaultTab "extendedcase-tab" in db (tblcasesolution)
-            if (m.ExtendedCases.Count == 0)
+            if(m.ContainsExtendedCase == false)
             {
                 m.ActiveTab = "";
             }
+            
 
             return this.View(m);
         }
