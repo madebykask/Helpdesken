@@ -17,6 +17,7 @@ namespace DH.Helpdesk.SelfService.Models.Case
             Result = new ProcessResult("");
         }
 
+        public string ActiveTab { get; set; }
         public int CustomerId { get; set; }
         public int LanguageId { get; set; }
         public int CaseId { get; set; }

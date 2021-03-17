@@ -31,7 +31,9 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public int ExternalTime { get; set; } 
 
-        public int Deleted { get; set; } 
+        public int Deleted { get; set; }
+        public string AvailableTabsSelfsevice { get; set; }
+        public string ActiveTabSelfservice { get; set; }
 
 
         #endregion

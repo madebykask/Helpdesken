@@ -279,7 +279,14 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
             
             if (currentCase.CaseExtendedCaseDatas.Any())
-                return RedirectToAction("ExtendedCase", new { caseId = currentCase.Id });
+            {
+                //New check here if Only Extended case should see Case-tab
+                if (currentCase.CaseSolution.AvailableTabsSelfsevice != "case-tab")
+                {
+                    return RedirectToAction("ExtendedCase", new { caseId = currentCase.Id });
+                }
+            }
+                
            
             var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
             var isMultiCustomerMode = globalSettings.MultiCustomersSearch.ToBool();
@@ -543,9 +550,13 @@ namespace DH.Helpdesk.SelfService.Controllers
                     var languageId = SessionFacade.CurrentLanguageId;
                     var currentCaseModel = GetCaseReceiptModel(currentCase, languageId);
                     model.CaseOverviewModel = currentCaseModel;
-                   
+                   if(currentCase.CaseSolution.AvailableTabsSelfsevice =="both")
+                    {
+                        model.ActiveTab = currentCase.CaseSolution.ActiveTabSelfservice;
+                        return View("ExtendedCaseWithCase", model);
+                    }
                 }
-                return View("ExtendedCaseWithCase", model);
+                return View("ExtendedCase", model);
             }
             else
             {
@@ -1116,7 +1127,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 return null;
             }
 
-            var model = new ExtendedCaseViewModel
+            var model = new ExtendedCaseViewModel()
             {
                 CaseId = initData.CaseId,
                 CaseTemplateId = initData.CaseSolutionId,

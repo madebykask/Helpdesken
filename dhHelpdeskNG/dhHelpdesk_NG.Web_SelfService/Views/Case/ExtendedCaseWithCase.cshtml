@@ -31,13 +31,6 @@
     var downloadCaseFileCompleteUrl = downloadCaseFileUrl + "?" + "id=" + "{id}" + "&fileName=" + "{name}";
     var returnUrl = (string)(ViewBag.ReturnUrl ?? "");
 
-    var recaptchaSiteKey = ConfigurationManager.AppSettings[AppSettingsKey.ReCaptchaSiteKey] != null ?
-                           ConfigurationManager.AppSettings[AppSettingsKey.ReCaptchaSiteKey].ToString() : "";
-    if (recaptchaSiteKey == "#{reCaptchaSiteKey}")
-    {
-        recaptchaSiteKey = "";
-    }
-
 }
 
 <script type="text/javascript">
@@ -368,10 +361,10 @@
 
 <div class="container-fluid dh-container">
     <ul class="nav nav-tabs" id="tabsArea">
-        <li id="CasePreviewTab" class="active">
+        <li id="CasePreviewTab" class="@((Model.ActiveTab == "" || Model.ActiveTab == CaseTabs.CaseTab) ? "active" : "")">
             <a href="#fragment-2">@Translation.Get("Case", Enums.TranslationSource.TextTranslation): @Model.CaseDataModel.CaseNumber</a>
         </li>
-        <li id="extendedcase-tab-@extendedFormId">
+        <li id="extendedcase-tab-@extendedFormId" class="@((Model.ActiveTab == "" || Model.ActiveTab == "extendedcase-tab-"+@extendedFormId) ? "active" : "")">
             <a href="#fragment-1">
                 @Translation.Get(Model.ExtendedCaseDataModel.FormModel.Name, Enums.TranslationSource.TextTranslation)
                 <i id="exTabIndicator_@extendedFormId" class="tab-indicator" style="display: none;">&nbsp;</i>
@@ -391,7 +384,7 @@
     </div>
     <div class="content tab-content">
         <!-- New tab with case-receipt-->
-        <div id="fragment-2" class="tab-pane active">
+        <div id="fragment-2" class="tab-pane @((Model.ActiveTab == "" || Model.ActiveTab == CaseTabs.CaseTab) ? "active" : "")">
             <div class="container-fluid dh-container">
                 @if (Model.CaseOverviewModel.CaseFieldGroups.Contains(Enums.CaseFieldGroups.UserInformation))
                 {
@@ -794,19 +787,19 @@
                                     </div>
                                 }
                                 @*@if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()))
-                        {
-                            <div class="form-group row">
-                                <label class="col-md-3">
-                                    @Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                                </label>
-                                <div class="col-md-9">
-                                    @if (Model.CasePreview.Priority != null)
                                     {
-                                        @Model.CasePreview.Priority.Name
-                                    }
-                                </div>
-                            </div>
-                        }*@
+                                        <div class="form-group row">
+                                            <label class="col-md-3">
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                            </label>
+                                            <div class="col-md-9">
+                                                @if (Model.CasePreview.Priority != null)
+                                                {
+                                                    @Model.CasePreview.Priority.Name
+                                                }
+                                            </div>
+                                        </div>
+                                    }*@
                                 @if (Model.CaseOverviewModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()))
                                 {
                                     <div class="form-group row">
@@ -979,7 +972,7 @@
             </div>
         </div>
         <!-- Extended Case -Tab contetnt-->
-        <div id="fragment-1" class="tab-pane">
+        <div id="fragment-1" class="tab-pane @((Model.ActiveTab == "" || Model.ActiveTab == "extendedcase-tab-"+@extendedFormId) ? "active" : "")">
             <div class="container-fluid dh-container">
 
                 @if (Model.CaseDataModel.FinishingDate != null)
@@ -998,10 +991,6 @@
                     @Html.Partial("_CaseInformation", Model, new ViewDataDictionary(ViewData) { { "Headline", Translation.Get(Model.ExtendedCaseDataModel.FormModel.Name) } })
                     @*Extended case placement*@
                 </div>
-                @if (Model.CaseId == 0 && (recaptchaSiteKey != "" || recaptchaSiteKey != null))
-                {
-                    <div id="cap1" class="g-recaptcha" data-sitekey=@recaptchaSiteKey></div>
-                }
             </div>
         </div>
         @if (Model.AttachmentPlacement == 1 &&
@@ -1059,30 +1048,10 @@
 @section Scripts
 {
     @Scripts.Render("~/Content/js/Case/extendedCase")
-    @if (recaptchaSiteKey != "")
-    {
-        <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
-    }
+
     <script type="text/javascript">
 
-        var recaptchaKey = '@recaptchaSiteKey';
-
-        var captchaChecker = function () { };
-        var recaptcha_widget;
-        var onloadCallback = function () {
-            if ($('#cap1').length) {
-                recaptcha_widget = grecaptcha.render('cap1', {
-                    'sitekey': '@recaptchaSiteKey',
-                    'theme': 'light'
-                });
-            }
-
-            captchaChecker = function () {
-                return grecaptcha.getResponse(recaptcha_widget);
-            }
-
-        };
-        var recaptchaMessage = '@Translation.GetForJS("Please confirm that you are not a robot.")';
+        var recaptchaKey = '';
 
         $(function () {
             //init extended case page js instance

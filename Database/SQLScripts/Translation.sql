@@ -7928,11 +7928,46 @@ begin
 end
 GO
 
+----Nytt
+If not exists (select * from tbltext where TextString = 'Tillgängliga flikar Självservice')
+begin
+    If not exists (select * from tbltext where id = 2072)
+	insert into tbltext (id, TextString, TextType) VALUES (2072, 'Tillgängliga flikar Självservice', 0)
+
+	If not exists (select * from tblTextTranslation where text_id = 2072 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2072, 2, N'Available tabs Self Service')
+end
+GO
+
+If not exists (select * from tbltext where TextString = 'Aktiv flik Självservice')
+begin
+    If not exists (select * from tbltext where id = 2073)
+	insert into tbltext (id, TextString, TextType) VALUES (2073, 'Aktiv flik Självservice', 0)
+
+	If not exists (select * from tblTextTranslation where text_id = 2073 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2073, 2, N'Active tab Self Service')
+end
+GO
+
+If not exists (select * from tbltext where TextString = 'Aktiv flik Helpdesk')
+begin
+    If not exists (select * from tbltext where id = 2074)
+	insert into tbltext (id, TextString, TextType) VALUES (2074, 'Aktiv flik Helpdesk', 0)
+
+	If not exists (select * from tblTextTranslation where text_id = 2074 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2074, 2, N'Active tab Helpdesk')
+end
+GO
+
+--- Slut nytt
+
 if exists (Select * from tblTextTranslation where Text_Id = 426 and Language_Id = 2 and TextTranslation = 'that are used can not be removed')
 BEGIN
 	UPDATE tblTextTranslation SET TextTranslation = N'that are used cannot be removed' where Text_Id = 426 and Language_Id = 2
 END
 GO
+
+
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)

@@ -185,6 +185,8 @@ namespace DH.Helpdesk.Dal.EntityConfigurations
             this.Property(x => x.ShortDescription).IsOptional().HasMaxLength(100);
             this.Property(x => x.Information).IsOptional();
             this.Property(x => x.DefaultTab).IsRequired().HasMaxLength(100);
+            this.Property(x => x.AvailableTabsSelfsevice).IsRequired().HasMaxLength(100);
+            this.Property(x => x.ActiveTabSelfservice).IsRequired().HasMaxLength(100);
             this.Property(x => x.CaseSolutionDescription).IsOptional();
             this.Property(x => x.ValidateOnChange).IsOptional().HasMaxLength(100);
             this.Property(x => x.NextStepState).IsOptional();
