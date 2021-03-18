@@ -1127,7 +1127,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 return null;
             }
 
-            var model = new ExtendedCaseViewModel()
+            var model = new ExtendedCaseViewModel
             {
                 CaseId = initData.CaseId,
                 CaseTemplateId = initData.CaseSolutionId,
