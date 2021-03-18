@@ -6341,6 +6341,7 @@ GO
 If not exists (select * from tbltext where id = 1873)
 	insert into tbltext (id, TextString) VALUES (1873, 'Välj den tab som ska vara aktiv när ett nytt ärende skapas utifrån den här ärendemallen')
 GO
+
 If not exists (select * from tblTextTranslation where text_id = 1873 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1873, 2, 'Choose the default tab that should be active when a case is created from this case template')
 GO
@@ -7928,7 +7929,15 @@ begin
 end
 GO
 
-----Nytt
+
+if exists (Select * from tblTextTranslation where Text_Id = 426 and Language_Id = 2 and TextTranslation = 'that are used can not be removed')
+BEGIN
+	UPDATE tblTextTranslation SET TextTranslation = N'that are used cannot be removed' where Text_Id = 426 and Language_Id = 2
+END
+GO
+
+----Nytt 2021-03-18 Katta Ask
+
 If not exists (select * from tbltext where TextString = 'Tillgängliga flikar Självservice')
 begin
     If not exists (select * from tbltext where id = 2072)
@@ -7959,15 +7968,37 @@ begin
 end
 GO
 
---- Slut nytt
+If not exists (select * from tblTextTranslation where text_id = 1873 and Language_Id = 2)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1873, 2, 'Choose the default tab that should be active when a case is created from this case template')
+end
+else
+begin
+	update tblTextTranslation set TextTranslation = 'Choose the default tab that should be active when a case is created from this case template'  where text_id = 1873 and Language_Id = 2
+end
 
-if exists (Select * from tblTextTranslation where Text_Id = 426 and Language_Id = 2 and TextTranslation = 'that are used can not be removed')
-BEGIN
-	UPDATE tblTextTranslation SET TextTranslation = N'that are used cannot be removed' where Text_Id = 426 and Language_Id = 2
-END
 GO
 
+If not exists (select * from tbltext where TextString = 'Välj vilken/vilka flikar som ska visas på Självservice')
+begin
+    If not exists (select * from tbltext where id = 2075)
+	insert into tbltext (id, TextString, TextType) VALUES (2075, 'Välj vilken/vilka flikar som ska visas på Självservice', 0)
 
+	If not exists (select * from tblTextTranslation where text_id = 2075 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2075, 2, N'Select which tab(s) to display on Self Service')
+end
+GO
+
+If not exists (select * from tbltext where TextString = 'Välj den tab som ska vara aktiv när ett ärende, skapat utifrån den här ärendemallen, öppnas')
+begin
+    If not exists (select * from tbltext where id = 2076)
+	insert into tbltext (id, TextString, TextType) VALUES (2076, 'Välj den tab som ska vara aktiv när ett ärende, skapat utifrån den här ärendemallen, öppnas', 0)
+
+	If not exists (select * from tblTextTranslation where text_id = 2076 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2076, 2, N'Choose the default tab that should be active when a case, that is created from this case template, is opened')
+end
+GO
+--- Slut nytt
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)

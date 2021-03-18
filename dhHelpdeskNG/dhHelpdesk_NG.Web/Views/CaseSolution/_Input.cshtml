@@ -293,7 +293,7 @@
                                                     <option value="extendedcase-tab-@extendedCaseId" @(Model.CaseSolution.AvailableTabsSelfsevice.ToLower() == "extendedcase-tab-" + extendedCaseId.ToString() ? "selected" : "")>@extendedCaseName<text></text></option>
                                                 </select>
                                             </td>
-                                            <td> <span title="" class="icon-info-sign tooltipType" data-original-title="<div align='left'>@Translation.Get("Välj den tab som ska vara aktiv när ett nytt ärende skapas utifrån den här ärendemallen") </div> <br />" data-html="true" rel="tooltip"></span> </td>
+                                            <td> <span title="" class="icon-info-sign tooltipType" data-original-title="<div align='left'>@Translation.Get("Välj vilken/vilka flikar som ska visas på Självservice") </div> <br />" data-html="true" rel="tooltip"></span> </td>
                                         </tr>
                                     </table>
                                     <div id="activeTabSelfservice">
@@ -308,7 +308,7 @@
                                                     <option value="extendedcase-tab-@extendedCaseId" @(Model.CaseSolution.ActiveTabSelfservice.ToLower() == "extendedcase-tab-" + extendedCaseId.ToString() ? "selected" : "")>@extendedCaseName<text></text></option>
                                                 </select>
                                             </td>
-                                            <td> <span title="" class="icon-info-sign tooltipType" data-original-title="<div align='left'>@Translation.Get("Välj den tab som ska vara aktiv när ett nytt ärende skapas utifrån den här ärendemallen") </div> <br />" data-html="true" rel="tooltip"></span> </td>
+                                            <td> <span title="" class="icon-info-sign tooltipType" data-original-title="<div align='left'>@Translation.Get("Välj den tab som ska vara aktiv när ett ärende, skapat utifrån den här ärendemallen, öppnas") </div> <br />" data-html="true" rel="tooltip"></span> </td>
                                         </tr>
                                         </table>
                                     </div>
@@ -2513,6 +2513,16 @@
         })
     });
 
+    $(document).ready(function () {
+        var SelectedValue = $('#availableTabs').val();
+        var $activeTabSelfservice = $('#activeTabSelfservice');
+        if (SelectedValue != 'both') {
+            $activeTabSelfservice.addClass('hidden');
+        }
+        else {
+            $activeTabSelfservice.removeClass('hidden');
+        }
+    });
 
     $('#availableTabs').change(function () {
 
