@@ -14,6 +14,14 @@ BEGIN
 	ADD [ActiveTabSelfservice] nvarchar(100) Not Null default('case-tab')
 End
 Go
+
+RAISERROR ('Adding Unique Constraint to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF OBJECT_ID('dbo.[UQ_LanguageId_Property]') IS NULL 
+Begin
+ALTER TABLE ExtendedCaseTranslations   
+ADD CONSTRAINT UQ_LanguageId_Property UNIQUE (LanguageId, Property); 
+end
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.51'
 GO
