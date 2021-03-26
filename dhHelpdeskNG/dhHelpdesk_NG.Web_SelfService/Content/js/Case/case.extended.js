@@ -460,12 +460,13 @@ window.extendedCasePage =
             self.$Form.submit();
         };
 
-        ExtendedCasePage.prototype.onSaveClick = function () {
-            var self = this;
+    ExtendedCasePage.prototype.onSaveClick = function () {
+        var self = this;
+        var id = self.Case_Field_Init_Values.CaseId;
             var url = self.SAVE_CASE_URL;
             var $exCaseContainer = self.getExtendedCaseContainer();
 
-            if (recaptchaKey != "") {
+            if (recaptchaKey != "" && id == 0) {
                 var res = captchaChecker();
                 if (res == "") {
                     ShowToastMessage(recaptchaMessage, "warning", false);
