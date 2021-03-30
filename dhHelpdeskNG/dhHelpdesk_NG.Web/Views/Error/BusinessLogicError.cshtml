@@ -8,21 +8,15 @@
         <h2 style="margin: 10px 0;">
             Sorry, an error occurred while processing your request.
         </h2>
-        <p class="error-message">
-            @Model.Exception.Message
-        </p>
-        <p style="margin: 10px 0;">
-            @DateTime.Now
-        </p>
         <p style="margin: 10px 0;">
             Please provide below to your support team:
         </p>
-        <p id="exception" style="padding: 10px; background: #ffa;">
+        <div id="exeption" style="padding: 10px; background: #ffa;">
             <ul>
-                <li>Error Id: @Model.Guid<</li>
+                <li>Error Id: @Model.Guid</li>
                 <li>Step-by-step instructions on how to reproduce your issue</li>
-                <li>Time when error occurred</li>
+                <li>Time when error occurred: @DateTime.Now</li>
             </ul>
-        </p>
+        </div>
     </div>
 </div>
