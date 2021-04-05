@@ -344,6 +344,7 @@ Module DH_Helpdesk_Mail
                                                                                       objCustomer.POP3Port,
                                                                                       objCustomer.POP3UserName,
                                                                                       objCustomer.EMailFolder,
+                                                                                      objCustomer.EMailFolderArchive,
                                                                                       objCustomer.EwsApplicationId,
                                                                                       objCustomer.EwsClientSecret,
                                                                                       objCustomer.EwsTenantId)
@@ -1146,7 +1147,8 @@ Module DH_Helpdesk_Mail
 
 
     Private Async Function DeleteEwsMail(message As EwsMailMessage, server As String, port As Integer, userName As String, emailFolder As String, emailArchiveFolder As String, applicationId As String, clientSecret As String, tenantId As String) As System.Threading.Tasks.Task
-
+        'emailFolder = "Inbox"
+        'emailArchiveFolder = "Archive/M2T_test"
         Dim ewsScopes As String() = New String() {"https://outlook.office.com/.default"}
         Dim app As IConfidentialClientApplication = ConfidentialClientApplicationBuilder.Create(applicationId).WithAuthority(AzureCloudInstance.AzurePublic, tenantId).WithClientSecret(clientSecret).Build()
 
@@ -1159,15 +1161,17 @@ Module DH_Helpdesk_Mail
         service.Credentials = New OAuthCredentials(result.AccessToken)
         service.ImpersonatedUserId = New ImpersonatedUserId(ConnectingIdType.SmtpAddress, userName)
 
-        If (emailArchiveFolder IsNot Nothing And emailArchiveFolder <> "") Then
+        If (Not String.IsNullOrWhiteSpace(emailArchiveFolder)) Then
 
-            Dim folders As FindFoldersResults = service.FindFolders(WellKnownFolderName.MsgFolderRoot, New FolderView(100))
+            Dim archive As Folder = FindEwsFolder(emailArchiveFolder, service)
 
-            Dim archive As Folder = folders.FirstOrDefault(Function(folder) folder.DisplayName = emailArchiveFolder)
-
-            Dim ids = New List(Of ItemId)
-            ids.Add(message.EwsID)
-            service.CopyItems(ids, archive.Id, False)
+            If (archive Is Nothing) Then
+                LogError("Error coping to archive folder. Archive folder not found: " & emailArchiveFolder)
+            Else
+                Dim ids = New List(Of ItemId)
+                ids.Add(message.EwsID)
+                service.CopyItems(ids, archive.Id, False)
+            End If
         End If
 
         Dim deleteIds As List(Of ItemId) = New List(Of ItemId)()
@@ -1181,7 +1185,10 @@ Module DH_Helpdesk_Mail
     End Function
 
 
-    Private Async Function ReadEwsFolderAsync(server As String, port As Integer, userName As String, emailFolder As String, applicationId As String, clientSecret As String, tenantId As String) As Task(Of List(Of MailMessage))
+    Private Async Function ReadEwsFolderAsync(server As String, port As Integer, userName As String, emailFolder As String, emailArchiveFolder As String,
+                                              applicationId As String, clientSecret As String, tenantId As String) As Task(Of List(Of MailMessage))
+        'emailFolder = "Inkorg/M2T_test"
+        'emailArchiveFolder = "Arkiv/M2T_test"
         Dim ewsScopes As String() = New String() {"https://outlook.office.com/.default"}
         Dim app As IConfidentialClientApplication = ConfidentialClientApplicationBuilder.Create(applicationId).WithAuthority(AzureCloudInstance.AzurePublic, tenantId).WithClientSecret(clientSecret).Build()
 
@@ -1203,7 +1210,13 @@ Module DH_Helpdesk_Mail
         End If
 
         If inbox Is Nothing Then
-            Throw New ArgumentException("No folder for email was found")
+            Throw New ArgumentException($"EmailFolder '{emailFolder}' doesn't exist.")
+        End If
+
+        If Not String.IsNullOrWhiteSpace(emailArchiveFolder) Then
+            If FindEwsFolder(emailArchiveFolder, service) Is Nothing Then
+                Throw New ArgumentException($"EmailFolderArchive '{emailArchiveFolder}' doesn't exist.")
+            End If
         End If
 
         Dim items As FindItemsResults(Of Item) = inbox.FindItems(New ItemView(10000))
@@ -1296,47 +1309,33 @@ Module DH_Helpdesk_Mail
 
     Private Function FindEwsFolder(emailFolder As String, service As ExchangeService) As Folder
         Dim emailFolders As String()
-        Dim isInbox As Boolean
         If emailFolder.IndexOf("/"c) >= 0 Then
             emailFolders = emailFolder.Split("/"c)
-            isInbox = emailFolders.First().Equals(InboxMailFolderName, StringComparison.InvariantCultureIgnoreCase)
-            emailFolder = emailFolders.Last()
+        Else
+            emailFolders = New String() {emailFolder}
         End If
 
-        Dim inbox As Folder
         Dim folders As FindFoldersResults
-        If Not isInbox Then
-            Try
+        Dim folder As Folder = Nothing
+        For Each currentFolderName As String In emailFolders
+            If folder Is Nothing Then
                 folders = service.FindFolders(WellKnownFolderName.MsgFolderRoot, New FolderView(100))
-            Catch ex As Exception
-                LogError("Error readMailBox: " & ex.Message.ToString)
-                'rethrow
-                Throw
-            End Try
+            Else
+                folders = service.FindFolders(folder.Id, New FolderView(100))
+            End If
+            folder = folders.FirstOrDefault(Function(f) f.DisplayName.Equals(currentFolderName, StringComparison.InvariantCultureIgnoreCase))
+            If folder Is Nothing Then
+                LogError("Can't find folder: " & currentFolderName)
+                Exit For
+            End If
+        Next
+
+        If folder Is Nothing Then
+            LogError("Can't find folder: " & emailFolder)
+            Return Nothing
         End If
 
-        Dim customEmailFolder As FindFoldersResults
-        Try
-            'Subfolders in inbox
-            customEmailFolder = service.FindFolders(WellKnownFolderName.Inbox, New FolderView(100))
-        Catch ex As Exception
-            LogError("Error readMailBox: " & ex.Message.ToString)
-            'rethrow
-            Throw
-        End Try
-
-        inbox = folders.FirstOrDefault(Function(folder) folder.DisplayName = emailFolder)
-
-        If customEmailFolder IsNot Nothing Then
-            For Each f As Folder In customEmailFolder
-                If f.DisplayName = emailFolder Then ' Read folder specified in tblsettings
-                    inbox = f
-                    Exit For
-                End If
-            Next
-        End If
-
-        Return inbox
+        Return folder
     End Function
 
     Private Function CheckIfTwoAttachmentsModeEnabled(objCaseData As CaseData, iCustomerID As Integer) As Boolean
