@@ -288,6 +288,20 @@
                                             </td>
                                             <td>
                                                 <select name="CaseSolution.AvailableTabsSelfsevice" id="availableTabs">
+                                                    <option value="@Model.CaseSolution.DefaultTab.ToLower()" selected=@(Model.CaseSolution.AvailableTabsSelfsevice.ToLower() == "" ? "selected" : "")>
+                                                        @{
+                                                            var defaultValue = Model.CaseSolution.DefaultTab.ToLower();
+                                                            if (defaultValue.StartsWith("case-tab"))
+                                                            {
+                                                                defaultValue = @Translation.Get("Ärende");
+                                                            }
+                                                            else
+                                                            {
+                                                                defaultValue = extendedCaseName;
+                                                            }
+                                                        }
+                                                        @defaultValue
+                                                    </option>
                                                     <option value="both" @(Model.CaseSolution.AvailableTabsSelfsevice.ToLower() == "both" ? "selected" : "")>@Translation.Get("Ärende")<text> + </text>@extendedCaseName</option>
                                                     <option value="case-tab" @(Model.CaseSolution.AvailableTabsSelfsevice.ToLower() == "case-tab" ? "selected" : "")>@Translation.Get("Ärende")</option>
                                                     <option value="extendedcase-tab-@extendedCaseId" @(Model.CaseSolution.AvailableTabsSelfsevice.ToLower() == "extendedcase-tab-" + extendedCaseId.ToString() ? "selected" : "")>@extendedCaseName<text></text></option>
@@ -2520,7 +2534,9 @@
             $activeTabSelfservice.addClass('hidden');
         }
         else {
-            $activeTabSelfservice.removeClass('hidden');
+            if ($activeTabSelfservice.hasClass('hidden')) {
+                $activeTabSelfservice.removeClass('hidden');
+            }
         }
     });
 
