@@ -1220,6 +1220,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             
             var model = this.CreateInputViewModel(caseSolution);
+            model.ContainsExtendedForm = model.CaseSolution.ExtendedCaseForms.Any();
 
             return this.View(model);
         }
@@ -1499,46 +1500,18 @@ namespace DH.Helpdesk.Web.Controllers
                     cs.Id = 0;
                 }
             }
-
-            //I need to identify if the template has extended case 
-            if (caseSolutionInputViewModel.CaseSolution.DefaultTab.ToLower().StartsWith("ext"))
+            if(caseSolutionInputViewModel.ContainsExtendedForm)
             {
                 if (caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice != "both")
                 {
                     caseSolutionInputViewModel.CaseSolution.ActiveTabSelfservice = caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice;
                 }
-
             }
             else
             {
                 caseSolutionInputViewModel.CaseSolution.ActiveTabSelfservice = "case-tab";
                 caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice = "case-tab";
             }
-            //Works if i remove the first option in dropdown AvailableTabsSelfsevice
-            //I need to identify if the template has extended case - found only this way.. //Katta
-            //if (String.IsNullOrEmpty(caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice))
-            //{
-            //    if (caseSolutionInputViewModel.CaseSolution.DefaultTab.ToLower().StartsWith("ext"))
-            //    {
-            //        if (caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice != "both")
-            //        {
-            //            caseSolutionInputViewModel.CaseSolution.ActiveTabSelfservice = caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice;
-            //        }
-
-            //    }
-            //    else
-            //    {
-            //        caseSolutionInputViewModel.CaseSolution.ActiveTabSelfservice = "case-tab";
-            //        caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice = "case-tab";
-            //    }
-            //}
-            //else
-            //{
-            //    if (caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice != "both")
-            //    {
-            //        caseSolutionInputViewModel.CaseSolution.ActiveTabSelfservice = caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice;
-            //    }
-            //}
 
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 

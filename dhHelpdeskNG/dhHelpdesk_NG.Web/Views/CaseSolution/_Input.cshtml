@@ -2193,7 +2193,7 @@
 
                                     @* <td class="span9">
 
-                        </td>*@
+                </td>*@
 
                                 </tr>
                                 <tr id="scheduleOptions" style="@(Model.Schedule.ToBool() ? "display:block" : "display:none")">
@@ -2385,6 +2385,7 @@
                             @Html.HiddenFor(model => model.CaseSolution.Id, new { id = "hidId" })
 
                             @Html.HiddenFor(model => model.CaseSolution.FormGUID)
+                            @Html.HiddenFor(model => model.ContainsExtendedForm)
                         </div>
                     </div>
                 </div>

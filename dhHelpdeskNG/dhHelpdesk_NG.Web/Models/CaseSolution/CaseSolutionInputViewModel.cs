@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
             this.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateDefaultModel();
         }
 
+        public bool ContainsExtendedForm { get; set; }
         public int Schedule { get; set; }
         public int ScheduleMonthly { get; set; }
         public int ScheduleMonthlyDay { get; set; }
