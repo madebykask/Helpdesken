@@ -2141,7 +2141,27 @@ namespace DH.Helpdesk.Web.Controllers
                 HasChild = hasChild
             });
         }
+        [HttpPost]
+        public JsonResult ChangeFinishingType(int? id)
+        {
+            int hasChild = 0;
 
+            if (id.HasValue)
+            {
+                var finishingType = _finishingCauseService.GetFinishingCause(id.Value);
+                if (finishingType != null)
+                { 
+
+                    if (finishingType.SubFinishingCauses != null && finishingType.SubFinishingCauses.Where(s => s.IsActive != 0).Any())
+                        hasChild = 1;
+                }
+            }
+
+            return Json(new
+            {
+                HasChild = hasChild
+            });
+        }
         [HttpGet]
         public JsonResult GetStateSecondary(int id)
         {
@@ -2258,6 +2278,18 @@ namespace DH.Helpdesk.Web.Controllers
             var productArea = _productAreaService.GetProductArea(pId);
             if (productArea != null && productArea.SubProductAreas != null &&
                 productArea.SubProductAreas.Where(p => p.IsActive != 0).ToList().Count > 0)
+                res = "true";
+
+            return Json(res);
+        }
+
+        [HttpGet]
+        public JsonResult FinishingCauseHasChild(int fId)
+        {
+            var res = "false";
+            var finishingCause = _finishingCauseService.GetFinishingCause(fId);
+            if (finishingCause != null && finishingCause.SubFinishingCauses != null &&
+                finishingCause.SubFinishingCauses.Where(f => f.IsActive != 0).ToList().Count > 0)
                 res = "true";
 
             return Json(res);
@@ -5464,6 +5496,9 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }
             }
+
+            //Check if FinishingCases has childs
+            m.FinishingCauseHasChild = 0;
 
             // hämta parent path för Category
             m.CategoryHasChild = 0;

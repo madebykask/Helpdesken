@@ -793,6 +793,14 @@ EditPage.prototype.isProductAreaValid = function () {
     else
         return true;
 };
+EditPage.prototype.isFinishingTypeValid = function () {
+    var me = this;
+    var res = me.$finishingCauseChildObj.val();
+    if (res == '1')
+        return false;
+    else
+        return true;
+};
 
 EditPage.prototype.getValidationErrorMessage = function (extraMessage) {
     var me = this;
@@ -826,7 +834,11 @@ EditPage.prototype.isFormValid = function () {
         dhHelpdesk.cases.utils.showError(me.productAreaErrorMessage);
         return false;
     }
-
+    if (!me.isFinishingTypeValid()) {
+        me.$finishingCauseObj.addClass("error");
+        dhHelpdesk.cases.utils.showError(me.finishingTypeErrorMessage);
+        return false;
+    }
     var curFinishDate = $('#' + me.p.caseFieldIds.FinishingDate).val();
     if (curFinishDate != undefined && curFinishDate != '') {
         var regDate = me.getDate(me.p.caseRegDate);
@@ -1575,7 +1587,10 @@ EditPage.prototype.init = function (p) {
 
     self.$productAreaObj = $('#divProductArea');
     self.$productAreaChildObj = $('#ProductAreaHasChild');
+    self.$finishingCauseObj = $('#divFinishingType');
+    self.$finishingCauseChildObj = $('#FinishingCauseHasChild');
     self.productAreaErrorMessage = self.p.productAreaErrorMessage;
+    self.finishingTypeErrorMessage = self.p.finishingTypeErrorMessage;
     self.$moveCaseButton = $("#btnMoveCase");
     self.$moveCaseCustomerSelect = $('#moveCaseToCustomerId');
     self.$btnSave = $('.btn.save');

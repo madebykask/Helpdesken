@@ -21,6 +21,10 @@
             '@Html.Raw(Translation.GetForJS("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält") + " [" +
                                            Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + "] " +
                                            Translation.GetForJS("inte har valts. Vänligen kontrollera ärendet."))',
+        finishingTypeErrorMessage:
+            '@Html.Raw(Translation.GetForJS("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält") + " [" +
+                                    Translation.GetForJS(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + "] " +
+                                    Translation.GetForJS("inte har valts. Vänligen kontrollera ärendet."))',
         caseLockGuid: '@Model.CaseLock.LockGUID',
         caseChangedTime: '@Model.case_.ChangeTime',
         userCaseLocker: '@Model.CaseLock.UserId',
@@ -602,6 +606,17 @@
             ret = false;
             document.getElementById('divProductArea').classList.add("error");
             ShowToastMessage(window.parameters.productAreaErrorMessage, "error", true);
+        }
+        return ret;
+    }
+
+    function isFinishingTypeValid() {
+        var ret = true;
+        var res = $("#FinishingCauseHasChild").val();
+        if (res == '1') {
+            ret = false;
+            document.getElementById('divFinishingType').classList.add("error");
+            ShowToastMessage(window.parameters.finishingTypeErrorMessage, "error", true);
         }
         return ret;
     }
