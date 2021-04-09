@@ -30,7 +30,7 @@
                     {
                         <li>
                                 @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "#", new { id = Model.Id },
-                                new { @class = "btn deleteDeniedDialog", deleteDialogText = Translation.GetCoreTextTranslation("Det går inte att ta bort en kategori som är kopplad till en eller flera FAQ") })
+                                new { @class = "btn deleteDeniedDialog", deleteDialogText = Translation.GetCoreTextTranslation("Det går inte att ta bort en kategori som är kopplad till en eller flera FAQ"), deleteDialogButtonText = @Translation.GetCoreTextTranslation("Avbryt") })
                         </li>
                     }
                     else
