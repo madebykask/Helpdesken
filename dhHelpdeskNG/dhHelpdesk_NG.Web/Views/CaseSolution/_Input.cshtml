@@ -287,25 +287,26 @@
                                                 @Translation.Get("Tillgängliga flikar Självservice")
                                             </td>
                                             <td>
-                                                <select name="CaseSolution.AvailableTabsSelfsevice" id="availableTabs">
-                                                    <option value="@Model.CaseSolution.DefaultTab.ToLower()" selected=@(Model.CaseSolution.AvailableTabsSelfsevice.ToLower() == "" ? "selected" : "")>
-                                                        @{
-                                                            var defaultValue = Model.CaseSolution.DefaultTab.ToLower();
-                                                            if (defaultValue.StartsWith("case-tab"))
-                                                            {
-                                                                defaultValue = @Translation.Get("Ärende");
-                                                            }
-                                                            else
-                                                            {
-                                                                defaultValue = extendedCaseName;
-                                                            }
-                                                        }
-                                                        @defaultValue
-                                                    </option>
-                                                    <option value="both" @(Model.CaseSolution.AvailableTabsSelfsevice.ToLower() == "both" ? "selected" : "")>@Translation.Get("Ärende")<text> + </text>@extendedCaseName</option>
-                                                    <option value="case-tab" @(Model.CaseSolution.AvailableTabsSelfsevice.ToLower() == "case-tab" ? "selected" : "")>@Translation.Get("Ärende")</option>
-                                                    <option value="extendedcase-tab-@extendedCaseId" @(Model.CaseSolution.AvailableTabsSelfsevice.ToLower() == "extendedcase-tab-" + extendedCaseId.ToString() ? "selected" : "")>@extendedCaseName<text></text></option>
-                                                </select>
+                                                @{
+                                                    if (Model.CaseSolution.AvailableTabsSelfsevice.ToLower() == "")
+                                                    {
+                                                        <select name="CaseSolution.AvailableTabsSelfsevice" id="availableTabs">
+                                                            <option value="extendedcase-tab-@extendedCaseId" selected="selected">@extendedCaseName<text></text></option>
+                                                            <option value="both">@Translation.Get("Ärende")<text> + </text>@extendedCaseName</option>
+                                                            <option value="case-tab">@Translation.Get("Ärende")</option>
+
+                                                        </select>
+                                                    }
+                                                    else
+                                                    {
+                                                        <select name="CaseSolution.AvailableTabsSelfsevice" id="availableTabs">
+                                                            <option value="both" @(Model.CaseSolution.AvailableTabsSelfsevice.ToLower() == "both" ? "selected" : "")>@Translation.Get("Ärende")<text> + </text>@extendedCaseName</option>
+                                                            <option value="case-tab" @(Model.CaseSolution.AvailableTabsSelfsevice.ToLower() == "case-tab" ? "selected" : "")>@Translation.Get("Ärende")</option>
+                                                            <option value="extendedcase-tab-@extendedCaseId" @(Model.CaseSolution.AvailableTabsSelfsevice.ToLower() == "extendedcase-tab-" + extendedCaseId.ToString() ? "selected" : "")>@extendedCaseName<text></text></option>
+                                                        </select>
+                                                    }
+                                                }
+
                                             </td>
                                             <td> <span title="" class="icon-info-sign tooltipType" data-original-title="<div align='left'>@Translation.Get("Välj vilken/vilka flikar som ska visas på Självservice") </div> <br />" data-html="true" rel="tooltip"></span> </td>
                                         </tr>
