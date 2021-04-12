@@ -568,6 +568,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                     // ta bort historik
                     var deletequery = $"DELETE FROM tblComputerUserLog WHERE ComputerUser_Id = {InitiatorId};" +
                                 $"DELETE FROM tblComputerUser_tblCUGroup WHERE ComputerUser_Id = {InitiatorId};" +
+                                $"DELETE FROM tblComputer WHERE User_Id = {InitiatorId};" +
                                 $"DELETE FROM tblComputerUsers WHERE Id = {InitiatorId};";
                     ret = dbQueryExecutor.ExecQuery(deletequery);
                 }
