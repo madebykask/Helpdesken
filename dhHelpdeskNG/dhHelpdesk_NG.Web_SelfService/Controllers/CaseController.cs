@@ -550,7 +550,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                     var languageId = SessionFacade.CurrentLanguageId;
                     var currentCaseModel = GetCaseReceiptModel(currentCase, languageId);
                     model.CaseOverviewModel = currentCaseModel;
-                   if(currentCase.CaseSolution.AvailableTabsSelfsevice =="both")
+                    ViewBag.AttachmentPlacement = model.AttachmentPlacement;
+                   if (currentCase.CaseSolution.AvailableTabsSelfsevice =="both")
                     {
                         model.ActiveTab = currentCase.CaseSolution.ActiveTabSelfservice;
                         return View("ExtendedCaseWithCase", model);
