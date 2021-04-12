@@ -56,7 +56,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Common.Logging.Log4Net2012">
-      <HintPath>..\..\Libs\Common.Logging\bin\Common.Logging.Log4Net2012.dll</HintPath>
+      <HintPath>..\..\Libs\Common.Logging\build\Common.Logging.Log4Net2012.dll</HintPath>
     </Reference>
     <Reference Include="CsvHelper, Version=6.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.6.0.0\lib\net45\CsvHelper.dll</HintPath>
