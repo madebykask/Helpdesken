@@ -127,7 +127,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                                 CreateOrganisation = _cs.LDAPCreateOrganization,
                                 DefaultRegion = _r,
                                 StartTime = "2018-04-06",
-                                CronExpression = "0 * 8-22 * * ?",
+                                CronExpression = "0 * * ? * * *",
                                 TimeZone = "",
                                 ImportFormat = "CSV"
                             };

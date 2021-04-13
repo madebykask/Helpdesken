@@ -49,3 +49,6 @@ dhHelpdeskMobile/.vs/
 /ExtendedCase/ExtendedCase.Database/ExtendedCase.Database.dbmdl
 /ExtendedCase/ExtendedCase.Database/ExtendedCase.Database.dbmdl
 /dhHelpdeskNG/UpgradeLog2.htm
+/dhHelpdeskNG/DH.Helpdesk.TaskScheduler/DH.Helpdesk.TaskScheduler.InstallLog
+/dhHelpdeskNG/DH.Helpdesk.TaskScheduler/InstallUtil.InstallLog
+/dhHelpdeskNG/dhHelpdesk_NG.Service/BusinessLogic/MailTools/TemplateFormatters/SurveyTemplate.cs
