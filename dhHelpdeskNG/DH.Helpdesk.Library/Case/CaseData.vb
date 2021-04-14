@@ -523,7 +523,7 @@ Public Class CaseData
                             getDBStringPrefix() & "'" & Replace(objCase.Persons_EMail, "'", "''") & "', " &
                             getDBStringPrefix() & "'" & Replace(Left(objCase.Persons_Phone, 40), "'", "''") & "', " &
                             getDBStringPrefix() & "'" & Left(objCase.Persons_CellPhone, 30) & "', " &
-                            getDBStringPrefix() & "'" & Left(objCase.Place, 50) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.Place, "'", ""), 50) & "', " &
                             getDBStringPrefix() & "'" & Left(objCase.UserCode, 20) & "', " &
                             getDBStringPrefix() & "'" & Left(objCase.CostCentre, 50) & "', " &
                             getDBStringPrefix() & "'" & Replace(objCase.InventoryNumber, "'", "") & "', " &

@@ -717,8 +717,13 @@ Module DH_Helpdesk_Mail
                                         End If
 
                                     End If
+                                    Try
+                                        objCase = objCaseData.createCase(objCase)
+                                    Catch ex As Exception
+                                        LogError("Error creating Case in database: " & ex.Message.ToString)
+                                        Continue For
+                                    End Try
 
-                                    objCase = objCaseData.createCase(objCase)
                                     'dhal i CaseHistory skall orginal från adressen hamna i CreatedByUser 
                                     'iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, objCase.Persons_EMail.ToString)
                                     iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, sFromEMailAddress)
