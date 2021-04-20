@@ -567,7 +567,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                 {
                     // Delete History
                     // 
-                    var selectComputerQuery = $"Select Id from tblComputers where User_Id  =  {InitiatorId};";
+                    var selectComputerQuery = $"Select Id from tblComputer where User_Id  =  {InitiatorId};";
                     var computerId = dbQueryExecutor.ExecQuery(selectComputerQuery);
                     var deletequery = $"DELETE FROM tblComputerUserLog WHERE ComputerUser_Id = {InitiatorId};" +
                                 $"DELETE FROM tblComputerUser_tblCUGroup WHERE ComputerUser_Id = {InitiatorId};" +

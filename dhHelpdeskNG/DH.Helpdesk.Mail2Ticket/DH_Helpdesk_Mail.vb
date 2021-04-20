@@ -371,7 +371,7 @@ Module DH_Helpdesk_Mail
                             'LogToFile("Connecting to " & objCustomer.POP3Server & " (" & ip & "):" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName, iPop3DebugLevel)
 
                             If objCustomer.POP3Port = 993 Then
-                                IMAPclient.Connect(objCustomer.POP3Server.ToString(), objCustomer.POP3Port, Nothing, ImapSecurity.Implicit)
+                                IMAPclient.Connect(objCustomer.POP3Server.ToString(), SslMode.Implicit)
                             Else
                                 IMAPclient.Connect(objCustomer.POP3Server, objCustomer.POP3Port)
                             End If
@@ -1551,7 +1551,7 @@ Module DH_Helpdesk_Mail
             objCase = objCaseData.getCase(logData.CaseId)
             If objCase IsNot Nothing Then
                 LogToFile(String.Format("Message was found in Mail2Ticket table. CaseId: {0}, MessageId: {1}", objCase.Id, uniqueMessageId), customer.POP3DebugLevel)
-                Return objCase
+
             End If
         End If
 
@@ -1560,7 +1560,7 @@ Module DH_Helpdesk_Mail
             objCase = objCaseData.getCaseByMessageID(uniqueMessageId)
             If objCase IsNot Nothing Then
                 LogToFile(String.Format("Message was found in tblEmailLog table. CaseId: {0}, MessageId: {1}", objCase.Id, uniqueMessageId), customer.POP3DebugLevel)
-                Return objCase
+
             End If
         End If
 
@@ -1569,10 +1569,10 @@ Module DH_Helpdesk_Mail
             objCase = objCaseData.getCaseByOrderMessageID(uniqueMessageId)
             If objCase IsNot Nothing Then
                 LogToFile(String.Format("Message was found in tblOrderEmailLog table. CaseId: {0}, MessageId: {1}", objCase.Id, uniqueMessageId), customer.POP3DebugLevel)
-                Return objCase
+
             End If
         End If
-
+        Return objCase
     End Function
 
 
