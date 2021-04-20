@@ -142,6 +142,8 @@ Module DH_Helpdesk_Mail
         End If
 
         Dim workingMode = If(workingModeArg = "5", SyncType.SyncByWorkingGroup, SyncType.SyncByCustomer)
+        ' For testing purposes only
+        ' Dim workingMode = SyncType.SyncByWorkingGroup
 
         If Not IsNullOrEmpty(logFolderArg) Then
             gsLogPath = logFolderArg
@@ -157,8 +159,9 @@ Module DH_Helpdesk_Mail
 
         'Log cmd line args
         Try
-            openLogFile()
 
+            openLogFile()
+            'Convert.ToInt32("Hejpådig")
             If IsNullOrEmpty(sConnectionstring) Then
                 Throw New ArgumentNullException("connection string")
             End If
@@ -181,7 +184,7 @@ Module DH_Helpdesk_Mail
         Catch ex As Exception
             LogError(ex.ToString())
         Finally
-            closeLogFile()
+            closeLogFiles()
         End Try
 
     End Sub
@@ -371,7 +374,7 @@ Module DH_Helpdesk_Mail
                             'LogToFile("Connecting to " & objCustomer.POP3Server & " (" & ip & "):" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName, iPop3DebugLevel)
 
                             If objCustomer.POP3Port = 993 Then
-                                IMAPclient.Connect(objCustomer.POP3Server.ToString(), SslMode.Implicit)
+                                IMAPclient.Connect(objCustomer.POP3Server.ToString(), SslMode.Explicit)
                             Else
                                 IMAPclient.Connect(objCustomer.POP3Server, objCustomer.POP3Port)
                             End If
@@ -1121,7 +1124,7 @@ Module DH_Helpdesk_Mail
 
 
                     Catch ex As Exception
-                        LogError("Error readMailBox. Error: " & ex.ToString())
+                        LogError("Error readMailBox." & objCustomer.POP3UserName & "  Error: " & ex.ToString())
                     Finally
 
                         If objCustomer.MailServerProtocol = 0 Then
@@ -1920,6 +1923,32 @@ Module DH_Helpdesk_Mail
         objLogFile = New StreamWriter(sFilePath, True)
 
     End Sub
+    Private Sub openErrorLogFile()
+
+        If objErrorLogFile IsNot Nothing Then
+            Return
+        End If
+
+        Dim sLogFolderPath As String
+
+        If Not IsNullOrEmpty(gsLogPath) Then
+            sLogFolderPath = gsLogPath
+        Else
+            sLogFolderPath = Path.Combine(Environment.CurrentDirectory, "log")
+        End If
+
+        If Not Directory.Exists(sLogFolderPath) Then
+            Directory.CreateDirectory(sLogFolderPath)
+        End If
+
+        Dim sFileName = "DH_Helpdesk_Mail_Error_" & DatePart(DateInterval.Year, Now()) &
+                        DatePart(DateInterval.Month, Now()).ToString().PadLeft(2, "0") &
+                        DatePart(DateInterval.Day, Now()).ToString().PadLeft(2, "0") &
+                        ".log"
+        Dim sFilePath = Path.Combine(sLogFolderPath, sFileName)
+        objErrorLogFile = New StreamWriter(sFilePath, True)
+
+    End Sub
     Private Sub DrawHeader(htmlHeader As String, ByVal htmlToPdfConverter As HtmlToPdfConverter, ByVal drawHeaderLine As Boolean)
         Dim headerHtmlUrl As String = htmlHeader
 
@@ -1957,13 +1986,22 @@ Module DH_Helpdesk_Mail
     End Sub
 
 
-    Private Sub closeLogFile()
+    Private Sub closeLogFiles()
         If objLogFile IsNot Nothing Then
             Try
                 objLogFile.Close()
             Catch ex As Exception
             Finally
                 objLogFile = Nothing
+            End Try
+        End If
+        'New Error logfile
+        If objErrorLogFile IsNot Nothing Then
+            Try
+                objErrorLogFile.Close()
+            Catch ex As Exception
+            Finally
+                objErrorLogFile = Nothing
             End Try
         End If
     End Sub
@@ -2164,8 +2202,9 @@ Module DH_Helpdesk_Mail
     End Sub
 
     Private Sub LogError(msg As String)
-        If objLogFile IsNot Nothing Then
-            objLogFile.WriteLine("{0}: {1}", Now(), msg)
+        openErrorLogFile()
+        If objErrorLogFile IsNot Nothing Then
+            objErrorLogFile.WriteLine("{0}: {1}", Now(), msg)
         End If
     End Sub
 

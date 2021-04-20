@@ -6,6 +6,7 @@ Public Module MGlobal
     Public giDBType As DbType
     Public gsLogPath As String
     Public objLogFile As StreamWriter
+    Public objErrorLogFile As StreamWriter
     Public giLoglevel As Integer
     Public gsDBVersion As String
     Public giSendMail As Integer = 1

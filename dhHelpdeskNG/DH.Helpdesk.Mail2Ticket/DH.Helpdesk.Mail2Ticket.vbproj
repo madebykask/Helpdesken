@@ -107,31 +107,24 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Rebex.Common, Version=5.0.7733.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>Dependencies\Rebex.Common.dll</HintPath>
     </Reference>
     <Reference Include="Rebex.Ews, Version=5.0.7733.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>Dependencies\Rebex.Ews.dll</HintPath>
     </Reference>
     <Reference Include="Rebex.Imap, Version=5.0.7733.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>Dependencies\Rebex.Imap.dll</HintPath>
     </Reference>
     <Reference Include="Rebex.Mail, Version=5.0.7733.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>Dependencies\Rebex.Mail.dll</HintPath>
     </Reference>
     <Reference Include="Rebex.Networking, Version=5.0.7733.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>Dependencies\Rebex.Networking.dll</HintPath>
     </Reference>
     <Reference Include="Rebex.Pop3, Version=5.0.7733.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>Dependencies\Rebex.Pop3.dll</HintPath>
     </Reference>
     <Reference Include="Rebex.Smtp, Version=5.0.7733.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>Dependencies\Rebex.Smtp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
