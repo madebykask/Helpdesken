@@ -21,23 +21,35 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
         private readonly ICaseTypeService _caseTypeService;
         private readonly ISettingService _settingsService;
         private readonly ICustomerService _customerService;
+        private readonly IMasterDataService _masterDataService;
+        private readonly ICaseFileService _caseFileService;
+        private readonly ILogFileService _logFileService;
 
         public CaseProcessor(ICaseService caseService, 
                              ICaseTypeService caseTypeService,
                              ISettingService settingsService,
-                             ICustomerService customerService)
+                             ICustomerService customerService,
+                             IMasterDataService masterDataService,
+                             ICaseFileService caseFileService,
+                             ILogFileService logFileService
+                             )
         {
             _customerService = customerService;
             _settingsService = settingsService;
             _caseService = caseService;
             _caseTypeService = caseTypeService;
+            _masterDataService = masterDataService;
+            _caseFileService = caseFileService;
+            _logFileService = logFileService;
         }
 
         #region Move Case To External Customer
 
         public void MoveCaseToExternalCustomer(int caseId, int userId, int newCustomerId)
         {
+            //TODO - Move casefiles
             var @case = _caseService.GetCaseById(caseId);
+            var oldCustomerId = @case.Customer_Id;
 
             var caseCustomerId = @case.Customer_Id;
             var newCustomerSettings = _settingsService.GetCustomerSetting(newCustomerId);
@@ -55,7 +67,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
             }
 
             if (newCaseTypeId == 0)
-                newCaseTypeId = newCustomerDefaults?.CaseTypeId ?? 0; 
+                newCaseTypeId = newCustomerDefaults?.CaseTypeId ?? 0;
 
             if (newCaseTypeId <= 0)
             {
@@ -69,7 +81,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
 
             //3. Reset all dropdown fields //what selections?
             ResetCaseFields(@case);
-            
+
             //4. Save case
             IDictionary<string, string> errors;
             var extraInfo = CaseExtraInfo.CreateHelpdesk5();
@@ -79,6 +91,16 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
 
             //SAVE CASE
             _caseService.SaveCase(@case, null, userId, null, extraInfo, out errors);
+
+            //move case files
+            var fromBasePath = _masterDataService.GetFilePath(oldCustomerId);
+            var toPath = _masterDataService.GetFilePath(newCustomerId);
+
+            if (!fromBasePath.Equals(toPath, StringComparison.CurrentCultureIgnoreCase))
+            {
+                _caseFileService.MoveCaseFiles(@case.CaseNumber.ToString(), fromBasePath, toPath);
+                _logFileService.MoveLogFiles(@case.Id, fromBasePath, toPath);
+            }
 
             if (errors.Count > 0)
             {
