@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "Documents";
+}
+
+@if (ViewBag.IsImage)
+{
+    <img src="~/@ViewBag.Path" />
+}
+else
+{
+    <object width="1200" height="800" data="~/@ViewBag.Path"></object>
+}
+
+
+

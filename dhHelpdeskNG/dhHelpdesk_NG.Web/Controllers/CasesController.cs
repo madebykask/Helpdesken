@@ -34,7 +34,6 @@ using DH.Helpdesk.Web.Infrastructure.Behaviors;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
 using DH.Helpdesk.BusinessData.Models.Case.Input;
-
 namespace DH.Helpdesk.Web.Controllers
 {
 	using DH.Helpdesk.BusinessData.Enums.Case;
@@ -103,7 +102,7 @@ namespace DH.Helpdesk.Web.Controllers
 	using BusinessData.Models.FinishingCause;
 	using Infrastructure.Mvc;
 
-	public partial class CasesController : BaseController
+    public partial class CasesController : BaseController
     {
         #region ***Constant/Variables***
 
@@ -434,6 +433,22 @@ namespace DH.Helpdesk.Web.Controllers
             return new RedirectResult("~/cases");
         }
 
+        [UserCasePermissions]
+        public ActionResult Documents(string id, string fileName)
+        {
+            var c = _caseService.GetCaseBasic(int.Parse(id));
+            var basePath = string.Empty;
+            if (c != null)
+            {
+                basePath = _masterDataService.GetVirtualDirectoryPath(c.CustomerId);
+                if (!basePath.EndsWith("/"))
+                    basePath = basePath + "/";
+            }
+            var isImage = FileExtensions.IsImage(fileName);
+            ViewBag.IsImage = isImage;
+            ViewBag.Path = basePath + c.CaseNumber + "/" + fileName;
+            return PartialView("_Documents");
+        }
 
         public ActionResult Index()
         {
