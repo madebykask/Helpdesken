@@ -46,14 +46,19 @@
                 {
                     if (Model.CaseFiles.VirtualDirectory)
                     {
-                    <a target="_blank" class="isExisted" 
-                       onclick="window.dhHelpdesk.logFileAccess(@l.CaseId, '@l.FileName', @((int)CaseFileType.CaseFile))" 
-                       href="@BuildCaseFileLinkVD(l.FileName)"><i class="icon- attachedFile"></i>@l.FileName</a>
+                        //Change this
+                        @*<a target="_blank" class="isExisted"
+                    onclick="window.dhHelpdesk.logFileAccess(@l.CaseId, '@l.FileName', @((int)CaseFileType.CaseFile))"
+                    href="@BuildCaseFileLinkVD(l.FileName)"><i class="icon- attachedFile"></i>@l.FileName</a>*@
+                        <a target="_blank" onclick="window.dhHelpdesk.logFileAccess(@l.CaseId, '@l.FileName', @((int) CaseFileType.CaseFile))"
+                           href="@Url.Action("Documents", "Cases",new RouteValueDictionary {{"id", l.CaseId}, {"fileName", l.FileName}, { "type", 0 } })">
+                            <i class="icon-file"></i>@l.FileName<br />
+                        </a>
                     }
                     else
                     {
-                         <a target="_blank" class="isExisted" 
-                       href="@Url.Action("DownloadFile", new { id = l.CaseId, fileName = l.FileName })"><i class="icon- attachedFile"></i>@l.FileName</a>
+                        <a target="_blank" class="isExisted"
+                           href="@Url.Action("DownloadFile", new { id = l.CaseId, fileName = l.FileName })"><i class="icon- attachedFile"></i>@l.FileName</a>
                     }
                 }
                 else
@@ -62,9 +67,16 @@
                     {
                         if (Model.CaseFiles.VirtualDirectory)
                         {
-                        <a target="_blank" class="isExisted"
-                           onclick="window.dhHelpdesk.logFileAccess(@currentLog.CaseId, '@l.FileName', @(l.LogType == LogFileType.Internal ? (int)CaseFileType.LogInternal : (int)CaseFileType.LogExternal), @l.LogId.Value)"
-                           href="@BuildLogFileLinkVD(l.LogId.Value, l.FileName, l.ParentLogType ?? l.LogType)"><i class="icon- attachedFile"></i> @l.FileName</a>
+                            //Changed this
+                            @*<a target="_blank" class="isExisted"
+                               onclick="window.dhHelpdesk.logFileAccess(@currentLog.CaseId, '@l.FileName', @(l.LogType == LogFileType.Internal ? (int)CaseFileType.LogInternal : (int)CaseFileType.LogExternal), @l.LogId.Value)"
+                               href="@BuildLogFileLinkVD(l.LogId.Value, l.FileName, l.ParentLogType ?? l.LogType)"><i class="icon- attachedFile"></i> @l.FileName</a>*@
+                            <a target="_blank"
+                               onclick="window.dhHelpdesk.logFileAccess(@currentLog.CaseId, '@l.FileName', @(l.LogType == LogFileType.Internal ? (int)CaseFileType.LogInternal : (int)CaseFileType.LogExternal), @currentLog.Id)"
+                               href="@Url.Action("Documents", "Cases",new RouteValueDictionary { { "id", currentLog.CaseId }, { "fileName", l.FileName }, { "type", l.ParentLogType ?? l.LogType } , {"logId", currentLog.Id } })"
+                               data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(l))">
+                                <i class="@(GetFileIcon(l))"></i> @l.FileName
+                            </a>
                         }
                         else
                         {
@@ -76,15 +88,32 @@
                     {
                         if (Model.CaseFiles.VirtualDirectory)
                         {
-                            <a target="_blank" class="isExisted" 
+
+                            var type = 0;
+                            if (l.LogType == LogFileType.Internal)
+                            {
+                                type = (int)CaseFileType.LogInternal;
+                            }
+                            else
+                            {
+                                type = (int)CaseFileType.LogExternal;
+                            }
+                            @*<a target="_blank" class="isExisted"
+                    onclick="window.dhHelpdesk.logFileAccess(@currentLog.CaseId, '@l.FileName', @(l.LogType == LogFileType.Internal ? (int)CaseFileType.LogInternal : (int)CaseFileType.LogExternal), @currentLog.Id)"
+                    href="@BuildLogFileLinkVD(currentLog.Id, l.FileName, l.LogType)"
+                    data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(l))"><i class="@(GetFileIcon(l))"></i> @l.FileName</a><br />*@
+                            //New
+                            <a target="_blank"
                                onclick="window.dhHelpdesk.logFileAccess(@currentLog.CaseId, '@l.FileName', @(l.LogType == LogFileType.Internal ? (int)CaseFileType.LogInternal : (int)CaseFileType.LogExternal), @currentLog.Id)"
-                               href="@BuildLogFileLinkVD(currentLog.Id, l.FileName, l.LogType)"
-                                data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(l))"><i class="@(GetFileIcon(l))"></i> @l.FileName</a>
+                               href="@Url.Action("Documents", "Cases",new RouteValueDictionary { { "id", currentLog.CaseId }, { "fileName", l.FileName }, { "type", type } , {"logId", currentLog.Id } })"
+                               data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(l))">
+                                <i class="@(GetFileIcon(l))"></i> @l.FileName
+                            </a>
                         }
                         else
                         {
-                            <a target="_blank" class="isExisted"  href="@Url.Action("DownloadLogFile", new { id = currentLog.Id, fileName = l.FileName, logType = (int)l.LogType })"
-                                data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(l))"><i class="@(GetFileIcon(l))"></i> @l.FileName</a>
+                            <a target="_blank" class="isExisted" href="@Url.Action("DownloadLogFile", new { id = currentLog.Id, fileName = l.FileName, logType = (int)l.LogType })"
+                               data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(l))"><i class="@(GetFileIcon(l))"></i> @l.FileName</a>
                         }
                     }
                 }

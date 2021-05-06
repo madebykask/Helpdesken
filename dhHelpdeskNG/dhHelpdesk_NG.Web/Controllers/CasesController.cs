@@ -34,6 +34,7 @@ using DH.Helpdesk.Web.Infrastructure.Behaviors;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
 using DH.Helpdesk.BusinessData.Models.Case.Input;
+using DH.Helpdesk.Common.Extensions;
 namespace DH.Helpdesk.Web.Controllers
 {
 	using DH.Helpdesk.BusinessData.Enums.Case;
@@ -101,6 +102,9 @@ namespace DH.Helpdesk.Web.Controllers
 	using Common.Tools.Files;
 	using BusinessData.Models.FinishingCause;
 	using Infrastructure.Mvc;
+    using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Common.Enums.Logs;
+    using DH.Helpdesk.Common.Extensions;
 
     public partial class CasesController : BaseController
     {
@@ -434,20 +438,65 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [UserCasePermissions]
-        public ActionResult Documents(string id, string fileName)
+        public ActionResult Documents(string id, string fileName, CaseFileType type, int? logId = null)
         {
+            if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
+            {
+                return new RedirectResult("~/Error/Unathorized");
+            }
+            var userId = SessionFacade.CurrentUser.Id;
+
+            var caseLockViewModel = GetCaseLockModel(int.Parse(id), userId, false, "");
+
+            var customerId =  _caseService.GetCaseCustomerId(int.Parse(id));
+
+            var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+            CaseInputViewModel m = null;
+            m = this.GetCaseInputViewModel(userId, customerId, int.Parse(id), caseLockViewModel, caseFieldSettings, "", "", null, null, false);
+
+            // User has not access to case
+            if (m.EditMode == AccessMode.NoAccess)
+                return this.RedirectToAction("index", "home");
+
+            //Ok to se case
             var c = _caseService.GetCaseBasic(int.Parse(id));
             var basePath = string.Empty;
+            var pathToFile = string.Empty;
             if (c != null)
             {
                 basePath = _masterDataService.GetVirtualDirectoryPath(c.CustomerId);
                 if (!basePath.EndsWith("/"))
                     basePath = basePath + "/";
+                if (logId != null)
+                {
+                    var prefix = "";
+                    if(type == CaseFileType.LogExternal)
+                    {
+                        prefix = DH.Helpdesk.Common.Enums.ModuleName.Log;
+                    }
+                    else
+                    {
+                        //Check permission to see internal lognotes.
+                        if(!SessionFacade.CurrentUser.CaseInternalLogPermission.ToBool())
+                            return this.RedirectToAction("index", "home");
+
+                        prefix = DH.Helpdesk.Common.Enums.ModuleName.LogInternal;
+                    }
+                    var logFolder = $"{prefix}{logId}";
+                    pathToFile = basePath + logFolder + "/" + fileName;
+                }
+                else
+                {
+                    pathToFile = basePath + c.CaseNumber + "/" + fileName;
+                }
+                
+
             }
             var isImage = FileExtensions.IsImage(fileName);
             ViewBag.IsImage = isImage;
-            ViewBag.Path = basePath + c.CaseNumber + "/" + fileName;
+            ViewBag.Path = pathToFile;
             return PartialView("_Documents");
+
         }
 
         public ActionResult Index()
