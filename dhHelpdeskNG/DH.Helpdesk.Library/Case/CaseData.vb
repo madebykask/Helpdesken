@@ -175,6 +175,7 @@ Public Class CaseData
                                               Nothing,
                                               Nothing,
                                               Nothing,
+                                              Nothing,
                                               New UserRepository(databaseFactory),
                                               Nothing,
                                               Nothing,

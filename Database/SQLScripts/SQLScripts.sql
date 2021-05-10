@@ -30,6 +30,42 @@ BEGIN
     alter column RegUserId nvarchar (200) null
 END
 
+--New table for User rights on ContractCategory
+RAISERROR ('Create table tblUsers_tblContractCategory', 10, 1) WITH NOWAIT
+if not exists(select * from sysobjects WHERE Name = N'tblUsers_tblContractCategory')
+Begin	
+	CREATE TABLE [tblUsers_tblContractCategory](
+		[User_Id] [int] NOT NULL,
+		[ContractCategory_Id] [int] NOT NULL,
+	 CONSTRAINT [PK_tblUsers_tblContractCategory] PRIMARY KEY CLUSTERED 
+	(
+		[User_Id] ASC,
+		[ContractCategory_Id] ASC
+		)
+		WITH (
+			PAD_INDEX = OFF, 
+			STATISTICS_NORECOMPUTE = OFF, 
+			IGNORE_DUP_KEY = OFF, 
+			ALLOW_ROW_LOCKS = ON, 
+			ALLOW_PAGE_LOCKS = ON, 
+			FILLFACTOR = 90) ON [PRIMARY]
+	)
+	ON [PRIMARY]
+
+
+	ALTER TABLE [tblUsers_tblContractCategory]  ADD CONSTRAINT [FK_tblUsers_tblContractCategory_tblContractCategory] FOREIGN KEY([ContractCategory_Id])
+	REFERENCES [tblContractCategory] ([Id])
+
+	ALTER TABLE [tblUsers_tblContractCategory] CHECK CONSTRAINT [FK_tblUsers_tblContractCategory_tblContractCategory]
+
+	ALTER TABLE [tblUsers_tblContractCategory]  ADD  CONSTRAINT [FK_tblUsers_tblContractCategory_tblUsers] FOREIGN KEY([User_Id])
+	REFERENCES [tblUsers] ([Id])
+
+	ALTER TABLE [tblUsers_tblContractCategory] CHECK CONSTRAINT [FK_tblUsers_tblContractCategory_tblUsers]
+
+end
+GO
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.51'
 GO

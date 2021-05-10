@@ -95,6 +95,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
     {
         public int OrderP1 { get; set; }
         public int OrderP2 { get; set; }
+        public int ContractPermission { get; set; }
         public int SendMailYesNo { get; set; }
         public int? SendMailYesNoWhen { get; set; }
         public int StateStatusCase { get; set; }
@@ -125,6 +126,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         public IList<SelectListItem> Languages { get; set; }
         public IList<SelectListItem> OTsAvailable { get; set; }
         public IList<SelectListItem> OTsSelected { get; set; }
+
+        public IList<SelectListItem> CCsAvailable { get; set; }
+        public IList<SelectListItem> CCsSelected { get; set; }
         public IList<SelectListItem> RefreshInterval { get; set; }
         public IList<SelectListItem> StartPageShowList { get; set; }
 
@@ -171,6 +175,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         public int[] AAsSelected { get; set; }
         public int[] CsSelected { get; set; }
         public int[] OTsSelected { get; set; }
+        public int[] CCsSelected { get; set; }
         public int[] Departments { get; set; }
         public List<UserWorkingGroup> UserWorkingGroups { get; set; }
         public string NewPassword { get; set; }

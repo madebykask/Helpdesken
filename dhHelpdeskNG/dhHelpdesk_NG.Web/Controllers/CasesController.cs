@@ -460,11 +460,10 @@ namespace DH.Helpdesk.Web.Controllers
 
             //Ok to se case
             var c = _caseService.GetCaseBasic(int.Parse(id));
-            var basePath = string.Empty;
             var pathToFile = string.Empty;
             if (c != null)
             {
-                basePath = _masterDataService.GetVirtualDirectoryPath(c.CustomerId);
+                var basePath = _masterDataService.GetVirtualDirectoryPath(c.CustomerId);
                 if (!basePath.EndsWith("/"))
                     basePath = basePath + "/";
                 if (logId != null)
@@ -492,6 +491,7 @@ namespace DH.Helpdesk.Web.Controllers
                 
 
             }
+            _fileViewLogService.Log(int.Parse(id), userId, fileName, pathToFile, FileViewLogFileSource.Helpdesk, FileViewLogOperation.View);
             var isImage = FileExtensions.IsImage(fileName);
             ViewBag.IsImage = isImage;
             ViewBag.Path = pathToFile;

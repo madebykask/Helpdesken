@@ -374,7 +374,7 @@ Module DH_Helpdesk_Mail
                             'LogToFile("Connecting to " & objCustomer.POP3Server & " (" & ip & "):" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName, iPop3DebugLevel)
 
                             If objCustomer.POP3Port = 993 Then
-                                IMAPclient.Connect(objCustomer.POP3Server.ToString(), SslMode.Explicit)
+                                IMAPclient.Connect(objCustomer.POP3Server.ToString(), SslMode.Implicit)
                             Else
                                 IMAPclient.Connect(objCustomer.POP3Server, objCustomer.POP3Port)
                             End If
@@ -2206,8 +2206,22 @@ Module DH_Helpdesk_Mail
         If objErrorLogFile IsNot Nothing Then
             objErrorLogFile.WriteLine("{0}: {1}", Now(), msg)
         End If
+        SendErrorMail(msg)
     End Sub
 
+    Private Sub SendErrorMail(msg As String)
+        Dim smtpServer As String = GetAppSettingValue("DefaultSmtpServer")
+        Dim toAddress As String = GetAppSettingValue("ErrorMailTo")
+        Dim fromAddress As String = GetAppSettingValue("ErrorMailFrom")
+        If (Not IsNullOrEmpty(smtpServer)) Then
+            Try
+                Rebex.Net.Smtp.Send(fromAddress, toAddress, "Error in M2T", msg, smtpServer)
+            Catch ex As Exception
+                Dim ajabaja = ex.ToString()
+            End Try
+        End If
+
+    End Sub
 
     Private Function ReturnProductArea(customerid As Integer, value As String) As ProductArea
         Dim ret As ProductArea = Nothing

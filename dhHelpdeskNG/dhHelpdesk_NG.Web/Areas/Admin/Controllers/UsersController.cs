@@ -38,6 +38,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ICaseSettingsService _caseSettingsService;
         private readonly ICaseLockService _caseLockService;
         private readonly ISettingService _settingService;
+        private readonly IContractCategoryService _contractCategoryService;
 
         public UsersController(
             ICustomerService customerService,
@@ -50,7 +51,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             ICaseSettingsService caseSettingsService,
             ICaseLockService caseLockService,
             IMasterDataService masterDataService,
-            ISettingService settingService)
+            ISettingService settingService,
+            IContractCategoryService contractCategoryService)
             : base(masterDataService)
         {
             this._customerService = customerService;
@@ -63,6 +65,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this._caseSettingsService = caseSettingsService;
             this._caseLockService = caseLockService;
             this._settingService = settingService;
+            this._contractCategoryService = contractCategoryService;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -635,7 +638,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 if (!otsSelected.Contains(ot))
                     otsAvailable.Add(ot);
             }
+            var ccsSelected = user.CCs ?? new List<ContractCategory>();
+            var ccsAvailable = new List<ContractCategory>();
 
+            foreach (var cc in _contractCategoryService.GetContractCategories(SessionFacade.CurrentCustomer.Id))
+            {
+                if (!ccsSelected.Contains(cc))
+                    ccsAvailable.Add(cc);
+            }
             #endregion
 
             #region SelectListItems
@@ -760,6 +770,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
                 OTsSelected = otsSelected.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                CCsAvailable = ccsAvailable.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                CCsSelected = ccsSelected.Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -909,6 +929,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     customersSelected,
                     customersAvailableHash.Keys.ToArray(),
                     inputModel.OTsSelected,
+                    inputModel.CCsSelected,
                     inputModel.Departments,
                     inputModel.UserWorkingGroups,
                     inputModel.CustomerUsers,
@@ -933,6 +954,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     customersSelected,
                     usersOwnCustomer.ToArray(),
                     inputModel.OTsSelected,
+                    inputModel.CCsSelected,
                     inputModel.Departments,
                     inputModel.UserWorkingGroups,
                     inputModel.CustomerUsers,

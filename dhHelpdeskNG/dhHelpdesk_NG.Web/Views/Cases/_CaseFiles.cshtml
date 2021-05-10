@@ -36,8 +36,7 @@
                             @*temporary file downloaded only by action, not directly*@
                             @if (Model.VirtualDirectory && !file.IsTemporary)
                             {
-                               <a target="_blank" onclick="window.dhHelpdesk.logFileAccess(@Model.ObjectId, '@file.FileName', @((int) CaseFileType.CaseFile))"
-                                   href="@Url.Action("Documents", "Cases",new RouteValueDictionary {{"id", Model.ObjectId}, {"fileName", file.FileName}, { "type", 0 } })">
+                               <a target="_blank" href="@Url.Action("Documents", "Cases",new RouteValueDictionary {{"id", Model.ObjectId}, {"fileName", file.FileName}, { "type", 0 } })">
                                     <i class="icon-file"></i>@file.FileName<br />
                                 </a>
                                 @*<a target="_blank" onclick="window.dhHelpdesk.logFileAccess(@Model.ObjectId, '@file.FileName', @((int) CaseFileType.CaseFile))"
