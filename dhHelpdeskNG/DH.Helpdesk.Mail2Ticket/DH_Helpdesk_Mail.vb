@@ -2210,16 +2210,21 @@ Module DH_Helpdesk_Mail
     End Sub
 
     Private Sub SendErrorMail(msg As String)
-        Dim smtpServer As String = GetAppSettingValue("DefaultSmtpServer")
-        Dim toAddress As String = GetAppSettingValue("ErrorMailTo")
-        Dim fromAddress As String = GetAppSettingValue("ErrorMailFrom")
-        If (Not IsNullOrEmpty(smtpServer)) Then
-            Try
-                Rebex.Net.Smtp.Send(fromAddress, toAddress, "Error in M2T", msg, smtpServer)
-            Catch ex As Exception
-                Dim ajabaja = ex.ToString()
-            End Try
-        End If
+        Try
+            Dim smtpServer As String = GetAppSettingValue("DefaultSmtpServer")
+            Dim toAddress As String = GetAppSettingValue("ErrorMailTo")
+            Dim fromAddress As String = GetAppSettingValue("ErrorMailFrom")
+            If (Not IsNullOrEmpty(smtpServer)) Then
+                Try
+                    Rebex.Net.Smtp.Send(fromAddress, toAddress, "Error in M2T", msg, smtpServer)
+                Catch ex As Exception
+                    Dim ajabaja = ex.ToString()
+                End Try
+            End If
+        Catch ex As Exception
+
+        End Try
+
 
     End Sub
 
