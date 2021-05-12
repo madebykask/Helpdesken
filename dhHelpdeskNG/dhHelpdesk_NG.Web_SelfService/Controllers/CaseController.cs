@@ -78,6 +78,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly ISupplierService _supplierService;
         private readonly ISettingService _settingService;
         private readonly IComputerService _computerService;
+        private readonly IContractCategoryService _contractCategoryService;
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IStateSecondaryService _stateSecondaryService;
@@ -132,6 +133,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             IComputerService computerService,
             ICaseSettingsService caseSettingService,
             ICaseSearchService caseSearchService,
+            IContractCategoryService contractCategoryService,
             IUserService userService,
             IWorkingGroupService workingGroupService,
             IStateSecondaryService stateSecondaryService,
@@ -184,6 +186,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             _computerService = computerService;
             _customerService = customerService;
             _workingGroupService = workingGroupService;
+            _contractCategoryService = contractCategoryService;
             _userService = userService;
             _stateSecondaryService = stateSecondaryService;
             _caseSolutionService = caseSolutionService;
