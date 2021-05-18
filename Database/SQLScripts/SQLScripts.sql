@@ -66,6 +66,24 @@ Begin
 end
 GO
 
+RAISERROR ('Extend URL1 lenght to 2000 char', 10, 1) WITH NOWAIT
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'URL1' and sysobjects.name = N'tblFAQ')
+BEGIN
+    ALTER TABLE tblFAQ	
+    alter column URL1 nvarchar (2000) null
+END
+GO
+
+RAISERROR ('Extend URL2 lenght to 2000 char', 10, 1) WITH NOWAIT
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'URL2' and sysobjects.name = N'tblFAQ')
+BEGIN
+    ALTER TABLE tblFAQ	
+    alter column URL2 nvarchar (2000) null
+END
+GO
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.51'
 GO
