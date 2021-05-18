@@ -126,7 +126,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         [BadRequestOnNotValid]
         public PartialViewResult Search(ContractsSearchInputData data)
-        {
+        {           
             var filter = new ContractsSearchFilter(data.CustomerId)
             {
                 SelectedContractCategories = data.Categories,
@@ -147,7 +147,17 @@ namespace DH.Helpdesk.Web.Controllers
 
                 SearchText = data.SearchText
             };
-            
+
+            var user = _userService.GetUser(SessionFacade.CurrentUser.Id);
+            if (data.Categories.Count == 0 && user.CCs.Count > 0)
+            {
+                var selectedCategories = new List<int>();
+                foreach (var cc in user.CCs)
+                {
+                    selectedCategories.Add(cc.Id);
+                }
+                filter.SelectedContractCategories = selectedCategories;
+            }
             //save filter in session
             SessionFacade.CurrentContractsSearch = filter;
 

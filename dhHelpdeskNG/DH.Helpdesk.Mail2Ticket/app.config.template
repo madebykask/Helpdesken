@@ -12,6 +12,9 @@
     <add key="LogFolder" value="" /> <!--Example: C:\temp-->
     <add key="LogIdentifier" value="" /> <!-- -->
     <add key="ProductAreaSeparator" value="" /> <!--separator symbol. Example: ;-->
+	<add key="DefaultSmtpServer" value="" /><!--smtp.datahalland.se -->
+	<add key="ErrorMailFrom" value="" /> <!-- testhelpdesk@dhsolutions.se -->
+	<add key="ErrorMailTo" value="" />  <!-- fredrik.landh@dhsolutions.se -->
   </appSettings>
   <connectionStrings>
     <add name="Helpdesk" connectionString="Data Source=#{DatabaseServer}; Initial Catalog=#{DatabaseName}; User Id=#{DatabaseUser}; Password=#{DatabasePassword};Network Library=dbmssocn" />

@@ -1250,7 +1250,8 @@ Module DH_Helpdesk_Mail
                 Dim mail As EmailMessage = item
                 If String.IsNullOrWhiteSpace(mail.Subject) Then
                     LogError("Missing mail subject for email: " & mail.From.Address)
-                    Continue For
+                    mail.Subject = ""
+                    'Continue For
                 End If
 
                 Dim message As EwsMailMessage = New EwsMailMessage()
@@ -1277,7 +1278,12 @@ Module DH_Helpdesk_Mail
                 Else
                     message.BodyText = mail.Body.Text
                 End If
+                'For Each attach As Microsoft.Exchange.WebServices.Data.Attachment In mail.Attachments
+                '    Dim byteArray(attach.Size) As Byte
+                '    Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(attach.Size, attach.Name, attach.ContentType.ToString())
+                '    Console.WriteLine(newAttachment.GetType())
 
+                'Next
                 If mail.Attachments.Any() Then
                     For Each attach As Microsoft.Exchange.WebServices.Data.Attachment In mail.Attachments
                         If attach.GetType() = GetType(FileAttachment) Then
@@ -1285,7 +1291,7 @@ Module DH_Helpdesk_Mail
                                 attach.Load()
                             Catch ex As Exception
                                 LogError("Error loading attachment: " & ex.Message.ToString)
-                                'rethrow
+                                'continue for?
                                 Throw
                             End Try
 
@@ -1303,6 +1309,27 @@ Module DH_Helpdesk_Mail
                                 End If
                                 message.Resources.Add(newResource)
                             End If
+
+                        End If
+                        If attach.GetType() = GetType(ItemAttachment) Then
+                            Try
+                                attach.Load()
+
+                                Dim itemAttach As ItemAttachment = attach
+                                Dim byteArray(itemAttach.Size) As Byte
+                                Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(byteArray), itemAttach.Name.Replace(":", "-").Replace("vbCrLf", " "))
+                                'Dim attach1 As Microsoft.Exchange.WebServices.Data.Attachment = attach
+                                message.Attachments.Add(newAttachment)
+                            Catch ex As Exception
+                                LogError("Error loading attachment: " & ex.Message.ToString)
+                                'continue for?
+                                Throw
+                            End Try
+
+
+                            'TODO - save And add it to the message
+                            ' Dim newResource As LinkedResource = New LinkedResource(New MemoryStream(itemAttach.ContentType, itemAttach.Name))
+
 
                         End If
                     Next

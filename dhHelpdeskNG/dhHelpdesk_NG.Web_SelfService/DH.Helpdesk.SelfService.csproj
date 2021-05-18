@@ -802,7 +802,12 @@
     <Content Include="log4net.config.template">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="_app_offline.htm" />
+    <Content Include="_app_offline.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="bin\DH.Helpdesk.SelfService.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />

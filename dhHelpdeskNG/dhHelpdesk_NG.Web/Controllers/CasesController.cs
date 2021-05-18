@@ -451,8 +451,7 @@ namespace DH.Helpdesk.Web.Controllers
             var customerId =  _caseService.GetCaseCustomerId(int.Parse(id));
 
             var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
-            CaseInputViewModel m = null;
-            m = this.GetCaseInputViewModel(userId, customerId, int.Parse(id), caseLockViewModel, caseFieldSettings, "", "", null, null, false);
+            CaseInputViewModel m = this.GetCaseInputViewModel(userId, customerId, int.Parse(id), caseLockViewModel, caseFieldSettings, "", "", null, null, false);
 
             // User has not access to case
             if (m.EditMode == AccessMode.NoAccess)
