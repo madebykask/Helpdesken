@@ -6,6 +6,8 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Net;
+using System.Net.Mime;
 using System.Web.Mvc;
 using System.Web.Routing;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
@@ -102,9 +104,10 @@ namespace DH.Helpdesk.Web.Controllers
 	using Common.Tools.Files;
 	using BusinessData.Models.FinishingCause;
 	using Infrastructure.Mvc;
-    using DH.Helpdesk.Common.Enums;
+    using System.Net.Mime;
     using DH.Helpdesk.Common.Enums.Logs;
     using DH.Helpdesk.Common.Extensions;
+    using System.IO;
 
     public partial class CasesController : BaseController
     {
@@ -455,16 +458,15 @@ namespace DH.Helpdesk.Web.Controllers
 
             // User has not access to case
             if (m.EditMode == AccessMode.NoAccess)
-                return this.RedirectToAction("index", "home");
+                return RedirectToAction("index", "home");
 
             //Ok to se case
             var c = _caseService.GetCaseBasic(int.Parse(id));
             var pathToFile = string.Empty;
             if (c != null)
             {
-                var basePath = _masterDataService.GetVirtualDirectoryPath(c.CustomerId);
-                if (!basePath.EndsWith("/"))
-                    basePath = basePath + "/";
+                var basePath = _masterDataService.GetFilePath(c.CustomerId) +"\\";
+
                 if (logId != null)
                 {
                     var prefix = "";
@@ -476,28 +478,26 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         //Check permission to see internal lognotes.
                         if(!SessionFacade.CurrentUser.CaseInternalLogPermission.ToBool())
-                            return this.RedirectToAction("index", "home");
+                            return RedirectToAction("index", "home");
 
                         prefix = DH.Helpdesk.Common.Enums.ModuleName.LogInternal;
                     }
                     var logFolder = $"{prefix}{logId}";
-                    pathToFile = basePath + logFolder + "/" + fileName;
+                    pathToFile = basePath + logFolder + "\\" + fileName;
                 }
                 else
                 {
-                    pathToFile = basePath + c.CaseNumber + "/" + fileName;
+                    pathToFile = basePath + c.CaseNumber + "\\" + fileName;
                 }
                 
-
             }
             _fileViewLogService.Log(int.Parse(id), userId, fileName, pathToFile, FileViewLogFileSource.Helpdesk, FileViewLogOperation.View);
-            var isImage = FileExtensions.IsImage(fileName);
-            ViewBag.IsImage = isImage;
-            ViewBag.Path = pathToFile;
-            return PartialView("_Documents");
 
+            string mimeType = MimeMapping.GetMimeMapping(fileName);
+            byte[] fileBytes = _filesStorage.GetFileByteContent(pathToFile);
+            Response.AppendHeader("Content-Disposition", "inline; filename=" + fileName);
+            return File(fileBytes, mimeType);
         }
-
         public ActionResult Index()
         {
             if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
