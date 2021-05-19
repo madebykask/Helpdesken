@@ -34,5 +34,13 @@
         public bool IsRequired { get; set; }
 
         public bool IsReadOnly { get; set; }
+
+        public bool IsCaptionDisabled { get; set; }
+
+        public bool IsRequiredDisabled { get; set; }
+
+        public bool IsShowInListDisabled { get; set; }
+
+        public bool IsReadOnlyDisabled { get; set; }
     }
 }

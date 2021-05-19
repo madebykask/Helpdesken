@@ -84,6 +84,14 @@ BEGIN
 END
 GO
 
+RAISERROR ('Update Showinlist, readonly and required in tblComputerFieldSettings for documents', 10, 1) WITH NOWAIT
+	UPDATE [tblComputerFieldSettings]
+    SET ShowInList = 0, 
+    ReadOnly = 0, 
+    Required = 0 
+	WHERE ComputerField = 'Dokument' OR ComputerField = 'Document'
+	GO
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.51'
 GO
