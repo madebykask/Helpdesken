@@ -10,6 +10,8 @@ namespace DH.Helpdesk.Dal.Infrastructure
 
         FileContentModel GetFileContent(string topic, int entityId, string basePath, string fileName);
 
+        byte[] GetFileByteContent(string pathToFile);
+
         string ComposeFilePath(string topic, int entityId, string basePath, string fileName);
 
         void MoveDirectory(string topic, string entityId, string sourceBasePath, string targetBasePath);

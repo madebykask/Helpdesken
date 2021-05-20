@@ -31,7 +31,11 @@ namespace DH.Helpdesk.Dal.Infrastructure.Concrete
 			};
 			return model;
         }
-
+        public byte[] GetFileByteContent(string pathToFile)
+        {
+            return File.ReadAllBytes(pathToFile);
+        }
+        
         public string SaveFile(byte[] content, string basePath, string fileName, string topic, int entityId)
         {
             //var saveDirectory = ComposeDirectoryPath(basePath, topic, entityId); 

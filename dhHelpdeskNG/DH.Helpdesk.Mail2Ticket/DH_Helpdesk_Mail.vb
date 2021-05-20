@@ -1314,7 +1314,7 @@ Module DH_Helpdesk_Mail
                         If attach.GetType() = GetType(ItemAttachment) Then
                             Try
                                 attach.Load()
-
+                                'Todo - Save itemAttach
                                 Dim itemAttach As ItemAttachment = attach
                                 Dim byteArray(itemAttach.Size) As Byte
                                 Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(byteArray), itemAttach.Name.Replace(":", "-").Replace("vbCrLf", " "))
