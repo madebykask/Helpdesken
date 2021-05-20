@@ -27,7 +27,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 CreatedDate = businessModel.CreatedDate,
                 ChangedDate = businessModel.CreatedDate, 
                 ComputerTypeDescription = businessModel.Description,
-                Customer_Id = customerId
+                Customer_Id = customerId,
+                Price = businessModel.Price
             };
             this.DbSet.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);

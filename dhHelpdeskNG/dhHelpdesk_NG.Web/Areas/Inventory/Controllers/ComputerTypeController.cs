@@ -65,6 +65,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         {
             var businessModel = base.CreateNewBusinessModel(model);
             businessModel.Description = model.Description ?? string.Empty;
+            businessModel.Price = model.Price ?? 0;
             return businessModel;
         }
 

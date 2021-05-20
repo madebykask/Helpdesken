@@ -7,11 +7,12 @@
 
     public class ComputerModule : BusinessModel
     {
-        private ComputerModule(ModelStates modelState, string name, string description = null)
+        private ComputerModule(ModelStates modelState, string name, string description = null, int? price = 0)
         {
             this.State = modelState;
             this.Name = name;
             this.Description = description;
+            this.Price = price;
         }
 
         [NotNullAndEmpty]
@@ -24,7 +25,8 @@
 
         [AllowRead(ModelStates.Updated)]
         public DateTime ChangedDate { get; set; }
-        public int? Price { get; internal set; }
+
+        public int? Price { get; set; }
 
         public static ComputerModule CreateNew(string name, DateTime createdDate)
         {
