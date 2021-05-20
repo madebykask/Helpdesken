@@ -39,6 +39,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.Name = businessModel.Name;
             entity.ComputerTypeDescription = businessModel.Description;
             entity.ChangedDate = businessModel.ChangedDate;
+            entity.Price = businessModel.Price;
         }
 
         public ComputerTypeOverview Get(int id)
@@ -46,7 +47,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             var item = DbSet.Single(x => x.Id == id);
             return new ComputerTypeOverview(item.Id, item.Name)
             {
-                Description = item.ComputerTypeDescription
+                Description = item.ComputerTypeDescription,
+                Price = item.Price
             };
         }
 

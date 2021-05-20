@@ -35,7 +35,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var computerType = ComputerModulesService.GetComputerType(id);
             return new ComputerModuleEditModel(id, computerType.Name)
             {
-                Description = computerType.Description
+                Description = computerType.Description,
+                Price = computerType.Price
             };
         }
 

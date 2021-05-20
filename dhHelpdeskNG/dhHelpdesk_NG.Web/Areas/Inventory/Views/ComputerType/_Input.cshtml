@@ -20,4 +20,13 @@
             @Html.ValidationMessageFor(m => m.Description)
         </td>
     </tr>
+    <tr>
+        <td class="span3">
+            <label>@Translation.Get("Kostnad")</label>
+        </td>
+        <td class="span9">
+            @Html.EditorFor(m => m.Price, new { @type = "number" })
+            @Html.ValidationMessageFor(m => m.Price)
+        </td>
+    </tr>
 </table>

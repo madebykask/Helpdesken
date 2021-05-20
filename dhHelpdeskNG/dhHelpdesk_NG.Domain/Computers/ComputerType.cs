@@ -14,5 +14,6 @@
 
         public virtual Customer Customer { get; set; }
         public virtual Inventory Inventory { get; set; }
+        public int? Price { get; set; }
     }
 }

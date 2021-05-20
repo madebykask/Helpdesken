@@ -24,15 +24,16 @@
 
         [AllowRead(ModelStates.Updated)]
         public DateTime ChangedDate { get; set; }
+        public int? Price { get; internal set; }
 
         public static ComputerModule CreateNew(string name, DateTime createdDate)
         {
             return new ComputerModule(ModelStates.Created, name) { CreatedDate = createdDate };
         }
 
-        public static ComputerModule CreateUpdated(int id, string name, DateTime changedDate)
+        public static ComputerModule CreateUpdated(int id, string name, DateTime changedDate, int? price)
         {
-            return new ComputerModule(ModelStates.Updated, name) { Id = id, ChangedDate = changedDate };
+            return new ComputerModule(ModelStates.Updated, name) { Id = id, ChangedDate = changedDate, Price = price };
         }
     }
 }
