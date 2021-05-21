@@ -35,7 +35,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var computerType = ComputerModulesService.GetComputerType(id);
             return new ComputerModuleEditModel(id, computerType.Name)
             {
-                Description = computerType.Description
+                Description = computerType.Description,
+                Price = computerType.Price
             };
         }
 
@@ -64,6 +65,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         {
             var businessModel = base.CreateNewBusinessModel(model);
             businessModel.Description = model.Description ?? string.Empty;
+            businessModel.Price = model.Price ?? 0;
             return businessModel;
         }
 

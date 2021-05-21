@@ -106,7 +106,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
         protected virtual ComputerModule CreateUpdatedBusinessModel(ComputerModuleEditModel model)
         {
-            var businessModel = ComputerModule.CreateUpdated(model.Id, model.Name, DateTime.Now);
+            var businessModel = ComputerModule.CreateUpdated(model.Id, model.Name, DateTime.Now, model.Price);
             return businessModel;
         }
 
