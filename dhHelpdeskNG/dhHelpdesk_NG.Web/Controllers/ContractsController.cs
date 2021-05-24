@@ -148,16 +148,7 @@ namespace DH.Helpdesk.Web.Controllers
                 SearchText = data.SearchText
             };
 
-            var user = _userService.GetUser(SessionFacade.CurrentUser.Id);
-            if (data.Categories.Count == 0 && user.CCs.Count > 0)
-            {
-                var selectedCategories = new List<int>();
-                foreach (var cc in user.CCs)
-                {
-                    selectedCategories.Add(cc.Id);
-                }
-                filter.SelectedContractCategories = selectedCategories;
-            }
+
             //save filter in session
             SessionFacade.CurrentContractsSearch = filter;
 
@@ -173,7 +164,6 @@ namespace DH.Helpdesk.Web.Controllers
 
         private ContractsSearchFilter GetSearchFilter(int customerId)
         {
-            var user = _userService.GetUser(SessionFacade.CurrentUser.Id);
             var filterModel = SessionFacade.CurrentContractsSearch;
             if (filterModel == null)
             {
@@ -181,15 +171,6 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     State = ContractStatuses.Active
                 };
-                if (user.CCs.Count > 0)
-                {
-                    var selectedCategories = new List<int>();
-                    foreach(var cc in user.CCs)
-                    {
-                        selectedCategories.Add(cc.Id);
-                    }
-                    filterModel.SelectedContractCategories = selectedCategories;
-                }
 
                 SessionFacade.CurrentContractsSearch = filterModel;
             }
@@ -200,6 +181,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var customerId = selectedFilter.CustomerId;
             var customer = _customerService.GetCustomer(customerId);
+
 
             var model = new ContractsSearchResultsModel(customer);
 
@@ -358,7 +340,16 @@ namespace DH.Helpdesk.Web.Controllers
 
         private IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter)
         {
-            var contracts  = _contractService.SearchContracts(filter, SessionFacade.CurrentUser.Id);
+            var user = _userService.GetUser(SessionFacade.CurrentUser.Id);
+            var userCategories = new List<int>();
+            if (filter.SelectedContractCategories.Count == 0 && user.CCs.Count > 0)
+            {
+                foreach (var cc in user.CCs)
+                {
+                    userCategories.Add(cc.Id);
+                }
+            }
+            var contracts  = _contractService.SearchContracts(filter, SessionFacade.CurrentUser.Id, userCategories);
             return contracts;
         }
 
@@ -431,7 +422,7 @@ namespace DH.Helpdesk.Web.Controllers
             var contractCategories = _contractCategoryService.GetContractCategories(customer.Id);
             if (user.CCs.Count() > 0)
                 contractCategories = user.CCs.ToList();
-            
+
             var model = new ContractsSearchFilterViewModel()
             {
                 ContractCategories = contractCategories.Select(c => new SelectListItem()
@@ -454,10 +445,10 @@ namespace DH.Helpdesk.Web.Controllers
 
                 Departments = _departmentService.GetDepartmentsForUser(customer.Id, SessionFacade.CurrentUser.Id)
                     .Select(d => new SelectListItem
-                {
-                    Value = d.Id.ToString(),
-                    Text = d.DepartmentName
-                }).ToList(),
+                    {
+                        Value = d.Id.ToString(),
+                        Text = d.DepartmentName
+                    }).ToList(),
 
                 ShowContracts = GetContractStatuses().ToSelectList(),
 
@@ -810,7 +801,7 @@ namespace DH.Helpdesk.Web.Controllers
                 CustomerId = customerId,
                 CurrentLanguage = SessionFacade.CurrentLanguageId,
                 Languages = new Dictionary<int, string> {{1, "SV"}, {2, "EN"}}.ToSelectList(),
-                SettingRows =
+                SettingRows =  
                     allFieldsSettingRows.Select(s => new ContractsSettingRowViewModel
                         {
                             Id = s.Id,

@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Services.Services
 {
     public interface IContractService
     {
-        IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter, int userId);
+        IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter, int userId, List<int> userCategories);
         Contract GetContract(int contractId, int userId);
         List<ContractsSettingRowModel> GetContractsSettingRows(int customerId);
         void SaveContractSettings(IList<ContractsSettingRowModel> contractSettings);
@@ -64,12 +64,14 @@ namespace DH.Helpdesk.Services.Services
             _unitOfwork = unitOfWork;
         }
 
-        public IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter, int userId)
+        public IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter, int userId, List<int> userCategories)
         {
             var selectedStatus = filter.State;
             var customerId = filter.CustomerId;
 
             Expression<Func<Contract, bool>> exp = c => c.ContractCategory.Customer_Id == customerId;
+            if (filter.SelectedContractCategories.Count == 0 && userCategories.Count > 0)
+                exp = PredicateBuilder<Contract>.AndAlso(exp, c => userCategories.Contains(c.ContractCategory_Id));
 
             if (filter.SelectedContractCategories.Any())
                 exp = PredicateBuilder<Contract>.AndAlso(exp, c => filter.SelectedContractCategories.Contains(c.ContractCategory_Id));
@@ -157,13 +159,12 @@ namespace DH.Helpdesk.Services.Services
                         Id = contract.Supplier_Id.Value,
                         Name = contract.Supplier.Name,
                     } : null,
-
+                    //This has to change
                     ContractCategory = new ContractCategoryOverview()
                     {
                         Id = contract.ContractCategory_Id,
                         Name = contract.ContractCategory.Name
                     },
-
                     Department = contract.Department_Id != null ? new DepartmentOverview()
                     {
                         Id = contract.Department_Id.Value,
