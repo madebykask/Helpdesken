@@ -7998,7 +7998,17 @@ begin
 		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2076, 2, N'Choose the default tab that should be active when a case, that is created from this case template, is opened')
 end
 GO
---- Slut nytt
+--Nytt 2021-05-25
+If not exists (select * from tbltext where TextString = 'Tillgängliga Avtalskategorier')
+begin
+    If not exists (select * from tbltext where id = 2077)
+	insert into tbltext (id, TextString, TextType) VALUES (2077, 'Tillgängliga Avtalskategorier', 0)
+
+	If not exists (select * from tblTextTranslation where text_id = 2077 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2077, 2, N'Available Contract categories')
+end
+GO
+
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)

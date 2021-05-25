@@ -182,7 +182,7 @@ Module DH_Helpdesk_Mail
             ReadMailBox(sConnectionstring, workingMode)
 
         Catch ex As Exception
-            LogError(ex.ToString())
+            LogError(ex.ToString(), Nothing)
         Finally
             closeLogFiles()
         End Try
@@ -221,7 +221,7 @@ Module DH_Helpdesk_Mail
             LogToFile("app.config connection string is protected={0}", section.SectionInformation.IsProtected)
 
         Catch ex As Exception
-            LogError(ex.ToString())
+            LogError(ex.ToString(), Nothing)
         End Try
     End Sub
 
@@ -343,7 +343,7 @@ Module DH_Helpdesk_Mail
                             If IsNullOrEmpty(objCustomer.EMailFolder) Then
                                 objCustomer.EMailFolder = InboxMailFolderName 'Set Default To inbox If NULL
                             End If
-                            Dim task As Task(Of List(Of MailMessage)) = ReadEwsFolderAsync(objCustomer.POP3Server,
+                            Dim task As Task(Of List(Of MailMessage)) = ReadEwsFolderAsync(objCustomer, objCustomer.POP3Server,
                                                                                       objCustomer.POP3Port,
                                                                                       objCustomer.POP3UserName,
                                                                                       objCustomer.EMailFolder,
@@ -400,10 +400,10 @@ Module DH_Helpdesk_Mail
                             'End If
 
                             If IsNullOrEmpty(objCustomer.POP3UserName) Or IsNullOrEmpty(objCustomer.POP3Password) Then
-                                LogError("Missing UserName Or Password")
+                                LogError("Missing UserName Or Password", objCustomer)
                                 Exit For
                             ElseIf objCustomer.EMailDefaultCaseType_Id = 0 Then
-                                LogError("Missing Default Case Type")
+                                LogError("Missing Default Case Type", objCustomer)
                                 Exit For
                             End If
 
@@ -445,7 +445,7 @@ Module DH_Helpdesk_Mail
                             'Validate email folders
                             If Not IsNullOrEmpty(objCustomer.EMailFolder) Then
                                 If Not CheckEmailFolderExists(IMAPclient, objCustomer.EMailFolder) Then
-                                    LogError($"EmailFolder '{objCustomer.EMailFolder}' doesn't exist.")
+                                    LogError($"EmailFolder '{objCustomer.EMailFolder}' doesn't exist.", objCustomer)
                                     Exit For
                                 Else
                                     emailFolder = objCustomer.EMailFolder
@@ -454,7 +454,7 @@ Module DH_Helpdesk_Mail
 
                             If Not IsNullOrEmpty(objCustomer.EMailFolderArchive) Then
                                 If Not CheckEmailFolderExists(IMAPclient, objCustomer.EMailFolderArchive) Then
-                                    LogError($"EmailFolderArchive '{objCustomer.EMailFolderArchive}' doesn't exist.")
+                                    LogError($"EmailFolderArchive '{objCustomer.EMailFolderArchive}' doesn't exist.", objCustomer)
                                     Exit For
                                 End If
                             End If
@@ -463,7 +463,7 @@ Module DH_Helpdesk_Mail
                             IMAPclient.SelectFolder(emailFolder)
 
                             If Not IMAPclient.CurrentFolder.Name.Equals(emailFolder, StringComparison.OrdinalIgnoreCase) Then
-                                LogError($"Failed to connect to '{emailFolder}' email folder")
+                                LogError($"Failed to connect to '{emailFolder}' email folder", objCustomer)
                                 Exit For
                             End If
 
@@ -723,7 +723,7 @@ Module DH_Helpdesk_Mail
                                     Try
                                         objCase = objCaseData.createCase(objCase)
                                     Catch ex As Exception
-                                        LogError("Error creating Case in database: " & ex.Message.ToString)
+                                        LogError("Error creating Case in database: " & ex.Message.ToString, objCustomer)
                                         Continue For
                                     End Try
 
@@ -744,8 +744,8 @@ Module DH_Helpdesk_Mail
                                     LogToFile("Create Case:" & objCase.Casenumber & ", Attachments:" & message.Attachments.Count, iPop3DebugLevel)
 
                                     'Save 
-                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
-                                    Dim sPDFFileName As String = CreatePdfFileFromMail(message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
+                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
+                                    Dim sPDFFileName As String = CreatePdfFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
 
                                     If Not IsNullOrEmpty(sPDFFileName) Then
                                         iHTMLFile = 1
@@ -1004,8 +1004,8 @@ Module DH_Helpdesk_Mail
                                     Dim bIsInternalLogFile = isInternalLogUsed AndAlso isTwoAttachmentsActive ' Mark file as internal only 2attachments is enabled
                                     Dim logSubFolderPrefix = If(bIsInternalLogFile, "LL", "L") ' LL - Internal log subfolder, L - external log subfolder
 
-                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
-                                    Dim sPDFFileName As String = CreatePdfFileFromMail(message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
+                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
+                                    Dim sPDFFileName As String = CreatePdfFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
 
                                     If Not IsNullOrEmpty(sPDFFileName) Then
                                         iHTMLFile = 1
@@ -1109,7 +1109,7 @@ Module DH_Helpdesk_Mail
                                     IMAPclient.Purge()
                                 ElseIf eMailConnectionType = MailConnectionType.Ews Then
                                     ' Copy mail if archieve, ' delete mail
-                                    DeleteEwsMail(message,
+                                    DeleteEwsMail(message, objCustomer,
                                           objCustomer.POP3Server,
                                           objCustomer.POP3Port,
                                           objCustomer.POP3UserName,
@@ -1124,7 +1124,7 @@ Module DH_Helpdesk_Mail
 
 
                     Catch ex As Exception
-                        LogError("Error readMailBox." & objCustomer.POP3UserName & "  Error: " & ex.ToString())
+                        LogError("Error readMailBox." & objCustomer.POP3UserName & "  Error: " & ex.ToString(), objCustomer)
                     Finally
 
                         If objCustomer.MailServerProtocol = 0 Then
@@ -1147,14 +1147,14 @@ Module DH_Helpdesk_Mail
             Next
 
         Catch ex As Exception
-            LogError("Error readMailBox: " & ex.Message.ToString)
+            LogError("Error readMailBox: " & ex.Message.ToString, Nothing)
             'rethrow
             Throw
         End Try
     End Function
 
 
-    Private Async Function DeleteEwsMail(message As EwsMailMessage, server As String, port As Integer, userName As String, emailFolder As String, emailArchiveFolder As String, applicationId As String, clientSecret As String, tenantId As String) As System.Threading.Tasks.Task
+    Private Async Function DeleteEwsMail(message As EwsMailMessage, objCustomer As Customer, server As String, port As Integer, userName As String, emailFolder As String, emailArchiveFolder As String, applicationId As String, clientSecret As String, tenantId As String) As System.Threading.Tasks.Task
         'emailFolder = "Inbox"
         'emailArchiveFolder = "Archive/M2T_test"
         Dim ewsScopes As String() = New String() {"https://outlook.office.com/.default"}
@@ -1171,10 +1171,10 @@ Module DH_Helpdesk_Mail
 
         If (Not String.IsNullOrWhiteSpace(emailArchiveFolder)) Then
 
-            Dim archive As Folder = FindEwsFolder(emailArchiveFolder, service)
+            Dim archive As Folder = FindEwsFolder(objCustomer, emailArchiveFolder, service)
 
             If (archive Is Nothing) Then
-                LogError("Error coping to archive folder. Archive folder not found: " & emailArchiveFolder)
+                LogError("Error coping to archive folder. Archive folder not found: " & emailArchiveFolder, objCustomer)
             Else
                 Dim ids = New List(Of ItemId)
                 ids.Add(message.EwsID)
@@ -1193,7 +1193,7 @@ Module DH_Helpdesk_Mail
     End Function
 
 
-    Private Async Function ReadEwsFolderAsync(server As String, port As Integer, userName As String, emailFolder As String, emailArchiveFolder As String,
+    Private Async Function ReadEwsFolderAsync(objCustomer As Customer, server As String, port As Integer, userName As String, emailFolder As String, emailArchiveFolder As String,
                                               applicationId As String, clientSecret As String, tenantId As String) As Task(Of List(Of MailMessage))
         'emailFolder = "Inkorg/M2T_test"
         'emailArchiveFolder = "Arkiv/M2T_test"
@@ -1214,7 +1214,7 @@ Module DH_Helpdesk_Mail
             'Dim folderId As FolderId = New FolderId(WellKnownFolderName.MsgFolderRoot, userName)
             inbox = Folder.Bind(service, WellKnownFolderName.Inbox)
         Else
-            inbox = FindEwsFolder(emailFolder, service)
+            inbox = FindEwsFolder(objCustomer, emailFolder, service)
         End If
 
         If inbox Is Nothing Then
@@ -1222,7 +1222,7 @@ Module DH_Helpdesk_Mail
         End If
 
         If Not String.IsNullOrWhiteSpace(emailArchiveFolder) Then
-            If FindEwsFolder(emailArchiveFolder, service) Is Nothing Then
+            If FindEwsFolder(objCustomer, emailArchiveFolder, service) Is Nothing Then
                 Throw New ArgumentException($"EmailFolderArchive '{emailArchiveFolder}' doesn't exist.")
             End If
         End If
@@ -1249,7 +1249,6 @@ Module DH_Helpdesk_Mail
             If item.GetType() Is GetType(EmailMessage) Then
                 Dim mail As EmailMessage = item
                 If String.IsNullOrWhiteSpace(mail.Subject) Then
-                    LogError("Missing mail subject for email: " & mail.From.Address)
                     mail.Subject = ""
                     'Continue For
                 End If
@@ -1290,7 +1289,7 @@ Module DH_Helpdesk_Mail
                             Try
                                 attach.Load()
                             Catch ex As Exception
-                                LogError("Error loading attachment: " & ex.Message.ToString)
+                                LogError("Error loading attachment: " & ex.Message.ToString, objCustomer)
                                 'continue for?
                                 Throw
                             End Try
@@ -1314,14 +1313,14 @@ Module DH_Helpdesk_Mail
                         If attach.GetType() = GetType(ItemAttachment) Then
                             Try
                                 attach.Load()
-                                'Todo - Save itemAttach
+                                'Todo - Save itemAttach?
                                 Dim itemAttach As ItemAttachment = attach
                                 Dim byteArray(itemAttach.Size) As Byte
                                 Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(byteArray), itemAttach.Name.Replace(":", "-").Replace("vbCrLf", " "))
                                 'Dim attach1 As Microsoft.Exchange.WebServices.Data.Attachment = attach
                                 message.Attachments.Add(newAttachment)
                             Catch ex As Exception
-                                LogError("Error loading attachment: " & ex.Message.ToString)
+                                LogError("Error loading attachment: " & ex.Message.ToString, objCustomer)
                                 'continue for?
                                 Throw
                             End Try
@@ -1342,7 +1341,7 @@ Module DH_Helpdesk_Mail
         Return messages
     End Function
 
-    Private Function FindEwsFolder(emailFolder As String, service As ExchangeService) As Folder
+    Private Function FindEwsFolder(objCustomer As Customer, emailFolder As String, service As ExchangeService) As Folder
         Dim emailFolders As String()
         If emailFolder.IndexOf("/"c) >= 0 Then
             emailFolders = emailFolder.Split("/"c)
@@ -1360,13 +1359,13 @@ Module DH_Helpdesk_Mail
             End If
             folder = folders.FirstOrDefault(Function(f) f.DisplayName.Equals(currentFolderName, StringComparison.InvariantCultureIgnoreCase))
             If folder Is Nothing Then
-                LogError("Can't find folder: " & currentFolderName)
+                LogError("Can't find folder: " & currentFolderName, objCustomer)
                 Exit For
             End If
         Next
 
         If folder Is Nothing Then
-            LogError("Can't find folder: " & emailFolder)
+            LogError("Can't find folder: " & emailFolder, objCustomer)
             Return Nothing
         End If
 
@@ -1681,7 +1680,7 @@ Module DH_Helpdesk_Mail
 
     End Function
 
-    Private Function CreateHtmlFileFromMail(ByVal message As MailMessage,
+    Private Function CreateHtmlFileFromMail(objCustomer As Customer, ByVal message As MailMessage,
                                             ByVal sFolder As String,
                                             ByVal sCaseNumber As String) As String
 
@@ -1784,7 +1783,7 @@ Module DH_Helpdesk_Mail
             End If
 
         Catch ex As Exception
-            LogError("Error createHtmlFileFromMail MediaType: " & sMediaType & ", " & ex.Message.ToString)
+            LogError("Error createHtmlFileFromMail MediaType: " & sMediaType & ", " & ex.Message.ToString, objCustomer)
 
             'Rethrow
             Throw
@@ -1793,7 +1792,7 @@ Module DH_Helpdesk_Mail
         Return sFileName
     End Function
 
-    Private Function CreatePdfFileFromMail(ByVal message As MailMessage,
+    Private Function CreatePdfFileFromMail(objCustomer As Customer, ByVal message As MailMessage,
                                             ByVal sFolder As String,
                                             ByVal sCaseNumber As String) As String
 
@@ -1862,7 +1861,7 @@ Module DH_Helpdesk_Mail
 
                     Catch ex As Exception
                         ' The HTML to PDF conversion failed                       
-                        LogError(String.Format("HTML to PDF Error. {0}", ex.Message))
+                        LogError(String.Format("HTML to PDF Error. {0}", ex.Message), objCustomer)
                     End Try
 
                     ' Open the created PDF document in default PDF viewer
@@ -1875,7 +1874,7 @@ Module DH_Helpdesk_Mail
             End If
 
         Catch ex As Exception
-            LogError("Error createPDFFileFromMail MediaType: " & sMediaType & ", " & ex.Message.ToString)
+            LogError("Error createPDFFileFromMail MediaType: " & sMediaType & ", " & ex.Message.ToString, objCustomer)
 
             'Rethrow
             Throw
@@ -2228,24 +2227,30 @@ Module DH_Helpdesk_Mail
         End If
     End Sub
 
-    Private Sub LogError(msg As String)
+    Private Sub LogError(msg As String, objCustomer As Customer)
         openErrorLogFile()
         If objErrorLogFile IsNot Nothing Then
             objErrorLogFile.WriteLine("{0}: {1}", Now(), msg)
         End If
-        SendErrorMail(msg)
+        SendErrorMail(msg, objCustomer)
     End Sub
 
-    Private Sub SendErrorMail(msg As String)
+    Private Sub SendErrorMail(msg As String, objCustomer As Customer)
         Try
             Dim smtpServer As String = GetAppSettingValue("DefaultSmtpServer")
+            Dim sConnectionstring As String = ConfigurationManager.ConnectionStrings("Helpdesk")?.ConnectionString
             Dim toAddress As String = GetAppSettingValue("ErrorMailTo")
             Dim fromAddress As String = GetAppSettingValue("ErrorMailFrom")
-            If (Not IsNullOrEmpty(smtpServer)) Then
+            If (Not IsNullOrEmpty(smtpServer) And objCustomer IsNot Nothing) Then
+
                 Try
-                    Rebex.Net.Smtp.Send(fromAddress, toAddress, "Error in M2T", msg, smtpServer)
+                    Dim objMail As New Mail
+                    objMail.SendErrorMail(fromAddress, toAddress, "Error in M2T", msg, objCustomer, sConnectionstring, smtpServer)
+
                 Catch ex As Exception
-                    Dim ajabaja = ex.ToString()
+                    If objErrorLogFile IsNot Nothing Then
+                        objErrorLogFile.WriteLine("{0}: {1}", Now(), ex.Message)
+                    End If
                 End Try
             End If
         Catch ex As Exception
