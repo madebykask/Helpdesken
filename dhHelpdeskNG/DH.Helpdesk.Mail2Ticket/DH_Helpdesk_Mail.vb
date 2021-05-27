@@ -1318,13 +1318,13 @@ Module DH_Helpdesk_Mail
                                 Dim itemAttachment As ItemAttachment = attach
                                 itemAttachment.Load(ItemSchema.MimeContent)
                                 'Dim fileName As String = "C:\\Temp\\" + itemAttachment.Item.Subject + ".eml"
-                                Dim fileName As String = temppath & "\" & itemAttachment.Item.Subject + ".eml"
+                                Dim fileName As String = temppath & "\" & itemAttachment.Item.Subject.Replace(":", "").Replace(",", "").Replace("?", "").Replace(" ", "") + ".eml"
                                 '// Write the bytes of the attachment into a file.
                                 File.WriteAllBytes(fileName, itemAttachment.Item.MimeContent.Content)
                                 'message.Attachments.Add(New Rebex.Mail.Attachment("C:\\Temp\\" + itemAttachment.Item.Subject + ".eml"))
-                                message.Attachments.Add(New Rebex.Mail.Attachment(temppath & "\" & itemAttachment.Item.Subject + ".eml"))
+                                message.Attachments.Add(New Rebex.Mail.Attachment(fileName))
 
-                                System.IO.File.Delete(temppath & "\" & itemAttachment.Item.Subject + ".eml")
+                                System.IO.File.Delete(fileName)
 
 
 
