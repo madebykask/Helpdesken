@@ -350,7 +350,8 @@ Module DH_Helpdesk_Mail
                                                                                       objCustomer.EMailFolderArchive,
                                                                                       objCustomer.EwsApplicationId,
                                                                                       objCustomer.EwsClientSecret,
-                                                                                      objCustomer.EwsTenantId)
+                                                                                      objCustomer.EwsTenantId,
+                                                                                      objCustomer.PhysicalFilePath)
 
                             task.Wait()
 
@@ -1194,7 +1195,7 @@ Module DH_Helpdesk_Mail
 
 
     Private Async Function ReadEwsFolderAsync(objCustomer As Customer, server As String, port As Integer, userName As String, emailFolder As String, emailArchiveFolder As String,
-                                              applicationId As String, clientSecret As String, tenantId As String) As Task(Of List(Of MailMessage))
+                                              applicationId As String, clientSecret As String, tenantId As String, temppath As String) As Task(Of List(Of MailMessage))
         'emailFolder = "Inkorg/M2T_test"
         'emailArchiveFolder = "Arkiv/M2T_test"
         Dim ewsScopes As String() = New String() {"https://outlook.office.com/.default"}
@@ -1312,13 +1313,36 @@ Module DH_Helpdesk_Mail
                         End If
                         If attach.GetType() = GetType(ItemAttachment) Then
                             Try
-                                attach.Load()
-                                'Todo - Save itemAttach?
-                                Dim itemAttach As ItemAttachment = attach
-                                Dim byteArray(itemAttach.Size) As Byte
-                                Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(byteArray), itemAttach.Name.Replace(":", "-").Replace("vbCrLf", " "))
-                                'Dim attach1 As Microsoft.Exchange.WebServices.Data.Attachment = attach
-                                message.Attachments.Add(newAttachment)
+
+
+                                Dim itemAttachment As ItemAttachment = attach
+                                itemAttachment.Load(ItemSchema.MimeContent)
+                                'Dim fileName As String = "C:\\Temp\\" + itemAttachment.Item.Subject + ".eml"
+                                Dim fileName As String = temppath & "\" & itemAttachment.Item.Subject + ".eml"
+                                '// Write the bytes of the attachment into a file.
+                                File.WriteAllBytes(fileName, itemAttachment.Item.MimeContent.Content)
+                                'message.Attachments.Add(New Rebex.Mail.Attachment("C:\\Temp\\" + itemAttachment.Item.Subject + ".eml"))
+                                message.Attachments.Add(New Rebex.Mail.Attachment(temppath & "\" & itemAttachment.Item.Subject + ".eml"))
+
+                                System.IO.File.Delete(temppath & "\" & itemAttachment.Item.Subject + ".eml")
+
+
+
+
+                                'attach.Load()
+                                ''Todo - Save itemAttach?
+
+
+
+
+                                'Dim itemAttach As ItemAttachment = attach
+                                'Dim byteArray(itemAttach.Size) As Byte
+                                'Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(byteArray), itemAttach.Name.Replace(":", "-").Replace("vbCrLf", " "))
+                                ''newAttachment.FileName = newAttachment.FileName & ".eml"
+
+
+                                ''Dim attach1 As Microsoft.Exchange.WebServices.Data.Attachment = attach
+                                'message.Attachments.Add(newAttachment)
                             Catch ex As Exception
                                 LogError("Error loading attachment: " & ex.Message.ToString, objCustomer)
                                 'continue for?
