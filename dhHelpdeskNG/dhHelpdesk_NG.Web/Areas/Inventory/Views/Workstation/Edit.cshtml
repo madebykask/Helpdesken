@@ -114,7 +114,7 @@
 @section Scripts
 {
     @Scripts.Render(BundleConfig.ScriptNames.InventoryWorkstation)
-    <script type="text/javascript">
+<script type="text/javascript">
 
         window.parameters = (window.parameters == null ? {} : window.parameters);
         window.parameters.fileUploadWhiteList = [];
@@ -142,7 +142,16 @@
                 getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})'
             });
         });
-    </script>
+
+    $("#ComputerViewModel_WorkstationFieldsViewModel_WorkstationFieldsModel_ComputerTypeId_Value").change(function () {
+
+        $.get('@Url.Action("GetPrice", "Workstation")', { id: this.value }, function (data) {
+            $('#ComputerViewModel_ContractFieldsViewModel_ContractFieldsModel_PurchasePrice_Value').val(data);
+            
+        });
+    })
+
+</script>
 
     @if (documentModel.Show)
     {

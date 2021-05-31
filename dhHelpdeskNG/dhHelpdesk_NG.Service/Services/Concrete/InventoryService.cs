@@ -474,6 +474,11 @@ namespace DH.Helpdesk.Services.Services.Concrete
             _computerRepository.DeleteFile(id);
         }
 
+        public int? GetComputerTypePrice(int id)
+        {
+            return _computerRepository.GetComputerTypeById(id);
+        }
+
         public List<ComputerLogOverview> GetWorkstationLogOverviews(int id)
         {
             return _computerLogRepository.Find(id);
