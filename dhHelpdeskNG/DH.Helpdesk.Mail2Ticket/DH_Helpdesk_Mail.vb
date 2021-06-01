@@ -160,8 +160,7 @@ Module DH_Helpdesk_Mail
         'Log cmd line args
         Try
 
-            openLogFile()
-            'Convert.ToInt32("Hejpådig")
+            'openLogFile()
             If IsNullOrEmpty(sConnectionstring) Then
                 Throw New ArgumentNullException("connection string")
             End If
@@ -1253,7 +1252,10 @@ Module DH_Helpdesk_Mail
                     mail.Subject = ""
                     'Continue For
                 End If
-
+                If String.IsNullOrWhiteSpace(mail.Body) Then
+                    mail.Body = ""
+                    'Continue For
+                End If
                 Dim message As EwsMailMessage = New EwsMailMessage()
                 message.MessageId = New MessageId(mail.InternetMessageId)
                 message.EwsID = mail.Id
@@ -1291,8 +1293,7 @@ Module DH_Helpdesk_Mail
                                 attach.Load()
                             Catch ex As Exception
                                 LogError("Error loading attachment: " & ex.Message.ToString, objCustomer)
-                                'continue for?
-                                Throw
+                                Continue For
                             End Try
 
                             Dim fileAttach As FileAttachment = attach
@@ -1318,7 +1319,7 @@ Module DH_Helpdesk_Mail
                                 Dim itemAttachment As ItemAttachment = attach
                                 itemAttachment.Load(ItemSchema.MimeContent)
                                 'Dim fileName As String = "C:\\Temp\\" + itemAttachment.Item.Subject + ".eml"
-                                Dim fileName As String = temppath & "\" & itemAttachment.Item.Subject.Replace(":", "").Replace(",", "").Replace("?", "").Replace(" ", "") + ".eml"
+                                Dim fileName As String = temppath & "\" & itemAttachment.Item.Subject.Replace(":", "").Replace(",", "").Replace("?", "").Replace(" ", "").Replace("/", "-") + ".eml"
                                 '// Write the bytes of the attachment into a file.
                                 File.WriteAllBytes(fileName, itemAttachment.Item.MimeContent.Content)
                                 'message.Attachments.Add(New Rebex.Mail.Attachment("C:\\Temp\\" + itemAttachment.Item.Subject + ".eml"))
@@ -1345,8 +1346,8 @@ Module DH_Helpdesk_Mail
                                 'message.Attachments.Add(newAttachment)
                             Catch ex As Exception
                                 LogError("Error loading attachment: " & ex.Message.ToString, objCustomer)
-                                'continue for?
-                                Throw
+                                Continue For
+
                             End Try
 
 
@@ -2244,6 +2245,7 @@ Module DH_Helpdesk_Mail
     End Function
 
     Private Sub LogToFile(msg As String, level As Integer)
+        openLogFile()
         If level > 0 Then
             If objLogFile IsNot Nothing Then
                 objLogFile.WriteLine("{0}: {1}", Now(), msg)
