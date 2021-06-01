@@ -749,7 +749,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         {
             var computerTypePrice =
                 (from c in DbContext.ComputerTypes.Where(i => i.Id == id).Select(i=> i.Price)
-                select c).Single();
+                select c).Single() ?? 0;
+
 
             return computerTypePrice;
         }
