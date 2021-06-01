@@ -62,6 +62,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         public RedirectToRouteResult Edit(ComputerModuleEditModel model)
         {
             var businessModel = CreateUpdatedBusinessModel(model);
+            if(businessModel.Price == null) businessModel.Price = 0;
             this.Update(businessModel);
 
             return this.RedirectToAction("Index");
