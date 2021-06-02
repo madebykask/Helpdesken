@@ -258,9 +258,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                     x =>
                     x.InventoryType_Id == inventoryTypeId
                     && !DbContext.ComputerInventories
-                            .Where(ci => ci.Computer_Id == computerId)
+                            .Where(ci => ci.Inventory_Id == x.Id)
                             .Select(ci => ci.Inventory_Id)
-                            .Contains(x.Id)).Select(x => new { x.Id, Name = x.InventoryName }).ToList();
+                            .Contains(x.Id)).OrderBy(x => x.InventoryName).Select(x => new { x.Id, Name = x.SerialNumber + " (" + x.InventoryName + ")" }).ToList();
 
             var overviews =
                 anonymus.Select(c => new ItemOverview(c.Name, c.Id.ToString(CultureInfo.InvariantCulture))).ToList();
