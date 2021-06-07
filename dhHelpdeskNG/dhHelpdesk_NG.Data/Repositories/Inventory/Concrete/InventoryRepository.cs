@@ -182,8 +182,13 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                     || x.InventoryModel.ToLower().Contains(searchStringLower)
                     || x.Manufacturer.ToLower().Contains(searchStringLower)
                     || x.SerialNumber.ToLower().Contains(searchStringLower)
+                    || x.TheftMark.ToLower().Contains(searchStringLower)
+                    || x.BarCode.ToLower().Contains(searchStringLower)
+                    || (x.Room_Id.HasValue && x.Room.Name.ToLower().Contains(searchStringLower))
+                    || (x.Room_Id.HasValue && x.Room.Floor.Name.ToLower().Contains(searchStringLower))
+                    || (x.Room_Id.HasValue && x.Room.Floor.Building.Name.ToLower().Contains(searchStringLower))
                     || DbContext.InventoryTypePropertyValues.Where(iv => iv.Inventory_Id == x.Id)
-                        .Any(iv => iv.Value.ToLower().Contains(searchStringLower))); // TODO: done as in HD4, but seems more effective way is over join
+                            .Any(iv => iv.Value.ToLower().Contains(searchStringLower))); // TODO: done as in HD4, but seems more effective way is over join
             }
 
             /*-1: take all records*/
