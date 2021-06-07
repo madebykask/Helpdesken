@@ -1,3 +1,4 @@
+using System;
 using DH.Helpdesk.BusinessData.Enums.Inventory;
 
 namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
@@ -175,14 +176,19 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                query = query.Where( x =>
-                        x.InventoryName == searchString || x.InventoryModel == searchString
-                        || x.Manufacturer == searchString || x.SerialNumber == searchString);
+                var searchStringLower = searchString.ToLower();
+                query = query.Where(x =>
+                    x.InventoryName.ToLower().Contains(searchStringLower) 
+                    || x.InventoryModel.ToLower().Contains(searchStringLower)
+                    || x.Manufacturer.ToLower().Contains(searchStringLower)
+                    || x.SerialNumber.ToLower().Contains(searchStringLower)
+                    || DbContext.InventoryTypePropertyValues.Where(iv => iv.Inventory_Id == x.Id)
+                        .Any(iv => iv.Value.ToLower().Contains(searchStringLower))); // TODO: done as in HD4, but seems more effective way is over join
             }
 
             /*-1: take all records*/
             if (pageSize != -1)
-                query = query.OrderBy(x => x.InventoryName).Take(pageSize);            
+                query = query.OrderBy(x => x.InventoryName).Take(pageSize);
 
             const string Delimeter = "; ";
 
