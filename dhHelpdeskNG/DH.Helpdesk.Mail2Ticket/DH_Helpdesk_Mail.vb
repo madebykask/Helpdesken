@@ -409,7 +409,7 @@ Module DH_Helpdesk_Mail
 
                             If eMailConnectionType = MailConnectionType.Pop3 Then
                                 ' Inget stöd för POP3 längre
-                                LogToFile("Pop3 Is Not supported.", iPop3DebugLevel)
+                                LogError("Pop3 Is Not supported. Mailserver protocol 0", objCustomer)
 
                                 ' ELSE CHECK EWS
                             ElseIf eMailConnectionType = MailConnectionType.Imap Then
@@ -426,6 +426,7 @@ Module DH_Helpdesk_Mail
 
                         If eMailConnectionType = MailConnectionType.Pop3 Then
                             ' Inget stöd för POP3 längre
+                            LogError("Pop3 Is Not supported. Mailserver protocol 0", objCustomer)
                         ElseIf eMailConnectionType = MailConnectionType.Imap Then
 
                             Dim emailFolder As String = "Inbox" ' Default email folder
@@ -491,7 +492,9 @@ Module DH_Helpdesk_Mail
                                     message = IMAPclient.GetMailMessage(sUniqueID)
                                     message.Silent = True
                                 Else
-                                    Throw New ArgumentException("Email type not supported")
+                                    LogError("Pop3 Is Not supported. Mailserver protocol 0", objCustomer)
+                                    'Throw New ArgumentException("Email type not supported")
+                                    Continue For
                                 End If
 
                                 Dim attachedFiles As List(Of MailFile) = New List(Of MailFile)()
@@ -1218,12 +1221,14 @@ Module DH_Helpdesk_Mail
         End If
 
         If inbox Is Nothing Then
-            Throw New ArgumentException($"EmailFolder '{emailFolder}' doesn't exist.")
+            LogError($"EmailFolder '{emailFolder}' doesn't exist.", objCustomer)
+            Return Nothing
         End If
 
         If Not String.IsNullOrWhiteSpace(emailArchiveFolder) Then
             If FindEwsFolder(objCustomer, emailArchiveFolder, service) Is Nothing Then
-                Throw New ArgumentException($"EmailFolderArchive '{emailArchiveFolder}' doesn't exist.")
+                LogError($"EmailFolderArchive '{emailArchiveFolder}' doesn't exist.", objCustomer)
+                Return Nothing
             End If
         End If
 
