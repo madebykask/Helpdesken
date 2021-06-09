@@ -10,7 +10,7 @@
 {
     <ul class="secnav">
         <li id="menu1">
-            <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn" onclick=" $('#workstation_edit_form').submit(); "/>
+            <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn" onclick=" $('#workstation_edit_form').submit(); " />
         </li>
         <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", null, new { @class = "btn" })</li>
     </ul>
@@ -57,7 +57,7 @@
 
         @if (Model.FileUploadWhiteList != null)
         {
-            foreach(var extension in Model.FileUploadWhiteList)
+            foreach (var extension in Model.FileUploadWhiteList)
             {
                 @:window.parameters.fileUploadWhiteList.push('@extension');
             }
@@ -72,11 +72,12 @@
     {
         @Html.Partial("_InventoryFiles")
         @Scripts.Render(BundleConfig.ScriptNames.InventoryFiles)
+        @Scripts.Render(BundleConfig.ScriptNames.InventoryWorkstation)
         <script type="text/javascript">
-        
+
             var inventoryFilesOptions = {
                 id: @Model.Id.ToString(),
-                attachedFileName: '',//new 
+                attachedFileName: '', //new
                 documentFileKey: '@Model.DocumentFileKey',
                 uploadDocumentFileUrl: '@Url.Action("UploadFile", "Workstation")',
                 fileDownloadUrlMask: '@Url.Action("DownloadFile", "Workstation")',
@@ -88,14 +89,16 @@
                 window.inventoryFiles = new InventoryFiles(jQuery);
                 window.inventoryFiles.init(inventoryFilesOptions);
 
-                window.workstationEdit = new WorkstationEdit($);
-                window.workstationEdit.init({
-                    userId: @SessionFacade.CurrentUser.Id,
-                    customerId: @SessionFacade.CurrentCustomer.Id,
-                    getUnitsUrl: '@Url.Action("GetUnits", "Ajax", new {area = ""})',
-                    getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})'
-                });
+                if (typeof WorkstationEdit !== 'undefined') {
+                    window.workstationEdit = new WorkstationEdit($);
+                    window.workstationEdit.init({
+                        userId: @SessionFacade.CurrentUser.Id,
+                        customerId: @SessionFacade.CurrentCustomer.Id,
+                        getUnitsUrl: '@Url.Action("GetUnits", "Ajax", new {area = ""})',
+                        getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})'
+                    });
+                }
             });
-        </script>    
+        </script>
     }
 }
