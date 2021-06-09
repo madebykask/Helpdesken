@@ -464,6 +464,13 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpGet]
+        [UserPermissions(UserPermission.InventoryViewPermission)]
+        public ContentResult GetPrice(int id)
+        {
+            return Content(this._inventoryService.GetComputerTypePrice(id).ToString());
+        }
+
+        [HttpGet]
 		[UserPermissions(UserPermission.InventoryViewPermission)]
 		public ActionResult Accessories(int computerId, bool dialog = false, string userId = null)
         {

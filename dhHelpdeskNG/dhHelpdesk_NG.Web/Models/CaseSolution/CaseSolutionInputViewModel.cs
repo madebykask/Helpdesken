@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
             this.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateDefaultModel();
         }
 
+        public bool ContainsExtendedForm { get; set; }
         public int Schedule { get; set; }
         public int ScheduleMonthly { get; set; }
         public int ScheduleMonthlyDay { get; set; }
@@ -97,6 +98,9 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
 
         //public IList<SelectListItem> TabList { get; set; }
         public string DefaultTab { get; set; }
+        public string AvailableTabsSelfsevice { get; set; }
+        public string ActiveTabSelfservice { get; set; }
+
         public string ValidateOnChange { get; set; }
         public int? NextStepState { get; set; }
 

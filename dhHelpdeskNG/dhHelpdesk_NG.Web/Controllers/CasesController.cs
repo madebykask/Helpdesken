@@ -6,6 +6,8 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Net;
+using System.Net.Mime;
 using System.Web.Mvc;
 using System.Web.Routing;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
@@ -34,7 +36,7 @@ using DH.Helpdesk.Web.Infrastructure.Behaviors;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
 using DH.Helpdesk.BusinessData.Models.Case.Input;
-
+using DH.Helpdesk.Common.Extensions;
 namespace DH.Helpdesk.Web.Controllers
 {
 	using DH.Helpdesk.BusinessData.Enums.Case;
@@ -102,8 +104,12 @@ namespace DH.Helpdesk.Web.Controllers
 	using Common.Tools.Files;
 	using BusinessData.Models.FinishingCause;
 	using Infrastructure.Mvc;
+    using System.Net.Mime;
+    using DH.Helpdesk.Common.Enums.Logs;
+    using DH.Helpdesk.Common.Extensions;
+    using System.IO;
 
-	public partial class CasesController : BaseController
+    public partial class CasesController : BaseController
     {
         #region ***Constant/Variables***
 
@@ -434,7 +440,64 @@ namespace DH.Helpdesk.Web.Controllers
             return new RedirectResult("~/cases");
         }
 
+        [UserCasePermissions]
+        public ActionResult Documents(string id, string fileName, CaseFileType type, int? logId = null)
+        {
+            if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
+            {
+                return new RedirectResult("~/Error/Unathorized");
+            }
+            var userId = SessionFacade.CurrentUser.Id;
 
+            var caseLockViewModel = GetCaseLockModel(int.Parse(id), userId, false, "");
+
+            var customerId =  _caseService.GetCaseCustomerId(int.Parse(id));
+
+            var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+            CaseInputViewModel m = this.GetCaseInputViewModel(userId, customerId, int.Parse(id), caseLockViewModel, caseFieldSettings, "", "", null, null, false);
+
+            // User has not access to case
+            if (m.EditMode == AccessMode.NoAccess)
+                return RedirectToAction("index", "home");
+
+            //Ok to se case
+            var c = _caseService.GetCaseBasic(int.Parse(id));
+            var pathToFile = string.Empty;
+            if (c != null)
+            {
+                var basePath = _masterDataService.GetFilePath(c.CustomerId) +"\\";
+
+                if (logId != null)
+                {
+                    var prefix = "";
+                    if(type == CaseFileType.LogExternal)
+                    {
+                        prefix = DH.Helpdesk.Common.Enums.ModuleName.Log;
+                    }
+                    else
+                    {
+                        //Check permission to see internal lognotes.
+                        if(!SessionFacade.CurrentUser.CaseInternalLogPermission.ToBool())
+                            return RedirectToAction("index", "home");
+
+                        prefix = DH.Helpdesk.Common.Enums.ModuleName.LogInternal;
+                    }
+                    var logFolder = $"{prefix}{logId}";
+                    pathToFile = basePath + logFolder + "\\" + fileName;
+                }
+                else
+                {
+                    pathToFile = basePath + c.CaseNumber + "\\" + fileName;
+                }
+                
+            }
+            _fileViewLogService.Log(int.Parse(id), userId, fileName, pathToFile, FileViewLogFileSource.Helpdesk, FileViewLogOperation.View);
+
+            string mimeType = MimeMapping.GetMimeMapping(fileName);
+            byte[] fileBytes = _filesStorage.GetFileByteContent(pathToFile);
+            Response.AppendHeader("Content-Disposition", "inline; filename=" + fileName);
+            return File(fileBytes, mimeType);
+        }
         public ActionResult Index()
         {
             if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
@@ -2141,7 +2204,27 @@ namespace DH.Helpdesk.Web.Controllers
                 HasChild = hasChild
             });
         }
+        [HttpPost]
+        public JsonResult ChangeFinishingType(int? id)
+        {
+            int hasChild = 0;
 
+            if (id.HasValue)
+            {
+                var finishingType = _finishingCauseService.GetFinishingCause(id.Value);
+                if (finishingType != null)
+                { 
+
+                    if (finishingType.SubFinishingCauses != null && finishingType.SubFinishingCauses.Where(s => s.IsActive != 0).Any())
+                        hasChild = 1;
+                }
+            }
+
+            return Json(new
+            {
+                HasChild = hasChild
+            });
+        }
         [HttpGet]
         public JsonResult GetStateSecondary(int id)
         {
@@ -2258,6 +2341,18 @@ namespace DH.Helpdesk.Web.Controllers
             var productArea = _productAreaService.GetProductArea(pId);
             if (productArea != null && productArea.SubProductAreas != null &&
                 productArea.SubProductAreas.Where(p => p.IsActive != 0).ToList().Count > 0)
+                res = "true";
+
+            return Json(res);
+        }
+
+        [HttpGet]
+        public JsonResult FinishingCauseHasChild(int fId)
+        {
+            var res = "false";
+            var finishingCause = _finishingCauseService.GetFinishingCause(fId);
+            if (finishingCause != null && finishingCause.SubFinishingCauses != null &&
+                finishingCause.SubFinishingCauses.Where(f => f.IsActive != 0).ToList().Count > 0)
                 res = "true";
 
             return Json(res);
@@ -5464,6 +5559,9 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }
             }
+
+            //Check if FinishingCases has childs
+            m.FinishingCauseHasChild = 0;
 
             // hämta parent path för Category
             m.CategoryHasChild = 0;

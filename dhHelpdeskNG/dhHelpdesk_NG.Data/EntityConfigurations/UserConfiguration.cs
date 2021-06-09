@@ -65,6 +65,15 @@
                     m.ToTable("tblUsers_tblOrderType");
                 });
 
+            this.HasMany(o => o.CCs)
+                .WithMany(o => o.Users)
+                .Map(m =>
+                {
+                    m.MapLeftKey("User_Id");
+                    m.MapRightKey("ContractCategory_Id");
+                    m.ToTable("tblUsers_tblContractCategory");
+                });
+
             this.HasRequired(o => o.Language)
                 .WithMany(o => o.Users)
                 .HasForeignKey(o => o.Language_Id);

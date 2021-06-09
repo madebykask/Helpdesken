@@ -78,6 +78,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly ISupplierService _supplierService;
         private readonly ISettingService _settingService;
         private readonly IComputerService _computerService;
+        private readonly IContractCategoryService _contractCategoryService;
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IStateSecondaryService _stateSecondaryService;
@@ -132,6 +133,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             IComputerService computerService,
             ICaseSettingsService caseSettingService,
             ICaseSearchService caseSearchService,
+            IContractCategoryService contractCategoryService,
             IUserService userService,
             IWorkingGroupService workingGroupService,
             IStateSecondaryService stateSecondaryService,
@@ -184,6 +186,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             _computerService = computerService;
             _customerService = customerService;
             _workingGroupService = workingGroupService;
+            _contractCategoryService = contractCategoryService;
             _userService = userService;
             _stateSecondaryService = stateSecondaryService;
             _caseSolutionService = caseSolutionService;
@@ -279,7 +282,14 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
             
             if (currentCase.CaseExtendedCaseDatas.Any())
-                return RedirectToAction("ExtendedCase", new { caseId = currentCase.Id });
+            {
+                //New check here if Only Extended case should see Case-tab
+                if (currentCase.CaseSolution.AvailableTabsSelfsevice != "case-tab")
+                {
+                    return RedirectToAction("ExtendedCase", new { caseId = currentCase.Id });
+                }
+            }
+                
            
             var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
             var isMultiCustomerMode = globalSettings.MultiCustomersSearch.ToBool();
@@ -524,6 +534,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var model = GetExtendedCaseViewModel(caseTemplateId, caseId);
             if (ErrorGenerator.HasError())
                 return RedirectToAction("Index", "Error");
+            RouteData.Values.Remove("caseId"); //hack to prevent ambient params in Url.Action in view
 
             if (!caseId.IsNew())
             {
@@ -533,10 +544,30 @@ namespace DH.Helpdesk.SelfService.Controllers
                     model.ShowRegistrationMessage = true;
                     model.CaseRegistrationMessage = GetCaseRegistrationMessage(SessionFacade.CurrentLanguageId);
                 }
+
+                int caseExistId = caseId ?? 0;
+                if (caseExistId != 0)
+                {
+                    //New to get the case also even if it's an extended case
+                    var currentCase = _caseService.GetCaseById(caseExistId);
+                    var languageId = SessionFacade.CurrentLanguageId;
+                    var currentCaseModel = GetCaseReceiptModel(currentCase, languageId);
+                    model.CaseOverviewModel = currentCaseModel;
+                    ViewBag.AttachmentPlacement = model.AttachmentPlacement;
+                   if (currentCase.CaseSolution.AvailableTabsSelfsevice =="both")
+                    {
+                        model.ActiveTab = currentCase.CaseSolution.ActiveTabSelfservice;
+                        return View("ExtendedCaseWithCase", model);
+                    }
+                }
+                return View("ExtendedCase", model);
+            }
+            else
+            {
+                return View("ExtendedCase", model);
             }
 
-            RouteData.Values.Remove("caseId"); //hack to prevent ambient params in Url.Action in view
-            return View("ExtendedCase", model);
+            
         }
 
         [HttpPost]

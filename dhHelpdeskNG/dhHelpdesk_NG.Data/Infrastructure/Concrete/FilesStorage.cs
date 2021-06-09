@@ -31,7 +31,11 @@ namespace DH.Helpdesk.Dal.Infrastructure.Concrete
 			};
 			return model;
         }
-
+        public byte[] GetFileByteContent(string pathToFile)
+        {
+            return File.ReadAllBytes(pathToFile);
+        }
+        
         public string SaveFile(byte[] content, string basePath, string fileName, string topic, int entityId)
         {
             //var saveDirectory = ComposeDirectoryPath(basePath, topic, entityId); 
@@ -39,7 +43,11 @@ namespace DH.Helpdesk.Dal.Infrastructure.Concrete
             var directory = Path.GetDirectoryName(savePath);
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
-            
+
+            if (File.Exists(savePath))
+            {
+                File.Delete(savePath);
+            }
             using (var fileStream = new FileStream(savePath, FileMode.CreateNew))
             {
                 fileStream.Write(content, 0, content.Length);

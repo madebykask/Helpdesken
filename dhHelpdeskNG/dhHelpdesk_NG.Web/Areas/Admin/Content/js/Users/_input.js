@@ -6,9 +6,13 @@
         for (var i = 0; i < document.getElementById("CsSelected").length; i++) {
             document.getElementById("CsSelected")[i].selected = true;
         }
+        for (var i = 0; i < document.getElementById("CCsSelected").length; i++) {
+            document.getElementById("CCsSelected")[i].selected = true;
+        }
 
         $("#AAsSelected option").attr("selected", "selected");
         $("#OTsSelected option").attr("selected", "selected");
+        //$("#CCsSelected option").attr("selected", "selected");
     };
 
     var $customersAvailableEl = $('#CsAvailable');
@@ -46,7 +50,7 @@
         return false;
     });
 
-    $("#addOTs").click(function() {
+    $("#addOTs").click(function () {
         $("#OTsAvailable option:selected").remove().appendTo("#OTsSelected");
         $("#OTsAvailable").get(0).selectedIndex = -1;
         $("#OTsSelected").get(0).selectedIndex = -1;
@@ -67,5 +71,18 @@
         } else {
             $("#rowSettingForNoMail").attr('style', 'display:none');
         }
+    });
+    $("#addCCs").click(function () {
+        $("#CCsAvailable option:selected").remove().appendTo("#CCsSelected");
+        $("#CCsAvailable").get(0).selectedIndex = -1;
+        $("#CCsSelected").get(0).selectedIndex = -1;
+        return false;
+    });
+
+    $("#removeCCs").click(function () {
+        $("#CCsSelected option:selected").remove().appendTo("#CCsAvailable");
+        $("#CCsAvailable").get(0).selectedIndex = -1;
+        $("#CCsAvailable").get(0).selectedIndex = -1;
+        return false;
     });
 });

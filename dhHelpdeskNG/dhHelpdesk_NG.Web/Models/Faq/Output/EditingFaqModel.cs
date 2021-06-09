@@ -88,10 +88,10 @@ namespace DH.Helpdesk.Web.Models.Faq.Output
 
         public bool ShowOnStartPage { get; private set; }
 
-        [LocalizedStringLength(100)]
+        [LocalizedStringLength(2000)]
         public string UrlOne { get; private set; }
 
-        [LocalizedStringLength(100)]
+        [LocalizedStringLength(2000)]
         public string UrlTwo { get; private set; }
 
         public DropDownContent WorkingGroup { get; private set; }

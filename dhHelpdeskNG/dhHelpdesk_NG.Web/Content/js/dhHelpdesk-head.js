@@ -90,6 +90,8 @@ $(function () {
 
         var action = $(this).attr("href");
         var text = $(this).attr("deleteDialogText");
+        var buttontext = $(this).attr("deleteDialogButtonText");
+        console.log(buttontext);
         var btnType = $(this).attr("buttonTypes");
 
         var txtCancel = "";
@@ -109,7 +111,7 @@ $(function () {
                                                     <p class="alert alert-info infop">\Infotext kommer här, ta ej bort</p>\
                                                 </div>\
                                                 <div class="modal-footer">\
-                                                    <button type="button" class="btn btn-cancel">Avbryt</button>\
+                                                    <button type="button" class="btn btn-cancel">'+ buttontext+'</button>\
                                                 </div>\
                                             </form>\
                                         </div>\
@@ -118,7 +120,7 @@ $(function () {
         NewDialog.on("show", function () {
             NewDialog.find("form").attr("action", action);
             NewDialog.find("p:eq(0)").text(text);
-            NewDialog.find("button:eq(2)").text(txtCancel);
+            NewDialog.find("button:eq(2)").text(buttontext);
 
             NewDialog.find(".btn-cancel").on("click", function (e) {
                 NewDialog.modal('hide');

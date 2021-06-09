@@ -135,6 +135,7 @@
         public virtual ICollection<UserWorkingGroup> UserWorkingGroups { get; set; }
         public virtual ICollection<AccountActivity> AAs { get; set; }
         public virtual ICollection<OrderType> OTs { get; set; }
+        public virtual ICollection<ContractCategory> CCs { get; set; }
         public virtual ICollection<OperationLog> OLs { get; set; }
 		public virtual ICollection<ReportFavorite> ReportFavorites { get; set; }
 	}

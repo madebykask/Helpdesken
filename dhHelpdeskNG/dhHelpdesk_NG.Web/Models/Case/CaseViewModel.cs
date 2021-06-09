@@ -182,6 +182,8 @@ namespace DH.Helpdesk.Web.Models.Case
         public AccessMode EditMode { get; set; } //(-1,0,1)
         public bool Disable_SendMailAboutCaseToNotifier { get; set; }
         public int ProductAreaHasChild { get; set; }
+        public int FinishingCauseHasChild { get; set; }
+
         public int CategoryHasChild { get; set; }
         public int? OrderId { get; set; }
         public int? AccountId { get; set; }

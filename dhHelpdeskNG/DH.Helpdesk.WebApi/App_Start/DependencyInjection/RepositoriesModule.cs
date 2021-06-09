@@ -75,6 +75,7 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<CaseFieldSettingLanguageRepository>().As<ICaseFieldSettingLanguageRepository>();
             builder.RegisterType<ReportRepository>().As<IReportRepository>();
             builder.RegisterType<SettingRepository>().As<ISettingRepository>();
+            builder.RegisterType<ContractCategoryRepository>().As<IContractCategoryRepository>();
             builder.RegisterType<UserRepository>().As<IUserRepository>();
             builder.RegisterType<CaseRepository>().As<ICaseRepository>();
             builder.RegisterType<CaseFileRepository>().As<ICaseFileRepository>();

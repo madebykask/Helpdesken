@@ -28,10 +28,10 @@
                     <tr>
                         <td>
                             <select id="CsAvailable" multiple="multiple" name="CsAvailable" style="width: 314px; height: 100px">
-                            @foreach(var customer in Model.CsAvailable)
-                            {
-                                <option value="@customer.Value" style="@(customer.Active ?  "" : "color: #ccc")">@customer.Text</option>
-                            }
+                                @foreach (var customer in Model.CsAvailable)
+                                {
+                                    <option value="@customer.Value" style="@(customer.Active ?  "" : "color: #ccc")">@customer.Text</option>
+                                }
                             </select>
                         </td>
                         <td>
@@ -40,10 +40,10 @@
                         </td>
                         <td>
                             <select id="CsSelected" multiple="multiple" name="CsSelected" style="width: 314px; height: 100px">
-                            @foreach(var customer in Model.CsSelected)
-                            {
-                                <option value="@customer.Value" style="@(customer.Active ?  "" : "color: #ccc")">@customer.Text</option>
-                            }
+                                @foreach (var customer in Model.CsSelected)
+                                {
+                                    <option value="@customer.Value" style="@(customer.Active ?  "" : "color: #ccc")">@customer.Text</option>
+                                }
                             </select>
                         </td>
                     </tr>
@@ -57,10 +57,10 @@
             <td>
                 <select data-val="true" data-val-number="The field Customer_Id must be a number." data-val-required="Fältet Customer_Id krävs." id="User_Customer_Id" name="User.Customer_Id">
                     <option value=""></option>
-                   @foreach (var customer in Model.CsSelected)
-                   {
-                     <option value="@customer.Value" style="@(customer.Active ?  "" : "color: #ccc")" @(Model.User.Customer_Id.ToString() == customer.Value ? "selected" : "")>@customer.Text</option>
-                   }
+                    @foreach (var customer in Model.CsSelected)
+                    {
+                        <option value="@customer.Value" style="@(customer.Active ?  "" : "color: #ccc")" @(Model.User.Customer_Id.ToString() == customer.Value ? "selected" : "")>@customer.Text</option>
+                    }
                 </select>
             </td>
         </tr>
@@ -259,39 +259,40 @@
                 </table>
             </td>
         </tr>
+
         @*<tr>
-                <td>
-                    @Translation.GetCoreTextTranslation("Beställning konto")
-                </td>
-                <td>
-                    <table>
-                        <tr>
-                            <td>
-                                @Translation.GetCoreTextTranslation("Tillgängliga kontobehörigheter")
-                            </td>
-                            <td>
+            <td>
+                @Translation.GetCoreTextTranslation("Beställning konto")
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <td>
+                            @Translation.GetCoreTextTranslation("Tillgängliga kontobehörigheter")
+                        </td>
+                        <td>
 
-                            </td>
-                            <td>
-                                @Translation.GetCoreTextTranslation("Användaren har rättighet till")
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                @Html.ListBox("AAsAvailable", Model.AAsAvailable, new { style = "width: 314px; height: 100px" })
+                        </td>
+                        <td>
+                            @Translation.GetCoreTextTranslation("Användaren har rättighet till")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.ListBox("AAsAvailable", Model.AAsAvailable, new { style = "width: 314px; height: 100px" })
 
-                            </td>
-                            <td>
-                                <input type="button" value="&gt;" id="addAAs" class="btn" /><br />
-                                <input type="button" value="&lt;" id="removeAAs" class="btn" />
-                            </td>
-                            <td>
-                                @Html.ListBox("AAsSelected", Model.AAsSelected, new { style = "width: 314px; height: 100px" })
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>*@
+                        </td>
+                        <td>
+                            <input type="button" value="&gt;" id="addAAs" class="btn" /><br />
+                            <input type="button" value="&lt;" id="removeAAs" class="btn" />
+                        </td>
+                        <td>
+                            @Html.ListBox("AAsSelected", Model.AAsSelected, new { style = "width: 314px; height: 100px" })
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>*@
         @Html.HiddenFor(m => m.AAsSelected)
 
         <tr>
@@ -350,6 +351,36 @@
                 &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren har rättighet till avtal")
             </td>
         </tr>
+        @*New 2021-05-07*@
+        <tr>
+            <td></td>
+            <td>
+                <table>
+                    <tr>
+                        <td>
+                            @Translation.GetCoreTextTranslation("Tillgängliga Avtalskategorier")
+                        </td>
+                        <td></td>
+                        <td>
+                            @Translation.GetCoreTextTranslation("Användaren har rättighet till")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.ListBox("CCsAvailable", Model.CCsAvailable, new { style = "width: 314px; height: 100px" })
+
+                        </td>
+                        <td>
+                            <input type="button" value="&gt;" id="addCCs" class="btn" /><br />
+                            <input type="button" value="&lt;" id="removeCCs" class="btn" />
+                        </td>
+                        <td>
+                            @Html.ListBox("CCsSelected", Model.CCsSelected, new { style = "width: 314px; height: 100px" })
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
         <tr>
             <td>
                 @Translation.GetCoreTextTranslation("Fakturering artikel")
@@ -379,17 +410,33 @@
             </td>
         </tr>
         @*<tr>
-                <td>
-                    @Translation.GetCoreTextTranslation("Lås upp ärende")
-                </td>
-                <td>
-                    @Html.CheckBoxFor(x => x.User.CaseUnlockPermission)
-                    &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren har rättighet till") @Translation.GetCoreTextTranslation("Lås upp ärende").ToLower()
-                </td>
-            </tr>*@
+            <td>
+                @Translation.GetCoreTextTranslation("Lås upp ärende")
+            </td>
+            <td>
+                @Html.CheckBoxFor(x => x.User.CaseUnlockPermission)
+                &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren har rättighet till") @Translation.GetCoreTextTranslation("Lås upp ärende").ToLower()
+            </td>
+        </tr>*@
     </table>
 </div>
 <script type="text/javascript">
+
+    //$("#addCCs").click(function () {
+    //    alert("Hej")
+    //    $("#CCsAvailable option:selected").remove().appendTo("#CCsSelected");
+    //    $("#CCsAvailable").get(0).selectedIndex = -1;
+    //    $("#CCsSelected").get(0).selectedIndex = -1;
+    //    return false;
+    //});
+
+    //$("#removeCCs").click(function () {
+    //    $("#CCsSelected option:selected").remove().appendTo("#CCsAvailable");
+    //    $("#CCsAvailable").get(0).selectedIndex = -1;
+    //    $("#CCsAvailable").get(0).selectedIndex = -1;
+    //    return false;
+    //});
+
     $('#OrderP1').click(function () {
         if ($("#OrderP2").prop('checked', true)) {
             $("#OrderP2").prop('checked', false);

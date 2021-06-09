@@ -53,5 +53,6 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
         List<ReportModel> FindConnectedToComputerLocationOverviews(int customerId, int? departmentId, string searchFor);
         int GetIdByName(string computerName, int customerId);
         List<ComputerOverview> GetRelatedOverviews(int customerId, string userId);
+        int? GetComputerTypeById(int id);
     }
 }

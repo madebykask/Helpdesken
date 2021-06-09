@@ -1,9 +1,15 @@
 ﻿namespace DH.Helpdesk.Domain
 {
+
     using global::System;
+    using global::System.Collections.Generic;
 
     public class ContractCategory : Entity
     {
+        public ContractCategory()
+        {
+            Users = new List<User>();
+        }
         public int? CaseType_Id { get; set; }
         public int Customer_Id { get; set; }
         public int? StateSecondary_Id1 { get; set; }
@@ -16,5 +22,6 @@
         public virtual CaseType CreateCase_CaseType { get; set; }
         public virtual Customer Customer { get; set; }
         public virtual StateSecondary StateSecondary { get; set; }
+        public virtual ICollection<User> Users { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
     using System.Web;
+    using System.Linq;
 
     public static class FileExtensions
     {
@@ -28,6 +29,14 @@
                     System.IO.File.Delete(s);
             }
             return true;
+        }
+        public static bool IsImage(this string s)
+        {
+            if (!string.IsNullOrWhiteSpace(s))
+            {
+                return new[] { "png", "jpg", "jpeg", "gif", "tiff", "eps" }.Any(x => s.ToLower().EndsWith(x));
+            }
+            return false;
         }
     }    
 }

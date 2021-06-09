@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "Documents";
+}
+<style>
+    .col {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .responsive {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+@if (ViewBag.IsImage)
+{
+    <div class="col"><img src="~/@ViewBag.Path" class="responsive"/></div>
+}
+else
+{
+    <object width="100%" height="100%" data="~/@ViewBag.Path"></object>
+}
+
+
+

@@ -108,6 +108,7 @@ namespace DH.Helpdesk.Services.Services
             int[] customersSelected,
             int[] customersAvailable,
             int[] ots,
+            int[] ccs,
             int[] dus,
             IList<UserWorkingGroup> userWorkingGroups,
             IList<CustomerUserForEdit> customerUsers,
@@ -209,6 +210,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICustomerUserRepository _customerUserRepository;
         private readonly IDepartmentRepository _departmentRepository;
         private readonly IOrderTypeRepository _orderTypeRepository;
+        private readonly IContractCategoryRepository _contractCategoryRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserRepository _userRepository;
         private readonly IUserGroupRepository _userGroupRepository;
@@ -233,6 +235,7 @@ namespace DH.Helpdesk.Services.Services
             ICustomerUserRepository customerUserRepository,
             IDepartmentRepository departmentRepository,
             IOrderTypeRepository orderTypeRepository,
+            IContractCategoryRepository contractCategoryRepository,
             IUnitOfWork unitOfWork,
             IUserRepository userRepository,
             IUserGroupRepository userGroupRepository,
@@ -254,6 +257,7 @@ namespace DH.Helpdesk.Services.Services
             _customerUserRepository = customerUserRepository;
             _departmentRepository = departmentRepository;
             _orderTypeRepository = orderTypeRepository;
+            _contractCategoryRepository = contractCategoryRepository;
             _unitOfWork = unitOfWork;
             _userRepository = userRepository;
             _userGroupRepository = userGroupRepository;
@@ -641,6 +645,7 @@ namespace DH.Helpdesk.Services.Services
             int[] customersSelected, 
             int[] customersAvailable, 
             int[] ots, 
+            int[] ccs,
             int[] dus, 
             IList<UserWorkingGroup> userWorkingGroups, 
             IList<CustomerUserForEdit> customerUsers,
@@ -756,7 +761,22 @@ namespace DH.Helpdesk.Services.Services
                         user.OTs.Add(ot);
                 }
             }
-           
+            if (user.CCs != null)
+                foreach (var delete in user.CCs.ToList())
+                    user.CCs.Remove(delete);
+            else
+                user.CCs = new List<ContractCategory>();
+
+            if (ccs != null)
+            {
+                foreach (int id in ccs)
+                {
+                    var cc = _contractCategoryRepository.GetById(id);
+
+                    if (cc != null)
+                        user.CCs.Add(cc);
+                }
+            }
             if (user.Departments != null)
                 foreach (var delete in user.Departments.ToList())
                     user.Departments.Remove(delete);

@@ -23,7 +23,7 @@
         {
             if (source == Enums.TranslationSource.TextTranslation)
             {
-                if (SessionFacade.TextTranslation != null)
+                if (SessionFacade.TextTranslation != null && translate != null)
                 {
                     try
                     {

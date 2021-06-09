@@ -1260,6 +1260,23 @@ function CaseInitForm(opt) {
         SetPriority();
     });
 
+    // CaseLog_FinishingType Area change
+    $('#CaseLog_FinishingType').change(function (e) {
+        console.log('>>> CaseLog_FinishingType changed event.');
+        $("#FinishingCauseHasChild").val(0);
+        document.getElementById("divFinishingType").classList.remove("error");
+        if ($(this).val() > 0) {
+            $.post('/Cases/ChangeFinishingType/', { 'id': $(this).val() }, 'json')
+                .done(function (data) {
+                    if (data) {
+                       
+                        var child = $('#FinishingCauseHasChild').val(data.HasChild);
+                        $('#FinishingCauseHasChild').val(data.HasChild);
+
+                    }
+                });
+        }  
+    });
     // Product Area change
     $('#case__ProductArea_Id').change(function (e) {
         console.log('>>> ProductArea changed event.');
@@ -1297,8 +1314,8 @@ function CaseInitForm(opt) {
                     
                         if (priorityId > 0)
                             $('.sla-value').eq(0).val(data.Priority_Id);
-
                         $('#ProductAreaHasChild').val(data.HasChild);
+                        
                     }
                 });
         }        
@@ -1352,6 +1369,8 @@ function CaseInitForm(opt) {
     function addTextToLog(text) {
         var regexp = /<BR>/g;
         var txt = text.replace(regexp, "\n");
+        regexp = /&amp;/g;
+        txt = txt.replace(regexp, "&");
         var writeTextToExternalNote = $("#WriteTextToExternalNote").val();
         var field = "#CaseLog_TextInternal";
 

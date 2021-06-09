@@ -118,7 +118,7 @@ namespace DH.Helpdesk.Web.Infrastructure
         private static string Get(string translate, int languageId, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, 
                                   int customerId = 0, bool diffTextType = false, int textTypeId = 0)
         {
-            if (source == Enums.TranslationSource.TextTranslation)
+            if (source == Enums.TranslationSource.TextTranslation && translate != null)
             {
                 try
                 {

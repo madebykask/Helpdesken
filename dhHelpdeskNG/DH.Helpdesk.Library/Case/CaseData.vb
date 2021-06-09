@@ -175,6 +175,7 @@ Public Class CaseData
                                               Nothing,
                                               Nothing,
                                               Nothing,
+                                              Nothing,
                                               New UserRepository(databaseFactory),
                                               Nothing,
                                               Nothing,
@@ -426,7 +427,7 @@ Public Class CaseData
             Else
                 sSQL = sSQL & objCase.Region_Id & ", "
             End If
-            sSQL = sSQL & getDBStringPrefix() & "'" & objCase.ReportedBy & "', "
+            sSQL = sSQL & getDBStringPrefix() & "'" & objCase.ReportedBy.Replace("'", "''") & "', "
 
             If objCase.Department_Id = 0 Then
                 sSQL = sSQL & "Null, "
@@ -519,13 +520,13 @@ Public Class CaseData
                             getDBStringPrefix() & "'" & Left(Replace(objCase.Currency, "'", ""), 10) & "', " &
                             getDBStringPrefix() & "'" & Left(Replace(objCase.ContactBeforeAction, "'", ""), 100) & "', " &
                             getDBStringPrefix() & "'" & Left(Replace(objCase.FinishingDescription, "'", ""), 200) & "', " &
-                            getDBStringPrefix() & "'" & Left(Replace(objCase.Persons_Name, "'", ""), 50) & "', " &
-                            getDBStringPrefix() & "'" & Replace(objCase.Persons_EMail, "'", "''") & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.Persons_Name, "'", "''"), 50) & "', " &
+                            getDBStringPrefix() & "'" & Replace(objCase.Persons_EMail, "'", "") & "', " &
                             getDBStringPrefix() & "'" & Replace(Left(objCase.Persons_Phone, 40), "'", "''") & "', " &
-                            getDBStringPrefix() & "'" & Left(objCase.Persons_CellPhone, 30) & "', " &
-                            getDBStringPrefix() & "'" & Left(objCase.Place, 50) & "', " &
-                            getDBStringPrefix() & "'" & Left(objCase.UserCode, 20) & "', " &
-                            getDBStringPrefix() & "'" & Left(objCase.CostCentre, 50) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.Persons_CellPhone, "'", "''"), 30) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.Place, "'", "''"), 50) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.UserCode, "'", "''"), 20) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.CostCentre, "'", "''"), 50) & "', " &
                             getDBStringPrefix() & "'" & Replace(objCase.InventoryNumber, "'", "") & "', " &
                             getDBStringPrefix() & "'" & Replace(objCase.InvoiceNumber, "'", "") & "', " &
                             getDBStringPrefix() & "'" & Replace(objCase.Caption, "'", "") & "', " &

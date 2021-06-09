@@ -1,12 +1,12 @@
 ﻿@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.Computer.FieldSettingModel
 <td>@Html.LabelFor(m => m)</td>
 <td>@Html.CheckBoxFor(m => m.ShowInDetails, new { @class = "switchcheckbox" })</td>
-<td>@Html.TextBoxFor(m => m.Caption)</td>
+<td>@Html.TextBoxFor(m => m.Caption, Model.IsCaptionDisabled ? (object)new { @readonly = "true" } : (object)new { })</td>
 <td>
-    @Html.CheckBoxFor(m => m.IsRequired, new { @class = "is_required_checkbox switchcheckbox" })
+    @Html.CheckBoxFor(m => m.IsRequired, Model.IsRequiredDisabled ? (object)new { @class = "is_required_checkbox switchcheckbox", @readonly = "true" } : (object)new { @class = "is_required_checkbox switchcheckbox" })
 </td>
-<td>@Html.CheckBoxFor(m => m.ShowInList, new { @class = "switchcheckbox" })</td>
+<td>@Html.CheckBoxFor(m => m.ShowInList, Model.IsShowInListDisabled ? (object)new { @class = "switchcheckbox", @readonly = "true" } : (object)new { @class = "switchcheckbox" })</td>
 <td>
-    @Html.CheckBoxFor(m => m.IsReadOnly, new { @class = "is_readonly_checkbox switchcheckbox" })
+    @Html.CheckBoxFor(m => m.IsReadOnly, Model.IsReadOnlyDisabled ? (object)new { @class = "is_readonly_checkbox switchcheckbox", @readonly = "true" } : (object)new { @class = "is_readonly_checkbox switchcheckbox" })
 </td>
 

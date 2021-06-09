@@ -4,18 +4,19 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="content">
-   <div class="container">
+    <div class="container">
         <h2 style="margin: 10px 0;">
             Sorry, an error occurred while processing your request.
         </h2>
         <p style="margin: 10px 0;">
-            @DateTime.Now
+            Please provide below to your support team:
         </p>
-        <p style="margin: 10px 0;">
-            Please provide Error Id to support team:
-        </p>
-        <p id="exception" style="padding: 10px; background: #ffa;">
-            Error Id: @Model.Guid
-        </p>
+        <div id="exeption" style="padding: 10px; background: #ffa;">
+            <ul>
+                <li>Error Id: @Model.Guid</li>
+                <li>Step-by-step instructions on how to reproduce your issue</li>
+                <li>Time when error occurred: @DateTime.Now</li>
+            </ul>
+        </div>
     </div>
 </div>

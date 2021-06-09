@@ -15,10 +15,10 @@
 
         public bool InformationIsAvailableForNotifiers { get; set; }
 
-        [StringLength(200)]
+        [StringLength(2000)]
         public string UrlOne { get; set; }
 
-        [StringLength(200)]
+        [StringLength(2000)]
         public string UrlTwo { get; set; }
 
         [Required]

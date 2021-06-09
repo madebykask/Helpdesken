@@ -127,7 +127,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                                 CreateOrganisation = _cs.LDAPCreateOrganization,
                                 DefaultRegion = _r,
                                 StartTime = "2018-04-06",
-                                CronExpression = "0 * 8-22 * * ?",
+                                CronExpression = "0 * * ? * * *",
                                 TimeZone = "",
                                 ImportFormat = "CSV"
                             };
@@ -489,6 +489,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
      
 
             logs.Add(setting.CustomerId, $"{insertText} \r\n {updateText}");
+           // _logger.InfoFormat("{insertText} \r\n {updateText}");
 
         }
 
@@ -565,14 +566,26 @@ namespace DH.Helpdesk.TaskScheduler.Services
 
                 foreach (var InitiatorId in InitiatorIds)
                 {
-                    // ta bort historik
-                    var deletequery = $"DELETE FROM tblComputerUserLog WHERE ComputerUser_Id = {InitiatorId};" +
+                    _logger.InfoFormat("Deleting Initiator {InitiatorId} FOR CustomerId {customerId}");
+                    // First delete Computer and History if there is any - this didn't work because of connection to other Inventories
+                    //var selectComputerQuery = $"Select Count(*) from tblComputer where User_Id  =  {InitiatorId};";
+                    //var computersCount = dbQueryExecutor.ExecuteScalar<int>(selectComputerQuery);
+                    //if(computersCount > 0)
+                    //{
+                    //    var deleteComputerQuery = $"Delete from tblComputer_History where Computer_Id in(select Id from tblComputer where User_Id = {InitiatorId});" +
+                    //            $"DELETE FROM tblComputer WHERE User_Id = {InitiatorId};";
+                    //    ret = dbQueryExecutor.ExecQuery(deleteComputerQuery);
+                    //}
+                  
+                    var deletequery = $"Update tblComputer set User_Id = null WHERE User_Id = {InitiatorId};" +
+                                $"DELETE FROM tblComputerUserLog WHERE ComputerUser_Id = {InitiatorId};" +
                                 $"DELETE FROM tblComputerUser_tblCUGroup WHERE ComputerUser_Id = {InitiatorId};" +
                                 $"DELETE FROM tblComputerUsers WHERE Id = {InitiatorId};";
                     ret = dbQueryExecutor.ExecQuery(deletequery);
                 }
                 if (ret == 1)
                 {
+
                     logs.Add(customerId, $"Number of Initiators Deleted : {InitiatorIds.Count()}");
                 }
             }

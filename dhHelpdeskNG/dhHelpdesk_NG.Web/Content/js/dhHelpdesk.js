@@ -286,6 +286,12 @@ function productAreaHasChild(productAreaId) {
     });
 }
 
+function finishingCauseHasChild(finishingCauseId) {
+    $.get('/Cases/FinishingCauseHasChild', { fId: finishingCauseId, now: Date.now() }, function (data) {
+        return data;
+    });
+}
+
 function SendToDialogCaseCallback(email) {
     if (email.length > 0) {
 

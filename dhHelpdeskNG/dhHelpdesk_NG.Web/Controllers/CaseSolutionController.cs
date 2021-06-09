@@ -387,6 +387,18 @@ namespace DH.Helpdesk.Web.Controllers
 
             //}
 
+            //Ugly but working
+            if(caseSolutionInputViewModel.CaseSolution.DefaultTab == "case-tab")
+            {
+                caseSolutionInputViewModel.CaseSolution.ActiveTabSelfservice = caseSolutionInputViewModel.CaseSolution.DefaultTab;
+                caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice = caseSolutionInputViewModel.CaseSolution.DefaultTab;
+            }
+            else
+            {
+                caseSolutionInputViewModel.CaseSolution.ActiveTabSelfservice = caseSolutionInputViewModel.CaseSolution.DefaultTab;
+                caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice = caseSolutionInputViewModel.CaseSolution.DefaultTab;
+            }
+
             if (caseSolutionSettingModels == null)
             {
                 caseSolutionSettingModels = new CaseSolutionSettingModel[0];
@@ -1206,8 +1218,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             ViewBag.PageId = backToPageId ?? 0;
 
-            //ViewBag.IdVal = caseSolution.Id;
+            
             var model = this.CreateInputViewModel(caseSolution);
+            model.ContainsExtendedForm = model.CaseSolution.ExtendedCaseForms.Any();
 
             return this.View(model);
         }
@@ -1486,6 +1499,18 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     cs.Id = 0;
                 }
+            }
+            if(caseSolutionInputViewModel.ContainsExtendedForm)
+            {
+                if (caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice != "both")
+                {
+                    caseSolutionInputViewModel.CaseSolution.ActiveTabSelfservice = caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice;
+                }
+            }
+            else
+            {
+                caseSolutionInputViewModel.CaseSolution.ActiveTabSelfservice = "case-tab";
+                caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice = "case-tab";
             }
 
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);

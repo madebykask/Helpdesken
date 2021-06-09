@@ -79,7 +79,8 @@ namespace DH.Helpdesk.Web.Controllers
         [UserPermissions(UserPermission.ContractPermission)]
         public ActionResult New(int customerId)
         {
-            var model = this.CreateInputViewModel(customerId);
+            var user = _userService.GetUser(SessionFacade.CurrentUser.Id);
+            var model = this.CreateInputViewModel(customerId, user);
 
             return this.View(model);
         }
@@ -90,6 +91,7 @@ namespace DH.Helpdesk.Web.Controllers
         [UserPermissions(UserPermission.ContractPermission)]
         public ActionResult Index()
         {
+            var user = _userService.GetUser(SessionFacade.CurrentUser.Id);
             var customer = _customerService.GetCustomer(SessionFacade.CurrentCustomer.Id);
             var sortModel = new ColSortModel(EnumContractFieldSettings.Number, true);
 
@@ -100,9 +102,9 @@ namespace DH.Helpdesk.Web.Controllers
             var searchResults = GetSearchResultsModel(filterModel, sortModel);
 
             var model =
-                new ContractIndexViewModel(customer)
+                new ContractIndexViewModel(customer, user)
                 {
-                    SearchFilterModel = GetContractsSearchFilterModel(customer),
+                    SearchFilterModel = GetContractsSearchFilterModel(customer, user),
                     Setting = GetSettingsModel(customer.Id),
                     SearchResults = searchResults
                 };
@@ -124,7 +126,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         [BadRequestOnNotValid]
         public PartialViewResult Search(ContractsSearchInputData data)
-        {
+        {           
             var filter = new ContractsSearchFilter(data.CustomerId)
             {
                 SelectedContractCategories = data.Categories,
@@ -145,7 +147,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 SearchText = data.SearchText
             };
-            
+
+
             //save filter in session
             SessionFacade.CurrentContractsSearch = filter;
 
@@ -178,6 +181,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var customerId = selectedFilter.CustomerId;
             var customer = _customerService.GetCustomer(customerId);
+
 
             var model = new ContractsSearchResultsModel(customer);
 
@@ -336,7 +340,16 @@ namespace DH.Helpdesk.Web.Controllers
 
         private IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter)
         {
-            var contracts  = _contractService.SearchContracts(filter, SessionFacade.CurrentUser.Id);
+            var user = _userService.GetUser(SessionFacade.CurrentUser.Id);
+            var userCategories = new List<int>();
+            if (filter.SelectedContractCategories.Count == 0 && user.CCs.Count > 0)
+            {
+                foreach (var cc in user.CCs)
+                {
+                    userCategories.Add(cc.Id);
+                }
+            }
+            var contracts  = _contractService.SearchContracts(filter, SessionFacade.CurrentUser.Id, userCategories);
             return contracts;
         }
 
@@ -403,11 +416,12 @@ namespace DH.Helpdesk.Web.Controllers
             return data;
         }
 
-        private ContractsSearchFilterViewModel GetContractsSearchFilterModel(Customer customer)
+        private ContractsSearchFilterViewModel GetContractsSearchFilterModel(Customer customer, User user)
         {
             var filter = GetSearchFilter(customer.Id);
-
             var contractCategories = _contractCategoryService.GetContractCategories(customer.Id);
+            if (user.CCs.Count() > 0)
+                contractCategories = user.CCs.ToList();
 
             var model = new ContractsSearchFilterViewModel()
             {
@@ -431,10 +445,10 @@ namespace DH.Helpdesk.Web.Controllers
 
                 Departments = _departmentService.GetDepartmentsForUser(customer.Id, SessionFacade.CurrentUser.Id)
                     .Select(d => new SelectListItem
-                {
-                    Value = d.Id.ToString(),
-                    Text = d.DepartmentName
-                }).ToList(),
+                    {
+                        Value = d.Id.ToString(),
+                        Text = d.DepartmentName
+                    }).ToList(),
 
                 ShowContracts = GetContractStatuses().ToSelectList(),
 
@@ -528,11 +542,14 @@ namespace DH.Helpdesk.Web.Controllers
             return false;
         }
 
-        private ContractViewInputModel CreateInputViewModel(int customerId)
+        private ContractViewInputModel CreateInputViewModel(int customerId, User user)
         {
             var model = new ContractViewInputModel();
             var contractFields = this.GetSettingsModel(customerId);
-            var contractcategories = _contractCategoryService.GetContractCategories(customerId).OrderBy(a => a.Name).ToList();
+            var contractCategories = _contractCategoryService.GetContractCategories(customerId).OrderBy(a => a.Name).ToList();
+            if (user.CCs.Count() > 0)
+                contractCategories = user.CCs.ToList();
+
             var suppliers = _supplierService.GetActiveSuppliers(customerId);
             var departments = _departmentService.GetDepartmentsForUser(customerId, SessionFacade.CurrentUser.Id);
             var users = _userService.GetCustomerUsers(customerId);
@@ -563,7 +580,7 @@ namespace DH.Helpdesk.Web.Controllers
             model.ContractFiles = new List<ContractFileViewModel>();
             model.ContractFileKey = Guid.NewGuid().ToString();
 
-            model.ContractCategories = contractcategories.Select(x => new SelectListItem
+            model.ContractCategories = contractCategories.Select(x => new SelectListItem
             {
                 Selected = (x.Id == model.CategoryId ? true : false),
                 Text = x.Name,
@@ -784,7 +801,7 @@ namespace DH.Helpdesk.Web.Controllers
                 CustomerId = customerId,
                 CurrentLanguage = SessionFacade.CurrentLanguageId,
                 Languages = new Dictionary<int, string> {{1, "SV"}, {2, "EN"}}.ToSelectList(),
-                SettingRows =
+                SettingRows =  
                     allFieldsSettingRows.Select(s => new ContractsSettingRowViewModel
                         {
                             Id = s.Id,
@@ -975,8 +992,9 @@ namespace DH.Helpdesk.Web.Controllers
                 return new HttpNotFoundResult("No permissions...");
 
             var changedbyUser = _userService.GetUser(contract.ChangedByUser_Id);
+            var user = _userService.GetUser(SessionFacade.CurrentUser.Id);
 
-            var contractEditInput = CreateInputViewModel(SessionFacade.CurrentCustomer.Id);
+            var contractEditInput = CreateInputViewModel(SessionFacade.CurrentCustomer.Id, user);
 
             contractEditInput.ContractId = contract.Id;
             contractEditInput.CategoryId = contract.ContractCategory_Id;

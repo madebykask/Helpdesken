@@ -191,11 +191,13 @@
                                                         <select id="savaAndClose" name="CaseSolution.SaveAndClose" @(Model.CaseSolution.ShowInsideCase == 1 ? "" : "disabled='true'")>
                                                             @foreach (var action in Model.ActionList)
                                                             {
-                                                                <option value="@action.Value" @(action.Selected ? "selected" : "")> @action.Text </option>}
+                                                                <option value="@action.Value" @(action.Selected ? "selected" : "")> @action.Text </option>
+                                                            }
 
                                                             @if (Model.CaseSolution.ShowInsideCase != 1)
                                                             {
-                                                                <option value="-2" selected> @saveDropDownText </option>}
+                                                                <option value="-2" selected> @saveDropDownText </option>
+                                                            }
                                                         </select>
                                                     </td>
                                                 </tr>
@@ -242,12 +244,6 @@
                                                         <input type="hidden" name="CaseSolution.OverWritePopUp" value="0" />
                                                     </td>
                                                 </tr>
-
-
-
-
-
-
                                             </table>
                                         </div>
                                     </div>
@@ -263,82 +259,128 @@
                         var extendedCaseId = extendedCaseForm != null ? extendedCaseForm.Id : 0;
 
                         <div id="divExtendedCase" style="padding:0px;width:100%">
-                            <h4>@Translation.GetMasterDataTranslation("Utökat ärende")</h4>
+                            <h4>@Translation.Get("Utökat ärende")</h4>
                             <div class="row">
                                 <div class="span12">
                                     <table class="tableform" border="0">
                                         <tr>
-                                            <td style="width:200px; margin-bottom:5px;">@Translation.GetMasterDataTranslation("Kopplat till utökat ärende")</td>
+                                            <td style="width:200px; margin-bottom:5px;">@Translation.Get("Kopplat till utökat ärende")</td>
                                             <td style="width:300px; margin-bottom:5px;">@extendedCaseName</td>
                                             <td></td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                @Translation.GetMasterDataTranslation("Aktiv tab")
+                                                @Translation.Get("Aktiv flik Helpdesk")
                                             </td>
                                             <td>
                                                 @*TODO: loop through all Extended Cases*@
                                                 <select name="CaseSolution.DefaultTab">
-                                                    <option value="case-tab" @(Model.CaseSolution.DefaultTab.ToLower() == "case-tab" ? "selected" : "")>@Translation.GetMasterDataTranslation("Ärende-tab")</option>
-                                                    <option value="extendedcase-tab-@extendedCaseId" @(Model.CaseSolution.DefaultTab.ToLower() == "extendedcase-tab-" + extendedCaseId.ToString() ? "selected" : "")>@extendedCaseName<text>-tab</text></option>
+                                                    <option value="case-tab" @(Model.CaseSolution.DefaultTab.ToLower() == "case-tab" ? "selected" : "")>@Translation.Get("Ärende")</option>
+                                                    <option value="extendedcase-tab-@extendedCaseId" @(Model.CaseSolution.DefaultTab.ToLower() == "extendedcase-tab-" + extendedCaseId.ToString() ? "selected" : "")>@extendedCaseName<text></text></option>
                                                 </select>
 
                                             </td>
-                                            <td> <span title="" class="icon-info-sign tooltipType" data-original-title="<div align='left'>@Translation.GetMasterDataTranslation("Välj den tab som ska vara aktiv när ett nytt ärende skapas utifrån den här ärendemallen") </div> <br />" data-html="true" rel="tooltip"></span> </td>
+                                            <td> <span title="" class="icon-info-sign tooltipType" data-original-title="<div align='left'>@Translation.Get("Välj den tab som ska vara aktiv när ett nytt ärende skapas utifrån den här ärendemallen") </div> <br />" data-html="true" rel="tooltip"></span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                @Translation.Get("Tillgängliga flikar Självservice")
+                                            </td>
+                                            <td>
+                                                @{
+                                                    if (Model.CaseSolution.AvailableTabsSelfsevice.ToLower() == "")
+                                                    {
+                                                        <select name="CaseSolution.AvailableTabsSelfsevice" id="availableTabs">
+                                                            <option value="extendedcase-tab-@extendedCaseId" selected="selected">@extendedCaseName<text></text></option>
+                                                            <option value="both">@Translation.Get("Ärende")<text> + </text>@extendedCaseName</option>
+                                                            <option value="case-tab">@Translation.Get("Ärende")</option>
+
+                                                        </select>
+                                                    }
+                                                    else
+                                                    {
+                                                        <select name="CaseSolution.AvailableTabsSelfsevice" id="availableTabs">
+                                                            <option value="both" @(Model.CaseSolution.AvailableTabsSelfsevice.ToLower() == "both" ? "selected" : "")>@Translation.Get("Ärende")<text> + </text>@extendedCaseName</option>
+                                                            <option value="case-tab" @(Model.CaseSolution.AvailableTabsSelfsevice.ToLower() == "case-tab" ? "selected" : "")>@Translation.Get("Ärende")</option>
+                                                            <option value="extendedcase-tab-@extendedCaseId" @(Model.CaseSolution.AvailableTabsSelfsevice.ToLower() == "extendedcase-tab-" + extendedCaseId.ToString() ? "selected" : "")>@extendedCaseName<text></text></option>
+                                                        </select>
+                                                    }
+                                                }
+
+                                            </td>
+                                            <td> <span title="" class="icon-info-sign tooltipType" data-original-title="<div align='left'>@Translation.Get("Välj vilken/vilka flikar som ska visas på Självservice") </div> <br />" data-html="true" rel="tooltip"></span> </td>
                                         </tr>
                                     </table>
-                                </div>
+                                    <div id="activeTabSelfservice">
+                                    <table class="tableform" border="0">
+                                        <tr>
+                                            <td style="width:200px; margin-bottom:5px;">
+                                                @Translation.Get("Aktiv flik Självservice")
+                                            </td>
+                                            <td style="width:300px; margin-bottom:5px;">
+                                                <select name="CaseSolution.ActiveTabSelfservice" id="activeTab">
+                                                    <option value="case-tab" @(Model.CaseSolution.ActiveTabSelfservice.ToLower() == "case-tab" ? "selected" : "")>@Translation.Get("Ärende")</option>
+                                                    <option value="extendedcase-tab-@extendedCaseId" @(Model.CaseSolution.ActiveTabSelfservice.ToLower() == "extendedcase-tab-" + extendedCaseId.ToString() ? "selected" : "")>@extendedCaseName<text></text></option>
+                                                </select>
+                                            </td>
+                                            <td> <span title="" class="icon-info-sign tooltipType" data-original-title="<div align='left'>@Translation.Get("Välj den tab som ska vara aktiv när ett ärende, skapat utifrån den här ärendemallen, öppnas") </div> <br />" data-html="true" rel="tooltip"></span> </td>
+                                        </tr>
+                                        </table>
+                                    </div>
+                                </div>                                
                             </div>
                         </div>
                     }
                     else
                     {
-                        @Html.HiddenFor(model => model.CaseSolution.DefaultTab)
+                        @Html.HiddenFor(model => model.CaseSolution.DefaultTab) 
+                        @Html.HiddenFor(model => model.CaseSolution.ActiveTabSelfservice) 
+                        @Html.HiddenFor(model => model.CaseSolution.AvailableTabsSelfsevice)
                     }
 
                     @*TODO: Move to another page*@
                     @if (SessionFacade.CurrentUser.UserGroupId >= 3)
                     {
-                    <div id="divSplitToCaseSolutions" style="padding:0px;width:100%">
-                        <h4>@Translation.Get("Multiärende (vid spara)", Enums.TranslationSource.TextTranslation)</h4>
-                        <table class="tableform" border="0">
-                            <tr>
-                                <td style="width:200px">
-                                    @Translation.Get("Typ av relation", Enums.TranslationSource.TextTranslation)
-                                </td>
-                                <td>
-                                    <select id="Casesolution_CaseRelationType" name="Casesolution.CaseRelationType">
-                                        <option @(Model.CaseSolution.CaseRelationType == CaseRelationType.None ? "selected" : "") value="0">&nbsp;</option>
-                                        <option @(Model.CaseSolution.CaseRelationType == CaseRelationType.ParentAndChildren ? "selected" : "") value="1">@Translation.Get(CaseRelationType.ParentAndChildren.ToString(), Enums.TranslationSource.TextTranslation)</option>
-                                        <option @(Model.CaseSolution.CaseRelationType == CaseRelationType.OnlyDescendants ? "selected" : "") value="2">@Translation.Get(CaseRelationType.OnlyDescendants.ToString(), Enums.TranslationSource.TextTranslation)</option>
-                                        <option @(Model.CaseSolution.CaseRelationType == CaseRelationType.SelfAndDescendandts ? "selected" : "") value="3">@Translation.Get(CaseRelationType.SelfAndDescendandts.ToString(), Enums.TranslationSource.TextTranslation)</option>
-                                    </select>
-                                </td>
-                            </tr>
-                        </table>
-                        <div id="divSplitToAllCaseSolutions" class="hidden">
+                        <div id="divSplitToCaseSolutions" style="padding:0px;width:100%">
+                            <h4>@Translation.Get("Multiärende (vid spara)", Enums.TranslationSource.TextTranslation)</h4>
                             <table class="tableform" border="0">
                                 <tr>
-                                    <td style="width:200px">@Translation.Get("Ärendemallar för underärenden", Enums.TranslationSource.TextTranslation)</td>
+                                    <td style="width:200px">
+                                        @Translation.Get("Typ av relation", Enums.TranslationSource.TextTranslation)
+                                    </td>
                                     <td>
-                                        <select id="SplitToCaseSolutionIds" name="SplitToCaseSolutionIds" data-field="id" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                            @foreach (var a in Model.SplitToAllCaseSolutions)
-                                            {
-                                                <option @(a.Selected ? " selected" : "") @(a.Disabled && a.Selected == false ? " disabled" : "") value="@a.Value">@a.Text</option>
-                                            }
+                                        <select id="Casesolution_CaseRelationType" name="Casesolution.CaseRelationType">
+                                            <option @(Model.CaseSolution.CaseRelationType == CaseRelationType.None ? "selected" : "") value="0">&nbsp;</option>
+                                            <option @(Model.CaseSolution.CaseRelationType == CaseRelationType.ParentAndChildren ? "selected" : "") value="1">@Translation.Get(CaseRelationType.ParentAndChildren.ToString(), Enums.TranslationSource.TextTranslation)</option>
+                                            <option @(Model.CaseSolution.CaseRelationType == CaseRelationType.OnlyDescendants ? "selected" : "") value="2">@Translation.Get(CaseRelationType.OnlyDescendants.ToString(), Enums.TranslationSource.TextTranslation)</option>
+                                            <option @(Model.CaseSolution.CaseRelationType == CaseRelationType.SelfAndDescendandts ? "selected" : "") value="3">@Translation.Get(CaseRelationType.SelfAndDescendandts.ToString(), Enums.TranslationSource.TextTranslation)</option>
                                         </select>
                                     </td>
                                 </tr>
                             </table>
+                            <div id="divSplitToAllCaseSolutions" class="hidden">
+                                <table class="tableform" border="0">
+                                    <tr>
+                                        <td style="width:200px">@Translation.Get("Ärendemallar för underärenden", Enums.TranslationSource.TextTranslation)</td>
+                                        <td>
+                                            <select id="SplitToCaseSolutionIds" name="SplitToCaseSolutionIds" data-field="id" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                                @foreach (var a in Model.SplitToAllCaseSolutions)
+                                                {
+                                                    <option @(a.Selected ? " selected" : "") @(a.Disabled && a.Selected == false ? " disabled" : "") value="@a.Value">@a.Text</option>
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
-                    </div>
                     }
                     else
                     {
                         @Html.HiddenFor(model => model.CaseSolution.CaseRelationType)
 
                         if (Model.SplitToCaseSolutionIds != null)
-                        { 
+                        {
                             for (int i = 0; i < Model.SplitToCaseSolutionIds.Count(); i++)
                             {
                                 @Html.HiddenFor(model => model.SplitToCaseSolutionIds[i])
@@ -374,7 +416,7 @@
                                     </tr>
                                     <tr>
                                         @*<th colspan="3" class="header">@Translation.Get("Användarinformation")</th>*@
-                                        @{  var myIndex = 0;
+                                        @{ var myIndex = 0;
                                             var curId = "";
                                             foreach (var cs in Model.CaseSolutionSettingModels)
                                             {
@@ -395,7 +437,9 @@
                                                 @Html.DropDownListFor(model => model.CaseSolution.UserSearchCategory_Id, Model.BuildComputerCategoriesSelectList(Model.CaseSolution.UserSearchCategory_Id), "",
                                                 new
                                                 {
-                                                    id = "UserSearchCategory", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString()
+                                                    id = "UserSearchCategory",
+                                                         @class = "acceptRules",
+                                                         standardId = GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString()
                                                 })
                                             </td>
                                             <td>
@@ -717,7 +761,7 @@
                                         </tr>
                                     }
                                 </table>
-                          </div>
+                            </div>
                         </div>
                     </div>
                     @*IsABout*@
@@ -747,7 +791,7 @@
                                             <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString(), Model.CaseSolution.Customer_Id)</td>
                                             <td>
                                                 @Html.DropDownListFor(model => model.CaseSolution.IsAbout_UserSearchCategory_Id, Model.BuildComputerCategoriesSelectList(Model.CaseSolution.IsAbout_UserSearchCategory_Id), "",
-                                                    new { id = "IsAbout_UserSearchCategory", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()})
+                                                    new { id = "IsAbout_UserSearchCategory", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString() })
                                             </td>
                                             <td>
                                                 <table>
@@ -1423,15 +1467,15 @@
                                         </td>
                                         <td>
                                             @*@if (Model.CaseSolution.ContactBeforeAction == 1)
-                                                {
+                                {
                                             *@<input type="checkbox" name="CaseSolution.ContactBeforeAction" @(Model.CaseSolution.ContactBeforeAction == 1 ? "checked=checked" : "") value="1" class="switchcheckbox acceptRules" standardId='@GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()' />
                                             <input type="hidden" name="CaseSolution.ContactBeforeAction" value="0" />
                                             @*}
-                                                else
-                                                {
-                                                    @Model.CaseSolution.ContactBeforeAction.IntToYES_NO()
-                                                    @Html.HiddenFor(model => model.CaseSolution.ContactBeforeAction)
-                                                }*@
+                                else
+                                {
+                                    @Model.CaseSolution.ContactBeforeAction.IntToYES_NO()
+                                    @Html.HiddenFor(model => model.CaseSolution.ContactBeforeAction)
+                                }*@
                                         </td>
                                         <td>
                                             <table>
@@ -1703,15 +1747,15 @@
                                             </td>
                                             <td>
                                                 @*<select id="Project" name="CaseSolution.Project_Id">
-                                                        <option value="">&nbsp;</option>
-                                                        @if (Model.Projects != null)
-                                                        {
-                                                            foreach (var e in Model.Projects)
-                                                            {
-                                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.Projects.ToString())>@e.Name</option>
-                                                            }
-                                                        }
-                                                    </select>*@
+                                        <option value="">&nbsp;</option>
+                                        @if (Model.Projects != null)
+                                        {
+                                            foreach (var e in Model.Projects)
+                                            {
+                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.Projects.ToString())>@e.Name</option>
+                                            }
+                                        }
+                                    </select>*@
                                                 @Html.DropDownListFor(model => model.CaseSolution.Project_Id, Model.projects, "", new { id = "Project", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.Project.ToString() })
                                             </td>
                                             <td>
@@ -1734,14 +1778,14 @@
                                             </td>
                                             <td>
                                                 @*<select id="Problems" name="model.Problems">
-                                                        <option value="">&nbsp;</option>
+                                        <option value="">&nbsp;</option>
 
-                                                            @foreach (var e in Model.Problems)
-                                                            {
-                                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.Problems.ToString())>@e.Name</option>
-                                                            }
+                                            @foreach (var e in Model.Problems)
+                                            {
+                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.Problems.ToString())>@e.Name</option>
+                                            }
 
-                                                    </select>*@
+                                    </select>*@
                                                 @Html.DropDownListFor(model => model.CaseSolution.Problem_Id, Model.problems, "", new { id = "Problem", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.Problem.ToString() })
                                             </td>
                                             <td>
@@ -1793,14 +1837,14 @@
                                             </td>
                                             <td>
                                                 @*<select id="changes" name="model.changes">
-                                                        <option value="">&nbsp;</option>
+                                        <option value="">&nbsp;</option>
 
-                                                            @foreach (var e in Model.changes)
-                                                            {
-                                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.changes.ToString())>@e.ChangeTitle</option>
-                                                            }
+                                            @foreach (var e in Model.changes)
+                                            {
+                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.changes.ToString())>@e.ChangeTitle</option>
+                                            }
 
-                                                    </select>*@
+                                    </select>*@
                                                 @Html.DropDownListFor(model => model.CaseSolution.Change_Id, Model.changes, "", new { id = "Change", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.Change.ToString() })
                                             </td>
                                             <td>
@@ -1977,9 +2021,10 @@
                                         <td>
                                             @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.LogFileName, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename)
                                         </td>
-                                    </tr>    
+                                    </tr>
+
                                 }
-                                
+
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
                                     <tr>
@@ -2001,7 +2046,7 @@
                                         </td>
                                     </tr>
                                 }
-                                
+
                                 @if (Model.CaseFieldSettings.Count() != 0)
                                 {
                                     <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal.ToString())">
@@ -2093,28 +2138,28 @@
                         </div>
                     </div>
                     @*<h4>@Translation.Get("Ärendeinformation", Enums.TranslationSource.TextTranslation)</h4>
-                        <div class="row">
-                            <div class="span12">
-                                <table class="tableform">
-                                </table>
-                            </div>
-                        </div>
-                        <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
-                        <div class="row">
-                            <div class="span12">
-                                <table class="tableform">
+        <div class="row">
+            <div class="span12">
+                <table class="tableform">
+                </table>
+            </div>
+        </div>
+        <h4>@Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation)</h4>
+        <div class="row">
+            <div class="span12">
+                <table class="tableform">
 
-                                </table>
-                            </div>
-                        </div>
-                        <h4>@Translation.Get("Logg", Enums.TranslationSource.TextTranslation)</h4>
-                        <div class="row">
-                            <div class="span12">
-                                <table class="tableform">
+                </table>
+            </div>
+        </div>
+        <h4>@Translation.Get("Logg", Enums.TranslationSource.TextTranslation)</h4>
+        <div class="row">
+            <div class="span12">
+                <table class="tableform">
 
-                                </table>
-                            </div>
-                        </div>*@
+                </table>
+            </div>
+        </div>*@
                     <h4>@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
@@ -2130,8 +2175,8 @@
                                     <td style="width:300px"></td>
                                     <td style="min-width:200px"></td>
                                     @*<td class="span9">
-                                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.WorkingGroup, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.WorkingGroup_Id)
-                                        </td>*@
+                            @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.WorkingGroup, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.WorkingGroup_Id)
+                        </td>*@
                                 </tr>
                             </table>
                         </div>
@@ -2149,7 +2194,7 @@
 
                                     @* <td class="span9">
 
-                                        </td>*@
+                </td>*@
 
                                 </tr>
                                 <tr id="scheduleOptions" style="@(Model.Schedule.ToBool() ? "display:block" : "display:none")">
@@ -2341,6 +2386,7 @@
                             @Html.HiddenFor(model => model.CaseSolution.Id, new { id = "hidId" })
 
                             @Html.HiddenFor(model => model.CaseSolution.FormGUID)
+                            @Html.HiddenFor(model => model.ContainsExtendedForm)
                         </div>
                     </div>
                 </div>
@@ -2480,79 +2526,39 @@
             document.getElementById('hidId').value=0;
             t.style.display = 'block';
 
-
-            //var id=0;
-            //if (id==0)
-            //{
-            //    var form = $("#target").serialize();
-            //    $.ajax({
-            //        type: 'POST',
-            //        url: "/CaseSolution/Copy",
-            //        data: form,
-            //        success: function (data) {
-
-            //            var t = document.getElementById('inputCopy');
-            //            t.style.display = 'block';          // Show
-
-
-            //            document.getElementById('hidId').value=0;
-            //            //document.getElementById('hidId').value=data;
-
-
-
-            //        },
-            //        error: function (result) {
-
-            //        }
-            //    });
-            //}
-
         })
     });
 
+    $(document).ready(function () {
+        var SelectedValue = $('#availableTabs').val();
+        var $activeTabSelfservice = $('#activeTabSelfservice');
+        if (SelectedValue != 'both') {
+            $activeTabSelfservice.addClass('hidden');
+        }
+        else {
+            if ($activeTabSelfservice.hasClass('hidden')) {
+                $activeTabSelfservice.removeClass('hidden');
+            }
+        }
+    });
+
+    $('#availableTabs').change(function () {
+
+        var SelectedValue = $(this).val();
+        var $activeTabSelfservice = $('#activeTabSelfservice');
+
+        if (SelectedValue == 'both') {
+            if ($activeTabSelfservice.hasClass('hidden')) {
+                $activeTabSelfservice.removeClass('hidden');
+            }          
+        }
+        else {
+            $activeTabSelfservice.addClass('hidden');
+        }
+
+    });
 
 
-    //$('#lstStateSecondary').change(function () {
-
-    //    var SelectedValue = $(this).val();
-    //    document.getElementById('selectedStates').value=SelectedValue;
-
-    //});
-
-    //$('#lstCaseWorkingGroup').change(function () {
-
-    //    var SelectedValue = $(this).val();
-    //    document.getElementById('selectedCaseWgs').value=SelectedValue;
-
-    //});
-
-    //$('#lstCasePriority').change(function () {
-
-    //    var SelectedValue = $(this).val();
-    //    document.getElementById('selectedPrioritys').value=SelectedValue;
-
-    //});
-
-    //$('#lstCaseStatus').change(function () {
-
-    //    var SelectedValue = $(this).val();
-    //    document.getElementById('selectedStatuses').value=SelectedValue;
-
-    //});
-
-    //$('#lstUserWg').change(function () {
-
-    //    var SelectedValue = $(this).val();
-    //    document.getElementById('selectedUserWgs').value=SelectedValue;
-
-    //});
-
-    //$('#lstCaseProductArea').change(function () {
-
-    //    var SelectedValue = $(this).val();
-    //    document.getElementById('selectedProductAreas').value=SelectedValue;
-
-    //});
 
     function setHiddenField()
     {
@@ -2602,49 +2608,9 @@
 
         var h=document.getElementById('selectedValues');
         h.value=final;
-        // alert(h.value);
     }
 
-    //function DropDownChange(v)
-    //{
-
-
-    //    var h=document.getElementById('selectedValues');
-
-
-    //    //var newval = v.value;
-
-    //    var newval = $(v).val();
-
-    //    //document.getElementById('selectedStates').value=SelectedValue;
-
-    //    var newid=v.id.replace('lst_','');
-
-
-    //    h.value=h.value + '~' + newid + ':' + newval;
-
-
-    //    //var txt=v.id.toString().replace('lst','txt');
-    //    //alert(txt);
-    //    //var g=document.getElementById(txt);
-    //    //alert(g);
-    //    //var SelectedValue = $(v).val();
-    //    //document.getElementById('selectedValues').value=SelectedValue;
-    //    //alert(document.getElementById('selectedValues').value);
-    //    //var name=v.name;
-
-    //    //name=name.toString().replace('lst_','');
-    //    //var pos=name.indexOf('.');
-
-    //    ////name=name.toString().substring(0, pos);
-
-    //    ////alert(document.getElementById('selectedValues').value=SelectedValue);
-    //    //var savedvals=document.getElementById('selectedValues').value;
-    //    //var pos1=savedvals.indexOf(name);
-    //    //alert(pos1);
-
-
-    //}
+ 
 
     function RemoveCondition (v)
     {

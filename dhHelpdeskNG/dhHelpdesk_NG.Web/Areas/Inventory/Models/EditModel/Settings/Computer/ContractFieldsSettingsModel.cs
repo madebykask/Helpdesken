@@ -32,6 +32,10 @@
             this.AccountingDimension3FieldSettingModel = accountingDimension3FieldSettingModel;
             this.AccountingDimension4FieldSettingModel = accountingDimension4FieldSettingModel;
             this.AccountingDimension5FieldSettingModel = accountingDimension5FieldSettingModel;
+            documentsFieldSettingModel.IsCaptionDisabled = true;
+            documentsFieldSettingModel.IsRequiredDisabled = true;
+            documentsFieldSettingModel.IsShowInListDisabled = true;
+            documentsFieldSettingModel.IsReadOnlyDisabled = true;
             this.DocumentsFieldSettingModel = documentsFieldSettingModel;
         }
 

@@ -10,12 +10,14 @@ namespace DH.Helpdesk.SelfService.Models.Case
 {       
     public class ExtendedCaseViewModel
     {
+        public CaseOverviewModel CaseOverviewModel { get; set; }
         public ExtendedCaseViewModel()
         {
             CaseOU = null;
             Result = new ProcessResult("");
         }
 
+        public string ActiveTab { get; set; }
         public int CustomerId { get; set; }
         public int LanguageId { get; set; }
         public int CaseId { get; set; }

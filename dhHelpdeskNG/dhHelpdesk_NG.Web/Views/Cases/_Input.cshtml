@@ -165,6 +165,7 @@
                         @Html.HiddenFor(model => model.SavedFiles)
                         @Html.HiddenFor(model => model.case_.Unread)
                         @Html.HiddenFor(model => model.ProductAreaHasChild)
+                        @Html.HiddenFor(model => model.FinishingCauseHasChild)
                         @Html.HiddenFor(model => model.CustomerSettings.ModuleCaseInvoice)
                         @Html.HiddenFor(model => model.MovedFromCustomerId)
                         @Html.HiddenFor(model => model.ContainsExtendedCase)
@@ -172,9 +173,9 @@
 
                         @foreach (var key in Model.StatusBar.Keys)
                         {
-                            @Html.HiddenFor(model => model.StatusBar[key]);                           
-                        }                                                  
-                                              
+                            @Html.HiddenFor(model => model.StatusBar[key]);
+                        }
+
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
                         @Html.Hidden("CurLanguageId", SessionFacade.CurrentLanguageId)
@@ -279,11 +280,11 @@
                                                     {
                                                         <a href="#" data-field="relatedInventory" title="@Translation.GetCoreTextTranslation("Relaterade") @Translation.GetCoreTextTranslation("Inventarie")" class="btn @(Model.UserHasInventoryViewPermission ? "" : "disabled")" style="display: none;"><i class="icon-th-large"></i></a>
                                                     }
-                                                    
+
                                                     @if (Model.CustomerSettings.ModuleComputerUser && Model.IsUserAdmin)
                                                     {
-                                                        <a href="javascript:;" data-field="inititatorDetails" style="display: none;" 
-                                                           title="@Model.getSectionHeader(CaseSectionType.Initiator, CaseSections.InitiatorHeader)" 
+                                                        <a href="javascript:;" data-field="inititatorDetails" style="display: none;"
+                                                           title="@Model.getSectionHeader(CaseSectionType.Initiator, CaseSections.InitiatorHeader)"
                                                            class="btn"><i class="icon-user"></i></a>
                                                     }
                                                 </td>
@@ -306,7 +307,7 @@
                                                 {
                                                     <td style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseSolutionFields.AddFollowersBtn)">
                                                         @Html.HiddenFor(model => model.FollowerUsers, new { @readonly = "true", id = "extraEmailsInput" })
-                                                        
+
                                                         @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseSolutionFields.AddFollowersBtn))
                                                         {
                                                             @Html.Partial("ModalDialogs/_ExtraEmails", Model.FollowersModel)
@@ -554,10 +555,10 @@
                                                 <td colspan="2">
                                                     <div id="extendedSection-Initiator" style="display:none">
                                                         <!--<h4>
-                                                            <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
-                                                            <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
-                                                            Vendor details <!-- TODO: Bind on category name and translation
-                                                        </h4>-->
+                                        <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
+                                        <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                                        Vendor details <!-- TODO: Bind on category name and translation
+                                    </h4>-->
 
                                                         <input type="hidden" id="ExtendedInitiatorGUID" name="ExtendedInitiatorGUID" value="@(Model.ExtendedCaseSections.ContainsKey(CaseSectionType.Initiator) ? Model.ExtendedCaseSections[CaseSectionType.Initiator].ExtendedCaseGuid.ToString() : "")" />
                                                         <iframe id="extendedSection-iframe-Initiator" src="" frameborder="0" scrolling="no" style="width:500px; height:180px; margin-top: 10px"></iframe>
@@ -849,10 +850,10 @@
                                             <td colspan="2">
                                                 <div id="extendedSection-Regarding" style="display:none">
                                                     <!--<h4>
-                                                        <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
-                                                        <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
-                                                        Vendor details <!-- TODO: Bind on category name and translation
-                                                    </h4>-->
+                                    <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
+                                    <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                                    Vendor details <!-- TODO: Bind on category name and translation
+                                </h4>-->
 
                                                     <input type="hidden" id="ExtendedRegardingGUID" name="ExtendedRegardingGUID" value="@(Model.ExtendedCaseSections.ContainsKey(CaseSectionType.Regarding) ? Model.ExtendedCaseSections[CaseSectionType.Regarding].ExtendedCaseGuid.ToString() : "")" />
                                                     <iframe id="extendedSection-iframe-Regarding" src="" style="width:500px; height:180px; margin-top:10px" frameborder="0" scrolling="no"></iframe>
@@ -976,7 +977,7 @@
                                             </tr>
                                             <tr style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.ChangeTime.ToString())">
                                                 <td>
-                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ChangeTime, "Ändringsdatum")
+                                                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ChangeTime, "Ändringsdatum")
                                                 </td>
                                                 <td colspan="2">
                                                     @Html.DisplayFor(m => m.ChangeTime)
@@ -1088,16 +1089,17 @@
                                             <td colspan="2">
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.System_Id, CaseSolutionFields.System))
                                                 {
-                                                <select id="case__System_Id" name="case_.System_Id" class="system">
-                                                    <option value="">&nbsp;</option>
-                                                    @if (Model.systems != null)
-                                                    {
-                                                        foreach (var e in Model.systems.Where(e => e.Status == 1 || Model.case_.System_Id == e.Id))
-                                                        {                                                           
-                                                           <option value="@e.Id" class="@(e.Status != 1 ? "inactive" : string.Empty)" @e.Id.IdIsSelected(Model.case_.System_Id.ToString())>@e.SystemName</option>                                                           
+                                                    <select id="case__System_Id" name="case_.System_Id" class="system">
+                                                        <option value="">&nbsp;</option>
+                                                        @if (Model.systems != null)
+                                                        {
+                                                            foreach (var e in Model.systems.Where(e => e.Status == 1 || Model.case_.System_Id == e.Id))
+                                                            {
+                                                                <option value="@e.Id" class="@(e.Status != 1 ? "inactive" : string.Empty)" @e.Id.IdIsSelected(Model.case_.System_Id.ToString())>@e.SystemName</option>
+
+                                                            }
                                                         }
-                                                    }
-                                                </select>
+                                                    </select>
                                                 }
                                                 else
                                                 {
@@ -1707,9 +1709,10 @@
                                                                     <option value="@e.UserId,@e.WorkingGroupId">@option</option>
                                                                 }
                                                             </select>
-                                                        </span>                                                        
+                                                        </span>
                                                     </div>
-                                                </td>                                               
+                                                </td>
+
                                             }
                                             else
                                             {

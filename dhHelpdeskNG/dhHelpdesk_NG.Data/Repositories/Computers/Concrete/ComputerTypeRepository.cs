@@ -27,7 +27,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 CreatedDate = businessModel.CreatedDate,
                 ChangedDate = businessModel.CreatedDate, 
                 ComputerTypeDescription = businessModel.Description,
-                Customer_Id = customerId
+                Customer_Id = customerId,
+                Price = businessModel.Price
             };
             this.DbSet.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);
@@ -39,6 +40,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.Name = businessModel.Name;
             entity.ComputerTypeDescription = businessModel.Description;
             entity.ChangedDate = businessModel.ChangedDate;
+            entity.Price = businessModel.Price;
         }
 
         public ComputerTypeOverview Get(int id)
@@ -46,7 +48,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             var item = DbSet.Single(x => x.Id == id);
             return new ComputerTypeOverview(item.Id, item.Name)
             {
-                Description = item.ComputerTypeDescription
+                Description = item.ComputerTypeDescription,
+                Price = item.Price
             };
         }
 

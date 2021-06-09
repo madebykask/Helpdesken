@@ -4,6 +4,7 @@ using DH.Helpdesk.Dal.Repositories.Printers;
 using DH.Helpdesk.Dal.Repositories.Printers.Concrete;
 using DH.Helpdesk.Dal.Repositories.Servers;
 using DH.Helpdesk.Dal.Repositories.Servers.Concrete;
+
 using DH.Helpdesk.SelfService;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.Services.Services.Authentication;
@@ -75,6 +76,7 @@ namespace DH.Helpdesk.SelfService
     using Services.Services.WebApi;
     using Dal.Repositories.Condition;
     using Dal.Repositories.Condition.Concrete;
+  
 
     public static class NinjectWebCommon 
     {
@@ -159,6 +161,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ICaseFieldSettingLanguageRepository>().To<CaseFieldSettingLanguageRepository>();
             kernel.Bind<IReportRepository>().To<ReportRepository>();
             kernel.Bind<ISettingRepository>().To<SettingRepository>();
+            kernel.Bind<IContractCategoryRepository>().To<ContractCategoryRepository>();
             kernel.Bind<IUserRepository>().To<UserRepository>();
             kernel.Bind<ICaseRepository>().To<CaseRepository>();
             kernel.Bind<ICaseFileRepository>().To<CaseFileRepository>();                                                          
@@ -260,6 +263,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IOrderFieldSettingsRepository>().To<OrderFieldSettingsRepository>();
             kernel.Bind<IOrderLogRepository>().To<OrderLogRepository>();
             kernel.Bind<IOrderRepository>().To<OrderRepository>();
+            kernel.Bind<IContractRepository>().To<ContractRepository>();
             kernel.Bind<IOrderStateRepository>().To<OrderStateRepository>();
             kernel.Bind<IExtendedCaseFormRepository>().To<ExtendedCaseFormRepository>();
             kernel.Bind<IExtendedCaseDataRepository>().To<ExtendedCaseDataRepository>();
@@ -330,6 +334,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ICurrencyService>().To<CurrencyService>();
             kernel.Bind<ICountryService>().To<CountryService>();
             kernel.Bind<IComputerService>().To<ComputerService>();
+            kernel.Bind<IContractCategoryService>().To<ContractCategoryService>();
             kernel.Bind<IUserService>().To<UserService>();
             kernel.Bind<ICustomerUserService>().To<CustomerUserService>();
             kernel.Bind<ICaseSearchService>().To<CaseSearchService>();

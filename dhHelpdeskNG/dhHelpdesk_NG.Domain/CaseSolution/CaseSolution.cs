@@ -114,6 +114,8 @@ namespace DH.Helpdesk.Domain
         
         public string Information { get; set; }
         public string DefaultTab { get; set; }
+        public string AvailableTabsSelfsevice { get; set; }
+        public string ActiveTabSelfservice { get; set; }
         public string ValidateOnChange { get; set; }
         public int? NextStepState { get; set; }
         public CaseRelationType CaseRelationType { get; set; }

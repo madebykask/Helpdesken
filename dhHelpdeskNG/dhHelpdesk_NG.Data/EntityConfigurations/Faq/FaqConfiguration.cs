@@ -15,8 +15,8 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Faq
             Property(f => f.Answer).IsRequired().HasMaxLength(2000);
             Property(f => f.Answer_Internal).IsRequired().HasMaxLength(1000);
             Property(f => f.InformationIsAvailableForNotifiers).HasColumnName("PublicFAQ").IsRequired();
-            Property(f => f.URL1).IsRequired().HasMaxLength(200);
-            Property(f => f.URL2).IsRequired().HasMaxLength(200);
+            Property(f => f.URL1).IsRequired().HasMaxLength(2000);
+            Property(f => f.URL2).IsRequired().HasMaxLength(2000);
             Property(f => f.Customer_Id).IsOptional();
             Property(f => f.WorkingGroup_Id).IsOptional();
             Property(f => f.ShowOnStartPage).IsRequired();

@@ -525,7 +525,7 @@
                                                     <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar">*</span> }
                                                 else
                                                 {
-                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar" style="display: none">*</span>}
+                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar" style="display: none"></span>}
                                             </label>
                                             <div class="col-md-9">
                                                 <select id="NewCase_Urgency_Id" name="NewCase.Urgency_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()">
@@ -551,7 +551,7 @@
                                                     <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar">*</span> }
                                                 else
                                                 {
-                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar" style="display: none">*</span>}
+                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar" style="display: none"></span>}
                                             </label>
                                             <div class="col-md-9">
                                                 <select id="NewCase_Urgency_Id" name="NewCase.Urgency_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()">
@@ -578,7 +578,7 @@
                                                     <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar">*</span> }
                                                 else
                                                 {
-                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar" style="display: none">*</span>}
+                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar" style="display: none"></span>}
                                             </label>
                                             <div class="col-md-9">
                                                 <select id="NewCase_Impact_Id" name="NewCase.Impact_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()">
@@ -604,7 +604,7 @@
                                                     <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar">*</span> }
                                                 else
                                                 {
-                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar" style="display: none">*</span>}
+                                                    <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar" style="display: none"></span>}
                                             </label>
                                             <div class="col-md-9">
                                                 <select id="NewCase_Impact_Id" name="NewCase.Impact_Id" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()">
@@ -682,7 +682,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ReferenceNumber)
                                                 @if (Model.FieldSettings.Where(f => f.Name == GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()).Select(f => f.Required).SingleOrDefault() == 1)
                                                 {
-                                                    <span class="mandatorystar">*</span>}
+                                                    <span class="mandatorystar"></span>}
                                             </label>
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(r => Model.NewCase.ReferenceNumber, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString() })

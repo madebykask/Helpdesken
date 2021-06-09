@@ -11,15 +11,16 @@ namespace DH.Helpdesk.Web.Models.Contract
 {
     public class ContractIndexViewModel
     {
-        public ContractIndexViewModel(Customer customer)
+        public ContractIndexViewModel(Customer customer, User user)
         {
             Customer = customer;
+            User = user;
             Columns = new ContractsIndexColumnsModel(customer);
             SearchResults = new ContractsSearchResultsModel(customer);
         }
         
         public Customer Customer { get; private set; }
-        
+        public User User { get; private set; }
         public ContractsSettingViewModel Setting { get; set; }
         public ContractsIndexColumnsModel Columns { get; set; }
         public ContractsSearchResultsModel SearchResults { get; set; }

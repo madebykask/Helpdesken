@@ -24,6 +24,8 @@
         [LocalizedStringLengthAttribute(50)]
         public string Description { get; set; }
 
+        public int? Price { get; set; }
+
         public bool UserHasInventoryAdminPermission { get; set; }
 		public bool UserHasInventoryViewPermission { get; set; }
 	}

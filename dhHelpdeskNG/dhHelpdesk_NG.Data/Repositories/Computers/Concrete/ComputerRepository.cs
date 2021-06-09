@@ -745,6 +745,16 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             return computer?.Id ?? 0;
         }
 
+        public int? GetComputerTypeById(int id)
+        {
+            var computerTypePrice =
+                (from c in DbContext.ComputerTypes.Where(i => i.Id == id).Select(i=> i.Price)
+                select c).Single() ?? 0;
+
+
+            return computerTypePrice;
+        }
+
         public List<ComputerOverview> GetRelatedOverviews(int customerId, string userId)
         {
             var computers = (from c in DbContext.Computers
