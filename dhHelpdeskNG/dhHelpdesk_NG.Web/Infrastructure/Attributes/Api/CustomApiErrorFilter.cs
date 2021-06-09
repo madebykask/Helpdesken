@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http.Filters;
-using System.Web.Mvc;
 using DH.Helpdesk.Dal.Infrastructure.Context;
 using DH.Helpdesk.Services.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Logger;
-using log4net.Core;
 
 namespace DH.Helpdesk.Web.Infrastructure.Attributes.Api
 {
-	public class CustomApiErrorFilter : ExceptionFilterAttribute
+    public class CustomApiErrorFilter : ExceptionFilterAttribute
 	{
 		public CustomApiErrorFilter()
 		{
