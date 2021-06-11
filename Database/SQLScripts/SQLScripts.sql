@@ -92,6 +92,14 @@ RAISERROR ('Update Showinlist, readonly and required in tblComputerFieldSettings
 	WHERE ComputerField = 'Dokument' OR ComputerField = 'Document'
 	GO
 
+RAISERROR ('Add Column Price to tblComputerType', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblComputerType','Price') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblComputerType]
+	ADD [Price] INT NOT NULL default(0)
+End
+Go
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.51'
 GO
