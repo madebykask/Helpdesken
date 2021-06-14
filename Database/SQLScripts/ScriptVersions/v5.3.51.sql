@@ -32,7 +32,8 @@ END
 
 --New table for User rights on ContractCategory
 RAISERROR ('Create table tblUsers_tblContractCategory', 10, 1) WITH NOWAIT
-if not exists(select * from sysobjects WHERE Name = N'tblUsers_tblContractCategory')
+--if not exists(select * from sysobjects WHERE Name = N'tblUsers_tblContractCategory')
+IF(OBJECT_ID('tblUsers_tblContractCategory', 'U') IS NULL)
 Begin	
 	CREATE TABLE [tblUsers_tblContractCategory](
 		[User_Id] [int] NOT NULL,
