@@ -8009,6 +8009,24 @@ begin
 end
 GO
 
+-- Nytt 2021-06-03
+If not exists (select * from tbltext where TextString = 'Editerbara formulär')
+begin
+    If not exists (select * from tbltext where id = 2078)
+	insert into tbltext (id, TextString, TextType) VALUES (2078, 'Editerbara formulär', 0)
+	If not exists (select * from tblTextTranslation where text_id = 2078 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2078, 2, N'Editable forms')
+end
+GO
+If not exists (select * from tbltext where TextString = 'Nytt utökat ärende formulär')
+begin
+    If not exists (select * from tbltext where id = 2079)
+	insert into tbltext (id, TextString, TextType) VALUES (2079, 'Nytt utökat ärende formulär', 0)
+	If not exists (select * from tblTextTranslation where text_id = 2079 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2079, 2, N'New extended case form')
+end
+GO
+
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
