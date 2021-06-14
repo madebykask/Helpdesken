@@ -1744,6 +1744,8 @@ namespace DH.Helpdesk.Services.Services
             caseSolution.InventoryLocation = caseSolution.InventoryLocation ?? string.Empty;
             caseSolution.Available = caseSolution.Available ?? string.Empty;
             caseSolution.Currency = caseSolution.Currency ?? string.Empty;
+            caseSolution.ActiveTabSelfservice = caseSolution.ActiveTabSelfservice ?? "";
+            caseSolution.AvailableTabsSelfsevice = caseSolution.AvailableTabsSelfsevice ?? "";
 
             if (caseSolution.Text_External != null && caseSolution.Text_External.Length > 3000)
                 caseSolution.Text_External = caseSolution.Text_External.Substring(0, 3000);
