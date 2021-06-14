@@ -52,7 +52,14 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 		public int Id { get; set; }
 	}
 
-	public class ExtendedCaseFormWithCaseSolutionsModel
+    public class ExtendedCaseFormsForCustomer
+    {
+        public DH.Helpdesk.Domain.Customer Customer { get; set; }
+        public int? LanguageId { get; set; }
+        public IList<ExtendedCaseFormModel> ExtendedCaseFormModels { get; set; }
+    }
+
+    public class ExtendedCaseFormWithCaseSolutionsModel
 	{
 		public string Name { get; set; }
 		public int Id { get; set; }

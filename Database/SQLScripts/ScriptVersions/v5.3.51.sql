@@ -32,7 +32,8 @@ END
 
 --New table for User rights on ContractCategory
 RAISERROR ('Create table tblUsers_tblContractCategory', 10, 1) WITH NOWAIT
-if not exists(select * from sysobjects WHERE Name = N'tblUsers_tblContractCategory')
+--if not exists(select * from sysobjects WHERE Name = N'tblUsers_tblContractCategory')
+IF(OBJECT_ID('tblUsers_tblContractCategory', 'U') IS NULL)
 Begin	
 	CREATE TABLE [tblUsers_tblContractCategory](
 		[User_Id] [int] NOT NULL,
@@ -90,7 +91,15 @@ RAISERROR ('Update Showinlist, readonly and required in tblComputerFieldSettings
     ReadOnly = 0, 
     Required = 0 
 	WHERE ComputerField = 'Dokument' OR ComputerField = 'Document'
-	GO
+GO
+
+RAISERROR ('Add Column Price to tblComputerType', 10, 1) WITH NOWAIT
+	IF COL_LENGTH('dbo.tblComputerType','Price') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblComputerType]
+		ADD [Price] INT NOT NULL default(0)
+	End
+Go
 
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.51'

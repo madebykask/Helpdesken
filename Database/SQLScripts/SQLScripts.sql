@@ -1,5 +1,32 @@
 ﻿--update DB from 5.3.51 to 5.3.52 version
 
+--New table for Extended Case Form Templates
+RAISERROR ('Create table ExtendedCaseFormTemplates', 10, 1) WITH NOWAIT
+IF(OBJECT_ID('ExtendedCaseFormTemplates', 'U') IS NULL)
+Begin	
+	CREATE TABLE [dbo].[ExtendedCaseFormTemplates](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Customer_Id]  [int] NOT NULL FOREIGN KEY REFERENCES tblUsers(Id),
+	[MetaData] [nvarchar](max) NOT NULL,
+	[Description] [nvarchar](500) NULL,
+	[CreatedOn] [datetime] NOT NULL,
+	[CreatedBy] [nvarchar](50) NOT NULL,
+	[UpdatedOn] [datetime] NULL,
+	[UpdatedBy] [nvarchar](50) NULL,
+	[Name] [nvarchar](100) NULL,
+	[Guid] [uniqueidentifier] NULL,
+	[Status] [int] NOT NULL,
+	[Version] [int] NOT NULL
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+ALTER TABLE [dbo].[ExtendedCaseFormTemplates] ADD  DEFAULT ((1)) FOR [Status]
+ALTER TABLE [dbo].[ExtendedCaseFormTemplates] ADD  DEFAULT ((0)) FOR [Version]
+END
+GO
+
 
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.52'
