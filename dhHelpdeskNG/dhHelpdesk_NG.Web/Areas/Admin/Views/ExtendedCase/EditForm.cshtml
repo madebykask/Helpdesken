@@ -1,0 +1,28 @@
+﻿﻿using @using DH.Helpdesk.Web.Infrastructure;
+@model DH.Helpdesk.BusinessData.Models.Case.ExtendedCaseFormWithCaseSolutionsModel
+@{
+    ViewBag.Title = "Example formBuilder";
+}
+@*<!DOCTYPE html>
+    <html>
+    <head>
+        <title>Example formBuilder</title>
+    </head>
+    <body> *@
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            @*<li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.Id }, new { @class = "btn" })</li>
+                          <li>
+                              @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",
+                new { id = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) })
+                          </li>
+                          <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = Model.CaseSolutions.FirstOrDefault().CustomerId }, new { @class = "btn" })</li>*@
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <div id="fb-editor"></div>
+    </div>
+</div>

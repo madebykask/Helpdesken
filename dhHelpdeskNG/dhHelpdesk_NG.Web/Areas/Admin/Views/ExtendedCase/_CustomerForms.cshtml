@@ -1,0 +1,74 @@
+﻿@model DH.Helpdesk.BusinessData.Models.Case.ExtendedCaseFormsForCustomer
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#subfragment-1">@Translation.GetCoreTextTranslation("Editerbara formulär") - @Model.Customer.Name</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    <table class="table table-striped table-bordered table-hover">
+                        <tbody>
+                            @foreach (var form in Model.ExtendedCaseFormModels)
+                            {
+                                <tr>
+                                    <td>
+                                        @form.Name
+                                        @*<a href="@Url.Action("Index", "Changes", new { customerId = customer.CustomerId })" class="pull-left">
+                                                @customer.CustomerName
+                                            </a>
+                                            <div class="pull-right">
+                                                <a href="@Url.Action("Index", "Changes", new { customerId = customer.CustomerId, filterType = FilterType.MyChanges })"
+                                                   class="start-tile label my"
+                                                   rel="tooltip"
+                                                   data-toggle="tooltip"
+                                                   title="@Translation.Get("Mina ändringar")">
+                                                    @customer.ChangesForUser
+                                                </a>
+                                                <a href="@Url.Action("Index", "Changes", new { customerId = customer.CustomerId, filterType = FilterType.ClosedChanges })"
+                                                   rel="tooltip"
+                                                   class="start-tile label closed"
+                                                   title="@Translation.Get("Avslutade ändringar")">
+                                                    @customer.ChangesClosed
+                                                </a>
+                                                <a href="@Url.Action("Index", "Changes", new { customerId = customer.CustomerId, filterType = FilterType.ActiveChanges })"
+                                                   rel="tooltip"
+                                                   class="start-tile label unread"
+                                                   title="@Translation.Get("Pågående ändringar")">
+                                                    @customer.ChangesInProgress
+                                                </a>
+                                            </div>*@
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                @*<h4>@Translation.GetCoreTextTranslation("Informationsfält"))</h4>*@
+                @*<div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td colspan="4">
+                                        @Translation.GetCoreTextTranslation("Helpdesk")&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </td>
+                                    <td colspan="6">
+                                        @Html.ListBoxFor(m => m.ShowStatusBarIds, new SelectList((List<CustomKeyValue<int, string>>)ViewBag.AllFields, "Key", "Value", Model.ShowStatusBarIds), new { id = "showStatusBarIds", multiple = "multiple", })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        @Translation.GetCoreTextTranslation("Självservice")&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </td>
+                                    <td colspan="6">
+                                        @Html.ListBoxFor(m => m.ShowExternalStatusBarIds, new SelectList((List<CustomKeyValue<int, string>>)ViewBag.ShowExternalStatusBarFields, "Key", "Value", Model.ShowExternalStatusBarIds), new { id = "showExternalStatusBarIds", multiple = "multiple" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+</div>

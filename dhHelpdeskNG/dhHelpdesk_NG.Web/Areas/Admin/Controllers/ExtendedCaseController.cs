@@ -13,6 +13,7 @@ using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Attributes;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using Microsoft.Ajax.Utilities;
+using DH.Helpdesk.BusinessData.Models.Case;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
@@ -21,15 +22,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ICustomerService _customerService;
         private readonly ILanguageService _languageService;
+        private readonly IExtendedCaseService _extendedCaseService;
 
         public ExtendedCaseController(ICaseFieldSettingService caseFieldSettingService,
             ICustomerService customerService,
             ILanguageService languageService,
+            IExtendedCaseService extendedCaseService,
             IMasterDataService masterDataService) : base(masterDataService)
         {
             _caseFieldSettingService = caseFieldSettingService;
             _customerService = customerService;
             _languageService = languageService;
+            _extendedCaseService = extendedCaseService;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -62,6 +66,34 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 return RedirectToAction("edit", new { customerId });
 
             return View("Edit", model);
+        }
+
+        [CustomAuthorize(Roles = "3,4")]
+        [HttpGet]
+        public ActionResult EditForm(int customerId, int? languageId)
+        {
+            languageId = languageId ?? SessionFacade.CurrentLanguageId;
+            ExtendedCaseFormsForCustomer model = new ExtendedCaseFormsForCustomer()
+            {
+                Customer = _customerService.GetCustomer(customerId),
+                LanguageId = languageId,
+                ExtendedCaseFormModels = _extendedCaseService.GetExtendedCaseFormsForCustomer(customerId)
+            };
+            return View("CustomerForms", model);
+        }
+        [CustomAuthorize(Roles = "3,4")]
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult New(int customerId, int? languageId, IList<int> ShowStatusBarIds, IList<int> ShowExternalStatusBarIds)
+        {
+            languageId = languageId ?? SessionFacade.CurrentLanguageId;
+            ExtendedCaseFormsForCustomer model = new ExtendedCaseFormsForCustomer()
+            {
+                Customer = _customerService.GetCustomer(customerId),
+                LanguageId = languageId,
+                ExtendedCaseFormModels = _extendedCaseService.GetExtendedCaseFormsForCustomer(customerId)
+            };
+            return View("EditForm", model);
         }
 
         private CustomerInputViewModel CustomerInputViewModel(int customerId, int languageId)
