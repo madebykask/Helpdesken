@@ -5046,6 +5046,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Inventory\Scripts\" />
+    <Folder Include="Components\Formbuilder\" />
     <Folder Include="FormLibContent\Xmls\Norway\Data\AdditionalPaymentsDeductions\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
     <Folder Include="rss\" />
