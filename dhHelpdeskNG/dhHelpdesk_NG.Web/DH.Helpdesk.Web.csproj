@@ -1199,6 +1199,8 @@
     <Content Include="Content\js\Faqs\faqsPage.js" />
     <Content Include="Content\js\Feedback\feedback.edit.js" />
     <Content Include="Content\js\Feedback\feedbackStatisticsCases.js" />
+    <Content Include="Content\js\FormBuilder\form-builder.min.js" />
+    <Content Include="Content\js\FormBuilder\form-render.min.js" />
     <Content Include="Content\js\Home\statistics.js" />
     <Content Include="Content\js\Inventory\inventory.search.js" />
     <Content Include="Areas\Inventory\Content\js\inventoryFiles.js" />
@@ -3536,6 +3538,8 @@
     <Content Include="Areas\Admin\Views\ExtendedCase\CustomerForms.cshtml" />
     <Content Include="Areas\Admin\Views\ExtendedCase\EditForm.cshtml" />
     <Content Include="Areas\Admin\Views\ExtendedCase\_CustomerForms.cshtml" />
+    <Content Include="Content\js\FormBuilder\form-builder.min.js.gz" />
+    <Content Include="Content\js\FormBuilder\form-render.min.js.gz" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\i18n\ar.js" />
     <Content Include="Scripts\i18n\az.js" />
