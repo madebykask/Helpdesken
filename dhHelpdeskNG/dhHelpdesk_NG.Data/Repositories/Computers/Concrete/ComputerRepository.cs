@@ -751,8 +751,12 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 (from c in DbContext.ComputerTypes.Where(i => i.Id == id).Select(i=> i.Price)
                 select c).Single() ?? 0;
 
-
             return computerTypePrice;
+        }
+
+        public bool IsMacAddressUnique(int exceptId, string macAddress)
+        {
+            return !DbSet.Any(w => w.MACAddress.Equals(macAddress, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId);
         }
 
         public List<ComputerOverview> GetRelatedOverviews(int customerId, string userId)

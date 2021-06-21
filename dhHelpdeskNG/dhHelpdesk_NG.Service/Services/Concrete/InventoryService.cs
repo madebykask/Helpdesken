@@ -448,6 +448,11 @@ namespace DH.Helpdesk.Services.Services.Concrete
             }
         }
 
+        public bool IsMacAddressUnique(int exceptId, string macAddress)
+        {
+            return _computerRepository.IsMacAddressUnique(exceptId, macAddress.Trim());
+        }
+
         public void UpdateWorkstationInfo(int id, string info)
         {
             _computerRepository.UpdateInfo(id, info);
