@@ -1,5 +1,5 @@
 ﻿var WorkstationEdit = function ($) {
-
+    var self = this;
     var settings = {};
 
     var ouRegionCtrl = $('#OU_RegionId');
@@ -63,5 +63,9 @@
 
                     });
             });
+    },
+
+    this.submit = function () {
+        $('#workstation_edit_form').submit();
     }
 }

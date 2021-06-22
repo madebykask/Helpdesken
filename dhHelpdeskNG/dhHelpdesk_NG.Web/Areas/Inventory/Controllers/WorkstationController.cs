@@ -600,6 +600,14 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             return View(viewModel);
         }
 
+        [HttpGet]
+        [OutputCache(NoStore = true, Duration = 0)]
+        public JsonResult ValidateMacAddress(int currentId, string macAddress)
+        {
+            var result = !string.IsNullOrWhiteSpace(macAddress) && _inventoryService.IsMacAddressUnique(currentId, macAddress);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         private InventoryGridModel CreateInventoryGridModel(WorkstationsSearchFilter filter)
         {
             var settings =

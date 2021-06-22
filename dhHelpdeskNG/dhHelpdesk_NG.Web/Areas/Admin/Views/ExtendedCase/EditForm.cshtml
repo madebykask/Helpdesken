@@ -1,28 +1,83 @@
-﻿﻿using @using DH.Helpdesk.Web.Infrastructure;
-@model DH.Helpdesk.BusinessData.Models.Case.ExtendedCaseFormWithCaseSolutionsModel
-@{
-    ViewBag.Title = "Example formBuilder";
-}
-@*<!DOCTYPE html>
-    <html>
-    <head>
-        <title>Example formBuilder</title>
-    </head>
-    <body> *@
-<div class="secnavs fixed">
+﻿<div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            @*<li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.Id }, new { @class = "btn" })</li>
-                          <li>
-                              @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",
-                new { id = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) })
-                          </li>
-                          <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = Model.CaseSolutions.FirstOrDefault().CustomerId }, new { @class = "btn" })</li>*@
+            <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), "edit", new { customerId = Model.Customer.Id }, new { onclick = "submitForm();return false;", @class = "btn" })</li>
+            <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "edit", new { customerId = Model.Customer.Id }, new { onclick = "submitForm();return false;", @class = "btn" })</li>
+            <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "edit", new { area = "admin", controller = "Customer", action = "Edit", id = Model.Customer.Id }, new { @class = "btn" })</li>
         </ul>
     </div>
 </div>
 <div class="content">
     <div class="container">
-        <div id="fb-editor"></div>
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="#subfragment-1">@Translation.GetCoreTextTranslation("Avdelning") - @Model.Customer.Name</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment1">
+                <div class="container">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="2">
+                                    @Translation.GetCoreTextTranslation("Allmänt")
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Formulär")  @Translation.GetCoreTextTranslation("Namn")
+                                </td>
+                                <td>
+                                    <input type="text" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Editerbart sektionsnamn")
+                                </td>
+                                <td>
+                                    <input type="text" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Aktiv")
+                                </td>
+                                <td>
+                                    <input type="checkbox" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Form editor
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div id="fb-editor"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<script src="~/Content/js/FormBuilder/form-builder.min.js"></script>
+<script src="~/Content/js/FormBuilder/form-render.min.js"></script>
+<script>
+    jQuery(function ($) {
+        $(document.getElementById('fb-editor')).formBuilder();
+    });
+</script>

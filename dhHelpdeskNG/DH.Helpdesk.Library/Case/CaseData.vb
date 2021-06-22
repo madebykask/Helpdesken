@@ -427,7 +427,13 @@ Public Class CaseData
             Else
                 sSQL = sSQL & objCase.Region_Id & ", "
             End If
-            sSQL = sSQL & getDBStringPrefix() & "'" & objCase.ReportedBy.Replace("'", "''") & "', "
+            'Check this
+            If Not IsNullOrEmpty(objCase.ReportedBy) Then
+                sSQL = sSQL & getDBStringPrefix() & "'" & objCase.ReportedBy.Replace("'", "''") & "', "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & objCase.ReportedBy & "', "
+            End If
+
 
             If objCase.Department_Id = 0 Then
                 sSQL = sSQL & "Null, "
