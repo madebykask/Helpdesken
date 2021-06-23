@@ -136,7 +136,7 @@
 
         $(function (jQuery) {
             $('#@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)')
-                .attr("data-val-uniquemac", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress), Translation.GetCoreTextTranslation("måste vara unikt"))');
+                .attr("data-val-uniquemac", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress), Translation.GetCoreTextTranslation("Värdet måste vara unikt"))');
 
             $.validator.unobtrusive.adapters.add("uniquemac", [], function (options) {
                 options.rules["uniquemac"] = true;
