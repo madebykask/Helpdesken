@@ -318,14 +318,14 @@
                 (DateTimeDisplayValue)overview.ContractFields.ContractEndDate,
                 values);
             CreateValueIfNeeded(
-                settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Shared.InventoryFields.PurchaseDate,
-                (DateTimeDisplayValue)overview.InventoryFields.PurchaseDate,
-                values);
-            CreateValueIfNeeded(
                 settings.ContractFieldsSettings.PurchasePriceFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Computer.ContractFields.PurchasePrice,
                 (IntegerDisplayValue)overview.ContractFields.PurchasePrice,
+                values);
+            CreateValueIfNeeded(
+                settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.InventoryFields.PurchaseDate,
+                (DateTimeDisplayValue)overview.InventoryFields.PurchaseDate,
                 values);
             CreateValueIfNeeded(
                 settings.ContractFieldsSettings.AccountingDimension1FieldSetting,
@@ -622,12 +622,12 @@
                 BusinessData.Enums.Inventory.Fields.Computer.ContractFields.ContractEndDate,
                 headers);
             CreateHeaderIfNeeded(
-                settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
-                BusinessData.Enums.Inventory.Fields.Shared.InventoryFields.PurchaseDate,
-                headers);
-            CreateHeaderIfNeeded(
                 settings.ContractFieldsSettings.PurchasePriceFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Computer.ContractFields.PurchasePrice,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Shared.InventoryFields.PurchaseDate,
                 headers);
             CreateHeaderIfNeeded(
                 settings.ContractFieldsSettings.AccountingDimension1FieldSetting,
