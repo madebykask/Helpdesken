@@ -1,4 +1,5 @@
 using System.Data.Entity;
+using DH.Helpdesk.Common.Tools;
 
 namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 {
@@ -390,7 +391,10 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 .Where(x => x.Computer.Customer_Id == customerId);
 
             if (!isShowScrapped)
-                query = query.Where(x => !x.Computer.ScrapDate.HasValue || x.Computer.ScrapDate.Value > DateTime.UtcNow);
+            {
+                var compareDate = DateTime.UtcNow.AddDays(-1).GetEndOfDay();
+                query = query.Where(x => !x.Computer.ScrapDate.HasValue || x.Computer.ScrapDate.Value > compareDate);
+            }
 
             if (domainId.HasValue)
                 query = query.Where(x => x.Computer.Domain_Id == domainId);
