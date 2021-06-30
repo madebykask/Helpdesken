@@ -17,7 +17,7 @@ window.fbEditors = {
  * @param  {Object} attrs {attrName: attrValue}
  * @return {Object}       Object trimmed of null or undefined values
  */
-export const trimObj = function(attrs, removeFalse = false) {
+export const trimObj = function (attrs, removeFalse = false) {
   const xmlRemove = [null, undefined, '']
   if (removeFalse) {
     xmlRemove.push(false)
@@ -40,7 +40,7 @@ export const trimObj = function(attrs, removeFalse = false) {
  * @param  {String} attr
  * @return {Boolean}
  */
-export const validAttr = function(attr) {
+export const validAttr = function (attr) {
   const invalid = [
     'values',
     'enableOther',
@@ -127,7 +127,7 @@ export const safeAttrName = name => {
 export const hyphenCase = str => {
   // eslint-disable-next-line no-useless-escape
   str = str.replace(/[^\w\s\-]/gi, '')
-  str = str.replace(/([A-Z])/g, function($1) {
+  str = str.replace(/([A-Z])/g, function ($1) {
     return '-' + $1.toLowerCase()
   })
 
@@ -162,7 +162,7 @@ export const bindEvents = (element, events) => {
  * @param  {Object} field
  * @return {String}       name
  */
-export const nameAttr = function(field) {
+export const nameAttr = function (field) {
   const epoch = new Date().getTime()
   const prefix = field.type || hyphenCase(field.label)
   return prefix + '-' + epoch
@@ -194,7 +194,7 @@ export const getContentType = content => {
  * @param  {Object}              attributes
  * @return {Object} DOM Element
  */
-export const markup = function(tag, content = '', attributes = {}) {
+export const markup = function (tag, content = '', attributes = {}) {
   let contentType = getContentType(content)
   const { events, ...attrs } = attributes
   const field = document.createElement(tag)
@@ -292,7 +292,7 @@ export const parseOptions = options => {
 export const parseUserData = userData => {
   const data = []
 
-  if(userData.length){
+  if (userData.length) {
     const values = userData[0].getElementsByTagName('value')
 
     for (let i = 0; i < values.length; i++) {
@@ -383,7 +383,7 @@ export const escapeAttrs = attrs => {
 }
 
 // forEach that can be used on nodeList
-export const forEach = function(array, callback, scope) {
+export const forEach = function (array, callback, scope) {
   for (let i = 0; i < array.length; i++) {
     callback.call(scope, i, array[i]) // passes back stuff we need
   }
@@ -495,9 +495,7 @@ export const getStyles = (scriptScr, path) => {
       link.href = (path || '') + src
       document.head.appendChild(link)
     } else {
-      $(`<style type="text/css">${src}</style>`)
-        .attr('id', id)
-        .appendTo($(document.head))
+      $(`<style type="text/css">${src}</style>`).attr('id', id).appendTo($(document.head))
     }
 
     // record this is cached
@@ -511,7 +509,7 @@ export const getStyles = (scriptScr, path) => {
  * @return {String} str capitalized string
  */
 export const capitalize = str => {
-  return str.replace(/\b\w/g, function(m) {
+  return str.replace(/\b\w/g, function (m) {
     return m.toUpperCase()
   })
 }
@@ -593,7 +591,7 @@ export const forceNumber = str => str.replace(/[^0-9]/g, '')
 
 // subtract the contents of 1 array from another
 export const subtract = (arr, from) => {
-  return from.filter(function(a) {
+  return from.filter(function (a) {
     return !~this.indexOf(a)
   }, arr)
 }
@@ -617,6 +615,19 @@ export const insertStyle = srcs => {
   )
 
   return Promise.all(promises)
+}
+
+// Read a page's GET URL variables and return them as an associative array.
+export function getUrlVars() {
+  var vars = [],
+    hash
+  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&')
+  for (var i = 0; i < hashes.length; i++) {
+    hash = hashes[i].split('=')
+    vars.push(hash[0])
+    vars[hash[0]] = hash[1]
+  }
+  return vars
 }
 
 export const removeStyle = id => {

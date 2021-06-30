@@ -332,6 +332,7 @@
     <Compile Include="Models\Email\EmailSearchScope.cs" />
     <Compile Include="Models\Employee\EmployeeModel.cs" />
     <Compile Include="Models\Error\ErrorModel.cs" />
+    <Compile Include="Models\ExtendedCase\FormTemplate.cs" />
     <Compile Include="Models\ExtendedCase\InitExtendedForm.cs" />
     <Compile Include="Models\ExternalInvoice\ExternalInvoice.cs" />
     <Compile Include="Models\Faq\Input\EditCategory.cs" />

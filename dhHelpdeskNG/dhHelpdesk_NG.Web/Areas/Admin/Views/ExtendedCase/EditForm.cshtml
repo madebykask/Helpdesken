@@ -35,7 +35,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    @Translation.GetCoreTextTranslation("Editerbart sektionsnamn")
+                                    @Translation.GetCoreTextTranslation("Sektionsnamn")
                                 </td>
                                 <td>
                                     <input type="text" />
@@ -74,10 +74,12 @@
     </div>
 </div>
 
-<script src="~/Content/js/FormBuilder/form-builder.min.js"></script>
-<script src="~/Content/js/FormBuilder/form-render.min.js"></script>
+<script src="~/Components/Formbuilder/dist/form-builder.min.js"></script>
+<script src="~/Components/Formbuilder/dist/form-render.min.js"></script>
 <script>
     jQuery(function ($) {
+
         $(document.getElementById('fb-editor')).formBuilder();
     });
+
 </script>

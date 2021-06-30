@@ -10,6 +10,9 @@ export const defaultOptions = {
   allowStageSort: true,
   append: false, // append non-editable content to the form.
   controlOrder: [
+    'text',
+    'textarea',
+    'select',
     'autocomplete',
     'button',
     'checkbox-group',
@@ -21,18 +24,26 @@ export const defaultOptions = {
     'number',
     'paragraph',
     'radio-group',
-    'select',
-    'text',
-    'textarea',
   ],
-  controlPosition: 'right',
+  controlPosition: 'left',
   dataType: 'json',
   defaultFields: [],
-  disabledActionButtons: [], // save, data, clear
+  disabledActionButtons: ['save', 'data'], // save, data, clear
   disabledAttrs: [],
   disabledFieldButtons: {},
   disabledSubtypes: {}, // subtypes you want disabled
-  disableFields: [], // Array of fields to disable
+  disableFields: [
+    'autocomplete',
+    'button',
+    'checkbox-group',
+    'file',
+    'select',
+    'header',
+    'hidden',
+    'number',
+    'paragraph',
+    'radio-group',
+  ], // Array of fields to disable
   disableHTMLLabels: false, // disables html in field labels
   disableInjectedStyle: false, // removes the injected style
   editOnAdd: false, // opens the edit panel on added field
