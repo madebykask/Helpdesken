@@ -8027,12 +8027,12 @@ begin
 end
 GO
 
-If not exists (select * from tbltext where TextString = 'Editerbart sektionsnamn')
+If not exists (select * from tbltext where TextString = 'Sektionsnamn')
 begin
     If not exists (select * from tbltext where id = 2080)
-	insert into tbltext (id, TextString, TextType) VALUES (2080, 'Editerbart sektionsnamn', 0)
+	insert into tbltext (id, TextString, TextType) VALUES (2080, 'Sektionsnamn', 0)
 	If not exists (select * from tblTextTranslation where text_id = 2080 and Language_Id = 2)
-		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2080, 2, N'Editable section label')
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2080, 2, N'Section label')
 end
 GO
 
