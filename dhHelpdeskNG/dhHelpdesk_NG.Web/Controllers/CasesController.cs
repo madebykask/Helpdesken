@@ -36,7 +36,6 @@ using DH.Helpdesk.Web.Infrastructure.Behaviors;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
 using DH.Helpdesk.BusinessData.Models.Case.Input;
-using DH.Helpdesk.Common.Extensions;
 namespace DH.Helpdesk.Web.Controllers
 {
 	using DH.Helpdesk.BusinessData.Enums.Case;
