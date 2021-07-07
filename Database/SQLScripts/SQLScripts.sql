@@ -27,7 +27,15 @@ ALTER TABLE [dbo].[ExtendedCaseFormTemplates] ADD  DEFAULT ((0)) FOR [Version]
 END
 GO
 
+IF COL_LENGTH('tblSettings', 'BlockedEmailRecipients') IS NULL
+	BEGIN
+		ALTER TABLE tblSettings ADD BlockedEmailRecipients nvarchar(4000) NULL
+	END
+GO
+
 
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.52'
 GO
+
+

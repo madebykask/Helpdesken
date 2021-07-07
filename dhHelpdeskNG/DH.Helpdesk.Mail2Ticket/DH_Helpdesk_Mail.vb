@@ -792,66 +792,11 @@ Module DH_Helpdesk_Mail
                                     End If
                                     '#65030
 
-                                    If isValidRecipient(newcaseEmailTo, objCustomer.AllowedEMailRecipients) = True Then
-                                        If objCustomer.EMailRegistrationMailID <> 0 And bOrder = False And (message.From.ToString <> message.To.ToString) Then
-                                            'If Len(objCase.Persons_EMail) > 6 Then  (objCase.Persons_EMail can be empty) #65030
-                                            objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.NewCase, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
-
-                                            If Not objMailTemplate Is Nothing Then
-                                                Dim objMail As New Mail
-
-                                                sMessageId = createMessageId(objCustomer.HelpdeskEMail)
-                                                sSendTime = Date.Now()
-
-                                                Dim sEMailLogGUID As String = Guid.NewGuid().ToString
-                                                'helpdesk case 58782, #65030
-                                                'Dim newcaseEmailTo As String = objCase.Persons_EMail
-                                                'If objCustomer.NewCaseMailTo = 1 Then
-                                                '    newcaseEmailTo = sNewCaseToEmailAddress
-                                                'End If
-                                                'helpdesk case 58782
-                                                sRet_SendMail =
-                                                    objMail.sendMail(objCase, Nothing, objCustomer, newcaseEmailTo, objMailTemplate, objGlobalSettings,
-                                                                     sMessageId, sEMailLogGUID, sConnectionstring)
-
-                                                objLogData.createEMailLog(iCaseHistory_Id, newcaseEmailTo, MailTemplates.NewCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
-                                            End If
-                                            'End If  #65030
-                                        End If
-                                    Else
-                                        LogToFile("readMailBox, isValidRecipient " & objCase.Persons_EMail & ", " & objCustomer.AllowedEMailRecipients, iPop3DebugLevel)
-                                    End If
-
-                                    If objCustomer.EMailRegistrationMailID <> 0 And objCustomer.NewCaseEMailList <> "" Then
-                                        objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.NewCase, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
-
-                                        If Not objMailTemplate Is Nothing Then
-                                            Dim vNewCaseEmailList() As String = objCustomer.NewCaseEMailList.Split(";")
-
-                                            For Index As Integer = 0 To vNewCaseEmailList.Length - 1
-                                                Dim objMail As New Mail
-
-                                                sMessageId = createMessageId(objCustomer.HelpdeskEMail)
-                                                sSendTime = Date.Now()
-
-                                                Dim sEMailLogGUID As String = Guid.NewGuid().ToString
-
-                                                sRet_SendMail =
-                                                    objMail.sendMail(objCase, Nothing, objCustomer, vNewCaseEmailList(Index), objMailTemplate, objGlobalSettings,
-                                                                     sMessageId, sEMailLogGUID, sConnectionstring)
-
-                                                objLogData.createEMailLog(iCaseHistory_Id, vNewCaseEmailList(Index), MailTemplates.NewCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
-                                            Next
-
-                                        End If
-                                    End If
-
-                                    If objCase.Performer_User_Id <> 0 Then
-                                        Dim objUser As User = objUserData.getUserById(objCase.Performer_User_Id)
-
-                                        If Not objUser Is Nothing Then
-                                            If objUser.AllocateCaseMail = 1 And Len(objUser.EMail) > 6 Then
-                                                objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.AssignedCaseToUser, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                                    If isBlockedRecipient(newcaseEmailTo, objCustomer.BlockedEmailRecipients) = False Then
+                                        If isValidRecipient(newcaseEmailTo, objCustomer.AllowedEMailRecipients) = True Then
+                                            If objCustomer.EMailRegistrationMailID <> 0 And bOrder = False And (message.From.ToString <> message.To.ToString) Then
+                                                'If Len(objCase.Persons_EMail) > 6 Then  (objCase.Persons_EMail can be empty) #65030
+                                                objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.NewCase, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
                                                 If Not objMailTemplate Is Nothing Then
                                                     Dim objMail As New Mail
@@ -860,57 +805,34 @@ Module DH_Helpdesk_Mail
                                                     sSendTime = Date.Now()
 
                                                     Dim sEMailLogGUID As String = Guid.NewGuid().ToString
-
+                                                    'helpdesk case 58782, #65030
+                                                    'Dim newcaseEmailTo As String = objCase.Persons_EMail
+                                                    'If objCustomer.NewCaseMailTo = 1 Then
+                                                    '    newcaseEmailTo = sNewCaseToEmailAddress
+                                                    'End If
+                                                    'helpdesk case 58782
                                                     sRet_SendMail =
-                                                        objMail.sendMail(objCase, Nothing, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId,
-                                                                         sEMailLogGUID, sConnectionstring)
+                                                    objMail.sendMail(objCase, Nothing, objCustomer, newcaseEmailTo, objMailTemplate, objGlobalSettings,
+                                                                     sMessageId, sEMailLogGUID, sConnectionstring)
 
-                                                    objLogData.createEMailLog(iCaseHistory_Id, objUser.EMail, MailTemplates.AssignedCaseToUser, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                    objLogData.createEMailLog(iCaseHistory_Id, newcaseEmailTo, MailTemplates.NewCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                                 End If
+                                                'End If  #65030
                                             End If
-                                        End If
-                                    End If
-
-                                    Dim workingGroupId As Integer = objCase.WorkingGroup_Id
-                                    Dim workingGroupEMail As String = objCase.WorkingGroupEMail
-                                    Dim workingGroupAllocateCaseMail As Integer = objCase.WorkingGroupAllocateCaseMail
-
-                                    If objCustomer.CaseWorkingGroupSource = 0 Then
-                                        workingGroupId = objCase.PerformerWorkingGroup_Id
-                                        workingGroupEMail = objCase.PerformerWorkingGroupEMail
-                                        workingGroupAllocateCaseMail = objCase.PerformerWorkingGroupAllocateCaseMail
-                                    End If
-
-                                    If workingGroupId <> 0 And workingGroupAllocateCaseMail = 1 Then
-                                        Dim emailsList As List(Of String) = New List(Of String)()
-
-                                        If Not IsNullOrEmpty(workingGroupEMail) Then
-                                            emailsList = workingGroupEMail.Split(New Char() {";"c, ","c}).ToList()
                                         Else
-                                            Dim users As List(Of WorkingGroupUser) = objUserWGData.getWorkgroupUsers(workingGroupId)
-                                            Dim usersDepartments As List(Of KeyValuePair(Of Integer, Integer)) = New List(Of KeyValuePair(Of Integer, Integer))
-                                            If Not objCase.Department_Id = 0 Then
-                                                usersDepartments = objDepartmentData.getUserDepartmentsIds(users.Select(Function(x) x.Id).ToArray())
-                                            End If
-
-                                            For Each user As WorkingGroupUser In users
-                                                If user.AllocateCaseMail = 1 And Not String.IsNullOrWhiteSpace(user.EMail) And
-                                                   user.Status = 1 And user.WorkingGroupUserRole = WorkingGroupUserPermission.ADMINSTRATOR Then
-                                                    If Not objCase.Department_Id = 0 And usersDepartments.Any(Function(ud) ud.Key = user.Id) Then
-                                                        If usersDepartments.Any(Function(ud) ud.Key = user.Id And ud.Value = objCase.Department_Id) Then
-                                                            emailsList.Add(user.EMail)
-                                                        End If
-                                                    Else
-                                                        emailsList.Add(user.EMail)
-                                                    End If
-                                                End If
-                                            Next
+                                            LogToFile("readMailBox, isValidRecipient " & objCase.Persons_EMail & ", " & objCustomer.AllowedEMailRecipients, iPop3DebugLevel)
                                         End If
+                                    Else
+                                        LogToFile("readMailBox, isBlockedRecipient " & objCase.Persons_EMail & ", " & objCustomer.BlockedEmailRecipients, iPop3DebugLevel)
+                                    End If
 
-                                        If emailsList.Any() Then
-                                            objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.AssignedCaseToWorkinggroup, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                                    If objCustomer.EMailRegistrationMailID <> 0 And objCustomer.NewCaseEMailList <> "" Then
+                                            objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.NewCase, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+
                                             If Not objMailTemplate Is Nothing Then
-                                                For Each recipient As String In emailsList.Where(Function(s) Not String.IsNullOrWhiteSpace(s)).Distinct()
+                                                Dim vNewCaseEmailList() As String = objCustomer.NewCaseEMailList.Split(";")
+
+                                                For Index As Integer = 0 To vNewCaseEmailList.Length - 1
                                                     Dim objMail As New Mail
 
                                                     sMessageId = createMessageId(objCustomer.HelpdeskEMail)
@@ -919,45 +841,127 @@ Module DH_Helpdesk_Mail
                                                     Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
                                                     sRet_SendMail =
+                                                    objMail.sendMail(objCase, Nothing, objCustomer, vNewCaseEmailList(Index), objMailTemplate, objGlobalSettings,
+                                                                     sMessageId, sEMailLogGUID, sConnectionstring)
+
+                                                    objLogData.createEMailLog(iCaseHistory_Id, vNewCaseEmailList(Index), MailTemplates.NewCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                Next
+
+                                            End If
+                                        End If
+
+                                        If objCase.Performer_User_Id <> 0 Then
+                                            Dim objUser As User = objUserData.getUserById(objCase.Performer_User_Id)
+
+                                            If Not objUser Is Nothing Then
+                                                If objUser.AllocateCaseMail = 1 And Len(objUser.EMail) > 6 Then
+                                                    objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.AssignedCaseToUser, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+
+                                                    If Not objMailTemplate Is Nothing Then
+                                                        Dim objMail As New Mail
+
+                                                        sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+                                                        sSendTime = Date.Now()
+
+                                                        Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+
+                                                        sRet_SendMail =
+                                                        objMail.sendMail(objCase, Nothing, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId,
+                                                                         sEMailLogGUID, sConnectionstring)
+
+                                                        objLogData.createEMailLog(iCaseHistory_Id, objUser.EMail, MailTemplates.AssignedCaseToUser, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                    End If
+                                                End If
+                                            End If
+                                        End If
+
+                                        Dim workingGroupId As Integer = objCase.WorkingGroup_Id
+                                        Dim workingGroupEMail As String = objCase.WorkingGroupEMail
+                                        Dim workingGroupAllocateCaseMail As Integer = objCase.WorkingGroupAllocateCaseMail
+
+                                        If objCustomer.CaseWorkingGroupSource = 0 Then
+                                            workingGroupId = objCase.PerformerWorkingGroup_Id
+                                            workingGroupEMail = objCase.PerformerWorkingGroupEMail
+                                            workingGroupAllocateCaseMail = objCase.PerformerWorkingGroupAllocateCaseMail
+                                        End If
+
+                                        If workingGroupId <> 0 And workingGroupAllocateCaseMail = 1 Then
+                                            Dim emailsList As List(Of String) = New List(Of String)()
+
+                                            If Not IsNullOrEmpty(workingGroupEMail) Then
+                                                emailsList = workingGroupEMail.Split(New Char() {";"c, ","c}).ToList()
+                                            Else
+                                                Dim users As List(Of WorkingGroupUser) = objUserWGData.getWorkgroupUsers(workingGroupId)
+                                                Dim usersDepartments As List(Of KeyValuePair(Of Integer, Integer)) = New List(Of KeyValuePair(Of Integer, Integer))
+                                                If Not objCase.Department_Id = 0 Then
+                                                    usersDepartments = objDepartmentData.getUserDepartmentsIds(users.Select(Function(x) x.Id).ToArray())
+                                                End If
+
+                                                For Each user As WorkingGroupUser In users
+                                                    If user.AllocateCaseMail = 1 And Not String.IsNullOrWhiteSpace(user.EMail) And
+                                                   user.Status = 1 And user.WorkingGroupUserRole = WorkingGroupUserPermission.ADMINSTRATOR Then
+                                                        If Not objCase.Department_Id = 0 And usersDepartments.Any(Function(ud) ud.Key = user.Id) Then
+                                                            If usersDepartments.Any(Function(ud) ud.Key = user.Id And ud.Value = objCase.Department_Id) Then
+                                                                emailsList.Add(user.EMail)
+                                                            End If
+                                                        Else
+                                                            emailsList.Add(user.EMail)
+                                                        End If
+                                                    End If
+                                                Next
+                                            End If
+
+                                            If emailsList.Any() Then
+                                                objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.AssignedCaseToWorkinggroup, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                                                If Not objMailTemplate Is Nothing Then
+                                                    For Each recipient As String In emailsList.Where(Function(s) Not String.IsNullOrWhiteSpace(s)).Distinct()
+                                                        Dim objMail As New Mail
+
+                                                        sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+                                                        sSendTime = Date.Now()
+
+                                                        Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+
+                                                        sRet_SendMail =
                                                         objMail.sendMail(objCase, Nothing, objCustomer, recipient, objMailTemplate, objGlobalSettings,
                                                                          sMessageId, sEMailLogGUID, sConnectionstring)
 
-                                                    objLogData.createEMailLog(iCaseHistory_Id, recipient, MailTemplates.AssignedCaseToWorkinggroup,
+                                                        objLogData.createEMailLog(iCaseHistory_Id, recipient, MailTemplates.AssignedCaseToWorkinggroup,
                                                                               sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
-                                                Next
+                                                    Next
+                                                End If
                                             End If
                                         End If
-                                    End If
 
-                                    If sPriorityEMailList <> "" Then
-                                        objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.AssignedCaseToPriority, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                                        If sPriorityEMailList <> "" Then
+                                            objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.AssignedCaseToPriority, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
-                                        If Not objMailTemplate Is Nothing Then
-                                            Dim vPriorityEmailList() As String = sPriorityEMailList.Split(";")
+                                            If Not objMailTemplate Is Nothing Then
+                                                Dim vPriorityEmailList() As String = sPriorityEMailList.Split(";")
 
-                                            For Index As Integer = 0 To vPriorityEmailList.Length - 1
-                                                Dim objMail As New Mail
+                                                For Index As Integer = 0 To vPriorityEmailList.Length - 1
+                                                    Dim objMail As New Mail
 
-                                                sMessageId = createMessageId(objCustomer.HelpdeskEMail)
-                                                sSendTime = Date.Now()
+                                                    sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+                                                    sSendTime = Date.Now()
 
-                                                Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+                                                    Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
-                                                sRet_SendMail =
+                                                    sRet_SendMail =
                                                     objMail.sendMail(objCase, Nothing, objCustomer, vPriorityEmailList(Index), objMailTemplate, objGlobalSettings,
                                                                      sMessageId, sEMailLogGUID, sConnectionstring)
 
-                                                objLogData.createEMailLog(iCaseHistory_Id, vPriorityEmailList(Index), MailTemplates.AssignedCaseToPriority, sMessageId,
+                                                    objLogData.createEMailLog(iCaseHistory_Id, vPriorityEmailList(Index), MailTemplates.AssignedCaseToPriority, sMessageId,
                                                                           sSendTime, sEMailLogGUID, sRet_SendMail)
-                                            Next
+                                                Next
 
+                                            End If
                                         End If
-                                    End If
-                                Else ' Existing case 
+                                    Else ' Existing case 
 
-                                    ' Spara svaret som en loggpost på aktuellt ärende
-                                    ' Ta endast med svaret
-                                    sBodyText = extractAnswerFromBody(sBodyText, objCustomer.EMailAnswerSeparator)
+                                        ' Spara svaret som en loggpost på aktuellt ärende
+                                        ' Ta endast med svaret
+                                        sBodyText = extractAnswerFromBody(sBodyText, objCustomer.EMailAnswerSeparator)
 
                                     ' Markera ärendet som oläst
                                     objCaseData.markCaseUnread(objCase)
@@ -2087,6 +2091,23 @@ Module DH_Helpdesk_Mail
         Catch ex As Exception
             Return sHTML
         End Try
+    End Function
+    Private Function isBlockedRecipient(sEMail As String, sBlockedEMailRecipents As String) As Boolean
+        isBlockedRecipient = False
+
+        If sBlockedEMailRecipents = "" Then
+            isBlockedRecipient = False
+        Else
+            Dim aEMails() As String = sBlockedEMailRecipents.Split(";")
+
+            For i As Integer = 0 To aEMails.Length - 1
+                If InStr(sEMail, aEMails(i).ToString, CompareMethod.Text) <> 0 Then
+
+                    isBlockedRecipient = True
+                    Exit For
+                End If
+            Next
+        End If
     End Function
 
     Private Function isValidRecipient(sEMail As String, sAllowedEMailRecipents As String) As Boolean
