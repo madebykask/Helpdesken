@@ -68,8 +68,6 @@
     if (Model.ComputerViewModel.CreatedDate.Show || Model.ComputerViewModel.ChangedDate.Show || Model.ComputerViewModel.DateFieldsModel.ScanDate.Show ||
             Model.ComputerViewModel.DateFieldsModel.SynchronizeDate.Show || Model.ComputerViewModel.DateFieldsModel.PathDirectory.Show)
     {
-        <h4>@Translation.GetCoreTextTranslation("Status")</h4>
-    }
     <div class="row">
         <div class="span12">
             <table class="tableform">
@@ -109,6 +107,7 @@
             </table>
         </div>
     </div>
+    }
     @Html.EditorFor(m => m.ComputerViewModel.DateFieldsModel)
 }
 
