@@ -2,7 +2,7 @@
     <div class="pull-left">
         <ul class="secnav">
             <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), "edit", new { customerId = Model.Customer.Id }, new { onclick = "submitForm();return false;", @class = "btn" })</li>
-            <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "edit", new { customerId = Model.Customer.Id }, new { onclick = "submitForm();return false;", @class = "btn" })</li>
+            <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "edit", new { customerId = Model.Customer.Id }, new { onclick = "deleteForm();return false;", @class = "btn" })</li>
             <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "edit", new { area = "admin", controller = "Customer", action = "Edit", id = Model.Customer.Id }, new { @class = "btn" })</li>
         </ul>
     </div>
@@ -35,14 +35,6 @@
                             </tr>
                             <tr>
                                 <td>
-                                    @Translation.GetCoreTextTranslation("Sektionsnamn")
-                                </td>
-                                <td>
-                                    <input type="text" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
                                     @Translation.GetCoreTextTranslation("Aktiv")
                                 </td>
                                 <td>
@@ -63,7 +55,18 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <div id="fb-editor"></div>
+                                    <div id="fields" class="dragndrop">
+                                        <ul id="source">
+                                            <li data-type="header"><i class="fa fa-header" aria-hidden="true"></i> Section Name</li>
+                                            <li data-type="text"><i class="fa fa-font" aria-hidden="true"></i> Text Field</li>
+                                            <li data-type="textarea"><i class="fa fa-text-width" aria-hidden="true"></i> Text Area</li>
+                                            <li data-type="date"><i class="fa fa-calendar-o" aria-hidden="true"></i> Date Field</li>
+                                            <li data-type="select"><i class="fa fa-list-ul" aria-hidden="true"></i> Template</li>
+                                            <li data-type="tinymce"><i class="fa fa-file-word-o" aria-hidden="true"></i> Info Field</li>
+                                        </ul>
+                                        <input id="btnClear" class="btn" type="button" onclick="clearItems()" value="Clear" />
+                                    </div>
+                                    <ul id="dropzone" class="dragndrop"></ul>
                                 </td>
                             </tr>
                         </tbody>
@@ -73,19 +76,297 @@
         </div>
     </div>
 </div>
-
-<script src="~/Components/Formbuilder/dist/form-builder.min.js"></script>
-<script src="~/Components/Formbuilder/dist/form-render.min.js"></script>
-<script>
-    var formBuilder
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+<script type="text/javascript">
 
     $(document).ready(function () {
-        var formData = '[{"type":"text","label":"Full Name","subtype":"text","className":"form-control","name":"text-1476748004559"},{"type":"select","label":"Occupation","className":"form-control","name":"select-1476748006618","values":[{"label":"Street Sweeper","value":"option-1","selected":true},{"label":"Moth Man","value":"option-2"},{"label":"Chemist","value":"option-3"}]},{"type":"textarea","label":"Short Bio","rows":"5","className":"form-control","name":"textarea-1476748007461"}]';
 
+        var draggedFrom = "";
+        var draggedItem;
+
+        let templates = {};
+        templates = getTemplates();
+
+        $("#source li").draggable({
+            connectToSortable: "#dropzone", helper: "clone", revert: 'invalid',
+            start: function (e, ui) {
+                $(ui.helper).css('width', "50%");
+                draggedItem = ui.item;
+                draggedFrom = $(this).closest(".dragndrop").attr("id");
+            },
+            stop: function (event, ui) {
+                $(ui.helper).css('width', "100%");
+            },
+            opacity: 0.75
+        });
+
+        $("#dropzone").sortable({
+            revert: true,
+            receive: function (event, ui) {
+                if (draggedFrom == "fields") {
+                    switch (draggedItem.data('type')) {
+                        case "header":
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'></div><div class='header-actions'><a class='fa fa-pencil fa-lg' title='Edit' aria-hidden='true'></a><a class='fa fa-trash fa-lg' title='Remove Element'  aria-hidden='true'></a></div></div><div class='control'><h3>Section Name</h3></div></div>")
+                            break;
+
+                        case "text":
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label'>Text Field</label></div><div class='header-actions'><a class='fa fa-pencil fa-lg' title='Edit' aria-hidden='true'></a><a class='fa fa-trash fa-lg' title='Remove Element'  aria-hidden='true'></a></div></div><div class='control'><input type='text' class='form-control form-control-width' readonly></div></div>")
+                            break;
+
+                        case "textarea":
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label'>Text Area</label></div><div class='header-actions'><a class='fa fa-pencil fa-lg' title='Edit' aria-hidden='true'></a><a class='fa fa-trash fa-lg' title='Remove Element'  aria-hidden='true'></a></div></div><div class='control'><textarea class='form-control form-control-width' readonly></textarea></div></div>")
+                            break;
+
+                        case "date":
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label'>Date Field</label></div><div class='header-actions'><a class='fa fa-pencil fa-lg' title='Edit' aria-hidden='true'></a><a class='fa fa-trash fa-lg' title='Remove Element'  aria-hidden='true'></a></div></div><div class='control'><input type='date' class='form-control' readonly></div></div>")
+                            break;
+
+                        case "select":
+
+                            templates = getTemplates();
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label'>Template</label></div><div class='header-actions'><a class='fa fa-pencil fa-lg' title='Edit' aria-hidden='true'></a><a class='fa fa-trash fa-lg' title='Remove Element'  aria-hidden='true'></a></div></div><div class='control'><select class='form-control form-control-width' data-placeholder='Choose a template...'><option>Template1</option><option>Template2</option><option>Template3</option></select></div></div>");
+                            break;
+
+                        case "tinymce":
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label'>Info Field</label></div><div class='header-actions'><a class='fa fa-pencil fa-lg' title='Edit' aria-hidden='true'></a><a class='fa fa-trash fa-lg' title='Remove Element'  aria-hidden='true'></a></div></div><div class='control' style='padding:10px'><input type='text' class='form-control form-control-width form-control-tinymce'></div></div>");
+                            tinymce.init({
+                                selector: '.form-control-tinymce',  //Change this value according to your HTML
+                                //auto_focus: 'element1',
+                                width: "100%%",
+                                height: "150px",
+                                readonly: 1,
+                            });
+                            break;
+
+                        default:
+                            draggedItem.html(draggedItem.data('type'));
+                    }
+
+                    draggedFrom = "";
+                    console.log(templates)
+                }
+            },
+            start: function (e, ui) {
+                draggedItem = ui.item;
+            }
+        });
+
+        $(document).on("mouseenter", ".field", function (e) {
+            $(this).children(".header").children(".header-actions").css("visibility", "visible");
+        });
+
+        $(document).on("mouseleave", ".field", function (e) {
+            $(this).children(".header").children(".header-actions").css("visibility", "hidden");
+        });
+
+        $(document).on("mouseenter", ".fa-pencil", function (e) {
+            $(this).css("cursor", "hand");
+
+            if ($(this).attr('class').includes("fa-lg")) {
+                $(this).attr('class', 'fa fa-pencil fa-2x');
+            }
+
+            $(this).parent().parent().parent().css("background", "#99ccff");
+        });
+
+        $(document).on("mouseleave", ".fa-pencil", function (e) {
+            $(this).css("cursor", "pointer");
+            if ($(this).attr('class').includes("fa-2x")) {
+                $(this).attr('class', 'fa fa-pencil fa-lg');
+            }
+
+            $(this).parent().parent().parent().css("background", "#e8dfdf");
+        });
+
+        $(document).on("mouseenter", ".fa-trash", function (e) {
+            $(this).css("cursor", "hand");
+
+            if ($(this).attr('class').includes("fa-lg")) {
+                $(this).attr('class', 'fa fa-trash fa-2x');
+            }
+
+            $(this).parent().parent().parent().css("background", "pink");
+        });
+
+        $(document).on("mouseleave", ".fa-trash", function (e) {
+            $(this).css("cursor", "pointer");
+            if ($(this).attr('class').includes("fa-2x")) {
+                $(this).attr('class', 'fa fa-trash fa-lg');
+            }
+            $(this).parent().parent().parent().css("background", "#e8dfdf");
+            //$(this).parent().parent().parent().attr('class', 'field');
+        });
+
+        $(document).on("click", ".fa-trash", function (e) {
+            $(this).parent().parent().parent().html('');
+        });
+    })
+
+    function clearItems() {
+        $("#dropzone").html('');
+    }
+
+    function submitForm() {
+        alert('he')
+    }
+
+    function getUrlVars() {
+        var vars = [],
+            hash
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&')
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=')
+            vars.push(hash[0])
+            vars[hash[0]] = hash[1]
+        }
+        return vars
+    }
+
+    function getTemplates() {
+        let templates = {};
+
+        let url = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + location.pathname
+        url = url.substr(0, url.lastIndexOf("/")) + "/Templates" + "?customerId=" + getUrlVars()["customerId"];
+
+
+        $.get(url, function (data) {            
+
+            for (var i = 0; i < data.length; i++) {
+                templates.data[i];
+            }
+        });
+
+        return templates;
+    }
+
+</script>
+
+<script src="https://cdn.tiny.cloud/1/1sfk2dp6yt1qy3dpohzyv6wro6kpk8szzkijgcpnepc4mazx/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+<style>
+    #fields {
+        margin: 0;
+        padding: 0;
+        width: 15%;
+        margin-right: 20px;
+        float: left;
+        border: 1px thin;
+        border-radius: 5px;
+    }
+
+    input[type=text] {
+        width: 97%
+    }
+
+    .header-actions {
+        opacity: 0.5;
+        visibility: hidden;
+    }
+
+        .header-actions a {
+            margin-right: 15px
+        }
+
+
+    #source {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        border: 1px solid #dddddd;
+        border-radius: 10px;
+    }
+
+    .field {
+        background-color: #e8dfdf;
+        border-radius: 10px;
+    }
+
+    .header-label {
+        width: 80%;
+        float: left
+    }
+
+    .header-actions {
+        /*width: 20%;*/
+        display: flex;
+        justify-content: flex-end;
+        margin: 5px;
+        padding-top: 5px;
+    }
+
+    .field-label {
+        font-family: inherit;
+        font-size: large;
+        margin: 5px;
+        padding-top: 5px;
+        padding-right: 10px
+    }
+
+    .form-control {
+        margin: 10px;
+    }
+
+    .form-control-width {
+        width: 97%;
+    }
+
+    #btnClear {
+        margin-top: 15px;
+        margin-left: 5px;
+    }
+
+    #source li {
+        cursor: move;
+        padding: 10px;
+        border: 1px solid #dddddd;
+        background: #f5f5f5;
+    }
+
+    .label {
+        font-size: large;
+    }
+
+    .control h3 {
+        padding: 5px;
+    }
+
+    #dropzone {
+        min-height: 400px;
+        height: auto;
+        float: none;
+        overflow: hidden;
+        border: 1px dashed black;
+    }
+
+    li {
+        list-style-type: none; /* Remove bullets */
+        padding: 0; /* Remove padding */
+        margin: 5px; /* Remove margins */
+    }
+
+    .fa {
+        margin: 5px;
+    }
+</style>
+
+@*<script src="~/Components/Formbuilder/dist/form-builder.min.js"></script>
+        <script src="~/Components/Formbuilder/dist/form-render.min.js"></script>
+        <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>*@
+<!--<!--var formBuilder
+
+    $(document).ready(function () {
+
+        //$('.formbuilder-icon-header span').text("Section name")
+        //var formData = [{ "type": "text", "label": "Full Name", "subtype": "text", "className": "form-control", "name": "text-1476748004559" }, { "type": "select", "label": "Occupation", "className": "form-control", "name": "select-1476748006618", "values": [{ "label": "Street Sweeper", "value": "option-1", "selected": true }, { "label": "Moth Man", "value": "option-2" }, { "label": "Chemist", "value": "option-3" }] }, { "type": "textarea", "label": "Short Bio", "rows": "5", "className": "form-control", "name": "textarea-1476748007461" }];
 
         formBuilder = $(document.getElementById('fb-editor')).formBuilder({
-        formData: formData});
-        
+            //formData: formData,
+        });
+
+        //$('.formbuilder-icon-header span').text("Hej")
+
         //If already exists nut cannot be edited
         //$(document.getElementById('fb-editor')).formRender({
         //    formData: formData
@@ -94,8 +375,12 @@
         //formBuilder.actions.setData(formData);
     });
 
-    function submitForm() {
-        alert(formBuilder.actions.getData('json', true))
+
+
+    function deleteForm() {
+        $(document.getElementById('fb-editor')).formRender({
+            formData: formData
+        });
     }
         //$.ajax({
         //    url: 'some-url',
@@ -108,4 +393,4 @@
         //});
     //});
 
-</script>
+</script>-->

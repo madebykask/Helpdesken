@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -42,6 +43,7 @@
     </NuGetPackageImportStamp>
     <Use64BitIISExpress />
     <DontImportPostSharp>True</DontImportPostSharp>
+    <TypeScriptToolsVersion>4.1</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -704,58 +706,6 @@
     <Content Include="Areas\Reports\Content\js\reports.reportedTime.js" />
     <Content Include="Areas\Reports\Content\js\reportViewer.logic.js" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
-    <Content Include="Components\Formbuilder\.gitattributes" />
-    <Content Include="Components\Formbuilder\.gitignore" />
-    <Content Include="Components\Formbuilder\demo\assets\js\demo.min.js" />
-    <Content Include="Components\Formbuilder\demo\assets\js\vendor.js" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\index.js" />
-    <Content Include="Components\Formbuilder\demo\index.html" />
-    <Content Include="Components\Formbuilder\dist\form-builder.min.js" />
-    <Content Include="Components\Formbuilder\dist\form-render.min.js" />
-    <Content Include="Components\Formbuilder\docs\css\site.css" />
-    <Content Include="Components\Formbuilder\docs\img\clipboard.svg" />
-    <Content Include="Components\Formbuilder\docs\img\logo-bg.svg" />
-    <Content Include="Components\Formbuilder\docs\img\noise.png" />
-    <Content Include="Components\Formbuilder\docs\js\scripts.js" />
-    <Content Include="Components\Formbuilder\docs\theme\base.html" />
-    <Content Include="Components\Formbuilder\docs\theme\footer.html" />
-    <Content Include="Components\Formbuilder\src\demo\index.html" />
-    <Content Include="Components\Formbuilder\src\demo\js\actionButtons.js" />
-    <Content Include="Components\Formbuilder\src\demo\js\demo.js" />
-    <Content Include="Components\Formbuilder\src\js\config.js" />
-    <Content Include="Components\Formbuilder\src\js\control.js" />
-    <Content Include="Components\Formbuilder\src\js\controls.js" />
-    <Content Include="Components\Formbuilder\src\js\control\autocomplete.js" />
-    <Content Include="Components\Formbuilder\src\js\control\button.js" />
-    <Content Include="Components\Formbuilder\src\js\control\custom.js" />
-    <Content Include="Components\Formbuilder\src\js\control\file.fineuploader.js" />
-    <Content Include="Components\Formbuilder\src\js\control\hidden.js" />
-    <Content Include="Components\Formbuilder\src\js\control\index.js" />
-    <Content Include="Components\Formbuilder\src\js\control\paragraph.js" />
-    <Content Include="Components\Formbuilder\src\js\control\select.js" />
-    <Content Include="Components\Formbuilder\src\js\control\text.js" />
-    <Content Include="Components\Formbuilder\src\js\control\textarea.js" />
-    <Content Include="Components\Formbuilder\src\js\control\textarea.quill.js" />
-    <Content Include="Components\Formbuilder\src\js\control\textarea.tinymce.js" />
-    <Content Include="Components\Formbuilder\src\js\control_plugins\starRating.js" />
-    <Content Include="Components\Formbuilder\src\js\control_plugins\textarea.trumbowyg.js" />
-    <Content Include="Components\Formbuilder\src\js\data.js" />
-    <Content Include="Components\Formbuilder\src\js\dom.js" />
-    <Content Include="Components\Formbuilder\src\js\events.js" />
-    <Content Include="Components\Formbuilder\src\js\form-builder.js" />
-    <Content Include="Components\Formbuilder\src\js\form-render.js" />
-    <Content Include="Components\Formbuilder\src\js\helpers.js" />
-    <Content Include="Components\Formbuilder\src\js\layout.js" />
-    <Content Include="Components\Formbuilder\src\js\utils.js" />
-    <Content Include="Components\Formbuilder\tools\build-vendor.js" />
-    <Content Include="Components\Formbuilder\tools\copy-language-files.js" />
-    <Content Include="Components\Formbuilder\tools\deploy-demo.js" />
-    <Content Include="Components\Formbuilder\tools\deploy-site.js" />
-    <Content Include="Components\Formbuilder\tools\icon-font.js" />
-    <Content Include="Components\Formbuilder\tools\test-helpers\document.js" />
-    <Content Include="Components\Formbuilder\tools\utils.js" />
-    <Content Include="Components\Formbuilder\tools\webpack.config.js" />
-    <Content Include="Components\Formbuilder\tools\webpack.plugins.config.js" />
     <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\bootstrap-datepicker3.css" />
     <Content Include="Content\bootstrap-responsive.css" />
@@ -3588,159 +3538,6 @@
     <Content Include="Areas\Admin\Views\ExtendedCase\CustomerForms.cshtml" />
     <Content Include="Areas\Admin\Views\ExtendedCase\EditForm.cshtml" />
     <Content Include="Areas\Admin\Views\ExtendedCase\_CustomerForms.cshtml" />
-    <Content Include="Components\Formbuilder\src\demo\sass\demo.scss" />
-    <Content Include="Components\Formbuilder\src\fonts\config.json" />
-    <Content Include="Components\Formbuilder\src\fonts\formbuilder-icons.woff" />
-    <Content Include="Components\Formbuilder\src\js\control\README.md" />
-    <Content Include="Components\Formbuilder\src\js\control_plugins\README.md" />
-    <Content Include="Components\Formbuilder\src\js\README.md" />
-    <Content Include="Components\Formbuilder\src\sass\base\_animation.scss" />
-    <Content Include="Components\Formbuilder\src\sass\base\_bs.scss" />
-    <Content Include="Components\Formbuilder\src\sass\base\_font.scss" />
-    <Content Include="Components\Formbuilder\src\sass\base\_mixins.scss" />
-    <Content Include="Components\Formbuilder\src\sass\base\_variables.scss" />
-    <Content Include="Components\Formbuilder\src\sass\form-builder.scss" />
-    <Content Include="Components\Formbuilder\src\sass\form-render.scss" />
-    <Content Include="Components\Formbuilder\src\sass\_controls.scss" />
-    <Content Include="Components\Formbuilder\src\sass\_kc-toggle.scss" />
-    <Content Include="Components\Formbuilder\src\sass\_stage.scss" />
-    <Content Include="Components\Formbuilder\.codeclimate.yml" />
-    <Content Include="Components\Formbuilder\.eslintrc.json" />
-    <Content Include="Components\Formbuilder\.prettierrc.json" />
-    <Content Include="Components\Formbuilder\bower.json" />
-    <Content Include="Components\Formbuilder\CHANGELOG.md" />
-    <Content Include="Components\Formbuilder\composer.json" />
-    <Content Include="Components\Formbuilder\CONTRIBUTING.md" />
-    <Content Include="Components\Formbuilder\ISSUE_TEMPLATE.md" />
-    <Content Include="Components\Formbuilder\LICENSE" />
-    <Content Include="Components\Formbuilder\mkdocs.yml" />
-    <Content Include="Components\Formbuilder\package-lock.json" />
-    <Content Include="Components\Formbuilder\package.json" />
-    <Content Include="Components\Formbuilder\README.md" />
-    <Content Include="Components\Formbuilder\.github\workflows\deploy.yaml" />
-    <Content Include="Components\Formbuilder\.github\workflows\publish.yaml" />
-    <Content Include="Components\Formbuilder\demo\assets\js\demo.min.js.gz" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\ar-SA.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\ar-TN.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\ca-ES.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\CHANGELOG.md" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\cs-CZ.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\da-DK.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\de-DE.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\el-GR.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\en-US.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\es-ES.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\fa-IR.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\fi-FI.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\fr-FR.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\he-IL.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\hu-HU.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\it-IT.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\ja-JP.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\LICENSE" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\my-MM.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\nb-NO.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\nl-NL.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\package.json" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\pl-PL.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\pt-BR.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\qz-MM.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\README.md" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\ro-RO.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\ru-RU.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\sl-SI.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\th-TH.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\tr-TR.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\uk-UA.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\vi-VN.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\zh-CN.lang" />
-    <Content Include="Components\Formbuilder\demo\assets\lang\zh-TW.lang" />
-    <Content Include="Components\Formbuilder\docs\contributing.md" />
-    <Content Include="Components\Formbuilder\docs\development.md" />
-    <Content Include="Components\Formbuilder\docs\editing-fonts.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\actions\addField.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\actions\clearFields.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\actions\closeAllFieldEdit.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\actions\getData.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\actions\removeField.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\actions\save.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\actions\setData.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\actions\setLang.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\actions\showData.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\actions\toggleAllFieldEdit.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\actions\toggleFieldEdit.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\control-plugins.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\controls.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\demos\angular.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\demos\basic.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\demos\bootstrap-grid.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\demos\data.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\demos\react.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\demos\tabs.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\demos\toggle-builder.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\demos\translation.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\actionButtons.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\allowStageSort.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\appendPrepend.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\controlOrder.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\controlPosition.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\dataType.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\defaultFields.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\disabledActionButtons.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\disabledAttrs.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\disabledFieldButtons.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\disabledSubtypes.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\disableFields.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\disableHTMLLabels.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\disableInjectedStyle.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\editOnAdd.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\fieldRemoveWarn.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\fields.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\formData.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\i18n.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\inputSets.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\layout.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\layoutTemplates.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\notify.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\onAddField.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\onAddFieldAfter.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\onAddOption.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\onClearAll.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\onCloseFieldEdit.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\onOpenFieldEdit.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\onSave.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\persistDefaultFields.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\replaceFields.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\roles.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\scrollToFieldOnAdd.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\showActionButtons.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\sortableControls.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\stickyControls.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\subtypes.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\templates.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\typeUserAttrs.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\typeUserDisabledAttrs.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\options\typeUserEvents.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\overview.md" />
-    <Content Include="Components\Formbuilder\docs\formBuilder\promise.md" />
-    <Content Include="Components\Formbuilder\docs\formRender\actions\clear.md" />
-    <Content Include="Components\Formbuilder\docs\formRender\actions\html.md" />
-    <Content Include="Components\Formbuilder\docs\formRender\actions\render.md" />
-    <Content Include="Components\Formbuilder\docs\formRender\actions\setData.md" />
-    <Content Include="Components\Formbuilder\docs\formRender\actions\userData.md" />
-    <Content Include="Components\Formbuilder\docs\formRender\demos\basic.md" />
-    <Content Include="Components\Formbuilder\docs\formRender\demos\preview-popup.md" />
-    <Content Include="Components\Formbuilder\docs\formRender\options.md" />
-    <Content Include="Components\Formbuilder\docs\formRender\options\container.md" />
-    <Content Include="Components\Formbuilder\docs\formRender\options\formData.md" />
-    <Content Include="Components\Formbuilder\docs\formRender\options\layout.md" />
-    <Content Include="Components\Formbuilder\docs\formRender\options\layoutTemplates.md" />
-    <Content Include="Components\Formbuilder\docs\formRender\options\render.md" />
-    <Content Include="Components\Formbuilder\docs\getting-started.md" />
-    <Content Include="Components\Formbuilder\docs\index.md" />
-    <Content Include="Components\Formbuilder\docs\license.md" />
-    <Content Include="Components\Formbuilder\dist\form-builder.min.js.gz" />
-    <Content Include="Components\Formbuilder\dist\form-render.min.js.gz" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\i18n\ar.js" />
     <Content Include="Scripts\i18n\az.js" />
@@ -5322,6 +5119,9 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -5347,6 +5147,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
