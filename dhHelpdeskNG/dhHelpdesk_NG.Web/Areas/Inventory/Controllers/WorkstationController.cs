@@ -607,6 +607,13 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var result = !string.IsNullOrWhiteSpace(macAddress) && _inventoryService.IsMacAddressUnique(currentId, macAddress);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        [HttpGet]
+        [OutputCache(NoStore = true, Duration = 0)]
+        public JsonResult ValidateTheftmark(int currentId, string theftMark)
+        {
+            var result = !string.IsNullOrWhiteSpace(theftMark) && _inventoryService.IsTheftMarkUnique(currentId, theftMark);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
         private InventoryGridModel CreateInventoryGridModel(WorkstationsSearchFilter filter)
         {

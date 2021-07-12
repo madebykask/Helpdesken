@@ -68,45 +68,45 @@
     if (Model.ComputerViewModel.CreatedDate.Show || Model.ComputerViewModel.ChangedDate.Show || Model.ComputerViewModel.DateFieldsModel.ScanDate.Show ||
             Model.ComputerViewModel.DateFieldsModel.SynchronizeDate.Show || Model.ComputerViewModel.DateFieldsModel.PathDirectory.Show)
     {
-    <div class="row">
-        <div class="span12">
-            <table class="tableform">
-                @if (Model.ComputerViewModel.CreatedDate.Show)
-                {
-                    <tr>
-                        <td class="span3">
-                            <label>@Translation.GetCoreTextTranslation(Model.ComputerViewModel.CreatedDate.Caption)</label>
-                        </td>
-                        <td class="span9">
-                            @Html.DisplayFor(m => m.ComputerViewModel.CreatedDate.Value, "Date")
-                        </td>
-                    </tr>
-                }
-                @if (Model.ComputerViewModel.ChangedDate.Show)
-                {
-                    <tr>
-                        <td class="span3">
-                            <label>@Translation.GetCoreTextTranslation(Model.ComputerViewModel.ChangedDate.Caption)</label>
-                        </td>
-                        <td class="span9">
-                            @Html.DisplayFor(m => m.ComputerViewModel.ChangedDate.Value, "Date")
-                        </td>
-                    </tr>
-                    if (Model.ComputerViewModel.ChangedByUserName != null)
+        <div class="row">
+            <div class="span12">
+                <table class="tableform">
+                    @if (Model.ComputerViewModel.CreatedDate.Show)
                     {
                         <tr>
                             <td class="span3">
-                                <label>@Translation.GetCoreTextTranslation("Changed by")</label>
+                                <label>@Translation.GetCoreTextTranslation(Model.ComputerViewModel.CreatedDate.Caption)</label>
                             </td>
                             <td class="span9">
-                                @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.LastName)
+                                @Html.DisplayFor(m => m.ComputerViewModel.CreatedDate.Value, "Date")
                             </td>
                         </tr>
                     }
-                }
-            </table>
+                    @if (Model.ComputerViewModel.ChangedDate.Show)
+                    {
+                        <tr>
+                            <td class="span3">
+                                <label>@Translation.GetCoreTextTranslation(Model.ComputerViewModel.ChangedDate.Caption)</label>
+                            </td>
+                            <td class="span9">
+                                @Html.DisplayFor(m => m.ComputerViewModel.ChangedDate.Value, "Date")
+                            </td>
+                        </tr>
+                        if (Model.ComputerViewModel.ChangedByUserName != null)
+                        {
+                            <tr>
+                                <td class="span3">
+                                    <label>@Translation.GetCoreTextTranslation("Changed by")</label>
+                                </td>
+                                <td class="span9">
+                                    @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.LastName)
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
         </div>
-    </div>
     }
     @Html.EditorFor(m => m.ComputerViewModel.DateFieldsModel)
 }
@@ -114,7 +114,7 @@
 @section Scripts
 {
     @Scripts.Render(BundleConfig.ScriptNames.InventoryWorkstation)
-    <script type="text/javascript">
+<script type="text/javascript">
 
         window.parameters = (window.parameters == null ? {} : window.parameters);
         window.parameters.fileUploadWhiteList = [];
@@ -135,11 +135,18 @@
 
         $(function (jQuery) {
             $('#@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)')
-                .attr("data-val-uniquemac", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress), Translation.GetCoreTextTranslation("Värdet måste vara unikt"))');
+                .attr("data-val-uniquemac", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress), Translation.GetCoreTextTranslation("måste vara unikt"))');
+
+            $('#@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)')
+                .attr("data-val-uniquetheftmark", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark), Translation.GetCoreTextTranslation("måste vara unikt"))');
 
             $.validator.unobtrusive.adapters.add("uniquemac", [], function (options) {
                 options.rules["uniquemac"] = true;
                 options.messages["uniquemac"] = options.message;
+            });
+            $.validator.unobtrusive.adapters.add("uniquetheftmark", [], function (options) {
+                options.rules["uniquetheftmark"] = true;
+                options.messages["uniquetheftmark"] = options.message;
             });
 
             $.validator.addMethod("uniquemac",
@@ -194,6 +201,58 @@
                     return valid;
                 }
             );
+            $.validator.addMethod("uniquetheftmark",
+                function (value, element, param) {
+                    var validator = this;
+                    if (!value) {
+                        var submitted = validator.formSubmitted;
+                        validator.prepareElement(element);
+                        validator.formSubmitted = submitted;
+                        validator.successList.push(element);
+                        delete validator.invalid[element.name];
+                        validator.showErrors();
+                        return true;
+                    }
+                    var previous = this.previousValue(element);
+                    if (!this.settings.messages[element.name]) {
+                        this.settings.messages[element.name] = {};
+                    }
+                    previous.originalMessage = this.settings.messages[element.name].uniquetheftmark;
+                    if (previous.old === value) {
+                        return previous.valid;
+                    }
+                    previous.old = value;
+                    this.startRequest(element);
+                    var valid = "pending";
+                    $.get('@Url.Action("ValidateTheftmark", "Workstation")',
+                        {
+                            theftMark: value,
+                            currentId: @Model.Id
+                        },
+                        function (response) {
+                            validator.settings.messages[element.name].uniquetheftmark = previous.originalMessage;
+                            valid = response === true || response === "true";
+                            if (valid) {
+                                var submitted = validator.formSubmitted;
+                                validator.prepareElement(element);
+                                validator.formSubmitted = submitted;
+                                validator.successList.push(element);
+                                delete validator.invalid[element.name];
+                                validator.showErrors();
+                            } else {
+                                var errors = {};
+                                var message = response || validator.defaultMessage(element, "uniquetheftmark");
+                                errors[element.name] = previous.message = $.isFunction(message) ? message(value) : message;
+                                validator.invalid[element.name] = true;
+                                validator.showErrors(errors);
+                            }
+                            previous.valid = valid;
+                            validator.stopRequest(element, valid);
+                        },
+                        'json');
+                    return valid;
+                }
+            );
             $('#workstation_edit_form')
                 .removeData("validator")
                 .removeData("unobtrusiveValidation");
@@ -207,9 +266,12 @@
                 getUnitsUrl: '@Url.Action("GetUnits", "Ajax", new {area = ""})',
                 getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})',
                 validateMacAddressUrl: '@Url.Action("ValidateMacAddress", "Workstation")',
+                validateTheftMarkUrl: '@Url.Action("ValidateTheftmark", "Workstation")',
                 fieldsIds: {
                     'MacAddressId':
-                        '@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)'
+                        '@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)',
+                    'TheftMarkId':
+                        '@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)'
                 },
             });
 
@@ -236,7 +298,7 @@
                     }
                 });
         });
-    </script>
+</script>
 
     @if (documentModel.Show)
     {

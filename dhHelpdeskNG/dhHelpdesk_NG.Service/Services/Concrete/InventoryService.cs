@@ -452,7 +452,10 @@ namespace DH.Helpdesk.Services.Services.Concrete
         {
             return _computerRepository.IsMacAddressUnique(exceptId, macAddress.Trim());
         }
-
+        public bool IsTheftMarkUnique(int exceptId, string theftMark)
+        {
+            return _computerRepository.IsTheftMarkUnique(exceptId, theftMark.Trim());
+        }
         public void UpdateWorkstationInfo(int id, string info)
         {
             _computerRepository.UpdateInfo(id, info);

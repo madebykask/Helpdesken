@@ -11,7 +11,7 @@
         public CommunicationFieldsModel(
             ConfigurableFieldModel<int?> networkAdapterId,
             ConfigurableFieldModel<string> ipAddress,
-            ConfigurableFieldModel<string> macAddress,
+            ConfigurableFieldModel<string> macAddress,           
             ConfigurableFieldModel<bool> isRas,
             ConfigurableFieldModel<string> novellClient)
         {

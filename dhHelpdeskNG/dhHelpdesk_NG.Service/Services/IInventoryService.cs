@@ -158,5 +158,6 @@ namespace DH.Helpdesk.Services.Services
         void SaveComputerStatus(ComputerStatus newCustomerStatus, out IDictionary<string, string> errors);
         int? GetComputerTypePrice(int id);
         bool IsMacAddressUnique(int exceptId, string macAddress);
+        bool IsTheftMarkUnique(int exceptId, string theftMark);
     }
 }

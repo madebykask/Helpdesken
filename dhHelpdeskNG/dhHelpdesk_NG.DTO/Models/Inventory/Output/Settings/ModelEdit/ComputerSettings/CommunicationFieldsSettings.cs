@@ -21,7 +21,7 @@
         
         [NotNull]
         public ModelEditFieldSetting MacAddressFieldSetting { get; set; }
-        
+
         [NotNull]
         public ModelEditFieldSetting RASFieldSetting { get; set; }
 

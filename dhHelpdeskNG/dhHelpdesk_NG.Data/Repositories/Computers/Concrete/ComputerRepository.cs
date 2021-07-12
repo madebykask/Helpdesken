@@ -762,7 +762,10 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         {
             return !DbSet.Any(w => w.MACAddress.Equals(macAddress, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId);
         }
-
+        public bool IsTheftMarkUnique(int exceptId, string theftMark)
+        {
+            return !DbSet.Any(w => w.TheftMark.Equals(theftMark, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId);
+        }
         public List<ComputerOverview> GetRelatedOverviews(int customerId, string userId)
         {
             var computers = (from c in DbContext.Computers
