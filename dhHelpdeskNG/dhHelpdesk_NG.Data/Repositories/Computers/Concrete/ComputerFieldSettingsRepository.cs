@@ -119,6 +119,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                                 ShowInList = s.ShowInList,
                                 ShowInDetails = s.Show,
                                 ReadOnly = s.ReadOnly,
+                                Copy = s.Copy,
                                 Required = s.Required
                             }).ToList();
                     break;
@@ -133,6 +134,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                                 ShowInList = s.ShowInList,
                                 ShowInDetails = s.Show,
                                 ReadOnly = s.ReadOnly,
+                                Copy = s.Copy,
                                 Required = s.Required,
                             }).ToList();
                     break;
@@ -147,6 +149,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                                 ShowInList = s.ShowInList,
                                 ShowInDetails = s.Show,
                                 ReadOnly = s.ReadOnly,
+                                Copy = s.Copy,
                                 Required = s.Required,
                             }).ToList();
                     break;
@@ -158,7 +161,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         }
 
         [CreateMissingComputerSettings("customerId")]
-        public ComputerFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false)
+        public ComputerFieldsSettingsForModelEdit GetFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false, bool isCopy = false)
         {
             var languageTextId = this.GetLanguageTextId(languageId);
             var settings = this.GetSettings(customerId);
@@ -176,6 +179,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                                 FieldName = s.ComputerField,
                                 Show = s.Show,
                                 ReadOnly = isReadonly ? 1 : s.ReadOnly,
+                                Copy = !isCopy ? 0 : s.Copy,
                                 Required = s.Required
                             }).ToList();
                     break;
@@ -189,6 +193,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                                 FieldName = s.ComputerField,
                                 Show = s.Show,
                                 ReadOnly = isReadonly ? 1 : s.ReadOnly,
+                                Copy = !isCopy ? 0 : s.Copy,
                                 Required = s.Required,
                             }).ToList();
                     break;
@@ -202,6 +207,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                                FieldName = s.ComputerField,
                                Show = s.Show,
                                ReadOnly = isReadonly ? 1 : s.ReadOnly,
+                               Copy = !isCopy ? 0 : s.Copy,
                                Required = s.Required,
                            }).ToList();
                     break;
@@ -315,13 +321,14 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         {
             var settings = this.GetSettings(customerId);
 
-            List<FieldProcessingSettingMapperData> mapperData = settings.Select(
+            var mapperData = settings.Select(
                 s =>
                 new FieldProcessingSettingMapperData
                     {
                         FieldName = s.ComputerField,
                         Show = s.Show,
                         ReadOnly = s.ReadOnly,
+                        Copy = s.Copy,
                         Required = s.Required
                     }).ToList();
 
@@ -555,6 +562,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             fieldSetting.ChangedDate = changeDate;
             fieldSetting.Required = updatedSetting.IsRequired.ToInt();
             fieldSetting.ReadOnly = updatedSetting.IsReadOnly.ToInt();
+            fieldSetting.Copy = updatedSetting.IsCopy.ToInt();
             fieldSetting.Show = updatedSetting.ShowInDetails.ToInt();
             fieldSetting.ShowInList = updatedSetting.ShowInList.ToInt();
 

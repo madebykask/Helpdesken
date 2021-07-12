@@ -390,7 +390,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 })
                 .Where(x => x.Computer.Customer_Id == customerId);
 
-            if (!isShowScrapped)
+            if (!isShowScrapped) 
             {
                 var compareDate = DateTime.UtcNow.AddDays(-1).GetEndOfDay();
                 query = query.Where(x => !x.Computer.ScrapDate.HasValue || x.Computer.ScrapDate.Value > compareDate);

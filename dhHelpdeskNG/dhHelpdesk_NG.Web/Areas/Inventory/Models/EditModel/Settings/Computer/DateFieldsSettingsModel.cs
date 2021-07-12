@@ -21,6 +21,11 @@
             this.SyncChangedDateSettingModel = syncChangedDateSettingModel;
             this.ScanDateFieldSettingModel = scanDateFieldSettingModel;
             this.PathDirectoryFieldSettingModel = pathDirectoryFieldSettingModel;
+            CreatedDateFieldSettingModel.IsCopyDisabled = true;
+            ChangedDateFieldSettingModel.IsCopyDisabled = true;
+            SyncChangedDateSettingModel.IsCopyDisabled = true;
+            ScanDateFieldSettingModel.IsCopyDisabled = true;
+            PathDirectoryFieldSettingModel.IsCopyDisabled = true;
         }
 
         [NotNull]

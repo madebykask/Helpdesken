@@ -68,4 +68,9 @@
     this.submit = function () {
         $('#workstation_edit_form').submit();
     }
+
+    this.copy = function () {
+        $('#' + settings.copyControlId).val('true');
+        $('#workstation_edit_form').submit();
+    }
 }

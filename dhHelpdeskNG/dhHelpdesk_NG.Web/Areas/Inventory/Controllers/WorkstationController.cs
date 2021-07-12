@@ -172,7 +172,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
             var settings =
                 _inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
-                    SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId, readOnly);
+                    SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId, readOnly, true);
 
 			var whiteList = _globalSettingService.GetFileUploadWhiteList();
 
@@ -282,7 +282,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 		[UserPermissions(UserPermission.InventoryViewPermission)]
 		public RedirectToRouteResult Edit(ComputerViewModel computerViewModel)
         {
-            ComputerForUpdate businessModel = this._computerBuilder.BuildForUpdate(computerViewModel, OperationContext);
+            if (computerViewModel.IsCopy)
+            {
+                //var computerFile = LoadTempFile(computerViewModel.DocumentFileKey); 
+                var copyBusinessModel = _computerBuilder.BuildForAdd(computerViewModel, this.OperationContext, null);
+                var newId = _inventoryService.CopyWorkstation(copyBusinessModel, this.OperationContext);
+
+                return RedirectToAction("Edit", new { id = newId, dialog = computerViewModel.IsForDialog });
+            }
+            var businessModel = this._computerBuilder.BuildForUpdate(computerViewModel, OperationContext);
             this._inventoryService.UpdateWorkstation(businessModel, this.OperationContext);
             if (computerViewModel.IsForDialog)
             {
@@ -303,7 +311,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var settings =
                 _inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
                     SessionFacade.CurrentCustomer.Id,
-                    SessionFacade.CurrentLanguageId);
+                    SessionFacade.CurrentLanguageId, 
+                    false, 
+                    true);
 
 			var whiteList = _globalSettingService.GetFileUploadWhiteList();
 
@@ -592,7 +602,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             {
                 Name = BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.Name,
                 SortBy = SortBy.Ascending
-            };
+            }; 
             var settings = _inventorySettingsService.GetWorkstationFieldSettingsOverview(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
             var models = _inventoryService.GetRelatedInventory(SessionFacade.CurrentCustomer.Id, userId);
             var viewModel = InventoryGridModel.BuildModel(models, settings, sortField);
@@ -604,6 +614,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [OutputCache(NoStore = true, Duration = 0)]
         public JsonResult ValidateMacAddress(int currentId, string macAddress)
         {
+            if (string.IsNullOrWhiteSpace(macAddress)) return Json(true, JsonRequestBehavior.AllowGet);
+
             var result = !string.IsNullOrWhiteSpace(macAddress) && _inventoryService.IsMacAddressUnique(currentId, macAddress);
             return Json(result, JsonRequestBehavior.AllowGet);
         }

@@ -32,12 +32,16 @@
         @if (!Model.IsForDialog)
         {
             <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", null, new { @class = "btn" })</li>
+            <li id="menu2">
+                <input type="submit" value="@Translation.GetCoreTextTranslation("Kopiera")" class="btn" onclick="workstationEdit.copy()"/>
+            </li>
         }
     </ul>
 }
 
 @using (Html.BeginForm("Edit", "Workstation", FormMethod.Post, new { id = "workstation_edit_form" }))
 {
+    @Html.HiddenFor(m => m.ComputerViewModel.IsCopy)
     @Html.HiddenFor(m => m.ComputerViewModel.IsForDialog)
     @Html.HiddenFor(m => m.ComputerViewModel.UserId)
     @Html.HiddenFor(m => m.ComputerViewModel.Id)
@@ -61,9 +65,6 @@
     @Html.EditorFor(m => m.ComputerViewModel.PlaceFieldsViewModel)
     @Html.EditorFor(m => m.ComputerViewModel.ContactFieldsModel)
     @Html.EditorFor(m => m.ComputerViewModel.StateFieldsViewModel)
-
-
-
 
     if (Model.ComputerViewModel.CreatedDate.Show || Model.ComputerViewModel.ChangedDate.Show || Model.ComputerViewModel.DateFieldsModel.ScanDate.Show ||
             Model.ComputerViewModel.DateFieldsModel.SynchronizeDate.Show || Model.ComputerViewModel.DateFieldsModel.PathDirectory.Show)
@@ -263,6 +264,7 @@
                 id: @Model.Id,
                 userId: @SessionFacade.CurrentUser.Id,
                 customerId: @SessionFacade.CurrentCustomer.Id,
+                copyControlId: '@Html.IdFor(m => m.ComputerViewModel.IsCopy)',
                 getUnitsUrl: '@Url.Action("GetUnits", "Ajax", new {area = ""})',
                 getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})',
                 validateMacAddressUrl: '@Url.Action("ValidateMacAddress", "Workstation")',

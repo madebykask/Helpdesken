@@ -72,7 +72,7 @@
 
         #region Methods
 
-        private static ComputerFieldSettings CreateDefaultSetting(string fieldName, int customerId)
+        private static ComputerFieldSettings CreateDefaultSetting(string fieldName, int customerId, bool isCopy = true)
         {
             return new ComputerFieldSettings
                    {
@@ -84,6 +84,7 @@
                        Label_ENG = fieldName,
                        Required = 0,
                        ReadOnly = 0,
+                       Copy = isCopy ? 1 : 0,
                        Show = 0,
                        ShowInList = 0,
                        FieldHelp = string.Empty
@@ -254,11 +255,11 @@
             List<string> settingNames,
             DbSet<ComputerFieldSettings> settings)
         {
-            CreateSettingIfNeeded(StateFields.State, customerId, settingNames, settings);
-            CreateSettingIfNeeded(StateFields.Stolen, customerId, settingNames, settings);
-            CreateSettingIfNeeded(StateFields.Replaced, customerId, settingNames, settings);
-            CreateSettingIfNeeded(StateFields.SendBack, customerId, settingNames, settings);
-            CreateSettingIfNeeded(StateFields.ScrapDate, customerId, settingNames, settings);
+            CreateSettingIfNeeded(StateFields.State, customerId, settingNames, settings, false);
+            CreateSettingIfNeeded(StateFields.Stolen, customerId, settingNames, settings, false);
+            CreateSettingIfNeeded(StateFields.Replaced, customerId, settingNames, settings, false);
+            CreateSettingIfNeeded(StateFields.SendBack, customerId, settingNames, settings, false);
+            CreateSettingIfNeeded(StateFields.ScrapDate, customerId, settingNames, settings, false);
         }
 
         private static void CreateMissingDateFieldsSettings(
@@ -266,18 +267,19 @@
             List<string> settingNames,
             DbSet<ComputerFieldSettings> settings)
         {
-            CreateSettingIfNeeded(DateFields.CreatedDate, customerId, settingNames, settings);
-            CreateSettingIfNeeded(DateFields.ChangedDate, customerId, settingNames, settings);
-            CreateSettingIfNeeded(DateFields.SynchronizeDate, customerId, settingNames, settings);
-            CreateSettingIfNeeded(DateFields.ScanDate, customerId, settingNames, settings);
-            CreateSettingIfNeeded(DateFields.PathDirectory, customerId, settingNames, settings);
+            CreateSettingIfNeeded(DateFields.CreatedDate, customerId, settingNames, settings, false);
+            CreateSettingIfNeeded(DateFields.ChangedDate, customerId, settingNames, settings, false);
+            CreateSettingIfNeeded(DateFields.SynchronizeDate, customerId, settingNames, settings, false);
+            CreateSettingIfNeeded(DateFields.ScanDate, customerId, settingNames, settings, false);
+            CreateSettingIfNeeded(DateFields.PathDirectory, customerId, settingNames, settings, false);
         }
 
         private static void CreateSettingIfNeeded(
             string checkSettingName,
             int customerId,
             List<string> settingNames,
-            DbSet<ComputerFieldSettings> settings)
+            DbSet<ComputerFieldSettings> settings, 
+            bool isCopy = true)
         {
             var settingExists = settingNames.Any(s => s.ToLower() == checkSettingName.ToLower());
             if (settingExists)
@@ -285,7 +287,7 @@
                 return;
             }
 
-            var setting = CreateDefaultSetting(checkSettingName, customerId);
+            var setting = CreateDefaultSetting(checkSettingName, customerId, isCopy);
             settings.Add(setting);
         }
 

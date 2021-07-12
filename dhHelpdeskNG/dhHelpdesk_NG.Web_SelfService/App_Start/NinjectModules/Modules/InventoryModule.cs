@@ -20,6 +20,7 @@ using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory;
 using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory.Concrete;
 using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory;
 using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory.Concrete;
+using DH.Helpdesk.Services.Services.Concrete;
 using Ninject.Modules;
 
 namespace DH.Helpdesk.SelfService.NinjectModules.Modules
@@ -47,6 +48,7 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
             
             this.Bind<IComputerRestorer>().To<ComputerRestorer>().InSingletonScope();
             this.Bind<IComputerValidator>().To<ComputerValidator>().InSingletonScope();
+            this.Bind<IComputerCopyService>().To<ComputerCopyService>().InSingletonScope();
 
             this.Bind<IServerRestorer>().To<ServerRestorer>().InSingletonScope();
             this.Bind<IServerValidator>().To<ServerValidator>().InSingletonScope();

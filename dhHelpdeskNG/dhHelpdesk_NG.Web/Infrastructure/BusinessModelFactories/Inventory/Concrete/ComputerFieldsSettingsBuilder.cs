@@ -199,7 +199,8 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 setting.ShowInList,
                 setting.Caption,
                 setting.IsRequired,
-                setting.IsReadOnly);
+                setting.IsReadOnly,
+                setting.IsCopy);
 
             return settingModel;
         }

@@ -93,9 +93,9 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 new TabSetting(relatedCasesTab.TabField, relatedCasesTab.Show, relatedCasesTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? relatedCasesTab.TabField));
         }
 
-        public ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false)
+        public ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false, bool isCopy = false)
         {
-            var models = _computerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId, isReadonly);
+            var models = _computerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId, isReadonly, isCopy);
             
             return models;
         }

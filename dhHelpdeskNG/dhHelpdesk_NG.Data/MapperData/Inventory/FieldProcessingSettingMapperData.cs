@@ -10,6 +10,8 @@
 
         public int ReadOnly { get; set; }
 
+        public int Copy { get; set; }
+
         public int Required { get; set; }
 
         public string GetName()

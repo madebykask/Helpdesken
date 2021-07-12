@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Modules
+﻿using DH.Helpdesk.Services.Services.Concrete;
+
+namespace DH.Helpdesk.Web.NinjectModules.Modules
 {
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.PrinterSettings;
@@ -74,6 +76,7 @@
 
             this.Bind<IComputerRestorer>().To<ComputerRestorer>().InSingletonScope();
             this.Bind<IComputerValidator>().To<ComputerValidator>().InSingletonScope();
+            this.Bind<IComputerCopyService>().To<ComputerCopyService>().InSingletonScope();
 
             this.Bind<IServerBuilder>().To<ServerBuilder>().InSingletonScope();
 

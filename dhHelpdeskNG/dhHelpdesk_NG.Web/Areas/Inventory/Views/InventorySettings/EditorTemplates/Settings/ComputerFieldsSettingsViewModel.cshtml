@@ -50,11 +50,12 @@
             <th>@Translation.GetCoreTextTranslation("Obligatorisk")</th>
             <th>@Translation.GetCoreTextTranslation("Lista")</th>
             <th>@Translation.GetCoreTextTranslation("Skrivskyddad")</th>
+            <th>@Translation.GetCoreTextTranslation("Inkludera vid kopiering")</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Arbetsstation")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Arbetsstation")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.WorkstationFieldsSettingsModel.NameFieldSettingModel, "Settings/FieldSettingForComputerModel")
@@ -87,19 +88,19 @@
             @Html.EditorFor(m => m.WorkstationFieldsSettingsModel.LocationFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Chassis")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Chassis")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.ChassisFieldsSettingsModel.ChassisFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Inventering")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Inventering")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.InventoryFieldsSettingsModel.BarCodeFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Operativsystem")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Operativsystem")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.OperatingSystemFieldsSettingsModel.OperatingSystemFieldSettingModel, "Settings/FieldSettingForComputerModel")
@@ -117,19 +118,19 @@
             @Html.EditorFor(m => m.OperatingSystemFieldsSettingsModel.ProductKeyFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Processor")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Processor")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.ProccesorFieldsSettingsModel.ProccesorFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Minne")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Minne")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.MemoryFieldsSettingsModel.RAMFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Kommunikation")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Kommunikation")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.CommunicationFieldsSettingsModel.NetworkAdapterFieldSettingModel, "Settings/FieldSettingForComputerModel")
@@ -147,19 +148,19 @@
             @Html.EditorFor(m => m.CommunicationFieldsSettingsModel.NovellClientFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Grafik")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Grafik")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.GraphicsFieldsSettingsModel.VideoCardFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Ljud")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Ljud")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.SoundFieldsSettingsModel.SoundCardFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Avtal")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Avtal")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.ContractFieldsSettingsModel.ContractStatusFieldSettingModel, "Settings/FieldSettingForComputerModel")
@@ -195,25 +196,25 @@
             @Html.EditorFor(m => m.ContractFieldsSettingsModel.AccountingDimension5FieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Övrigt")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Övrigt")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.OtherFieldsSettingsModel.InfoFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Dokument")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Dokument")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.ContractFieldsSettingsModel.DocumentsFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Användaruppgifter")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Användaruppgifter")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.ContactInformationFieldsSettingsModel.UserIdFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Organisation")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Organisation")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.OrganizationFieldsSettingsModel.RegionFieldSettingModel, "Settings/FieldSettingForComputerModel")
@@ -229,7 +230,7 @@
             @Html.EditorFor(m => m.OrganizationFieldsSettingsModel.UnitFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Placering")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Placering")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.PlaceFieldsSettingsModel.RoomFieldSettingModel, "Settings/FieldSettingForComputerModel")
@@ -250,7 +251,7 @@
             @Html.EditorFor(m => m.PlaceFieldsSettingsModel.Place2FieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Kontakt")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Kontakt")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.ContactFieldsSettingsModel.NameFieldSettingModel, "Settings/FieldSettingForComputerModel")
@@ -262,7 +263,7 @@
             @Html.EditorFor(m => m.ContactFieldsSettingsModel.EmailFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Status")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Status")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.StateFieldsSettingsModel.StateFieldSettingModel, "Settings/FieldSettingForComputerModel")
@@ -295,7 +296,7 @@
             @Html.EditorFor(m => m.DateFieldsSettingsModel.PathDirectoryFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
-            <td colspan="6" class="header">@Translation.GetCoreTextTranslation("Tabs")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Tabs")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.WorkstationTabsSettingsModel.ComputersTabSettingModel, "Settings/TabSettingForComputerModel")

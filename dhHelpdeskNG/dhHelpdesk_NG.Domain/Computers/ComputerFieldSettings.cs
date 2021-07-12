@@ -10,6 +10,7 @@
         public int Show { get; set; }
         public int ShowInList { get; set; }
         public int ReadOnly { get; set; }
+        public int Copy { get; set; }
         public int Required { get; set; }
         public string ComputerField { get; set; }
         public string FieldHelp { get; set; }

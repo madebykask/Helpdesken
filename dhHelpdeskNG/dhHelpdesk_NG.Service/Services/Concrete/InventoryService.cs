@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ProcessingSetttings.ComputerSettings;
 using DH.Helpdesk.BusinessData.Models.User.Input;
 using DH.Helpdesk.Domain.Computers;
 
@@ -77,6 +78,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
         private readonly IInventoryValidator _inventoryValidator;
         private readonly IInventoryRestorer _inventoryRestorer;
         private readonly IInventoryTypeStandardSettingsRepository _inventoryTypeStandardSettingsRepository;
+        private readonly IComputerCopyService _computerCopyService;
 
         #endregion
 
@@ -113,7 +115,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             IPrinterValidator printerValidator,
             IInventoryValidator inventoryValidator,
             IInventoryRestorer inventoryRestorer,
-            IUnitOfWorkFactory unitOfWorkFactory, IComputerStatusRepository computerStatusRepository)
+            IUnitOfWorkFactory unitOfWorkFactory, IComputerStatusRepository computerStatusRepository, IComputerCopyService computerCopyService)
         {
             _inventoryTypeStandardSettingsRepository = inventoryTypeStandardSettingsRepository;
             _inventoryTypeRepository = inventoryTypeRepository;
@@ -149,6 +151,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             _inventoryRestorer = inventoryRestorer;
             _unitOfWorkFactory = unitOfWorkFactory;
             _computerStatusRepository = computerStatusRepository;
+            _computerCopyService = computerCopyService;
         }
 
         public List<ComputerUserOverview> GetComputerUsers(int customerId, string searchFor)
@@ -408,6 +411,23 @@ namespace DH.Helpdesk.Services.Services.Concrete
             {
                 this.AddUserHistory(businessModel.Id, businessModel.ContactInformationFields.UserId.Value);
             }
+        }
+
+        public int CopyWorkstation(ComputerForInsert businessModel, OperationContext context)
+        {
+            var settings = _computerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
+            _computerCopyService.ApplyCopySettings(businessModel, settings);
+
+            //_computerValidator.Validate(businessModel, settings);
+            _computerRepository.Add(businessModel);
+            _computerRepository.Commit();
+            
+            if (businessModel.ContactInformationFields.UserId.HasValue)
+            {
+                this.AddUserHistory(businessModel.Id, businessModel.ContactInformationFields.UserId.Value);
+            }
+
+            return businessModel.Id;
         }
 
         public void DeleteWorkstation(int id)

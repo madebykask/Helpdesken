@@ -14,6 +14,8 @@ namespace DH.Helpdesk.Dal.MapperData.Inventory
 
         public int ReadOnly { get; set; }
 
+        public int Copy { get; set; }
+
         public string GetName()
         {
             return this.FieldName;

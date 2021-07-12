@@ -294,7 +294,8 @@
                 fieldSetting.ShowInList.ToBool(),
                 fieldSetting.Caption,
                 fieldSetting.Required.ToBool(),
-                fieldSetting.ReadOnly.ToBool());
+                fieldSetting.ReadOnly.ToBool(),
+                fieldSetting.Copy.ToBool());
         }
     }
 }

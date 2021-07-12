@@ -33,6 +33,32 @@ IF COL_LENGTH('tblSettings', 'BlockedEmailRecipients') IS NULL
 	END
 GO
 
+RAISERROR ('Add Column Copy to tblComputerFieldSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblComputerFieldSettings','Copy') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblComputerFieldSettings]
+	ADD [Copy] int Not Null default(1)
+End
+Go
+
+RAISERROR ('Updating Copy in tblComputerFieldSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblComputerFieldSettings','Copy') IS NOT NULL
+BEGIN
+	UPDATE [tblComputerFieldSettings]
+    SET [Copy] = 0
+	WHERE ComputerField = 'Status' 
+	OR ComputerField = 'Stolen'
+	OR ComputerField = 'ReplacedWithComputerName'
+	OR ComputerField = 'Sendback'
+	OR ComputerField = 'ScrapDate'
+	OR ComputerField = 'CreatedDate'
+	OR ComputerField = 'ChangedDate'
+	OR ComputerField = 'SyncChangedDate'
+	OR ComputerField = 'ScanDate'
+	OR ComputerField = 'LDAPPath'
+END
+GO
+
 
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.52'

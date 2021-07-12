@@ -24,7 +24,7 @@
 </div>
 <div class="content" style="@(Model.IsForDialog ? "margin-top: 50px" : "")">
     <div class="container">
-        <ul class="nav nav-tabs nav-tabs-actions">
+        <ul class="nav nav-tabs nav-tabs-actions"> 
             @if (Model.TabSettings.ComputersTabSetting.Show)
             {
                 <li class="@GetIsActive(WorkstationEditTabs.Workstation)">
