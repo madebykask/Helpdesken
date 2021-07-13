@@ -2692,7 +2692,8 @@
                         </td>
                         <td></td>
                         <td>
-                            <input type="checkbox" name="CaseFieldSettings[42].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.PlanDate.ToString()) == 1 ? "checked=checked" : "") value="1" />
+                            @*<input type="checkbox" name="CaseFieldSettings[42].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.PlanDate.ToString()) == 1 ? "checked=checked" : "") value="1" />*@
+                            <input type="checkbox" name="CaseFieldSettings[42].ShowExternal" disabled="disabled" />
                             <input type="hidden" name="CaseFieldSettings[42].ShowExternal" value="0" />
                         </td>
                         <td>
@@ -2734,7 +2735,8 @@
                         </td>
                         <td></td>
                         <td>
-                            <input type="checkbox" name="CaseFieldSettings[43].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.WatchDate.ToString()) == 1 ? "checked=checked" : "") value="1" />
+                            @*<input type="checkbox" name="CaseFieldSettings[43].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.WatchDate.ToString()) == 1 ? "checked=checked" : "") value="1" />*@
+                            <input type="checkbox" name="CaseFieldSettings[43].ShowExternal" disabled="disabled" />
                             <input type="hidden" name="CaseFieldSettings[43].ShowExternal" value="0" />
                         </td>
                         <td>
