@@ -1528,15 +1528,15 @@
                                                         {
                                                             <td>
                                                                 @Translation.GetCoreTextTranslation("Artikelkostnad")<br />
-                                                                @Html.TextBoxFor(model => model.case_.Cost, new { maxlength = "7", Class = "inputw50" })
+                                                                @Html.TextBoxFor(model => model.case_.Cost, new { maxlength = "7", Class = "inputw50 cost-field" })
                                                             </td>
                                                             <td>
                                                                 @Translation.GetCoreTextTranslation("Övrig kostnad")<br />
-                                                                @Html.TextBoxFor(model => model.case_.OtherCost, new { maxlength = "7", Class = "inputw50" })
+                                                                @Html.TextBoxFor(model => model.case_.OtherCost, new { maxlength = "7", Class = "inputw50 cost-field" })
                                                             </td>
                                                             <td>
                                                                 @Translation.GetCoreTextTranslation("Valuta")<br />
-                                                                <select id="case__Currency" name="case_.Currency" class="inputw100">
+                                                                <select id="case__Currency" name="case_.Currency" class="inputw100 cost-field">
                                                                     <option value="">&nbsp;</option>
                                                                     @if (Model.currencies != null)
                                                                     {
@@ -1552,18 +1552,21 @@
                                                         {
                                                             <td>
                                                                 @Translation.GetCoreTextTranslation("Artikelkostnad")<br />
-                                                                @Html.TextBoxFor(model => model.case_.Cost, new { maxlength = "7", Class = "inputw50", @readonly = true })
+                                                                @Html.TextBoxFor(model => model.case_.Cost, new { maxlength = "7", Class = "inputw50 cost-field", @readonly = true })
                                                             </td>
                                                             <td>
                                                                 @Translation.GetCoreTextTranslation("Övrig kostnad")<br />
-                                                                @Html.TextBoxFor(model => model.case_.OtherCost, new { maxlength = "7", Class = "inputw50", @readonly = true })
+                                                                @Html.TextBoxFor(model => model.case_.OtherCost, new { maxlength = "7", Class = "inputw50 cost-field", @readonly = true })
                                                             </td>
                                                             <td>
                                                                 @Translation.GetCoreTextTranslation("Valuta")<br />
-                                                                @Html.TextBoxFor(m => m.case_.Currency, new { @readonly = true, Class = "inputw50" })
+                                                                @Html.TextBoxFor(m => m.case_.Currency, new { @readonly = true, Class = "inputw50 cost-field" })
                                                                 @Html.HiddenFor(x => x.case_.Currency)
                                                             </td>
                                                         }
+                                                    </tr>
+                                                    <tr>
+                                                        <td id="costValidationMessage" colspan="3"></td>
                                                     </tr>
                                                 </table>
                                             </td>

@@ -327,25 +327,30 @@
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.WatchDate": {
-                required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Model.IsCaseReopened)"); }
+                required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Model.IsCaseReopened)");
+                }
             },
-            "case_.Cost": {
-                required: function () {
-                    if (($('#case__Cost').val() == "0" && $('#case__OtherCost').val() == "0" && $('#case__Currency').val() == "") &&  @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.FinishingCause)) == true) {
-
-                        alert('Cost is required');
-                        //Does not work :(
-                        //return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Cost.ToString(), Model.IsCaseReopened)");
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
+            "@Html.NameFor(m => m.case_.Cost)": {
+                require_from_group: {
+                    param: [3, ".cost-field"],
+                    depends: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost))
+                }
+            },
+            "@Html.NameFor(m => m.case_.OtherCost)": {
+                require_from_group: {
+                    param: [3, ".cost-field"],
+                    depends: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost))
+                }
+            },
+            "@Html.NameFor(m => m.case_.Currency)": {
+                require_from_group: {
+                    param: [3, ".cost-field"],
+                    depends: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost))
                 }
             },
             "CaseLog.FinishingType": {
                 required: function () {
-                    if ($('#CaseLog_FinishingDate').closest('tr').css('display') != 'none' && $('#CaseLog_FinishingType').closest('tr').css('display') != 'none') {
+                    if ($('#CaseLog_FinishingDate').closest('tr').css('display') !== 'none' && $('#CaseLog_FinishingType').closest('tr').css('display') !== 'none') {
                         if (($('#CaseLog_FinishingDate').val() == "" || $('#CaseLog_FinishingDate').val() == null) && @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)) == false) {
                             return false;
                         }
@@ -486,6 +491,8 @@
         errorPlacement: function(error, element) {
             if (element.hasClass("time-field")) {
                 $("#timeValidationMessage").html(error);
+            } else if (element.hasClass("cost-field")) {
+                $("#costValidationMessage").html(error);
             } else {
                 if (element.is("select.chosen-single-select")) {
                     error.insertAfter($("#" + element.attr("id") + "_chosen"));
@@ -498,9 +505,6 @@
             }
         },
         messages: {
-            "case_.Cost": {
-                required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Cost.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
-            },
             "case_.ReportedBy": {
                 required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
@@ -537,8 +541,14 @@
             "case_.OU_Id": {
             required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
-            "case_.Cost":{
-            required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Cost.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            "@Html.NameFor(m => m.case_.Cost)":{
+                require_from_group: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Cost.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            },
+            "@Html.NameFor(m => m.case_.OtherCost)":{
+                require_from_group: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Cost.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            },
+            "@Html.NameFor(m => m.case_.Currency)":{
+                require_from_group: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Cost.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
             "case_.CostCentre":{
             required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.CostCentre.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
