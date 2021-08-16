@@ -2099,11 +2099,11 @@
                             <input type="hidden" name="CaseFieldSettingWithLangauges[30].Name" value="ContactBeforeAction" />
                         </td>
                         <td>
-                            <input type="checkbox" name="CaseFieldSettings[30].Required" @(Model.CaseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()) == 1 ? "checked=checked" : "") value="1" />
+                            <input type="checkbox" name="CaseFieldSettings[30].Required" disabled="disabled" />
                             <input type="hidden" name="CaseFieldSettings[30].Required" value="0" />
                         </td>
                         <td>
-                            <input type="checkbox" name="CaseFieldSettings[30].RequiredIfReopened" @(Model.CaseFieldSettings.getRequiredIfReopened(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()) == 1 ? "checked=checked" : "") value="1" />
+                            <input type="checkbox" name="CaseFieldSettings[30].RequiredIfReopened" disabled="disabled" @(Model.CaseFieldSettings.getRequiredIfReopened(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()) == 1 ? "checked=checked" : "") value="1" />
                             <input type="hidden" name="CaseFieldSettings[30].RequiredIfReopened" value="0" />
                         </td>
                         <td>
