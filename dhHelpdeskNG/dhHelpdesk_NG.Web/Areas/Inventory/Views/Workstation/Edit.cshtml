@@ -11,32 +11,56 @@
 
 @section Actions
 {
-    <ul class="secnav">
-        @if (Model.UserHasInventoryAdminPermission)
+<ul class="secnav">
+    @if (Model.UserHasInventoryAdminPermission)
+    {
+        <li id="menu1">
+            <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn controlBtn" onclick="workstationEdit.submit()" />
+        </li>
+        if (!Model.IsForDialog)
         {
-            <li id="menu1">
-                <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn" onclick="workstationEdit.submit()" />
-            </li>
-            if (!Model.IsForDialog)
-            {
-                <li id="menu3">
-                    @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "Delete", new { id = Model.ComputerViewModel.Id }, new
-                    { @class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?" })
-                </li>
-            }
+        <li id="menu3">
+            @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "Delete", new { id = Model.ComputerViewModel.Id }, new
+       {
+           @class = "btn deleteDialog controlBtn",
+           deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?",
+           actionControlId = "deleteActionBtn"
+       })
+            @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "Delete", new { id = Model.ComputerViewModel.Id }, new
+       {
+           @id= "deleteActionBtn",
+           @class = "btn hide",
+           onclick = "workstationEdit.delete();"
+       })
+        </li>
         }
-        @if (Model.IsForDialog && !string.IsNullOrEmpty(Model.UserId))
-        {
-            <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "RelatedInventoryFull", new { userId = Model.UserId }, new { @class = "btn" })</li>
-        }
-        @if (!Model.IsForDialog)
-        {
-            <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", null, new { @class = "btn" })</li>
-            <li id="menu2">
-                <input type="submit" value="@Translation.GetCoreTextTranslation("Kopiera")" class="btn" onclick="workstationEdit.copy()"/>
-            </li>
-        }
-    </ul>
+    }
+    @if (Model.IsForDialog && !string.IsNullOrEmpty(Model.UserId))
+    {
+        <li id="menu2">
+            @Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "RelatedInventoryFull", new {userId = Model.UserId},
+                     new {@class = "btn controlBtn" })
+        </li>
+    }
+    @if (!Model.IsForDialog)
+    {
+        <li id="menu2">
+            @Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", null, new {@class = "btn controlBtn" })
+        </li>
+        <li id="menu2">
+            @Html.ActionLink(Translation.GetCoreTextTranslation("Kopiera"), "Index",null, new
+       {
+           @class = "btn deleteDialog controlBtn",
+           deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill kopiera") + "?",
+           buttonTypes="YesNo",
+           actionControlId = "copyActionBtn"
+       })
+
+            <input id="copyActionBtn" type="submit" value="@Translation.GetCoreTextTranslation("Kopiera")" class="btn hide" onclick="workstationEdit.copy();" />
+        </li>
+    }
+    <li><i id="loaderIndicator" class="gif-loader" style="display:none">&nbsp;</i></li>
+</ul>
 }
 
 @using (Html.BeginForm("Edit", "Workstation", FormMethod.Post, new { id = "workstation_edit_form" }))

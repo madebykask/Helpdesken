@@ -21,6 +21,7 @@
             this.MacAddressFieldSettingModel = macAddressFieldSettingModel;
             this.RASFieldSettingModel = rasFieldSettingModel;
             this.NovellClientFieldSettingModel = novellClientFieldSettingModel;
+            this.MacAddressFieldSettingModel.IsCopyDisabled = true;
         }
 
         [NotNull]
