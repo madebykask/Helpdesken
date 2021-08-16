@@ -5,6 +5,8 @@
     var ouRegionCtrl = $('#OU_RegionId');
     var ouDepartmentCtrl = $('#OU_DepartmentId');
     var ouOUCtrl = $('#OU_OUId');
+    var loaderIndicatorId = "loaderIndicator";
+    var controlButtonsCtrl = $('.btn.controlBtn');
 
     this.init = function (options) {
         $.extend(settings, options || {});
@@ -63,14 +65,38 @@
 
                     });
             });
-    },
+    }
 
     this.submit = function () {
+        if (!$('#workstation_edit_form').valid()) return;
+        this.changeCaseButtonsState(false);
         $('#workstation_edit_form').submit();
     }
 
+    this.delete = function () {
+        this.changeCaseButtonsState(false);
+        var form = $('<form method="post" id="deleteDialogForm" action=""></form>');
+        form.attr('action', $('#deleteActionBtn').attr('href')).appendTo("body");
+        form[0].submit();
+    }
+
     this.copy = function () {
+        if (!$('#workstation_edit_form').valid()) return;
+        this.changeCaseButtonsState(false);
         $('#' + settings.copyControlId).val('true');
         $('#workstation_edit_form').submit();
+    }
+
+    this.changeCaseButtonsState = function (state) {
+        if (state) {
+            controlButtonsCtrl.removeClass('disabled');
+            controlButtonsCtrl.css("pointer-events", "");
+            $('#' + loaderIndicatorId).css("display", "none");
+        }
+        else {
+            controlButtonsCtrl.addClass("disabled");
+            controlButtonsCtrl.css("pointer-events", "none");
+            $('#' + loaderIndicatorId).css("display", "block");
+        }
     }
 }

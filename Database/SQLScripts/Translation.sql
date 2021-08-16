@@ -8045,6 +8045,14 @@ begin
 end
 GO
 
+If not exists (select * from tbltext where id = 2082)
+	insert into tbltext (id, TextString) VALUES (2082, 'Är du säker på att du vill kopiera')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2082 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2082, 2, 'Are you sure you want to copy')
+GO
+
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')

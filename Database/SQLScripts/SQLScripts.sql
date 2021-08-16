@@ -56,6 +56,8 @@ BEGIN
 	OR ComputerField = 'SyncChangedDate'
 	OR ComputerField = 'ScanDate'
 	OR ComputerField = 'LDAPPath'
+	OR ComputerField = 'MACAddress'
+	OR ComputerField = 'Theftmark'
 END
 GO
 

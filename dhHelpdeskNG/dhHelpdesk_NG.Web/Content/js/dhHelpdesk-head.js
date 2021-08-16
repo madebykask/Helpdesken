@@ -17,6 +17,8 @@ $(function () {
         var action = $(this).attr("href");
         var text = $(this).attr("deleteDialogText");
         var btnType = $(this).attr("buttonTypes");
+        var actionControlId = $(this).attr("actionControlId");
+        var that = this;
 
         var txtDelete = "";
         var txtCancel = "";
@@ -56,7 +58,11 @@ $(function () {
             });
 
             NewDialog.find(".btn-ok").on("click", function (e) {
-                $("#deleteDialogForm").submit();
+                if (actionControlId) {
+                    $("#" + actionControlId).click();
+                } else {
+                    $("#deleteDialogForm").submit();
+                }
                 NewDialog.modal('hide');
             });
         });
