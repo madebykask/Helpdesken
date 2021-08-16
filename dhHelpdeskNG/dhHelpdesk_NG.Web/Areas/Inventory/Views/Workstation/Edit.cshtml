@@ -176,34 +176,41 @@
 
             $.validator.addMethod("uniquemac",
                 function (value, element, param) {
-                    var validator = this;
-                    if (!value) {
-                        var submitted = validator.formSubmitted;
-                        validator.prepareElement(element);
-                        validator.formSubmitted = submitted;
-                        validator.successList.push(element);
-                        delete validator.invalid[element.name];
-                        validator.showErrors();
-                        return true;
+                    if (this.optional(element)) {
+                        return "dependency-mismatch";
                     }
+
                     var previous = this.previousValue(element);
                     if (!this.settings.messages[element.name]) {
                         this.settings.messages[element.name] = {};
                     }
-                    previous.originalMessage = this.settings.messages[element.name].uniquemac;
+                    previous.originalMessage = this.settings.messages[element.name].remote;
+                    this.settings.messages[element.name].remote = previous.message;
+
+                    param = '@Url.Action("ValidateMacAddress", "Workstation")';
+
                     if (previous.old === value) {
                         return previous.valid;
                     }
+
                     previous.old = value;
+                    var validator = this;
                     this.startRequest(element);
+                    var data = {
+                        macAddress: value,
+                        currentId: @Model.Id
+                    };
+                    data[element.name] = value;
                     var valid = "pending";
-                    $.get('@Url.Action("ValidateMacAddress", "Workstation")',
-                        {
-                            macAddress: value,
-                            currentId: @Model.Id
-                        },
-                        function (response) {
-                            validator.settings.messages[element.name].uniquemac = previous.originalMessage;
+                    $.ajax($.extend(true, {
+                        url: param,
+                        async: false,
+                        mode: "abort",
+                        port: "validate" + element.name,
+                        dataType: "json",
+                        data: data,
+                        success: function (response) {
+                            validator.settings.messages[element.name].remote = previous.originalMessage;
                             valid = response === true || response === "true";
                             if (valid) {
                                 var submitted = validator.formSubmitted;
@@ -221,41 +228,48 @@
                             }
                             previous.valid = valid;
                             validator.stopRequest(element, valid);
-                        },
-                        'json');
+                        }
+                    }, param));
                     return valid;
                 }
             );
             $.validator.addMethod("uniquetheftmark",
                 function (value, element, param) {
-                    var validator = this;
-                    if (!value) {
-                        var submitted = validator.formSubmitted;
-                        validator.prepareElement(element);
-                        validator.formSubmitted = submitted;
-                        validator.successList.push(element);
-                        delete validator.invalid[element.name];
-                        validator.showErrors();
-                        return true;
+                    if (this.optional(element)) {
+                        return "dependency-mismatch";
                     }
+
                     var previous = this.previousValue(element);
                     if (!this.settings.messages[element.name]) {
                         this.settings.messages[element.name] = {};
                     }
-                    previous.originalMessage = this.settings.messages[element.name].uniquetheftmark;
+                    previous.originalMessage = this.settings.messages[element.name].remote;
+                    this.settings.messages[element.name].remote = previous.message;
+
+                    param = '@Url.Action("ValidateTheftmark", "Workstation")';
+
                     if (previous.old === value) {
                         return previous.valid;
                     }
+
                     previous.old = value;
+                    var validator = this;
                     this.startRequest(element);
+                    var data = {
+                        theftMark: value,
+                        currentId: @Model.Id
+                    };
+                    data[element.name] = value;
                     var valid = "pending";
-                    $.get('@Url.Action("ValidateTheftmark", "Workstation")',
-                        {
-                            theftMark: value,
-                            currentId: @Model.Id
-                        },
-                        function (response) {
-                            validator.settings.messages[element.name].uniquetheftmark = previous.originalMessage;
+                    $.ajax($.extend(true, {
+                        url: param,
+                        async: false,
+                        mode: "abort",
+                        port: "validate" + element.name,
+                        dataType: "json",
+                        data: data,
+                        success: function (response) {
+                            validator.settings.messages[element.name].remote = previous.originalMessage;
                             valid = response === true || response === "true";
                             if (valid) {
                                 var submitted = validator.formSubmitted;
@@ -273,11 +287,12 @@
                             }
                             previous.valid = valid;
                             validator.stopRequest(element, valid);
-                        },
-                        'json');
+                        }
+                    }, param));
                     return valid;
                 }
             );
+            
             $('#workstation_edit_form')
                 .removeData("validator")
                 .removeData("unobtrusiveValidation");

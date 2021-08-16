@@ -68,8 +68,13 @@
     }
 
     this.submit = function () {
-        if (!$('#workstation_edit_form').valid()) return;
-        this.changeCaseButtonsState(false);
+        $("#workstation_edit_form").data("validator").settings.submitHandler = function (form) {
+            if ($(form).valid()) {
+                self.changeCaseButtonsState(false);
+                form.submit();
+            }
+        };
+        $('#' + settings.copyControlId).val('false');
         $('#workstation_edit_form').submit();
     }
 
@@ -81,8 +86,12 @@
     }
 
     this.copy = function () {
-        if (!$('#workstation_edit_form').valid()) return;
-        this.changeCaseButtonsState(false);
+        $("#workstation_edit_form").data("validator").settings.submitHandler = function (form) {
+            if ($(form).valid()) {
+                self.changeCaseButtonsState(false);
+                form.submit();
+            }
+        };
         $('#' + settings.copyControlId).val('true');
         $('#workstation_edit_form').submit();
     }
