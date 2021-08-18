@@ -40,7 +40,7 @@ Public Class CustomerData
                            "tblSettings.LDAPSyncType, tblCustomer.Days2WaitBeforeDelete, tblSettings.LDAPAuthenticationType, 0 AS WorkingGroup_Id, " &
                            "tblSettings.InventoryDays2WaitBeforeDelete, tblSettings.LDAPAllUsers, tblSettings.EMailAnswerDestination, tblSettings.ModuleOrder, tblSettings.ModuleAccount, tblSettings.PhysicalFilePath, " &
                            "tblSettings.InventoryCreate, tblSettings.AllowedEMailRecipients, tblCustomer.CaseStatisticsEMailList, tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId, tblSettings.UseEws, " &
-                           "tblSettings.DefaultAdministratorExternal, tblCustomer.NewCaseEMailList, tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination "
+                           "tblSettings.DefaultAdministratorExternal, tblCustomer.NewCaseEMailList, tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, tblSettings.BlockedEmailRecipients "
 
                 If Id <> 0 Then
                     sSQL = sSQL & ", tblSettings.XMLFileFolder, tblCustomer.NDSPath AS LDAPServerName, tblSettings.LDAPUserName, tblSettings.LDAPPassword " & _
