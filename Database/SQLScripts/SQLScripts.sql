@@ -61,6 +61,17 @@ BEGIN
 END
 GO
 
+RAISERROR ('Add Column Customer_Id to tblOperatingSystem', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblOperatingSystem','Customer_Id') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblOperatingSystem]
+	ADD [Customer_Id] INT NULL
+
+	ALTER TABLE [dbo].[tblOperatingSystem] WITH NOCHECK ADD CONSTRAINT [FK_tblOperatingSystem_tblCustomer]
+	FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
+
+End
+Go
 
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.52'

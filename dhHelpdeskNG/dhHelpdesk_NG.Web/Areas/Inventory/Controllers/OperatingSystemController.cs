@@ -7,6 +7,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel;
     using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+    using DH.Helpdesk.Web.Infrastructure;
 
     public class OperatingSystemController : ComputerModuleBaseController
     {
@@ -27,16 +28,18 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
         protected override List<ItemOverview> Get()
         {
-            return this.ComputerModulesService.GetOperatingSystems();
+            return this.ComputerModulesService.GetOperatingSystems(SessionFacade.CurrentCustomer.Id);
         }
 
         protected override void Create(ComputerModule computerModule)
         {
+            computerModule.Customer_Id = SessionFacade.CurrentCustomer.Id;
             this.ComputerModulesService.AddOperatingSystem(computerModule);
         }
 
         protected override void Update(ComputerModule computerModule)
         {
+            computerModule.Customer_Id = SessionFacade.CurrentCustomer.Id;
             this.ComputerModulesService.UpdateOperatingSystem(computerModule);
         }
 

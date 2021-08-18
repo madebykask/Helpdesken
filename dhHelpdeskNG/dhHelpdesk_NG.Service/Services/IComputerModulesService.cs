@@ -26,7 +26,7 @@ namespace DH.Helpdesk.Services.Services
 
         List<ItemOverview> GetProcessors();
 
-        List<ItemOverview> GetOperatingSystems();
+        List<ItemOverview> GetOperatingSystems(int customerId);
 
         List<ItemOverview> GetComputerTypes(int customerId, int? inventoryId = null);
 

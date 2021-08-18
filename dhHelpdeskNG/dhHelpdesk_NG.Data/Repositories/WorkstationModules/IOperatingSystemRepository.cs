@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules
 
         void Update(ComputerModule businessModel);
 
-        List<ItemOverview> FindOverviews();
+        List<ItemOverview> FindOverviews(int customerId);
 
         List<ReportModel> FindConnectedToComputerOperatingSystemOverviews(
             int customerId,

@@ -110,9 +110,9 @@ namespace DH.Helpdesk.Services.Services.Concrete
             return processors;
         }
 
-        public List<ItemOverview> GetOperatingSystems()
+        public List<ItemOverview> GetOperatingSystems(int customerId)
         {
-            var operatingSystems = this.operatingSystemRepository.FindOverviews();
+            var operatingSystems = this.operatingSystemRepository.FindOverviews(customerId);
             return operatingSystems;
         }
 
