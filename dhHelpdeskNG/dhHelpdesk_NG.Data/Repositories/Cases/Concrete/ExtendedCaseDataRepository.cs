@@ -10,6 +10,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     using Mappers;
     using Domain.ExtendedCaseEntity;    
     using System.Collections.ObjectModel;
+    using System.Collections.Generic;
 
     public sealed class ExtendedCaseDataRepository : RepositoryBase<ExtendedCaseDataEntity>, IExtendedCaseDataRepository
     {        
@@ -148,5 +149,5 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
 			return dataEntity;
 		}
-	}
+    }
 }

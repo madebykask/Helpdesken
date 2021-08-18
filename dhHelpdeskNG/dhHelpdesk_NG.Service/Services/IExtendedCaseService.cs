@@ -20,11 +20,14 @@ namespace DH.Helpdesk.Services.Services
         IDictionary<string, string> GetTemplateCaseBindingValues(int formId, int extendedCaseDataId);
 
 		List<ExtendedCaseFormModel> GetExtendedCaseFormsForCustomer(int customerId);
-		List<ExtendedCaseFormWithCaseSolutionsModel> GetExtendedCaseFormsWithCaseSolutionForCustomer(int customerId);
+
+        List<ExtendedCaseFormModel> GetExtendedCaseFormsCreatedByEditor(int customerId);
+
+        List<ExtendedCaseFormWithCaseSolutionsModel> GetExtendedCaseFormsWithCaseSolutionForCustomer(int customerId);
 
 		List<ExtendedCaseFormFieldTranslationModel> GetExtendedCaseFormFields(int extendedCaseFormId, int languageID);
 		List<ExtendedCaseFormSectionTranslationModel> GetExtendedCaseFormSections(int extendedCaseFormId, int languageID);
 
-
+        bool CreateExtendedCaseForm(ExtendedCaseFormPayloadModel entity, string userId);
     }
 }

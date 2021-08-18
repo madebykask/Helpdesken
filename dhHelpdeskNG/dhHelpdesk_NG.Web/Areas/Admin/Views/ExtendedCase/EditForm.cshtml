@@ -1,9 +1,16 @@
-﻿<div class="secnavs fixed">
+﻿@using DH.Helpdesk.Web
+@using DH.Helpdesk.Web.Models.Faq.Output
+
+@model DH.Helpdesk.BusinessData.Models.Case.CustomerCaseSolutions
+
+@Scripts.Render(BundleConfig.ScriptNames.ConfirmationDialog)
+<div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), "edit", new { customerId = Model.Customer.Id }, new { onclick = "submitForm();return false;", @class = "btn" })</li>
-            <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "edit", new { customerId = Model.Customer.Id }, new { onclick = "deleteForm();return false;", @class = "btn" })</li>
-            <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "edit", new { area = "admin", controller = "Customer", action = "Edit", id = Model.Customer.Id }, new { @class = "btn" })</li>
+            @*<li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), "Edit", "ExtendedCase", new { customerId = @Model.Id }, new { onclick = "submitForm();return false;", @class = "btn" })</li>*@
+            <li><input type="button" class="btn" value=@Translation.GetCoreTextTranslation("Spara") onclick="submitForm()"></li>
+            <li><input type="button" class="btn" value="@Translation.GetCoreTextTranslation("Ta bort")" id="delete_button"></li>
+            <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Edit", new { area = "admin", controller = "Customer", action = "Edit", id = @Model.Customer.Id }, new { @class = "btn" })</li>
         </ul>
     </div>
 </div>
@@ -30,7 +37,28 @@
                                     @Translation.GetCoreTextTranslation("Formulär")  @Translation.GetCoreTextTranslation("Namn")
                                 </td>
                                 <td>
-                                    <input type="text" />
+                                    <input id="formName" type="text" maxlength="100" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Formulär")  @Translation.GetCoreTextTranslation("Beskrivning")
+                                </td>
+                                <td>
+                                    <input id="formDescription" type="text" maxlength="500" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Ärendemallar")
+                                </td>
+                                <td>
+                                    <select id="drpCaseSolutions" class="chosen-select" multiple placeholder=@Translation.GetCoreTextTranslation("Välj en eller flera")>
+                                        @foreach (var item in Model.CaseSolutionSelections)
+                                        {
+                                            <option value="@item.Id" @((item.IsChecked == true) ? "selected" : "")>@item.Name</option>
+                                        }
+                                    </select>
                                 </td>
                             </tr>
                             <tr>
@@ -38,7 +66,7 @@
                                     @Translation.GetCoreTextTranslation("Aktiv")
                                 </td>
                                 <td>
-                                    <input type="checkbox" />
+                                    <input id="formActive" type="checkbox" />
                                 </td>
                             </tr>
                         </tbody>
@@ -57,11 +85,11 @@
                                 <td>
                                     <div id="fields" class="dragndrop">
                                         <ul id="source">
-                                            <li data-type="header"><i class="fa fa-header" aria-hidden="true"></i> Section Name</li>
+                                            <li data-type="section"><i class="fa fa-header" aria-hidden="true"></i> Section Name</li>
                                             <li data-type="text"><i class="fa fa-font" aria-hidden="true"></i> Text Field</li>
                                             <li data-type="textarea"><i class="fa fa-text-width" aria-hidden="true"></i> Text Area</li>
                                             <li data-type="date"><i class="fa fa-calendar-o" aria-hidden="true"></i> Date Field</li>
-                                            <li data-type="select"><i class="fa fa-list-ul" aria-hidden="true"></i> Template</li>
+                                            @*<li data-type="select"><i class="fa fa-list-ul" aria-hidden="true"></i> Template</li>*@
                                             <li data-type="tinymce"><i class="fa fa-file-word-o" aria-hidden="true"></i> Info Field</li>
                                         </ul>
                                         <input id="btnClear" class="btn" type="button" onclick="clearItems()" value="Clear" />
@@ -76,22 +104,41 @@
         </div>
     </div>
 </div>
+
 <link href="~/Content/font-awesome.css" rel="stylesheet" />
 <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
 <script type="text/javascript">
 
-    $(document).ready(function () {
+    const IDNAME = "firstSectionId";
+    let divHeaderActions = (idName) => "<div class='header-actions'><a class='fa fa-pencil fa-lg' data-toggle='collapse' href='#" + idName + "' role='button' title='Edit' aria-hidden='true'></a><a class='fa fa-trash fa-lg' href='#" + idName + "' title='Remove Element' role='button' aria-hidden='true'></a></div>";
+    let divHeaderLabel = (labelClass, labelName, idName) => "<div class='header-label'><label class='" + labelClass + "' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + labelName + "</label></div>";
+    let editFieldHtml = (idName, placeHolder, hasLabelName, hasRequiredChk) => {
+        var res =
+            "<div class='collapse' id = '" + idName + "'><div><table class='table borderless' style='margin-left:10px;margin-right:10px'><tbody>"
+        if (hasLabelName) {
+            res = res + "<tr><td><label for='" + idName + "label" + "'>Label</label></td><td><input class='labelName' type='text' id='" + idName + "label" + "' placeholder='" + placeHolder + "'></td></tr>" 
+        }
 
+        if (hasRequiredChk) {
+            res = res + "<tr><td><label for='" + idName + "required" + "' class=''>Required</label></td><td><input type='checkbox' class='chkRequired' id='" + idName + "required" + "'></td></tr>";
+        }
+        res = res +"</table></div ></div>";
+        return res;
+    }
+    let sectionHtmlDiv = (editFieldHtml, idName, labelClass, labelName) => "<div class='field'><div class='header'>" + divHeaderLabel(labelClass, labelName, idName) + divHeaderActions(idName) + "</div><br/>" + editFieldHtml + "</div>";
+    let sectionHtml = () => "<li data-type='section' class='ui-draggable' style='display: list-item'>" + sectionHtmlDiv(editFieldHtml(IDNAME, "Section Name", true, false), IDNAME, "labelLg", "Section Name") + "</li>";
+
+    $(document).ready(function () {
         var draggedFrom = "";
         var draggedItem;
 
-        let templates = {};
-        templates = getTemplates();
+        //let templates = {};
+        // templates = getTemplates();
 
         $("#source li").draggable({
             connectToSortable: "#dropzone", helper: "clone", revert: 'invalid',
             start: function (e, ui) {
-                $(ui.helper).css('width', "50%");
+              $(ui.helper).css('width', "10%");
                 draggedItem = ui.item;
                 draggedFrom = $(this).closest(".dragndrop").attr("id");
             },
@@ -104,38 +151,38 @@
         $("#dropzone").sortable({
             revert: true,
             receive: function (event, ui) {
+                let idName = createUUID();
                 if (draggedFrom == "fields") {
                     switch (draggedItem.data('type')) {
-                        case "header":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'></div><div class='header-actions'><a class='fa fa-pencil fa-lg' title='Edit' aria-hidden='true'></a><a class='fa fa-trash fa-lg' title='Remove Element'  aria-hidden='true'></a></div></div><div class='control'><h3>Section Name</h3></div></div>")
+                        case "section":
+                            draggedItem.html(sectionHtmlDiv(editFieldHtml(idName, "Section Name", true, false), idName, "labelLg", "Section Name"));
                             break;
 
                         case "text":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label'>Text Field</label></div><div class='header-actions'><a class='fa fa-pencil fa-lg' title='Edit' aria-hidden='true'></a><a class='fa fa-trash fa-lg' title='Remove Element'  aria-hidden='true'></a></div></div><div class='control'><input type='text' class='form-control form-control-width' readonly></div></div>")
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>Text Field</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, "Text Field", true, true) + "</div>")
                             break;
 
                         case "textarea":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label'>Text Area</label></div><div class='header-actions'><a class='fa fa-pencil fa-lg' title='Edit' aria-hidden='true'></a><a class='fa fa-trash fa-lg' title='Remove Element'  aria-hidden='true'></a></div></div><div class='control'><textarea class='form-control form-control-width' readonly></textarea></div></div>")
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>Text Area</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><textarea class='form-control form-control-width' readonly></textarea></div>" + editFieldHtml(idName, "Text Area", true, true) + "</div>")
                             break;
 
                         case "date":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label'>Date Field</label></div><div class='header-actions'><a class='fa fa-pencil fa-lg' title='Edit' aria-hidden='true'></a><a class='fa fa-trash fa-lg' title='Remove Element'  aria-hidden='true'></a></div></div><div class='control'><input type='date' class='form-control' readonly></div></div>")
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>Date Field</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='date' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, "Date Field", true, true) + "</div>")
                             break;
 
-                        case "select":
+                        //case "select":
 
-                            templates = getTemplates();
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label'>Template</label></div><div class='header-actions'><a class='fa fa-pencil fa-lg' title='Edit' aria-hidden='true'></a><a class='fa fa-trash fa-lg' title='Remove Element'  aria-hidden='true'></a></div></div><div class='control'><select class='form-control form-control-width' data-placeholder='Choose a template...'><option>Template1</option><option>Template2</option><option>Template3</option></select></div></div>");
-                            break;
+                        //    templates = getTemplates();
+                        //    draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>Template</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><select class='form-control form-control-width' data-placeholder='Choose a template...'><option>Template1</option><option>Template2</option><option>Template3</option></select></div>" + editFieldHtml(idName, "Template") + "</div>")
+                        //    break;
 
                         case "tinymce":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label'>Info Field</label></div><div class='header-actions'><a class='fa fa-pencil fa-lg' title='Edit' aria-hidden='true'></a><a class='fa fa-trash fa-lg' title='Remove Element'  aria-hidden='true'></a></div></div><div class='control' style='padding:10px'><input type='text' class='form-control form-control-width form-control-tinymce'></div></div>");
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>Info Field</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' style='padding:10px'><input type='text' class='form-control form-control-width form-control-tinymce'></div></div>")
                             tinymce.init({
-                                selector: '.form-control-tinymce',  //Change this value according to your HTML
-                                //auto_focus: 'element1',
+                                selector: '.form-control-tinymce',
                                 width: "100%%",
                                 height: "150px",
-                                readonly: 1,
+                                readonly: 0,
                             });
                             break;
 
@@ -144,7 +191,6 @@
                     }
 
                     draggedFrom = "";
-                    console.log(templates)
                 }
             },
             start: function (e, ui) {
@@ -161,54 +207,124 @@
         });
 
         $(document).on("mouseenter", ".fa-pencil", function (e) {
-            $(this).css("cursor", "hand");
-
-            if ($(this).attr('class').includes("fa-lg")) {
-                $(this).attr('class', 'fa fa-pencil fa-2x');
-            }
+            //if ($(this).attr('class').includes("fa-lg")) {
+            //    $(this).attr('class', 'fa fa-pencil fa-2x');
+            //}
 
             $(this).parent().parent().parent().css("background", "#99ccff");
         });
 
         $(document).on("mouseleave", ".fa-pencil", function (e) {
-            $(this).css("cursor", "pointer");
-            if ($(this).attr('class').includes("fa-2x")) {
-                $(this).attr('class', 'fa fa-pencil fa-lg');
-            }
+            //if ($(this).attr('class').includes("fa-2x")) {
+            //    $(this).attr('class', 'fa fa-pencil fa-lg');
+            //}
 
             $(this).parent().parent().parent().css("background", "#e8dfdf");
         });
 
         $(document).on("mouseenter", ".fa-trash", function (e) {
-            $(this).css("cursor", "hand");
-
-            if ($(this).attr('class').includes("fa-lg")) {
-                $(this).attr('class', 'fa fa-trash fa-2x');
-            }
+            //if ($(this).attr('class').includes("fa-lg")) {
+            //    $(this).attr('class', 'fa fa-trash fa-2x');
+            //}
 
             $(this).parent().parent().parent().css("background", "pink");
         });
 
         $(document).on("mouseleave", ".fa-trash", function (e) {
-            $(this).css("cursor", "pointer");
-            if ($(this).attr('class').includes("fa-2x")) {
-                $(this).attr('class', 'fa fa-trash fa-lg');
-            }
+            //if ($(this).attr('class').includes("fa-2x")) {
+            //    $(this).attr('class', 'fa fa-trash fa-lg');
+            //}
             $(this).parent().parent().parent().css("background", "#e8dfdf");
-            //$(this).parent().parent().parent().attr('class', 'field');
+            $(this).parent().parent().parent().attr('class', 'field');
         });
 
         $(document).on("click", ".fa-trash", function (e) {
             $(this).parent().parent().parent().html('');
         });
-    })
+
+        $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(IDNAME, "Section Name"), IDNAME, "labelLg", "Section Name")));
+
+        $(document).on("keyup", ".labelName", function (e) {            
+            var id = $(this).attr('id').replace('label', 'headerName');
+            document.getElementById(id).innerHTML = $(this).attr('value');
+        });
+
+        $(document).on("change", ".chkRequired", function (e) {
+            var id = $(this).attr('id').replace('required', 'requiredSpan');
+            if ($(this).prop("checked")) {
+                document.getElementById(id).style.visibility = "visible";
+            }
+            else {
+                document.getElementById(id).style.visibility = "hidden";
+            }
+        });
+
+            $(function () {
+        $('#delete_button').click(function (e) {
+            e.stopImmediatePropagation();
+            var dlg = new ConfirmationDialog();
+            var opts = {
+                dlgText: '@Html.Raw(Translation.GetForJS("Är du säker på att du vill ta bort aktuell FAQ"))',
+                btnYesText: '@Translation.GetForJS("Ja")',
+                btnNoText: '@Translation.GetForJS("Nej")',
+                onClick: function (button) {
+                    if (button === ConfirmationDialog.YES) {
+                        @*$.post('@Url.Action("DeleteFaq")', { id: '@Model.Id' }, function () {
+                            window.location.href = '@Url.Action("Index")';
+                        });*@
+                    } else {
+                        dlg.hide();
+                    }
+                }
+            }
+            dlg.init(opts);
+            dlg.show();
+        });
+    });
+
+    });
 
     function clearItems() {
-        $("#dropzone").html('');
+        //$("#dropzone").html('');
+        $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(IDNAME, "Section Name"), IDNAME, "labelLg", "Section Name")));
     }
 
     function submitForm() {
-        alert('he')
+
+        var selectedCaseSolutions = []
+        $.each($("#drpCaseSolutions option:selected"), function () {
+            selectedCaseSolutions.push($(this).val());
+        });
+
+        var mod = $('#divPasswordDialog').modal('show');
+
+        mod.find("#btnClose").on("click", function (e) {
+            mod.modal('hide');
+        });
+
+        let url = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + location.pathname
+        url = url.substr(0, url.lastIndexOf("/")) + "/EditForm";
+
+        var dataToSend = {
+            customerId: getUrlVars()["customerId"],
+            languageId: getUrlVars()["languageId"],
+            name: document.getElementById("formName").value,
+            description: document.getElementById("formDescription").value,
+            status: $("#formActive").is(":checked") ? "true" : "false",
+            caseSolutionIds: selectedCaseSolutions,
+            items: [{ id: "1", type: "string", label: "text" }, { id: "2", type: "string", label: "textarea" }]
+        };
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: JSON.stringify(dataToSend),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+            }
+        });
     }
 
     function getUrlVars() {
@@ -223,6 +339,13 @@
         return vars
     }
 
+    function createUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+
     function getTemplates() {
         let templates = {};
 
@@ -230,7 +353,7 @@
         url = url.substr(0, url.lastIndexOf("/")) + "/Templates" + "?customerId=" + getUrlVars()["customerId"];
 
 
-        $.get(url, function (data) {            
+        $.get(url, function (data) {
 
             for (var i = 0; i < data.length; i++) {
                 templates.data[i];
@@ -327,8 +450,10 @@
         font-size: large;
     }
 
-    .control h3 {
+    .labelLg {
         padding: 5px;
+        font-size: x-large;
+        font-weight: 600;
     }
 
     #dropzone {
@@ -348,49 +473,9 @@
     .fa {
         margin: 5px;
     }
-</style>
 
-@*<script src="~/Components/Formbuilder/dist/form-builder.min.js"></script>
-        <script src="~/Components/Formbuilder/dist/form-render.min.js"></script>
-        <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>*@
-<!--<!--var formBuilder
-
-    $(document).ready(function () {
-
-        //$('.formbuilder-icon-header span').text("Section name")
-        //var formData = [{ "type": "text", "label": "Full Name", "subtype": "text", "className": "form-control", "name": "text-1476748004559" }, { "type": "select", "label": "Occupation", "className": "form-control", "name": "select-1476748006618", "values": [{ "label": "Street Sweeper", "value": "option-1", "selected": true }, { "label": "Moth Man", "value": "option-2" }, { "label": "Chemist", "value": "option-3" }] }, { "type": "textarea", "label": "Short Bio", "rows": "5", "className": "form-control", "name": "textarea-1476748007461" }];
-
-        formBuilder = $(document.getElementById('fb-editor')).formBuilder({
-            //formData: formData,
-        });
-
-        //$('.formbuilder-icon-header span').text("Hej")
-
-        //If already exists nut cannot be edited
-        //$(document.getElementById('fb-editor')).formRender({
-        //    formData: formData
-        //});
-
-        //formBuilder.actions.setData(formData);
-    });
-
-
-
-    function deleteForm() {
-        $(document.getElementById('fb-editor')).formRender({
-            formData: formData
-        });
+    .required {
+        color: red;
+        visibility: hidden;
     }
-        //$.ajax({
-        //    url: 'some-url',
-        //    type: 'post',
-        //    dataType: 'json',
-        //    data: $('form#myForm').serialize(),
-        //    success: function (data) {
-        //        // ... do something with the data...
-        //    }
-        //});
-    //});
-
-</script>-->
+</style>

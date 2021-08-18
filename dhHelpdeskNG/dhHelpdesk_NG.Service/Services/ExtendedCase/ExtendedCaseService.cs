@@ -156,7 +156,15 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
             return forms;
         }
 
-		public List<ExtendedCaseFormWithCaseSolutionsModel> GetExtendedCaseFormsWithCaseSolutionForCustomer(int customerId)
+        public List<ExtendedCaseFormModel> GetExtendedCaseFormsCreatedByEditor(int customerId)
+        {
+            var forms = _extendedCaseFormRepository.GetExtendedCaseFormsCreatedByEditor(customerId)
+                .Select(_entityToModelMapper.Map).ToList();
+            return forms;
+        }
+        
+
+        public List<ExtendedCaseFormWithCaseSolutionsModel> GetExtendedCaseFormsWithCaseSolutionForCustomer(int customerId)
 		{
 
 			var forms = _extendedCaseFormRepository.GetExtendedCaseFormsForCustomer(customerId)
@@ -177,6 +185,11 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
         public List<ExtendedCaseFormSectionTranslationModel> GetExtendedCaseFormSections(int extendedCaseFormId, int languageID)
         {
             return _extendedCaseFormRepository.GetExtendedCaseFormSections(extendedCaseFormId, languageID);
+        }
+
+        public bool CreateExtendedCaseForm(ExtendedCaseFormPayloadModel entity, string userId)
+        {
+            return _extendedCaseFormRepository.CreateExtendedCaseForm(entity, userId);
         }
     }
 }

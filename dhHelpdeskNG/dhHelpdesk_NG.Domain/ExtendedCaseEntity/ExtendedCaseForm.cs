@@ -23,5 +23,13 @@ namespace DH.Helpdesk.Domain.ExtendedCaseEntity
         public virtual ICollection<ExtendedCaseDataEntity> ExtendedCaseDatas { get; set; }
 
         public virtual ICollection<Case_ExtendedCaseEntity> Case_ExtendedCases { get; set; }
+
+        public string Description { get; set; }
+
+        public Guid? Guid { get; set; }
+
+        public int Status { get; set; }
+
+        public bool? CreatedByEditor { get; set; }
     }
 }

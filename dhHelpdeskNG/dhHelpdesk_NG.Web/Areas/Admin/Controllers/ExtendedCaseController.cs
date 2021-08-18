@@ -15,6 +15,11 @@ using DH.Helpdesk.Web.Infrastructure.Extensions;
 using Microsoft.Ajax.Utilities;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.ExtendedCase;
+using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Domain.ExtendedCaseEntity;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
@@ -24,17 +29,20 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ICustomerService _customerService;
         private readonly ILanguageService _languageService;
         private readonly IExtendedCaseService _extendedCaseService;
+        private readonly ICaseSolutionService _caseSolutionService;
 
         public ExtendedCaseController(ICaseFieldSettingService caseFieldSettingService,
             ICustomerService customerService,
             ILanguageService languageService,
             IExtendedCaseService extendedCaseService,
-            IMasterDataService masterDataService) : base(masterDataService)
+            IMasterDataService masterDataService,
+            ICaseSolutionService caseSolutionService) : base(masterDataService)
         {
             _caseFieldSettingService = caseFieldSettingService;
             _customerService = customerService;
             _languageService = languageService;
             _extendedCaseService = extendedCaseService;
+            _caseSolutionService = caseSolutionService;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -84,29 +92,39 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         [CustomAuthorize(Roles = "3,4")]
         [HttpGet]
-        public ActionResult EditForm(int customerId, int? languageId)
+        public ActionResult CustomerForms(int customerId, int? languageId)
         {
             languageId = languageId ?? SessionFacade.CurrentLanguageId;
             ExtendedCaseFormsForCustomer model = new ExtendedCaseFormsForCustomer()
             {
                 Customer = _customerService.GetCustomer(customerId),
                 LanguageId = languageId,
-                ExtendedCaseFormModels = _extendedCaseService.GetExtendedCaseFormsForCustomer(customerId)
+                ExtendedCaseFormModels = _extendedCaseService.GetExtendedCaseFormsCreatedByEditor(customerId)
             };
             return View("CustomerForms", model);
         }
+
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult New(int customerId, int? languageId, IList<int> ShowStatusBarIds, IList<int> ShowExternalStatusBarIds)
+        public async Task<ActionResult> New(int customerId, int? languageId, IList<int> ShowStatusBarIds, IList<int> ShowExternalStatusBarIds)
         {
             languageId = languageId ?? SessionFacade.CurrentLanguageId;
-            ExtendedCaseFormsForCustomer model = new ExtendedCaseFormsForCustomer()
+            var customer = _customerService.GetCustomer(customerId);
+
+            var caseSolutions = await _caseSolutionService.GetCustomerCaseSolutionsAsync(customerId);
+
+            CustomerCaseSolutions model = new CustomerCaseSolutions()
             {
-                Customer = _customerService.GetCustomer(customerId),
-                LanguageId = languageId,
-                ExtendedCaseFormModels = _extendedCaseService.GetExtendedCaseFormsForCustomer(customerId)
+                Customer = customer,
+                CaseSolutionSelections = (from c in caseSolutions.ToList() where c.Status == 1 orderby c.Name select new CaseSolutionSelections()
+                {
+                    Id= c.CaseSolutionId, 
+                    Name = c.Name
+                }
+                ).ToList()
             };
+
             return View("EditForm", model);
         }
 
@@ -180,6 +198,24 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 .OrderBy(c => c.Value)
                 .ToList();
             return model;
+        }
+
+        [CustomAuthorize(Roles = "3,4")]
+        [HttpPost]
+        [ValidateInput(false)]
+
+        public ActionResult EditForm(ExtendedCaseFormPayloadModel entity, int? formId)
+        {
+
+            //TODO if id = 0 || null
+            _extendedCaseService.CreateExtendedCaseForm(entity, SessionFacade.CurrentUser.UserId);
+
+            ExtendedCaseFormsForCustomer model = new ExtendedCaseFormsForCustomer()
+            {
+                Customer = _customerService.GetCustomer(entity.CustomerId),
+                ExtendedCaseFormModels = _extendedCaseService.GetExtendedCaseFormsCreatedByEditor(entity.CustomerId)
+            };
+            return View("CustomerForms", model);
         }
     }
 }

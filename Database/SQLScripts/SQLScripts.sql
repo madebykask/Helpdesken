@@ -70,6 +70,13 @@ BEGIN
 	ALTER TABLE [dbo].[tblOperatingSystem] WITH NOCHECK ADD CONSTRAINT [FK_tblOperatingSystem_tblCustomer]
 	FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
 
+=======
+RAISERROR ('Add Column CreatedByEditor to ExtendedCaseForms', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.ExtendedCaseForms','CreatedByEditor') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[ExtendedCaseForms]
+	ADD [CreatedByEditor] BIT NULL 
+>>>>>>> Stashed changes
 End
 Go
 
