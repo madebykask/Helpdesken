@@ -24,7 +24,7 @@ namespace DH.Helpdesk.Services.Services
 
         List<ItemOverview> GetRams();
 
-        List<ItemOverview> GetProcessors();
+        List<ItemOverview> GetProcessors(int customerId);
 
         List<ItemOverview> GetOperatingSystems(int customerId);
 

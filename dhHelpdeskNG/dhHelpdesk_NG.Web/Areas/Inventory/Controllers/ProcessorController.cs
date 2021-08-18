@@ -7,6 +7,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel;
     using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+    using DH.Helpdesk.Web.Infrastructure;
 
     public class ProcessorController : ComputerModuleBaseController
     {
@@ -27,16 +28,18 @@
 
         protected override List<ItemOverview> Get()
         {
-            return this.ComputerModulesService.GetProcessors();
+            return this.ComputerModulesService.GetProcessors(SessionFacade.CurrentCustomer.Id);
         }
 
         protected override void Create(ComputerModule computerModule)
         {
+            computerModule.Customer_Id = SessionFacade.CurrentCustomer.Id;
             this.ComputerModulesService.AddProcessor(computerModule);
         }
 
         protected override void Update(ComputerModule computerModule)
         {
+            computerModule.Customer_Id = SessionFacade.CurrentCustomer.Id;
             this.ComputerModulesService.UpdateProcessor(computerModule);
         }
 

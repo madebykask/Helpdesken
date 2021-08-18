@@ -73,6 +73,17 @@ BEGIN
 End
 Go
 
+RAISERROR ('Add Column Customer_Id to tblProcessor', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblProcessor','Customer_Id') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblProcessor]
+	ADD [Customer_Id] INT NULL
+
+	ALTER TABLE [dbo].[tblProcessor] WITH NOCHECK ADD CONSTRAINT [FK_tblProcessor_tblCustomer]
+	FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
+
+End
+Go
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.52'
 GO

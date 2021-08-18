@@ -104,9 +104,9 @@ namespace DH.Helpdesk.Services.Services.Concrete
             return rams;
         }
 
-        public List<ItemOverview> GetProcessors()
+        public List<ItemOverview> GetProcessors(int customerId)
         {
-            var processors = this.processorRepository.FindOverviews();
+            var processors = this.processorRepository.FindOverviews(customerId);
             return processors;
         }
 

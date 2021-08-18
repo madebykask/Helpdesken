@@ -652,7 +652,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 _computerModulesService.GetComputerTypes(customerId).OrderBy(x => x.Name).ToList();
             var operatingSystems =
                 _computerModulesService.GetOperatingSystems(customerId).OrderBy(x => x.Name).ToList();
-            var processors = _computerModulesService.GetProcessors().OrderBy(x => x.Name).ToList();
+            var processors = _computerModulesService.GetProcessors(customerId).OrderBy(x => x.Name).ToList();
             var rams = _computerModulesService.GetRams().OrderBy(x => x.Name).ToList();
             var netAdapters = _computerModulesService.GetNetAdapters().OrderBy(x => x.Name).ToList();
             var regions =
