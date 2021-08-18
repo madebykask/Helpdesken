@@ -647,14 +647,14 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         private ComputerEditOptions GetWorkstationEditOptions(int customerId, int? departmentId, int? regionId)
         {
             var computerModels =
-                _computerModulesService.GetComputerModels().OrderBy(x => x.Name).ToList();
+                _computerModulesService.GetComputerModels(customerId).OrderBy(x => x.Name).ToList();
             var computerTypes =
                 _computerModulesService.GetComputerTypes(customerId).OrderBy(x => x.Name).ToList();
             var operatingSystems =
                 _computerModulesService.GetOperatingSystems(customerId).OrderBy(x => x.Name).ToList();
             var processors = _computerModulesService.GetProcessors(customerId).OrderBy(x => x.Name).ToList();
-            var rams = _computerModulesService.GetRams().OrderBy(x => x.Name).ToList();
-            var netAdapters = _computerModulesService.GetNetAdapters().OrderBy(x => x.Name).ToList();
+            var rams = _computerModulesService.GetRams(customerId).OrderBy(x => x.Name).ToList();
+            var netAdapters = _computerModulesService.GetNetAdapters(customerId).OrderBy(x => x.Name).ToList();
             var regions =
                 OrganizationService.GetRegions(customerId).OrderBy(x => x.Name).ToList();
             var departments =

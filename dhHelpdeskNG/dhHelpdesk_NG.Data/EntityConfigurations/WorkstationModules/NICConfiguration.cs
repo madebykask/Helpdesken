@@ -11,7 +11,10 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.WorkstationModules
             this.HasKey(x => x.Id);
 
             this.Property(x => x.Name).HasColumnName("NIC").IsRequired().HasMaxLength(200);
-
+            this.HasOptional(x => x.Customer)
+                .WithMany()
+                .HasForeignKey(x => x.Customer_Id)
+                .WillCascadeOnDelete(false);
             this.Property(x => x.CreatedDate).IsRequired();
             this.Property(x => x.ChangedDate).IsRequired();
 

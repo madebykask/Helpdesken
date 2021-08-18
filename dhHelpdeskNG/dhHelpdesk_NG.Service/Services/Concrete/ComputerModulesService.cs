@@ -92,15 +92,15 @@ namespace DH.Helpdesk.Services.Services.Concrete
             return this.serverSoftwareRepository.Find(id);
         }
 
-        public List<ItemOverview> GetNetAdapters()
+        public List<ItemOverview> GetNetAdapters(int customerId)
         {
-            var netAdapters = this.nicRepository.FindOverviews();
+            var netAdapters = this.nicRepository.FindOverviews(customerId);
             return netAdapters;
         }
 
-        public List<ItemOverview> GetRams()
+        public List<ItemOverview> GetRams(int customerId)
         {
-            var rams = this.ramRepository.FindOverviews();
+            var rams = this.ramRepository.FindOverviews(customerId);
             return rams;
         }
 
@@ -128,9 +128,9 @@ namespace DH.Helpdesk.Services.Services.Concrete
             return computerType;
         }
 
-        public List<ItemOverview> GetComputerModels()
+        public List<ItemOverview> GetComputerModels(int customerId)
         {
-            var computerModels = this.computerModelRepository.FindOverviews();
+            var computerModels = this.computerModelRepository.FindOverviews(customerId);
             return computerModels;
         }
 

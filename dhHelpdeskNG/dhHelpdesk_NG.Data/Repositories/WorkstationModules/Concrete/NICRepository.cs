@@ -24,6 +24,7 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete
             {
                 Id = businessModel.Id,
                 Name = businessModel.Name,
+                Customer_Id = businessModel.Customer_Id,
                 CreatedDate = businessModel.CreatedDate,
                 ChangedDate = businessModel.CreatedDate, // todo
             };
@@ -36,19 +37,20 @@ namespace DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete
             var entity = this.DbSet.Find(businessModel.Id);
             entity.Name = businessModel.Name;
             entity.ChangedDate = businessModel.ChangedDate;
+            entity.Customer_Id = businessModel.Customer_Id;
         }
 
-        public List<ItemOverview> FindOverviews()
+        public List<ItemOverview> FindOverviews(int customerId)
         {
-            var anonymus =
-                this.DbSet
-                    .Select(c => new { c.Name, c.Id })
-                    .ToList();
+            var query =
+            DbSet.AsNoTracking()
+                .Where(c => c.Customer_Id == customerId || c.Customer_Id == null);
 
-            var overviews =
-                anonymus.Select(c => new ItemOverview(c.Name, c.Id.ToString(CultureInfo.InvariantCulture))).ToList();
-
-            return overviews;
+            return query.Select(c => new ItemOverview
+            {
+                Name = c.Name,
+                Value = c.Id.ToString()
+            }).ToList();
         }
 
         public List<ReportModel> FindConnectedToComputerOverviews(int customerId, int? departmentId, string searchFor)
