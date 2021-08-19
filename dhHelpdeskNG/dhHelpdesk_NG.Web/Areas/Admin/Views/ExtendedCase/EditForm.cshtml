@@ -66,7 +66,7 @@
                                     @Translation.GetCoreTextTranslation("Aktiv")
                                 </td>
                                 <td>
-                                    <input id="formActive" type="checkbox" />
+                                    <input id="formActive" type="checkbox" checked/>
                                 </td>
                             </tr>
                         </tbody>
@@ -290,7 +290,7 @@
     }
 
     function submitForm() {
-        let sectionId, sectionName, controls, id, type, label, valueBinding, required;
+        let sectionId, sectionName, id, type, label, valueBinding, required;
         let items = [
             {
                 sectionId,
@@ -329,26 +329,28 @@
         };
 
         $('.sectionLabel').each(function (i, obj) {
-            items[i] = [];
+            items[i] = {};
             items[i].sectionId = document.getElementById(obj.id + "Name").innerText;
             items[i].sectionName = document.getElementById(obj.id + "Name").innerText;
             items[i].controls = [];
 
             getNextUntil(obj.parentElement.parentElement.parentElement.parentElement, "[data-type='section']").forEach(function (obj, n) {
-                //console.log(value)
-                //fd836826 - 90db - 4afd - 9412 - 89bcbd68add5label
-                //fd836826 - 90db - 4afd - 9412 - 89bcbd68add5required
+
                 var id = obj.querySelector('.field-label').id;
+                var contentTinyMce = obj.querySelectorAll('.form-control-tinymce');
+                var label = document.getElementById(id.replace('header', 'label')) ? document.getElementById(id.replace('header', 'label')).getAttribute('placeholder') : "infoField";
+                var required = document.getElementById(id.replace('header', 'required')) ? document.getElementById(id.replace('header', 'required')).checked : false;
+                var content = contentTinyMce[0] ? tinymce.get(contentTinyMce[0].id).getContent() : ""
+                
                 items[i].controls[n] = {
-                    id: document.getElementById(id.replace('header', 'label')).getAttribute('placeholder'),
+                    id: label,
                     type: obj.getAttribute('data-type'),
-                    label: document.getElementById(id.replace('header', 'label')).getAttribute('placeholder'),
-                    required: document.getElementById(id.replace('header', 'required')).checked,
-                    valueBinding: ""
+                    label: label,
+                    required: required,
+                    valueBinding: content
                 }
             });
 
-            console.log(items[i]);
         });
 
         var selectedCaseSolutions = [];
@@ -358,29 +360,29 @@
 
         let url = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + location.pathname
         url = url.substr(0, url.lastIndexOf("/")) + "/EditForm";
+        
+        var dataToSend = {
+            customerId: getUrlVars()["customerId"],
+            languageId: getUrlVars()["languageId"],
+            name: document.getElementById("formName").value,
+            description: document.getElementById("formDescription").value,
+            status: $("#formActive").is(":checked") ? "true" : "false",
+            caseSolutionIds: selectedCaseSolutions,
+            sections: items
+        };
 
-        //var dataToSend = {
-        //    customerId: getUrlVars()["customerId"],
-        //    languageId: getUrlVars()["languageId"],
-        //    name: document.getElementById("formName").value,
-        //    description: document.getElementById("formDescription").value,
-        //    status: $("#formActive").is(":checked") ? "true" : "false",
-        //    caseSolutionIds: selectedCaseSolutions,
-        //    tabs: [
-        //      items
-        //    ]
-        //};
+        console.log(JSON.stringify(dataToSend))
 
-        //$.ajax({
-        //    url: url,
-        //    type: "POST",
-        //    data: JSON.stringify(dataToSend),
-        //    contentType: "application/json; charset=utf-8",
-        //    dataType: "json",
-        //    success: function (data) {
-        //        //console.log(data);
-        //    }
-        //});
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: JSON.stringify(dataToSend),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                //console.log(data);
+            }
+        });
     }
 
     function getUrlVars() {

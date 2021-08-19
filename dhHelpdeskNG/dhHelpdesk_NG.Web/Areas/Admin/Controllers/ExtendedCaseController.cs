@@ -204,18 +204,19 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
 
-        public ActionResult EditForm(ExtendedCaseFormPayloadModel entity, int? formId)
+        public ActionResult EditForm(ExtendedCaseFormPayloadModel payload, int? formId)
         {
 
             //TODO if id = 0 || null
-            _extendedCaseService.CreateExtendedCaseForm(entity, SessionFacade.CurrentUser.UserId);
+            //_extendedCaseService.CreateExtendedCaseForm(payload, SessionFacade.CurrentUser.UserId);
 
-            ExtendedCaseFormsForCustomer model = new ExtendedCaseFormsForCustomer()
-            {
-                Customer = _customerService.GetCustomer(entity.CustomerId),
-                ExtendedCaseFormModels = _extendedCaseService.GetExtendedCaseFormsCreatedByEditor(entity.CustomerId)
-            };
-            return View("CustomerForms", model);
+            //ExtendedCaseFormsForCustomer model = new ExtendedCaseFormsForCustomer()
+            //{
+            //    Customer = _customerService.GetCustomer(payload.CustomerId),
+            //    ExtendedCaseFormModels = _extendedCaseService.GetExtendedCaseFormsCreatedByEditor(payload.CustomerId)
+            //};
+            //return View("CustomerForms", model);
+            return new EmptyResult();
         }
     }
 }

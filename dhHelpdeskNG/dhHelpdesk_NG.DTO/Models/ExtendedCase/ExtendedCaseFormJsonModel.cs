@@ -40,6 +40,10 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         public List<OnSave> onSave { get; set; }
     }
 
+    public class OnSave
+    {
+    }
+
     public class ControlElement
     {
         public string id { get; set; }
@@ -47,6 +51,10 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         public string label { get; set; }
         public string valueBinding { get; set; }
         public Validators validators { get; set; }
+    }
+
+    public class Validators
+    {
     }
 
     public class SectionElement
