@@ -116,7 +116,7 @@
         var res =
             "<div class='collapse' id = '" + idName + "'><div><table class='table borderless' style='margin-left:10px;margin-right:10px'><tbody>"
         if (hasLabelName) {
-            res = res + "<tr><td><label for='" + idName + "label" + "'>Label</label></td><td><input class='labelName' type='text' id='" + idName + "label" + "' placeholder='" + placeHolder + "'></td></tr>" 
+            res = res + "<tr><td><label for='" + idName + "label" + "'>Label</label></td><td><input class='labelName' type='text' id='" + idName + "label" + "' placeholder='" + placeHolder + "'></td></tr>"
         }
 
         if (hasRequiredChk) {
@@ -126,7 +126,7 @@
         return res;
     }
     let sectionHtmlDiv = (editFieldHtml, idName, labelClass, labelName) => "<div class='field'><div class='header'>" + divHeaderLabel(labelClass, labelName, idName) + divHeaderActions(idName) + "</div><br/>" + editFieldHtml + "</div>";
-    let sectionHtml = () => "<li data-type='section' class='ui-draggable' style='display: list-item'>" + sectionHtmlDiv(editFieldHtml(IDNAME, "Section Name", true, false), IDNAME, "labelLg", "Section Name") + "</li>";
+    let sectionHtml = () => "<li data-type='section' class='ui-draggable' style='display: list-item'>" + sectionHtmlDiv(editFieldHtml(IDNAME, "Section Name", true, false), IDNAME, "field-label sectionLabel", "Section Name") + "</li>";
 
     $(document).ready(function () {
         var draggedFrom = "";
@@ -155,7 +155,7 @@
                 if (draggedFrom == "fields") {
                     switch (draggedItem.data('type')) {
                         case "section":
-                            draggedItem.html(sectionHtmlDiv(editFieldHtml(idName, "Section Name", true, false), idName, "labelLg", "Section Name"));
+                            draggedItem.html(sectionHtmlDiv(editFieldHtml(idName, "Section Name", true, false), idName, "field-label sectionLabel", "Section Name"));
                             break;
 
                         case "text":
@@ -242,9 +242,9 @@
             $(this).parent().parent().parent().html('');
         });
 
-        $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(IDNAME, "Section Name"), IDNAME, "labelLg", "Section Name")));
+        $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(IDNAME, "Section Name"), IDNAME, "field-label sectionLabel", "Section Name")));
 
-        $(document).on("keyup", ".labelName", function (e) {            
+        $(document).on("keyup", ".labelName", function (e) {
             var id = $(this).attr('id').replace('label', 'headerName');
             document.getElementById(id).innerHTML = $(this).attr('value');
         });
@@ -286,45 +286,101 @@
 
     function clearItems() {
         //$("#dropzone").html('');
-        $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(IDNAME, "Section Name"), IDNAME, "labelLg", "Section Name")));
+        $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(IDNAME, "Section Name"), IDNAME, "field-label sectionLabel", "Section Name")));
     }
 
     function submitForm() {
+        let sectionId, sectionName, controls, id, type, label, valueBinding, required;
+        let items = [
+            {
+                sectionId,
+                sectionName,
+                controls: [
+                    id,
+                    type,
+                    label,
+                    required,
+                    valueBinding
+                ]
+            }
+        ];
+        var getNextUntil = function (elem, selector) {
 
-        var selectedCaseSolutions = []
-        $.each($("#drpCaseSolutions option:selected"), function () {
-            selectedCaseSolutions.push($(this).val());
+            // Setup siblings array and get next sibling
+            var siblings = [];
+            var next = elem.nextElementSibling;
+
+            // Loop through all siblings
+            while (next) {
+
+                // If the matching item is found, quit
+                if (next.matches(selector)) break;
+
+                // Otherwise, push to array
+                siblings.push(next);
+
+                // Get the next sibling
+                next = next.nextElementSibling
+
+            }
+
+            return siblings;
+
+        };
+
+        $('.sectionLabel').each(function (i, obj) {
+            items[i] = [];
+            items[i].sectionId = document.getElementById(obj.id + "Name").innerText;
+            items[i].sectionName = document.getElementById(obj.id + "Name").innerText;
+            items[i].controls = [];
+
+            getNextUntil(obj.parentElement.parentElement.parentElement.parentElement, "[data-type='section']").forEach(function (obj, n) {
+                //console.log(value)
+                //fd836826 - 90db - 4afd - 9412 - 89bcbd68add5label
+                //fd836826 - 90db - 4afd - 9412 - 89bcbd68add5required
+                var id = obj.querySelector('.field-label').id;
+                items[i].controls[n] = {
+                    id: document.getElementById(id.replace('header', 'label')).getAttribute('placeholder'),
+                    type: obj.getAttribute('data-type'),
+                    label: document.getElementById(id.replace('header', 'label')).getAttribute('placeholder'),
+                    required: document.getElementById(id.replace('header', 'required')).checked,
+                    valueBinding: ""
+                }
+            });
+
+            console.log(items[i]);
         });
 
-        var mod = $('#divPasswordDialog').modal('show');
-
-        mod.find("#btnClose").on("click", function (e) {
-            mod.modal('hide');
+        var selectedCaseSolutions = [];
+        $.each($("#drpCaseSolutions option:selected"), function () {
+            selectedCaseSolutions.push($(this).val());
         });
 
         let url = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + location.pathname
         url = url.substr(0, url.lastIndexOf("/")) + "/EditForm";
 
-        var dataToSend = {
-            customerId: getUrlVars()["customerId"],
-            languageId: getUrlVars()["languageId"],
-            name: document.getElementById("formName").value,
-            description: document.getElementById("formDescription").value,
-            status: $("#formActive").is(":checked") ? "true" : "false",
-            caseSolutionIds: selectedCaseSolutions,
-            items: [{ id: "1", type: "string", label: "text" }, { id: "2", type: "string", label: "textarea" }]
-        };
+        //var dataToSend = {
+        //    customerId: getUrlVars()["customerId"],
+        //    languageId: getUrlVars()["languageId"],
+        //    name: document.getElementById("formName").value,
+        //    description: document.getElementById("formDescription").value,
+        //    status: $("#formActive").is(":checked") ? "true" : "false",
+        //    caseSolutionIds: selectedCaseSolutions,
+        //    tabs: [
+        //      items
+        //    ]
+        //};
 
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: JSON.stringify(dataToSend),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (data) {
-                //console.log(data);
-            }
-        });
+        //$.ajax({
+        //    url: url,
+        //    type: "POST",
+        //    data: JSON.stringify(dataToSend),
+        //    contentType: "application/json; charset=utf-8",
+        //    dataType: "json",
+        //    success: function (data) {
+        //        //console.log(data);
+        //    }
+        //});
     }
 
     function getUrlVars() {
@@ -450,7 +506,7 @@
         font-size: large;
     }
 
-    .labelLg {
+    .sectionLabel {
         padding: 5px;
         font-size: x-large;
         font-weight: 600;
