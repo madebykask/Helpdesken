@@ -80,6 +80,54 @@ BEGIN
 End
 Go
 
+RAISERROR ('Add Column Customer_Id to tblProcessor', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblProcessor','Customer_Id') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblProcessor]
+	ADD [Customer_Id] INT NULL
+
+	ALTER TABLE [dbo].[tblProcessor] WITH NOCHECK ADD CONSTRAINT [FK_tblProcessor_tblCustomer]
+	FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
+
+End
+Go
+
+RAISERROR ('Add Column Customer_Id to tblNIC', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblNIC','Customer_Id') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblNIC]
+	ADD [Customer_Id] INT NULL
+
+	ALTER TABLE [dbo].[tblNIC] WITH NOCHECK ADD CONSTRAINT [FK_tblNIC_tblCustomer]
+	FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
+
+End
+Go
+
+RAISERROR ('Add Column Customer_Id to tblComputerModel', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblComputerModel','Customer_Id') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblComputerModel]
+	ADD [Customer_Id] INT NULL
+
+	ALTER TABLE [dbo].[tblComputerModel] WITH NOCHECK ADD CONSTRAINT [FK_tblComputerModel_tblCustomer]
+	FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
+
+End
+Go
+
+RAISERROR ('Add Column Customer_Id to tblRAM', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblRAM','Customer_Id') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[tblRAM]
+	ADD [Customer_Id] INT NULL
+
+	ALTER TABLE [dbo].[tblRAM] WITH NOCHECK ADD CONSTRAINT [FK_tblRAM_tblCustomer]
+	FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
+
+End
+Go
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.52'
 GO

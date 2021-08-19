@@ -14,6 +14,6 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
 
         void Update(ComputerModule businessModel);
 
-        List<ItemOverview> FindOverviews();
+        List<ItemOverview> FindOverviews(int customerId);
     }
 }
