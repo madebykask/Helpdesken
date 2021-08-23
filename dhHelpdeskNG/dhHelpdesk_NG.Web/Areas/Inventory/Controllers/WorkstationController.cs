@@ -284,15 +284,6 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 		[UserPermissions(UserPermission.InventoryViewPermission)]
 		public RedirectToRouteResult Edit(ComputerViewModel computerViewModel)
         {
-            if (computerViewModel.IsCopy)
-            {
-                //var computerFile = LoadTempFile(computerViewModel.DocumentFileKey); 
-                //var copyBusinessModel = _computerBuilder.BuildForAdd(computerViewModel, this.OperationContext, null);
-                //var copyModel = _inventoryService.CopyWorkstation(computerViewModel, this.OperationContext);
-                //copyBusinessModel.Id = 0;
-                TempData["copyViewModel"] = computerViewModel;
-                return RedirectToAction("New");
-            }
             var businessModel = this._computerBuilder.BuildForUpdate(computerViewModel, OperationContext);
             this._inventoryService.UpdateWorkstation(businessModel, this.OperationContext);
             if (computerViewModel.IsForDialog)
@@ -304,6 +295,14 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 return RedirectToAction("Edit", new { id = computerViewModel.Id, dialog = computerViewModel.IsForDialog });
             }
             return this.RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [UserPermissions(UserPermission.InventoryViewPermission)]
+        public RedirectToRouteResult Copy(ComputerViewModel computerViewModel)
+        {
+            TempData["copyViewModel"] = computerViewModel;
+            return RedirectToAction("New");
         }
 
         [HttpGet]

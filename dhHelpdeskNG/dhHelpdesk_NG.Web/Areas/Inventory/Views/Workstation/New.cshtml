@@ -88,7 +88,8 @@
                     userId: @SessionFacade.CurrentUser.Id,
                     customerId: @SessionFacade.CurrentCustomer.Id,
                     getUnitsUrl: '@Url.Action("GetUnits", "Ajax", new {area = ""})',
-                    getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})'
+                    getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})',
+                    copyUrl: '@Url.Action("Copy", "Workstation")',
                 });
             }
         });
