@@ -9,7 +9,7 @@
         <ul class="secnav">
             @*<li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), "Edit", "ExtendedCase", new { customerId = @Model.Id }, new { onclick = "submitForm();return false;", @class = "btn" })</li>*@
             <li><input type="button" class="btn" value=@Translation.GetCoreTextTranslation("Spara") onclick="submitForm()"></li>
-            <li><input type="button" class="btn" value="@Translation.GetCoreTextTranslation("Ta bort")" id="delete_button"></li>
+            <li><input disabled type="button" class="btn" value="@Translation.GetCoreTextTranslation("Ta bort")" id="delete_button"></li>
             <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Edit", new { area = "admin", controller = "Customer", action = "Edit", id = @Model.Customer.Id }, new { @class = "btn" })</li>
         </ul>
     </div>
@@ -37,7 +37,7 @@
                                     @Translation.GetCoreTextTranslation("Formulär")  @Translation.GetCoreTextTranslation("Namn")
                                 </td>
                                 <td>
-                                    <input id="formName" type="text" maxlength="100" />
+                                    <input id="formName" required type="text" maxlength="100" />
                                 </td>
                             </tr>
                             <tr>
@@ -53,7 +53,8 @@
                                     @Translation.GetCoreTextTranslation("Ärendemallar")
                                 </td>
                                 <td>
-                                    <select id="drpCaseSolutions" class="chosen-select" multiple placeholder=@Translation.GetCoreTextTranslation("Välj en eller flera")>
+                                    <select required id="drpCaseSolutions" class="chosen-select" multiple placeholder=@Translation.GetCoreTextTranslation("Välj en eller flera")>
+                                        @*<option value="">Please select</option>*@
                                         @foreach (var item in Model.CaseSolutionSelections)
                                         {
                                             <option value="@item.Id" @((item.IsChecked == true) ? "selected" : "")>@item.Name</option>
@@ -66,7 +67,7 @@
                                     @Translation.GetCoreTextTranslation("Aktiv")
                                 </td>
                                 <td>
-                                    <input id="formActive" type="checkbox" checked/>
+                                    <input id="formActive" type="checkbox" checked />
                                 </td>
                             </tr>
                         </tbody>
@@ -86,11 +87,11 @@
                                     <div id="fields" class="dragndrop">
                                         <ul id="source">
                                             <li data-type="section"><i class="fa fa-header" aria-hidden="true"></i> Section Name</li>
-                                            <li data-type="text"><i class="fa fa-font" aria-hidden="true"></i> Text Field</li>
+                                            <li data-type="textbox"><i class="fa fa-font" aria-hidden="true"></i> Text Field</li>
                                             <li data-type="textarea"><i class="fa fa-text-width" aria-hidden="true"></i> Text Area</li>
                                             <li data-type="date"><i class="fa fa-calendar-o" aria-hidden="true"></i> Date Field</li>
                                             @*<li data-type="select"><i class="fa fa-list-ul" aria-hidden="true"></i> Template</li>*@
-                                            <li data-type="tinymce"><i class="fa fa-file-word-o" aria-hidden="true"></i> Info Field</li>
+                                            <li data-type="html"><i class="fa fa-file-word-o" aria-hidden="true"></i> Info Field</li>
                                         </ul>
                                         <input id="btnClear" class="btn" type="button" onclick="clearItems()" value="Clear" />
                                     </div>
@@ -158,7 +159,7 @@
                             draggedItem.html(sectionHtmlDiv(editFieldHtml(idName, "Section Name", true, false), idName, "field-label sectionLabel", "Section Name"));
                             break;
 
-                        case "text":
+                        case "textbox":
                             draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>Text Field</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, "Text Field", true, true) + "</div>")
                             break;
 
@@ -176,12 +177,15 @@
                         //    draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>Template</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><select class='form-control form-control-width' data-placeholder='Choose a template...'><option>Template1</option><option>Template2</option><option>Template3</option></select></div>" + editFieldHtml(idName, "Template") + "</div>")
                         //    break;
 
-                        case "tinymce":
+                        case "html":
                             draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>Info Field</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' style='padding:10px'><input type='text' class='form-control form-control-width form-control-tinymce'></div></div>")
                             tinymce.init({
                                 selector: '.form-control-tinymce',
+                                plugins: "lists",
+                                toolbar: "numlist bullist | undo redo | bold italic",
                                 width: "100%%",
                                 height: "150px",
+                                entity_encoding: "raw",
                                 readonly: 0,
                             });
                             break;
@@ -290,99 +294,125 @@
     }
 
     function submitForm() {
-        let sectionId, sectionName, id, type, label, valueBinding, required;
-        let items = [
-            {
-                sectionId,
-                sectionName,
-                controls: [
-                    id,
-                    type,
-                    label,
-                    required,
-                    valueBinding
-                ]
-            }
-        ];
-        var getNextUntil = function (elem, selector) {
 
-            // Setup siblings array and get next sibling
-            var siblings = [];
-            var next = elem.nextElementSibling;
-
-            // Loop through all siblings
-            while (next) {
-
-                // If the matching item is found, quit
-                if (next.matches(selector)) break;
-
-                // Otherwise, push to array
-                siblings.push(next);
-
-                // Get the next sibling
-                next = next.nextElementSibling
-
-            }
-
-            return siblings;
-
-        };
-
-        $('.sectionLabel').each(function (i, obj) {
-            items[i] = {};
-            items[i].sectionId = document.getElementById(obj.id + "Name").innerText;
-            items[i].sectionName = document.getElementById(obj.id + "Name").innerText;
-            items[i].controls = [];
-
-            getNextUntil(obj.parentElement.parentElement.parentElement.parentElement, "[data-type='section']").forEach(function (obj, n) {
-
-                var id = obj.querySelector('.field-label').id;
-                var contentTinyMce = obj.querySelectorAll('.form-control-tinymce');
-                var label = document.getElementById(id.replace('header', 'label')) ? document.getElementById(id.replace('header', 'label')).getAttribute('placeholder') : "infoField";
-                var required = document.getElementById(id.replace('header', 'required')) ? document.getElementById(id.replace('header', 'required')).checked : false;
-                var content = contentTinyMce[0] ? tinymce.get(contentTinyMce[0].id).getContent() : ""
-                
-                items[i].controls[n] = {
-                    id: label,
-                    type: obj.getAttribute('data-type'),
-                    label: label,
-                    required: required,
-                    valueBinding: content
-                }
-            });
-
-        });
+        if (document.getElementById("formName").value == "" || document.getElementById("formName").value.match(/^ *$/) !== null) {
+            document.getElementById("formName").value = "";
+            document.getElementById("formName").focus();
+            return;
+        }
 
         var selectedCaseSolutions = [];
         $.each($("#drpCaseSolutions option:selected"), function () {
             selectedCaseSolutions.push($(this).val());
         });
 
-        let url = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + location.pathname
-        url = url.substr(0, url.lastIndexOf("/")) + "/EditForm";
-        
-        var dataToSend = {
-            customerId: getUrlVars()["customerId"],
-            languageId: getUrlVars()["languageId"],
-            name: document.getElementById("formName").value,
-            description: document.getElementById("formDescription").value,
-            status: $("#formActive").is(":checked") ? "true" : "false",
-            caseSolutionIds: selectedCaseSolutions,
-            sections: items
-        };
+        if (selectedCaseSolutions.length == 0) {
+            $("#drpCaseSolutions").focus();
+            ShowToastMessage('@Html.Raw(Translation.GetForJS("Vänligen välj minst en ärendemall"))', "error")
+            return;
+        }
+            let sectionId, sectionName, id, type, label, valueBinding, required;
+            let items = [
+                {
+                    sectionId,
+                    sectionName,
+                    controls: [
+                        id,
+                        type,
+                        label,
+                        required,
+                        valueBinding
+                    ]
+                }
+            ];
+            var getNextUntil = function (elem, selector) {
 
-        console.log(JSON.stringify(dataToSend))
+                // Setup siblings array and get next sibling
+                var siblings = [];
+                var next = elem.nextElementSibling;
 
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: JSON.stringify(dataToSend),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (data) {
-                //console.log(data);
-            }
-        });
+                // Loop through all siblings
+                while (next) {
+
+                    // If the matching item is found, quit
+                    if (next.matches(selector)) break;
+
+                    // Otherwise, push to array
+                    siblings.push(next);
+
+                    // Get the next sibling
+                    next = next.nextElementSibling
+
+                }
+
+                return siblings;
+
+            };
+
+            $('.sectionLabel').each(function (i, obj) {
+                items[i] = {};
+                items[i].id = document.getElementById(obj.id + "Name").innerText;
+                items[i].sectionName = document.getElementById(obj.id + "Name").innerText;
+                items[i].controls = [];
+
+                getNextUntil(obj.parentElement.parentElement.parentElement.parentElement, "[data-type='section']").forEach(function (obj, n) {
+                    if (obj.querySelector('.field-label') != null) {
+                        var id = obj.querySelector('.field-label').id;
+                        var contentTinyMce = obj.querySelectorAll('.form-control-tinymce');
+                        var label = document.getElementById(id.replace('header', 'headerName')) ? document.getElementById(id.replace('header', 'headerName')).innerText : "infoField";
+                        var required = document.getElementById(id.replace('header', 'required')) ? document.getElementById(id.replace('header', 'required')).checked : false;
+                        var content = contentTinyMce[0] ? 'function(m) { return ' + tinymce.get(contentTinyMce[0].id).getContent() + ' }' : ""
+
+                        items[i].controls[n] = {
+                            id: label,
+                            type: obj.getAttribute('data-type'),
+                            label: label,
+                            required: required,
+                            valueBinding: content
+                        }
+                    }
+                });
+
+            });
+
+            let url = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + location.pathname
+            url = url.substr(0, url.lastIndexOf("/")) + "/EditForm";
+
+            var dataToSend = {
+                customerId: getUrlVars()["customerId"],
+                languageId: getUrlVars()["languageId"],
+                name: document.getElementById("formName").value,
+                description: document.getElementById("formDescription").value,
+                status: $("#formActive").is(":checked") ? "true" : "false",
+                caseSolutionIds: selectedCaseSolutions,
+                sections: items
+            };
+
+            //console.log(dataToSend)
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: JSON.stringify(dataToSend),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    if (data.result == true) {
+                        ShowToastMessage('@Html.Raw(Translation.GetForJS("Sparat"))')
+                    }
+
+                    else {
+                        ShowToastMessage(data.error, "error")
+                    }
+                }
+                //,
+                //error: function (request) {
+
+                //    ShowToastMessage(, "error");
+                //}
+            });
+
     }
 
     function getUrlVars() {
@@ -424,7 +454,9 @@
 </script>
 
 <script src="https://cdn.tiny.cloud/1/1sfk2dp6yt1qy3dpohzyv6wro6kpk8szzkijgcpnepc4mazx/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-
+@*Use this to apply changes in tinymce ?cachebuster=123*@
+@*<script type="text/javascript" src="@Url.Content("~/Content/js/tinymce/tinymce.min.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/js/tinymce/tinymce.initiate.js")"></script>*@
 <style>
     #fields {
         margin: 0;

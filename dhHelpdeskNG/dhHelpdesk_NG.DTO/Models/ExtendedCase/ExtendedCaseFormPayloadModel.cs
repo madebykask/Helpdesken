@@ -43,7 +43,7 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
 
     public class Section
     {
-        [JsonProperty("sectionId")]
+        [JsonProperty("id")]
         public string Id { get; set; }
 
         [JsonProperty("sectionName")]
@@ -70,7 +70,7 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         public bool Required { get; set; }   
         
         [JsonProperty("valueBinding")]
-        public string ValueBinding { get; set; }
+        public object ValueBinding { get; set; }
     }
 
 }

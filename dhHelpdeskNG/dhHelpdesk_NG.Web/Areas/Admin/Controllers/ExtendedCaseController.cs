@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.ExtendedCase;
+using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Areas.Admin.Models;
-using DH.Helpdesk.BusinessData.OldComponents;
-using DH.Helpdesk.BusinessData.Enums.Case.Fields;
-using DH.Helpdesk.BusinessData.Models;
-using DH.Helpdesk.Domain;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Attributes;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using Microsoft.Ajax.Utilities;
-using DH.Helpdesk.BusinessData.Models.Case;
-using DH.Helpdesk.BusinessData.Models.ExtendedCase;
-using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
-using DH.Helpdesk.Dal.Infrastructure;
-using DH.Helpdesk.Domain.ExtendedCaseEntity;
-using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
@@ -206,17 +201,30 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         public ActionResult EditForm(ExtendedCaseFormPayloadModel payload, int? formId)
         {
+            List<CaseSolution> caseSolutionsWithForms = _extendedCaseService.GetCaseSolutionsWithExtendedCaseForm(payload.CaseSolutionIds);
 
             //TODO if id = 0 || null
-            //_extendedCaseService.CreateExtendedCaseForm(payload, SessionFacade.CurrentUser.UserId);
+            if (caseSolutionsWithForms.Count > 0)
+            {
+                string msg = "Följande ärendemallar har redan ett formulär: " + Environment.NewLine;
 
-            //ExtendedCaseFormsForCustomer model = new ExtendedCaseFormsForCustomer()
-            //{
-            //    Customer = _customerService.GetCustomer(payload.CustomerId),
-            //    ExtendedCaseFormModels = _extendedCaseService.GetExtendedCaseFormsCreatedByEditor(payload.CustomerId)
-            //};
+                foreach (var c in caseSolutionsWithForms)
+                {
+                    msg += Environment.NewLine + c.Name;
+                }
+
+                return Json(new { result = false, error = msg });
+            }
+
+            _extendedCaseService.CreateExtendedCaseForm(payload, SessionFacade.CurrentUser.UserId);
+
+            ExtendedCaseFormsForCustomer model = new ExtendedCaseFormsForCustomer()
+            {
+                Customer = _customerService.GetCustomer(payload.CustomerId),
+                ExtendedCaseFormModels = _extendedCaseService.GetExtendedCaseFormsCreatedByEditor(payload.CustomerId)
+            };
             //return View("CustomerForms", model);
-            return new EmptyResult();
+            return Json(new { result = true });
         }
     }
 }

@@ -10,6 +10,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     using Mappers;
     using DH.Helpdesk.BusinessData.Models.ExtendedCase;
     using Newtonsoft.Json;
+    using DH.Helpdesk.Domain;
 
     //NOTE: This is performance optimised class - pls do not use mappers!
     public sealed class ExtendedCaseFormRepository : RepositoryBase<ExtendedCaseFormEntity>, IExtendedCaseFormRepository
@@ -253,33 +254,40 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             return sectionName;
         }
 
-        public bool CreateExtendedCaseForm(ExtendedCaseFormPayloadModel entity, string userId)
+        public bool CreateExtendedCaseForm(ExtendedCaseFormJsonModel entity, string userId)
         {
-
 
             var res = DataContext.ExtendedCaseForms.Add(new ExtendedCaseFormEntity() 
             {
                 MetaData = "",
                 CreatedOn = DateTime.Now,
                 CreatedBy = userId,
-                Status = 1,
+                Status = entity.status ? 1 : 0,
                 Version = 1,
                 Guid = Guid.NewGuid(),
                 CreatedByEditor = true,
-                Name = entity.Name,
-                Description = entity.Description
+                Name = entity.name,
+                Description = entity.description
 
             });
 
             DataContext.Commit();
 
-            entity.Id = res.Id;
+            entity.id = res.Id;
 
-            res.MetaData = JsonConvert.SerializeObject(entity, Formatting.Indented);
+            var data = JsonConvert.SerializeObject(entity,
+                            Newtonsoft.Json.Formatting.None,
+                            new JsonSerializerSettings
+                            {
+                                NullValueHandling = NullValueHandling.Ignore
+                            });
+
+            var metaData = data.Replace(@"valueBinding"":""function(m) { return ", @"valueBinding"": function(m) { return """).Replace(@"> }""}", @">"";}}").Replace(@"\""", "").Replace(@"\n", "").Replace("color: ", "color:");
+            res.MetaData = metaData;
 
             DataContext.Commit();
             
-            foreach (var c in entity.CaseSolutionIds)
+            foreach (var c in entity.caseSolutionIds)
             {
                 DataContext.CaseSolutions.Where(x => x.Id == c).FirstOrDefault().ExtendedCaseForms.Add(res);
 
@@ -287,6 +295,16 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             }
 
             return true;
+        }
+
+        public List<CaseSolution> GetCaseSolutionsWithExtendedCaseForm(int[] caseSolutionIds)
+        {
+            var query = from cs in DataContext.CaseSolutions
+                        from exCaseForm in cs.ExtendedCaseForms
+                        where caseSolutionIds.Contains(cs.Id)
+                        select cs;
+
+            return query.ToList();
         }
     }
 }

@@ -13,63 +13,63 @@ using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Services.Services.ExtendedCase
 {
-    public class ExtendedCaseService: IExtendedCaseService
+    public class ExtendedCaseService : IExtendedCaseService
     {
         private readonly IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel> _entityToModelMapper;
         private readonly IGlobalSettingService _globalSettingService;
         private readonly IExtendedCaseDataRepository _extendedCaseDataRepository;
         private readonly IExtendedCaseFormRepository _extendedCaseFormRepository;
-		private readonly IEntityToBusinessModelMapper<CaseSolution, CaseSolutionOverview> _caseSolutionToModelMapper;
+        private readonly IEntityToBusinessModelMapper<CaseSolution, CaseSolutionOverview> _caseSolutionToModelMapper;
 
-		public ExtendedCaseService(
+        public ExtendedCaseService(
             IGlobalSettingService globalSettingService,
             IExtendedCaseDataRepository extendedCaseDataRepository,
-            IExtendedCaseFormRepository extendedCaseFormRepository, 
+            IExtendedCaseFormRepository extendedCaseFormRepository,
             IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel> entityToModelMapper,
-			IEntityToBusinessModelMapper<CaseSolution, CaseSolutionOverview> caseSolutionToModelMapper)
+            IEntityToBusinessModelMapper<CaseSolution, CaseSolutionOverview> caseSolutionToModelMapper)
         {
             _globalSettingService = globalSettingService;
             _extendedCaseDataRepository = extendedCaseDataRepository;
-            _extendedCaseFormRepository  = extendedCaseFormRepository;
+            _extendedCaseFormRepository = extendedCaseFormRepository;
             _entityToModelMapper = entityToModelMapper;
-			_caseSolutionToModelMapper = caseSolutionToModelMapper;
+            _caseSolutionToModelMapper = caseSolutionToModelMapper;
         }
 
         public ExtendedCaseDataModel GenerateExtendedFormModel(InitExtendedForm initData, out string lastError)
         {
             lastError = "";
-            
+
             var globalSetting = _globalSettingService.GetGlobalSettings().FirstOrDefault();
             if (globalSetting == null)
             {
                 lastError = "Global setting can not be empty!";
                 return null;
             }
-                            
+
             if (string.IsNullOrEmpty(globalSetting.ExtendedCasePath))
             {
                 lastError = "Target path is not specified!";
                 return null;
             }
 
-            ExtendedCaseDataModel extendedCaseData = null;                        
+            ExtendedCaseDataModel extendedCaseData = null;
             if (initData.CaseId == 0)
             {
                 if (!initData.CaseSolutionId.HasValue || initData.CaseSolutionId.Value == 0)
                 {
                     lastError = "Template id must be specified!";
                     return null;
-                }               
+                }
 
                 var extendedCaseForm = _extendedCaseFormRepository.GetExtendedCaseFormForSolution(initData.CaseSolutionId.Value, initData.CustomerId);
                 if (extendedCaseForm != null)
                 {
-                    extendedCaseData = _extendedCaseDataRepository.CreateTemporaryExtendedCaseData(extendedCaseForm.ExtendedCaseFormId, initData.UserName);                    
+                    extendedCaseData = _extendedCaseDataRepository.CreateTemporaryExtendedCaseData(extendedCaseForm.ExtendedCaseFormId, initData.UserName);
                 }
             }
             else
             {
-                extendedCaseData = _extendedCaseDataRepository.GetExtendedCaseDataByCaseId(initData.CaseId);                
+                extendedCaseData = _extendedCaseDataRepository.GetExtendedCaseDataByCaseId(initData.CaseId);
             }
 
             if (extendedCaseData == null)
@@ -79,13 +79,13 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
             }
 
             //TODO: After refactoring needs to be changed
-            extendedCaseData.FormModel.CaseId = initData.CaseId;            
+            extendedCaseData.FormModel.CaseId = initData.CaseId;
             extendedCaseData.FormModel.LanguageId = initData.LanguageId;
             extendedCaseData.FormModel.Path = ExpandExtendedCasePath(globalSetting.ExtendedCasePath, extendedCaseData.ExtendedCaseFormId, initData);
 
             return extendedCaseData;
         }
-        
+
         private string ExpandExtendedCasePath(string path, int formModelId, InitExtendedForm initData)
         {
             var expandedPath =
@@ -101,7 +101,7 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
         public IList<string> GetTemplateCaseBindingKeys(int formId)
         {
             var exCaseForm = _extendedCaseFormRepository.GetById(formId);
-            
+
             var templateParser = new ExtendedCaseTemplateParser();
             var caseBindingFieldsMap = templateParser.ExtractCaseBindingFields(exCaseForm.MetaData);
             var keys = caseBindingFieldsMap.Keys.ToList();
@@ -111,7 +111,7 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
         public IDictionary<string, string> GetTemplateCaseBindingValues(int formId, int extendedCaseDataId)
         {
             var exCaseForm = _extendedCaseFormRepository.GetById(formId);
-            
+
             var templateParser = new ExtendedCaseTemplateParser();
             var caseBindingFieldsMap = templateParser.ExtractCaseBindingFields(exCaseForm.MetaData);
             var extendedCaseFieldValues = _extendedCaseDataRepository.GetById(extendedCaseDataId).ExtendedCaseValues;
@@ -149,9 +149,9 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
             return _extendedCaseDataRepository.GetCaseIdByExtendedCaseGuid(uniqueId);
         }
 
-		public List<ExtendedCaseFormModel> GetExtendedCaseFormsForCustomer(int customerId)
-		{
-			var forms = _extendedCaseFormRepository.GetExtendedCaseFormsForCustomer(customerId)
+        public List<ExtendedCaseFormModel> GetExtendedCaseFormsForCustomer(int customerId)
+        {
+            var forms = _extendedCaseFormRepository.GetExtendedCaseFormsForCustomer(customerId)
                 .Select(_entityToModelMapper.Map).ToList();
             return forms;
         }
@@ -162,34 +162,109 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                 .Select(_entityToModelMapper.Map).ToList();
             return forms;
         }
-        
+
 
         public List<ExtendedCaseFormWithCaseSolutionsModel> GetExtendedCaseFormsWithCaseSolutionForCustomer(int customerId)
-		{
+        {
 
-			var forms = _extendedCaseFormRepository.GetExtendedCaseFormsForCustomer(customerId)
-				.Select(o => new ExtendedCaseFormWithCaseSolutionsModel
-				{
-					Id = o.Id,
-					Name = o.Name,
-					CaseSolutions = o.CaseSolutions.Select(_caseSolutionToModelMapper.Map)
-				});
-			return forms.ToList();
-		}
+            var forms = _extendedCaseFormRepository.GetExtendedCaseFormsForCustomer(customerId)
+                .Select(o => new ExtendedCaseFormWithCaseSolutionsModel
+                {
+                    Id = o.Id,
+                    Name = o.Name,
+                    CaseSolutions = o.CaseSolutions.Select(_caseSolutionToModelMapper.Map)
+                });
+            return forms.ToList();
+        }
 
-		public List<ExtendedCaseFormFieldTranslationModel> GetExtendedCaseFormFields(int extendedCaseFormId, int languageID)
-		{
-			return _extendedCaseFormRepository.GetExtendedCaseFormFields(extendedCaseFormId, languageID);
-		}
+        public List<ExtendedCaseFormFieldTranslationModel> GetExtendedCaseFormFields(int extendedCaseFormId, int languageID)
+        {
+            return _extendedCaseFormRepository.GetExtendedCaseFormFields(extendedCaseFormId, languageID);
+        }
 
         public List<ExtendedCaseFormSectionTranslationModel> GetExtendedCaseFormSections(int extendedCaseFormId, int languageID)
         {
             return _extendedCaseFormRepository.GetExtendedCaseFormSections(extendedCaseFormId, languageID);
         }
 
-        public bool CreateExtendedCaseForm(ExtendedCaseFormPayloadModel entity, string userId)
+        public bool CreateExtendedCaseForm(ExtendedCaseFormPayloadModel payload, string userId)
         {
+            List<SectionElement> sectionLst = GetExtendedCaseFormSections(payload);
+
+            var entity = new ExtendedCaseFormJsonModel()
+            {
+                id = 0,
+                name = payload.Name,
+                description = payload.Description,
+                status = payload.Status,
+                caseSolutionIds = payload.CaseSolutionIds,
+                localization = new LocalizationElement()
+                { dateFormat = "YYYY-MM-DD", decimalSeparator = "." },
+                validatorsMessages = new ValidatorsMessagesElement()
+                { required = "Field is required", dateYearFormat = "Correct date format (YYYY)", email = "Specify valid email" },
+                styles = "ec-section .col-xs-6:first-child { text-align: left; } ec-section .col-md-6:first-child { text-align: left; } .checkbox label { display: block } .radio label { display: block } ",
+                tabs = new List<TabElement>()
+                    {
+                        new TabElement()
+                        {
+                            columnCount = "1",
+                            id = "",
+                            name = "",
+                            sections = sectionLst
+                        }                    
+                }
+
+            };
+
             return _extendedCaseFormRepository.CreateExtendedCaseForm(entity, userId);
+        }
+
+        private static List<SectionElement> GetExtendedCaseFormSections(ExtendedCaseFormPayloadModel payload)
+        {
+            var sectionLst = new List<SectionElement>();
+            foreach (var s in payload.Sections)
+            {
+                var section = new SectionElement()
+                {
+                    id = s.Id,
+                    name = s.SectionName,
+                    controls = new List<ControlElement>()
+                };
+
+                if (s.Controls != null)
+                {
+
+                    foreach (var c in s.Controls)
+                    {
+                        section.controls.Add(
+                            new ControlElement()
+                            {
+                                id = c.Id,
+                                type = c.Type,
+                                label = c.Label,
+                                valueBinding = c.ValueBinding,
+                                validators = c.Required ? new ValidatorsElement()
+                                {
+                                    onSave = new List<OnSaveElement>()
+                                    {
+                                    new OnSaveElement()
+                                    {
+                                        type = c.Required ? "required" : ""
+                                    }
+                                    }
+                                } : null
+                            });
+                    }
+                }
+                sectionLst.Add(section);
+            }
+
+            return sectionLst;
+        }
+
+        public List<CaseSolution> GetCaseSolutionsWithExtendedCaseForm(int[] caseSolutionIds)
+        {
+            return _extendedCaseFormRepository.GetCaseSolutionsWithExtendedCaseForm(caseSolutionIds);
         }
     }
 }

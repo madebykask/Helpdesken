@@ -10,6 +10,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 	using Common.Enums.Cases;
     using DH.Helpdesk.Models.Case;
     using DH.Helpdesk.BusinessData.Models.ExtendedCase;
+    using DH.Helpdesk.Domain;
 
     public interface IExtendedCaseFormRepository : IRepository<ExtendedCaseFormEntity>
 	{
@@ -28,6 +29,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 
 		List<ExtendedCaseFormFieldTranslationModel> GetExtendedCaseFormFields(int extendedCaseFormId, int languageID);
 		List<ExtendedCaseFormSectionTranslationModel> GetExtendedCaseFormSections(int extendedCaseFormId, int languageID);
-        bool CreateExtendedCaseForm(ExtendedCaseFormPayloadModel entity, string userId);
+        bool CreateExtendedCaseForm(ExtendedCaseFormJsonModel entity, string userId);
+		List<CaseSolution> GetCaseSolutionsWithExtendedCaseForm(int[] caseSolutionIds);
     }
 }
