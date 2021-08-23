@@ -58,6 +58,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         private readonly IOrdersService _ordersService;
         private readonly ISettingService _settingsService;
 		private readonly IGlobalSettingService _globalSettingService;
+        private readonly IComputerCopyBuilder _computerCopyBuilder;
 
 		public WorkstationController(
             IMasterDataService masterDataService,
@@ -74,7 +75,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
             IOrdersService ordersService,
             ISettingService settingsService,
-			IGlobalSettingService globalSettingService)
+			IGlobalSettingService globalSettingService,
+            IComputerCopyBuilder computerCopyBuilder)
             : base(masterDataService, exportFileNameFormatter, excelFileComposer, organizationService, placeService)
         {
             _filesStore = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Inventory);
@@ -87,8 +89,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             _ordersService = ordersService;
             _settingsService = settingsService;
 			_globalSettingService = globalSettingService;
-
-		}
+            _computerCopyBuilder = computerCopyBuilder;
+        }
 
         [HttpGet]
 		[UserPermissions(UserPermission.InventoryViewPermission)]
@@ -285,10 +287,11 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             if (computerViewModel.IsCopy)
             {
                 //var computerFile = LoadTempFile(computerViewModel.DocumentFileKey); 
-                var copyBusinessModel = _computerBuilder.BuildForAdd(computerViewModel, this.OperationContext, null);
-                var newId = _inventoryService.CopyWorkstation(copyBusinessModel, this.OperationContext);
-
-                return RedirectToAction("Edit", new { id = newId, dialog = computerViewModel.IsForDialog });
+                //var copyBusinessModel = _computerBuilder.BuildForAdd(computerViewModel, this.OperationContext, null);
+                //var copyModel = _inventoryService.CopyWorkstation(computerViewModel, this.OperationContext);
+                //copyBusinessModel.Id = 0;
+                TempData["copyViewModel"] = computerViewModel;
+                return RedirectToAction("New");
             }
             var businessModel = this._computerBuilder.BuildForUpdate(computerViewModel, OperationContext);
             this._inventoryService.UpdateWorkstation(businessModel, this.OperationContext);
@@ -321,7 +324,14 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 options,
                 settings,
                 SessionFacade.CurrentCustomer.Id,
-				whiteList);
+                whiteList);
+
+            if (TempData.ContainsKey("copyViewModel"))
+            {
+                var sourceModel = TempData["copyViewModel"] as ComputerViewModel;
+                if (sourceModel == null) throw new NullReferenceException("sourceModel can't be empty");
+                viewModel = _computerCopyBuilder.CopyWorkstation(viewModel, sourceModel, this.OperationContext);
+            }
 
             if (orderId.HasValue)
                 ApplyOrderFields(orderId.Value, viewModel);
@@ -612,18 +622,18 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
         [HttpGet]
         [OutputCache(NoStore = true, Duration = 0)]
-        public JsonResult ValidateMacAddress(int currentId, string macAddress)
+        public JsonResult ValidateMacAddress(int currentId, string value)
         {
-            if (string.IsNullOrWhiteSpace(macAddress)) return Json(true, JsonRequestBehavior.AllowGet);
+            if (string.IsNullOrWhiteSpace(value)) return Json(true, JsonRequestBehavior.AllowGet);
 
-            var result = !string.IsNullOrWhiteSpace(macAddress) && _inventoryService.IsMacAddressUnique(currentId, macAddress);
+            var result = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsMacAddressUnique(currentId, value);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         [HttpGet]
         [OutputCache(NoStore = true, Duration = 0)]
-        public JsonResult ValidateTheftmark(int currentId, string theftMark)
+        public JsonResult ValidateTheftmark(int currentId, string value)
         {
-            var result = !string.IsNullOrWhiteSpace(theftMark) && _inventoryService.IsTheftMarkUnique(currentId, theftMark);
+            var result = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsTheftMarkUnique(currentId, value);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

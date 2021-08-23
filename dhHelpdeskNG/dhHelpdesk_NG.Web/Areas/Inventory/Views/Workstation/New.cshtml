@@ -1,6 +1,7 @@
 ﻿@using System.Web.Optimization
 @using DH.Helpdesk.Web
 @using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer.ComputerViewModel
 @{
     Layout = "~/Areas/Inventory/Views/Shared/_EditLayout.cshtml";
@@ -48,7 +49,7 @@
 }
 
 @section Scripts{
-
+    @Scripts.Render(BundleConfig.ScriptNames.InventoryWorkstation)
     <script type="text/javascript">
         window.parameters = (window.parameters == null ? {} : window.parameters);
         window.parameters.fileUploadWhiteList = [];
@@ -66,6 +67,31 @@
         {
             @:window.parameters.fileUploadWhiteList = null;
         }
+
+        $(function(jQuery) {
+            $('#@Html.IdFor(m => m.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)')
+                .attr("data-val-remote",
+                    '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress), Translation.GetCoreTextTranslation("måste vara unikt"))');
+            $('#@Html.IdFor(m => m.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)')
+                .attr("data-val-remote-url", '@Url.Action("ValidateMacAddress", "Workstation")');
+
+            $('#@Html.IdFor(m => m.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)')
+                .attr("data-val-remote",
+                    '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark), Translation.GetCoreTextTranslation("måste vara unikt"))');
+            $('#@Html.IdFor(m => m.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)')
+                .attr("data-val-remote-url", '@Url.Action("ValidateTheftmark", "Workstation")');
+
+            if (typeof WorkstationEdit !== 'undefined') {
+                window.workstationEdit = new WorkstationEdit($);
+                window.workstationEdit.init({
+                    id: @Model.Id,
+                    userId: @SessionFacade.CurrentUser.Id,
+                    customerId: @SessionFacade.CurrentCustomer.Id,
+                    getUnitsUrl: '@Url.Action("GetUnits", "Ajax", new {area = ""})',
+                    getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})'
+                });
+            }
+        });
     </script>
 
     @if (Model.ContractFieldsViewModel.ContractFieldsModel.Document.Show)
@@ -88,16 +114,6 @@
                 // create instance and init
                 window.inventoryFiles = new InventoryFiles(jQuery);
                 window.inventoryFiles.init(inventoryFilesOptions);
-
-                if (typeof WorkstationEdit !== 'undefined') {
-                    window.workstationEdit = new WorkstationEdit($);
-                    window.workstationEdit.init({
-                        userId: @SessionFacade.CurrentUser.Id,
-                        customerId: @SessionFacade.CurrentCustomer.Id,
-                        getUnitsUrl: '@Url.Action("GetUnits", "Ajax", new {area = ""})',
-                        getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})'
-                    });
-                }
             });
         </script>
     }

@@ -73,6 +73,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Modules
             this.Bind<IInventoryFieldSettingsEditViewModelBuilder>().To<InventoryFieldSettingsEditViewModelBuilder>().InSingletonScope();
 
             this.Bind<IComputerBuilder>().To<ComputerBuilder>().InSingletonScope();
+            this.Bind<IComputerCopyBuilder>().To<ComputerCopyBuilder>();
 
             this.Bind<IComputerRestorer>().To<ComputerRestorer>().InSingletonScope();
             this.Bind<IComputerValidator>().To<ComputerValidator>().InSingletonScope();
