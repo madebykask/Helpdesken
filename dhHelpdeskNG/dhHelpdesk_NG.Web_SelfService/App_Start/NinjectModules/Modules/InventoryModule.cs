@@ -48,7 +48,6 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
             
             this.Bind<IComputerRestorer>().To<ComputerRestorer>().InSingletonScope();
             this.Bind<IComputerValidator>().To<ComputerValidator>().InSingletonScope();
-            this.Bind<IComputerCopyService>().To<ComputerCopyService>().InSingletonScope();
 
             this.Bind<IServerRestorer>().To<ServerRestorer>().InSingletonScope();
             this.Bind<IServerValidator>().To<ServerValidator>().InSingletonScope();
