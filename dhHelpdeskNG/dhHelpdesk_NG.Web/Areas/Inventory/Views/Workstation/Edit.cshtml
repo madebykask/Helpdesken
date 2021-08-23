@@ -184,8 +184,8 @@
                     if (!this.settings.messages[element.name]) {
                         this.settings.messages[element.name] = {};
                     }
-                    previous.originalMessage = this.settings.messages[element.name].remote;
-                    this.settings.messages[element.name].remote = previous.message;
+                    previous.originalMessage = this.settings.messages[element.name].uniquemac;
+                    this.settings.messages[element.name].uniquemac = previous.message;
 
                     param = '@Url.Action("ValidateMacAddress", "Workstation")';
 
@@ -210,7 +210,7 @@
                         dataType: "json",
                         data: data,
                         success: function (response) {
-                            validator.settings.messages[element.name].remote = previous.originalMessage;
+                            validator.settings.messages[element.name].uniquemac = previous.originalMessage;
                             valid = response === true || response === "true";
                             if (valid) {
                                 var submitted = validator.formSubmitted;
@@ -243,8 +243,8 @@
                     if (!this.settings.messages[element.name]) {
                         this.settings.messages[element.name] = {};
                     }
-                    previous.originalMessage = this.settings.messages[element.name].remote;
-                    this.settings.messages[element.name].remote = previous.message;
+                    previous.originalMessage = this.settings.messages[element.name].uniquetheftmark;
+                    this.settings.messages[element.name].uniquetheftmark = previous.message;
 
                     param = '@Url.Action("ValidateTheftmark", "Workstation")';
 
@@ -269,7 +269,7 @@
                         dataType: "json",
                         data: data,
                         success: function (response) {
-                            validator.settings.messages[element.name].remote = previous.originalMessage;
+                            validator.settings.messages[element.name].uniquetheftmark = previous.originalMessage;
                             valid = response === true || response === "true";
                             if (valid) {
                                 var submitted = validator.formSubmitted;
