@@ -165,13 +165,6 @@
     this.copy = function () {
         $("#workstation_edit_form").attr('action', settings.copyUrl);
         $("#workstation_edit_form").validate().destroy();
-        //this.removeValidation();
-        //$("#workstation_edit_form").data("validator").settings.submitHandler = function (form) {
-        //    //if ($(form).valid()) {
-        //        self.changeCaseButtonsState(false);
-        //        form.submit();
-        //    //}
-        //};
         self.changeCaseButtonsState(false);
         $('#' + settings.copyControlId).val('true');
         $('#workstation_edit_form').submit();
