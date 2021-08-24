@@ -13,62 +13,19 @@
                             {
                                 <tr>
                                     <td>
+                                        @*<a href="@Url.Action("EditForm", "ExtendedCase", new { customerId = customer.CustomerId })" ">
+        <div style="height:100%;width:100%">*@
                                         @form.Name
-                                        @*<a href="@Url.Action("Index", "Changes", new { customerId = customer.CustomerId })" class="pull-left">
-                                                @customer.CustomerName
-                                            </a>
-                                            <div class="pull-right">
-                                                <a href="@Url.Action("Index", "Changes", new { customerId = customer.CustomerId, filterType = FilterType.MyChanges })"
-                                                   class="start-tile label my"
-                                                   rel="tooltip"
-                                                   data-toggle="tooltip"
-                                                   title="@Translation.Get("Mina ändringar")">
-                                                    @customer.ChangesForUser
-                                                </a>
-                                                <a href="@Url.Action("Index", "Changes", new { customerId = customer.CustomerId, filterType = FilterType.ClosedChanges })"
-                                                   rel="tooltip"
-                                                   class="start-tile label closed"
-                                                   title="@Translation.Get("Avslutade ändringar")">
-                                                    @customer.ChangesClosed
-                                                </a>
-                                                <a href="@Url.Action("Index", "Changes", new { customerId = customer.CustomerId, filterType = FilterType.ActiveChanges })"
-                                                   rel="tooltip"
-                                                   class="start-tile label unread"
-                                                   title="@Translation.Get("Pågående ändringar")">
-                                                    @customer.ChangesInProgress
-                                                </a>
-                                            </div>*@
+                                        @*   </div>
+           </div>
+        </a>*@
                                     </td>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-
-                @*<h4>@Translation.GetCoreTextTranslation("Informationsfält"))</h4>*@
-                @*<div class="row">
-                        <div class="span12">
-                            <table class="tableform">
-                                <tr>
-                                    <td colspan="4">
-                                        @Translation.GetCoreTextTranslation("Helpdesk")&nbsp;&nbsp;&nbsp;&nbsp;
-                                    </td>
-                                    <td colspan="6">
-                                        @Html.ListBoxFor(m => m.ShowStatusBarIds, new SelectList((List<CustomKeyValue<int, string>>)ViewBag.AllFields, "Key", "Value", Model.ShowStatusBarIds), new { id = "showStatusBarIds", multiple = "multiple", })
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4">
-                                        @Translation.GetCoreTextTranslation("Självservice")&nbsp;&nbsp;&nbsp;&nbsp;
-                                    </td>
-                                    <td colspan="6">
-                                        @Html.ListBoxFor(m => m.ShowExternalStatusBarIds, new SelectList((List<CustomKeyValue<int, string>>)ViewBag.ShowExternalStatusBarFields, "Key", "Value", Model.ShowExternalStatusBarIds), new { id = "showExternalStatusBarIds", multiple = "multiple" })
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>*@
             </div>
         </div>
     </div>
-</div>

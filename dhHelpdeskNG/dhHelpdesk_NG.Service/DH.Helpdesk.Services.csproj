@@ -355,7 +355,6 @@
     <Compile Include="Services\Cache\TranslateCacheService.cs" />
     <Compile Include="Services\Cache\ICacheService.cs" />
     <Compile Include="Services\Concrete\Changes\BaseChangesService.cs" />
-    <Compile Include="Services\Concrete\ComputerCopyService.cs" />
     <Compile Include="Services\ConditionService.cs" />
     <Compile Include="Services\CaseExtraFollowersService.cs" />
     <Compile Include="Services\CaseFollowUpService.cs" />

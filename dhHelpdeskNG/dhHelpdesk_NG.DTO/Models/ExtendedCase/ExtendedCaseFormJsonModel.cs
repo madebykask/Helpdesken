@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,12 +7,22 @@ using System.Threading.Tasks;
 
 namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
 {
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
+    // ExtendedCaseFormJsonModel myDeserializedClass = JsonConvert.DeserializeObject<ExtendedCaseFormJsonModel>(myJsonResponse); 
 
-    public class RootElement
+    public class ExtendedCaseFormJsonModel
     {
         public int id { get; set; }
         public string name { get; set; }
+
+        [JsonIgnore]
+        public string description { get; set; }
+
+        [JsonIgnore]
+        public bool status { get; set; }
+
+        [JsonIgnore]
+        public int[] caseSolutionIds { get; set; }
+
         public LocalizationElement localization { get; set; }
         public ValidatorsMessagesElement validatorsMessages { get; set; }
         public string styles { get; set; }
@@ -37,7 +48,11 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
 
     public class ValidatorsElement
     {
-        public List<OnSave> onSave { get; set; }
+        public List<OnSaveElement> onSave { get; set; }
+    }
+
+    public class OnSave
+    {
     }
 
     public class ControlElement
@@ -45,8 +60,12 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         public string id { get; set; }
         public string type { get; set; }
         public string label { get; set; }
-        public string valueBinding { get; set; }
-        public Validators validators { get; set; }
+        public object valueBinding { get; set; }
+        public ValidatorsElement validators { get; set; }
+    }
+
+    public class Validators
+    {
     }
 
     public class SectionElement

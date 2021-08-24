@@ -139,207 +139,74 @@
 @section Scripts
 {
     @Scripts.Render(BundleConfig.ScriptNames.InventoryWorkstation)
-<script type="text/javascript">
+    <script type="text/javascript">
 
-        window.parameters = (window.parameters == null ? {} : window.parameters);
-        window.parameters.fileUploadWhiteList = [];
-        window.parameters.invalidFileExtensionText = '@Html.Raw(Translation.GetForJS("har inte en giltig filändelse"))';
+            window.parameters = (window.parameters == null ? {} : window.parameters);
+            window.parameters.fileUploadWhiteList = [];
+            window.parameters.invalidFileExtensionText = '@Html.Raw(Translation.GetForJS("har inte en giltig filändelse"))';
 
-        @if (Model.FileUploadWhiteList != null)
-        {
-            foreach (var extension in Model.FileUploadWhiteList)
+            @if (Model.FileUploadWhiteList != null)
             {
-                @:window.parameters.fileUploadWhiteList.push('@extension');
+                foreach (var extension in Model.FileUploadWhiteList)
+                {
+                    @:window.parameters.fileUploadWhiteList.push('@extension');
+                }
             }
-        }
-        else
-        {
-            @:window.parameters.fileUploadWhiteList = null;
-        }
+            else
+            {
+                @:window.parameters.fileUploadWhiteList = null;
+            }
 
 
-        $(function (jQuery) {
-            $('#@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)')
-                .attr("data-val-uniquemac", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress), Translation.GetCoreTextTranslation("måste vara unikt"))');
+            $(function (jQuery) {
+                $('#@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)')
+                    .attr("data-val-remote", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress), Translation.GetCoreTextTranslation("måste vara unikt"))');
+                $('#@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)')
+                    .attr("data-val-remote-url", '@Url.Action("ValidateMacAddress", "Workstation")');
 
-            $('#@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)')
-                .attr("data-val-uniquetheftmark", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark), Translation.GetCoreTextTranslation("måste vara unikt"))');
+                $('#@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)')
+                    .attr("data-val-remote", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark), Translation.GetCoreTextTranslation("måste vara unikt"))');
+                $('#@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)')
+                    .attr("data-val-remote-url", '@Url.Action("ValidateTheftmark", "Workstation")');
 
-            $.validator.unobtrusive.adapters.add("uniquemac", [], function (options) {
-                options.rules["uniquemac"] = true;
-                options.messages["uniquemac"] = options.message;
-            });
-            $.validator.unobtrusive.adapters.add("uniquetheftmark", [], function (options) {
-                options.rules["uniquetheftmark"] = true;
-                options.messages["uniquetheftmark"] = options.message;
-            });
-
-            $.validator.addMethod("uniquemac",
-                function (value, element, param) {
-                    if (this.optional(element)) {
-                        return "dependency-mismatch";
-                    }
-
-                    var previous = this.previousValue(element);
-                    if (!this.settings.messages[element.name]) {
-                        this.settings.messages[element.name] = {};
-                    }
-                    previous.originalMessage = this.settings.messages[element.name].remote;
-                    this.settings.messages[element.name].remote = previous.message;
-
-                    param = '@Url.Action("ValidateMacAddress", "Workstation")';
-
-                    if (previous.old === value) {
-                        return previous.valid;
-                    }
-
-                    previous.old = value;
-                    var validator = this;
-                    this.startRequest(element);
-                    var data = {
-                        macAddress: value,
-                        currentId: @Model.Id
-                    };
-                    data[element.name] = value;
-                    var valid = "pending";
-                    $.ajax($.extend(true, {
-                        url: param,
-                        async: false,
-                        mode: "abort",
-                        port: "validate" + element.name,
-                        dataType: "json",
-                        data: data,
-                        success: function (response) {
-                            validator.settings.messages[element.name].remote = previous.originalMessage;
-                            valid = response === true || response === "true";
-                            if (valid) {
-                                var submitted = validator.formSubmitted;
-                                validator.prepareElement(element);
-                                validator.formSubmitted = submitted;
-                                validator.successList.push(element);
-                                delete validator.invalid[element.name];
-                                validator.showErrors();
-                            } else {
-                                var errors = {};
-                                var message = response || validator.defaultMessage(element, "uniquemac");
-                                errors[element.name] = previous.message = $.isFunction(message) ? message(value) : message;
-                                validator.invalid[element.name] = true;
-                                validator.showErrors(errors);
-                            }
-                            previous.valid = valid;
-                            validator.stopRequest(element, valid);
-                        }
-                    }, param));
-                    return valid;
-                }
-            );
-            $.validator.addMethod("uniquetheftmark",
-                function (value, element, param) {
-                    if (this.optional(element)) {
-                        return "dependency-mismatch";
-                    }
-
-                    var previous = this.previousValue(element);
-                    if (!this.settings.messages[element.name]) {
-                        this.settings.messages[element.name] = {};
-                    }
-                    previous.originalMessage = this.settings.messages[element.name].remote;
-                    this.settings.messages[element.name].remote = previous.message;
-
-                    param = '@Url.Action("ValidateTheftmark", "Workstation")';
-
-                    if (previous.old === value) {
-                        return previous.valid;
-                    }
-
-                    previous.old = value;
-                    var validator = this;
-                    this.startRequest(element);
-                    var data = {
-                        theftMark: value,
-                        currentId: @Model.Id
-                    };
-                    data[element.name] = value;
-                    var valid = "pending";
-                    $.ajax($.extend(true, {
-                        url: param,
-                        async: false,
-                        mode: "abort",
-                        port: "validate" + element.name,
-                        dataType: "json",
-                        data: data,
-                        success: function (response) {
-                            validator.settings.messages[element.name].remote = previous.originalMessage;
-                            valid = response === true || response === "true";
-                            if (valid) {
-                                var submitted = validator.formSubmitted;
-                                validator.prepareElement(element);
-                                validator.formSubmitted = submitted;
-                                validator.successList.push(element);
-                                delete validator.invalid[element.name];
-                                validator.showErrors();
-                            } else {
-                                var errors = {};
-                                var message = response || validator.defaultMessage(element, "uniquetheftmark");
-                                errors[element.name] = previous.message = $.isFunction(message) ? message(value) : message;
-                                validator.invalid[element.name] = true;
-                                validator.showErrors(errors);
-                            }
-                            previous.valid = valid;
-                            validator.stopRequest(element, valid);
-                        }
-                    }, param));
-                    return valid;
-                }
-            );
-            
-            $('#workstation_edit_form')
-                .removeData("validator")
-                .removeData("unobtrusiveValidation");
-            $.validator.unobtrusive.parse($('#workstation_edit_form'));
-
-            window.workstationEdit = new WorkstationEdit($);
-            window.workstationEdit.init({
-                id: @Model.Id,
-                userId: @SessionFacade.CurrentUser.Id,
-                customerId: @SessionFacade.CurrentCustomer.Id,
-                copyControlId: '@Html.IdFor(m => m.ComputerViewModel.IsCopy)',
-                getUnitsUrl: '@Url.Action("GetUnits", "Ajax", new {area = ""})',
-                getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})',
-                validateMacAddressUrl: '@Url.Action("ValidateMacAddress", "Workstation")',
-                validateTheftMarkUrl: '@Url.Action("ValidateTheftmark", "Workstation")',
-                fieldsIds: {
-                    'MacAddressId':
-                        '@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)',
-                    'TheftMarkId':
-                        '@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)'
-                },
-            });
-
-            // TODO: Move this section to WorkstationEdit
-            $('#@Html.IdFor(m => m.ComputerViewModel.ContractFieldsViewModel.ContractFieldsModel.PurchasePrice.Value)')
-                .prop('type', 'number');
-
-            // TODO: Move this section to WorkstationEdit
-            $("#@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.ComputerTypeId.Value)")
-                .change(function() {
-
-                    if (this.value > 0) {
-                        $.get('@Url.Action("GetPrice", "Workstation")',
-                            { id: this.value },
-                            function(data) {
-                                $(
-                                        '#@Html.IdFor(m => m.ComputerViewModel.ContractFieldsViewModel.ContractFieldsModel.PurchasePrice.Value)')
-                                    .val(data);
-                            });
-                    } else {
-                        $(
-                                '#@Html.IdFor(m => m.ComputerViewModel.ContractFieldsViewModel.ContractFieldsModel.PurchasePrice.Value)')
-                            .val(0);
-                    }
+                window.workstationEdit = new WorkstationEdit($);
+                window.workstationEdit.init({
+                    id: @Model.Id,
+                    userId: @SessionFacade.CurrentUser.Id,
+                    customerId: @SessionFacade.CurrentCustomer.Id,
+                    copyControlId: '@Html.IdFor(m => m.ComputerViewModel.IsCopy)',
+                    getUnitsUrl: '@Url.Action("GetUnits", "Ajax", new {area = ""})',
+                    getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})',
+                    validateMacAddressUrl: '@Url.Action("ValidateMacAddress", "Workstation")',
+                    validateTheftMarkUrl: '@Url.Action("ValidateTheftmark", "Workstation")',
+                    copyUrl: '@Url.Action("Copy", "Workstation")',
+                    fieldsIds: {
+                        'MacAddressId':
+                            '@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)',
+                        'TheftMarkId':
+                            '@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)'
+                    },
                 });
-        });
-</script>
+
+                // TODO: Move this section to WorkstationEdit
+                $('#@Html.IdFor(m => m.ComputerViewModel.ContractFieldsViewModel.ContractFieldsModel.PurchasePrice.Value)')
+                    .prop('type', 'number');
+
+                // TODO: Move this section to WorkstationEdit
+                $("#@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.ComputerTypeId.Value)")
+                    .change(function() {
+                        if (this.value > 0) {
+                            $.get('@Url.Action("GetPrice", "Workstation")',
+                                { id: this.value },
+                                function(data) {
+                                    $('#@Html.IdFor(m => m.ComputerViewModel.ContractFieldsViewModel.ContractFieldsModel.PurchasePrice.Value)').val(data);
+                                });
+                        } else {
+                            $('#@Html.IdFor(m => m.ComputerViewModel.ContractFieldsViewModel.ContractFieldsModel.PurchasePrice.Value)').val(0);
+                        }
+                    });
+            });
+    </script>
 
     @if (documentModel.Show)
     {

@@ -24,37 +24,53 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         [JsonProperty("status")]
         public bool Status { get; set; }
 
-        [JsonProperty("items")]
-        public List<Root> Items { get; set; }
-
         [JsonProperty("caseSolutionIds")]
         public int[] CaseSolutionIds { get; set; }
+
+        //[JsonProperty("tabs")]
+        //public List<Tab> Tabs { get; set; }
+
+        [JsonProperty("sections")]
+        public List<Section> Sections { get; set; }
+
     }
-    public class Root
+
+    //public class Tab
+    //{
+    //    [JsonProperty("sections")]
+    //    public List<Section> Sections { get; set; }
+    //}
+
+    public class Section
     {
         [JsonProperty("id")]
         public string Id { get; set; }
 
-        [JsonProperty("type")]
-        public string Type { get; set; }
+        [JsonProperty("sectionName")]
+        public string SectionName { get; set; }
 
-        [JsonProperty("label", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string Label { get; set; }
+        [JsonProperty("controls")]
+        public List<Control> Controls { get; set; }
 
-        //[JsonProperty("validators")]
-        //public Validators Validators { get; set; }
     }
 
 
-    public class OnSave
+    public class Control
     {
+        [JsonProperty("id")]
+        public string Id { get; set; }        
+        
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public string Type { get; set; }     
+        
+        [JsonProperty("label")]
+        public string Label { get; set; } 
+        
+        [JsonProperty("required")]
+        public bool Required { get; set; }   
+        
+        [JsonProperty("valueBinding")]
+        public object ValueBinding { get; set; }
     }
 
-    public class Validators
-    {
-        [JsonProperty("onSave")]
-        public List<OnSave> OnSave { get; set; }
-    }
 }

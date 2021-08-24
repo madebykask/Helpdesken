@@ -159,6 +159,5 @@ namespace DH.Helpdesk.Services.Services
         int? GetComputerTypePrice(int id);
         bool IsMacAddressUnique(int exceptId, string macAddress);
         bool IsTheftMarkUnique(int exceptId, string theftMark);
-        int CopyWorkstation(ComputerForInsert copyBusinessModel, OperationContext operationContext);
     }
 }

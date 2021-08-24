@@ -3,7 +3,7 @@
     ViewBag.Title = "Extended Case Forms";
 }
 @using (Html.BeginForm("New", "ExtendedCase", new { customerId = Model.Customer.Id, languageId = Model.LanguageId, area = "admin" }, FormMethod.Post, new { id = "target" }))
-{
+{   
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">

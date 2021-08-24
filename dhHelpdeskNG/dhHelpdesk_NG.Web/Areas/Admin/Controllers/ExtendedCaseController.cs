@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.ExtendedCase;
+using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Areas.Admin.Models;
-using DH.Helpdesk.BusinessData.OldComponents;
-using DH.Helpdesk.BusinessData.Enums.Case.Fields;
-using DH.Helpdesk.BusinessData.Models;
-using DH.Helpdesk.Domain;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Attributes;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using Microsoft.Ajax.Utilities;
-using DH.Helpdesk.BusinessData.Models.Case;
-using DH.Helpdesk.BusinessData.Models.ExtendedCase;
-using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
-using DH.Helpdesk.Dal.Infrastructure;
-using DH.Helpdesk.Domain.ExtendedCaseEntity;
-using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
@@ -204,18 +199,27 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
 
-        public ActionResult EditForm(ExtendedCaseFormPayloadModel entity, int? formId)
+        public ActionResult EditForm(ExtendedCaseFormPayloadModel payload, int? formId)
         {
+            List<CaseSolution> caseSolutionsWithForms = _extendedCaseService.GetCaseSolutionsWithExtendedCaseForm(payload.CaseSolutionIds);
 
             //TODO if id = 0 || null
-            _extendedCaseService.CreateExtendedCaseForm(entity, SessionFacade.CurrentUser.UserId);
-
-            ExtendedCaseFormsForCustomer model = new ExtendedCaseFormsForCustomer()
+            if (caseSolutionsWithForms.Count > 0)
             {
-                Customer = _customerService.GetCustomer(entity.CustomerId),
-                ExtendedCaseFormModels = _extendedCaseService.GetExtendedCaseFormsCreatedByEditor(entity.CustomerId)
-            };
-            return View("CustomerForms", model);
+                string msg = "Följande ärendemallar har redan ett formulär: " + Environment.NewLine;
+
+                foreach (var c in caseSolutionsWithForms)
+                {
+                    msg += Environment.NewLine + c.Name;
+                }
+
+                return Json(new { result = false, error = msg });
+            }
+
+            _extendedCaseService.CreateExtendedCaseForm(payload, SessionFacade.CurrentUser.UserId);
+
+            //return View("CustomerForms", model);
+            return Json(new { result = true });
         }
     }
 }
