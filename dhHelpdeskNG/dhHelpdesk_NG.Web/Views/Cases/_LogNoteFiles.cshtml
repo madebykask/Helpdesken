@@ -51,7 +51,7 @@
                     onclick="window.dhHelpdesk.logFileAccess(@l.CaseId, '@l.FileName', @((int)CaseFileType.CaseFile))"
                     href="@BuildCaseFileLinkVD(l.FileName)"><i class="icon- attachedFile"></i>@l.FileName</a>*@
                         <a target="_blank" href="@Url.Action("Documents", "Cases",new RouteValueDictionary {{"id", l.CaseId}, {"fileName", l.FileName}, { "type", 0 } })">
-                            <i class="icon-file"></i>@l.FileName<br />
+                            <i class="icon- attachedFile"></i>@l.FileName<br />
                         </a>
                     }
                     else
@@ -70,9 +70,9 @@
                             @*<a target="_blank" class="isExisted"
                                onclick="window.dhHelpdesk.logFileAccess(@currentLog.CaseId, '@l.FileName', @(l.LogType == LogFileType.Internal ? (int)CaseFileType.LogInternal : (int)CaseFileType.LogExternal), @l.LogId.Value)"
                                href="@BuildLogFileLinkVD(l.LogId.Value, l.FileName, l.ParentLogType ?? l.LogType)"><i class="icon- attachedFile"></i> @l.FileName</a>*@
-                            <a target="_blank" href="@Url.Action("Documents", "Cases",new RouteValueDictionary { { "id", currentLog.CaseId }, { "fileName", l.FileName }, { "type", l.ParentLogType ?? l.LogType } , {"logId", currentLog.Id } })"
+                            <a target="_blank" href="@Url.Action("Documents", "Cases",new RouteValueDictionary { { "id", currentLog.CaseId }, { "fileName", l.FileName }, { "type",  (int)(l.ParentLogType ?? l.LogType) } , {"logId", currentLog.Id } })"
                                data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(l))">
-                                <i class="@(GetFileIcon(l))"></i> @l.FileName
+                                <i class="icon- attachedFile"></i> @l.FileName
                             </a>
                         }
                         else
