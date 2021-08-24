@@ -9,7 +9,10 @@
         <ul class="secnav">
             @*<li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), "Edit", "ExtendedCase", new { customerId = @Model.Id }, new { onclick = "submitForm();return false;", @class = "btn" })</li>*@
             <li><input type="button" class="btn" value=@Translation.GetCoreTextTranslation("Spara") onclick="submitForm()"></li>
-            <li><input disabled type="button" class="btn" value="@Translation.GetCoreTextTranslation("Ta bort")" id="delete_button"></li>
+            @*@if(Model.SelectedExtendedCase != null)
+            {
+                <li><input type="button" class="btn" value="@Translation.GetCoreTextTranslation("Ta bort")" id="delete_button"></li>
+            }*@
             <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Edit", new { area = "admin", controller = "Customer", action = "Edit", id = @Model.Customer.Id }, new { @class = "btn" })</li>
         </ul>
     </div>
@@ -112,7 +115,7 @@
 
     const IDNAME = "firstSectionId";
     let divHeaderActions = (idName) => "<div class='header-actions'><a class='fa fa-pencil fa-lg' data-toggle='collapse' href='#" + idName + "' role='button' title='Edit' aria-hidden='true'></a><a class='fa fa-trash fa-lg' href='#" + idName + "' title='Remove Element' role='button' aria-hidden='true'></a></div>";
-    let divHeaderLabel = (labelClass, labelName, idName) => "<div class='header-label'><label class='" + labelClass + "' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + labelName + "</label></div>";
+    let divHeaderLabel = (labelClass, labelName, idName) => "<div class='header-label'><label class='" + labelClass + "' id='" + idName + "header"   + "'><span id= '" + idName + "headerName" + "'>" + labelName + "</label></div>";
     let editFieldHtml = (idName, placeHolder, hasLabelName, hasRequiredChk) => {
         var res =
             "<div class='collapse' id = '" + idName + "'><div><table class='table borderless' style='margin-left:10px;margin-right:10px'><tbody>"
@@ -243,7 +246,8 @@
         });
 
         $(document).on("click", ".fa-trash", function (e) {
-            $(this).parent().parent().parent().html('');
+            //console.log($(this).parent().parent().parent().id)
+            $(this).parent().parent().parent().parent().remove();
         });
 
         $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(IDNAME, "Section Name"), IDNAME, "field-label sectionLabel", "Section Name")));
@@ -294,6 +298,18 @@
     }
 
     function submitForm() {
+
+        if(document.getElementById("dropzone").firstElementChild == null)
+        {
+            ShowToastMessage('@Html.Raw(Translation.GetForJS("Formuläret får ej vara tomt"))', "error")
+            return;
+        }
+
+        if(document.getElementById("dropzone").firstElementChild.getAttribute('data-type') != "section")
+        {
+            ShowToastMessage('@Html.Raw(Translation.GetForJS("Formulärets första fält måste vara en sektion"))', "error")
+            return;
+        }
 
         if (document.getElementById("formName").value == "" || document.getElementById("formName").value.match(/^ *$/) !== null) {
             document.getElementById("formName").value = "";
@@ -349,10 +365,11 @@
 
             };
 
-            $('.sectionLabel').each(function (i, obj) {
+        $('.sectionLabel').each(function (i, obj) {
+
                 items[i] = {};
-                items[i].id = document.getElementById(obj.id + "Name").innerText;
-                items[i].sectionName = document.getElementById(obj.id + "Name").innerText;
+                items[i].id = document.getElementById(obj.id).innerText;
+                items[i].sectionName = document.getElementById(obj.id).innerText;
                 items[i].controls = [];
 
                 getNextUntil(obj.parentElement.parentElement.parentElement.parentElement, "[data-type='section']").forEach(function (obj, n) {
@@ -374,6 +391,11 @@
                 });
 
             });
+
+            if (checkForDuplicates(items)) {
+                ShowToastMessage("Sektionerna får ej ha samma namn", "error");
+                return;
+            }
 
             let url = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + location.pathname
             url = url.substr(0, url.lastIndexOf("/")) + "/EditForm";
@@ -413,6 +435,19 @@
                 //}
             });
 
+    }
+
+    function checkForDuplicates(array) {
+        let valuesAlreadySeen = []
+
+        for (let i = 0; i < array.length; i++) {
+            let value = array[i].id
+            if (valuesAlreadySeen.indexOf(value) !== -1) {
+                return true
+            }
+            valuesAlreadySeen.push(value)
+        }
+        return false
     }
 
     function getUrlVars() {
