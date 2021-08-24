@@ -218,11 +218,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             _extendedCaseService.CreateExtendedCaseForm(payload, SessionFacade.CurrentUser.UserId);
 
-            ExtendedCaseFormsForCustomer model = new ExtendedCaseFormsForCustomer()
-            {
-                Customer = _customerService.GetCustomer(payload.CustomerId),
-                ExtendedCaseFormModels = _extendedCaseService.GetExtendedCaseFormsCreatedByEditor(payload.CustomerId)
-            };
             //return View("CustomerForms", model);
             return Json(new { result = true });
         }

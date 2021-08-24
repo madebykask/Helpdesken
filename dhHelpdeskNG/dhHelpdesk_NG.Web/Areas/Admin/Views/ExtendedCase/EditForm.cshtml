@@ -272,7 +272,7 @@
             e.stopImmediatePropagation();
             var dlg = new ConfirmationDialog();
             var opts = {
-                dlgText: '@Html.Raw(Translation.GetForJS("Är du säker på att du vill ta bort aktuell FAQ"))',
+                dlgText: '@Html.Raw(Translation.GetForJS("Är du säker på att du vill ta bort aktuellt formulär?"))',
                 btnYesText: '@Translation.GetForJS("Ja")',
                 btnNoText: '@Translation.GetForJS("Nej")',
                 onClick: function (button) {
@@ -410,8 +410,6 @@
                 sections: items
             };
 
-            //console.log(dataToSend)
-
             $.ajax({
                 url: url,
                 type: "POST",
@@ -419,7 +417,6 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
-                    //console.log(data);
                     if (data.result == true) {
                         ShowToastMessage('@Html.Raw(Translation.GetForJS("Sparat"))')
                     }

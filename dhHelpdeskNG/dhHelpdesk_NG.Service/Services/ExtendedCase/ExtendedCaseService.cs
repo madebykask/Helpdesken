@@ -10,6 +10,7 @@ using DH.Helpdesk.Services.BusinessLogic.Cases;
 using DH.Helpdesk.Services.Enums;
 using OfficeOpenXml.Table.PivotTable;
 using DH.Helpdesk.Domain;
+using DH.Helpdesk.Common.Tools;
 
 namespace DH.Helpdesk.Services.Services.ExtendedCase
 {
@@ -208,7 +209,7 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                         new TabElement()
                         {
                             columnCount = "1",
-                            id = "",
+                            id = StringHelper.HandleSwedishChars(payload.Name.Replace(" ","")),
                             name = "",
                             sections = sectionLst
                         }                    
@@ -226,7 +227,7 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
             {
                 var section = new SectionElement()
                 {
-                    id = s.Id,
+                    id = StringHelper.HandleSwedishChars(s.Id.Replace(" ", String.Empty)),
                     name = s.SectionName,
                     controls = new List<ControlElement>()
                 };
@@ -239,7 +240,7 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                         section.controls.Add(
                             new ControlElement()
                             {
-                                id = c.Id,
+                                id = StringHelper.HandleSwedishChars(c.Id.Replace(" ", String.Empty)),
                                 type = c.Type,
                                 label = c.Label,
                                 valueBinding = c.ValueBinding,
