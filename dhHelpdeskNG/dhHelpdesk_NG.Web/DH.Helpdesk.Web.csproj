@@ -18,7 +18,7 @@
     <AssemblyName>DH.Helpdesk.Web</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <SccProjectName>
     </SccProjectName>
     <SccLocalPath>
@@ -407,6 +407,8 @@
     <Compile Include="Infrastructure\Extensions\ItemOverviewExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\RouteDataExtensions.cs" />
     <Compile Include="Infrastructure\JsonNetResult.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ComputerCopyBuilder.cs" />
+    <Compile Include="Infrastructure\ModelFactories\Inventory\IComputerCopyBuilder.cs" />
     <Compile Include="Models\Case\AdvancedCaseSearchInput.cs" />
     <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />

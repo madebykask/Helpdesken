@@ -31,7 +31,6 @@
             this.CarePackNumberFieldSettingModel = carePackNumberFieldSettingModel;
             this.ComputerTypeFieldSettingModel = computerTypeFieldSettingModel;
             this.LocationFieldSettingModel = locationFieldSettingModelModel;
-            this.TheftmarkFieldSettingModel.IsCopyDisabled = true;
         }
 
         [NotNull]

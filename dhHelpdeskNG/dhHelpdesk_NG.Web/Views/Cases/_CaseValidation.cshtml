@@ -327,27 +327,31 @@
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.WatchDate": {
-                required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Model.IsCaseReopened)");
-                }
+                required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Model.IsCaseReopened)"); }
             },
-            "@Html.NameFor(m => m.case_.Cost)": {
-                require_from_group: {
-                    param: [3, ".cost-field"],
-                    depends: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost))
-                }
-            },
-            "@Html.NameFor(m => m.case_.OtherCost)": {
-                require_from_group: {
-                    param: [3, ".cost-field"],
-                    depends: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost))
-                }
-            },
-            "@Html.NameFor(m => m.case_.Currency)": {
-                require_from_group: {
-                    param: [3, ".cost-field"],
-                    depends: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost))
-                }
-            },
+            @if(Model.IsRequired(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost)) 
+            { 
+                <text>
+                "@Html.NameFor(m => m.case_.Cost)": {
+                    require_from_group: {
+                        param: [3, ".cost-field"],
+                        depends: @Json.Encode(Model.IsRequired(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost))
+                    }
+                },
+                "@Html.NameFor(m => m.case_.OtherCost)": {
+                    require_from_group: {
+                        param: [3, ".cost-field"],
+                        depends: @Json.Encode(Model.IsRequired(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost))
+                    }
+                },
+                "@Html.NameFor(m => m.case_.Currency)": {
+                    require_from_group: {
+                        param: [3, ".cost-field"],
+                        depends: @Json.Encode(Model.IsRequired(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost))
+                    }
+                },
+                </text>
+            }
             "CaseLog.FinishingType": {
                 required: function () {
                     if ($('#CaseLog_FinishingDate').closest('tr').css('display') !== 'none' && $('#CaseLog_FinishingType').closest('tr').css('display') !== 'none') {
