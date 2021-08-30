@@ -494,7 +494,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             string mimeType = MimeMapping.GetMimeMapping(fileName);
             byte[] fileBytes = _filesStorage.GetFileByteContent(pathToFile);
-            Response.AppendHeader("Content-Disposition", "inline; filename=" + fileName);
+            Response.AppendHeader("Content-Disposition", "inline; filename=" + fileName.Replace(",", ""));
             return File(fileBytes, mimeType);
         }
         public ActionResult Index()
