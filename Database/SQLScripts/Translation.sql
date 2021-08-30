@@ -8052,6 +8052,12 @@ If not exists (select * from tblTextTranslation where text_id = 2082 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2082, 2, 'Are you sure you want to copy')
 GO
 
+If not exists (select * from tbltext where id = 2083)
+	insert into tbltext (id, TextString) VALUES (2083, 'måste vara unikt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2083 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2083, 2, 'must be unique')
+GO
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
