@@ -345,7 +345,14 @@ Module DH_Helpdesk_Mail
                             End If
 
                             'Dim maxAttempt As Integer = 5
-                            Dim maxAttempt As Integer = 5 ' GetAppSettingValue("MaxAttempt")
+                            'Dim maxAttempt As Integer = 5 ' GetAppSettingValue("MaxAttempt")
+                            Dim imax As String = GetAppSettingValue("MaxConnectionAttempts")
+                            Dim maxAttempt As Integer
+                            If IsNumeric(imax) Then
+                                maxAttempt = Convert.ToInt32(imax)
+                            Else
+                                maxAttempt = 1
+                            End If
                             Dim icount As Integer = 0
                             Dim task As Task(Of List(Of MailMessage))
 
