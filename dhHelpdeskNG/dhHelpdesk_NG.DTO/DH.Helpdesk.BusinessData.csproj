@@ -192,6 +192,7 @@
     <Compile Include="Models\CaseDocument\CaseDocumentTemplateModel.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentTextConditionIdentifierModel.cs" />
     <Compile Include="Models\CaseDocument\DocumentConditionOverview.cs" />
+    <Compile Include="Models\CaseSolution\CaseSolutionSelections.cs" />
     <Compile Include="Models\Case\CaseFileContent.cs" />
     <Compile Include="Models\Case\CaseLockSettings.cs" />
     <Compile Include="Models\Case\CaseLock\CaseLockInfo.cs" />
@@ -203,7 +204,6 @@
     <Compile Include="Models\Case\CaseSolutionConditionOverview.cs" />
     <Compile Include="Models\Case\CaseSolutionInfo.cs" />
     <Compile Include="Models\Case\CaseSolutionOverview.cs" />
-    <Compile Include="Models\Case\CaseSolutionSelections.cs" />
     <Compile Include="Models\Case\CaseTemplateData.cs" />
     <Compile Include="Models\Case\CustomerCaseSolutions.cs" />
     <Compile Include="Models\Case\ExtendedCaseFormCaseSolutionModel.cs" />
@@ -337,6 +337,7 @@
     <Compile Include="Models\Email\EmailSearchScope.cs" />
     <Compile Include="Models\Employee\EmployeeModel.cs" />
     <Compile Include="Models\Error\ErrorModel.cs" />
+    <Compile Include="Models\ExtendedCase\CustomerCaseSolutionExtendedForms.cs" />
     <Compile Include="Models\ExtendedCase\ExtendedCaseFormJsonModel.cs" />
     <Compile Include="Models\ExtendedCase\ExtendedCaseFormPayloadModel.cs" />
     <Compile Include="Models\ExtendedCase\FormTemplate.cs" />

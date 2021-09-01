@@ -11,6 +11,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     using DH.Helpdesk.BusinessData.Models.ExtendedCase;
     using Newtonsoft.Json;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Dal.DbQueryExecutor;
 
     //NOTE: This is performance optimised class - pls do not use mappers!
     public sealed class ExtendedCaseFormRepository : RepositoryBase<ExtendedCaseFormEntity>, IExtendedCaseFormRepository
@@ -161,14 +162,6 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             return query.ToList();
         }
 
-        public List<ExtendedCaseFormEntity> GetExtendedCaseFormsCreatedByEditor(int customerId)
-        {
-            var query = DataContext.ExtendedCaseForms
-                .Where(o => o.CaseSolutions.Any(f => f.Customer_Id == customerId) && o.CreatedByEditor == true);
-
-            return query.ToList();
-        }
-
         public List<ExtendedCaseFormFieldTranslationModel> GetExtendedCaseFormFields(int extendedCaseFormId, int languageID)
         {
             var fieldIds = DataContext.ExtendedCaseValues.Where(o => o.ExtendedCaseData.ExtendedCaseFormId == extendedCaseFormId)
@@ -254,26 +247,40 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             return sectionName;
         }
 
-        public bool CreateExtendedCaseForm(ExtendedCaseFormJsonModel entity, string userId)
+        public int SaveExtendedCaseForm(ExtendedCaseFormJsonModel entity, string userId)
         {
+            ExtendedCaseFormEntity res = new ExtendedCaseFormEntity();
 
-            var res = DataContext.ExtendedCaseForms.Add(new ExtendedCaseFormEntity() 
+            if (entity.id > 0)
             {
-                MetaData = "",
-                CreatedOn = DateTime.Now,
-                CreatedBy = userId,
-                Status = entity.status ? 1 : 0,
-                Version = 1,
-                Guid = Guid.NewGuid(),
-                CreatedByEditor = true,
-                Name = entity.name,
-                Description = entity.description
+                res = DataContext.ExtendedCaseForms.Where(e => e.Id == entity.id).FirstOrDefault();
+                res.Status = entity.status ? 1 : 0;
+                res.Version = res.Version++;
+                res.Name = entity.name;
+                res.Description = entity.description;
+                res.UpdatedBy = userId;
+                res.UpdatedOn = DateTime.Now;
+            }
 
-            });
+            else
+            {
+                res = DataContext.ExtendedCaseForms.Add(new ExtendedCaseFormEntity()
+                {
+                    MetaData = "",
+                    CreatedOn = DateTime.Now,
+                    CreatedBy = userId,
+                    Status = entity.status ? 1 : 0,
+                    Version = 1,
+                    Guid = Guid.NewGuid(),
+                    CreatedByEditor = true,
+                    Name = entity.name,
+                    Description = entity.description
 
-            DataContext.Commit();
+                });
+                DataContext.Commit();
 
-            entity.id = res.Id;
+                entity.id = res.Id;
+            }
 
             var data = JsonConvert.SerializeObject(entity,
                             Newtonsoft.Json.Formatting.None,
@@ -285,26 +292,94 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             var metaData = data.Replace(@"valueBinding"":""function(m) { return ", @"valueBinding"": function(m) { return """).Replace(@"> }""}", @">"";}}").Replace(@"\""", "").Replace(@"\n", "").Replace("color: ", "color:");
             res.MetaData = metaData;
 
-            DataContext.Commit();
-            
             foreach (var c in entity.caseSolutionIds)
             {
-                DataContext.CaseSolutions.Where(x => x.Id == c).FirstOrDefault().ExtendedCaseForms.Add(res);
-
-                DataContext.Commit();
+                if (DataContext.CaseSolutions.Where(x => x.Id == c).FirstOrDefault().ExtendedCaseForms.Count == 0)
+                {
+                    DataContext.CaseSolutions.Where(x => x.Id == c).FirstOrDefault().ExtendedCaseForms.Add(res);
+                }
             }
 
-            return true;
+            IList<CaseSolution> items = DataContext.CaseSolutions.Where(f => f.ExtendedCaseForms.Any(x => x.Id == res.Id)).ToList();
+            foreach (var e in items)
+            {
+                if (!entity.caseSolutionIds.Contains(e.Id))
+                {
+                    DataContext.CaseSolutions.Where(c => c.Id == e.Id).FirstOrDefault().ExtendedCaseForms.Remove(res);
+                }
+            }
+
+            DataContext.Commit();
+            return res.Id;
         }
 
-        public List<CaseSolution> GetCaseSolutionsWithExtendedCaseForm(int[] caseSolutionIds)
+        public List<CaseSolution> GetCaseSolutionsWithExtendedCaseForm(ExtendedCaseFormPayloadModel formModel)
         {
             var query = from cs in DataContext.CaseSolutions
                         from exCaseForm in cs.ExtendedCaseForms
-                        where caseSolutionIds.Contains(cs.Id)
+                        where formModel.CaseSolutionIds.Contains(cs.Id) && exCaseForm.Id != formModel.Id
                         select cs;
 
             return query.ToList();
+        }
+
+        public IList<ExtendedCaseFormEntity> GetExtendedCaseFormsCreatedByEditor(Customer customer)
+        {
+
+            //var forms = new List<ExtendedCaseFormsForCustomer>();
+
+            //List<CustomerCaseSolutionsExtendedForm> forms = (from e in DataContext.ExtendedCaseForms
+            //            where e.CaseSolutions.Any(f => f.Customer_Id == customer.Id) && e.CreatedByEditor == true
+            //            select new CustomerCaseSolutionsExtendedForm()
+            //            {
+            //                Customer = e.CaseSolutions.FirstOrDefault().Customer,
+            //                ExtendedCaseForm = e,
+            //                CustomerCaseSolutions = from c in DataContext.CaseSolutions where c.Customer_Id == customer.Id select new CaseSolutionOverview() { CaseSolutionId = c.Id, Name = c.Name, Status = c.Status }
+            //            }).ToList< CustomerCaseSolutionsExtendedForm>();
+            //return forms;
+
+            var forms = (from e in DataContext.ExtendedCaseForms
+                         where e.CaseSolutions.Any(f => f.Customer_Id == customer.Id) && e.CreatedByEditor == true
+                         select e
+                         //new ExtendedCaseFormEntity()
+                         //{
+                         //    Id = e.Id,
+                         //    Name = e.Name,
+                         //    Status = e.Status
+                         //}
+                         ).ToList();
+
+            return forms;
+        }
+
+        public ExtendedCaseFormEntity GetExtendedCaseFormById(int extendedCaseId)
+        {
+            var form = (from f in DataContext.ExtendedCaseForms
+                        where f.Id == extendedCaseId
+                        select f).FirstOrDefault();
+
+            return form;
+        }
+
+        public bool DeleteExtendedCaseForm(int extendedCaseFormId)
+        {
+            if (DataContext.ExtendedCaseForms.Where(o => o.Id == extendedCaseFormId).FirstOrDefault() is ExtendedCaseFormEntity entity)
+            {
+                //foreach (var c in entity.CaseSolutions)
+                //{
+
+                //DataContext.CaseSolutions.Where(x => x.Id == c.Id).FirstOrDefault().ExtendedCaseForms.Remove(entity);
+
+                //DataContext.Commit();
+                //}
+
+                DataContext.ExtendedCaseForms.Remove(entity);
+
+                DataContext.Commit();
+
+                return true;
+            }
+            return false;
         }
     }
 }

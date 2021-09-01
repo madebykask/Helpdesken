@@ -1,5 +1,7 @@
-﻿using System;
+﻿using DH.Helpdesk.BusinessData.Models.ExtendedCase;
 using DH.Helpdesk.Common.Enums.Cases;
+using DH.Helpdesk.Domain.ExtendedCaseEntity;
+using System;
 using System.Collections.Generic;
 
 namespace DH.Helpdesk.BusinessData.Models.Case
@@ -46,24 +48,26 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
     }
 
-	public class ExtendedCaseFormModel
-	{
-		public string Name { get; set; }
-		public int Id { get; set; }
-	}
+    public class ExtendedCaseFormModel
+    {
+        public string Name { get; set; }
+        public int Id { get; set; }
+    }
 
     public class ExtendedCaseFormsForCustomer
     {
         public DH.Helpdesk.Domain.Customer Customer { get; set; }
         public int? LanguageId { get; set; }
-        public IList<ExtendedCaseFormModel> ExtendedCaseFormModels { get; set; }
+        public IList<ExtendedCaseFormEntity> ExtendedCaseForms { get; set; }
+
+        public bool IsShowOnlyActive { get; set; }
     }
 
     public class ExtendedCaseFormWithCaseSolutionsModel
-	{
-		public string Name { get; set; }
-		public int Id { get; set; }
+    {
+        public string Name { get; set; }
+        public int Id { get; set; }
 
-		public IEnumerable<CaseSolutionOverview> CaseSolutions { get; set; }
-	}
+        public IEnumerable<CaseSolutionOverview> CaseSolutions { get; set; }
+    }
 }

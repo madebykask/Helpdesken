@@ -11,6 +11,6 @@ namespace DH.Helpdesk.BusinessData.Models.Case
     {
         public DH.Helpdesk.Domain.Customer Customer { get; set; }
 
-        public IEnumerable<CaseSolutionSelections> CaseSolutionSelections { get; set; }
+        public IEnumerable<CaseSolutionInfo> CaseSolutionSelections { get; set; }
     }
 }
