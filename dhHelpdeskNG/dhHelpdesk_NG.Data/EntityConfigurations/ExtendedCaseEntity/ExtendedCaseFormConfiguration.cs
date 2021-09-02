@@ -25,6 +25,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.ExtendedCaseEntity
             Property(e => e.Guid).IsOptional();
             Property(e => e.Status).IsOptional();
             Property(e => e.CreatedByEditor).IsOptional();
+            Property(e => e.Customer_Id).IsOptional();
 
             ToTable("ExtendedCaseForms");
         }

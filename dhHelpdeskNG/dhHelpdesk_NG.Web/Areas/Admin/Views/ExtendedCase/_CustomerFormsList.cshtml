@@ -15,10 +15,10 @@
                 {
                     continue;
                 }
-                var inactiveVal = form.Status == 1 ? string.Empty : "inactive";
-                <tr class="@inactiveVal">
+
+                <tr>
                     <td>
-                        <a href="@Url.Action("EditForm", "ExtendedCase", new { extendedCaseFormId = form.Id })">
+                        <a href="@Url.Action("EditForm", "ExtendedCase", new { extendedCaseFormId = form.Id })" class="@(form.Status == 0 ? "inactive" : "" )">
                             <div style="height:100%;width:100%">
                                 @form.Name
                             </div>

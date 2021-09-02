@@ -153,7 +153,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             ExtendedCaseFormEntity extendedCaseForm = _extendedCaseService.GetExtendedCaseFormById(extendedCaseFormId);
 
-            var customer = extendedCaseForm.CaseSolutions.FirstOrDefault().Customer;
+            int customerId = extendedCaseForm.Customer_Id  == null ? 0 : (int)extendedCaseForm.Customer_Id;
+
+            var customer = _customerService.GetCustomer(customerId);
 
             var caseSolutions = await _caseSolutionService.GetCustomerCaseSolutionsAsync(customer.Id);
 

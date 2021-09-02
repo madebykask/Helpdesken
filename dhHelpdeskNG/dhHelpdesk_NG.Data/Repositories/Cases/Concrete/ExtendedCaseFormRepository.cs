@@ -274,9 +274,11 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     Guid = Guid.NewGuid(),
                     CreatedByEditor = true,
                     Name = entity.name,
-                    Description = entity.description
+                    Description = entity.description,
+                    Customer_Id = entity.customerId
 
                 });
+
                 DataContext.Commit();
 
                 entity.id = res.Id;
@@ -292,18 +294,28 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             var metaData = data.Replace(@"valueBinding"":""function(m) { return ", @"valueBinding"": function(m) { return """).Replace(@"> }""}", @">"";}}").Replace(@"\""", "").Replace(@"\n", "").Replace("color: ", "color:");
             res.MetaData = metaData;
 
-            foreach (var c in entity.caseSolutionIds)
+            if (entity.caseSolutionIds != null)
             {
-                if (DataContext.CaseSolutions.Where(x => x.Id == c).FirstOrDefault().ExtendedCaseForms.Count == 0)
+                foreach (var c in entity.caseSolutionIds)
                 {
-                    DataContext.CaseSolutions.Where(x => x.Id == c).FirstOrDefault().ExtendedCaseForms.Add(res);
+                    if (DataContext.CaseSolutions.Where(x => x.Id == c).FirstOrDefault().ExtendedCaseForms.Count == 0)
+                    {
+                        DataContext.CaseSolutions.Where(x => x.Id == c).FirstOrDefault().ExtendedCaseForms.Add(res);
+                    }
                 }
             }
 
             IList<CaseSolution> items = DataContext.CaseSolutions.Where(f => f.ExtendedCaseForms.Any(x => x.Id == res.Id)).ToList();
             foreach (var e in items)
             {
-                if (!entity.caseSolutionIds.Contains(e.Id))
+                if (entity.caseSolutionIds != null)
+                {
+                    if (!entity.caseSolutionIds.Contains(e.Id))
+                    {
+                        DataContext.CaseSolutions.Where(c => c.Id == e.Id).FirstOrDefault().ExtendedCaseForms.Remove(res);
+                    }
+                }
+                else
                 {
                     DataContext.CaseSolutions.Where(c => c.Id == e.Id).FirstOrDefault().ExtendedCaseForms.Remove(res);
                 }
@@ -315,38 +327,22 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
         public List<CaseSolution> GetCaseSolutionsWithExtendedCaseForm(ExtendedCaseFormPayloadModel formModel)
         {
-            var query = from cs in DataContext.CaseSolutions
-                        from exCaseForm in cs.ExtendedCaseForms
-                        where formModel.CaseSolutionIds.Contains(cs.Id) && exCaseForm.Id != formModel.Id
-                        select cs;
-
-            return query.ToList();
+            List<CaseSolution> caseSolutions = new List<CaseSolution>();
+            if (formModel.CaseSolutionIds != null)
+            {
+                caseSolutions = (from cs in DataContext.CaseSolutions
+                                 from exCaseForm in cs.ExtendedCaseForms
+                                 where formModel.CaseSolutionIds.Contains(cs.Id) && exCaseForm.Id != formModel.Id
+                                 select cs).ToList();
+            }
+            return caseSolutions;
         }
 
         public IList<ExtendedCaseFormEntity> GetExtendedCaseFormsCreatedByEditor(Customer customer)
         {
-
-            //var forms = new List<ExtendedCaseFormsForCustomer>();
-
-            //List<CustomerCaseSolutionsExtendedForm> forms = (from e in DataContext.ExtendedCaseForms
-            //            where e.CaseSolutions.Any(f => f.Customer_Id == customer.Id) && e.CreatedByEditor == true
-            //            select new CustomerCaseSolutionsExtendedForm()
-            //            {
-            //                Customer = e.CaseSolutions.FirstOrDefault().Customer,
-            //                ExtendedCaseForm = e,
-            //                CustomerCaseSolutions = from c in DataContext.CaseSolutions where c.Customer_Id == customer.Id select new CaseSolutionOverview() { CaseSolutionId = c.Id, Name = c.Name, Status = c.Status }
-            //            }).ToList< CustomerCaseSolutionsExtendedForm>();
-            //return forms;
-
             var forms = (from e in DataContext.ExtendedCaseForms
-                         where e.CaseSolutions.Any(f => f.Customer_Id == customer.Id) && e.CreatedByEditor == true
+                         where e.Customer_Id == customer.Id && e.CreatedByEditor == true
                          select e
-                         //new ExtendedCaseFormEntity()
-                         //{
-                         //    Id = e.Id,
-                         //    Name = e.Name,
-                         //    Status = e.Status
-                         //}
                          ).ToList();
 
             return forms;

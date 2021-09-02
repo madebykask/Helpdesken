@@ -67,14 +67,14 @@
                                     </select>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    @Translation.GetCoreTextTranslation("Aktiv")
-                                </td>
-                                <td>
-                                    <input id="formActive" type="checkbox" @(Model.ExtendedCaseForm == null ? "checked" : (Model.ExtendedCaseForm.Status == 0 ? "" : "checked")) />
-                                </td>
-                            </tr>
+                            @*<tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Aktiv")
+                                    </td>
+                                    <td>
+                                        <input id="formActive" type="checkbox" @(Model.ExtendedCaseForm == null ? "checked" : (Model.ExtendedCaseForm.Status == 0 ? "" : "checked")) />
+                                    </td>
+                                </tr>*@
                         </tbody>
                     </table>
 
@@ -346,14 +346,12 @@
 
     function submitForm() {
 
-        if(document.getElementById("dropzone").firstElementChild == null)
-        {
+        if (document.getElementById("dropzone").firstElementChild == null) {
             ShowToastMessage('@Html.Raw(Translation.GetForJS("Formuläret får ej vara tomt"))', "error")
             return;
         }
 
-        if(document.getElementById("dropzone").firstElementChild.getAttribute('data-type') != "section")
-        {
+        if (document.getElementById("dropzone").firstElementChild.getAttribute('data-type') != "section") {
             ShowToastMessage('@Html.Raw(Translation.GetForJS("Formulärets första fält måste vara en sektion"))', "error")
             return;
         }
@@ -370,11 +368,34 @@
         });
 
         if (selectedCaseSolutions.length == 0) {
-            $("#drpCaseSolutions").focus();
-            ShowToastMessage('@Html.Raw(Translation.GetForJS("Vänligen välj minst en ärendemall"))', "error")
-            return;
+            var dlg = new ConfirmationDialog();
+            var opts = {
+                dlgText: '@Html.Raw(Translation.GetForJS("Ingen vald ärendemall. Är du säker på att du vill inaktivera formuläret?"))',
+                btnYesText: '@Translation.GetForJS("Ja")',
+                btnNoText: '@Translation.GetForJS("Nej")',
+                onClick: function (button) {
+                    if (button === ConfirmationDialog.YES) {
+                        postForm(selectedCaseSolutions);
+                        dlg.hide();
+                    }
+                    else {
+                        dlg.hide();
+                    }
+                }
+            }
+            dlg.init(opts);
+            dlg.show();
         }
-            let sectionId, sectionName, id, type, label, valueBinding, required;
+        else {
+
+            postForm(selectedCaseSolutions);
+                @*ShowToastMessage('@Html.Raw(Translation.GetForJS("Vänligen välj minst en ärendemall"))', "error")
+                return;*@
+        }
+    }
+
+    function postForm(selectedCaseSolutions) {
+        let sectionId, sectionName, id, type, label, valueBinding, required;
             let items = [
                 {
                     sectionId,
@@ -450,7 +471,7 @@
                 languageId: getUrlVars()["languageId"],
                 name: document.getElementById("formName").value,
                 description: document.getElementById("formDescription").value,
-                status: $("#formActive").is(":checked") ? "true" : "false",
+                status: selectedCaseSolutions.length == 0 ? "false" : "true", //$("#formActive").is(":checked") ? "true" : "false",
                 caseSolutionIds: selectedCaseSolutions,
                 sections: items
             };

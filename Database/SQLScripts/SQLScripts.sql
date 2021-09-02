@@ -127,6 +127,18 @@ BEGIN
 End
 Go
 
+RAISERROR ('Add Column Customer_Id to ExtendedCaseForms', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.ExtendedCaseForms','Customer_Id') IS NULL
+BEGIN	 
+	ALTER TABLE [dbo].[ExtendedCaseForms]
+	ADD [Customer_Id] INT NULL
+
+	ALTER TABLE [dbo].[ExtendedCaseForms] WITH NOCHECK ADD CONSTRAINT [FK_ExtendedCaseForms_tblCustomer]
+	FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
+
+End
+Go
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.52'
 GO

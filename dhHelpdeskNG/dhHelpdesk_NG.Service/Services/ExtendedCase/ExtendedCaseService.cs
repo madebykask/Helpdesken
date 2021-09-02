@@ -188,6 +188,8 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                 name = payload.Name,
                 description = payload.Description,
                 status = payload.Status,
+                customerId = payload.CustomerId,
+                languageId = payload.LanguageId,
                 caseSolutionIds = payload.CaseSolutionIds,
                 localization = new LocalizationElement()
                 { dateFormat = "YYYY-MM-DD", decimalSeparator = "." },
