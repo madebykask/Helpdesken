@@ -1,0 +1,39 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+
+@model DH.Helpdesk.BusinessData.Models.Case.ExtendedCaseFormsForCustomer
+
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <td>@Translation.Get("Namn")</td>
+            </tr>
+        </thead>
+        <tbody id="extendedCaseFormsLst">
+            @foreach (var form in Model.ExtendedCaseForms)
+            {
+                if (Model.IsShowOnlyActive && form.Status == 0)
+                {
+                    continue;
+                }
+
+                <tr>
+                    <td>
+                        <a href="@Url.Action("EditForm", "ExtendedCase", new { extendedCaseFormId = form.Id })" class="@(form.Status == 0 ? "inactive" : "" )">
+                            <div style="height:100%;width:100%">
+                                @form.Name
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <script type="text/javascript">
+
+    $("#chkActive").on('switchChange.bootstrapSwitch', function () {        
+        let url = "/admin/ExtendedCase/GetCustomerFormsList?customerId=" + '@Model.Customer.Id' + "&showActive=" + $("#chkActive").is(':checked');
+        $('#extendedCaseFormsLst').load(url + ' #extendedCaseFormsLst>*')
+    });
+
+    </script>

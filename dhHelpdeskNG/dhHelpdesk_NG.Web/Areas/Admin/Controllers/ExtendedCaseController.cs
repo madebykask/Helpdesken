@@ -4,6 +4,7 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.ExtendedCase;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Domain;
+using DH.Helpdesk.Domain.ExtendedCaseEntity;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Areas.Admin.Models;
 using DH.Helpdesk.Web.Infrastructure;
@@ -56,7 +57,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             //languageId = languageId ?? SessionFacade.CurrentLanguageId;
             //var model = CustomerInputViewModel(customerId, languageId.Value);
-                       
+
             List<FormTemplate> templates = new List<FormTemplate>()
             { new FormTemplate {Id=1, Name= "Template David" }, new FormTemplate { Id = 2, Name = "Template Other" } };
 
@@ -66,7 +67,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Edit(int customerId, int? languageId,  IList<int> ShowStatusBarIds, IList<int> ShowExternalStatusBarIds)
+        public ActionResult Edit(int customerId, int? languageId, IList<int> ShowStatusBarIds, IList<int> ShowExternalStatusBarIds)
         {
             languageId = languageId ?? SessionFacade.CurrentLanguageId;
             var model = CustomerInputViewModel(customerId, languageId.Value);
@@ -85,43 +86,97 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return View("Edit", model);
         }
 
+
         [CustomAuthorize(Roles = "3,4")]
         [HttpGet]
-        public ActionResult CustomerForms(int customerId, int? languageId)
+        public ActionResult GetCustomerForms(int customerId, int? languageId, bool showActive = true)
         {
             languageId = languageId ?? SessionFacade.CurrentLanguageId;
+            var customer = _customerService.GetCustomer(customerId);
+
             ExtendedCaseFormsForCustomer model = new ExtendedCaseFormsForCustomer()
             {
-                Customer = _customerService.GetCustomer(customerId),
+                Customer = customer,
                 LanguageId = languageId,
-                ExtendedCaseFormModels = _extendedCaseService.GetExtendedCaseFormsCreatedByEditor(customerId)
+                ExtendedCaseForms = _extendedCaseService.GetExtendedCaseFormsCreatedByEditor(customer, showActive),
+                IsShowOnlyActive = showActive
             };
+
             return View("CustomerForms", model);
+        }
+
+        public ActionResult GetCustomerFormsList(int customerId, int? languageId, bool showActive = true)
+        {
+            languageId = languageId ?? SessionFacade.CurrentLanguageId;
+            var customer = _customerService.GetCustomer(customerId);
+            ExtendedCaseFormsForCustomer model = new ExtendedCaseFormsForCustomer()
+            {
+                Customer = customer,
+                LanguageId = languageId,
+                ExtendedCaseForms = _extendedCaseService.GetExtendedCaseFormsCreatedByEditor(customer, showActive),
+                IsShowOnlyActive = showActive
+            };
+            return PartialView("_CustomerFormsList", model);
         }
 
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         [ValidateInput(false)]
-        public async Task<ActionResult> New(int customerId, int? languageId, IList<int> ShowStatusBarIds, IList<int> ShowExternalStatusBarIds)
+        public async Task<ActionResult> New(int customerId, int? languageId)
         {
             languageId = languageId ?? SessionFacade.CurrentLanguageId;
             var customer = _customerService.GetCustomer(customerId);
 
             var caseSolutions = await _caseSolutionService.GetCustomerCaseSolutionsAsync(customerId);
 
-            CustomerCaseSolutions model = new CustomerCaseSolutions()
+            CustomerCaseSolutionsExtendedForm model = new CustomerCaseSolutionsExtendedForm()
             {
                 Customer = customer,
-                CaseSolutionSelections = (from c in caseSolutions.ToList() where c.Status == 1 orderby c.Name select new CaseSolutionSelections()
-                {
-                    Id= c.CaseSolutionId, 
-                    Name = c.Name
-                }
-                ).ToList()
+                CustomerCaseSolutions = (from c in caseSolutions.ToList()
+                                         where c.Status == 1
+                                         orderby c.Name
+                                         select new CaseSolution()
+                                         {
+                                             Id = c.Id,
+                                             Name = c.Name
+                                         }
+                ).ToList(),
+                ExtendedCaseForm = null
             };
 
             return View("EditForm", model);
         }
+
+        [CustomAuthorize(Roles = "3,4")]
+        [HttpGet]
+        public async Task<ActionResult> EditForm(int extendedCaseFormId)
+        {
+            ExtendedCaseFormEntity extendedCaseForm = _extendedCaseService.GetExtendedCaseFormById(extendedCaseFormId);
+
+            int customerId = extendedCaseForm.Customer_Id  == null ? 0 : (int)extendedCaseForm.Customer_Id;
+
+            var customer = _customerService.GetCustomer(customerId);
+
+            var caseSolutions = await _caseSolutionService.GetCustomerCaseSolutionsAsync(customer.Id);
+
+            CustomerCaseSolutionsExtendedForm model = new CustomerCaseSolutionsExtendedForm()
+            {
+                Customer = customer,
+                CustomerCaseSolutions = caseSolutions,
+                ExtendedCaseForm = extendedCaseForm
+            };
+
+            return View("EditForm", model);
+        }
+
+        //[CustomAuthorize(Roles = "3,4")]
+        //[HttpPost]
+        //[ValidateInput(false)]
+        //public ActionResult DeleteExtendedCaseForm(int id)
+        //{
+        //    bool deleted = _extendedCaseService.DeleteExtendedCaseForm(id);
+        //    return Json();
+        //}
 
         private CustomerInputViewModel CustomerInputViewModel(int customerId, int languageId)
         {
@@ -177,10 +232,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 .Where(c => FieldSettingsUiNames.Names.ContainsKey(c.Name) && fieldstoExclude.All(f => f != c.Name));
 
             ViewBag.AllFields = allFields.Select(c => new CustomKeyValue<int, string>
-                {
-                    Key = c.Id,
-                    Value = model.CaseFieldSettingWithLangauges.getLabel(c.Name) ?? ""
-                })
+            {
+                Key = c.Id,
+                Value = model.CaseFieldSettingWithLangauges.getLabel(c.Name) ?? ""
+            })
                 .OrderBy(c => c.Value)
                 .ToList();
 
@@ -199,11 +254,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
 
-        public ActionResult EditForm(ExtendedCaseFormPayloadModel payload, int? formId)
+        public ActionResult SaveForm(ExtendedCaseFormPayloadModel payload)
         {
-            List<CaseSolution> caseSolutionsWithForms = _extendedCaseService.GetCaseSolutionsWithExtendedCaseForm(payload.CaseSolutionIds);
+            List<CaseSolution> caseSolutionsWithForms = _extendedCaseService.GetCaseSolutionsWithExtendedCaseForm(payload);
 
-            //TODO if id = 0 || null
             if (caseSolutionsWithForms.Count > 0)
             {
                 string msg = "Följande ärendemallar har redan ett formulär: " + Environment.NewLine;
@@ -216,10 +270,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 return Json(new { result = false, error = msg });
             }
 
-            _extendedCaseService.CreateExtendedCaseForm(payload, SessionFacade.CurrentUser.UserId);
+            var id = _extendedCaseService.SaveExtendedCaseForm(payload, SessionFacade.CurrentUser.UserId);
 
-            //return View("CustomerForms", model);
-            return Json(new { result = true });
+            return Json(new { result = true, formId = id });
         }
     }
 }

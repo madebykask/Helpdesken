@@ -15,7 +15,13 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         public string name { get; set; }
 
         [JsonIgnore]
-        public string description { get; set; }
+        public string description { get; set; }        
+        
+        [JsonIgnore]
+        public int customerId{ get; set; }        
+        
+        [JsonIgnore]
+        public int languageId { get; set; }
 
         [JsonIgnore]
         public bool status { get; set; }

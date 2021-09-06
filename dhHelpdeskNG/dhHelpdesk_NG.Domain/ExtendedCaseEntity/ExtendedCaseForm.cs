@@ -31,5 +31,7 @@ namespace DH.Helpdesk.Domain.ExtendedCaseEntity
         public int Status { get; set; }
 
         public bool? CreatedByEditor { get; set; }
+
+        public int? Customer_Id { get; set; }
     }
 }
