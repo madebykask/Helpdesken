@@ -4,6 +4,10 @@
     {
         public static readonly string Room = "Room_Id";
 
+        public static readonly string Building = "Building";
+
+        public static readonly string Floor = "Floor";
+
         public static readonly string Address = "LocationAddress";
 
         public static readonly string PostalCode = "LocationPostalCode";

@@ -3,6 +3,8 @@
     public class PlaceFields
     {
         public static readonly string Room = "Place.Room";
+        public static readonly string Building = "Place.Building";
+        public static readonly string Floor = "Place.Floor";
 
         public static readonly string Address = "Place.LocationAddress";
 

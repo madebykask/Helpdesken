@@ -11,6 +11,8 @@
 
         public PlaceFieldsSettingsModel(
             FieldSettingModel roomFieldSettingModel,
+            FieldSettingModel buildingFieldSettingModel,
+            FieldSettingModel floorFieldSettingModel,
             FieldSettingModel addressFieldSettingModel,
             FieldSettingModel postalCodeFieldSettingModel,
             FieldSettingModel postalAddressFieldSettingModel,
@@ -18,6 +20,8 @@
             FieldSettingModel place2FieldSettingModel)
         {
             this.RoomFieldSettingModel = roomFieldSettingModel;
+            this.BuildingFieldSettingModel = buildingFieldSettingModel;
+            this.FloorFieldSettingModel = floorFieldSettingModel;
             this.AddressFieldSettingModel = addressFieldSettingModel;
             this.PostalCodeFieldSettingModel = postalCodeFieldSettingModel;
             this.PostalAddressFieldSettingModel = postalAddressFieldSettingModel;
@@ -28,6 +32,14 @@
         [NotNull]
         [LocalizedDisplay("Rum")]
         public FieldSettingModel RoomFieldSettingModel { get; set; }
+
+        [NotNull]
+        [LocalizedDisplay("Byggnad")]
+        public FieldSettingModel BuildingFieldSettingModel { get; set; }
+
+        [NotNull]
+        [LocalizedDisplay("Våning")]
+        public FieldSettingModel FloorFieldSettingModel { get; set; }
 
         [NotNull]
         [LocalizedDisplay("Adress")]

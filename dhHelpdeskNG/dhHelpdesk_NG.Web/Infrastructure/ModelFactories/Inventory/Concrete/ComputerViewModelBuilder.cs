@@ -292,6 +292,12 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var room = CreateNullableIntegerField(
                 settings.PlaceFieldsSettings.RoomFieldSetting,
                 model.PlaceFields.RoomId);
+            var building = CreateNullableIntegerField(
+                settings.PlaceFieldsSettings.BuildingFieldSetting,
+                model.PlaceFields.BuildingId);
+            var floor = CreateNullableIntegerField(
+                settings.PlaceFieldsSettings.FloorFieldSetting,
+                model.PlaceFields.FloorId);
             var address =
                 CreateStringField(
                     settings.PlaceFieldsSettings.AddressFieldSetting,
@@ -314,8 +320,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     model.PlaceFields.Location2);
 
             var placeFieldsModel = new PlaceFieldsModel(
-                model.PlaceFields.BuildingId,
-                model.PlaceFields.FloorId,
+                building,
+                floor,
                 room,
                 address,
                 postalCode,
@@ -324,11 +330,11 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 location2);
 
             var buildings = CreateSelectList(
-                settings.PlaceFieldsSettings.RoomFieldSetting,
+                settings.PlaceFieldsSettings.BuildingFieldSetting,
                 options.Buildings,
                 model.PlaceFields.BuildingId.ToString());
             var floors = CreateSelectList(
-                settings.PlaceFieldsSettings.RoomFieldSetting,
+                settings.PlaceFieldsSettings.FloorFieldSetting,
                 options.Floors,
                 model.PlaceFields.FloorId.ToString());
             var rooms =
@@ -676,6 +682,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var soundFieldModel = new SoundFieldsModel(sound);
 
             var room = CreateNullableIntegerField(settings.PlaceFieldsSettings.RoomFieldSetting, null);
+            var building = CreateNullableIntegerField(settings.PlaceFieldsSettings.BuildingFieldSetting, null);
+            var floor = CreateNullableIntegerField(settings.PlaceFieldsSettings.FloorFieldSetting, null);
             var address = CreateStringField(settings.PlaceFieldsSettings.AddressFieldSetting, null);
             var postalCode = CreateStringField(settings.PlaceFieldsSettings.PostalCodeFieldSetting, null);
             var postalAddress = CreateStringField(settings.PlaceFieldsSettings.PostalAddressFieldSetting, null);
@@ -683,8 +691,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var location2 = CreateStringField(settings.PlaceFieldsSettings.Place2FieldSetting, null);
 
             var placeFieldsModel = new PlaceFieldsModel(
-                null,
-                null,
+                building,
+                floor,
                 room,
                 address,
                 postalCode,
@@ -692,8 +700,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 location1,
                 location2);
 
-            var buildings = CreateSelectList(settings.PlaceFieldsSettings.RoomFieldSetting, options.Buildings, null);
-            var floors = CreateSelectList(settings.PlaceFieldsSettings.RoomFieldSetting, options.Floors, null);
+            var buildings = CreateSelectList(settings.PlaceFieldsSettings.BuildingFieldSetting, options.Buildings, null);
+            var floors = CreateSelectList(settings.PlaceFieldsSettings.FloorFieldSetting, options.Floors, null);
             var rooms = CreateSelectListField(settings.PlaceFieldsSettings.RoomFieldSetting, options.Rooms, null);
 
             var placeFieldsViewModel = new PlaceFieldsViewModel(placeFieldsModel, buildings, floors, rooms);
