@@ -25,6 +25,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
     using DH.Helpdesk.Web.Infrastructure.Filters.Problems;
     using DH.Helpdesk.Web.Models.Problem;
+    using DH.Helpdesk.Common.Enums;
 
     public class ProblemsController : BaseController
     {
@@ -227,7 +228,7 @@ namespace DH.Helpdesk.Web.Controllers
                 log.FinishingCauseId,
                 log.FinishingDate,
                 log.FinishConnectedCases ? 1 : 0);
-
+            //Loop through all cases here?
             this._problemService.AddProblem(problemDto, logDto);
 
             return this.RedirectToAction("Index");
@@ -336,7 +337,9 @@ namespace DH.Helpdesk.Web.Controllers
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId };
 
             this._problemLogService.AddLog(logDto);
-            SendProblemLogEmail(log);
+
+            //Save LogNote - SaveCaseLog
+            SendProblemLogEmailAndSaveHistory(log);
             return this.RedirectToAction("ProblemActiveLog", new { id = log.ProblemId });
         }
 
@@ -367,7 +370,7 @@ namespace DH.Helpdesk.Web.Controllers
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId, Id = log.Id };
 
             this._problemLogService.UpdateLog(logDto);
-            SendProblemLogEmail(log);
+            SendProblemLogEmailAndSaveHistory(log);
             return this.RedirectToAction("ProblemActiveLog", new { id = log.ProblemId });
         }
 
@@ -411,7 +414,7 @@ namespace DH.Helpdesk.Web.Controllers
             return new ProblemEditViewModel { Problem = problemOutputModel, Users = userOutputModels, Logs = outputLogs, Cases = outputCases };
         }
 
-        private void SendProblemLogEmail(LogEditModel log)
+        private void SendProblemLogEmailAndSaveHistory(LogEditModel log)
         {
             if (log.ExternNotering || log.FinishConnectedCases)
             {
@@ -446,6 +449,16 @@ namespace DH.Helpdesk.Web.Controllers
                     if (log.InternNotering)
                         caseLog.TextInternal = log.LogText;
 
+                    IDictionary<string, string> errors;
+                    // save casehistory
+                    var ei = new CaseExtraInfo()
+                    {
+                        CreatedByApp = CreatedByApplications.Helpdesk5,
+                        LeadTimeForNow = c.LeadTime,
+                        ActionLeadTime = 0,
+                        ActionExternalTime = 0
+                    };
+                    _caseService.SaveCase(c, caseLog, SessionFacade.CurrentUser.Id, User.Identity.Name, ei, out errors);
                     _caseService.SendProblemLogEmail(c, caseMailSetting, caseHistoryId, userTimeZone, caseLog, log.FinishConnectedCases);
                 }
             }
