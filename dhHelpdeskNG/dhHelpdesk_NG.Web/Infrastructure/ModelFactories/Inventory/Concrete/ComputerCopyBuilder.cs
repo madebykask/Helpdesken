@@ -103,11 +103,6 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             CopyField(destModel.OtherFieldsModel.Info, 
                 sourceModel.OtherFieldsModel.Info, settings.OtherFieldsSettings.InfoFieldSetting);
 
-            if (settings.PlaceFieldsSettings.RoomFieldSetting.IsCopy)
-                destModel.PlaceFieldsViewModel.PlaceFieldsModel.BuildingId = sourceModel.PlaceFieldsViewModel.PlaceFieldsModel.BuildingId;
-            if (settings.PlaceFieldsSettings.RoomFieldSetting.IsCopy)
-                destModel.PlaceFieldsViewModel.PlaceFieldsModel.FloorId = sourceModel.PlaceFieldsViewModel.PlaceFieldsModel.FloorId;
-
             CopyField(destModel.PlaceFieldsViewModel.PlaceFieldsModel.Address, 
                 sourceModel.PlaceFieldsViewModel.PlaceFieldsModel.Address, settings.PlaceFieldsSettings.AddressFieldSetting);
             CopyField(destModel.PlaceFieldsViewModel.PlaceFieldsModel.Location2, 
@@ -120,6 +115,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 sourceModel.PlaceFieldsViewModel.PlaceFieldsModel.PostalCode, settings.PlaceFieldsSettings.PostalCodeFieldSetting);
             CopyField(destModel.PlaceFieldsViewModel.PlaceFieldsModel.RoomId, 
                 sourceModel.PlaceFieldsViewModel.PlaceFieldsModel.RoomId, settings.PlaceFieldsSettings.RoomFieldSetting);
+            CopyField(destModel.PlaceFieldsViewModel.PlaceFieldsModel.BuildingId, 
+                sourceModel.PlaceFieldsViewModel.PlaceFieldsModel.BuildingId, settings.PlaceFieldsSettings.BuildingFieldSetting);
+            CopyField(destModel.PlaceFieldsViewModel.PlaceFieldsModel.FloorId, 
+                sourceModel.PlaceFieldsViewModel.PlaceFieldsModel.FloorId, settings.PlaceFieldsSettings.FloorFieldSetting);
 
             CopyField(destModel.ProccesorFieldsViewModel.ProccesorFieldsModel.ProccesorId, 
                 sourceModel.ProccesorFieldsViewModel.ProccesorFieldsModel.ProccesorId, settings.ProccesorFieldsSettings.ProccesorFieldSetting);

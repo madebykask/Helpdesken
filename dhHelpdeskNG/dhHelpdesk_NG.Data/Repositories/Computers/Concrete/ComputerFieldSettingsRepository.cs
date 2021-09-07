@@ -509,6 +509,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             DateTime changeDate)
         {
             MapFieldSetting(updatedSettings.RoomFieldSetting, entity.FindByName(PlaceFields.Room), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.BuildingFieldSetting, entity.FindByName(PlaceFields.Building), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.FloorFieldSetting, entity.FindByName(PlaceFields.Floor), languageTextId, changeDate);
             MapFieldSetting(updatedSettings.AddressFieldSetting, entity.FindByName(PlaceFields.Address), languageTextId, changeDate);
             MapFieldSetting(updatedSettings.PostalCodeFieldSetting, entity.FindByName(PlaceFields.PostalCode), languageTextId, changeDate);
             MapFieldSetting(updatedSettings.PostalAddressFieldSetting, entity.FindByName(PlaceFields.PostalAddress), languageTextId, changeDate);

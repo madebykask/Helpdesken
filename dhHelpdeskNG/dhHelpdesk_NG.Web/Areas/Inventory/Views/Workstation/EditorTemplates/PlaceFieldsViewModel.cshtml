@@ -19,7 +19,7 @@
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @if (Model.PlaceFieldsModel.RoomId.Show)
+                @*@if (Model.PlaceFieldsModel.RoomId.Show)
                 {
                     <tr>
                         <td class="span3">
@@ -53,7 +53,9 @@
                             }
                         </td>
                     </tr>
-                }
+                }*@
+                @Html.EditorFor(m => m.PlaceFieldsModel.BuildingId, "Fields/List", new { Source = Model.Buildings, Id = "buildings_dropdown" })
+                @Html.EditorFor(m => m.PlaceFieldsModel.FloorId, "Fields/List", new { Source = Model.Floors, Id = "floors_dropdown" })
                 @Html.EditorFor(m => m.PlaceFieldsModel.RoomId, "Fields/List", new { Source = Model.Rooms, Id = "rooms_dropdown" })
                 @Html.EditorFor(m => m.PlaceFieldsModel.Address, "Fields/Text")
                 @Html.EditorFor(m => m.PlaceFieldsModel.PostalCode, "Fields/Text")

@@ -139,6 +139,168 @@ BEGIN
 End
 Go
 
+RAISERROR ('ADD Building and floor settings', 10, 1) WITH NOWAIT
+begin transaction
+
+DECLARE @tempTable TABLE ([Id] int
+						,[Customer_Id] int
+						,[ComputerField] nvarchar(50)
+						,[Show] int
+						,[ShowExternal] int
+						,[Label] nvarchar(50)
+						,[Label_ENG] nvarchar(50)
+						,[Required] int
+						,[FieldHelp] nvarchar(200)
+						,[ShowInList] int
+						,[ShowInListExternal] int
+						,[XMLElement] nvarchar(100)
+						,[ReadOnly] int
+						,[SortOrder] int
+						,[ComputerFieldGroup_Id] int 
+						,[CopyField] int
+						,[CreatedDate] datetime
+						,[ChangedDate] datetime
+						,[Copy] int);    
+
+INSERT @tempTable ([Id]
+				,[Customer_Id]
+				,[ComputerField]
+				,[Show]
+				,[ShowExternal]
+				,[Label]
+				,[Label_ENG]
+				,[Required]
+				,[FieldHelp]
+				,[ShowInList]
+				,[ShowInListExternal]
+				,[XMLElement]
+				,[ReadOnly]
+				,[SortOrder]
+				,[ComputerFieldGroup_Id]
+				,[CopyField]
+				,[CreatedDate]
+				,[ChangedDate]
+				,[Copy]) 
+SELECT DISTINCT [Id]
+				,[Customer_Id]
+				,[ComputerField]
+				,[Show]
+				,[ShowExternal]
+				,[Label]
+				,[Label_ENG]
+				,[Required]
+				,[FieldHelp]
+				,[ShowInList]
+				,[ShowInListExternal]
+				,[XMLElement]
+				,[ReadOnly]
+				,[SortOrder]
+				,[ComputerFieldGroup_Id]
+				,[CopyField]
+				,[CreatedDate]
+				,[ChangedDate]
+				,[Copy]
+FROM [dbo].tblComputerFieldSettings 
+WHERE ComputerField = 'Room_Id' 
+
+DECLARE @currentId INT
+WHILE(1 = 1)
+    BEGIN
+		SET @currentId = NULL
+		SELECT TOP 1 @currentId = [id] FROM @tempTable
+		IF @currentId IS NULL
+			BREAK
+		IF NOT EXISTS(select * from [dbo].tblComputerFieldSettings 
+				where [ComputerField] = 'Building' and [Customer_Id] IN (SELECT [Customer_Id] from [dbo].tblComputerFieldSettings where [Id] = @currentId)) 
+			INSERT INTO [dbo].tblComputerFieldSettings ([Customer_Id]
+					,[ComputerField]
+					,[Show]
+					,[ShowExternal]
+					,[Label]
+					,[Label_ENG]
+					,[Required]
+					,[FieldHelp]
+					,[ShowInList]
+					,[ShowInListExternal]
+					,[XMLElement]
+					,[ReadOnly]
+					,[SortOrder]
+					,[ComputerFieldGroup_Id]
+					,[CopyField]
+					,[CreatedDate]
+					,[ChangedDate]
+					,[Copy])
+				SELECT [Customer_Id]
+					,N'Building'
+					,[Show]
+					,[ShowExternal]
+					,N'Building'
+					,N'Building'
+					,[Required]
+					,N''
+					,0
+					,0
+					,NULL
+					,[ReadOnly]
+					,[SortOrder]
+					,NULL
+					,[CopyField]
+					,CURRENT_TIMESTAMP
+					,CURRENT_TIMESTAMP
+					,[Copy] 
+				FROM @tempTable 
+				WHERE [Id] = @currentId
+
+		IF NOT EXISTS(select * from [dbo].tblComputerFieldSettings 
+				where [ComputerField] = 'Floor' and [Customer_Id] IN (SELECT [Customer_Id] from [dbo].tblComputerFieldSettings where [Id] = @currentId)) 
+			INSERT INTO [dbo].tblComputerFieldSettings ([Customer_Id]
+					,[ComputerField]
+					,[Show]
+					,[ShowExternal]
+					,[Label]
+					,[Label_ENG]
+					,[Required]
+					,[FieldHelp]
+					,[ShowInList]
+					,[ShowInListExternal]
+					,[XMLElement]
+					,[ReadOnly]
+					,[SortOrder]
+					,[ComputerFieldGroup_Id]
+					,[CopyField]
+					,[CreatedDate]
+					,[ChangedDate]
+					,[Copy])
+				SELECT [Customer_Id]
+					,N'Floor'
+					,[Show]
+					,[ShowExternal]
+					,N'Floor'
+					,N'Floor'
+					,[Required]
+					,N''
+					,0
+					,0
+					,NULL
+					,[ReadOnly]
+					,[SortOrder]
+					,NULL
+					,[CopyField]
+					,CURRENT_TIMESTAMP
+					,CURRENT_TIMESTAMP
+					,[Copy] 
+				FROM @tempTable 
+				WHERE [Id] = @currentId
+
+        DELETE TOP(1) FROM @tempTable
+    END
+
+--SELECT *FROM [dbo].tblComputerFieldSettings WHERE ComputerField = 'Room_Id'
+--SELECT *FROM [dbo].tblComputerFieldSettings WHERE ComputerField = 'Building'
+--SELECT *FROM [dbo].tblComputerFieldSettings WHERE ComputerField = 'Floor'
+
+commit transaction
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.52'
 GO
