@@ -3,23 +3,23 @@
 @model DH.Helpdesk.BusinessData.Models.ExtendedCase.CustomerCaseSolutionsExtendedForm
 
 @Scripts.Render(BundleConfig.ScriptNames.ConfirmationDialog)
+<script src="https://cdn.tiny.cloud/1/1sfk2dp6yt1qy3dpohzyv6wro6kpk8szzkijgcpnepc4mazx/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            @*<li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), "Edit", "ExtendedCase", new { customerId = @Model.Id }, new { onclick = "submitForm();return false;", @class = "btn" })</li>*@
-            <li><input type="button" class="btn" value=@Translation.GetCoreTextTranslation("Spara") onclick="submitForm()"></li>
+            <li class="extendedCaseFormsLst"><input type="button" class="btn" value=@Translation.GetCoreTextTranslation("Spara") onclick="submitForm()"></li>
             @*@if (Model.ExtendedCaseForm != null)
                 {
-                    <li><input type="button" class="btn" value="@Translation.GetCoreTextTranslation("Ta bort")" id="btnDelete"></li>
+                    <li class="extendedCaseFormsLst"><input type="button" class="btn" value="@Translation.GetCoreTextTranslation("Ta bort")" id="btnDelete"></li>
                 }*@
-            <li><input type="button" class="btn" value="@Translation.GetCoreTextTranslation("Avbryt")" id="btnCancel"></li>
+            <li class="extendedCaseFormsLst"><input type="button" class="btn" value="@Translation.GetCoreTextTranslation("Avbryt")" id="btnCancel"></li>
         </ul>
     </div>
 </div>
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active" style="margin-left:0px"><a href="#subfragment-1">@Translation.GetCoreTextTranslation("Avdelning") - @Model.Customer.Name</a></li>
+            <li class="active extendedCaseFormsLst" style="margin-left:0px"><a href="#subfragment-1">@Translation.GetCoreTextTranslation("Avdelning") - @Model.Customer.Name</a></li>
         </ul>
 
         <div class="tab-content">
@@ -57,24 +57,17 @@
                                 </td>
                                 <td>
                                     <select required id="drpCaseSolutions" class="chosen-select" multiple placeholder=@Translation.GetCoreTextTranslation("Välj en eller flera")>
-                                        @*<option value="">Please select</option>*@
-                                        @foreach (var item in Model.CustomerCaseSolutions)
+                                        @foreach (var item in Model.CustomerCaseSolutions.OrderBy(c => c.Name))
                                         {
-                                            <option value="@item.Id" @((Model.ExtendedCaseForm == null ? "" : (Model.ExtendedCaseForm.CaseSolutions.Contains(item)) ? "selected" : ""))>
+                                            <option value="@item.Id"
+                                                    @((Model.ExtendedCaseForm == null ? "" : (Model.ExtendedCaseForm.CaseSolutions.Contains(item)) ? "selected " : " "))
+                                                    @((Model.CustomerCaseSolutionsWithExtendedCaseForm == null ? "" : (Model.CustomerCaseSolutionsWithExtendedCaseForm.Contains(item) && !Model.ExtendedCaseForm.CaseSolutions.Contains(item)) ? "disabled" : ""))>
                                                 @item.Name
                                             </option>
                                         }
                                     </select>
                                 </td>
                             </tr>
-                            @*<tr>
-                                    <td>
-                                        @Translation.GetCoreTextTranslation("Aktiv")
-                                    </td>
-                                    <td>
-                                        <input id="formActive" type="checkbox" @(Model.ExtendedCaseForm == null ? "checked" : (Model.ExtendedCaseForm.Status == 0 ? "" : "checked")) />
-                                    </td>
-                                </tr>*@
                         </tbody>
                     </table>
 
@@ -91,12 +84,12 @@
                                 <td>
                                     <div id="fields" class="dragndrop">
                                         <ul id="source">
-                                            <li data-type="section"><i class="fa fa-header" aria-hidden="true"></i> Section Name</li>
-                                            <li data-type="textbox"><i class="fa fa-font" aria-hidden="true"></i> Text Field</li>
-                                            <li data-type="textarea"><i class="fa fa-text-width" aria-hidden="true"></i> Text Area</li>
-                                            <li data-type="date"><i class="fa fa-calendar-o" aria-hidden="true"></i> Date Field</li>
-                                            @*<li data-type="select"><i class="fa fa-list-ul" aria-hidden="true"></i> Template</li>*@
-                                            <li data-type="html"><i class="fa fa-file-word-o" aria-hidden="true"></i> Info Field</li>
+                                            <li class="extendedCaseFormsLst" data-type="section"><i class="fa fa-header" aria-hidden="true"></i> @Translation.GetCoreTextTranslation("Sektion")</li>
+                                            <li class="extendedCaseFormsLst" data-type="textbox"><i class="fa fa-font" aria-hidden="true"></i> @Translation.GetCoreTextTranslation("Textfält")</li>
+                                            <li class="extendedCaseFormsLst" data-type="textarea"><i class="fa fa-text-width" aria-hidden="true"></i> @Translation.GetCoreTextTranslation("Textarea")</li>
+                                            <li class="extendedCaseFormsLst" data-type="date"><i class="fa fa-calendar-o" aria-hidden="true"></i> @Translation.GetCoreTextTranslation("Datumfält")</li>
+                                            @*<li class="extendedCaseFormsLst" data-type="select"><i class="fa fa-list-ul" aria-hidden="true"></i> Template</li>*@
+                                            <li class="extendedCaseFormsLst" data-type="html"><i class="fa fa-file-word-o" aria-hidden="true"></i> @Translation.GetCoreTextTranslation("Infofält")</li>
                                         </ul>
                                         <input id="btnClear" class="btn" type="button" onclick="clearItems()" value='@Translation.GetCoreTextTranslation("Rensa")' />
                                     </div>
@@ -126,17 +119,18 @@
         }
 
         if (hasRequiredChk) {
-            res = res + "<tr><td><label for='" + idName + "required" + "' class=''>Required</label></td><td><input type='checkbox' " + (isRequired == true ? 'checked' : '') + " class='chkRequired' id = '" + idName + "required" + "' ></td ></tr > ";
+            res = res + "<tr><td><label for='" + idName + "required" + "' class=''>" + '@Translation.GetCoreTextTranslation("Obligatorisk")' + "</label></td><td><input type='checkbox' " + (isRequired == true ? 'checked' : '') + " class='chkRequired' id = '" + idName + "required" + "' ></td ></tr > ";
         }
         res = res +"</table></div ></div>";
         return res;
     }
     let sectionHtmlDiv = (editFieldHtml, idName, labelClass, labelName) => "<div class='field'><div class='header'>" + divHeaderLabel(labelClass, labelName, idName) + divHeaderActions(idName) + "</div><br/>" + editFieldHtml + "</div>";
-    let sectionHtml = () => "<li data-type='section' class='ui-draggable' style='display: list-item'>" + sectionHtmlDiv(editFieldHtml(IDNAME, "Section Name", true, false), IDNAME, "field-label sectionLabel", "Section Name") + "</li>";
+    let sectionHtml = () => "<li data-type='section' class='ui-draggable' style='display: list-item'>" + sectionHtmlDiv(editFieldHtml(IDNAME, '@Translation.GetCoreTextTranslation("Sektion")', true, false), IDNAME, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")') + "</li>";
 
     let listHtml = (dataType, controlDiv) => "<li data-type='" + dataType + "' class='ui-draggable' style='display: list-item'>" + controlDiv + "</li>";
 
     $(document).ready(function () {
+
         var draggedFrom = "";
         var draggedItem;
 
@@ -163,19 +157,19 @@
                 if (draggedFrom == "fields") {
                     switch (draggedItem.data('type')) {
                         case "section":
-                            draggedItem.html(sectionHtmlDiv(editFieldHtml(idName, "Section Name", true, false), idName, "field-label sectionLabel", "Section Name"));
+                            draggedItem.html(sectionHtmlDiv(editFieldHtml(idName, '@Translation.GetCoreTextTranslation("Sektion")', true, false), idName, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")'));
                             break;
 
                         case "textbox":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>Text Field</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, "Text Field", true, true) + "</div>")
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Textfält")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, "Text Field", true, true) + "</div>")
                             break;
 
                         case "textarea":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>Text Area</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><textarea class='form-control form-control-width' readonly></textarea></div>" + editFieldHtml(idName, "Text Area", true, true) + "</div>")
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Textarea")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><textarea class='form-control form-control-width' readonly></textarea></div>" + editFieldHtml(idName, "Text Area", true, true) + "</div>")
                             break;
 
                         case "date":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>Date Field</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='date' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, "Date Field", true, true) + "</div>")
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Datumfält")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='date' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, "Date Field", true, true) + "</div>")
                             break;
 
                         //case "select":
@@ -185,7 +179,7 @@
                         //    break;
 
                         case "html":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>Info Field</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' style='padding:10px'><input type='text' class='form-control form-control-width form-control-tinymce'></div></div>")
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Infofält")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' style='padding:10px'><input type='text' class='form-control form-control-width form-control-tinymce'></div></div>")
                             tinymce.init({
                                 selector: '.form-control-tinymce',
                                 plugins: "lists, link",
@@ -238,7 +232,7 @@
             //    $(this).attr('class', 'fa fa-trash fa-2x');
             //}
 
-            $(this).parent().parent().parent().css("ModelaExtendedCaseFMetaDataetaDataormckground", "pink");
+            $(this).parent().parent().parent().css("background", "pink");
         });
 
         $(document).on("mouseleave", ".fa-trash", function (e) {
@@ -312,7 +306,7 @@
                 }
             }
             else {
-                $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(IDNAME, "Section Name"), IDNAME, "field-label sectionLabel", "Section Name")));
+                $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(IDNAME, '@Translation.GetCoreTextTranslation("Sektion")'), IDNAME, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")')));
         }
 
         $(document).on("keyup", ".labelName", function (e) {
@@ -341,7 +335,7 @@
 
     function clearItems() {
         //$("#dropzone").html('');
-        $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(IDNAME, "Section Name"), IDNAME, "field-label sectionLabel", "Section Name")));
+        $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(IDNAME, '@Translation.GetCoreTextTranslation("Sektion")'), IDNAME, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")')));
     }
 
     function submitForm() {
@@ -370,7 +364,7 @@
         if (selectedCaseSolutions.length == 0) {
             var dlg = new ConfirmationDialog();
             var opts = {
-                dlgText: '@Html.Raw(Translation.GetForJS("Ingen vald ärendemall. Är du säker på att du vill inaktivera formuläret?"))',
+                dlgText: '@Html.Raw(Translation.GetForJS(Translation.GetCoreTextTranslation(Translation.GetForJS("Ingen vald ärendemall. Är du säker på att du vill inaktivera formuläret?"))))',
                 btnYesText: '@Translation.GetForJS("Ja")',
                 btnNoText: '@Translation.GetForJS("Nej")',
                 onClick: function (button) {
@@ -449,7 +443,7 @@
                         var content = contentTinyMce[0] ? 'function(m) { return ' + tinymce.get(contentTinyMce[0].id).getContent() + ' }' : ""
 
                         items[i].controls[n] = {
-                            id: label + n,
+                            id: label.replace(/[^a-zA-Z0-9]/g, "") + (n + 1),
                             type: obj.getAttribute('data-type'),
                             label: label,
                             required: required,
@@ -555,10 +549,6 @@
 
 </script>
 
-<script src="https://cdn.tiny.cloud/1/1sfk2dp6yt1qy3dpohzyv6wro6kpk8szzkijgcpnepc4mazx/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-@*Use this to apply changes in tinymce ?cachebuster=123*@
-@*<script type="text/javascript" src="@Url.Content("~/Content/js/tinymce/tinymce.min.js")"></script>
-    <script type="text/javascript" src="@Url.Content("~/Content/js/tinymce/tinymce.initiate.js")"></script>*@
 <style>
     #fields {
         margin: 0;
@@ -656,10 +646,10 @@
         border: 1px dashed black;
     }
 
-    li {
-        list-style-type: none; /* Remove bullets */
-        padding: 0; /* Remove padding */
-        margin: 5px; /* Remove margins */
+    .extendedCaseFormsLst {
+        list-style-type: none;
+        padding: 0;
+        margin: 5px;
     }
 
     .fa {
@@ -669,5 +659,11 @@
     .required {
         color: red;
         visibility: hidden;
+    }
+
+    .ui-draggable {
+        list-style-type: none;
+        padding: 0;
+        margin: 5px;
     }
 </style>

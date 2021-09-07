@@ -7,12 +7,13 @@ namespace DH.Helpdesk.Services.Services
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
+    using DH.Helpdesk.BusinessData.Models.ExtendedCase;
     using DH.Helpdesk.BusinessData.Models.Language.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.ExtendedCaseEntity;
 
     public interface ILanguageService
     {
@@ -37,6 +38,7 @@ namespace DH.Helpdesk.Services.Services
         IEnumerable<LanguageOverview> GetActiveLanguages();
 
         IList<ItemOverview> GetOverviews(bool active = false);
+        IList<ExtendedCaseFieldTranslation> GetExtendedCaseTranslations(ExtendedCaseFormEntity extendedCase, int? languageId);
     }
 
     public class LanguageService : ILanguageService //TODO: needs refactoring
@@ -137,6 +139,22 @@ namespace DH.Helpdesk.Services.Services
         {
             var languages = GetLanguages(active);
             return languages.Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
+        }
+
+        public IList<ExtendedCaseFieldTranslation> GetExtendedCaseTranslations(ExtendedCaseFormEntity extendedCase, int? languageId)
+        {
+            IList<ExtendedCaseFieldTranslation> fieldtranslations = new List<ExtendedCaseFieldTranslation>();
+            if (extendedCase == null)
+            {
+                fieldtranslations.Add(new ExtendedCaseFieldTranslation() { Language = _languageRepository.GetById(languageId ?? 1) });
+            }
+
+            else
+            {
+                //foreach (var i in extendedCase.)
+            }
+
+            return fieldtranslations;
         }
     }
 }
