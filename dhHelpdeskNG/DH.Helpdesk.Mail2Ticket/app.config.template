@@ -15,6 +15,7 @@
 	<add key="DefaultSmtpServer" value="" /><!--smtp.datahalland.se -->
 	<add key="ErrorMailFrom" value="" /> <!-- testhelpdesk@dhsolutions.se -->
 	<add key="ErrorMailTo" value="" />  <!-- fredrik.landh@dhsolutions.se -->
+	<add key="MaxConnectionAttempts" value="1" />
   </appSettings>
   <connectionStrings>
     <add name="Helpdesk" connectionString="Data Source=#{DatabaseServer}; Initial Catalog=#{DatabaseName}; User Id=#{DatabaseUser}; Password=#{DatabasePassword};Network Library=dbmssocn" />
