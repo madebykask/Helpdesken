@@ -8059,6 +8059,27 @@ If not exists (select * from tblTextTranslation where text_id = 2083 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2083, 2, 'must be unique')
 GO
 
+If not exists (select * from tbltext where id = 2084)
+	insert into tbltext (id, TextString) VALUES (2084, 'Ingen vald ärendemall. Är du säker på att du vill inaktivera formuläret?')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2084 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2084, 2, 'No case template selected. Are you sure you want to disable the form?')
+GO
+
+If not exists (select * from tbltext where id = 2085)
+	insert into tbltext (id, TextString) VALUES (2085, 'Infofält')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2085 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2085, 2, 'Info Field')
+GO
+
+If not exists (select * from tbltext where id = 2086)
+	insert into tbltext (id, TextString) VALUES (2086, 'Textarea')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2086 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2086, 2, 'Text Area')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')

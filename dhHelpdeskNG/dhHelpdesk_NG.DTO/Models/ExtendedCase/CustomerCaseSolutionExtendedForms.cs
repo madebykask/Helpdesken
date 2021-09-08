@@ -8,7 +8,10 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         public DH.Helpdesk.Domain.Customer Customer { get; set; }
 
         public IEnumerable<DH.Helpdesk.Domain.CaseSolution> CustomerCaseSolutions { get; set; }
+        public IEnumerable<DH.Helpdesk.Domain.CaseSolution> CustomerCaseSolutionsWithExtendedCaseForm { get; set; }
 
-        public ExtendedCaseFormEntity ExtendedCaseForm { get; set; }
+        public ExtendedCaseFormEntity ExtendedCaseForm { get; set; }    
+
+        public IList<ExtendedCaseFieldTranslation> FieldTranslations { get; set; }
     }
 }

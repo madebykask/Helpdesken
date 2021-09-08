@@ -1,6 +1,5 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
-@using DH.Helpdesk.Web.Infrastructure.Extensions
-@using System.Web.Optimization
+
 ﻿﻿
 @model DH.Helpdesk.BusinessData.Models.Case.ExtendedCaseFormsForCustomer
 @{
@@ -30,7 +29,7 @@
                                     <span>@Translation.Get("Visa endast aktiva")</span>
                                 </td>
                                 <td>
-                                    @if (Model != null && Model.ExtendedCaseForms.Count() > 0)
+                                    @if (Model != null)
                                     {
                                         <input type="checkbox" class="switchcheckbox" id="chkActive" @(Model.IsShowOnlyActive ? "checked" : string.Empty)>
                                     }

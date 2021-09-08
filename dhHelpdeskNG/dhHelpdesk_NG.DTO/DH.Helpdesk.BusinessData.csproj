@@ -338,6 +338,7 @@
     <Compile Include="Models\Employee\EmployeeModel.cs" />
     <Compile Include="Models\Error\ErrorModel.cs" />
     <Compile Include="Models\ExtendedCase\CustomerCaseSolutionExtendedForms.cs" />
+    <Compile Include="Models\ExtendedCase\ExtendedCaseFieldTranslation.cs" />
     <Compile Include="Models\ExtendedCase\ExtendedCaseFormJsonModel.cs" />
     <Compile Include="Models\ExtendedCase\ExtendedCaseFormPayloadModel.cs" />
     <Compile Include="Models\ExtendedCase\FormTemplate.cs" />

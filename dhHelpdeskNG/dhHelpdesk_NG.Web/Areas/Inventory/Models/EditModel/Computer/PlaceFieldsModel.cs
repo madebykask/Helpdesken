@@ -9,8 +9,8 @@
         }
 
         public PlaceFieldsModel(
-            int? buildingId,
-            int? floorId,
+            ConfigurableFieldModel<int?> buildingId,
+            ConfigurableFieldModel<int?> floorId,
             ConfigurableFieldModel<int?> roomId,
             ConfigurableFieldModel<string> address,
             ConfigurableFieldModel<string> postalCode,
@@ -28,11 +28,11 @@
             this.Location2 = location2;
         }
 
-        [IsId]
-        public int? BuildingId { get; set; }
+        [NotNull]
+        public ConfigurableFieldModel<int?> BuildingId { get; set; }
 
-        [IsId]
-        public int? FloorId { get; set; }
+        [NotNull]
+        public ConfigurableFieldModel<int?> FloorId { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<int?> RoomId { get; set; }

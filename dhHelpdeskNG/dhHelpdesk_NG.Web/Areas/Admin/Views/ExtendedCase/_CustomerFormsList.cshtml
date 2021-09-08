@@ -18,7 +18,7 @@
 
                 <tr>
                     <td>
-                        <a href="@Url.Action("EditForm", "ExtendedCase", new { extendedCaseFormId = form.Id })" class="@(form.Status == 0 ? "inactive" : "" )">
+                        <a href="@Url.Action("EditForm", "ExtendedCase", new { extendedCaseFormId = form.Id, languageId = Model.LanguageId })" class="@(form.Status == 0 ? "inactive" : "" )">
                             <div style="height:100%;width:100%">
                                 @form.Name
                             </div>

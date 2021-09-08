@@ -51,18 +51,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return View("Edit", model);
         }
 
-        //[CustomAuthorize(Roles = "3,4")]
-        [HttpGet]
-        public ActionResult Templates(int customerId)
-        {
-            //languageId = languageId ?? SessionFacade.CurrentLanguageId;
-            //var model = CustomerInputViewModel(customerId, languageId.Value);
+        ////[CustomAuthorize(Roles = "3,4")]
+        //[HttpGet]
+        //public ActionResult Templates(int customerId)
+        //{
+        //    //languageId = languageId ?? SessionFacade.CurrentLanguageId;
+        //    //var model = CustomerInputViewModel(customerId, languageId.Value);
 
-            List<FormTemplate> templates = new List<FormTemplate>()
-            { new FormTemplate {Id=1, Name= "Template David" }, new FormTemplate { Id = 2, Name = "Template Other" } };
+        //    List<FormTemplate> templates = new List<FormTemplate>()
+        //    { new FormTemplate {Id=1, Name= "Template" }, new FormTemplate { Id = 2, Name = "Template Other" } };
 
-            return Json(templates, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(templates, JsonRequestBehavior.AllowGet);
+        //}
 
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
@@ -141,7 +141,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                                              Name = c.Name
                                          }
                 ).ToList(),
-                ExtendedCaseForm = null
+                ExtendedCaseForm = null,
+                FieldTranslations = _languageService.GetExtendedCaseTranslations(null, languageId)
             };
 
             return View("EditForm", model);
@@ -149,7 +150,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         [CustomAuthorize(Roles = "3,4")]
         [HttpGet]
-        public async Task<ActionResult> EditForm(int extendedCaseFormId)
+        public async Task<ActionResult> EditForm(int extendedCaseFormId, int? languageId)
         {
             ExtendedCaseFormEntity extendedCaseForm = _extendedCaseService.GetExtendedCaseFormById(extendedCaseFormId);
 
@@ -159,11 +160,15 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             var caseSolutions = await _caseSolutionService.GetCustomerCaseSolutionsAsync(customer.Id);
 
+            var caseSolutionsExtendedCaseForms = await _caseSolutionService.GetCaseSolutionsWithExtendeCaseFormAsync(customer.Id);
+
             CustomerCaseSolutionsExtendedForm model = new CustomerCaseSolutionsExtendedForm()
             {
                 Customer = customer,
                 CustomerCaseSolutions = caseSolutions,
-                ExtendedCaseForm = extendedCaseForm
+                ExtendedCaseForm = extendedCaseForm,
+                CustomerCaseSolutionsWithExtendedCaseForm = caseSolutionsExtendedCaseForms,
+                FieldTranslations = _languageService.GetExtendedCaseTranslations(extendedCaseForm, languageId)
             };
 
             return View("EditForm", model);
