@@ -161,8 +161,8 @@ Module DH_Helpdesk_Mail
         'Log cmd line args
         Try
 
-            'openLogFile()
             If IsNullOrEmpty(sConnectionstring) Then
+                LogError("Connectionstring can not be empty", Nothing)
                 Throw New ArgumentNullException("connection string")
             End If
 
@@ -2330,20 +2330,20 @@ Module DH_Helpdesk_Mail
         If objErrorLogFile IsNot Nothing Then
             objErrorLogFile.WriteLine("{0}: {1}", Now(), msg)
         End If
-        SendErrorMail(msg, objCustomer)
+        SendErrorMail(msg)
     End Sub
 
-    Private Sub SendErrorMail(msg As String, objCustomer As Customer)
+    Private Sub SendErrorMail(msg As String)
         Try
             Dim smtpServer As String = GetAppSettingValue("DefaultSmtpServer")
             Dim sConnectionstring As String = ConfigurationManager.ConnectionStrings("Helpdesk")?.ConnectionString
             Dim toAddress As String = GetAppSettingValue("ErrorMailTo")
             Dim fromAddress As String = GetAppSettingValue("ErrorMailFrom")
-            If (Not IsNullOrEmpty(smtpServer) And objCustomer IsNot Nothing) Then
+            If (Not IsNullOrEmpty(smtpServer) And Not IsNullOrEmpty(toAddress) And Not IsNullOrEmpty(fromAddress)) Then
 
                 Try
                     Dim objMail As New Mail
-                    objMail.SendErrorMail(fromAddress, toAddress, "Error in M2T", msg, objCustomer, sConnectionstring, smtpServer)
+                    objMail.SendErrorMail(fromAddress, toAddress, "Error in M2T", msg, sConnectionstring, smtpServer)
 
                 Catch ex As Exception
                     If objErrorLogFile IsNot Nothing Then
