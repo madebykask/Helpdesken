@@ -28,7 +28,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 
 		List<ExtendedCaseFormFieldTranslationModel> GetExtendedCaseFormFields(int extendedCaseFormId, int languageID);
 		List<ExtendedCaseFormSectionTranslationModel> GetExtendedCaseFormSections(int extendedCaseFormId, int languageID);
-		int SaveExtendedCaseForm(ExtendedCaseFormJsonModel entity, string userId, List<ExtendedCaseTranslationEntity> translations);
+		int SaveExtendedCaseForm(ExtendedCaseFormJsonModel entity, string userId, List<ExtendedCaseFormTranslation> translations);
 		List<CaseSolution> GetCaseSolutionsWithExtendedCaseForm(ExtendedCaseFormPayloadModel formModel);
 		IList<ExtendedCaseFormEntity> GetExtendedCaseFormsCreatedByEditor(Customer customer);
 		ExtendedCaseFormEntity GetExtendedCaseFormById(int extendedCaseId);

@@ -35,7 +35,7 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         public List<Section> Sections { get; set; }
 
         [JsonProperty("translations")]
-        public List<ExtendedCaseTranslationEntity> Translations { get; set; }
+        public List<ExtendedCaseFormTranslation> Translations { get; set; }
     }
 
     //public class Tab
