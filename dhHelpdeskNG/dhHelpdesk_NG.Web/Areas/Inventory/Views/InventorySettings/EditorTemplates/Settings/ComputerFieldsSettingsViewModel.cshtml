@@ -236,9 +236,11 @@
             @Html.EditorFor(m => m.PlaceFieldsSettingsModel.RoomFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
+            @{ Model.PlaceFieldsSettingsModel.BuildingFieldSettingModel.IsShowInListDisabled = true;}
             @Html.EditorFor(m => m.PlaceFieldsSettingsModel.BuildingFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
+            @{ Model.PlaceFieldsSettingsModel.FloorFieldSettingModel.IsShowInListDisabled = true;}
             @Html.EditorFor(m => m.PlaceFieldsSettingsModel.FloorFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>

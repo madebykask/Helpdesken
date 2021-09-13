@@ -1,11 +1,30 @@
 ﻿function applySettingsBehavior(parameters) {
     if (!parameters.saveSettingsUrl) throw new Error('saveSettingsUrl must be specified.');
     if (!parameters.settingsSavedSuccessfullyMessage) throw new Error('settingsSavedSuccessfullyMessage must be specified.');
+    if (!parameters.showRoomId) throw new Error('showRoomId must be specified.');
+    if (!parameters.showBuildingId) throw new Error('showBuildingId must be specified.');
+    if (!parameters.showFloorId) throw new Error('showFloorId must be specified.');
 
     $('#settings_language_dropdown').change(function() {
         $.get(parameters.saveSettingsUrl, { languageId: $(this).val(), tabLanguageId: $(this).val() }, function(settingsMarkup) {
             $('#settings_container').html(settingsMarkup);
         });
+    });
+
+    if (!$('#' + parameters.showRoomId).bootstrapSwitch('state')) {
+        $('#' + parameters.showBuildingId).bootstrapSwitch('disabled', true);
+        $('#' + parameters.showFloorId).bootstrapSwitch('disabled', true);
+    }
+
+    $('#' + parameters.showRoomId).on('switchChange.bootstrapSwitch', function (event, state) {
+        var building$ = $('#' + parameters.showBuildingId);
+        var floor$ = $('#' + parameters.showFloorId);
+        if (state === false) {
+            building$.bootstrapSwitch('state', state);
+            floor$.bootstrapSwitch('state', state);
+        }
+        building$.bootstrapSwitch('toggleDisabled', !state, !state);
+        floor$.bootstrapSwitch('toggleDisabled', !state, !state);
     });
 
     //$('#tab_settings_language_dropdown').change(function () {
