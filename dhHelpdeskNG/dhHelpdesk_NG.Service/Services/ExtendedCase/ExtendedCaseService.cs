@@ -11,6 +11,8 @@ using DH.Helpdesk.Services.Enums;
 using OfficeOpenXml.Table.PivotTable;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Common.Tools;
+using System.Text.RegularExpressions;
+using DH.Helpdesk.BusinessData.Models.Language.Output;
 
 namespace DH.Helpdesk.Services.Services.ExtendedCase
 {
@@ -209,7 +211,7 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
 
             };
 
-            return _extendedCaseFormRepository.SaveExtendedCaseForm(entity, userId);
+            return _extendedCaseFormRepository.SaveExtendedCaseForm(entity, userId, payload.Translations);
         }
 
         private static List<SectionElement> GetExtendedCaseFormSections(ExtendedCaseFormPayloadModel payload)
@@ -219,7 +221,8 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
             {
                 var section = new SectionElement()
                 {
-                    id = StringHelper.HandleSwedishChars(s.Id.Replace(" ", String.Empty)),
+                    id = Regex.Replace(StringHelper.HandleSwedishChars(s.Id.Replace(" ", String.Empty)),"[^a-zA-Z0-9 _]",
+                            "", RegexOptions.Compiled),
                     name = s.SectionName,
                     controls = new List<ControlElement>()
                 };

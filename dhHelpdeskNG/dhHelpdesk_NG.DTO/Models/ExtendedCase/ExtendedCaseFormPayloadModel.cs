@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DH.Helpdesk.Domain.ExtendedCaseEntity;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
@@ -33,6 +34,8 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         [JsonProperty("sections")]
         public List<Section> Sections { get; set; }
 
+        [JsonProperty("translations")]
+        public List<ExtendedCaseTranslationEntity> Translations { get; set; }
     }
 
     //public class Tab

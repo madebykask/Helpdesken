@@ -5,6 +5,7 @@ namespace DH.Helpdesk.Services.Services
 {
     using BusinessData.Models.Case;
     using BusinessData.Models.ExtendedCase;
+    using DH.Helpdesk.BusinessData.Models.Language.Output;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.ExtendedCaseEntity;
 

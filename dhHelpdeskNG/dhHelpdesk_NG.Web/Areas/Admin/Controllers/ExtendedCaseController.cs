@@ -2,6 +2,7 @@
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.ExtendedCase;
+using DH.Helpdesk.BusinessData.Models.Language.Output;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.ExtendedCaseEntity;
@@ -11,6 +12,7 @@ using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Attributes;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -127,22 +129,25 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             languageId = languageId ?? SessionFacade.CurrentLanguageId;
             var customer = _customerService.GetCustomer(customerId);
 
-            var caseSolutions = await _caseSolutionService.GetCustomerCaseSolutionsAsync(customerId);
+            var caseSolutions = await _caseSolutionService.GetCustomerCaseSolutionsAsync(customer.Id);
+            var caseSolutionsExtendedCaseForms = await _caseSolutionService.GetCaseSolutionsWithExtendeCaseFormAsync(customer.Id);
+
+            List<ExtendedCaseFieldTranslation> initialTranslations = new List<ExtendedCaseFieldTranslation>()
+            {
+                new ExtendedCaseFieldTranslation() { Name = Translation.GetCoreTextTranslation("Sektion")},
+                new ExtendedCaseFieldTranslation() { Name = Translation.GetCoreTextTranslation("Textfält")},
+                new ExtendedCaseFieldTranslation() { Name = Translation.GetCoreTextTranslation("Textarea")},
+                new ExtendedCaseFieldTranslation() { Name = Translation.GetCoreTextTranslation("Datumfält")},
+                new ExtendedCaseFieldTranslation() { Name = Translation.GetCoreTextTranslation("Infofält")}
+            };
 
             CustomerCaseSolutionsExtendedForm model = new CustomerCaseSolutionsExtendedForm()
             {
                 Customer = customer,
-                CustomerCaseSolutions = (from c in caseSolutions.ToList()
-                                         where c.Status == 1
-                                         orderby c.Name
-                                         select new CaseSolution()
-                                         {
-                                             Id = c.Id,
-                                             Name = c.Name
-                                         }
-                ).ToList(),
+                CustomerCaseSolutions = caseSolutions,
                 ExtendedCaseForm = null,
-                FieldTranslations = _languageService.GetExtendedCaseTranslations(null, languageId)
+                FieldTranslations = _languageService.GetExtendedCaseTranslations(null, languageId, initialTranslations),
+                CustomerCaseSolutionsWithExtendedCaseForm = caseSolutionsExtendedCaseForms
             };
 
             return View("EditForm", model);
@@ -167,10 +172,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Customer = customer,
                 CustomerCaseSolutions = caseSolutions,
                 ExtendedCaseForm = extendedCaseForm,
-                CustomerCaseSolutionsWithExtendedCaseForm = caseSolutionsExtendedCaseForms,
-                FieldTranslations = _languageService.GetExtendedCaseTranslations(extendedCaseForm, languageId)
+                CustomerCaseSolutionsWithExtendedCaseForm = caseSolutionsExtendedCaseForms
             };
 
+            string metaData = model.ExtendedCaseForm.MetaData.Replace("function(m) { return ", "").Replace("\";}", "\"");
+            model.FormFields = JsonConvert.DeserializeObject<ExtendedCaseFormJsonModel>(metaData);
+            model.FieldTranslations = _languageService.GetExtendedCaseTranslations(model.FormFields, languageId, null);
             return View("EditForm", model);
         }
 
@@ -262,6 +269,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         public ActionResult SaveForm(ExtendedCaseFormPayloadModel payload)
         {
             List<CaseSolution> caseSolutionsWithForms = _extendedCaseService.GetCaseSolutionsWithExtendedCaseForm(payload);
+
+            //List<LanguageOverview> activeLanguages = _languageService.GetActiveLanguages().ToList();
 
             if (caseSolutionsWithForms.Count > 0)
             {

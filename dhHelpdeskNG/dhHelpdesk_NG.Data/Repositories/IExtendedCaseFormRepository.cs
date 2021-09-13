@@ -11,8 +11,9 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 	using DH.Helpdesk.Models.Case;
 	using DH.Helpdesk.BusinessData.Models.ExtendedCase;
 	using DH.Helpdesk.Domain;
+    using DH.Helpdesk.BusinessData.Models.Language.Output;
 
-	public interface IExtendedCaseFormRepository : IRepository<ExtendedCaseFormEntity>
+    public interface IExtendedCaseFormRepository : IRepository<ExtendedCaseFormEntity>
 	{
 		Guid CreateExtendedCaseData(int formId, string userGuid);
 
@@ -27,7 +28,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 
 		List<ExtendedCaseFormFieldTranslationModel> GetExtendedCaseFormFields(int extendedCaseFormId, int languageID);
 		List<ExtendedCaseFormSectionTranslationModel> GetExtendedCaseFormSections(int extendedCaseFormId, int languageID);
-		int SaveExtendedCaseForm(ExtendedCaseFormJsonModel entity, string userId);
+		int SaveExtendedCaseForm(ExtendedCaseFormJsonModel entity, string userId, List<ExtendedCaseTranslationEntity> translations);
 		List<CaseSolution> GetCaseSolutionsWithExtendedCaseForm(ExtendedCaseFormPayloadModel formModel);
 		IList<ExtendedCaseFormEntity> GetExtendedCaseFormsCreatedByEditor(Customer customer);
 		ExtendedCaseFormEntity GetExtendedCaseFormById(int extendedCaseId);

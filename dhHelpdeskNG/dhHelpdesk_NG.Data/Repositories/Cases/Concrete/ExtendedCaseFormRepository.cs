@@ -12,6 +12,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     using Newtonsoft.Json;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Dal.DbQueryExecutor;
+    using DH.Helpdesk.BusinessData.Models.Language.Output;
 
     //NOTE: This is performance optimised class - pls do not use mappers!
     public sealed class ExtendedCaseFormRepository : RepositoryBase<ExtendedCaseFormEntity>, IExtendedCaseFormRepository
@@ -247,7 +248,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             return sectionName;
         }
 
-        public int SaveExtendedCaseForm(ExtendedCaseFormJsonModel entity, string userId)
+        public int SaveExtendedCaseForm(ExtendedCaseFormJsonModel entity, string userId, List<ExtendedCaseTranslationEntity> translations)
         {
             ExtendedCaseFormEntity res = new ExtendedCaseFormEntity();
 
@@ -282,6 +283,46 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 DataContext.Commit();
 
                 entity.id = res.Id;
+            }
+
+            foreach (var s in entity.tabs[0].sections)
+            {
+                if (!s.id.StartsWith("Section."))
+                { s.id = "Section." + s.id + "_" + entity.id; }     
+
+                foreach (var t in translations)
+                {
+                    if (DataContext.ExtendedCaseTranslations.Where(ct => ct.Property == s.id).Count() == 0)
+                    {
+                        DataContext.ExtendedCaseTranslations.Add(
+                        new ExtendedCaseTranslationEntity()
+                        {
+                            LanguageId = t.Id,
+                            Property = s.id,
+                            Text = t.Text
+                        });
+                    }
+                }
+
+                foreach (var c in s.controls)
+                {
+                    if (!c.id.StartsWith("Control."))
+                    { c.id = "Control." + c.id + "_" + entity.id; }
+
+                    foreach (var t in translations)
+                    {
+                        if (DataContext.ExtendedCaseTranslations.Where(ct => ct.Property == c.id).Count() == 0)
+                        {
+                            DataContext.ExtendedCaseTranslations.Add(
+                            new ExtendedCaseTranslationEntity()
+                            {
+                                LanguageId = t.Id,
+                                Property = c.id,
+                                Text = t.Text
+                            });
+                        }
+                    }
+                }
             }
 
             var data = JsonConvert.SerializeObject(entity,
