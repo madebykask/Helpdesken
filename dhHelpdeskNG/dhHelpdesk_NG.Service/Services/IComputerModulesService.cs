@@ -20,19 +20,19 @@ namespace DH.Helpdesk.Services.Services
 
         List<SoftwareOverview> GetServerSoftware(int id);
 
-        List<ItemOverview> GetNetAdapters();
+        List<ItemOverview> GetNetAdapters(int customerId);
 
-        List<ItemOverview> GetRams();
+        List<ItemOverview> GetRams(int customerId);
 
-        List<ItemOverview> GetProcessors();
+        List<ItemOverview> GetProcessors(int customerId);
 
-        List<ItemOverview> GetOperatingSystems();
+        List<ItemOverview> GetOperatingSystems(int customerId);
 
         List<ItemOverview> GetComputerTypes(int customerId, int? inventoryId = null);
 
         ComputerTypeOverview GetComputerType(int id);
 
-        List<ItemOverview> GetComputerModels();
+        List<ItemOverview> GetComputerModels(int customerId);
 
         List<ReportModel> GetConnectedToComputersProcessorsOverviews(
             int customerId,

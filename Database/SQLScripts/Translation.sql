@@ -8009,6 +8009,83 @@ begin
 end
 GO
 
+-- Nytt 2021-06-03
+If not exists (select * from tbltext where TextString = 'Editerbara formulär')
+begin
+    If not exists (select * from tbltext where id = 2078)
+	insert into tbltext (id, TextString, TextType) VALUES (2078, 'Editerbara formulär', 0)
+	If not exists (select * from tblTextTranslation where text_id = 2078 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2078, 2, N'Editable forms')
+end
+GO
+If not exists (select * from tbltext where TextString = 'Nytt utökat ärende formulär')
+begin
+    If not exists (select * from tbltext where id = 2079)
+	insert into tbltext (id, TextString, TextType) VALUES (2079, 'Nytt utökat ärende formulär', 0)
+	If not exists (select * from tblTextTranslation where text_id = 2079 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2079, 2, N'New extended case form')
+end
+GO
+
+If not exists (select * from tbltext where TextString = 'Sektionsnamn')
+begin
+    If not exists (select * from tbltext where id = 2080)
+	insert into tbltext (id, TextString, TextType) VALUES (2080, 'Sektionsnamn', 0)
+	If not exists (select * from tblTextTranslation where text_id = 2080 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2080, 2, N'Section label')
+end
+GO
+
+If not exists (select * from tbltext where TextString = 'Inkludera vid kopiering')
+begin
+    If not exists (select * from tbltext where id = 2081)
+	insert into tbltext (id, TextString, TextType) VALUES (2081, 'Inkludera vid kopiering', 0)
+	If not exists (select * from tblTextTranslation where text_id = 2081 and Language_Id = 2)
+		insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2081, 2, N'Include when copying')
+end
+GO
+
+If not exists (select * from tbltext where id = 2082)
+	insert into tbltext (id, TextString) VALUES (2082, 'Är du säker på att du vill kopiera')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2082 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2082, 2, 'Are you sure you want to copy')
+GO
+
+If not exists (select * from tbltext where id = 2083)
+	insert into tbltext (id, TextString) VALUES (2083, 'måste vara unikt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2083 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2083, 2, 'must be unique')
+GO
+
+If not exists (select * from tbltext where id = 2084)
+	insert into tbltext (id, TextString) VALUES (2084, 'Ingen vald ärendemall. Är du säker på att du vill inaktivera formuläret?')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2084 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2084, 2, 'No case template selected. Are you sure you want to disable the form?')
+GO
+
+If not exists (select * from tbltext where id = 2085)
+	insert into tbltext (id, TextString) VALUES (2085, 'Infofält')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2085 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2085, 2, 'Info Field')
+GO
+
+If not exists (select * from tbltext where id = 2086)
+	insert into tbltext (id, TextString) VALUES (2086, 'Textarea')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2086 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2086, 2, 'Text Area')
+GO
+
+If not exists (select * from tbltext where id = 2087)
+	insert into tbltext (id, TextString) VALUES (2087, 'Fältetikett')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2087 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2087, 2, 'Label')
+GO
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)

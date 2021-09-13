@@ -83,6 +83,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var otherFieldsSettingsModel = new OtherFieldsSettingsModel(info);
 
             var room = MapFieldSetting(settings.PlaceFieldsSettings.RoomFieldSetting);
+            var building = MapFieldSetting(settings.PlaceFieldsSettings.BuildingFieldSetting);
+            var floor = MapFieldSetting(settings.PlaceFieldsSettings.FloorFieldSetting);
             var address = MapFieldSetting(settings.PlaceFieldsSettings.AddressFieldSetting);
             var postalCode = MapFieldSetting(settings.PlaceFieldsSettings.PostalCodeFieldSetting);
             var postalAddress = MapFieldSetting(settings.PlaceFieldsSettings.PostalAddressFieldSetting);
@@ -90,6 +92,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var place2 = MapFieldSetting(settings.PlaceFieldsSettings.Place2FieldSetting);
             var placeFieldsSettingsModel = new PlaceFieldsSettingsModel(
                 room,
+                building,
+                floor,
                 address,
                 postalCode,
                 postalAddress,
@@ -207,7 +211,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 setting.ShowInList,
                 setting.Caption,
                 setting.IsRequired,
-                setting.IsReadOnly);
+                setting.IsReadOnly,
+                setting.IsCopy);
 
             return settingModel;
         }

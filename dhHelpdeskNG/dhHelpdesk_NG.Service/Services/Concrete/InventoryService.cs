@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ProcessingSetttings.ComputerSettings;
 using DH.Helpdesk.BusinessData.Models.User.Input;
 using DH.Helpdesk.Domain.Computers;
 
@@ -448,6 +449,14 @@ namespace DH.Helpdesk.Services.Services.Concrete
             }
         }
 
+        public bool IsMacAddressUnique(int exceptId, string macAddress)
+        {
+            return _computerRepository.IsMacAddressUnique(exceptId, macAddress.Trim());
+        }
+        public bool IsTheftMarkUnique(int exceptId, string theftMark)
+        {
+            return _computerRepository.IsTheftMarkUnique(exceptId, theftMark.Trim());
+        }
         public void UpdateWorkstationInfo(int id, string info)
         {
             _computerRepository.UpdateInfo(id, info);

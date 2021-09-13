@@ -608,6 +608,10 @@
     <Compile Include="utils\WorkTimeCalculatorFactory.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DH.Helpdesk.Models\DH.Helpdesk.Models.csproj">
+      <Project>{DE589388-2E9B-44C3-BCB7-9D4D051391DE}</Project>
+      <Name>DH.Helpdesk.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
       <Project>{90defcb6-e297-4f99-a532-da1e0522aa49}</Project>
       <Name>DH.Helpdesk.Common</Name>

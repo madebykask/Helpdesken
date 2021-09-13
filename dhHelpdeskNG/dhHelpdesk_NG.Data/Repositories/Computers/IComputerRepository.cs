@@ -54,5 +54,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
         int GetIdByName(string computerName, int customerId);
         List<ComputerOverview> GetRelatedOverviews(int customerId, string userId);
         int? GetComputerTypeById(int id);
+        bool IsMacAddressUnique(int exceptId, string macAddress);
+        bool IsTheftMarkUnique(int exceptId, string theftMark);
     }
 }

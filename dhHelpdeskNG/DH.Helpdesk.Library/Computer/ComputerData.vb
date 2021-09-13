@@ -767,6 +767,25 @@ Public Class ComputerData
             Throw ex
         End Try
     End Function
+    Private Function checkMacAddress(ByVal objComputer As Computer) As Integer
+        Dim sSQL As String
+        Dim dt As DataTable
+        If objComputer.MACAddress <> "" Then
+            sSQL = "SELECT tblComputer.MACAddress " &
+                    "FROM tblComputer WHERE LOWER(tblComputer.MACAddress)= '" & LCase(objComputer.MACAddress) & "' "
+
+            dt = getDataTable(gsConnectionString, sSQL)
+
+            If dt.Rows.Count > 0 Then
+                Return 1
+            Else
+                Return 0
+            End If
+        Else
+            Return 0
+        End If
+
+    End Function
 
     Private Function inventoryExists(ByVal iCustomer_Id As Integer, ByVal objInventory As Inventory) As Integer
         Dim sSQL As String

@@ -364,13 +364,15 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             }
 
             var room = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.RoomId);
+            var building = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.BuildingId);
+            var floor = ConfigurableFieldModel<int?>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.FloorId);
             var address = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.Address);
             var postalCode = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.PostalCode);
             var postalAddress = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.PostalAddress);
             var location = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.Location);
             var location2 = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.PlaceFieldsModel.Location2);
 
-            var fields = new PlaceFields(room, address, postalCode, postalAddress, location, location2);
+            var fields = new PlaceFields(building, floor, room, address, postalCode, postalAddress, location, location2);
 
             return fields;
         }

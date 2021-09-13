@@ -239,7 +239,15 @@ namespace DH.Helpdesk.SelfService.Controllers
                 var data = _extendedCaseService.GetExtendedCaseFromCase(caseId);
                 if (data != null)
                 {
-                    return RedirectToAction("ExtendedCasePublic", new { id = data.ExtendedCaseGuid });
+                    //Get case + extendedcase
+                    var extCase = _caseService.GetCaseById(caseId);
+                    //New check here if Only Extended case should see Case-tab
+                    if (extCase.CaseSolution.AvailableTabsSelfsevice != "case-tab")
+                    {
+                        var caseTemplateId = extCase.CaseSolution.Id;
+                        return RedirectToAction("ExtendedCase", new { caseTemplateId, caseId = extCase.Id });
+                    }
+                    //return RedirectToAction("ExtendedCasePublic", new { id = data.ExtendedCaseGuid });
                 }
                 
                 //check dynamic case
@@ -286,7 +294,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                 //New check here if Only Extended case should see Case-tab
                 if (currentCase.CaseSolution.AvailableTabsSelfsevice != "case-tab")
                 {
-                    return RedirectToAction("ExtendedCase", new { caseId = currentCase.Id });
+                    var caseTemplateId = currentCase.CaseSolution.Id;
+                    return RedirectToAction("ExtendedCase", new { caseTemplateId, caseId = currentCase.Id });
                 }
             }
                 

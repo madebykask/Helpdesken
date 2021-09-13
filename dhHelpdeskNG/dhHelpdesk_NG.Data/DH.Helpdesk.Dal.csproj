@@ -69,6 +69,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PostSharp, Version=4.0.38.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL">
       <HintPath>..\packages\PostSharp.4.0.38\lib\net35-client\PostSharp.dll</HintPath>
       <Private>True</Private>
@@ -918,6 +921,10 @@
     <Compile Include="DbQueryExecutor\SqlQueryExecutor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DH.Helpdesk.Models\DH.Helpdesk.Models.csproj">
+      <Project>{DE589388-2E9B-44C3-BCB7-9D4D051391DE}</Project>
+      <Name>DH.Helpdesk.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
       <Project>{90DEFCB6-E297-4F99-A532-DA1E0522AA49}</Project>
       <Name>DH.Helpdesk.Common</Name>

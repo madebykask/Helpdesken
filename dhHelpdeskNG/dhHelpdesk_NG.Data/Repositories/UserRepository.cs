@@ -480,7 +480,21 @@ namespace DH.Helpdesk.Dal.Repositories
             var selector = GetUserOverviewSelector();
 
             var res = await DataContext.Users.Where(u => u.UserID.ToUpper() == userIdUpper && u.Password == passw && u.IsActive == 1).Select(selector).ToListAsync();
-            return res.FirstOrDefault();
+            var userResult = res.FirstOrDefault();
+            //New 20210712 - Katta, to check if password is correct according to case sensitive.
+            if (userResult != null)
+            {
+                var user = GetUserLoginInfo(userId);
+                if (user.Password == passw)
+                    return userResult;
+                else
+                    return null;
+            }
+            else
+            {
+                return null;
+            }
+            // return userResult;
         }
         
         private UserOverview GetUser(Expression<Func<User, bool>> expression)

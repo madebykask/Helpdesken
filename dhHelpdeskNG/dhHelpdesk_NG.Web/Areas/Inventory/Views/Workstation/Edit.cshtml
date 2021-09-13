@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @using DH.Helpdesk.Web
 @using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer.ComputerEditViewModel
@@ -10,33 +11,61 @@
 
 @section Actions
 {
-    <ul class="secnav">
-        @if (Model.UserHasInventoryAdminPermission)
+<ul class="secnav">
+    @if (Model.UserHasInventoryAdminPermission)
+    {
+        <li id="menu1">
+            <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn controlBtn" onclick="workstationEdit.submit()" />
+        </li>
+        if (!Model.IsForDialog)
         {
-            <li id="menu1">
-                <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn" onclick=" $('#workstation_edit_form').submit(); " />
-            </li>
-            if (!Model.IsForDialog)
-            {
-                <li id="menu3">
-                    @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "Delete", new { id = Model.ComputerViewModel.Id }, new
-                    { @class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?" })
-                </li>
-            }
+        <li id="menu3">
+            @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "Delete", new { id = Model.ComputerViewModel.Id }, new
+       {
+           @class = "btn deleteDialog controlBtn",
+           deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?",
+           actionControlId = "deleteActionBtn"
+       })
+            @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "Delete", new { id = Model.ComputerViewModel.Id }, new
+       {
+           @id= "deleteActionBtn",
+           @class = "btn hide",
+           onclick = "workstationEdit.delete();"
+       })
+        </li>
         }
-        @if (Model.IsForDialog && !string.IsNullOrEmpty(Model.UserId))
-        {
-            <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "RelatedInventoryFull", new { userId = Model.UserId }, new { @class = "btn" })</li>
-        }
-        @if (!Model.IsForDialog)
-        {
-            <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", null, new { @class = "btn" })</li>
-        }
-    </ul>
+    }
+    @if (Model.IsForDialog && !string.IsNullOrEmpty(Model.UserId))
+    {
+        <li id="menu2">
+            @Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "RelatedInventoryFull", new {userId = Model.UserId},
+                     new {@class = "btn controlBtn" })
+        </li>
+    }
+    @if (!Model.IsForDialog)
+    {
+        <li id="menu2">
+            @Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", null, new {@class = "btn controlBtn" })
+        </li>
+        <li id="menu2">
+            @Html.ActionLink(Translation.GetCoreTextTranslation("Kopiera"), "Index",null, new
+       {
+           @class = "btn deleteDialog controlBtn",
+           deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill kopiera") + "?",
+           buttonTypes="YesNo",
+           actionControlId = "copyActionBtn"
+       })
+
+            <input id="copyActionBtn" type="submit" value="@Translation.GetCoreTextTranslation("Kopiera")" class="btn hide" onclick="workstationEdit.copy();" />
+        </li>
+    }
+    <li><i id="loaderIndicator" class="gif-loader" style="display:none">&nbsp;</i></li>
+</ul>
 }
 
 @using (Html.BeginForm("Edit", "Workstation", FormMethod.Post, new { id = "workstation_edit_form" }))
 {
+    @Html.HiddenFor(m => m.ComputerViewModel.IsCopy)
     @Html.HiddenFor(m => m.ComputerViewModel.IsForDialog)
     @Html.HiddenFor(m => m.ComputerViewModel.UserId)
     @Html.HiddenFor(m => m.ComputerViewModel.Id)
@@ -49,8 +78,8 @@
     @Html.EditorFor(m => m.ComputerViewModel.OperatingSystemFieldsViewModel)
     @Html.EditorFor(m => m.ComputerViewModel.ProccesorFieldsViewModel)
     @Html.EditorFor(m => m.ComputerViewModel.MemoryFieldsViewModel)
-    @Html.EditorFor(m => m.ComputerViewModel.GraphicsFieldsModel)
     @Html.EditorFor(m => m.ComputerViewModel.CommunicationFieldsViewModel)
+    @Html.EditorFor(m => m.ComputerViewModel.GraphicsFieldsModel)
     @Html.EditorFor(m => m.ComputerViewModel.SoundFieldsModel)
     @Html.EditorFor(m => m.ComputerViewModel.ContractFieldsViewModel)
     @Html.EditorFor(m => m.ComputerViewModel.OtherFieldsModel)
@@ -61,107 +90,123 @@
     @Html.EditorFor(m => m.ComputerViewModel.ContactFieldsModel)
     @Html.EditorFor(m => m.ComputerViewModel.StateFieldsViewModel)
 
-
-
-
     if (Model.ComputerViewModel.CreatedDate.Show || Model.ComputerViewModel.ChangedDate.Show || Model.ComputerViewModel.DateFieldsModel.ScanDate.Show ||
             Model.ComputerViewModel.DateFieldsModel.SynchronizeDate.Show || Model.ComputerViewModel.DateFieldsModel.PathDirectory.Show)
     {
-        <h4>@Translation.GetCoreTextTranslation("Status")</h4>
-    }
-    <div class="row">
-        <div class="span12">
-            <table class="tableform">
-                @if (Model.ComputerViewModel.CreatedDate.Show)
-                {
-                    <tr>
-                        <td class="span3">
-                            <label>@Translation.GetCoreTextTranslation(Model.ComputerViewModel.CreatedDate.Caption)</label>
-                        </td>
-                        <td class="span9">
-                            @Html.DisplayFor(m => m.ComputerViewModel.CreatedDate.Value, "Date")
-                        </td>
-                    </tr>
-                }
-                @if (Model.ComputerViewModel.ChangedDate.Show)
-                {
-                    <tr>
-                        <td class="span3">
-                            <label>@Translation.GetCoreTextTranslation(Model.ComputerViewModel.ChangedDate.Caption)</label>
-                        </td>
-                        <td class="span9">
-                            @Html.DisplayFor(m => m.ComputerViewModel.ChangedDate.Value, "Date")
-                        </td>
-                    </tr>
-                    if (Model.ComputerViewModel.ChangedByUserName != null)
+        <div class="row">
+            <div class="span12">
+                <table class="tableform">
+                    @if (Model.ComputerViewModel.CreatedDate.Show)
                     {
                         <tr>
                             <td class="span3">
-                                <label>@Translation.GetCoreTextTranslation("Changed by")</label>
+                                <label>@Translation.GetCoreTextTranslation(Model.ComputerViewModel.CreatedDate.Caption)</label>
                             </td>
                             <td class="span9">
-                                @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.LastName)
+                                @Html.DisplayFor(m => m.ComputerViewModel.CreatedDate.Value, "Date")
                             </td>
                         </tr>
                     }
-                }
-            </table>
+                    @if (Model.ComputerViewModel.ChangedDate.Show)
+                    {
+                        <tr>
+                            <td class="span3">
+                                <label>@Translation.GetCoreTextTranslation(Model.ComputerViewModel.ChangedDate.Caption)</label>
+                            </td>
+                            <td class="span9">
+                                @Html.DisplayFor(m => m.ComputerViewModel.ChangedDate.Value, "Date")
+                            </td>
+                        </tr>
+                        if (Model.ComputerViewModel.ChangedByUserName != null)
+                        {
+                            <tr>
+                                <td class="span3">
+                                    <label>@Translation.GetCoreTextTranslation("Changed by")</label>
+                                </td>
+                                <td class="span9">
+                                    @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.LastName)
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
         </div>
-    </div>
+    }
     @Html.EditorFor(m => m.ComputerViewModel.DateFieldsModel)
 }
 
 @section Scripts
 {
     @Scripts.Render(BundleConfig.ScriptNames.InventoryWorkstation)
-<script type="text/javascript">
+    <script type="text/javascript">
 
-        window.parameters = (window.parameters == null ? {} : window.parameters);
-        window.parameters.fileUploadWhiteList = [];
-        window.parameters.invalidFileExtensionText = '@Html.Raw(Translation.GetForJS("har inte en giltig filändelse"))';
+            window.parameters = (window.parameters == null ? {} : window.parameters);
+            window.parameters.fileUploadWhiteList = [];
+            window.parameters.invalidFileExtensionText = '@Html.Raw(Translation.GetForJS("har inte en giltig filändelse"))';
 
-        @if (Model.FileUploadWhiteList != null)
-        {
-            foreach(var extension in Model.FileUploadWhiteList)
+            @if (Model.FileUploadWhiteList != null)
             {
-                @:window.parameters.fileUploadWhiteList.push('@extension');
+                foreach (var extension in Model.FileUploadWhiteList)
+                {
+                    @:window.parameters.fileUploadWhiteList.push('@extension');
+                }
             }
-        }
-        else
-        {
-            @:window.parameters.fileUploadWhiteList = null;
-        }
+            else
+            {
+                @:window.parameters.fileUploadWhiteList = null;
+            }
 
 
-        $(function(jQuery) {
-            window.workstationEdit = new WorkstationEdit($);
-            window.workstationEdit.init({
-                userId: @SessionFacade.CurrentUser.Id,
-                customerId: @SessionFacade.CurrentCustomer.Id,
-                getUnitsUrl: '@Url.Action("GetUnits", "Ajax", new {area = ""})',
-                getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})'
+            $(function (jQuery) {
+                $('#@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)')
+                    .attr("data-val-remote", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress), Translation.GetCoreTextTranslation("måste vara unikt"))');
+                $('#@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)')
+                    .attr("data-val-remote-url", '@Url.Action("ValidateMacAddress", "Workstation")');
+
+                $('#@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)')
+                    .attr("data-val-remote", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark), Translation.GetCoreTextTranslation("måste vara unikt"))');
+                $('#@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)')
+                    .attr("data-val-remote-url", '@Url.Action("ValidateTheftmark", "Workstation")');
+
+                window.workstationEdit = new WorkstationEdit($);
+                window.workstationEdit.init({
+                    id: @Model.Id,
+                    userId: @SessionFacade.CurrentUser.Id,
+                    customerId: @SessionFacade.CurrentCustomer.Id,
+                    copyControlId: '@Html.IdFor(m => m.ComputerViewModel.IsCopy)',
+                    getUnitsUrl: '@Url.Action("GetUnits", "Ajax", new {area = ""})',
+                    getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})',
+                    validateMacAddressUrl: '@Url.Action("ValidateMacAddress", "Workstation")',
+                    validateTheftMarkUrl: '@Url.Action("ValidateTheftmark", "Workstation")',
+                    copyUrl: '@Url.Action("Copy", "Workstation")',
+                    fieldsIds: {
+                        'MacAddressId':
+                            '@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)',
+                        'TheftMarkId':
+                            '@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)'
+                    },
+                });
+
+                // TODO: Move this section to WorkstationEdit
+                $('#@Html.IdFor(m => m.ComputerViewModel.ContractFieldsViewModel.ContractFieldsModel.PurchasePrice.Value)')
+                    .prop('type', 'number');
+
+                // TODO: Move this section to WorkstationEdit
+                $("#@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.ComputerTypeId.Value)")
+                    .change(function() {
+                        if (this.value > 0) {
+                            $.get('@Url.Action("GetPrice", "Workstation")',
+                                { id: this.value },
+                                function(data) {
+                                    $('#@Html.IdFor(m => m.ComputerViewModel.ContractFieldsViewModel.ContractFieldsModel.PurchasePrice.Value)').val(data);
+                                });
+                        } else {
+                            $('#@Html.IdFor(m => m.ComputerViewModel.ContractFieldsViewModel.ContractFieldsModel.PurchasePrice.Value)').val(0);
+                        }
+                    });
             });
-        });
-
-        $("#ComputerViewModel_WorkstationFieldsViewModel_WorkstationFieldsModel_ComputerTypeId_Value").change(function () {
-
-            if (this.value > 0) {
-                $.get('@Url.Action("GetPrice", "Workstation")', { id: this.value }, function (data) {
-                    $('#ComputerViewModel_ContractFieldsViewModel_ContractFieldsModel_PurchasePrice_Value').val(data);
-                })
-            }
-            else {
-                $('#ComputerViewModel_ContractFieldsViewModel_ContractFieldsModel_PurchasePrice_Value').val(0);
-            }
-        })
-
-    $(document).ready(function () {
-        $('#ComputerViewModel_ContractFieldsViewModel_ContractFieldsModel_PurchasePrice_Value').prop('type','number')
-    });
-
-
-
-</script>
+    </script>
 
     @if (documentModel.Show)
     {

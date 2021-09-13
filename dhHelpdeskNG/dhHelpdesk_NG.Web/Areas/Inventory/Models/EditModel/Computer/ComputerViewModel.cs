@@ -121,5 +121,6 @@
 
 		public bool IsForDialog { get; set; }
         public string UserId { get; set; }
+        public bool IsCopy { get; set; }
     }
 }

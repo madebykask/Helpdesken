@@ -339,10 +339,10 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         private ServerEditOptions GetServerEditOptions(int customerId)
         {
             List<ItemOverview> operatingSystems =
-                this.computerModulesService.GetOperatingSystems().OrderBy(x => x.Name).ToList();
-            List<ItemOverview> processors = this.computerModulesService.GetProcessors().OrderBy(x => x.Name).ToList();
-            List<ItemOverview> rams = this.computerModulesService.GetRams().OrderBy(x => x.Name).ToList();
-            List<ItemOverview> netAdapters = this.computerModulesService.GetNetAdapters().OrderBy(x => x.Name).ToList();
+                this.computerModulesService.GetOperatingSystems(customerId).OrderBy(x => x.Name).ToList();
+            List<ItemOverview> processors = this.computerModulesService.GetProcessors(customerId).OrderBy(x => x.Name).ToList();
+            List<ItemOverview> rams = this.computerModulesService.GetRams(customerId).OrderBy(x => x.Name).ToList();
+            List<ItemOverview> netAdapters = this.computerModulesService.GetNetAdapters(customerId).OrderBy(x => x.Name).ToList();
             List<ItemOverview> buildings = this.PlaceService.GetBuildings(customerId).OrderBy(x => x.Name).ToList();
             List<ItemOverview> floors = this.PlaceService.GetFloors(customerId).OrderBy(x => x.Name).ToList();
             List<ItemOverview> rooms = this.PlaceService.GetRooms(customerId).OrderBy(x => x.Name).ToList();

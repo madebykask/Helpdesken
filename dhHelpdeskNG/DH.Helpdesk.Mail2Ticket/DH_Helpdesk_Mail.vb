@@ -26,6 +26,7 @@ Imports Microsoft.Exchange.WebServices.Data
 Imports Microsoft.VisualBasic
 Imports Rebex
 Imports Winnovative
+Imports System.Threading
 
 Module DH_Helpdesk_Mail
     Private Const InboxMailFolderName As String = "Inbox"
@@ -160,8 +161,8 @@ Module DH_Helpdesk_Mail
         'Log cmd line args
         Try
 
-            'openLogFile()
             If IsNullOrEmpty(sConnectionstring) Then
+                LogError("Connectionstring can not be empty", Nothing)
                 Throw New ArgumentNullException("connection string")
             End If
 
@@ -342,19 +343,64 @@ Module DH_Helpdesk_Mail
                             If IsNullOrEmpty(objCustomer.EMailFolder) Then
                                 objCustomer.EMailFolder = InboxMailFolderName 'Set Default To inbox If NULL
                             End If
-                            Dim task As Task(Of List(Of MailMessage)) = ReadEwsFolderAsync(objCustomer, objCustomer.POP3Server,
-                                                                                      objCustomer.POP3Port,
-                                                                                      objCustomer.POP3UserName,
-                                                                                      objCustomer.EMailFolder,
-                                                                                      objCustomer.EMailFolderArchive,
-                                                                                      objCustomer.EwsApplicationId,
-                                                                                      objCustomer.EwsClientSecret,
-                                                                                      objCustomer.EwsTenantId,
-                                                                                      objCustomer.PhysicalFilePath)
 
-                            task.Wait()
+                            'Dim maxAttempt As Integer = 5
+                            'Dim maxAttempt As Integer = 5 ' GetAppSettingValue("MaxAttempt")
+                            Dim imax As String = GetAppSettingValue("MaxConnectionAttempts")
+                            Dim maxAttempt As Integer
+                            If IsNumeric(imax) Then
+                                maxAttempt = Convert.ToInt32(imax)
+                            Else
+                                maxAttempt = 1
+                            End If
+                            Dim icount As Integer = 0
+                            Dim task As Task(Of List(Of MailMessage))
 
-                            mails = task.Result
+                            For i As Integer = maxAttempt To 0 Step -1
+
+                                Try
+
+                                    task = ReadEwsFolderAsync(objCustomer, objCustomer.POP3Server,
+                                                                                              objCustomer.POP3Port,
+                                                                                              objCustomer.POP3UserName,
+                                                                                              objCustomer.EMailFolder,
+                                                                                              objCustomer.EMailFolderArchive,
+                                                                                              objCustomer.EwsApplicationId,
+                                                                                              objCustomer.EwsClientSecret,
+                                                                                              objCustomer.EwsTenantId,
+                                                                                              objCustomer.PhysicalFilePath)
+
+                                    'Successful Quit
+                                    task.Wait()
+                                    mails = task.Result
+                                    Exit For
+
+                                Catch ex As Exception
+                                    icount = icount + 1
+                                    If icount = maxAttempt Then
+                                        'LogError("Error readMailBox: " & ex.Message.ToString, Nothing)
+                                        'rethrow
+                                        Throw
+                                    End If
+                                    Thread.Sleep(2000)
+
+                                End Try
+                            Next
+
+
+                            'Dim task As Task(Of List(Of MailMessage)) = ReadEwsFolderAsync(objCustomer, objCustomer.POP3Server,
+                            '                                                          objCustomer.POP3Port,
+                            '                                                          objCustomer.POP3UserName,
+                            '                                                          objCustomer.EMailFolder,
+                            '                                                          objCustomer.EMailFolderArchive,
+                            '                                                          objCustomer.EwsApplicationId,
+                            '                                                          objCustomer.EwsClientSecret,
+                            '                                                          objCustomer.EwsTenantId,
+                            '                                                          objCustomer.PhysicalFilePath)
+
+                            'task.Wait()
+
+                            'mails = task.Result
                             iListCount = mails.Count()
                         Else
                             eMailConnectionType = MailConnectionType.Imap
@@ -792,34 +838,38 @@ Module DH_Helpdesk_Mail
                                     End If
                                     '#65030
 
-                                    If isValidRecipient(newcaseEmailTo, objCustomer.AllowedEMailRecipients) = True Then
-                                        If objCustomer.EMailRegistrationMailID <> 0 And bOrder = False And (message.From.ToString <> message.To.ToString) Then
-                                            'If Len(objCase.Persons_EMail) > 6 Then  (objCase.Persons_EMail can be empty) #65030
-                                            objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.NewCase, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                                    If isBlockedRecipient(newcaseEmailTo, objCustomer.BlockedEmailRecipients) = False Then
+                                        If isValidRecipient(newcaseEmailTo, objCustomer.AllowedEMailRecipients) = True Then
+                                            If objCustomer.EMailRegistrationMailID <> 0 And bOrder = False And (message.From.ToString <> message.To.ToString) Then
+                                                'If Len(objCase.Persons_EMail) > 6 Then  (objCase.Persons_EMail can be empty) #65030
+                                                objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.NewCase, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
-                                            If Not objMailTemplate Is Nothing Then
-                                                Dim objMail As New Mail
+                                                If Not objMailTemplate Is Nothing Then
+                                                    Dim objMail As New Mail
 
-                                                sMessageId = createMessageId(objCustomer.HelpdeskEMail)
-                                                sSendTime = Date.Now()
+                                                    sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+                                                    sSendTime = Date.Now()
 
-                                                Dim sEMailLogGUID As String = Guid.NewGuid().ToString
-                                                'helpdesk case 58782, #65030
-                                                'Dim newcaseEmailTo As String = objCase.Persons_EMail
-                                                'If objCustomer.NewCaseMailTo = 1 Then
-                                                '    newcaseEmailTo = sNewCaseToEmailAddress
-                                                'End If
-                                                'helpdesk case 58782
-                                                sRet_SendMail =
+                                                    Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+                                                    'helpdesk case 58782, #65030
+                                                    'Dim newcaseEmailTo As String = objCase.Persons_EMail
+                                                    'If objCustomer.NewCaseMailTo = 1 Then
+                                                    '    newcaseEmailTo = sNewCaseToEmailAddress
+                                                    'End If
+                                                    'helpdesk case 58782
+                                                    sRet_SendMail =
                                                     objMail.sendMail(objCase, Nothing, objCustomer, newcaseEmailTo, objMailTemplate, objGlobalSettings,
                                                                      sMessageId, sEMailLogGUID, sConnectionstring)
 
-                                                objLogData.createEMailLog(iCaseHistory_Id, newcaseEmailTo, MailTemplates.NewCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                    objLogData.createEMailLog(iCaseHistory_Id, newcaseEmailTo, MailTemplates.NewCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                End If
+                                                'End If  #65030
                                             End If
-                                            'End If  #65030
+                                        Else
+                                            LogToFile("readMailBox, isValidRecipient " & objCase.Persons_EMail & ", " & objCustomer.AllowedEMailRecipients, iPop3DebugLevel)
                                         End If
                                     Else
-                                        LogToFile("readMailBox, isValidRecipient " & objCase.Persons_EMail & ", " & objCustomer.AllowedEMailRecipients, iPop3DebugLevel)
+                                        LogToFile("readMailBox, isBlockedRecipient " & objCase.Persons_EMail & ", " & objCustomer.BlockedEmailRecipients, iPop3DebugLevel)
                                     End If
 
                                     If objCustomer.EMailRegistrationMailID <> 0 And objCustomer.NewCaseEMailList <> "" Then
@@ -837,8 +887,8 @@ Module DH_Helpdesk_Mail
                                                 Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
                                                 sRet_SendMail =
-                                                    objMail.sendMail(objCase, Nothing, objCustomer, vNewCaseEmailList(Index), objMailTemplate, objGlobalSettings,
-                                                                     sMessageId, sEMailLogGUID, sConnectionstring)
+                                                objMail.sendMail(objCase, Nothing, objCustomer, vNewCaseEmailList(Index), objMailTemplate, objGlobalSettings,
+                                                                 sMessageId, sEMailLogGUID, sConnectionstring)
 
                                                 objLogData.createEMailLog(iCaseHistory_Id, vNewCaseEmailList(Index), MailTemplates.NewCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             Next
@@ -862,8 +912,8 @@ Module DH_Helpdesk_Mail
                                                     Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
                                                     sRet_SendMail =
-                                                        objMail.sendMail(objCase, Nothing, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId,
-                                                                         sEMailLogGUID, sConnectionstring)
+                                                    objMail.sendMail(objCase, Nothing, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId,
+                                                                     sEMailLogGUID, sConnectionstring)
 
                                                     objLogData.createEMailLog(iCaseHistory_Id, objUser.EMail, MailTemplates.AssignedCaseToUser, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                                 End If
@@ -895,7 +945,7 @@ Module DH_Helpdesk_Mail
 
                                             For Each user As WorkingGroupUser In users
                                                 If user.AllocateCaseMail = 1 And Not String.IsNullOrWhiteSpace(user.EMail) And
-                                                   user.Status = 1 And user.WorkingGroupUserRole = WorkingGroupUserPermission.ADMINSTRATOR Then
+                                               user.Status = 1 And user.WorkingGroupUserRole = WorkingGroupUserPermission.ADMINSTRATOR Then
                                                     If Not objCase.Department_Id = 0 And usersDepartments.Any(Function(ud) ud.Key = user.Id) Then
                                                         If usersDepartments.Any(Function(ud) ud.Key = user.Id And ud.Value = objCase.Department_Id) Then
                                                             emailsList.Add(user.EMail)
@@ -919,11 +969,11 @@ Module DH_Helpdesk_Mail
                                                     Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
                                                     sRet_SendMail =
-                                                        objMail.sendMail(objCase, Nothing, objCustomer, recipient, objMailTemplate, objGlobalSettings,
-                                                                         sMessageId, sEMailLogGUID, sConnectionstring)
+                                                    objMail.sendMail(objCase, Nothing, objCustomer, recipient, objMailTemplate, objGlobalSettings,
+                                                                     sMessageId, sEMailLogGUID, sConnectionstring)
 
                                                     objLogData.createEMailLog(iCaseHistory_Id, recipient, MailTemplates.AssignedCaseToWorkinggroup,
-                                                                              sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                                          sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                                 Next
                                             End If
                                         End If
@@ -2088,6 +2138,23 @@ Module DH_Helpdesk_Mail
             Return sHTML
         End Try
     End Function
+    Private Function isBlockedRecipient(sEMail As String, sBlockedEMailRecipents As String) As Boolean
+        isBlockedRecipient = False
+
+        If sBlockedEMailRecipents = "" Then
+            isBlockedRecipient = False
+        Else
+            Dim aEMails() As String = sBlockedEMailRecipents.Split(";")
+
+            For i As Integer = 0 To aEMails.Length - 1
+                If InStr(sEMail, aEMails(i).ToString, CompareMethod.Text) <> 0 Then
+
+                    isBlockedRecipient = True
+                    Exit For
+                End If
+            Next
+        End If
+    End Function
 
     Private Function isValidRecipient(sEMail As String, sAllowedEMailRecipents As String) As Boolean
         isValidRecipient = False
@@ -2263,20 +2330,20 @@ Module DH_Helpdesk_Mail
         If objErrorLogFile IsNot Nothing Then
             objErrorLogFile.WriteLine("{0}: {1}", Now(), msg)
         End If
-        SendErrorMail(msg, objCustomer)
+        SendErrorMail(msg)
     End Sub
 
-    Private Sub SendErrorMail(msg As String, objCustomer As Customer)
+    Private Sub SendErrorMail(msg As String)
         Try
             Dim smtpServer As String = GetAppSettingValue("DefaultSmtpServer")
             Dim sConnectionstring As String = ConfigurationManager.ConnectionStrings("Helpdesk")?.ConnectionString
             Dim toAddress As String = GetAppSettingValue("ErrorMailTo")
             Dim fromAddress As String = GetAppSettingValue("ErrorMailFrom")
-            If (Not IsNullOrEmpty(smtpServer) And objCustomer IsNot Nothing) Then
+            If (Not IsNullOrEmpty(smtpServer) And Not IsNullOrEmpty(toAddress) And Not IsNullOrEmpty(fromAddress)) Then
 
                 Try
                     Dim objMail As New Mail
-                    objMail.SendErrorMail(fromAddress, toAddress, "Error in M2T", msg, objCustomer, sConnectionstring, smtpServer)
+                    objMail.SendErrorMail(fromAddress, toAddress, "Error in M2T", msg, sConnectionstring, smtpServer)
 
                 Catch ex As Exception
                     If objErrorLogFile IsNot Nothing Then

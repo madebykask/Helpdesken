@@ -256,13 +256,17 @@
         private static PlaceFieldsSettings CreatePlaceSettings(NamedObjectCollection<FieldProcessingSettingMapperData> entity)
         {
             var room = CreateFieldSetting(entity.FindByName(PlaceFields.Room));
+            var building = CreateFieldSetting(entity.FindByName(PlaceFields.Building));
+            var floor = CreateFieldSetting(entity.FindByName(PlaceFields.Floor));
             var address = CreateFieldSetting(entity.FindByName(PlaceFields.Address));
             var postalCode = CreateFieldSetting(entity.FindByName(PlaceFields.PostalCode));
             var postalAddress = CreateFieldSetting(entity.FindByName(PlaceFields.PostalAddress));
             var location = CreateFieldSetting(entity.FindByName(PlaceFields.Location));
             var location2 = CreateFieldSetting(entity.FindByName(PlaceFields.Location2));
 
-            var settings = new PlaceFieldsSettings(room, address, postalCode, postalAddress, location, location2);
+            var settings = new PlaceFieldsSettings(room, building, floor,
+                address, postalCode, 
+                postalAddress, location, location2);
 
             return settings;
         }
@@ -309,7 +313,8 @@
             return new ProcessingFieldSetting(
                 fieldSetting.Show.ToBool(),
                 fieldSetting.Required.ToBool(),
-                fieldSetting.ReadOnly.ToBool());
+                fieldSetting.ReadOnly.ToBool(),
+                fieldSetting.Copy.ToBool());
         }
     }
 }

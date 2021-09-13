@@ -363,6 +363,16 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory.Co
                 this.CreateValidationRule(updatedSettings.RoomFieldSetting));
             this.RestoreFieldIfNeeded(
                 updated,
+                () => updated.BuildingId,
+                existing.BuildingId,
+                this.CreateValidationRule(updatedSettings.BuildingFieldSetting));
+            this.RestoreFieldIfNeeded(
+                updated,
+                () => updated.FloorId,
+                existing.FloorId,
+                this.CreateValidationRule(updatedSettings.FloorFieldSetting));
+            this.RestoreFieldIfNeeded(
+                updated,
                 () => updated.Address,
                 existing.Address,
                 this.CreateValidationRule(updatedSettings.AddressFieldSetting));

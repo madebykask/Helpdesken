@@ -157,5 +157,7 @@ namespace DH.Helpdesk.Services.Services
         List<int> GetRelatedCaseIds(CurrentModes inventoryType, int inventoryId, int customerId);
         void SaveComputerStatus(ComputerStatus newCustomerStatus, out IDictionary<string, string> errors);
         int? GetComputerTypePrice(int id);
+        bool IsMacAddressUnique(int exceptId, string macAddress);
+        bool IsTheftMarkUnique(int exceptId, string theftMark);
     }
 }

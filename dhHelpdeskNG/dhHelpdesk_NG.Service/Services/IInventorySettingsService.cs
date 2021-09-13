@@ -23,7 +23,7 @@ namespace DH.Helpdesk.Services.Services
         ComputerFieldsSettings GetWorkstationFieldSettingsForEdit(int customerId, int languageId);
         WorkstationTabsSettings GetWorkstationTabsSettingsForEdit(int customerId, int languageId);
 
-        ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false);
+        ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false, bool isCopy = false);
 
         ComputerFieldsSettingsOverview GetWorkstationFieldSettingsOverview(int customerId, int languageId);
 

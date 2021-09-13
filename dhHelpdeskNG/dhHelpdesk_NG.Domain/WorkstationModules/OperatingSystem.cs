@@ -5,6 +5,8 @@
     public class OperatingSystem : Entity
     {
         public string Name { get; set; }
+        public int? Customer_Id { get; set; }
+        public virtual Customer Customer { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }

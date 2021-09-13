@@ -1,4 +1,5 @@
 using System.Data.Entity;
+using DH.Helpdesk.Common.Tools;
 
 namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 {
@@ -389,8 +390,11 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 })
                 .Where(x => x.Computer.Customer_Id == customerId);
 
-            if (!isShowScrapped)
-                query = query.Where(x => x.Computer.ScrapDate == null);
+            if (!isShowScrapped) 
+            {
+                var compareDate = DateTime.UtcNow.AddDays(-1).GetEndOfDay();
+                query = query.Where(x => !x.Computer.ScrapDate.HasValue || x.Computer.ScrapDate.Value > compareDate);
+            }
 
             if (domainId.HasValue)
                 query = query.Where(x => x.Computer.Domain_Id == domainId);
@@ -751,10 +755,17 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 (from c in DbContext.ComputerTypes.Where(i => i.Id == id).Select(i=> i.Price)
                 select c).Single() ?? 0;
 
-
             return computerTypePrice;
         }
 
+        public bool IsMacAddressUnique(int exceptId, string macAddress)
+        {
+            return !DbSet.Any(w => w.MACAddress.Equals(macAddress, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId);
+        }
+        public bool IsTheftMarkUnique(int exceptId, string theftMark)
+        {
+            return !DbSet.Any(w => w.TheftMark.Equals(theftMark, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId);
+        }
         public List<ComputerOverview> GetRelatedOverviews(int customerId, string userId)
         {
             var computers = (from c in DbContext.Computers

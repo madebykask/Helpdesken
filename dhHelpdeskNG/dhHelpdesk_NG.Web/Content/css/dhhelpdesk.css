@@ -2914,9 +2914,13 @@ body.login {
     margin-left: -400px;
 }
 
-    .modal.modalprintA4P .modal-body {
-        max-height: 600px;
-    }
+.modal.modalprintA4P .modal-body {
+    max-height: 600px;
+}
+
+.modal-body-select {
+    width: 100%;
+}
 /**************************** Validation **************************************************/
 
 .field-validation-error {

@@ -14,7 +14,7 @@
     public interface ISystemService
     {
         IList<Domain.System> GetSystems(int customerId, bool activeOnly = false, int? includeId = null);
-        List<ItemOverview> GetOperatingSystem();
+        List<ItemOverview> GetOperatingSystem(int customerId);
         Domain.System GetSystem(int id);
 
         DeleteMessage DeleteSystem(int id);
@@ -72,9 +72,9 @@
             return this._systemRepository.GetById(id);
         }
 
-        public List<ItemOverview> GetOperatingSystem()
+        public List<ItemOverview> GetOperatingSystem(int customerId)
         {
-            return this._operatingSystemRepository.FindOverviews().OrderBy(x => x.Name).ToList();
+            return this._operatingSystemRepository.FindOverviews(customerId).OrderBy(x => x.Name).ToList();
         }
 
         public DeleteMessage DeleteSystem(int id)

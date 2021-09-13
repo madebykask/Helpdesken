@@ -4,6 +4,7 @@
     using Infrastructure;
     using Domain.ExtendedCaseEntity;
     using BusinessData.Models.Case;
+    using System.Collections.Generic;
 
     public interface IExtendedCaseDataRepository : IRepository<ExtendedCaseDataEntity>
     {
@@ -14,7 +15,6 @@
         ExtendedCaseDataEntity GetExtendedCaseData(Guid extendedCaseGuid);
 
         ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, string userID, int? extendedCaseFormId = null);
-
 
         ExtendedCaseDataModel GetExtendedCaseDataByCaseId(int caseID);
 

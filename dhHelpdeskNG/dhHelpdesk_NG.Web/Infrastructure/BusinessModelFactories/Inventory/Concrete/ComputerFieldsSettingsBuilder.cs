@@ -83,12 +83,16 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var otherFieldsSettings = new OtherFieldsSettings(info);
 
             var room = MapFieldSetting(settings.PlaceFieldsSettingsModel.RoomFieldSettingModel);
+            var building = MapFieldSetting(settings.PlaceFieldsSettingsModel.BuildingFieldSettingModel);
+            var floor = MapFieldSetting(settings.PlaceFieldsSettingsModel.FloorFieldSettingModel);
             var address = MapFieldSetting(settings.PlaceFieldsSettingsModel.AddressFieldSettingModel);
             var postalCode = MapFieldSetting(settings.PlaceFieldsSettingsModel.PostalCodeFieldSettingModel);
             var postalAddress = MapFieldSetting(settings.PlaceFieldsSettingsModel.PostalAddressFieldSettingModel);
             var place = MapFieldSetting(settings.PlaceFieldsSettingsModel.PlaceFieldSettingModel);
             var place2 = MapFieldSetting(settings.PlaceFieldsSettingsModel.Place2FieldSettingModel);
-            var placeFieldsSettings = new PlaceFieldsSettings(room, address, postalCode, postalAddress, place, place2);
+            var placeFieldsSettings = new PlaceFieldsSettings(room, building, floor,
+                address, postalCode, postalAddress,
+                place, place2);
 
             var sound = MapFieldSetting(settings.SoundFieldsSettingsModel.SoundCardFieldSettingModel);
             var soundFieldsSettings = new SoundFieldsSettings(sound);
@@ -199,7 +203,8 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 setting.ShowInList,
                 setting.Caption,
                 setting.IsRequired,
-                setting.IsReadOnly);
+                setting.IsReadOnly,
+                setting.IsCopy);
 
             return settingModel;
         }

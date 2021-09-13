@@ -16,6 +16,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IQueryable<CaseSolution> GetCustomerCaseSolutions(int customerId);
         IQueryable<CaseSolution> GetCustomerCaseSolutions(IList<int> customersIds);
         IList<CaseSolutionOverview> GetCaseSolutionsWithConditions(IList<int> Ids);
+        IQueryable<CaseSolution> GetCaseSolutionsWithExtendeCaseForm(int customerId);
     }
 
     public class CaseSolutionRepository : RepositoryBase<CaseSolution>, ICaseSolutionRepository
@@ -28,7 +29,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public CaseSolutionInfo GetGetSolutionInfo(int id, int customerId)
         {
-            var caseSolutionInfo = 
+            var caseSolutionInfo =
                 Table.Where(c => c.Customer_Id == customerId && c.Id == id)
                 .Select(cs => new CaseSolutionInfo
                 {
@@ -48,7 +49,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 where cs.Customer_Id == customerId && cs.Status != 0
                 orderby cs.SortOrder
                 select cs;
-            
+
             return query;
         }
 
@@ -59,7 +60,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 where customersIds.Contains(cs.Customer_Id) && cs.Status != 0
                 orderby cs.SortOrder
                 select cs;
-            
+
             return query.Include(c => c.Customer);
         }
 
@@ -70,7 +71,7 @@ namespace DH.Helpdesk.Dal.Repositories
                  from csc in cs.Conditions
                  where Ids.Contains(cs.Id)
                  orderby cs.SortOrder
-                 select new 
+                 select new
                  {
                      CaseSolutionId = cs.Id,
                      Name = cs.Name,
@@ -90,11 +91,11 @@ namespace DH.Helpdesk.Dal.Repositories
                     x.NextStepState,
                     x.StateSecondaryId
                 }, x => new CaseSolutionConditionOverview()
-                        {
-                            Id = x.Id,
-                            Property = x.Property_Name,
-                            Values = x.Values
-                        })
+                {
+                    Id = x.Id,
+                    Property = x.Property_Name,
+                    Values = x.Values
+                })
                     .Select(x => new CaseSolutionOverview
                     {
                         CaseSolutionId = x.Key.CaseSolutionId,
@@ -105,6 +106,14 @@ namespace DH.Helpdesk.Dal.Repositories
                     }).ToList();
 
             return res;
+        }
+
+        public IQueryable<CaseSolution> GetCaseSolutionsWithExtendeCaseForm(int customerId)
+        {
+            var query = DataContext.CaseSolutions
+                        .Where(c => c.ExtendedCaseForms.Count > 0 && c.Customer_Id == customerId);
+
+            return query;
         }
     }
 
@@ -133,7 +142,7 @@ namespace DH.Helpdesk.Dal.Repositories
             }
         }
     }
-       
+
     #endregion
 
     #region CASESOLUTIONSCHEDULE

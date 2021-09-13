@@ -154,7 +154,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                OperatingSystem = this._systemService.GetOperatingSystem().Select(x => new SelectListItem
+                OperatingSystem = this._systemService.GetOperatingSystem(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Value

@@ -15,6 +15,8 @@ namespace DH.Helpdesk.Domain.ExtendedCaseEntity
 		public int Customer_Id { get; set; }
 		public int ExtendedCaseForm_Id { get; set; }
 
-		public virtual ICollection<ExtendedCaseReportField> ExtendedCaseReportFields { get; set; }
+        public int? Active { get; set; }
+
+        public virtual ICollection<ExtendedCaseReportField> ExtendedCaseReportFields { get; set; }
 	}
 }

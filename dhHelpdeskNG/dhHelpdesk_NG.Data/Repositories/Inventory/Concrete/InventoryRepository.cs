@@ -1,3 +1,4 @@
+using System;
 using DH.Helpdesk.BusinessData.Enums.Inventory;
 
 namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
@@ -175,14 +176,24 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                query = query.Where( x =>
-                        x.InventoryName == searchString || x.InventoryModel == searchString
-                        || x.Manufacturer == searchString || x.SerialNumber == searchString);
+                var searchStringLower = searchString.ToLower();
+                query = query.Where(x =>
+                    x.InventoryName.ToLower().Contains(searchStringLower) 
+                    || x.InventoryModel.ToLower().Contains(searchStringLower)
+                    || x.Manufacturer.ToLower().Contains(searchStringLower)
+                    || x.SerialNumber.ToLower().Contains(searchStringLower)
+                    || x.TheftMark.ToLower().Contains(searchStringLower)
+                    || x.BarCode.ToLower().Contains(searchStringLower)
+                    || (x.Room_Id.HasValue && x.Room.Name.ToLower().Contains(searchStringLower))
+                    || (x.Room_Id.HasValue && x.Room.Floor.Name.ToLower().Contains(searchStringLower))
+                    || (x.Room_Id.HasValue && x.Room.Floor.Building.Name.ToLower().Contains(searchStringLower))
+                    || DbContext.InventoryTypePropertyValues.Where(iv => iv.Inventory_Id == x.Id)
+                            .Any(iv => iv.Value.ToLower().Contains(searchStringLower))); // TODO: done as in HD4, but seems more effective way is over join
             }
 
             /*-1: take all records*/
             if (pageSize != -1)
-                query = query.OrderBy(x => x.InventoryName).Take(pageSize);            
+                query = query.OrderBy(x => x.InventoryName).Take(pageSize);
 
             const string Delimeter = "; ";
 
@@ -258,9 +269,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                     x =>
                     x.InventoryType_Id == inventoryTypeId
                     && !DbContext.ComputerInventories
-                            .Where(ci => ci.Computer_Id == computerId)
+                            .Where(ci => ci.Inventory_Id == x.Id)
                             .Select(ci => ci.Inventory_Id)
-                            .Contains(x.Id)).Select(x => new { x.Id, Name = x.InventoryName }).ToList();
+                            .Contains(x.Id)).OrderBy(x => x.InventoryName).Select(x => new { x.Id, Name = x.SerialNumber + " (" + x.InventoryName + ")" }).ToList();
 
             var overviews =
                 anonymus.Select(c => new ItemOverview(c.Name, c.Id.ToString(CultureInfo.InvariantCulture))).ToList();

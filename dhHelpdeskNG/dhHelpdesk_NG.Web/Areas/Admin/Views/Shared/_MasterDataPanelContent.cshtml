@@ -255,6 +255,11 @@
                 @Translation.GetCoreTextTranslation("Informationsfält")
             </a>
         </li>
+        <li>
+            <a href="@Url.Action("GetCustomerForms", "ExtendedCase", new { customerId = Model.Id })">
+                @Translation.GetCoreTextTranslation("Editerbara formulär")
+            </a>
+        </li>
     </ul>
 </li>
 

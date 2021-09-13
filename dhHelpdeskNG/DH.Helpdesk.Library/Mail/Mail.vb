@@ -458,17 +458,16 @@ Public Class Mail
                          sTo As String,
                          sSubject As String,
                          sBody As String,
-                         objCustomer As Customer,
                          connectionString As String,
                          smtpServer As String)
         ' Create Mail
-        Dim setting As Setting
-        Using factory As DatabaseFactory = New DatabaseFactory(connectionString)
+        'Dim setting As Setting
+        'Using factory As DatabaseFactory = New DatabaseFactory(connectionString)
 
-            Dim settingsRepository As New SettingRepository(factory)
-            setting = settingsRepository.Get(Function(x) x.Customer_Id = objCustomer.Id)
+        '    Dim settingsRepository As New SettingRepository(factory)
+        '    setting = settingsRepository.Get(Function(x) x.Customer_Id = objCustomer.Id)
 
-        End Using
+        'End Using
         Dim msg As New MailMessage()
         Dim sRet As String = ""
 
@@ -488,16 +487,16 @@ Public Class Mail
 
         smtp.Host = smtpServer
 
-        If Not IsNullOrEmpty(setting.SMTPUserName) Then
-            Dim credentials = New Net.NetworkCredential(setting.SMTPUserName, setting.SMTPPassWord)
-            smtp.Credentials = credentials
-        End If
+        'If Not IsNullOrEmpty(setting.SMTPUserName) Then
+        '    Dim credentials = New Net.NetworkCredential(setting.SMTPUserName, setting.SMTPPassWord)
+        '    smtp.Credentials = credentials
+        'End If
 
-        If setting.SMTPPort > 0 Then
-            smtp.Port = setting.SMTPPort
-        End If
+        'If setting.SMTPPort > 0 Then
+        '    smtp.Port = setting.SMTPPort
+        'End If
 
-        smtp.EnableSsl = setting.IsSMTPSecured
+        'smtp.EnableSsl = setting.IsSMTPSecured
 
         Try
             smtp.Send(msg)

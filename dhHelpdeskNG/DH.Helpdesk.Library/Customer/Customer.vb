@@ -80,6 +80,8 @@
     Private msEwsTenantId As String
     Private mbUseEws As Boolean
 
+    Private strBlockedEmailRecipients As String
+
 
 #End Region
 
@@ -306,6 +308,11 @@
             miLDAPCreateOrganization = dr("LDAPCreateOrganization")
 
             miNewCaseMailTo = dr("M2TNewCaseMailTo")
+
+            If Not IsDBNull(dr("BlockedEmailRecipients")) Then
+                strBlockedEmailRecipients = dr("BlockedEmailRecipients")
+            End If
+
 
         Catch ex As Exception
             Throw ex
@@ -890,6 +897,16 @@
             mbUseEws = Value
         End Set
     End Property
+
+    Public Property BlockedEmailRecipients As String
+        Get
+            Return strBlockedEmailRecipients
+        End Get
+        Set(ByVal Value As String)
+            strBlockedEmailRecipients = Value
+        End Set
+    End Property
+
 
 #End Region
 End Class

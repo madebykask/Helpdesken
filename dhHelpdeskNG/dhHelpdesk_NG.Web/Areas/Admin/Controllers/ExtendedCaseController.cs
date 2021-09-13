@@ -1,18 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.ExtendedCase;
+using DH.Helpdesk.BusinessData.Models.Language.Output;
+using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Domain;
+using DH.Helpdesk.Domain.ExtendedCaseEntity;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Areas.Admin.Models;
-using DH.Helpdesk.BusinessData.OldComponents;
-using DH.Helpdesk.BusinessData.Enums.Case.Fields;
-using DH.Helpdesk.BusinessData.Models;
-using DH.Helpdesk.Domain;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Attributes;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
@@ -21,15 +26,21 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ICustomerService _customerService;
         private readonly ILanguageService _languageService;
+        private readonly IExtendedCaseService _extendedCaseService;
+        private readonly ICaseSolutionService _caseSolutionService;
 
         public ExtendedCaseController(ICaseFieldSettingService caseFieldSettingService,
             ICustomerService customerService,
             ILanguageService languageService,
-            IMasterDataService masterDataService) : base(masterDataService)
+            IExtendedCaseService extendedCaseService,
+            IMasterDataService masterDataService,
+            ICaseSolutionService caseSolutionService) : base(masterDataService)
         {
             _caseFieldSettingService = caseFieldSettingService;
             _customerService = customerService;
             _languageService = languageService;
+            _extendedCaseService = extendedCaseService;
+            _caseSolutionService = caseSolutionService;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -42,10 +53,23 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return View("Edit", model);
         }
 
+        ////[CustomAuthorize(Roles = "3,4")]
+        //[HttpGet]
+        //public ActionResult Templates(int customerId)
+        //{
+        //    //languageId = languageId ?? SessionFacade.CurrentLanguageId;
+        //    //var model = CustomerInputViewModel(customerId, languageId.Value);
+
+        //    List<FormTemplate> templates = new List<FormTemplate>()
+        //    { new FormTemplate {Id=1, Name= "Template" }, new FormTemplate { Id = 2, Name = "Template Other" } };
+
+        //    return Json(templates, JsonRequestBehavior.AllowGet);
+        //}
+
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult Edit(int customerId, int? languageId,  IList<int> ShowStatusBarIds, IList<int> ShowExternalStatusBarIds)
+        public ActionResult Edit(int customerId, int? languageId, IList<int> ShowStatusBarIds, IList<int> ShowExternalStatusBarIds)
         {
             languageId = languageId ?? SessionFacade.CurrentLanguageId;
             var model = CustomerInputViewModel(customerId, languageId.Value);
@@ -63,6 +87,108 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             return View("Edit", model);
         }
+
+
+        [CustomAuthorize(Roles = "3,4")]
+        [HttpGet]
+        public ActionResult GetCustomerForms(int customerId, int? languageId, bool showActive = true)
+        {
+            languageId = languageId ?? SessionFacade.CurrentLanguageId;
+            var customer = _customerService.GetCustomer(customerId);
+
+            ExtendedCaseFormsForCustomer model = new ExtendedCaseFormsForCustomer()
+            {
+                Customer = customer,
+                LanguageId = languageId,
+                ExtendedCaseForms = _extendedCaseService.GetExtendedCaseFormsCreatedByEditor(customer, showActive),
+                IsShowOnlyActive = showActive
+            };
+
+            return View("CustomerForms", model);
+        }
+
+        public ActionResult GetCustomerFormsList(int customerId, int? languageId, bool showActive = true)
+        {
+            languageId = languageId ?? SessionFacade.CurrentLanguageId;
+            var customer = _customerService.GetCustomer(customerId);
+            ExtendedCaseFormsForCustomer model = new ExtendedCaseFormsForCustomer()
+            {
+                Customer = customer,
+                LanguageId = languageId,
+                ExtendedCaseForms = _extendedCaseService.GetExtendedCaseFormsCreatedByEditor(customer, showActive),
+                IsShowOnlyActive = showActive
+            };
+            return PartialView("_CustomerFormsList", model);
+        }
+
+        [CustomAuthorize(Roles = "3,4")]
+        [HttpPost]
+        [ValidateInput(false)]
+        public async Task<ActionResult> New(int customerId, int? languageId)
+        {
+            languageId = languageId ?? SessionFacade.CurrentLanguageId;
+            var customer = _customerService.GetCustomer(customerId);
+
+            var caseSolutions = await _caseSolutionService.GetCustomerCaseSolutionsAsync(customer.Id);
+            var caseSolutionsExtendedCaseForms = await _caseSolutionService.GetCaseSolutionsWithExtendeCaseFormAsync(customer.Id);
+
+            List<ExtendedCaseFieldTranslation> initialTranslations = new List<ExtendedCaseFieldTranslation>()
+            {
+                new ExtendedCaseFieldTranslation() { Name = Translation.GetCoreTextTranslation("Sektion")},
+                new ExtendedCaseFieldTranslation() { Name = Translation.GetCoreTextTranslation("Textfält")},
+                new ExtendedCaseFieldTranslation() { Name = Translation.GetCoreTextTranslation("Textarea")},
+                new ExtendedCaseFieldTranslation() { Name = Translation.GetCoreTextTranslation("Datumfält")},
+                new ExtendedCaseFieldTranslation() { Name = Translation.GetCoreTextTranslation("Infofält")}
+            };
+
+            CustomerCaseSolutionsExtendedForm model = new CustomerCaseSolutionsExtendedForm()
+            {
+                Customer = customer,
+                CustomerCaseSolutions = caseSolutions,
+                ExtendedCaseForm = null,
+                FieldTranslations = _languageService.GetExtendedCaseTranslations(null, languageId, initialTranslations),
+                CustomerCaseSolutionsWithExtendedCaseForm = caseSolutionsExtendedCaseForms
+            };
+
+            return View("EditForm", model);
+        }
+
+        [CustomAuthorize(Roles = "3,4")]
+        [HttpGet]
+        public async Task<ActionResult> EditForm(int extendedCaseFormId, int? languageId)
+        {
+            ExtendedCaseFormEntity extendedCaseForm = _extendedCaseService.GetExtendedCaseFormById(extendedCaseFormId);
+
+            int customerId = extendedCaseForm.Customer_Id  == null ? 0 : (int)extendedCaseForm.Customer_Id;
+
+            var customer = _customerService.GetCustomer(customerId);
+
+            var caseSolutions = await _caseSolutionService.GetCustomerCaseSolutionsAsync(customer.Id);
+
+            var caseSolutionsExtendedCaseForms = await _caseSolutionService.GetCaseSolutionsWithExtendeCaseFormAsync(customer.Id);
+
+            CustomerCaseSolutionsExtendedForm model = new CustomerCaseSolutionsExtendedForm()
+            {
+                Customer = customer,
+                CustomerCaseSolutions = caseSolutions,
+                ExtendedCaseForm = extendedCaseForm,
+                CustomerCaseSolutionsWithExtendedCaseForm = caseSolutionsExtendedCaseForms
+            };
+
+            string metaData = model.ExtendedCaseForm.MetaData.Replace("function(m) { return ", "").Replace("\";}", "\"");
+            model.FormFields = JsonConvert.DeserializeObject<ExtendedCaseFormJsonModel>(metaData);
+            model.FieldTranslations = _languageService.GetExtendedCaseTranslations(model.FormFields, languageId, null);
+            return View("EditForm", model);
+        }
+
+        //[CustomAuthorize(Roles = "3,4")]
+        //[HttpPost]
+        //[ValidateInput(false)]
+        //public ActionResult DeleteExtendedCaseForm(int id)
+        //{
+        //    bool deleted = _extendedCaseService.DeleteExtendedCaseForm(id);
+        //    return Json();
+        //}
 
         private CustomerInputViewModel CustomerInputViewModel(int customerId, int languageId)
         {
@@ -118,10 +244,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 .Where(c => FieldSettingsUiNames.Names.ContainsKey(c.Name) && fieldstoExclude.All(f => f != c.Name));
 
             ViewBag.AllFields = allFields.Select(c => new CustomKeyValue<int, string>
-                {
-                    Key = c.Id,
-                    Value = model.CaseFieldSettingWithLangauges.getLabel(c.Name) ?? ""
-                })
+            {
+                Key = c.Id,
+                Value = model.CaseFieldSettingWithLangauges.getLabel(c.Name) ?? ""
+            })
                 .OrderBy(c => c.Value)
                 .ToList();
 
@@ -134,6 +260,33 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 .OrderBy(c => c.Value)
                 .ToList();
             return model;
+        }
+
+        [CustomAuthorize(Roles = "3,4")]
+        [HttpPost]
+        [ValidateInput(false)]
+
+        public ActionResult SaveForm(ExtendedCaseFormPayloadModel payload)
+        {
+            List<CaseSolution> caseSolutionsWithForms = _extendedCaseService.GetCaseSolutionsWithExtendedCaseForm(payload);
+
+            //List<LanguageOverview> activeLanguages = _languageService.GetActiveLanguages().ToList();
+
+            if (caseSolutionsWithForms.Count > 0)
+            {
+                string msg = "Följande ärendemallar har redan ett formulär: " + Environment.NewLine;
+
+                foreach (var c in caseSolutionsWithForms)
+                {
+                    msg += Environment.NewLine + c.Name;
+                }
+
+                return Json(new { result = false, error = msg });
+            }
+
+            var id = _extendedCaseService.SaveExtendedCaseForm(payload, SessionFacade.CurrentUser.UserId);
+
+            return Json(new { result = true, formId = id });
         }
     }
 }

@@ -5,8 +5,12 @@
 <td>
     @Html.CheckBoxFor(m => m.IsRequired, Model.IsRequiredDisabled ? (object)new { @class = "is_required_checkbox switchcheckbox", @readonly = "true" } : (object)new { @class = "is_required_checkbox switchcheckbox" })
 </td>
-<td>@Html.CheckBoxFor(m => m.ShowInList, Model.IsShowInListDisabled ? (object)new { @class = "switchcheckbox", @readonly = "true" } : (object)new { @class = "switchcheckbox" })</td>
+<td>
+    @Html.CheckBoxFor(m => m.ShowInList, Model.IsShowInListDisabled ? (object) new {@class = "switchcheckbox", @readonly = "true"} : (object) new {@class = "switchcheckbox"})
+</td>
 <td>
     @Html.CheckBoxFor(m => m.IsReadOnly, Model.IsReadOnlyDisabled ? (object)new { @class = "is_readonly_checkbox switchcheckbox", @readonly = "true" } : (object)new { @class = "is_readonly_checkbox switchcheckbox" })
 </td>
-
+<td>
+    @Html.CheckBoxFor(m => m.IsCopy, Model.IsCopyDisabled ? (object)new { @class = "is_copy_checkbox switchcheckbox", @readonly = "true" } : (object)new { @class = "is_copy_checkbox switchcheckbox" })
+</td>

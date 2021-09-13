@@ -20,6 +20,7 @@ using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory;
 using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Inventory.Concrete;
 using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory;
 using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory.Concrete;
+using DH.Helpdesk.Services.Services.Concrete;
 using Ninject.Modules;
 
 namespace DH.Helpdesk.SelfService.NinjectModules.Modules

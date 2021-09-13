@@ -376,6 +376,16 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory.C
                 existing.RoomId,
                 BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.Room,
                 this.CreateValidationRule(updatedSettings.RoomFieldSetting));
+            this.elementaryRulesValidator.ValidateIntegerField(
+                updated.BuildingId,
+                existing.BuildingId,
+                BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.Building,
+                this.CreateValidationRule(updatedSettings.BuildingFieldSetting));
+            this.elementaryRulesValidator.ValidateIntegerField(
+                updated.FloorId,
+                existing.FloorId,
+                BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.Floor,
+                this.CreateValidationRule(updatedSettings.FloorFieldSetting));
             this.elementaryRulesValidator.ValidateStringField(
                 updated.Address,
                 existing.Address,
@@ -738,6 +748,14 @@ namespace DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Inventory.C
                 model.RoomId,
                 BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.Room,
                 this.CreateValidationRule(modelSettings.RoomFieldSetting));
+            this.elementaryRulesValidator.ValidateIntegerField(
+                model.BuildingId,
+                BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.Building,
+                this.CreateValidationRule(modelSettings.BuildingFieldSetting));
+            this.elementaryRulesValidator.ValidateIntegerField(
+                model.FloorId,
+                BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.Floor,
+                this.CreateValidationRule(modelSettings.FloorFieldSetting));
             this.elementaryRulesValidator.ValidateStringField(
                 model.Address,
                 BusinessData.Enums.Inventory.Fields.Computer.PlaceFields.Address,

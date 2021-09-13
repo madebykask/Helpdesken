@@ -4,9 +4,13 @@
 
     public class PlaceFieldsSettings
     {
-        public PlaceFieldsSettings(FieldSetting roomFieldSetting, FieldSetting addressFieldSetting, FieldSetting postalCodeFieldSetting, FieldSetting postalAddressFieldSetting, FieldSetting placeFieldSetting, FieldSetting place2FieldSetting)
+        public PlaceFieldsSettings(FieldSetting roomFieldSetting, FieldSetting buildingFieldSetting, FieldSetting floorFieldSetting, FieldSetting addressFieldSetting, 
+            FieldSetting postalCodeFieldSetting, FieldSetting postalAddressFieldSetting, 
+            FieldSetting placeFieldSetting, FieldSetting place2FieldSetting)
         {
             this.RoomFieldSetting = roomFieldSetting;
+            this.BuildingFieldSetting = buildingFieldSetting;
+            this.FloorFieldSetting = floorFieldSetting;
             this.AddressFieldSetting = addressFieldSetting;
             this.PostalCodeFieldSetting = postalCodeFieldSetting;
             this.PostalAddressFieldSetting = postalAddressFieldSetting;
@@ -16,6 +20,12 @@
 
         [NotNull]
         public FieldSetting RoomFieldSetting { get; set; }
+
+        [NotNull]
+        public FieldSetting BuildingFieldSetting { get; set; }
+
+        [NotNull]
+        public FieldSetting FloorFieldSetting { get; set; }
 
         [NotNull]
         public FieldSetting AddressFieldSetting { get; set; }

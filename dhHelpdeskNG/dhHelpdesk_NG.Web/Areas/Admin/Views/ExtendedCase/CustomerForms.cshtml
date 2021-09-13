@@ -1,0 +1,65 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+
+﻿﻿
+@model DH.Helpdesk.BusinessData.Models.Case.ExtendedCaseFormsForCustomer
+@{
+    ViewBag.Title = "Extended Case Forms";
+}
+@using (Html.BeginForm("New", "ExtendedCase", new { customerId = Model.Customer.Id, languageId = Model.LanguageId, area = "admin" }, FormMethod.Post, new { id = "target" }))
+{
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Nytt utökat ärende formulär"), "New", new { customerId = Model.Customer.Id, languageId = Model.LanguageId, }, new { onclick = "submitForm();return false;", @class = "btn" })</li>
+            </ul>
+        </div>
+        @Html.Partial("_MasterDataPanel", Model.Customer)
+    </div>
+    <div class="content">
+        <div class="container">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a href="#subfragment-1">@Translation.GetCoreTextTranslation("Editerbara formulär") - @Model.Customer.Name</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment1">
+                    <div class="container">
+                        <table>
+                            <tr>
+                                <td style="width:200px">
+                                    <span>@Translation.Get("Visa endast aktiva")</span>
+                                </td>
+                                <td>
+                                    @if (Model != null)
+                                    {
+                                        <input type="checkbox" class="switchcheckbox" id="chkActive" @(Model.IsShowOnlyActive ? "checked" : string.Empty)>
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" class="switchcheckbox" id="chkActive">
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+                        @Html.Partial("_CustomerFormsList", Model)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+<script type="text/javascript">
+    function submitForm() {
+        $("#target").submit();
+    };
+    $(function () {
+        $('#showStatusBarIds, #showExternalStatusBarIds').chosen({
+            width: '315px',
+            max_selected_options: 10,
+            hide_results_on_select: false,
+            placeholder_text_multiple: placeholder_text_multiple,
+            no_results_text: no_results_text
+        });
+    });
+</script>

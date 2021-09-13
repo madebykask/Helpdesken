@@ -58,6 +58,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         private readonly IOrdersService _ordersService;
         private readonly ISettingService _settingsService;
 		private readonly IGlobalSettingService _globalSettingService;
+        private readonly IComputerCopyBuilder _computerCopyBuilder;
 
 		public WorkstationController(
             IMasterDataService masterDataService,
@@ -74,7 +75,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
             IOrdersService ordersService,
             ISettingService settingsService,
-			IGlobalSettingService globalSettingService)
+			IGlobalSettingService globalSettingService,
+            IComputerCopyBuilder computerCopyBuilder)
             : base(masterDataService, exportFileNameFormatter, excelFileComposer, organizationService, placeService)
         {
             _filesStore = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Inventory);
@@ -87,8 +89,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             _ordersService = ordersService;
             _settingsService = settingsService;
 			_globalSettingService = globalSettingService;
-
-		}
+            _computerCopyBuilder = computerCopyBuilder;
+        }
 
         [HttpGet]
 		[UserPermissions(UserPermission.InventoryViewPermission)]
@@ -172,7 +174,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
             var settings =
                 _inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
-                    SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId, readOnly);
+                    SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId, readOnly, true);
 
 			var whiteList = _globalSettingService.GetFileUploadWhiteList();
 
@@ -282,7 +284,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 		[UserPermissions(UserPermission.InventoryViewPermission)]
 		public RedirectToRouteResult Edit(ComputerViewModel computerViewModel)
         {
-            ComputerForUpdate businessModel = this._computerBuilder.BuildForUpdate(computerViewModel, OperationContext);
+            var businessModel = this._computerBuilder.BuildForUpdate(computerViewModel, OperationContext);
             this._inventoryService.UpdateWorkstation(businessModel, this.OperationContext);
             if (computerViewModel.IsForDialog)
             {
@@ -295,6 +297,14 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             return this.RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [UserPermissions(UserPermission.InventoryViewPermission)]
+        public RedirectToRouteResult Copy(ComputerViewModel computerViewModel)
+        {
+            TempData["copyViewModel"] = computerViewModel;
+            return RedirectToAction("New");
+        }
+
         [HttpGet]
 		[UserPermissions(UserPermission.InventoryViewPermission)]
 		public ViewResult New(int? orderId = null)
@@ -303,7 +313,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var settings =
                 _inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
                     SessionFacade.CurrentCustomer.Id,
-                    SessionFacade.CurrentLanguageId);
+                    SessionFacade.CurrentLanguageId, 
+                    false, 
+                    true);
 
 			var whiteList = _globalSettingService.GetFileUploadWhiteList();
 
@@ -311,7 +323,14 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 options,
                 settings,
                 SessionFacade.CurrentCustomer.Id,
-				whiteList);
+                whiteList);
+
+            if (TempData.ContainsKey("copyViewModel"))
+            {
+                var sourceModel = TempData["copyViewModel"] as ComputerViewModel;
+                if (sourceModel == null) throw new NullReferenceException("sourceModel can't be empty");
+                viewModel = _computerCopyBuilder.CopyWorkstation(viewModel, sourceModel, this.OperationContext);
+            }
 
             if (orderId.HasValue)
                 ApplyOrderFields(orderId.Value, viewModel);
@@ -592,12 +611,29 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             {
                 Name = BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields.Name,
                 SortBy = SortBy.Ascending
-            };
+            }; 
             var settings = _inventorySettingsService.GetWorkstationFieldSettingsOverview(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
             var models = _inventoryService.GetRelatedInventory(SessionFacade.CurrentCustomer.Id, userId);
             var viewModel = InventoryGridModel.BuildModel(models, settings, sortField);
             ViewData.Add(new KeyValuePair<string, object>("UserId", userId));
             return View(viewModel);
+        }
+
+        [HttpGet]
+        [OutputCache(NoStore = true, Duration = 0)]
+        public JsonResult ValidateMacAddress(int currentId, string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return Json(true, JsonRequestBehavior.AllowGet);
+
+            var result = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsMacAddressUnique(currentId, value);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        [OutputCache(NoStore = true, Duration = 0)]
+        public JsonResult ValidateTheftmark(int currentId, string value)
+        {
+            var result = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsTheftMarkUnique(currentId, value);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         private InventoryGridModel CreateInventoryGridModel(WorkstationsSearchFilter filter)
@@ -620,14 +656,14 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         private ComputerEditOptions GetWorkstationEditOptions(int customerId, int? departmentId, int? regionId)
         {
             var computerModels =
-                _computerModulesService.GetComputerModels().OrderBy(x => x.Name).ToList();
+                _computerModulesService.GetComputerModels(customerId).OrderBy(x => x.Name).ToList();
             var computerTypes =
                 _computerModulesService.GetComputerTypes(customerId).OrderBy(x => x.Name).ToList();
             var operatingSystems =
-                _computerModulesService.GetOperatingSystems().OrderBy(x => x.Name).ToList();
-            var processors = _computerModulesService.GetProcessors().OrderBy(x => x.Name).ToList();
-            var rams = _computerModulesService.GetRams().OrderBy(x => x.Name).ToList();
-            var netAdapters = _computerModulesService.GetNetAdapters().OrderBy(x => x.Name).ToList();
+                _computerModulesService.GetOperatingSystems(customerId).OrderBy(x => x.Name).ToList();
+            var processors = _computerModulesService.GetProcessors(customerId).OrderBy(x => x.Name).ToList();
+            var rams = _computerModulesService.GetRams(customerId).OrderBy(x => x.Name).ToList();
+            var netAdapters = _computerModulesService.GetNetAdapters(customerId).OrderBy(x => x.Name).ToList();
             var regions =
                 OrganizationService.GetRegions(customerId).OrderBy(x => x.Name).ToList();
             var departments =

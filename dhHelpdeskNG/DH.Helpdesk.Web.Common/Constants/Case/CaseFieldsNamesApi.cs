@@ -25,6 +25,7 @@
         public const string ImpactId = "ImpactId";
         public const string InventoryLocation = "InventoryLocation";
         public const string InventoryNumber = "InventoryNumber";
+        public const string InventoryType = "InventoryType";
         public const string InvoiceNumber = "InvoiceNumber";
         public const string Miscellaneous = "Miscellaneous";
         public const string OrganizationUnitId = "OrganizationUnitId";

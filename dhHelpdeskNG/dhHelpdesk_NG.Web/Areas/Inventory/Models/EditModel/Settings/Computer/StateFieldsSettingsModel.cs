@@ -21,6 +21,11 @@
             this.ReplacedWithFieldSettingModel = replacedWithFieldSettingModel;
             this.SendBackFieldSettingModel = sendBackFieldSettingModel;
             this.ScrapDateFieldSettingModel = scrapDateFieldSettingModel;
+            StateFieldSettingModel.IsCopyDisabled = true;
+            StolenFieldSettingModel.IsCopyDisabled = true;
+            ReplacedWithFieldSettingModel.IsCopyDisabled = true;
+            SendBackFieldSettingModel.IsCopyDisabled = true;
+            ScrapDateFieldSettingModel.IsCopyDisabled = true;
         }
 
         [NotNull]
