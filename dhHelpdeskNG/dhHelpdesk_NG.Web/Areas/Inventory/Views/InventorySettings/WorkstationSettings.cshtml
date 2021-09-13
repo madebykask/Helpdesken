@@ -4,7 +4,10 @@
     $(function () {
         var parameters = {
             saveSettingsUrl: '@Url.Action("WorkstationSettings")',
-            settingsSavedSuccessfullyMessage: '@Translation.GetForJS("Inställningarna sparades")'
+            settingsSavedSuccessfullyMessage: '@Translation.GetForJS("Inställningarna sparades")',
+            showRoomId: '@Html.IdFor(m => m.PlaceFieldsSettingsModel.RoomFieldSettingModel.ShowInDetails)',
+            showFloorId: '@Html.IdFor(m => m.PlaceFieldsSettingsModel.FloorFieldSettingModel.ShowInDetails)',
+            showBuildingId: '@Html.IdFor(m => m.PlaceFieldsSettingsModel.BuildingFieldSettingModel.ShowInDetails)'
         };
 
         applySettingsBehavior(parameters);
