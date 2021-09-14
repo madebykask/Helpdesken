@@ -289,7 +289,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
             foreach (var s in entity.tabs[0].sections)
             {
-                if (!s.id.StartsWith("Section."))
+                if (!s.id.Contains("Section."))
                 { s.id = "Section." + Regex.Replace(StringHelper.HandleSwedishChars(s.id), "[^a-zA-Z0-9 _]", "", RegexOptions.Compiled) + "_" + entity.id; }
 
                 foreach (var t in translations.Where(x=> x.IsSection))
@@ -309,12 +309,16 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         var updatedTranslation = DataContext.ExtendedCaseTranslations.Where(u => u.Property == s.id && u.LanguageId == t.LanguageId).FirstOrDefault();
                         updatedTranslation.Text = t.Text;
                     }
+
                 }
+
+                s.name = "@Translation." + s.id;
+
                 DataContext.Commit();
 
                 foreach (var c in s.controls)
                 {
-                    if (!c.id.StartsWith("Control."))
+                    if (!c.id.Contains("Control."))
                     { c.id = "Control." + Regex.Replace(StringHelper.HandleSwedishChars(c.id), "[^a-zA-Z0-9 _]", "", RegexOptions.Compiled) + "_" + entity.id; }
 
                     foreach (var t in translations.Where(x => !x.IsSection))
@@ -335,7 +339,9 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                             updatedTranslation.Text = t.Text;
                         }
                     }
-                }
+                    c.label = "@Translation." + c.id;
+                }                
+
                 DataContext.Commit();
             }
 
