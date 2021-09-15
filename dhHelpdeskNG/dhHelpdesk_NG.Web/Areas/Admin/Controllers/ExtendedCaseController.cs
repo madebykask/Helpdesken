@@ -132,14 +132,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var caseSolutions = await _caseSolutionService.GetCustomerCaseSolutionsAsync(customer.Id);
             var caseSolutionsExtendedCaseForms = await _caseSolutionService.GetCaseSolutionsWithExtendeCaseFormAsync(customer.Id);
 
-            List<ExtendedCaseFieldTranslation> initialTranslations = new List<ExtendedCaseFieldTranslation>()
-            {
-                new ExtendedCaseFieldTranslation() { Name = Translation.GetCoreTextTranslation("Sektion")},
-                new ExtendedCaseFieldTranslation() { Name = Translation.GetCoreTextTranslation("Textfält")},
-                new ExtendedCaseFieldTranslation() { Name = Translation.GetCoreTextTranslation("Textarea")},
-                new ExtendedCaseFieldTranslation() { Name = Translation.GetCoreTextTranslation("Datumfält")},
-                new ExtendedCaseFieldTranslation() { Name = Translation.GetCoreTextTranslation("Infofält")}
-            };
+            List<ExtendedCaseFieldTranslation> initialTranslations = GetInitialTranslations();
 
             CustomerCaseSolutionsExtendedForm model = new CustomerCaseSolutionsExtendedForm()
             {
@@ -167,6 +160,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             var caseSolutionsExtendedCaseForms = await _caseSolutionService.GetCaseSolutionsWithExtendeCaseFormAsync(customer.Id);
 
+            List<ExtendedCaseFieldTranslation> initialTranslations = GetInitialTranslations();
+
             CustomerCaseSolutionsExtendedForm model = new CustomerCaseSolutionsExtendedForm()
             {
                 Customer = customer,
@@ -177,7 +172,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             string metaData = model.ExtendedCaseForm.MetaData.Replace("function(m) { return ", "").Replace("\";}", "\"");
             model.FormFields = JsonConvert.DeserializeObject<ExtendedCaseFormJsonModel>(metaData);
-            model.FieldTranslations = _languageService.GetExtendedCaseTranslations(model.FormFields, languageId, null);
+            model.FieldTranslations = _languageService.GetExtendedCaseTranslations(model.FormFields, languageId, initialTranslations);
             return View("EditForm", model);
         }
 
@@ -189,6 +184,20 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         //    bool deleted = _extendedCaseService.DeleteExtendedCaseForm(id);
         //    return Json();
         //}
+
+        private List<ExtendedCaseFieldTranslation> GetInitialTranslations()
+        {
+            LanguageOverview defaultLanguage = _languageService.GetActiveLanguages().Where(x => x.IsActive == 1).OrderBy(x => x.Id).FirstOrDefault();
+
+            return new List<ExtendedCaseFieldTranslation>()
+            {
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage,  Name = Translation.GetCoreTextTranslation("Sektion")},
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Name = Translation.GetCoreTextTranslation("Textfält")},
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Name = Translation.GetCoreTextTranslation("Textarea")},
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Name = Translation.GetCoreTextTranslation("Datumfält")},
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Name = Translation.GetCoreTextTranslation("Infofält")}
+            };
+        }
 
         private CustomerInputViewModel CustomerInputViewModel(int customerId, int languageId)
         {

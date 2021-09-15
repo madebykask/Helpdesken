@@ -203,13 +203,18 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                         new TabElement()
                         {
                             columnCount = "1",
-                            id = StringHelper.HandleSwedishChars(payload.Name.Replace(" ","")),
+                            id = StringHelper.GetCleanString(payload.Name),
                             name = "",
                             sections = sectionLst
                         }
                 }
 
             };
+
+            //foreach(var t in payload.Translations)
+            //{
+            //    t.Id = _extendedCaseFormRepository.GetExtendedCaseFormTranslation(t);
+            //}
 
             return _extendedCaseFormRepository.SaveExtendedCaseForm(entity, userId, payload.Translations);
         }
@@ -221,8 +226,7 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
             {
                 var section = new SectionElement()
                 {
-                    id = Regex.Replace(StringHelper.HandleSwedishChars(s.Id.Replace(" ", String.Empty)),"[^a-zA-Z0-9 _]",
-                            "", RegexOptions.Compiled),
+                    id = StringHelper.GetCleanString(s.Id),
                     name = s.SectionName,
                     controls = new List<ControlElement>()
                 };
@@ -235,7 +239,7 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                         section.controls.Add(
                             new ControlElement()
                             {
-                                id = StringHelper.HandleSwedishChars(c.Id.Replace(" ", String.Empty)),
+                                id = StringHelper.GetCleanString(c.Id),
                                 type = c.Type,
                                 label = c.Label,
                                 valueBinding = c.ValueBinding,

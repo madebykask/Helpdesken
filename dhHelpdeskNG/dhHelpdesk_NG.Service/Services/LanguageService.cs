@@ -151,43 +151,56 @@ namespace DH.Helpdesk.Services.Services
             IList<ExtendedCaseFieldTranslation> fieldtranslations = new List<ExtendedCaseFieldTranslation>();
             if (form == null)
             {
-                foreach (var t in initialTranslations)
-                {
-                    var prefix = t.Name == initialTranslations[0].Name ? "Section." : "Control."; 
-                    fieldtranslations.Add(new ExtendedCaseFieldTranslation()
-                    {
-                        Language = defaultLanguage,
-                        IsDefaultLanguage = true,
-                        Name = t.Name,
-                        TranslationText =
-                            GetExtendedCaseTranslation(defaultLanguage.Id, prefix + Regex.Replace(StringHelper.HandleSwedishChars(t.Name), "[^a-zA-Z0-9 _]", "", RegexOptions.Compiled))
-                    });
-                }
-                foreach (var al in activeLanguages.Where(l => l.Id != defaultLanguage.Id))
-                {
-                    foreach (var t in initialTranslations)
-                    {
-                        var prefix = t.Name == initialTranslations[0].Name ? "Section." : "Control.";
-                        fieldtranslations.Add(new ExtendedCaseFieldTranslation()
-                        {
-                            Language = al,
-                            IsDefaultLanguage = (al.Id == defaultLanguage.Id),
-                            Name = t.Name,
-                            TranslationText =
-                                GetExtendedCaseTranslation(al.Id, prefix + Regex.Replace(StringHelper.HandleSwedishChars(t.Name), "[^a-zA-Z0-9]", "", RegexOptions.Compiled))
-                        });
-                    }
-                }
+                fieldtranslations = GetInitialTranslations(initialTranslations, activeLanguages, defaultLanguage);
             }
             else
             {
-                fieldtranslations = GetExtendedCaseTranlations(form, languageId, activeLanguages, defaultLanguage);
+                fieldtranslations = GetExtendedCaseTranslations(form, activeLanguages, defaultLanguage);
+
+                foreach (var t in GetInitialTranslations(initialTranslations, activeLanguages, defaultLanguage))
+                {
+                    fieldtranslations.Add(t);
+                }
             }
 
             return fieldtranslations;
         }
 
-        private IList<ExtendedCaseFieldTranslation> GetExtendedCaseTranlations(ExtendedCaseFormJsonModel form, int? languageId, IEnumerable<LanguageOverview> activeLanguages, LanguageOverview usedLanguage)
+        private IList<ExtendedCaseFieldTranslation> GetInitialTranslations(List<ExtendedCaseFieldTranslation> initialTranslations, IEnumerable<LanguageOverview> activeLanguages, LanguageOverview defaultLanguage)
+        {
+            IList<ExtendedCaseFieldTranslation> fieldtranslations = new List<ExtendedCaseFieldTranslation>();
+
+            foreach (var t in initialTranslations)
+            {
+                var prefix = t.Name == initialTranslations[0].Name ? "Section." : "Control.";
+                fieldtranslations.Add(new ExtendedCaseFieldTranslation()
+                {
+                    Language = defaultLanguage,
+                    IsDefaultLanguage = true,
+                    Name = t.Name,
+                    TranslationText =
+                        GetExtendedCaseTranslation(prefix + StringHelper.GetCleanString(t.Name), defaultLanguage.Id)
+                });
+            }
+            foreach (var al in activeLanguages.Where(l => l.Id != defaultLanguage.Id))
+            {
+                foreach (var t in initialTranslations)
+                {
+                    var prefix = t.Name == initialTranslations[0].Name ? "Section." : "Control.";
+                    fieldtranslations.Add(new ExtendedCaseFieldTranslation()
+                    {
+                        Language = al,
+                        IsDefaultLanguage = (al.Id == defaultLanguage.Id),
+                        Name = t.Name,
+                        TranslationText =
+                            GetExtendedCaseTranslation(prefix + StringHelper.GetCleanString(t.Name), al.Id)
+                    });
+                }
+            }
+            return fieldtranslations;
+        }
+
+        private IList<ExtendedCaseFieldTranslation> GetExtendedCaseTranslations(ExtendedCaseFormJsonModel form, IEnumerable<LanguageOverview> activeLanguages, LanguageOverview defaultLanguage)
         {
             IList<ExtendedCaseFieldTranslation> fieldtranslations = new List<ExtendedCaseFieldTranslation>();
             foreach (var t in form.tabs)
@@ -196,42 +209,49 @@ namespace DH.Helpdesk.Services.Services
                 {
                     fieldtranslations.Add(new ExtendedCaseFieldTranslation()
                     {
-                        Language = usedLanguage,
+                        Id = _languageRepository.GetExtendedFormTranslationId(s.name, defaultLanguage.Id),
+                        Language = defaultLanguage,
                         Name = s.name,
                         TranslationText =
-                            GetExtendedCaseTranslation(usedLanguage.Id, "Section." + Regex.Replace(s.name, "[^a-zA-Z0-9]", "", RegexOptions.Compiled))
+                            GetExtendedCaseTranslation(s.id, defaultLanguage.Id),
+                        IsDefaultLanguage = true
                     });
 
-                    foreach (var l in activeLanguages.Where(x => x.Id != languageId))
+                    foreach (var l in activeLanguages.Where(x => x.Id != defaultLanguage.Id))
                     {
                         fieldtranslations.Add(new ExtendedCaseFieldTranslation()
                         {
+                            Id = _languageRepository.GetExtendedFormTranslationId(s.name, l.Id),
                             Language = l,
                             Name = s.name,
                             TranslationText =
-                                GetExtendedCaseTranslation(l.Id, "Section." + Regex.Replace(s.name, "[^a-zA-Z0-9]", "", RegexOptions.Compiled))
+                                GetExtendedCaseTranslation(s.id, l.Id)
                         });
                     }
                     foreach (var c in s.controls)
                     {
                         fieldtranslations.Add(new ExtendedCaseFieldTranslation()
                         {
-                            Language = usedLanguage,
+                            Id = _languageRepository.GetExtendedFormTranslationId(c.label, defaultLanguage.Id),
+                            Language = defaultLanguage,
                             Name = c.label,
                             TranslationText =
-                                GetExtendedCaseTranslation(usedLanguage.Id, "Control." + Regex.Replace(c.label, "[^a-zA-Z0-9]", "", RegexOptions.Compiled))
+                                GetExtendedCaseTranslation(c.id, defaultLanguage.Id),
+                            IsDefaultLanguage = true
                         });
 
-                        foreach (var l in activeLanguages.Where(x => x.Id != languageId))
+                        foreach (var l in activeLanguages.Where(x => x.Id != defaultLanguage.Id))
                         {
                             fieldtranslations.Add(new ExtendedCaseFieldTranslation()
                             {
+                                Id = _languageRepository.GetExtendedFormTranslationId(c.label, l.Id),
                                 Language = l,
                                 Name = c.label,
                                 TranslationText =
-                                    GetExtendedCaseTranslation(l.Id, "Control." + Regex.Replace(c.label, "[^a-zA-Z0-9]", "", RegexOptions.Compiled))
+                                    GetExtendedCaseTranslation(c.id, l.Id),
+                                IsDefaultLanguage = false
                             });
-                        }
+                        }   
                     }
                 }
             }
@@ -239,9 +259,9 @@ namespace DH.Helpdesk.Services.Services
             return fieldtranslations;
         }
 
-        private string GetExtendedCaseTranslation(int id, string name)
+        private string GetExtendedCaseTranslation(string name, int languageId)
         {
-            return _languageRepository.GetExtendedCaseTranslation(id, name);
+            return _languageRepository.GetExtendedCaseTranslation(name, languageId);
         }
     }
 }
