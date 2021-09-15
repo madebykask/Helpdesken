@@ -113,7 +113,6 @@
     $(document).ready(function () {
         var translations = {}
         translations = JSON.parse('@Html.Raw(Json.Encode(Model.FieldTranslations))');
-
         const IDNAME = "firstSectionId";
 
         let divHeaderActions = (idName) => "<div class='header-actions'><a class='fa fa-pencil fa-lg' data-toggle='collapse' href='#" + idName + "' role='button' title='Edit' aria-hidden='true'></a><a class='fa fa-trash fa-lg' href='#" + idName + "' title='Remove Element' role='button' aria-hidden='true'></a></div>";
@@ -126,7 +125,6 @@
                 if (placeHolder !== null) {
                     if (getStringWithoutSpecialChars(getStringWithoutSweChars(translations[i].Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(placeHolder))) {
                         var translationText = (translations[i].TranslationText == null ? "" : translations[i].TranslationText)
-                        //console.log(translationText)
                         res = res + "<tr><td><label for='" + idName + "label" + translations[i].Language.Id + "'><span>@Translation.GetCoreTextTranslation("Fältetikett") " + translations[i].Language.LanguageId + " </span>" + (translations[i].IsDefaultLanguage == true ? "<span class='required-defaultLng'>*</span>" : "") + "</label ></td > <td><input class='labelName' type='text' id='" + idName + "label" + translations[i].Language.Id + "' data-dhhelpdesk-langId='" + translations[i].Language.Id + "' data-dhhelpdesk-lang='" + translations[i].Language.LanguageId + "' data-dhhelpdesk-section='" + isSection + "' data-dhhelpdesk-id='" + translations[i].Id + "' placeholder='" + translationText + "' value='" + translationText + "'></td></tr>"
                     }
                 }
@@ -460,10 +458,9 @@
             var sTranslationsProperty = [...sTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguageId);
 
             for (s = 0; s < sTranslations.length; s++) {
-                console.log(sTranslations[s].getAttribute('data-dhhelpdesk-id'))
                 var translation = {};
                 translation.Languageid = sTranslations[s].getAttribute('data-dhhelpdesk-langid');
-                translation.Property = sTranslationsProperty[0].value + (s + 1);
+                translation.Property = sTranslationsProperty[0].value + (i +1);
                 translation.Text = sTranslations[s].value;
                 translation.IsSection = sTranslations[s].getAttribute('data-dhhelpdesk-section');
                 translation.TranslationId = sTranslations[s].getAttribute('data-dhhelpdesk-id');
@@ -491,7 +488,6 @@
 
                     for (f = 0; f < fTranslations.length; f++) {
                         var translation = {};
-                        console.log(fTranslations[f].getAttribute('data-dhhelpdesk-id'))
                         translation.LanguageId = fTranslations[f].getAttribute('data-dhhelpdesk-langId');
                         translation.Property = fTranslationsProperty[0].value + (n + 1);
                         translation.Text = fTranslations[f].value;
@@ -535,6 +531,7 @@
                             window.history.pushState({}, null, url);
                         }
                         ShowToastMessage('@Html.Raw(Translation.GetForJS("Sparat"))')
+                        //window.location.reload();
                     }
 
                     else {
