@@ -55,7 +55,7 @@
     </thead>
     <tbody>
         <tr>
-            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Arbetsstation")</td>
+            <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Hårdvara")</td>
         </tr>
         <tr>
             @Html.EditorFor(m => m.WorkstationFieldsSettingsModel.NameFieldSettingModel, "Settings/FieldSettingForComputerModel")
@@ -217,14 +217,14 @@
             <td colspan="7" class="header">@Translation.GetCoreTextTranslation("Organisation")</td>
         </tr>
         <tr>
+            @Html.EditorFor(m => m.OrganizationFieldsSettingsModel.DomainFieldSettingModel, "Settings/FieldSettingForComputerModel")
+        </tr>
+        <tr>
             @Html.EditorFor(m => m.OrganizationFieldsSettingsModel.RegionFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
 
         <tr>
             @Html.EditorFor(m => m.OrganizationFieldsSettingsModel.DepartmentFieldSettingModel, "Settings/FieldSettingForComputerModel")
-        </tr>
-        <tr>
-            @Html.EditorFor(m => m.OrganizationFieldsSettingsModel.DomainFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
         <tr>
             @Html.EditorFor(m => m.OrganizationFieldsSettingsModel.UnitFieldSettingModel, "Settings/FieldSettingForComputerModel")
