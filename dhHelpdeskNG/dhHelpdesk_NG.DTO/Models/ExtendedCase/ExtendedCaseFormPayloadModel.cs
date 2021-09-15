@@ -36,6 +36,7 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
 
         [JsonProperty("translations")]
         public List<ExtendedCaseFormTranslation> Translations { get; set; }
+
     }
 
     //public class Tab
@@ -74,6 +75,10 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         
         [JsonProperty("valueBinding")]
         public object ValueBinding { get; set; }
+
+        [JsonProperty("translationId")]
+        public int TranslationId { get; set; }
+
     }
 
 }

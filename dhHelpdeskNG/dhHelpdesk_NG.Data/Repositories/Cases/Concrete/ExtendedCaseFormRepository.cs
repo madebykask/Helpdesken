@@ -289,12 +289,20 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
             foreach (var s in entity.tabs[0].sections)
             {
+                var cleanSectionName = StringHelper.GetCleanString(s.id);
                 if (!s.id.Contains("Section."))
-                { s.id = "Section." + Regex.Replace(StringHelper.HandleSwedishChars(s.id), "[^a-zA-Z0-9 _]", "", RegexOptions.Compiled) + "_" + entity.id; }
+                { s.id = "Section." + cleanSectionName + "_" + entity.id; }
 
-                foreach (var t in translations.Where(x=> x.IsSection))
+                foreach (var t in translations.Where(x => x.IsSection && StringHelper.GetCleanString(x.Property) == cleanSectionName))
                 {
-                    if (DataContext.ExtendedCaseTranslations.Where(ct => ct.Property == s.id && t.LanguageId == ct.LanguageId).Count() == 0)
+                    if (t.TranslationId != 0)
+                    {
+                        var updatedTranslation = DataContext.ExtendedCaseTranslations.FirstOrDefault(x => x.Id == t.TranslationId);
+                        //var updatedTranslation = DataContext.ExtendedCaseTranslations.Where(u => u.Property == c.id && u.LanguageId == t.LanguageId).FirstOrDefault();
+                        updatedTranslation.Property = s.id;
+                        updatedTranslation.Text = t.Text ?? "";
+                    }
+                    else if (DataContext.ExtendedCaseTranslations.Where(ct => ct.Property == s.id && t.LanguageId == ct.LanguageId).Count() == 0)
                     {
                         DataContext.ExtendedCaseTranslations.Add(
                         new ExtendedCaseTranslationEntity()
@@ -307,23 +315,30 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     else
                     {
                         var updatedTranslation = DataContext.ExtendedCaseTranslations.Where(u => u.Property == s.id && u.LanguageId == t.LanguageId).FirstOrDefault();
-                        updatedTranslation.Text = t.Text;
+                        updatedTranslation.Text = t.Text ?? "";
                     }
-
+                    DataContext.Commit();
                 }
 
                 s.name = "@Translation." + s.id;
 
-                DataContext.Commit();
 
                 foreach (var c in s.controls)
                 {
+                    var cleanControlName = StringHelper.GetCleanString(c.id);
                     if (!c.id.Contains("Control."))
-                    { c.id = "Control." + Regex.Replace(StringHelper.HandleSwedishChars(c.id), "[^a-zA-Z0-9 _]", "", RegexOptions.Compiled) + "_" + entity.id; }
+                    { c.id = "Control." + cleanControlName + "_" + entity.id; }
 
-                    foreach (var t in translations.Where(x => !x.IsSection))
+                    foreach (var t in translations.Where(x => !x.IsSection && StringHelper.GetCleanString(x.Property) == cleanControlName))
                     {
-                        if (DataContext.ExtendedCaseTranslations.Where(ct => ct.Property == c.id && t.LanguageId == ct.LanguageId).Count() == 0)
+                        if (t.TranslationId!= 0)
+                        {
+                            var updatedTranslation = DataContext.ExtendedCaseTranslations.FirstOrDefault(x=> x.Id == t.TranslationId);
+                            //var updatedTranslation = DataContext.ExtendedCaseTranslations.Where(u => u.Property == c.id && u.LanguageId == t.LanguageId).FirstOrDefault();
+                            updatedTranslation.Property = c.id;
+                            updatedTranslation.Text = t.Text ?? "";
+                        }
+                        else if (DataContext.ExtendedCaseTranslations.Where(ct => ct.Property == c.id && t.LanguageId == ct.LanguageId).Count() == 0)
                         {
                             DataContext.ExtendedCaseTranslations.Add(
                             new ExtendedCaseTranslationEntity()
@@ -336,13 +351,14 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         else
                         {
                             var updatedTranslation = DataContext.ExtendedCaseTranslations.Where(u => u.Property == c.id && u.LanguageId == t.LanguageId).FirstOrDefault();
-                            updatedTranslation.Text = t.Text;
+                            updatedTranslation.Text = t.Text ?? "";
                         }
+                        DataContext.Commit();
                     }
                     c.label = "@Translation." + c.id;
-                }                
 
-                DataContext.Commit();
+
+                }
             }
 
             var data = JsonConvert.SerializeObject(entity,

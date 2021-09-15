@@ -126,7 +126,8 @@
                 if (placeHolder !== null) {
                     if (getStringWithoutSpecialChars(getStringWithoutSweChars(translations[i].Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(placeHolder))) {
                         var translationText = (translations[i].TranslationText == null ? "" : translations[i].TranslationText)
-                        res = res + "<tr><td><label for='" + idName + "label" + translations[i].Language.Id + "'><span>@Translation.GetCoreTextTranslation("Fältetikett") " + translations[i].Language.LanguageId + " </span>" + (translations[i].IsDefaultLanguage == true ? "<span class='required-defaultLng'>*</span>" : "") + "</label ></td > <td><input class='labelName' type='text' id='" + idName + "label" + translations[i].Language.Id + "' data-dhhelpdesk-langId='" + translations[i].Language.Id + "' data-dhhelpdesk-lang='" + translations[i].Language.LanguageId + "' data-dhhelpdesk-section='" + isSection + "' placeholder='" + translationText + "' value='" + translationText + "'></td></tr>"
+                        //console.log(translationText)
+                        res = res + "<tr><td><label for='" + idName + "label" + translations[i].Language.Id + "'><span>@Translation.GetCoreTextTranslation("Fältetikett") " + translations[i].Language.LanguageId + " </span>" + (translations[i].IsDefaultLanguage == true ? "<span class='required-defaultLng'>*</span>" : "") + "</label ></td > <td><input class='labelName' type='text' id='" + idName + "label" + translations[i].Language.Id + "' data-dhhelpdesk-langId='" + translations[i].Language.Id + "' data-dhhelpdesk-lang='" + translations[i].Language.LanguageId + "' data-dhhelpdesk-section='" + isSection + "' data-dhhelpdesk-id='" + translations[i].Id + "' placeholder='" + translationText + "' value='" + translationText + "'></td></tr>"
                     }
                 }
             }
@@ -226,33 +227,18 @@
         });
 
         $(document).on("mouseenter", ".fa-pencil", function (e) {
-            //if ($(this).attr('class').includes("fa-lg")) {
-            //    $(this).attr('class', 'fa fa-pencil fa-2x');
-            //}
-
             $(this).parent().parent().parent().css("background", "#99ccff");
         });
 
         $(document).on("mouseleave", ".fa-pencil", function (e) {
-            //if ($(this).attr('class').includes("fa-2x")) {
-            //    $(this).attr('class', 'fa fa-pencil fa-lg');
-            //}
-
             $(this).parent().parent().parent().css("background", "#e8dfdf");
         });
 
         $(document).on("mouseenter", ".fa-trash", function (e) {
-            //if ($(this).attr('class').includes("fa-lg")) {
-            //    $(this).attr('class', 'fa fa-trash fa-2x');
-            //}
-
             $(this).parent().parent().parent().css("background", "pink");
         });
 
         $(document).on("mouseleave", ".fa-trash", function (e) {
-            //if ($(this).attr('class').includes("fa-2x")) {
-            //    $(this).attr('class', 'fa fa-trash fa-lg');
-            //}
             $(this).parent().parent().parent().css("background", "#e8dfdf");
             $(this).parent().parent().parent().attr('class', 'field');
         });
@@ -273,30 +259,34 @@
                 for (var t = 0; t < formData.tabs.length; t++) {
                     for (var s = 0; s < formData.tabs[t].sections.length; s++) {
                         let idName = createUUID();
-                        $("#dropzone").append(listHtml("section", sectionHtmlDiv(editFieldHtml(idName, formData.tabs[t].sections[s].name, true, false, false), idName, "field-label sectionLabel", formData.tabs[t].sections[s].name)));
+                        let defaultSectionName = [...translations].filter(item => item.Language.Id == defaultLanguageId && formData.tabs[t].sections[s].name == item.Name);
+                        $("#dropzone").append(listHtml("section", sectionHtmlDiv(editFieldHtml(idName, formData.tabs[t].sections[s].name, true, false, false), idName, "field-label sectionLabel", defaultSectionName[0].TranslationText)));
 
                         for (var c = 0; c < formData.tabs[t].sections[s].controls.length; c++) {
                             let idName = createUUID();
                             let dataType = formData.tabs[t].sections[s].controls[c].type;
                             let isRequired = false;
+
                             if (formData.tabs[t].sections[s].controls[c].validators) {
                                 isRequired = formData.tabs[t].sections[s].controls[c].validators.onSave[0].type == "required" ? true : false;
                             }
 
+                            let defaultControlName = [...translations].filter(item => item.Language.Id == defaultLanguageId && formData.tabs[t].sections[s].controls[c].label == item.Name);
+
                             if (dataType == "textbox") {
-                                $("#dropzone").append(listHtml("textbox", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id='" + idName + "headerName" + "'>" + formData.tabs[t].sections[s].controls[c].label + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, false, true, isRequired) + "</div>"));
+                                $("#dropzone").append(listHtml("textbox", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id='" + idName + "headerName" + "'>" + defaultControlName[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, false, true, isRequired) + "</div>"));
                             }
 
                             else if (dataType == "textarea") {
-                                $("#dropzone").append(listHtml("textarea", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + formData.tabs[t].sections[s].controls[c].label + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><textarea class='form-control form-control-width' readonly></textarea></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, false, true, isRequired) + "</div>"));
+                                $("#dropzone").append(listHtml("textarea", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + defaultControlName[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><textarea class='form-control form-control-width' readonly></textarea></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, false, true, isRequired) + "</div>"));
                             }
 
                             else if (dataType == "date") {
-                                $("#dropzone").append(listHtml("date", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + formData.tabs[t].sections[s].controls[c].label + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='date' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, false, true, isRequired) + "</div>"), null);
+                                $("#dropzone").append(listHtml("date", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + defaultControlName[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='date' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, false, true, isRequired) + "</div>"), null);
                             }
 
                             else if (dataType = "html") {
-                                $("#dropzone").append(listHtml("html", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + formData.tabs[t].sections[s].controls[c].label + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' style='padding:10px'><input type='text' id='" + idName + "tiny" + "' class='form-control form-control-width form-control-tinymce' value='" + formData.tabs[t].sections[s].controls[c].valueBinding + "'></div></div>"));
+                                $("#dropzone").append(listHtml("html", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + defaultControlName[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' style='padding:10px'><input type='text' id='" + idName + "tiny" + "' class='form-control form-control-width form-control-tinymce' value='" + formData.tabs[t].sections[s].controls[c].valueBinding + "'></div></div>"));
 
                                 tinymce.init({
                                     selector: '#' + idName + 'tiny',
@@ -464,17 +454,19 @@
             items[i].id = document.getElementById(obj.id).innerText + (i + 1);
             items[i].sectionName = document.getElementById(obj.id).innerText;
             items[i].controls = [];
+            items[i].translationId = document.getElementById(obj.id).getAttribute('data-dhhelpdesk-id');
 
             var sTranslations = document.getElementById(obj.id.replace("header", "")).querySelectorAll(".labelName");
             var sTranslationsProperty = [...sTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguageId);
 
             for (s = 0; s < sTranslations.length; s++) {
+                console.log(sTranslations[s].getAttribute('data-dhhelpdesk-id'))
                 var translation = {};
                 translation.Languageid = sTranslations[s].getAttribute('data-dhhelpdesk-langid');
-                translation.Property = sTranslationsProperty[0].value;
+                translation.Property = sTranslationsProperty[0].value + (s + 1);
                 translation.Text = sTranslations[s].value;
                 translation.IsSection = sTranslations[s].getAttribute('data-dhhelpdesk-section');
-
+                translation.TranslationId = sTranslations[s].getAttribute('data-dhhelpdesk-id');
                 fieldTranslations.push(translation);
             }
 
@@ -487,7 +479,7 @@
                     var content = contentTinyMce[0] ? 'function(m) { return ' + tinymce.get(contentTinyMce[0].id).getContent() + ' }' : ""
 
                     items[i].controls[n] = {
-                        id: getStringWithoutSpecialChars(getStringWithoutSweChars(label)) + (n + 1),
+                        id: label + (n + 1),
                         type: obj.getAttribute('data-type'),
                         label: label,
                         required: required,
@@ -499,11 +491,12 @@
 
                     for (f = 0; f < fTranslations.length; f++) {
                         var translation = {};
-
+                        console.log(fTranslations[f].getAttribute('data-dhhelpdesk-id'))
                         translation.LanguageId = fTranslations[f].getAttribute('data-dhhelpdesk-langId');
-                        translation.Property = fTranslationsProperty[0].value;
+                        translation.Property = fTranslationsProperty[0].value + (n + 1);
                         translation.Text = fTranslations[f].value;
                         translation.IsSection = fTranslations[f].getAttribute('data-dhhelpdesk-section');
+                        translation.TranslationId = fTranslations[f].getAttribute('data-dhhelpdesk-id');
                         fieldTranslations.push(translation);
                     }
                 }
