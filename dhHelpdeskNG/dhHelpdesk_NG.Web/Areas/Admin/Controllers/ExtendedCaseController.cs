@@ -150,6 +150,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<ActionResult> EditForm(int extendedCaseFormId, int? languageId)
         {
+            languageId = languageId ?? SessionFacade.CurrentLanguageId;
             ExtendedCaseFormEntity extendedCaseForm = _extendedCaseService.GetExtendedCaseFormById(extendedCaseFormId);
 
             int customerId = extendedCaseForm.Customer_Id  == null ? 0 : (int)extendedCaseForm.Customer_Id;
@@ -278,8 +279,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         public ActionResult SaveForm(ExtendedCaseFormPayloadModel payload)
         {
             List<CaseSolution> caseSolutionsWithForms = _extendedCaseService.GetCaseSolutionsWithExtendedCaseForm(payload);
-
-            //List<LanguageOverview> activeLanguages = _languageService.GetActiveLanguages().ToList();
 
             if (caseSolutionsWithForms.Count > 0)
             {

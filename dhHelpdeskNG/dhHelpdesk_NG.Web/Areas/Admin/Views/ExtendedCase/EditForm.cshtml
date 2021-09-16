@@ -306,7 +306,7 @@
         }
 
         $(document).on("keyup", ".labelName", function (e) {
-
+            console.log('pressed')
             var id = $(this).attr('id').replace('label' + getUrlVars()["languageId"], 'headerName');
                 document.getElementById(id).innerHTML = $(this).attr('value');
             });
@@ -445,11 +445,11 @@
 
         let fieldTranslations = [];
 
-
+        let counter = 0
         $('.sectionLabel').each(function (i, obj) {
-
+            counter++;
             items[i] = {};
-            items[i].id = document.getElementById(obj.id).innerText + (i + 1);
+            items[i].id = document.getElementById(obj.id).innerText + counter;//(i + 1);
             items[i].sectionName = document.getElementById(obj.id).innerText;
             items[i].controls = [];
             items[i].translationId = document.getElementById(obj.id).getAttribute('data-dhhelpdesk-id');
@@ -460,7 +460,7 @@
             for (s = 0; s < sTranslations.length; s++) {
                 var translation = {};
                 translation.Languageid = sTranslations[s].getAttribute('data-dhhelpdesk-langid');
-                translation.Property = sTranslationsProperty[0].value + (i +1);
+                translation.Property = sTranslationsProperty[0].value + counter;//(i +1);
                 translation.Text = sTranslations[s].value;
                 translation.IsSection = sTranslations[s].getAttribute('data-dhhelpdesk-section');
                 translation.TranslationId = sTranslations[s].getAttribute('data-dhhelpdesk-id');
@@ -468,6 +468,7 @@
             }
 
             getNextUntil(obj.parentElement.parentElement.parentElement.parentElement, "[data-type='section']").forEach(function (obj, n) {
+                counter++;
                 if (obj.querySelector('.field-label') != null) {
                     var id = obj.querySelector('.field-label').id;
                     var contentTinyMce = obj.querySelectorAll('.form-control-tinymce');
@@ -476,7 +477,7 @@
                     var content = contentTinyMce[0] ? 'function(m) { return ' + tinymce.get(contentTinyMce[0].id).getContent() + ' }' : ""
 
                     items[i].controls[n] = {
-                        id: label + (n + 1),
+                        id: label + counter,//(n + 1),
                         type: obj.getAttribute('data-type'),
                         label: label,
                         required: required,
@@ -489,7 +490,7 @@
                     for (f = 0; f < fTranslations.length; f++) {
                         var translation = {};
                         translation.LanguageId = fTranslations[f].getAttribute('data-dhhelpdesk-langId');
-                        translation.Property = fTranslationsProperty[0].value + (n + 1);
+                        translation.Property = fTranslationsProperty[0].value + counter;// (n + 1);
                         translation.Text = fTranslations[f].value;
                         translation.IsSection = fTranslations[f].getAttribute('data-dhhelpdesk-section');
                         translation.TranslationId = fTranslations[f].getAttribute('data-dhhelpdesk-id');
@@ -511,7 +512,7 @@
                 languageId: getUrlVars()["languageId"],
                 name: document.getElementById("formName").value,
                 description: document.getElementById("formDescription").value,
-                status: selectedCaseSolutions.length == 0 ? "false" : "true", //$("#formActive").is(":checked") ? "true" : "false",
+                status: selectedCaseSolutions.length == 0 ? "false" : "true",
                 caseSolutionIds: selectedCaseSolutions,
                 sections: items,
                 translations: fieldTranslations
@@ -526,12 +527,10 @@
                 success: function (data) {
                     if (data.result == true) {
                         if (typeof (getUrlVars()["extendedCaseFormId"]) == "undefined") {
-                            let url = "admin/ExtendedCase/EditForm?extendedCaseFormId=" + data.formId;
-                            //window.location.href = url;
-                            window.history.pushState({}, null, url);
+                            let url = "EditForm?extendedCaseFormId=" + data.formId + "&languageId="+ @SessionFacade.CurrentLanguageId;
+                            window.location.href = url;
                         }
                         ShowToastMessage('@Html.Raw(Translation.GetForJS("Sparat"))')
-                        //window.location.reload();
                     }
 
                     else {
