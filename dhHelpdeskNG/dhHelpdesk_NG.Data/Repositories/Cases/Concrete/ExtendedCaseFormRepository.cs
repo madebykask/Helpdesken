@@ -356,8 +356,6 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         DataContext.Commit();
                     }
                     c.label = "@Translation." + c.id;
-
-
                 }
             }
 

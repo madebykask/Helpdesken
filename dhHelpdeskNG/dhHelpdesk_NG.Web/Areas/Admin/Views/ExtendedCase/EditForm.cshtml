@@ -306,7 +306,6 @@
         }
 
         $(document).on("keyup", ".labelName", function (e) {
-            console.log('pressed')
             var id = $(this).attr('id').replace('label' + getUrlVars()["languageId"], 'headerName');
                 document.getElementById(id).innerHTML = $(this).attr('value');
             });
@@ -448,14 +447,15 @@
         let counter = 0
         $('.sectionLabel').each(function (i, obj) {
             counter++;
-            items[i] = {};
-            items[i].id = document.getElementById(obj.id).innerText + counter;//(i + 1);
-            items[i].sectionName = document.getElementById(obj.id).innerText;
-            items[i].controls = [];
-            items[i].translationId = document.getElementById(obj.id).getAttribute('data-dhhelpdesk-id');
 
             var sTranslations = document.getElementById(obj.id.replace("header", "")).querySelectorAll(".labelName");
             var sTranslationsProperty = [...sTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguageId);
+
+            items[i] = {};
+            items[i].id = sTranslationsProperty[0].value + counter; //document.getElementById(obj.id).innerText + counter;//(i + 1);
+            items[i].sectionName = document.getElementById(obj.id).innerText;
+            items[i].controls = [];
+            items[i].translationId = document.getElementById(obj.id).getAttribute('data-dhhelpdesk-id');
 
             for (s = 0; s < sTranslations.length; s++) {
                 var translation = {};
@@ -476,16 +476,16 @@
                     var required = document.getElementById(id.replace('header', 'required')) ? document.getElementById(id.replace('header', 'required')).checked : false;
                     var content = contentTinyMce[0] ? 'function(m) { return ' + tinymce.get(contentTinyMce[0].id).getContent() + ' }' : ""
 
+                    var fTranslations = obj.querySelectorAll(".labelName");
+                    var fTranslationsProperty = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguageId);
+
                     items[i].controls[n] = {
-                        id: label + counter,//(n + 1),
+                        id: fTranslationsProperty[0].value + counter,//label + counter,//(n + 1),
                         type: obj.getAttribute('data-type'),
                         label: label,
                         required: required,
                         valueBinding: content
                     }
-
-                    var fTranslations = obj.querySelectorAll(".labelName");
-                    var fTranslationsProperty = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguageId);
 
                     for (f = 0; f < fTranslations.length; f++) {
                         var translation = {};
