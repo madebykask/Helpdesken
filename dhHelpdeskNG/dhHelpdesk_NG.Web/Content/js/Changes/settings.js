@@ -16,8 +16,8 @@
     var floor$ = $('#' + parameters.showFloorId);
 
     if (!room$.bootstrapSwitch('state')) {
-        building$.bootstrapSwitch('disabled', true);
-        //floor$.bootstrapSwitch('disabled', true);
+        //building$.bootstrapSwitch('disabled', true);
+        floor$.bootstrapSwitch('disabled', true);
     }
 
     if (!building$.bootstrapSwitch('state')) {
@@ -26,18 +26,18 @@
 
     room$.on('switchChange.bootstrapSwitch', function (event, state) {
         if (state === false) {
-            building$.bootstrapSwitch('state', state);
-            //floor$.bootstrapSwitch('state', state);
+            //building$.bootstrapSwitch('state', state);
+            floor$.bootstrapSwitch('state', state);
         }
         building$.bootstrapSwitch('toggleDisabled', !state, !state);
         //floor$.bootstrapSwitch('toggleDisabled', !state, !state);
     });
 
-    building$.on('switchChange.bootstrapSwitch', function(event, state) {
+    floor$.on('switchChange.bootstrapSwitch', function(event, state) {
         if (state === false) {
-            floor$.bootstrapSwitch('state', state);
+            building$.bootstrapSwitch('state', state);
         }
-        floor$.bootstrapSwitch('toggleDisabled', !state, !state);
+        building$.bootstrapSwitch('toggleDisabled', !state, !state);
     });
 
     //$('#tab_settings_language_dropdown').change(function () {
