@@ -61,7 +61,7 @@
                                         {
                                             <option value="@item.Id"
                                                     @((Model.ExtendedCaseForm == null ? "" : (Model.ExtendedCaseForm.CaseSolutions.Contains(item)) ? "selected " : " "))
-                                                    @((Model.CustomerCaseSolutionsWithExtendedCaseForm == null ? "" : (Model.CustomerCaseSolutionsWithExtendedCaseForm.Contains(item)) ? "disabled" : ""))>
+                                                    @((Model.CustomerCaseSolutionsWithExtendedCaseForm == null ? "" : (Model.CustomerCaseSolutionsWithExtendedCaseForm.Contains(item) && !item.ExtendedCaseForms.Exists(x=> x.Id == Model.ExtendedCaseForm.Id)) ? "disabled" : ""))>
                                                 @item.Name
                                             </option>
                                         }
