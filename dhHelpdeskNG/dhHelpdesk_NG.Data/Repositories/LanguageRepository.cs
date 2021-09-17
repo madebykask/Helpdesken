@@ -61,7 +61,8 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The languages.
         /// </returns>
         IEnumerable<LanguageOverview> GetActiveLanguages();
-        string GetExtendedCaseTranslation(int id, string name);
+        string GetExtendedCaseTranslation(string name, int languageId);
+        int GetExtendedFormTranslationId(string name, int id);
     }
 
     /// <summary>
@@ -158,9 +159,16 @@ namespace DH.Helpdesk.Dal.Repositories
             return this.DataContext.Languages.Find(languageName).Id;
         }
 
-        public string GetExtendedCaseTranslation(int id, string name)
+        public string GetExtendedCaseTranslation(string name, int languageId)
         {
-            return DataContext.ExtendedCaseTranslations.Where(t => t.LanguageId == id && t.Property == name).Select(t => t.Text).FirstOrDefault();
+            return DataContext.ExtendedCaseTranslations.Where(t => t.LanguageId == languageId && t.Property == name).Select(t => t.Text).FirstOrDefault();
+        }
+
+        public int GetExtendedFormTranslationId(string name, int id)
+        {
+            var translationField = DataContext.ExtendedCaseTranslations.FirstOrDefault(x => x.Property == name.Replace("@Translation.", "") && x.LanguageId == id);
+
+            return translationField == null ? 0 : translationField.Id;
         }
     }
 }

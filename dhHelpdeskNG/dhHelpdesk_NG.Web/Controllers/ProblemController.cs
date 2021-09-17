@@ -458,8 +458,8 @@ namespace DH.Helpdesk.Web.Controllers
                         ActionLeadTime = 0,
                         ActionExternalTime = 0
                     };
-                    _caseService.SaveCase(c, caseLog, SessionFacade.CurrentUser.Id, User.Identity.Name, ei, out errors);
-                    _caseService.SendProblemLogEmail(c, caseMailSetting, caseHistoryId, userTimeZone, caseLog, log.FinishConnectedCases);
+                    var newid = _caseService.SaveCase(c, caseLog, SessionFacade.CurrentUser.Id, User.Identity.Name, ei, out errors);
+                    _caseService.SendProblemLogEmail(c, caseMailSetting, newid, userTimeZone, caseLog, log.FinishConnectedCases);
                 }
             }
         }

@@ -9,6 +9,8 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
 {
     public class ExtendedCaseFieldTranslation
     {
+        public int Id { get; set; }
+
         public LanguageOverview Language { get; set; }
 
         public bool IsDefaultLanguage { get; set; }
