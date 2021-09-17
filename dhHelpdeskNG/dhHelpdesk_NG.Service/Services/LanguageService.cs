@@ -213,7 +213,7 @@ namespace DH.Helpdesk.Services.Services
                         Language = defaultLanguage,
                         Name = s.name,
                         TranslationText =
-                            GetExtendedCaseTranslation(s.id, defaultLanguage.Id),
+                            GetExtendedCaseTranslation(s.name.Replace("@Translation.",""), defaultLanguage.Id),
                         IsDefaultLanguage = true
                     });
 
@@ -225,7 +225,7 @@ namespace DH.Helpdesk.Services.Services
                             Language = l,
                             Name = s.name,
                             TranslationText =
-                                GetExtendedCaseTranslation(s.id, l.Id)
+                                GetExtendedCaseTranslation(s.name.Replace("@Translation.", ""), l.Id)
                         });
                     }
                     foreach (var c in s.controls)
@@ -236,7 +236,7 @@ namespace DH.Helpdesk.Services.Services
                             Language = defaultLanguage,
                             Name = c.label,
                             TranslationText =
-                                GetExtendedCaseTranslation(c.id, defaultLanguage.Id),
+                                GetExtendedCaseTranslation(c.label.Replace("@Translation.", ""), defaultLanguage.Id),
                             IsDefaultLanguage = true
                         });
 
@@ -248,7 +248,7 @@ namespace DH.Helpdesk.Services.Services
                                 Language = l,
                                 Name = c.label,
                                 TranslationText =
-                                    GetExtendedCaseTranslation(c.id, l.Id),
+                                    GetExtendedCaseTranslation(c.label.Replace("@Translation.", ""), l.Id),
                                 IsDefaultLanguage = false
                             });
                         }   
