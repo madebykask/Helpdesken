@@ -89,18 +89,18 @@ namespace DH.Helpdesk.TaskScheduler.Services
 
         public IList<CompuerUsersFieldSetting> GetInitiatorSettings(int customerId)
         {
-            var dbQueryExecutor = _execFactory.Create();           
+            var dbQueryExecutor = _execFactory.Create();
             var ret = dbQueryExecutor.QueryList<CompuerUsersFieldSetting>
-               ("Select * from tblComputerUserFieldSettings where Customer_id = @Customer_Id", new { Customer_Id = customerId} );            
+               ("Select * from tblComputerUserFieldSettings where Customer_id = @Customer_Id", new { Customer_Id = customerId });
             return ret;
         }
 
         public IList<ImportInitiator_JobSettings> GetJobSettings(ref DataLogModel logs)
-        {                       
+        {
             var CSVcustomers = _settingRepository.GetMany(c => c.IntegrationType == 0).ToList();
-            var customerIds = CSVcustomers.Select(c=> c.Customer_Id).ToArray();
+            var customerIds = CSVcustomers.Select(c => c.Customer_Id).ToArray();
             var customerSettings = _settingRepository.GetMany(c => customerIds.Contains(c.Customer_Id)).ToList();
-                        
+
             var ret = new List<ImportInitiator_JobSettings>();
             if (CSVcustomers != null)
             {
@@ -118,7 +118,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                             {
                                 CustomerId = customer.Customer_Id,
                                 Url = _cs.LDAPBase,
-                                InputFilename = _cs.LDAPFilter,                                
+                                InputFilename = _cs.LDAPFilter,
                                 OverwriteFromMasterDirectory = this_Customer.OverwriteFromMasterDirectory,
                                 Days2WaitBeforeDelete = this_Customer.Days2WaitBeforeDelete,
                                 UserName = _cs.LDAPUserName,
@@ -138,7 +138,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                     {
                         logs.Add(customer.Id, $"Error: {ex.Message}");
                     }
-                    
+
                 }
             }
             return ret;
@@ -199,9 +199,9 @@ namespace DH.Helpdesk.TaskScheduler.Services
                     i++;
                 }
             }
-                       
+
             if (triggers == null) throw new ArgumentNullException(nameof(triggers));
-           
+
             return triggers;
         }
 
@@ -212,83 +212,86 @@ namespace DH.Helpdesk.TaskScheduler.Services
             var filePath = setting.Url;
             var fileName = $"{setting.InputFilename}";
             const char delimiter = ';';
-            var sourcePath = Path.Combine(filePath , fileName);
-            var newPath = Path.Combine(filePath, "archive");  
+            var sourcePath = Path.Combine(filePath, fileName);
+            var newPath = Path.Combine(filePath, "archive");
 
-            try
+
+            if (File.Exists(sourcePath))
             {
-                using (var reader = new StreamReader(sourcePath, Encoding.UTF7, true))
+                try
                 {
-                    // First line contains column names.
-                    var columnNames = reader.ReadLine().Split(delimiter);
-                    ret.InputHeaders = columnNames.ToList();
-
-                    var line = reader.ReadLine();
-                    while (!string.IsNullOrEmpty(line))
+                    using (var reader = new StreamReader(sourcePath, Encoding.UTF7, true))
                     {
-                        var curRecord = line.Split(delimiter).ToList();
-                        if (curRecord.Any())
+                        // First line contains column names.
+                        var columnNames = reader.ReadLine().Split(delimiter);
+                        ret.InputHeaders = columnNames.ToList();
+
+                        var line = reader.ReadLine();
+                        while (!string.IsNullOrEmpty(line))
                         {
-                            var identity = curRecord[0];
-                            var rowFields = new Dictionary<string, string>();
-                            for (int i = 0; i < curRecord.Count; i++)
+                            var curRecord = line.Split(delimiter).ToList();
+                            if (curRecord.Any())
                             {
-                                rowFields.Add(columnNames[i], curRecord[i]);
+                                var identity = curRecord[0];
+                                var rowFields = new Dictionary<string, string>();
+                                for (int i = 0; i < curRecord.Count; i++)
+                                {
+                                    rowFields.Add(columnNames[i], curRecord[i]);
+                                }
+                                ret.InputColumns.Add(new Tuple<string, Dictionary<string, string>>(identity, rowFields));
                             }
-                            ret.InputColumns.Add(new Tuple<string, Dictionary<string, string>>(identity, rowFields));
+
+                            line = reader.ReadLine();
                         }
+                        reader.Close();
+                        var destinationPath = Path.Combine(newPath + @"\" + fileName);
 
-                        line = reader.ReadLine();
-                    }
-                    reader.Close();
-                    var destinationPath = Path.Combine(newPath +@"\" +fileName);
-
-                    if (Directory.Exists(newPath))
-                    {                        
-                        try
+                        if (Directory.Exists(newPath))
                         {
-                            File.Copy(sourcePath, destinationPath, true);
-                            File.Delete(sourcePath);
+                            try
+                            {
+                                File.Copy(sourcePath, destinationPath, true);
+                                File.Delete(sourcePath);
+
+                            }
+                            catch (Exception ex)
+                            {
+                                logs.Add(setting.CustomerId, $"Error: {ex.Message}");
+                            }
 
                         }
-                        catch (Exception ex)
-                        {                           
-                            logs.Add(setting.CustomerId, $"Error: {ex.Message}");
-                        }
-                       
-                    }
-                    else
-                    {
-                        Directory.CreateDirectory(newPath);
-                        try
+                        else
                         {
-                              File.Copy(sourcePath, destinationPath, true);
-                              File.Delete(sourcePath);
+                            Directory.CreateDirectory(newPath);
+                            try
+                            {
+                                File.Copy(sourcePath, destinationPath, true);
+                                File.Delete(sourcePath);
+                            }
+                            catch (Exception ex)
+                            {
+                                logs.Add(setting.CustomerId, $"Error: {ex.Message}");
+                            }
+
                         }
-                        catch (Exception ex)
-                        {
-                            logs.Add(setting.CustomerId, $"Error: {ex.Message}");
-                        }
-                        
+
+                        return ret;
                     }
 
-                    return ret;
-                }                              
-
+                }
+                catch (Exception ex)
+                {
+                    //TODO: Log error
+                    if (setting.Logging == 1)
+                        logs.Add(setting.CustomerId, $"Error: {ex.Message} Failed to reading file { fileName} from path { filePath}");
+                }
             }
-            catch(Exception ex)
-            {
-                //TODO: Log error
-                if (setting.Logging == 1)
-                logs.Add(setting.CustomerId, $"Error: {ex.Message} Failed to reading file { fileName} from path { filePath}");               
-            }
-
             return ret;
         }
 
-        public int CheckIfExisting(string UserId , int customerId)
-        {                             
-            return _notifielrRepository.GetExistingNotifierIdByUserId(UserId,customerId);                         
+        public int CheckIfExisting(string UserId, int customerId)
+        {
+            return _notifielrRepository.GetExistingNotifierIdByUserId(UserId, customerId);
         }
         public void ImportInitiator(ImportInitiator_JobSettings setting, CsvInputData inputData, IList<CompuerUsersFieldSetting> fieldSettings, ref DataLogModel logs)
         {
@@ -299,7 +302,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
             //{
             //    //Delete
             //    DeleteInitiators(deletingDays, setting.CustomerId, ref logs);
-                
+
             //}
             var multipleFields = fieldSettings.Where(fs => fs.LDAPAttribute.Contains(',')).ToList();
             var ldapFields = fieldSettings.Where(fs => !string.IsNullOrEmpty(fs.LDAPAttribute)).ToList();
@@ -316,42 +319,42 @@ namespace DH.Helpdesk.TaskScheduler.Services
             var updated = "";
             var uCount = 0;
 
-			var idIdentifier = ldapFields.Where(o => o.ComputerUserField.ToLower() == "userid" && !string.IsNullOrEmpty(o.LDAPAttribute))
-				.Select(o => o.LDAPAttribute)
-				.SingleOrDefault();
+            var idIdentifier = ldapFields.Where(o => o.ComputerUserField.ToLower() == "userid" && !string.IsNullOrEmpty(o.LDAPAttribute))
+                .Select(o => o.LDAPAttribute)
+                .SingleOrDefault();
 
-			var regionIdentifier = ldapFields.Where(o => o.ComputerUserField.ToLower() == region && !string.IsNullOrEmpty(o.LDAPAttribute))
-				.Select(o => o.LDAPAttribute)
-				.SingleOrDefault();
-				
-			if (regionIdentifier != null)
-			{
-				var regionNames = inputData.InputColumns.Where(o => o.Item2.ContainsKey(regionIdentifier))
-					.Select(o => o.Item2[regionIdentifier])
-					.Where(o => !string.IsNullOrEmpty(o))
-					.Distinct()
-					.ToList();
-				if (regionNames.Any())
-				{
-					CreateRegions(regionNames, setting.CustomerId, setting.CreateOrganisation);
-				}
-			}
+            var regionIdentifier = ldapFields.Where(o => o.ComputerUserField.ToLower() == region && !string.IsNullOrEmpty(o.LDAPAttribute))
+                .Select(o => o.LDAPAttribute)
+                .SingleOrDefault();
 
-			var regions = _regionRepository.GetMany(o => o.Customer_Id == setting.CustomerId && o.IsActive == 1)
-				.ToList()
-				.GroupBy(o => o.Name.ToLower())
-				.Select(o => o.OrderByDescending(p => p.Id).First()) // Ensure unique name, if more than 1, take highest ID
-				.ToDictionary(o => o.Name.ToLower(), o => o.Id);	
+            if (regionIdentifier != null)
+            {
+                var regionNames = inputData.InputColumns.Where(o => o.Item2.ContainsKey(regionIdentifier))
+                    .Select(o => o.Item2[regionIdentifier])
+                    .Where(o => !string.IsNullOrEmpty(o))
+                    .Distinct()
+                    .ToList();
+                if (regionNames.Any())
+                {
+                    CreateRegions(regionNames, setting.CustomerId, setting.CreateOrganisation);
+                }
+            }
+
+            var regions = _regionRepository.GetMany(o => o.Customer_Id == setting.CustomerId && o.IsActive == 1)
+                .ToList()
+                .GroupBy(o => o.Name.ToLower())
+                .Select(o => o.OrderByDescending(p => p.Id).First()) // Ensure unique name, if more than 1, take highest ID
+                .ToDictionary(o => o.Name.ToLower(), o => o.Id);
 
             foreach (var row in inputData.InputColumns)
             {
                 var updateQuery = "";
                 var existingId = 0;
-				var id = idIdentifier != null ?
-					row.Item2[idIdentifier] :
-					row.Item1;
+                var id = idIdentifier != null ?
+                    row.Item2[idIdentifier] :
+                    row.Item1;
 
-				existingId = CheckIfExisting(id, setting.CustomerId);
+                existingId = CheckIfExisting(id, setting.CustomerId);
 
                 var fieldNames = "";
                 var fieldValues = "";
@@ -359,38 +362,38 @@ namespace DH.Helpdesk.TaskScheduler.Services
                 var delimiter = "";
                 var isNew = existingId <= 0;
 
-				int? regionId;
-				if (regionIdentifier != null && row.Item2.ContainsKey(regionIdentifier) && !string.IsNullOrEmpty(row.Item2[regionIdentifier]))
-				{
-					var regionName = row.Item2[regionIdentifier].ToLower();
-					if(regions.ContainsKey(regionName))
-					{
-						regionId = regions[regionName];
-					}
-					else
-					{
-						regionId = setting.DefaultRegion;
-					}
-				}
-				else
-				{
-					regionId = setting.DefaultRegion;
-				}
+                int? regionId;
+                if (regionIdentifier != null && row.Item2.ContainsKey(regionIdentifier) && !string.IsNullOrEmpty(row.Item2[regionIdentifier]))
+                {
+                    var regionName = row.Item2[regionIdentifier].ToLower();
+                    if (regions.ContainsKey(regionName))
+                    {
+                        regionId = regions[regionName];
+                    }
+                    else
+                    {
+                        regionId = setting.DefaultRegion;
+                    }
+                }
+                else
+                {
+                    regionId = setting.DefaultRegion;
+                }
 
 
-				foreach (var fs in ldapFields)
+                foreach (var fs in ldapFields)
                 {
                     var _dbFieldName = fs.ComputerUserField.ToLower();
                     var _csvFieldValue = "";
                     var maxLen = 0;
                     var maxLengthAttr = fieldLenght.GetAttributeFrom<MaxLengthAttribute>(_dbFieldName);
                     if (maxLengthAttr != null)
-                       maxLen = maxLengthAttr.Length;
+                        maxLen = maxLengthAttr.Length;
 
                     if (fs.LDAPAttribute.Contains(","))
                     {
                         var _fsFields = fs.LDAPAttribute.Split(',').ToList();
-                   
+
                         foreach (var _fsField in _fsFields)
                         {
                             var _sectionValue = row.Item2[_fsField];
@@ -406,13 +409,13 @@ namespace DH.Helpdesk.TaskScheduler.Services
                     }
                     else
                     {
-						if (row.Item2.ContainsKey(fs.LDAPAttribute))
-							_csvFieldValue = row.Item2[fs.LDAPAttribute];
+                        if (row.Item2.ContainsKey(fs.LDAPAttribute))
+                            _csvFieldValue = row.Item2[fs.LDAPAttribute];
                         if (relatedFields.Contains(_dbFieldName))
                             _csvFieldValue = GetRelatedValue(_dbFieldName, _csvFieldValue, setting.CustomerId, regionId, setting.CreateOrganisation);
                         if (BlockFields.Contains(_dbFieldName))
                         {
-                           // regionsToAdd.Add(_csvFieldValue);
+                            // regionsToAdd.Add(_csvFieldValue);
                             _dbFieldName = string.Empty;
                         }
                     }
@@ -454,30 +457,31 @@ namespace DH.Helpdesk.TaskScheduler.Services
                         $"Update tblComputerUsers SET {updateQuery} " +
                                       $",ChangeTime = '{DateTime.Now}' " +
                                       $",SyncChangedDate = '{DateTime.UtcNow}' " +
-                                      $"where id = {existingId}": string.Empty);
+                                      $"where id = {existingId}" : string.Empty);
 
                 if (!string.IsNullOrEmpty(queryToRun))
                 {
                     var dbQueryExecutor = _execFactory.Create();
                     var ret = dbQueryExecutor.ExecQuery(queryToRun);
 
-                   
+
                     if (isNew)
                     {
                         inserted += $"{row.Item1}, ";
                         insertLog += queryToRun + "\r\n";
                         iCount++;
                     }
-                    else {
-                            updated += $"{row.Item1}, ";
-                            updateLog += queryToRun + "\r\n";
-                            uCount++;
-                         }
-                }                
+                    else
+                    {
+                        updated += $"{row.Item1}, ";
+                        updateLog += queryToRun + "\r\n";
+                        uCount++;
+                    }
+                }
             }
 
-           /* if (regionsToAdd.Any())
-                CreateRegions(regionsToAdd, setting.CustomerId, setting.CreateOrganisation);*/
+            /* if (regionsToAdd.Any())
+                 CreateRegions(regionsToAdd, setting.CustomerId, setting.CreateOrganisation);*/
 
             inserted += string.IsNullOrEmpty(inserted) ?
             $"There was no New Initiator." : inserted;
@@ -486,29 +490,29 @@ namespace DH.Helpdesk.TaskScheduler.Services
             updated += string.IsNullOrEmpty(updated) ?
             $"There was no Initiator to update." : updated;
             var updateText = $"{DateTime.Now} Number of updated inisitator is {uCount}. UserIds are: {updated} \r\n {updateLog}";
-     
+
 
             logs.Add(setting.CustomerId, $"{insertText} \r\n {updateText}");
-           // _logger.InfoFormat("{insertText} \r\n {updateText}");
+            // _logger.InfoFormat("{insertText} \r\n {updateText}");
 
         }
 
-        private string GetRelatedValue(string fieldName, string forignKey, int customerId , int? regionId, int createOrganisation)
-        {            
+        private string GetRelatedValue(string fieldName, string forignKey, int customerId, int? regionId, int createOrganisation)
+        {
             switch (fieldName)
             {
-                               
-                case departmentId:                   
+
+                case departmentId:
                     var depId = GetDepartmentId(forignKey, customerId, regionId, createOrganisation);
                     return depId == 0 ? "null" : depId.ToString();
-                    
-                case LanguageId:                   
+
+                case LanguageId:
                     var langId = _languageRepository.GetLanguageIdByText(forignKey);
-                    return langId == 0 ? "null" : langId.ToString();                    
+                    return langId == 0 ? "null" : langId.ToString();
 
                 case DivisionId:
                     var divId = _divisionRepository.GetDivisionIdByName(forignKey, customerId);
-                    return divId == 0 ? "null" : divId.ToString();                  
+                    return divId == 0 ? "null" : divId.ToString();
 
                 case DomainId:
                     var domainId = _domainRepository.GetDomainId(forignKey, customerId);
@@ -531,8 +535,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
         }
 
         public void DeleteInitiators(int Days2waitBeforeDelete, int customerId, ref DataLogModel logs)
-        {          
-            var Initiators = _notifielrRepository.GetMany(n=> n.Customer_Id == customerId).ToList();
+        {
+            var Initiators = _notifielrRepository.GetMany(n => n.Customer_Id == customerId).ToList();
             if (Initiators.Any())
             {
                 var InitiatorsToDelete = Initiators.
@@ -576,7 +580,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
                     //            $"DELETE FROM tblComputer WHERE User_Id = {InitiatorId};";
                     //    ret = dbQueryExecutor.ExecQuery(deleteComputerQuery);
                     //}
-                  
+
                     var deletequery = $"Update tblComputer set User_Id = null WHERE User_Id = {InitiatorId};" +
                                 $"DELETE FROM tblComputerUserLog WHERE ComputerUser_Id = {InitiatorId};" +
                                 $"DELETE FROM tblComputerUser_tblCUGroup WHERE ComputerUser_Id = {InitiatorId};" +
@@ -590,12 +594,12 @@ namespace DH.Helpdesk.TaskScheduler.Services
                 }
             }
         }
-    
+
         public void CreatLogFile(DataLogModel _logs)
         {
             //var _logs = new DataLogModel();
 
-            var basePath = ConfigurationManager.AppSettings["LogPath"]; 
+            var basePath = ConfigurationManager.AppSettings["LogPath"];
             var fileName = $"LogFile_{DateTime.Now.ToString("yyMMdd")}.txt";
             foreach (var log in _logs.RowsData)
             {
@@ -630,9 +634,10 @@ namespace DH.Helpdesk.TaskScheduler.Services
 
         private void CreateRegions(List<string> regionNames, int customerId, int createOrganisation)
         {
-            if (createOrganisation != 0) { 
-            var dbQueryExecutor = _execFactory.Create();
-            var ret = 0;
+            if (createOrganisation != 0)
+            {
+                var dbQueryExecutor = _execFactory.Create();
+                var ret = 0;
                 regionNames.Distinct();
                 foreach (var regionName in regionNames)
                 {
@@ -641,11 +646,11 @@ namespace DH.Helpdesk.TaskScheduler.Services
                                 $"BEGIN " +
                                 $"Insert into tblRegion (Region, Customer_Id)" +
                                 $"Values ('{regionName}', {customerId})" +
-                                $"END";                 
-                       
+                                $"END";
+
                     ret = dbQueryExecutor.ExecQuery(query);
                 }
-           }
+            }
 
         }
         public int GetDepartmentId(string departmentName, int customerId, int? regionId, int createOrganisation)
@@ -657,7 +662,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
             }
             return depId;
         }
-		public int CreateDepartment(string departmentName, int customerId, int? regionId)
+        public int CreateDepartment(string departmentName, int customerId, int? regionId)
         {
             var department = new Domain.Department();
 
@@ -702,10 +707,10 @@ namespace DH.Helpdesk.TaskScheduler.Services
         }
 
         private int CreateOU(string OUName)
-        {     
+        {
             var dbQueryExecutor = _execFactory.Create();
             var ret = 0;
-                           
+
             var query = $"Insert into tblOU (OU, Department_Id)" +
                         $"Values ('{OUName}', NULL)";
             ret = dbQueryExecutor.ExecQuery(query);
@@ -733,9 +738,9 @@ namespace DH.Helpdesk.TaskScheduler.Services
 
         IList<CompuerUsersFieldSetting> GetInitiatorSettings(int customerId);
 
-        void ImportInitiator(ImportInitiator_JobSettings setting, CsvInputData inputColumns , IList<CompuerUsersFieldSetting> fieldSettings, ref DataLogModel logs);
+        void ImportInitiator(ImportInitiator_JobSettings setting, CsvInputData inputColumns, IList<CompuerUsersFieldSetting> fieldSettings, ref DataLogModel logs);
 
-        int CheckIfExisting(string UserId , int customerId);
+        int CheckIfExisting(string UserId, int customerId);
 
         void DeleteInitiators(int Days2waitBeforeDelete, int customerId, ref DataLogModel logs);
 
