@@ -130,7 +130,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var customer = _customerService.GetCustomer(customerId);
 
             var caseSolutions = await _caseSolutionService.GetCustomerCaseSolutionsAsync(customer.Id);
-            var caseSolutionsExtendedCaseForms = await _caseSolutionService.GetCaseSolutionsWithExtendeCaseFormAsync(customer.Id);
+            var caseSolutionsExtendedCaseForms = await _caseSolutionService.GetCaseSolutionsWithExtendeCaseFormAsync(customer.Id, null);
 
             List<ExtendedCaseFieldTranslation> initialTranslations = GetInitialTranslations();
 
@@ -159,7 +159,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             var caseSolutions = await _caseSolutionService.GetCustomerCaseSolutionsAsync(customer.Id);
 
-            var caseSolutionsExtendedCaseForms = await _caseSolutionService.GetCaseSolutionsWithExtendeCaseFormAsync(customer.Id);
+            var caseSolutionsExtendedCaseForms = await _caseSolutionService.GetCaseSolutionsWithExtendeCaseFormAsync(customer.Id, extendedCaseFormId);
 
             List<ExtendedCaseFieldTranslation> initialTranslations = GetInitialTranslations();
 

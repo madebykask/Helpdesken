@@ -59,11 +59,11 @@
                                     <select required id="drpCaseSolutions" class="chosen-select" multiple placeholder=@Translation.GetCoreTextTranslation("Välj en eller flera")>
                                         @foreach (var item in Model.CustomerCaseSolutions.OrderBy(c => c.Name))
                                         {
-                                            <option value="@item.Id"
-                                                    @((Model.ExtendedCaseForm == null ? "" : (Model.ExtendedCaseForm.CaseSolutions.Contains(item)) ? "selected " : " "))
-                                                    @((Model.CustomerCaseSolutionsWithExtendedCaseForm == null ? "" : (Model.CustomerCaseSolutionsWithExtendedCaseForm.Contains(item) && !item.ExtendedCaseForms.Exists(x=> x.Id == Model.ExtendedCaseForm.Id)) ? "disabled" : ""))>
-                                                @item.Name
-                                            </option>
+                                        <option value="@item.Id"
+                                                @((Model.ExtendedCaseForm == null ? "" : (Model.ExtendedCaseForm.CaseSolutions.Contains(item)) ? "selected " : " "))
+                                                @((Model.CustomerCaseSolutionsWithExtendedCaseForm == null ? "" : (Model.CustomerCaseSolutionsWithExtendedCaseForm.Contains(item)) ? "disabled" : ""))>
+                                            @item.Name
+                                        </option>
                                         }
                                     </select>
                                 </td>
