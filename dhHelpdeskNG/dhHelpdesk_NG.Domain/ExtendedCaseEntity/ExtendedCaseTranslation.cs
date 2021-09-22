@@ -12,5 +12,7 @@ namespace DH.Helpdesk.Domain.ExtendedCaseEntity
 		public string Text { get; set; }
 
 		public int LanguageId { get; set; }
-	}
+
+        public int? ExtendedCaseForm_Id { get; set; }
+    }
 }
