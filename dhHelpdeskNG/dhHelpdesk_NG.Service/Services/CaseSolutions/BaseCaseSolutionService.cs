@@ -16,7 +16,7 @@ namespace DH.Helpdesk.Services.Services
         CaseSolution GetCaseSolution(int id);
         Task<CaseSolution> GetCaseSolutionAsync(int id);
         Task<List<CaseSolution>> GetCustomerCaseSolutionsAsync(int customerId);
-        Task<List<CaseSolution>> GetCaseSolutionsWithExtendeCaseFormAsync(int customerId);
+        Task<List<CaseSolution>> GetCaseSolutionsWithExtendeCaseFormAsync(int customerId, int? extendedCaseFormId);
         Task<List<CaseSolutionOverview>> GetCustomerMobileCaseSolutionsAsync(int customerId);
         Task<List<CaseSolutionOverview>> GetCustomersMobileCaseSolutionsAsync(IList<int> customersIds);
         CaseSolutionCategory GetCaseSolutionCategory(int id);
@@ -55,9 +55,9 @@ namespace DH.Helpdesk.Services.Services
             return caseSolutions.ToListAsync();
         }
 
-        public Task<List<CaseSolution>> GetCaseSolutionsWithExtendeCaseFormAsync(int customerId)
+        public Task<List<CaseSolution>> GetCaseSolutionsWithExtendeCaseFormAsync(int customerId, int? extendedCaseFormId)
         {
-            var caseSolutions = CaseSolutionRepository.GetCaseSolutionsWithExtendeCaseForm(customerId);
+            var caseSolutions = CaseSolutionRepository.GetCaseSolutionsWithExtendeCaseForm(customerId, extendedCaseFormId);
             return caseSolutions.ToListAsync();
         }
 

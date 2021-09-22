@@ -59,11 +59,11 @@
                                     <select required id="drpCaseSolutions" class="chosen-select" multiple placeholder=@Translation.GetCoreTextTranslation("Välj en eller flera")>
                                         @foreach (var item in Model.CustomerCaseSolutions.OrderBy(c => c.Name))
                                         {
-                                            <option value="@item.Id"
-                                                    @((Model.ExtendedCaseForm == null ? "" : (Model.ExtendedCaseForm.CaseSolutions.Contains(item)) ? "selected " : " "))
-                                                    @((Model.CustomerCaseSolutionsWithExtendedCaseForm == null ? "" : (Model.CustomerCaseSolutionsWithExtendedCaseForm.Contains(item)) ? "disabled" : ""))>
-                                                @item.Name
-                                            </option>
+                                        <option value="@item.Id"
+                                                @((Model.ExtendedCaseForm == null ? "" : (Model.ExtendedCaseForm.CaseSolutions.Contains(item)) ? "selected " : " "))
+                                                @((Model.CustomerCaseSolutionsWithExtendedCaseForm == null ? "" : (Model.CustomerCaseSolutionsWithExtendedCaseForm.Contains(item)) ? "disabled" : ""))>
+                                            @item.Name
+                                        </option>
                                         }
                                     </select>
                                 </td>
@@ -109,6 +109,7 @@
 <script type="text/javascript">
 
     const defaultLanguageId = @Model.FieldTranslations.Where(l => l.IsDefaultLanguage).FirstOrDefault().Language.Id;
+    const currentLanguageId = @SessionFacade.CurrentLanguageId;
 
     $(document).ready(function () {
         var translations = {}
@@ -257,8 +258,10 @@
                 for (var t = 0; t < formData.tabs.length; t++) {
                     for (var s = 0; s < formData.tabs[t].sections.length; s++) {
                         let idName = createUUID();
-                        let defaultSectionName = [...translations].filter(item => item.Language.Id == defaultLanguageId && formData.tabs[t].sections[s].name == item.Name);
-                        $("#dropzone").append(listHtml("section", sectionHtmlDiv(editFieldHtml(idName, formData.tabs[t].sections[s].name, true, false, false), idName, "field-label sectionLabel", defaultSectionName[0].TranslationText)));
+
+                        let currentLanguageSectionName = [...translations].filter(item => item.Language.Id == currentLanguageId && formData.tabs[t].sections[s].name == item.Name);
+
+                        $("#dropzone").append(listHtml("section", sectionHtmlDiv(editFieldHtml(idName, formData.tabs[t].sections[s].name, true, false, false), idName, "field-label sectionLabel", currentLanguageSectionName[0].TranslationText)));
 
                         for (var c = 0; c < formData.tabs[t].sections[s].controls.length; c++) {
                             let idName = createUUID();
@@ -269,22 +272,22 @@
                                 isRequired = formData.tabs[t].sections[s].controls[c].validators.onSave[0].type == "required" ? true : false;
                             }
 
-                            let defaultControlName = [...translations].filter(item => item.Language.Id == defaultLanguageId && formData.tabs[t].sections[s].controls[c].label == item.Name);
+                            let currentLanguageLabel = [...translations].filter(item => item.Language.Id == currentLanguageId && formData.tabs[t].sections[s].controls[c].label == item.Name);
 
                             if (dataType == "textbox") {
-                                $("#dropzone").append(listHtml("textbox", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id='" + idName + "headerName" + "'>" + defaultControlName[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, false, true, isRequired) + "</div>"));
+                                $("#dropzone").append(listHtml("textbox", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id='" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, false, true, isRequired) + "</div>"));
                             }
 
                             else if (dataType == "textarea") {
-                                $("#dropzone").append(listHtml("textarea", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + defaultControlName[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><textarea class='form-control form-control-width' readonly></textarea></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, false, true, isRequired) + "</div>"));
+                                $("#dropzone").append(listHtml("textarea", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><textarea class='form-control form-control-width' readonly></textarea></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, false, true, isRequired) + "</div>"));
                             }
 
                             else if (dataType == "date") {
-                                $("#dropzone").append(listHtml("date", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + defaultControlName[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='date' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, false, true, isRequired) + "</div>"), null);
+                                $("#dropzone").append(listHtml("date", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='date' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, false, true, isRequired) + "</div>"), null);
                             }
 
                             else if (dataType = "html") {
-                                $("#dropzone").append(listHtml("html", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + defaultControlName[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' style='padding:10px'><input type='text' id='" + idName + "tiny" + "' class='form-control form-control-width form-control-tinymce' value='" + formData.tabs[t].sections[s].controls[c].valueBinding + "'></div></div>"));
+                                $("#dropzone").append(listHtml("html", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + '@Html.Raw(Translation.GetForJS(Translation.GetCoreTextTranslation("Infofält")))' + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' style='padding:10px'><input type='text' id='" + idName + "tiny" + "' class='form-control form-control-width form-control-tinymce' value='" + formData.tabs[t].sections[s].controls[c].valueBinding + "'></div></div>"));
 
                                 tinymce.init({
                                     selector: '#' + idName + 'tiny',
@@ -367,7 +370,7 @@
                 if (selectedCaseSolutions.length == 0) {
                     var dlg = new ConfirmationDialog();
                     var opts = {
-                        dlgText: '@Html.Raw(Translation.GetForJS(Translation.GetCoreTextTranslation(Translation.GetForJS("Ingen vald ärendemall. Är du säker på att du vill inaktivera formuläret?"))))',
+                        dlgText: '@Html.Raw(Translation.GetForJS(Translation.GetCoreTextTranslation("Ingen vald ärendemall. Är du säker på att du vill inaktivera formuläret?")))',
                         btnYesText: '@Translation.GetForJS("Ja")',
                         btnNoText: '@Translation.GetForJS("Nej")',
                         onClick: function (button) {
@@ -455,6 +458,7 @@
             items[i].id = sTranslationsProperty[0].value + counter; //document.getElementById(obj.id).innerText + counter;//(i + 1);
             items[i].sectionName = document.getElementById(obj.id).innerText;
             items[i].controls = [];
+
             items[i].translationId = document.getElementById(obj.id).getAttribute('data-dhhelpdesk-id');
 
             for (s = 0; s < sTranslations.length; s++) {
@@ -472,15 +476,18 @@
                 if (obj.querySelector('.field-label') != null) {
                     var id = obj.querySelector('.field-label').id;
                     var contentTinyMce = obj.querySelectorAll('.form-control-tinymce');
-                    var label = document.getElementById(id.replace('header', 'headerName')) ? document.getElementById(id.replace('header', 'headerName')).innerText : "infoField";
+                    var label = document.getElementById(id.replace('header', 'headerName')) != null ? document.getElementById(id.replace('header', 'headerName')).innerText : "infoField";
+
                     var required = document.getElementById(id.replace('header', 'required')) ? document.getElementById(id.replace('header', 'required')).checked : false;
                     var content = contentTinyMce[0] ? 'function(m) { return ' + tinymce.get(contentTinyMce[0].id).getContent() + ' }' : ""
 
                     var fTranslations = obj.querySelectorAll(".labelName");
                     var fTranslationsProperty = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguageId);
 
+                    var idControl = fTranslationsProperty.length > 0 ? fTranslationsProperty[0].value + counter : label + counter;
+
                     items[i].controls[n] = {
-                        id: fTranslationsProperty[0].value + counter,//label + counter,//(n + 1),
+                        id: idControl,//label + counter,//(n + 1),
                         type: obj.getAttribute('data-type'),
                         label: label,
                         required: required,
@@ -490,7 +497,7 @@
                     for (f = 0; f < fTranslations.length; f++) {
                         var translation = {};
                         translation.LanguageId = fTranslations[f].getAttribute('data-dhhelpdesk-langId');
-                        translation.Property = fTranslationsProperty[0].value + counter;// (n + 1);
+                        translation.Property = idControl;// (n + 1);
                         translation.Text = fTranslations[f].value;
                         translation.IsSection = fTranslations[f].getAttribute('data-dhhelpdesk-section');
                         translation.TranslationId = fTranslations[f].getAttribute('data-dhhelpdesk-id');
@@ -509,7 +516,7 @@
         var dataToSend = {
                 id: getUrlVars()["extendedCaseFormId"],
                 customerId: getUrlVars()["customerId"],
-                languageId: getUrlVars()["languageId"],
+                languageId: currentLanguageId,
                 name: document.getElementById("formName").value,
                 description: document.getElementById("formDescription").value,
                 status: selectedCaseSolutions.length == 0 ? "false" : "true",
@@ -527,7 +534,7 @@
                 success: function (data) {
                     if (data.result == true) {
                         if (typeof (getUrlVars()["extendedCaseFormId"]) == "undefined") {
-                            let url = "EditForm?extendedCaseFormId=" + data.formId + "&languageId="+ @SessionFacade.CurrentLanguageId;
+                            let url = "EditForm?extendedCaseFormId=" + data.formId + "&languageId=" + currentLanguageId;
                             window.location.href = url;
                         }
                         ShowToastMessage('@Html.Raw(Translation.GetForJS("Sparat"))')

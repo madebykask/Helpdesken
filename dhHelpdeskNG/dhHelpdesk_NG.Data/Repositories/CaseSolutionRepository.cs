@@ -16,7 +16,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IQueryable<CaseSolution> GetCustomerCaseSolutions(int customerId);
         IQueryable<CaseSolution> GetCustomerCaseSolutions(IList<int> customersIds);
         IList<CaseSolutionOverview> GetCaseSolutionsWithConditions(IList<int> Ids);
-        IQueryable<CaseSolution> GetCaseSolutionsWithExtendeCaseForm(int customerId);
+        IQueryable<CaseSolution> GetCaseSolutionsWithExtendeCaseForm(int customerId, int? extendedCaseFormId);
     }
 
     public class CaseSolutionRepository : RepositoryBase<CaseSolution>, ICaseSolutionRepository
@@ -108,12 +108,22 @@ namespace DH.Helpdesk.Dal.Repositories
             return res;
         }
 
-        public IQueryable<CaseSolution> GetCaseSolutionsWithExtendeCaseForm(int customerId)
+        public IQueryable<CaseSolution> GetCaseSolutionsWithExtendeCaseForm(int customerId, int? extendedCaseFormId)
         {
-            var query = DataContext.CaseSolutions
-                        .Where(c => c.ExtendedCaseForms.Count > 0 && c.Customer_Id == customerId);
+            if (extendedCaseFormId == null)
+            {
+                var query = DataContext.CaseSolutions
+                            .Where(c => c.ExtendedCaseForms.Count > 0 && c.Customer_Id == customerId);
+                return query;
+            }
 
-            return query;
+            else
+            {
+                var query = DataContext.CaseSolutions
+                            .Where(c => c.ExtendedCaseForms.Count > 0 && c.Customer_Id == customerId && !c.ExtendedCaseForms.Any(x=> x.Id == extendedCaseFormId));
+                return query;
+            }
+            
         }
     }
 
