@@ -3,7 +3,12 @@
 @model DH.Helpdesk.BusinessData.Models.ExtendedCase.CustomerCaseSolutionsExtendedForm
 
 @Scripts.Render(BundleConfig.ScriptNames.ConfirmationDialog)
-<script src="https://cdn.tiny.cloud/1/1sfk2dp6yt1qy3dpohzyv6wro6kpk8szzkijgcpnepc4mazx/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+<link href="~/Content/summernote-0.8.18/summernote.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="~/Content/font-awesome.css" rel="stylesheet" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+<script src="~/Content/summernote-0.8.18/summernote.min.js" crossorigin="anonymous"></script>
+
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
@@ -59,11 +64,11 @@
                                     <select required id="drpCaseSolutions" class="chosen-select" multiple placeholder=@Translation.GetCoreTextTranslation("Välj en eller flera")>
                                         @foreach (var item in Model.CustomerCaseSolutions.OrderBy(c => c.Name))
                                         {
-                                        <option value="@item.Id"
-                                                @((Model.ExtendedCaseForm == null ? "" : (Model.ExtendedCaseForm.CaseSolutions.Contains(item)) ? "selected " : " "))
-                                                @((Model.CustomerCaseSolutionsWithExtendedCaseForm == null ? "" : (Model.CustomerCaseSolutionsWithExtendedCaseForm.Contains(item)) ? "disabled" : ""))>
-                                            @item.Name
-                                        </option>
+                                            <option value="@item.Id"
+                                                    @((Model.ExtendedCaseForm == null ? "" : (Model.ExtendedCaseForm.CaseSolutions.Contains(item)) ? "selected " : " "))
+                                                    @((Model.CustomerCaseSolutionsWithExtendedCaseForm == null ? "" : (Model.CustomerCaseSolutionsWithExtendedCaseForm.Contains(item)) ? "disabled" : ""))>
+                                                @item.Name
+                                            </option>
                                         }
                                     </select>
                                 </td>
@@ -104,8 +109,6 @@
     </div>
 </div>
 
-<link href="~/Content/font-awesome.css" rel="stylesheet" />
-<link href="~/Content/font-awesome.min.css" rel="stylesheet" />
 <script type="text/javascript">
 
     const defaultLanguageId = @Model.FieldTranslations.Where(l => l.IsDefaultLanguage).FirstOrDefault().Language.Id;
@@ -131,7 +134,6 @@
                 }
             }
 
-
             if (hasRequiredChk) {
                 res = res + "<tr><td><label for='" + idName + "required" + "' class=''>" + '@Translation.GetCoreTextTranslation("Obligatorisk")' + "</label></td><td><input type='checkbox' " + (isRequired == true ? 'checked' : '') + " class='chkRequired' id = '" + idName + "required" + "' ></td ></tr > ";
             }
@@ -143,7 +145,7 @@
         let sectionHtml = () => "<li data-type='section' class='ui-draggable' style='display: list-item'>" + sectionHtmlDiv(editFieldHtml(IDNAME, '@Translation.GetCoreTextTranslation("Sektion")', true, false, false), IDNAME, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")') + "</li>";
 
         let listHtml = (dataType, controlDiv) => "<li data-type='" + dataType + "' class='ui-draggable' style='display: list-item'>" + controlDiv + "</li>";
-
+        let summerNoteConfig = (idName, data) => "<div id='" + idName + "_summernote'>" + data + "</div><script>$('#" + idName + "_summernote').summernote({placeholder: '', dialogsFade: true, tabsize: 2, height: 170}); <" + "/script>"
 
         var draggedFrom = "";
         var draggedItem;
@@ -193,16 +195,8 @@
                         //    break;
 
                         case "html":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Infofält")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' style='padding:10px'><input type='text' class='form-control form-control-width form-control-tinymce'></div></div>")
-                            tinymce.init({
-                                selector: '.form-control-tinymce',
-                                plugins: "lists, link",
-                                toolbar: "numlist bullist | undo redo | bold italic | link",
-                                width: "100%%",
-                                height: "150px",
-                                entity_encoding: "raw",
-                                readonly: 0,
-                            });
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Infofält")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' style='padding:10px'>" + summerNoteConfig(idName, '') + "</div></div>")
+                            $('#dropzone').sortable("disable");
                             break;
 
                         default:
@@ -287,18 +281,9 @@
                             }
 
                             else if (dataType = "html") {
-                                $("#dropzone").append(listHtml("html", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + '@Html.Raw(Translation.GetForJS(Translation.GetCoreTextTranslation("Infofält")))' + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' style='padding:10px'><input type='text' id='" + idName + "tiny" + "' class='form-control form-control-width form-control-tinymce' value='" + formData.tabs[t].sections[s].controls[c].valueBinding + "'></div></div>"));
-
-                                tinymce.init({
-                                    selector: '#' + idName + 'tiny',
-                                    plugins: "lists, link",
-                                    toolbar: "numlist bullist | undo redo | bold italic | link",
-                                    width: "100%%",
-                                    height: "150px",
-                                    entity_encoding: "raw",
-                                    readonly: 0
-                                });
+                                $("#dropzone").append(listHtml("html", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + '@Html.Raw(Translation.GetForJS(Translation.GetCoreTextTranslation("Infofält")))' + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' style='padding:10px'>" + summerNoteConfig(idName, formData.tabs[t].sections[s].controls[c].valueBinding) + "</div></div>"));
                             }
+
                             if (isRequired) {
                                 $("#" + idName + "requiredSpan").css('visibility', 'visible');
                             }
@@ -328,6 +313,17 @@
                 $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(IDNAME, '@Translation.GetCoreTextTranslation("Sektion")', true, false), IDNAME, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")')));
             });
         });
+
+        $(document).on('click', '.note-editing-area', function () {
+            $(this).children('.note-editable').trigger('focus');
+        });
+
+
+        $(document).on('mouseenter', '.note-editable', function () {
+                $('#dropzone').sortable("disable")
+        }).on('mouseleave', '.note-editable', function () {
+            $('#dropzone').sortable("enable")
+            });
 
         $(function () {
             $('#btnSubmit').click(function (e) {
@@ -422,27 +418,15 @@
         ];
 
         var getNextUntil = function (elem, selector) {
-
-            // Setup siblings array and get next sibling
             var siblings = [];
             var next = elem.nextElementSibling;
 
-            // Loop through all siblings
             while (next) {
-
-                // If the matching item is found, quit
                 if (next.matches(selector)) break;
-
-                // Otherwise, push to array
                 siblings.push(next);
-
-                // Get the next sibling
                 next = next.nextElementSibling
-
             }
-
              return siblings;
-
         };
 
         let fieldTranslations = [];
@@ -475,11 +459,15 @@
                 counter++;
                 if (obj.querySelector('.field-label') != null) {
                     var id = obj.querySelector('.field-label').id;
-                    var contentTinyMce = obj.querySelectorAll('.form-control-tinymce');
+                    let contentSummerNote;
+                    if (document.getElementById(id.replace('header', '_summernote')) != null) {
+                        contentSummerNote = $('#' + id.replace('header', '_summernote')).summernote('code');
+                    }
+                     
                     var label = document.getElementById(id.replace('header', 'headerName')) != null ? document.getElementById(id.replace('header', 'headerName')).innerText : "infoField";
 
                     var required = document.getElementById(id.replace('header', 'required')) ? document.getElementById(id.replace('header', 'required')).checked : false;
-                    var content = contentTinyMce[0] ? 'function(m) { return ' + tinymce.get(contentTinyMce[0].id).getContent() + ' }' : ""
+                    var content = contentSummerNote ? 'function(m) { return ' + contentSummerNote + ' }' : ""
 
                     var fTranslations = obj.querySelectorAll(".labelName");
                     var fTranslationsProperty = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguageId);
@@ -487,7 +475,7 @@
                     var idControl = fTranslationsProperty.length > 0 ? fTranslationsProperty[0].value + counter : label + counter;
 
                     items[i].controls[n] = {
-                        id: idControl,//label + counter,//(n + 1),
+                        id: idControl,
                         type: obj.getAttribute('data-type'),
                         label: label,
                         required: required,
@@ -497,7 +485,7 @@
                     for (f = 0; f < fTranslations.length; f++) {
                         var translation = {};
                         translation.LanguageId = fTranslations[f].getAttribute('data-dhhelpdesk-langId');
-                        translation.Property = idControl;// (n + 1);
+                        translation.Property = idControl;
                         translation.Text = fTranslations[f].value;
                         translation.IsSection = fTranslations[f].getAttribute('data-dhhelpdesk-section');
                         translation.TranslationId = fTranslations[f].getAttribute('data-dhhelpdesk-id');
@@ -738,5 +726,9 @@
         list-style-type: none;
         padding: 0;
         margin: 5px;
+    }
+
+    .note-editor {
+        padding: 0px;
     }
 </style>
