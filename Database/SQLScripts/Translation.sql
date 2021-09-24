@@ -8116,6 +8116,14 @@ If not exists (select * from tblTextTranslation where text_id = 2091 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2091, 2, 'The following case templates are already connected to a form')
 GO
 
+If not exists (select * from tbltext where id = 2092)
+	insert into tbltext (id, TextString) VALUES (2092, 'En sektion får ej vara tom')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2092 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2092, 2, 'A section can not be empty')
+GO
+
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')
