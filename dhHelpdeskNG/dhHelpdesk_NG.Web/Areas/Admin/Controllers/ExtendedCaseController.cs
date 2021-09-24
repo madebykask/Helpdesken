@@ -282,7 +282,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             if (caseSolutionsWithForms.Count > 0)
             {
-                string msg = "Följande ärendemallar har redan ett formulär: " + Environment.NewLine;
+                string msg = Translation.GetCoreTextTranslation("Följande ärendemallar har redan ett formulär") + ": " + Environment.NewLine;
 
                 foreach (var c in caseSolutionsWithForms)
                 {

@@ -328,12 +328,12 @@
         $(function () {
             $('#btnSubmit').click(function (e) {
                  if (document.getElementById("dropzone").firstElementChild == null) {
-                    ShowToastMessage('@Html.Raw(Translation.GetForJS("Formuläret får ej vara tomt"))', "error")
+                    ShowToastMessage('@Html.Raw(Translation.GetForJS(Translation.Get("Formuläret får ej vara tomt", Enums.TranslationSource.TextTranslation)))', "error")
                     return;
                 }
 
                 if (document.getElementById("dropzone").firstElementChild.getAttribute('data-type') != "section") {
-                    ShowToastMessage('@Html.Raw(Translation.GetForJS("Formulärets första fält måste vara en sektion"))', "error")
+                    ShowToastMessage('@Html.Raw(Translation.GetForJS(Translation.Get("Formulärets första fält måste vara en sektion", Enums.TranslationSource.TextTranslation)))', "error")
                     return;
                 }
 
@@ -355,7 +355,7 @@
                 });
 
                 if (requiredNotFilled > 0) {
-                    ShowToastMessage('@Html.Raw(Translation.GetForJS("Obligatorisk fältetikett måste anges "))', "error");
+                    ShowToastMessage('@Html.Raw(Translation.GetForJS(Translation.Get("Obligatorisk fältetikett måste anges", Enums.TranslationSource.TextTranslation)))', "error");
                     return;
                 }
                 var selectedCaseSolutions = [];

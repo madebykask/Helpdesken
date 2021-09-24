@@ -1,7 +1,7 @@
 ﻿--update DB from 5.3.52 to 5.3.53 version
 
-RAISERROR ('Add Column Customer_Id to ExtendedCaseForms', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.ExtendedCaseForms','Customer_Id') IS NULL
+RAISERROR ('Add Column ExtendedCaseForm_Id to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.ExtendedCaseTranslations','ExtendedCaseForm_Id') IS NULL
 BEGIN	 
 	ALTER TABLE [dbo].[ExtendedCaseTranslations]
 	ADD [ExtendedCaseForm_Id] INT NULL

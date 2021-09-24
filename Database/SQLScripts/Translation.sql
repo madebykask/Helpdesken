@@ -8087,6 +8087,35 @@ If not exists (select * from tblTextTranslation where text_id = 2087 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2087, 2, 'Label')
 GO
 
+If not exists (select * from tbltext where id = 2088)
+	insert into tbltext (id, TextString) VALUES (2088, 'Obligatorisk fältetikett måste anges')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2088 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2088, 2, 'Please enter mandatory label')
+GO
+
+If not exists (select * from tbltext where id = 2089)
+	insert into tbltext (id, TextString) VALUES (2089, 'Formuläret får ej vara tomt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2089 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2089, 2, 'The form may not be empty')
+GO
+
+
+If not exists (select * from tbltext where id = 2090)
+	insert into tbltext (id, TextString) VALUES (2090, 'Formulärets första fält måste vara en sektion')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2090 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2090, 2, 'The first field must be a section')
+GO
+
+If not exists (select * from tbltext where id = 2091)
+	insert into tbltext (id, TextString) VALUES (2091, 'Följande ärendemallar har redan ett formulär')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2091 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2091, 2, 'The following case templates are already connected to a form')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')
