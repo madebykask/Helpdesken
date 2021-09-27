@@ -77,6 +77,7 @@
         fileExistError: '@Translation.GetForJS("Bifogad fil är borttagen från ärendet")',
         currentUserName: '@Model.CurrentUserName',
         applicationType: '@ApplicationTypes.Helpdesk',
+        caseLockedByLabel: '@Translation.GetForJS("Låsningen av ärendet bröts. Användare <name> har låst ärendet. Dina ändringar kan inte sparas. Stäng ärendet och försök att öppna det igen senare.")',
         caseFieldIds: {
             Caption: "case__Caption",
             CaseId: "case__Id",
@@ -178,7 +179,7 @@
             descriptionText: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)',
             getInventoryUrl: '@Url.Action("GetInventoryUrlByName", "InventoryRouting", new {  area = "Inventory" })',
             initiatorDetailsUrl: '@Url.Action("NotifierPopup", "Notifiers")',
-            checkInitiatorUrl: '@Url.Action("GetNotifierInfo", "Notifiers")'
+            checkInitiatorUrl: '@Url.Action("GetNotifierInfo", "Notifiers")',
         },
 
         user: {
