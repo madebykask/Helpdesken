@@ -65,7 +65,7 @@
                                     @*<a target="_blank" class="@(GuidHelper.IsGuid(Model.LogId) ? "isExisted" : "")"
                                     onclick="window.dhHelpdesk.logFileAccess(@Model.CaseId, '@fileModel.Name', @((int)CaseFileType.CaseFile))"
                                     href="@BuildCaseFileLinkVD(fileModel.Name)"><i class="icon- attachedFile"></i>@fileModel.Name</a>*@
-                                    <a target="_blank" href="@Url.Action("Documents", "Cases",new RouteValueDictionary {{"id", Model.CaseId}, {"fileName", fileModel.Name}, { "type", 0 } })">
+                                    <a target="_blank" class="@(GuidHelper.IsGuid(Model.LogId) ? "isExisted" : "")" href="@Url.Action("Documents", "Cases",new RouteValueDictionary {{"id", Model.CaseId}, {"fileName", fileModel.Name}, { "type", 0 } })">
                                         <i class="icon-file"></i>@fileModel.Name<br />
                                     </a>
                                 }
@@ -94,7 +94,7 @@
                                         @*<a target="_blank" class="@(GuidHelper.IsGuid(Model.LogId) ? "isExisted" : "")"
                                            onclick="window.dhHelpdesk.logFileAccess(@Model.CaseId, '@fileModel.Name', @(fileModel.LogType == LogFileType.Internal ? (int)CaseFileType.LogInternal : (int)CaseFileType.LogExternal), @fileModel.ObjId.Value)"
                                            href="@BuildLogFileLinkVD(fileModel.ObjId.Value, fileModel.Name, fileModel.ParentLogType ?? fileModel.LogType)"><i class="icon- attachedFile"></i> @fileModel.Name</a>*@
-                                        <a target="_blank" href="@Url.Action("Documents", "Cases",new RouteValueDictionary { { "id", Model.CaseId }, { "fileName", fileModel.Name }, { "type", type } , {"logId",fileModel.ObjId } })"
+                                        <a target="_blank"  class="@(GuidHelper.IsGuid(Model.LogId) ? "isExisted" : "")" href="@Url.Action("Documents", "Cases",new RouteValueDictionary { { "id", Model.CaseId }, { "fileName", fileModel.Name }, { "type", type } , {"logId",fileModel.ObjId } })"
                                            data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(fileModel.LogType))">
                                             <i class="@(GetFileIcon(fileModel.LogType))"></i> @fileModel.Name
                                         </a>
@@ -130,7 +130,8 @@
                             }
                             else if (GuidHelper.IsGuid(Model.LogId))
                             {
-                                <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.GetCoreTextTranslation("Ta bort")"><i class="icon-remove"></i></a>
+                            @*<a  id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" href="@Url.Action("ClearExistingAttachedFile", "Cases",new RouteValueDictionary { { "caseId", Model.CaseId }, { "fileName", fileModel.Name } })" title="@Translation.GetCoreTextTranslation("Ta bort")"><i class="icon-remove"></i></a>*@
+                              <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.GetCoreTextTranslation("Ta bort")"><i class="icon-remove"></i></a>
                             }
                         </td>
                     </tr>
