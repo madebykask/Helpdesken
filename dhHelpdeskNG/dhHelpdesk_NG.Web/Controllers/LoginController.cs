@@ -136,6 +136,61 @@ namespace DH.Helpdesk.Web.Controllers
             return View("Login");
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult LoginMicrosoft(LoginInputModel inputData)
+        {
+            var userName = inputData.txtUid?.Trim();
+            var password = inputData.txtPwd?.Trim();
+            var returnUrl = inputData.returnUrl;
+
+            if (IsValidLoginArgument(userName, password))
+            {
+                // try to login user
+                var res =
+                    _authenticationService.Login(
+                        HttpContext,
+                        userName,
+                        password,
+                        new UserTimeZoneInfo(inputData.timeZoneOffsetInJan1, inputData.timeZoneOffsetInJul1));
+
+                if (res.IsSuccess)
+                {
+                    SessionFacade.TimeZoneDetectionResult = res.TimeZoneAutodetect;
+
+                    if (res.PasswordExpired)
+                    {
+                        var settings = _settingService.GetCustomerSetting(res.User.CustomerId);
+
+                        ViewBag.UserId = userName;
+                        ViewBag.ChangePasswordModel = GetPasswordChangeModel(res.User, settings);
+                        return View("Login");
+                    }
+
+                    _caseLockService.CaseLockCleanUp();
+
+                    #region Token based authentication
+
+                    //var token = GetToken(userName, password);
+                    //TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
+                    //if (token != null)
+                    //{
+                    //    TempData[TokenKey] = GetTokenData(token.access_token, token.refresh_token);                        
+                    //}
+
+                    #endregion
+
+                    RedirectFromLoginPage(returnUrl, res.User.StartPage, res.TimeZoneAutodetect);
+                }
+                else
+                {
+                    TempData["LoginFailed"] = $"Login failed! {res.ErrorMessage ?? string.Empty}".Trim();
+                }
+            }
+
+            return View("Login");
+        }
+
         [HttpGet]
         public ActionResult Logout()
         {
