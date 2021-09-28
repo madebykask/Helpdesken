@@ -36,6 +36,8 @@ using DH.Helpdesk.Web.Infrastructure.Behaviors;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
 using DH.Helpdesk.BusinessData.Models.Case.Input;
+using Microsoft.Ajax.Utilities;
+
 namespace DH.Helpdesk.Web.Controllers
 {
 	using DH.Helpdesk.BusinessData.Enums.Case;
@@ -448,15 +450,16 @@ namespace DH.Helpdesk.Web.Controllers
             }
             var userId = SessionFacade.CurrentUser.Id;
 
-            var caseLockViewModel = GetCaseLockModel(int.Parse(id), userId, false, "");
+            //var caseLockViewModel = GetCaseLockModel(int.Parse(id), userId, false, "");
 
             var customerId =  _caseService.GetCaseCustomerId(int.Parse(id));
 
-            var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
-            CaseInputViewModel m = this.GetCaseInputViewModel(userId, customerId, int.Parse(id), caseLockViewModel, caseFieldSettings, "", "", null, null, false);
-
+            //var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+            //CaseInputViewModel m = this.GetCaseInputViewModel(userId, customerId, int.Parse(id), caseLockViewModel, caseFieldSettings, "", "", null, null, false);
+            var cc = _caseService.GetCaseById(int.Parse(id));
+            var editMode = CalcEditMode(customerId, userId, cc);
             // User has not access to case
-            if (m.EditMode == AccessMode.NoAccess)
+            if (editMode == AccessMode.NoAccess)
                 return RedirectToAction("index", "home");
 
             //Ok to se case
@@ -496,6 +499,64 @@ namespace DH.Helpdesk.Web.Controllers
             byte[] fileBytes = _filesStorage.GetFileByteContent(pathToFile);
             Response.AppendHeader("Content-Disposition", "inline; filename=" + fileName.Replace(",", ""));
             return File(fileBytes, mimeType);
+        }
+        public AccessMode CalcEditMode(int customerId, int userId, Case @case, bool temporaryHasAccessToWG = false)
+        {
+            var gs = _globalSettingService.GetGlobalSettings().FirstOrDefault();
+            var accessToWorkinggroups = _userService.GetWorkinggroupsForUserAndCustomer(userId, customerId);
+            var departmensForUser = _departmentService.GetDepartmentsByUserPermissions(userId, customerId);
+
+            var currentUser = _userService.GetUserOverview(userId);
+            if (departmensForUser != null)
+            {
+                var accessToDepartments = departmensForUser.Select(d => d.Id).ToList();
+
+                if (currentUser.UserGroupId < (int)BusinessData.Enums.Admin.Users.UserGroup.CustomerAdministrator)
+                {
+                    if (accessToDepartments.Count > 0 && @case.Department_Id.HasValue)
+                    {
+                        if (!accessToDepartments.Contains(@case.Department_Id.Value))
+                        {
+                            return AccessMode.NoAccess;
+                        }
+                    }
+                }
+            }
+
+            // In new case shouldn't check
+            /*Updated in this way:*/
+            /*If user does not have access to WG, if last action was "Save", user can see the Case in readonly mode 
+             * there is no ticket. (Per knows more info)
+             */
+            if (accessToWorkinggroups != null && @case.Id != 0)
+            {
+                if (currentUser.UserGroupId < (int)BusinessData.Enums.Admin.Users.UserGroup.CustomerAdministrator)
+                {
+                    if (accessToWorkinggroups.Any() && @case.WorkingGroup_Id.HasValue)
+                    {
+                        var wg = accessToWorkinggroups.FirstOrDefault(w => w.WorkingGroup_Id == @case.WorkingGroup_Id.Value);
+                        if (wg == null && (gs != null && gs.LockCaseToWorkingGroup == 1))
+                        {
+                            return temporaryHasAccessToWG ? AccessMode.ReadOnly : AccessMode.NoAccess;
+                        }
+
+                        if (wg != null && wg.RoleToUWG == 1)
+                        {
+                            return AccessMode.ReadOnly;
+                        }
+                    }
+                }
+            }
+
+            if (@case.FinishingDate.HasValue)
+            {
+                return AccessMode.ReadOnly;
+            }
+
+            //case lock condition will be checked on client separately
+            //if (lockModel != null && lockModel.IsLocked) return AccessMode.ReadOnly;
+
+            return AccessMode.FullAccess;
         }
         public ActionResult Index()
         {
@@ -986,23 +1047,39 @@ namespace DH.Helpdesk.Web.Controllers
                 // Case still is locked by me
                 return Json(true);
             }
-            else if (caseLock == null ||
-                     (caseLock != null && !(caseLock.ExtendedTime >= DateTime.Now)))
+
+            if (caseLock == null || !(caseLock.ExtendedTime >= DateTime.Now))
             {
                 //case is not locked by me or is not locked at all 
                 var curCase = _caseService.GetDetachedCaseById(caseId);
                 if (curCase != null && curCase.ChangeTime.RoundTick() == caseChangedTime.RoundTick())
                     return Json(true);//case is not updated yet by any other
-                else
-                    return Json(false);
-            }
-            else
                 return Json(false);
+            }
+
+            return Json(false);
         }
 
-        public JsonResult ReExtendCaseLock(string lockGuid, int extendValue)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lockGuid"></param>
+        /// <param name="extendValue"></param>
+        /// <param name="caseId"></param>
+        /// <returns>empty string if success. Name of user who locked the case if not</returns>
+        public JsonResult ReExtendCaseLock(string lockGuid, int extendValue, int caseId)
         {
-            return Json(_caseLockService.ReExtendLockCase(new Guid(lockGuid), extendValue));
+            var isExtended = _caseLockService.ReExtendLockCase(new Guid(lockGuid), extendValue);
+            if (!isExtended)
+            {
+                var lockInfo = _caseLockService.GetCaseLock(caseId);
+                if (lockInfo != null)
+                {
+                    return Json(
+                        $"{lockInfo.User.FirstName ?? ""} {lockInfo.User.SurName ?? ""} ({lockInfo.User.UserID ?? ""})");
+                }
+            }
+            return Json(string.Empty);
         }
 
         #endregion
