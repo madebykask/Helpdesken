@@ -12,6 +12,9 @@ using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete;
 using IpMatcher;
+using Microsoft.Owin;
+using Microsoft.Owin.Security.OpenIdConnect;
+using Microsoft.Owin.Security;
 
 namespace DH.Helpdesk.Web.Infrastructure.Authentication
 {
@@ -122,6 +125,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             var helpdeskUserIdentity = SessionFacade.CurrentUserIdentity?.UserId ?? string.Empty;
 
             var loginMode = GetCurrentLoginMode();
+            //var loginMode = LoginMode.Microsoft;
             _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge: {context.HttpContext.Request.Url}. AuthMode: {loginMode}. [IsAuthenticated: {isIdentityAuthenticated}, HttpUserIdentity: {httpUserIdentity}, HelpdeskSessionUser: {helpdeskUserIdentity}]");
 
             #region MixedMode handling
@@ -143,6 +147,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                     context.Result = new RedirectResult(loginUrl);
                     _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Request ip ({clientIP}) is not from WinAuth ip range. Do not prompt windows login...");
                 }
+            }
+            else if(loginMode == LoginMode.Microsoft)
+            {
+                //Do something...
             }
 
             #endregion

@@ -411,6 +411,7 @@
     <Compile Include="Controllers\CasesController_Files.cs" />
     <Compile Include="Controllers\CasesController_MobileRoute.cs" />
     <Compile Include="Controllers\FileAccessController.cs" />
+    <Compile Include="Controllers\MicrosoftLoginController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\MicrosoftAuthenticationBehavior.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\MixedModeAuthenticationBehavior.cs" />
@@ -5111,6 +5112,7 @@
     <Folder Include="Views\CasesController_MobileRoute\" />
     <Folder Include="Views\LogAccess\" />
     <Folder Include="Views\MicrosoftAuth\" />
+    <Folder Include="Views\MicrosoftLogin\" />
     <Folder Include="Views\Password\" />
     <Folder Include="Views\Statistics\" />
   </ItemGroup>

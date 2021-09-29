@@ -6,6 +6,7 @@ using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Users;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Authentication;
+using DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors;
 using DH.Helpdesk.Web.Infrastructure.Tools;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Services.Services.Concrete;
@@ -19,6 +20,10 @@ using DH.Helpdesk.Services.Services.Authentication;
 using DH.Helpdesk.Web.Infrastructure.Configuration;
 using DH.Helpdesk.Web.Models.Login;
 using DH.Helpdesk.Web.Models.Shared;
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.OpenIdConnect;
+using System.Web;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -38,6 +43,8 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IApplicationConfiguration _applicationConfiguration;
         private readonly IFederatedAuthenticationService _federatedAuthenticationService;
         private readonly IAuthenticationService _authenticationService;
+        private readonly IAuthenticationServiceBehaviorFactory _behaviorFactory;
+        public IAuthenticationBehavior _authenticationBehavior;
 
         public LoginController(
                 IUserService userService, 
@@ -50,7 +57,8 @@ namespace DH.Helpdesk.Web.Controllers
                 ILogProgramService logProgramService,
                 IApplicationConfiguration applicationConfiguration,
                 IFederatedAuthenticationService federatedAuthenticationService,
-                IAuthenticationService authenticationService)
+                IAuthenticationService authenticationService,
+                IAuthenticationServiceBehaviorFactory behaviorFactory)
         {
             _userService = userService;
             _settingService = settingService;
@@ -60,6 +68,7 @@ namespace DH.Helpdesk.Web.Controllers
             _applicationConfiguration = applicationConfiguration;
             _federatedAuthenticationService = federatedAuthenticationService;
             _authenticationService = authenticationService;
+            _behaviorFactory = behaviorFactory;
         }
      
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)]
@@ -135,7 +144,18 @@ namespace DH.Helpdesk.Web.Controllers
 
             return View("Login");
         }
+        public void SignIn()
+        {
+            if (!Request.IsAuthenticated)
+            {
+                _authenticationService.SetLoginModeToMicrosoft();
+                //_authenticationBehavior = _behaviorFactory.Create(LoginMode.Microsoft);
 
+                HttpContext.GetOwinContext().Authentication.Challenge(
+                    new AuthenticationProperties { RedirectUri = "/" },
+                    OpenIdConnectAuthenticationDefaults.AuthenticationType);
+            }
+        }
         [HttpPost]
         [AllowAnonymous]
         public ActionResult LoginMicrosoft(LoginInputModel inputData)

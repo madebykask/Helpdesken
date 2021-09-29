@@ -33,6 +33,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         HttpCookie CreateFormsAuthCookie(string userName, string userData);
         string GetSiteLoginPageUrl();
         string GetAuthenticationModeLoginUrl();
+        LoginMode SetLoginModeToMicrosoft();
     }
 
     public class AuthenticationService : IAuthenticationService
@@ -48,8 +49,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         private readonly IUserContext _userContext;
         private readonly ICustomerContext _customerContext;
         private readonly ISessionContext _sessionContext;
-        private readonly IAuthenticationBehavior _authenticationBehavior;
-        private readonly ILoggerService _logger = LogManager.Session;        
+        public IAuthenticationBehavior _authenticationBehavior;
+        private readonly ILoggerService _logger = LogManager.Session;
+        private readonly IAuthenticationServiceBehaviorFactory _behaviorFactory;
 
         #region ctor()
 
@@ -73,6 +75,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             _languageService = languageService;
             _usersPasswordHistoryService = usersPasswordHistoryService;
             _settingService = settingService;
+            _behaviorFactory = behaviorFactory;
 
             _customerContext = customerContext;
             _userContext = userContext;
@@ -83,7 +86,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         }
 
         #endregion
-
+        public LoginMode SetLoginModeToMicrosoft()
+        {
+            _sessionContext.SetLoginMode(LoginMode.Microsoft);
+            _authenticationBehavior = _behaviorFactory.Create(LoginMode.Microsoft);
+            return _sessionContext.LoginMode;
+            
+        }
         public LoginResult Login(HttpContextBase ctx, string userName, string pwd, UserTimeZoneInfo userTimeZoneInfo)
         {
             var user = _userService.Login(userName, pwd);

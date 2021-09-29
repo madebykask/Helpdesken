@@ -47,7 +47,7 @@
             <input type="button" value="Get Case" name="btnGetCase" id="btnGetCase" class="btn btn-large btn-warning" style="width:100%;" />
             <input type="button" value="Save Case" name="btnSaveCase" id="btnSaveCase" class="btn btn-large btn-warning" style="width:100%;" />*@
         }
-        @using (Html.BeginForm("LoginMicrosoft", "Login", null, FormMethod.Post, new { id = "frmLogin", name = "frmLogin" }))
+        @using (Html.BeginForm("SignIn", "MicrosoftLogin", null, FormMethod.Post, new { id = "frmLogin", name = "frmLogin" }))
         {
             <input type="submit" value="Login with Microsoft" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />
         }

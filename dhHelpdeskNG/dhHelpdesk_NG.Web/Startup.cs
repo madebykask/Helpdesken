@@ -46,7 +46,7 @@ namespace DH.Helpdesk.Web.App_Start
                 CookieSecure = CookieSecureOption.Always
             };
             app.UseCookieAuthentication(cookieOptions);
-            if (loginMode == "Microsoft")
+            if (loginMode == "Microsoft" || loginMode == "Application")
             {
                 app.UseOpenIdConnectAuthentication(
                                 new OpenIdConnectAuthenticationOptions
@@ -77,8 +77,6 @@ namespace DH.Helpdesk.Web.App_Start
                                 }
                              );
             }
-
-
             config.Filters.Add(new AuthorizeAttributeExtended());
             WebApiConfig.Register(config);
             ConfigureAuth(app);
