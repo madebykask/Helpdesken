@@ -440,5 +440,9 @@ namespace DH.Helpdesk.Common.Extensions.String
         {
             return string.Join(sep, items);
         }
+        public static string JoinEmailAttachmentsToString(this IEnumerable<string> items, string sep = "|")
+        {
+            return string.Join(sep, items);
+        }
     }
 }

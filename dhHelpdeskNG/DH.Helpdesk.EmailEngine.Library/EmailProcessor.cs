@@ -165,7 +165,7 @@ namespace DH.Helpdesk.EmailEngine.Library
         private void AttachFiles(MailMessage mailMessage, string filesString)
         {
             //TODO - Change separator - se EmailService
-            var files = filesString?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var files = filesString?.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             if (files != null && files.Any())
             {
                 foreach (var file in files)

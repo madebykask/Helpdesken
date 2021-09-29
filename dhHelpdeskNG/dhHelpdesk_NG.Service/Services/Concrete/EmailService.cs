@@ -450,8 +450,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 el.Cc = string.Join(",", msg.CC.Select(x => x.Address));
                 el.Bcc = string.Join(",", msg.Bcc.Select(x => x.Address));
                 el.HighPriority = highPriority;
-                el.Files = externalFiles.Any() ? externalFiles.JoinToString() : ""; //TODO - Change separator
-                el.FilesInternal = internalFiles.Any() ? internalFiles.JoinToString() : "";
+                el.Files = externalFiles.Any() ? externalFiles.JoinEmailAttachmentsToString() : ""; //TODO - Change separator
+                el.FilesInternal = internalFiles.Any() ? internalFiles.JoinEmailAttachmentsToString() : "";
                 el.From = msg.From.Address;
                 el.SendStatus = EmailSendStatus.Pending;
                 el.Attempts = 0;
