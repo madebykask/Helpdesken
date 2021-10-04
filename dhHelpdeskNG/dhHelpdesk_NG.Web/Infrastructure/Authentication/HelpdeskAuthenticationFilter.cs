@@ -15,6 +15,8 @@ using IpMatcher;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Microsoft.Owin.Security;
+using Microsoft.Identity.Client;
+using System.Threading.Tasks;
 
 namespace DH.Helpdesk.Web.Infrastructure.Authentication
 {
@@ -115,6 +117,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         //OnAuthenticationChallenge: is called at the end after other Authorisation filters to be able to process final result - redirect to login page or issue auth challenge
         public void OnAuthenticationChallenge(AuthenticationChallengeContext context)
         {
+            var loginMode = GetCurrentLoginMode();
+            //if (loginMode == LoginMode.Microsoft)
+            //    return;
             // check if we shall skip auth result check for AllowAnonymous controller actions
             var skipAuthResultCheck = (bool)(context.HttpContext.Items[SkipAuthResultCheck] ?? false);
             if (skipAuthResultCheck)
@@ -124,8 +129,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             var httpUserIdentity = context.HttpContext.User?.Identity?.Name ?? string.Empty;
             var helpdeskUserIdentity = SessionFacade.CurrentUserIdentity?.UserId ?? string.Empty;
 
-            var loginMode = GetCurrentLoginMode();
-            //var loginMode = LoginMode.Microsoft;
+            
             _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge: {context.HttpContext.Request.Url}. AuthMode: {loginMode}. [IsAuthenticated: {isIdentityAuthenticated}, HttpUserIdentity: {httpUserIdentity}, HelpdeskSessionUser: {helpdeskUserIdentity}]");
 
             #region MixedMode handling
@@ -148,9 +152,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                     _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Request ip ({clientIP}) is not from WinAuth ip range. Do not prompt windows login...");
                 }
             }
-            else if(loginMode == LoginMode.Microsoft)
+            else if (loginMode == LoginMode.Microsoft)
             {
-                //Do something...
+
+                //var result = MSLogin(context);
+                context.HttpContext.GetOwinContext().Authentication.Challenge(
+                    new AuthenticationProperties { RedirectUri = "/" },
+                    OpenIdConnectAuthenticationDefaults.AuthenticationType);
+
             }
 
             #endregion
@@ -159,6 +168,24 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         #endregion
 
         #region Helper Methods
+        private async Task<AuthenticationResult> MSLogin(AuthenticationChallengeContext context)
+        {
+            string tenant = System.Configuration.ConfigurationManager.AppSettings["Tenant"] != null ?
+           System.Configuration.ConfigurationManager.AppSettings["Tenant"] : "";
+
+                string auth = System.Configuration.ConfigurationManager.AppSettings["Authority"] != null ?
+                                      System.Configuration.ConfigurationManager.AppSettings["Authority"] : "";
+                // Authority is the URL for authority, composed by Microsoft identity platform endpoint and the tenant name (e.g. https://login.microsoftonline.com/contoso.onmicrosoft.com/v2.0)
+                string authority = String.Format(System.Globalization.CultureInfo.InvariantCulture, auth, tenant);
+                IPublicClientApplication app = PublicClientApplicationBuilder.Create("d7a3b1b6-c4a9-461f-a0d6-505f662969df")
+                    .WithAuthority(authority)
+                    .WithRedirectUri("https://localhost:63222/")
+                    .Build();
+            // 5. AcquireTokenInteractive
+            return await app.AcquireTokenInteractive(new[] { "User.Read" })
+            .WithUseEmbeddedWebView(true)
+            .ExecuteAsync();
+        }
 
         private bool IgnoreRequest(AuthenticationContext filterContext)
         {
@@ -195,7 +222,23 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
 
         #endregion
     }
+    #region MicrosoftMode
+    public class MicrosoftResult : ActionResult
+    {
+        private readonly string _redirectUrl;
 
+        public MicrosoftResult(string redirectUrl)
+        {
+            _redirectUrl = redirectUrl;
+        }
+        public override void ExecuteResult(ControllerContext context)
+        {
+            context.HttpContext.GetOwinContext().Authentication.Challenge(
+                    new AuthenticationProperties { RedirectUri = "~/Home/Index/" },
+                    OpenIdConnectAuthenticationDefaults.AuthenticationType);
+        }
+    }
+    #endregion
     #region MixedModeWinAuth401Result
 
     public class MixedModeWinAuth401Result : ActionResult

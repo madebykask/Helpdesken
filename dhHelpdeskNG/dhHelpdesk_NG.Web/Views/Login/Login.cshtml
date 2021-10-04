@@ -15,56 +15,60 @@
     <title>@ViewBag.Title</title>
 </head>
 <body class="login" onload="catchTime()">
-    <div class="form-signin">
-        @using (Html.BeginForm("Login", "Login", null, FormMethod.Post, new { id = "frmLogin", name = "frmLogin" }))
-        {
-            @Html.Hidden("returnUrl", Request.QueryString["returnUrl"])
-            <div class="form-signin-heading">&nbsp;</div>
-            if (TempData["LoginFailed"] != null)
-            {
-                <div class="alert alert-error">
-                    @TempData["LoginFailed"];
-                </div>
-            }
-            @(Translation.Get("Username") + ":")<br />
-            <input type="text" maxlength="50" name="txtUid" id="txtUid" class="input-block-level" placeholder="Username" value='@(ViewBag.UserId != null ? ViewBag.UserId : "")' />
-            <br />
-            @(Translation.Get("Password") + ":")<br />
-            <input type="password" maxlength="50" name="txtPwd" id="txtPwd" class="input-block-level" placeholder="Password" />
-            <!--
-        @Translation.Get("Logga in med"):<br />
-        <select name="checkInWith" id="checkInWith" class="input-block-level">
-            <option value="0">@Translation.Get("Lokalt konto")</option>
-            <option value="1">@Translation.Get("Nätverkskonto")</option>
-        </select>
-        -->
-            <br />
-            <input type="hidden" id="timeZoneOffsetInJan1" name="timeZoneOffsetInJan1" />
-            <input type="hidden" id="timeZoneOffsetInJul1" name="timeZoneOffsetInJul1" />
-            <input type="submit" value="Login" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />
-            @*<input type="button" value="Get Access Token" name="btnAccessToken" id="btnAccessToken" class="btn btn-large btn-danger" style="width:100%;" />
-            <input type="button" value="Get New Access Token" name="btnRefreshToken" id="btnRefreshToken" class="btn btn-large btn-danger" style="width:100%;" />
-            <input type="button" value="Get Case" name="btnGetCase" id="btnGetCase" class="btn btn-large btn-warning" style="width:100%;" />
-            <input type="button" value="Save Case" name="btnSaveCase" id="btnSaveCase" class="btn btn-large btn-warning" style="width:100%;" />*@
-        }
-        @using (Html.BeginForm("SignIn", "MicrosoftLogin", null, FormMethod.Post, new { id = "frmLogin", name = "frmLogin" }))
-        {
-            <input type="submit" value="Login with Microsoft" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />
-        }
-    </div>
-    <div class="signin-bottom">
-        <p><img src="@Url.Content("~/Content/img/dhhelpdesk.png")" /></p>
-        <p>DH Helpdesk is a case handling system from DH Solutions</p>
-        <p>@Translation.Get("version")&nbsp;@ApplicationFacade.Version</p>
-        <a href="http://www.dhsolutions.se" target="_blank">www.dhsolutions.se</a>
-    </div>
-
-    @if (ViewBag.ChangePasswordModel != null)
+    @if (Request.IsAuthenticated)
     {
-        @Html.Partial("_ChangePassword", (ChangePasswordModel)ViewBag.ChangePasswordModel)
+        <p>Hejhej</p>
     }
-    
-<script type="text/javascript">
+        <div class="form-signin">
+            @using (Html.BeginForm("Login", "Login", null, FormMethod.Post, new { id = "frmLogin", name = "frmLogin" }))
+            {
+                @Html.Hidden("returnUrl", Request.QueryString["returnUrl"])
+                <div class="form-signin-heading">&nbsp;</div>
+                if (TempData["LoginFailed"] != null)
+                {
+                    <div class="alert alert-error">
+                        @TempData["LoginFailed"];
+                    </div>
+                }
+                @(Translation.Get("Username") + ":")<br />
+                <input type="text" maxlength="50" name="txtUid" id="txtUid" class="input-block-level" placeholder="Username" value='@(ViewBag.UserId != null ? ViewBag.UserId : "")' />
+                <br />
+                @(Translation.Get("Password") + ":")<br />
+                <input type="password" maxlength="50" name="txtPwd" id="txtPwd" class="input-block-level" placeholder="Password" />
+                <!--
+                @Translation.Get("Logga in med"):<br />
+                <select name="checkInWith" id="checkInWith" class="input-block-level">
+                    <option value="0">@Translation.Get("Lokalt konto")</option>
+                    <option value="1">@Translation.Get("Nätverkskonto")</option>
+                </select>
+                -->
+                <br />
+                <input type="hidden" id="timeZoneOffsetInJan1" name="timeZoneOffsetInJan1" />
+                <input type="hidden" id="timeZoneOffsetInJul1" name="timeZoneOffsetInJul1" />
+                <input type="submit" value="Login" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />
+                @*<input type="button" value="Get Access Token" name="btnAccessToken" id="btnAccessToken" class="btn btn-large btn-danger" style="width:100%;" />
+                    <input type="button" value="Get New Access Token" name="btnRefreshToken" id="btnRefreshToken" class="btn btn-large btn-danger" style="width:100%;" />
+                    <input type="button" value="Get Case" name="btnGetCase" id="btnGetCase" class="btn btn-large btn-warning" style="width:100%;" />
+                    <input type="button" value="Save Case" name="btnSaveCase" id="btnSaveCase" class="btn btn-large btn-warning" style="width:100%;" />*@
+            }
+            @using (Html.BeginForm("SignIn", "Login", null, FormMethod.Post, new { id = "frmLogin", name = "frmLogin" }))
+            {
+                <input type="submit" value="Login with Microsoft" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />
+            }
+        </div>
+        <div class="signin-bottom">
+            <p><img src="@Url.Content("~/Content/img/dhhelpdesk.png")" /></p>
+            <p>DH Helpdesk is a case handling system from DH Solutions</p>
+            <p>@Translation.Get("version")&nbsp;@ApplicationFacade.Version</p>
+            <a href="http://www.dhsolutions.se" target="_blank">www.dhsolutions.se</a>
+        </div>
+
+        @if (ViewBag.ChangePasswordModel != null)
+        {
+            @Html.Partial("_ChangePassword", (ChangePasswordModel)ViewBag.ChangePasswordModel)
+        }
+
+        <script type="text/javascript">
 
     $(function () {
         if (window.ChangePasswordDialog) {
@@ -109,12 +113,12 @@
         saveCase();
     });
 
-    function getToken() {        
+    function getToken() {
         $.post("@Url.Content("~/token")",
             "username=admin" +
             "&password=" +
             "&grant_type=password",
-            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }                
+            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         ).success(function (data) {
             if (data == null)
                 alert("Error occurred!");
@@ -135,13 +139,13 @@
             if (data == null)
                 alert("Error occurred!");
             else {
-                localStorage.setItem('AccessToken', data.access_token);                
+                localStorage.setItem('AccessToken', data.access_token);
             }
         });
     };
 
     function getCase() {
-        var _token = localStorage.getItem('AccessToken');        
+        var _token = localStorage.getItem('AccessToken');
         if (_token == null || _token == "") {
             alert("Not authenticated!");
             return;
@@ -167,12 +171,12 @@
         }
 
         var caseInfo = {
-            Id: 0,            
+            Id: 0,
             Caption: "My Case Caption1",
-            Customer_Id: 29,            
+            Customer_Id: 29,
             ProductAreaSetDate:"2017-05-12T12:41:55",
             PersonsEmail: "mg@dhsolutions.se",
-            CurrentLanguageId: 1            
+            CurrentLanguageId: 1
         };
 
         $.ajax({
@@ -183,6 +187,6 @@
             headers: { "Authorization": "Bearer " + _token }
         });
     };
-</script>
-</body>
+        </script>
+    </body>
 </html>

@@ -24,6 +24,8 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using System.Web;
+using Microsoft.Identity.Client;
+using System.Threading.Tasks;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -75,13 +77,24 @@ namespace DH.Helpdesk.Web.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
+            //TODO: MicrosoftLogin
+            //HttpContext.GetOwinContext().Authentication.Challenge(
+            //        new AuthenticationProperties { RedirectUri = "/" },
+            //        OpenIdConnectAuthenticationDefaults.AuthenticationType);
+
             if (_applicationConfiguration.LoginMode == LoginMode.SSO)
             {
                 var loginUrl = _federatedAuthenticationService.GetSignInUrl();
                 return Redirect(loginUrl);
             }
 
-            //TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
+            //Doesnt work..
+            if(_applicationConfiguration.LoginMode == LoginMode.Microsoft)
+            {
+                HttpContext.GetOwinContext().Authentication.Challenge(
+                    new AuthenticationProperties { RedirectUri = "/" },
+                    OpenIdConnectAuthenticationDefaults.AuthenticationType);
+            }
 
             if (Request.QueryString["ReturnUrl"] == "/")
             {
@@ -141,7 +154,15 @@ namespace DH.Helpdesk.Web.Controllers
                     TempData["LoginFailed"] = $"Login failed! {res.ErrorMessage ?? string.Empty}".Trim();
                 }
             }
+            else
+            {
+                _authenticationService.SetLoginModeToMicrosoft();
+                //_authenticationBehavior = _behaviorFactory.Create(LoginMode.Microsoft);
 
+                //HttpContext.GetOwinContext().Authentication.Challenge(
+                //    new AuthenticationProperties { RedirectUri = "/" },
+                //    OpenIdConnectAuthenticationDefaults.AuthenticationType);
+            }
             return View("Login");
         }
         public void SignIn()
@@ -151,9 +172,19 @@ namespace DH.Helpdesk.Web.Controllers
                 _authenticationService.SetLoginModeToMicrosoft();
                 //_authenticationBehavior = _behaviorFactory.Create(LoginMode.Microsoft);
 
-                HttpContext.GetOwinContext().Authentication.Challenge(
-                    new AuthenticationProperties { RedirectUri = "/" },
-                    OpenIdConnectAuthenticationDefaults.AuthenticationType);
+                //HttpContext.GetOwinContext().Authentication.Challenge(
+                //    new AuthenticationProperties { RedirectUri = "/" },
+                //    OpenIdConnectAuthenticationDefaults.AuthenticationType);
+                //string tenant = System.Configuration.ConfigurationManager.AppSettings["Tenant"] != null ?
+                //       System.Configuration.ConfigurationManager.AppSettings["Tenant"] : "";
+
+                // string auth = System.Configuration.ConfigurationManager.AppSettings["Authority"] != null ?
+                //                       System.Configuration.ConfigurationManager.AppSettings["Authority"] : "";
+                //// Authority is the URL for authority, composed by Microsoft identity platform endpoint and the tenant name (e.g. https://login.microsoftonline.com/contoso.onmicrosoft.com/v2.0)
+                //string authority = String.Format(System.Globalization.CultureInfo.InvariantCulture, auth, tenant);
+                //IPublicClientApplication app = PublicClientApplicationBuilder.Create("d7a3b1b6-c4a9-461f-a0d6-505f662969df").WithAuthority(authority).Build();
+                //string[] scopes = new string[] {"user.read" };
+                //var response = app.AcquireTokenInteractive(scopes);
             }
         }
         [HttpPost]

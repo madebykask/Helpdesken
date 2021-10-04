@@ -57,6 +57,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
             }
             else if (mode == LoginMode.Microsoft)
             {
+                //return new ApplicationAuthenticationBehavior();
                 return new MicrosoftAuthenticationBehavior(_masterDataService);
             }
 

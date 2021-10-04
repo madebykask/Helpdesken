@@ -12,6 +12,7 @@ namespace DH.Helpdesk.Web.Controllers
         // GET: MicrosoftLogin
         public ActionResult Index()
         {
+
             return View();
         }
         /// <summary>

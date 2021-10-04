@@ -37,8 +37,9 @@ namespace DH.Helpdesk.Web.App_Start
         string loginMode = System.Configuration.ConfigurationManager.AppSettings["LoginMode"];
         public void Configuration(IAppBuilder app)
         {
-            app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
             var config = new HttpConfiguration();
+             app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
+                
             var cookieOptions = new CookieAuthenticationOptions
             {
                 //SameSiteMode.None should be always with Secure = true in chrome https://docs.microsoft.com/en-us/aspnet/core/security/samesite?view=aspnetcore-5.0
@@ -49,38 +50,38 @@ namespace DH.Helpdesk.Web.App_Start
             if (loginMode == "Microsoft" || loginMode == "Application")
             {
                 app.UseOpenIdConnectAuthentication(
-                                new OpenIdConnectAuthenticationOptions
-                                {
-                                    // Sets the ClientId, authority, RedirectUri as obtained from web.config
-                                    ClientId = clientId,
-                                    Authority = authority,
-                                    RedirectUri = redirectUri,
-                                    // PostLogoutRedirectUri is the page that users will be redirected to after sign-out. In this case, it is using the home page
-                                    PostLogoutRedirectUri = redirectUri,
-                                    Scope = OpenIdConnectScope.OpenIdProfile,
-                                    // ResponseType is set to request the id_token - which contains basic information about the signed-in user
-                                    ResponseType = OpenIdConnectResponseType.IdToken,
-                                    // ValidateIssuer set to false to allow personal and work accounts from any organization to sign in to your application
-                                    // To only allow users from a single organizations, set ValidateIssuer to true and 'tenant' setting in web.config to the tenant name
-                                    // To allow users from only a list of specific organizations, set ValidateIssuer to true and use ValidIssuers parameter
-                                    TokenValidationParameters = new TokenValidationParameters()
-                                    {
-                                        ValidateIssuer = false // This is a simplification
-                                    },
-                                    // OpenIdConnectAuthenticationNotifications configures OWIN to send notification of failed authentications to OnAuthenticationFailed method
-                                    Notifications = new OpenIdConnectAuthenticationNotifications
-                                    {
-                                        AuthenticationFailed = OnAuthenticationFailed
-                                    },
-                                    // Just for debug purpose to see cookies values
-                                    //CookieManager = new SameSiteCookieManager(new SystemWebCookieManager())
-                                }
-                             );
+                    new OpenIdConnectAuthenticationOptions
+                    {
+                        // Sets the ClientId, authority, RedirectUri as obtained from web.config
+                        ClientId = clientId,
+                        Authority = authority,
+                        RedirectUri = redirectUri,
+                        // PostLogoutRedirectUri is the page that users will be redirected to after sign-out. In this case, it is using the home page
+                        PostLogoutRedirectUri = redirectUri,
+                        Scope = OpenIdConnectScope.OpenIdProfile,
+                        // ResponseType is set to request the id_token - which contains basic information about the signed-in user
+                        ResponseType = OpenIdConnectResponseType.IdToken,
+                        // ValidateIssuer set to false to allow personal and work accounts from any organization to sign in to your application
+                        // To only allow users from a single organizations, set ValidateIssuer to true and 'tenant' setting in web.config to the tenant name
+                        // To allow users from only a list of specific organizations, set ValidateIssuer to true and use ValidIssuers parameter
+                        TokenValidationParameters = new TokenValidationParameters()
+                        {
+                            ValidateIssuer = false // This is a simplification
+                        },
+                        // OpenIdConnectAuthenticationNotifications configures OWIN to send notification of failed authentications to OnAuthenticationFailed method
+                        Notifications = new OpenIdConnectAuthenticationNotifications
+                        {
+                            AuthenticationFailed = OnAuthenticationFailed
+                        },
+                        
+                        // Just for debug purpose to see cookies values
+                        // CookieManager = new SameSiteCookieManager(new SystemWebCookieManager())
+                    }
+                );
             }
             config.Filters.Add(new AuthorizeAttributeExtended());
             WebApiConfig.Register(config);
             ConfigureAuth(app);
-
             var kernel = NinjectWebCommon.Bootstrapper.Kernel;                        
             config.DependencyResolver = new NinjectDependencyResolver(kernel);            
             app.UseWebApi(config);
