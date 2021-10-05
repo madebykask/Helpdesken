@@ -8130,6 +8130,12 @@ If not exists (select * from tblTextTranslation where text_id = 2093 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2093, 2, 'The case was unlocked and user <name> locked the case. Your changes can not be saved. Close the case and try to open again later.')
 GO
 
+If not exists (select * from tbltext where id = 2094)
+	insert into tbltext (id, TextString) VALUES (2094, 'Sparat')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2094 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2094, 2, 'Saved')
+GO
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
