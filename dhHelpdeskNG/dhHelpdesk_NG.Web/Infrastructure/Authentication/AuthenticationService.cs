@@ -34,6 +34,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         string GetSiteLoginPageUrl();
         string GetAuthenticationModeLoginUrl();
         LoginMode SetLoginModeToMicrosoft();
+        LoginMode SetLoginModeToApplication();
     }
 
     public class AuthenticationService : IAuthenticationService
@@ -92,6 +93,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             _authenticationBehavior = _behaviorFactory.Create(LoginMode.Microsoft);
             return _sessionContext.LoginMode;
             
+        }
+        public LoginMode SetLoginModeToApplication()
+        {
+            _sessionContext.SetLoginMode(LoginMode.Application);
+            _authenticationBehavior = _behaviorFactory.Create(LoginMode.Application);
+            return _sessionContext.LoginMode;
+
         }
         public LoginResult Login(HttpContextBase ctx, string userName, string pwd, UserTimeZoneInfo userTimeZoneInfo)
         {
@@ -213,6 +221,51 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
 
             return true;
         }
+        public bool SignInApplicationUser(int userId)
+        {
+            _logger.Debug($"AuthenticationService.SignIn: authenticating user. LoginMode: {_sessionContext.LoginMode}");
+
+            var userIdentity = _authenticationBehavior.CreateUserIdentity(userId);
+
+            if (!string.IsNullOrWhiteSpace(userIdentity?.UserId))
+            {
+                ApplyUserIdentityOverrides(userIdentity);
+                _sessionContext.SetUserIdentity(userIdentity);
+
+                _logger.Debug("AuthenticationService.SignIn: user has successfully been authenticated. " +
+                             $"User: {userIdentity.UserId}, Domain: {userIdentity.Domain}, FullName: {userIdentity.FirstName + " " + userIdentity.LastName} ");
+
+                //get customer user (tblUsers)
+                var customerUser = GetLocalUser(userIdentity);
+
+                //set only if its non-empty
+                if (customerUser != null)
+                {
+                    //set user and customer context
+                    _userContext.SetCurrentUser(customerUser);
+                    _customerContext.SetCustomer(customerUser.CustomerId);
+
+                    FixUserTimeZone(customerUser);
+
+                    AddLoggedInUser(customerUser, _customerContext, ctx);
+                    UpdateUserLogin(ctx, customerUser);
+                    //_caseLockService.CaseLockCleanUp(); //todo: check if required?
+                }
+                else
+                {
+                    _logger.Warn($"AuthenticationService.SignIn: Customer user doesn't exist for login '{userIdentity.UserId}'.");
+                    return false;
+                }
+            }
+            else
+            {
+                _logger.Warn($"AuthenticationService.SignIn: User identity is null or empty.");
+                return false;
+            }
+
+
+            return true;
+        }
 
         // try to load users by different formats
         private UserOverview GetLocalUser(UserIdentity userIdentity)
@@ -250,19 +303,25 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
            _logger.Debug("AuthenticationService. Clearing logging session.");
 
             var sessionId = _sessionContext.SessionId;
-
+            var loginMode = _sessionContext.LoginMode;
             if (!string.IsNullOrWhiteSpace(sessionId))
             {
                 _applicationContext.RemoveLoggedInUser(ctx.Session.SessionID);
                 _sessionContext.ClearSession();
             }
-
+            //Clear Microsoft login which is not set in config file
+            if (loginMode == LoginMode.Microsoft)
+            {
+                ctx.GetOwinContext().Authentication.SignOut();
+            }
             //clear auth cookie for forms/mixed modes
             if (_appConfiguration.LoginMode == LoginMode.Application ||
-                _appConfiguration.LoginMode == LoginMode.Mixed)
+                _appConfiguration.LoginMode == LoginMode.Mixed
+)
             {
                 FormsAuthentication.SignOut();
             }
+
         }
 
         public string GetSiteLoginPageUrl()

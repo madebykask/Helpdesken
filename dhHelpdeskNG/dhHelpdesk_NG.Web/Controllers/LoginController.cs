@@ -32,6 +32,7 @@ namespace DH.Helpdesk.Web.Controllers
     public class LoginController : Controller
     {
         private const string Root = "/";
+        private bool isLoggedIn = false;
         //private const string TokenKey = "Token_Data";
         //private const string Access_Token_Key = "Access_Token";
         //private const string Refresh_Token_Key = "Refresh_Token";
@@ -77,28 +78,24 @@ namespace DH.Helpdesk.Web.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
-            //TODO: MicrosoftLogin
-            //HttpContext.GetOwinContext().Authentication.Challenge(
-            //        new AuthenticationProperties { RedirectUri = "/" },
-            //        OpenIdConnectAuthenticationDefaults.AuthenticationType);
-
+            if(SessionFacade.CurrentUser != null)
+            {
+                return Redirect("Home/Index");
+            }
+            if (_applicationConfiguration.LoginMode == LoginMode.SSO)
+            {
+                var loginUrl = _federatedAuthenticationService.GetSignInUrl();
+                return Redirect(loginUrl);
+            }
             if (_applicationConfiguration.LoginMode == LoginMode.SSO)
             {
                 var loginUrl = _federatedAuthenticationService.GetSignInUrl();
                 return Redirect(loginUrl);
             }
 
-            //Doesnt work..
-            if(_applicationConfiguration.LoginMode == LoginMode.Microsoft)
+            if (isLoggedIn)
             {
-                HttpContext.GetOwinContext().Authentication.Challenge(
-                    new AuthenticationProperties { RedirectUri = "/" },
-                    OpenIdConnectAuthenticationDefaults.AuthenticationType);
-            }
-
-            if (Request.QueryString["ReturnUrl"] == "/")
-            {
-                return RedirectToAction("Login");
+                return Redirect("~/Home/Index");
             }
             return View();
         }
@@ -110,6 +107,10 @@ namespace DH.Helpdesk.Web.Controllers
             var userName = inputData.txtUid?.Trim();
             var password = inputData.txtPwd?.Trim();
             var returnUrl = inputData.returnUrl;
+            if(string.IsNullOrEmpty(returnUrl))
+            {
+                returnUrl = "~/";
+            }
 
             if (IsValidLoginArgument(userName, password))
             {
@@ -146,106 +147,42 @@ namespace DH.Helpdesk.Web.Controllers
                     //}
 
                     #endregion
-
+                    //return RedirectToAction("Index", "Home");
+                    //return Redirect("~/Home/Index");
+                    isLoggedIn = true;
+                    //_authenticationService.SignIn(ctx);
                     RedirectFromLoginPage(returnUrl, res.User.StartPage, res.TimeZoneAutodetect);
                 }
                 else
                 {
                     TempData["LoginFailed"] = $"Login failed! {res.ErrorMessage ?? string.Empty}".Trim();
+                    
                 }
             }
-            else
-            {
-                _authenticationService.SetLoginModeToMicrosoft();
-                //_authenticationBehavior = _behaviorFactory.Create(LoginMode.Microsoft);
 
-                //HttpContext.GetOwinContext().Authentication.Challenge(
-                //    new AuthenticationProperties { RedirectUri = "/" },
-                //    OpenIdConnectAuthenticationDefaults.AuthenticationType);
-            }
-            return View("Login");
+           return View("Login");
+
+
         }
+
+        [AllowAnonymous]
         public void SignIn()
         {
             if (!Request.IsAuthenticated)
             {
                 _authenticationService.SetLoginModeToMicrosoft();
-                //_authenticationBehavior = _behaviorFactory.Create(LoginMode.Microsoft);
 
-                //HttpContext.GetOwinContext().Authentication.Challenge(
-                //    new AuthenticationProperties { RedirectUri = "/" },
-                //    OpenIdConnectAuthenticationDefaults.AuthenticationType);
-                //string tenant = System.Configuration.ConfigurationManager.AppSettings["Tenant"] != null ?
-                //       System.Configuration.ConfigurationManager.AppSettings["Tenant"] : "";
+                HttpContext.GetOwinContext().Authentication.Challenge(
+                    new AuthenticationProperties { RedirectUri = "/" },
+                    OpenIdConnectAuthenticationDefaults.AuthenticationType);
 
-                // string auth = System.Configuration.ConfigurationManager.AppSettings["Authority"] != null ?
-                //                       System.Configuration.ConfigurationManager.AppSettings["Authority"] : "";
-                //// Authority is the URL for authority, composed by Microsoft identity platform endpoint and the tenant name (e.g. https://login.microsoftonline.com/contoso.onmicrosoft.com/v2.0)
-                //string authority = String.Format(System.Globalization.CultureInfo.InvariantCulture, auth, tenant);
-                //IPublicClientApplication app = PublicClientApplicationBuilder.Create("d7a3b1b6-c4a9-461f-a0d6-505f662969df").WithAuthority(authority).Build();
-                //string[] scopes = new string[] {"user.read" };
-                //var response = app.AcquireTokenInteractive(scopes);
             }
-        }
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult LoginMicrosoft(LoginInputModel inputData)
-        {
-            var userName = inputData.txtUid?.Trim();
-            var password = inputData.txtPwd?.Trim();
-            var returnUrl = inputData.returnUrl;
-
-            if (IsValidLoginArgument(userName, password))
-            {
-                // try to login user
-                var res =
-                    _authenticationService.Login(
-                        HttpContext,
-                        userName,
-                        password,
-                        new UserTimeZoneInfo(inputData.timeZoneOffsetInJan1, inputData.timeZoneOffsetInJul1));
-
-                if (res.IsSuccess)
-                {
-                    SessionFacade.TimeZoneDetectionResult = res.TimeZoneAutodetect;
-
-                    if (res.PasswordExpired)
-                    {
-                        var settings = _settingService.GetCustomerSetting(res.User.CustomerId);
-
-                        ViewBag.UserId = userName;
-                        ViewBag.ChangePasswordModel = GetPasswordChangeModel(res.User, settings);
-                        return View("Login");
-                    }
-
-                    _caseLockService.CaseLockCleanUp();
-
-                    #region Token based authentication
-
-                    //var token = GetToken(userName, password);
-                    //TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
-                    //if (token != null)
-                    //{
-                    //    TempData[TokenKey] = GetTokenData(token.access_token, token.refresh_token);                        
-                    //}
-
-                    #endregion
-
-                    RedirectFromLoginPage(returnUrl, res.User.StartPage, res.TimeZoneAutodetect);
-                }
-                else
-                {
-                    TempData["LoginFailed"] = $"Login failed! {res.ErrorMessage ?? string.Empty}".Trim();
-                }
-            }
-
-            return View("Login");
         }
 
         [HttpGet]
         public ActionResult Logout()
         {
-            //TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
+            var loginMode = SessionFacade.CurrentLoginMode;
             _authenticationService.ClearLoginSession(ControllerContext.HttpContext);
             return View("Login");
         }

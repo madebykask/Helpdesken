@@ -86,7 +86,7 @@ namespace DH.Helpdesk.Web
             SetPerformanceLogSettings();
             //DumpModules();
             string loginMode = System.Configuration.ConfigurationManager.AppSettings["LoginMode"];
-            if (loginMode == "Microsoft")
+            if (loginMode == "Microsoft" || loginMode == "Application")
             {
                 AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
             }

@@ -1,6 +1,7 @@
 using System.Web;
 using System.Web.Security;
 using DH.Helpdesk.Common.Types;
+using System.Security.Claims;
 
 namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
 {
@@ -26,12 +27,22 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
         protected virtual UserIdentity CreateUserIdentityInner(HttpContextBase ctx)
         {
             UserIdentity userIdentity = null;
-            var identity = ctx.User.Identity as FormsIdentity;
-
-            if (identity != null)
+            var identity = ctx.User.Identity as ClaimsIdentity;
+            userIdentity = new UserIdentity()
             {
-                userIdentity = identity.CreateHelpdeskUserIdentity();
-            }
+                UserId = identity.Name,
+                Domain = ""
+                //FirstName = user?.FirstName,
+                //LastName = user?.SurName,
+                //EmployeeNumber = employeeNum,
+                //Phone = user?.Phone,
+                //Email = user?.Email ?? emailAddress
+            };
+
+            //if (identity != null)
+            //{
+            //    userIdentity = identity.CreateHelpdeskUserIdentity();
+            //}
             return userIdentity;
         }
 

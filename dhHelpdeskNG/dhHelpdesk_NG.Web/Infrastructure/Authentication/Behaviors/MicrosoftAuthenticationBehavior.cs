@@ -17,7 +17,7 @@ using System.Linq;
 
 namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
 {
-    public class MicrosoftAuthenticationBehavior : Controller, IAuthenticationBehavior 
+    public class MicrosoftAuthenticationBehavior : IAuthenticationBehavior 
     {
         private readonly IMasterDataService _masterDataService;
         public MicrosoftAuthenticationBehavior(IMasterDataService masterDataService)
