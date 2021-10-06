@@ -65,7 +65,8 @@
                                     @*<a target="_blank" class="@(GuidHelper.IsGuid(Model.LogId) ? "isExisted" : "")"
                                     onclick="window.dhHelpdesk.logFileAccess(@Model.CaseId, '@fileModel.Name', @((int)CaseFileType.CaseFile))"
                                     href="@BuildCaseFileLinkVD(fileModel.Name)"><i class="icon- attachedFile"></i>@fileModel.Name</a>*@
-                                    <a target="_blank" class="@(GuidHelper.IsGuid(Model.LogId) ? "isExisted" : "")" href="@Url.Action("Documents", "Cases",new RouteValueDictionary {{"id", Model.CaseId}, {"fileName", fileModel.Name}, { "type", 0 } })">
+                                    <a target="_blank" class="@(GuidHelper.IsGuid(Model.LogId) ? "isExisted" : "")" href="@Url.Action("Documents", "Cases",new RouteValueDictionary {{"id", Model.CaseId}, {"fileName", fileModel.Name}, { "type", 0 } })"
+                                       data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(fileModel.LogType))">
                                         <i class="icon-file"></i>@fileModel.Name<br />
                                     </a>
                                 }
@@ -82,20 +83,20 @@
                                     if (Model.UseVirtualDirectory)
 
                                     {
-                                        var type = 0;
-                                        if (fileModel.LogType == LogFileType.Internal)
+                                        var type = 1;
+                                        if (fileModel.ParentLogType != null)
                                         {
-                                            type = (int)CaseFileType.LogInternal;
+                                            type = fileModel.ParentLogType == LogFileType.Internal ? (int)CaseFileType.LogInternal : (int)CaseFileType.LogExternal;
                                         }
                                         else
                                         {
-                                            type = (int)CaseFileType.LogExternal;
+                                            type = fileModel.LogType == LogFileType.Internal ? (int)CaseFileType.LogInternal : (int)CaseFileType.LogExternal;
                                         }
                                         @*<a target="_blank" class="@(GuidHelper.IsGuid(Model.LogId) ? "isExisted" : "")"
                                            onclick="window.dhHelpdesk.logFileAccess(@Model.CaseId, '@fileModel.Name', @(fileModel.LogType == LogFileType.Internal ? (int)CaseFileType.LogInternal : (int)CaseFileType.LogExternal), @fileModel.ObjId.Value)"
                                            href="@BuildLogFileLinkVD(fileModel.ObjId.Value, fileModel.Name, fileModel.ParentLogType ?? fileModel.LogType)"><i class="icon- attachedFile"></i> @fileModel.Name</a>*@
                                         <a target="_blank"  class="@(GuidHelper.IsGuid(Model.LogId) ? "isExisted" : "")" href="@Url.Action("Documents", "Cases",new RouteValueDictionary { { "id", Model.CaseId }, { "fileName", fileModel.Name }, { "type", type } , {"logId",fileModel.ObjId } })"
-                                           data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(fileModel.LogType))">
+                                           data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(fileModel.ParentLogType ?? fileModel.LogType))">
                                             <i class="@(GetFileIcon(fileModel.LogType))"></i> @fileModel.Name
                                         </a>
                                      }
