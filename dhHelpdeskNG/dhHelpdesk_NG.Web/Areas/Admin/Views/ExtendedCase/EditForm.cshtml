@@ -42,7 +42,7 @@
                                     @Translation.GetCoreTextTranslation("Formulär")  @Translation.GetCoreTextTranslation("Namn")
                                 </td>
                                 <td>
-                                    <input id="formName" required type="text" value='@(Model.ExtendedCaseForm == null ? "" : Model.ExtendedCaseForm.Name)' maxlength="100" />
+                                    <input id="formName" type="text" value='@(Model.ExtendedCaseForm == null ? "" : Model.ExtendedCaseForm.Name)' maxlength="100" />
 
                                 </td>
                             </tr>
@@ -359,6 +359,7 @@
 
                 if (document.getElementById("formName").value == "" || document.getElementById("formName").value.match(/^ *$/) !== null) {
                     document.getElementById("formName").value = "";
+                    ShowToastMessage('@Html.Raw(Translation.GetForJS(Translation.Get("Du måste ange ett namn", Enums.TranslationSource.TextTranslation)))', "error")
                     document.getElementById("formName").focus();
                     return;
                 }
