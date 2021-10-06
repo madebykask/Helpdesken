@@ -99,7 +99,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 //Todo - with Håkan
                 var userId = _userContext.UserId;
                 _authenticationService.SetLoginModeToApplication();
-                _authenticationService.SignIn(ctx);
+                _authenticationService.SignInApplicationUser(ctx, userId);
                 return;
             }
             else

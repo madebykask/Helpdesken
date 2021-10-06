@@ -41,7 +41,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
             if (mode == LoginMode.Application)
             {
                 //Todo - with Håkan
-                return new ApplicationAuthenticationBehavior();
+                return new ApplicationAuthenticationBehavior(_masterDataService);
             }
             
             else if (mode == LoginMode.Windows)

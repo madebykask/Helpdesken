@@ -24,6 +24,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
         {
             _masterDataService = masterDataService;
         }
+        public UserIdentity CreateUserIdentityById(int userId)
+        {
+            return null;
+        }
         public UserIdentity CreateUserIdentity(HttpContextBase ctx)
         {
             var userIdentity = ctx.User.Identity as ClaimsIdentity;

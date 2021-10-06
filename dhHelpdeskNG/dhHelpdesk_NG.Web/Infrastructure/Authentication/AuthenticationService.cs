@@ -29,6 +29,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
     {
         LoginResult Login(HttpContextBase ctx, string userName, string pwd, UserTimeZoneInfo userTimeZoneInfo);
         bool SignIn(HttpContextBase ctx);
+        bool SignInApplicationUser(HttpContextBase ctx, int userId);
         void ClearLoginSession(HttpContextBase ctx);
         HttpCookie CreateFormsAuthCookie(string userName, string userData);
         string GetSiteLoginPageUrl();
@@ -221,11 +222,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
 
             return true;
         }
-        public bool SignInApplicationUser(int userId)
+        public bool SignInApplicationUser(HttpContextBase ctx, int userId)
         {
             _logger.Debug($"AuthenticationService.SignIn: authenticating user. LoginMode: {_sessionContext.LoginMode}");
 
-            var userIdentity = _authenticationBehavior.CreateUserIdentity(userId);
+            var userIdentity = _authenticationBehavior.CreateUserIdentityById(userId);
 
             if (!string.IsNullOrWhiteSpace(userIdentity?.UserId))
             {
