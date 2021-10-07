@@ -234,23 +234,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
 
         #endregion
     }
-    #region MicrosoftMode
-    //public class MicrosoftResult : ActionResult
-    //{
-    //    private readonly string _redirectUrl;
 
-    //    public MicrosoftResult(string redirectUrl)
-    //    {
-    //        _redirectUrl = redirectUrl;
-    //    }
-    //    public override void ExecuteResult(ControllerContext context)
-    //    {
-    //        context.HttpContext.GetOwinContext().Authentication.Challenge(
-    //                new AuthenticationProperties { RedirectUri = "~/Home/Index/" },
-    //                OpenIdConnectAuthenticationDefaults.AuthenticationType);
-    //    }
-    //}
-    #endregion
     #region MixedModeWinAuth401Result
 
     public class MixedModeWinAuth401Result : ActionResult

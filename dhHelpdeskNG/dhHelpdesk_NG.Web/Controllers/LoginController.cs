@@ -24,8 +24,6 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using System.Web;
-using Microsoft.Identity.Client;
-using System.Threading.Tasks;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -87,16 +85,11 @@ namespace DH.Helpdesk.Web.Controllers
                 var loginUrl = _federatedAuthenticationService.GetSignInUrl();
                 return Redirect(loginUrl);
             }
-            if (_applicationConfiguration.LoginMode == LoginMode.SSO)
-            {
-                var loginUrl = _federatedAuthenticationService.GetSignInUrl();
-                return Redirect(loginUrl);
-            }
 
-            if (isLoggedIn)
-            {
-                return Redirect("~/Home/Index");
-            }
+            //if (isLoggedIn)
+            //{
+            //    return Redirect("~/Home/Index");
+            //}
             return View();
         }
 
