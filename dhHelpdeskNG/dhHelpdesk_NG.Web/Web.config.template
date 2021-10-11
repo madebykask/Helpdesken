@@ -33,7 +33,18 @@
     #{if AuthenticationMode == "mixed"}<add key="winAuthIPFilter" value="#{MixedModeIPRanges}"/>#{/if}
     #{if AuthenticationMode == "sso"}<add key="LoginMode" value="SSO"/>#{/if}
     #{if AuthenticationMode == "anonymous"}<add key="LoginMode" value="Anonymous"/>#{/if}
-  </appSettings>
+    #{if AuthenticationMode == "applicationandmicrosoft"}
+	<add key="LoginMode" value="ApplicationAndMicrosoft"/>
+	<add key="ClientId" value="{AzureClientId}" />
+	  <!--DH Solutions Azure-->
+	<add key="Tenant" value="common" />
+	  <!--If your application supports My organization only, replace this value with the Tenant Id or Tenant name (for example, contoso.onmicrosoft.com)
+    If your application supports Accounts in any organizational directory, replace this value with "organizations"
+    If your application supports All Microsoft account users, replace this value with "common"-->
+	<add key="Authority" value="https://login.microsoftonline.com/{0}/v2.0" />
+	<add key="RedirectUri" value="https://localhost:63222/" />
+	#{/if}
+</appSettings>
   <system.web.extensions>
     <scripting>
       <webServices>
@@ -71,9 +82,14 @@
     <authentication mode="Forms">
       <forms loginUrl="~/Login/Login" timeout="2880" defaultUrl="~/"/>
     </authentication>
-    #{/if}
-    
-    <identity impersonate="false"/>
+	  #{/if}
+	  #{if AuthenticationMode == "ApplicationAndMicrosoft"}
+	  <authorization>
+		  <allow users="*" />
+	  </authorization>
+	#{/if}
+
+	  <identity impersonate="false"/>
     <httpHandlers>
       <add path="Reserved.ReportViewerWebControl.axd" verb="*" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" validate="false"/>
     </httpHandlers>
@@ -185,14 +201,27 @@
         <assemblyIdentity name="itextsharp" publicKeyToken="8354ae6d2174ddca" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-5.5.0.0" newVersion="5.5.0.0" />
       </dependentAssembly>-->
-      <dependentAssembly>
+      <!--<dependentAssembly>
         <assemblyIdentity name="Microsoft.Owin" publicKeyToken="31bf3856ad364e35" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-3.1.0.0" newVersion="3.1.0.0" />
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="Microsoft.Owin.Security" publicKeyToken="31bf3856ad364e35" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-3.1.0.0" newVersion="3.1.0.0" />
-      </dependentAssembly>
+      </dependentAssembly>-->
+		<!--New Owin Development-->
+		<dependentAssembly>
+			<assemblyIdentity name="Microsoft.Owin" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+			<bindingRedirect oldVersion="0.0.0.0-4.2.0.0" newVersion="4.2.0.0" />
+		</dependentAssembly>
+		<dependentAssembly>
+			<assemblyIdentity name="Microsoft.Owin.Security" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+			<bindingRedirect oldVersion="0.0.0.0-4.2.0.0" newVersion="4.2.0.0" />
+		</dependentAssembly>
+		<dependentAssembly>
+			<assemblyIdentity name="System.IdentityModel.Tokens.Jwt" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+			<bindingRedirect oldVersion="0.0.0.0-5.3.0.0" newVersion="5.3.0.0" />
+		</dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="MiniProfiler" publicKeyToken="b44f9351044011a3" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-3.2.0.157" newVersion="3.2.0.157" />

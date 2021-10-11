@@ -30,7 +30,6 @@ namespace DH.Helpdesk.Web.Controllers
     public class LoginController : Controller
     {
         private const string Root = "/";
-        private bool isLoggedIn = false;
         //private const string TokenKey = "Token_Data";
         //private const string Access_Token_Key = "Access_Token";
         //private const string Refresh_Token_Key = "Refresh_Token";
@@ -46,7 +45,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IAuthenticationService _authenticationService;
         private readonly IAuthenticationServiceBehaviorFactory _behaviorFactory;
         public IAuthenticationBehavior _authenticationBehavior;
-
+        private readonly IGlobalSettingService _globalSettingService;
         public LoginController(
                 IUserService userService, 
                 ICustomerService customerService, 
@@ -59,7 +58,8 @@ namespace DH.Helpdesk.Web.Controllers
                 IApplicationConfiguration applicationConfiguration,
                 IFederatedAuthenticationService federatedAuthenticationService,
                 IAuthenticationService authenticationService,
-                IAuthenticationServiceBehaviorFactory behaviorFactory)
+                IAuthenticationServiceBehaviorFactory behaviorFactory,
+                            IGlobalSettingService globalSettingService)
         {
             _userService = userService;
             _settingService = settingService;
@@ -70,6 +70,7 @@ namespace DH.Helpdesk.Web.Controllers
             _federatedAuthenticationService = federatedAuthenticationService;
             _authenticationService = authenticationService;
             _behaviorFactory = behaviorFactory;
+            _globalSettingService = globalSettingService;
         }
      
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)]
@@ -86,10 +87,7 @@ namespace DH.Helpdesk.Web.Controllers
                 return Redirect(loginUrl);
             }
 
-            //if (isLoggedIn)
-            //{
-            //    return Redirect("~/Home/Index");
-            //}
+            ViewBag.ShowMsButton = false;
             return View();
         }
 
@@ -140,10 +138,7 @@ namespace DH.Helpdesk.Web.Controllers
                     //}
 
                     #endregion
-                    //return RedirectToAction("Index", "Home");
-                    //return Redirect("~/Home/Index");
-                    isLoggedIn = true;
-                    //_authenticationService.SignIn(ctx);
+
                     RedirectFromLoginPage(returnUrl, res.User.StartPage, res.TimeZoneAutodetect);
                 }
                 else
@@ -175,7 +170,6 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ActionResult Logout()
         {
-            var loginMode = SessionFacade.CurrentLoginMode;
             _authenticationService.ClearLoginSession(ControllerContext.HttpContext);
             return View("Login");
         }

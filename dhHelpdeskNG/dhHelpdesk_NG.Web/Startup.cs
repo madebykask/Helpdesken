@@ -47,7 +47,7 @@ namespace DH.Helpdesk.Web.App_Start
                 CookieSecure = CookieSecureOption.Always
             };
             app.UseCookieAuthentication(cookieOptions);
-            if (loginMode == "Microsoft" || loginMode == "Application")
+            if (!string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(redirectUri) && !string.IsNullOrEmpty(tenant))
             {
                 app.UseOpenIdConnectAuthentication(
                     new OpenIdConnectAuthenticationOptions

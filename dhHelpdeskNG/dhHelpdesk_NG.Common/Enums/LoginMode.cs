@@ -20,6 +20,8 @@ namespace DH.Helpdesk.Common.Enums
 
         Microsoft,
 
-        Anonymous
+        Anonymous,
+
+        ApplicationAndMicrosoft
     }
 }
