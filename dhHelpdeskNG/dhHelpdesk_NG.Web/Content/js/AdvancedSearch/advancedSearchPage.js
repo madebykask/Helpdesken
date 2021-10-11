@@ -523,10 +523,14 @@ window.advancedSearchPage =
 
                     //todo: refactor url construction
                     var url = encodeURIComponent(strJoin('/Cases/AdvancedSearch?', 'doSearchAtBegining=true', "&isExtSearch=", self.isExtendedSearch));
-                    var firstCell = strJoin('<td><a href="/Cases/Edit/', record.case_id, '?backUrl=', url, '"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></a></td>');
+                    var caseImg = strJoin('<img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" />');
+                    if (record.isCaseLocked) {
+                        caseImg = caseImg + strJoin('<img class="img-case-locked" title="', record.caseLockedIconTitle, '" alt="', record.caseLockedIconTitle, '" src="', record.caseLockedIconUrl, '" />');
+                    }
+                    var firstCell = strJoin('<td><a class="img-case-parent" href="/Cases/Edit/', record.case_id, '?backUrl=', url, '">', caseImg, '</a></td>');
 
                     if (self.isExtendedSearch && !record.ExtendedAvailable) {
-                        firstCell = strJoin('<td ><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></td>');
+                        firstCell = strJoin('<td >', caseImg, '</td>');
                     }
 
                     var rowClass = getClsRow(record);

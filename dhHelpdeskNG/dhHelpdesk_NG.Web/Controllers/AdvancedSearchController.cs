@@ -30,6 +30,8 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ISettingService _settingService;
         private readonly GridSettingsService _gridSettingsService;
 		private readonly ICustomerService _customerService;
+        private readonly IGlobalSettingService _globalSettingService;
+        private readonly ICaseLockService _caseLockService;
 
 		public AdvancedSearchController(
             ICaseFieldSettingService caseFieldSettingService, 
@@ -40,17 +42,23 @@ namespace DH.Helpdesk.Web.Controllers
             IUserService userService, 
             ICustomerUserService customerUserService,
 			ICustomerService customerService,
-            GridSettingsService gridSettingsService)
+            GridSettingsService gridSettingsService,
+            IGlobalSettingService globalSettingService,
+            ICaseLockService caseLockService)
         {
             _settingService = settingService;
             _gridSettingsService = gridSettingsService;
-			_customerService = customerService;
+            _globalSettingService = globalSettingService;
+            _caseLockService = caseLockService;
+            _customerService = customerService;
             _advancedSearchBehavior = new AdvancedSearchBehavior(caseFieldSettingService, 
                 caseSearchService, 
                 userService, 
                 settingService, 
                 productAreaService,
-                customerUserService);
+                customerUserService,
+                globalSettingService,
+                caseLockService);
         }
 
         [HttpPost]
