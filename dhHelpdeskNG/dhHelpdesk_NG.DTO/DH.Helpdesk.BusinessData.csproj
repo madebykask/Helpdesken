@@ -337,7 +337,7 @@
     <Compile Include="Models\Email\EmailSearchScope.cs" />
     <Compile Include="Models\Employee\EmployeeModel.cs" />
     <Compile Include="Models\Error\ErrorModel.cs" />
-    <Compile Include="Models\ExtendedCase\CustomerCaseSolutionExtendedForms.cs" />
+    <Compile Include="Models\ExtendedCase\ExtendedFormViewModels.cs" />
     <Compile Include="Models\ExtendedCase\ExtendedCaseFieldTranslation.cs" />
     <Compile Include="Models\ExtendedCase\ExtendedCaseFormJsonModel.cs" />
     <Compile Include="Models\ExtendedCase\ExtendedCaseFormPayloadModel.cs" />

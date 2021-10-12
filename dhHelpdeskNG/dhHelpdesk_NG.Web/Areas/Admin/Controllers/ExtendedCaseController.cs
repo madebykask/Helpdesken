@@ -134,16 +134,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             List<ExtendedCaseFieldTranslation> initialTranslations = GetInitialTranslations();
 
-            CustomerCaseSolutionsExtendedForm model = new CustomerCaseSolutionsExtendedForm()
+            ExtendedFormViewModels viewmodel = new ExtendedFormViewModels()
             {
                 Customer = customer,
                 CustomerCaseSolutions = caseSolutions,
                 ExtendedCaseForm = null,
                 FieldTranslations = _languageService.GetExtendedCaseTranslations(null, languageId, initialTranslations),
-                CustomerCaseSolutionsWithExtendedCaseForm = caseSolutionsExtendedCaseForms
+                CustomerCaseSolutionsWithExtendedCaseForm = caseSolutionsExtendedCaseForms,
+                ActiveLanguages = _languageService.GetActiveLanguages().Where(x => x.IsActive == 1).OrderBy(x => x.Id).ToList()
             };
 
-            return View("EditForm", model);
+            return View("EditForm", viewmodel);
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -163,18 +164,19 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             List<ExtendedCaseFieldTranslation> initialTranslations = GetInitialTranslations();
 
-            CustomerCaseSolutionsExtendedForm model = new CustomerCaseSolutionsExtendedForm()
+            ExtendedFormViewModels viewModel = new ExtendedFormViewModels()
             {
                 Customer = customer,
                 CustomerCaseSolutions = caseSolutions,
                 ExtendedCaseForm = extendedCaseForm,
-                CustomerCaseSolutionsWithExtendedCaseForm = caseSolutionsExtendedCaseForms
+                CustomerCaseSolutionsWithExtendedCaseForm = caseSolutionsExtendedCaseForms,
+                ActiveLanguages = _languageService.GetActiveLanguages().Where(x => x.IsActive == 1).OrderBy(x => x.Id).ToList()
             };
 
-            string metaData = model.ExtendedCaseForm.MetaData.Replace("function(m) { return ", "").Replace("\";}", "\"");
-            model.FormFields = JsonConvert.DeserializeObject<ExtendedCaseFormJsonModel>(metaData);
-            model.FieldTranslations = _languageService.GetExtendedCaseTranslations(model.FormFields, languageId, initialTranslations);
-            return View("EditForm", model);
+            string metaData = viewModel.ExtendedCaseForm.MetaData.Replace("function(m) { return ", "").Replace("\";}", "\"");
+            viewModel.FormFields = JsonConvert.DeserializeObject<ExtendedCaseFormJsonModel>(metaData);
+            viewModel.FieldTranslations = _languageService.GetExtendedCaseTranslations(viewModel.FormFields, languageId, initialTranslations);
+            return View("EditForm", viewModel);
         }
 
         //[CustomAuthorize(Roles = "3,4")]
@@ -196,7 +198,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Name = Translation.GetCoreTextTranslation("Textfält")},
                 new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Name = Translation.GetCoreTextTranslation("Textarea")},
                 new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Name = Translation.GetCoreTextTranslation("Datumfält")},
-                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Name = Translation.GetCoreTextTranslation("Infofält")}
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Name = Translation.GetCoreTextTranslation("Infofält")},
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Name = Translation.GetCoreTextTranslation("Filuppladdning")},
             };
         }
 

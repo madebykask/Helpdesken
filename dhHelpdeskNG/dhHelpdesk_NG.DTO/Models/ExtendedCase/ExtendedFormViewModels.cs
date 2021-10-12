@@ -1,10 +1,11 @@
-﻿using DH.Helpdesk.Domain.ExtendedCaseEntity;
+﻿using DH.Helpdesk.BusinessData.Models.Language.Output;
+using DH.Helpdesk.Domain.ExtendedCaseEntity;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
 {
-    public class CustomerCaseSolutionsExtendedForm
+    public class ExtendedFormViewModels
     {
         public DH.Helpdesk.Domain.Customer Customer { get; set; }
 
@@ -16,6 +17,8 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         public ExtendedCaseFormJsonModel FormFields { get; set; }
 
         public IList<ExtendedCaseFieldTranslation> FieldTranslations { get; set; }
+
+        public IList<LanguageOverview> ActiveLanguages { get; set; }
 
     }
 }
