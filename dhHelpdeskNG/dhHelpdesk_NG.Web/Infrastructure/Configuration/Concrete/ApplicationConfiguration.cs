@@ -85,5 +85,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
                 return ipList.Split(new [] {';'}, StringSplitOptions.RemoveEmptyEntries).ToList();
             }
         }
+        public string GetAppKeyValueMicrosoft
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["MicrosoftLogin"] != null ?
+                    ConfigurationManager.AppSettings["MicrosoftLogin"] : "";
+            }
+        }
     }
 }

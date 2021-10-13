@@ -421,7 +421,6 @@
     <Compile Include="Controllers\CasesController_Files.cs" />
     <Compile Include="Controllers\CasesController_MobileRoute.cs" />
     <Compile Include="Controllers\FileAccessController.cs" />
-    <Compile Include="Controllers\MicrosoftLoginController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\MicrosoftAuthenticationBehavior.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\MixedModeAuthenticationBehavior.cs" />
@@ -4400,8 +4399,6 @@
     <Content Include="Web.config.template.variables.dev.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Views\MicrosoftLogin\Login.cshtml" />
-    <Content Include="Views\MicrosoftLogin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">
@@ -5123,7 +5120,6 @@
     <Folder Include="rss\" />
     <Folder Include="Views\CasesController_MobileRoute\" />
     <Folder Include="Views\LogAccess\" />
-    <Folder Include="Views\MicrosoftAuth\" />
     <Folder Include="Views\Password\" />
     <Folder Include="Views\Statistics\" />
   </ItemGroup>

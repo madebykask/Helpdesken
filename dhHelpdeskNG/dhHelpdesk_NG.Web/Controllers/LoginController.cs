@@ -24,6 +24,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using System.Web;
+using DH.Helpdesk.Web.Infrastructure.Configuration.Concrete;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -33,7 +34,7 @@ namespace DH.Helpdesk.Web.Controllers
         //private const string TokenKey = "Token_Data";
         //private const string Access_Token_Key = "Access_Token";
         //private const string Refresh_Token_Key = "Refresh_Token";
-
+        private ApplicationConfiguration appconfig;
         private readonly IUserService _userService;
         private readonly ISettingService _settingService;
         private readonly IUsersPasswordHistoryService _usersPasswordHistoryService;
@@ -86,8 +87,14 @@ namespace DH.Helpdesk.Web.Controllers
                 var loginUrl = _federatedAuthenticationService.GetSignInUrl();
                 return Redirect(loginUrl);
             }
-
+            appconfig = new ApplicationConfiguration();
+            var msLogin = appconfig.GetAppKeyValueMicrosoft;
             ViewBag.ShowMsButton = false;
+            if (msLogin == "1")
+            {
+                ViewBag.ShowMsButton = true;
+            }
+            
             return View();
         }
 
@@ -148,7 +155,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
-           return View("Login");
+            return View("Login");
 
 
         }
@@ -171,6 +178,13 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Logout()
         {
             _authenticationService.ClearLoginSession(ControllerContext.HttpContext);
+            appconfig = new ApplicationConfiguration();
+            var msLogin = appconfig.GetAppKeyValueMicrosoft;
+            ViewBag.ShowMsButton = false;
+            if (msLogin == "1")
+            {
+                ViewBag.ShowMsButton = true;
+            }
             return View("Login");
         }
 
