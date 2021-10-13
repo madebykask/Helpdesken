@@ -76,7 +76,7 @@ namespace DH.Helpdesk.EmailEngine.Library
                     smtpPort = int.Parse(ConfigurationManager.AppSettings["DefaultSmtpPort"]);
                     smtpUser = "";
                     smtpPassword = "";
-                    smtpSsl = false;
+                    smtpSsl = Convert.ToBoolean (ConfigurationManager.AppSettings["smtpSsl"]);// false;
                 }
 
                 using (var smtpClient = new SmtpClient(smtpServer, smtpPort))
@@ -119,7 +119,17 @@ namespace DH.Helpdesk.EmailEngine.Library
                         var addresses = email.EmailAddress.Split(',');
                         foreach (var address in addresses)
                         {
-                            mailMessage.To.Add(new MailAddress(address));
+
+                            if (IsValidEmail(address))
+                            {
+
+                                mailMessage.To.Add(new MailAddress(address));
+
+                            }
+                            else
+                            {
+                                _logger.Debug("Email address: " + address + " is not valid");
+                            }
                         }
                     }
 
@@ -159,6 +169,21 @@ namespace DH.Helpdesk.EmailEngine.Library
                     inner = inner.InnerException;
                 }
                 attempt.Message = errorMsg.ToString();
+            }
+        }
+
+
+
+        bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
             }
         }
 

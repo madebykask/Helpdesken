@@ -364,7 +364,9 @@ namespace DH.Helpdesk.Web.Controllers
                 userService,
                 settingService,
                 productAreaService,
-                customerUserService);
+                customerUserService,
+                globalSettingService,
+                caseLockService);
         }
 
         #endregion

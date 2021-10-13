@@ -14,7 +14,7 @@ namespace DH.Helpdesk.Domain.ExtendedCaseEntity
         
         public string Text { get; set; }
 
-        public bool IsSection { get; set; }
+        public string ControlType{ get; set; }
 
         public int LanguageId { get; set; }
 

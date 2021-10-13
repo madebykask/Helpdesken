@@ -12,6 +12,33 @@ BEGIN
 END
 GO
 
+RAISERROR ('Add Control.Filuppladdning Swedish to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 1 AND Property = 'Control.Filuppladdning')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (1
+           ,'Control.Filuppladdning'
+           ,'Filuppladdning')
+		   END
+GO
+RAISERROR ('Add Control.Filuppladdning English to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 2 AND Property = 'Control.Filuppladdning')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (2
+           ,'Control.Filuppladdning'
+           ,'File Upload')
+		   END
+GO
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.53'
 GO

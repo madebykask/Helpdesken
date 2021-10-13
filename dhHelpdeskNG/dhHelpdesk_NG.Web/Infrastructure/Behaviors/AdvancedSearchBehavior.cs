@@ -7,6 +7,7 @@ using DH.Helpdesk.BusinessData.Enums.Users;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Grid;
 using DH.Helpdesk.BusinessData.Models.User.Input;
+using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Extensions.Integer;
@@ -30,7 +31,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
         private readonly ISettingService _settingService;
         private readonly IProductAreaService _productAreaService;
         private readonly ICustomerUserService _customerUserService;
+        private readonly IGlobalSettingService _globalSettingService;
+        private readonly ICaseLockService _caseLockService;
 
+        private readonly int DefaultCaseLockBufferTime = 30; // Seconds
         private readonly int DefaultMaxRows = 10;
 
         public AdvancedSearchBehavior(ICaseFieldSettingService caseFieldSettingService,
@@ -38,9 +42,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
             IUserService userService, 
             ISettingService settingService, 
             IProductAreaService productAreaService,
-            ICustomerUserService customerUserService)
+            ICustomerUserService customerUserService, 
+            IGlobalSettingService globalSettingService,
+            ICaseLockService caseLockService)
         {
             _customerUserService = customerUserService;
+            _globalSettingService = globalSettingService;
+            _caseLockService = caseLockService;
             _caseFieldSettingService = caseFieldSettingService;
             _caseSearchService = caseSearchService;
             _userService = userService;
@@ -213,6 +221,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
             var data = new List<Dictionary<string, object>>();
             var customerSettings = _settingService.GetCustomerSetting(currentCustomerId);
             var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1, userTimeZone);
+            var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
+            var ids = m.cases.Select(o => o.Id).ToArray();
+            var casesLocks = _caseLockService.GetLockedCasesToOverView(ids, globalSettings, this.DefaultCaseLockBufferTime).ToList();
 
             foreach (var searchRow in m.cases)
             {
@@ -225,6 +236,15 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
                     { "isUrgent", searchRow.IsUrgent },
                     { "isClosed", searchRow.IsClosed},
                 };
+
+                var caseLock = casesLocks.FirstOrDefault(x => x.CaseId == searchRow.Id);
+                if (caseLock != null)
+                {
+                    jsRow.Add("isCaseLocked", true);
+                    jsRow.Add("caseLockedIconTitle",
+                        $"{caseLock.User.FirstName} {caseLock.User.LastName} ({caseLock.User.UserId})");
+                    jsRow.Add("caseLockedIconUrl", $"/Content/icons/{GlobalEnums.CaseIcon.Locked.CaseIconSrc()}");
+                }
 
                 if (f.IsExtendedSearch)
                 {

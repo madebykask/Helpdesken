@@ -410,10 +410,14 @@ var GRID_STATE = {
         if (data && data.length > 0) {
             $.each(data, function (idx, record) {
                 var url = encodeURIComponent(strJoin('/Cases/AdvancedSearch?', 'doSearchAtBegining=true', "&isExtSearch=", isExtendedSearch));
-                var firstCell = strJoin('<td > <a href="/Cases/Edit/', record.case_id, '?backUrl=', url, '"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></a></td>');;
+                var caseImg = strJoin('<img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" />');
+                if (record.isCaseLocked) {
+                    caseImg = caseImg + strJoin('<img class="img-case-locked" title="', record.caseLockedIconTitle, '" alt="', record.caseLockedIconTitle, '" src="', record.caseLockedIconUrl, '" />');
+                }
+                var firstCell = strJoin('<td > <a class="img-case-parent" href="/Cases/Edit/', record.case_id, '?backUrl=', url, '">', caseImg, '</a></td>');;
 
                 if (isExtendedSearch && !record.ExtendedAvailable) {
-                    firstCell = strJoin('<td ><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></td>');
+                    firstCell = strJoin('<td >', caseImg, '</td>');
                 }
 
                 var rowClass = me.getClsRow(record);

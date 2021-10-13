@@ -8137,6 +8137,27 @@ If not exists (select * from tblTextTranslation where text_id = 2094 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2094, 2, 'Saved')
 GO
 
+If not exists (select * from tbltext where id = 2095)
+	insert into tbltext (id, TextString) VALUES (2095, 'Filuppladdning')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2095 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2095, 2, 'File Upload')
+GO
+
+If not exists (select * from tbltext where id = 2096)
+	insert into tbltext (id, TextString) VALUES (2096, 'Alla texter måste vara ifyllda på språket')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2096 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2096, 2, 'All text needs to be entered in language')
+GO
+
+If not exists (select * from tbltext where id = 2097)
+	insert into tbltext (id, TextString) VALUES (2097, 'Fälttext')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2097 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2097, 2, 'Field Text')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')

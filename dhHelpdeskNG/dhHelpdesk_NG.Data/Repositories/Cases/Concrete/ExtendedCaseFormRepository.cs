@@ -295,7 +295,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 if (!sectionId.Contains("Section."))
                 { sectionId = "Section." + sectionNameWithFormId; }
 
-                foreach (var t in translations.Where(x => x.IsSection && StringHelper.GetCleanString(x.Property) == cleanSectionName))
+                foreach (var t in translations.Where(x => x.ControlType == "Section" && StringHelper.GetCleanString(x.Property) == cleanSectionName))
                 {
                     if (t.TranslationId != 0)
                     {
@@ -335,7 +335,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     if (!controlId.Contains("Control."))
                     { controlId = "Control." + controlNameWithFormId; }
 
-                    foreach (var t in translations.Where(x => !x.IsSection && StringHelper.GetCleanString(x.Property) == cleanControlName))
+                    foreach (var t in translations.Where(x => x.ControlType != "Section" && StringHelper.GetCleanString(x.Property) == cleanControlName))
                     {
                         if (t.TranslationId!= 0)
                         {
