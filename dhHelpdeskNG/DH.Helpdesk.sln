@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.Web", "dhHelpdesk_NG.Web\DH.Helpdesk.Web.csproj", "{FFCFD298-57C0-46A4-8554-CB2163A49B25}"
 EndProject
@@ -50,6 +50,8 @@ EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DH.Helpdesk.LDAP_AD", "DH.Helpdesk.LDAP-AD\DH.Helpdesk.LDAP_AD.vbproj", "{305EAD7F-ADDE-4821-8213-1E273C4E526E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.TaskScheduler.Console", "DH.Helpdesk.TaskScheduler.Console\DH.Helpdesk.TaskScheduler.Console.csproj", "{B25DB426-911D-429B-B537-CFA2FD1F5F0F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DH.Helpdesk.Upkeeper", "DH.Helpdesk.Upkeeper\DH.Helpdesk.Upkeeper.csproj", "{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -545,6 +547,30 @@ Global
 		{B25DB426-911D-429B-B537-CFA2FD1F5F0F}.Template_Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{B25DB426-911D-429B-B537-CFA2FD1F5F0F}.Template_Debug|x86.ActiveCfg = Debug|Any CPU
 		{B25DB426-911D-429B-B537-CFA2FD1F5F0F}.Template_Debug|x86.Build.0 = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Debug|x86.Build.0 = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.DhDev|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.DhDev|Any CPU.Build.0 = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.DhDev|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.DhDev|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.DhDev|x86.ActiveCfg = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.DhDev|x86.Build.0 = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Release|x86.ActiveCfg = Release|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Release|x86.Build.0 = Release|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Template_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Template_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Template_Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Template_Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Template_Debug|x86.ActiveCfg = Debug|Any CPU
+		{BDDA9CC6-5CB4-4DC9-9B72-5AAD68272BD6}.Template_Debug|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

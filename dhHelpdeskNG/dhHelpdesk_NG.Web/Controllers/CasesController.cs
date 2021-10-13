@@ -36,6 +36,8 @@ using DH.Helpdesk.Web.Infrastructure.Behaviors;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
 using DH.Helpdesk.BusinessData.Models.Case.Input;
+using Microsoft.Ajax.Utilities;
+
 namespace DH.Helpdesk.Web.Controllers
 {
 	using DH.Helpdesk.BusinessData.Enums.Case;
@@ -1045,23 +1047,39 @@ namespace DH.Helpdesk.Web.Controllers
                 // Case still is locked by me
                 return Json(true);
             }
-            else if (caseLock == null ||
-                     (caseLock != null && !(caseLock.ExtendedTime >= DateTime.Now)))
+
+            if (caseLock == null || !(caseLock.ExtendedTime >= DateTime.Now))
             {
                 //case is not locked by me or is not locked at all 
                 var curCase = _caseService.GetDetachedCaseById(caseId);
                 if (curCase != null && curCase.ChangeTime.RoundTick() == caseChangedTime.RoundTick())
                     return Json(true);//case is not updated yet by any other
-                else
-                    return Json(false);
-            }
-            else
                 return Json(false);
+            }
+
+            return Json(false);
         }
 
-        public JsonResult ReExtendCaseLock(string lockGuid, int extendValue)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lockGuid"></param>
+        /// <param name="extendValue"></param>
+        /// <param name="caseId"></param>
+        /// <returns>empty string if success. Name of user who locked the case if not</returns>
+        public JsonResult ReExtendCaseLock(string lockGuid, int extendValue, int caseId)
         {
-            return Json(_caseLockService.ReExtendLockCase(new Guid(lockGuid), extendValue));
+            var isExtended = _caseLockService.ReExtendLockCase(new Guid(lockGuid), extendValue);
+            if (!isExtended)
+            {
+                var lockInfo = _caseLockService.GetCaseLock(caseId);
+                if (lockInfo != null)
+                {
+                    return Json(
+                        $"{lockInfo.User.FirstName ?? ""} {lockInfo.User.SurName ?? ""} ({lockInfo.User.UserID ?? ""})");
+                }
+            }
+            return Json(string.Empty);
         }
 
         #endregion

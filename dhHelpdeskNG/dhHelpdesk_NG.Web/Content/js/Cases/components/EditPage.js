@@ -770,11 +770,31 @@ EditPage.prototype.reExtendCaseLock = function () {
 
     var data = {
         lockGuid: p.caseLockGuid,
-        extendValue: p.extendValue
+        extendValue: p.extendValue,
+        caseId: p.currentCaseId
     };
+    if ($.parseJSON(p.isCaseLocked.toLowerCase())) return;
 
     $.post(p.caseLockExtender, data, function (data) {
-        if (data === false) {
+        if (data && data.length) {
+            var caseLockedWarning$ = $('#caseLockedWarning');
+            caseLockedWarning$.off('show.bs.modal').on('show.bs.modal',
+                function () {
+                    var caseLockedByLabel = p.caseLockedByLabel.replace('&lt;name&gt;', data);
+                    caseLockedWarning$.find('.modal-body').html(caseLockedByLabel);
+                    caseButtons
+                        .addClass('disabled')
+                        .css('pointer-events', 'none');
+                    $('#case-action-close')
+                        .removeClass('disabled')
+                        .css('pointer-events', '');
+
+                    caseLockedWarning$.find('.btn.ok').off('click').on('click', function (e) {
+                        caseLockedWarning$.modal('hide');
+                        //window.location.reload();
+                    });
+                });
+            caseLockedWarning$.modal('show');
             self.stopCaseLockTimer();
         }
     });
@@ -809,11 +829,10 @@ EditPage.prototype.getValidationErrorMessage = function (extraMessage) {
     var mandatoryFieldsText = me.p.casesScopeInitParameters.mandatoryFieldsText || '';
     var messages = [requiredFieldsMessage, '<br />', mandatoryFieldsText, ':'];
     $('label.error').each(function (key, el) {
-        var errorText;
         if ($(el).css('display') === 'none') {
             return true;
         }
-        errorText = $(el).text();
+        var errorText = $(el).text();
         $.each(validationMessages, function (index, validationMessage) {
             errorText = '<br />' + '[' + dhHelpdesk.cases.utils.replaceAll(errorText, validationMessage, '').trim() + ']';
         });
