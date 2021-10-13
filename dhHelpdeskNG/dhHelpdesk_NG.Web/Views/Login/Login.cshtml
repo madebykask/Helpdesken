@@ -51,7 +51,7 @@
         {
             if (ViewBag.ShowMsButton)
             {
-                using (Html.BeginForm("SignIn", "Login", null, FormMethod.Post, new { id = "frmLogin", name = "frmLogin" }))
+                using (Html.BeginForm("SignIn", "Login", null, FormMethod.Post, new { id = "frmLoginMS", name = "frmLoginMS" }))
                 {
                     <div class="text-center">
                         <input type="image" value="Login with Microsoft" name="btnLogin" id="btnLogin" src="~/Content/img/ms-symbollockup_signin_light.png" />
