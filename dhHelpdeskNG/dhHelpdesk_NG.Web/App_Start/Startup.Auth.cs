@@ -19,7 +19,8 @@ namespace DH.Helpdesk.Web.App_Start
     {        
 
         public void ConfigureAuth(IAppBuilder app)
-        {            
+        {       
+            //Todo - check this up
             OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions()
             {
                 AllowInsecureHttp = true,

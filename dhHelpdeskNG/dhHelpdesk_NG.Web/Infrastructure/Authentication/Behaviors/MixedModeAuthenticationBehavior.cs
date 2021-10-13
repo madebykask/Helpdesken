@@ -29,7 +29,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
 
             return userIdentity;
         }
-
+        public UserIdentity CreateUserIdentityById(int userId)
+        {
+            return null;
+        }
         public string GetLoginUrl()
         {
             return "/"; // return home page to display windows login page first, if cancelled user will be redirected by auth filter to site login page 

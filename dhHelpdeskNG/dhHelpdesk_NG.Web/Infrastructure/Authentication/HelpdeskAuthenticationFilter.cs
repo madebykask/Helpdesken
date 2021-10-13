@@ -12,6 +12,12 @@ using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete;
 using IpMatcher;
+using Microsoft.Owin;
+using Microsoft.Owin.Security.OpenIdConnect;
+using Microsoft.Owin.Security;
+using Microsoft.Identity.Client;
+using System.Threading.Tasks;
+using DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors;
 
 namespace DH.Helpdesk.Web.Infrastructure.Authentication
 {
@@ -25,6 +31,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         private readonly IApplicationConfiguration _applicationConfiguration;
         private readonly IUserContext _userContext;
         private readonly ILoggerService _logger = LogManager.Session;
+        private readonly IAuthenticationServiceBehaviorFactory _authenticationBehaviorFactory;
         private Matcher _ipMatcher;
         
         #region ctor()
@@ -32,12 +39,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         public HelpdeskAuthenticationFilter(IAuthenticationService authenticationService, 
             ISessionContext sessionContext,
             IUserContext userContext,
-            IApplicationConfiguration applicationConfiguration)
+            IApplicationConfiguration applicationConfiguration,
+            IAuthenticationServiceBehaviorFactory authenticationBehaviorFactory)
         {
             _authenticationService = authenticationService;
             _sessionContext = sessionContext;
             _userContext = userContext;
             _applicationConfiguration = applicationConfiguration;
+            _authenticationBehaviorFactory = authenticationBehaviorFactory;
 
             var loginMode = GetCurrentLoginMode();
             if (loginMode == LoginMode.Mixed)
@@ -75,53 +84,90 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             var ctx = filterContext.HttpContext;
             var identity = ctx.User.Identity;
             var isIdentityAuthenticated = identity?.IsAuthenticated ?? false;
+            var loginMode = GetCurrentLoginMode();
 
-            // allow anonymous for login controller actions
-            if (IgnoreRequest(filterContext))
+            if(isIdentityAuthenticated && loginMode == LoginMode.Microsoft)
             {
-                filterContext.HttpContext.Items[SkipAuthResultCheck] = true;
-                _logger.Debug($"AuthenticationFilter. Skip check for anonymous action. Identity: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}, Url: {ctx.Request.Url}");
+                //Working
+                _authenticationService.SetLoginModeToMicrosoft();
+                _authenticationService.SignIn(ctx);
+                return;
+
+            }
+            else if(loginMode == LoginMode.Application && !string.IsNullOrEmpty(_userContext.Login))
+            {
+                //Todo - with Håkan
+                var userId = _userContext.UserId;
+                _authenticationService.SetLoginModeToApplication();
+                _authenticationService.SignInApplicationUser(ctx, userId);
                 return;
             }
-            
-            var customerUserName = _userContext.Login;
-            
-            _logger.Debug($"AuthenticationFilter called. CustomerUser: {customerUserName}, Identity: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}, Url: {ctx.Request.Url}");
-            
-            if (isIdentityAuthenticated)
+            else
             {
-                //NOTE: perform sign in only if request is authenticated (forms, wins, adfs,..) but helpdesk user was not created yet (first login request) or doesn't exist in session any more (asp.net session expired)
-                if (string.IsNullOrEmpty(_sessionContext.UserIdentity?.UserId))
+                // allow anonymous for login controller actions
+                if (IgnoreRequest(filterContext))
                 {
-                    _logger.Debug($"AuthenticationFilter. Performing user signIn. Identity: {identity?.Name}");
-                    var isUserAuthenticated = _authenticationService.SignIn(ctx);
-                    if (!isUserAuthenticated)
+                    filterContext.HttpContext.Items[SkipAuthResultCheck] = true;
+                    _logger.Debug($"AuthenticationFilter. Skip check for anonymous action. Identity: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}, Url: {ctx.Request.Url}");
+                    return;
+                }
+
+                var customerUserName = _userContext.Login;
+
+                _logger.Debug($"AuthenticationFilter called. CustomerUser: {customerUserName}, Identity: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}, Url: {ctx.Request.Url}");
+
+                if (isIdentityAuthenticated)
+                {
+                    //NOTE: perform sign in only if request is authenticated (forms, wins, adfs,..) but helpdesk user was not created yet (first login request) or doesn't exist in session any more (asp.net session expired)
+                    if (string.IsNullOrEmpty(_sessionContext.UserIdentity?.UserId))
                     {
-                        _logger.Warn($"AuthenticationFilter. Failed to sign in user. Signing out. Identity: {identity?.Name}");
-                        _authenticationService.ClearLoginSession(ctx);
-                        
-                        //redirect to forms login page if user cannot be found in the database by identity user name
-                        var loginUrl = _authenticationService.GetSiteLoginPageUrl(); // specific for each auth mode (win, forms, mixed, sso)
-                        _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Redirecting to login page: {loginUrl}");
-                        filterContext.Result = new RedirectResult(loginUrl);
+                        _logger.Debug($"AuthenticationFilter. Performing user signIn. Identity: {identity?.Name}");
+                        var isUserAuthenticated = _authenticationService.SignIn(ctx);
+                        if (!isUserAuthenticated)
+                        {
+                            _logger.Warn($"AuthenticationFilter. Failed to sign in user. Signing out. Identity: {identity?.Name}");
+                            _authenticationService.ClearLoginSession(ctx);
+
+                            //redirect to forms login page if user cannot be found in the database by identity user name
+                            var loginUrl = _authenticationService.GetSiteLoginPageUrl(); // specific for each auth mode (win, forms, mixed, sso)
+                            _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Redirecting to login page: {loginUrl}");
+                            filterContext.Result = new RedirectResult(loginUrl);
+                        }
                     }
+
+                }
+                //else if(!string.IsNullOrEmpty(_userContext.Login))
+                //{
+                //    isIdentityAuthenticated = true;
+                //    _authenticationService.SignIn(ctx);
+                //    return;
+                //}
+                else
+                {
+                    //This is wrong when using Applöication Login
+                    _authenticationService.ClearLoginSession(ctx);
+                    var loginUrl = "~/Login/Login";
+                    filterContext.Result = new RedirectResult(loginUrl);
                 }
             }
+            
         }
         
         //OnAuthenticationChallenge: is called at the end after other Authorisation filters to be able to process final result - redirect to login page or issue auth challenge
         public void OnAuthenticationChallenge(AuthenticationChallengeContext context)
         {
+            var loginMode = GetCurrentLoginMode();
+            var isIdentityAuthenticated = context.HttpContext.User?.Identity?.IsAuthenticated ?? false;
+            //Todo - Check with Håkan
             // check if we shall skip auth result check for AllowAnonymous controller actions
             var skipAuthResultCheck = (bool)(context.HttpContext.Items[SkipAuthResultCheck] ?? false);
             if (skipAuthResultCheck)
                 return;
 
-            var isIdentityAuthenticated = context.HttpContext.User?.Identity?.IsAuthenticated ?? false;
             var httpUserIdentity = context.HttpContext.User?.Identity?.Name ?? string.Empty;
             var helpdeskUserIdentity = SessionFacade.CurrentUserIdentity?.UserId ?? string.Empty;
 
-            var loginMode = GetCurrentLoginMode();
+
             _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge: {context.HttpContext.Request.Url}. AuthMode: {loginMode}. [IsAuthenticated: {isIdentityAuthenticated}, HttpUserIdentity: {httpUserIdentity}, HelpdeskSessionUser: {helpdeskUserIdentity}]");
 
             #region MixedMode handling
@@ -144,6 +190,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                     _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Request ip ({clientIP}) is not from WinAuth ip range. Do not prompt windows login...");
                 }
             }
+
 
             #endregion
         }
