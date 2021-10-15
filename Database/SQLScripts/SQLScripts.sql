@@ -12,8 +12,8 @@ BEGIN
 END
 GO
 
-RAISERROR ('Add Control.Filuppladdning Swedish to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
-IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 1 AND Property = 'Control.Filuppladdning')
+RAISERROR ('Add Message.DragFilerHit Swedish to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 1 AND Property = 'Message.DragFilerHit')
 BEGIN	 
 INSERT INTO [dbo].[ExtendedCaseTranslations]
            ([LanguageId]
@@ -21,12 +21,12 @@ INSERT INTO [dbo].[ExtendedCaseTranslations]
            ,[Text])
      VALUES
            (1
-           ,'Control.Filuppladdning'
-           ,'Filuppladdning')
+           ,'Message.DragFilerHit'
+           ,'Drag filer hit')
 		   END
 GO
-RAISERROR ('Add Control.Filuppladdning English to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
-IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 2 AND Property = 'Control.Filuppladdning')
+RAISERROR ('Add Message.DragFilerHit English to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 2 AND Property = 'Message.DragFilerHit')
 BEGIN	 
 INSERT INTO [dbo].[ExtendedCaseTranslations]
            ([LanguageId]
@@ -34,10 +34,11 @@ INSERT INTO [dbo].[ExtendedCaseTranslations]
            ,[Text])
      VALUES
            (2
-           ,'Control.Filuppladdning'
-           ,'File Upload')
+           ,'Message.DragFilerHit'
+           ,'Drop files here')
 		   END
 GO
+
 
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.53'
