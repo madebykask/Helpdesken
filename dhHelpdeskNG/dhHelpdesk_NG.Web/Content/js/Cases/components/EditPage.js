@@ -771,8 +771,12 @@ EditPage.prototype.reExtendCaseLock = function () {
     var data = {
         lockGuid: p.caseLockGuid,
         extendValue: p.extendValue,
-        caseId: p.currentCaseId
+        caseId: parseInt(p.currentCaseId || self.case.id)
     };
+    if (!data.caseId || !data.lockGuid) {
+        console.log(`Missing data for reextendcase: ${JSON.stringify(data)}`);
+        return;
+    }
     if ($.parseJSON(p.isCaseLocked.toLowerCase())) return;
 
     $.post(p.caseLockExtender, data, function (data) {
