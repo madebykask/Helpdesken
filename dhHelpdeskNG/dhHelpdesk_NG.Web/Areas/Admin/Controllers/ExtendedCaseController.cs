@@ -194,12 +194,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             return new List<ExtendedCaseFieldTranslation>()
             {
-                new ExtendedCaseFieldTranslation() { Language = defaultLanguage,  Name = Translation.GetCoreTextTranslation("Sektion")},
-                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Name = Translation.GetCoreTextTranslation("Textfält")},
-                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Name = Translation.GetCoreTextTranslation("Textarea")},
-                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Name = Translation.GetCoreTextTranslation("Datumfält")},
-                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Name = Translation.GetCoreTextTranslation("Infofält")},
-                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Name = Translation.GetCoreTextTranslation("Filuppladdning")},
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Section", Name = Translation.GetCoreTextTranslation("Sektion")},
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Control", Name = Translation.GetCoreTextTranslation("Textfält")},
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Control", Name = Translation.GetCoreTextTranslation("Textarea")},
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Control", Name = Translation.GetCoreTextTranslation("Datumfält")},
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Control", Name = Translation.GetCoreTextTranslation("Infofält")},
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Control", Name = Translation.GetCoreTextTranslation("Filuppladdning")},
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Message", Name = Translation.GetCoreTextTranslation("Dra filer hit")},
             };
         }
 

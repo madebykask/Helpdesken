@@ -18,5 +18,7 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         public string Name { get; set; }
 
         public string TranslationText { get; set; }
+
+        public string Prefix { get; set; }
     }
 }

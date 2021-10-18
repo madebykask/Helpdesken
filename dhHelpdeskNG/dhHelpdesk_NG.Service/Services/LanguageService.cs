@@ -172,28 +172,30 @@ namespace DH.Helpdesk.Services.Services
 
             foreach (var t in initialTranslations)
             {
-                var prefix = t.Name == initialTranslations[0].Name ? "Section." : "Control.";
+                //var prefix = t.Name == initialTranslations[0].Name ? "Section." : "Control.";
                 fieldtranslations.Add(new ExtendedCaseFieldTranslation()
                 {
                     Language = defaultLanguage,
                     IsDefaultLanguage = true,
                     Name = t.Name,
+                    Prefix = t.Prefix,
                     TranslationText =
-                        GetExtendedCaseTranslation(prefix + StringHelper.GetCleanString(t.Name), defaultLanguage.Id)
+                        GetExtendedCaseTranslation(t.Prefix + "." + StringHelper.GetCleanString(t.Name), defaultLanguage.Id)
                 });
             }
             foreach (var al in activeLanguages.Where(l => l.Id != defaultLanguage.Id))
             {
                 foreach (var t in initialTranslations)
                 {
-                    var prefix = t.Name == initialTranslations[0].Name ? "Section." : "Control.";
+                    //var prefix = t.Name == initialTranslations[0].Name ? "Section." : "Control.";
                     fieldtranslations.Add(new ExtendedCaseFieldTranslation()
                     {
                         Language = al,
                         IsDefaultLanguage = (al.Id == defaultLanguage.Id),
                         Name = t.Name,
+                        Prefix = t.Prefix,
                         TranslationText =
-                            GetExtendedCaseTranslation(prefix + StringHelper.GetCleanString(t.Name), al.Id)
+                            GetExtendedCaseTranslation(t.Prefix + "." + StringHelper.GetCleanString(t.Name), al.Id)
                     });
                 }
             }
