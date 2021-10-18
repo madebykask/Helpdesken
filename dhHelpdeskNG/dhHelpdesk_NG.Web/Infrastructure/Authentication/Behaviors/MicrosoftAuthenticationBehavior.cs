@@ -35,18 +35,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
             var userEmail = userClaims.First(c => c.Type == "preferred_username").Value;
             string fullName = userClaims.First(c => c.Type == "name").Value;
 
-            //var user = principal.Claims(0)
             var lastError = new ErrorModel(string.Empty);
 
-
-            //var res = SetCustomer(filterContext, out lastError);
-
             var microsoftIdentity = TryMicrosoftLogin(userEmail, out lastError);
-
-            //if (microsoftIdentity != null)
-            //{
-            //    microsoftIdentity = microsoftIdentity.CreateHelpdeskUserIdentity();
-            //}
 
             return microsoftIdentity;
         }
@@ -66,13 +57,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
             lastError = null;
             var employeeNum = string.Empty;
             var user = _masterDataService.GetUserByEmail(emailAddress);
-
-            //if (string.IsNullOrWhiteSpace(initiator?.UserId))
-            //    userId = mailAddress;
-
-            //var defaultUserId = ConfigurationManager.AppSettings[AppSettingsKey.DefaultUserId];
-            //if (!string.IsNullOrEmpty(defaultUserId))
-            //    userId = defaultUserId;
 
             var defaultEmployeeNumber = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultEmployeeNumber);
             if (!string.IsNullOrEmpty(defaultEmployeeNumber))
