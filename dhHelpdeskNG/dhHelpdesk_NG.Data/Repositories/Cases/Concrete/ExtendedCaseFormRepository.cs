@@ -337,9 +337,9 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
                     foreach (var t in translations.Where(x => x.ControlType != "Section" && StringHelper.GetCleanString(x.Property) == cleanControlName))
                     {
-                        if (t.TranslationId!= 0)
+                        if (t.TranslationId != 0)
                         {
-                            var updatedTranslation = DataContext.ExtendedCaseTranslations.FirstOrDefault(x=> x.Id == t.TranslationId);
+                            var updatedTranslation = DataContext.ExtendedCaseTranslations.FirstOrDefault(x => x.Id == t.TranslationId);
                             //var updatedTranslation = DataContext.ExtendedCaseTranslations.Where(u => u.Property == controlId && u.LanguageId == t.LanguageId).FirstOrDefault();
                             updatedTranslation.Property = controlId;
                             updatedTranslation.Text = t.Text ?? "";
@@ -366,6 +366,46 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     }
                     c.label = "@Translation." + controlId;
                     c.id = controlNameWithFormId;
+
+                    if (!String.IsNullOrEmpty(c.addonText))
+                    {
+                        var addOnTextId = c.addonText;
+                        var cleanAddOnText = StringHelper.GetCleanString(addOnTextId);
+                        var cleanAddOnTextWithFormId = cleanAddOnText + "_" + entity.id;
+                        if (!addOnTextId.Contains("Message."))
+                        { addOnTextId = "Message." + cleanAddOnTextWithFormId; }
+
+                        foreach (var t in translations.Where(x => x.ControlType == "fileUpload" && StringHelper.GetCleanString(x.Property) == cleanAddOnText))
+                        {
+                            if (t.TranslationId != 0)
+                            {
+                                var updatedTranslation = DataContext.ExtendedCaseTranslations.FirstOrDefault(x => x.Id == t.TranslationId);
+                                //var updatedTranslation = DataContext.ExtendedCaseTranslations.Where(u => u.Property == controlId && u.LanguageId == t.LanguageId).FirstOrDefault();
+                                updatedTranslation.Property = addOnTextId;
+                                updatedTranslation.Text = t.Text ?? "";
+                                updatedTranslation.ExtendedCaseForm_Id = entity.id;
+                            }
+                            else if (DataContext.ExtendedCaseTranslations.Where(ct => ct.Property == addOnTextId && t.LanguageId == ct.LanguageId).Count() == 0)
+                            {
+                                DataContext.ExtendedCaseTranslations.Add(
+                                new ExtendedCaseTranslationEntity()
+                                {
+                                    LanguageId = t.LanguageId,
+                                    Property = addOnTextId,
+                                    Text = t.Text ?? "",
+                                    ExtendedCaseForm_Id = entity.id
+                                });
+                            }
+                            else
+                            {
+                                var updatedTranslation = DataContext.ExtendedCaseTranslations.Where(u => u.Property == addOnTextId && u.LanguageId == t.LanguageId).FirstOrDefault();
+                                updatedTranslation.Text = t.Text ?? "";
+                                updatedTranslation.ExtendedCaseForm_Id = entity.id;
+                            }
+                            DataContext.Commit();
+                        }
+                        c.addonText = "@Translation." + addOnTextId;
+                    }
                 }
             }
 

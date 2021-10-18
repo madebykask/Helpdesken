@@ -79,6 +79,9 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         [JsonProperty("translationId")]
         public int TranslationId { get; set; }
 
+        [JsonProperty("addonText")]
+        public string AddOnText { get; set; }
+
     }
 
 }

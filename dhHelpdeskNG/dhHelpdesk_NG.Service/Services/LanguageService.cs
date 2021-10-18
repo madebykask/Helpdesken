@@ -216,7 +216,8 @@ namespace DH.Helpdesk.Services.Services
                         Name = s.name,
                         TranslationText =
                             GetExtendedCaseTranslation(s.name.Replace("@Translation.",""), defaultLanguage.Id),
-                        IsDefaultLanguage = true
+                        IsDefaultLanguage = true,
+                        Prefix = "Section"
                     });
 
                     foreach (var l in activeLanguages.Where(x => x.Id != defaultLanguage.Id))
@@ -227,9 +228,11 @@ namespace DH.Helpdesk.Services.Services
                             Language = l,
                             Name = s.name,
                             TranslationText =
-                                GetExtendedCaseTranslation(s.name.Replace("@Translation.", ""), l.Id)
+                                GetExtendedCaseTranslation(s.name.Replace("@Translation.", ""), l.Id),
+                            Prefix = "Section"
                         });
                     }
+
                     foreach (var c in s.controls)
                     {
                         fieldtranslations.Add(new ExtendedCaseFieldTranslation()
@@ -237,10 +240,23 @@ namespace DH.Helpdesk.Services.Services
                             Id = _languageRepository.GetExtendedFormTranslationId(c.label, defaultLanguage.Id),
                             Language = defaultLanguage,
                             Name = c.label,
-                            TranslationText =
-                                GetExtendedCaseTranslation(c.label.Replace("@Translation.", ""), defaultLanguage.Id),
-                            IsDefaultLanguage = true
+                            TranslationText = GetExtendedCaseTranslation(c.label.Replace("@Translation.", ""), defaultLanguage.Id),
+                            IsDefaultLanguage = true,
+                            Prefix = "Control"
                         });
+
+                        if (c.addonText != null)
+                        {
+                            fieldtranslations.Add(new ExtendedCaseFieldTranslation()
+                            {
+                                Id = _languageRepository.GetExtendedFormTranslationId(c.addonText, defaultLanguage.Id),
+                                Language = defaultLanguage,
+                                Name = c.addonText,
+                                TranslationText = GetExtendedCaseTranslation(c.addonText.Replace("@Translation.", ""), defaultLanguage.Id),
+                                IsDefaultLanguage = true,
+                                Prefix = "Message"
+                            });
+                        }
 
                         foreach (var l in activeLanguages.Where(x => x.Id != defaultLanguage.Id))
                         {
@@ -249,11 +265,24 @@ namespace DH.Helpdesk.Services.Services
                                 Id = _languageRepository.GetExtendedFormTranslationId(c.label, l.Id),
                                 Language = l,
                                 Name = c.label,
-                                TranslationText =
-                                    GetExtendedCaseTranslation(c.label.Replace("@Translation.", ""), l.Id),
-                                IsDefaultLanguage = false
+                                TranslationText = GetExtendedCaseTranslation(c.label.Replace("@Translation.", ""), l.Id),
+                                IsDefaultLanguage = false,
+                                Prefix = "Control"
                             });
-                        }   
+
+                            if (c.addonText != null)
+                            {
+                                fieldtranslations.Add(new ExtendedCaseFieldTranslation()
+                                {
+                                    Id = _languageRepository.GetExtendedFormTranslationId(c.addonText, l.Id),
+                                    Language = l,
+                                    Name = c.addonText,
+                                    TranslationText = GetExtendedCaseTranslation(c.addonText.Replace("@Translation.", ""), l.Id),
+                                    IsDefaultLanguage = false,
+                                    Prefix = "Message"
+                                });
+                            }
+                        }
                     }
                 }
             }
