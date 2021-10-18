@@ -1,0 +1,10 @@
+﻿{
+"HelpdeskDB": "Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword}",
+"UpKeeperUrl": "https://api.upkeeper.se",
+"UserName": "fredrik.landh@dhsolutions.se",
+"Password": "9U.kVbX?)V",
+"Customer_Id": "749",
+"CreateInventory": "true",
+"UpdateInventory": "true",
+"UpdateUpKeeper": "false"
+}
