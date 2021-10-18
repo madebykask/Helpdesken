@@ -149,18 +149,19 @@
                 var isDefaultLanguage = activeLanguages[i].Id == defaultLanguage.Id;
 
                 if (placeHolder !== null) {
-                    var translation = translations.filter(t => getStringWithoutSpecialChars(getStringWithoutSweChars(t.Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(placeHolder))
+                    let translation = [...translations].filter(t => getStringWithoutSpecialChars(getStringWithoutSweChars(t.Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(placeHolder))
                                                                     && t.Language.Id == activeLanguages[i].Id);
-                    var translationText = (translation[0].TranslationText == null ? "" : translation[0].TranslationText);
+                    let translationText = (translation[0].TranslationText == null ? "" : translation[0].TranslationText);
                     if (activeLanguages[i].Id == defaultLanguage.Id) {
                         defaultLanguageValue = translationText;
                     }
                     res = res + "<tr class='trTransField' data-dhhelpdesk-labelId='" + idName + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "'" + (activeLanguages[i].Id == document.getElementById("chosenLanguage").value ? "" : "style='display:none'") + "><td>" + (isDefaultLanguage ? "" : "<br/>") + "<label for='" + idName + "label" + activeLanguages[i].Id + "'><span>@Translation.GetCoreTextTranslation("Fältetikett") " + activeLanguages[i].LanguageId + " </span>" + (isDefaultLanguage ? "<span class='required-defaultLng'>*</span>" : "") + "</label></td><td>" + "<span class='spanDefaultLabelName'>" + (isDefaultLanguage ? "" : " (" + defaultLanguage.LanguageId + ") </span>" + " <span class='spanDefaultLabelName' id='defaultLabelName" + idName + "'>" + defaultLanguageValue) + "</span>" + "<input class='labelName' type='text' id='" + idName + "label" + activeLanguages[i].Id + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "' data-dhhelpdesk-lang='" + activeLanguages[i].LanguageId + "' data-dhhelpdesk-controlType='" + controlType + "' data-dhhelpdesk-id='" + translation[0].Id + "' placeholder='" + translationText + "' value='" + translationText + "'></td></tr>"
                     if (controlType == "fileUpload") {
-                        var translation = translations.filter(t => getStringWithoutSpecialChars(getStringWithoutSweChars(t.Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(labelFields[0].Text))
+
+                        let translation = [...translations].filter(t => getStringWithoutSpecialChars(getStringWithoutSweChars(t.Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(labelFields[0].Text))
                             && t.Language.Id == activeLanguages[i].Id && t.Prefix == "Message");
 
-                        var translationText = (translation[0].TranslationText == null ? "" : translation[0].TranslationText);
+                        let translationText = (translation[0].TranslationText == null ? "" : translation[0].TranslationText);
                         res = res + "<tr class='trTransField' data-dhhelpdesk-fileupload-text='true' data-dhhelpdesk-labelId='" + idName + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "'" + (activeLanguages[i].Id == document.getElementById("chosenLanguage").value ? "" : "style='display:none'") + "><td>" + (isDefaultLanguage ? "" : "<br/>") + "<label for='" + idName + "label" + activeLanguages[i].Id + "'><span>@Translation.GetCoreTextTranslation("Fälttext") " + activeLanguages[i].LanguageId + " </span>" + (isDefaultLanguage ? "<span class='required-defaultLng'>*</span>" : "") + "</label></td><td>" + "<span class='spanDefaultLabelName'>" + (isDefaultLanguage ? "" : " (" + defaultLanguage.LanguageId + ") </span>" + " <span class='spanDefaultLabelName' id='defaultLabelName" + idName + "'>" + defaultLanguageValue) + "</span>" + "<input class='labelFieldTextName labelName' type='text' id='" + idName + "labelFieldText" + activeLanguages[i].Id + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "' data-dhhelpdesk-lang='" + activeLanguages[i].LanguageId + "' data-dhhelpdesk-controlType='" + controlType + "' data-dhhelpdesk-id='" + translation[0].Id + "' placeholder='" + translationText + "' value='" + translationText + "'></td></tr>"
                     }
                 }
@@ -296,6 +297,7 @@
 
                         for (var c = 0; c < formData.tabs[t].sections[s].controls.length; c++) {
                             let idName = createUUID();
+
                             let dataType = formData.tabs[t].sections[s].controls[c].type;
                             let isRequired = false;
 
@@ -318,7 +320,9 @@
                             }
 
                             else if (dataType == "fileupload") {
-                                $("#dropzone").append(listHtml("fileupload", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, "fileUpload", true, isRequired) + "</div>"), null);
+                                let currentLanguageFieldTextName = [...translations].filter(item => item.Language.Id == currentLanguageId && formData.tabs[t].sections[s].controls[c].addonText == item.Name);
+                                
+                                $("#dropzone").append(listHtml("fileupload", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' id=" + idName + "fileUploadText" + " value='" + currentLanguageFieldTextName[0].TranslationText + "' class='file-upload' readonly></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, "fileUpload", true, false, [{ Text: currentLanguageFieldTextName[0].Name }]) + "</div>"), null);
                             }
 
                             else if (dataType = "html") {
@@ -342,7 +346,7 @@
         $(document).on("keyup", ".labelFieldTextName", function (e) {
             var objId = $(this).attr('id');
             var id = objId.substring(0, objId.indexOf('labelFieldText'));
-            //d8ddb921 - 9cf4 - 47ce - b844 - 4abfa239b752fileUploadText
+
             document.getElementById(id + "fileUploadText").value = $(this).attr('value');
         });
 
@@ -471,7 +475,7 @@
 
 
     function postForm(selectedCaseSolutions) {
-        let sectionId, sectionName, id, type, label, valueBinding, required;
+        let sectionId, sectionName, id, type, label, valueBinding, required, addonText;
         let items = [
             {
                 sectionId,
@@ -481,7 +485,8 @@
                     type,
                     label,
                     required,
-                    valueBinding
+                    valueBinding,
+                    addonText
                 ]
             }
         ];
@@ -515,55 +520,79 @@
             items[i].translationId = document.getElementById(obj.id).getAttribute('data-dhhelpdesk-id');
 
             for (s = 0; s < sTranslations.length; s++) {
-                var translation = {};
+                let translation = {};
                 translation.Languageid = sTranslations[s].getAttribute('data-dhhelpdesk-langid');
                 translation.Property = sTranslationsProperty[0].value + counter;//(i +1);
                 translation.Text = sTranslations[s].value;
                 translation.ControlType = sTranslations[s].getAttribute('data-dhhelpdesk-controlType');
                 translation.TranslationId = sTranslations[s].getAttribute('data-dhhelpdesk-id');
                 fieldTranslations.push(translation);
+            }
+
+        getNextUntil(obj.parentElement.parentElement.parentElement.parentElement, "[data-type='section']").forEach(function (obj, n) {
+            counter++;
+            if (obj.querySelector('.field-label') != null) {
+                var id = obj.querySelector('.field-label').id;
+                let contentSummerNote;
+                if (document.getElementById(id.replace('header', '_summernote')) != null) {
+                    contentSummerNote = $('#' + id.replace('header', '_summernote')).summernote('code');
                 }
 
-                getNextUntil(obj.parentElement.parentElement.parentElement.parentElement, "[data-type='section']").forEach(function (obj, n) {
-                    counter++;
-                    if (obj.querySelector('.field-label') != null) {
-                        var id = obj.querySelector('.field-label').id;
-                        let contentSummerNote;
-                        if (document.getElementById(id.replace('header', '_summernote')) != null) {
-                            contentSummerNote = $('#' + id.replace('header', '_summernote')).summernote('code');
-                        }
+                var label = document.getElementById(id.replace('header', 'headerName')) != null ? document.getElementById(id.replace('header', 'headerName')).innerText : "infoField";
 
-                    var label = document.getElementById(id.replace('header', 'headerName')) != null ? document.getElementById(id.replace('header', 'headerName')).innerText : "infoField";
+                var required = document.getElementById(id.replace('header', 'required')) ? document.getElementById(id.replace('header', 'required')).checked : false;
+                var content = contentSummerNote ? 'function(m) { return ' + contentSummerNote + ' }' : ""
+                var fileuploadText = document.getElementById(id.replace('header', 'fileUploadText')) != null ? document.getElementById(id.replace('header', 'fileUploadText')).value : '';
+                var fTranslations = obj.querySelectorAll(".trTransField");
+                var fTranslationsProperty = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguage.Id);
 
-                    var required = document.getElementById(id.replace('header', 'required')) ? document.getElementById(id.replace('header', 'required')).checked : false;
-                    var content = contentSummerNote ? 'function(m) { return ' + contentSummerNote + ' }' : ""
+                var idControl = fTranslationsProperty.length > 0 ? fTranslationsProperty[0].querySelector('.labelName').value + counter : label + counter;
 
-                    var fTranslations = obj.querySelectorAll(".labelName");
-                    var fTranslationsProperty = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguage.Id);
-
-                    var idControl = fTranslationsProperty.length > 0 ? fTranslationsProperty[0].value + counter : label + counter;
-
-                    items[i].controls[n] = {
+                items[i].controls[n] = {
                     id: idControl,
                     type: obj.getAttribute('data-type'),
                     label: label,
                     required: required,
-                    valueBinding: content
-                 }
+                    valueBinding: content,
+                    addonText: fileuploadText
+                }
 
-                for (f = 0; f < fTranslations.length; f++) {
-                    var translation = {};
-                    translation.LanguageId = fTranslations[f].getAttribute('data-dhhelpdesk-langId');
-                    translation.Property = idControl;
-                    translation.Text = fTranslations[f].value;
-                    translation.ControlType = fTranslations[f].getAttribute('data-dhhelpdesk-controlType');
-                    translation.TranslationId = fTranslations[f].getAttribute('data-dhhelpdesk-id');
-                    fieldTranslations.push(translation);
-                        }
-                     }
-                    });
+                let fieldTextTranslations = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-fileupload-text') == "true");
 
-                 });
+                if (fieldTextTranslations.length > 0) {
+
+                    let idFileUploadText = fieldTextTranslations[0].querySelector('.labelName').value;
+
+                    for (let t = 0; t < fieldTextTranslations.length; t++) {
+                        let fTranslation = fieldTextTranslations[t].querySelector('.labelName');
+                        let translation = {};
+                        translation.LanguageId = fTranslation.getAttribute('data-dhhelpdesk-langId');
+                        translation.Property = idFileUploadText;
+                        translation.Text = fTranslation.value;
+                        translation.ControlType = fTranslation.getAttribute('data-dhhelpdesk-controlType');
+                        translation.TranslationId = fieldTextTranslations[t].getAttribute('data-dhhelpdesk-id');
+                        fieldTranslations.push(translation);
+                    }
+                }
+
+                let fieldLabelTranslations = [...fTranslations].filter(item => !fieldTextTranslations.includes(item));
+
+                if (fieldLabelTranslations.length > 0) {
+                    for (let f = 0; f < fieldLabelTranslations.length; f++) {
+                        let lTranslation = fieldLabelTranslations[f].querySelector('.labelName');
+                        let translation = {};
+                        translation.LanguageId = lTranslation.getAttribute('data-dhhelpdesk-langId');
+                        translation.Property = idControl;
+                        translation.Text = lTranslation.value;
+                        translation.ControlType = lTranslation.getAttribute('data-dhhelpdesk-controlType');
+                        translation.TranslationId = lTranslation.getAttribute('data-dhhelpdesk-id');
+                        fieldTranslations.push(translation);
+                    }
+                }
+                }
+                });
+
+                });
 
                 if (checkForDuplicates(items)) {
                     ShowToastMessage("Sektionerna får ej ha samma namn", "error");
@@ -678,15 +707,12 @@
                 let fileUploadText = ""; //TODO Array of values
                 let id;
                 var transFields = $(this).find('.trTransField');
-                //    .filter(function () {
-                //    return $(this).attr('data-dhhelpdesk-langid') == opt.value
-                //});
-                //debugger;
+
                 for (let i = 0; i < transFields.length; i++) {
                     if (transFields[i].getAttribute('data-dhhelpdesk-langid') == opt.value) {
                         transFields[i].style.display = "";
                         id = $(transFields[i]).attr('data-dhhelpdesk-labelId');
-                        //console.log(transFields.attr('data-dhhelpdesk-controltype'))
+
                         var lables = $(transFields[i]).find('.labelName');
 
                         if ($(transFields[i]).attr('data-dhhelpdesk-fileupload-text') == 'true') {

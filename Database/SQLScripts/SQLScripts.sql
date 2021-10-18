@@ -12,8 +12,8 @@ BEGIN
 END
 GO
 
-RAISERROR ('Add Message.DragFilerHit Swedish to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
-IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 1 AND Property = 'Message.DragFilerHit')
+RAISERROR ('Add Control.Filuppladdning Swedish to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 1 AND Property = 'Control.Filuppladdning')
 BEGIN	 
 INSERT INTO [dbo].[ExtendedCaseTranslations]
            ([LanguageId]
@@ -21,12 +21,12 @@ INSERT INTO [dbo].[ExtendedCaseTranslations]
            ,[Text])
      VALUES
            (1
-           ,'Message.DragFilerHit'
-           ,'Drag filer hit')
+           ,'Control.Filuppladdning'
+           ,'Filuppladdning')
 		   END
 GO
-RAISERROR ('Add Message.DragFilerHit English to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
-IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 2 AND Property = 'Message.DragFilerHit')
+RAISERROR ('Add Control.Filuppladdning English to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 2 AND Property = 'Control.Filuppladdning')
 BEGIN	 
 INSERT INTO [dbo].[ExtendedCaseTranslations]
            ([LanguageId]
@@ -34,7 +34,35 @@ INSERT INTO [dbo].[ExtendedCaseTranslations]
            ,[Text])
      VALUES
            (2
-           ,'Message.DragFilerHit'
+           ,'Control.Filuppladdning'
+           ,'File upload')
+		   END
+GO
+
+
+RAISERROR ('Add Message.DraFilerHit Swedish to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 1 AND Property = 'Message.DraFilerHit')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (1
+           ,'Message.DraFilerHit'
+           ,'Dra filer hit')
+		   END
+GO
+RAISERROR ('Add Message.DraFilerHit English to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 2 AND Property = 'Message.DraFilerHit')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (2
+           ,'Message.DraFilerHit'
            ,'Drop files here')
 		   END
 GO

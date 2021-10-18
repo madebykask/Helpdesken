@@ -67,6 +67,7 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         public string type { get; set; }
         public string label { get; set; }
         public object valueBinding { get; set; }
+        public string addonText { get; set; }
         public ValidatorsElement validators { get; set; }
     }
 

@@ -252,7 +252,8 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                                         type = c.Required ? "required" : ""
                                     }
                                     }
-                                } : null
+                                } : null,
+                                addonText = c.AddOnText
                             });
                     }
                 }
