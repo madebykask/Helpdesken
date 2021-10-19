@@ -147,16 +147,17 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                     }
 
                 }
-                else if (!string.IsNullOrEmpty(_userContext.Login))
-                {
-                    isIdentityAuthenticated = true;
-                   
-                }
                 else
                 {
-                    //This is wrong when using Applöication Login
                     _authenticationService.ClearLoginSession(ctx);
+                    string requestedUrl = "~" + ctx.Request.Path;
+                    var redirectUrl = HttpUtility.UrlEncode(requestedUrl);
                     var loginUrl = "~/Login/Login";
+                    if (!string.IsNullOrEmpty(requestedUrl) && requestedUrl != "~/")
+                    {
+                        loginUrl = loginUrl + "?returnUrl=" + redirectUrl;
+                    }
+
                     filterContext.Result = new RedirectResult(loginUrl);
                 }
             }
