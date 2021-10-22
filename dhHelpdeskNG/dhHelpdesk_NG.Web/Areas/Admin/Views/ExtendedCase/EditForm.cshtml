@@ -41,18 +41,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            @*<tr>
                                 <td>
                                     @Translation.GetCoreTextTranslation("Formulär")  @Translation.GetCoreTextTranslation("Namn")
                                 </td>
                                 <td>
                                     <input id="formName" type="text" value='@(Model.ExtendedCaseForm == null ? "" : Model.ExtendedCaseForm.Name)' maxlength="100" />
-
                                 </td>
-                            </tr>
+                            </tr>*@
                             <tr>
                                 <td>
-                                    @Translation.GetCoreTextTranslation("Formulär")  @Translation.GetCoreTextTranslation("Beskrivning")
+                                    @Translation.GetCoreTextTranslation("Beskrivning")
                                 </td>
                                 <td>
                                     <input id="formDescription" type="text" value='@(Model.ExtendedCaseForm == null ? "" : Model.ExtendedCaseForm.Description)' maxlength="500" />
@@ -462,10 +461,10 @@
                     return;
                 }
 
-                if (document.getElementById("formName").value == "" || document.getElementById("formName").value.match(/^ *$/) !== null) {
-                    document.getElementById("formName").value = "";
-                    ShowToastMessage('@Html.Raw(Translation.GetForJS(Translation.Get("Du måste ange ett namn", Enums.TranslationSource.TextTranslation)))', "error")
-                    document.getElementById("formName").focus();
+                if (document.getElementById("formDescription").value == "" || document.getElementById("formDescription").value.match(/^ *$/) !== null) {
+                    document.getElementById("formDescription").value = "";
+                    ShowToastMessage('@Html.Raw(Translation.GetForJS(Translation.Get("Du måste ange en beskrivning", Enums.TranslationSource.TextTranslation)))', "error")
+                    document.getElementById("formDescription").focus();
                     return;
                 }
 
@@ -665,7 +664,7 @@
                     id: getUrlVars()["extendedCaseFormId"],
                     customerId: getUrlVars()["customerId"],
                     languageId: currentLanguageId,
-                    name: document.getElementById("formName").value,
+                    //name: document.getElementById("formName").value,
                     description: document.getElementById("formDescription").value,
                     status: selectedCaseSolutions.length == 0 ? "false" : "true",
                     caseSolutionIds: selectedCaseSolutions,

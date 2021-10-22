@@ -183,11 +183,11 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
         public int SaveExtendedCaseForm(ExtendedCaseFormPayloadModel payload, string userId)
         {
             List<SectionElement> sectionLst = GetExtendedCaseFormSections(payload);
-
+            var formName = "Formulär"; 
             var entity = new ExtendedCaseFormJsonModel()
             {
                 id = payload.Id,
-                name = payload.Name,
+                name = formName,
                 description = payload.Description,
                 status = payload.Status,
                 customerId = payload.CustomerId,
@@ -203,7 +203,7 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                         new TabElement()
                         {
                             columnCount = "1",
-                            id = StringHelper.GetCleanString(payload.Name),
+                            id = StringHelper.GetCleanString(formName),
                             name = "",
                             sections = sectionLst
                         }
