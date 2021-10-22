@@ -291,7 +291,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             {
                 string sectionId = s.id;
                 var cleanSectionName = StringHelper.GetCleanString(s.id);
-                var sectionNameWithFormId = cleanSectionName + "_" + entity.id;
+                var sectionNameWithFormId = cleanSectionName.EndsWith("_" + entity.id) ? cleanSectionName : cleanSectionName + "_" + entity.id;
                 if (!sectionId.Contains("Section."))
                 { sectionId = "Section." + sectionNameWithFormId; }
 
@@ -331,7 +331,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 {
                     string controlId = c.id;
                     var cleanControlName = StringHelper.GetCleanString(c.id);
-                    var controlNameWithFormId = cleanControlName + "_" + entity.id;
+                    var controlNameWithFormId = cleanControlName.EndsWith("_" + entity.id) ? cleanControlName : cleanControlName + "_" + entity.id;
                     if (!controlId.Contains("Control."))
                     { controlId = "Control." + controlNameWithFormId; }
 
@@ -501,6 +501,11 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 return true;
             }
             return false;
+        }
+
+        public bool ExtendedCaseFormInCases(int extendedCaseFormId)
+        {
+            return DataContext.Case_ExtendedCases.Any(x => x.ExtendedCaseForm_Id == extendedCaseFormId);
         }
     }
 }

@@ -141,7 +141,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 ExtendedCaseForm = null,
                 FieldTranslations = _languageService.GetExtendedCaseTranslations(null, languageId, initialTranslations),
                 CustomerCaseSolutionsWithExtendedCaseForm = caseSolutionsExtendedCaseForms,
-                ActiveLanguages = _languageService.GetActiveLanguages().Where(x => x.IsActive == 1).OrderBy(x => x.Id).ToList()
+                ActiveLanguages = _languageService.GetActiveLanguages().Where(x => x.IsActive == 1).OrderBy(x => x.Id).ToList(),
+                ExtendedCaseFormInCases = false
             };
 
             return View("EditForm", viewmodel);
@@ -170,7 +171,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 CustomerCaseSolutions = caseSolutions,
                 ExtendedCaseForm = extendedCaseForm,
                 CustomerCaseSolutionsWithExtendedCaseForm = caseSolutionsExtendedCaseForms,
-                ActiveLanguages = _languageService.GetActiveLanguages().Where(x => x.IsActive == 1).OrderBy(x => x.Id).ToList()
+                ActiveLanguages = _languageService.GetActiveLanguages().Where(x => x.IsActive == 1).OrderBy(x => x.Id).ToList(),
+                ExtendedCaseFormInCases = _extendedCaseService.ExtendedCaseFormInCases(extendedCaseFormId)
             };
 
             string metaData = viewModel.ExtendedCaseForm.MetaData.Replace("function(m) { return ", "").Replace("\";}", "\"");

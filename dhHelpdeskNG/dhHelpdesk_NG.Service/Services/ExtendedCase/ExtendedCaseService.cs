@@ -196,7 +196,7 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                 localization = new LocalizationElement()
                 { dateFormat = "YYYY-MM-DD", decimalSeparator = "." },
                 validatorsMessages = new ValidatorsMessagesElement()
-                { required = "Field is required", dateYearFormat = "Correct date format (YYYY)", email = "Specify valid email" },
+                { required = " ", dateYearFormat = "Correct date format (YYYY)", email = "Specify valid email" },
                 styles = "ec-section .col-xs-6:first-child { text-align: left; } ec-section .col-md-6:first-child { text-align: left; } .checkbox label { display: block } .radio label { display: block } ",
                 tabs = new List<TabElement>()
                     {
@@ -292,6 +292,11 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
         public bool DeleteExtendedCaseForm(int extendedCaseFormId)
         {
             return _extendedCaseFormRepository.DeleteExtendedCaseForm(extendedCaseFormId);
+        }
+
+        public bool ExtendedCaseFormInCases(int extendedCaseFormId)
+        {
+            return _extendedCaseFormRepository.ExtendedCaseFormInCases(extendedCaseFormId);
         }
     }
 }

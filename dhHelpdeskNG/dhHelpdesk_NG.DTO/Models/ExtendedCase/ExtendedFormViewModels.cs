@@ -20,5 +20,7 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
 
         public IList<LanguageOverview> ActiveLanguages { get; set; }
 
+        public bool ExtendedCaseFormInCases { get; set; }
+
     }
 }
