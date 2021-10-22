@@ -78,10 +78,7 @@ namespace DH.Helpdesk.Web.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
-            if(SessionFacade.CurrentUser != null)
-            {
-                return Redirect("Home/Index");
-            }
+
             if (_applicationConfiguration.LoginMode == LoginMode.SSO)
             {
                 var loginUrl = _federatedAuthenticationService.GetSignInUrl();
@@ -161,14 +158,23 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [AllowAnonymous]
-        public void SignIn()
+        public void SignIn(LoginInputModel inputData)
         {
+            var returnUrl = inputData.returnUrl;
+            if(!string.IsNullOrEmpty(returnUrl))
+            {
+                returnUrl = returnUrl.Replace("~/", "");
+            }
+            else
+            {
+                returnUrl = "/";
+            }
             if (!Request.IsAuthenticated)
             {
                 _authenticationService.SetLoginModeToMicrosoft();
 
                 HttpContext.GetOwinContext().Authentication.Challenge(
-                    new AuthenticationProperties { RedirectUri = "/" },
+                    new AuthenticationProperties { RedirectUri = returnUrl },
                     OpenIdConnectAuthenticationDefaults.AuthenticationType);
 
             }

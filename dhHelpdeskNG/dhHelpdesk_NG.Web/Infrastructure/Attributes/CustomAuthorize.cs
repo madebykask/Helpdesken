@@ -82,7 +82,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Attributes
             {
                 return false;
             }
-
+            //TODO - have a look into this
             if (this.Roles != string.Empty)
             {
                 foreach (string userRole in this.Roles.Split(','))

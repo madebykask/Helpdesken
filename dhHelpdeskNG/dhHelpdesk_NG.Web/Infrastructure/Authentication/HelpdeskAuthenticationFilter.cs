@@ -25,7 +25,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
     {
         public const string SkipAuthResultCheck = "__skipAuthResultCheck";
         private const string IssueLoginRedirectKey = "__issueLoginRedirectKey";
-
+        
         private readonly IAuthenticationService _authenticationService;
         private readonly ISessionContext _sessionContext;
         private readonly IApplicationConfiguration _applicationConfiguration;
@@ -33,7 +33,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         private readonly ILoggerService _logger = LogManager.Session;
         private readonly IAuthenticationServiceBehaviorFactory _authenticationBehaviorFactory;
         private Matcher _ipMatcher;
-        
         #region ctor()
 
         public HelpdeskAuthenticationFilter(IAuthenticationService authenticationService, 
@@ -84,6 +83,18 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             var ctx = filterContext.HttpContext;
             var identity = ctx.User.Identity;
             var isIdentityAuthenticated = identity?.IsAuthenticated ?? false;
+            if(isIdentityAuthenticated || !string.IsNullOrEmpty(_userContext.Login))
+            {
+                if(filterContext.HttpContext.Items["AspSessionIDManagerInitializeRequestCalled"] != null)
+                {
+                    if (SessionFacade.CurrentUser == null)
+                    {
+                        _authenticationService.SetLoginModeToMicrosoft();
+                        _authenticationService.SignIn(ctx);
+                    }
+                    return;
+                }
+            }
             var loginMode = GetCurrentLoginMode();
 
             if(isIdentityAuthenticated && loginMode == LoginMode.Microsoft)
@@ -94,7 +105,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 return;
 
             }
-            else if(loginMode == LoginMode.Application && !string.IsNullOrEmpty(_userContext.Login))
+            else if (loginMode == LoginMode.Application && !string.IsNullOrEmpty(_userContext.Login))
             {
                 //Todo - with Håkan
                 var userId = _userContext.UserId;
@@ -136,21 +147,21 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                     }
 
                 }
-                //else if(!string.IsNullOrEmpty(_userContext.Login))
-                //{
-                //    isIdentityAuthenticated = true;
-                //    _authenticationService.SignIn(ctx);
-                //    return;
-                //}
                 else
                 {
-                    //This is wrong when using Applöication Login
                     _authenticationService.ClearLoginSession(ctx);
+                    string requestedUrl = "~" + ctx.Request.Path;
+                    var redirectUrl = HttpUtility.UrlEncode(requestedUrl);
                     var loginUrl = "~/Login/Login";
+                    if (!string.IsNullOrEmpty(requestedUrl) && requestedUrl != "~/")
+                    {
+                        loginUrl = loginUrl + "?returnUrl=" + redirectUrl;
+                    }
+
                     filterContext.Result = new RedirectResult(loginUrl);
                 }
             }
-            
+
         }
         
         //OnAuthenticationChallenge: is called at the end after other Authorisation filters to be able to process final result - redirect to login page or issue auth challenge
