@@ -143,14 +143,14 @@ export class FormControlsManagerService {
             fieldValueModel.Pristine = proxyControl.pristine;
 
             if (controlTemplate.caseBinding && controlTemplate.caseBinding.length > 0 ) {
-              if (!checkCaseBindingBehaviour || (checkCaseBindingBehaviour &&
+              const prevSyncedValue = this.lastSyncedFields[controlTemplate.caseBinding] ? this.lastSyncedFields[controlTemplate.caseBinding].Value : null;
+              if (checkCaseBindingBehaviour &&
                         (controlTemplate.caseBindingBehaviour === CaseBindingBehaviour.Overwrite ||
                          (controlTemplate.caseBindingBehaviour === CaseBindingBehaviour.NewOnly &&
-                             (this.lastSyncedFields[controlTemplate.caseBinding] &&
-                               this.lastSyncedFields[controlTemplate.caseBinding].Value !== fieldValueModel.Value))))) {
+                             (prevSyncedValue !== fieldValueModel.Value)))) {
                   caseFieldsValues[controlTemplate.caseBinding] = fieldValueModel;
+                  this.lastSyncedFields[controlTemplate.caseBinding] = fieldValueModel;
                 }
-                this.lastSyncedFields[controlTemplate.caseBinding] = fieldValueModel;
 
                 // do not save values for caseBinding fields - only pristine flag.
                 fieldsValues[fieldPath] = new FieldValueModel('', '', proxyControl.pristine);
