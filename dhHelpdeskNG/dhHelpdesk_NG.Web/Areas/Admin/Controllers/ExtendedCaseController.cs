@@ -203,6 +203,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Control", Name = Translation.GetCoreTextTranslation("Infofält")},
                 new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Control", Name = Translation.GetCoreTextTranslation("Filuppladdning")},
                 new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Message", Name = Translation.GetCoreTextTranslation("Dra filer hit")},
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Tab", Name = Translation.GetCoreTextTranslation("Fliknamn")}
             };
         }
 

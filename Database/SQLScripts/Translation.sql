@@ -8172,6 +8172,21 @@ If not exists (select * from tblTextTranslation where text_id = 2099 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2099, 2, 'The form is used on at least one case. Deletion of field/section affects existing cases. Are you sure you want delete it')
 GO
 
+If not exists (select * from tbltext where id = 2100)
+	insert into tbltext (id, TextString) VALUES (2100, 'Fliknamn')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2100 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2100, 2, 'Tab Name')
+GO
+
+If not exists (select * from tbltext where id = 2101)
+	insert into tbltext (id, TextString) VALUES (2101, 'Formulärets flik får ej vara tom')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2101 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2101, 2, 'The form tab can not be empty')
+GO
+
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')

@@ -42,15 +42,15 @@
                         </thead>
                         <tbody>
                             @*<tr>
-                                <td>
-                                    @Translation.GetCoreTextTranslation("Formulär")  @Translation.GetCoreTextTranslation("Namn")
-                                </td>
-                                <td>
-                                    <input id="formName" type="text" value='@(Model.ExtendedCaseForm == null ? "" : Model.ExtendedCaseForm.Name)' maxlength="100" />
-                                </td>
-                            </tr>*@
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Formulär")  @Translation.GetCoreTextTranslation("Namn")
+                                    </td>
+                                    <td>
+                                        <input id="formName" type="text" value='@(Model.ExtendedCaseForm == null ? "" : Model.ExtendedCaseForm.Name)' maxlength="100" />
+                                    </td>
+                                </tr>*@
                             <tr>
-                                <td>
+                                <td class="general-fields">
                                     @Translation.GetCoreTextTranslation("Beskrivning")
                                 </td>
                                 <td>
@@ -58,7 +58,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>
+                                <td class="general-fields">
                                     @Translation.GetCoreTextTranslation("Ärendemallar")
                                 </td>
                                 <td>
@@ -98,7 +98,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td colspan="2">
+                                <td colspan="2" class="editor-cols">
                                     <div id="fields" class="dragndrop">
                                         <ul id="source">
                                             <li class="extendedCaseFormsLst" data-type="section"><i class="fa fa-header" aria-hidden="true"></i> @Translation.GetCoreTextTranslation("Sektion")</li>
@@ -110,7 +110,12 @@
                                             <li class="extendedCaseFormsLst" data-type="html"><i class="fa fa-file-word-o" aria-hidden="true"></i> @Translation.GetCoreTextTranslation("Infofält")</li>
                                         </ul>
                                         <input id="btnClear" class="btn" type="button" value='@Translation.GetCoreTextTranslation("Rensa")' />
-                                    </div>
+                                    </div>                                
+                                
+                                    <ul id="formtabs" class="field" style="background-color:inherit">
+                                        <li class="formtabs-li"><span id="formtab-editheaderName" tabindex=0 role="textbox" contenteditable="false"></span><a id="tab-edit" class='fa fa-pencil' data-toggle='collapse' role='button' title='Edit' href='#formtab-edit' aria-hidden='true'></a></li>
+                                    </ul>
+
                                     <ul id="dropzone" class="dragndrop"></ul>
                                 </td>
                             </tr>
@@ -140,15 +145,18 @@
         translations = JSON.parse('@Html.Raw(Json.Encode(Model.FieldTranslations))');
         const IDNAME = "firstSectionId";
 
+        $('#formtab-editheaderName')[0].innerHTML = '@Translation.GetCoreTextTranslation("Fliknamn")';
+
         let divHeaderActions = (idName) => "<div class='header-actions'><a class='fa fa-pencil fa-lg' data-toggle='collapse' href='#" + idName + "' role='button' title='Edit' aria-hidden='true'></a><a class='fa fa-trash fa-lg' href='#" + idName + "' title='Remove Element' role='button' aria-hidden='true'></a></div>";
         let divHeaderLabel = (labelClass, labelName, idName) => "<div class='header-label'><label class='" + labelClass + "' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + labelName + "</label></div>";
         let editFieldHtml = (idName, placeHolder, controlType, hasRequiredChk, isRequired = false, labelFields = null) => {
-            var res = "<div class='collapse' id = '" + idName + "'><div><table class='table borderless' style='margin-left:10px;margin-right:10px;'><tbody>";
+            var res = "<div class='collapse' id = '" + idName + "'><div><table class='table borderless'><tbody>";
             var defaultLanguageValue = '';
             for (let i = 0; i < activeLanguages.length; i++) {
                 var isDefaultLanguage = activeLanguages[i].Id == defaultLanguage.Id;
 
                 if (placeHolder !== null) {
+
                     let translation = [...translations].filter(t => getStringWithoutSpecialChars(getStringWithoutSweChars(t.Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(placeHolder))
                                                                     && t.Language.Id == activeLanguages[i].Id);
                     let translationText = (translation[0].TranslationText == null ? "" : translation[0].TranslationText);
@@ -173,6 +181,8 @@
             res = res +"</tbody></table></div ></div>";
             return res;
         }
+
+        $('#formtabs').append(editFieldHtml("formtab-edit", '@Translation.GetCoreTextTranslation("Fliknamn")', "Tab", false, false));
 
         let sectionHtmlDiv = (editFieldHtml, idName, labelClass, labelName, savedId = null) => "<div class='field' " + (savedId != null ? "data-dhhelpdesk-savedid='" + savedId + "'" : "") + "><div class='header'>" + divHeaderLabel(labelClass, labelName, idName) + divHeaderActions(idName) + "</div><br/>" + editFieldHtml + "</div > ";
         let sectionHtml = () => "<li data-type='section' class='ui-draggable dropped-item' style='display: list-item'>" + sectionHtmlDiv(editFieldHtml(IDNAME, '@Translation.GetCoreTextTranslation("Sektion")', "Section", false, false), IDNAME, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")') + "</li>";
@@ -258,20 +268,28 @@
         });
 
         $(document).on("mouseenter", ".fa-pencil", function (e) {
-            $(this).parent().parent().parent().css("background", "#99ccff");
+            let field = $(this).closest('.field');
+            if (field.attr("id") == "formtabs") {
+                return;
+            }
+            $(this).closest('.field').css("background", "#99ccff");
         });
 
         $(document).on("mouseleave", ".fa-pencil", function (e) {
-            $(this).parent().parent().parent().css("background", "#e8dfdf");
+            let field = $(this).closest('.field');
+            if (field.attr("id") == "formtabs") {
+                return;
+            }
+            $(this).closest('.field').css("background", "#e8dfdf");
         });
 
         $(document).on("mouseenter", ".fa-trash", function (e) {
-            $(this).parent().parent().parent().css("background", "pink");
+            $(this).closest('.field').css("background", "pink");
         });
 
         $(document).on("mouseleave", ".fa-trash", function (e) {
-            $(this).parent().parent().parent().css("background", "#e8dfdf");
-            $(this).parent().parent().parent().attr('class', 'field');
+            $(this).closest('.field').css("background", "#e8dfdf");
+            $(this).closest('.field').attr('class', 'field');
         });
 
         $(document).on("click", ".fa-trash", function () {
@@ -363,7 +381,7 @@
 
         $(document).on("keyup", ".labelName", function (e) {
             var id = $(this).attr('id').replace('label' + document.getElementById("chosenLanguage").value, 'headerName');
-                document.getElementById(id).innerHTML = $(this).attr('value');
+            document.getElementById(id).innerHTML = $(this).attr('value');
         });
 
         $(document).on("keyup", ".labelFieldTextName", function (e) {
@@ -392,7 +410,7 @@
                         return false;
                     }
                 });
-        
+
                 if (hasSavedId != null && extendedCaseFormInCases == 'True') {
                     var dlg = new ConfirmationDialog();
                     var opts = {
@@ -436,6 +454,13 @@
                     return;
                 }
 
+                let tabName = $('span#formtab-editheaderName')[0].innerHTML;
+                if (tabName == null || tabName.trim() == '') {
+                    ShowToastMessage('@Html.Raw(Translation.GetForJS(Translation.Get("Formulärets flik får ej vara tom", Enums.TranslationSource.TextTranslation)))', "error")
+                    $('#formtab-editheaderName').focus();
+                    return;
+                }
+
                 var emptySections = 0;
                 var droppedItemElements = $("." + droppedItemClass);
                 for (var i = 0; i < droppedItemElements.length; i++) {
@@ -476,7 +501,6 @@
                             requiredNotFilled = requiredNotFilled + 1;
                         }
                     }
-
                 });
 
                 if (requiredNotFilled > 0) {
@@ -824,9 +848,9 @@
         visibility: hidden;
     }
 
-        .header-actions a {
-            margin-right: 15px
-        }
+    .header-actions a {
+        margin-right: 15px
+    }
 
 
     #source {
@@ -907,6 +931,12 @@
         margin: 5px;
     }
 
+    .formtabs-li {
+        list-style-type: none;
+        padding: 0;
+        margin: 5px 5px 0px 5px;
+    }
+
     .fa {
         margin: 5px;
     }
@@ -948,6 +978,54 @@
     }
 
     .transField {
-        width:200px;
+        width: 200px;
+    }
+
+    #formtabs {
+        list-style-type: none;
+        /*min-height: 400px;*/
+        height: auto;
+        float: none;
+        overflow: hidden;
+        padding:0;
+        margin: 0px 0px 5px 5px
+    }
+
+    #formtab-editheaderName {
+        background-color: #e8dfdf;
+        width: inherit;
+        font-family: inherit;
+        padding: 1px 6px;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+        margin: 5px 5px 5px 5px;
+        font-weight: bold;
+        font-size: 16px;
+        display: inline-block;
+        justify-content: space-between;
+        height: inherit
+    }
+
+    #formtab-edit {
+        background-color: #e8dfdf;
+    }
+
+    .general-fields {
+        width:17%;
+    }
+
+    .editor-cols {
+        background-color: inherit;
+    }
+
+    .table.borderless {
+        margin:5px 10px;
+        width:98%;
+    }
+
+    span[contenteditable]:empty:focus::before,
+    span[contenteditable]:empty::before {
+        content: '@Translation.GetCoreTextTranslation("Fliknamn")';
+        opacity: 0.5;
     }
 </style>
