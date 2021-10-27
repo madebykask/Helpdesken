@@ -491,8 +491,18 @@ namespace DH.Helpdesk.TaskScheduler.Services
             $"There was no Initiator to update." : updated;
             var updateText = $"{DateTime.Now} Number of updated inisitator is {uCount}. UserIds are: {updated} \r\n {updateLog}";
 
-
-            logs.Add(setting.CustomerId, $"{insertText} \r\n {updateText}");
+            if (iCount > 0 && uCount > 0)
+            {
+                logs.Add(setting.CustomerId, $"{insertText} \r\n {updateText}");
+            }
+            else if (iCount > 0 && uCount == 0)
+            {
+                logs.Add(setting.CustomerId, $"{insertText}");
+            }
+            else if (iCount == 0 && uCount > 0)
+            {
+                logs.Add(setting.CustomerId, $"{updateText}");
+            }
             // _logger.InfoFormat("{insertText} \r\n {updateText}");
 
         }
