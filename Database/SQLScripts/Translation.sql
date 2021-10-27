@@ -8186,6 +8186,16 @@ If not exists (select * from tblTextTranslation where text_id = 2101 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2101, 2, 'The form tab can not be empty')
 GO
 
+If not exists (select * from tbltext where id = 2102)
+	insert into tbltext (id, TextString, TextType) VALUES (2102, 'Formulär', 1)
+GO
+If not exists (select * from tblTextTranslation where text_id = 2102 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2102, 2, 'Form')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2102 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2102, 1, 'Formulär')
+GO
+
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)

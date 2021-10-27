@@ -202,9 +202,9 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                     {
                         new TabElement()
                         {
-                            columnCount = "1",
-                            id = StringHelper.GetCleanString(formName),
-                            name = "",
+                            columnCount = payload.Tabs[0].ColumnCount.ToString(),
+                            id = StringHelper.GetCleanString(payload.Tabs[0].Name),
+                            name = StringHelper.GetCleanString(payload.Tabs[0].Name),
                             sections = sectionLst
                         }
                 }
@@ -222,42 +222,45 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
         private static List<SectionElement> GetExtendedCaseFormSections(ExtendedCaseFormPayloadModel payload)
         {
             var sectionLst = new List<SectionElement>();
-            foreach (var s in payload.Sections)
+            foreach (var t in payload.Tabs)
             {
-                var section = new SectionElement()
+                foreach (var s in t.Sections)
                 {
-                    id = StringHelper.GetCleanString(s.Id),
-                    name = s.SectionName,
-                    controls = new List<ControlElement>()
-                };
-
-                if (s.Controls != null)
-                {
-
-                    foreach (var c in s.Controls)
+                    var section = new SectionElement()
                     {
-                        section.controls.Add(
-                            new ControlElement()
-                            {
-                                id = StringHelper.GetCleanString(c.Id),
-                                type = c.Type,
-                                label = c.Label,
-                                valueBinding = c.ValueBinding,
-                                validators = c.Required ? new ValidatorsElement()
+                        id = StringHelper.GetCleanString(s.Id),
+                        name = s.SectionName,
+                        controls = new List<ControlElement>()
+                    };
+
+                    if (s.Controls != null)
+                    {
+
+                        foreach (var c in s.Controls)
+                        {
+                            section.controls.Add(
+                                new ControlElement()
                                 {
-                                    onSave = new List<OnSaveElement>()
+                                    id = StringHelper.GetCleanString(c.Id),
+                                    type = c.Type,
+                                    label = c.Label,
+                                    valueBinding = c.ValueBinding,
+                                    validators = c.Required ? new ValidatorsElement()
                                     {
+                                        onSave = new List<OnSaveElement>()
+                                        {
                                     new OnSaveElement()
                                     {
                                         type = c.Required ? "required" : ""
                                     }
-                                    }
-                                } : null,
-                                addonText = c.AddOnText
-                            });
+                                        }
+                                    } : null,
+                                    addonText = c.AddOnText
+                                });
+                        }
                     }
+                    sectionLst.Add(section);
                 }
-                sectionLst.Add(section);
             }
 
             return sectionLst;

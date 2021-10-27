@@ -53,18 +53,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return View("Edit", model);
         }
 
-        ////[CustomAuthorize(Roles = "3,4")]
-        //[HttpGet]
-        //public ActionResult Templates(int customerId)
-        //{
-        //    //languageId = languageId ?? SessionFacade.CurrentLanguageId;
-        //    //var model = CustomerInputViewModel(customerId, languageId.Value);
-
-        //    List<FormTemplate> templates = new List<FormTemplate>()
-        //    { new FormTemplate {Id=1, Name= "Template" }, new FormTemplate { Id = 2, Name = "Template Other" } };
-
-        //    return Json(templates, JsonRequestBehavior.AllowGet);
-        //}
 
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]

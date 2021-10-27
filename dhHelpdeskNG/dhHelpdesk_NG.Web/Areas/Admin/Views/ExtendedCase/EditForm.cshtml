@@ -110,8 +110,8 @@
                                             <li class="extendedCaseFormsLst" data-type="html"><i class="fa fa-file-word-o" aria-hidden="true"></i> @Translation.GetCoreTextTranslation("Infofält")</li>
                                         </ul>
                                         <input id="btnClear" class="btn" type="button" value='@Translation.GetCoreTextTranslation("Rensa")' />
-                                    </div>                                
-                                
+                                    </div>
+
                                     <ul id="formtabs" class="field" style="background-color:inherit">
                                         <li class="formtabs-li"><span id="formtab-editheaderName" tabindex=0 role="textbox" contenteditable="false"></span><a id="tab-edit" class='fa fa-pencil' data-toggle='collapse' role='button' title='Edit' href='#formtab-edit' aria-hidden='true'></a></li>
                                     </ul>
@@ -237,8 +237,6 @@
                             break;
 
                         //case "select":
-
-                        //    templates = getTemplates();
                         //    draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>Template</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><select class='form-control form-control-width' data-placeholder='Choose a template...'><option>Template1</option><option>Template2</option><option>Template3</option></select></div>" + editFieldHtml(idName, "Template") + "</div>")
                         //    break;
 
@@ -551,7 +549,17 @@
 
 
     function postForm(selectedCaseSolutions) {
-        let sectionId, sectionName, id, type, label, valueBinding, required, addonText;
+        let sectionId, sectionName, id, type, label, valueBinding, required, addonText, columnCount, sections;
+
+        let tabs = [
+            {
+                id,
+                name,
+                columnCount,
+                sections
+            }
+        ];
+
         let items = [
             {
                 sectionId,
@@ -684,6 +692,30 @@
                     return;
                 }
 
+                let tabTranslations = document.getElementById("formtabs").querySelectorAll(".labelName");
+                let tabTranslationsProperty = [...tabTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguage.Id);
+                let savedId = $('#formtabs').find('.field').attr('data-dhhelpdesk-savedid');
+
+                let newId = tabTranslationsProperty[0].value + "0";
+                let tabId = savedId != null ? savedId : newId;
+
+                tabs[0] = {
+                    id: tabId,
+                    name: tabId,
+                    columnCount: "1",
+                    sections: items
+                }
+
+                for (let t = 0; t < tabTranslations.length; t++) {
+                    let translation = {};
+                    translation.Languageid = tabTranslations[t].getAttribute('data-dhhelpdesk-langid');
+                    translation.Property = tabId;
+                    translation.Text = tabTranslations[t].value;
+                    translation.ControlType = tabTranslations[t].getAttribute('data-dhhelpdesk-controlType');
+                    translation.TranslationId = tabTranslations[t].getAttribute('data-dhhelpdesk-id');
+                    fieldTranslations.push(translation);
+                }
+
                 var dataToSend = {
                     id: getUrlVars()["extendedCaseFormId"],
                     customerId: getUrlVars()["customerId"],
@@ -692,7 +724,8 @@
                     description: document.getElementById("formDescription").value,
                     status: selectedCaseSolutions.length == 0 ? "false" : "true",
                     caseSolutionIds: selectedCaseSolutions,
-                    sections: items,
+                    //sections: items,
+                    tabs: tabs,
                     translations: fieldTranslations
                 };
 
@@ -767,20 +800,6 @@
             return (str.replace(translate_re, function (match) {
             return translate[match];
             }));
-        }
-
-        function getTemplates() {
-            let templates = {};
-
-            let url = "admin/ExtendedCase/Templates" + "?customerId=" + getUrlVars()["customerId"];
-
-            $.get(url, function (data) {
-                for (var i = 0; i < data.length; i++) {
-                    templates.data[i];
-                }
-            });
-
-            return templates;
         }
 
         function onChangeLanguage(opt) {
