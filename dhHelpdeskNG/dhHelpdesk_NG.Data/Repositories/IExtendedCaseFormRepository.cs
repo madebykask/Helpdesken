@@ -33,5 +33,6 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 		IList<ExtendedCaseFormEntity> GetExtendedCaseFormsCreatedByEditor(Customer customer);
 		ExtendedCaseFormEntity GetExtendedCaseFormById(int extendedCaseId);
 		bool DeleteExtendedCaseForm(int extendedCaseFormId);
+        bool ExtendedCaseFormInCases(int extendedCaseFormId);
     }
 }

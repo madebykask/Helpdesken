@@ -183,11 +183,11 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
         public int SaveExtendedCaseForm(ExtendedCaseFormPayloadModel payload, string userId)
         {
             List<SectionElement> sectionLst = GetExtendedCaseFormSections(payload);
-
+            var formName = "Formulär"; 
             var entity = new ExtendedCaseFormJsonModel()
             {
                 id = payload.Id,
-                name = payload.Name,
+                name = formName,
                 description = payload.Description,
                 status = payload.Status,
                 customerId = payload.CustomerId,
@@ -196,15 +196,15 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                 localization = new LocalizationElement()
                 { dateFormat = "YYYY-MM-DD", decimalSeparator = "." },
                 validatorsMessages = new ValidatorsMessagesElement()
-                { required = "Field is required", dateYearFormat = "Correct date format (YYYY)", email = "Specify valid email" },
+                { required = "", dateYearFormat = "Correct date format (YYYY)", email = "Specify valid email" },
                 styles = "ec-section .col-xs-6:first-child { text-align: left; } ec-section .col-md-6:first-child { text-align: left; } .checkbox label { display: block } .radio label { display: block } ",
                 tabs = new List<TabElement>()
                     {
                         new TabElement()
                         {
-                            columnCount = "1",
-                            id = StringHelper.GetCleanString(payload.Name),
-                            name = "",
+                            columnCount = payload.Tabs[0].ColumnCount.ToString(),
+                            id = StringHelper.GetCleanString(payload.Tabs[0].Name),
+                            name = StringHelper.GetCleanString(payload.Tabs[0].Name),
                             sections = sectionLst
                         }
                 }
@@ -222,42 +222,45 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
         private static List<SectionElement> GetExtendedCaseFormSections(ExtendedCaseFormPayloadModel payload)
         {
             var sectionLst = new List<SectionElement>();
-            foreach (var s in payload.Sections)
+            foreach (var t in payload.Tabs)
             {
-                var section = new SectionElement()
+                foreach (var s in t.Sections)
                 {
-                    id = StringHelper.GetCleanString(s.Id),
-                    name = s.SectionName,
-                    controls = new List<ControlElement>()
-                };
-
-                if (s.Controls != null)
-                {
-
-                    foreach (var c in s.Controls)
+                    var section = new SectionElement()
                     {
-                        section.controls.Add(
-                            new ControlElement()
-                            {
-                                id = StringHelper.GetCleanString(c.Id),
-                                type = c.Type,
-                                label = c.Label,
-                                valueBinding = c.ValueBinding,
-                                validators = c.Required ? new ValidatorsElement()
+                        id = StringHelper.GetCleanString(s.Id),
+                        name = s.SectionName,
+                        controls = new List<ControlElement>()
+                    };
+
+                    if (s.Controls != null)
+                    {
+
+                        foreach (var c in s.Controls)
+                        {
+                            section.controls.Add(
+                                new ControlElement()
                                 {
-                                    onSave = new List<OnSaveElement>()
+                                    id = StringHelper.GetCleanString(c.Id),
+                                    type = c.Type,
+                                    label = c.Label,
+                                    valueBinding = c.ValueBinding,
+                                    validators = c.Required ? new ValidatorsElement()
                                     {
+                                        onSave = new List<OnSaveElement>()
+                                        {
                                     new OnSaveElement()
                                     {
                                         type = c.Required ? "required" : ""
                                     }
-                                    }
-                                } : null,
-                                addonText = c.AddOnText
-                            });
+                                        }
+                                    } : null,
+                                    addonText = c.AddOnText
+                                });
+                        }
                     }
+                    sectionLst.Add(section);
                 }
-                sectionLst.Add(section);
             }
 
             return sectionLst;
@@ -292,6 +295,11 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
         public bool DeleteExtendedCaseForm(int extendedCaseFormId)
         {
             return _extendedCaseFormRepository.DeleteExtendedCaseForm(extendedCaseFormId);
+        }
+
+        public bool ExtendedCaseFormInCases(int extendedCaseFormId)
+        {
+            return _extendedCaseFormRepository.ExtendedCaseFormInCases(extendedCaseFormId);
         }
     }
 }

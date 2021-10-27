@@ -5,7 +5,7 @@
     <table class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
-                <th>@Translation.Get("Namn")</th>
+                <th>@Translation.Get("Beskrivning")</th>
             </tr>
         </thead>
         <tbody id="extendedCaseFormsLst">
@@ -20,7 +20,7 @@
                     <td>
                         <a href="@Url.Action("EditForm", "ExtendedCase", new { extendedCaseFormId = form.Id, languageId = Model.LanguageId })" class="@(form.Status == 0 ? "inactive" : "" )">
                             <div style="height:100%;width:100%">
-                                @form.Name
+                                @form.Description
                             </div>
                         </a>
                     </td>

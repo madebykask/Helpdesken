@@ -34,5 +34,6 @@ namespace DH.Helpdesk.Services.Services
         IList<ExtendedCaseFormEntity> GetExtendedCaseFormsCreatedByEditor(Customer customer, bool showActive);
         ExtendedCaseFormEntity GetExtendedCaseFormById(int extendedCaseId);
         bool DeleteExtendedCaseForm(int extendedCaseFormId);
+        bool ExtendedCaseFormInCases(int extendedCaseFormId);
     }
 }

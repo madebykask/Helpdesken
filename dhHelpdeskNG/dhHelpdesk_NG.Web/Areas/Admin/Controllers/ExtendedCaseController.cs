@@ -53,18 +53,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return View("Edit", model);
         }
 
-        ////[CustomAuthorize(Roles = "3,4")]
-        //[HttpGet]
-        //public ActionResult Templates(int customerId)
-        //{
-        //    //languageId = languageId ?? SessionFacade.CurrentLanguageId;
-        //    //var model = CustomerInputViewModel(customerId, languageId.Value);
-
-        //    List<FormTemplate> templates = new List<FormTemplate>()
-        //    { new FormTemplate {Id=1, Name= "Template" }, new FormTemplate { Id = 2, Name = "Template Other" } };
-
-        //    return Json(templates, JsonRequestBehavior.AllowGet);
-        //}
 
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
@@ -141,7 +129,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 ExtendedCaseForm = null,
                 FieldTranslations = _languageService.GetExtendedCaseTranslations(null, languageId, initialTranslations),
                 CustomerCaseSolutionsWithExtendedCaseForm = caseSolutionsExtendedCaseForms,
-                ActiveLanguages = _languageService.GetActiveLanguages().Where(x => x.IsActive == 1).OrderBy(x => x.Id).ToList()
+                ActiveLanguages = _languageService.GetActiveLanguages().Where(x => x.IsActive == 1).OrderBy(x => x.Id).ToList(),
+                ExtendedCaseFormInCases = false
             };
 
             return View("EditForm", viewmodel);
@@ -170,7 +159,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 CustomerCaseSolutions = caseSolutions,
                 ExtendedCaseForm = extendedCaseForm,
                 CustomerCaseSolutionsWithExtendedCaseForm = caseSolutionsExtendedCaseForms,
-                ActiveLanguages = _languageService.GetActiveLanguages().Where(x => x.IsActive == 1).OrderBy(x => x.Id).ToList()
+                ActiveLanguages = _languageService.GetActiveLanguages().Where(x => x.IsActive == 1).OrderBy(x => x.Id).ToList(),
+                ExtendedCaseFormInCases = _extendedCaseService.ExtendedCaseFormInCases(extendedCaseFormId)
             };
 
             string metaData = viewModel.ExtendedCaseForm.MetaData.Replace("function(m) { return ", "").Replace("\";}", "\"");
@@ -201,6 +191,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Control", Name = Translation.GetCoreTextTranslation("Infofält")},
                 new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Control", Name = Translation.GetCoreTextTranslation("Filuppladdning")},
                 new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Message", Name = Translation.GetCoreTextTranslation("Dra filer hit")},
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Tab", Name = Translation.GetCoreTextTranslation("Fliknamn")}
             };
         }
 

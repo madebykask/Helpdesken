@@ -67,6 +67,33 @@ INSERT INTO [dbo].[ExtendedCaseTranslations]
 		   END
 GO
 
+RAISERROR ('Add Tab.Fliknamn Swedish to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 1 AND Property = 'Tab.Fliknamn')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (1
+           ,'Tab.Fliknamn'
+           ,'Fliknamn')
+		   END
+GO
+RAISERROR ('Add Tab.Fliknamn English to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 2 AND Property = 'Tab.Fliknamn')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (2
+           ,'Tab.Fliknamn'
+           ,'Tab Name')
+		   END
+GO
+
 
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.53'
