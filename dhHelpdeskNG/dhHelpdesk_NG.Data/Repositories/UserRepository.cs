@@ -242,9 +242,17 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public User GetUserByEmail(string emailAddress)
         {
-            var user = Table.AsNoTracking().Include(x => x.CustomerUsers).FirstOrDefault(x => x.Email == emailAddress);
-            DataContext.Entry(user).State = EntityState.Detached;
-            return user;
+
+            if(Table.FirstOrDefault(x => x.UserID == emailAddress) != null)
+            {
+                return Table.FirstOrDefault(x => x.UserID == emailAddress);
+            }
+            else if(Table.FirstOrDefault(x => x.Email == emailAddress) != null)
+            {
+                return Table.FirstOrDefault(x => x.Email == emailAddress);
+            }
+            return null;
+
         }
 
         public CustomerUserInfo GetUserInfo(int userId)
