@@ -144,11 +144,12 @@ export class FormControlsManagerService {
 
             if (controlTemplate.caseBinding && controlTemplate.caseBinding.length > 0 ) {
               const prevSyncedValue = this.lastSyncedFields[controlTemplate.caseBinding] ? this.lastSyncedFields[controlTemplate.caseBinding].Value : null;
-              if (checkCaseBindingBehaviour &&
-                        (controlTemplate.caseBindingBehaviour === CaseBindingBehaviour.Overwrite ||
+              if (checkCaseBindingBehaviour) {
+                if(controlTemplate.caseBindingBehaviour === CaseBindingBehaviour.Overwrite ||
                          (controlTemplate.caseBindingBehaviour === CaseBindingBehaviour.NewOnly &&
-                             (prevSyncedValue !== fieldValueModel.Value)))) {
-                  caseFieldsValues[controlTemplate.caseBinding] = fieldValueModel;
+                             (prevSyncedValue !== fieldValueModel.Value))) {
+                    caseFieldsValues[controlTemplate.caseBinding] = fieldValueModel;
+                  }
                   this.lastSyncedFields[controlTemplate.caseBinding] = fieldValueModel;
                 }
 
@@ -267,6 +268,7 @@ export class FormControlsManagerService {
     }
 
     setFormData(formData: FormDataModel, formModel: FormModel) {
+        this.initSyncedValues(formData);
         let res = this.prepareFormFieldsValues(formData, formModel);
         let exCaseFieldsValuesMap = res.exCaseFieldsMap;
         let caseBindingFieldsMap = res.caseBindingFieldsMap;
@@ -331,6 +333,15 @@ export class FormControlsManagerService {
                 }
             }
         }
+    }
+
+    private initSyncedValues(formData: FormDataModel) {
+      if (formData.CaseFieldsValues) {
+        formData.CaseFieldsValues.getKeys().forEach((key: string) => {
+          let fieldValue: FieldValueModel = formData.CaseFieldsValues.getItem(key);
+          this.lastSyncedFields[key] = fieldValue;
+        });
+      }
     }
 
     private prepareFormFieldsValues(formData: FormDataModel, formModel: FormModel): any {
