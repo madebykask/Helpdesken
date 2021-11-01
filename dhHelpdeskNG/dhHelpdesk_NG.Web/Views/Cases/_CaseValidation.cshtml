@@ -387,7 +387,7 @@
                 }
             },
             "CaseLog.TextExternal": {
-                maxlength: 3000,
+/*                maxlength: 3000,*/
                 required: function() {
                     return $('#divCaseLogFiles.externalLog-files tr').length > 0;
                 },
@@ -412,7 +412,7 @@
                     }
                 },
                 "CaseLog.TextInternal": {
-                    maxlength: 3000,
+/*                    maxlength: 3000,*/
                     @if (Model.CustomerSettings.ModuleInvoice)
                         {
                             <text>
@@ -670,11 +670,11 @@
             required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
             "CaseLog.TextInternal": {
-            maxlength: "@Translation.GetForJS("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)",
+            @*maxlength: "@Translation.GetForJS("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)",*@
             require_from_group: "@Translation.GetForJS("Något av följande fält måste fyllas i")"
             },
             "CaseLog.TextExternal": {
-                maxlength: "@Translation.GetForJS("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)",
+                @*maxlength: "@Translation.GetForJS("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)",*@
                 required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")",
                 require_from_group: "@Translation.GetForJS("Något av följande fält måste fyllas i")"
             },

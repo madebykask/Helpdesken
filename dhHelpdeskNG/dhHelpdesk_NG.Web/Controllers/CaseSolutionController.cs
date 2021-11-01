@@ -734,11 +734,11 @@ namespace DH.Helpdesk.Web.Controllers
             string Currency = Convert.ToString(collection["Casesolution.Currency"].ToString());
             caseSolutionInputViewModel.CaseSolution.Currency = Currency ?? string.Empty;
 
-            if (caseSolutionInputViewModel.CaseSolution.Text_External != null && caseSolutionInputViewModel.CaseSolution.Text_External.Length > 3000)
-                caseSolutionInputViewModel.CaseSolution.Text_External = caseSolutionInputViewModel.CaseSolution.Text_External.Substring(0, 3000);
+            //if (caseSolutionInputViewModel.CaseSolution.Text_External != null && caseSolutionInputViewModel.CaseSolution.Text_External.Length > 3000)
+            //    caseSolutionInputViewModel.CaseSolution.Text_External = caseSolutionInputViewModel.CaseSolution.Text_External.Substring(0, 3000);
 
-            if (caseSolutionInputViewModel.CaseSolution.Text_Internal != null && caseSolutionInputViewModel.CaseSolution.Text_Internal.Length > 3000)
-                caseSolutionInputViewModel.CaseSolution.Text_Internal = caseSolutionInputViewModel.CaseSolution.Text_Internal.Substring(0, 3000);
+            //if (caseSolutionInputViewModel.CaseSolution.Text_Internal != null && caseSolutionInputViewModel.CaseSolution.Text_Internal.Length > 3000)
+            //    caseSolutionInputViewModel.CaseSolution.Text_Internal = caseSolutionInputViewModel.CaseSolution.Text_Internal.Substring(0, 3000);
             
             if (collection["CaseSolution.AgreedDate"].ToString().Trim() != string.Empty)
             {
@@ -1882,11 +1882,11 @@ namespace DH.Helpdesk.Web.Controllers
             string Currency = Convert.ToString(collection["Casesolution.Currency"].ToString());
             caseSolutionInputViewModel.CaseSolution.Currency = Currency ?? string.Empty;
 
-            if (caseSolutionInputViewModel.CaseSolution.Text_External != null && caseSolutionInputViewModel.CaseSolution.Text_External.Length > 3000)
-                caseSolutionInputViewModel.CaseSolution.Text_External = caseSolutionInputViewModel.CaseSolution.Text_External.Substring(0, 3000);
+            //if (caseSolutionInputViewModel.CaseSolution.Text_External != null && caseSolutionInputViewModel.CaseSolution.Text_External.Length > 3000)
+            //    caseSolutionInputViewModel.CaseSolution.Text_External = caseSolutionInputViewModel.CaseSolution.Text_External.Substring(0, 3000);
 
-            if (caseSolutionInputViewModel.CaseSolution.Text_Internal != null && caseSolutionInputViewModel.CaseSolution.Text_Internal.Length > 3000)
-                caseSolutionInputViewModel.CaseSolution.Text_Internal = caseSolutionInputViewModel.CaseSolution.Text_Internal.Substring(0, 3000);
+            //if (caseSolutionInputViewModel.CaseSolution.Text_Internal != null && caseSolutionInputViewModel.CaseSolution.Text_Internal.Length > 3000)
+            //    caseSolutionInputViewModel.CaseSolution.Text_Internal = caseSolutionInputViewModel.CaseSolution.Text_Internal.Substring(0, 3000);
 
 
 

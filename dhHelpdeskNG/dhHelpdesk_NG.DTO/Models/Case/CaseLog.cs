@@ -31,10 +31,10 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public string RegUser { get; set; }
         public string FinishingTypeName { get; set; }
 
-        [StringLength(3000)]
+        //[StringLength(3000)]
         public string TextExternal { get; set; }
 
-        [StringLength(3000)]
+        //[StringLength(3000)]
         public string TextInternal { get; set; }
         
         public string EmailRecepientsInternalLogTo { get; set; }
