@@ -1,10 +1,10 @@
 ﻿{
-"HelpdeskDB": "Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword}",
-"UpKeeperUrl": "#{ApiUrl}",
-"UserName": "fredrik.landh@dhsolutions.se",
-"Password": "9U.kVbX?)V",
-"Customer_Id": "749",
-"CreateInventory": "true",
-"UpdateInventory": "true",
-"UpdateUpKeeper": "false"
+  "HelpdeskDB": "Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword}",
+  "UpKeeperUrl": "#{ApiUrl}",
+  "UserName": "#{UpKeeperUserName}",
+  "Password": "#{UpKeeperPassword}",
+  "Customer_Id": "#{UpKeeperCustID}",
+  "CreateInventory": "true",
+  "UpdateInventory": "true",
+  "UpdateUpKeeper": "false"
 }
