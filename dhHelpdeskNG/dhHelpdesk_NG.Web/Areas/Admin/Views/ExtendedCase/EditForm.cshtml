@@ -156,7 +156,7 @@
                 var isDefaultLanguage = activeLanguages[i].Id == defaultLanguage.Id;
 
                 if (placeHolder !== null) {
-
+                   
                     let translation = [...translations].filter(t => getStringWithoutSpecialChars(getStringWithoutSweChars(t.Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(placeHolder))
                                                                     && t.Language.Id == activeLanguages[i].Id);
                     let translationText = (translation[0].TranslationText == null ? "" : translation[0].TranslationText);
@@ -181,8 +181,6 @@
             res = res +"</tbody></table></div ></div>";
             return res;
         }
-
-        $('#formtabs').append(editFieldHtml("formtab-edit", '@Translation.GetCoreTextTranslation("Fliknamn")', "Tab", false, false));
 
         let sectionHtmlDiv = (editFieldHtml, idName, labelClass, labelName, savedId = null) => "<div class='field' " + (savedId != null ? "data-dhhelpdesk-savedid='" + savedId + "'" : "") + "><div class='header'>" + divHeaderLabel(labelClass, labelName, idName) + divHeaderActions(idName) + "</div><br/>" + editFieldHtml + "</div > ";
         let sectionHtml = () => "<li data-type='section' class='ui-draggable dropped-item' style='display: list-item'>" + sectionHtmlDiv(editFieldHtml(IDNAME, '@Translation.GetCoreTextTranslation("Sektion")', "Section", false, false), IDNAME, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")') + "</li>";
@@ -321,13 +319,23 @@
 
         if (formFields === 'null') {
             $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(IDNAME, '@Translation.GetCoreTextTranslation("Sektion")', "Section", false, false, IDNAME, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")'))));
+            $('#formtabs').append(editFieldHtml("formtab-edit", '@Translation.GetCoreTextTranslation("Fliknamn")', "Tab", false, false));
         }
         else {
             var formData = JSON.parse(formFields);
 
             if (formData) {
                 for (var t = 0; t < formData.tabs.length; t++) {
+
+                    $('#formtabs').attr('data-dhhelpdesk-savedid', formData.tabs[t].id);
+                    let currentTabLabel = [...translations].filter(item => item.Language.Id == currentLanguageId && item.Name == formData.tabs[t].name);
+
+                    $('span#formtab-editheaderName')[0].innerHTML = currentTabLabel[0].TranslationText;
+
+                    $('#formtabs').append(editFieldHtml("formtab-edit", currentTabLabel[0].Name, "Tab", false, false));
+
                     for (var s = 0; s < formData.tabs[t].sections.length; s++) {
+
                         let idName = formData.tabs[t].sections[s].id;
 
                         let currentLanguageSectionName = [...translations].filter(item => item.Language.Id == currentLanguageId && formData.tabs[t].sections[s].name == item.Name);
@@ -694,7 +702,8 @@
 
                 let tabTranslations = document.getElementById("formtabs").querySelectorAll(".labelName");
                 let tabTranslationsProperty = [...tabTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguage.Id);
-                let savedId = $('#formtabs').find('.field').attr('data-dhhelpdesk-savedid');
+
+                let savedId = $('#formtabs').attr('data-dhhelpdesk-savedid');
 
                 let newId = tabTranslationsProperty[0].value + "0";
                 let tabId = savedId != null ? savedId : newId;

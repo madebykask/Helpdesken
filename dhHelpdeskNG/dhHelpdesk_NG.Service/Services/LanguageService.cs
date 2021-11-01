@@ -207,6 +207,29 @@ namespace DH.Helpdesk.Services.Services
             IList<ExtendedCaseFieldTranslation> fieldtranslations = new List<ExtendedCaseFieldTranslation>();
             foreach (var t in form.tabs)
             {
+                fieldtranslations.Add(new ExtendedCaseFieldTranslation()
+                {
+                    Id = _languageRepository.GetExtendedFormTranslationId(t.name, defaultLanguage.Id),
+                    Language = defaultLanguage,
+                    Name = t.name,
+                    TranslationText =GetExtendedCaseTranslation(t.name.Replace("@Translation.", ""), defaultLanguage.Id),
+                    IsDefaultLanguage = true,
+                    Prefix = "Tab"
+                });
+
+                foreach (var l in activeLanguages.Where(x => x.Id != defaultLanguage.Id))
+                {
+                    fieldtranslations.Add(new ExtendedCaseFieldTranslation()
+                    {
+                        Id = _languageRepository.GetExtendedFormTranslationId(t.name, l.Id),
+                        Language = l,
+                        Name = t.name,
+                        TranslationText =
+                            GetExtendedCaseTranslation(t.name.Replace("@Translation.", ""), l.Id),
+                        Prefix = "Tab"
+                    });
+                }
+
                 foreach (var s in t.sections)
                 {
                     fieldtranslations.Add(new ExtendedCaseFieldTranslation()
