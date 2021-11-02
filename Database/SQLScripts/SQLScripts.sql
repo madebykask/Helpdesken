@@ -180,7 +180,77 @@ BEGIN
 END
 GO
 
+RAISERROR ('Drop default Constraint for Text_Internal', 10, 1) WITH NOWAIT
+IF OBJECT_ID('[DF_tblLog_Text_Internal]', 'D') IS NOT NULL
+	begin
+		ALTER TABLE [dbo].[tblLog] DROP CONSTRAINT [DF_tblLog_Text_Internal]
+	end
+go
 
+RAISERROR ('Drop IsFulltextIndexed for Text_Internal', 10, 1) WITH NOWAIT
+Declare @exists int
+	SELECT @exists =  COLUMNPROPERTY(OBJECT_ID('[dbo].[tblLog]'), 'Text_Internal', 'IsFulltextIndexed')
+	if(@exists = 1)
+		begin
+		--Drop
+			EXEC sp_fulltext_column 
+			@tabname =  'tblLog' , 
+			@colname =  'Text_Internal' , 
+			@action =  'drop' 
+		end
+go
+
+RAISERROR ('Extend Text_Internal in tblLog lenght to nvarchar(MAX)', 10, 1) WITH NOWAIT
+ALTER TABLE [dbo].[tblLog] 
+alter column Text_Internal nvarchar(MAX) not null
+Go
+
+RAISERROR ('Add IsFulltextIndexed for Text_Internal', 10, 1) WITH NOWAIT
+EXEC sp_fulltext_column 
+@tabname =  'tblLog' , 
+@colname =  'Text_Internal' ,  
+@action =  'add' 	
+Go
+
+RAISERROR ('Add default Constraint for Text_Internal', 10, 1) WITH NOWAIT
+ALTER TABLE [dbo].[tblLog] ADD  CONSTRAINT [DF_tblLog_Text_Internal]  DEFAULT ('') FOR [Text_Internal]
+GO
+
+RAISERROR ('Drop default Constraint for Text_External', 10, 1) WITH NOWAIT
+IF OBJECT_ID('[DF_tblLog_Text_External]', 'D') IS NOT NULL
+	begin
+		ALTER TABLE [dbo].[tblLog] DROP CONSTRAINT [DF_tblLog_Text_External]
+	end
+go
+
+RAISERROR ('Drop IsFulltextIndexed for Text_External', 10, 1) WITH NOWAIT
+Declare @exists int
+	SELECT @exists =  COLUMNPROPERTY(OBJECT_ID('[dbo].[tblLog]'), 'Text_External', 'IsFulltextIndexed')
+	if(@exists = 1)
+		begin
+		--Drop
+			EXEC sp_fulltext_column 
+			@tabname =  'tblLog' , 
+			@colname =  'Text_External' , 
+			@action =  'drop' 
+		end
+go
+
+RAISERROR ('Extend Text_External in tblLog lenght to nvarchar(MAX)', 10, 1) WITH NOWAIT
+ALTER TABLE [dbo].[tblLog] 
+alter column Text_Internal nvarchar(MAX) not null
+Go
+
+RAISERROR ('Add IsFulltextIndexed for Text_External', 10, 1) WITH NOWAIT
+EXEC sp_fulltext_column 
+@tabname =  'tblLog' , 
+@colname =  'Text_External' ,  
+@action =  'add' 	
+Go
+
+RAISERROR ('Add default Constraint for Text_External', 10, 1) WITH NOWAIT
+ALTER TABLE [dbo].[tblLog] ADD  CONSTRAINT [DF_tblLog_Text_External]  DEFAULT ('') FOR [Text_External]
+GO
 
 
   -- Last Line to update database version

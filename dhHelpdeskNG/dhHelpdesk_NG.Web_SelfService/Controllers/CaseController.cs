@@ -798,7 +798,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         //TODO: should be refactored to methods with single responsibility!
-        [HttpGet]
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult _CaseLogNote(int caseId, string note, string logFileGuid)
         {
