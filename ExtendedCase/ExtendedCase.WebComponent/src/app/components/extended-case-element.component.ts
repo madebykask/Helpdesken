@@ -132,7 +132,7 @@ export class ExtendedCaseElementComponent {
     }
 
     getCaseValues(): { [id: string]: FieldValueModel } {
-        let formData = this.formControlsManagerService.getFormFieldValues(this.formModel, true);
+        let formData = this.formControlsManagerService.getFormFieldValues(this.formModel, this.formData, true);
         return formData.caseFieldsValues as any;
     }
 
@@ -229,7 +229,7 @@ export class ExtendedCaseElementComponent {
         let caseId = this.formModel.proxyModel.formInfo.caseId; // this.storageService.getCaseId();
 
         // update form fields values
-        let fieldsValues = this.formControlsManagerService.getFormFieldValues(this.formModel);
+        let fieldsValues = this.formControlsManagerService.getFormFieldValues(this.formModel, this.formData);
         this.formData.ExtendedCaseFieldsValues = new KeyedCollection(fieldsValues.fieldsValues);
         this.formData.CaseFieldsValues = new KeyedCollection(fieldsValues.caseFieldsValues);
 
