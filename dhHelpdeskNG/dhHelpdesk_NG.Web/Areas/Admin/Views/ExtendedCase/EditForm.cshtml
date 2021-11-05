@@ -229,7 +229,7 @@
         let sectionHtml = () => "<li data-type='section' class='ui-draggable dropped-item' style='display: list-item'>" + sectionHtmlDiv(editFieldHtml(IDNAME, '@Translation.GetCoreTextTranslation("Sektion")', "Section", false, false), IDNAME, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")') + "</li>";
 
         let listHtml = (dataType, controlDiv) => "<li data-type='" + dataType + "' class='ui-draggable dropped-item' style='display: list-item'>" + controlDiv + "</li>";
-        let summerNoteConfig = (idName, data) => "<div id='" + idName + "_summernote'>" + data + "</div><script>$('#" + idName + "_summernote').summernote({placeholder: '', dialogsFade: true, tabsize: 2, height: 170, toolbar: [ ['style', ['bold', 'italic', 'underline', 'clear']], ['insert', ['link', 'picture']], ['fontname', ['fontname']], ['color', ['forecolor']], ['para', ['ul', 'ol']] ] }); <" + "/script>"
+        let summerNoteConfig = (idName, data) => "<div id='" + idName + "_summernote'>" + data + "</div><script>$('#" + idName + "_summernote').summernote({placeholder: '', dialogsFade: true, tabsize: 2, height: 170, toolbar: [ ['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['forecolor']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']] ] }); <" + "/script>"
 
         var draggedFrom = "";
         var draggedItem;
@@ -1202,6 +1202,14 @@
         margin-left: -1.3em;
         width: 1.3em;
         position: absolute;
+    }
+
+    .note-fontname {
+        padding-top: 5px;
+    }
+
+    .note-color-fore {
+        padding-top: 5px;
     }
 
 </style>
