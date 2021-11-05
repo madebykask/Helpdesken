@@ -38,42 +38,45 @@
                                 IQueryable<Software> software,
                                 IQueryable<Computer> computers,
                                 int[] regionsFilter, int[] departmentsFilter)
-        {           
+        {
 
-            //Regions = p.Licenses.Where(l=> (departmentsFilter.Any()? departmentsFilter.Contains(l.Department_Id.Value):true))
-            //                                    .Select(l => l.Region.Name)
-            //                                    .Distinct(),
 
-            //                Departments = p.Licenses.Where(l => (departmentsFilter.Any() ? departmentsFilter.Contains(l.Department_Id.Value) : true))
-            //                                        .Select(l => new { Id = l.Department.Id, Name = l.Department.DepartmentName })
-            //                                        .Distinct(),
             var entities = query.Select(p => new
                         {
                             ProductId = p.Id,
                             ProductName = p.Name,
                             Licenses = p.Licenses,
-                            //LicencesNumber = p.Licenses.Where(l => (departmentsFilter.Any() ? departmentsFilter.Contains(l.Department_Id.Value) : true))
-                            //                           .GroupBy(ls => ls.Department_Id != null ? ls.Department_Id : 0)
-                            //                           .Select(l => new
-                            //                                {
-                            //                                    DepartmentId = l.Key,                                                                                   
-                            //                                    LicensesCount = l.Sum(nl => nl.NumberOfLicenses)
-                            //                                })
-                            //                           .ToList(),
+                            Regions = p.Licenses.Where(l => (regionsFilter.Any() ? regionsFilter.Contains(l.Region_Id.Value) : true))
+                                                            .Select(l => new { Id = l.Id, Name = l.Region })
+                                                            .Distinct(),
 
-                            //LicencesNumber2 = p.Licenses.Where(l => (departmentsFilter.Any() ? departmentsFilter.Contains(l.Department_Id.Value) : true))
-                            //                           .GroupBy(ls => ls.Department_Id != null ? ls.Department_Id : 0)
-                            //                           .Select(l => new
-                            //                           {
-                            //                               R = l.Key
-                            //                               DepartmentId = l.Key,
-                            //                               LicensesCount = l.Sum(nl => nl.NumberOfLicenses)
-                            //                           })
-                            //                           .ToList(),
-                                               
-                           
-                            UsedLicencesNumber = computers.Select(c => new { DepartmentId = (c.Department_Id != null) ? c.Department_Id.Value : 0, 
-                                                                             DepartmentName = c.Department.DepartmentName, 
+                            //Departments = p.Licenses.Where(l => (departmentsFilter.Any() ? departmentsFilter.Contains(l.Department_Id.Value) : true))
+                            //                                    .Select(l => new { Id = l.Department.Id, Name = l.Department.DepartmentName })
+                            //                                    .Distinct(),
+                //LicencesNumber = p.Licenses.Where(l => (departmentsFilter.Any() ? departmentsFilter.Contains(l.Department_Id.Value) : true))
+                //                           .GroupBy(ls => ls.Department_Id != null ? ls.Department_Id : 0)
+                //                           .Select(l => new
+                //                                {
+                //                                    DepartmentId = l.Key,                                                                                   
+                //                                    LicensesCount = l.Sum(nl => nl.NumberOfLicenses)
+                //                                })
+                //                           .ToList(),
+
+                //LicencesNumber2 = p.Licenses.Where(l => (departmentsFilter.Any() ? departmentsFilter.Contains(l.Department_Id.Value) : true))
+                //                           .GroupBy(ls => ls.Department_Id != null ? ls.Department_Id : 0)
+                //                           .Select(l => new
+                //                           {
+                //                               R = l.Key
+                //                               DepartmentId = l.Key,
+                //                               LicensesCount = l.Sum(nl => nl.NumberOfLicenses)
+                //                           })
+                //                           .ToList(),
+
+
+                UsedLicencesNumber = computers.Select(c => new { DepartmentId = (c.Department_Id != null) ? c.Department_Id.Value : 0,
+                    RegionId = (c.Region_Id != null) ? c.Region_Id.Value : 0,
+                    Region = c.Region,
+                    DepartmentName = c.Department.DepartmentName, 
                                                                              ComputerId = c.Id  
                                                                            })
                                                           .Where(c => (departmentsFilter.Any() ? departmentsFilter.Contains(c.DepartmentId) : true))
@@ -92,43 +95,112 @@
                 var curProduct = new ProductOverview(e.ProductId, e.ProductName);
                 var curLicense = new ProductLicense();
                 var usedLicenses = e.UsedLicencesNumber;
+
                 foreach (var l in e.Licenses)
                 {
-                    
-
                     if (!l.Region_Id.HasValue && !l.Department_Id.HasValue)
                     {
-                        //RegionID?
+                        //Without region and department
                         var howManyInUse = usedLicenses.Where(p => p.DepartmentId == 0).Count();
                         curLicense = new ProductLicense(null, null, "", "", l.NumberOfLicenses, howManyInUse);
-                    }
-                        
-                    
-                    //if (l.Region_Id.HasValue && l.Department_Id.HasValue)
-                    //{
-                    //    var howManyInUse = curProduct.ProductLicenses.Where(p => p.DepartmentId == l.Department_Id && p.RegionId == l.Region_Id).SingleOrDefault();
-                    //    curLicense = new ProductLicense(l.Region_Id, l.Department_Id, l.Region.Name, l.Department.DepartmentName, l.NumberOfLicenses, howManyInUse.NumberOfLicenses);
-                    //}
-
-                    //if (l.Region_Id.HasValue && !l.Department_Id.HasValue)
-                    //{
-                    //    var howManyInUse = curProduct.ProductLicenses.Where(p => p.RegionId == l.Region_Id).SingleOrDefault();
-                    //    curLicense = new ProductLicense(l.Region_Id, null, l.Region.Name, "", l.NumberOfLicenses, howManyInUse.NumberOfLicenses);
-                    //}
-                        
-
-                    if (!l.Region_Id.HasValue && l.Department_Id.HasValue)
-                    {
-                        var howManyInUse = usedLicenses.Where(p => p.DepartmentId == l.Department_Id).Count();
-                        curLicense = new ProductLicense(null, l.Department_Id, "", l.Department.DepartmentName, l.NumberOfLicenses, howManyInUse);
-                    }
-                       
-
-                    var alreadyExists = curProduct.ProductLicenses.Where(p => p.DepartmentId == curLicense.DepartmentId).SingleOrDefault();
-                    if (alreadyExists != null)
-                        alreadyExists.NumberOfLicenses += curLicense.NumberOfLicenses;
-                    else
                         curProduct.ProductLicenses.Add(curLicense);
+                    }
+
+                    if (l.Department_Id.HasValue && !l.Region_Id.HasValue)
+                    {
+                        var compswithanotherdep = usedLicenses.Where(d => d.DepartmentId != l.Department_Id && d.DepartmentId != 0).GroupBy(c => c.DepartmentId).ToList();
+                        if (compswithanotherdep.Count > 0)
+                        {
+                            foreach (var group in compswithanotherdep)
+                            {
+                                int howMany = 0;
+                                string depName = "";
+                                int depId = 0;
+                                foreach (var c in group)
+                                {
+                                    howMany++;
+                                    depName = c.DepartmentName;
+                                    depId = c.DepartmentId;
+
+                                }
+                                curLicense = new ProductLicense(null, depId, "", depName, 0, group.Count());
+                                curProduct.ProductLicenses.Add(curLicense);
+                            }
+
+                        }
+                        var compswithsamedep = usedLicenses.Where(d => d.DepartmentId == l.Department_Id).Count();
+                        if (compswithsamedep > 0)
+                        {
+                            curLicense = new ProductLicense(null, l.Department_Id, "", l.Department.DepartmentName, l.NumberOfLicenses, compswithsamedep);
+                            curProduct.ProductLicenses.Add(curLicense);
+                        }
+                    }
+
+                    if (l.Region_Id.HasValue && !l.Department_Id.HasValue)
+                    {
+                        var compswithanotherregion = usedLicenses.Where(d => d.RegionId != l.Region_Id && d.RegionId != 0).GroupBy(c => c.RegionId).ToList(); 
+                        if (compswithanotherregion.Count > 0)
+                        {
+                            foreach (var group in compswithanotherregion)
+                            {
+                                int howMany = 0;
+                                string regionName = "";
+                                int regionId = 0;
+                                foreach (var c in group)
+                                {
+                                    howMany++;
+                                    regionName = c.Region.Name;
+                                    regionId = c.RegionId;
+
+                                }
+                                curLicense = new ProductLicense(regionId, null, regionName, "", 0, group.Count());
+                                curProduct.ProductLicenses.Add(curLicense);
+                            }
+                        }
+                        var compswithsamereg = usedLicenses.Where(d => d.RegionId == l.Region_Id).Count();
+                        if (compswithsamereg > 0)
+                        {
+                            curLicense = new ProductLicense(l.Region_Id, null, "", l.Region.Name, l.NumberOfLicenses, compswithsamereg);
+                            curProduct.ProductLicenses.Add(curLicense);
+                        }
+                    }
+                    if (l.Region_Id.HasValue && l.Department_Id.HasValue)
+                    {
+
+                        //Same region and department
+                        var howManyInUse = usedLicenses.Where(p => p.DepartmentId == l.Department_Id).Count();
+                        curLicense = new ProductLicense(l.Region_Id, l.Department_Id, l.Region.Name, l.Department.DepartmentName, l.NumberOfLicenses, howManyInUse);
+                        curProduct.ProductLicenses.Add(curLicense);
+
+                        var compswithnodep = usedLicenses.Where(d => d.DepartmentId != l.Department_Id).GroupBy(c => c.DepartmentId).ToList();
+                        if (compswithnodep.Count > 0)
+                        {
+                            foreach (var group in compswithnodep)
+                            {
+                                int howMany = 0;
+                                string depName = "";
+                                int depId = 0;
+                                foreach (var c in group)
+                                {
+                                    howMany++;
+                                    depName = c.DepartmentName;
+                                    depId = c.DepartmentId;
+
+                                }
+                                curLicense = new ProductLicense(null, depId, "", depName, 0, group.Count());
+                                curProduct.ProductLicenses.Add(curLicense);
+                            }
+
+                        }
+
+
+                    }
+
+                    //var alreadyExists = curProduct.ProductLicenses.Where(p => p.DepartmentId == curLicense.DepartmentId).SingleOrDefault();
+                    //if (alreadyExists != null)
+                    //    alreadyExists.NumberOfLicenses += curLicense.NumberOfLicenses;
+                    //else
+                    //    curProduct.ProductLicenses.Add(curLicense);
                 }
 
                 if (e.Licenses.Count == 0)
@@ -139,21 +211,6 @@
                 overviews.Add(curProduct);
             }
 
-            //var overviews = entities.Select(p => new ProductOverview(
-            //                                        p.ProductId,
-            //                                        p.ProductName,
-            //                                        p.Regions.ToArray(),
-            //                                        p.Departments.Select(d => new KeyValuePair<int, string>(d.Id, d.Name))
-            //                                                     .Union(p.UsedLicencesNumber.Where(ul=> !p.Departments.Select(d=> d.Id).Contains(ul.DepartmentId))
-            //                                                                                .Select(ul=> new KeyValuePair<int, string>(ul.DepartmentId, ul.DepartmentName))).ToArray(),
-
-            //                                        p.LicencesNumber.Where(ln => ln != null)
-            //                                                        .Select(ln => new KeyValuePair<int?,int>(ln.DepartmentId, ln.LicensesCount))
-            //                                                        .Union(p.UsedLicencesNumber.Where(ul => !p.LicencesNumber.Select(l => l.DepartmentId).Contains(ul.DepartmentId))
-            //                                                                                   .Select(ul => new KeyValuePair<int?, int>(ul.DepartmentId, 0))).ToArray(),
-
-            //                                        p.UsedLicencesNumber.Select(un => new KeyValuePair<int?, int>(un.DepartmentId, un.ComputerId)).ToArray()
-            //                                        )).ToArray();
 
             return overviews.ToArray();
         }
