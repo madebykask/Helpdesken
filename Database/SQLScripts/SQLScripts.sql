@@ -252,6 +252,87 @@ RAISERROR ('Add default Constraint for Text_External', 10, 1) WITH NOWAIT
 ALTER TABLE [dbo].[tblLog] ADD  CONSTRAINT [DF_tblLog_Text_External]  DEFAULT ('') FOR [Text_External]
 GO
 
+RAISERROR ('Add Control.Radioknapp Swedish to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 1 AND Property = 'Control.Radioknapp')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (1
+           ,'Control.Radioknapp'
+           ,'Radioknapp')
+		   END
+GO
+RAISERROR ('Add Control.Radioknapp English to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 2 AND Property = 'Control.Radioknapp')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (2
+           ,'Control.Radioknapp'
+           ,'Radio Button')
+		   END
+GO
+
+RAISERROR ('Add Control.Kryssruta Swedish to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 1 AND Property = 'Control.Kryssruta')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (1
+           ,'Control.Kryssruta'
+           ,'Kryssruta')
+		   END
+GO
+RAISERROR ('Add Control.Kryssruta English to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 2 AND Property = 'Control.Kryssruta')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (2
+           ,'Control.Kryssruta'
+           ,'Checkbox')
+		   END
+GO
+
+RAISERROR ('Add Control.Rullgardinsmeny Swedish to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 1 AND Property = 'Control.Rullgardinsmeny')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (1
+           ,'Control.Rullgardinsmeny'
+           ,'Rullgardinsmeny')
+		   END
+GO
+RAISERROR ('Add Control.Rullgardinsmeny English to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 2 AND Property = 'Control.Rullgardinsmeny')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (2
+           ,'Control.Rullgardinsmeny'
+           ,'Dropdown Menu')
+		   END
+GO
+
 
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.53'
