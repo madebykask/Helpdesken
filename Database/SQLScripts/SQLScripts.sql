@@ -180,6 +180,7 @@ BEGIN
 END
 GO
 
+--Text_Internal in tblLog
 RAISERROR ('Drop default Constraint for Text_Internal', 10, 1) WITH NOWAIT
 IF OBJECT_ID('[DF_tblLog_Text_Internal]', 'D') IS NOT NULL
 	begin
@@ -216,6 +217,7 @@ RAISERROR ('Add default Constraint for Text_Internal', 10, 1) WITH NOWAIT
 ALTER TABLE [dbo].[tblLog] ADD  CONSTRAINT [DF_tblLog_Text_Internal]  DEFAULT ('') FOR [Text_Internal]
 GO
 
+--Text_External in tblLog
 RAISERROR ('Drop default Constraint for Text_External', 10, 1) WITH NOWAIT
 IF OBJECT_ID('[DF_tblLog_Text_External]', 'D') IS NOT NULL
 	begin
@@ -238,7 +240,7 @@ go
 
 RAISERROR ('Extend Text_External in tblLog lenght to nvarchar(MAX)', 10, 1) WITH NOWAIT
 ALTER TABLE [dbo].[tblLog] 
-alter column Text_Internal nvarchar(MAX) not null
+alter column Text_External nvarchar(MAX) not null
 Go
 
 RAISERROR ('Add IsFulltextIndexed for Text_External', 10, 1) WITH NOWAIT
