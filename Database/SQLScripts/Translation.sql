@@ -8196,6 +8196,34 @@ If not exists (select * from tblTextTranslation where text_id = 2102 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2102, 1, 'Formulär')
 GO
 
+If not exists (select * from tbltext where id = 2103)
+	insert into tbltext (id, TextString) VALUES (2103, 'Val')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2103 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2103, 2, 'Choices')
+GO
+
+If not exists (select * from tbltext where id = 2104)
+	insert into tbltext (id, TextString) VALUES (2104, 'Radioknapp')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2104 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2104, 2, 'Radio Button')
+GO
+
+If not exists (select * from tbltext where id = 2105)
+	insert into tbltext (id, TextString) VALUES (2105, 'Kryssruta')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2105 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2105, 2, 'Checkbox')
+GO
+
+If not exists (select * from tbltext where id = 2106)
+	insert into tbltext (id, TextString) VALUES (2106, 'Rullgardinsmeny')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2106 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2106, 2, 'Dropdown Menu')
+GO
+
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
