@@ -115,15 +115,23 @@
                             {
                                 int howMany = 0;
                                 string depName = "";
+                                string regName = "";
                                 int depId = 0;
+                                int regionId = 0;
                                 foreach (var c in group)
                                 {
+                                    if (c.RegionId != 0)
+                                    {
+                                        regionId = c.RegionId;
+                                        regName = c.Region.Name;
+                                    }
+                                        
                                     howMany++;
                                     depName = c.DepartmentName;
                                     depId = c.DepartmentId;
 
                                 }
-                                curLicense = new ProductLicense(null, depId, "", depName, 0, group.Count());
+                                curLicense = new ProductLicense(regionId, depId, regName, depName, 0, group.Count());
                                 curProduct.ProductLicenses.Add(curLicense);
                             }
 
@@ -179,15 +187,23 @@
                             {
                                 int howMany = 0;
                                 string depName = "";
+                                string regName = "";
                                 int depId = 0;
+                                int regionId = 0;
                                 foreach (var c in group)
                                 {
+                                    if (c.RegionId != 0)
+                                    {
+                                        regionId = c.RegionId;
+                                        regName = c.Region.Name;
+                                    }
+
                                     howMany++;
                                     depName = c.DepartmentName;
                                     depId = c.DepartmentId;
 
                                 }
-                                curLicense = new ProductLicense(null, depId, "", depName, 0, group.Count());
+                                curLicense = new ProductLicense(regionId, depId, regName, depName, 0, group.Count());
                                 curProduct.ProductLicenses.Add(curLicense);
                             }
 

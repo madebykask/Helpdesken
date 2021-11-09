@@ -822,7 +822,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         public PartialViewResult SearchText(int textTypeId, string searchValue, int searchOption)
         {
             var model = new TranslationGridModel();
-            var allTexts = this._textTranslationService.GetAllTexts(textTypeId, SessionFacade.CurrentCustomer.Language_Id).ToList();
+            //Before
+            //var allTexts = this._textTranslationService.GetAllTexts(textTypeId, SessionFacade.CurrentCustomer.Id).ToList();
+            //New 20211109
+            var allTexts = this._textTranslationService.GetAllTexts(textTypeId, null).ToList();
+            
 
             switch (searchOption)
             {
