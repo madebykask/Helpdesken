@@ -230,7 +230,7 @@
                     }
                     if (l.Region_Id.HasValue && l.Department_Id.HasValue)
                     {
-
+                        //Hope this works
                         //Same region and department
                         var howManyInUse = usedLicenses.Where(p => p.DepartmentId == l.Department_Id).Count();
                         curLicense = new ProductLicense(l.Region_Id, l.Department_Id, l.Region.Name, l.Department.DepartmentName, l.NumberOfLicenses, howManyInUse);
