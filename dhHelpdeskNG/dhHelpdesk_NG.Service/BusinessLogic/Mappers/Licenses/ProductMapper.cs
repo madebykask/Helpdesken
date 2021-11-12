@@ -98,7 +98,7 @@
 
                 foreach (var l in e.Licenses)
                 {
-                    if (!l.Region_Id.HasValue && !l.Department_Id.HasValue)
+                     if (!l.Region_Id.HasValue && !l.Department_Id.HasValue)
                     {
                         //Another region
                         int howManyInUseWithAnotherRegion = 0;
@@ -224,7 +224,7 @@
                         var compswithsamereg = usedLicenses.Where(d => d.RegionId == l.Region_Id).Count();
                         if (compswithsamereg > 0)
                         {
-                            curLicense = new ProductLicense(l.Region_Id, null, "", l.Region.Name, l.NumberOfLicenses, compswithsamereg);
+                            curLicense = new ProductLicense(l.Region_Id, null, l.Region.Name, "", l.NumberOfLicenses, compswithsamereg);
                             curProduct.ProductLicenses.Add(curLicense);
                         }
                     }
