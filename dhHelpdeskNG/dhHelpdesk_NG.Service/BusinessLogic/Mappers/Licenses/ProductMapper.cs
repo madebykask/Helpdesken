@@ -157,6 +157,7 @@
 
                         }
                         //Without region and department
+
                         var howManyInUse = usedLicenses.Where(p => p.DepartmentId == 0).Count() - howManyInUseWithAnotherRegion - howManyInUseWithAnotherDep;
                         curLicense = new ProductLicense(null, null, "", "", l.NumberOfLicenses, howManyInUse);
                         curProduct.ProductLicenses.Add(curLicense);
