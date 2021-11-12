@@ -1468,7 +1468,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.RedirectToAction("index", "cases", new { id = customerId });
         }
 
-        [UserCasePermissions]
+        //[UserCasePermissions]
         public ActionResult Edit(int id,
             string redirectFrom = "",
             int? moveToCustomerId = null,
@@ -1488,6 +1488,12 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (SessionFacade.CurrentUser != null)
             {
+
+                var isAuthorised = _userService.VerifyUserCasePermissions(SessionFacade.CurrentUser, id);
+                if(!isAuthorised)
+                {
+                    return new RedirectResult("~/Error/Unathorized");
+                }
                 /* Used for Extended Case */
                 TempData["Case_Id"] = id;
 

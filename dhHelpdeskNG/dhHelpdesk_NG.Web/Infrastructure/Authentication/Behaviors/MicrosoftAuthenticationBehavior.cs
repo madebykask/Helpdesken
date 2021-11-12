@@ -62,18 +62,26 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
             if (!string.IsNullOrEmpty(defaultEmployeeNumber))
                 employeeNum = defaultEmployeeNumber;
 
-            var userIdentity = new UserIdentity()
+            if(user != null)
             {
-                UserId = user.UserID,
-                Domain = "",
-                FirstName = user?.FirstName,
-                LastName = user?.SurName,
-                EmployeeNumber = employeeNum,
-                Phone = user?.Phone,
-                Email = user?.Email ?? emailAddress
-            };
+                var userIdentity = new UserIdentity()
+                {
+                    UserId = user.UserID,
+                    Domain = "",
+                    FirstName = user?.FirstName,
+                    LastName = user?.SurName,
+                    EmployeeNumber = employeeNum,
+                    Phone = user?.Phone,
+                    Email = user?.Email ?? emailAddress
+                };
 
-            return userIdentity;
+                return userIdentity;
+            }
+            else
+            {
+                return null;
+            }
         }
+
     }
 }

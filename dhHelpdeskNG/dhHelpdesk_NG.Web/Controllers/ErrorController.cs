@@ -77,14 +77,14 @@
         {
             return this.View();
         }
-
+        [AllowAnonymous]
         public ViewResult Forbidden()
         {
             Response.StatusCode = 403; // Forbidden 
             return this.View("Unathorized");
         }
         
-
+        [AllowAnonymous]
         public ViewResult Unathorized()
         {
             Response.StatusCode = 401; // unauthorized

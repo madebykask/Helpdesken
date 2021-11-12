@@ -177,6 +177,13 @@ namespace DH.Helpdesk.Web.Controllers
                     new AuthenticationProperties { RedirectUri = returnUrl },
                     OpenIdConnectAuthenticationDefaults.AuthenticationType);
 
+                var apa = SessionFacade.CurrentUser;
+
+            }
+            else
+            {
+                //Check the user
+                var apa = HttpContext;
             }
         }
 
