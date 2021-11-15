@@ -103,7 +103,7 @@ namespace ExtendedCase.Logic.Services
 
         private string Translate(int langId, string data)
         {
-            var regex = new Regex("[\"'](?:@Translation\\.)([^\"']+)[\"']");
+            var regex = new Regex("(?:@Translation\\.)([\\.A-Za-z_0-9]+)");
             var propertiesValues = regex.Matches(data).Cast<Match>()
                 .SelectMany(m => m.Groups.Cast<Group>().Skip(1).Select(g => g.Value))
                 .ToArray();
@@ -112,7 +112,7 @@ namespace ExtendedCase.Logic.Services
                 var translations = _translationRepository.GetTranslations(langId, propertiesValues);
                 foreach (var translation in translations)
                 {
-                    data = Regex.Replace(data,$"[\"']{Regex.Escape($"@Translation.{translation.Key}")}[\"']", $"\"{translation.Value}\"");
+                    data = Regex.Replace(data,$"{Regex.Escape($"@Translation.{translation.Key}")}", $"{translation.Value}");
                 }
             }
             return data;
