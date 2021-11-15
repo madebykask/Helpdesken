@@ -33,7 +33,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
             var userIdentity = ctx.User.Identity as ClaimsIdentity;
             var userClaims = userIdentity.Claims;
             var userEmail = userClaims.First(c => c.Type == "preferred_username").Value;
-            string fullName = userClaims.First(c => c.Type == "name").Value;
 
             var lastError = new ErrorModel(string.Empty);
 
