@@ -84,10 +84,9 @@
             return this.View("Unathorized");
         }
         
-
         public ViewResult Unathorized()
-        {
-            Response.StatusCode = 401; // unauthorized
+            {
+            //Response.StatusCode = 401; // unauthorized
             return this.View();
         }
     }

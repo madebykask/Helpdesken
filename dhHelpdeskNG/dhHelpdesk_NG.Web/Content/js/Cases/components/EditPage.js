@@ -781,6 +781,7 @@ EditPage.prototype.reExtendCaseLock = function () {
 
     $.post(p.caseLockExtender, data, function (data) {
         if (data && data.length) {
+            console.log(data);
             var caseLockedWarning$ = $('#caseLockedWarning');
             caseLockedWarning$.off('show.bs.modal').on('show.bs.modal',
                 function () {
@@ -1562,6 +1563,8 @@ EditPage.prototype.unlockCase = function (lockGuid, url) {
 EditPage.prototype.unlockCaseById = function(caseId, url) {
     var self = this;
     var p = self.p;
+    console.log(p);
+    debugger;
     $.post(p.unlockCaseByCaseIdUrl, $.param({ caseId: caseId }), function (data) {
         if (data !== "Success") {
             ShowToastMessage(p.caseUnlockErrorMessage, "Error");
