@@ -12,15 +12,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Attributes
             if (httpContext == null)
                 throw new ArgumentNullException(nameof(httpContext));
 
-            bool isAuthenticated;
-            if (httpContext.Application["USER_LOGGED_IN"] != null)
-            {
-                isAuthenticated = true;
-            }
-            else
-            {
-                isAuthenticated = httpContext.User?.Identity?.IsAuthenticated ?? false;
-            }
+            bool isAuthenticated = httpContext.User?.Identity?.IsAuthenticated ?? false;
             if (!isAuthenticated)
             {
                 return false;

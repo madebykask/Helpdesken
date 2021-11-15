@@ -3,6 +3,7 @@ using System.Web.Security;
 using DH.Helpdesk.Common.Types;
 using System.Security.Claims;
 using DH.Helpdesk.Services.Services;
+using System.Collections.Generic;
 namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
 {
     public class ApplicationAuthenticationBehavior : IAuthenticationBehavior
@@ -35,19 +36,30 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
         protected virtual UserIdentity CreateUserIdentityByUserId(int userId)
         {
             var user = _masterDataService.GetUser(userId);
-            var employeeNum = string.Empty;
-            var userIdentity = new UserIdentity()
+            if(user != null)
             {
-                UserId = user.UserID,
-                Domain = "",
-                FirstName = user?.FirstName,
-                LastName = user?.SurName,
-                EmployeeNumber = employeeNum,
-                Phone = user?.Phone,
-                Email = user?.Email ?? ""
-            };
+                var employeeNum = string.Empty;
+                var userIdentity = new UserIdentity()
+                {
+                    UserId = user.UserID,
+                    Domain = "",
+                    FirstName = user?.FirstName,
+                    LastName = user?.SurName,
+                    EmployeeNumber = employeeNum,
+                    Phone = user?.Phone,
+                    Email = user?.Email ?? ""
+                };
 
-            return userIdentity;
+                var identity = new System.Security.Principal.GenericIdentity(user.UserID);
+                var principal = new ClaimsPrincipal(identity);
+                HttpContext.Current.User = principal;
+                return userIdentity;
+            }
+            else
+            {
+                return null;
+            }
+
         }
         protected virtual UserIdentity CreateUserIdentityInner(HttpContextBase ctx)
         {
@@ -67,7 +79,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
 
             //if (identity != null)
             //{
-            //    userIdentity = identity.CreateHelpdeskUserIdentity();
+            //    userIdentity = userIdentity.CreateHelpdeskUserIdentity();
             //}
             return userIdentity;
         }

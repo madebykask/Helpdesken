@@ -53,15 +53,15 @@
             _isCaseExists = true;
 
             var caseId = 0;
-            //if (int.TryParse(caseIdParam?.ToString(), out caseId))
-            //{
-            //    if (!_caseService.IsCaseExist(caseId))
-            //        return true;
+            if (int.TryParse(caseIdParam?.ToString(), out caseId))
+            {
+                if (!_caseService.IsCaseExist(caseId))
+                    return true;
 
-            //    var isAuthorised = _userService.VerifyUserCasePermissions(user, caseId);
-            //    httpContext.Session.Add("isAuthorized", isAuthorised);
-            //    return isAuthorised;
-            //}
+                var isAuthorised = _userService.VerifyUserCasePermissions(user, caseId);
+                httpContext.Session.Add("isAuthorized", isAuthorised);
+                return isAuthorised;
+            }
 
             return true;
         }
