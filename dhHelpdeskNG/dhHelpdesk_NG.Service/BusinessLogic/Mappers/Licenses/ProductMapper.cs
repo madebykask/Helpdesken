@@ -46,9 +46,9 @@
                             ProductId = p.Id,
                             ProductName = p.Name,
                             Licenses = p.Licenses,
-                            Regions = p.Licenses.Where(l => (regionsFilter.Any() ? regionsFilter.Contains(l.Region_Id.Value) : true))
-                                                            .Select(l => new { Id = l.Id, Name = l.Region })
-                                                            .Distinct(),
+                            //Regions = p.Licenses.Where(l => (regionsFilter.Any() ? regionsFilter.Contains(l.Region_Id.Value) : true))
+                            //                                .Select(l => new { Id = l.Id, Name = l.Region })
+                            //                                .Distinct(),
 
                             //Departments = p.Licenses.Where(l => (departmentsFilter.Any() ? departmentsFilter.Contains(l.Department_Id.Value) : true))
                             //                                    .Select(l => new { Id = l.Department.Id, Name = l.Department.DepartmentName })
@@ -80,6 +80,7 @@
                                                                              ComputerId = c.Id  
                                                                            })
                                                           .Where(c => (departmentsFilter.Any() ? departmentsFilter.Contains(c.DepartmentId) : true))
+                                                          .Where(c => (regionsFilter.Any() ? regionsFilter.Contains(c.RegionId) : true))
                                                           .Where(c => software.Where(s => p.Applications.Select(a => a.Name).Contains(s.Name))
                                                                               .Select(s=> s.Computer_Id)
                                                                               .Contains(c.ComputerId))
@@ -283,7 +284,6 @@
                 }
                 overviews.Add(curProduct);
             }
-
 
             return overviews.ToArray();
         }
