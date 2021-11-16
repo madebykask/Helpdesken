@@ -149,22 +149,22 @@
 
         $('#formtab-editheaderName')[0].innerHTML = '@Translation.GetCoreTextTranslation("Fliknamn")';
 
-        let optionListItem = (idName, option) => "<li data-dhhelpdesk-listId='" + option.id + "' data-dhhelpdesk-controlId='" + idName + "'><input style='width:95%' type='text' placeholder='" + option.name + "'><span><a class='fa fa-trash fa-lg option' style='color:black' aria-hidden='true'></a></span></li>"
+        let optionListItem = (idName, option, activeLanguage, controlType) => "<li data-dhhelpdesk-listId='" + option.id + "' data-dhhelpdesk-controlId='" + idName + "'><input class='labelName' type='text' id='" + idName + "label" + activeLanguage.Id + "' data-dhhelpdesk-isoption='true' data-dhhelpdesk-langId='" + activeLanguage.Id + "' data-dhhelpdesk-controlType='" + controlType + "' style='width:95%' type='text' placeholder='" + option.name + "'><span><a class='fa fa-trash fa-lg option' style='color:black' aria-hidden='true'></a></span></li>"
 
         let selectionHtml = (idName, activeLanguage, isDefaultLanguage, options, controlType) => {
-            let checkboxCls = controlType == "CheckboxList" ? " checkboxlst" : "";
+            let selectionCls = controlType == "CheckboxList" ? " checkboxlst" : (controlType == "Radio" ? " radiolst" : "");
             let optionRows = (options) => {
-                let res = "<tr class='table-light'><td style='width:100%'><ul class='selectOptions" + checkboxCls + "' data-dhhelpdesk-controlId='" + idName + "'>";
+                let res = "<tr class='table-light'><td style='width:100%'><ul class='selectOptions" + selectionCls + "' data-dhhelpdesk-controlId='" + idName + "' data-dhhelpdesk-langId='" + activeLanguage.Id + "'>";
                 for (let o = 0; o < options.length; o++) {
                     //res = res + "<tr class='table-light'><td style='width:5%'><span aria-hidden='true'><i class='fa fa-circle'></i></span></td><td style='width:100%'><input type='text' placeholder='" + options[o] + "'></td><td><a class='fa fa-trash fa-lg' style='color:black' aria-hidden='true'></a></td></tr>"
-                    res = res + optionListItem(idName, options[o]);
+                    res = res + optionListItem(idName, options[o], activeLanguage, controlType);
                 }
                 res = res + "</ul></td></tr>";
                 //res = res + "<div style='border: 1px solid black; margin-left:5px:margin-right:5px'><ul><li><input style='width:95%' type='text' placeholder='Option 1'><span><a class='fa fa-trash fa-lg' style='color:black' aria-hidden='true'></a></span></li></ul></div>"
                 return res;
             };
 
-            return "<tr class='trTransField' data-dhhelpdesk-labelId='" + idName + "' data-dhhelpdesk-langId='" + activeLanguage.Id + "'" + (activeLanguage.Id == document.getElementById("chosenLanguage").value ? "" : "style='display:none'") + "><td class='transField'>" + (isDefaultLanguage ? "" : "<br/>") + "<label><span>@Translation.GetCoreTextTranslation("Val") " + activeLanguage.LanguageId + " </span>" + (isDefaultLanguage ? "<span class='required-defaultLng'>*</span>" : "") + "</label><td><table class='table table-borderless'><tbody>"
+            return "<tr class='trTransField' data-dhhelpdesk-labelId='" + idName + "' data-dhhelpdesk-options='true' data-dhhelpdesk-langId='" + activeLanguage.Id + "'" + (activeLanguage.Id == document.getElementById("chosenLanguage").value ? "" : "style='display:none'") + "><td class='transField'>" + (isDefaultLanguage ? "" : "<br/>") + "<label><span>@Translation.GetCoreTextTranslation("Val") " + activeLanguage.LanguageId + " </span>" + (isDefaultLanguage ? "<span class='required-defaultLng'>*</span>" : "") + "</label><td><table class='table table-borderless'><tbody>"
                 + optionRows(options) + "</tbody></table></td></tr>";
         }
 
@@ -202,7 +202,9 @@
                             options = [{ id: 1, name: "Option 1" }];
                         }
                         else {
-                            options = [{ id: 1, name: "Option 1" }, { id: 2, name: "Option 2" }, { id: 3, name: "Option 3" }];
+                            options = [{ id: 1, name: "Option 1" },
+                                { id: 2, name: "Option 2" },
+                                { id: 3, name: "Option 3" }];
                         }
 
                         res = res + selectionHtml(idName, activeLanguages[i], isDefaultLanguage, options, controlType);
@@ -277,21 +279,21 @@
                             draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Filuppladdning")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' id=" + idName + "fileUploadText" + " value='"+ '@Translation.GetCoreTextTranslation("Dra filer hit")' + "' class='file-upload' readonly></div>" + editFieldHtml(idName, '@Html.Raw(Translation.GetCoreTextTranslation("Filuppladdning"))', "fileUpload", true, false, [{ Text: '@Translation.GetCoreTextTranslation("Dra filer hit")'}]) + "</div>")
                             break;
 
-                        case "radio":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Radioknapp")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><select class='form-control form-control-width' readonly data-placeholder='Choose a template...'></select></div>" + editFieldHtml(idName, '@Html.Raw(Translation.GetCoreTextTranslation("Radioknapp"))', "Radio", true, false) + "</div>")
-                            break;
-
-                        case "checkbox-list":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Kryssruta")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><select class='form-control form-control-width' readonly data-placeholder='Choose a template...'></select></div>" + editFieldHtml(idName, '@Html.Raw(Translation.GetCoreTextTranslation("Kryssruta"))', "CheckboxList", true, false) + "</div>")
-                            break;
-
-                        case "dropdown":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Rullgardinsmeny")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><select class='form-control form-control-width' readonly data-placeholder='Choose a template...'></select></div>" + editFieldHtml(idName, '@Html.Raw(Translation.GetCoreTextTranslation("Rullgardinsmeny"))', "Dropdown", true, false) + "</div>")
-                            break;
-
                         case "html":
                             draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Infofält")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' style='padding:10px'>" + summerNoteConfig(idName, '') + "</div></div>")
                             $('#dropzone').sortable("disable");
+                            break;
+
+                        case "radio":
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Radioknapp")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, '@Html.Raw(Translation.GetCoreTextTranslation("Radioknapp"))', "Radio", true, false) + "</div>")
+                            break;
+
+                        case "checkbox-list":
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Kryssruta")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, '@Html.Raw(Translation.GetCoreTextTranslation("Kryssruta"))', "CheckboxList", true, false) + "</div>")
+                            break;
+
+                        case "dropdown":
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Rullgardinsmeny")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><select class='form-control form-control-width' readonly></select></div>" + editFieldHtml(idName, '@Html.Raw(Translation.GetCoreTextTranslation("Rullgardinsmeny"))', "Dropdown", true, false) + "</div>")
                             break;
 
                         default:
@@ -396,8 +398,11 @@
 
             for (let l = 0; l < listOfChoices.length; l++) {
                 let count = parseInt(listOfChoices[l].childElementCount);
+                let activeLanguageId = listOfChoices[l].getAttribute('data-dhhelpdesk-langId');
+                let activeLanguage = [...activeLanguages].filter(l => l.Id == activeLanguageId)[0];
+                let controlType = listOfChoices[l].querySelectorAll("input")[0].getAttribute('data-dhhelpdesk-controlType');
                 let option = { id: count + 1, name: "Option" + " " + (count + 1) };
-                listOfChoices[l].innerHTML += (optionListItem(controlId, option));
+                listOfChoices[l].innerHTML += (optionListItem(controlId, option, activeLanguage, controlType));
             }
         });
 
@@ -473,8 +478,12 @@
         }
 
         $(document).on("keyup", ".labelName", function (e) {
-            var id = $(this).attr('id').replace('label' + document.getElementById("chosenLanguage").value, 'headerName');
-            document.getElementById(id).innerHTML = $(this).attr('value');
+            var isOptionElement = $(this).attr('data-dhhelpdesk-isoption');
+
+            if (isOptionElement == null) {
+                var id = $(this).attr('id').replace('label' + document.getElementById("chosenLanguage").value, 'headerName');
+                document.getElementById(id).innerHTML = $(this).attr('value');
+            }
         });
 
         $(document).on("keyup", ".labelFieldTextName", function (e) {
@@ -713,72 +722,132 @@
                 fieldTranslations.push(translation);
             }
 
-        getNextUntil(obj.parentElement.parentElement.parentElement.parentElement, "[data-type='section']").forEach(function (obj, n) {
-            counter++;
+            getNextUntil(obj.parentElement.parentElement.parentElement.parentElement, "[data-type='section']").forEach(function (obj, n) {
+                counter++;
 
-            if (obj.querySelector('.field-label') != null) {
-                var id = obj.querySelector('.field-label').id;
-                let contentSummerNote;
-                if (document.getElementById(id.replace('header', '_summernote')) != null) {
-                    contentSummerNote = $('#' + id.replace('header', '_summernote')).summernote('code');
-                    console.log(contentSummerNote)
-                }
-
-                var label = document.getElementById(id.replace('header', 'headerName')) != null ? document.getElementById(id.replace('header', 'headerName')).innerText : "infoField";
-
-                var required = document.getElementById(id.replace('header', 'required')) ? document.getElementById(id.replace('header', 'required')).checked : false;
-                var content = contentSummerNote ? 'function(m) { return ' + contentSummerNote + ' }' : ""
-                var fileuploadText = document.getElementById(id.replace('header', 'fileUploadText')) != null ? document.getElementById(id.replace('header', 'fileUploadText')).value : '';
-                var fTranslations = obj.querySelectorAll(".trTransField");
-                var fTranslationsProperty = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguage.Id);
-
-                let savedId = $(obj).find('.field').attr('data-dhhelpdesk-savedid');
-
-                let newId = fTranslationsProperty.length > 0 ? fTranslationsProperty[0].querySelector('.labelName').value + counter : label + counter;
-                idControl = savedId != null ? savedId : newId;
-
-                items[i].controls[n] = {
-                    id: idControl,
-                    type: obj.getAttribute('data-type'),
-                    label: label,
-                    required: required,
-                    valueBinding: content,
-                    addonText: fileuploadText
-                }
-
-                let fieldTextTranslations = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-fileupload-text') == "true");
-
-                if (fieldTextTranslations.length > 0) {
-
-                    let idFileUploadText = fieldTextTranslations[0].querySelector('.labelName').value;
-
-                    for (let t = 0; t < fieldTextTranslations.length; t++) {
-                        let fTranslation = fieldTextTranslations[t].querySelector('.labelName');
-                        let translation = {};
-                        translation.LanguageId = fTranslation.getAttribute('data-dhhelpdesk-langId');
-                        translation.Property = idFileUploadText;
-                        translation.Text = fTranslation.value;
-                        translation.ControlType = fTranslation.getAttribute('data-dhhelpdesk-controlType');
-                        translation.TranslationId = fieldTextTranslations[t].getAttribute('data-dhhelpdesk-id');
-                        fieldTranslations.push(translation);
+                if (obj.querySelector('.field-label') != null) {
+                    var id = obj.querySelector('.field-label').id;
+                    let contentSummerNote;
+                    if (document.getElementById(id.replace('header', '_summernote')) != null) {
+                        contentSummerNote = $('#' + id.replace('header', '_summernote')).summernote('code');
                     }
-                }
 
-                let fieldLabelTranslations = [...fTranslations].filter(item => !fieldTextTranslations.includes(item));
+                    var label = document.getElementById(id.replace('header', 'headerName')) != null ? document.getElementById(id.replace('header', 'headerName')).innerText : "infoField";
 
-                if (fieldLabelTranslations.length > 0) {
-                    for (let f = 0; f < fieldLabelTranslations.length; f++) {
-                        let lTranslation = fieldLabelTranslations[f].querySelector('.labelName');
-                        let translation = {};
-                        translation.LanguageId = lTranslation.getAttribute('data-dhhelpdesk-langId');
-                        translation.Property = idControl;
-                        translation.Text = lTranslation.value;
-                        translation.ControlType = lTranslation.getAttribute('data-dhhelpdesk-controlType');
-                        translation.TranslationId = lTranslation.getAttribute('data-dhhelpdesk-id');
-                        fieldTranslations.push(translation);
+                    var required = document.getElementById(id.replace('header', 'required')) ? document.getElementById(id.replace('header', 'required')).checked : false;
+                    var content = contentSummerNote ? 'function(m) { return ' + contentSummerNote + ' }' : ""
+                    var fileuploadText = document.getElementById(id.replace('header', 'fileUploadText')) != null ? document.getElementById(id.replace('header', 'fileUploadText')).value : '';
+                    var fTranslations = obj.querySelectorAll(".trTransField");
+                    
+                    var fTranslationsProperty = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguage.Id);
+                    var dataSrc = null;
+
+                    if (fTranslationsProperty.length > 1) {
+                        dataSrc = [];
+                        let optionLst = fTranslationsProperty[1].querySelector('.selectOptions').getElementsByTagName("li");
+                         
+                        for (let o = 0; o < optionLst.length; o++) {
+                            let optionId;
+                            let savedId = optionLst[o].getAttribute('data-dhhelpdesk-savedid');
+
+                            let newId = optionLst[o].firstElementChild.value + optionLst[o].getAttribute('data-dhhelpdesk-listid');
+                            optionId = savedId != null ? savedId : newId;
+                            
+                            let option = optionLst[o].querySelector('.labelName');
+                            dataSrc.push({ value: optionId, text: option.value })
+                        }
                     }
-                }
-                }
+
+                    let savedId = $(obj).find('.field').attr('data-dhhelpdesk-savedid');
+
+                    let newId = fTranslationsProperty.length > 0 ? fTranslationsProperty[0].querySelector('.labelName').value + counter : label + counter;
+                    idControl = savedId != null ? savedId : newId;
+
+                    items[i].controls[n] = {
+                        id: idControl,
+                        type: obj.getAttribute('data-type'),
+                        label: label,
+                        required: required,
+                        valueBinding: content,
+                        addonText: fileuploadText,
+                        dataSource: dataSrc
+                    }
+
+                    let fieldTextTranslations = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-fileupload-text') == "true");
+
+                    if (fieldTextTranslations.length > 0) {
+
+                        let idFileUploadText = fieldTextTranslations[0].querySelector('.labelName').value;
+
+                        for (let t = 0; t < fieldTextTranslations.length; t++) {
+                            let fTranslation = fieldTextTranslations[t].querySelector('.labelName');
+                            let translation = {};
+                            translation.LanguageId = fTranslation.getAttribute('data-dhhelpdesk-langId');
+                            translation.Property = idFileUploadText;
+                            translation.Text = fTranslation.value;
+                            translation.ControlType = fTranslation.getAttribute('data-dhhelpdesk-controlType');
+                            translation.TranslationId = fieldTextTranslations[t].getAttribute('data-dhhelpdesk-id');
+                            fieldTranslations.push(translation);
+                        }
+                    }
+
+                    let optionTextTranslations = [];
+                    optionTextTranslations = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-options') == "true");
+                  
+                    if (optionTextTranslations.length > 0) {
+
+                        let count;
+
+                        let optionElms = [];
+
+                        for (let o = 0; o < optionTextTranslations.length; o++) {
+                            let selectOptions = optionTextTranslations[o].querySelector('.selectOptions');
+                            let optionItems = selectOptions.getElementsByTagName('li');
+                            if (o == 0) {
+                                count = parseInt(optionItems.length);
+                            }
+
+                            for (let i = 0; i < optionItems.length; i++) {
+                                optionElms.push(optionItems[i]);
+                            }
+                        }
+
+                        for (let c = 0; c < count; c++) {
+                            let optionsList = [...optionElms].filter(item => item.getAttribute('data-dhhelpdesk-listid') == c + 1);
+                            let options = [];
+                            for (let u = 0; u < optionsList.length; u++) {
+                                options.push(optionsList[u].firstElementChild)
+                            }
+                            let idOptionProperty = [...options].filter(item => item.getAttribute('data-dhhelpdesk-langId') == defaultLanguage.Id);
+
+                            for (let p = 0; p < options.length; p++) {
+                                let translation = {};
+                              
+                                translation.LanguageId = options[p].getAttribute('data-dhhelpdesk-langId');
+                                translation.Property = idOptionProperty[0].value + options[p].parentElement.getAttribute('data-dhhelpdesk-listid');
+                                translation.Text = options[p].value;
+                                translation.ControlType = options[p].getAttribute('data-dhhelpdesk-controlType');
+                                translation.TranslationId = options[p].getAttribute('data-dhhelpdesk-id');
+                                fieldTranslations.push(translation);
+                            }
+                        }                        
+                    }
+
+                    let fieldLabelTranslations = [...fTranslations].filter(item => !fieldTextTranslations.includes(item) && !optionTextTranslations.includes(item));
+
+                    if (fieldLabelTranslations.length > 0) {
+                        for (let f = 0; f < fieldLabelTranslations.length; f++) {
+                            let lTranslation = fieldLabelTranslations[f].querySelector('.labelName');
+                            let translation = {};
+                            translation.LanguageId = lTranslation.getAttribute('data-dhhelpdesk-langId');
+                            translation.Property = idControl;
+                            translation.Text = lTranslation.value;
+                            translation.ControlType = lTranslation.getAttribute('data-dhhelpdesk-controlType');
+                            translation.TranslationId = lTranslation.getAttribute('data-dhhelpdesk-id');
+                            fieldTranslations.push(translation);
+                        }
+                    }
+                    }
                 });
 
                 });
@@ -850,7 +919,7 @@
                 //    ShowToastMessage(, "error");
                 //}
                 });
-
+    
             }
 
         function checkForDuplicates(array) {
@@ -1186,7 +1255,7 @@
         position: relative;
     }
 
-    .selectOptions li:before {
+    .selectOptions.radiolst li:before {
         content: "\f1db"; /*"\f096"; */
         font-family: FontAwesome;
         display: inline-block;

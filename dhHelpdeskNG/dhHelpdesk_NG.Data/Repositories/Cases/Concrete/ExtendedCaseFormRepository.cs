@@ -448,6 +448,49 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         }
                         c.addonText = "@Translation." + addOnTextId;
                     }
+
+                    if(c.dataSource != null) 
+                    {
+                        foreach(var d in c.dataSource)
+                        {
+                            var dataSourceTextId = d.value;
+                            var cleanDataSourceText = StringHelper.GetCleanString(dataSourceTextId);
+                            var cleanDataSourceTextWithFormId = cleanDataSourceText + "_" + entity.id;
+                            if (!dataSourceTextId.Contains("DataSource.Value"))
+                            { dataSourceTextId = "DataSource.Value." + cleanDataSourceTextWithFormId; }
+
+                            foreach (var t in translations.Where(x => (x.ControlType == "Radio" || x.ControlType == "CheckboxList" || x.ControlType == "Dropdown") && StringHelper.GetCleanString(x.Property) == cleanDataSourceText))
+                            {
+                                if (t.TranslationId != 0)
+                                {
+                                    var updatedTranslation = DataContext.ExtendedCaseTranslations.FirstOrDefault(x => x.Id == t.TranslationId);
+                                    //var updatedTranslation = DataContext.ExtendedCaseTranslations.Where(u => u.Property == controlId && u.LanguageId == t.LanguageId).FirstOrDefault();
+                                    updatedTranslation.Property = dataSourceTextId;
+                                    updatedTranslation.Text = t.Text ?? "";
+                                    updatedTranslation.ExtendedCaseForm_Id = entity.id;
+                                }
+                                else if (DataContext.ExtendedCaseTranslations.Where(ct => ct.Property == dataSourceTextId && t.LanguageId == ct.LanguageId).Count() == 0)
+                                {
+                                    DataContext.ExtendedCaseTranslations.Add(
+                                    new ExtendedCaseTranslationEntity()
+                                    {
+                                        LanguageId = t.LanguageId,
+                                        Property = dataSourceTextId,
+                                        Text = t.Text ?? "",
+                                        ExtendedCaseForm_Id = entity.id
+                                    });
+                                }
+                                else
+                                {
+                                    var updatedTranslation = DataContext.ExtendedCaseTranslations.Where(u => u.Property == dataSourceTextId && u.LanguageId == t.LanguageId).FirstOrDefault();
+                                    updatedTranslation.Text = t.Text ?? "";
+                                    updatedTranslation.ExtendedCaseForm_Id = entity.id;
+                                }
+                                DataContext.Commit();
+                            }
+                            d.text= "@Translation." + dataSourceTextId;
+                        }
+                    }
                 }
             }
 

@@ -291,7 +291,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
             var id = _extendedCaseService.SaveExtendedCaseForm(payload, SessionFacade.CurrentUser.UserId);
-
+            //return new EmptyResult();
             return Json(new { result = true, formId = id });
         }
     }
