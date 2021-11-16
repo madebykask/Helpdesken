@@ -172,7 +172,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (!Request.IsAuthenticated)
             {
                 _authenticationService.SetLoginModeToMicrosoft();
-
+                //Make an async method to call instead?
                 HttpContext.GetOwinContext().Authentication.Challenge(
                     new AuthenticationProperties { RedirectUri = returnUrl },
                     OpenIdConnectAuthenticationDefaults.AuthenticationType);

@@ -33,7 +33,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
             var userIdentity = ctx.User.Identity as ClaimsIdentity;
             var userClaims = userIdentity.Claims;
             var userEmail = userClaims.First(c => c.Type == "preferred_username").Value;
-            string fullName = userClaims.First(c => c.Type == "name").Value;
 
             var lastError = new ErrorModel(string.Empty);
 
@@ -62,18 +61,26 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
             if (!string.IsNullOrEmpty(defaultEmployeeNumber))
                 employeeNum = defaultEmployeeNumber;
 
-            var userIdentity = new UserIdentity()
+            if(user != null)
             {
-                UserId = user.UserID,
-                Domain = "",
-                FirstName = user?.FirstName,
-                LastName = user?.SurName,
-                EmployeeNumber = employeeNum,
-                Phone = user?.Phone,
-                Email = user?.Email ?? emailAddress
-            };
+                var userIdentity = new UserIdentity()
+                {
+                    UserId = user.UserID,
+                    Domain = "",
+                    FirstName = user?.FirstName,
+                    LastName = user?.SurName,
+                    EmployeeNumber = employeeNum,
+                    Phone = user?.Phone,
+                    Email = user?.Email ?? emailAddress
+                };
 
-            return userIdentity;
+                return userIdentity;
+            }
+            else
+            {
+                return null;
+            }
         }
+
     }
 }

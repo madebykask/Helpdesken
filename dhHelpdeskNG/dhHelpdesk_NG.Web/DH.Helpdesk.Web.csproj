@@ -841,6 +841,8 @@
     <Content Include="Content\img\ic_thumbs_down_black_24dp_2x.png" />
     <Content Include="Content\img\ic_thumbs_up_black_24dp_1x.png" />
     <Content Include="Content\img\ic_thumbs_up_black_24dp_2x.png" />
+    <Content Include="Content\img\ms-symbollockup_signin_light.png" />
+    <Content Include="Content\img\ms-symbollockup_signin_light.svg" />
     <Content Include="Content\js\Account\order.js" />
     <Content Include="Areas\Admin\Content\js\Users\_input.js" />
     <Content Include="Content\js\additional-methods.js" />

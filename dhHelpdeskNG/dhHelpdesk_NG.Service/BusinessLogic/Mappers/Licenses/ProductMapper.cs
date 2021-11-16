@@ -98,10 +98,67 @@
 
                 foreach (var l in e.Licenses)
                 {
-                    if (!l.Region_Id.HasValue && !l.Department_Id.HasValue)
+                     if (!l.Region_Id.HasValue && !l.Department_Id.HasValue)
                     {
+                        //Another region
+                        int howManyInUseWithAnotherRegion = 0;
+                        var compswithanotherreg = usedLicenses.Where(d => d.RegionId != l.Region_Id && d.RegionId != 0 && d.DepartmentId == 0).GroupBy(c => c.RegionId).ToList();
+                        if (compswithanotherreg.Count > 0)
+                        {
+                            foreach (var group in compswithanotherreg)
+                            {
+                                
+                                string depName = "";
+                                string regName = "";
+                                int depId = 0;
+                                int regionId = 0;
+                                foreach (var c in group)
+                                {
+                                    if (c.RegionId != 0)
+                                    {
+                                        regionId = c.RegionId;
+                                        regName = c.Region.Name;
+                                    }
+
+                                    howManyInUseWithAnotherRegion++;
+
+                                }
+                                curLicense = new ProductLicense(regionId, depId, regName, depName, 0, group.Count());
+                                curProduct.ProductLicenses.Add(curLicense);
+                            }
+
+                        }
+                        //Another department
+                        int howManyInUseWithAnotherDep = 0;
+                        var compswithanotherdep = usedLicenses.Where(d => d.DepartmentId != l.Department_Id && d.DepartmentId != 0 && d.DepartmentId == 0).GroupBy(c => c.RegionId).ToList();
+                        if (compswithanotherdep.Count > 0)
+                        {
+                            foreach (var group in compswithanotherdep)
+                            {
+
+                                string depName = "";
+                                string regName = "";
+                                int depId = 0;
+                                int regionId = 0;
+                                foreach (var c in group)
+                                {
+                                    if (c.RegionId != 0)
+                                    {
+                                        depId = c.RegionId;
+                                        depName = c.Region.Name;
+                                    }
+
+                                    howManyInUseWithAnotherDep++;
+
+                                }
+                                curLicense = new ProductLicense(regionId, depId, regName, depName, 0, group.Count());
+                                curProduct.ProductLicenses.Add(curLicense);
+                            }
+
+                        }
                         //Without region and department
-                        var howManyInUse = usedLicenses.Where(p => p.DepartmentId == 0).Count();
+
+                        var howManyInUse = usedLicenses.Where(p => p.DepartmentId == 0).Count() - howManyInUseWithAnotherRegion - howManyInUseWithAnotherDep;
                         curLicense = new ProductLicense(null, null, "", "", l.NumberOfLicenses, howManyInUse);
                         curProduct.ProductLicenses.Add(curLicense);
                     }
@@ -115,15 +172,23 @@
                             {
                                 int howMany = 0;
                                 string depName = "";
+                                string regName = "";
                                 int depId = 0;
+                                int regionId = 0;
                                 foreach (var c in group)
                                 {
+                                    if (c.RegionId != 0)
+                                    {
+                                        regionId = c.RegionId;
+                                        regName = c.Region.Name;
+                                    }
+                                        
                                     howMany++;
                                     depName = c.DepartmentName;
                                     depId = c.DepartmentId;
 
                                 }
-                                curLicense = new ProductLicense(null, depId, "", depName, 0, group.Count());
+                                curLicense = new ProductLicense(regionId, depId, regName, depName, 0, group.Count());
                                 curProduct.ProductLicenses.Add(curLicense);
                             }
 
@@ -160,13 +225,13 @@
                         var compswithsamereg = usedLicenses.Where(d => d.RegionId == l.Region_Id).Count();
                         if (compswithsamereg > 0)
                         {
-                            curLicense = new ProductLicense(l.Region_Id, null, "", l.Region.Name, l.NumberOfLicenses, compswithsamereg);
+                            curLicense = new ProductLicense(l.Region_Id, null, l.Region.Name, "", l.NumberOfLicenses, compswithsamereg);
                             curProduct.ProductLicenses.Add(curLicense);
                         }
                     }
                     if (l.Region_Id.HasValue && l.Department_Id.HasValue)
                     {
-
+                        //Hope this works
                         //Same region and department
                         var howManyInUse = usedLicenses.Where(p => p.DepartmentId == l.Department_Id).Count();
                         curLicense = new ProductLicense(l.Region_Id, l.Department_Id, l.Region.Name, l.Department.DepartmentName, l.NumberOfLicenses, howManyInUse);
@@ -179,15 +244,23 @@
                             {
                                 int howMany = 0;
                                 string depName = "";
+                                string regName = "";
                                 int depId = 0;
+                                int regionId = 0;
                                 foreach (var c in group)
                                 {
+                                    if (c.RegionId != 0)
+                                    {
+                                        regionId = c.RegionId;
+                                        regName = c.Region.Name;
+                                    }
+
                                     howMany++;
                                     depName = c.DepartmentName;
                                     depId = c.DepartmentId;
 
                                 }
-                                curLicense = new ProductLicense(null, depId, "", depName, 0, group.Count());
+                                curLicense = new ProductLicense(regionId, depId, regName, depName, 0, group.Count());
                                 curProduct.ProductLicenses.Add(curLicense);
                             }
 
