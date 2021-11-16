@@ -255,7 +255,8 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                                     }
                                         }
                                     } : null,
-                                    addonText = c.AddOnText
+                                    addonText = c.AddOnText,
+                                    dataSource = c.DataSource != null ? c.DataSource : null
                                 });
                         }
                     }

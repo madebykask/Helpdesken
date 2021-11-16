@@ -91,6 +91,9 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         [JsonProperty("addonText")]
         public string AddOnText { get; set; }
 
+        [JsonProperty("dataSource")]
+        public List<DataSource> DataSource { get; set; }
+
     }
 
 }

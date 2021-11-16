@@ -69,6 +69,7 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         public object valueBinding { get; set; }
         public string addonText { get; set; }
         public ValidatorsElement validators { get; set; }
+        public List<DataSource> dataSource { get; set; }
     }
 
     public class Validators
@@ -88,5 +89,12 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         public string name { get; set; }
         public string columnCount { get; set; }
         public List<SectionElement> sections { get; set; }
+    }
+
+    public class DataSource
+    {
+        public string value { get; set; }
+
+        public string text { get; set; }
     }
 }
