@@ -142,6 +142,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             };
 
             // override with test values from config if required
+            //Todo - whats this?
             ApplyUserIdentityOverrides(userIdentity);
 
             //set app and session state
@@ -208,6 +209,18 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                     AddLoggedInUser(customerUser, _customerContext, ctx);
                     UpdateUserLogin(ctx, customerUser);
                     //_caseLockService.CaseLockCleanUp(); //todo: check if required?
+                    _sessionContext.SetCurrentLanguageId(customerUser.LanguageId);
+
+                    var language = _languageService.GetLanguage(customerUser.LanguageId);
+                    if (language != null)
+                        _sessionContext.SetCurrentLanguageCode(language.LanguageID);
+
+                    //Set Cookie?
+                    var cookie = CreateFormsAuthCookie(customerUser.UserId, customerUser.ToString()); //todo: check if userData is correct?
+                    ctx.Response.Cookies.Add(cookie);
+                    ////try to auto detect user time zone
+                    //loginResult.TimeZoneAutodetect =
+                    //    SetUserTimeZone(userTimeZoneInfo.TimeZoneOffsetInJan1, userTimeZoneInfo.TimeZoneOffsetInJul1, user);
                 }
                 else
                 {

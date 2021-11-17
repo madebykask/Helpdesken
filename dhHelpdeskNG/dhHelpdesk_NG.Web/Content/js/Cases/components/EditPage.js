@@ -781,7 +781,7 @@ EditPage.prototype.reExtendCaseLock = function () {
 
     $.post(p.caseLockExtender, data, function (data) {
         if (data && data.length) {
-            console.log(data);
+            console.log("Data has length: " + data);
             var caseLockedWarning$ = $('#caseLockedWarning');
             caseLockedWarning$.off('show.bs.modal').on('show.bs.modal',
                 function () {
@@ -801,6 +801,9 @@ EditPage.prototype.reExtendCaseLock = function () {
                 });
             caseLockedWarning$.modal('show');
             self.stopCaseLockTimer();
+        }
+        else {
+            console.log("Data has no length");
         }
     });
 };
@@ -1563,10 +1566,10 @@ EditPage.prototype.unlockCase = function (lockGuid, url) {
 EditPage.prototype.unlockCaseById = function(caseId, url) {
     var self = this;
     var p = self.p;
-    console.log(p);
-    debugger;
+    console.log("Unlocking");
     $.post(p.unlockCaseByCaseIdUrl, $.param({ caseId: caseId }), function (data) {
         if (data !== "Success") {
+            console.log(data);
             ShowToastMessage(p.caseUnlockErrorMessage, "Error");
         }
         if (url) {
