@@ -53,7 +53,7 @@
             }
             */
             ViewBag.ErrorMessage = errorMessage;
-            Response.StatusCode = 404;
+           // Response.StatusCode = 404;
             return this.View();
         }
 
@@ -80,7 +80,7 @@
 
         public ViewResult Forbidden()
         {
-            Response.StatusCode = 403; // Forbidden 
+            //Response.StatusCode = 403; // Forbidden 
             return this.View("Unathorized");
         }
         

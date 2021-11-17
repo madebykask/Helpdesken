@@ -36,7 +36,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
         protected virtual UserIdentity CreateUserIdentityByUserId(int userId)
         {
             var user = _masterDataService.GetUser(userId);
-            if(user != null)
+           
+            if (user != null)
             {
                 var employeeNum = string.Empty;
                 var userIdentity = new UserIdentity()
@@ -50,9 +51,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
                     Email = user?.Email ?? ""
                 };
 
-                var identity = new System.Security.Principal.GenericIdentity(user.UserID);
+                var identity = new System.Security.Principal.GenericIdentity(user.UserID, "Application");
                 var principal = new ClaimsPrincipal(identity);
                 HttpContext.Current.User = principal;
+                bool isAuth = HttpContext.Current.User.Identity.IsAuthenticated;
                 return userIdentity;
             }
             else

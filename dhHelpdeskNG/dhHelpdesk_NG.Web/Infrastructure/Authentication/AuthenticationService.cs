@@ -194,6 +194,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 //get customer user (tblUsers)
                 var customerUser = GetLocalUser(userIdentity);
 
+                // Todo - Create cookie?
+                
                 //set only if its non-empty
                 if (customerUser != null)
                 {
@@ -230,42 +232,47 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
 
             if (!string.IsNullOrWhiteSpace(userIdentity?.UserId))
             {
-                ApplyUserIdentityOverrides(userIdentity);
-                _sessionContext.SetUserIdentity(userIdentity);
+                //    ApplyUserIdentityOverrides(userIdentity);
+                //    _sessionContext.SetUserIdentity(userIdentity);
 
-                _logger.Debug("AuthenticationService.SignIn: user has successfully been authenticated. " +
-                             $"User: {userIdentity.UserId}, Domain: {userIdentity.Domain}, FullName: {userIdentity.FirstName + " " + userIdentity.LastName} ");
+                //    _logger.Debug("AuthenticationService.SignIn: user has successfully been authenticated. " +
+                //                 $"User: {userIdentity.UserId}, Domain: {userIdentity.Domain}, FullName: {userIdentity.FirstName + " " + userIdentity.LastName} ");
 
-                //get customer user (tblUsers)
-                var customerUser = GetLocalUser(userIdentity);
+                //    //get customer user (tblUsers)
+                //    var customerUser = GetLocalUser(userIdentity);
 
-                //set only if its non-empty
-                if (customerUser != null)
-                {
-                    //set user and customer context
-                    _userContext.SetCurrentUser(customerUser);
-                    _customerContext.SetCustomer(customerUser.CustomerId);
+                //    //set only if its non-empty
+                //    if (customerUser != null)
+                //    {
+                //        //set user and customer context
+                //        _userContext.SetCurrentUser(customerUser);
+                //        _customerContext.SetCustomer(customerUser.CustomerId);
 
-                    FixUserTimeZone(customerUser);
+                //        FixUserTimeZone(customerUser);
 
-                    AddLoggedInUser(customerUser, _customerContext, ctx);
-                    UpdateUserLogin(ctx, customerUser);
-                    //_caseLockService.CaseLockCleanUp(); //todo: check if required?
-                }
-                else
-                {
-                    _logger.Warn($"AuthenticationService.SignIn: Customer user doesn't exist for login '{userIdentity.UserId}'.");
-                    return false;
-                }
+                //        AddLoggedInUser(customerUser, _customerContext, ctx);
+                //        UpdateUserLogin(ctx, customerUser);
+                //        //_caseLockService.CaseLockCleanUp(); //todo: check if required?
+                //        _sessionContext.ClearSession();
+                //        _sessionContext.SetUserIdentity(userIdentity);
+
+                //    }
+                //    else
+                //    {
+                //        _logger.Warn($"AuthenticationService.SignIn: Customer user doesn't exist for login '{userIdentity.UserId}'.");
+                //        return false;
+                //    }
+                //}
+                //else
+                //{
+                //    _logger.Warn($"AuthenticationService.SignIn: User identity is null or empty.");
+                //    return false;
+                //}
+
+
+                return true;
             }
-            else
-            {
-                _logger.Warn($"AuthenticationService.SignIn: User identity is null or empty.");
-                return false;
-            }
-
-
-            return true;
+            return false;
         }
 
         // try to load users by different formats

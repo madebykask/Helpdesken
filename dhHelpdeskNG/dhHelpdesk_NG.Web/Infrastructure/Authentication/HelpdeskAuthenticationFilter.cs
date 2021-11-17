@@ -106,27 +106,29 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             //}
             var loginMode = GetCurrentLoginMode();
 
-            if(isIdentityAuthenticated && loginMode == LoginMode.Microsoft)
+            if (isIdentityAuthenticated && loginMode == LoginMode.Microsoft)
             {
-                //Working??
+                //Working
                 _authenticationService.SetLoginModeToMicrosoft();
-                if(_authenticationService.SignIn(ctx))
+                if(SessionFacade.CurrentUser == null)
                 {
-                    return;
+                    if (_authenticationService.SignIn(ctx))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        ctx.Session.Abandon();
+                        var loginUrl = "~/Login/Login";
+                        filterContext.Result = new RedirectResult(loginUrl);
+                        return;
+                    }
                 }
-                else
-                {
-                    ctx.Session.Abandon();
-                    var loginUrl = "~/Login/Login";
-                    filterContext.Result = new RedirectResult(loginUrl);
-                    return;
-                }
-                
-
             }
+
             else if (loginMode == LoginMode.Application && !string.IsNullOrEmpty(_userContext.Login))
             {
-                //Todo - with Håkan
+
                 var userId = _userContext.UserId;
                 _authenticationService.SetLoginModeToApplication();
                 _authenticationService.SignInApplicationUser(ctx, userId);
