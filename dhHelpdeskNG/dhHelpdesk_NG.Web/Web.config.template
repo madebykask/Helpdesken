@@ -68,7 +68,9 @@
     <httpRuntime maxRequestLength="52428800" targetFramework="4.7.2"/>
 
 	  #{if AuthenticationMode == "application"}
-	  <authentication mode="None" />
+	  <authentication mode="None">
+	      <forms loginUrl="~/Login/Login" timeout="2880" defaultUrl="~/" />
+      </authentication>
 	  <authorization>
 		  <allow users="*" />
 	  </authorization>
