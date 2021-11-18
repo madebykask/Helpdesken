@@ -169,15 +169,27 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 returnUrl = "/";
             }
-            if (!Request.IsAuthenticated)
-            {
-                _authenticationService.SetLoginModeToMicrosoft();
-                //Make an async method to call instead?
-                HttpContext.GetOwinContext().Authentication.Challenge(
-                    new AuthenticationProperties { RedirectUri = returnUrl },
-                    OpenIdConnectAuthenticationDefaults.AuthenticationType);
+            _authenticationService.SetLoginModeToMicrosoft();
+            HttpContext.GetOwinContext().Authentication.Challenge(
+                new AuthenticationProperties { RedirectUri = returnUrl },
+                OpenIdConnectAuthenticationDefaults.AuthenticationType);
 
-            }
+            //if (!Request.IsAuthenticated)
+            //{
+            //    _authenticationService.SetLoginModeToMicrosoft();
+            //    //Make an async method to call instead?
+            //    HttpContext.GetOwinContext().Authentication.Challenge(
+            //        new AuthenticationProperties { RedirectUri = returnUrl },
+            //        OpenIdConnectAuthenticationDefaults.AuthenticationType);
+
+            //}
+            //else
+            //{
+            //    //Log in user again
+
+            //    var user = SessionFacade.CurrentUser;
+            //}
+            //return new RedirectResult(returnUrl);
         }
 
         [HttpGet]

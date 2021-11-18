@@ -83,30 +83,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             var ctx = filterContext.HttpContext;
             var identity = ctx.User.Identity;
             var isIdentityAuthenticated = identity?.IsAuthenticated ?? false;
-            //if(isIdentityAuthenticated || !string.IsNullOrEmpty(_userContext.Login))
-            //{
-            //    if(filterContext.HttpContext.Items["AspSessionIDManagerInitializeRequestCalled"] != null)
-            //    {
-            //        if (SessionFacade.CurrentUser == null)
-            //        {
-            //            _authenticationService.SetLoginModeToMicrosoft();
-            //            if (_authenticationService.SignIn(ctx))
-            //            {
-            //                return;
-            //            }
-            //            else
-            //            {
-            //                ctx.Session.Abandon();
-            //                var loginUrl = "~/Login/Login";
-            //                filterContext.Result = new RedirectResult(loginUrl);
-            //            }
-            //        }
 
-            //    }
-            //}
             var loginMode = GetCurrentLoginMode();
 
-            if (isIdentityAuthenticated && loginMode == LoginMode.Microsoft)
+            if (loginMode == LoginMode.Microsoft)
             {
                 //Working
                 _authenticationService.SetLoginModeToMicrosoft();
