@@ -413,7 +413,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     {
                         var addOnTextId = c.addonText;
                         var cleanAddOnText = StringHelper.GetCleanString(addOnTextId);
-                        var cleanAddOnTextWithFormId = cleanAddOnText + "_" + entity.id;
+                        var cleanAddOnTextWithFormId = cleanAddOnText.EndsWith("_" + entity.id) ? cleanAddOnText : cleanAddOnText + "_" + entity.id;
                         if (!addOnTextId.Contains("Message."))
                         { addOnTextId = "Message." + cleanAddOnTextWithFormId; }
 
@@ -455,11 +455,11 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         {
                             var dataSourceTextId = d.value;
                             var cleanDataSourceText = StringHelper.GetCleanString(dataSourceTextId);
-                            var cleanDataSourceTextWithFormId = cleanDataSourceText + "_" + entity.id;
+                            var cleanDataSourceTextWithFormId = cleanDataSourceText.EndsWith("_" + entity.id) ? cleanDataSourceText : cleanDataSourceText + "_" + entity.id;
                             if (!dataSourceTextId.Contains("DataSource.Value"))
                             { dataSourceTextId = "DataSource.Value." + cleanDataSourceTextWithFormId; }
 
-                            foreach (var t in translations.Where(x => (x.ControlType == "Radio" || x.ControlType == "CheckboxList" || x.ControlType == "Dropdown") && StringHelper.GetCleanString(x.Property) == cleanDataSourceText))
+                            foreach (var t in translations.Where(x => (x.ControlType == "radio" || x.ControlType == "checkbox-list" || x.ControlType == "dropdown") && StringHelper.GetCleanString(x.Property) == cleanDataSourceText))
                             {
                                 if (t.TranslationId != 0)
                                 {
@@ -489,6 +489,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                                 DataContext.Commit();
                             }
                             d.text= "@Translation." + dataSourceTextId;
+                            d.value = cleanDataSourceTextWithFormId;
                         }
                     }
                 }
@@ -501,7 +502,13 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                                 NullValueHandling = NullValueHandling.Ignore
                             });
 
-            var metaData = data.Replace(@"valueBinding"":""function(m) { return ", @"valueBinding"": function(m) { return """).Replace(@"> }""}", @">"";}}").Replace(@"\""", "").Replace(@"\n", "").Replace("color: ", "color:");
+            var metaData = data.Replace(@"valueBinding"":""function(m) { return ", @"valueBinding"": function(m) { return """)
+                                .Replace(@"> }""", @">"";}")
+                                .Replace(@"\""", "").Replace(@"\n", "")
+                                .Replace("color: ", "color:")
+                                .Replace(" background-color: ", "background-color:")
+                                .Replace("font-size: ", "font-size:")
+                                .Replace("font-family: ", "font-family:");
             res.MetaData = metaData;
 
             if (entity.caseSolutionIds != null)
