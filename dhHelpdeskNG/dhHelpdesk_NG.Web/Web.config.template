@@ -69,7 +69,7 @@
 
 	  #{if AuthenticationMode == "application"}
 	  <authentication mode="None">
-	      <forms loginUrl="~/Login/Login" timeout="2880" defaultUrl="~/" />
+	      <forms loginUrl="~/Login/Login" defaultUrl="~/" />
       </authentication>
 	  <authorization>
 		  <allow users="*" />
@@ -77,8 +77,11 @@
     #{/if}
     #{if AuthenticationMode == "windows"}
     <authentication mode="Windows">
-      <forms loginUrl="~/Login/Login" timeout="2880" defaultUrl="~/"/>
+      <forms loginUrl="~/Login/Login" defaultUrl="~/"/>
     </authentication>
+	<authorization>
+		<deny users="?" />
+	</authorization>
     #{/if}
     #{if AuthenticationMode == "mixed"}
     <authentication mode="Forms">
