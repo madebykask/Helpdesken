@@ -335,6 +335,32 @@ INSERT INTO [dbo].[ExtendedCaseTranslations]
 		   END
 GO
 
+RAISERROR ('Add DataSource.Value.Val Swedish to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 1 AND Property = 'DataSource.Value.Val')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (1
+           ,'DataSource.Value.Val'
+           ,'Val')
+		   END
+GO
+RAISERROR ('Add DataSource.Value.Val English to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 2 AND Property = 'DataSource.Value.Val')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (2
+           ,'DataSource.Value.Val'
+           ,'Option')
+		   END
+GO
 
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.53'

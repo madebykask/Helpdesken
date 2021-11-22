@@ -194,7 +194,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Tab", Name = Translation.GetCoreTextTranslation("Fliknamn")},
                 new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Control", Name = Translation.GetCoreTextTranslation("Radioknapp")},
                 new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Control", Name = Translation.GetCoreTextTranslation("Kryssruta")},
-                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Control", Name = Translation.GetCoreTextTranslation("Rullgardinsmeny")}
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "Control", Name = Translation.GetCoreTextTranslation("Rullgardinsmeny")},
+                new ExtendedCaseFieldTranslation() { Language = defaultLanguage, Prefix = "DataSource.Value", Name = "Val"}
             };
         }
 
@@ -291,7 +292,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
             var id = _extendedCaseService.SaveExtendedCaseForm(payload, SessionFacade.CurrentUser.UserId);
-            //return new EmptyResult();
+
             return Json(new { result = true, formId = id });
         }
     }

@@ -136,6 +136,9 @@
         LanguageId : '@defaultLang.LanguageId'
     };
     const currentLanguageId = @SessionFacade.CurrentLanguageId;
+
+    let SELECTEDTRANSLATIONLANGUAGEID = currentLanguageId;
+
     const droppedItemClass = "dropped-item";
     const extendedCaseFormInCases = '@Model.ExtendedCaseFormInCases';
 
@@ -149,15 +152,28 @@
 
         $('#formtab-editheaderName')[0].innerHTML = '@Translation.GetCoreTextTranslation("Fliknamn")';
 
-        let optionListItem = (idName, option, activeLanguage, controlType) => "<li data-dhhelpdesk-listId='" + option.id + "' data-dhhelpdesk-controlId='" + idName + "'><input class='labelName' type='text' id='" + idName + "label" + activeLanguage.Id + "' data-dhhelpdesk-isoption='true' data-dhhelpdesk-langId='" + activeLanguage.Id + "' data-dhhelpdesk-controlType='" + controlType + "' style='width:95%' type='text' placeholder='" + option.name + "'><span><a class='fa fa-trash fa-lg option' style='color:black' aria-hidden='true'></a></span></li>"
+        let optionListItem = (idName, option, activeLanguage, controlType, savedId) => "<li " + (savedId != null ? "data-dhhelpdesk-savedId='" + option.id + "' data-dhhelpdesk-listId='" + option.id.split("_")[0].replace(/[^0-9]/gi, '') : " data-dhhelpdesk-listId='" + option.id) + "' data-dhhelpdesk-controlId='" + idName + "' data-dhhelpdesk-langId='" + activeLanguage.Id + "'>" + optionInput(idName, option, activeLanguage, controlType) + "</li>"
 
-        let selectionHtml = (idName, activeLanguage, isDefaultLanguage, options, controlType) => {
-            let selectionCls = controlType == "CheckboxList" ? " checkboxlst" : (controlType == "Radio" ? " radiolst" : "");
+        let optionInput = (idName, option, activeLanguage, controlType) => {
+            let isDefaultLanguage = activeLanguage.Id == defaultLanguage.Id;
+            let translation = [...translations].filter(t => getStringWithoutSpecialChars(getStringWithoutSweChars(t.Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(option.name))
+                && t.Language.Id == activeLanguage.Id && t.Prefix == "DataSource.Value");
+
+            let defaultLanguageValue = [...translations].filter(t => getStringWithoutSpecialChars(getStringWithoutSweChars(t.Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(option.name))
+                && t.Language.Id == defaultLanguage.Id && t.Prefix == "DataSource.Value");
+
+            let optionTranslation = translation[0].TranslationText + (translation[0].Name == "Val" ? (" " + option.id) : "");
+            let optionDefaultLangTranslation = defaultLanguageValue[0].TranslationText + (defaultLanguageValue[0].Name == "Val" ? (" " + option.id) : "");
+            return "<div>" + (isDefaultLanguage ? "" : "<span class='spanDefaultOptionName'>" + " (" + defaultLanguage.LanguageId + ") </span>" + " <span class='spanDefaultOptionName' id='defaultOptionLabel_" + idName + "_Item_" + (option.listId != null ? option.listId : option.id) + "_Lang_" + activeLanguage.Id + "'>" + optionDefaultLangTranslation + "</span><br/>") + "</div><input class='labelName' type='text' id='" + idName + "label" + activeLanguage.Id + "' data-dhhelpdesk-isoption='true' data-dhhelpdesk-langId='" + activeLanguage.Id + "' data-dhhelpdesk-controlType='" + controlType + "' style='width:95%' type='text' value='" + (option.placeholderOnly ? "" : optionTranslation) + "' placeholder='" + optionTranslation + "'><span><a class='fa fa-trash fa-lg option' style='color:black' aria-hidden='true'></a></span>";
+        };
+
+        let selectionHtml = (idName, activeLanguage, isDefaultLanguage, options, controlType, savedId) => {
+            let selectionCls = controlType == "checkbox-list" ? " checkboxlst" : (controlType == "radio" ? " radiolst" : "");
             let optionRows = (options) => {
                 let res = "<tr class='table-light'><td style='width:100%'><ul class='selectOptions" + selectionCls + "' data-dhhelpdesk-controlId='" + idName + "' data-dhhelpdesk-langId='" + activeLanguage.Id + "'>";
                 for (let o = 0; o < options.length; o++) {
                     //res = res + "<tr class='table-light'><td style='width:5%'><span aria-hidden='true'><i class='fa fa-circle'></i></span></td><td style='width:100%'><input type='text' placeholder='" + options[o] + "'></td><td><a class='fa fa-trash fa-lg' style='color:black' aria-hidden='true'></a></td></tr>"
-                    res = res + optionListItem(idName, options[o], activeLanguage, controlType);
+                    res = res + optionListItem(idName, options[o], activeLanguage, controlType, savedId);
                 }
                 res = res + "</ul></td></tr>";
                 //res = res + "<div style='border: 1px solid black; margin-left:5px:margin-right:5px'><ul><li><input style='width:95%' type='text' placeholder='Option 1'><span><a class='fa fa-trash fa-lg' style='color:black' aria-hidden='true'></a></span></li></ul></div>"
@@ -170,15 +186,16 @@
 
         let divHeaderActions = (idName) => "<div class='header-actions'><a class='fa fa-pencil fa-lg' data-toggle='collapse' href='#" + idName + "' role='button' title='Edit' aria-hidden='true'></a><a class='fa fa-trash fa-lg head' href='#" + idName + "' title='Remove Element' role='button' aria-hidden='true'></a></div>";
         let divHeaderLabel = (labelClass, labelName, idName) => "<div class='header-label'><label class='" + labelClass + "' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + labelName + "</label></div>";
-        let editFieldHtml = (idName, placeHolder, controlType, hasRequiredChk, isRequired = false, labelFields = null) => {
-            var res = "<div class='collapse' id = '" + idName + "'><div><table class='table borderless'><tbody>";
+        let editFieldHtml = (editfields) => {
+
+            var res = "<div class='collapse' id = '" + editfields.idName + "'><div><table class='table borderless'><tbody>";
             var defaultLanguageValue = '';
             for (let i = 0; i < activeLanguages.length; i++) {
                 var isDefaultLanguage = activeLanguages[i].Id == defaultLanguage.Id;
 
-                if (placeHolder !== null) {
+                if (editfields.placeHolder !== null) {
 
-                    let translation = [...translations].filter(t => getStringWithoutSpecialChars(getStringWithoutSweChars(t.Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(placeHolder))
+                    let translation = [...translations].filter(t => getStringWithoutSpecialChars(getStringWithoutSweChars(t.Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(editfields.placeHolder))
                         && t.Language.Id == activeLanguages[i].Id);
                     let translationText = (translation[0].TranslationText == null ? "" : translation[0].TranslationText);
 
@@ -186,58 +203,45 @@
                         defaultLanguageValue = translationText;
                     }
 
-                    res = res + "<tr class='trTransField' data-dhhelpdesk-labelId='" + idName + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "'" + (activeLanguages[i].Id == document.getElementById("chosenLanguage").value ? "" : "style='display:none'") + "><td class='transField'>" + (isDefaultLanguage ? "" : "<br/>") + "<label for='" + idName + "label" + activeLanguages[i].Id + "'><span>@Translation.GetCoreTextTranslation("Fältetikett") " + activeLanguages[i].LanguageId + " </span>" + (isDefaultLanguage ? "<span class='required-defaultLng'>*</span>" : "") + "</label></td><td>" + "<span class='spanDefaultLabelName'>" + (isDefaultLanguage ? "" : " (" + defaultLanguage.LanguageId + ") </span>" + " <span class='spanDefaultLabelName' id='defaultLabelName" + idName + "'>" + defaultLanguageValue) + "</span>" + "<input class='labelName' type='text' id='" + idName + "label" + activeLanguages[i].Id + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "' data-dhhelpdesk-lang='" + activeLanguages[i].LanguageId + "' data-dhhelpdesk-controlType='" + controlType + "' data-dhhelpdesk-id='" + translation[0].Id + "' placeholder='" + translationText + "' value='" + translationText + "'></td></tr>"
+                    res = res + "<tr class='trTransField' data-dhhelpdesk-labelId='" + editfields.idName + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "'" + (activeLanguages[i].Id == document.getElementById("chosenLanguage").value ? "" : "style='display:none'") + "><td class='transField'>" + (isDefaultLanguage ? "" : "<br/>") + "<label for='" + editfields.idName + "label" + activeLanguages[i].Id + "'><span>@Translation.GetCoreTextTranslation("Fältetikett") " + activeLanguages[i].LanguageId + " </span>" + (isDefaultLanguage ? "<span class='required-defaultLng'>*</span>" : "") + "</label></td><td>" + "<span class='spanDefaultLabelName'>" + (isDefaultLanguage ? "" : " (" + defaultLanguage.LanguageId + ") </span>" + " <span class='spanDefaultLabelName' id='defaultLabelName" + editfields.idName + "'>" + defaultLanguageValue) + "</span>" + "<input class='labelName' type='text' id='" + editfields.idName + "label" + activeLanguages[i].Id + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "' data-dhhelpdesk-lang='" + activeLanguages[i].LanguageId + "' data-dhhelpdesk-controlType='" + editfields.controlType + "' data-dhhelpdesk-id='" + translation[0].Id + "' placeholder='" + translationText + "' value='" + (editfields.placeholderOnly ? "" : translationText) + "'></td></tr>"
 
-                    if (controlType == "fileUpload") {
-                        let translation = [...translations].filter(t => getStringWithoutSpecialChars(getStringWithoutSweChars(t.Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(labelFields[0].Text))
+                    if (editfields.controlType == "fileUpload") {
+                        let translation = [...translations].filter(t => getStringWithoutSpecialChars(getStringWithoutSweChars(t.Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(editfields.labelFields[0].Text))
                             && t.Language.Id == activeLanguages[i].Id && t.Prefix == "Message");
 
                         let translationText = (translation[0].TranslationText == null ? "" : translation[0].TranslationText);
-                        res = res + "<tr class='trTransField' data-dhhelpdesk-fileupload-text='true' data-dhhelpdesk-labelId='" + idName + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "'" + (activeLanguages[i].Id == document.getElementById("chosenLanguage").value ? "" : "style='display:none'") + "><td class='transField'>" + (isDefaultLanguage ? "" : "<br/>") + "<label for='" + idName + "label" + activeLanguages[i].Id + "'><span>@Translation.GetCoreTextTranslation("Fälttext") " + activeLanguages[i].LanguageId + " </span>" + (isDefaultLanguage ? "<span class='required-defaultLng'>*</span>" : "") + "</label></td><td>" + "<span class='spanDefaultLabelName'>" + (isDefaultLanguage ? "" : " (" + defaultLanguage.LanguageId + ") </span>" + " <span class='spanDefaultLabelName' id='defaultLabelName" + idName + "'>" + defaultLanguageValue) + "</span>" + "<input class='labelFieldTextName labelName' type='text' id='" + idName + "labelFieldText" + activeLanguages[i].Id + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "' data-dhhelpdesk-lang='" + activeLanguages[i].LanguageId + "' data-dhhelpdesk-controlType='" + controlType + "' data-dhhelpdesk-id='" + translation[0].Id + "' placeholder='" + translationText + "' value='" + translationText + "'></td></tr>"
+                        res = res + "<tr class='trTransField' data-dhhelpdesk-fileupload-text='true' data-dhhelpdesk-labelId='" + editfields.idName + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "'" + (activeLanguages[i].Id == document.getElementById("chosenLanguage").value ? "" : "style='display:none'") + "><td class='transField'>" + (isDefaultLanguage ? "" : "<br/>") + "<label for='" + editfields.idName + "label" + activeLanguages[i].Id + "'><span>@Translation.GetCoreTextTranslation("Fälttext") " + activeLanguages[i].LanguageId + " </span>" + (isDefaultLanguage ? "<span class='required-defaultLng'>*</span>" : "") + "</label></td><td>" + "<span class='spanDefaultLabelName'>" + (isDefaultLanguage ? "" : " (" + defaultLanguage.LanguageId + ") </span>" + " <span class='spanDefaultLabelName' id='defaultLabelName" + editfields.idName + "'>" + defaultLanguageValue) + "</span>" + "<input class='labelFieldTextName labelName' type='text' id='" + editfields.idName + "labelFieldText" + activeLanguages[i].Id + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "' data-dhhelpdesk-lang='" + activeLanguages[i].LanguageId + "' data-dhhelpdesk-controlType='" + editfields.controlType + "' data-dhhelpdesk-id='" + translation[0].Id + "' placeholder='" + translationText + "' value='" + (editfields.placeholderOnly ? "" : translationText) + "'></td></tr>"
                     }
 
-                    if (controlType == "Radio" || controlType == "CheckboxList" || controlType == "Dropdown") {
-                        let options;
-                        if (controlType == "CheckboxList") {
-                            options = [{ id: 1, name: "Option 1" }];
-                        }
-                        else {
-                            options = [{ id: 1, name: "Option 1" },
-                                { id: 2, name: "Option 2" },
-                                { id: 3, name: "Option 3" }];
-                        }
+                    if (editfields.controlType == "radio" || editfields.controlType == "checkbox-list" || editfields.controlType == "dropdown") {
 
-                        res = res + selectionHtml(idName, activeLanguages[i], isDefaultLanguage, options, controlType);
-                        //let translation = [...translations].filter(t => getStringWithoutSpecialChars(getStringWithoutSweChars(t.Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(labelFields[0].Text))
-                        //    && t.Language.Id == activeLanguages[i].Id && t.Prefix == "Message");
-
-                        //let translationText = (translation[0].TranslationText == null ? "" : translation[0].TranslationText);
-                        //res = res + "<tr class='trTransField' data-dhhelpdesk-fileupload-text='true' data-dhhelpdesk-labelId='" + idName + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "'" + (activeLanguages[i].Id == document.getElementById("chosenLanguage").value ? "" : "style='display:none'") + "><td class='transField'>" + (isDefaultLanguage ? "" : "<br/>") + "<label for='" + idName + "label" + activeLanguages[i].Id + "'><span>@Translation.GetCoreTextTranslation("Fälttext") " + activeLanguages[i].LanguageId + " </span>" + (isDefaultLanguage ? "<span class='required-defaultLng'>*</span>" : "") + "</label></td><td>" + "<span class='spanDefaultLabelName'>" + (isDefaultLanguage ? "" : " (" + defaultLanguage.LanguageId + ") </span>" + " <span class='spanDefaultLabelName' id='defaultLabelName" + idName + "'>" + defaultLanguageValue) + "</span>" + "<input class='labelFieldTextName labelName' type='text' id='" + idName + "labelFieldText" + activeLanguages[i].Id + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "' data-dhhelpdesk-lang='" + activeLanguages[i].LanguageId + "' data-dhhelpdesk-controlType='" + controlType + "' data-dhhelpdesk-id='" + translation[0].Id + "' placeholder='" + translationText + "' value='" + translationText + "'></td></tr>"
+                        res = res + selectionHtml(editfields.idName, activeLanguages[i], isDefaultLanguage, editfields.options, editfields.controlType, editfields.savedId);
                     }
                 }
             }
-            if (controlType == "Radio" || controlType == "CheckboxList" || controlType == "Dropdown") {
-                res = res + "<tr><td class='tdAddOption' style='background-color: white; margin-top: 0px; border-top: none;'></td><td class='tdAddOption' style='background-color: white; margin-top: 0px; border-top: none; text-align:right; padding-top:0px'><button class='btn btn-outline-dark btnAddChoice' data-dhhelpdesk-controlId='" + idName + "'>@Translation.GetCoreTextTranslation("Lägg till") @Translation.GetCoreTextTranslation("Val") +</button></td></tr>"
+            if (editfields.controlType == "radio" || editfields.controlType == "checkbox-list" || editfields.controlType == "dropdown") {
+                res = res + "<tr><td class='tdAddOption' style='background-color: white; margin-top: 0px; border-top: none;'></td><td class='tdAddOption' style='background-color: white; margin-top: 0px; border-top: none; text-align:right; padding-top:0px'><button class='btn btn-outline-dark btnAddChoice' data-dhhelpdesk-controlId='" + editfields.idName + "'>@Translation.GetCoreTextTranslation("Lägg till") @Translation.GetCoreTextTranslation("Val") +</button></td></tr>"
             }
 
-            if (hasRequiredChk) {
-                res = res + "<tr><td><label for='" + idName + "required" + "' class=''>" + '@Translation.GetCoreTextTranslation("Obligatorisk")' + "</label></td><td><input type='checkbox' " + (isRequired == true ? 'checked' : '') + " class='chkRequired' id = '" + idName + "required" + "' ></td ></tr > ";
+            if (editfields.hasRequiredChk) {
+                res = res + "<tr><td><label for='" + editfields.idName + "required" + "' class=''>" + '@Translation.GetCoreTextTranslation("Obligatorisk")' + "</label></td><td><input type='checkbox' " + (editfields.isRequired == true ? 'checked' : '') + " class='chkRequired' id = '" + editfields.idName + "required" + "' ></td ></tr > ";
             }
             res = res +"</tbody></table></div></div>";
             return res;
         }
 
         let sectionHtmlDiv = (editFieldHtml, idName, labelClass, labelName, savedId = null) => "<div class='field' " + (savedId != null ? "data-dhhelpdesk-savedid='" + savedId + "'" : "") + "><div class='header'>" + divHeaderLabel(labelClass, labelName, idName) + divHeaderActions(idName) + "</div><br/>" + editFieldHtml + "</div > ";
-        let sectionHtml = () => "<li data-type='section' class='ui-draggable dropped-item' style='display: list-item'>" + sectionHtmlDiv(editFieldHtml(IDNAME, '@Translation.GetCoreTextTranslation("Sektion")', "Section", false, false), IDNAME, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")') + "</li>";
+        let sectionHtml = () => {
+            let editfields = { idName: IDNAME, placeHolder: '@Translation.GetCoreTextTranslation("Sektion")', controlType: "Section", hasRequiredChk: false, isRequired: false, labelFields: null };
+            return "<li data-type='section' class='ui-draggable dropped-item' style='display: list-item'>" + sectionHtmlDiv(editFieldHtml(editfields), IDNAME, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")') + "</li>";
+        }
 
         let listHtml = (dataType, controlDiv) => "<li data-type='" + dataType + "' class='ui-draggable dropped-item' style='display: list-item'>" + controlDiv + "</li>";
-        let summerNoteConfig = (idName, data) => "<div id='" + idName + "_summernote'>" + data + "</div><script>$('#" + idName + "_summernote').summernote({placeholder: '', dialogsFade: true, tabsize: 2, height: 170, toolbar: [ ['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['forecolor']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']] ] }); <" + "/script>"
+        let summerNoteConfig = (idName, data) => "<div id='" + idName + "_summernote'>" + data + "</div><script>$('#" + idName + "_summernote').summernote({placeholder: '', dialogsFade: true, tabsize: 2, height: 270, fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48' , '64', '82'], toolbar: [ ['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['fontsize', ['fontsize']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']] ] }); <" + "/script>"
 
         var draggedFrom = "";
         var draggedItem;
 
-        //let templates = {};
-        // templates = getTemplates();
 
         $("#source li").draggable({
             connectToSortable: "#dropzone", helper: "clone", revert: 'invalid',
@@ -257,43 +261,55 @@
             receive: function (event, ui) {
                 draggedItem.switchClass("extendedCaseFormsLst", droppedItemClass);
                 let idName = createUUID();
+                let editfields;
                 if (draggedFrom == "fields") {
                     switch (draggedItem.data('type')) {
                         case "section":
-                            draggedItem.html(sectionHtmlDiv(editFieldHtml(idName, '@Translation.GetCoreTextTranslation("Sektion")', "Section", false, false), idName, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")'));
+                            editfields = { idName: idName, placeHolder: '@Translation.GetCoreTextTranslation("Sektion")', controlType: "Section", hasRequiredChk: false, isRequired: false, labelFields: null, placeholderOnly: true };
+                            draggedItem.html(sectionHtmlDiv(editFieldHtml(editfields), idName, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")'));
                             break;
 
                         case "textbox":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Textfält")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, '@Html.Raw(Translation.GetCoreTextTranslation("Textfält"))', "TextBox", true, false) + "</div>")
+                            editfields = { idName: idName, placeHolder: '@Html.Raw(Translation.GetCoreTextTranslation("Textfält"))', controlType: "TextBox", hasRequiredChk: true, isRequired: false, labelFields: null, placeholderOnly: true };
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Textfält")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'><input type='text' class='form-control form-control-width' readonly></div>" + editFieldHtml(editfields) + "</div>")
                             break;
 
                         case "textarea":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Textarea")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><textarea class='form-control form-control-width' readonly></textarea></div>" + editFieldHtml(idName, '@Html.Raw(Translation.GetCoreTextTranslation("Textarea"))', "Textarea", true, false) + "</div>")
+                            editfields = { idName: idName, placeHolder: '@Html.Raw(Translation.GetCoreTextTranslation("Textarea"))', controlType: "Textarea", hasRequiredChk: true, isRequired: false, labelFields: null, placeholderOnly: true };
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Textarea")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'><textarea class='form-control form-control-width' readonly></textarea></div>" + editFieldHtml(editfields) + "</div>")
                             break;
 
                         case "date":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Datumfält")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='date' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, '@Html.Raw(Translation.GetCoreTextTranslation("Datumfält"))', "Date", true, false) + "</div>")
+                            editfields = { idName: idName, placeHolder: '@Html.Raw(Translation.GetCoreTextTranslation("Datumfält"))', controlType: "Date", hasRequiredChk: true, isRequired: false, labelFields: null, placeholderOnly: true };
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Datumfält")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'><input type='date' class='form-control form-control-width' readonly></div>" + editFieldHtml(editfields) + "</div>")
                             break;
 
                         case "fileupload":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Filuppladdning")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' id=" + idName + "fileUploadText" + " value='"+ '@Translation.GetCoreTextTranslation("Dra filer hit")' + "' class='file-upload' readonly></div>" + editFieldHtml(idName, '@Html.Raw(Translation.GetCoreTextTranslation("Filuppladdning"))', "fileUpload", true, false, [{ Text: '@Translation.GetCoreTextTranslation("Dra filer hit")'}]) + "</div>")
+                            editfields = { idName: idName, placeHolder: '@Html.Raw(Translation.GetCoreTextTranslation("Filuppladdning"))', controlType: "fileUpload", hasRequiredChk: true, isRequired: false, labelFields: [{ Text: '@Translation.GetCoreTextTranslation("Dra filer hit")' }], placeholderOnly: true };
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Filuppladdning")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'><input type='text' id=" + idName + "fileUploadText" + " value='"+ '@Translation.GetCoreTextTranslation("Dra filer hit")' + "' class='file-upload' readonly></div>" + editFieldHtml(editfields) + "</div>")
                             break;
 
                         case "html":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Infofält")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' style='padding:10px'>" + summerNoteConfig(idName, '') + "</div></div>")
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Infofält")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control' style='padding:10px'>" + summerNoteConfig(idName, '') + "</div></div>")
                             $('#dropzone').sortable("disable");
                             break;
 
                         case "radio":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Radioknapp")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, '@Html.Raw(Translation.GetCoreTextTranslation("Radioknapp"))', "Radio", true, false) + "</div>")
+                            let radioOptions = [{ id: 1, name: "Val", placeholderOnly: true }, { id: 2, name: "Val", placeholderOnly: true }, { id: 3, name: "Val", placeholderOnly: true }];
+                            editfields = { idName: idName, placeHolder: '@Html.Raw(Translation.GetCoreTextTranslation("Radioknapp"))', controlType: "radio", hasRequiredChk: true, isRequired: false, labelFields: null, options: radioOptions, placeholderOnly: true };
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Radioknapp")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'>" + draggedItemInputField(draggedItem.data('type'), radioOptions, [...activeLanguages].filter(l => l.Id == currentLanguageId)[0], [...translations]) + "</div>" + editFieldHtml(editfields) + "</div>")
                             break;
 
                         case "checkbox-list":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Kryssruta")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, '@Html.Raw(Translation.GetCoreTextTranslation("Kryssruta"))', "CheckboxList", true, false) + "</div>")
+                            let chkOptions = [{ id: 1, name: "Val", placeholderOnly: true }];
+                            editfields = { idName: idName, placeHolder: '@Html.Raw(Translation.GetCoreTextTranslation("Kryssruta"))', controlType: "checkbox-list", hasRequiredChk: true, isRequired: false, labelFields: null, options: chkOptions, placeholderOnly: true };
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Kryssruta")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'>" + draggedItemInputField(draggedItem.data('type'), chkOptions, [...activeLanguages].filter(l => l.Id == currentLanguageId)[0], [...translations]) + "</div>" + editFieldHtml(editfields) + "</div>")
                             break;
 
                         case "dropdown":
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Rullgardinsmeny")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><select class='form-control form-control-width' readonly></select></div>" + editFieldHtml(idName, '@Html.Raw(Translation.GetCoreTextTranslation("Rullgardinsmeny"))', "Dropdown", true, false) + "</div>")
+                            let drpOptions = [{ id: 1, name: "Val", placeholderOnly: true }, { id: 2, name: "Val", placeholderOnly: true }, { id: 3, name: "Val", placeholderOnly: true }];
+                            editfields = { idName: idName, placeHolder: '@Html.Raw(Translation.GetCoreTextTranslation("Rullgardinsmeny"))', controlType: "dropdown", hasRequiredChk: true, isRequired: false, labelFields: null, options: drpOptions, placeholderOnly: true };
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Rullgardinsmeny")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'>" + draggedItemInputField(draggedItem.data('type'), drpOptions, [...activeLanguages].filter(l => l.Id == currentLanguageId)[0], [...translations]) + "</div>" + editFieldHtml(editfields) + "</div>")
                             break;
 
                         default:
@@ -368,18 +384,76 @@
             }
         });
 
+        $(document).on("click", ".fa-pencil", function () {
+            let isCollapsed = $(this).hasClass('collapsed');
+            let controlType = $(this).closest("li").attr('data-type');
+            let controlId = $(this).attr('href').replace('#', '');
+
+            if (controlType == 'radio' || controlType == 'checkbox-list' || controlType == 'dropdown') {
+                let element;
+                if (isCollapsed) {
+                    let listOfChoices = $(document).find(".selectOptions").filter('[data-dhhelpdesk-controlId= ' + controlId + ']');
+                    let listItems = listOfChoices.filter('[data-dhhelpdesk-langId= ' + SELECTEDTRANSLATIONLANGUAGEID + ']')[0].getElementsByTagName('li');
+
+                    let options = [];
+
+                    for (let i = 0; i < listItems.length; i++) {
+                        let option = { name: listItems[i].querySelectorAll("input")[0].value };
+                        options.push(option);
+                    }
+
+                    element = draggedItemInputField(controlType, options, null, [...translations]);
+                }
+                else {
+                    element = "<br/>";
+                }
+
+                document.getElementById(controlId + '_control').innerHTML = element;
+            }
+        });
+
         $(document).on("click", ".fa-trash.option", function () {
-            let listId = $(this).closest('li').attr('data-dhhelpdesk-listId');
-            let controlId = $(this).closest('li').attr('data-dhhelpdesk-controlid');
+            let obj = $(this).closest("li");
+            let savedId = obj.attr('data-dhhelpdesk-savedid');
+
+            let listId = obj.attr('data-dhhelpdesk-listId');
+            let controlId = obj.attr('data-dhhelpdesk-controlid');
 
             let list = $(document).find(".selectOptions")
                 .filter('[data-dhhelpdesk-controlId= ' + controlId + ']');
 
-            for (let l = 0; l < list.length; l++) {
-                let listOfChoices = [...list[l].children].filter(item => item.getAttribute('data-dhhelpdesk-listId') == listId);
+            if (savedId != null && extendedCaseFormInCases == 'True') {
+                var dlg = new ConfirmationDialog();
+                var opts = {
+                    dlgText: '@Html.Raw(Translation.GetForJS(Translation.GetCoreTextTranslation("Formuläret används på minst ett ärende. Borttagning av fält/sektion påverkar existerande ärenden. Är du säker på att du vill ta bort") +"?"))',
+                    btnYesText: '@Translation.GetForJS("Ja")',
+                    btnNoText: '@Translation.GetForJS("Nej")',
+                    onClick: function (button) {
+                        if (button === ConfirmationDialog.YES) {
+                            for (let l = 0; l < list.length; l++) {
+                                let listOfChoices = [...list[l].children].filter(item => item.getAttribute('data-dhhelpdesk-listId') == listId);
 
-                for (let c = 0; c < listOfChoices.length; c++) {
-                    listOfChoices[c].remove();
+                                for (let c = 0; c < listOfChoices.length; c++) {
+                                    listOfChoices[c].remove();
+                                }
+                            }
+                            dlg.hide();
+                        }
+                        else {
+                            dlg.hide();
+                        }
+                    }
+                }
+                dlg.init(opts);
+                dlg.show();
+            }
+            else {
+                for (let l = 0; l < list.length; l++) {
+                    let listOfChoices = [...list[l].children].filter(item => item.getAttribute('data-dhhelpdesk-listId') == listId);
+
+                    for (let c = 0; c < listOfChoices.length; c++) {
+                        listOfChoices[c].remove();
+                    }
                 }
             }
         });
@@ -395,23 +469,44 @@
         $(document).on("click", ".btnAddChoice", function () {
             let controlId = $(this).attr('data-dhhelpdesk-controlId');
             let listOfChoices = $(document).find(".selectOptions").filter('[data-dhhelpdesk-controlId= ' + controlId + ']');
+            let listItems = listOfChoices.filter('[data-dhhelpdesk-langId= ' + SELECTEDTRANSLATIONLANGUAGEID + ']')[0].getElementsByTagName('li');
 
+            let nextListItemId = 1;
+
+            for (let i = 0; i < listItems.length; i++) {
+                let listItemId = listItems[i].getAttribute('data-dhhelpdesk-listid');
+                if (listItemId > nextListItemId) {
+                    nextListItemId = listItemId;
+                }
+            }
+
+            nextListItemId++;
+
+            let controlType = listOfChoices[0].querySelectorAll("input")[0].getAttribute('data-dhhelpdesk-controlType');
             for (let l = 0; l < listOfChoices.length; l++) {
                 let count = parseInt(listOfChoices[l].childElementCount);
                 let activeLanguageId = listOfChoices[l].getAttribute('data-dhhelpdesk-langId');
                 let activeLanguage = [...activeLanguages].filter(l => l.Id == activeLanguageId)[0];
-                let controlType = listOfChoices[l].querySelectorAll("input")[0].getAttribute('data-dhhelpdesk-controlType');
-                let option = { id: count + 1, name: "Option" + " " + (count + 1) };
-                listOfChoices[l].innerHTML += (optionListItem(controlId, option, activeLanguage, controlType));
+
+                let option = { id: count + 1, name: "Val", placeholderOnly: true, listId: nextListItemId};
+                let li = document.createElement('li');
+                li.setAttribute('data-dhhelpdesk-listid', nextListItemId);
+                li.setAttribute('data-dhhelpdesk-controlid', controlId);
+                li.setAttribute('data-dhhelpdesk-langid', activeLanguageId);
+                li.innerHTML = optionInput(controlId, option, activeLanguage, controlType);
+                listOfChoices[l].appendChild(li);
             }
+
         });
 
 
         var formFields =  @Html.Raw(Json.Encode(Newtonsoft.Json.JsonConvert.SerializeObject(Model.FormFields)));
 
         if (formFields === 'null') {
-            $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(IDNAME, '@Translation.GetCoreTextTranslation("Sektion")', "Section", false, false, IDNAME, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")'))));
-            $('#formtabs').append(editFieldHtml("formtab-edit", '@Translation.GetCoreTextTranslation("Fliknamn")', "Tab", false, false));
+            let editfields = { idName: IDNAME, placeHolder: '@Translation.GetCoreTextTranslation("Sektion")', controlType: "Section", hasRequiredChk: false, isRequired: false, placeholderOnly: true };
+            $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(editfields), IDNAME, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")')));
+            let formtabEditFields = { idName: "formtab-edit", placeHolder: '@Translation.GetCoreTextTranslation("Fliknamn")', controlType: "Tab", hasRequiredChk: false, isRequired: false };
+            $('#formtabs').append(editFieldHtml(formtabEditFields));
         }
         else {
             var formData = JSON.parse(formFields);
@@ -423,16 +518,17 @@
                     let currentTabLabel = [...translations].filter(item => item.Language.Id == currentLanguageId && item.Name == formData.tabs[t].name);
 
                     $('span#formtab-editheaderName')[0].innerHTML = currentTabLabel[0].TranslationText;
-
-                    $('#formtabs').append(editFieldHtml("formtab-edit", currentTabLabel[0].Name, "Tab", false, false));
+                    let formtabEditFields = { idName: "formtab-edit", placeHolder: currentTabLabel[0].Name, controlType: "Tab", hasRequiredChk: false, isRequired: false };
+                    $('#formtabs').append(editFieldHtml(formtabEditFields));
 
                     for (var s = 0; s < formData.tabs[t].sections.length; s++) {
 
                         let idName = formData.tabs[t].sections[s].id;
 
                         let currentLanguageSectionName = [...translations].filter(item => item.Language.Id == currentLanguageId && formData.tabs[t].sections[s].name == item.Name);
+                        let sectioneditfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].name, controlType: "Section", hasRequiredChk: false, isRequired: false };
 
-                        $("#dropzone").append(listHtml("section", sectionHtmlDiv(editFieldHtml(idName, formData.tabs[t].sections[s].name, "Section", false, false), idName, "field-label sectionLabel", currentLanguageSectionName[0].TranslationText, idName)));
+                        $("#dropzone").append(listHtml("section", sectionHtmlDiv(editFieldHtml(sectioneditfields), idName, "field-label sectionLabel", currentLanguageSectionName[0].TranslationText, idName)));
 
                         for (var c = 0; c < formData.tabs[t].sections[s].controls.length; c++) {
                             let idName = formData.tabs[t].sections[s].controls[c].id;
@@ -445,27 +541,62 @@
                             }
 
                             let currentLanguageLabel = [...translations].filter(item => item.Language.Id == currentLanguageId && formData.tabs[t].sections[s].controls[c].label == item.Name);
-
+                            let editfields;
                             if (dataType == "textbox") {
-                                $("#dropzone").append(listHtml("textbox", "<div class='field' data-dhhelpdesk-savedid='" + idName +  "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id='" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, "TextBox", true, isRequired) + "</div>"));
+                                editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "TextBox", hasRequiredChk: true, isRequired: isRequired };
+                                $("#dropzone").append(listHtml(dataType, "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id='" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'><input type='text' class='form-control form-control-width' readonly></div>" + editFieldHtml(editfields) + "</div>"));
                             }
 
                             else if (dataType == "textarea") {
-                                $("#dropzone").append(listHtml("textarea", "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><textarea class='form-control form-control-width' readonly></textarea></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, "Textarea", true, isRequired) + "</div>"));
+                                editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "Textarea", hasRequiredChk: true, isRequired: isRequired };
+                                $("#dropzone").append(listHtml(dataType, "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'><textarea class='form-control form-control-width' readonly></textarea></div>" + editFieldHtml(editfields) + "</div>"));
                             }
 
                             else if (dataType == "date") {
-                                $("#dropzone").append(listHtml("date", "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='date' class='form-control form-control-width' readonly></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, "Date", true, isRequired) + "</div>"), null);
+                                editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "Date", hasRequiredChk: true, isRequired: isRequired };
+                                $("#dropzone").append(listHtml(dataType, "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'><input type='date' class='form-control form-control-width' readonly></div>" + editFieldHtml(editfields) + "</div>"), null);
                             }
 
                             else if (dataType == "fileupload") {
                                 let currentLanguageFieldTextName = [...translations].filter(item => item.Language.Id == currentLanguageId && formData.tabs[t].sections[s].controls[c].addonText == item.Name);
 
-                                $("#dropzone").append(listHtml("fileupload", "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control'><input type='text' id=" + idName + "fileUploadText" + " value='" + currentLanguageFieldTextName[0].TranslationText + "' class='file-upload' readonly></div>" + editFieldHtml(idName, formData.tabs[t].sections[s].controls[c].label, "fileUpload", true, false, [{ Text: currentLanguageFieldTextName[0].Name }]) + "</div>"), null);
+                                editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "fileUpload", hasRequiredChk: true, isRequired: false, labelFields: [{ Text: currentLanguageFieldTextName[0].Name }] };
+                                $("#dropzone").append(listHtml(dataType, "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'><input type='text' id=" + idName + "fileUploadText" + " value='" + currentLanguageFieldTextName[0].TranslationText + "' class='file-upload' readonly></div>" + editFieldHtml(editfields) + "</div>"), null);
+                            }
+
+                            else if (dataType == "radio") {
+                                let radioOptions = [];
+
+                                for (let r = 0; r < formData.tabs[t].sections[s].controls[c].dataSource.length; r++) {
+
+                                    radioOptions.push({ id: formData.tabs[t].sections[s].controls[c].dataSource[r].value, name: formData.tabs[t].sections[s].controls[c].dataSource[r].text });
+                                }
+
+                                editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "radio", hasRequiredChk: true, isRequired: false, labelFields: null, options: radioOptions, savedId: idName };
+                                $("#dropzone").append(listHtml(dataType, "<div class='field' data-dhhelpdesk-savedid='" + idName + "''><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'>" + draggedItemInputField(dataType, radioOptions, [...activeLanguages].filter(l => l.Id == currentLanguageId)[0], [...translations]) + "</div>" + editFieldHtml(editfields) + "</div>"), null);
+                            }
+
+                            else if (dataType == "checkbox-list") {
+                                let chkOptions = [];
+                                for (let r = 0; r < formData.tabs[t].sections[s].controls[c].dataSource.length; r++) {
+                                    chkOptions.push({ id: formData.tabs[t].sections[s].controls[c].dataSource[r].value, name: formData.tabs[t].sections[s].controls[c].dataSource[r].text });
+                                }
+
+                                editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "checkbox-list", hasRequiredChk: true, isRequired: false, labelFields: null, options: chkOptions, savedId: idName };
+                                $("#dropzone").append(listHtml(dataType, "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'>" + draggedItemInputField(dataType, chkOptions, [...activeLanguages].filter(l => l.Id == currentLanguageId)[0], [...translations]) + "</div>" + editFieldHtml(editfields) + "</div>"));
+                            }
+
+                            else if (dataType == "dropdown") {
+                                let drpOptions = [];
+                                for (let r = 0; r < formData.tabs[t].sections[s].controls[c].dataSource.length; r++) {
+                                    drpOptions.push({ id: formData.tabs[t].sections[s].controls[c].dataSource[r].value, name: formData.tabs[t].sections[s].controls[c].dataSource[r].text });
+                                }
+                                editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "dropdown", hasRequiredChk: true, isRequired: false, labelFields: null, options: drpOptions, savedId: idName };
+                                $("#dropzone").append(listHtml(dataType, "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'>" + draggedItemInputField(dataType, drpOptions, [...activeLanguages].filter(l => l.Id == currentLanguageId)[0], [...translations]) + "</div>" + editFieldHtml(editfields) + "</div>"));
                             }
 
                             else if (dataType = "html") {
-                                $("#dropzone").append(listHtml("html", "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + '@Html.Raw(Translation.GetForJS(Translation.GetCoreTextTranslation("Infofält")))' + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' style='padding:10px'>" + summerNoteConfig(idName, formData.tabs[t].sections[s].controls[c].valueBinding) + "</div></div>"));
+                                $("#dropzone").append(listHtml("html", "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + '@Html.Raw(Translation.GetForJS(Translation.GetCoreTextTranslation("Infofält")))' + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control' style='padding:10px'>" + summerNoteConfig(idName, formData.tabs[t].sections[s].controls[c].valueBinding) + "</div></div>"));
                             }
 
                             if (isRequired) {
@@ -513,6 +644,7 @@
                     }
                 });
 
+                let editfields = { idName: IDNAME, placeHolder: '@Translation.GetCoreTextTranslation("Sektion")', controlType: "Section", hasRequiredChk: false, placeholderOnly: true };
                 if (hasSavedId != null && extendedCaseFormInCases == 'True') {
                     var dlg = new ConfirmationDialog();
                     var opts = {
@@ -521,7 +653,7 @@
                         btnNoText: '@Translation.GetForJS("Nej")',
                         onClick: function (button) {
                             if (button === ConfirmationDialog.YES) {
-                                $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(IDNAME, '@Translation.GetCoreTextTranslation("Sektion")', "Section", false), IDNAME, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")')));
+                                $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(editfields), IDNAME, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")')));
                                 dlg.hide();
                             }
                             else {
@@ -533,7 +665,7 @@
                     dlg.show();
                 }
                 else {
-                    $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(IDNAME, '@Translation.GetCoreTextTranslation("Sektion")', "Section", false), IDNAME, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")')));
+                    $("#dropzone").html(sectionHtml(sectionHtmlDiv(editFieldHtml(editfields), IDNAME, "field-label sectionLabel", '@Translation.GetCoreTextTranslation("Sektion")')));
                 }
             });
         });
@@ -735,24 +867,26 @@
                     var label = document.getElementById(id.replace('header', 'headerName')) != null ? document.getElementById(id.replace('header', 'headerName')).innerText : "infoField";
 
                     var required = document.getElementById(id.replace('header', 'required')) ? document.getElementById(id.replace('header', 'required')).checked : false;
-                    var content = contentSummerNote ? 'function(m) { return ' + contentSummerNote + ' }' : ""
+                    var content = contentSummerNote ? 'function(m) { return ' + contentSummerNote + ' }' : "";
+
                     var fileuploadText = document.getElementById(id.replace('header', 'fileUploadText')) != null ? document.getElementById(id.replace('header', 'fileUploadText')).value : '';
                     var fTranslations = obj.querySelectorAll(".trTransField");
-                    
+
                     var fTranslationsProperty = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguage.Id);
                     var dataSrc = null;
 
                     if (fTranslationsProperty.length > 1) {
                         dataSrc = [];
+
                         let optionLst = fTranslationsProperty[1].querySelector('.selectOptions').getElementsByTagName("li");
-                         
+
                         for (let o = 0; o < optionLst.length; o++) {
                             let optionId;
                             let savedId = optionLst[o].getAttribute('data-dhhelpdesk-savedid');
 
-                            let newId = optionLst[o].firstElementChild.value + optionLst[o].getAttribute('data-dhhelpdesk-listid');
+                            let newId = 'lst' + optionLst[o].getAttribute('data-dhhelpdesk-listid') + '_' + optionLst[o].querySelectorAll('.labelName')[0].value;
                             optionId = savedId != null ? savedId : newId;
-                            
+
                             let option = optionLst[o].querySelector('.labelName');
                             dataSrc.push({ value: optionId, text: option.value })
                         }
@@ -793,44 +927,51 @@
 
                     let optionTextTranslations = [];
                     optionTextTranslations = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-options') == "true");
-                  
+                    let listItemCount = 0;
+                    
                     if (optionTextTranslations.length > 0) {
-
-                        let count;
 
                         let optionElms = [];
 
                         for (let o = 0; o < optionTextTranslations.length; o++) {
                             let selectOptions = optionTextTranslations[o].querySelector('.selectOptions');
                             let optionItems = selectOptions.getElementsByTagName('li');
-                            if (o == 0) {
-                                count = parseInt(optionItems.length);
-                            }
 
                             for (let i = 0; i < optionItems.length; i++) {
+                                let listItemId = optionItems[i].getAttribute('data-dhhelpdesk-listid');
+                                if (listItemId > listItemCount) {
+                                    listItemCount = listItemId;
+                                }
                                 optionElms.push(optionItems[i]);
                             }
                         }
 
-                        for (let c = 0; c < count; c++) {
+                        for (let c = 0; c < listItemCount; c++) {
                             let optionsList = [...optionElms].filter(item => item.getAttribute('data-dhhelpdesk-listid') == c + 1);
                             let options = [];
+
                             for (let u = 0; u < optionsList.length; u++) {
-                                options.push(optionsList[u].firstElementChild)
+                                options.push(optionsList[u].querySelector('.labelName'));
                             }
+
                             let idOptionProperty = [...options].filter(item => item.getAttribute('data-dhhelpdesk-langId') == defaultLanguage.Id);
 
                             for (let p = 0; p < options.length; p++) {
+                                
+                                let savedId = options[p].parentElement.getAttribute('data-dhhelpdesk-savedId');
+                                let newId = 'lst' + options[p].parentElement.getAttribute('data-dhhelpdesk-listid') + '_' + idOptionProperty[0].value;
+                                let idOption = savedId != null ? savedId : newId;
+
                                 let translation = {};
-                              
+
                                 translation.LanguageId = options[p].getAttribute('data-dhhelpdesk-langId');
-                                translation.Property = idOptionProperty[0].value + options[p].parentElement.getAttribute('data-dhhelpdesk-listid');
+                                translation.Property = idOption;
                                 translation.Text = options[p].value;
                                 translation.ControlType = options[p].getAttribute('data-dhhelpdesk-controlType');
                                 translation.TranslationId = options[p].getAttribute('data-dhhelpdesk-id');
                                 fieldTranslations.push(translation);
                             }
-                        }                        
+                        }
                     }
 
                     let fieldLabelTranslations = [...fTranslations].filter(item => !fieldTextTranslations.includes(item) && !optionTextTranslations.includes(item));
@@ -886,11 +1027,9 @@
                     id: getUrlVars()["extendedCaseFormId"],
                     customerId: getUrlVars()["customerId"],
                     languageId: currentLanguageId,
-                    //name: document.getElementById("formName").value,
                     description: document.getElementById("formDescription").value,
                     status: selectedCaseSolutions.length == 0 ? "false" : "true",
                     caseSolutionIds: selectedCaseSolutions,
-                    //sections: items,
                     tabs: tabs,
                     translations: fieldTranslations
                 };
@@ -919,7 +1058,7 @@
                 //    ShowToastMessage(, "error");
                 //}
                 });
-    
+
             }
 
         function checkForDuplicates(array) {
@@ -958,69 +1097,176 @@
         }
 
         function getStringWithoutSweChars(str) {
+
             var translate = {
             "ä": "a", "ö": "o", "ü": "u",
             "Ä": "A", "Ö": "O", "Ü": "U"
             };
             var translate_re = /[öäüÖÄÜ]/g;
             return (str.replace(translate_re, function (match) {
-            return translate[match];
+                return translate[match];
             }));
         }
 
         function onChangeLanguage(opt) {
-            $.each($(".field"), function () {
 
-                let lblNameText = "";
-                let fileUploadText = ""; //TODO Array of values
-                let id;
-                var transFields = $(this).find('.trTransField');
-                let defaultLangLabelName = "";
+                $.each($(".field"), function () {
 
-                for (let i = 0; i < transFields.length; i++) {
-                    if (transFields[i].getAttribute('data-dhhelpdesk-langid') == opt.value) {
-                        transFields[i].style.display = "";
-                        id = $(transFields[i]).attr('data-dhhelpdesk-labelId');
+                    SELECTEDTRANSLATIONLANGUAGEID = opt.value;
+                    let lblNameText = "";
+                    let fileUploadText = "";
+                    let id;
+                    var transFields = $(this).find('.trTransField');
+                    let defaultLangLabelName = "";
 
-                        var lables = $(transFields[i]).find('.labelName');
+                    for (let i = 0; i < transFields.length; i++) {
 
-                        if ($(transFields[i]).attr('data-dhhelpdesk-fileupload-text') == 'true') {
-                            fileUploadText = lables[0] == null ? "" : lables[0].value;
+                        if (transFields[i].getAttribute('data-dhhelpdesk-langid') == opt.value) {
+                            transFields[i].style.display = "";
+                            id = $(transFields[i]).attr('data-dhhelpdesk-labelId');
+
+                            var lables = $(transFields[i]).find('.labelName');
+
+                            if ($(transFields[i]).attr('data-dhhelpdesk-fileupload-text') == 'true') {
+                                fileUploadText = lables[0] == null ? "" : lables[0].value;
+                            }
+                            else {
+                                if (transFields[i].getAttribute('data-dhhelpdesk-options') == null) {
+                                    if (lables.length > 0) {
+                                        lblNameText = lables[0].value;
+                                    }
+                                }
+                            }
                         }
                         else {
-                            //lblNameText = lables[0] == null ? "" : lables[0].value;
-                            if (lables.length > 0) {
-                                lblNameText = lables[0].value;
+                            transFields[i].style.display = "none";
+                        }
+
+                        if (transFields[i].getAttribute('data-dhhelpdesk-options') == null) {
+                            if (transFields[i].getAttribute('data-dhhelpdesk-langid') == defaultLanguage.Id) {
+                                let lables = $(transFields[i]).find('.labelName');
+
+                                if (lables.length > 0) {
+                                    defaultLangLabelName = lables[0].value;
+                                }
+                            }
+                        }
+                        else {
+                            if (transFields[i].getAttribute('data-dhhelpdesk-langid') == opt.value) {
+
+                                let controlId = transFields[i].getAttribute('data-dhhelpdesk-labelid');
+                                let list = transFields[i].querySelector('.selectOptions').getElementsByTagName("li");
+                                let controlType = list[0].querySelectorAll("input")[0].getAttribute('data-dhhelpdesk-controlType');
+                                let options = [];
+                                for (let l = 0; l < list.length; l++) {
+                                    let listItemId = list[l].getAttribute('data-dhhelpdesk-listid');
+                                    let option = { name: list[l].querySelectorAll("input")[0].value };
+
+                                    let defaultOptionLabel = $('[data-dhhelpdesk-listid="' + listItemId + '"][data-dhhelpdesk-langid="' + defaultLanguage.Id
+                                        + '"][data-dhhelpdesk-controlid="' + controlId + '"]');
+
+                                    let optionLabelId = "defaultOptionLabel_" + controlId + "_Item_" + listItemId + "_Lang_" + opt.value;
+
+                                    if (document.getElementById(optionLabelId) != null) {
+                                        let inputVal = defaultOptionLabel[0].querySelectorAll("input")[0].value;
+
+                                        document.getElementById(optionLabelId).innerHTML = inputVal;
+                                    }
+                                    options.push(option);
+                                }
+
+                                let element = draggedItemInputField(controlType, options, null, null)
+                                document.getElementById(controlId + '_control').innerHTML = element;
                             }
                         }
                     }
-                    else {
-                        transFields[i].style.display = "none";
-                    }
-                    if (transFields[i].getAttribute('data-dhhelpdesk-langid') == defaultLanguage.Id) {
-                        let lables = $(transFields[i]).find('.labelName');
 
-                        if (lables.length > 0) {
-                            defaultLangLabelName = lables[0].value;
+                    if (document.getElementById('defaultLabelName' + id) != null) {
+                        document.getElementById('defaultLabelName' + id).innerHTML = defaultLangLabelName;
+                    }
+
+                    if (document.getElementById(id + 'headerName') != null) {
+                        document.getElementById(id + 'headerName').innerHTML = lblNameText;
+                    }
+                    if (document.getElementById(id + 'fileUploadText') != null) {
+                        document.getElementById(id + 'fileUploadText').value = fileUploadText;
+                    }
+                });
+            }
+
+            function draggedItemInputField(controlType, options, activeLanguage, translations) {
+
+                    if (controlType == "radio" || controlType == "checkbox-list" || controlType == "dropdown") {
+
+                        let str = "";
+                        if (controlType == "radio") {
+                            str += "<div class='form-control form-control-width'>";
+                            for (let o = 0; o < options.length; o++) {
+                                let optionName;
+                                if (activeLanguage != null) {
+                                    let translation = [...translations].filter(t => getStringWithoutSpecialChars(getStringWithoutSweChars(t.Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(options[o].name))
+                                        && t.Language.Id == activeLanguage.Id && t.Prefix == "DataSource.Value");
+
+                                    optionName = translation[0].TranslationText + (translation[0].Name == "Val" ? (" " + options[o].id) : "");
+                                }
+                                else {
+                                    optionName = options[o].name;
+                                }
+
+                                str += "<label>";
+                                str += "<input disabled='true' type='radio' name='" + optionName + "'" + (o == 0 ? "checked" : "") + ">";
+                                str += optionName;
+                                str += "</label>";
+                            }
+                            str += "</div>";
                         }
+
+                        if (controlType == "checkbox-list") {
+                            str += "<div class='form-control form-control-width'>";
+                            for (let o = 0; o < options.length; o++) {
+                                let optionName;
+                                if (activeLanguage != null) {
+                                let translation = [...translations].filter(t => getStringWithoutSpecialChars(getStringWithoutSweChars(t.Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(options[o].name))
+                                    && t.Language.Id == activeLanguage.Id && t.Prefix == "DataSource.Value");
+
+                                    optionName = translation[0].TranslationText + (translation[0].Name == "Val" ? (" " + options[o].id) : "");
+                                }
+                                else {
+                                    optionName = options[o].name;
+                                }
+                                str += "<label>";
+                                str += "<input disabled='true' type='checkbox' name='" + optionName + "'>";
+                                str += optionName
+                                str += "</label>";
+                            }
+                            str += "</div>";
+                        }
+
+                        if (controlType == "dropdown") {
+                            str += "<select class='form-control form-control-width' readonly>";
+                            for (let o = 0; o < options.length; o++) {
+                                let optionName;
+                                if (activeLanguage != null) {
+                                let translation = [...translations].filter(t => getStringWithoutSpecialChars(getStringWithoutSweChars(t.Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(options[o].name))
+                                    && t.Language.Id == activeLanguage.Id && t.Prefix == "DataSource.Value");
+
+                                    optionName = translation[0].TranslationText + (translation[0].Name == "Val" ? (" " + options[o].id) : "");
+                                }
+                                else {
+                                    optionName = options[o].name;
+                                }
+                                str += "<option value='" + optionName + "'" + (o == 0 ? "selected" : "") + ">";
+                                str += optionName
+                                str += "</option>";
+                            }
+                            str += "</select>"
+                        }
+                        return str;
                     }
-                }
-
-                if (document.getElementById('defaultLabelName' + id) != null) {
-                    document.getElementById('defaultLabelName' + id).innerHTML = defaultLangLabelName;
-                }
-
-                if (document.getElementById(id + 'headerName') != null) {
-                    document.getElementById(id + 'headerName').innerHTML = lblNameText;
-                }
-                if (document.getElementById(id + 'fileUploadText') != null) {
-                    document.getElementById(id + 'fileUploadText').value = fileUploadText;
-                }
-                //var idLbl = $(transFields[i]).attr('data-dhhelpdesk-labelId') + 'headerName';
-                //document.getElementById(idLbl).innerHTML = lables[0].value;
-
-            });
-        }
+                    else {
+                        return "<input type='text' class='form-control form-control-width' readonly>";
+                    }
+                };
 
 </script>
 
@@ -1173,6 +1419,11 @@
         font-size: 12px;
     }
 
+    .spanDefaultOptionName {
+        margin-left: 5px;
+        font-size: 12px;
+    }
+
     .transField {
         width: 200px;
     }
@@ -1274,6 +1525,10 @@
     }
 
     .note-fontname {
+        padding-top: 5px;
+    }
+
+    .note-fontsize {
         padding-top: 5px;
     }
 

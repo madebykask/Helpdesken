@@ -281,6 +281,22 @@ namespace DH.Helpdesk.Services.Services
                             });
                         }
 
+                        if(c.dataSource != null)
+                        {
+                            foreach(var d in c.dataSource)
+                            {
+                                fieldtranslations.Add(new ExtendedCaseFieldTranslation()
+                                {
+                                    Id = _languageRepository.GetExtendedFormTranslationId(d.text, defaultLanguage.Id),
+                                    Language = defaultLanguage,
+                                    Name = d.text,
+                                    TranslationText = GetExtendedCaseTranslation(d.text.Replace("@Translation.", ""), defaultLanguage.Id),
+                                    IsDefaultLanguage = true,
+                                    Prefix = "DataSource.Value"
+                                });
+                            }
+                        }
+
                         foreach (var l in activeLanguages.Where(x => x.Id != defaultLanguage.Id))
                         {
                             fieldtranslations.Add(new ExtendedCaseFieldTranslation()
@@ -304,6 +320,22 @@ namespace DH.Helpdesk.Services.Services
                                     IsDefaultLanguage = false,
                                     Prefix = "Message"
                                 });
+                            }
+
+                            if (c.dataSource != null)
+                            {
+                                foreach (var d in c.dataSource)
+                                {
+                                    fieldtranslations.Add(new ExtendedCaseFieldTranslation()
+                                    {
+                                        Id = _languageRepository.GetExtendedFormTranslationId(d.text, l.Id),
+                                        Language = l,
+                                        Name = d.text,
+                                        TranslationText = GetExtendedCaseTranslation(d.text.Replace("@Translation.", ""), l.Id),
+                                        IsDefaultLanguage = true,
+                                        Prefix = "DataSource.Value"
+                                    });
+                                }
                             }
                         }
                     }
