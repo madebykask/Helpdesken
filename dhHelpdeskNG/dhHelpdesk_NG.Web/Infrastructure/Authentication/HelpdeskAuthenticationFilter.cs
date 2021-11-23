@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Filters;
@@ -100,7 +101,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                     {
                         ctx.Session.Abandon();
                         var loginUrl = "~/Login/Login";
-                        filterContext.Result = new RedirectResult(loginUrl);
+                        OnError(filterContext, loginUrl);
                         return;
                     }
                 }
@@ -143,7 +144,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                             //redirect to forms login page if user cannot be found in the database by identity user name
                             var loginUrl = _authenticationService.GetSiteLoginPageUrl(); // specific for each auth mode (win, forms, mixed, sso)
                             _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Redirecting to login page: {loginUrl}");
-                            filterContext.Result = new RedirectResult(loginUrl);
+                            OnError(filterContext, loginUrl);
                         }
                     }
 
@@ -159,12 +160,33 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                         loginUrl = loginUrl + "?returnUrl=" + redirectUrl;
                     }
 
-                    filterContext.Result = new RedirectResult(loginUrl);
+                    OnError(filterContext, loginUrl);
                 }
             }
 
         }
-        
+
+        private static void OnError(AuthenticationContext filterContext, string loginUrl)
+        {
+            if (filterContext.HttpContext.Request.IsAjaxRequest())
+            {
+                var urlHelper = new UrlHelper(filterContext.HttpContext.Request.RequestContext);
+                if (filterContext.HttpContext.Request.Url != null)
+                    filterContext.Result = new ContentResult()
+                    {
+                        Content = urlHelper.Action("Index", "Home", null,
+                            filterContext.HttpContext.Request.Url.Scheme),
+                    };
+                filterContext.HttpContext.Response.StatusCode = 401;
+                filterContext.HttpContext.Response.StatusDescription = "You are not authorized";
+                filterContext.HttpContext.Response.SuppressFormsAuthenticationRedirect = true;
+            }
+            else
+            {
+                filterContext.Result = new RedirectResult(loginUrl);
+            }
+        }
+
         //OnAuthenticationChallenge: is called at the end after other Authorisation filters to be able to process final result - redirect to login page or issue auth challenge
         public void OnAuthenticationChallenge(AuthenticationChallengeContext context)
         {

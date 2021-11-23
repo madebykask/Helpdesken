@@ -1070,7 +1070,6 @@ namespace DH.Helpdesk.Web.Controllers
         /// <param name="caseId"></param>
         /// <returns>empty string if success. Name of user who locked the case if not</returns>
         /// 
-        [AllowAnonymous]
         public JsonResult ReExtendCaseLock(string lockGuid, int extendValue, int caseId)
         {
             var isExtended = _caseLockService.ReExtendLockCase(new Guid(lockGuid), extendValue);
