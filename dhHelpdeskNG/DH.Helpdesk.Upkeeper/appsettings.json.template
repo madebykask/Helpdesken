@@ -6,5 +6,6 @@
   "Customer_Id": "#{UpKeeperCustID}",
   "CreateInventory": "true",
   "UpdateInventory": "true",
-  "UpdateUpKeeper": "false"
+  "UpdateUpKeeper": "false",
+  "UpKeeperOrgNo": "#{UpKeeperOrgNo}"
 }
