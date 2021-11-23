@@ -39,10 +39,6 @@
 	  <add key="RedirectUri" value="https://dev.helpdesk.internal.datahalland.se/" /><!-- Your applications RedirectUri from Azure eg homepage-->
 	  #{/if}
     #{if AuthenticationMode == "windows"}<add key="LoginMode" value="Windows"/>#{/if}
-    #{if AuthenticationMode == "mixed"}<add key="LoginMode" value="Mixed"/>#{/if}
-    #{if AuthenticationMode == "mixed"}<add key="winAuthIPFilter" value="#{MixedModeIPRanges}"/>#{/if}
-    #{if AuthenticationMode == "sso"}<add key="LoginMode" value="SSO"/>#{/if}
-    #{if AuthenticationMode == "anonymous"}<add key="LoginMode" value="Anonymous"/>#{/if}
 </appSettings>
   <system.web.extensions>
     <scripting>
@@ -83,11 +79,6 @@
 		<deny users="?" />
 	</authorization>
     #{/if}
-    #{if AuthenticationMode == "mixed"}
-    <authentication mode="Forms">
-      <forms loginUrl="~/Login/Login" timeout="2880" defaultUrl="~/"/>
-    </authentication>
-	  #{/if}
 	  <identity impersonate="false"/>
     <httpHandlers>
       <add path="Reserved.ReportViewerWebControl.axd" verb="*" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" validate="false"/>
