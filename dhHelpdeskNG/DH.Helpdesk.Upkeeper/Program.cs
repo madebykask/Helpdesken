@@ -16,21 +16,55 @@ namespace upKeeper2Helpdesk
 
 		static void Main(string[] args)
 		{
+			StreamWriter writer = null;
+			//Console.WriteLine(AppContext.BaseDirectory);
+			string logfilepath = AppContext.BaseDirectory.ToString() + "\\logfiles\\";
+			if (!Directory.Exists(logfilepath))
+			{
+				Directory.CreateDirectory(logfilepath);
+			}
+			string logfilename = "Logfile_" + DateTime.Now.ToShortDateString().Replace(" ", "").Replace(":", "").Replace("-", "") + ".txt";
+
+			if (!System.IO.File.Exists(logfilepath + logfilename))
+			{
+				// Create a file to write to.                
+				writer = System.IO.File.CreateText(logfilepath + logfilename);
+			}
+			else
+			{
+				writer = System.IO.File.AppendText(logfilepath + logfilename);
+			}
+
+
+
 			try
 			{
-				DateTime startTime = DateTime.Now;
 
-				var builder = new ConfigurationBuilder()
+				
+				DateTime startTime = DateTime.Now;
+				
+				writer.WriteLine(DateTime.Now.ToString() + " DateTime: " + startTime);
+
+				var builder = new ConfigurationBuilder()				
 				.SetBasePath(Directory.GetCurrentDirectory())
 				.AddJsonFile("appsettings.json", false);
-
+				
 				IConfigurationRoot configuration = builder.Build();
 				
 				BaseAPI api = new BaseAPI(configuration.GetSection("UpKeeperUrl").Value);
+				writer.WriteLine("Username: " + configuration.GetSection("UserName").Value);
+				writer.WriteLine("Password: " + configuration.GetSection("Password").Value);
 
-                Token t = api.Login(configuration.GetSection("UserName").Value, configuration.GetSection("Password").Value);
+				Token t = api.Login(configuration.GetSection("UserName").Value, configuration.GetSection("Password").Value);
+				string UpKeeperOrgNo = configuration.GetSection("UpKeeperOrgNo").Value;
+
+
+				writer.WriteLine("Token: " + t.Access_token.ToString());
 
 				int Customer_Id = 1;
+
+				
+
 				if (configuration.GetSection("Customer_Id").Value != null)
 				{
 					bool success = Int32.TryParse(configuration.GetSection("Customer_Id").Value, out int number);
@@ -40,82 +74,92 @@ namespace upKeeper2Helpdesk
 					}
 				}
 
+				writer.WriteLine("Customer Id: " + Customer_Id);
+
 				bool CreateInventory = false;
 				if (configuration.GetSection("CreateInventory").Value != null && configuration.GetSection("CreateInventory").Value.ToLower() == "true") {
 					CreateInventory = true;
 				}
-
+				
 				bool UpdateInventory = false;
 				if (configuration.GetSection("UpdateInventory").Value != null && configuration.GetSection("UpdateInventory").Value.ToLower() == "true")
 				{
 					UpdateInventory = true;
 				}
-
+				
 				bool UpdateUpKeeper = true;
 				if (configuration.GetSection("UpdateUpKeeper").Value != null && configuration.GetSection("UpdateUpKeeper").Value.ToLower() == "false")
 				{
 					UpdateUpKeeper = false;
 				}
-
+				
 
 				if (t != null)
 				{
 					var data = new ComputerData(configuration.GetSection("HelpdeskDB").Value);
 					var idx = 0;
-
+					
 					// Hämta alla datorer
-					IEnumerable<IDictionary<string, string>> computers = api.GetComputerNames(t);
-
+					IEnumerable<IDictionary<string, string>> computers = api.GetComputerNames(t, UpKeeperOrgNo);
+					
+					
+					if (computers==null)
+                    {
+						writer.WriteLine("Computers is null, exiting....");						
+						writer.Close();
+						return;
+                    }
 					logger.Debug("Antal datorer: " + computers.Count());
-
+					
 					foreach (Dictionary<string, string> c in computers)
 					{
+						
 						if ((DateTime.Now - startTime).TotalSeconds > 300)
 						{
 							t = api.Login(configuration.GetSection("UserName").Value, configuration.GetSection("Password").Value);
 
 							startTime = DateTime.Now;
 						}
-
+						
 						idx += 1;
 
                         var computerId = c["Key"].ToString();
-
+						writer.WriteLine("Key: " + computerId.ToString());
 						logger.Debug("computerId: " + computerId);
-
-						var computer = api.GetComputer(computerId, t);
+						
+						var computer = api.GetComputer(computerId, t, UpKeeperOrgNo);
 
 						if (computer != null) {
 							computer.Customer_Id = Customer_Id;
-
+							writer.WriteLine("CustomerId: " + Customer_Id.ToString());
 							logger.Debug("Synkroniserar: " + computer.Name + ", " + idx.ToString());
-
+							writer.WriteLine("Synk: " + computer.Name + ", " + idx.ToString());
 							computer = data.GetComputerInfo(computer);
-
+							
 							if (computer.Computer_Id == null && CreateInventory == true)
 							{
 								data.Create(computer);
 
 								computer = data.GetComputerInfo(computer);
 							}
-
+							
 							if (computer.Computer_Id == null)
 							{
 								logger.Error(computer.Name + " saknas i DH Helpdesk");
 							}
-
+							
 							else if (computer.ScrapDate != null && computer.ScrapDate < DateTime.Today.AddDays(-7))
 							{
 								logger.Debug("DeleteComputer ");
 
-								api.DeleteComputer(computerId, t);
+								api.DeleteComputer(computerId, t, UpKeeperOrgNo);
 
 								logger.Debug(computer.Name + " borttagen i upKeeper");
 							}
 							else if (UpdateInventory == true)
 							{
 
-								var hardware = api.GetHardware(computerId, t);
+								var hardware = api.GetHardware(computerId, t, UpKeeperOrgNo);
 
 								if (hardware != null && hardware.Properties != null) {
 									if (hardware.Properties.FirstOrDefault(x => x.Property == "Time of inventory") != null)
@@ -184,9 +228,9 @@ namespace upKeeper2Helpdesk
 
 									computer.ClientInformation.User_Id = data.GetComputerUserById(1, computer.ClientInformation.LastLoggedInUser);
 
-									computer.Software = api.GetComputerSoftware(computerId, t);
+									computer.Software = api.GetComputerSoftware(computerId, t, UpKeeperOrgNo);
 
-									computer.Hotfix = api.GetComputerUpdates(computerId, t);
+									computer.Hotfix = api.GetComputerUpdates(computerId, t, UpKeeperOrgNo);
 
 									if (hardware.Disks != null)
 									{
@@ -221,7 +265,7 @@ namespace upKeeper2Helpdesk
 										logger.Debug(computer.Name + " Uppdatera upKeeper, location " + computer.Location2);
 
 										// Uppdatera upKeeper
-										var computerDetail = api.GetComputerDetail(computerId, t);
+										var computerDetail = api.GetComputerDetail(computerId, t, UpKeeperOrgNo);
 
 										if (computerDetail != null) {
 											if (computer.Location2.Length > 60)
@@ -233,7 +277,7 @@ namespace upKeeper2Helpdesk
 												computerDetail.Location = computer.Location2;
 											}
 
-											string ret = api.SaveComputerDetails(computerId, computerDetail, t);
+											string ret = api.SaveComputerDetails(computerId, computerDetail, t, UpKeeperOrgNo);
 										}
 									}
 
@@ -247,9 +291,21 @@ namespace upKeeper2Helpdesk
 					// Uppdatera program så att de syns i licensmodulen
 					data.UpdateApplication(Customer_Id);
 
+					if (writer != null)
+					{
+						writer.WriteLine("Finished");
+						writer.Close();
+					}
+
 				}
 			}
 			catch (Exception ex) {
+				if (writer != null)
+				{
+					writer.WriteLine(ex.Message + ex.Source + ex.InnerException);
+					writer.Close();
+				}
+
 				logger.Error(ex.Message);
 			}
 			
