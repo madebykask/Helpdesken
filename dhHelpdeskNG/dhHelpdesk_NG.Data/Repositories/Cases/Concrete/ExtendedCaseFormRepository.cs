@@ -504,11 +504,8 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
             var metaData = data.Replace(@"valueBinding"":""function(m) { return ", @"valueBinding"": function(m) { return """)
                                 .Replace(@"> }""", @">"";}")
-                                .Replace(@"\""", "").Replace(@"\n", "")
-                                .Replace("color: ", "color:")
-                                .Replace(" background-color: ", "background-color:")
-                                .Replace("font-size: ", "font-size:")
-                                .Replace("font-family: ", "font-family:");
+                                .Replace(@"\""", "").Replace(@"\n", "");
+
             res.MetaData = metaData;
 
             if (entity.caseSolutionIds != null)

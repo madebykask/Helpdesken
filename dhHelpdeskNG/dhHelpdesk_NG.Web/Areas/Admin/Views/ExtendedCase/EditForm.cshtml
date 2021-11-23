@@ -862,6 +862,20 @@
                     let contentSummerNote;
                     if (document.getElementById(id.replace('header', '_summernote')) != null) {
                         contentSummerNote = $('#' + id.replace('header', '_summernote')).summernote('code');
+
+                        contentSummerNote = contentSummerNote.replaceAll("color: ", "color:");
+                        contentSummerNote = contentSummerNote.replaceAll(" background-color:", "background-color:");
+                        contentSummerNote = contentSummerNote.replaceAll(" font-size: ", "font-size:");
+                        contentSummerNote = contentSummerNote.replaceAll("font-size: ", "font-size:");
+                        contentSummerNote = contentSummerNote.replaceAll("font-family: ", "font-family:");
+                        let regex = /[Rr][Gg][Bb][\(](((([\d]{1,3})[\,]{0,1})[\s]*){3})[\)]/gm
+                        let matches = contentSummerNote.match(regex);
+
+                        if (matches != null) {
+                            for (let m = 0; m < matches.length; m++) {
+                                contentSummerNote = contentSummerNote.replace(matches[m], matches[m].replaceAll(' ', ''));
+                            }
+                        }
                     }
 
                     var label = document.getElementById(id.replace('header', 'headerName')) != null ? document.getElementById(id.replace('header', 'headerName')).innerText : "infoField";
