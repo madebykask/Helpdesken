@@ -183,7 +183,9 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
         public int SaveExtendedCaseForm(ExtendedCaseFormPayloadModel payload, string userId)
         {
             List<SectionElement> sectionLst = GetExtendedCaseFormSections(payload);
-            var formName = "Formulär"; 
+            sectionLst.AddRange(GetInitiatorSectionsData(payload));
+
+            var formName = "Formulär";
             var entity = new ExtendedCaseFormJsonModel()
             {
                 id = payload.Id,
@@ -191,10 +193,31 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                 description = payload.Description,
                 status = payload.Status,
                 customerId = payload.CustomerId,
+                customerGuid = payload.CustomerGuid,
                 languageId = payload.LanguageId,
                 caseSolutionIds = payload.CaseSolutionIds,
                 localization = new LocalizationElement()
                 { dateFormat = "YYYY-MM-DD", decimalSeparator = "." },
+                dataSources = new List<DataSource>() {
+                    new DataSource() {
+                        type = "query",
+                        id = "getInitiatorByName",
+                        parameters = new List<DataSourcesParams>() {
+                            new DataSourcesParams() { name = "name", field = "tabs.EditorInitiator.sections.HiddenFields.controls.currentUser" },
+                            new DataSourcesParams() { name = "customerGuid", field = "tabs.EditorInitiator.sections.HiddenFields.controls.customerGuid" }
+                        }
+                    }
+                    ,
+                    new DataSource() {
+                        type = "query",
+                        id = "OusByDepartmentDs",
+                        parameters = new List<DataSourcesParams>() {
+                            new DataSourcesParams() { name = "CustomerGuid", field = "tabs.EditorInitiator.sections.HiddenFields.controls.customerGuid" },
+                            new DataSourcesParams() { name = "Department_Id", field = "tabs.EditorInitiator.sections.InitiatorInfo.controls.departmentId" }
+                        }
+                    }
+                },
+
                 validatorsMessages = new ValidatorsMessagesElement()
                 { required = "", dateYearFormat = "Correct date format (YYYY)", email = "Specify valid email" },
                 styles = "ec-section .col-xs-6:first-child { text-align: left; } ec-section .col-md-6:first-child { text-align: left; } .checkbox label { display: block } .radio label { display: block } ",
@@ -211,12 +234,199 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
 
             };
 
-            //foreach(var t in payload.Translations)
-            //{
-            //    t.Id = _extendedCaseFormRepository.GetExtendedCaseFormTranslation(t);
-            //}
-
             return _extendedCaseFormRepository.SaveExtendedCaseForm(entity, userId, payload.Translations);
+        }
+
+        private IList<SectionElement> GetInitiatorSectionsData(ExtendedCaseFormPayloadModel payload)
+        {
+            List<SectionElement> sectionLst = new List<SectionElement>();
+            sectionLst.Add(new SectionElement
+            {
+                id = "InitiatorInfo",
+                name = "@Translation.Section.InitiatorInfo",
+                hiddenBinding = "function(m, log) { return true; }",
+                controls = new List<ControlElement>()
+                {
+                    new ControlElement() {
+                        id= "UserId",
+                        type= "textbox",
+                        label= "User Id",
+                        valueBinding= @"function(m, log) { var ds = m.dataSources.getInitiatorByName; if (this.value != """") { return this.value; } else if (ds && ds.length > 0){ var userId = (ds[0].UserId || """"); return userId; } return this.value; }".Replace(@"\r", String.Empty).Replace(@"\t", String.Empty),
+                        caseBinding= "reportedby",
+                        caseBindingBehaviour= "newonly"
+                    },
+
+                    new ControlElement() {
+                        id= "Initiator",
+                        type= "textbox",
+                        label= "Initiator",
+                        valueBinding= @"function(m, log) {var ds = m.dataSources.getInitiatorByName; if (this.value != """") { return this.value; } else if (ds && ds.length > 0) { var flName = (ds[0].FirstName || """") + "" "" + (ds[0].LastName || """"); return flName.trim();} return this.value; }".Replace(@"\r", String.Empty).Replace(@"\t", String.Empty),
+                        caseBinding= "persons_name",
+                        caseBindingBehaviour= "newonly"
+                    },
+
+                    new ControlElement()
+                    {
+                        id = "Email",
+                        type = "textbox",
+                        label = "Email",
+                        validators = new ValidatorsElement()
+                        {
+                            onSave = new List<OnSaveElement>()
+                            {
+                                new OnSaveElement() { type = "pattern", value = ".+\\@.+\\..+", messageName = "email"}
+                            }
+                        },
+                        valueBinding = @"function(m, log) { var ds = m.dataSources.getInitiatorByName; if (this.value != """") { return this.value; } else if (ds && ds.length > 0) { var email = (ds[0].Email || """"); return email; } return this.value; }".Replace(@"\r", String.Empty).Replace(@"\t", String.Empty),
+                        caseBinding = "persons_email",
+                        caseBindingBehaviour = "newonly"
+                    },
+
+                    new ControlElement() {
+                        id= "Phone",
+                        type= "textbox",
+                        label= "Phone",
+                        valueBinding= @"function(m, log) { var ds = m.dataSources.getInitiatorByName; if (this.value != """") { return this.value; } else if (ds && ds.length > 0) { var phone = (ds[0].Phone || """"); return phone; } return this.value; }".Replace(@"\r", String.Empty).Replace(@"\t", String.Empty),
+                        caseBinding= "persons_phone",
+                        caseBindingBehaviour= "newonly"
+                    },
+
+                    new ControlElement() {
+                        id= "Mobile",
+                        type= "textbox",
+                        label= "Mobile",
+                        valueBinding= @"function(m, log) { var ds = m.dataSources.getInitiatorByName; if (this.value != """") { return this.value; } else if (ds && ds.length > 0) { var cellphone = (ds[0].Mobile || """"); return cellphone; } return this.value; }".Replace(@"\r", String.Empty).Replace(@"\t", String.Empty),
+                        caseBinding= "persons_cellphone",
+                        caseBindingBehaviour= "newonly"
+                    },
+
+                    new ControlElement() {
+                        id= "regionId",
+                        type= "dropdown",
+                        label= "Region",
+                        dataSource = new List<DataSource>()
+                        {
+                            new DataSource()
+                            {
+                                type = "option",
+                                id = "RegionsByCustomer",
+                                parameters = new List<DataSourcesParams>()
+                                {
+                                    new DataSourcesParams() {
+                                        name = "CustomerGuid",
+                                        field = "tabs.EditorInitiator.sections.HiddenFields.controls.customerGuid"
+                                    }
+                                }
+                            }
+                        },
+                        valueBinding= @"function(m, log) { var ds = m.dataSources.getInitiatorByName; if (this.value != """") { return this.value; } else { if (ds && ds.length > 0) { var regionId = ds[0].RegionId; if (regionId !== null) { return ds[0].RegionId; } } } return this.value; }".Replace(@"\r", String.Empty).Replace(@"\t", String.Empty),
+                        caseBinding= "region_id",
+                        caseBindingBehaviour= "newonly"
+                    },
+
+                    new ControlElement() {
+                        id= "departmentId",
+                        type= "dropdown",
+                        label= "Department",
+                        dataSource = new List<DataSource>()
+                        {
+                            new DataSource()
+                            {
+                                type = "option",
+                                id = "DepartmentsByCustomer",
+                                parameters = new List<DataSourcesParams>()
+                                {
+                                    new DataSourcesParams() {
+                                        name = "CustomerGuid",
+                                        field = "tabs.EditorInitiator.sections.HiddenFields.controls.customerGuid"
+                                    }
+                                }
+                            }
+                        },
+                        valueBinding= @"function(m, log) { var ds = m.dataSources.getInitiatorByName; if (this.value != """") { return this.value; } else { if (ds && ds.length > 0) { var departmentId = ds[0].DepartmentId; if (departmentId !== null) { return ds[0].DepartmentId; } } } return this.value; }".Replace(@"\r", String.Empty).Replace(@"\t", String.Empty),
+                        caseBinding= "department_id",
+                        caseBindingBehaviour= "newonly"
+                    },
+
+                new ControlElement() {
+                    id= "organizationalUnit",
+                    type= "dropdown",
+                    label= "Organizational Unit",
+                    dataSource = new List<DataSource>()
+                    {
+                        new DataSource()
+                        {
+                            type = "custom",
+                            id = "OusByDepartmentDs",
+                            valueField = "Id",
+                            textField = "OU"
+                        }
+                    },
+                    valueBinding= @"function(m, log) { var ds = m.dataSources.getInitiatorByName; if (this.value != """") { return this.value; } else { if (ds && ds.length > 0) { var orgUnitId = ds[0].OU_Id; if (orgUnitId !== null) { return ds[0].OU_Id; } } } return this.value; }".Replace(@"\r", String.Empty).Replace(@"\t", String.Empty),
+                    caseBinding= "ou_id_1",
+                    caseBindingBehaviour= "newonly"
+                },
+
+                new ControlElement() {
+                    id= "CostCentre",
+                    type= "textbox",
+                    label= "Cost Centre",
+                    valueBinding= @"function(m, log) { var ds = m.dataSources.getInitiatorByName; if (this.value != """") { return this.value; } else if (ds && ds.length > 0) { var costCentre = (ds[0].CostCentre || """"); return costCentre; } return this.value; }".Replace(@"\r", String.Empty).Replace(@"\t", String.Empty),
+                },
+
+                new ControlElement() {
+                    id= "CostCentreValue",
+                    type= "textbox",
+                    hiddenBinding= @"function(m, log) { return true; }",
+                    valueBinding= @"function(m, log) { return this.parent.controls.CostCentre.value || """"; }".Replace(@"\r", String.Empty).Replace(@"\t", String.Empty),
+                    caseBinding= "costcentre",
+                    caseBindingBehaviour= "newonly"
+                },
+
+                new ControlElement() {
+                    id= "Placement",
+                    type= "textbox",
+                    label= "Placement",
+                    valueBinding= @"function(m, log) { var ds = m.dataSources.getInitiatorByName; if (this.value != """") { return this.value; } else if (ds && ds.length > 0) { var placement = (ds[0].Place || """"); return placement; } return this.value; }".Replace(@"\r", String.Empty).Replace(@"\t", String.Empty),
+                    caseBinding= "place",
+                    caseBindingBehaviour= "newonly"
+                },
+
+                new ControlElement() {
+                    id= "OrdererCode",
+                    type= "textbox",
+                    label= "Orderer Code",
+                    valueBinding= @"function(m, log) { var ds = m.dataSources.getInitiatorByName; if (this.value != """") { return this.value; } else if (ds && ds.length > 0) { var userCode = (ds[0].UserCode || """"); return userCode; } return this.value; }".Replace(@"\r", String.Empty).Replace(@"\t", String.Empty),
+                    caseBinding= "usercode",
+                    caseBindingBehaviour= "newonly"
+                },
+            }
+            }); ;
+
+            sectionLst.Add(new SectionElement()
+            {
+                id = "HiddenFields",
+                name = "Hidden fields",
+                hiddenBinding = @"function(m, log) { return true; }",
+                controls = new List<ControlElement>()
+                    {
+                        new ControlElement()
+                        {
+                            id = "customerGuid",
+                            type = "textbox",
+                            valueBinding = @"function(m, log) { return """ + payload.CustomerGuid + @"""; }"
+                        },
+
+                        new ControlElement()
+                        {
+                            id = "currentUser",
+                            type = "textbox",
+                            valueBinding = @"function(m, log) { if (!m.formInfo.currentUser) return """"; if (!m.formInfo.caseId) return m.formInfo.currentUser; }".Replace(@"\r", String.Empty).Replace(@"\t", String.Empty)
+                        }
+                    }
+            }
+            );
+            return sectionLst;
         }
 
         private static List<SectionElement> GetExtendedCaseFormSections(ExtendedCaseFormPayloadModel payload)

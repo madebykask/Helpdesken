@@ -230,7 +230,7 @@ namespace DH.Helpdesk.Services.Services
                     });
                 }
 
-                foreach (var s in t.sections)
+                foreach (var s in t.sections.Where(x => x.id != "InitiatorInfo" && x.id != "HiddenFields"))
                 {
                     fieldtranslations.Add(new ExtendedCaseFieldTranslation()
                     {

@@ -8,8 +8,11 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
     public class ExtendedCaseFormPayloadModel
     {
         [JsonProperty("customerId")]
-        public int CustomerId { get; set; }       
-        
+        public int CustomerId { get; set; }
+
+        [JsonProperty("customerGuid")]
+        public string CustomerGuid { get; set; }
+
         [JsonProperty("languageId")]
         public int LanguageId { get; set; }
 

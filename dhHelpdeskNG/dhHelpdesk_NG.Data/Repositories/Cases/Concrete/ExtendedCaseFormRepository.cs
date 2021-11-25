@@ -329,7 +329,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             }
 
 
-            foreach (var s in entity.tabs[0].sections)
+            foreach (var s in entity.tabs[0].sections.Where(x=> x.id != "InitiatorInfo" && x.id != "HiddenFields"))
             {
                 string sectionId = s.id;
                 var cleanSectionName = StringHelper.GetCleanString(s.id);
@@ -502,9 +502,12 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                                 NullValueHandling = NullValueHandling.Ignore
                             });
 
-            var metaData = data.Replace(@"valueBinding"":""function(m) { return ", @"valueBinding"": function(m) { return """)
-                                .Replace(@"> }""", @">"";}")
-                                .Replace(@"\""", "").Replace(@"\n", "");
+            var metaData =      data.Replace(@"""function(", @" function(")
+                                .Replace(@" > }""", @">"";}")
+                                .Replace(@"\""", @"""")
+                                .Replace(@"; }""", @"; }")
+                                .Replace(@"\n", "")
+                                .Replace(@"tabs.EditorInitiator.", "tabs." + entity.tabs[0].id + ".");
 
             res.MetaData = metaData;
 

@@ -362,6 +362,97 @@ INSERT INTO [dbo].[ExtendedCaseTranslations]
 		   END
 GO
 
+RAISERROR ('Alter Stored procedure [dbo].[EC_Get_DepartmentsByCustomer]', 10, 1) WITH NOWAIT
+IF(OBJECT_ID('[dbo].[EC_Get_DepartmentsByCustomer]', 'P') IS NOT NULL)
+DROP PROCEDURE  [dbo].[EC_Get_DepartmentsByCustomer]
+GO
+CREATE PROCEDURE [dbo].[EC_Get_DepartmentsByCustomer]
+(@CustomerGuid uniqueIdentifier)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	
+	Declare @Customer_Id int
+	--set @Customer_Id = 1
+	select @Customer_Id = Id from tblCustomer where CustomerGUID = @CustomerGuid
+
+	if (@Customer_Id is not null)
+	begin
+
+			SELECT null as [Value], '' as [Text] UNION ALL
+			select Id As Value , Department As [TEXT]  from tblDepartment where Customer_id =  @Customer_Id and [Status] = 1  order by [TEXT] ASC
+	end
+	else
+	begin
+		SELECT null as [Value], '' as [Text]
+	end
+END
+GO
+
+
+RAISERROR ('Alter Stored procedure [dbo].[EC_Get_OusByDepartmentDs]', 10, 1) WITH NOWAIT
+IF(OBJECT_ID('[dbo].[EC_Get_OusByDepartmentDs]', 'P') IS NOT NULL)
+DROP PROCEDURE  [dbo].[EC_Get_OusByDepartmentDs]
+GO
+CREATE PROCEDURE [dbo].[EC_Get_OusByDepartmentDs](
+    @CustomerGuid uniqueIdentifier, 
+    @Department_Id int = 0-- need to send in this default value otherwise extended case gets error
+)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @Customer_Id int
+	SELECT @Customer_Id = Id FROM tblCustomer WHERE CustomerGUID = @CustomerGuid
+     
+	IF (@Customer_Id is null or @Department_Id = 0)
+	BEGIN
+		SELECT '' as Id, '' as OU, '' as Code
+	END
+	ELSE
+	BEGIN
+		SELECT '' as Id, '' as OU, '' as Code
+		UNION ALL
+        SELECT Cast(Id as nvarchar(10)), OU, Code
+        FROM tblOU
+        WHERE Department_Id = @Department_Id AND 
+	          Parent_OU_Id IS NULL AND 
+	          [Status] = 1 --AND 
+	         -- [Code] IS NOT NULL
+        ORDER BY OU ASC;	
+	END
+END
+GO
+
+RAISERROR ('Alter Stored procedure [dbo].[EC_Get_RegionsByCustomer]', 10, 1) WITH NOWAIT
+IF(OBJECT_ID('[dbo].[EC_Get_RegionsByCustomer]', 'P') IS NOT NULL)
+DROP PROCEDURE  [dbo].[EC_Get_RegionsByCustomer]
+GO
+CREATE PROCEDURE [dbo].[EC_Get_RegionsByCustomer]
+(@CustomerGuid uniqueIdentifier)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	
+	Declare @Customer_Id int
+	--set @Customer_Id = 1
+	select @Customer_Id = Id from tblCustomer where CustomerGUID = @CustomerGuid
+
+	if (@Customer_Id is not null)
+	begin
+
+			SELECT null as [Value], '' as [Text] UNION ALL
+			select Id As Value , Region As [TEXT]  from tblRegion where Customer_id =  @Customer_Id and [Status] = 1  order by [TEXT] ASC
+	end
+	else
+	begin
+		SELECT null as [Value], '' as [Text]
+	end
+END
+GO
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.53'
 GO
