@@ -210,7 +210,7 @@
                             && t.Language.Id == activeLanguages[i].Id && t.Prefix == "Message");
 
                         let translationText = (translation[0].TranslationText == null ? "" : translation[0].TranslationText);
-                        res = res + "<tr class='trTransField' data-dhhelpdesk-fileupload-text='true' data-dhhelpdesk-labelId='" + editfields.idName + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "'" + (activeLanguages[i].Id == document.getElementById("chosenLanguage").value ? "" : "style='display:none'") + "><td class='transField'>" + (isDefaultLanguage ? "" : "<br/>") + "<label for='" + editfields.idName + "label" + activeLanguages[i].Id + "'><span>@Translation.GetCoreTextTranslation("Fälttext") " + activeLanguages[i].LanguageId + " </span>" + (isDefaultLanguage ? "<span class='required-defaultLng'>*</span>" : "") + "</label></td><td>" + "<span class='spanDefaultLabelName'>" + (isDefaultLanguage ? "" : " (" + defaultLanguage.LanguageId + ") </span>" + " <span class='spanDefaultLabelName' id='defaultLabelName" + editfields.idName + "'>" + defaultLanguageValue) + "</span>" + "<input class='labelFieldTextName labelName' type='text' id='" + editfields.idName + "labelFieldText" + activeLanguages[i].Id + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "' data-dhhelpdesk-lang='" + activeLanguages[i].LanguageId + "' data-dhhelpdesk-controlType='" + editfields.controlType + "' data-dhhelpdesk-id='" + translation[0].Id + "' placeholder='" + translationText + "' value='" + (editfields.placeholderOnly ? "" : translationText) + "'></td></tr>"
+                        res = res + "<tr class='trTransField' data-dhhelpdesk-fileupload-text='true' data-dhhelpdesk-labelId='" + editfields.idName + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "'" + (activeLanguages[i].Id == document.getElementById("chosenLanguage").value ? "" : "style='display:none'") + "><td class='transField'>" + (isDefaultLanguage ? "" : "<br/>") + "<label for='" + editfields.idName + "label" + activeLanguages[i].Id + "'><span>@Translation.GetCoreTextTranslation("Fälttext") " + activeLanguages[i].LanguageId + " </span>" + (isDefaultLanguage ? "<span class='required-defaultLng'>*</span>" : "") + "</label></td><td>" + "<span class='spanDefaultLabelName'>" + (isDefaultLanguage ? "" : " (" + defaultLanguage.LanguageId + ") </span>" + " <span class='spanDefaultLabelName' id='defaultLabelName" + editfields.idName + "FieldText'>" + defaultLanguageValue) + "</span>" + "<input class='labelFieldTextName labelName' type='text' id='" + editfields.idName + "labelFieldText" + activeLanguages[i].Id + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "' data-dhhelpdesk-lang='" + activeLanguages[i].LanguageId + "' data-dhhelpdesk-controlType='" + editfields.controlType + "' data-dhhelpdesk-id='" + translation[0].Id + "' placeholder='" + translationText + "' value='" + (editfields.placeholderOnly ? "" : translationText) + "'></td></tr>"
                     }
 
                     if (editfields.controlType == "radio" || editfields.controlType == "checkbox-list" || editfields.controlType == "dropdown") {
@@ -286,7 +286,7 @@
 
                         case "fileupload":
                             editfields = { idName: idName, placeHolder: '@Html.Raw(Translation.GetCoreTextTranslation("Filuppladdning"))', controlType: "fileUpload", hasRequiredChk: true, isRequired: false, labelFields: [{ Text: '@Translation.GetCoreTextTranslation("Dra filer hit")' }], placeholderOnly: true };
-                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Filuppladdning")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'><input type='text' id=" + idName + "fileUploadText" + " value='"+ '@Translation.GetCoreTextTranslation("Dra filer hit")' + "' class='file-upload' readonly></div>" + editFieldHtml(editfields) + "</div>")
+                            draggedItem.html("<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Filuppladdning")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'><input type='text' id='" + idName + "fileUploadText' value='"+ '@Translation.GetCoreTextTranslation("Dra filer hit")' + "' class='file-upload' readonly></div>" + editFieldHtml(editfields) + "</div>")
                             break;
 
                         case "html":
@@ -575,7 +575,7 @@
                                     let currentLanguageFieldTextName = [...translations].filter(item => item.Language.Id == currentLanguageId && formData.tabs[t].sections[s].controls[c].addonText == item.Name);
 
                                     editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "fileUpload", hasRequiredChk: true, isRequired: false, labelFields: [{ Text: currentLanguageFieldTextName[0].Name }] };
-                                    $("#dropzone").append(listHtml(dataType, "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'><input type='text' id=" + idName + "fileUploadText" + " value='" + currentLanguageFieldTextName[0].TranslationText + "' class='file-upload' readonly></div>" + editFieldHtml(editfields) + "</div>"), null);
+                                    $("#dropzone").append(listHtml(dataType, "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'><input type='text' id='" + idName + "fileUploadText' value='" + currentLanguageFieldTextName[0].TranslationText + "' class='file-upload' readonly></div>" + editFieldHtml(editfields) + "</div>"), null);
                                 }
 
                                 else if (dataType == "radio") {
@@ -899,7 +899,7 @@
                     var required = document.getElementById(id.replace('header', 'required')) ? document.getElementById(id.replace('header', 'required')).checked : false;
                     var content = contentSummerNote ? 'function(m) { return ' + contentSummerNote + ' }' : "";
 
-                    var fileuploadText = document.getElementById(id.replace('header', 'fileUploadText')) != null ? document.getElementById(id.replace('header', 'fileUploadText')).value : '';
+                    var fileuploadText = document.getElementById(id.replace('header', 'labelFieldText') + defaultLanguage.Id) != null ? document.getElementById(id.replace('header', 'labelFieldText') + defaultLanguage.Id).value : '';
                     var fTranslations = obj.querySelectorAll(".trTransField");
 
                     var fTranslationsProperty = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguage.Id);
@@ -908,17 +908,19 @@
                     if (fTranslationsProperty.length > 1) {
                         dataSrc = [];
 
-                        let optionLst = fTranslationsProperty[1].querySelector('.selectOptions').getElementsByTagName("li");
+                        if (fTranslationsProperty[1].querySelector('.selectOptions') !== null) {
+                            let optionLst = fTranslationsProperty[1].querySelector('.selectOptions').getElementsByTagName("li");
 
-                        for (let o = 0; o < optionLst.length; o++) {
-                            let optionId;
-                            let savedId = optionLst[o].getAttribute('data-dhhelpdesk-savedid');
+                            for (let o = 0; o < optionLst.length; o++) {
+                                let optionId;
+                                let savedId = optionLst[o].getAttribute('data-dhhelpdesk-savedid');
 
-                            let newId = 'lst' + optionLst[o].getAttribute('data-dhhelpdesk-listid') + '_' + optionLst[o].querySelectorAll('.labelName')[0].value;
-                            optionId = savedId != null ? savedId : newId;
+                                let newId = 'lst' + optionLst[o].getAttribute('data-dhhelpdesk-listid') + '_' + optionLst[o].querySelectorAll('.labelName')[0].value;
+                                optionId = savedId != null ? savedId : newId;
 
-                            let option = optionLst[o].querySelector('.labelName');
-                            dataSrc.push({ value: optionId, text: option.value })
+                                let option = optionLst[o].querySelector('.labelName');
+                                dataSrc.push({ value: optionId, text: option.value })
+                            }
                         }
                     }
 
@@ -938,11 +940,11 @@
                     }
 
                     let fieldTextTranslations = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-fileupload-text') == "true");
-
+                    
                     if (fieldTextTranslations.length > 0) {
-
+                        
                         let idFileUploadText = fieldTextTranslations[0].querySelector('.labelName').value;
-
+                        
                         for (let t = 0; t < fieldTextTranslations.length; t++) {
                             let fTranslation = fieldTextTranslations[t].querySelector('.labelName');
                             let translation = {};
@@ -1089,7 +1091,6 @@
                 //    ShowToastMessage(, "error");
                 //}
                 });
-
             }
 
         function checkForDuplicates(array) {
@@ -1149,7 +1150,8 @@
                     let id;
                     var transFields = $(this).find('.trTransField');
                     let defaultLangLabelName = "";
-
+                    let defaultLangLabelFieldTextName = "";
+                    
                     for (let i = 0; i < transFields.length; i++) {
 
                         if (transFields[i].getAttribute('data-dhhelpdesk-langid') == opt.value) {
@@ -1164,6 +1166,7 @@
                             else {
                                 if (transFields[i].getAttribute('data-dhhelpdesk-options') == null) {
                                     if (lables.length > 0) {
+
                                         lblNameText = lables[0].value;
                                     }
                                 }
@@ -1178,7 +1181,12 @@
                                 let lables = $(transFields[i]).find('.labelName');
 
                                 if (lables.length > 0) {
-                                    defaultLangLabelName = lables[0].value;
+                                    if (lables[0].id.includes("FieldText")) {
+                                        defaultLangLabelFieldTextName = lables[0].value;
+                                    }
+                                    else {
+                                        defaultLangLabelName = lables[0].value;
+                                    }
                                 }
                             }
                         }
@@ -1214,6 +1222,10 @@
 
                     if (document.getElementById('defaultLabelName' + id) != null) {
                         document.getElementById('defaultLabelName' + id).innerHTML = defaultLangLabelName;
+                    }
+
+                    if (document.getElementById('defaultLabelName' + id + 'FieldText') != null) {
+                        document.getElementById('defaultLabelName' + id + 'FieldText').innerHTML = defaultLangLabelFieldTextName;
                     }
 
                     if (document.getElementById(id + 'headerName') != null) {
