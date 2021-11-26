@@ -382,7 +382,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         if (t.TranslationId != 0)
                         {
                             var updatedTranslation = DataContext.ExtendedCaseTranslations.FirstOrDefault(x => x.Id == t.TranslationId);
-                            //var updatedTranslation = DataContext.ExtendedCaseTranslations.Where(u => u.Property == controlId && u.LanguageId == t.LanguageId).FirstOrDefault();
+                            
                             updatedTranslation.Property = controlId;
                             updatedTranslation.Text = t.Text ?? "";
                             updatedTranslation.ExtendedCaseForm_Id = entity.id;
