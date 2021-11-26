@@ -152,9 +152,9 @@
 
         $('#formtab-editheaderName')[0].innerHTML = '@Translation.GetCoreTextTranslation("Fliknamn")';
 
-        let optionListItem = (idName, option, activeLanguage, controlType, savedId) => "<li " + (savedId != null ? "data-dhhelpdesk-savedId='" + option.id + "' data-dhhelpdesk-listId='" + option.id.split("_")[0].replace(/[^0-9]/gi, '') : " data-dhhelpdesk-listId='" + option.id) + "' data-dhhelpdesk-controlId='" + idName + "' data-dhhelpdesk-langId='" + activeLanguage.Id + "'>" + optionInput(idName, option, activeLanguage, controlType) + "</li>"
+        let optionListItem = (idName, option, activeLanguage, controlType, savedId, optionsCount) => "<li " + (savedId != null ? "data-dhhelpdesk-savedId='" + option.id + "' data-dhhelpdesk-listId='" + option.id.split("_")[0].replace(/[^0-9]/gi, '') : " data-dhhelpdesk-listId='" + option.id) + "' data-dhhelpdesk-controlId='" + idName + "' data-dhhelpdesk-langId='" + activeLanguage.Id + "'>" + optionInput(idName, option, activeLanguage, controlType, optionsCount) + "</li>"
 
-        let optionInput = (idName, option, activeLanguage, controlType) => {
+        let optionInput = (idName, option, activeLanguage, controlType, optionsCount) => {
             let isDefaultLanguage = activeLanguage.Id == defaultLanguage.Id;
             let translation = [...translations].filter(t => getStringWithoutSpecialChars(getStringWithoutSweChars(t.Name)) == getStringWithoutSpecialChars(getStringWithoutSweChars(option.name))
                 && t.Language.Id == activeLanguage.Id && t.Prefix == "DataSource.Value");
@@ -164,7 +164,7 @@
 
             let optionTranslation = translation[0].TranslationText + (translation[0].Name == "Val" ? (" " + option.id) : "");
             let optionDefaultLangTranslation = defaultLanguageValue[0].TranslationText + (defaultLanguageValue[0].Name == "Val" ? (" " + option.id) : "");
-            return "<div>" + (isDefaultLanguage ? "" : "<span class='spanDefaultOptionName'>" + " (" + defaultLanguage.LanguageId + ") </span>" + " <span class='spanDefaultOptionName' id='defaultOptionLabel_" + idName + "_Item_" + (option.listId != null ? option.listId : option.id) + "_Lang_" + activeLanguage.Id + "'>" + optionDefaultLangTranslation + "</span><br/>") + "</div><input class='labelName' type='text' id='" + idName + "label" + activeLanguage.Id + "' data-dhhelpdesk-isoption='true' data-dhhelpdesk-langId='" + activeLanguage.Id + "' data-dhhelpdesk-controlType='" + controlType + "' style='width:95%' type='text' value='" + (option.placeholderOnly ? "" : optionTranslation) + "' placeholder='" + optionTranslation + "'><span><a class='fa fa-trash fa-lg option' style='color:black' aria-hidden='true'></a></span>";
+            return "<div>" + (isDefaultLanguage ? "" : "<span class='spanDefaultOptionName'>" + " (" + defaultLanguage.LanguageId + ") </span>" + " <span class='spanDefaultOptionName' id='defaultOptionLabel_" + idName + "_Item_" + (option.listId != null ? option.listId : option.id) + "_Lang_" + activeLanguage.Id + "'>" + optionDefaultLangTranslation + "</span><br/>") + "</div><input class='labelName' type='text' id='" + idName + "label" + activeLanguage.Id + "' data-dhhelpdesk-isoption='true' data-dhhelpdesk-langId='" + activeLanguage.Id + "' data-dhhelpdesk-controlType='" + controlType + "' style='width:95%' type='text' value='" + (option.placeholderOnly ? "" : optionTranslation) + "' placeholder='" + optionTranslation + "'><span><a class='fa fa-trash fa-lg option' href='#' style='color:black; " + (optionsCount == 1 ? "display:none" : "") + "' aria-hidden='true'></a></span>";
         };
 
         let selectionHtml = (idName, activeLanguage, isDefaultLanguage, options, controlType, savedId) => {
@@ -173,7 +173,7 @@
                 let res = "<tr class='table-light'><td style='width:100%'><ul class='selectOptions" + selectionCls + "' data-dhhelpdesk-controlId='" + idName + "' data-dhhelpdesk-langId='" + activeLanguage.Id + "'>";
                 for (let o = 0; o < options.length; o++) {
                     //res = res + "<tr class='table-light'><td style='width:5%'><span aria-hidden='true'><i class='fa fa-circle'></i></span></td><td style='width:100%'><input type='text' placeholder='" + options[o] + "'></td><td><a class='fa fa-trash fa-lg' style='color:black' aria-hidden='true'></a></td></tr>"
-                    res = res + optionListItem(idName, options[o], activeLanguage, controlType, savedId);
+                    res = res + optionListItem(idName, options[o], activeLanguage, controlType, savedId, options.length);
                 }
                 res = res + "</ul></td></tr>";
                 //res = res + "<div style='border: 1px solid black; margin-left:5px:margin-right:5px'><ul><li><input style='width:95%' type='text' placeholder='Option 1'><span><a class='fa fa-trash fa-lg' style='color:black' aria-hidden='true'></a></span></li></ul></div>"
@@ -422,37 +422,48 @@
             let list = $(document).find(".selectOptions")
                 .filter('[data-dhhelpdesk-controlId= ' + controlId + ']');
 
-            if (savedId != null && extendedCaseFormInCases == 'True') {
-                var dlg = new ConfirmationDialog();
-                var opts = {
-                    dlgText: '@Html.Raw(Translation.GetForJS(Translation.GetCoreTextTranslation("Formuläret används på minst ett ärende. Borttagning av fält/sektion påverkar existerande ärenden. Är du säker på att du vill ta bort") +"?"))',
-                    btnYesText: '@Translation.GetForJS("Ja")',
-                    btnNoText: '@Translation.GetForJS("Nej")',
-                    onClick: function (button) {
-                        if (button === ConfirmationDialog.YES) {
-                            for (let l = 0; l < list.length; l++) {
-                                let listOfChoices = [...list[l].children].filter(item => item.getAttribute('data-dhhelpdesk-listId') == listId);
+            if (list[0].childElementCount > 1) {
 
-                                for (let c = 0; c < listOfChoices.length; c++) {
-                                    listOfChoices[c].remove();
+                if (savedId != null && extendedCaseFormInCases == 'True') {
+                    var dlg = new ConfirmationDialog();
+                    var opts = {
+                        dlgText: '@Html.Raw(Translation.GetForJS(Translation.GetCoreTextTranslation("Formuläret används på minst ett ärende. Borttagning av fält/sektion påverkar existerande ärenden. Är du säker på att du vill ta bort") +"?"))',
+                        btnYesText: '@Translation.GetForJS("Ja")',
+                        btnNoText: '@Translation.GetForJS("Nej")',
+                        onClick: function (button) {
+                            if (button === ConfirmationDialog.YES) {
+                                for (let l = 0; l < list.length; l++) {
+                                    let listOfChoices = [...list[l].children].filter(item => item.getAttribute('data-dhhelpdesk-listId') == listId);
+
+                                    for (let c = 0; c < listOfChoices.length; c++) {
+                                        listOfChoices[c].remove();
+                                    }
                                 }
+                                dlg.hide();
                             }
-                            dlg.hide();
+                            else {
+                                dlg.hide();
+                            }
                         }
-                        else {
-                            dlg.hide();
+                    }
+                    dlg.init(opts);
+                    dlg.show();
+                }
+                else {
+                    for (let l = 0; l < list.length; l++) {
+                        let listOfChoices = [...list[l].children].filter(item => item.getAttribute('data-dhhelpdesk-listId') == listId);
+
+                        for (let c = 0; c < listOfChoices.length; c++) {
+                            listOfChoices[c].remove();
                         }
                     }
                 }
-                dlg.init(opts);
-                dlg.show();
-            }
-            else {
-                for (let l = 0; l < list.length; l++) {
-                    let listOfChoices = [...list[l].children].filter(item => item.getAttribute('data-dhhelpdesk-listId') == listId);
-
-                    for (let c = 0; c < listOfChoices.length; c++) {
-                        listOfChoices[c].remove();
+                if (list[0].childElementCount == 1) {
+                    for (let l = 0; l < list.length; l++) {
+                        let listOfChoices = [...list[l].children];
+                        for (let c = 0; c < listOfChoices.length; c++) {
+                            listOfChoices[c].getElementsByClassName('fa-trash')[0].style.display = 'none';
+                        }
                     }
                 }
             }
@@ -493,10 +504,13 @@
                 li.setAttribute('data-dhhelpdesk-listid', nextListItemId);
                 li.setAttribute('data-dhhelpdesk-controlid', controlId);
                 li.setAttribute('data-dhhelpdesk-langid', activeLanguageId);
-                li.innerHTML = optionInput(controlId, option, activeLanguage, controlType);
+                li.innerHTML = optionInput(controlId, option, activeLanguage, controlType, count + 1);
                 listOfChoices[l].appendChild(li);
-            }
 
+                if (listOfChoices[l].childElementCount == 2) {
+                    listOfChoices[l].getElementsByClassName('fa-trash')[0].style.display = 'inline';
+                }
+            }
         });
 
 
@@ -1050,7 +1064,7 @@
                     tabs: tabs,
                     translations: fieldTranslations
                 };
-        
+
                 $.ajax({
                     url: "/admin/ExtendedCase/SaveForm",
                     type: "POST",
@@ -1533,7 +1547,7 @@
     }
 
     .selectOptions.checkboxlst li:before {
-        content: "\f096"; 
+        content: "\f096";
         font-family: FontAwesome;
         display: inline-block;
         margin-left: -1.3em;
