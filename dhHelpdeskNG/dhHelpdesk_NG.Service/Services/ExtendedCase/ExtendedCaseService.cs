@@ -183,7 +183,8 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
         public int SaveExtendedCaseForm(ExtendedCaseFormPayloadModel payload, string userId)
         {
             List<SectionElement> sectionLst = GetExtendedCaseFormSections(payload);
-            sectionLst.AddRange(GetInitiatorSectionsData(payload));
+            //sectionLst.AddRange(GetInitiatorSectionsData(payload));
+            sectionLst.Add(new SectionElement() { id = "InitiatorSectionData", controls = new List<ControlElement>() });
 
             var formName = "Formulär";
             var entity = new ExtendedCaseFormJsonModel()

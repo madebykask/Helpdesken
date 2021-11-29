@@ -503,12 +503,16 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                             });
 
             var metaData =      data.Replace(@"""function(", @" function(")
-                                .Replace(@" > }""", @">"";}")
-                                .Replace(@"\""", @"""")
-                                .Replace(@"; }""", @"; }")
-                                .Replace(@"\n", "")
-                                .Replace(@"tabs.EditorInitiator.", "tabs." + entity.tabs[0].id + ".");
+                                .Replace(@"function(m) { return <", @"function(m) { return ""<")
+                                .Replace(@"> }""", @">"";}")
+                                .Replace(@"\""", String.Empty)
+                                //.Replace(@"; }""", @"; }")
+                                //.Replace(@"\n", "")
+                                .Replace(@"tabs.EditorInitiator.", "tabs." + entity.tabs[0].id + ".")
+                                .Replace("{\"id\":\"InitiatorSectionData_" + entity.id.ToString() + "\",\"name\":\"@Translation.Section.InitiatorSectionData_" + entity.id.ToString() + "\",\"controls\":[]}", ExtendedCaseFormsHelper.GetEditorInitiatorData(entity.tabs[0].id, entity.customerGuid) + "]}");
 
+           
+            
             res.MetaData = metaData;
 
             if (entity.caseSolutionIds != null)
