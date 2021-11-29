@@ -453,6 +453,33 @@ BEGIN
 END
 GO
 
+RAISERROR ('Add Control.Infofalt Swedish to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 1 AND Property = 'Control.Infofalt')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (1
+           ,'Control.Infofalt'
+           ,'Infofält')
+		   END
+GO
+RAISERROR ('Add Control.Infofalt English to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 2 AND Property = 'Control.Infofalt')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (2
+           ,'Control.Infofalt'
+           ,'Info Field')
+		   END
+GO
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.53'
 GO
