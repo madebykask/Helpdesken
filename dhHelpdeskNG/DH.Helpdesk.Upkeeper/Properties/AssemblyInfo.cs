@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
+// Changed assembly Title and Product 211129 //Katta
 [assembly: AssemblyTitle("DH.Helpdesk.Upkeeper")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
