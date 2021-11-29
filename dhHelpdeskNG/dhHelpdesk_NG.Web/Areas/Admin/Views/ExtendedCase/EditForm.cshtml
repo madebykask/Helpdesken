@@ -205,7 +205,7 @@
                     }
 
                     if (editfields.controlType == "html") {
-                        res += "<tr class='trTransField' data-dhhelpdesk-labelId='" + editfields.idName + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "'" + (activeLanguages[i].Id == document.getElementById("chosenLanguage").value ? "" : "style='display:none;'") + "><td style='width:100%' class='transField'>" + summerNoteConfig(editfields.idName + activeLanguages[i].Id, '') + "</td></tr>";
+                        res += "<tr class='trTransField' data-dhhelpdesk-labelId='" + editfields.idName + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "'" + (activeLanguages[i].Id == document.getElementById("chosenLanguage").value ? "" : "style='display:none;'") + "><td style='width:100%' class='transField'>" + summerNoteConfig(editfields.idName + activeLanguages[i].Id, translationText) + "</td></tr>";
                     }
                     else {
                         res += "<tr class='trTransField' data-dhhelpdesk-labelId='" + editfields.idName + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "'" + (activeLanguages[i].Id == document.getElementById("chosenLanguage").value ? "" : "style='display:none'") + "><td class='transField'>" + (isDefaultLanguage ? "" : "<br/>") + "<label for='" + editfields.idName + "label" + activeLanguages[i].Id + "'><span>@Translation.GetCoreTextTranslation("Fältetikett") " + activeLanguages[i].LanguageId + " </span>" + (isDefaultLanguage ? "<span class='required-defaultLng'>*</span>" : "") + "</label></td><td>" + "<span class='spanDefaultLabelName'>" + (isDefaultLanguage ? "" : " (" + defaultLanguage.LanguageId + ") </span>" + " <span class='spanDefaultLabelName' id='defaultLabelName" + editfields.idName + "'>" + defaultLanguageValue) + "</span>" + "<input class='labelName' type='text' id='" + editfields.idName + "label" + activeLanguages[i].Id + "' data-dhhelpdesk-langId='" + activeLanguages[i].Id + "' data-dhhelpdesk-lang='" + activeLanguages[i].LanguageId + "' data-dhhelpdesk-controlType='" + editfields.controlType + "' data-dhhelpdesk-id='" + translation[0].Id + "' placeholder='" + translationText + "' value='" + (editfields.placeholderOnly ? "" : translationText) + "'></td></tr>"
@@ -368,6 +368,7 @@
         });
 
         $(document).on("click", ".fa-trash.head", function () {
+
             let savedId = $(this).closest(".field").attr('data-dhhelpdesk-savedid');
             let obj = $(this)
             if (savedId != null && extendedCaseFormInCases == 'True') {
@@ -621,7 +622,9 @@
                                 }
 
                                 else if (dataType = "html") {
-                                    $("#dropzone").append(listHtml("html", "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + '@Html.Raw(Translation.GetForJS(Translation.GetCoreTextTranslation("Infofält")))' + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control' style='padding:10px'>" + summerNoteConfig(idName, formData.tabs[t].sections[s].controls[c].valueBinding) + "</div></div>"));
+                                    
+                                    editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "html", hasRequiredChk: false, isRequired: false, labelFields: null, placeholderOnly: true };
+                                    $("#dropzone").append(listHtml("html", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Infofält")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + divHeaderActions(idName) + "</div><div class='control' id='" + idName + "_control'</div><p class='form-control form-control-width' readonly></p></div>" + editFieldHtml(editfields) + "</div>"));
                                 }
 
                                 if (isRequired) {
@@ -1006,7 +1009,7 @@
                     }
 
                     let fieldLabelTranslations = [...fTranslations].filter(item => !fieldTextTranslations.includes(item) && !optionTextTranslations.includes(item));
-                    
+
                     if (fieldLabelTranslations.length > 0) {
                         for (let f = 0; f < fieldLabelTranslations.length; f++) {
                             let lTranslation;
@@ -1098,7 +1101,7 @@
                     tabs: tabs,
                     translations: fieldTranslations
             };
-        
+
             $.ajax({
                 url: "/admin/ExtendedCase/SaveForm",
                 type: "POST",
