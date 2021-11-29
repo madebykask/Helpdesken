@@ -18,7 +18,7 @@ namespace DH.Helpdesk.Upkeeper_New
         static void Main(string[] args)
         {
             StreamWriter writer = null;
-            string logfilepath = System.Reflection.Assembly.GetExecutingAssembly().Location.ToString().Replace("\\DH.Helpdesk.Upkeeper_New.exe", "") + "\\logfiles\\";
+            string logfilepath = System.Reflection.Assembly.GetExecutingAssembly().Location.ToString().Replace("\\DH.Helpdesk.Upkeeper.exe", "") + "\\logfiles\\";
             if (!Directory.Exists(logfilepath))
             {
                 Directory.CreateDirectory(logfilepath);
