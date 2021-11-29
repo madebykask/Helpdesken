@@ -189,6 +189,7 @@
             var accountingDimension4 = CreateFieldSetting(entity.FindByName(ContractFields.AccountingDimension4));
             var accountingDimension5 = CreateFieldSetting(entity.FindByName(ContractFields.AccountingDimension5));
             var document = CreateFieldSetting(entity.FindByName(ContractFields.Document));
+            var warrantyEndDate = CreateFieldSetting(entity.FindByName(ContractFields.WarrantyEndDate));
 
             var settings = new ContractFieldsSettings(
                 contractStatusName,
@@ -201,7 +202,8 @@
                 accountingDimension3,
                 accountingDimension4,
                 accountingDimension5,
-                document);
+                document,
+                warrantyEndDate);
 
             return settings;
         }

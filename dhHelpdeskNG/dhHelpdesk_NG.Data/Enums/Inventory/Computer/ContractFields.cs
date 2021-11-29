@@ -8,6 +8,8 @@
 
         public static readonly string ContractStartDate = "ContractStartDate";
 
+        public static readonly string WarrantyEndDate = "WarrantyEndDate";
+
         public static readonly string ContractEndDate = "ContractEndDate";
 
         public static readonly string PurchasePrice = "Price";

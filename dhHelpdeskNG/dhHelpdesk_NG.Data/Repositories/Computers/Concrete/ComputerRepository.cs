@@ -239,7 +239,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                     anonymus.Entity.AccountingDimension3,
                     anonymus.Entity.AccountingDimension4,
                     anonymus.Entity.AccountingDimension5,
-                    anonymus.Entity.ComputerFileName);
+                    anonymus.Entity.ComputerFileName,
+                    anonymus.Entity.WarrantyEndDate);
 
             var contactInfo = new BusinessData.Models.Inventory.Edit.Computer.ContactInformationFields(
                 anonymus.UserId,

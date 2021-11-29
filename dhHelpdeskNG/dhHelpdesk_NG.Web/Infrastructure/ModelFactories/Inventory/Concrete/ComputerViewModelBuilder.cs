@@ -406,6 +406,11 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     settings.InventoryFieldsSettings.PurchaseDateFieldSetting,
                     model.InventoryFields.PurchaseDate);
 
+            var warrantyEndDate =
+                CreateNullableDateTimeField(
+                    settings.ContractFieldsSettings.WarrantyEndDateFieldSettings,
+                    model.ContractFields.WarrantyEndDate);
+
 
             var document = CreateStringField(settings.ContractFieldsSettings.DocumentFieldSetting, model.ContractFields.Document);
 
@@ -421,7 +426,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 accounting4,
                 accounting5, 
                 document,
-                purchaseDate);
+                purchaseDate,
+                warrantyEndDate);
 
             var contractStatuses =
                 CreateSelectListField(
@@ -725,6 +731,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var accounting5 = CreateStringField(settings.ContractFieldsSettings.AccountingDimension5FieldSetting, null);
             var document = CreateStringField(settings.ContractFieldsSettings.DocumentFieldSetting, null);
             var purchaseDate = CreateNullableDateTimeField(settings.InventoryFieldsSettings.PurchaseDateFieldSetting, null);
+            var warrantyEndDate = CreateNullableDateTimeField(settings.ContractFieldsSettings.WarrantyEndDateFieldSettings, null);
 
             var contractFieldsModel = new ContractFieldsModel(
                 contractStatus,
@@ -738,7 +745,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 accounting4,
                 accounting5,
                 document,
-                purchaseDate);
+                purchaseDate,
+                warrantyEndDate);
 
             var contractStatuses = CreateSelectListField(
                 settings.ContractFieldsSettings.ContractStatusFieldSetting,

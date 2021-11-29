@@ -293,6 +293,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var accountingDimension3 = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.ContractFieldsModel.AccountingDimension3);
             var accountingDimension4 = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.ContractFieldsModel.AccountingDimension4);
             var accountingDimension5 = ConfigurableFieldModel<string>.GetValueOrDefault(fieldsModel.ContractFieldsModel.AccountingDimension5);
+            var warrantyEndDate = ConfigurableFieldModel<DateTime?>.GetValueOrDefault(fieldsModel.ContractFieldsModel.WarrantyEndDate);
 
             var fields = new ContractFields(
                 contractStatusName,
@@ -305,6 +306,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 accountingDimension3,
                 accountingDimension4,
                 accountingDimension5,
+                null,
                 null);
 
             return fields;

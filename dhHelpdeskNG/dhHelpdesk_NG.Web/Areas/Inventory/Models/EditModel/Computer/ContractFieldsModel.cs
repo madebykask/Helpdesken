@@ -22,7 +22,8 @@
             ConfigurableFieldModel<string> accountingDimension4,
             ConfigurableFieldModel<string> accountingDimension5,
             ConfigurableFieldModel<string> document,
-            ConfigurableFieldModel<DateTime?> purchaseDate)
+            ConfigurableFieldModel<DateTime?> purchaseDate,
+            ConfigurableFieldModel<DateTime?> warrantyenddate)
         {
             this.ContractStatusId = contractStatusId;
             this.ContractNumber = contractNumber;
@@ -35,6 +36,7 @@
             this.AccountingDimension3 = accountingDimension3;
             this.AccountingDimension4 = accountingDimension4;
             this.AccountingDimension5 = accountingDimension5;
+            this.WarrantyEndDate = warrantyenddate;
             this.Document = document;
         }
 
@@ -70,6 +72,8 @@
 
         [NotNull]
         public ConfigurableFieldModel<string> AccountingDimension5 { get; set; }
+        [NotNull]
+        public ConfigurableFieldModel<DateTime?> WarrantyEndDate { get; set; }
 
         [NotNull]
         public ConfigurableFieldModel<string> Document { get; set; }

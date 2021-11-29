@@ -15,7 +15,8 @@
             FieldSetting accountingDimension3FieldSetting,
             FieldSetting accountingDimension4FieldSetting,
             FieldSetting accountingDimension5FieldSetting,
-            FieldSetting documentFieldSetting)
+            FieldSetting documentFieldSetting,
+            FieldSetting warrantyEndDateFieldSetting)
         {
             this.ContractStatusFieldSetting = contractStatusFieldSetting;
             this.ContractNumberFieldSetting = contractNumberFieldSetting;
@@ -28,6 +29,7 @@
             this.AccountingDimension4FieldSetting = accountingDimension4FieldSetting;
             this.AccountingDimension5FieldSetting = accountingDimension5FieldSetting;
             this.DocumentFieldSetting = documentFieldSetting;
+            this.WarrantyEndDateFieldSetting = warrantyEndDateFieldSetting;
         }
 
         [NotNull]
@@ -62,5 +64,8 @@
 
         [NotNull]
         public FieldSetting DocumentFieldSetting { get; set; }
+
+        [NotNull]
+        public FieldSetting WarrantyEndDateFieldSetting { get; set; }
     }
 }
