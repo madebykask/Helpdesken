@@ -286,8 +286,8 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
                 entity.id = res.Id;
             }
-            
-            foreach(var tab in entity.tabs)
+
+            foreach (var tab in entity.tabs)
             {
                 string tabId = tab.id;
                 var cleanTabName = StringHelper.GetCleanString(tab.id);
@@ -329,7 +329,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             }
 
 
-            foreach (var s in entity.tabs[0].sections.Where(x=> x.id != "InitiatorInfo" && x.id != "HiddenFields"))
+            foreach (var s in entity.tabs[0].sections.Where(x => x.id != "InitiatorInfo" && x.id != "HiddenFields"))
             {
                 string sectionId = s.id;
                 var cleanSectionName = StringHelper.GetCleanString(s.id);
@@ -379,12 +379,15 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
                     foreach (var t in translations.Where(x => x.ControlType != "Section" && StringHelper.GetCleanString(x.Property) == cleanControlName))
                     {
+
+                        var text = c.valueBinding != null ? t.Text.Replace(@"""", String.Empty) : (t.Text ?? "");
+
                         if (t.TranslationId != 0)
                         {
                             var updatedTranslation = DataContext.ExtendedCaseTranslations.FirstOrDefault(x => x.Id == t.TranslationId);
-                            
+
                             updatedTranslation.Property = controlId;
-                            updatedTranslation.Text = t.Text ?? "";
+                            updatedTranslation.Text = text;
                             updatedTranslation.ExtendedCaseForm_Id = entity.id;
                         }
                         else if (DataContext.ExtendedCaseTranslations.Where(ct => ct.Property == controlId && t.LanguageId == ct.LanguageId).Count() == 0)
@@ -394,20 +397,25 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                             {
                                 LanguageId = t.LanguageId,
                                 Property = controlId,
-                                Text = t.Text ?? "",
+                                Text = text,
                                 ExtendedCaseForm_Id = entity.id
                             });
                         }
                         else
                         {
                             var updatedTranslation = DataContext.ExtendedCaseTranslations.Where(u => u.Property == controlId && u.LanguageId == t.LanguageId).FirstOrDefault();
-                            updatedTranslation.Text = t.Text ?? "";
+                            updatedTranslation.Text = text;
                             updatedTranslation.ExtendedCaseForm_Id = entity.id;
                         }
                         DataContext.Commit();
                     }
                     c.label = "@Translation." + controlId;
                     c.id = controlNameWithFormId;
+
+                    if (c.valueBinding != null)
+                    {
+                        c.valueBinding = "function(m) { return \"" + "@Translation." + controlId + ";" + "\"" + " }";
+                    }
 
                     if (!String.IsNullOrEmpty(c.addonText))
                     {
@@ -422,7 +430,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                             if (t.TranslationId != 0)
                             {
                                 var updatedTranslation = DataContext.ExtendedCaseTranslations.FirstOrDefault(x => x.Id == t.TranslationId);
-                                //var updatedTranslation = DataContext.ExtendedCaseTranslations.Where(u => u.Property == controlId && u.LanguageId == t.LanguageId).FirstOrDefault();
+                                
                                 updatedTranslation.Property = addOnTextId;
                                 updatedTranslation.Text = t.Text ?? "";
                                 updatedTranslation.ExtendedCaseForm_Id = entity.id;
@@ -449,9 +457,9 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         c.addonText = "@Translation." + addOnTextId;
                     }
 
-                    if(c.dataSource != null) 
+                    if (c.dataSource != null)
                     {
-                        foreach(var d in c.dataSource)
+                        foreach (var d in c.dataSource)
                         {
                             var dataSourceTextId = d.value;
                             var cleanDataSourceText = StringHelper.GetCleanString(dataSourceTextId);
@@ -464,7 +472,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                                 if (t.TranslationId != 0)
                                 {
                                     var updatedTranslation = DataContext.ExtendedCaseTranslations.FirstOrDefault(x => x.Id == t.TranslationId);
-                                    //var updatedTranslation = DataContext.ExtendedCaseTranslations.Where(u => u.Property == controlId && u.LanguageId == t.LanguageId).FirstOrDefault();
+                                    
                                     updatedTranslation.Property = dataSourceTextId;
                                     updatedTranslation.Text = t.Text ?? "";
                                     updatedTranslation.ExtendedCaseForm_Id = entity.id;
@@ -488,7 +496,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                                 }
                                 DataContext.Commit();
                             }
-                            d.text= "@Translation." + dataSourceTextId;
+                            d.text = "@Translation." + dataSourceTextId;
                             d.value = cleanDataSourceTextWithFormId;
                         }
                     }
@@ -502,17 +510,16 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                                 NullValueHandling = NullValueHandling.Ignore
                             });
 
-            var metaData =      data.Replace(@"""function(", @" function(")
-                                .Replace(@"function(m) { return <", @"function(m) { return ""<")
+            var metaData = data.Replace(@"\""", String.Empty)
+                                .Replace(@"""function(m) { return ", @"function(m) { return """)
                                 .Replace(@"> }""", @">"";}")
-                                .Replace(@"\""", String.Empty)
-                                //.Replace(@"; }""", @"; }")
-                                //.Replace(@"\n", "")
+                                .Replace(@"; }"",", @""" },")
+
                                 .Replace(@"tabs.EditorInitiator.", "tabs." + entity.tabs[0].id + ".")
                                 .Replace("{\"id\":\"InitiatorSectionData_" + entity.id.ToString() + "\",\"name\":\"@Translation.Section.InitiatorSectionData_" + entity.id.ToString() + "\",\"controls\":[]}", ExtendedCaseFormsHelper.GetEditorInitiatorData(entity.tabs[0].id, entity.customerGuid) + "]}");
 
-           
-            
+
+
             res.MetaData = metaData;
 
             if (entity.caseSolutionIds != null)
@@ -582,13 +589,6 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
         {
             if (DataContext.ExtendedCaseForms.Where(o => o.Id == extendedCaseFormId).FirstOrDefault() is ExtendedCaseFormEntity entity)
             {
-                //foreach (var c in entity.CaseSolutions)
-                //{
-
-                //DataContext.CaseSolutions.Where(x => x.Id == c.Id).FirstOrDefault().ExtendedCaseForms.Remove(entity);
-
-                //DataContext.Commit();
-                //}
 
                 DataContext.ExtendedCaseForms.Remove(entity);
 

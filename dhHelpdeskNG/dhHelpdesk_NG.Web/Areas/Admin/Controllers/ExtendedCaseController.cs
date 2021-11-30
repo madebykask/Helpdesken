@@ -169,6 +169,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var secondIndex = metaData.IndexOf("\"name\":\"@Translation.Tab") - firstIndex;
             string firstTabName = metaData.Substring(firstIndex, secondIndex - 2);
             metaData = metaData.Replace("]},"+ ExtendedCaseFormsHelper.GetEditorInitiatorData(firstTabName, viewModel.Customer.CustomerGUID.ToString()), "");
+            metaData = metaData.Replace(@""" },""dataSource", @" "",""dataSource");
 
             viewModel.FormFields = JsonConvert.DeserializeObject<ExtendedCaseFormJsonModel>(metaData);
             viewModel.FieldTranslations = _languageService.GetExtendedCaseTranslations(viewModel.FormFields, languageId, initialTranslations);
