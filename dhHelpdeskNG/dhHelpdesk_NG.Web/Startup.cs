@@ -47,8 +47,8 @@ namespace DH.Helpdesk.Web.App_Start
                 CookieSameSite = SameSiteMode.None,
                 CookieSecure = CookieSecureOption.Always,
                 CookieName ="HDCookie",
-                SlidingExpiration = false,
-                ExpireTimeSpan = TimeSpan.FromHours(2.0),
+                //SlidingExpiration = true,
+                //ExpireTimeSpan = TimeSpan.FromHours(3.0)
                 //LoginPath = new PathString("/Login/Login")
             };
             app.UseCookieAuthentication(cookieOptions);
