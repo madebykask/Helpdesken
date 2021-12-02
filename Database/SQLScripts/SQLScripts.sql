@@ -125,7 +125,6 @@ BEGIN
 	select top 1 
 	     @Id = ISNULL(Id, 0),
 	   	@DepartmentId = ISNULL(Department_Id, 0),
-		--@OU_Id = ISNULL(OU_Id, 0) -- OU is it ok to use it instead?		
 		@OU_Id = OU_Id
 	from tblComputerUsers cu 
 	where cu.Customer_Id = @customerId
@@ -149,7 +148,6 @@ BEGIN
 	   -- OU
 	   IF (@OU_Id > 0)
 	   BEGIN 
-	    --SELECT @OU = OU FROM tblOU WHERE Id = @OU_Id --Commented out, replaced by below:
 
 		-- get ou info
 		SELECT @DepartmentId = ISNULL(o.Department_Id,0), @OU = o.OU FROM tblOU o WHERE o.Id = @OU_Id
@@ -374,7 +372,7 @@ BEGIN
 
 	
 	Declare @Customer_Id int
-	--set @Customer_Id = 1
+
 	select @Customer_Id = Id from tblCustomer where CustomerGUID = @CustomerGuid
 
 	if (@Customer_Id is not null)
@@ -397,7 +395,7 @@ DROP PROCEDURE  [dbo].[EC_Get_OusByDepartmentDs]
 GO
 CREATE PROCEDURE [dbo].[EC_Get_OusByDepartmentDs](
     @CustomerGuid uniqueIdentifier, 
-    @Department_Id int = 0-- need to send in this default value otherwise extended case gets error
+    @Department_Id int = 0
 )
 AS
 BEGIN
@@ -418,8 +416,7 @@ BEGIN
         FROM tblOU
         WHERE Department_Id = @Department_Id AND 
 	          Parent_OU_Id IS NULL AND 
-	          [Status] = 1 --AND 
-	         -- [Code] IS NOT NULL
+	          [Status] = 1
         ORDER BY OU ASC;	
 	END
 END
@@ -437,7 +434,7 @@ BEGIN
 
 	
 	Declare @Customer_Id int
-	--set @Customer_Id = 1
+
 	select @Customer_Id = Id from tblCustomer where CustomerGUID = @CustomerGuid
 
 	if (@Customer_Id is not null)
@@ -479,6 +476,103 @@ INSERT INTO [dbo].[ExtendedCaseTranslations]
            ,'Info Field')
 		   END
 GO
+
+
+RAISERROR ('Add getInitiatorByName to ExtendedCaseCustomDataSources if not exists', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT 1 FROM [dbo].[ExtendedCaseCustomDataSources] WHERE DataSourceId = 'getInitiatorByName')
+BEGIN
+
+	INSERT INTO [dbo].[ExtendedCaseCustomDataSources]
+			   ([DataSourceId]
+			   ,[Description]
+			   ,[MetaData]
+			   ,[CreatedOn]
+			   ,[CreatedBy]
+			   ,[UpdatedOn]
+			   ,[UpdatedBy])
+		 VALUES
+			   ('getInitiatorByName' --<DataSourceId, nvarchar(100),>
+			   ,'get initator by name' -- <Description, nvarchar(500),>
+			   , '{Type: "db-sp", ProcedureName: "EC_Get_Initiator_By_Name"}'--<MetaData, nvarchar(max),>
+			   , CURRENT_TIMESTAMP --<CreatedOn, datetime,>
+			   , 'DHS' --<CreatedBy, nvarchar(50),>
+			   , NULL --<UpdatedOn, datetime,>
+			   , NULL --<UpdatedBy, nvarchar(50),>
+			   )
+END
+
+RAISERROR ('Add OusByDepartmentDs to ExtendedCaseCustomDataSources if not exists', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT 1 FROM [dbo].[ExtendedCaseCustomDataSources] WHERE DataSourceId = 'OusByDepartmentDs')
+BEGIN
+
+	INSERT INTO [dbo].[ExtendedCaseCustomDataSources]
+			   ([DataSourceId]
+			   ,[Description]
+			   ,[MetaData]
+			   ,[CreatedOn]
+			   ,[CreatedBy]
+			   ,[UpdatedOn]
+			   ,[UpdatedBy])
+		 VALUES
+			   ('OusByDepartmentDs' --<DataSourceId, nvarchar(100),>
+			   ,'db-sp' -- <Description, nvarchar(500),>
+			   , '{ Type: "db-sp", ProcedureName: "EC_Get_OusByDepartmentDs" }'--<MetaData, nvarchar(max),>
+			   , CURRENT_TIMESTAMP --<CreatedOn, datetime,>
+			   , 'DHS' --<CreatedBy, nvarchar(50),>
+			   , NULL --<UpdatedOn, datetime,>
+			   , NULL --<UpdatedBy, nvarchar(50),>
+			   )
+END
+
+
+RAISERROR ('Add RegionsByCustomer to ExtendedCaseOptionDataSources if not exists', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT 1 FROM [dbo].[ExtendedCaseOptionDataSources] WHERE DataSourceId = 'RegionsByCustomer')
+BEGIN
+
+INSERT INTO [dbo].[ExtendedCaseOptionDataSources]
+           ([DataSourceId]
+           ,[Description]
+           ,[MetaData]
+           ,[CreatedOn]
+           ,[CreatedBy]
+           ,[UpdatedOn]
+           ,[UpdatedBy])
+     VALUES
+           ( 'RegionsByCustomer' --<DataSourceId, nvarchar(100),>
+           , NULL --<Description, nvarchar(500),>
+           , '{Type:"db-sp", ProcedureName:"EC_Get_RegionsByCustomer"}' --<MetaData, nvarchar(max),>
+           , CURRENT_TIMESTAMP --<CreatedOn, datetime,>
+           , 'DHS' --<CreatedBy, nvarchar(50),>
+           , NULL --<UpdatedOn, datetime,>
+           , NULL --<UpdatedBy, nvarchar(50),>
+		   )
+END
+
+
+RAISERROR ('Add DepartmentsByCustomer to ExtendedCaseOptionDataSources if not exists', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT 1 FROM [dbo].[ExtendedCaseOptionDataSources] WHERE DataSourceId = 'DepartmentsByCustomer')
+BEGIN
+
+INSERT INTO [dbo].[ExtendedCaseOptionDataSources]
+           ([DataSourceId]
+           ,[Description]
+           ,[MetaData]
+           ,[CreatedOn]
+           ,[CreatedBy]
+           ,[UpdatedOn]
+           ,[UpdatedBy])
+     VALUES
+           ( 'DepartmentsByCustomer' --<DataSourceId, nvarchar(100),>
+           , NULL --<Description, nvarchar(500),>
+           , '{Type:"db-sp", ProcedureName:"EC_Get_DepartmentsByCustomer"}' --<MetaData, nvarchar(max),>
+           , CURRENT_TIMESTAMP --<CreatedOn, datetime,>
+           , 'DHS' --<CreatedBy, nvarchar(50),>
+           , NULL --<UpdatedOn, datetime,>
+           , NULL --<UpdatedBy, nvarchar(50),>
+		   )
+END
+
+
 
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.53'
