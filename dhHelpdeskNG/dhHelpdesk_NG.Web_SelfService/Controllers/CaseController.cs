@@ -239,7 +239,12 @@ namespace DH.Helpdesk.SelfService.Controllers
                 var data = _extendedCaseService.GetExtendedCaseFromCase(caseId);
                 if (data != null)
                 {
-                    return RedirectToAction("ExtendedCasePublic", new { id = data.ExtendedCaseGuid });
+                    var curCase = _caseService.GetCaseById(caseId);
+                    if(curCase.CaseSolution.AvailableTabsSelfsevice != "case-tab")
+                    {
+                        return RedirectToAction("ExtendedCasePublic", new { id = data.ExtendedCaseGuid });
+                    }
+                    
                 }
                 
                 //check dynamic case
@@ -522,12 +527,13 @@ namespace DH.Helpdesk.SelfService.Controllers
             var currentCaseModel = GetCaseReceiptModel(currentCase, languageId);
             model.CaseOverviewModel = currentCaseModel;
             ViewBag.AttachmentPlacement = model.AttachmentPlacement;
+
             if (currentCase.CaseSolution.AvailableTabsSelfsevice == "both")
             {
                 model.ActiveTab = currentCase.CaseSolution.ActiveTabSelfservice;
                 both = true;
             }
-            
+
             if (ErrorGenerator.HasError())
                 return RedirectToAction("Index", "Error");
 
@@ -1141,6 +1147,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var model = new ExtendedCaseViewModel
             {
+                ActiveTab = caseTemplate.ActiveTabSelfservice,
                 CaseId = initData.CaseId,
                 CaseTemplateId = initData.CaseSolutionId,
                 CustomerId = initData.CustomerId,
