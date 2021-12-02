@@ -1147,7 +1147,6 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var model = new ExtendedCaseViewModel
             {
-                ActiveTab = caseTemplate.ActiveTabSelfservice,
                 CaseId = initData.CaseId,
                 CaseTemplateId = initData.CaseSolutionId,
                 CustomerId = initData.CustomerId,
