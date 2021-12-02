@@ -30,13 +30,13 @@
     #{if AuthenticationMode == "application"}
 	<add key="LoginMode" value="Application"/>
 	  <add key="MicrosoftLogin" value="1" /><!-- 1 = Show Microsoft login-button, else 0-->
-	  <add key="ClientId" value="d7a3b1b6-c4a9-461f-a0d6-505f662969df" /><!-- Your applications Client ID fromn Azure-->
+	  <add key="ClientId" value="#{ClientId}" /><!-- Your applications Client ID fromn Azure-->
 	  <add key="Tenant" value="common" />
 	  <!--If your application supports My organization only, replace this value with the Tenant Id or Tenant name (for example, contoso.onmicrosoft.com)
     If your application supports Accounts in any organizational directory, replace this value with "organizations"
     If your application supports All Microsoft account users, replace this value with "common"-->
 	  <add key="Authority" value="https://login.microsoftonline.com/{0}/v2.0" />
-	  <add key="RedirectUri" value="https://dev.helpdesk.internal.datahalland.se/" /><!-- Your applications RedirectUri from Azure eg homepage-->
+	  <add key="RedirectUri" value="#{RedirectUri}" /><!-- Your applications RedirectUri from Azure eg homepage-->
 	  #{/if}
     #{if AuthenticationMode == "windows"}<add key="LoginMode" value="Windows"/>#{/if}
 </appSettings>
@@ -89,6 +89,7 @@
       decryptionKey="CBAB74D7EC5BB56D75D217CECBFB9628819BDB8BF91CFCD64568A145BE59718B"
       validation="SHA1"
       decryption="AES"/>
+	  <sessionState cookieless="UseDeviceProfile" timeout="2880" />
   </system.web>
   <system.webServer>
     <modules runAllManagedModulesForAllRequests="false"/>

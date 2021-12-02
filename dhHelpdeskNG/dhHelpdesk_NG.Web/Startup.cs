@@ -46,9 +46,9 @@ namespace DH.Helpdesk.Web.App_Start
                 //SameSiteMode.None should be always with Secure = true in chrome https://docs.microsoft.com/en-us/aspnet/core/security/samesite?view=aspnetcore-5.0
                 CookieSameSite = SameSiteMode.None,
                 CookieSecure = CookieSecureOption.Always,
-                CookieName ="HDCookie"
+                CookieName ="HDCookie",
                 //SlidingExpiration = true,
-                //ExpireTimeSpan = TimeSpan.FromHours(2.0),
+                //ExpireTimeSpan = TimeSpan.FromHours(3.0)
                 //LoginPath = new PathString("/Login/Login")
             };
             app.UseCookieAuthentication(cookieOptions);

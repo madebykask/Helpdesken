@@ -216,10 +216,17 @@ ALTER TABLE [dbo].[tblLog] ADD  CONSTRAINT [DF_tblLog_Text_Internal]  DEFAULT ('
 GO
 
 --Text_External in tblLog
-RAISERROR ('Drop default Constraint for Text_External', 10, 1) WITH NOWAIT
+RAISERROR ('Drop default Constraint for Text_External (DF_tblLog_Text_External)', 10, 1) WITH NOWAIT
 IF OBJECT_ID('[DF_tblLog_Text_External]', 'D') IS NOT NULL
 	begin
 		ALTER TABLE [dbo].[tblLog] DROP CONSTRAINT [DF_tblLog_Text_External]
+	end
+go
+
+RAISERROR ('Drop default Constraint for Text_External (DF_tblLog_Text)', 10, 1) WITH NOWAIT
+IF OBJECT_ID('[DF_tblLog_Text]', 'D') IS NOT NULL
+	begin
+		ALTER TABLE [dbo].[tblLog] DROP CONSTRAINT [DF_tblLog_Text]
 	end
 go
 
