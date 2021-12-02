@@ -48,7 +48,7 @@ namespace DH.Helpdesk.Web.App_Start
                 CookieSecure = CookieSecureOption.Always,
                 CookieName ="HDCookie",
                 //SlidingExpiration = true,
-                //ExpireTimeSpan = TimeSpan.FromHours(3.0)
+                //ExpireTimeSpan = TimeSpan.FromHours(2.0)
                 //LoginPath = new PathString("/Login/Login")
             };
             app.UseCookieAuthentication(cookieOptions);
@@ -66,6 +66,8 @@ namespace DH.Helpdesk.Web.App_Start
                         Scope = OpenIdConnectScope.OpenIdProfile,
                         // ResponseType is set to request the id_token - which contains basic information about the signed-in user
                         ResponseType = OpenIdConnectResponseType.IdToken,
+                        //SignInAsAuthenticationType = cookieOptions.CookieName,
+                        UseTokenLifetime = false,
                         // ValidateIssuer set to false to allow personal and work accounts from any organization to sign in to your application
                         // To only allow users from a single organizations, set ValidateIssuer to true and 'tenant' setting in web.config to the tenant name
                         // To allow users from only a list of specific organizations, set ValidateIssuer to true and use ValidIssuers parameter
@@ -76,6 +78,15 @@ namespace DH.Helpdesk.Web.App_Start
                         // OpenIdConnectAuthenticationNotifications configures OWIN to send notification of failed authentications to OnAuthenticationFailed method
                         Notifications = new OpenIdConnectAuthenticationNotifications
                         {
+                            SecurityTokenValidated = n =>
+                            {
+                                // Set persistent cookie, 
+                                n.AuthenticationTicket.Properties.IsPersistent = true;
+                                // and the expiration
+                                n.AuthenticationTicket.Properties.ExpiresUtc = DateTime.Now.AddHours(48);
+                                //n.AuthenticationTicket.Properties.ExpiresUtc = DateTime.Now.AddMinutes(2);
+                                return Task.CompletedTask;
+                            },
                             AuthenticationFailed = OnAuthenticationFailed
                         },
                         
