@@ -94,11 +94,9 @@ INSERT INTO [dbo].[ExtendedCaseTranslations]
 		   END
 GO
 
-RAISERROR ('ALTER PROCEDURE [dbo].[EC_Get_Initiator_By_Name]', 10, 1) WITH NOWAIT
-IF(OBJECT_ID('[dbo].[EC_Get_Initiator_By_Name]', 'P') IS NOT NULL)
-DROP PROCEDURE  [dbo].[EC_Get_Initiator_By_Name]
-GO
-
+RAISERROR ('Create PROCEDURE [dbo].[EC_Get_Initiator_By_Name]', 10, 1) WITH NOWAIT
+IF(OBJECT_ID('[dbo].[EC_Get_Initiator_By_Name]', 'P') IS NULL)
+EXEC('
 CREATE PROCEDURE [dbo].[EC_Get_Initiator_By_Name] 
 (
 	@name nvarchar(512),
@@ -157,25 +155,25 @@ BEGIN
 	END
 
 	select top 1 
-	    Isnull(cu.UserId, '') as UserId ,
-	    ISNULL(cu.UserCode, '') AS UserCode,
-	    Isnull(cu.FirstName, '') as FirstName,
-	    Isnull(cu.SurName, '') as LastName,
-	    Isnull(cu.Email, '') as Email,
-	    Isnull(cu.Phone, '') as Phone,
-	    Isnull(cu.Cellphone, '') as Mobile,
-	    Isnull(cu.Location, '') as Place,	    
+	    Isnull(cu.UserId, '''') as UserId ,
+	    ISNULL(cu.UserCode, '''') AS UserCode,
+	    Isnull(cu.FirstName, '''') as FirstName,
+	    Isnull(cu.SurName, '''') as LastName,
+	    Isnull(cu.Email, '''') as Email,
+	    Isnull(cu.Phone, '''') as Phone,
+	    Isnull(cu.Cellphone, '''') as Mobile,
+	    Isnull(cu.Location, '''') as Place,	    
 	    Department_Id AS DepartmentId,
-	    ISNULL(@DepartmentName, '') AS Department,
+	    ISNULL(@DepartmentName, '''') AS Department,
 	    @RegionId AS RegionId,
-	    ISNULL(@RegionName, '') AS Region,
+	    ISNULL(@RegionName, '''') AS Region,
 	    @OU_Id AS OU_Id,
-	    ISNULL(@OU, '') AS OU,
-	    Isnull(cu.CostCentre, '') as CostCentre 
+	    ISNULL(@OU, '''') AS OU,
+	    Isnull(cu.CostCentre, '''') as CostCentre 
 	    --Division_Id? 
 	from tblComputerUsers cu 
 	where Id = @Id	
-END
+END')
 GO
 
 --Text_Internal in tblLog
@@ -367,10 +365,9 @@ INSERT INTO [dbo].[ExtendedCaseTranslations]
 		   END
 GO
 
-RAISERROR ('Alter Stored procedure [dbo].[EC_Get_DepartmentsByCustomer]', 10, 1) WITH NOWAIT
-IF(OBJECT_ID('[dbo].[EC_Get_DepartmentsByCustomer]', 'P') IS NOT NULL)
-DROP PROCEDURE  [dbo].[EC_Get_DepartmentsByCustomer]
-GO
+RAISERROR ('Create Stored procedure [dbo].[EC_Get_DepartmentsByCustomer]', 10, 1) WITH NOWAIT
+IF(OBJECT_ID('[dbo].[EC_Get_DepartmentsByCustomer]', 'P') IS NULL)
+EXEC('
 CREATE PROCEDURE [dbo].[EC_Get_DepartmentsByCustomer]
 (@CustomerGuid uniqueIdentifier)
 AS
@@ -385,21 +382,20 @@ BEGIN
 	if (@Customer_Id is not null)
 	begin
 
-			SELECT null as [Value], '' as [Text] UNION ALL
+			SELECT null as [Value], '''' as [Text] UNION ALL
 			select Id As Value , Department As [TEXT]  from tblDepartment where Customer_id =  @Customer_Id and [Status] = 1  order by [TEXT] ASC
 	end
 	else
 	begin
-		SELECT null as [Value], '' as [Text]
+		SELECT null as [Value], '''' as [Text]
 	end
-END
+END')
 GO
 
 
-RAISERROR ('Alter Stored procedure [dbo].[EC_Get_OusByDepartmentDs]', 10, 1) WITH NOWAIT
-IF(OBJECT_ID('[dbo].[EC_Get_OusByDepartmentDs]', 'P') IS NOT NULL)
-DROP PROCEDURE  [dbo].[EC_Get_OusByDepartmentDs]
-GO
+RAISERROR ('Create Stored procedure [dbo].[EC_Get_OusByDepartmentDs]', 10, 1) WITH NOWAIT
+IF(OBJECT_ID('[dbo].[EC_Get_OusByDepartmentDs]', 'P') IS NULL)
+EXEC('
 CREATE PROCEDURE [dbo].[EC_Get_OusByDepartmentDs](
     @CustomerGuid uniqueIdentifier, 
     @Department_Id int = 0
@@ -413,11 +409,11 @@ BEGIN
      
 	IF (@Customer_Id is null or @Department_Id = 0)
 	BEGIN
-		SELECT '' as Id, '' as OU, '' as Code
+		SELECT '''' as Id, '''' as OU, '''' as Code
 	END
 	ELSE
 	BEGIN
-		SELECT '' as Id, '' as OU, '' as Code
+		SELECT '''' as Id, '''' as OU, '''' as Code
 		UNION ALL
         SELECT Cast(Id as nvarchar(10)), OU, Code
         FROM tblOU
@@ -426,13 +422,12 @@ BEGIN
 	          [Status] = 1
         ORDER BY OU ASC;	
 	END
-END
+END')
 GO
 
-RAISERROR ('Alter Stored procedure [dbo].[EC_Get_RegionsByCustomer]', 10, 1) WITH NOWAIT
-IF(OBJECT_ID('[dbo].[EC_Get_RegionsByCustomer]', 'P') IS NOT NULL)
-DROP PROCEDURE  [dbo].[EC_Get_RegionsByCustomer]
-GO
+RAISERROR ('Create Stored procedure [dbo].[EC_Get_RegionsByCustomer]', 10, 1) WITH NOWAIT
+IF(OBJECT_ID('[dbo].[EC_Get_RegionsByCustomer]', 'P') IS NULL)
+EXEC('
 CREATE PROCEDURE [dbo].[EC_Get_RegionsByCustomer]
 (@CustomerGuid uniqueIdentifier)
 AS
@@ -447,14 +442,14 @@ BEGIN
 	if (@Customer_Id is not null)
 	begin
 
-			SELECT null as [Value], '' as [Text] UNION ALL
+			SELECT null as [Value], '''' as [Text] UNION ALL
 			select Id As Value , Region As [TEXT]  from tblRegion where Customer_id =  @Customer_Id and [Status] = 1  order by [TEXT] ASC
 	end
 	else
 	begin
-		SELECT null as [Value], '' as [Text]
+		SELECT null as [Value], '''' as [Text]
 	end
-END
+END')
 GO
 
 RAISERROR ('Add Control.Infofalt Swedish to ExtendedCaseTranslations', 10, 1) WITH NOWAIT
