@@ -85,6 +85,17 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             var identity = ctx.User.Identity;
             var isIdentityAuthenticated = identity?.IsAuthenticated ?? false;
 
+            if (IgnoreRequest(filterContext))
+            {
+                filterContext.HttpContext.Items[SkipAuthResultCheck] = true;
+                _logger.Debug($"AuthenticationFilter. Skip check for anonymous action. Identity: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}, Url: {ctx.Request.Url}");
+                return;
+            }
+            if(isIdentityAuthenticated && SessionFacade.CurrentUser != null)
+            {
+                return;
+            }
+
             var loginMode = GetCurrentLoginMode();
 
             if (loginMode == LoginMode.Microsoft)
