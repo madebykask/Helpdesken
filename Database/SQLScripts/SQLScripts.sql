@@ -574,7 +574,13 @@ INSERT INTO [dbo].[ExtendedCaseOptionDataSources]
 		   )
 END
 
-
+RAISERROR ('Extend BIOSVersion lenght to 40 char', 10, 1) WITH NOWAIT
+if EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'BIOSVersion' and sysobjects.name = N'tblComputer')
+BEGIN
+    ALTER TABLE [dbo].[tblComputer]
+    ALTER COLUMN BIOSVersion nvarchar (40) not null
+END
 
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.53'
