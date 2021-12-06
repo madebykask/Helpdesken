@@ -307,7 +307,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 accountingDimension4,
                 accountingDimension5,
                 null,
-                null);
+                warrantyEndDate); 
 
             return fields;
         }

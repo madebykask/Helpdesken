@@ -72,6 +72,7 @@
 
         [NotNull]
         public ConfigurableFieldModel<string> AccountingDimension5 { get; set; }
+
         [NotNull]
         public ConfigurableFieldModel<DateTime?> WarrantyEndDate { get; set; }
 
