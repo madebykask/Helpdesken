@@ -14,7 +14,8 @@
             string accountingDimension2,
             string accountingDimension3,
             string accountingDimension4,
-            string accountingDimension5)
+            string accountingDimension5,
+            DateTime? warrantyEndDate)
         {
             this.ContractStatusName = contractStatusName;
             this.ContractNumber = contractNumber;
@@ -26,6 +27,7 @@
             this.AccountingDimension3 = accountingDimension3;
             this.AccountingDimension4 = accountingDimension4;
             this.AccountingDimension5 = accountingDimension5;
+            this.WarrantyEndDate = warrantyEndDate;
         }
 
         public string ContractStatusName { get; set; }
@@ -47,5 +49,7 @@
         public string AccountingDimension4 { get; set; }
 
         public string AccountingDimension5 { get; set; }
+
+        public DateTime? WarrantyEndDate { get; set; }
     }
 }

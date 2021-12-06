@@ -861,7 +861,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         x.Computer.AccountingDimension2,
                         x.Computer.AccountingDimension3,
                         x.Computer.AccountingDimension4,
-                        x.Computer.AccountingDimension5),
+                        x.Computer.AccountingDimension5,
+                        x.Computer.WarrantyEndDate),
                         new BusinessData.Models.Inventory.Output.Computer.ContactInformationFields(
                         x.UserId,
                         x.UserRegionName,
@@ -947,7 +948,9 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.AccountingDimension3 = businessModel.ContractFields.AccountingDimension3;
             entity.AccountingDimension4 = businessModel.ContractFields.AccountingDimension4;
             entity.AccountingDimension5 = businessModel.ContractFields.AccountingDimension5;
-            
+            entity.WarrantyEndDate = businessModel.ContractFields.WarrantyEndDate;
+
+
             entity.User_Id = businessModel.ContactInformationFields.UserId;
 
             entity.ContactName = businessModel.ContactFields.Name;
