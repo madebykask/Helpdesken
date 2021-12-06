@@ -381,16 +381,13 @@
         </h4>
         @if (Model.templateistrue != 1 && !readonlyMode)
         {
-        <div class="secnavs secnavmarg">
-            <div class="pull-left">
-                <ul class="secnav">
-                    @if (Model.CustomerSettings.ModuleInvoice)
-                    {
-                        <li><input type="button" id="btnCaseCharge" class="btn" style="@Model.ShowInvoiceFields.displayHtml()" value="@Translation.GetCoreTextTranslation("Debitering")" /></li>
-                    }
-                </ul>
+            <div class="secnavs secnavmarg">
+                <div class="pull-left">
+                    <ul class="secnav">
+                         <li><input type="button" id="btnCaseCharge" class="btn" style="@Model.ShowInvoiceFields.displayHtml()" value="@Translation.GetCoreTextTranslation("Debitering")" /></li>
+                    </ul>
+                </div>
             </div>
-        </div>
         }
         @{
             var invoiceClaimed = Model.CaseLog.InvoiceRow != null

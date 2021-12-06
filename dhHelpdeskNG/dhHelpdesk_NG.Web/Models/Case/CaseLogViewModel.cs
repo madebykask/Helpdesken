@@ -17,7 +17,6 @@ namespace DH.Helpdesk.Web.Models.Case
         public int CurrentCaseLanguageId { get; set; }
         public TimeZoneInfo UserTimeZone { get; set; }
         public bool IsCaseReopened { get; set; }
-        public Department Department { get; set; }
         public CaseFilesModel CaseFiles { get; set; }
         public string HelpdeskEmail { get; set; }
         public bool CaseInternalLogAccess { get; set; }
