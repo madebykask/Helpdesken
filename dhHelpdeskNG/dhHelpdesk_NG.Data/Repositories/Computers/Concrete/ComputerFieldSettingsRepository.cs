@@ -470,6 +470,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             MapFieldSetting(updatedSettings.AccountingDimension4FieldSetting, entity.FindByName(ContractFields.AccountingDimension4), languageTextId, changeDate);
             MapFieldSetting(updatedSettings.AccountingDimension5FieldSetting, entity.FindByName(ContractFields.AccountingDimension5), languageTextId, changeDate);
             MapFieldSetting(updatedSettings.DocumentFieldSetting, entity.FindByName(ContractFields.Document), languageTextId, changeDate);
+            MapFieldSetting(updatedSettings.ContractEndDateFieldSetting, entity.FindByName(ContractFields.WarrantyEndDate), languageTextId, changeDate);
         }
 
         private static void MapOtherFieldsSettings(

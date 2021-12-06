@@ -130,7 +130,7 @@
             this.Property(x => x.ScanDate).IsOptional();
             this.Property(x => x.Updated).IsRequired();
             this.Property(x => x.SyncChangedDate).IsOptional();
-
+            this.Property(x => x.WarrantyEndDate).IsOptional();
             this.Property(x => x.RegUser_Id).IsOptional();
             this.Property(x => x.ChangedByUser_Id).IsOptional();
 

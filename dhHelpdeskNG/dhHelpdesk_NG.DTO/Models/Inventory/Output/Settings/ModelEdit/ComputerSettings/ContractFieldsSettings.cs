@@ -16,7 +16,8 @@
             ModelEditFieldSetting accountingDimension3FieldSetting,
             ModelEditFieldSetting accountingDimension4FieldSetting,
             ModelEditFieldSetting accountingDimension5FieldSetting,
-            ModelEditFieldSetting doumentFieldSetting)
+            ModelEditFieldSetting doumentFieldSetting,
+            ModelEditFieldSetting warrantyEndDateFieldSettings)
         {
             this.ContractStatusFieldSetting = contractStatusFieldSetting;
             this.ContractNumberFieldSetting = contractNumberFieldSetting;
@@ -30,6 +31,7 @@
             this.AccountingDimension4FieldSetting = accountingDimension4FieldSetting;
             this.AccountingDimension5FieldSetting = accountingDimension5FieldSetting;
             this.DocumentFieldSetting = doumentFieldSetting;
+            this.WarrantyEndDateFieldSettings = warrantyEndDateFieldSettings;
         }
 
         [NotNull]
@@ -49,6 +51,8 @@
 
         [NotNull]
         public ModelEditFieldSetting PurchaseDateFieldSetting { get; set; }
+
+        public ModelEditFieldSetting WarrantyEndDateFieldSettings { get; set; }
 
         [NotNull]
         public ModelEditFieldSetting AccountingDimension1FieldSetting { get; set; }

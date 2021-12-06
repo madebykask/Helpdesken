@@ -20,7 +20,8 @@
             FieldSettingModel accountingDimension3FieldSettingModel,
             FieldSettingModel accountingDimension4FieldSettingModel,
             FieldSettingModel accountingDimension5FieldSettingModel,
-            FieldSettingModel documentsFieldSettingModel)
+            FieldSettingModel documentsFieldSettingModel,
+            FieldSettingModel warrantyEndDateFieldSettingModel)
         {
             this.ContractStatusFieldSettingModel = contractStatusFieldSettingModel;
             this.ContractNumberFieldSettingModel = contractNumberFieldSettingModel;
@@ -37,6 +38,7 @@
             documentsFieldSettingModel.IsShowInListDisabled = true;
             documentsFieldSettingModel.IsReadOnlyDisabled = true;
             this.DocumentsFieldSettingModel = documentsFieldSettingModel;
+            this.WarrantyEndDateSettingModel = warrantyEndDateFieldSettingModel;
         }
 
         [NotNull]
@@ -82,5 +84,9 @@
         [NotNull]
         [LocalizedDisplay("Dokument")]
         public FieldSettingModel DocumentsFieldSettingModel { get; set; }
+
+        [NotNull]
+        [LocalizedDisplay("Garanti slutdatum")]
+        public FieldSettingModel WarrantyEndDateSettingModel { get; set; }
     }
 }
