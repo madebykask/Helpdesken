@@ -2187,65 +2187,67 @@
                                         @Model.getSectionHeader(CaseSectionType.Invoices, CaseSections.InvoicesHeader)
                                     </h4>
                                     <div class="row">
-                                        <div class="span12">
+                                        <div class="span7">
                                             <table class="tableform" id="externalInvoices">
                                                 <thead>
-                                                    <tr>
-                                                        <th class="span3">@Translation.GetCoreTextTranslation("Fakturanummer")</th>
-                                                        <th class="span1">@Translation.GetCoreTextTranslation("Fakturapris")</th>
-                                                        <th class="span8"></th>
-                                                    </tr>
+                                                <tr>
+                                                    <th class="span3">@Translation.GetCoreTextTranslation("Fakturanummer")</th>
+                                                    <th class="span1">@Translation.GetCoreTextTranslation("Fakturapris")</th>
+                                                    <th class="span8"></th>
+                                                </tr>
                                                 </thead>
                                                 @{
                                                     var readonlyExternalInvoices = Model.ExternalInvoices.Where(x => x.InvoiceRow != null
-                                                                                    && x.InvoiceRow.Status.HasValue
-                                                                                    && (x.InvoiceRow.Status.Value == InvoiceStatus.Invoiced || x.InvoiceRow.Status.Value == InvoiceStatus.NotInvoiced))
-                                                                                .ToList();
+                                                                                                                     && x.InvoiceRow.Status.HasValue
+                                                                                                                     && (x.InvoiceRow.Status.Value == InvoiceStatus.Invoiced || x.InvoiceRow.Status.Value == InvoiceStatus.NotInvoiced))
+                                                        .ToList();
                                                     var editableExternalInvoices = Model.ExternalInvoices.Except(readonlyExternalInvoices).ToList();
                                                     var extInvoicesCount = 0;
                                                 }
-                                                @for (var i = 0; i < readonlyExternalInvoices.Count; i++)
+
+                                                @foreach (var externalInvoice in readonlyExternalInvoices)
                                                 {
                                                     <tr>
                                                         <td>
-                                                            @readonlyExternalInvoices[i].Name
-                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@readonlyExternalInvoices[i].Name">
+                                                            @externalInvoice.Name
+                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@externalInvoice.Name">
                                                         </td>
                                                         <td>
-                                                            @readonlyExternalInvoices[i].Amount.ToString("#.##")
-                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@readonlyExternalInvoices[i].AmountValue" placeholder="0.00">
-                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="@readonlyExternalInvoices[i].Id">
+                                                            @externalInvoice.Amount.ToString("#.##")
+                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@externalInvoice.AmountValue" placeholder="0.00">
+                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="@externalInvoice.Id">
                                                         </td>
                                                         <td>
-                                                            @readonlyExternalInvoices[i].InvoiceRow.Status.Value.GetTranslation()
+                                                            @externalInvoice.InvoiceRow.Status.Value.GetTranslation()
                                                         </td>
                                                     </tr>
                                                     extInvoicesCount++;
                                                 }
-                                                @for (var i = 0; i < editableExternalInvoices.Count; i++)
+
+                                                @foreach (var externalInvoice in editableExternalInvoices)
                                                 {
                                                     <tr>
                                                         <td>
                                                             @if (Model.EditMode == AccessMode.ReadOnly)
                                                             {
-                                                                <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@editableExternalInvoices[i].Name" disabled="disabled">
+                                                                @:<input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@externalInvoice.Name" disabled="disabled">
                                                             }
                                                             else
                                                             {
-                                                                <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@editableExternalInvoices[i].Name">
+                                                                @:<input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@externalInvoice.Name">
                                                             }
                                                         </td>
                                                         <td>
                                                             @if (Model.EditMode == AccessMode.ReadOnly)
                                                             {
-                                                                <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@editableExternalInvoices[i].AmountValue" placeholder="0.00" disabled="disabled">
+                                                                @:<input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@externalInvoice.AmountValue" placeholder="0.00" disabled="disabled">
                                                             }
                                                             else
                                                             {
-                                                                <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@editableExternalInvoices[i].AmountValue" placeholder="0.00">
+                                                                @:<input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@externalInvoice.AmountValue" placeholder="0.00">
                                                             }
 
-                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="@editableExternalInvoices[i].Id">
+                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="@externalInvoice.Id">
                                                         </td>
                                                         <td>
                                                             @if (Model.EditMode == AccessMode.ReadOnly)
@@ -2301,6 +2303,59 @@
                                                 </tr>
                                             </table>
 
+                                        </div>
+                                        <div class="span6">
+                                            <table id="tblCaseChargeSummary" style="@Model.ShowInvoiceFields.displayHtml()">
+                                                <tbody>
+                                                    @if (Model.case_.Department != null)
+                                                    {
+                                                        if (Model.case_.Department.ShowInvoiceTime)
+                                                        {
+                                                            <tr>
+                                                                <td>@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Arbete"):</td>
+                                                                <td id="totalWorkingTime">
+                                                                    @(Model.Logs.Sum(x => x.WorkingTime) / 60) @Translation.GetCoreTextTranslation("Tim")
+                                                                    @(Model.Logs.Sum(x => x.WorkingTime) % 60) @Translation.GetCoreTextTranslation("Min")
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                        if (Model.case_.Department.ShowInvoiceOvertime)
+                                                        {
+                                                            <tr>
+                                                                <td>@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Övertid"):</td>
+                                                                <td id="totalOvertime">
+                                                                    @(Model.Logs.Sum(x => x.OverTime) / 60) @Translation.GetCoreTextTranslation("Tim")
+                                                                    @(Model.Logs.Sum(x => x.OverTime) % 60) @Translation.GetCoreTextTranslation("Min")
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                        if (Model.case_.Department.ShowInvoiceMaterial)
+                                                        {
+                                                            <tr>
+                                                                <td>@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Material"):</td>
+                                                                <td id="totalMaterial">
+                                                                    @Model.Logs.Sum(x => x.EquipmentPrice).ToString("0.00")
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                        if (Model.case_.Department.ShowInvoicePrice)
+                                                        {
+                                                            <tr>
+                                                                <td>@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Pris"):</td>
+                                                                <td id="totalPrice">
+                                                                    @Model.Logs.Sum(x => x.Price).ToString("0.00")
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                    <tr id="totalExternalAmountRow" style="@Model.ShowExternalInvoiceFields.displayHtml()">
+                                                        <td>@Translation.GetCoreTextTranslation("Totalt") @Translation.GetCoreTextTranslation("Fakturor"):</td>
+                                                        <td id="totalExternalAmount">
+                                                            @Model.ExternalInvoices.Sum(x => x.Amount).ToString("0.00")
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
