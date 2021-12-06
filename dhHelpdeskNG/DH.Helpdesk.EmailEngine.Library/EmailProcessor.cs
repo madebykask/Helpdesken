@@ -76,7 +76,7 @@ namespace DH.Helpdesk.EmailEngine.Library
                     smtpPort = int.Parse(ConfigurationManager.AppSettings["DefaultSmtpPort"]);
                     smtpUser = "";
                     smtpPassword = "";
-                    smtpSsl = false;
+                    smtpSsl = Convert.ToBoolean (ConfigurationManager.AppSettings["smtpSsl"]);// false;
                 }
 
                 using (var smtpClient = new SmtpClient(smtpServer, smtpPort))
@@ -119,7 +119,17 @@ namespace DH.Helpdesk.EmailEngine.Library
                         var addresses = email.EmailAddress.Split(',');
                         foreach (var address in addresses)
                         {
-                            mailMessage.To.Add(new MailAddress(address));
+
+                            if (IsValidEmail(address))
+                            {
+
+                                mailMessage.To.Add(new MailAddress(address));
+
+                            }
+                            else
+                            {
+                                _logger.Debug("Email address: " + address + " is not valid");
+                            }
                         }
                     }
 
@@ -162,10 +172,25 @@ namespace DH.Helpdesk.EmailEngine.Library
             }
         }
 
+
+
+        bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private void AttachFiles(MailMessage mailMessage, string filesString)
         {
             //TODO - Change separator - se EmailService
-            var files = filesString?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var files = filesString?.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
             if (files != null && files.Any())
             {
                 foreach (var file in files)

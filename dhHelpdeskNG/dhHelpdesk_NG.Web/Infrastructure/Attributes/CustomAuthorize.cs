@@ -69,12 +69,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Attributes
 
             _logger.Debug($"CustomAuthorize.AuthorizeCore: Checking request. Url: {httpContext.Request.Url}");
 
-            var isAuthenticated = httpContext.User?.Identity?.IsAuthenticated ?? false;
+            bool isAuthenticated = httpContext.User?.Identity?.IsAuthenticated ?? false;
             if (!isAuthenticated)
             {
                 return false;
             }
-
+            //TODO - have a look into this
             if (this.Roles != string.Empty)
             {
                 foreach (string userRole in this.Roles.Split(','))

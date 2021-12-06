@@ -29,7 +29,15 @@
     {
         if (Model.IsTwoAttachmentsMode)
         {
-            return logFile.LogType == LogFileType.External ? Translation.GetCoreTextTranslation("Extern bifogad fil") : Translation.GetCoreTextTranslation("Intern bifogad fil");
+            if(logFile.ParentLogType != null)
+            {
+                return logFile.ParentLogType == LogFileType.External ? Translation.GetCoreTextTranslation("Extern bifogad fil") : Translation.GetCoreTextTranslation("Intern bifogad fil");
+            }
+            else
+            {
+                return logFile.LogType == LogFileType.External ? Translation.GetCoreTextTranslation("Extern bifogad fil") : Translation.GetCoreTextTranslation("Intern bifogad fil");
+            }
+
         }
         return string.Empty;
 
@@ -50,7 +58,8 @@
                         @*<a target="_blank" class="isExisted"
                     onclick="window.dhHelpdesk.logFileAccess(@l.CaseId, '@l.FileName', @((int)CaseFileType.CaseFile))"
                     href="@BuildCaseFileLinkVD(l.FileName)"><i class="icon- attachedFile"></i>@l.FileName</a>*@
-                        <a target="_blank" href="@Url.Action("Documents", "Cases",new RouteValueDictionary {{"id", l.CaseId}, {"fileName", l.FileName}, { "type", 0 } })">
+                        <a target="_blank" href="@Url.Action("Documents", "Cases",new RouteValueDictionary {{"id", l.CaseId}, {"fileName", l.FileName}, { "type", 0 } })"
+                           data-toggle="tooltip" rel="tooltip" data-placement="top" title="@(GetLogTypeText(l))">
                             <i class="icon- attachedFile"></i>@l.FileName<br />
                         </a>
                     }
@@ -67,14 +76,14 @@
                         if (Model.CaseFiles.VirtualDirectory)
                         {
                             //Changed this
-                            var type = 0;
-                            if (l.LogType == LogFileType.Internal)
+                            var type = 1;
+                            if (l.ParentLogType != null)
                             {
-                                type = (int)CaseFileType.LogInternal;
+                                type = l.ParentLogType == LogFileType.Internal ? (int)CaseFileType.LogInternal : (int)CaseFileType.LogExternal;
                             }
                             else
                             {
-                                type = (int)CaseFileType.LogExternal;
+                                type = l.LogType == LogFileType.Internal ? (int)CaseFileType.LogInternal : (int)CaseFileType.LogExternal;
                             }
                             @*<a target="_blank" class="isExisted"
                                onclick="window.dhHelpdesk.logFileAccess(@currentLog.CaseId, '@l.FileName', @(l.LogType == LogFileType.Internal ? (int)CaseFileType.LogInternal : (int)CaseFileType.LogExternal), @l.LogId.Value)"

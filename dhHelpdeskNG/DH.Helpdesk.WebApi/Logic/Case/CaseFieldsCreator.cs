@@ -1181,7 +1181,7 @@ namespace DH.Helpdesk.WebApi.Logic.Case
                 if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External))
                     AddHiddenOption(field.Options);
 
-                AddMaxLengthOption(field.Options, 3000);
+                //AddMaxLengthOption(field.Options, 3000);
                 model.Fields.Add(field);
             }
 
@@ -1203,7 +1203,7 @@ namespace DH.Helpdesk.WebApi.Logic.Case
                 if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_Internal))
                     AddHiddenOption(field.Options);
 
-                AddMaxLengthOption(field.Options, 3000);
+                //AddMaxLengthOption(field.Options, 3000);
                 model.Fields.Add(field);
             }
 

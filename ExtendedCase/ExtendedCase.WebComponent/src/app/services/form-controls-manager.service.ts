@@ -119,7 +119,7 @@ export class FormControlsManagerService {
         return form;
     }
 
-    getFormFieldValues(formModel: FormModel, checkCaseBindingBehaviour = false):
+    getFormFieldValues(formModel: FormModel, formData: FormDataModel, checkCaseBindingBehaviour = false):
       { fieldsValues: IMap<FieldValueModel>, caseFieldsValues: IMap<FieldValueModel> } {
         let fieldsValues: IMap<FieldValueModel> = {};
         let caseFieldsValues: IMap<FieldValueModel> = {};
@@ -142,18 +142,26 @@ export class FormControlsManagerService {
             let fieldValueModel = this.getControlValueForSave(fieldPath, fieldModel, proxyControl, controlTemplate);
             fieldValueModel.Pristine = proxyControl.pristine;
 
-            if (controlTemplate.caseBinding && controlTemplate.caseBinding.length > 0 ) {
-              if (!checkCaseBindingBehaviour || (checkCaseBindingBehaviour &&
-                        (controlTemplate.caseBindingBehaviour === CaseBindingBehaviour.Overwrite ||
-                         (controlTemplate.caseBindingBehaviour === CaseBindingBehaviour.NewOnly &&
-                             (this.lastSyncedFields[controlTemplate.caseBinding] &&
-                               this.lastSyncedFields[controlTemplate.caseBinding].Value !== fieldValueModel.Value))))) {
+            if (controlTemplate.caseBinding && controlTemplate.caseBinding.length > 0) {
+              const prevSyncedValue = this.lastSyncedFields[controlTemplate.caseBinding] ? this.lastSyncedFields[controlTemplate.caseBinding].Value : null;
+              const isNewOnlyCaseBinding = controlTemplate.caseBindingBehaviour === CaseBindingBehaviour.NewOnly;
+              if (checkCaseBindingBehaviour) {
+                if (controlTemplate.caseBindingBehaviour === CaseBindingBehaviour.Overwrite) {
                   caseFieldsValues[controlTemplate.caseBinding] = fieldValueModel;
+                  // do not save values for caseBinding fields - only pristine flag.
+                  fieldsValues[fieldPath] = new FieldValueModel('', '', proxyControl.pristine);
+                }
+                if (isNewOnlyCaseBinding) {
+                  const isExistingCase = formModel.proxyModel.formInfo.caseId > 0;
+                  if (!isExistingCase && prevSyncedValue !== fieldValueModel.Value) { // pass value to case only if case is new
+                    caseFieldsValues[controlTemplate.caseBinding] = fieldValueModel;
+                  }
+                  fieldsValues[fieldPath] = fieldValueModel;
                 }
                 this.lastSyncedFields[controlTemplate.caseBinding] = fieldValueModel;
-
-                // do not save values for caseBinding fields - only pristine flag.
-                fieldsValues[fieldPath] = new FieldValueModel('', '', proxyControl.pristine);
+              } else if(isNewOnlyCaseBinding) {
+                fieldsValues[fieldPath] = fieldValueModel;
+              }
             } else {
                 fieldsValues[fieldPath] = fieldValueModel;
             }
@@ -267,6 +275,7 @@ export class FormControlsManagerService {
     }
 
     setFormData(formData: FormDataModel, formModel: FormModel) {
+        this.initSyncedValues(formData);
         let res = this.prepareFormFieldsValues(formData, formModel);
         let exCaseFieldsValuesMap = res.exCaseFieldsMap;
         let caseBindingFieldsMap = res.caseBindingFieldsMap;
@@ -313,9 +322,12 @@ export class FormControlsManagerService {
 
                         let fieldPath = new FormFieldPathModel(tabModel.id, sectionModel.id, sectionInstanceIndex, fieldModel.id);
                         let caseBinding = controlTemplate.caseBinding;
+                        let caseBindingBehaviour = controlTemplate.caseBindingBehaviour;
 
                         let fieldsValuesSource =
-                            (caseBinding && caseBinding.length > 0) ? caseBindingFieldsMap : sectionValues;
+                            (caseBinding && caseBinding.length > 0 && caseBindingBehaviour && caseBindingBehaviour === CaseBindingBehaviour.Overwrite) ?
+                               caseBindingFieldsMap :
+                               sectionValues;
 
                         let fieldValueItem = fieldsValuesSource.find((el: IExtendedCaseValuesFieldPathMap) => el.fieldPath.equals(fieldPath));
                         let fieldValue = !commonMethods.isUndefinedOrNull(fieldValueItem) ? fieldValueItem.fieldValue : undefined;
@@ -331,6 +343,15 @@ export class FormControlsManagerService {
                 }
             }
         }
+    }
+
+    private initSyncedValues(formData: FormDataModel) {
+      if (formData.CaseFieldsValues) {
+        formData.CaseFieldsValues.getKeys().forEach((key: string) => {
+          let fieldValue: FieldValueModel = formData.CaseFieldsValues.getItem(key);
+          this.lastSyncedFields[key] = fieldValue;
+        });
+      }
     }
 
     private prepareFormFieldsValues(formData: FormDataModel, formModel: FormModel): any {
@@ -353,7 +374,7 @@ export class FormControlsManagerService {
             formModel.createFieldsIterator()
                 .forEach((formField: FieldModelBase, fieldPath: FormFieldPathModel) => {
                     let fieldTemplate = formField.template;
-                    if (fieldTemplate.caseBinding && fieldTemplate.caseBinding.length) {
+                    if (fieldTemplate.caseBinding && fieldTemplate.caseBinding.length && fieldTemplate.caseBindingBehaviour === CaseBindingBehaviour.Overwrite) {
                         caseBindingFields.add(fieldPath.buildFormFieldPath(), fieldTemplate);
                     }
                 });

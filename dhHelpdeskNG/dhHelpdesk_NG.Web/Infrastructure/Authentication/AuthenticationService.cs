@@ -29,10 +29,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
     {
         LoginResult Login(HttpContextBase ctx, string userName, string pwd, UserTimeZoneInfo userTimeZoneInfo);
         bool SignIn(HttpContextBase ctx);
+        bool SignInApplicationUser(HttpContextBase ctx, int userId);
         void ClearLoginSession(HttpContextBase ctx);
         HttpCookie CreateFormsAuthCookie(string userName, string userData);
         string GetSiteLoginPageUrl();
         string GetAuthenticationModeLoginUrl();
+        LoginMode SetLoginModeToMicrosoft();
+        LoginMode SetLoginModeToApplication();
     }
 
     public class AuthenticationService : IAuthenticationService
@@ -48,8 +51,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         private readonly IUserContext _userContext;
         private readonly ICustomerContext _customerContext;
         private readonly ISessionContext _sessionContext;
-        private readonly IAuthenticationBehavior _authenticationBehavior;
-        private readonly ILoggerService _logger = LogManager.Session;        
+        public IAuthenticationBehavior _authenticationBehavior;
+        private readonly ILoggerService _logger = LogManager.Session;
+        private readonly IAuthenticationServiceBehaviorFactory _behaviorFactory;
 
         #region ctor()
 
@@ -73,6 +77,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             _languageService = languageService;
             _usersPasswordHistoryService = usersPasswordHistoryService;
             _settingService = settingService;
+            _behaviorFactory = behaviorFactory;
 
             _customerContext = customerContext;
             _userContext = userContext;
@@ -83,7 +88,20 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         }
 
         #endregion
+        public LoginMode SetLoginModeToMicrosoft()
+        {
+            _sessionContext.SetLoginMode(LoginMode.Microsoft);
+            _authenticationBehavior = _behaviorFactory.Create(LoginMode.Microsoft);
+            return _sessionContext.LoginMode;
+            
+        }
+        public LoginMode SetLoginModeToApplication()
+        {
+            _sessionContext.SetLoginMode(LoginMode.Application);
+            _authenticationBehavior = _behaviorFactory.Create(LoginMode.Application);
+            return _sessionContext.LoginMode;
 
+        }
         public LoginResult Login(HttpContextBase ctx, string userName, string pwd, UserTimeZoneInfo userTimeZoneInfo)
         {
             var user = _userService.Login(userName, pwd);
@@ -124,6 +142,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             };
 
             // override with test values from config if required
+            //Todo - whats this?
             ApplyUserIdentityOverrides(userIdentity);
 
             //set app and session state
@@ -176,6 +195,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 //get customer user (tblUsers)
                 var customerUser = GetLocalUser(userIdentity);
 
+                // Todo - Create cookie?
+                
                 //set only if its non-empty
                 if (customerUser != null)
                 {
@@ -188,6 +209,18 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                     AddLoggedInUser(customerUser, _customerContext, ctx);
                     UpdateUserLogin(ctx, customerUser);
                     //_caseLockService.CaseLockCleanUp(); //todo: check if required?
+                    _sessionContext.SetCurrentLanguageId(customerUser.LanguageId);
+
+                    var language = _languageService.GetLanguage(customerUser.LanguageId);
+                    if (language != null)
+                        _sessionContext.SetCurrentLanguageCode(language.LanguageID);
+
+                    //Set Cookie?
+                    var cookie = CreateFormsAuthCookie(customerUser.UserId, customerUser.ToString()); //todo: check if userData is correct?
+                    ctx.Response.Cookies.Add(cookie);
+                    ////try to auto detect user time zone
+                    //loginResult.TimeZoneAutodetect =
+                    //    SetUserTimeZone(userTimeZoneInfo.TimeZoneOffsetInJan1, userTimeZoneInfo.TimeZoneOffsetInJul1, user);
                 }
                 else
                 {
@@ -203,6 +236,56 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             
 
             return true;
+        }
+        public bool SignInApplicationUser(HttpContextBase ctx, int userId)
+        {
+            _logger.Debug($"AuthenticationService.SignIn: authenticating user. LoginMode: {_sessionContext.LoginMode}");
+
+            var userIdentity = _authenticationBehavior.CreateUserIdentityById(userId);
+
+            if (!string.IsNullOrWhiteSpace(userIdentity?.UserId))
+            {
+                //    ApplyUserIdentityOverrides(userIdentity);
+                //    _sessionContext.SetUserIdentity(userIdentity);
+
+                //    _logger.Debug("AuthenticationService.SignIn: user has successfully been authenticated. " +
+                //                 $"User: {userIdentity.UserId}, Domain: {userIdentity.Domain}, FullName: {userIdentity.FirstName + " " + userIdentity.LastName} ");
+
+                //    //get customer user (tblUsers)
+                //    var customerUser = GetLocalUser(userIdentity);
+
+                //    //set only if its non-empty
+                //    if (customerUser != null)
+                //    {
+                //        //set user and customer context
+                //        _userContext.SetCurrentUser(customerUser);
+                //        _customerContext.SetCustomer(customerUser.CustomerId);
+
+                //        FixUserTimeZone(customerUser);
+
+                //        AddLoggedInUser(customerUser, _customerContext, ctx);
+                //        UpdateUserLogin(ctx, customerUser);
+                //        //_caseLockService.CaseLockCleanUp(); //todo: check if required?
+                //        _sessionContext.ClearSession();
+                //        _sessionContext.SetUserIdentity(userIdentity);
+
+                //    }
+                //    else
+                //    {
+                //        _logger.Warn($"AuthenticationService.SignIn: Customer user doesn't exist for login '{userIdentity.UserId}'.");
+                //        return false;
+                //    }
+                //}
+                //else
+                //{
+                //    _logger.Warn($"AuthenticationService.SignIn: User identity is null or empty.");
+                //    return false;
+                //}
+
+
+                return true;
+            }
+            return false;
         }
 
         // try to load users by different formats
@@ -241,19 +324,25 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
            _logger.Debug("AuthenticationService. Clearing logging session.");
 
             var sessionId = _sessionContext.SessionId;
-
+            var loginMode = _sessionContext.LoginMode;
             if (!string.IsNullOrWhiteSpace(sessionId))
             {
                 _applicationContext.RemoveLoggedInUser(ctx.Session.SessionID);
                 _sessionContext.ClearSession();
             }
-
+            //Clear Microsoft login which is not set in config file
+            if (loginMode == LoginMode.Microsoft)
+            {
+                ctx.GetOwinContext().Authentication.SignOut();
+            }
             //clear auth cookie for forms/mixed modes
             if (_appConfiguration.LoginMode == LoginMode.Application ||
-                _appConfiguration.LoginMode == LoginMode.Mixed)
+                _appConfiguration.LoginMode == LoginMode.Mixed
+)
             {
                 FormsAuthentication.SignOut();
             }
+
         }
 
         public string GetSiteLoginPageUrl()

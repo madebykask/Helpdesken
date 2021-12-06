@@ -129,29 +129,50 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Owin, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.3.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.Identity.Client, Version=4.36.1.0, Culture=neutral, PublicKeyToken=0a613f4dd989e8ae, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Identity.Client.4.36.1\lib\net461\Microsoft.Identity.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Cors, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Cors.3.1.0\lib\net45\Microsoft.Owin.Cors.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.Identity.Client.Extensions.Msal, Version=2.19.1.0, Culture=neutral, PublicKeyToken=0a613f4dd989e8ae, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Identity.Client.Extensions.Msal.2.19.1\lib\net45\Microsoft.Identity.Client.Extensions.Msal.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.5.3.0\lib\net461\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.3.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Logging.5.3.0\lib\net461\Microsoft.IdentityModel.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.1.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.IdentityModel.Protocols, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Protocols.5.3.0\lib\net461\Microsoft.IdentityModel.Protocols.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Protocols.OpenIdConnect.5.3.0\lib\net461\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.3.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.4.2.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Cors, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Cors.4.1.1\lib\net45\Microsoft.Owin.Cors.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.4.1.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.4.2.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.4.1.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.4.2.0\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.4.1.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OpenIdConnect, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OpenIdConnect.4.1.1\lib\net45\Microsoft.Owin.Security.OpenIdConnect.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -228,9 +249,8 @@
     </Reference>
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.identitymodel.services" />
-    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.1.0.0\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.3.0\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
     </Reference>
     <Reference Include="System.IdentityModel.Tokens.ValidatingIssuerNameRegistry, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.4.5.1\lib\net45\System.IdentityModel.Tokens.ValidatingIssuerNameRegistry.dll</HintPath>
@@ -253,6 +273,8 @@
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Text.Encodings.Web, Version=5.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Text.Encodings.Web.5.0.1\lib\net461\System.Text.Encodings.Web.dll</HintPath>
@@ -400,6 +422,7 @@
     <Compile Include="Controllers\CasesController_MobileRoute.cs" />
     <Compile Include="Controllers\FileAccessController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
+    <Compile Include="Infrastructure\Authentication\Behaviors\MicrosoftAuthenticationBehavior.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\MixedModeAuthenticationBehavior.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\PrincipalExtensions.cs" />
     <Compile Include="Infrastructure\Behaviors\AdvancedSearchBehavior.cs" />
@@ -743,12 +766,15 @@
     <Content Include="Content\css\clickmultimenu_dropdown.css" />
     <Content Include="Content\css\custom\dynamic-cases.css" />
     <Content Include="Content\css\extendedcase.css" />
+    <Content Include="Content\css\font-awesome.min.css" />
     <Content Include="Content\css\images\sort_asc.png" />
     <Content Include="Content\css\images\sort_both.png" />
     <Content Include="Content\css\images\sort_desc.png" />
     <Content Include="Content\css\print.css" />
     <Content Include="Content\css\select2.css" />
     <Content Include="Content\css\select2.min.css" />
+    <Content Include="Content\css\summernote-lite.css" />
+    <Content Include="Content\css\summernote.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\icons\advanced_search.png" />
@@ -815,6 +841,8 @@
     <Content Include="Content\img\ic_thumbs_down_black_24dp_2x.png" />
     <Content Include="Content\img\ic_thumbs_up_black_24dp_1x.png" />
     <Content Include="Content\img\ic_thumbs_up_black_24dp_2x.png" />
+    <Content Include="Content\img\ms-symbollockup_signin_light.png" />
+    <Content Include="Content\img\ms-symbollockup_signin_light.svg" />
     <Content Include="Content\js\Account\order.js" />
     <Content Include="Areas\Admin\Content\js\Users\_input.js" />
     <Content Include="Content\js\additional-methods.js" />
@@ -1320,6 +1348,25 @@
     <Content Include="Content\js\tinymce\themes\modern\theme.min.js" />
     <Content Include="Content\js\tinymce\tinymce.initiate.js" />
     <Content Include="Content\js\tinymce\tinymce.min.js" />
+    <Content Include="Content\summernote-0.8.18\font\summernote.eot" />
+    <Content Include="Content\summernote-0.8.18\font\summernote.ttf" />
+    <Content Include="Content\summernote-0.8.18\font\summernote.woff" />
+    <Content Include="Content\summernote-0.8.18\font\summernote.woff2" />
+    <Content Include="Content\summernote-0.8.18\summernote-bs4.css" />
+    <Content Include="Content\summernote-0.8.18\summernote-bs4.js" />
+    <Content Include="Content\summernote-0.8.18\summernote-bs4.min.css" />
+    <Content Include="Content\summernote-0.8.18\summernote-bs4.min.js" />
+    <Content Include="Content\summernote-0.8.18\summernote-bs4.min.js.LICENSE.txt" />
+    <Content Include="Content\summernote-0.8.18\summernote-lite.css" />
+    <Content Include="Content\summernote-0.8.18\summernote-lite.js" />
+    <Content Include="Content\summernote-0.8.18\summernote-lite.min.css" />
+    <Content Include="Content\summernote-0.8.18\summernote-lite.min.js" />
+    <Content Include="Content\summernote-0.8.18\summernote-lite.min.js.LICENSE.txt" />
+    <Content Include="Content\summernote-0.8.18\summernote.css" />
+    <Content Include="Content\summernote-0.8.18\summernote.js" />
+    <Content Include="Content\summernote-0.8.18\summernote.min.css" />
+    <Content Include="Content\summernote-0.8.18\summernote.min.js" />
+    <Content Include="Content\summernote-0.8.18\summernote.min.js.LICENSE.txt" />
     <Content Include="Content\templates\case-invoice-case-files.tmpl.html" />
     <Compile Include="Areas\Reports\Controllers\ReportController.cs" />
     <Compile Include="Areas\Reports\Controllers\ServicesController.cs" />
@@ -3565,6 +3612,16 @@
     <Content Include="Areas\Admin\Views\ExtendedCase\CustomerForms.cshtml" />
     <Content Include="Areas\Admin\Views\ExtendedCase\EditForm.cshtml" />
     <Content Include="Areas\Admin\Views\ExtendedCase\_CustomerFormsList.cshtml" />
+    <Content Include="Content\summernote-0.8.18\summernote-bs4.js.map" />
+    <Content Include="Content\summernote-0.8.18\summernote-bs4.min.js.map" />
+    <Content Include="Content\summernote-0.8.18\summernote-lite.js.map" />
+    <Content Include="Content\summernote-0.8.18\summernote-lite.min.js.map" />
+    <Content Include="Content\summernote-0.8.18\summernote.js.map" />
+    <Content Include="Content\summernote-0.8.18\summernote.min.js.map" />
+    <Content Include="Content\css\font\summernote.eot" />
+    <Content Include="Content\css\font\summernote.ttf" />
+    <Content Include="Content\css\font\summernote.woff" />
+    <Content Include="Content\css\font\summernote.woff2" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\i18n\ar.js" />
     <Content Include="Scripts\i18n\az.js" />
@@ -5192,11 +5249,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>54624</DevelopmentServerPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:63223/</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost:63223/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

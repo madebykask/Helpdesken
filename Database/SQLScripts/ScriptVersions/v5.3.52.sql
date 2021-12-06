@@ -1,4 +1,4 @@
-﻿--update DB from 5.3.51 to 5.3.52 version
+--update DB from 5.3.51 to 5.3.52 version
 
 --New table for Extended Case Form Templates
 RAISERROR ('Create table ExtendedCaseFormTemplates', 10, 1) WITH NOWAIT

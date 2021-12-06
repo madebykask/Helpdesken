@@ -801,6 +801,9 @@ EditPage.prototype.reExtendCaseLock = function () {
             caseLockedWarning$.modal('show');
             self.stopCaseLockTimer();
         }
+        else {
+            console.log("Data has no length");
+        }
     });
 };
 
@@ -1562,8 +1565,10 @@ EditPage.prototype.unlockCase = function (lockGuid, url) {
 EditPage.prototype.unlockCaseById = function(caseId, url) {
     var self = this;
     var p = self.p;
+    console.log("Unlocking");
     $.post(p.unlockCaseByCaseIdUrl, $.param({ caseId: caseId }), function (data) {
         if (data !== "Success") {
+            console.log(data);
             ShowToastMessage(p.caseUnlockErrorMessage, "Error");
         }
         if (url) {

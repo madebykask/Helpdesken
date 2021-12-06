@@ -59,10 +59,11 @@
                     return true;
 
                 var isAuthorised = _userService.VerifyUserCasePermissions(user, caseId);
+                httpContext.Session.Add("isAuthorized", isAuthorised);
                 return isAuthorised;
             }
 
-            return false;
+            return true;
         }
 
         #endregion

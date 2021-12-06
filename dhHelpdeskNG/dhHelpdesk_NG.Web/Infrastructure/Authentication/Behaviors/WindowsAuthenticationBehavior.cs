@@ -18,7 +18,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
 
             return userIdentity;
         }
-
+        public UserIdentity CreateUserIdentityById(int userId)
+        {
+            return null;
+        }
         public void SignOut(HttpContextBase ctx)
         {
             // in windows mode a user can use login page to login with helpdesk credentials

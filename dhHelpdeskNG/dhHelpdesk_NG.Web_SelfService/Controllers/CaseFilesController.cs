@@ -224,11 +224,25 @@ namespace DH.Helpdesk.SelfService.Controllers
             var useInternalLogs = customer.UseInternalLogNoteOnExternalPage.ToBool();
 
             var logFileType = LogFileType.External;
+            var basePath = _masterDataService.GetFilePath(customer.Id) + "\\";
 
             if (isTwoAttachmentsMode && useInternalLogs)
             {
                 logFileType = LogFileType.Internal;
             }
+            var logId = int.Parse(id);
+
+            var logFiles = _logFileService.GetLogFilesByNameAndId(fileName, logId);
+            var logFile = logFiles
+                .OrderBy(o => o.LogType)
+                .FirstOrDefault(o => o.FileName == fileName);
+
+            // Check that the found file also have set its logfiletype to Internal, if not use external for legacy support.
+            if (logFile != null && isTwoAttachmentsMode && useInternalLogs &&
+                logFile.LogType == LogFileType.Internal)
+                logFileType = logFile.ParentLogType ?? logFile.LogType;
+            else
+                logFileType = LogFileType.External;
 
             byte[] fileContent;
             if (GuidHelper.IsGuid(id))
@@ -236,27 +250,29 @@ namespace DH.Helpdesk.SelfService.Controllers
                 fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, logFileType.GetFolderPrefix());
             }
             else
-            {
-                var logId = int.Parse(id);
-
-                var logFiles = _logFileService.GetLogFilesByNameAndId(fileName, logId);
-                var logFile = logFiles
-                    .OrderBy(o => o.LogType)
-                    .FirstOrDefault(o => o.FileName == fileName);
-
-                // Check that the found file also have set its logfiletype to Internal, if not use external for legacy support.
-                if (logFile != null && isTwoAttachmentsMode && useInternalLogs &&
-                    logFile.LogType == LogFileType.Internal)
-                    logFileType = logFile.ParentLogType ?? logFile.LogType;
-                else
-                    logFileType = LogFileType.External;
-
+            {               
                 //existing file
-                var basePath = _masterDataService.GetFilePath(customer.Id);
-                var model = _logFileService.GetFileContentByIdAndFileName(logId, basePath, fileName, logFileType);
+                if (logFile.IsCaseFile != null && logFile.IsCaseFile == true)
+                {
+                    //Get CaseNumber
+                    if (caseId.HasValue && caseId > 0)
+                    {
+                        var caseNumber = _caseService.GetCaseById(caseId.Value).CaseNumber;
+                        basePath = basePath + caseNumber + "\\" + fileName;
+                    }
+                }
+                else 
+                {
+                    //External file
+                    var prefix = "";
+                    if (logFileType == LogFileType.External)
+                    {
+                        prefix = DH.Helpdesk.Common.Enums.ModuleName.Log;
+                    }
+                    var logFolder = $"{prefix}{logId}";
+                    basePath = basePath + logFolder + "\\" + fileName;
 
-                fileContent = model.Content;
-
+                }
                 if (!_featureToggleService.IsActive(FeatureToggleTypes.DISABLE_LOG_VIEW_CASE_FILE))
                 {
                     var logCaseId = caseId ?? _logService.GetLogById(logId).CaseId;
@@ -269,7 +285,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                             FileViewLogFileSource.Selfservice, FileViewLogOperation.View);
                 }
             }
-
+            string mimeType = MimeMapping.GetMimeMapping(fileName);
+            fileContent = _filesStorage.GetFileByteContent(basePath);
             return File(fileContent, "application/octet-stream", fileName);
         }
 

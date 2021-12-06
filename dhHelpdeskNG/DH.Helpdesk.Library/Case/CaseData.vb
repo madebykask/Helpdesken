@@ -927,9 +927,9 @@ Public Class CaseData
                               "Miscellaneous, ContactBeforeAction, SMS, AgreedDate, Available, c.Cost, OtherCost, Replace(Currency,'', NULL) Currency, Performer_User_Id, CaseResponsibleUser_Id, Priority_Id, Status_Id, StateSecondary_Id, ExternalTime, Project_Id, " &
                               "ProjectSchedule_Id, Verified, Replace(VerifiedDescription, '', NULL) VerifiedDescription, Replace(SolutionRate,'', NULL) SolutionRate, PlanDate, ApprovedDate, ApprovedBy_User_Id, WatchDate, LockCaseToWorkingGroup_Id, WorkingGroup_Id, FinishingDate, Replace(FinishingDescription,'', NULL) FinishingDescription, FollowUpDate, " &
                               "RegistrationSource, RelatedCaseNumber, Problem_Id, Change_Id, Deleted, Status, RegLanguage_Id, Replace(RegUserId,NULL, '') RegUserId, Replace(RegUserDomain,NULL, '') RegUserDomain, ProductAreaQuestionVersion_Id, LeadTime, getutcdate(),'" & Replace(sCreatedByUser, "'", "''") & "', CausingPartId, " &
-                              "DefaultOwnerWG_Id, RegistrationSourceCustomer_Id, c.CostCentre, ca.Person_Name, ca.ReportedBy, ca.Person_Phone, ca.UserCode, " &
+                              "DefaultOwnerWG_Id, RegistrationSourceCustomer_Id, Replace(c.CostCentre, '', NULL) AS CostCentre , ca.Person_Name, ca.ReportedBy, ca.Person_Phone, ca.UserCode, " &
                               "ca.Department_Id, '', LatestSLACountDate, ca.Person_Email, ca.Person_CellPhone,ca.Region_Id, ca.OU_Id, " &
-                              "ca.CostCentre, ca.Place " &
+                              "Replace(ca.CostCentre, '', NULL) AS CostCentre , ca.Place " &
                        "From tblCase c " &
                        "LEFT JOIN tblCaseIsAbout ca ON c.Id = ca.Case_Id" &
                        " where c.Id = " & iCase_Id & " "

@@ -87,7 +87,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             _fileViewLogService = fileViewLogService;
             _departmentsService = departmentsService;
         }
-
+        [ValidateInput(false)]
         public ActionResult Index(int texttypeid, string textSearch, int compareMethod)
         {
             var searchOpt = new SearchOption { TextType = texttypeid, TextSearch = textSearch, CompareMethod = compareMethod };
@@ -380,7 +380,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             return this.View(model);
         }
-
+        [ValidateInput(false)]
         public ActionResult EditTranslation(int id, int textType, string textSearch, int compareMethod)
         {
             var text = this._textTranslationService.GetText(id);
@@ -400,6 +400,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult EditTranslation(int id, int texttypeid, string textSearch, int compareMethod, List<TextTranslationLanguageList> TTs, FormCollection coll)
         {
             var textToSave = this._textTranslationService.GetText(id);
@@ -817,10 +818,15 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [ValidateInput(false)]
         public PartialViewResult SearchText(int textTypeId, string searchValue, int searchOption)
         {
             var model = new TranslationGridModel();
-            var allTexts = this._textTranslationService.GetAllTexts(textTypeId, SessionFacade.CurrentCustomer.Language_Id).ToList();
+            //Before
+            //var allTexts = this._textTranslationService.GetAllTexts(textTypeId, SessionFacade.CurrentCustomer.Id).ToList();
+            //New 20211109
+            var allTexts = this._textTranslationService.GetAllTexts(textTypeId, null).ToList();
+            
 
             switch (searchOption)
             {

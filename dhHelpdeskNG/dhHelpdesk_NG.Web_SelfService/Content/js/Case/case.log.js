@@ -184,7 +184,6 @@ $(function () {
             //public
             this.saveLogMessage = function (src) {
                 var self = this;
-                
                 var isPopup = src && src === "popup";
                 //console.log('>>> IsPopup: ' + (isPopup ? 'true' : 'false'));
 
@@ -201,7 +200,7 @@ $(function () {
                     }
                 } else {
                     changeState.call(self, true);
-                    $.get(saveLogMessageUrl, { caseId: caseId, note: note, logFileGuid: logFileKey },
+                    $.post(saveLogMessageUrl, { caseId: caseId, note: note, logFileGuid: logFileKey },
                         function(res) {
                             if (isPopup) {
                                 if (caseEmailGuid != null && caseEmailGuid !== '') {

@@ -1747,11 +1747,11 @@ namespace DH.Helpdesk.Services.Services
             caseSolution.ActiveTabSelfservice = caseSolution.ActiveTabSelfservice ?? "";
             caseSolution.AvailableTabsSelfsevice = caseSolution.AvailableTabsSelfsevice ?? "";
 
-            if (caseSolution.Text_External != null && caseSolution.Text_External.Length > 3000)
-                caseSolution.Text_External = caseSolution.Text_External.Substring(0, 3000);
+            //if (caseSolution.Text_External != null && caseSolution.Text_External.Length > 3000)
+            //    caseSolution.Text_External = caseSolution.Text_External.Substring(0, 3000);
 
-            if (caseSolution.Text_Internal != null && caseSolution.Text_Internal.Length > 3000)
-                caseSolution.Text_Internal = caseSolution.Text_Internal.Substring(0, 3000);
+            //if (caseSolution.Text_Internal != null && caseSolution.Text_Internal.Length > 3000)
+            //    caseSolution.Text_Internal = caseSolution.Text_Internal.Substring(0, 3000);
 
             if (caseSolution.Id == 0)
                 CaseSolutionRepository.Add(caseSolution);

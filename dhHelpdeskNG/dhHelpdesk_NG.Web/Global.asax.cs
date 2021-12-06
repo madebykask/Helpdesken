@@ -2,10 +2,12 @@
 using System.Collections.Concurrent;
 using System.Configuration;
 using System.Diagnostics;
+using System.IdentityModel.Claims;
 using System.IdentityModel.Services;
 using System.Text;
 using System.Threading;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -83,6 +85,11 @@ namespace DH.Helpdesk.Web
 
             SetPerformanceLogSettings();
             //DumpModules();
+            string loginMode = System.Configuration.ConfigurationManager.AppSettings["LoginMode"];
+            if (loginMode == "Microsoft" || loginMode == "Application")
+            {
+                AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
+            }
         }
 
         private void ViewEngineInit()

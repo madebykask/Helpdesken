@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.ExtendedCaseEntity
 			Property(e => e.LanguageId).IsRequired();
 			Property(e => e.Property).IsRequired();
 			Property(e => e.Text).IsRequired();
+			Property(e => e.ExtendedCaseForm_Id).IsOptional();
 
 
 			ToTable("ExtendedCaseTranslations");

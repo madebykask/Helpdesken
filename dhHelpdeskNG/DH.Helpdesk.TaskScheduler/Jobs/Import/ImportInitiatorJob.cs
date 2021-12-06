@@ -43,7 +43,7 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Import
                     if (inputData.InputColumns.Any())
 						_importInitiatorService.ImportInitiator(setting, inputData, fieldSettings, ref _logs);
 
-                    if (setting.Logging == 1)
+                    if (setting.Logging == 1 && inputData.InputColumns.Any())
                         _importInitiatorService.CreatLogFile(_logs);
                 }
                 

@@ -239,15 +239,12 @@ namespace DH.Helpdesk.SelfService.Controllers
                 var data = _extendedCaseService.GetExtendedCaseFromCase(caseId);
                 if (data != null)
                 {
-                    //Get case + extendedcase
-                    var extCase = _caseService.GetCaseById(caseId);
-                    //New check here if Only Extended case should see Case-tab
-                    if (extCase.CaseSolution.AvailableTabsSelfsevice != "case-tab")
+                    var curCase = _caseService.GetCaseById(caseId);
+                    if(curCase.CaseSolution.AvailableTabsSelfsevice != "case-tab")
                     {
-                        var caseTemplateId = extCase.CaseSolution.Id;
-                        return RedirectToAction("ExtendedCase", new { caseTemplateId, caseId = extCase.Id });
+                        return RedirectToAction("ExtendedCasePublic", new { id = data.ExtendedCaseGuid });
                     }
-                    //return RedirectToAction("ExtendedCasePublic", new { id = data.ExtendedCaseGuid });
+                    
                 }
                 
                 //check dynamic case
@@ -517,15 +514,26 @@ namespace DH.Helpdesk.SelfService.Controllers
                 return RedirectToAction("Index", "Error");
             }
             */
-
+            bool both = false;
             var caseId = _extendedCaseService.GetCaseIdByExtendedCaseGuid(id);
             if (caseId <= 0)
             {
                 ErrorGenerator.MakeError("Extended case data not found!", 210);
                 return RedirectToAction("Index", "Error");
             }
+            var currentCase = _caseService.GetCaseById(caseId);
+            var model = GetExtendedCaseViewModel(currentCase.CaseSolution.Id,  caseId);
+            var languageId = SessionFacade.CurrentLanguageId;
+            var currentCaseModel = GetCaseReceiptModel(currentCase, languageId);
+            model.CaseOverviewModel = currentCaseModel;
+            ViewBag.AttachmentPlacement = model.AttachmentPlacement;
 
-            var model = GetExtendedCaseViewModel(null, caseId, true);
+            if (currentCase.CaseSolution.AvailableTabsSelfsevice == "both")
+            {
+                model.ActiveTab = currentCase.CaseSolution.ActiveTabSelfservice;
+                both = true;
+            }
+
             if (ErrorGenerator.HasError())
                 return RedirectToAction("Index", "Error");
 
@@ -533,7 +541,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             ViewBag.ReturnUrl = Url.Action("ExtendedCasePublic", new { id });
             ViewBag.caseEmailGuid = id;
 
-            return View("ExtendedCase", model);
+            return both ? View("ExtendedCaseWithCase", model) : View("ExtendedCase", model);
         }
 
         [HttpGet]
@@ -543,7 +551,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var model = GetExtendedCaseViewModel(caseTemplateId, caseId);
             if (ErrorGenerator.HasError())
                 return RedirectToAction("Index", "Error");
-            RouteData.Values.Remove("caseId"); //hack to prevent ambient params in Url.Action in view
+            bool both = false;
 
             if (!caseId.IsNew())
             {
@@ -566,17 +574,14 @@ namespace DH.Helpdesk.SelfService.Controllers
                    if (currentCase.CaseSolution.AvailableTabsSelfsevice =="both")
                     {
                         model.ActiveTab = currentCase.CaseSolution.ActiveTabSelfservice;
-                        return View("ExtendedCaseWithCase", model);
+                        both = true;  
                     }
                 }
-                return View("ExtendedCase", model);
-            }
-            else
-            {
-                return View("ExtendedCase", model);
+
             }
 
-            
+            return both ? View("ExtendedCaseWithCase", model) : View("ExtendedCase", model);
+
         }
 
         [HttpPost]
@@ -799,7 +804,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         //TODO: should be refactored to methods with single responsibility!
-        [HttpGet]
+        [HttpPost]
         [ValidateInput(false)]
         public ActionResult _CaseLogNote(int caseId, string note, string logFileGuid)
         {

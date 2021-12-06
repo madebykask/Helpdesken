@@ -10,7 +10,7 @@ namespace DH.Helpdesk.Domain.ExtendedCaseEntity
         }
         
         public string Name { get; set; }
-        public string MetaData { get; set; } //todo: remove 
+        public string MetaData { get; set; }
         public int Version { get; set; }
 
 

@@ -8130,6 +8130,100 @@ If not exists (select * from tblTextTranslation where text_id = 2093 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2093, 2, 'The case was unlocked and user <name> locked the case. Your changes can not be saved. Close the case and try to open again later.')
 GO
 
+If not exists (select * from tbltext where id = 2094)
+	insert into tbltext (id, TextString) VALUES (2094, 'Sparat')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2094 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2094, 2, 'Saved')
+GO
+
+If not exists (select * from tbltext where id = 2095)
+	insert into tbltext (id, TextString) VALUES (2095, 'Filuppladdning')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2095 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2095, 2, 'File Upload')
+GO
+
+If not exists (select * from tbltext where id = 2096)
+	insert into tbltext (id, TextString) VALUES (2096, 'Alla texter måste vara ifyllda på språket')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2096 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2096, 2, 'All text needs to be entered in language')
+GO
+
+If not exists (select * from tbltext where id = 2097)
+	insert into tbltext (id, TextString) VALUES (2097, 'Fälttext')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2097 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2097, 2, 'Field Text')
+GO
+
+If not exists (select * from tbltext where id = 2098)
+	insert into tbltext (id, TextString) VALUES (2098, 'Dra filer hit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2098 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2098, 2, 'Drop files here')
+GO
+
+If not exists (select * from tbltext where id = 2099)
+	insert into tbltext (id, TextString) VALUES (2099, 'Formuläret används på minst ett ärende. Borttagning av fält/sektion påverkar existerande ärenden. Är du säker på att du vill ta bort')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2099 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2099, 2, 'The form is used on at least one case. Deletion of field/section affects existing cases. Are you sure you want delete it')
+GO
+
+If not exists (select * from tbltext where id = 2100)
+	insert into tbltext (id, TextString) VALUES (2100, 'Fliknamn')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2100 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2100, 2, 'Tab Name')
+GO
+
+If not exists (select * from tbltext where id = 2101)
+	insert into tbltext (id, TextString) VALUES (2101, 'Formulärets flik får ej vara tom')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2101 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2101, 2, 'The form tab can not be empty')
+GO
+
+If not exists (select * from tbltext where id = 2102)
+	insert into tbltext (id, TextString, TextType) VALUES (2102, 'Formulär', 1)
+GO
+If not exists (select * from tblTextTranslation where text_id = 2102 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2102, 2, 'Form')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2102 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2102, 1, 'Formulär')
+GO
+
+If not exists (select * from tbltext where id = 2103)
+	insert into tbltext (id, TextString) VALUES (2103, 'Val')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2103 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2103, 2, 'Choices')
+GO
+
+If not exists (select * from tbltext where id = 2104)
+	insert into tbltext (id, TextString) VALUES (2104, 'Radioknapp')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2104 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2104, 2, 'Radio Button')
+GO
+
+If not exists (select * from tbltext where id = 2105)
+	insert into tbltext (id, TextString) VALUES (2105, 'Kryssruta')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2105 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2105, 2, 'Checkbox')
+GO
+
+If not exists (select * from tbltext where id = 2106)
+	insert into tbltext (id, TextString) VALUES (2106, 'Rullgardinsmeny')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2106 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2106, 2, 'Dropdown Menu')
+GO
+
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
@@ -8139,13 +8233,5 @@ If not exists (select * from tblTextTranslation where text_id = 20000 and Langua
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(20000, 2, 'Start of customer generated ID:s (ignore)')
 GO
 
-
-
-GO
-
 -- *** Run this last when put translation script above this line *** --
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
-
-
-
-

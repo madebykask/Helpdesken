@@ -878,7 +878,7 @@ Module DH_Helpdesk_Mail
                                         If Not objMailTemplate Is Nothing Then
                                             Dim vNewCaseEmailList() As String = objCustomer.NewCaseEMailList.Split(";")
 
-                                            For Index As Integer = 0 To vNewCaseEmailList.Length - 1
+                                            For index As Integer = 0 To vNewCaseEmailList.Length - 1
                                                 Dim objMail As New Mail
 
                                                 sMessageId = createMessageId(objCustomer.HelpdeskEMail)
@@ -887,10 +887,10 @@ Module DH_Helpdesk_Mail
                                                 Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
                                                 sRet_SendMail =
-                                                objMail.sendMail(objCase, Nothing, objCustomer, vNewCaseEmailList(Index), objMailTemplate, objGlobalSettings,
+                                                objMail.sendMail(objCase, Nothing, objCustomer, vNewCaseEmailList(index), objMailTemplate, objGlobalSettings,
                                                                  sMessageId, sEMailLogGUID, sConnectionstring)
 
-                                                objLogData.createEMailLog(iCaseHistory_Id, vNewCaseEmailList(Index), MailTemplates.NewCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                objLogData.createEMailLog(iCaseHistory_Id, vNewCaseEmailList(index), MailTemplates.NewCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             Next
 
                                         End If
@@ -899,7 +899,7 @@ Module DH_Helpdesk_Mail
                                     If objCase.Performer_User_Id <> 0 Then
                                         Dim objUser As User = objUserData.getUserById(objCase.Performer_User_Id)
 
-                                        If Not objUser Is Nothing Then
+                                        If Not objUser Is Nothing And objUser.Status = 1 Then
                                             If objUser.AllocateCaseMail = 1 And Len(objUser.EMail) > 6 Then
                                                 objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.AssignedCaseToUser, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
@@ -985,7 +985,7 @@ Module DH_Helpdesk_Mail
                                         If Not objMailTemplate Is Nothing Then
                                             Dim vPriorityEmailList() As String = sPriorityEMailList.Split(";")
 
-                                            For Index As Integer = 0 To vPriorityEmailList.Length - 1
+                                            For index As Integer = 0 To vPriorityEmailList.Length - 1
                                                 Dim objMail As New Mail
 
                                                 sMessageId = createMessageId(objCustomer.HelpdeskEMail)
@@ -994,10 +994,10 @@ Module DH_Helpdesk_Mail
                                                 Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
                                                 sRet_SendMail =
-                                                    objMail.sendMail(objCase, Nothing, objCustomer, vPriorityEmailList(Index), objMailTemplate, objGlobalSettings,
+                                                    objMail.sendMail(objCase, Nothing, objCustomer, vPriorityEmailList(index), objMailTemplate, objGlobalSettings,
                                                                      sMessageId, sEMailLogGUID, sConnectionstring)
 
-                                                objLogData.createEMailLog(iCaseHistory_Id, vPriorityEmailList(Index), MailTemplates.AssignedCaseToPriority, sMessageId,
+                                                objLogData.createEMailLog(iCaseHistory_Id, vPriorityEmailList(index), MailTemplates.AssignedCaseToPriority, sMessageId,
                                                                           sSendTime, sEMailLogGUID, sRet_SendMail)
                                             Next
 
@@ -1093,23 +1093,26 @@ Module DH_Helpdesk_Mail
                                         objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.CaseIsUpdated, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
                                         If Not objMailTemplate Is Nothing Then
-                                            Dim objMail As New Mail
-                                            Dim objLog As New Log
+                                            Dim objUser As User = objUserData.getUserById(objCase.Performer_User_Id)
+                                            If Not objUser Is Nothing And objUser.Status = 1 And Not String.IsNullOrWhiteSpace(objUser.EMail) Then
+                                                Dim objMail As New Mail
+                                                Dim objLog As New Log
 
-                                            ' Set appropriate log text property
-                                            objLog.Text_External = If(Not isInternalLogUsed, sBodyText, String.Empty)
-                                            objLog.Text_Internal = If(isInternalLogUsed, sBodyText, String.Empty)
+                                                ' Set appropriate log text property
+                                                objLog.Text_External = If(Not isInternalLogUsed, sBodyText, String.Empty)
+                                                objLog.Text_Internal = If(isInternalLogUsed, sBodyText, String.Empty)
 
-                                            sMessageId = createMessageId(objCustomer.HelpdeskEMail)
-                                            sSendTime = Date.Now()
+                                                sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+                                                sSendTime = Date.Now()
 
-                                            Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+                                                Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
-                                            sRet_SendMail =
-                                                objMail.sendMail(objCase, objLog, objCustomer, objCase.PerformerEMail, objMailTemplate, objGlobalSettings,
-                                                                 sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
+                                                sRet_SendMail =
+                                                    objMail.sendMail(objCase, objLog, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings,
+                                                                     sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
 
-                                            objLogData.createEMailLog(iCaseHistory_Id, objCase.PerformerEMail, MailTemplates.CaseIsUpdated, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                objLogData.createEMailLog(iCaseHistory_Id, objCase.PerformerEMail, MailTemplates.CaseIsUpdated, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                            End If
                                         End If
                                     ElseIf iFinishingCause_Id <> 0 And Len(objCase.Persons_EMail) > 6 Then
                                         objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.ClosedCase, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)

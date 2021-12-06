@@ -2,257 +2,320 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.Configuration;
+//using Microsoft.Extensions.Configuration;
 using NLog;
+using upKeeper2Helpdesk;
 using upKeeper2Helpdesk.api;
 using upKeeper2Helpdesk.data;
 using upKeeper2Helpdesk.entities;
 
-namespace upKeeper2Helpdesk
+namespace DH.Helpdesk.Upkeeper_New
 {
-	class Program
-	{
-		private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+    class Program
+    {
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
-		static void Main(string[] args)
-		{
-			try
-			{
-				DateTime startTime = DateTime.Now;
+        static void Main(string[] args)
+        {
+            StreamWriter writer = null;
+            string logfilepath = System.Reflection.Assembly.GetExecutingAssembly().Location.ToString().Replace("\\DH.Helpdesk.Upkeeper.exe", "") + "\\logfiles\\";
+            if (!Directory.Exists(logfilepath))
+            {
+                Directory.CreateDirectory(logfilepath);
+            }
+            string logfilename = "Logfile_" + DateTime.Now.ToShortDateString().Replace(" ", "").Replace(":", "").Replace("-", "") + ".txt";
 
-				var builder = new ConfigurationBuilder()
-				.SetBasePath(Directory.GetCurrentDirectory())
-				.AddJsonFile("appsettings.json", false);
-
-				IConfigurationRoot configuration = builder.Build();
-				
-				BaseAPI api = new BaseAPI(configuration.GetSection("UpKeeperUrl").Value);
-
-                Token t = api.Login(configuration.GetSection("UserName").Value, configuration.GetSection("Password").Value);
-
-				int Customer_Id = 1;
-				if (configuration.GetSection("Customer_Id").Value != null)
-				{
-					bool success = Int32.TryParse(configuration.GetSection("Customer_Id").Value, out int number);
-					if (success)
-					{
-						Customer_Id = number;
-					}
-				}
-
-				bool CreateInventory = false;
-				if (configuration.GetSection("CreateInventory").Value != null && configuration.GetSection("CreateInventory").Value.ToLower() == "true") {
-					CreateInventory = true;
-				}
-
-				bool UpdateInventory = false;
-				if (configuration.GetSection("UpdateInventory").Value != null && configuration.GetSection("UpdateInventory").Value.ToLower() == "true")
-				{
-					UpdateInventory = true;
-				}
-
-				bool UpdateUpKeeper = true;
-				if (configuration.GetSection("UpdateUpKeeper").Value != null && configuration.GetSection("UpdateUpKeeper").Value.ToLower() == "false")
-				{
-					UpdateUpKeeper = false;
-				}
+            if (!System.IO.File.Exists(logfilepath + logfilename))
+            {
+                // Create a file to write to.                
+                writer = System.IO.File.CreateText(logfilepath + logfilename);
+            }
+            else
+            {
+                writer = System.IO.File.AppendText(logfilepath + logfilename);
+            }
 
 
-				if (t != null)
-				{
-					var data = new ComputerData(configuration.GetSection("HelpdeskDB").Value);
-					var idx = 0;
 
-					// Hämta alla datorer
-					IEnumerable<IDictionary<string, string>> computers = api.GetComputerNames(t);
+            try
+            {
 
-					logger.Debug("Antal datorer: " + computers.Count());
 
-					foreach (Dictionary<string, string> c in computers)
-					{
-						if ((DateTime.Now - startTime).TotalSeconds > 300)
-						{
-							t = api.Login(configuration.GetSection("UserName").Value, configuration.GetSection("Password").Value);
+                DateTime startTime = DateTime.Now;
 
-							startTime = DateTime.Now;
-						}
+                writer.WriteLine(DateTime.Now.ToString() + " DateTime: " + startTime);
 
-						idx += 1;
+                //var builder = new ConfigurationBuilder()
+                //.SetBasePath(Directory.GetCurrentDirectory())
+                //.AddJsonFile("appsettings.json", false);
+
+                //IConfigurationRoot configuration = builder.Build();
+
+                BaseAPI api = new BaseAPI(System.Configuration.ConfigurationManager.AppSettings["UpKeeperUrl"]);
+
+
+                //writer.WriteLine("Username: " + configuration.GetSection("UserName").Value);
+                //writer.WriteLine("Password: " + configuration.GetSection("Password").Value);
+
+                Token t = api.Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"]);
+                string UpKeeperOrgNo = System.Configuration.ConfigurationManager.AppSettings["UpKeeperOrgNo"];
+
+
+                writer.WriteLine("Token: " + t.Access_token.ToString());
+
+                int Customer_Id = 1;
+
+
+
+                if (System.Configuration.ConfigurationManager.AppSettings["Customer_Id"] != null)
+                {
+                    bool success = Int32.TryParse(System.Configuration.ConfigurationManager.AppSettings["Customer_Id"], out int number);
+                    if (success)
+                    {
+                        Customer_Id = number;
+                    }
+                }
+
+                writer.WriteLine("Customer Id: " + Customer_Id);
+
+                bool CreateInventory = false;
+                if (System.Configuration.ConfigurationManager.AppSettings["CreateInventory"] != null && System.Configuration.ConfigurationManager.AppSettings["CreateInventory"].ToLower() == "true")
+                {
+                    CreateInventory = true;
+                }
+
+                bool UpdateInventory = false;
+                if (System.Configuration.ConfigurationManager.AppSettings["UpdateInventory"] != null && System.Configuration.ConfigurationManager.AppSettings["UpdateInventory"].ToLower() == "true")
+                {
+                    UpdateInventory = true;
+                }
+
+                bool UpdateUpKeeper = true;
+                if (System.Configuration.ConfigurationManager.AppSettings["UpdateUpKeeper"] != null && System.Configuration.ConfigurationManager.AppSettings["UpdateUpKeeper"].ToLower() == "false")
+                {
+                    UpdateUpKeeper = false;
+                }
+
+
+                if (t != null)
+                {
+                    var data = new ComputerData(System.Configuration.ConfigurationManager.AppSettings["HelpdeskDB"]);
+                    var idx = 0;
+
+                    // Hämta alla datorer
+                    IEnumerable<IDictionary<string, string>> computers = api.GetComputerNames(t, UpKeeperOrgNo);
+
+
+                    if (computers == null)
+                    {
+                        writer.WriteLine("Computers is null, exiting....");
+                        writer.Close();
+                        return;
+                    }
+                    logger.Debug("Antal datorer: " + computers.Count());
+
+                    foreach (Dictionary<string, string> c in computers)
+                    {
+
+                        if ((DateTime.Now - startTime).TotalSeconds > 300)
+                        {
+                            t = api.Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"]);
+
+                            startTime = DateTime.Now;
+                        }
+
+                        idx += 1;
 
                         var computerId = c["Key"].ToString();
+                        writer.WriteLine("Key: " + computerId.ToString());
+                        logger.Debug("computerId: " + computerId);
 
-						logger.Debug("computerId: " + computerId);
+                        var computer = api.GetComputer(computerId, t, UpKeeperOrgNo);
 
-						var computer = api.GetComputer(computerId, t);
+                        if (computer != null)
+                        {
+                            computer.Customer_Id = Customer_Id;
+                            writer.WriteLine("CustomerId: " + Customer_Id.ToString());
+                            logger.Debug("Synkroniserar: " + computer.Name + ", " + idx.ToString());
+                            writer.WriteLine("Synk: " + computer.Name + ", " + idx.ToString());
+                            computer = data.GetComputerInfo(computer);
 
-						if (computer != null) {
-							computer.Customer_Id = Customer_Id;
+                            if (computer.Computer_Id == null && CreateInventory == true)
+                            {
+                                data.Create(computer);
 
-							logger.Debug("Synkroniserar: " + computer.Name + ", " + idx.ToString());
+                                computer = data.GetComputerInfo(computer);
+                            }
 
-							computer = data.GetComputerInfo(computer);
+                            if (computer.Computer_Id == null)
+                            {
+                                logger.Error(computer.Name + " saknas i DH Helpdesk");
+                            }
 
-							if (computer.Computer_Id == null && CreateInventory == true)
-							{
-								data.Create(computer);
+                            else if (computer.ScrapDate != null && computer.ScrapDate < DateTime.Today.AddDays(-7))
+                            {
+                                logger.Debug("DeleteComputer ");
 
-								computer = data.GetComputerInfo(computer);
-							}
+                                api.DeleteComputer(computerId, t, UpKeeperOrgNo);
 
-							if (computer.Computer_Id == null)
-							{
-								logger.Error(computer.Name + " saknas i DH Helpdesk");
-							}
+                                logger.Debug(computer.Name + " borttagen i upKeeper");
+                            }
+                            else if (UpdateInventory == true)
+                            {
 
-							else if (computer.ScrapDate != null && computer.ScrapDate < DateTime.Today.AddDays(-7))
-							{
-								logger.Debug("DeleteComputer ");
+                                var hardware = api.GetHardware(computerId, t, UpKeeperOrgNo);
 
-								api.DeleteComputer(computerId, t);
+                                if (hardware != null && hardware.Properties != null)
+                                {
+                                    if (hardware.Properties.FirstOrDefault(x => x.Property == "Time of inventory") != null)
+                                    {
+                                        if (DateTime.TryParse(hardware.Properties.FirstOrDefault(x => x.Property == "Time of inventory").Value, out DateTime dt))
+                                        {
+                                            computer.ScanDate = dt;
+                                        }
+                                    }
+                                }
 
-								logger.Debug(computer.Name + " borttagen i upKeeper");
-							}
-							else if (UpdateInventory == true)
-							{
+                                if (computer.ScanDate == DateTime.MinValue)
+                                {
+                                    logger.Error(computer.Name + " ej scannad");
+                                }
+                                else
+                                {
+                                    if (hardware != null && hardware.Properties != null)
+                                    {
+                                        if (hardware.Properties.FirstOrDefault(x => x.Property == "Identifying Number") != null)
+                                        {
+                                            computer.SerialNumber = hardware.Properties.FirstOrDefault(x => x.Property == "Identifying Number").Value;
+                                        }
 
-								var hardware = api.GetHardware(computerId, t);
+                                        if (hardware.Properties.FirstOrDefault(x => x.Property == "Manufacturer") != null)
+                                        {
+                                            computer.Manufacturer = hardware.Properties.FirstOrDefault(x => x.Property == "Manufacturer").Value;
+                                        }
 
-								if (hardware != null && hardware.Properties != null) {
-									if (hardware.Properties.FirstOrDefault(x => x.Property == "Time of inventory") != null)
-									{
-										if (DateTime.TryParse(hardware.Properties.FirstOrDefault(x => x.Property == "Time of inventory").Value, out DateTime dt))
-										{
-											computer.ScanDate = dt;
-										}
-									}
-								}
+                                        if (hardware.Properties.FirstOrDefault(x => x.Property == "Model") != null)
+                                        {
+                                            computer.ComputerModel_Id = data.ExistsObject(ObjectType.ComputerModel, hardware.Properties.FirstOrDefault(x => x.Property == "Model").Value);
+                                        }
 
-								if (computer.ScanDate == DateTime.MinValue)
-								{
-									logger.Error(computer.Name + " ej scannad");
-								}
-								else
-								{
-									if (hardware != null && hardware.Properties != null)
-									{
-										if (hardware.Properties.FirstOrDefault(x => x.Property == "Identifying Number") != null)
-										{
-											computer.SerialNumber = hardware.Properties.FirstOrDefault(x => x.Property == "Identifying Number").Value;
-										}
+                                        if (hardware.Properties.FirstOrDefault(x => x.Property == "Total Physical Memory") != null)
+                                        {
+                                            computer.RAM_Id = data.ExistsObject(ObjectType.RAM, hardware.Properties.FirstOrDefault(x => x.Property == "Total Physical Memory").Value);
+                                        }
 
-										if (hardware.Properties.FirstOrDefault(x => x.Property == "Manufacturer") != null)
-										{
-											computer.Manufacturer = hardware.Properties.FirstOrDefault(x => x.Property == "Manufacturer").Value;
-										}
+                                        if (hardware.Properties.FirstOrDefault(x => x.Property == "Processor") != null)
+                                        {
+                                            computer.Processor_Id = data.ExistsObject(ObjectType.Processor, hardware.Properties.FirstOrDefault(x => x.Property == "Processor").Value);
+                                        }
 
-										if (hardware.Properties.FirstOrDefault(x => x.Property == "Model") != null)
-										{
-											computer.ComputerModel_Id = data.ExistsObject(ObjectType.ComputerModel, hardware.Properties.FirstOrDefault(x => x.Property == "Model").Value);
-										}
+                                        if (hardware.Properties.FirstOrDefault(x => x.Property == "Operating System") != null)
+                                        {
+                                            computer.OS_Id = data.ExistsObject(ObjectType.OS, hardware.Properties.FirstOrDefault(x => x.Property == "Operating System").Value);
+                                        }
 
-										if (hardware.Properties.FirstOrDefault(x => x.Property == "Total Physical Memory") != null)
-										{
-											computer.RAM_Id = data.ExistsObject(ObjectType.RAM, hardware.Properties.FirstOrDefault(x => x.Property == "Total Physical Memory").Value);
-										}
+                                        if (hardware.NetworkAdapters != null && hardware.NetworkAdapters.FirstOrDefault(x => x.Property == "Name") != null)
+                                        {
+                                            computer.NIC_Id = data.ExistsObject(ObjectType.NetworkAdapter, hardware.NetworkAdapters.FirstOrDefault(x => x.Property == "Name").Value);
+                                        }
 
-										if (hardware.Properties.FirstOrDefault(x => x.Property == "Processor") != null)
-										{
-											computer.Processor_Id = data.ExistsObject(ObjectType.Processor, hardware.Properties.FirstOrDefault(x => x.Property == "Processor").Value);
-										}
+                                        if (hardware.Properties.FirstOrDefault(x => x.Property == "BIOS Version") != null)
+                                        {
+                                            computer.BIOSVersion = hardware.Properties.FirstOrDefault(x => x.Property == "BIOS Version").Value;
+                                        }
 
-										if (hardware.Properties.FirstOrDefault(x => x.Property == "Operating System") != null)
-										{
-											computer.OS_Id = data.ExistsObject(ObjectType.OS, hardware.Properties.FirstOrDefault(x => x.Property == "Operating System").Value);
-										}
+                                        if (hardware.Properties.FirstOrDefault(x => x.Property == "Domain") != null)
+                                        {
+                                            computer.Domain_Id = data.GetDomainByName(1, hardware.Properties.FirstOrDefault(x => x.Property == "Domain").Value);
+                                        }
 
-										if (hardware.NetworkAdapters != null && hardware.NetworkAdapters.FirstOrDefault(x => x.Property == "Name") != null)
-										{
-											computer.NIC_Id = data.ExistsObject(ObjectType.NetworkAdapter, hardware.NetworkAdapters.FirstOrDefault(x => x.Property == "Name").Value);
-										}
+                                    }
 
-										if (hardware.Properties.FirstOrDefault(x => x.Property == "BIOS Version") != null)
-										{
-											computer.BIOSVersion = hardware.Properties.FirstOrDefault(x => x.Property == "BIOS Version").Value;
-										}
+                                    computer.ClientInformation.User_Id = data.GetComputerUserById(1, computer.ClientInformation.LastLoggedInUser);
 
-										if (hardware.Properties.FirstOrDefault(x => x.Property == "Domain") != null)
-										{
-											computer.Domain_Id = data.GetDomainByName(1, hardware.Properties.FirstOrDefault(x => x.Property == "Domain").Value);
-										}
+                                    computer.Software = api.GetComputerSoftware(computerId, t, UpKeeperOrgNo);
 
-									}
+                                    computer.Hotfix = api.GetComputerUpdates(computerId, t, UpKeeperOrgNo);
 
-									computer.ClientInformation.User_Id = data.GetComputerUserById(1, computer.ClientInformation.LastLoggedInUser);
+                                    if (hardware.Disks != null)
+                                    {
+                                        computer.LogicalDrives = new List<LogicalDrive>();
 
-									computer.Software = api.GetComputerSoftware(computerId, t);
+                                        for (int i = 0; i < hardware.Disks.Count; i += 3)
+                                        {
+                                            var ld = new LogicalDrive
+                                            {
+                                                DriveType = 3
+                                            };
 
-									computer.Hotfix = api.GetComputerUpdates(computerId, t);
+                                            var cp = hardware.Disks[i];
+                                            ld.DriveLetter = cp.Value;
 
-									if (hardware.Disks != null)
-									{
-										computer.LogicalDrives = new List<LogicalDrive>();
+                                            cp = hardware.Disks[i + 1];
+                                            ld.TotalBytes = cp.Value.ConvertToBytes();
 
-										for (int i = 0; i < hardware.Disks.Count; i += 3)
-										{
-											var ld = new LogicalDrive
-											{
-												DriveType = 3
-											};
+                                            cp = hardware.Disks[i + 2];
+                                            ld.FreeBytes = cp.Value.ConvertToBytes();
+                                            computer.LogicalDrives.Add(ld);
+                                        }
 
-											var cp = hardware.Disks[i];
-											ld.DriveLetter = cp.Value;
+                                    }
 
-											cp = hardware.Disks[i + 1];
-											ld.TotalBytes = cp.Value.ConvertToBytes();
+                                    logger.Debug(computer.Name + " sparas");
 
-											cp = hardware.Disks[i + 2];
-											ld.FreeBytes = cp.Value.ConvertToBytes();
-											computer.LogicalDrives.Add(ld);
-										}
+                                    data.Save(computer);
 
-									}
+                                    if (UpdateUpKeeper == true && (computer.ScrapDate == null || computer.ScrapDate > DateTime.Today.AddDays(-7)))
+                                    {
+                                        logger.Debug(computer.Name + " Uppdatera upKeeper, location " + computer.Location2);
 
-									logger.Debug(computer.Name + " sparas");
+                                        // Uppdatera upKeeper
+                                        var computerDetail = api.GetComputerDetail(computerId, t, UpKeeperOrgNo);
 
-									data.Save(computer);
+                                        if (computerDetail != null)
+                                        {
+                                            if (computer.Location2.Length > 60)
+                                            {
+                                                computerDetail.Location = computer.Location2.Substring(0, 60);
+                                            }
+                                            else
+                                            {
+                                                computerDetail.Location = computer.Location2;
+                                            }
 
-									if (UpdateUpKeeper == true && (computer.ScrapDate == null || computer.ScrapDate > DateTime.Today.AddDays(-7)))
-									{
-										logger.Debug(computer.Name + " Uppdatera upKeeper, location " + computer.Location2);
+                                            string ret = api.SaveComputerDetails(computerId, computerDetail, t, UpKeeperOrgNo);
+                                        }
+                                    }
 
-										// Uppdatera upKeeper
-										var computerDetail = api.GetComputerDetail(computerId, t);
+                                }
 
-										if (computerDetail != null) {
-											if (computer.Location2.Length > 60)
-											{
-												computerDetail.Location = computer.Location2.Substring(0, 60);
-											}
-											else
-											{
-												computerDetail.Location = computer.Location2;
-											}
+                            }
+                        }
 
-											string ret = api.SaveComputerDetails(computerId, computerDetail, t);
-										}
-									}
+                    }
 
-								}
+                    // Uppdatera program så att de syns i licensmodulen
+                    data.UpdateApplication(Customer_Id);
 
-							}
-						}
+                    if (writer != null)
+                    {
+                        writer.WriteLine("Finished");
+                        writer.Close();
+                    }
 
-					}
+                }
+            }
+            catch (Exception ex)
+            {
+                if (writer != null)
+                {
+                    writer.WriteLine(ex.Message + ex.Source + ex.InnerException);
+                    writer.Close();
+                }
 
-					// Uppdatera program så att de syns i licensmodulen
-					data.UpdateApplication(Customer_Id);
+                logger.Error(ex.Message);
+            }
 
-				}
-			}
-			catch (Exception ex) {
-				logger.Error(ex.Message);
-			}
-			
-		}
-	}
+        }
+    }
 }

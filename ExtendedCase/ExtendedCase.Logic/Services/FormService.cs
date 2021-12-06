@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using ExtendedCase.Dal.Data;
 using ExtendedCase.Dal.Repositories;
 using ExtendedCase.Logic.Services.Mappers;
@@ -89,25 +90,32 @@ namespace ExtendedCase.Logic.Services
         {
             if (string.IsNullOrWhiteSpace(metaData))
                 return metaData;
-
-            var translate = (Func<int, string, string>)((langId, data) =>
-            {
-                var translations = _translationRepository.GetTranslations(langId);
-                foreach (var translation in translations)
-                {
-                    data = data.Replace("@Translation." + translation.Key, translation.Value);
-                }
-                return data;
-            });
-
-            metaData = translate(languageId, metaData);
+            
+            metaData = Translate(languageId, metaData);
 
             if (defaultLanguageId.HasValue)
             {
-                metaData = translate(defaultLanguageId.Value, metaData);
+                metaData = Translate(defaultLanguageId.Value, metaData);
             }
 
             return metaData;
+        }
+
+        private string Translate(int langId, string data)
+        {
+            var regex = new Regex("(?:@Translation\\.)([\\.A-Za-z_0-9]+)");
+            var propertiesValues = regex.Matches(data).Cast<Match>()
+                .SelectMany(m => m.Groups.Cast<Group>().Skip(1).Select(g => g.Value))
+                .ToArray();
+            if (propertiesValues.Any())
+            {
+                var translations = _translationRepository.GetTranslations(langId, propertiesValues);
+                foreach (var translation in translations)
+                {
+                    data = Regex.Replace(data,$"{Regex.Escape($"@Translation.{translation.Key}")}", $"{translation.Value}");
+                }
+            }
+            return data;
         }
 
         #endregion

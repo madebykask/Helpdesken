@@ -5,8 +5,7 @@
 		<!-- If changing this, change var match.. in C# code also  -->
 		<TagMatchTemplate>v*.*.*</TagMatchTemplate>
 		<ExitCode>0</ExitCode>
-		<GitExe>C:\Git\bin\git.exe</GitExe> 
-		<!--<GitExe>c:\Program Files\Git\bin\git.exe</GitExe>-->
+		<GitExe>c:\Git\bin\git.exe</GitExe>
 		<!--<GitExe>C:\Program Files (86)\Git\bin\git.exe</GitExe>	 -->
 	</PropertyGroup>
 
@@ -100,7 +99,7 @@
     <WriteLinesToFile Overwrite="true" File="$(ProjectDir)$(AssemblyFileName)" Encoding="UTF-8" Lines='using System.Reflection%3B
 
 [assembly: AssemblyCompany("DH Solutions")]
-[assembly: AssemblyCopyright("&#169; 2015 DH Solutions")]
+[assembly: AssemblyCopyright("&#169; 2021 DH Solutions")]
 [assembly: AssemblyVersion("$(VersionString)")]
 [assembly: AssemblyFileVersion("$(VersionString)")]
 [assembly: AssemblyInformationalVersion("$(FullVersion)")]
@@ -116,7 +115,7 @@ namespace DH.Helpdesk
     <WriteLinesToFile Overwrite="true" File="$(ProjectDir)..\dhHelpdeskNG\CommonAssembly\SharedAssemblyInfo.vb" Encoding="UTF-8" Lines='Imports System.Reflection
 
 &lt;Assembly: AssemblyCompany("DH Solutions")&gt;
-&lt;Assembly: AssemblyCopyright("&#169; 2015 DH Solutions")&gt;
+&lt;Assembly: AssemblyCopyright("&#169; 2021 DH Solutions")&gt;
 &lt;Assembly: AssemblyVersion("$(VersionString)")&gt;
 &lt;Assembly: AssemblyFileVersion("$(VersionString)")&gt;
 &lt;Assembly: AssemblyInformationalVersion("$(FullVersion)")&gt;

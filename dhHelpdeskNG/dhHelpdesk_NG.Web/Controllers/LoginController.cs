@@ -6,6 +6,7 @@ using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Users;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Authentication;
+using DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors;
 using DH.Helpdesk.Web.Infrastructure.Tools;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Services.Services.Concrete;
@@ -19,6 +20,11 @@ using DH.Helpdesk.Services.Services.Authentication;
 using DH.Helpdesk.Web.Infrastructure.Configuration;
 using DH.Helpdesk.Web.Models.Login;
 using DH.Helpdesk.Web.Models.Shared;
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.OpenIdConnect;
+using System.Web;
+using DH.Helpdesk.Web.Infrastructure.Configuration.Concrete;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -28,7 +34,7 @@ namespace DH.Helpdesk.Web.Controllers
         //private const string TokenKey = "Token_Data";
         //private const string Access_Token_Key = "Access_Token";
         //private const string Refresh_Token_Key = "Refresh_Token";
-
+        private ApplicationConfiguration appconfig;
         private readonly IUserService _userService;
         private readonly ISettingService _settingService;
         private readonly IUsersPasswordHistoryService _usersPasswordHistoryService;
@@ -38,7 +44,9 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IApplicationConfiguration _applicationConfiguration;
         private readonly IFederatedAuthenticationService _federatedAuthenticationService;
         private readonly IAuthenticationService _authenticationService;
-
+        private readonly IAuthenticationServiceBehaviorFactory _behaviorFactory;
+        public IAuthenticationBehavior _authenticationBehavior;
+        private readonly IGlobalSettingService _globalSettingService;
         public LoginController(
                 IUserService userService, 
                 ICustomerService customerService, 
@@ -50,7 +58,9 @@ namespace DH.Helpdesk.Web.Controllers
                 ILogProgramService logProgramService,
                 IApplicationConfiguration applicationConfiguration,
                 IFederatedAuthenticationService federatedAuthenticationService,
-                IAuthenticationService authenticationService)
+                IAuthenticationService authenticationService,
+                IAuthenticationServiceBehaviorFactory behaviorFactory,
+                            IGlobalSettingService globalSettingService)
         {
             _userService = userService;
             _settingService = settingService;
@@ -60,24 +70,28 @@ namespace DH.Helpdesk.Web.Controllers
             _applicationConfiguration = applicationConfiguration;
             _federatedAuthenticationService = federatedAuthenticationService;
             _authenticationService = authenticationService;
+            _behaviorFactory = behaviorFactory;
+            _globalSettingService = globalSettingService;
         }
      
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)]
         [AllowAnonymous]
         public ActionResult Login()
         {
+
             if (_applicationConfiguration.LoginMode == LoginMode.SSO)
             {
                 var loginUrl = _federatedAuthenticationService.GetSignInUrl();
                 return Redirect(loginUrl);
             }
-
-            //TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
-
-            if (Request.QueryString["ReturnUrl"] == "/")
+            appconfig = new ApplicationConfiguration();
+            var msLogin = appconfig.GetAppKeyValueMicrosoft;
+            ViewBag.ShowMsButton = false;
+            if (msLogin == "1")
             {
-                return RedirectToAction("Login");
+                ViewBag.ShowMsButton = true;
             }
+            
             return View();
         }
 
@@ -88,6 +102,10 @@ namespace DH.Helpdesk.Web.Controllers
             var userName = inputData.txtUid?.Trim();
             var password = inputData.txtPwd?.Trim();
             var returnUrl = inputData.returnUrl;
+            if(string.IsNullOrEmpty(returnUrl))
+            {
+                returnUrl = "~/";
+            }
 
             if (IsValidLoginArgument(userName, password))
             {
@@ -130,17 +148,61 @@ namespace DH.Helpdesk.Web.Controllers
                 else
                 {
                     TempData["LoginFailed"] = $"Login failed! {res.ErrorMessage ?? string.Empty}".Trim();
+                    
                 }
             }
 
             return View("Login");
+
+
+        }
+
+        [AllowAnonymous]
+        public void SignIn(LoginInputModel inputData)
+        {
+            var returnUrl = inputData.returnUrl;
+            if(!string.IsNullOrEmpty(returnUrl))
+            {
+                returnUrl = returnUrl.Replace("~/", "");
+            }
+            else
+            {
+                returnUrl = "/";
+            }
+            _authenticationService.SetLoginModeToMicrosoft();
+            HttpContext.GetOwinContext().Authentication.Challenge(
+                new AuthenticationProperties { RedirectUri = returnUrl },
+                OpenIdConnectAuthenticationDefaults.AuthenticationType);
+
+            //if (!Request.IsAuthenticated)
+            //{
+            //    _authenticationService.SetLoginModeToMicrosoft();
+            //    //Make an async method to call instead?
+            //    HttpContext.GetOwinContext().Authentication.Challenge(
+            //        new AuthenticationProperties { RedirectUri = returnUrl },
+            //        OpenIdConnectAuthenticationDefaults.AuthenticationType);
+
+            //}
+            //else
+            //{
+            //    //Log in user again
+
+            //    var user = SessionFacade.CurrentUser;
+            //}
+            //return new RedirectResult(returnUrl);
         }
 
         [HttpGet]
         public ActionResult Logout()
         {
-            //TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
             _authenticationService.ClearLoginSession(ControllerContext.HttpContext);
+            appconfig = new ApplicationConfiguration();
+            var msLogin = appconfig.GetAppKeyValueMicrosoft;
+            ViewBag.ShowMsButton = false;
+            if (msLogin == "1")
+            {
+                ViewBag.ShowMsButton = true;
+            }
             return View("Login");
         }
 

@@ -52,6 +52,7 @@ namespace DH.Helpdesk.Dal.Repositories
         DateTime GetPasswordChangedDate(int id);
 
         User GetUserForCopy(int id);
+        User GetUserByEmail(string emailAddress);
         CustomerUserInfo GetUserInfo(int userId); //basic information - good perf
         UserOverview GetUser(int userid); // full information
         Task<UserOverview> GetUserAsync(int userId);
@@ -239,6 +240,21 @@ namespace DH.Helpdesk.Dal.Repositories
             return user;
         }
 
+        public User GetUserByEmail(string emailAddress)
+        {
+
+            if(Table.FirstOrDefault(x => x.UserID == emailAddress) != null)
+            {
+                return Table.FirstOrDefault(x => x.UserID == emailAddress);
+            }
+            else if(Table.FirstOrDefault(x => x.Email == emailAddress) != null)
+            {
+                return Table.FirstOrDefault(x => x.Email == emailAddress);
+            }
+            return null;
+
+        }
+
         public CustomerUserInfo GetUserInfo(int userId)
         {
             var userInfo = 
@@ -259,6 +275,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return userInfo;
         }
+
 
         public IQueryable<User> GetUsersForWorkingGroupQuery(int workingGroupId, int? customerId, bool requireMemberOfGroup = false)
         {

@@ -8,8 +8,11 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
     public class ExtendedCaseFormPayloadModel
     {
         [JsonProperty("customerId")]
-        public int CustomerId { get; set; }       
-        
+        public int CustomerId { get; set; }
+
+        [JsonProperty("customerGuid")]
+        public string CustomerGuid { get; set; }
+
         [JsonProperty("languageId")]
         public int LanguageId { get; set; }
 
@@ -28,22 +31,31 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         [JsonProperty("caseSolutionIds")]
         public int[] CaseSolutionIds { get; set; }
 
-        //[JsonProperty("tabs")]
-        //public List<Tab> Tabs { get; set; }
+        [JsonProperty("tabs")]
+        public List<Tab> Tabs { get; set; }
 
-        [JsonProperty("sections")]
-        public List<Section> Sections { get; set; }
+        //[JsonProperty("sections")]
+        //public List<Section> Sections { get; set; }
 
         [JsonProperty("translations")]
         public List<ExtendedCaseFormTranslation> Translations { get; set; }
 
     }
 
-    //public class Tab
-    //{
-    //    [JsonProperty("sections")]
-    //    public List<Section> Sections { get; set; }
-    //}
+    public class Tab
+    {
+        [JsonProperty("id")]
+        public string  Id { get; set; }
+        
+        [JsonProperty("name")]
+        public string Name { get; set; }
+        
+        [JsonProperty("columnCount")]
+        public int ColumnCount { get; set; }
+        
+        [JsonProperty("sections")]
+        public List<Section> Sections { get; set; }
+    }
 
     public class Section
     {
@@ -78,6 +90,12 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
 
         [JsonProperty("translationId")]
         public int TranslationId { get; set; }
+
+        [JsonProperty("addonText")]
+        public string AddOnText { get; set; }
+
+        [JsonProperty("dataSource")]
+        public List<DataSource> DataSource { get; set; }
 
     }
 

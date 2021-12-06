@@ -173,6 +173,7 @@
     <Compile Include="ExtendedCaseEntity\CaseSolution_CaseSection_ExtendedCaseForm.cs" />
     <Compile Include="ExtendedCaseEntity\Case_CaseSection_ExtendedCase.cs" />
     <Compile Include="ExtendedCaseEntity\Case_ExtendedCaseEntity.cs" />
+    <Compile Include="ExtendedCaseEntity\ExtendedCaseFormsHelpers.cs" />
     <Compile Include="ExtendedCaseEntity\ExtendedCaseFormTranslation.cs" />
     <Compile Include="ExtendedCaseEntity\ExtendedCaseReport.cs" />
     <Compile Include="ExtendedCaseEntity\ExtendedCaseReportField.cs" />

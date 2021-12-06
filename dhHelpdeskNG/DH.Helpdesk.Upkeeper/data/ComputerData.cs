@@ -2,8 +2,6 @@
 using System.Data;
 using System.Data.SqlClient;
 using NLog;
-//using System.Data;
-//using System.Data.SqlClient;
 using upKeeper2Helpdesk.entities;
 
 namespace upKeeper2Helpdesk.data
@@ -231,7 +229,7 @@ namespace upKeeper2Helpdesk.data
 		{
 			int? id = null;
 
-			string[] a = DomainName.Split(".");
+			string[] a = DomainName.Split('.');
 
 			using (var connection = new SqlConnection(_ConnectionString))
 			{
