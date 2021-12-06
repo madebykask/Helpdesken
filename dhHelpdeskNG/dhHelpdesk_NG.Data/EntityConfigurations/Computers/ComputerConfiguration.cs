@@ -85,7 +85,7 @@
             this.Property(x => x.ComputerName).IsRequired().HasMaxLength(60);
             this.Property(x => x.Manufacturer).IsRequired().HasMaxLength(50);
             this.Property(x => x.SerialNumber).IsRequired().HasMaxLength(60);
-            this.Property(x => x.BIOSVersion).IsRequired().HasMaxLength(30);
+            this.Property(x => x.BIOSVersion).IsRequired().HasMaxLength(40);
             this.Property(x => x.BIOSDate).IsOptional();
             this.Property(x => x.TheftMark).IsRequired().HasMaxLength(50);
             this.Property(x => x.CarePackNumber).IsRequired().HasMaxLength(50);
