@@ -43,9 +43,6 @@
                 <ul class="secnav">
                     @if (!hasReadonlyLog)
                     {
-                        if (Model.CustomerSettings.ModuleInvoice)
-                        {
-                            <li><input type="button" id="btnCaseCharge" class="btn" style="@Model.ShowInvoiceFields.displayHtml()" value="@Translation.GetCoreTextTranslation("Debitering")" /></li>}
                         if (Model.CustomerSettings.ModuleFaq == true && Model.customerUserSetting.User.FAQPermission == 1)
                         {
                             <li><a href="#" id="AddFAQ" class="btn">@Translation.GetCoreTextTranslation("Ny FAQ")</a></li>
@@ -382,6 +379,19 @@
         <h4>
             @Model.getSectionHeader(CaseSectionType.Invoicing, CaseSections.InvoicingHeader)
         </h4>
+        @if (Model.templateistrue != 1 && !readonlyMode)
+        {
+        <div class="secnavs secnavmarg">
+            <div class="pull-left">
+                <ul class="secnav">
+                    @if (Model.CustomerSettings.ModuleInvoice)
+                    {
+                        <li><input type="button" id="btnCaseCharge" class="btn" style="@Model.ShowInvoiceFields.displayHtml()" value="@Translation.GetCoreTextTranslation("Debitering")" /></li>
+                    }
+                </ul>
+            </div>
+        </div>
+        }
         @{
             var invoiceClaimed = Model.CaseLog.InvoiceRow != null
                                 && Model.CaseLog.InvoiceRow.Status.HasValue
