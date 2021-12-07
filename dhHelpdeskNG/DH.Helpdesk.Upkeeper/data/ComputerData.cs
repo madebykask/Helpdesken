@@ -79,7 +79,14 @@ namespace upKeeper2Helpdesk.data
 						{
 							s = s + "Domain_Id=Null, ";
 						}
-
+						if (c.WarrantyEndDate != null)
+						{
+							s = s + "WarrantyEndDate='" + c.WarrantyEndDate + "', ";
+						}
+						else
+						{
+							s = s + "WarrantyEndDate=Null, ";
+						}
 						s = s + "ScanDate='" + c.ScanDate + "', " +
 								"SyncChangedDate=getdate() " +
 								"where computerName='" + c.Name + "' and Customer_Id=" + c.Customer_Id;

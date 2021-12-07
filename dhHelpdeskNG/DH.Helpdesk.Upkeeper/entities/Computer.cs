@@ -24,7 +24,7 @@ namespace upKeeper2Helpdesk.entities
 
 		public DateTime ScanDate { get; set; }
 		public DateTime? ScrapDate { get; set; }
-
+		public DateTime? WarrantyEndDate { get; set; }
 		public User ClientInformation { get; set; }
 		public List<Software> Software { get; set; }
 		public List<Hotfix> Hotfix { get; set; }

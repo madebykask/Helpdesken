@@ -354,6 +354,12 @@
                 values);
 
             CreateValueIfNeeded(
+                settings.ContractFieldsSettings.WarrantyEndDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.WarrantyEndDate,
+                (DateTimeDisplayValue)overview.ContractFields.WarrantyEndDate,
+                values);
+
+            CreateValueIfNeeded(
                 settings.OtherFieldsSettings.InfoFieldSetting,
                 BusinessData.Enums.Inventory.Fields.Computer.OtherFields.Info,
                 (StringDisplayValue)overview.OtherFields.Info,
@@ -648,6 +654,10 @@
             CreateHeaderIfNeeded(
                 settings.ContractFieldsSettings.AccountingDimension5FieldSetting,
                 BusinessData.Enums.Inventory.Fields.Computer.ContractFields.AccountingDimension5,
+                headers);
+            CreateHeaderIfNeeded(
+                settings.ContractFieldsSettings.WarrantyEndDateFieldSetting,
+                BusinessData.Enums.Inventory.Fields.Computer.ContractFields.WarrantyEndDate,
                 headers);
 
             CreateHeaderIfNeeded(

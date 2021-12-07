@@ -27,6 +27,7 @@ namespace upKeeper2Helpdesk.entities
 		public string ServiceOSPath { get; set; }
 		public DateTime InstallDate { get; set; }
 		public DateTime StartInstallDate { get; set; }
+		public DateTime? WarrantyEndDate { get; set; }
 		public bool Disabled { get; set; }
 		public string TeamViewerId { get; set; }
 		public Guid? CategoryId { get; set; }
