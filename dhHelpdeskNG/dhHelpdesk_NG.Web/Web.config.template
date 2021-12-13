@@ -75,9 +75,6 @@
     <authentication mode="Windows">
       <forms loginUrl="~/Login/Login" defaultUrl="~/"/>
     </authentication>
-	<authorization>
-		<deny users="?" />
-	</authorization>
     #{/if}
 	  <identity impersonate="false"/>
     <httpHandlers>
@@ -91,7 +88,16 @@
       decryption="AES"/>
 	  <sessionState cookieless="UseDeviceProfile" timeout="2880" />
   </system.web>
-  <system.webServer>
+	#{if AuthenticationMode == "windows"}
+	<location path="." inheritInChildApplications="false">
+		<system.web>
+			<authorization>
+				<deny users="?" />
+			</authorization>
+		</system.web>
+	</location>
+	#{/if}
+	<system.webServer>
     <modules runAllManagedModulesForAllRequests="false"/>
     <security>
       <requestFiltering allowDoubleEscaping="true">
