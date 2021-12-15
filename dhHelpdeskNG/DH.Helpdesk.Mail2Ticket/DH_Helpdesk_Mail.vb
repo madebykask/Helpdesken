@@ -34,6 +34,7 @@ Module DH_Helpdesk_Mail
     Dim iSequenceNumber As ImapMessageSet
     Dim msDeniedHtmlBodyString As String
 
+    Dim itemattach() As String
     ' Optional Parameters set from config
     Dim bEnableNewEmailProcessing = False
     Dim customersFilter As List(Of Integer) = New List(Of Integer)
@@ -185,6 +186,24 @@ Module DH_Helpdesk_Mail
             LogError(ex.ToString(), Nothing)
         Finally
             closeLogFiles()
+            Try
+
+
+                If Not itemattach Is Nothing Then
+                    For i As Integer = 0 To itemattach.Count - 1
+                        If Not itemattach(i) Is Nothing Then
+                            Dim strFile As String = itemattach(i).ToString()
+                            If System.IO.File.Exists(strFile) Then
+                                System.IO.File.Delete(strFile)
+                            End If
+                        End If
+
+                    Next
+                End If
+            Catch ex As Exception
+
+            End Try
+
         End Try
 
     End Sub
@@ -1303,6 +1322,10 @@ Module DH_Helpdesk_Mail
                                                                                                   EmailMessageSchema.InReplyTo,
                                                                                                   ItemSchema.DateTimeReceived))
 
+        ReDim itemattach(items.Count)
+        Dim intArray As Integer = 0
+
+
         For Each item As Item In items
             If item.GetType() Is GetType(EmailMessage) Then
                 Dim mail As EmailMessage = item
@@ -1355,9 +1378,41 @@ Module DH_Helpdesk_Mail
                             End Try
 
                             Dim fileAttach As FileAttachment = attach
+                            Dim retval As String
                             If Not attach.IsInline Then
-                                Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(fileAttach.Content), fileAttach.Name)
-                                message.Attachments.Add(newAttachment)
+                                Dim b As Boolean = False
+                                Dim strName As String = fileAttach.Name
+                                If InStr(strName, "/") > 0 Or InStr(strName, "~") > 0 Or InStr(strName, ":") > 0 Or InStr(strName, "\") > 0 Then
+                                    strName = Replace(Replace(Replace(Replace(strName, "/", ""), "~", ""), ":", ""), "\", "")
+                                    fileAttach.Load(temppath & "\" & strName)
+                                    retval = temppath & "\" & strName
+                                    b = True
+                                Else
+                                    strName = fileAttach.Name
+                                End If
+
+                                If b = True Then
+                                    Dim bData As Byte()
+                                    Dim br As BinaryReader = New BinaryReader(System.IO.File.OpenRead(retval))
+                                    bData = br.ReadBytes(br.BaseStream.Length)
+
+                                    Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(bData, 0, bData.Length), strName)
+                                    message.Attachments.Add(newAttachment)
+                                    newAttachment = Nothing
+                                    bData = Nothing
+                                    br = Nothing
+                                    bData = Nothing
+
+                                    itemattach(intArray) = temppath & "\" & strName
+                                    intArray = intArray + 1
+
+
+
+                                Else
+                                    Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(fileAttach.Content), fileAttach.Name)
+                                    message.Attachments.Add(newAttachment)
+                                End If
+
                             Else
                                 Dim newResource As LinkedResource = New LinkedResource(New MemoryStream(fileAttach.Content), fileAttach.Name, fileAttach.ContentType)
                                 If Not fileAttach.ContentId Is Nothing Then
@@ -1419,6 +1474,7 @@ Module DH_Helpdesk_Mail
 
                 messages.Add(message)
             End If
+
         Next
 
         Return messages
