@@ -346,7 +346,7 @@
                         </td>
                         <td>
                             @if (!(Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)
-|| readonlyMode || (Model.IsItParentCase() && Model.IsAnyNotClosedChild(true))))
+                                || readonlyMode || (Model.IsItParentCase() && Model.IsAnyNotClosedChild(true))))
                             {
                                 if (Model.Setting.DisableCaseEndDate == 0)
                                 {
@@ -537,29 +537,6 @@
 }
 
 <script>
-    //$('#CaseLog_TextExternal').on('onchange', function () {
-    //    checkLength(this);
-    //});
-
-    //$('#CaseLog_TextExternal').on('onkeyup', function () {
-    //    checkLength(this);
-    //});
-
-    //$('#CaseLog_TextExternal').on('onpaste', function () {
-    //    checkLength(this);
-    //});
-
-    //$('#CaseLog_TextInternal').on('onchange', function () {
-    //    checkLength(this);
-    //});
-
-    //$('#CaseLog_TextInternal').on('onkeyup', function () {
-    //    checkLength(this);
-    //});
-
-    //$('#CaseLog_TextInternal').on('onpaste', function () {
-    //    checkLength(this);
-    //});
 
     $(document)
         .on('change'
