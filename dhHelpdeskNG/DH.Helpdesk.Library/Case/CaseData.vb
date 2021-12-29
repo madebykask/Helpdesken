@@ -923,30 +923,30 @@ Public Class CaseData
                           "IsAbout_CostCentre, IsAbout_Place) " &
                        "Select top 1  '" & sCaseHistoryGUID & "', " & iCase_Id & " , " &
                               "Replace(c.ReportedBy, '', NULL) AS ReportedBy, " &
-                              "Replace(c.Persons_Name, '', NULL) AS Persons_Name, " &
-                              "Replace(c.Persons_EMail, '', NULL) AS Persons_EMail, " &
-                              "Replace(c.Persons_Phone, '', NULL) AS Replace(, " &
+                              "c.Persons_Name AS Persons_Name, " &
+                              "c.Persons_EMail AS Persons_EMail, " &
+                              "Replace(c.Persons_Phone, '', NULL) AS Persons_Phone, " &
                               "Replace(c.Persons_CellPhone, '', NULL) AS Persons_CellPhone, " &
                               "Customer_Id, " &
                               "Replace(c.Region_Id, 0, NULL) AS Region_Id, " &
-                              "c.Department_Id, " &
-                              "c.OU_Id, " &
+                              "Replace(c.Department_Id, 0, NULL) AS Department_Id, " &
+                              "Replace(c.OU_Id, 0, NULL) AS OU_Id, " &
                               "c.Place, " &
                               "Replace(c.UserCode,'', NULL) UserCode, " &
-                              "InventoryNumber, " &
+                              "Replace(InventoryNumber,'', NULL) AS InventoryNumber, " &
                               "InventoryType," &
                               "InventoryLocation, " &
                               "Casenumber, " &
-                              "User_Id, " &
+                              "Replace(User_Id, 0, NULL) AS User_Id, " &
                               "IPAddress, " &
                               "CaseType_Id, " &
-                              "ProductArea_Id, " &
-                              "ProductAreaSetDate, " &
-                              "System_Id, " &
-                              "Urgency_Id, " &
-                              "Impact_Id, " &
-                              "Category_Id, " &
-                              "Supplier_Id, " &
+                              "Replace(ProductArea_Id, 0, NULL) AS ProductArea_Id, " &
+                              "Replace(ProductAreaSetDate, '', NULL) AS ProductAreaSetDate, " &
+                              "Replace(System_Id, 0, NULL) AS System_Id, " &
+                              "Replace(Urgency_Id, 0, NULL) AS Urgency_Id, " &
+                              "Replace(Impact_Id, 0, NULL) AS Impact_Id, " &
+                              "Replace(Category_Id, 0, NULL) AS Category_Id, " &
+                              "Replace(Supplier_Id, 0, NULL) AS Supplier_Id, " &
                               "InvoiceNumber, " &
                               "Replace(ReferenceNumber,'', NULL) ReferenceNumber,  " &
                               "Caption, " &
@@ -954,59 +954,59 @@ Public Class CaseData
                               "Miscellaneous, " &
                               "ContactBeforeAction, " &
                               "SMS, " &
-                              "AgreedDate, " &
+                              "Replace(AgreedDate,'', NULL) AS AgreedDate, " &
                               "Available, " &
                               "c.Cost, " &
                               "OtherCost, " &
                               "Replace(Currency,'', NULL) Currency, " &
-                              "Performer_User_Id, " &
-                              "CaseResponsibleUser_Id, " &
-                              "Priority_Id, " &
-                              "Status_Id, " &
-                              "StateSecondary_Id, " &
+                              "Replace(Performer_User_Id, 0, NULL) AS Performer_User_Id, " &
+                              "Replace(CaseResponsibleUser_Id, 0, NULL) AS CaseResponsibleUser_Id, " &
+                              "Replace(Priority_Id, 0, NULL) AS Priority_Id, " &
+                              "Replace(Status_Id, 0, NULL) AS Status_Id, " &
+                              "Replace(StateSecondary_Id, 0, NULL) AS StateSecondary_Id, " &
                               "ExternalTime, " &
-                              "Project_Id, " &
-                              "ProjectSchedule_Id,  " &
-                              "Verified, " &
+                              "Replace(Project_Id, 0, NULL) AS Project_Id, " &
+                              "Replace(ProjectSchedule_Id, 0, NULL) AS ProjectSchedule_Id,  " &
+                              "Replace(Verified, 0, NULL) AS Verified, " &
                               "Replace(VerifiedDescription, '', NULL) VerifiedDescription, " &
                               "Replace(SolutionRate,'', NULL) SolutionRate, " &
-                              "PlanDate, " &
-                              "ApprovedDate, " &
-                              "ApprovedBy_User_Id, " &
-                              "WatchDate, " &
-                              "LockCaseToWorkingGroup_Id, " &
-                              "WorkingGroup_Id, " &
-                              "FinishingDate, " &
+                              "Replace(PlanDate, '', NULL) PlanDate, " &
+                              "Replace(ApprovedDate, '', NULL) AS ApprovedDate, " &
+                              "Replace(ApprovedBy_User_Id, 0, NULL) AS ApprovedBy_User_Id, " &
+                              "Replace(WatchDate, '', NULL) AS WatchDate, " &
+                              "Replace(LockCaseToWorkingGroup_Id, 0, NULL) AS LockCaseToWorkingGroup_Id, " &
+                              "Replace(WorkingGroup_Id, 0, NULL) AS WorkingGroup_Id, " &
+                              "Replace(FinishingDate, '', NULL) AS FinishingDate, " &
                               "Replace(FinishingDescription,'', NULL) FinishingDescription, " &
-                              "FollowUpDate, " &
+                              "Replace(FollowUpDate, '', NULL) AS FollowUpDate, " &
                               "RegistrationSource, " &
                               "RelatedCaseNumber, " &
-                              "Problem_Id, " &
-                              "Change_Id, " &
+                              "Replace(Problem_Id, 0, NULL) AS Problem_Id, " &
+                              "Replace(Change_Id, 0, NULL) AS Change_Id, " &
                               "Deleted, " &
                               "Status, " &
                               "RegLanguage_Id, " &
                               "Replace(RegUserId,NULL, '') RegUserId, " &
                               "Replace(RegUserDomain,NULL, '') RegUserDomain, " &
-                              "ProductAreaQuestionVersion_Id, " &
+                              "Replace(ProductAreaQuestionVersion_Id, 0, NULL) AS ProductAreaQuestionVersion_Id, " &
                               "LeadTime, " &
                               "getutcdate(), " &
                               "'" & Replace(sCreatedByUser, "'", "''") & "', " &
-                              "CausingPartId, " &
-                              "DefaultOwnerWG_Id, " &
-                              "RegistrationSourceCustomer_Id, " &
+                              "Replace(CausingPartId, 0, NULL) AS CausingPartId, " &
+                              "Replace(DefaultOwnerWG_Id, 0, NULL) AS DefaultOwnerWG_Id, " &
+                              "Replace(RegistrationSourceCustomer_Id, 0, NULL) AS RegistrationSourceCustomer_Id, " &
                               "Replace(c.CostCentre, '', NULL) AS CostCentre , " &
                               "ca.Person_Name, " &
-                              "ca.ReportedBy, " &
-                              "ca.Person_Phone, " &
-                              "ca.UserCode, " &
-                              "ca.Department_Id, " &
+                              "Replace(ca.ReportedBy, '', NULL) AS ReportedBy, " &
+                              "Replace(ca.Person_Phone, '', NULL) AS Person_Phone, " &
+                              "Replace(ca.UserCode, '', NULL) AS UserCode, " &
+                              "Replace(ca.Department_Id, 0, NULL) AS Department_Id, " &
                               "'', " &
-                              "LatestSLACountDate, " &
+                              "Replace(LatestSLACountDate, '', NULL) AS LatestSLACountDate, " &
                               "ca.Person_Email, " &
-                              "ca.Person_CellPhone, " &
-                              "ca.Region_Id, " &
-                              "ca.OU_Id, " &
+                              "Replace(ca.Person_CellPhone, '', NULL) AS Person_CellPhone, " &
+                              "Replace(ca.Region_Id, 0, NULL) AS Region_Id, " &
+                              "Replace(ca.OU_Id, 0, NULL) AS OU_Id, " &
                               "Replace(ca.CostCentre, '', NULL) AS CostCentre, " &
                               "ca.Place " &
                        "From tblCase c " &
