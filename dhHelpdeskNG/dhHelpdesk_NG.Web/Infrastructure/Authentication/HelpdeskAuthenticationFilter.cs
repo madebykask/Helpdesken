@@ -13,12 +13,8 @@ using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete;
 using IpMatcher;
-using Microsoft.Owin;
-using Microsoft.Owin.Security.OpenIdConnect;
-using Microsoft.Owin.Security;
-using Microsoft.Identity.Client;
-using System.Threading.Tasks;
 using DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors;
+using DH.Helpdesk.BusinessData.Enums.Users;
 
 namespace DH.Helpdesk.Web.Infrastructure.Authentication
 {
@@ -85,18 +81,20 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             var identity = ctx.User.Identity;
             var isIdentityAuthenticated = identity?.IsAuthenticated ?? false;
 
+            var loginMode = GetCurrentLoginMode();
+
             if (IgnoreRequest(filterContext))
             {
                 filterContext.HttpContext.Items[SkipAuthResultCheck] = true;
                 _logger.Debug($"AuthenticationFilter. Skip check for anonymous action. Identity: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}, Url: {ctx.Request.Url}");
                 return;
             }
-            if(isIdentityAuthenticated && SessionFacade.CurrentUser != null)
+            if (isIdentityAuthenticated && SessionFacade.CurrentUser != null)
             {
                 return;
             }
 
-            var loginMode = GetCurrentLoginMode();
+            
 
             if (loginMode == LoginMode.Microsoft)
             {
@@ -106,7 +104,29 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 {
                     if (_authenticationService.SignIn(ctx))
                     {
-                        return;
+                        //If user clicked a link not logged in
+                        if(ctx.Request.Path != "/")
+                        {
+                            filterContext.Result = new RedirectResult(ctx.Request.Path);
+                        }
+                        else
+                        {
+                            //Send to preferred startpage
+                            if ((StartPage)SessionFacade.CurrentUser.StartPage == StartPage.CaseSummary)
+                            {
+                                filterContext.Result = new RedirectResult("~/Cases");
+                            }
+                            else if ((StartPage)SessionFacade.CurrentUser.StartPage == StartPage.AdvancedSearch)
+                            {
+                                filterContext.Result = new RedirectResult("~/Cases/AdvancedSearch");
+                            }
+                            else
+                            {
+                                filterContext.Result = new RedirectResult("~/");
+                            }
+                            return;
+                        }
+                        
                     }
                     else
                     {
@@ -140,6 +160,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
 
                 _logger.Debug($"AuthenticationFilter called. CustomerUser: {customerUserName}, Identity: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}, Url: {ctx.Request.Url}");
 
+                //Windows login
                 if (isIdentityAuthenticated)
                 {
                     //NOTE: perform sign in only if request is authenticated (forms, wins, adfs,..) but helpdesk user was not created yet (first login request) or doesn't exist in session any more (asp.net session expired)
@@ -157,6 +178,32 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                             _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Redirecting to login page: {loginUrl}");
                             OnError(filterContext, loginUrl);
                         }
+                        else
+                        {
+                            //If user clicked a link not logged in
+                            if (ctx.Request.Path != "/")
+                            {
+                                filterContext.Result = new RedirectResult(ctx.Request.Path);
+                            }
+                            else
+                            {
+                                //Send to preferred startpage
+                                if ((StartPage)SessionFacade.CurrentUser.StartPage == StartPage.CaseSummary)
+                                {
+                                    filterContext.Result = new RedirectResult("~/Cases");
+                                }
+                                else if ((StartPage)SessionFacade.CurrentUser.StartPage == StartPage.AdvancedSearch)
+                                {
+                                    filterContext.Result = new RedirectResult("~/Cases/AdvancedSearch");
+                                }
+                                else
+                                {
+                                    filterContext.Result = new RedirectResult("~/");
+                                }
+                                return;
+                            }
+                        }
+                        
                     }
 
                 }

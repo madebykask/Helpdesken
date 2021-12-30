@@ -174,22 +174,6 @@ namespace DH.Helpdesk.Web.Controllers
                 new AuthenticationProperties { RedirectUri = returnUrl },
                 OpenIdConnectAuthenticationDefaults.AuthenticationType);
 
-            //if (!Request.IsAuthenticated)
-            //{
-            //    _authenticationService.SetLoginModeToMicrosoft();
-            //    //Make an async method to call instead?
-            //    HttpContext.GetOwinContext().Authentication.Challenge(
-            //        new AuthenticationProperties { RedirectUri = returnUrl },
-            //        OpenIdConnectAuthenticationDefaults.AuthenticationType);
-
-            //}
-            //else
-            //{
-            //    //Log in user again
-
-            //    var user = SessionFacade.CurrentUser;
-            //}
-            //return new RedirectResult(returnUrl);
         }
 
         [HttpGet]
@@ -242,21 +226,29 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (timeZoneAutodetectResult == TimeZoneAutodetectResult.Failure)
             {
-                redirectTo = Url.Action("Edit", "Profile", null, Request.Url?.Scheme ?? "http");
+                redirectTo = Url.Action("Edit", "Profile", null, Request.Url?.Scheme ?? "https");
             }
             else
             {
-                if (!string.IsNullOrEmpty(returnUrl) &&
-                    HttpContext.Request.IsAbsoluteUrlLocalToHost(returnUrl) &&
-                    _routeResolver.AbsolutePathToRelative(returnUrl) != Root)
+                if(returnUrl != "~/")
                 {
                     redirectTo = Server.UrlDecode(returnUrl);
                 }
-
-                if (!string.IsNullOrEmpty(redirectTo) && redirectTo.ToLower().Contains("login"))
+                else
                 {
-                    redirectTo = Root;
+                    redirectTo = "";
                 }
+                //if (!string.IsNullOrEmpty(returnUrl) &&
+                //    HttpContext.Request.IsAbsoluteUrlLocalToHost(returnUrl) &&
+                //    _routeResolver.AbsolutePathToRelative(returnUrl) != Root)
+                //{
+                //    redirectTo = Server.UrlDecode(returnUrl);
+                //}
+
+                //if (!string.IsNullOrEmpty(redirectTo) && redirectTo.ToLower().Contains("login"))
+                //{
+                //    redirectTo = Root;
+                //}
             }
 
             Response.Redirect(!string.IsNullOrEmpty(redirectTo) ? redirectTo : _routeResolver.ResolveStartPage(Url, startPage));
