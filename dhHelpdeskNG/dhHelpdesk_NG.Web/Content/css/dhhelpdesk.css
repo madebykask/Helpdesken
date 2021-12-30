@@ -4214,3 +4214,33 @@ div.chosen-container.chosen-container-single.error .chosen-single {
 .portlet-content .more {
     text-align: right;
 }
+
+.all a, a.row-all {
+    color: #0088cc;
+    text-decoration: none;
+}
+
+.caselog tr.less3 > td > a > div,
+.caselog tr.less3 > td > div {
+    height: 60px;
+    overflow: hidden;
+}
+
+.caselog tr.less7 > td > a > div,
+.caselog tr.less7 > td > div {
+    height: 140px;
+    overflow: hidden;
+}
+
+.caselog tr.less3 .row-all::before,
+.caselog tr.less7 .row-all::before {
+    content: '>>'
+}
+
+.caselog .row-all::before {
+    content: '<<'
+}
+
+.caselog .log-files a {
+    margin-bottom: 10px;
+}
