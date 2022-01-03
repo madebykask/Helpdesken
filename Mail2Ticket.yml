@@ -27,6 +27,12 @@ steps:
     feedsToUse: 'select'
     restoreDirectory: '$(build.artifactStagingDirectory)'
 
+- task: NuGetCommand@2
+  inputs:
+    command: 'restore'
+    restoreSolution: '**\dhHelpdesk_NG.Common\packages.config'
+    feedsToUse: 'select'
+    restoreDirectory: '$(build.artifactStagingDirectory)'
 - task: VSBuild@1
   inputs:
     solution: '**\DH.Helpdesk.Mail2Ticket.vbproj'
