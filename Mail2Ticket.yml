@@ -22,7 +22,9 @@ steps:
 
 - task: NuGetCommand@2
   inputs:
-    restoreSolution: '**\DH.Helpdesk.Mail2Ticket.vbproj'
+    command: 'restore'
+    restoreSolution: '**\DH.Helpdesk.Mail2Ticket\packages.config'
+    feedsToUse: 'select'
 
 - task: VSBuild@1
   inputs:
