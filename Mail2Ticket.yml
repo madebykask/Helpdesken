@@ -20,13 +20,13 @@ steps:
 
 - task: NuGetToolInstaller@1
 
-- task: DotNetCoreCLI@2
-  displayName: dotnet restore
-  inputs:
-    command: restore
-    projects: '**/*.*proj'
-    includeNuGetOrg: true
-    restoreDirectory: '$(build.artifactStagingDirectory)'
+# - task: DotNetCoreCLI@2
+#   displayName: dotnet restore
+#   inputs:
+#     command: restore
+#     projects: '**/*.*proj'
+#     includeNuGetOrg: true
+#     restoreDirectory: '$(build.artifactStagingDirectory)'
     
 # - task: NuGetCommand@2
 #   inputs:
@@ -36,12 +36,14 @@ steps:
 #     restoreDirectory: '$(build.artifactStagingDirectory)'
 #     includeNuGetOrg: true
 
-# - task: NuGetCommand@2
-#   inputs:
-#     command: 'restore'
-#     restoreSolution: '**\dhHelpdesk_NG.Common\packages.config'
-#     feedsToUse: 'select'
-#     restoreDirectory: '$(build.artifactStagingDirectory)'
+- task: NuGetCommand@2
+  inputs:
+    command: 'restore'
+    restoreSolution: '**\dhHelpdesk_NG.Common/packages.config'
+    feedsToUse: 'select'
+    restoreDirectory: '$(build.artifactStagingDirectory)'
+    includeNuGetOrg: true
+    
 - task: VSBuild@1
   inputs:
     solution: '**\DH.Helpdesk.Mail2Ticket.vbproj'
