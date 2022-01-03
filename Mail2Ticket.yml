@@ -20,12 +20,20 @@ steps:
 
 - task: NuGetToolInstaller@1
 
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
+  displayName: dotnet restore
   inputs:
-    command: 'restore'
-    restoreSolution: '**\DH.Helpdesk.Mail2Ticket\packages.config'
-    feedsToUse: 'select'
-    restoreDirectory: '$(build.artifactStagingDirectory)'
+    command: restore
+    projects: '**/*.csproj'
+    includeNuGetOrg: true
+    
+# - task: NuGetCommand@2
+#   inputs:
+#     command: 'restore'
+#     #restoreSolution: '**\DH.Helpdesk.Mail2Ticket\packages.config'
+#     feedsToUse: 'select'
+#     restoreDirectory: '$(build.artifactStagingDirectory)'
+#     includeNuGetOrg: true
 
 - task: NuGetCommand@2
   inputs:
