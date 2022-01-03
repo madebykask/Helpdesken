@@ -40,8 +40,6 @@ steps:
   inputs:
     command: 'restore'
     restoreSolution: '**\dhHelpdesk_NG.Common/packages.config'
-    feedsToUse: 'select'
-    restoreDirectory: '$(build.artifactStagingDirectory)'
     includeNuGetOrg: true
     
 - task: VSBuild@1
