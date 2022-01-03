@@ -25,6 +25,7 @@ steps:
     command: 'restore'
     restoreSolution: '**\DH.Helpdesk.Mail2Ticket\packages.config'
     feedsToUse: 'select'
+    restoreDirectory: '$(build.artifactStagingDirectory)'
 
 - task: VSBuild@1
   inputs:
