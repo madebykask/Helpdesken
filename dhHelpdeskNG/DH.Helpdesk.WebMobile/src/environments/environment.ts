@@ -13,12 +13,13 @@ export const environment = {
 
 export const config = {
     // apiUrl: 'http://dhutvas3.datahalland.se:8049',
-    apiUrl: 'http://localhost:8049',
+    apiUrl: 'http://localhost:8049/',
     //apiUrl: 'http://192.168.1.102:8049',
     clientId: 'hd',
     version: VERSION.fullVersion,
     internalVersion: require('../../package.json').version,
     enableLog: true,
+    microsoftLogin: true
 };
 
 /*

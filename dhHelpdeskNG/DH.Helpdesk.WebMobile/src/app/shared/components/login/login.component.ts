@@ -16,6 +16,7 @@ import { CommunicationService, Channels } from 'src/app/services/communication';
 export class LoginComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject();
     version = config.version;
+    microsoftLogin = config.microsoftLogin;
     loginForm: FormGroup;
     isLoading = false;
     submitted = false;
