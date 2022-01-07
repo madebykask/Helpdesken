@@ -31,6 +31,10 @@ import { RouteReuseStrategy } from '@angular/router';
 import { CaseRouteReuseStrategy } from './helpers/case-route-resolver.stategy';
 import { CasesStatusComponent } from './components/cases-status/cases-status.component';
 import { VersionComponent } from './components/version.component';
+import { MsalModule } from '@azure/msal-angular';
+import { PublicClientApplication } from '@azure/msal-browser';
+
+const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -64,6 +68,18 @@ import { VersionComponent } from './components/version.component';
     }),
     SharedModule,
     //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+
+    MsalModule.forRoot( new PublicClientApplication({
+      auth: {
+        clientId: 'd7a3b1b6-c4a9-461f-a0d6-505f662969df',
+        authority: 'https://login.microsoftonline.com/common/',
+        redirectUri: 'https://localhost:447/'
+      },
+      cache: {
+        cacheLocation: 'localStorage',
+        storeAuthStateInCookie: isIE, 
+      }
+    }), null, null)
   ],
   providers: [
     { provide: ErrorHandler, useClass: GlobalErrorHandler },

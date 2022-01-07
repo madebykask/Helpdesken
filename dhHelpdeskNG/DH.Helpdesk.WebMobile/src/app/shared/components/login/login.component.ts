@@ -8,6 +8,7 @@ import { throwError, Subject } from 'rxjs';
 import { ErrorHandlingService } from '../../../services/logging/error-handling.service';
 import { config } from '@env/environment';
 import { CommunicationService, Channels } from 'src/app/services/communication';
+import { MsalService } from '@azure/msal-angular';
 
 @Component({
     templateUrl: 'login.component.html',
@@ -23,7 +24,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     returnUrl: string;
     error = '';
     pageSettings = {};
-
+    isIframe = false;
+    loginDisplay = false;
+  
     errorMessages = {
         username: {
             required: 'Username required'
@@ -42,7 +45,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         private communicationService: CommunicationService,
         private authenticationService: AuthenticationService,
         private userSettingsService: UserSettingsApiService,
-        private errorHandlingService: ErrorHandlingService) {}
+        private errorHandlingService: ErrorHandlingService,
+        private authServiceMsal: MsalService) {}
 
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
@@ -55,6 +59,23 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        this.isIframe = window !== window.parent && !window.opener;
+    }
+
+    login() {
+      debugger;
+      this.authServiceMsal.loginPopup()
+        .subscribe({
+          next: (result) => {
+            console.log(result);
+            this.setLoginDisplay();
+          },
+          error: (error) => console.log(error)
+        });
+    }
+  
+    setLoginDisplay() {
+      this.loginDisplay = this.authServiceMsal.instance.getAllAccounts().length > 0;
     }
 
     ngOnDestroy(): void {

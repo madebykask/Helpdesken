@@ -16,7 +16,7 @@
                         <mbsc-button flat icon="fa-refresh" [hidden]="!isLoading" class="float-right"></mbsc-button> 
                     </div>
                     <div style="text-align: center;" *ngIf="microsoftLogin">
-                      <button style="background-color:inherit">
+                      <button style="background-color:inherit" (click)="login()">
                         <img style='width: fit-content;' src='content/img//ms-symbollockup_signin_light.svg'>
                       </button>                      
                   </div>
