@@ -73,7 +73,7 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
       auth: {
         clientId: 'd7a3b1b6-c4a9-461f-a0d6-505f662969df',
         authority: 'https://login.microsoftonline.com/common/',
-        redirectUri: 'https://localhost:447/'
+        redirectUri: 'http://localhost:4200/'
       },
       cache: {
         cacheLocation: 'localStorage',

@@ -26,7 +26,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     pageSettings = {};
     isIframe = false;
     loginDisplay = false;
-  
+    loginRequest = {
+      scopes: ["User.ReadWrite"]
+  }
     errorMessages = {
         username: {
             required: 'Username required'
@@ -63,8 +65,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     login() {
-      debugger;
-      this.authServiceMsal.loginPopup()
+      // debugger;
+      this.authServiceMsal.loginPopup(this.loginRequest)
         .subscribe({
           next: (result) => {
             console.log(result);
