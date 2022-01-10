@@ -11,7 +11,7 @@ pool:
 
 variables:
   solution: '**/DH.Helpdesk.Upkeeper/DH.Helpdesk.Upkeeper.csproj'
-  buildPlatform: 'Any CPU'
+  buildPlatform: 'AnyCPU'
   buildConfiguration: 'Release'
 
 steps:
