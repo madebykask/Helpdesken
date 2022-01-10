@@ -26,10 +26,11 @@ namespace DH.Helpdesk.WebApi
             app.UseCors(new CorsOptions
             {
                 PolicyProvider = new CorsPolicyProvider()
-                {
+                {// Commented below to be able to run CORS locally in development
                     PolicyResolver = request =>
-                        (request.Path.Value ?? string.Empty).Equals("/token", StringComparison.OrdinalIgnoreCase) 
-                            ? Task.FromResult(new CorsPolicy
+                        //(request.Path.Value ?? string.Empty).Equals("/token", StringComparison.OrdinalIgnoreCase) 
+                        //    ? 
+                            Task.FromResult(new CorsPolicy
                             {
                                 AllowAnyHeader = true,
                                 AllowAnyMethod = true,
@@ -37,7 +38,8 @@ namespace DH.Helpdesk.WebApi
                                 SupportsCredentials = false,
                                 PreflightMaxAge = 600
                             })
-                            : Task.FromResult<CorsPolicy>(null)
+                            //: 
+                            //Task.FromResult<CorsPolicy>(null)
                 }
             });
 
