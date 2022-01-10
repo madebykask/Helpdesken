@@ -10,7 +10,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/DH.Helpdesk.Upkeeper.csproj'
+  solution: '**/DH.Helpdesk.Upkeeper/DH.Helpdesk.Upkeeper.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
