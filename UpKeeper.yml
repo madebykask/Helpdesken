@@ -28,3 +28,9 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)/DH.Helpdesk.Upkeeper/bin/$(buildPlatform)/$(buildConfiguration)'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)'
