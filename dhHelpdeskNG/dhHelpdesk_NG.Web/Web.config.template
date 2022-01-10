@@ -24,7 +24,7 @@
     <add key="UnobtrusiveJavaScriptEnabled" value="true"/>
     <add key="InitFromSelfService" value="false"/>
     <add key="InitFromSelfServiceWorkflowInitValue" value="10"/>
-    <add key="log4net.Internal.Debug" value="true"/>
+    <add key="log4net.Internal.Debug" value="false"/>
     <add key="SmtpServer" value="smtp.datahalland.se"/>
     <add key="SmtpPort" value="25"/>
     #{if AuthenticationMode == "application"}
