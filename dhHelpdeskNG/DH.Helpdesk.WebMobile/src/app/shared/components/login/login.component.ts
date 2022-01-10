@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { switchMap, finalize, take, map } from 'rxjs/operators';
+import { switchMap, finalize, take, map, catchError } from 'rxjs/operators';
 import { AuthenticationService } from '../../../services/authentication';
 import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
 import { throwError, Subject } from 'rxjs';
@@ -9,6 +9,8 @@ import { ErrorHandlingService } from '../../../services/logging/error-handling.s
 import { config } from '@env/environment';
 import { CommunicationService, Channels } from 'src/app/services/communication';
 import { MsalService } from '@azure/msal-angular';
+import { AuthenticationResult } from '@azure/msal-browser';
+
 
 @Component({
     templateUrl: 'login.component.html',
@@ -24,11 +26,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     returnUrl: string;
     error = '';
     pageSettings = {};
-    isIframe = false;
     loginDisplay = false;
-    loginRequest = {
-      scopes: ["User.ReadWrite"]
-  }
+
     errorMessages = {
         username: {
             required: 'Username required'
@@ -48,7 +47,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private authenticationService: AuthenticationService,
         private userSettingsService: UserSettingsApiService,
         private errorHandlingService: ErrorHandlingService,
-        private authServiceMsal: MsalService) {}
+        private msalService: MsalService) {}
 
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
@@ -56,28 +55,28 @@ export class LoginComponent implements OnInit, OnDestroy {
             password: ['', Validators.required]
         });
 
-        // reset login status
-        this.authenticationService.logout();
+        this.msalService.instance.handleRedirectPromise().then( res => {
+          if (res != null && res.account != null) {
+            this.msalService.instance.setActiveAccount(res.account)
+          }
+        })
 
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        this.isIframe = window !== window.parent && !window.opener;
     }
 
     login() {
-      // debugger;
-      this.authServiceMsal.loginPopup(this.loginRequest)
-        .subscribe({
-          next: (result) => {
-            console.log(result);
-            this.setLoginDisplay();
-          },
-          error: (error) => console.log(error)
-        });
+      this.msalService.loginPopup().subscribe((response: AuthenticationResult)=> {
+        console.log(response)
+        this.msalService.instance.setActiveAccount(response.account)
+      });
     }
   
+    logout() {
+      this.msalService.logout();
+    }
     setLoginDisplay() {
-      this.loginDisplay = this.authServiceMsal.instance.getAllAccounts().length > 0;
+      // this.loginDisplay = this.authServiceMsal.instance.getAllAccounts().length > 0;
     }
 
     ngOnDestroy(): void {

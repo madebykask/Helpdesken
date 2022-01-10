@@ -31,10 +31,9 @@ import { RouteReuseStrategy } from '@angular/router';
 import { CaseRouteReuseStrategy } from './helpers/case-route-resolver.stategy';
 import { CasesStatusComponent } from './components/cases-status/cases-status.component';
 import { VersionComponent } from './components/version.component';
-import { MsalModule } from '@azure/msal-angular';
-import { PublicClientApplication } from '@azure/msal-browser';
+import { MsalModule, MSAL_INSTANCE, MsalService } from '@azure/msal-angular';
+import { MSALInstanceFactory } from './services/authentication/MSALInstanceFactory';
 
-const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -68,18 +67,7 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
     }),
     SharedModule,
     //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-
-    MsalModule.forRoot( new PublicClientApplication({
-      auth: {
-        clientId: 'd7a3b1b6-c4a9-461f-a0d6-505f662969df',
-        authority: 'https://login.microsoftonline.com/common/',
-        redirectUri: 'http://localhost:4200/'
-      },
-      cache: {
-        cacheLocation: 'localStorage',
-        storeAuthStateInCookie: isIE, 
-      }
-    }), null, null)
+    MsalModule
   ],
   providers: [
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
@@ -87,6 +75,8 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     // { provide: LOCALE_ID, useValue: "sv-SE" },
     // { provide: LOCALE_ID, deps: [SettingsService], useFactory: (settingsService) => settingsService.getLanguage()},
+    { provide: MSAL_INSTANCE, useFactory: MSALInstanceFactory },
+      MsalService,
     {
       provide: APP_INITIALIZER,
       useFactory: initApplication,
