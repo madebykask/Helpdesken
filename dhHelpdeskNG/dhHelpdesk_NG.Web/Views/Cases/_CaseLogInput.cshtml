@@ -511,7 +511,7 @@
             <div class="span6">
                 <table id="tblCaseChargeSummary" style="@Model.ShowInvoiceFields.displayHtml()">
                     <tbody>
-                        @if (Model.case_.Department != null)
+                        @if (Model.case_.Department != null && Model.Logs != null)
                         {
                             if (Model.case_.Department.ShowInvoiceTime)
                             {
