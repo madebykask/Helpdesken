@@ -31,6 +31,6 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(system.defaultworkingdirectory)/DH.Helpdesk.Upkeeper/bin/$(buildPlatform)/$(buildConfiguration)'
+    SourceFolder: '$(system.defaultworkingdirectory)/DH.Helpdesk.Upkeeper/bin/$(buildConfiguration)'
     Contents: '**'
     TargetFolder: '$(build.artifactstagingdirectory)'
