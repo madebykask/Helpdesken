@@ -12,7 +12,7 @@ pool:
 variables:
   solution: '**/DH.Helpdesk.Upkeeper/DH.Helpdesk.Upkeeper.csproj'
   buildPlatform: 'AnyCPU'
-  buildConfiguration: 'Degug'
+  buildConfiguration: 'Debug'
 
 steps:
 - task: NuGetToolInstaller@1
