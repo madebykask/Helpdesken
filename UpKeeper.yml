@@ -20,8 +20,6 @@ steps:
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
-    packagesDirectory: '**/DH.Helpdesk.Upkeeper'
-    #restoreSolution: '**\DH.Helpdesk.Upkeeper/packages.config'
 
 - task: VSBuild@1
   inputs:
