@@ -19,7 +19,7 @@ steps:
 
 - task: NuGetCommand@2
   inputs:
-    restoreSolution: '$(solution)'
+    restoreSolution: 'DH.Helpdesk.Upkeeper.csproj'
 
 - task: VSBuild@1
   inputs:
