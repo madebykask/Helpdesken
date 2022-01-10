@@ -21,6 +21,7 @@ steps:
   inputs:
     command: 'restore'
     restoreSolution: '**\DH.Helpdesk.Upkeeper/packages.config'
+    includeNuGetOrg: true
 
 - task: VSBuild@1
   inputs:
