@@ -29,7 +29,7 @@ steps:
    
 - task: VSBuild@1
   inputs:
-    solution: '**\DH.Helpdesk.Upkeeper.vbproj'
+    solution: 'DH.Helpdesk.Upkeeper\DH.Helpdesk.Upkeeper.vbproj'
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true'
 
 - task: CopyFiles@2
