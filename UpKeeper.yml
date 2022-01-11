@@ -22,7 +22,7 @@ steps:
     command: 'restore'
     restoreSolution: '$(solution)'
     feedsToUse: 'select'
-    restoreDirectory: ''
+    restoreDirectory: '**/DH.Helpdesk.Upkeeper/'
 
 # - task: NuGetCommand@2
 #   inputs:
