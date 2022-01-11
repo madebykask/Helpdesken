@@ -30,8 +30,8 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(system.defaultworkingdirectory)/dhHelpdeskNG/bin/$(buildConfiguration)'
-    Contents: '**'
-    TargetFolder: '$(build.artifactstagingdirectory)'
+# - task: CopyFiles@2
+#   inputs:
+#     SourceFolder: '$(system.defaultworkingdirectory)/dhHelpdeskNG/bin/$(buildConfiguration)'
+#     Contents: '**'
+#     TargetFolder: '$(build.artifactstagingdirectory)'
