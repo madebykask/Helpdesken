@@ -21,7 +21,6 @@ steps:
   inputs:
     command: 'restore'
     restoreSolution: '$(solution)'
-    restoreDirectory: '**/DH.Helpdesk.Upkeeper'
 
 # - task: NuGetCommand@2
 #   inputs:
