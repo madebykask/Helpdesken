@@ -19,7 +19,6 @@ steps:
 
 - task: NuGetCommand@2
   inputs:
-    command: 'restore'
     restoreSolution: '$(solution)'
     feedsToUse: 'select'
     vstsFeed: '1e2f294e-d4e3-4681-bb74-833f682abc75'
