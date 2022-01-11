@@ -19,8 +19,14 @@ steps:
 
 - task: NuGetCommand@2
   inputs:
+    command: 'restore'
     restoreSolution: '$(solution)'
-    #restoreSolution: 'DH.Helpdesk.Upkeeper.csproj'
+    feedsToUse: 'select'
+    restoreDirectory: 'DH.Helpdesk.Upkeeper'
+
+# - task: NuGetCommand@2
+#   inputs:
+#     #restoreSolution: 'DH.Helpdesk.Upkeeper.csproj'
 
 # - task: VSBuild@1
 #   inputs:
