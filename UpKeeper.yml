@@ -21,12 +21,16 @@ steps:
   inputs:
     restoreSolution: 'DH.Helpdesk.Upkeeper.csproj'
 
+# - task: VSBuild@1
+#   inputs:
+#     solution: '$(solution)'
+#     platform: '$(buildPlatform)'
+#     configuration: '$(buildConfiguration)'
+   
 - task: VSBuild@1
   inputs:
-    solution: '$(solution)'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-   
+    solution: '**\DH.Helpdesk.Upkeeper.vbproj'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true'
 
 - task: CopyFiles@2
   inputs:
