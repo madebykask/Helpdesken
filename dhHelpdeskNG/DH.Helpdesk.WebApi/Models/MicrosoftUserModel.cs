@@ -9,6 +9,6 @@ namespace DH.Helpdesk.WebApi.Models
         [Required]
         public string ClientId { get; set; }
         [Required]
-        public string AccessToken { get; set; }
+        public string IdToken { get; set; }
     }
 }
