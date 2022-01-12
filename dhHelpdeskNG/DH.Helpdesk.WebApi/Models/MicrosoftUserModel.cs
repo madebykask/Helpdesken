@@ -8,5 +8,7 @@ namespace DH.Helpdesk.WebApi.Models
         public string Email { get; set; }
         [Required]
         public string ClientId { get; set; }
+        [Required]
+        public string AccessToken { get; set; }
     }
 }
