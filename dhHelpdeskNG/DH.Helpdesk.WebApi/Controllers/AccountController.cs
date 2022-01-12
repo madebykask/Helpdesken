@@ -67,41 +67,12 @@ namespace DH.Helpdesk.WebApi.Controllers
         [AllowAnonymous]
         public async Task<HttpResponseMessage> SignInWithMicrosoft([FromBody] MicrosoftUserModel model)
         {
+            var validUser = CheckValidUserLogin(model);
 
-            string token = model.IdToken;
-                string stsDiscoveryEndpoint = "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration";
-
-            var configManager = new ConfigurationManager<OpenIdConnectConfiguration>(
-                                    stsDiscoveryEndpoint,
-                                    new OpenIdConnectConfigurationRetriever());
-
-            OpenIdConnectConfiguration config = configManager.GetConfigurationAsync().Result;
-            TokenValidationParameters validationParameters = new TokenValidationParameters
+            if (validUser)
             {
-                //decode the JWT to see what these values should be
-                ValidAudience = "f263307c-2182-44c0-9c28-1b8e88c00a7b",
-                ValidIssuer = "https://login.microsoftonline.com/a1f945cf-f91f-4b88-a250-a58e3dd50140/v2.0",
-
-                ValidateAudience = true,
-                ValidateIssuer = true,
-                IssuerSigningKeys = config.SigningKeys,
-                ValidateLifetime = true
-            };
-
-            JwtSecurityTokenHandler tokendHandler = new JwtSecurityTokenHandler();
-
-            SecurityToken jwt;
-
-            var result = tokendHandler.ValidateToken(token, validationParameters, out jwt);
-
-            var securityToken = jwt as JwtSecurityToken;
-            var userName = securityToken.Claims.FirstOrDefault(x => x.Type.Equals("preferred_username", StringComparison.OrdinalIgnoreCase))?.Value;
-            var validuser = !string.IsNullOrEmpty(userName) && (userName.Trim() == model.Email.Trim());
-
-            if(validuser)
-            {
-                //Get User if exists
-                var user = _masterDataService.GetUserByEmail(userName);
+                //Get Helpdesk User if exists from verifyed email
+                var user = _masterDataService.GetUserByEmail(model.Email);
                 var request = HttpContext.Current.Request;
                 var tokenServiceUrl = request.Url.GetLeftPart(UriPartial.Authority) + request.ApplicationPath + ConfigApi.Constants.TokenEndPoint;
                 using (var client = new HttpClient())
@@ -130,53 +101,58 @@ namespace DH.Helpdesk.WebApi.Controllers
             }
 
         }
-        public JwtSecurityToken Validate(string token)
+
+        private bool CheckValidUserLogin(MicrosoftUserModel model)
         {
-            string stsDiscoveryEndpoint = "https://login.microsoftonline.com/common/.well-known/openid-configuration";
+            // The Client ID is used by the application to uniquely identify itself to Microsoft identity platform.
+            string clientId = System.Configuration.ConfigurationManager.AppSettings["ClientId"] != null ?
+                              System.Configuration.ConfigurationManager.AppSettings["ClientId"] : "";
 
-            ConfigurationManager<OpenIdConnectConfiguration> configManager = new ConfigurationManager<OpenIdConnectConfiguration>(stsDiscoveryEndpoint, new OpenIdConnectConfigurationRetriever());
+            // Tenant is the tenant ID (e.g. contoso.onmicrosoft.com, or 'common' for multi-tenant)
+            string tenant = System.Configuration.ConfigurationManager.AppSettings["Tenant"] != null ?
+                                   System.Configuration.ConfigurationManager.AppSettings["Tenant"] : "";
 
-            OpenIdConnectConfiguration config = configManager.GetConfigurationAsync().Result;
-
-            TokenValidationParameters validationParameters = new TokenValidationParameters
-            {
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                ValidateLifetime = false
-            };
-
-            JwtSecurityTokenHandler tokendHandler = new JwtSecurityTokenHandler();
-
-            SecurityToken jwt;
-
-            var result = tokendHandler.ValidateToken(token, validationParameters, out jwt);
-
-            return jwt as JwtSecurityToken;
-        }
-        public async Task<HttpResponseMessage> TestMS(string token)
-        {
+            string auth = System.Configuration.ConfigurationManager.AppSettings["Authority"] != null ?
+                                   System.Configuration.ConfigurationManager.AppSettings["Authority"] : "";
+            // Authority is the URL for authority, composed by Microsoft identity platform endpoint and the tenant name (e.g. https://login.microsoftonline.com/contoso.onmicrosoft.com/v2.0)
+            string authority = String.Format(System.Globalization.CultureInfo.InvariantCulture, auth, tenant);
             try
             {
-                
-                var graphserviceClient = new GraphServiceClient(
-                new DelegateAuthenticationProvider(
-                    (requestMessage) =>
-                    {
-                        requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                        return Task.FromResult(0);
-                    }));
+                string token = model.IdToken;
+                string stsDiscoveryEndpoint = "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration";
 
-                //This is wrong
-                
-                var apa = await graphserviceClient.Me.Request().GetAsync();
+                var configManager = new ConfigurationManager<OpenIdConnectConfiguration>(
+                                        stsDiscoveryEndpoint,
+                                        new OpenIdConnectConfigurationRetriever());
+
+                OpenIdConnectConfiguration config = configManager.GetConfigurationAsync().Result;
+                TokenValidationParameters validationParameters = new TokenValidationParameters
+                {
+                    //ClientId
+                    ValidAudience = clientId,
+                    ValidIssuer = authority,
+
+                    ValidateAudience = true,
+                    ValidateIssuer = true,
+                    IssuerSigningKeys = config.SigningKeys,
+                    ValidateLifetime = true
+                };
+
+                JwtSecurityTokenHandler tokendHandler = new JwtSecurityTokenHandler();
+
+                SecurityToken jwt;
+
+                var result = tokendHandler.ValidateToken(token, validationParameters, out jwt);
+
+                var securityToken = jwt as JwtSecurityToken;
+                var userName = securityToken.Claims.FirstOrDefault(x => x.Type.Equals("preferred_username", StringComparison.OrdinalIgnoreCase))?.Value;
+                var validuser = !string.IsNullOrEmpty(userName) && (userName.Trim() == model.Email.Trim());
+                return true;
             }
             catch(Exception ex)
             {
-                //Code: InvalidAuthenticationToken\r\nMessage: Invalid x5t claim
-                //{"Code: Authorization_RequestDenied\r\nMessage: Insufficient privileges to complete the operation.\r\nInner error:\r\n\tAdditionalData:\r\n\tdate: 2022-01-12T09:14:51\r\n\trequest-id: 120ffb4d-3522-44a5-a22f-5e66d8200587\r\n\tclient-request-id: 120ffb4d-3522-44a5-a22f-5e66d8200587\r\nClientRequestId: 120ffb4d-3522-44a5-a22f-5e66d8200587\r\n"}
-                string aj = ex.Message;
+                return false;
             }
-            return null;
         }
         /// <summary>
         /// Creates new access token from refresh token
