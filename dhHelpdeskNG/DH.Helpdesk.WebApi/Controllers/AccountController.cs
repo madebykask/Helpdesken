@@ -113,7 +113,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             //                                          .WithAuthority(new Uri("https://login.microsoftonline.com/common/"))
             //                                          .Build();
             var testMe = await TestMS(accessToken);
-            var validuser = false;
+            var validuser = true;
             //validuser = CheckUserTokenWithMicrosoft();
             if(validuser)
             {
