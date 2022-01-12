@@ -51,7 +51,7 @@ export class AuthenticationApiService extends HttpApiServiceBase {
         //login successful if there's a token in the response
           if (response && response.accessToken) {
         
-          const postData = { Email: response.account.username, ClientId: config.clientId, Access_Token: response.accessToken};
+          const postData = { Email: response.account.username, ClientId: config.clientId, AccessToken: response.accessToken};
 
           this.postJsonWithSubscription<any>(this.buildResourseUrl('/api/account/SignInWithMicrosoft', undefined, false), postData)
             .pipe(
