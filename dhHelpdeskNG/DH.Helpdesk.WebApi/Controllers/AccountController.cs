@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using Azure.Identity;
 using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.Config;
 using DH.Helpdesk.WebApi.Models;
+using Microsoft.Graph;
+using Microsoft.Identity.Client;
+using Microsoft.IdentityModel.Protocols;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -62,10 +70,49 @@ namespace DH.Helpdesk.WebApi.Controllers
         [AllowAnonymous]
         public async Task<HttpResponseMessage> SignInWithMicrosoft([FromBody] MicrosoftUserModel model)
         {
-            //var claims = HttpContextBase
-            //Get accesstoken from Header
-            //Validate token or validate 
-            //Check
+            //Just testing...
+            //We must validate the user somehow
+            string clientId = "f263307c-2182-44c0-9c28-1b8e88c00a7b";
+            string clientSecret = "MbM7Q~dREOk~UJJNgl0Q_vKIWXdiiLkNluwDD";
+            string accessToken = model.AccessToken;
+            string assertionType = "urn:ietf:params:oauth:grant-type:jwt-bearer";
+            //string[] scopes = new string[] { "api://f263307c-2182-44c0-9c28-1b8e88c00a7b/access_as_user" };
+            string[] scopes = new string[] { "api://f263307c-2182-44c0-9c28-1b8e88c00a7b/.default" };
+            string graphAccessToken = null;
+
+            try
+            {
+                var app = ConfidentialClientApplicationBuilder
+                            .Create(clientId).WithTenantId("a1f945cf-f91f-4b88-a250-a58e3dd50140").WithClientSecret(clientSecret).Build();
+
+
+                // I get an accesToken from result.AccessToken but dont know what to do with it
+                var result = app.AcquireTokenForClient(scopes)
+                                .ExecuteAsync().GetAwaiter().GetResult();
+
+                //Testing this
+                var testUsers = await TestMS(result.AccessToken);
+
+                //This does not work
+
+                var userAssertion = new UserAssertion(accessToken, assertionType);
+
+                var result2 = app.AcquireTokenOnBehalfOf(scopes, userAssertion)
+                .ExecuteAsync().GetAwaiter().GetResult();
+                //This always throws 
+                //AADSTS50013: Assertion failed signature validation. [Reason - The provided signature value did not match the expected signature value.
+                graphAccessToken = result2.AccessToken;
+            }
+            catch (MsalServiceException ex)
+            {
+                string aj = ex.Message;
+            }
+            //IConfidentialClientApplication app;
+            //app = ConfidentialClientApplicationBuilder.Create("f263307c-2182-44c0-9c28-1b8e88c00a7b")
+            //                                           .WithClientSecret("MbM7Q~dREOk~UJJNgl0Q_vKIWXdiiLkNluwDD")
+            //                                          .WithAuthority(new Uri("https://login.microsoftonline.com/common/"))
+            //                                          .Build();
+            var testMe = await TestMS(accessToken);
             var validuser = false;
             //validuser = CheckUserTokenWithMicrosoft();
             if(validuser)
@@ -100,7 +147,54 @@ namespace DH.Helpdesk.WebApi.Controllers
             }
 
         }
+        public JwtSecurityToken Validate(string token)
+        {
+            string stsDiscoveryEndpoint = "https://login.microsoftonline.com/common/.well-known/openid-configuration";
 
+            ConfigurationManager<OpenIdConnectConfiguration> configManager = new ConfigurationManager<OpenIdConnectConfiguration>(stsDiscoveryEndpoint, new OpenIdConnectConfigurationRetriever());
+
+            OpenIdConnectConfiguration config = configManager.GetConfigurationAsync().Result;
+
+            TokenValidationParameters validationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateLifetime = false
+            };
+
+            JwtSecurityTokenHandler tokendHandler = new JwtSecurityTokenHandler();
+
+            SecurityToken jwt;
+
+            var result = tokendHandler.ValidateToken(token, validationParameters, out jwt);
+
+            return jwt as JwtSecurityToken;
+        }
+        public async Task<HttpResponseMessage> TestMS(string token)
+        {
+            try
+            {
+                
+                var graphserviceClient = new GraphServiceClient(
+                new DelegateAuthenticationProvider(
+                    (requestMessage) =>
+                    {
+                        requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                        return Task.FromResult(0);
+                    }));
+
+                //This is wrong
+                
+                var apa = await graphserviceClient.Users.Request().GetAsync();
+            }
+            catch(Exception ex)
+            {
+                //Code: InvalidAuthenticationToken\r\nMessage: Invalid x5t claim
+                //{"Code: Authorization_RequestDenied\r\nMessage: Insufficient privileges to complete the operation.\r\nInner error:\r\n\tAdditionalData:\r\n\tdate: 2022-01-12T09:14:51\r\n\trequest-id: 120ffb4d-3522-44a5-a22f-5e66d8200587\r\n\tclient-request-id: 120ffb4d-3522-44a5-a22f-5e66d8200587\r\nClientRequestId: 120ffb4d-3522-44a5-a22f-5e66d8200587\r\n"}
+                string aj = ex.Message;
+            }
+            return null;
+        }
         /// <summary>
         /// Creates new access token from refresh token
         /// </summary>
@@ -148,5 +242,9 @@ namespace DH.Helpdesk.WebApi.Controllers
         {
             throw new NotImplementedException();
         }
+    }
+
+    internal class MSGraphUser
+    {
     }
 }
