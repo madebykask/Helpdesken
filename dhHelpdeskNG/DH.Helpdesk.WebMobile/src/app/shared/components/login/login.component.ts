@@ -8,8 +8,6 @@ import { throwError, Subject } from 'rxjs';
 import { ErrorHandlingService } from '../../../services/logging/error-handling.service';
 import { config } from '@env/environment';
 import { CommunicationService, Channels } from 'src/app/services/communication';
-import { MsalService } from '@azure/msal-angular';
-import { AuthenticationResult } from '@azure/msal-browser';
 
 
 @Component({
@@ -19,7 +17,7 @@ import { AuthenticationResult } from '@azure/msal-browser';
 export class LoginComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject();
     version = config.version;
-    microsoftLogin = config.microsoftLogin;
+    hasMicrosoftLogin = config.microsoftLogin;
     loginForm: FormGroup;
     isLoading = false;
     submitted = false;
@@ -47,7 +45,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private authenticationService: AuthenticationService,
         private userSettingsService: UserSettingsApiService,
         private errorHandlingService: ErrorHandlingService,
-        private msalService: MsalService) {}
+        ) {}
 
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
@@ -55,29 +53,43 @@ export class LoginComponent implements OnInit, OnDestroy {
             password: ['', Validators.required]
         });
 
-        this.msalService.instance.handleRedirectPromise().then( res => {
-          if (res != null && res.account != null) {
-            this.msalService.instance.setActiveAccount(res.account)
-          }
-        })
+        // this.msalService.instance.handleRedirectPromise().then( res => {
+        //   if (res != null && res.account != null) {
+        //     this.msalService.instance.setActiveAccount(res.account)
+        //   }
+        // })
 
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     }
 
-    login() {
-      this.msalService.loginPopup().subscribe((response: AuthenticationResult)=> {
-        console.log(response)
-        this.msalService.instance.setActiveAccount(response.account)
-      });
+    microsoftLogin() {
+      this.authenticationService.microsoftLogin().pipe(
+        take(1),
+        switchMap(currentUser => {
+          this.communicationService.publish(Channels.UserLoggedIn, currentUser);
+          return this.userSettingsService.applyUserSettings();
+        }),
+        finalize(() => this.isLoading = false)
+      ).subscribe(res => {
+            this.showLoginError = false;
+            this.router.navigateByUrl(this.returnUrl);
+        },
+        error => {
+          if (error.status && error.status === 400) {
+              this.showLoginError = true;
+          } else {
+              this.errorHandlingService.handleError(error);
+          }
+        });
     }
   
-    logout() {
-      this.msalService.logout();
-    }
-    setLoginDisplay() {
-      // this.loginDisplay = this.authServiceMsal.instance.getAllAccounts().length > 0;
-    }
+    // logout() {
+    //   this.msalService.logout();
+    // }
+    // setLoginDisplay() {
+    //   // this.loginDisplay = this.authServiceMsal.instance.getAllAccounts().length > 0;
+    // }
 
     ngOnDestroy(): void {
         this.destroy$.next();

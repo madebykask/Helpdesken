@@ -39,6 +39,19 @@ export class AuthenticationService {
           );
     }
 
+    microsoftLogin(): Observable<CurrentUser> {
+      return this.authApiService.microsoftLogin()
+      .pipe(
+          take(1),
+          switchMap(isSuccess => {
+              if (!isSuccess) { throwError('Something wrong.'); }
+              return this.userSettingsApiService.loadUserSettings();
+          }),
+          // tap(() => this._logger.log(`Log in action.`)),
+          finalize(() => this.raiseAuthenticationChanged())
+      );
+    }
+
     refreshToken(): Observable<boolean> {
         const user = this.authStateService.getUser();
         if (user && user.authData && user.authData.refresh_token) {

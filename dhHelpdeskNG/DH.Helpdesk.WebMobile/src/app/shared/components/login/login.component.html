@@ -15,8 +15,8 @@
                         <mbsc-button flat type="submit" [disabled]="loginForm.invalid" [hidden]="isLoading" class="float-right">Login</mbsc-button>
                         <mbsc-button flat icon="fa-refresh" [hidden]="!isLoading" class="float-right"></mbsc-button> 
                     </div>
-                    <div style="text-align: center;" *ngIf="microsoftLogin">
-                      <button style="background-color:inherit" (click)="login()">
+                    <div style="text-align: center;" *ngIf="hasMicrosoftLogin">
+                      <button style="background-color:inherit" (click)="microsoftLogin()">
                         <img style='width: fit-content;' src='content/img//ms-symbollockup_signin_light.svg'>
                       </button>                      
                   </div>

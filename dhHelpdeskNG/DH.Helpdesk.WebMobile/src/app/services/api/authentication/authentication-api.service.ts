@@ -7,13 +7,17 @@ import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from '../../local-storage';
 import { Observable } from 'rxjs';
 import { ErrorHandlingService } from '../../logging/error-handling.service';
+import { MsalService } from '@azure/msal-angular';
+import { AuthenticationResult } from '@azure/msal-browser';
+
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationApiService extends HttpApiServiceBase {
 
   constructor(protected http: HttpClient,
     protected localStorageService: LocalStorageService,
-    protected errorHandlingService: ErrorHandlingService) {
+    protected errorHandlingService: ErrorHandlingService,
+    private msalService: MsalService) {
     super(http, localStorageService);
   }
 
@@ -36,9 +40,39 @@ export class AuthenticationApiService extends HttpApiServiceBase {
                     isSuccess = true;
                 }
                 return isSuccess;
-            }));
+            }));  
   }
 
+  microsoftLogin(): Observable<boolean> {
+      return this.msalService.loginPopup().pipe(
+        take(1),
+        map(response => {
+          let isSuccess = false;
+        //login successful if there's a token in the response
+          if (response && response.accessToken) {
+        
+          const postData = { Email: response.account.username, ClientId: config.clientId, Access_Token: response.accessToken};
+
+          this.postJsonWithSubscription<any>(this.buildResourseUrl('/api/account/SignInWithMicrosoft', undefined, false), postData)
+            .pipe(
+            take(1),
+            map(data => {
+
+                // login successful if there's a token in the response
+                if (data && data.access_token) {
+                    const user = CurrentUser.createAuthenticated(data);
+                    // user.currentData.name = username;
+                    user.version = config.version;  
+
+                    // store user details and token in local storage to keep user logged in between page refreshes
+                    this.localStorageService.setCurrentUser(user);
+                    isSuccess = true;
+              }   
+              }))
+              return isSuccess;
+          }
+    }))
+  }
   refreshToken(refreshToken: string): Observable<any> {
       const params = {
         refreshToken: refreshToken,
