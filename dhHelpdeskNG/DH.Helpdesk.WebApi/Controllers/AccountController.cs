@@ -76,9 +76,9 @@ namespace DH.Helpdesk.WebApi.Controllers
             string clientSecret = "rSm7Q~.SEh3yUzbszCA6xyfHo7smyDwXUEoBv";
             string accessToken = model.AccessToken;
             string assertionType = "urn:ietf:params:oauth:grant-type:jwt-bearer";
-            string[] scopes = new string[] { "api://c9a4ee1c-5e42-4c3d-ae66-03208e4e684a/.default" };
+            string[] scopes = new string[] { "access_as_user" };
             string graphAccessToken = null;
-
+            //Kladd Ett
             try
             {
                 var app = ConfidentialClientApplicationBuilder
@@ -111,6 +111,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             //                                           .WithClientSecret("MbM7Q~dREOk~UJJNgl0Q_vKIWXdiiLkNluwDD")
             //                                          .WithAuthority(new Uri("https://login.microsoftonline.com/common/"))
             //                                          .Build();
+
+            //Kladd två
             var testMe = await TestMS(accessToken);
             var validuser = true;
             //validuser = CheckUserTokenWithMicrosoft();
