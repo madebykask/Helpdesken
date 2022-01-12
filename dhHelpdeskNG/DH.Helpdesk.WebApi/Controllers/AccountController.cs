@@ -72,48 +72,48 @@ namespace DH.Helpdesk.WebApi.Controllers
         {
             //Just testing...
             //We must validate the user somehow
-            string clientId = "c9a4ee1c-5e42-4c3d-ae66-03208e4e684a";
-            string clientSecret = "rSm7Q~.SEh3yUzbszCA6xyfHo7smyDwXUEoBv";
-            string accessToken = model.AccessToken;
-            string assertionType = "urn:ietf:params:oauth:grant-type:jwt-bearer";
-            string[] scopes = new string[] { "access_as_user" };
-            string graphAccessToken = null;
-            //Kladd Ett
-            try
-            {
-                var app = ConfidentialClientApplicationBuilder
-                            .Create(clientId).WithTenantId("a1f945cf-f91f-4b88-a250-a58e3dd50140").WithClientSecret(clientSecret).Build();
+            //string clientId = "c9a4ee1c-5e42-4c3d-ae66-03208e4e684a";
+            //string clientSecret = "rSm7Q~.SEh3yUzbszCA6xyfHo7smyDwXUEoBv";
+            //string accessToken = model.AccessToken;
+            //string assertionType = "urn:ietf:params:oauth:grant-type:jwt-bearer";
+            //string[] scopes = new string[] { "access_as_user" };
+            //string graphAccessToken = null;
+            ////Kladd Ett
+            //try
+            //{
+            //    var app = ConfidentialClientApplicationBuilder
+            //                .Create(clientId).WithTenantId("a1f945cf-f91f-4b88-a250-a58e3dd50140").WithClientSecret(clientSecret).Build();
 
 
-                //// I get an accesToken from result.AccessToken but dont know what to do with it
-                //var result = app.AcquireTokenForClient(scopes)
-                //                .ExecuteAsync().GetAwaiter().GetResult();
+            //    //// I get an accesToken from result.AccessToken but dont know what to do with it
+            //    //var result = app.AcquireTokenForClient(scopes)
+            //    //                .ExecuteAsync().GetAwaiter().GetResult();
 
-                ////Testing this
-                //var testUsers = await TestMS(result.AccessToken);
+            //    ////Testing this
+            //    //var testUsers = await TestMS(result.AccessToken);
 
-                //This does not work
+            //    //This does not work
 
-                var userAssertion = new UserAssertion(accessToken, assertionType);
+            //    var userAssertion = new UserAssertion(accessToken, assertionType);
 
-                var result2 = app.AcquireTokenOnBehalfOf(scopes, userAssertion)
-                .ExecuteAsync().GetAwaiter().GetResult();
-                //This always throws 
-                //AADSTS50013: Assertion failed signature validation. [Reason - The provided signature value did not match the expected signature value.
-                graphAccessToken = result2.AccessToken;
-            }
-            catch (MsalServiceException ex)
-            {
-                string aj = ex.Message;
-            }
-            //IConfidentialClientApplication app;
-            //app = ConfidentialClientApplicationBuilder.Create("f263307c-2182-44c0-9c28-1b8e88c00a7b")
-            //                                           .WithClientSecret("MbM7Q~dREOk~UJJNgl0Q_vKIWXdiiLkNluwDD")
-            //                                          .WithAuthority(new Uri("https://login.microsoftonline.com/common/"))
-            //                                          .Build();
+            //    var result2 = app.AcquireTokenOnBehalfOf(scopes, userAssertion)
+            //    .ExecuteAsync().GetAwaiter().GetResult();
+            //    //This always throws 
+            //    //AADSTS50013: Assertion failed signature validation. [Reason - The provided signature value did not match the expected signature value.
+            //    graphAccessToken = result2.AccessToken;
+            //}
+            //catch (MsalServiceException ex)
+            //{
+            //    string aj = ex.Message;
+            //}
+            ////IConfidentialClientApplication app;
+            ////app = ConfidentialClientApplicationBuilder.Create("f263307c-2182-44c0-9c28-1b8e88c00a7b")
+            ////                                           .WithClientSecret("MbM7Q~dREOk~UJJNgl0Q_vKIWXdiiLkNluwDD")
+            ////                                          .WithAuthority(new Uri("https://login.microsoftonline.com/common/"))
+            ////                                          .Build();
 
-            //Kladd två
-            var testMe = await TestMS(accessToken);
+            ////Kladd två
+            //var testMe = await TestMS(accessToken);
             var validuser = true;
             //validuser = CheckUserTokenWithMicrosoft();
             if(validuser)
