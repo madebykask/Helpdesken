@@ -72,12 +72,11 @@ namespace DH.Helpdesk.WebApi.Controllers
         {
             //Just testing...
             //We must validate the user somehow
-            string clientId = "f263307c-2182-44c0-9c28-1b8e88c00a7b";
-            string clientSecret = "MbM7Q~dREOk~UJJNgl0Q_vKIWXdiiLkNluwDD";
+            string clientId = "c9a4ee1c-5e42-4c3d-ae66-03208e4e684a";
+            string clientSecret = "rSm7Q~.SEh3yUzbszCA6xyfHo7smyDwXUEoBv";
             string accessToken = model.AccessToken;
             string assertionType = "urn:ietf:params:oauth:grant-type:jwt-bearer";
-            //string[] scopes = new string[] { "api://f263307c-2182-44c0-9c28-1b8e88c00a7b/access_as_user" };
-            string[] scopes = new string[] { "api://f263307c-2182-44c0-9c28-1b8e88c00a7b/.default" };
+            string[] scopes = new string[] { "api://c9a4ee1c-5e42-4c3d-ae66-03208e4e684a/.default" };
             string graphAccessToken = null;
 
             try
@@ -86,12 +85,12 @@ namespace DH.Helpdesk.WebApi.Controllers
                             .Create(clientId).WithTenantId("a1f945cf-f91f-4b88-a250-a58e3dd50140").WithClientSecret(clientSecret).Build();
 
 
-                // I get an accesToken from result.AccessToken but dont know what to do with it
-                var result = app.AcquireTokenForClient(scopes)
-                                .ExecuteAsync().GetAwaiter().GetResult();
+                //// I get an accesToken from result.AccessToken but dont know what to do with it
+                //var result = app.AcquireTokenForClient(scopes)
+                //                .ExecuteAsync().GetAwaiter().GetResult();
 
-                //Testing this
-                var testUsers = await TestMS(result.AccessToken);
+                ////Testing this
+                //var testUsers = await TestMS(result.AccessToken);
 
                 //This does not work
 
@@ -185,7 +184,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
                 //This is wrong
                 
-                var apa = await graphserviceClient.Users.Request().GetAsync();
+                var apa = await graphserviceClient.Me.Request().GetAsync();
             }
             catch(Exception ex)
             {
