@@ -51,10 +51,7 @@ export abstract class HttpApiServiceBase {
   
   protected postJsonWithSubscription<TResponse>(url: string, data: any, headers: any = null, noAuth = false): Observable<TResponse> {
     headers = this.getHeaders(headers, true, noAuth);
- 
-    console.log(headers)
-    console.log(JSON.stringify(data))
-    // debugger;
+
     let req =  this.http
         .post<TResponse>(url, JSON.stringify(data), { headers: headers })
         .pipe(
