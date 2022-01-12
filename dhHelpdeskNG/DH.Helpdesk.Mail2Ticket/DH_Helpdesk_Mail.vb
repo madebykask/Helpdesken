@@ -1361,12 +1361,7 @@ Module DH_Helpdesk_Mail
                 Else
                     message.BodyText = mail.Body.Text
                 End If
-                'For Each attach As Microsoft.Exchange.WebServices.Data.Attachment In mail.Attachments
-                '    Dim byteArray(attach.Size) As Byte
-                '    Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(attach.Size, attach.Name, attach.ContentType.ToString())
-                '    Console.WriteLine(newAttachment.GetType())
 
-                'Next
                 If mail.Attachments.Any() Then
                     For Each attach As Microsoft.Exchange.WebServices.Data.Attachment In mail.Attachments
                         If attach.GetType() = GetType(FileAttachment) Then
@@ -1383,10 +1378,23 @@ Module DH_Helpdesk_Mail
                                 Dim b As Boolean = False
                                 Dim strName As String = fileAttach.Name
                                 If InStr(strName, "/") > 0 Or InStr(strName, "~") > 0 Or InStr(strName, ":") > 0 Or InStr(strName, "\") > 0 Then
-                                    strName = Replace(Replace(Replace(Replace(strName, "/", ""), "~", ""), ":", ""), "\", "")
-                                    fileAttach.Load(temppath & "\" & strName)
-                                    retval = temppath & "\" & strName
-                                    b = True
+                                    If InStr(strName, "\") > 0 Then
+                                        Dim iRevPos As Integer
+                                        iRevPos = InStrRev(strName, "\")
+                                        Dim strNewFileName As String
+                                        strNewFileName = Mid(strName, iRevPos + 1, Len(strName) - (iRevPos))
+                                        strNewFileName = Replace(Replace(Replace(strNewFileName, "/", ""), "~", ""), ":", "")
+                                        strName = strNewFileName
+                                        fileAttach.Load(temppath & "\" & strName)
+                                        retval = temppath & "\" & strName
+                                        b = True
+                                    Else
+                                        strName = Replace(Replace(Replace(Replace(strName, "/", ""), "~", ""), ":", ""), "\", "")
+                                        fileAttach.Load(temppath & "\" & strName)
+                                        retval = temppath & "\" & strName
+                                        b = True
+                                    End If
+
                                 Else
                                     strName = fileAttach.Name
                                 End If
