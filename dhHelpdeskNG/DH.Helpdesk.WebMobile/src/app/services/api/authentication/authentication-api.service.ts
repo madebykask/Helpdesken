@@ -49,9 +49,9 @@ export class AuthenticationApiService extends HttpApiServiceBase {
         map(response => {
           let isSuccess = false;
         //login successful if there's a token in the response
-          if (response && response.accessToken) {
+          if (response && response.idToken) {
         
-          const postData = { Email: response.account.username, ClientId: config.clientId, AccessToken: response.accessToken};
+          const postData = { Email: response.account.username, ClientId: config.clientId, IdToken: response.idToken};
 
           this.postJsonWithSubscription<any>(this.buildResourseUrl('/api/account/SignInWithMicrosoft', undefined, false), postData)
             .pipe(
@@ -61,7 +61,7 @@ export class AuthenticationApiService extends HttpApiServiceBase {
                 // login successful if there's a token in the response
                 if (data && data.access_token) {
                     const user = CurrentUser.createAuthenticated(data);
-                    // user.currentData.name = username;
+                    user.currentData.name = response.account.username;
                     user.version = config.version;  
 
                     // store user details and token in local storage to keep user logged in between page refreshes

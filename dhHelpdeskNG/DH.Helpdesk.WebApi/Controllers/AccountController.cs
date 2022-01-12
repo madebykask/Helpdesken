@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http;
-using Azure.Identity;
-using DH.Helpdesk.Dal.Repositories;
-using DH.Helpdesk.Services.Services;
+﻿using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.Config;
 using DH.Helpdesk.WebApi.Models;
 using Microsoft.Graph;
-using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Http;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -70,56 +67,41 @@ namespace DH.Helpdesk.WebApi.Controllers
         [AllowAnonymous]
         public async Task<HttpResponseMessage> SignInWithMicrosoft([FromBody] MicrosoftUserModel model)
         {
-            //Just testing...
-            //We must validate the user somehow
-            string clientId = "c9a4ee1c-5e42-4c3d-ae66-03208e4e684a";
-            string clientSecret = "rSm7Q~.SEh3yUzbszCA6xyfHo7smyDwXUEoBv";
-            string accessToken = model.AccessToken;
-            string assertionType = "urn:ietf:params:oauth:grant-type:jwt-bearer";
-            string[] scopes = new string[] { "access_as_user" };
-            string graphAccessToken = null;
-            //Kladd Ett
-            try
+
+            string token = model.IdToken;
+                string stsDiscoveryEndpoint = "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration";
+
+            var configManager = new ConfigurationManager<OpenIdConnectConfiguration>(
+                                    stsDiscoveryEndpoint,
+                                    new OpenIdConnectConfigurationRetriever());
+
+            OpenIdConnectConfiguration config = configManager.GetConfigurationAsync().Result;
+            TokenValidationParameters validationParameters = new TokenValidationParameters
             {
-                var app = ConfidentialClientApplicationBuilder
-                            .Create(clientId).WithTenantId("a1f945cf-f91f-4b88-a250-a58e3dd50140").WithClientSecret(clientSecret).Build();
+                //decode the JWT to see what these values should be
+                ValidAudience = "f263307c-2182-44c0-9c28-1b8e88c00a7b",
+                ValidIssuer = "https://login.microsoftonline.com/a1f945cf-f91f-4b88-a250-a58e3dd50140/v2.0",
 
+                ValidateAudience = true,
+                ValidateIssuer = true,
+                IssuerSigningKeys = config.SigningKeys,
+                ValidateLifetime = true
+            };
 
-                //// I get an accesToken from result.AccessToken but dont know what to do with it
-                //var result = app.AcquireTokenForClient(scopes)
-                //                .ExecuteAsync().GetAwaiter().GetResult();
+            JwtSecurityTokenHandler tokendHandler = new JwtSecurityTokenHandler();
 
-                ////Testing this
-                //var testUsers = await TestMS(result.AccessToken);
+            SecurityToken jwt;
 
-                //This does not work
+            var result = tokendHandler.ValidateToken(token, validationParameters, out jwt);
 
-                var userAssertion = new UserAssertion(accessToken, assertionType);
+            var securityToken = jwt as JwtSecurityToken;
+            var userName = securityToken.Claims.FirstOrDefault(x => x.Type.Equals("preferred_username", StringComparison.OrdinalIgnoreCase))?.Value;
+            var validuser = !string.IsNullOrEmpty(userName) && (userName.Trim() == model.Email.Trim());
 
-                var result2 = app.AcquireTokenOnBehalfOf(scopes, userAssertion)
-                .ExecuteAsync().GetAwaiter().GetResult();
-                //This always throws 
-                //AADSTS50013: Assertion failed signature validation. [Reason - The provided signature value did not match the expected signature value.
-                graphAccessToken = result2.AccessToken;
-            }
-            catch (MsalServiceException ex)
-            {
-                string aj = ex.Message;
-            }
-            //IConfidentialClientApplication app;
-            //app = ConfidentialClientApplicationBuilder.Create("f263307c-2182-44c0-9c28-1b8e88c00a7b")
-            //                                           .WithClientSecret("MbM7Q~dREOk~UJJNgl0Q_vKIWXdiiLkNluwDD")
-            //                                          .WithAuthority(new Uri("https://login.microsoftonline.com/common/"))
-            //                                          .Build();
-
-            //Kladd två
-            var testMe = await TestMS(accessToken);
-            var validuser = true;
-            //validuser = CheckUserTokenWithMicrosoft();
             if(validuser)
             {
                 //Get User if exists
-                var user = _masterDataService.GetUserByEmail(model.Email);
+                var user = _masterDataService.GetUserByEmail(userName);
                 var request = HttpContext.Current.Request;
                 var tokenServiceUrl = request.Url.GetLeftPart(UriPartial.Authority) + request.ApplicationPath + ConfigApi.Constants.TokenEndPoint;
                 using (var client = new HttpClient())
