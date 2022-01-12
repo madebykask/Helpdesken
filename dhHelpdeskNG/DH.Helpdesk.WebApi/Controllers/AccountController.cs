@@ -35,7 +35,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         [AllowAnonymous]
         public async Task<HttpResponseMessage> Login([FromBody]LoginUserInputModel model)
         {
-            var user = _masterDataService.GetUserByEmail("katarina.ask@dhsolutions.se");
+            //var user = _masterDataService.GetUserByEmail("katarina.ask@dhsolutions.se");
             var request = HttpContext.Current.Request;
             var tokenServiceUrl = request.Url.GetLeftPart(UriPartial.Authority) + request.ApplicationPath + ConfigApi.Constants.TokenEndPoint;
             using (var client = new HttpClient())
@@ -62,29 +62,43 @@ namespace DH.Helpdesk.WebApi.Controllers
         [AllowAnonymous]
         public async Task<HttpResponseMessage> SignInWithMicrosoft([FromBody] MicrosoftUserModel model)
         {
-            //Get User if exists
-            var user = _masterDataService.GetUserByEmail(model.Email);
-            var request = HttpContext.Current.Request;
-            var tokenServiceUrl = request.Url.GetLeftPart(UriPartial.Authority) + request.ApplicationPath + ConfigApi.Constants.TokenEndPoint;
-            using (var client = new HttpClient())
+            //var claims = HttpContextBase
+            //Get accesstoken from Header
+            //Validate token or validate 
+            //Check
+            var validuser = false;
+            //validuser = CheckUserTokenWithMicrosoft();
+            if(validuser)
             {
-                var requestParams = new List<KeyValuePair<string, string>>
+                //Get User if exists
+                var user = _masterDataService.GetUserByEmail(model.Email);
+                var request = HttpContext.Current.Request;
+                var tokenServiceUrl = request.Url.GetLeftPart(UriPartial.Authority) + request.ApplicationPath + ConfigApi.Constants.TokenEndPoint;
+                using (var client = new HttpClient())
+                {
+                    var requestParams = new List<KeyValuePair<string, string>>
                 {
                     new KeyValuePair<string, string>("grant_type", "password"),
                     new KeyValuePair<string, string>("username", user.UserID),
                     new KeyValuePair<string, string>("password", user.Password),
                     new KeyValuePair<string, string>("client_id", model.ClientId)
                 };
-                var requestParamsFormUrlEncoded = new FormUrlEncodedContent(requestParams);
-                var tokenServiceResponse = await client.PostAsync(tokenServiceUrl, requestParamsFormUrlEncoded);
-                var responseString = await tokenServiceResponse.Content.ReadAsStringAsync();
-                var responseCode = tokenServiceResponse.StatusCode;
-                var responseMsg = new HttpResponseMessage(responseCode)
-                {
-                    Content = new StringContent(responseString, Encoding.UTF8, "application/json")
-                };
-                return responseMsg;
+                    var requestParamsFormUrlEncoded = new FormUrlEncodedContent(requestParams);
+                    var tokenServiceResponse = await client.PostAsync(tokenServiceUrl, requestParamsFormUrlEncoded);
+                    var responseString = await tokenServiceResponse.Content.ReadAsStringAsync();
+                    var responseCode = tokenServiceResponse.StatusCode;
+                    var responseMsg = new HttpResponseMessage(responseCode)
+                    {
+                        Content = new StringContent(responseString, Encoding.UTF8, "application/json")
+                    };
+                    return responseMsg;
+                }
             }
+            else
+            {
+                return null;
+            }
+
         }
 
         /// <summary>
@@ -96,6 +110,12 @@ namespace DH.Helpdesk.WebApi.Controllers
         [AllowAnonymous]
         public async Task<HttpResponseMessage> Refresh([FromBody]RefreshTokenInputModel model)
         {
+            //Maybe issue here if logged in with microsoft...
+            //Check here too?
+            //Check the user again
+            //Check the claimns for authorization...
+            //UserClaims, Email
+
             var request = HttpContext.Current.Request;
             var tokenServiceUrl = request.Url.GetLeftPart(UriPartial.Authority) + request.ApplicationPath + ConfigApi.Constants.TokenEndPoint;
             using (var client = new HttpClient())
