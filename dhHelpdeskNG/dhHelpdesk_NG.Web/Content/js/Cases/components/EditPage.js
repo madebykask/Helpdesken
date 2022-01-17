@@ -1679,26 +1679,34 @@ EditPage.prototype.init = function (p) {
             const row$ = $(row);
             const isFirstRow = i === 0;
             const maxTdRows = isFirstRow ? 7 : 3;
+            const className = classPreffix + maxTdRows;
+            let isRowAllVisible = false;
             const tds = row$.find('td');
             const externalCellRowsCount = Math.ceil(($(tds[2]).find('a>div>div').height() || 1) / lineHeight);
             const internalCellRowsCount = Math.ceil(($(tds[3]).find('a>div>div').height() || 1) / lineHeight);
             const filesCellRowsCount = Math.ceil(($(tds[5]).find('>div>div').height() || 1) / lineHeight);
             if (externalCellRowsCount > maxTdRows) {
                 $(tds[2]).find('.row-all').show();
+                isRowAllVisible = true;
             }
             if (internalCellRowsCount > maxTdRows) {
                 $(tds[3]).find('.row-all').show();
+                isRowAllVisible = true;
             }
             if (filesCellRowsCount > maxTdRows) {
                 $(tds[5]).find('.row-all').show();
+                isRowAllVisible = true;
             }
-            row$.find('.row-all').on('click',
-                function (e) {
-                    e.preventDefault();
-                    const currRow$ = $(e.target).closest('tr');
-                    const className = classPreffix + maxTdRows;
-                    currRow$.toggleClass(className);
-                });
+            if (isRowAllVisible) {
+                row$.find('.row-all').on('click',
+                    function(e) {
+                        e.preventDefault();
+                        const currRow$ = $(e.target).closest('tr');
+                        currRow$.toggleClass(className);
+                    });
+            } else {
+                row$.removeClass(className);
+            }
         });
 
         // process table height
