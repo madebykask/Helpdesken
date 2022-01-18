@@ -49,7 +49,12 @@ namespace DH.Helpdesk.Dal.Repositories
                 public const string ReferenceNumber = "ReferenceNumber";
                 public const string InvoiceNumber = "InvoiceNumber";
                 public const string InventoryNumber = "InventoryNumber";
+                public const string InventoryType = "InventoryType";
+                public const string InventoryLocation = "InventoryLocation";
+                public const string VerifiedDescription = "VerifiedDescription";
                 public const string UserCode = "UserCode";
+                public const string CostCentre = "CostCentre";
+                public const string Available = "Available";
             }
 
             public static class CaseIsAbout
@@ -61,6 +66,8 @@ namespace DH.Helpdesk.Dal.Repositories
                 public const string Place = "Place";
                 public const string Person_CellPhone = "Person_CellPhone";
                 public const string Person_Phone = "Person_Phone";
+                public const string CostCentre = "CostCentre";
+
             }
 
             public static class Log
@@ -115,7 +122,13 @@ namespace DH.Helpdesk.Dal.Repositories
             Tables.Case.Miscellaneous,
             Tables.Case.ReferenceNumber,
             Tables.Case.InvoiceNumber,
-            Tables.Case.InventoryNumber
+            Tables.Case.InventoryNumber,
+            Tables.Case.InventoryType,
+            Tables.Case.InventoryLocation,
+            Tables.Case.VerifiedDescription,
+            Tables.Case.CostCentre,
+            Tables.Case.Available
+
         };
 
         private readonly string[] _freeTextCaseIsAboutConditionFields = new string[]
@@ -126,7 +139,9 @@ namespace DH.Helpdesk.Dal.Repositories
             Tables.CaseIsAbout.Person_Email,
             Tables.CaseIsAbout.Place,
             Tables.CaseIsAbout.Person_CellPhone,
-            Tables.CaseIsAbout.Person_Phone
+            Tables.CaseIsAbout.Person_Phone,
+            Tables.CaseIsAbout.CostCentre,
+
         };
 
         private readonly string[] _freeTextLogConditionFields = new string[]
@@ -822,6 +837,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", text));
                 sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", text));
                 sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InventoryLocation]", text));
                 sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Caption]", text));
                 sb.AppendFormat(" OR [tblCase].[Description] LIKE '%{0}%'", text);
                 sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Miscellaneous]", text));
