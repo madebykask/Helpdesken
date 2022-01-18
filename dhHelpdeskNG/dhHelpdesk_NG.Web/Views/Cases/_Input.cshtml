@@ -807,11 +807,11 @@
                                             <td class="span4">
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre, CaseSolutionFields.IsAbout_CostCentre))
                                                 {
-                                                    @Html.TextBoxFor(model => model.case_.IsAbout.CostCentre, new { maxlength = "30" })
+                                                    @Html.TextBoxFor(model => model.case_.IsAbout.CostCentre, new { maxlength = "50" })
                                                 }
                                                 else
                                                 {
-                                                    @Html.TextBoxFor(model => model.case_.IsAbout.CostCentre, new { maxlength = "30", @readonly = "readonly" })
+                                                    @Html.TextBoxFor(model => model.case_.IsAbout.CostCentre, new { maxlength = "50", @readonly = "readonly" })
                                                 }
                                             </td>
                                         </tr>
