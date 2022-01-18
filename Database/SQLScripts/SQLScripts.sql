@@ -8,6 +8,12 @@ IF COL_LENGTH('dbo.tblComputer','WarrantyEndDate') IS NULL
 	End
 
 Go
+
+if not exists(select * from tblReport WHERE Id=18)
+	begin
+		INSERT INTO tblReport(Id) VALUES(18)
+	end
+GO
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.54'
 GO
