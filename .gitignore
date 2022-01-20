@@ -25,11 +25,8 @@ obj/
 _ReSharper*/
 *.DotSettings
 [Tt]est[Rr]esult*
-dhHelpdeskNG/dhHelpdesk_NG.Web/Web.config
 dhHelpdeskNG/dhHelpdesk_NG.Web/App_Data/Uploaded Files/Reports/
-dhHelpdeskNG/dhHelpdesk_NG.Web/log4net.config
 dhHelpdeskNG/packages/*
-dhHelpdeskNG/dhHelpdesk_NG.Web_SelfService/Web.config
 dhHelpdeskNG/.vs/config/applicationhost.config
 
 dhHelpdeskNG/dhHelpdesk_NG.Web/Logs/
