@@ -4116,16 +4116,13 @@
     <Content Include="Content\js\plupload\plupload.silverlight.xap" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\js\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Content\js\jquery.validate.unobtrusive.min.js" />
