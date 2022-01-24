@@ -13,9 +13,14 @@ variables:
   solution: '**/DH.Helpdesk.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  buildVersion: $(AssemblyInfo.AssemblyInformationalVersion)
 
 steps:
 - task: NuGetToolInstaller@1
+
+- task: AssembyInfoReader@3
+  inputs:
+    searchPattern: '**\CommonAssembly\SharedAssemblyInfo.cs'
 
 - task: NuGetCommand@2
   inputs:
@@ -26,12 +31,48 @@ steps:
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
-    #msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(system.defaultworkingdirectory)/dhHelpdeskNG/bin/$(buildConfiguration)'
+    SourceFolder: '$(system.defaultworkingdirectory)/dhHelpdeskNG/DH.Helpdesk.LDAP-AD/bin/$(buildConfiguration)'
     Contents: '**'
-    TargetFolder: '$(build.artifactstagingdirectory)'
+    TargetFolder: '$(build.artifactstagingdirectory)/DH.Helpdesk.LDAP-AD'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)/dhHelpdeskNG/DH.Helpdesk.Mail2Ticket/bin/$(buildConfiguration)'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)/DH.Helpdesk.Mail2Ticket'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)/dhHelpdeskNG/DH.Helpdesk.Upkeeper/bin/$(buildConfiguration)'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)/DH.Helpdesk.Upkeeper'
+
+# - task: PublishBuildArtifacts@1
+#   inputs:
+#     pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+#     artifactName: 'DH.Helpdesk'
+
+
+- task: PublishBuildArtifacts@1
+  displayName: PublishBuildArtifacts-LDAP-AD
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.LDAP-AD' 
+    artifactName: 'DH.Helpdesk.LDAP-AD'
+
+- task: PublishBuildArtifacts@1
+  displayName: PublishBuildArtifacts-LDAP-AD
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Mail2Ticket' 
+    artifactName: 'DH.Helpdesk.Mail2Ticket'
+
+- task: PublishBuildArtifacts@1
+  displayName: PublishBuildArtifacts-Upkeeper
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Upkeeper' 
+    artifactName: 'DH.Helpdesk.UpKeeper'
