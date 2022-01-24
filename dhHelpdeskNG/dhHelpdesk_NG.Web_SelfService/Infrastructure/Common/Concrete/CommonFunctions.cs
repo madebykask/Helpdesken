@@ -125,7 +125,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
         public LayoutViewModel GetLayoutViewModel(object tmpDataLanguge)
         {
             var globalSettings = _globalSettingService.GetGlobalSettings();
-            
+            string signOutUrl = System.Configuration.ConfigurationManager.AppSettings["SignOutUrl"] != null ?
+                          System.Configuration.ConfigurationManager.AppSettings["SignOutUrl"] : "";
             int pCustomerId = -1;
             if (SessionFacade.CurrentCustomer != null)
             {
@@ -145,6 +146,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
             var appType = _configurationService.AppSettings.ApplicationType;
             var model = new LayoutViewModel
             {
+                SignOutUrl = signOutUrl,
                 AppType = appType,
                 IsLineManager = ApplicationTypes.LineManager.Equals(appType, StringComparison.OrdinalIgnoreCase),
                 IsMultiCustomerSearchEnabled = globalSettings.First().MultiCustomersSearch == 1,

@@ -25,6 +25,7 @@ namespace DH.Helpdesk.SelfService.Models.Shared
         public IList<LanguageOverview> AllLanguages { get; set; }
         public int CurrentLanguageId { get; set; }
         public string CurrentSystemUser { get; set; }
+        public string SignOutUrl { get; set; }
         public UserIdentity CurrentUserIdentity { get; set; }
         public UserOverview CurrentLocalUser { get; set; }
     }
