@@ -15,38 +15,67 @@
     {
         <div class="pull-left toplogo"></div>
     }
-    <div class="pull-right small toplogout">        
-            <div class="dropdown">
-                <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">@Translation.Get("Select language")<span class="caret"></span></a>
-                @if (Model.AllLanguages != null)
-                {
-                    <ul class="dropdown-menu" role="menu">
-                        @foreach (var lang in Model.AllLanguages)
-                        {
-                            <li>
-                                <a href="@Url.Action("ChangeLanguage", "start", new
-                                    {
-                                        area = "",
-                                        language = lang.LanguageId,
-                                        currentUrl = Context.Request.Url.LocalPath,
-                                        lastParams = Context.Request.QueryString
-                                    })">
-                                    @Translation.Get(lang.Name, Enums.TranslationSource.TextTranslation, customerLanguageId) @(lang.Id == Model.CurrentLanguageId ? "●" : "")</a>
-                            </li>
-                        }
-                    </ul>
-                }
-            </div>
-            <span class="toplogout-space"> | </span>
-        
+    <div class="pull-right small toplogout">
+
+
         @if (!string.IsNullOrEmpty(Model.CurrentSystemUser))
         {
-            <a href="#" title="Employee number: @(Model.CurrentUserIdentity != null? Model.CurrentUserIdentity.EmployeeNumber:"")">
-                @Translation.Get("User"): @Model.CurrentSystemUser</a>
+            if (!string.IsNullOrEmpty(Model.SignOutUrl))
+            {
+                <div class="dropdown">
+                    <a href="#" title="Employee number: @(Model.CurrentUserIdentity != null ? Model.CurrentUserIdentity.EmployeeNumber : "")" type="button" class="dropdown-toggle" data-toggle="dropdown">
+                        @Translation.Get("User"): @Model.CurrentSystemUser <span class="caret"></span>
+
+                    </a>
+                    @if (!string.IsNullOrEmpty(Model.SignOutUrl))
+                    {
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="@Model.SignOutUrl"> @Translation.Get("Logga ut")</a>
+                            </li>
+                        </ul>
+                    }
+
+                </div>
+            }
+            else
+            {
+
+                <a href="#" title="Employee number: @(Model.CurrentUserIdentity != null ? Model.CurrentUserIdentity.EmployeeNumber : "")">
+                    @Translation.Get("User"): @Model.CurrentSystemUser
+                </a>
+            }
         }
         else
         {
             <a href="#">@Translation.Get("User"): ? </a>
         }
     </div>
+    <div class="pull-right small toplogout">
+        <div class="dropdown">
+            <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">@Translation.Get("Select language")<span class="caret"></span></a>
+            @if (Model.AllLanguages != null)
+            {
+                <ul class="dropdown-menu" role="menu">
+                    @foreach (var lang in Model.AllLanguages)
+                    {
+                        <li>
+                            <a href="@Url.Action("ChangeLanguage", "start", new
+                                        {
+                                            area = "",
+                                            language = lang.LanguageId,
+                                            currentUrl = Context.Request.Url.LocalPath,
+                                            lastParams = Context.Request.QueryString
+                                        })">
+                                @Translation.Get(lang.Name, Enums.TranslationSource.TextTranslation, customerLanguageId) @(lang.Id == Model.CurrentLanguageId ? "●" : "")
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+        <span class="toplogout-space"> | </span>
+    </div>
+
+
 </div>
