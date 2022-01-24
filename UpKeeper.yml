@@ -22,8 +22,6 @@ steps:
   inputs:
     searchPattern: '**\CommonAssembly\SharedAssemblyInfo.cs'
 
-- script: echo "name is $(AssemblyInfo.AssemblyInformationalVersion)"
-
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
