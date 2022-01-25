@@ -17,7 +17,6 @@
     }
     <div class="pull-right small toplogout">
 
-
         @if (!string.IsNullOrEmpty(Model.CurrentSystemUser))
         {
             if (!string.IsNullOrEmpty(Model.SignOutUrl))
@@ -40,7 +39,6 @@
             }
             else
             {
-
                 <a href="#" title="Employee number: @(Model.CurrentUserIdentity != null ? Model.CurrentUserIdentity.EmployeeNumber : "")">
                     @Translation.Get("User"): @Model.CurrentSystemUser
                 </a>
@@ -76,6 +74,4 @@
         </div>
         <span class="toplogout-space"> | </span>
     </div>
-
-
 </div>

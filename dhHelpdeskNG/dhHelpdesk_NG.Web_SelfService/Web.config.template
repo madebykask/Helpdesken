@@ -48,6 +48,7 @@
     <add key="ida:ProviderSelection" value="#{AdfsProviderSection}" />
     <add key="SmtpServer" value="#{SmptServer}" />
     <add key="SmtpPort" value="#{SmptPort"}" />-->
+	  <add key="SignOutUrl" value="" />
 
     <add key="CaseList" value="manager,coworkers" />
     <add key="CurrentApplication" value="SelfService" />
