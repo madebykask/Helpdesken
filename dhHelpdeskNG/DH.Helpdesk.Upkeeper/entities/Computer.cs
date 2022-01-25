@@ -19,7 +19,6 @@ namespace upKeeper2Helpdesk.entities
 		public string HardwareId { get; set; }
 		public string MACAddress { get; set; }
 		public string Location2 { get; set; }
-
 		public int? Domain_Id { get; set; }
 
 		public DateTime ScanDate { get; set; }
