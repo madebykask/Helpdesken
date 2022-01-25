@@ -808,6 +808,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         [ValidateInput(false)]
         public ActionResult _CaseLogNote(int caseId, string note, string logFileGuid)
         {
+            //Also save Workflowsteps
             SaveLogMessage(caseId, note, logFileGuid);
             
             var model = GetCaseLogsModel(caseId);
