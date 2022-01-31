@@ -44,6 +44,7 @@
     <Use64BitIISExpress />
     <TypeScriptToolsVersion>4.1</TypeScriptToolsVersion>
     <DontImportPostSharp>True</DontImportPostSharp>
+	<ExcludeFilesFromDeployment>Web.config</ExcludeFilesFromDeployment> 
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
