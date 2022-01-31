@@ -806,10 +806,41 @@ namespace DH.Helpdesk.SelfService.Controllers
         //TODO: should be refactored to methods with single responsibility!
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult _CaseLogNote(int caseId, string note, string logFileGuid)
+        public ActionResult _CaseLogNote(int caseId, string note, string logFileGuid, int? templateId)
         {
+            bool activateCase = true;
             //Also save Workflowsteps
-            SaveLogMessage(caseId, note, logFileGuid);
+            if(templateId.HasValue && templateId.Value > 0)
+            {
+                var caseTemplate = _caseSolutionService.GetCaseSolution(templateId.Value);
+                if(caseTemplate.FinishingCause != null)
+                {
+                    activateCase = false;
+                }
+
+                if (caseTemplate.Status == 0)
+                {
+                    return Json(new { success = false, Error = "Selected template is not available anymore!" });
+                }
+
+                var caseModel = _universalCaseService.GetCase(caseId);
+
+                // Apply template values to case:
+                ApplyTemplate(caseTemplate, caseModel, true);
+
+                var localUserId = SessionFacade.CurrentLocalUser?.Id ?? 0;
+                var auxModel = new AuxCaseModel(SessionFacade.CurrentLanguageId,
+                    localUserId,
+                    SessionFacade.CurrentUserIdentity.UserId,
+                    ConfigurationService.AppSettings.HelpdeskPath,
+                    CreatedByApplications.SelfService5,
+                    TimeZoneInfo.Local);
+
+                decimal caseNum;
+                var res = _universalCaseService.SaveCaseCheckSplit(caseModel, auxModel, out caseId, out caseNum);
+            }
+
+            SaveLogMessage(caseId, note, logFileGuid, activateCase);
             
             var model = GetCaseLogsModel(caseId);
             return PartialView(model);
@@ -1285,7 +1316,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             return model;
         }
 
-        private void SaveLogMessage(int caseId, string extraNote, string logFileGuid) 
+        private void SaveLogMessage(int caseId, string extraNote, string logFileGuid, bool activateCase = true) 
         { 
             IDictionary<string, string> errors;            
             var currentCase = _caseService.GetCaseById(caseId);
@@ -1299,7 +1330,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             // unread/status flag update if not case is closed
 
-            if (currentCase.FinishingDate.HasValue)
+            if (currentCase.FinishingDate.HasValue && activateCase == true)
             {
                 var adUser = SessionFacade.CurrentSystemUser; // global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
                 _caseService.Activate(currentCase.Id, 0, adUser, CreatedByApplications.SelfService5, out errors);
