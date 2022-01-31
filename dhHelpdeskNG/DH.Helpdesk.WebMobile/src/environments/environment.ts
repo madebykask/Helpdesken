@@ -20,7 +20,7 @@ export const config = {
     internalVersion: require('../../package.json').version,
     enableLog: true,
 };
-
+ 
 /*
  * In development mode, to ignore zone related error stack frames such as
  * `zone.run`, `zoneDelegate.invokeTask` for easier debugging, you can
