@@ -53,17 +53,17 @@ export class LoginComponent implements OnInit, OnDestroy {
             password: ['', Validators.required]
         });
 
-        // this.msalService.instance.handleRedirectPromise().then( res => {
-        //   if (res != null && res.account != null) {
-        //     this.msalService.instance.setActiveAccount(res.account)
-        //   }
-        // })
+        // reset login status
+        this.authenticationService.logout();
 
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     }
 
     microsoftLogin() {
+      this.showLoginError = false;
+      this.isLoading = true;
+      
       this.authenticationService.microsoftLogin().pipe(
         take(1),
         switchMap(currentUser => {
