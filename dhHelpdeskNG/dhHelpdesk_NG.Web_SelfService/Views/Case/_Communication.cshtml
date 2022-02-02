@@ -68,12 +68,15 @@
                                 <select name="steps" class="dropdown-group workflows-select" id="steps">
                                     @* options are populated from client via ajax request - see workflowStepsBehavior.js*@
                                 </select>
+                                <span class="input-group-btn">
+                                    <a id="btnSendLog" data-src="communication" role="button" class="btn btn-default">@Translation.Get("Send")</a>
+                                    <i id="sendLogIndicator" style="display: none" class="gif-loader">&nbsp;</i>
+                                </span>
                             </div>
                         </div>
-                        <div class="form-group col-md-10">
-                            <a id="btnSendLog" data-src="communication" role="button" class="btn btn-default">@Translation.Get("Send")</a>
-                            <i id="sendLogIndicator" style="display: none" class="gif-loader">&nbsp;</i>
-                        </div>
+                        @*<div class="form-group col-md-10">
+                            
+                        </div>*@
                     </form>
                 </div>
             </div>

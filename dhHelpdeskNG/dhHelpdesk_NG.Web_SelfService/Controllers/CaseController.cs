@@ -808,15 +808,11 @@ namespace DH.Helpdesk.SelfService.Controllers
         [ValidateInput(false)]
         public ActionResult _CaseLogNote(int caseId, string note, string logFileGuid, int? templateId)
         {
-            bool activateCase = true;
+            SaveLogMessage(caseId, note, logFileGuid);
             //Also save Workflowsteps
-            if(templateId.HasValue && templateId.Value > 0)
+            if (templateId.HasValue && templateId.Value > 0)
             {
                 var caseTemplate = _caseSolutionService.GetCaseSolution(templateId.Value);
-                if(caseTemplate.FinishingCause != null)
-                {
-                    activateCase = false;
-                }
 
                 if (caseTemplate.Status == 0)
                 {
@@ -840,8 +836,6 @@ namespace DH.Helpdesk.SelfService.Controllers
                 var res = _universalCaseService.SaveCaseCheckSplit(caseModel, auxModel, out caseId, out caseNum);
             }
 
-            SaveLogMessage(caseId, note, logFileGuid, activateCase);
-            
             var model = GetCaseLogsModel(caseId);
             return PartialView(model);
         }
@@ -1316,7 +1310,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             return model;
         }
 
-        private void SaveLogMessage(int caseId, string extraNote, string logFileGuid, bool activateCase = true) 
+        private void SaveLogMessage(int caseId, string extraNote, string logFileGuid) 
         { 
             IDictionary<string, string> errors;            
             var currentCase = _caseService.GetCaseById(caseId);
@@ -1330,7 +1324,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             // unread/status flag update if not case is closed
 
-            if (currentCase.FinishingDate.HasValue && activateCase == true)
+            if (currentCase.FinishingDate.HasValue)
             {
                 var adUser = SessionFacade.CurrentSystemUser; // global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
                 _caseService.Activate(currentCase.Id, 0, adUser, CreatedByApplications.SelfService5, out errors);
@@ -1391,7 +1385,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 ActionLeadTime = currentCase.LeadTime - oldLeadTime,
                 LeadTime = currentCase.LeadTime
             };
-
+            //This only if changed workflow is not true?
             var caseHistoryId = 
                 _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5, out errors, SessionFacade.CurrentUserIdentity.UserId, extraFields);
 
