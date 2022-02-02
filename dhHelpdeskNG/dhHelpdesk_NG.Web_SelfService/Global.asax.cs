@@ -57,8 +57,9 @@ namespace DH.Helpdesk.SelfService
 
         protected void Application_Start()
         {
-			//System.Net.ServicePointManager.SecurityProtocol = System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
-			InitLogging();
+            //System.Net.ServicePointManager.SecurityProtocol = System.Net.ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+            MvcHandler.DisableMvcResponseHeader = true;
+            InitLogging();
 
             AreaRegistration.RegisterAllAreas();
 
@@ -78,6 +79,7 @@ namespace DH.Helpdesk.SelfService
             {
                 FederatedAuthenticationConfiguration.Configure();
             }
+            PreSendRequestHeaders += Application_PreSendRequestHeaders;
         }
 
         //todo: implement more advanced error handling similar to helpdesk 
@@ -90,7 +92,14 @@ namespace DH.Helpdesk.SelfService
                 logger.Error(ex);
             }
         }
-
+        protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
+        {
+            HttpContext.Current.Response.Headers.Remove("Server");
+            HttpContext.Current.Response.Headers.Remove("X-AspNetWebPages-Version");
+            HttpContext.Current.Response.Headers.Remove("X-AspNet-Version");
+            HttpContext.Current.Response.Headers.Remove("X-Powered-By");
+            HttpContext.Current.Response.Headers.Remove("X-AspNetMvc-Version");
+        }
         #region Logging
 
         private void InitLogging()

@@ -43,6 +43,7 @@ namespace DH.Helpdesk.Web
         protected void Application_Start()
         {
             //Debugger.Launch();
+            MvcHandler.DisableMvcResponseHeader = true;
 
             AreaRegistration.RegisterAllAreas();
             //MARK: Remove old Api
@@ -90,6 +91,7 @@ namespace DH.Helpdesk.Web
             {
                 AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
             }
+            PreSendRequestHeaders += Application_PreSendRequestHeaders;
         }
 
         private void ViewEngineInit()
@@ -111,7 +113,14 @@ namespace DH.Helpdesk.Web
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this._configuration.Application.DefaultCulture;
             LogSession("Application.BeginRequest.", Context);
         }
-
+        protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
+        {
+            HttpContext.Current.Response.Headers.Remove("Server");
+            HttpContext.Current.Response.Headers.Remove("X-AspNetWebPages-Version");
+            HttpContext.Current.Response.Headers.Remove("X-AspNet-Version");
+            HttpContext.Current.Response.Headers.Remove("X-Powered-By");
+            HttpContext.Current.Response.Headers.Remove("X-AspNetMvc-Version");
+        }
         #region Authentication Events 
 
         protected void Application_PostAuthenticateRequest(object sender, EventArgs args)
