@@ -104,6 +104,7 @@
     <Compile Include="CaseSolution\CaseSolution.cs" />
     <Compile Include="CaseSolution\CaseSolutionCategory.cs" />
     <Compile Include="CaseSolution\CaseSolutionConditionPropertyEntity.cs" />
+    <Compile Include="CaseSolution\CaseSolutionLanguageEntity.cs" />
     <Compile Include="CaseSolution\CaseSolutionSchedule.cs" />
     <Compile Include="CaseSolution\CaseSolutionSearch.cs" />
     <Compile Include="CaseSolution\CaseSolution_SplitToCaseSolutionEntity.cs" />
