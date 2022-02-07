@@ -30,7 +30,7 @@
             hasWorkflows = res.items && res.items.length > 0;
             if (hasWorkflows) {
                 var options = [];
-                if (res.items.length > 1) {
+                if (res.items.length > 0) {
                     options.push('<option value="0">' + self.selectStepText + '</option>');
                 }
                 $.each(res.items, function (index, item) {
