@@ -11,12 +11,17 @@
                     <mbsc-input formControlName="password" type="password" password-toggle="true" icon="none"
                         icon-align="right" [error]="f.password.touched && f.password.dirty && f.password.invalid" [errorMessage]="getError('password')"
                             input-style="outline" class="margin">Password</mbsc-input>
-                    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-                    <mbsc-note color="danger" *ngIf="showLoginError" #loginError>User or Password is incorrect.</mbsc-note>
-                </div>
-                <div class="mbsc-form-group-inset mbsc-padding md-load-btn">
-                    <mbsc-button flat type="submit" [disabled]="loginForm.invalid" [hidden]="isLoading" class="float-right">Login</mbsc-button>
-                    <mbsc-button flat icon="fa-refresh" [hidden]="!isLoading" class="float-right"></mbsc-button> 
+                    <div class="mbsc-form-group-inset mbsc-padding md-load-btn">
+                        <mbsc-button flat type="submit" [disabled]="loginForm.invalid" [hidden]="isLoading" class="float-right">Login</mbsc-button>
+                        <mbsc-button flat icon="fa-refresh" [hidden]="!isLoading" class="float-right"></mbsc-button> 
+                    </div>
+                    <div style="text-align: center;" *ngIf="hasMicrosoftLogin">
+                      <button style="background-color:inherit" (click)="microsoftLogin()">
+                        <img style='width: fit-content;' src='content/img//ms-symbollockup_signin_light.svg'>
+                      </button>                      
+                  </div>
+                  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+                  <mbsc-note color="danger" *ngIf="showLoginError" #loginError>User or Password is incorrect.</mbsc-note>
                 </div>
             </form>
         </mbsc-form>

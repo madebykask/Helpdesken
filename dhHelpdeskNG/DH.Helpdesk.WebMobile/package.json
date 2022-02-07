@@ -29,6 +29,8 @@
         "@angular/pwa": "^0.802.0",
         "@angular/router": "^8.2.14",
         "@angular/service-worker": "^8.2.14",
+        "@azure/msal-angular": "^2.1.0",
+        "@azure/msal-browser": "^2.21.0",
         "@mobiscroll/angular": "file:./src/lib/mobiscroll-package/mobiscroll-angular-4.7.3.tgz",
         "@ngx-translate/core": "^11.0.1",
         "@ngx-translate/http-loader": "^4.0.0",

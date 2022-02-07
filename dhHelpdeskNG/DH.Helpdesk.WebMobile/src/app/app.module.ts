@@ -31,6 +31,9 @@ import { RouteReuseStrategy } from '@angular/router';
 import { CaseRouteReuseStrategy } from './helpers/case-route-resolver.stategy';
 import { CasesStatusComponent } from './components/cases-status/cases-status.component';
 import { VersionComponent } from './components/version.component';
+import { MsalModule, MSAL_INSTANCE, MsalService } from '@azure/msal-angular';
+import { MSALInstanceFactory } from './services/authentication/MSALInstanceFactory';
+
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -64,6 +67,7 @@ import { VersionComponent } from './components/version.component';
     }),
     SharedModule,
     //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    MsalModule
   ],
   providers: [
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
@@ -71,6 +75,8 @@ import { VersionComponent } from './components/version.component';
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     // { provide: LOCALE_ID, useValue: "sv-SE" },
     // { provide: LOCALE_ID, deps: [SettingsService], useFactory: (settingsService) => settingsService.getLanguage()},
+    { provide: MSAL_INSTANCE, useFactory: MSALInstanceFactory },
+      MsalService,
     {
       provide: APP_INITIALIZER,
       useFactory: initApplication,
