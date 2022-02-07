@@ -1,13 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { switchMap, finalize, take, map } from 'rxjs/operators';
+import { switchMap, finalize, take, map, catchError } from 'rxjs/operators';
 import { AuthenticationService } from '../../../services/authentication';
 import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
 import { throwError, Subject } from 'rxjs';
 import { ErrorHandlingService } from '../../../services/logging/error-handling.service';
 import { config } from '@env/environment';
 import { CommunicationService, Channels } from 'src/app/services/communication';
+
 
 @Component({
     templateUrl: 'login.component.html',
@@ -16,12 +17,14 @@ import { CommunicationService, Channels } from 'src/app/services/communication';
 export class LoginComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject();
     version = config.version;
+    hasMicrosoftLogin = config.microsoftLogin;
     loginForm: FormGroup;
     isLoading = false;
     submitted = false;
     returnUrl: string;
     error = '';
     pageSettings = {};
+    loginDisplay = false;
 
     errorMessages = {
         username: {
@@ -41,7 +44,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         private communicationService: CommunicationService,
         private authenticationService: AuthenticationService,
         private userSettingsService: UserSettingsApiService,
-        private errorHandlingService: ErrorHandlingService) {}
+        private errorHandlingService: ErrorHandlingService,
+        ) {}
 
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
@@ -55,6 +59,37 @@ export class LoginComponent implements OnInit, OnDestroy {
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     }
+
+    microsoftLogin() {
+      this.showLoginError = false;
+      this.isLoading = true;
+      
+      this.authenticationService.microsoftLogin().pipe(
+        take(1),
+        switchMap(currentUser => {
+          this.communicationService.publish(Channels.UserLoggedIn, currentUser);
+          return this.userSettingsService.applyUserSettings();
+        }),
+        finalize(() => this.isLoading = false)
+      ).subscribe(res => {
+            this.showLoginError = false;
+            this.router.navigateByUrl(this.returnUrl);
+        },
+        error => {
+          if (error.status && error.status === 400) {
+              this.showLoginError = true;
+          } else {
+              this.errorHandlingService.handleError(error);
+          }
+        });
+    }
+  
+    // logout() {
+    //   this.msalService.logout();
+    // }
+    // setLoginDisplay() {
+    //   // this.loginDisplay = this.authServiceMsal.instance.getAllAccounts().length > 0;
+    // }
 
     ngOnDestroy(): void {
         this.destroy$.next();

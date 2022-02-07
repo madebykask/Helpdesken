@@ -8234,13 +8234,13 @@ If not exists (select * from tbltext where id = 2108)
 	insert into tbltext (id, TextString) VALUES (2108, 'Visa hela Ärendeloggen')
 GO
 If not exists (select * from tblTextTranslation where text_id = 2108 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2108, 2, 'Show full Case logs')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2108, 2, 'Show full Case log')
 GO
 If not exists (select * from tbltext where id = 2109)
-	insert into tbltext (id, TextString) VALUES (2109, 'Göm hela ärendeloggen')
+	insert into tbltext (id, TextString) VALUES (2109, 'Visa endast senaste')
 GO
 If not exists (select * from tblTextTranslation where text_id = 2109 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2109, 2, 'Hide full Case logs')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2109, 2, 'Show only latest')
 GO
 
 
