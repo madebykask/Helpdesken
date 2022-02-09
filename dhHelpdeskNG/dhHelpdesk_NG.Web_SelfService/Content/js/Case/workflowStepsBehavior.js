@@ -61,10 +61,17 @@
     this.setUIForNormalCase = function (hasWorkflows) {
         var self = this;
         if (self.caseId > 0) {
+            
             // no save button, show only if hasWorkflows
             if (hasWorkflows) {
                 $('div[id^="caseControlPanel"]').show();
                 $(".workflowStepsPanel").show();
+                $(".workflowStepsPanel2").hide();
+            }
+            else {
+                console.log("no workflows");
+                $(".workflowStepsPanel2").show();
+                $(".workflowStepsPanel").hide();
             }
         } else {
             // new: save is avaialble, workflows visible only if exist
@@ -73,6 +80,11 @@
             if (hasWorkflows) {
                 $(".save-button").val(self.saveText);
                 $(".workflowStepsPanel").show();
+                $(".workflowStepsPanel2").hide();
+            }
+            else {
+                $(".workflowStepsPanel2").show();
+                $(".workflowStepsPanel").hide();
             }
         }
     }

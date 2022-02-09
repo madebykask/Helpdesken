@@ -62,23 +62,20 @@
                                 </div>
                             }
                         </div>
-                        <div class="container">
-                            <div class="row">
-                                <div class="form-group col-md-10">
-                                    <div class="col-sm input-group workflowStepsPanel" style="display: none">
+                        <div class="form-group col-md-10">
+                            <div class="col-sm input-group workflowStepsPanel">
 
-                                        <select name="steps" class="dropdown-group workflows-select" id="steps">
-                                            @* options are populated from client via ajax request - see workflowStepsBehavior.js*@
-                                        </select>
-                                        <br /> <br />
-                                    </div>
-                                    
-                                    <div class="col-sm">
-                                        <a id="btnSendLog" data-src="communication" role="button" class="btn btn-default">@Translation.Get("Send")</a>
-                                        <i id="sendLogIndicator" style="display: none" class="gif-loader">&nbsp;</i>
-                                    </div>
-                                </div>
+                                <select name="steps" class="dropdown-group workflows-select" id="steps">
+                                    @* options are populated from client via ajax request - see workflowStepsBehavior.js*@
+                                </select>
+                                <a id="btnSendLog" data-src="communication" role="button" class="btn btn-default">@Translation.Get("Send")</a>
+                                <i id="sendLogIndicator" style="display: none" class="gif-loader">&nbsp;</i>
                             </div>
+                            <div class="col-sm input-group workflowStepsPanel2" style="display: none">
+                                <a id="btnSendLog2" data-src="communication" role="button" class="btn btn-default">@Translation.Get("Send")</a>
+                                <i id="sendLogIndicator" style="display: none" class="gif-loader">&nbsp;</i>
+                            </div>
+
                         </div>
                   </form>
                 </div>

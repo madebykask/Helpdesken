@@ -322,6 +322,11 @@ $(function () {
         var src = $(this).data('src');
         selfService.caseLog.saveLogMessage(src);
     });
+    $('#btnSendLog2').click(function (e) {
+        e.preventDefault();
+        var src = $(this).data('src');
+        selfService.caseLog.saveLogMessage(src);
+    });
 
     $("a[href='#upload_clipboard_file_popup_2']").on('click', function (e) {
         e.preventDefault();
