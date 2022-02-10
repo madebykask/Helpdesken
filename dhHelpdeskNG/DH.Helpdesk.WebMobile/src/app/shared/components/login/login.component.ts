@@ -17,7 +17,7 @@ import { CommunicationService, Channels } from 'src/app/services/communication';
 export class LoginComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject();
     version = config.version;
-    hasMicrosoftLogin = config.microsoftLogin;
+    hasMicrosoftLogin = config.showMicrosoftLogin;
     loginForm: FormGroup;
     isLoading = false;
     submitted = false;
@@ -76,8 +76,8 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.router.navigateByUrl(this.returnUrl);
         },
         error => {
-          if (error.status && error.status === 400) {
-              this.showLoginError = true;
+          if ((error.name && error.name === "BrowserAuthError") || (error.status && error.status === 400)) {  
+            this.showLoginError = true;
           } else {
               this.errorHandlingService.handleError(error);
           }
@@ -112,7 +112,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     onSubmit() {
-
         this.submitted = true;
 
         // stop here if form is invalid

@@ -52,7 +52,7 @@ export class AuthenticationApiService extends HttpApiServiceBase {
         if (response && response.idToken) {
           const postData = { Email: response.account.username, ClientId: config.clientId, IdToken: response.idToken };
 
-          return this.postJsonWithSubscription<any>(this.buildResourseUrl('/api/account/SignInWithMicrosoft', undefined, false), postData)
+          return this.postJson<any>(this.buildResourseUrl('/api/account/SignInWithMicrosoft', undefined, false), postData)
             .pipe(
               take(1),
               map(data => {

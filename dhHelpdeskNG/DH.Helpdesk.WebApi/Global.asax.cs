@@ -20,17 +20,5 @@ namespace DH.Helpdesk.WebApi
             //Use this method only if you really know what are you doing. Use RequestMiddleware.cs instead.
         }
 
-        //protected void Application_PostAuthorizeRequest()
-        //{
-        //    if (IsWebApiRequest())
-        //    {
-        //        HttpContext.Current.SetSessionStateBehavior(SessionStateBehavior.Required);
-        //    }
-        //}
-
-        //private bool IsWebApiRequest()
-        //{
-        //    return HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath != null && HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath.StartsWith(WebApiConfig.UrlPrefixRelative);
-        //}
     }
 }

@@ -38,7 +38,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
         [HttpPost]
         [AllowAnonymous]
-        public async Task<HttpResponseMessage> Login([FromBody]LoginUserInputModel model)
+        public async Task<HttpResponseMessage> Login([FromBody] LoginUserInputModel model)
         {
             //var user = _masterDataService.GetUserByEmail("katarina.ask@dhsolutions.se");
             var request = HttpContext.Current.Request;
@@ -73,6 +73,17 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 //Get Helpdesk User if exists from verifyed email
                 var user = _masterDataService.GetUserByEmail(model.Email);
+
+                if(user == null)
+                {
+                    var responseString = "{\"error\":\"Invalid user!\",\"error_description\":\"The user name or password is incorrect.\"}";
+                    var responseMsg = new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest)
+                    {
+                        Content = new StringContent(responseString, Encoding.UTF8, "application/json")
+                    };
+                    return responseMsg;
+                }
+
                 var request = HttpContext.Current.Request;
                 var tokenServiceUrl = request.Url.GetLeftPart(UriPartial.Authority) + request.ApplicationPath + ConfigApi.Constants.TokenEndPoint;
                 using (var client = new HttpClient())
@@ -149,7 +160,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 var validuser = !string.IsNullOrEmpty(userName) && (userName.Trim() == model.Email.Trim());
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -161,7 +172,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <returns>Access token</returns>
         [HttpPost]
         [AllowAnonymous]
-        public async Task<HttpResponseMessage> Refresh([FromBody]RefreshTokenInputModel model)
+        public async Task<HttpResponseMessage> Refresh([FromBody] RefreshTokenInputModel model)
         {
             //Maybe issue here if logged in with microsoft...
             //Check here too?
