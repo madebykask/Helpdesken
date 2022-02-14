@@ -116,15 +116,15 @@ namespace DH.Helpdesk.WebApi.Controllers
         private bool CheckValidUserLogin(MicrosoftUserModel model)
         {
             // The Client ID is used by the application to uniquely identify itself to Microsoft identity platform.
-            string clientId = System.Configuration.ConfigurationManager.AppSettings["ClientId"] != null ?
-                              System.Configuration.ConfigurationManager.AppSettings["ClientId"] : "";
+            string clientId = System.Configuration.ConfigurationManager.AppSettings["MicrosoftClientId"] != null ?
+                              System.Configuration.ConfigurationManager.AppSettings["MicrosoftClientId"] : "";
 
             // Tenant is the tenant ID (e.g. contoso.onmicrosoft.com, or 'common' for multi-tenant)
-            string tenant = System.Configuration.ConfigurationManager.AppSettings["Tenant"] != null ?
-                                   System.Configuration.ConfigurationManager.AppSettings["Tenant"] : "";
+            string tenant = System.Configuration.ConfigurationManager.AppSettings["MicrosoftTenant"] != null ?
+                                   System.Configuration.ConfigurationManager.AppSettings["MicrosoftTenant"] : "";
 
-            string auth = System.Configuration.ConfigurationManager.AppSettings["Authority"] != null ?
-                                   System.Configuration.ConfigurationManager.AppSettings["Authority"] : "";
+            string auth = System.Configuration.ConfigurationManager.AppSettings["MicrosoftAuthority"] != null ?
+                                   System.Configuration.ConfigurationManager.AppSettings["MicrosoftAuthority"] : "";
             // Authority is the URL for authority, composed by Microsoft identity platform endpoint and the tenant name (e.g. https://login.microsoftonline.com/contoso.onmicrosoft.com/v2.0)
             string authority = String.Format(System.Globalization.CultureInfo.InvariantCulture, auth, tenant);
             try
