@@ -1,6 +1,6 @@
 {
   "name": "web-mobile",
-  "version": "0.4.4",
+  "version": "0.5.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -15,7 +15,7 @@
     "e2e": "ng e2e",
     "format": "pretty-quick --staged"
   },
-  "browserslist":[
+  "browserslist": [
     "> 1.5%",
     "not Firefox ESR",
     "not dead",
