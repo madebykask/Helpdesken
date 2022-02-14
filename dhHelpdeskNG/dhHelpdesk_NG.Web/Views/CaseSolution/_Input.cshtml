@@ -2741,7 +2741,16 @@
     $(function() {
         $("#languageList").change(function() {
             var selectedItem = $(this).val();
+            //If not default language
+            //Disable controls
+            
             window.location.href = '@Url.Action("Edit","CaseSolution")?id=' + @Model.CaseSolution.Id + "&languageId=" + selectedItem;
+            DisableControls();
         });
     });
+    function DisableControls() {
+        //CaseSolution_CaseSolutionCategory_Id
+        document.getElementById('CaseSolutionDescription').disabled = true;
+        document.getElementById('CaseSolution_CaseSolutionCategory_Id').disabled = true;
+    }
 </script>

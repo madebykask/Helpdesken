@@ -1228,11 +1228,13 @@ namespace DH.Helpdesk.Web.Controllers
             
             var model = this.CreateInputViewModel(caseSolution);
 
-            if(language != null)
+            if(language != null && languageId != SessionFacade.CurrentUser.LanguageId)
             {
                 model.CaseSolution.ShortDescription = language.ShortDescription;
                 model.CaseSolution.Name = language.CaseSolutionName;
                 model.CaseSolution.Information = language.Information;
+
+                //Disable all fields in model
             }
 
             return this.View(model);
