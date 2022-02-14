@@ -151,7 +151,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 string smtpServer = emailsettings.SmtpSettings.Server;
                 var smtpPort = emailsettings.SmtpSettings.Port;
 
-                if (!string.IsNullOrWhiteSpace(smtpServer) && !string.IsNullOrWhiteSpace(from) && !string.IsNullOrWhiteSpace(to))
+                if (!string.IsNullOrWhiteSpace(smtpServer) && !string.IsNullOrWhiteSpace(from) && (!string.IsNullOrWhiteSpace(to) || !string.IsNullOrWhiteSpace(cc)))
                 {
                     if (IsValidEmail(from))
                     {
