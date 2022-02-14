@@ -198,7 +198,7 @@ namespace DH.Helpdesk.Web.Controllers
         #endregion
 
         private readonly int DefaultCaseLockBufferTime = 30; // Second
-        private readonly int DefaultExtendCaseLockTime = 60; // Second
+        private readonly int DefaultExtendCaseLockTime = 60; // Secondx§
 
         #region ***Constructor***
 

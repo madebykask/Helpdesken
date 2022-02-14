@@ -1,8 +1,9 @@
 ﻿using System;
+using global::System.Collections.Generic;
 namespace DH.Helpdesk.Domain
 
 {
-    public class CaseSolutionLanguageEntity: EntityBase
+    public class CaseSolutionLanguageEntity
     {
         public string CaseSolutionName { get; set; }
 

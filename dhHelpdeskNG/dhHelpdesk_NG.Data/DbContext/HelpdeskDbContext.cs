@@ -291,6 +291,8 @@ namespace DH.Helpdesk.Dal.DbContext
 
         public DbSet<FaqLanguageEntity> FAQLanguages { get; set; }
 
+        public DbSet<CaseSolutionLanguageEntity> CaseSolutionLanguages { get; set; }
+
         public DbSet<FaqEntity> FAQs { get; set; }
 
         public DbSet<FaqCategoryLanguageEntity> FaqCategoryLanguages { get; set; }
@@ -713,6 +715,7 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new CaseQuestionHeaderConfiguration());
             modelBuilder.Configurations.Add(new CaseSolutionCategoryConfiguration());
             modelBuilder.Configurations.Add(new CaseSolutionConfiguration());
+            modelBuilder.Configurations.Add(new CaseSolutionLanguageConfiguration());
             modelBuilder.Configurations.Add(new CaseSolutionScheduleConfiguration());
             modelBuilder.Configurations.Add(new CaseTypeConfiguration());
             modelBuilder.Configurations.Add(new CaseTypeProductAreaConfiguration());

@@ -505,6 +505,7 @@
     <Compile Include="Repositories\BusinessRules\Concrete\BusinessRuleRepository.cs" />
     <Compile Include="Repositories\BusinessRules\IBusinessRuleRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentTextConditionIdentifierRepository.cs" />
+    <Compile Include="Repositories\CaseSolutionLanguageRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\ExtendedCaseReportRepository.cs" />
     <Compile Include="Repositories\Computers\Concrete\ComputerStatusRepository.cs" />
     <Compile Include="Repositories\Computers\Concrete\ComputerTabsSettingsRepository.cs" />

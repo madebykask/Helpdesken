@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.CaseSolution;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Domain;
@@ -63,6 +64,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return query.Include(c => c.Customer);
         }
+
 
         public IList<CaseSolutionOverview> GetCaseSolutionsWithConditions(IList<int> Ids)
         {

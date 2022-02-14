@@ -304,6 +304,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IEntityInfoRepository>().To<EntityInfoRepository>();
             this.Bind<IConditionRepository>().To<ConditionRepository>();
 			this.Bind<IComputerUserCategoryRepository>().To<ComputerUserCategoryRepository>();
+            this.Bind<ICaseSolutionLanguageRepository>().To<CaseSolutionLanguageRepository>();
             this.Bind<IGDPRDataPrivacyAccessRepository>().To<GDPRDataPrivacyAccessRepository>();
             this.Bind<IGDPROperationsAuditRespository>().To<GDPROperationsAuditRespository>();
             this.Bind<IGDPRDataPrivacyFavoriteRepository>().To<GDPRDataPrivacyFavoriteRepository>();

@@ -11,6 +11,9 @@ using DH.Helpdesk.Web.Common.Enums.Case;
 using DH.Helpdesk.Web.Models.Case;
 using DH.Helpdesk.Web.Models.CaseRules;
 
+using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+using DH.Helpdesk.BusinessData.Models.CaseSolution;
+
 namespace DH.Helpdesk.Web.Models.CaseSolution
 {
     
@@ -79,6 +82,7 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
         public IList<SelectListItem> CausingParts { get; set; }
         public IList<SelectListItem> RegistrationSources { get; set; }
 
+
         public string EmptyUserCategoryName { get; set; }
 
         public AccessMode EditMode { get; set; }
@@ -125,5 +129,11 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
 
         public int? UserSearchCategory_Id { get; set; }
         public int? IsAbout_UserSearchCategory_Id { get; set; }
+
+        public SelectList Languages { get; set; }
+
+        [LocalizedDisplay("LanquageId")]
+        public int LanguageId { get; set; }
+        public CaseSolutionLanguage CaseSolutionLanguage { get; set; }
     }
 }

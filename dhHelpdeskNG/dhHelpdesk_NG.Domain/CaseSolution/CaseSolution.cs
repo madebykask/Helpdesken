@@ -15,6 +15,7 @@ namespace DH.Helpdesk.Domain
         public CaseSolution()
         {
             this.ExtendedCaseForms = new List<ExtendedCaseEntity.ExtendedCaseFormEntity>();
+            //this.CaseSolutionLanguages = new List<CaseSolutionLanguageEntity>();
         }
 
         public int? CaseSolutionCategory_Id { get; set; }
@@ -56,6 +57,7 @@ namespace DH.Helpdesk.Domain
         public int? System_Id { get; set; }
         public int? Urgency_Id { get; set; }
         public int? Impact_Id { get; set; }
+        //public int? Language_Id { get; set; }
         public string InvoiceNumber { get; set; }
         public string ReferenceNumber { get; set; }
         public int? Status_Id { get; set; }
@@ -150,6 +152,7 @@ namespace DH.Helpdesk.Domain
         public virtual ICollection<CaseSolution_SplitToCaseSolutionEntity> SplitToCaseSolutionDescendants { get; set; }
 
         public virtual ICollection<CaseSolutionConditionEntity> Conditions { get; set; }
+        public virtual ICollection<CaseSolutionLanguageEntity> CaseSolutionLanguages { get; set; }
 
     }
 }

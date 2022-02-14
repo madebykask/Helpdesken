@@ -58,7 +58,15 @@
                                 @Html.HiddenFor(model => model.CaseSolution.TemplatePath)
                                 @Html.HiddenFor(model => model.CaseSolution.ValidateOnChange)
                                 @Html.HiddenFor(model => model.CaseSolution.NextStepState)
-
+                                <tr>
+                                <tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Språk")
+                                    </td>
+                                    <td>
+                                        @Html.DropDownListFor(model => model.LanguageId, Model.Languages, new { id = "languageList" })
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td style="width:200px">
                                         @Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
@@ -2727,5 +2735,13 @@
 
 
 
+    });
+</script>
+<script type="text/javascript">
+    $(function() {
+        $("#languageList").change(function() {
+            var selectedItem = $(this).val();
+            window.location.href = '@Url.Action("Edit","CaseSolution")?id=' + @Model.CaseSolution.Id + "&languageId=" + selectedItem;
+        });
     });
 </script>

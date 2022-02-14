@@ -69,6 +69,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseSolutionConditionService _caseSolutionConditionService;
         private IComputerService _computerService;
         private readonly IGlobalSettingService _globalSettingService;
+        private readonly ILanguageService _languageService;
 
 
         private const int MAX_QUICK_BUTTONS_COUNT = 5;
@@ -112,7 +113,8 @@ namespace DH.Helpdesk.Web.Controllers
             ICacheProvider cache,
             ICaseSolutionConditionService caseSolutionConditionService,
             IComputerService computerService,
-            IGlobalSettingService globalSettingService)
+            IGlobalSettingService globalSettingService,
+            ILanguageService languageService)
             : base(masterDataService)
         {
             _computerService = computerService;
@@ -151,6 +153,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._caseSolutionConditionService = caseSolutionConditionService;
             _watchDateCalendarService = watchDateCalendarService;
             this._globalSettingService = globalSettingService;
+            this._languageService = languageService;
 
         }
 
@@ -1205,9 +1208,12 @@ namespace DH.Helpdesk.Web.Controllers
             //return this.View("/Views/CaseSolution/Edit.cshtml", model);
         }
 
-        public ActionResult Edit(int id, int? backToPageId)
+        public ActionResult Edit(int id, int languageId, int? backToPageId)
         {
             var caseSolution = this._caseSolutionService.GetCaseSolution(id);
+            //Not necessary anymore
+            var language = _caseSolutionService.GetCaseSolutionLanguage(id, languageId);
+            //caseSolution.CaseSolutionLanguages = languages;
 
             if (caseSolution == null)
                 return new HttpNotFoundResult("No case solution found...");
@@ -1216,11 +1222,18 @@ namespace DH.Helpdesk.Web.Controllers
             // If you ever remove this - please remove it in GetTemplate() action also
             caseSolution.NoMailToNotifier = caseSolution.NoMailToNotifier == 0 ? 1 : 0;
 
+
             ViewBag.PageId = backToPageId ?? 0;
 
             
             var model = this.CreateInputViewModel(caseSolution);
-            model.ContainsExtendedForm = model.CaseSolution.ExtendedCaseForms.Any();
+
+            if(language != null)
+            {
+                model.CaseSolution.ShortDescription = language.ShortDescription;
+                model.CaseSolution.Name = language.CaseSolutionName;
+                model.CaseSolution.Information = language.Information;
+            }
 
             return this.View(model);
         }
@@ -1444,180 +1457,198 @@ namespace DH.Helpdesk.Web.Controllers
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
             this.TempData["RequiredFields"] = null;
 
-            if (CaseSolutionSettingModels == null)
+            if(caseSolutionInputViewModel.LanguageId != 1)
+            //hrmm
             {
-                CaseSolutionSettingModels = new CaseSolutionSettingModel[0];
-            }
-
-            var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
-
-            // Positive: Send Mail to...
-            if (caseSolutionInputViewModel.CaseSolution.NoMailToNotifier == 0)
-                caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 1;
-            else
-                caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 0;
-
-            if (caseSolutionInputViewModel.CaseSolution.PerformerUser_Id == -1)
-            {
-                caseSolutionInputViewModel.CaseSolution.PerformerUser_Id = null;
-                caseSolutionInputViewModel.CaseSolution.SetCurrentUserAsPerformer = 1;
+                //Only this fields should be updated
+                var caseSolutionLang = new CaseSolutionLanguageEntity();
+                caseSolutionLang.Language_Id = caseSolutionInputViewModel.LanguageId;
+                caseSolutionLang.CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id;
+                caseSolutionLang.Information = caseSolutionInputViewModel.CaseSolution.Information;
+                caseSolutionLang.ShortDescription = caseSolutionInputViewModel.CaseSolution.ShortDescription;
+                caseSolutionLang.CaseSolutionName = caseSolutionInputViewModel.CaseSolution.Name;
+                _caseSolutionService.UpdateCaseSolutionLanguage(caseSolutionLang);
             }
             else
             {
-                caseSolutionInputViewModel.CaseSolution.SetCurrentUserAsPerformer = null;
-            }
-
-            if (caseSolutionInputViewModel.CaseSolution.CaseWorkingGroup_Id == -1)
-            {
-                caseSolutionInputViewModel.CaseSolution.CaseWorkingGroup_Id = null;
-                caseSolutionInputViewModel.CaseSolution.SetCurrentUsersWorkingGroup = 1;
-            }
-            else
-            {
-                caseSolutionInputViewModel.CaseSolution.SetCurrentUsersWorkingGroup = null;
-            }
-
-            if (caseSolutionInputViewModel.CaseSolution.ShowInsideCase != 1 || caseSolutionInputViewModel.CaseSolution.SaveAndClose < 0)
-                caseSolutionInputViewModel.CaseSolution.SaveAndClose = null;
-
-            var splitToSolutionIds = caseSolutionInputViewModel.SplitToCaseSolutionIds;
-            if (splitToSolutionIds != null && splitToSolutionIds.Any())
-            {
-                caseSolutionInputViewModel.CaseSolution.SplitToCaseSolutionDescendants =
-                    splitToSolutionIds.Select(id => new CaseSolution_SplitToCaseSolutionEntity
-                    {
-                        CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
-                        SplitToCaseSolution_Id = id
-                    }).ToList();
-            }
-
-            // reset Id if its a copy template request 
-            var isCopy = caseSolutionInputViewModel.CaseSolution.Id == 0;
-            if (isCopy)
-            {
-                foreach (var cs in CaseSolutionSettingModels)
+                if (CaseSolutionSettingModels == null)
                 {
-                    cs.Id = 0;
+                    CaseSolutionSettingModels = new CaseSolutionSettingModel[0];
                 }
-            }
-            if(caseSolutionInputViewModel.ContainsExtendedForm)
-            {
-                if (caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice != "both")
+
+                var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
+
+
+                // Positive: Send Mail to...
+                if (caseSolutionInputViewModel.CaseSolution.NoMailToNotifier == 0)
+                    caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 1;
+                else
+                    caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 0;
+
+                if (caseSolutionInputViewModel.CaseSolution.PerformerUser_Id == -1)
                 {
-                    caseSolutionInputViewModel.CaseSolution.ActiveTabSelfservice = caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice;
-                }
-            }
-            else
-            {
-                caseSolutionInputViewModel.CaseSolution.ActiveTabSelfservice = "case-tab";
-                caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice = "case-tab";
-            }
-
-            this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
-
-            var settingsSolutionAggregate =
-                this.CreateCaseSettingsSolutionAggregate(caseSolutionInputViewModel.CaseSolution.Id, CaseSolutionSettingModels);
-
-            this.caseSolutionSettingService.UpdateCaseSolutionSettings(settingsSolutionAggregate);
-
-            List<CaseSolitionConditionListEntity> cse = new List<CaseSolitionConditionListEntity>();
-
-            //Remove caching of all casesolution conditions
-            _cache.InvalidateStartsWith(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition);
-
-            string[] selectedSplit = selectedValues.Split('~');
-            foreach (string s in selectedSplit)
-            {
-                string[] cap = s.Split(':');
-                var text = cap[0].StartsWith("_") ? cap[0].Substring(1, cap[0].Length - 1) : cap[0];
-
-                string values = string.Empty;
-                if (cap.Length > 1)
-                {
-                    values = cap[1];
-                }
-                bool exists = false;
-
-                exists = cse.Any(u => u.CaseSolutionConditionCaption == text);
-                if (exists == false)
-                {
-                    CaseSolitionConditionListEntity cSc = new CaseSolitionConditionListEntity
-                    {
-                        CaseSolutionConditionCaption = text,
-                        CaseSolutionConditionValues = values.Replace('_', ',')
-                    };
-
-                    cse.Add(cSc);
+                    caseSolutionInputViewModel.CaseSolution.PerformerUser_Id = null;
+                    caseSolutionInputViewModel.CaseSolution.SetCurrentUserAsPerformer = 1;
                 }
                 else
                 {
+                    caseSolutionInputViewModel.CaseSolution.SetCurrentUserAsPerformer = null;
+                }
 
+                if (caseSolutionInputViewModel.CaseSolution.CaseWorkingGroup_Id == -1)
+                {
+                    caseSolutionInputViewModel.CaseSolution.CaseWorkingGroup_Id = null;
+                    caseSolutionInputViewModel.CaseSolution.SetCurrentUsersWorkingGroup = 1;
+                }
+                else
+                {
+                    caseSolutionInputViewModel.CaseSolution.SetCurrentUsersWorkingGroup = null;
+                }
 
+                if (caseSolutionInputViewModel.CaseSolution.ShowInsideCase != 1 || caseSolutionInputViewModel.CaseSolution.SaveAndClose < 0)
+                    caseSolutionInputViewModel.CaseSolution.SaveAndClose = null;
 
-                    string exvalues = cse.Where(x => x.CaseSolutionConditionCaption == text).FirstOrDefault().CaseSolutionConditionValues;
-                    string exid = cse.Where(x => x.CaseSolutionConditionCaption == text).FirstOrDefault().CaseSolutionConditionCaption;
+                var splitToSolutionIds = caseSolutionInputViewModel.SplitToCaseSolutionIds;
+                if (splitToSolutionIds != null && splitToSolutionIds.Any())
+                {
+                    caseSolutionInputViewModel.CaseSolution.SplitToCaseSolutionDescendants =
+                        splitToSolutionIds.Select(id => new CaseSolution_SplitToCaseSolutionEntity
+                        {
+                            CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
+                            SplitToCaseSolution_Id = id
+                        }).ToList();
+                }
 
-                    string[] existarray = exvalues.Split(',');
-                    string[] newarray = values.Split(',');
-                    string[] result = existarray.Union(newarray).ToArray();
-                    string final = string.Empty;
-                    foreach (string word in result)
+                // reset Id if its a copy template request 
+                var isCopy = caseSolutionInputViewModel.CaseSolution.Id == 0;
+                if (isCopy)
+                {
+                    foreach (var cs in CaseSolutionSettingModels)
                     {
-                        if (final == string.Empty)
+                        cs.Id = 0;
+                    }
+                }
+                if (caseSolutionInputViewModel.ContainsExtendedForm)
+                {
+                    if (caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice != "both")
+                    {
+                        caseSolutionInputViewModel.CaseSolution.ActiveTabSelfservice = caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice;
+                    }
+                }
+                else
+                {
+                    caseSolutionInputViewModel.CaseSolution.ActiveTabSelfservice = "case-tab";
+                    caseSolutionInputViewModel.CaseSolution.AvailableTabsSelfsevice = "case-tab";
+                }
+
+                this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
+
+                var settingsSolutionAggregate =
+                    this.CreateCaseSettingsSolutionAggregate(caseSolutionInputViewModel.CaseSolution.Id, CaseSolutionSettingModels);
+
+                this.caseSolutionSettingService.UpdateCaseSolutionSettings(settingsSolutionAggregate);
+
+                List<CaseSolitionConditionListEntity> cse = new List<CaseSolitionConditionListEntity>();
+
+                //Remove caching of all casesolution conditions
+                _cache.InvalidateStartsWith(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition);
+
+                string[] selectedSplit = selectedValues.Split('~');
+                foreach (string s in selectedSplit)
+                {
+                    string[] cap = s.Split(':');
+                    var text = cap[0].StartsWith("_") ? cap[0].Substring(1, cap[0].Length - 1) : cap[0];
+
+                    string values = string.Empty;
+                    if (cap.Length > 1)
+                    {
+                        values = cap[1];
+                    }
+                    bool exists = false;
+
+                    exists = cse.Any(u => u.CaseSolutionConditionCaption == text);
+                    if (exists == false)
+                    {
+                        CaseSolitionConditionListEntity cSc = new CaseSolitionConditionListEntity
                         {
-                            final = word;
-                        }
-                        else
+                            CaseSolutionConditionCaption = text,
+                            CaseSolutionConditionValues = values.Replace('_', ',')
+                        };
+
+                        cse.Add(cSc);
+                    }
+                    else
+                    {
+
+
+
+                        string exvalues = cse.Where(x => x.CaseSolutionConditionCaption == text).FirstOrDefault().CaseSolutionConditionValues;
+                        string exid = cse.Where(x => x.CaseSolutionConditionCaption == text).FirstOrDefault().CaseSolutionConditionCaption;
+
+                        string[] existarray = exvalues.Split(',');
+                        string[] newarray = values.Split(',');
+                        string[] result = existarray.Union(newarray).ToArray();
+                        string final = string.Empty;
+                        foreach (string word in result)
                         {
-                            final = final + "," + word;
+                            if (final == string.Empty)
+                            {
+                                final = word;
+                            }
+                            else
+                            {
+                                final = final + "," + word;
+                            }
                         }
+
+
+
+                        foreach (var item in cse.Where(w => w.CaseSolutionConditionCaption == text))
+                        {
+                            item.CaseSolutionConditionValues = final;
+                        }
+
+
+
                     }
 
 
-
-                    foreach (var item in cse.Where(w => w.CaseSolutionConditionCaption == text))
+                }
+                if (cse != null)
+                {
+                    foreach (CaseSolitionConditionListEntity lk in cse)
                     {
-                        item.CaseSolutionConditionValues = final;
+                        CaseSolutionConditionEntity o = new CaseSolutionConditionEntity
+                        {
+                            CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
+                            Property_Name = lk.CaseSolutionConditionCaption,
+                            Values = lk.CaseSolutionConditionValues
+                        };
+                        this._caseSolutionConditionService.Save(o);
                     }
-
-
-
                 }
 
 
-            }
-            if (cse != null)
-            {
-                foreach (CaseSolitionConditionListEntity lk in cse)
+
+
+
+                if (errors.Count == 0)
                 {
-                    CaseSolutionConditionEntity o = new CaseSolutionConditionEntity
+                    switch (PageId) // back to refrence page
                     {
-                        CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
-                        Property_Name = lk.CaseSolutionConditionCaption,
-                        Values = lk.CaseSolutionConditionValues
-                    };
-                    this._caseSolutionConditionService.Save(o);
+                        case 1:
+                            return this.RedirectToAction("index", "Cases");
+
+                        default:
+                            return this.RedirectToAction("index", "casesolution");
+
+                    }
                 }
+                this.TempData["RequiredFields"] = errors;
             }
 
 
-
-
-
-            if (errors.Count == 0)
-            {
-                switch (PageId) // back to refrence page
-                {
-                    case 1:
-                        return this.RedirectToAction("index", "Cases");
-
-                    default:
-                        return this.RedirectToAction("index", "casesolution");
-
-                }
-            }
-
-            this.TempData["RequiredFields"] = errors;
+            ViewBag.PageId = PageId;
             var model = this.CreateInputViewModel(caseSolutionInputViewModel.CaseSolution);
 
 
@@ -2801,6 +2832,15 @@ namespace DH.Helpdesk.Web.Controllers
             List<SelectListItem> departments = null;
             List<SelectListItem> organizationUnits = null;
 
+            var languageOverviewsOrginal = _languageService.GetOverviews(true);
+            var languageOverviews =
+                languageOverviewsOrginal.Select(
+                    o =>
+                        new ItemOverview(Translation.GetCoreTextTranslation(o.Name),
+                            o.Value.ToString())).ToList();
+            //var languages = _caseSolutionService.GetCaseSolutionLanguages(caseSolution.Id);
+            var languageList = new SelectList(languageOverviews, "Value", "Name");
+
             var regionList = this._regionService.GetActiveRegions(curCustomerId);
 
             //Get not selected case solution conditions
@@ -3021,6 +3061,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var model = new CaseSolutionInputViewModel
             {
+                Languages = languageList,
                 CaseSolution = caseSolution,
                 CaseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(curCustomerId),
                 Countries = this._countryService.GetCountries(curCustomerId),
