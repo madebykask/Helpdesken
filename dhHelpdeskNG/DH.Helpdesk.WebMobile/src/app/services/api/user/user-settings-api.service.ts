@@ -92,12 +92,18 @@ export class UserSettingsApiService extends HttpApiServiceBase {
   private tryLoadTranslations(): Observable<any> {
     const currentLangId = this.getCurrentLanguage();
     const languages = this.localStorageService.getLanguages();
-    let languageKey = 'en'; // TODO: use config for default language?
-    if (currentLangId && languages && languages.length) {
-      const lang = languages.filter((l: Language) => l.id === currentLangId);
-      languageKey = lang && lang.length ? lang[0].languageId : languageKey;
+    let languageKey: string;
+    if (languages && languages.length) {
+      if (currentLangId) {
+        const lang = languages.filter((l: Language) => l.id === currentLangId);
+        languageKey = lang && lang.length ? lang[0].languageId : languages[0].languageId;
+      } else {
+        languageKey = languages[0].languageId;
+      }
     }
-
+    if (!languageKey) { 
+      languageKey = 'en';
+    }
     //change translations
     this._logger.log('>>> Settings translation language to: ' + languageKey);
     return this.ngxTranslationService.use(languageKey.toLowerCase());
