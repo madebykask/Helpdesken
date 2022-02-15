@@ -20,7 +20,7 @@ export const config = {
     version: VERSION.fullVersion,
     internalVersion: require('../../package.json').version,
     enableLog: true,
-    showMicrosoftLogin: true,
+    microsoftShowLogin: true,
     microsoftClientId: "f263307c-2182-44c0-9c28-1b8e88c00a7b",
     microsoftTenant: "a1f945cf-f91f-4b88-a250-a58e3dd50140",
     microsoftAuthority: "https://login.microsoftonline.com/",
