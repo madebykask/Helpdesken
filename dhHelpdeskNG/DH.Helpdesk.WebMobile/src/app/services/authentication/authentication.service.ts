@@ -85,6 +85,13 @@ export class AuthenticationService {
         this.raiseAuthenticationChanged();
     }
 
+    microsoftLogout() {
+      this.authApiService.microsoftLogout();
+      this.appStore.reset();
+      // this._logger.log(`Log out action.`);
+      this.raiseAuthenticationChanged();
+    }
+
     setAuthHeader(request: HttpRequest<any>): HttpRequest<any> {
         // Get access token
         const accessToken = this.authStateService.getAccessToken();

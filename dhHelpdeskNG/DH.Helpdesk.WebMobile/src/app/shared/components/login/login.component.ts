@@ -56,6 +56,11 @@ export class LoginComponent implements OnInit, OnDestroy {
         // reset login status
         this.authenticationService.logout();
 
+        // reset microsoft login data
+        if(this.hasMicrosoftLogin) {
+          this.authenticationService.microsoftLogout();
+        }
+
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     }
@@ -84,9 +89,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
     }
   
-    // logout() {
-    //   this.msalService.logout();
-    // }
+
     // setLoginDisplay() {
     //   // this.loginDisplay = this.authServiceMsal.instance.getAllAccounts().length > 0;
     // }

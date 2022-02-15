@@ -73,6 +73,15 @@ export class AuthenticationApiService extends HttpApiServiceBase {
         return of(false);
       }))
   }
+
+  microsoftLogout() {
+    if(this.msalService.instance.getAllAccounts().length) {
+      this.msalService.logout();
+      return true;
+    };
+    return false;
+  }
+
   refreshToken(refreshToken: string): Observable<any> {
     const params = {
       refreshToken: refreshToken,
