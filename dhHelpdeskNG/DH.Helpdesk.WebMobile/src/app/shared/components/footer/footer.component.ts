@@ -1,19 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MbscNavOptions } from '@mobiscroll/angular';
-import { takeUntil, distinctUntilChanged, filter  } from 'rxjs/operators';
+import { takeUntil, distinctUntilChanged, filter } from 'rxjs/operators';
 import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { AppStore, AppStoreKeys } from 'src/app/store/app-store';
 import { CustomerCaseTemplateModel } from 'src/app/models/caseTemplate/case-template.model';
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { config } from '@env/environment';
+import { AuthenticationService } from '../../../services/authentication';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
-export class FooterComponent implements OnInit  {
+export class FooterComponent implements OnInit {
   languageId = 0;
   isLoadingLanguage = true;
   isVisible = true;
@@ -27,19 +29,21 @@ export class FooterComponent implements OnInit  {
     menuIcon: null,
     menuText: null,
   };
+  showMicrosoftLogin = config.microsoftShowLogin;
 
   constructor(private router: Router,
-              private appStore: AppStore,
-              private userSettingsService: UserSettingsApiService) {
+    private appStore: AppStore,
+    private userSettingsService: UserSettingsApiService,
+    private authenticationService: AuthenticationService) {
   }
 
   ngOnInit() {
     // load templates from appStore state
     if (this.userSettingsService.getUserData().createCasePermission) {
-       this.appStore.select<CustomerCaseTemplateModel[]>(AppStoreKeys.Templates).pipe(
-         distinctUntilChanged(),
-         filter(Boolean), // aka new Boolean(val) to filter null values
-         untilDestroyed(this)
+      this.appStore.select<CustomerCaseTemplateModel[]>(AppStoreKeys.Templates).pipe(
+        distinctUntilChanged(),
+        filter(Boolean), // aka new Boolean(val) to filter null values
+        untilDestroyed(this)
       ).subscribe((templates: CustomerCaseTemplateModel[]) => {
         this.canCreateCases$.next(templates && templates.length > 0);
       });
@@ -51,6 +55,10 @@ export class FooterComponent implements OnInit  {
   }
 
   logout() {
+    // reset microsoft login data
+    if (this.showMicrosoftLogin) {
+      this.authenticationService.microsoftLogout();
+    }
     this.goTo('/login');
   }
 

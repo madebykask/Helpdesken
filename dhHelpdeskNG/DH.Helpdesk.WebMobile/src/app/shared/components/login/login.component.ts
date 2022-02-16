@@ -17,7 +17,7 @@ import { CommunicationService, Channels } from 'src/app/services/communication';
 export class LoginComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject();
     version = config.version;
-    hasMicrosoftLogin = config.microsoftShowLogin;
+    showMicrosoftLogin = config.microsoftShowLogin;
     loginForm: FormGroup;
     isLoading = false;
     submitted = false;
@@ -55,12 +55,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         // reset login status
         this.authenticationService.logout();
-
-        // reset microsoft login data
-        if(this.hasMicrosoftLogin) {
-          this.authenticationService.microsoftLogout();
-        }
-
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     }
