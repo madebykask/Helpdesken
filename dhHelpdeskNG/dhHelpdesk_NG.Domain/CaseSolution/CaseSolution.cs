@@ -154,5 +154,6 @@ namespace DH.Helpdesk.Domain
         public virtual ICollection<CaseSolutionConditionEntity> Conditions { get; set; }
         public virtual ICollection<CaseSolutionLanguageEntity> CaseSolutionLanguages { get; set; }
 
+
     }
 }

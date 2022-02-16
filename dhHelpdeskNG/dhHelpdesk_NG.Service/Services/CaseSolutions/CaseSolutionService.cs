@@ -32,6 +32,7 @@ namespace DH.Helpdesk.Services.Services
 
         IList<ApplicationTypeEntity> GetApplicationTypes(int customerId);
         IList<CaseSolutionCategory> GetCaseSolutionCategories(int customerId);
+        CaseSolutionCategoryLanguageEntity GetCaseSolutionCategoryLanguage(int categoryId, int languageId);
         IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch SearchCaseSolutions, bool isFirstNamePresentation);
 
         void ApplyCaseSolution(ICaseEntity model, CaseSolution caseSolution);
@@ -55,6 +56,7 @@ namespace DH.Helpdesk.Services.Services
         bool CheckIfExtendedFormExistForSolutionsInCategories(int customerId, List<int> list);
         CaseSolutionLanguageEntity GetCaseSolutionLanguage(int id, int language);
         void UpdateCaseSolutionLanguage(CaseSolutionLanguageEntity caseLang);
+        void UpdateCaseSolutionCategoryLanguage(CaseSolutionCategoryLanguageEntity caseLang);
     }
 
     public class CaseSolutionService : BaseCaseSolutionService, ICaseSolutionService
@@ -75,6 +77,7 @@ namespace DH.Helpdesk.Services.Services
 
         private readonly IComputerUserCategoryRepository _computerUserCategoryRepository;
         private readonly ICaseSolutionLanguageRepository _caseSolutionLanguageRepository;
+        private readonly ICaseSolutionCategoryLanguageRepository _caseSolutionCategoryLanguageRepository;
 
         public CaseSolutionService(
             ICaseSolutionRepository caseSolutionRepository,
@@ -90,7 +93,8 @@ namespace DH.Helpdesk.Services.Services
             IWorkingGroupService workingGroupService,
             IComputerUserCategoryRepository computerUserCategoryRepository,
             IUnitOfWorkFactory unitOfWorkFactory,
-            ICaseSolutionLanguageRepository caseSolutionLanguageRepository) 
+            ICaseSolutionLanguageRepository caseSolutionLanguageRepository,
+            ICaseSolutionCategoryLanguageRepository caseSolutionCategoryLanguageRepository) 
             : base(caseSolutionRepository, caseSolutionCategoryRepository) 
         {
             _caseSolutionCategoryRepository = caseSolutionCategoryRepository;
@@ -106,12 +110,19 @@ namespace DH.Helpdesk.Services.Services
             _unitOfWorkFactory = unitOfWorkFactory;
             _computerUserCategoryRepository = computerUserCategoryRepository;
             _caseSolutionLanguageRepository = caseSolutionLanguageRepository;
+            _caseSolutionCategoryLanguageRepository = caseSolutionCategoryLanguageRepository;
         }
         public void UpdateCaseSolutionLanguage(CaseSolutionLanguageEntity caseLang)
         {
             _caseSolutionLanguageRepository.UpdateOtherLanguageCaseSolution(caseLang);
 
             _caseSolutionLanguageRepository.Commit();
+        }
+        public void UpdateCaseSolutionCategoryLanguage(CaseSolutionCategoryLanguageEntity caseLang)
+        {
+            _caseSolutionCategoryLanguageRepository.UpdateOtherLanguageCaseSolutionCategory(caseLang);
+
+            _caseSolutionCategoryLanguageRepository.Commit();
         }
         public IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, int? userId = null)
         {
@@ -1650,10 +1661,15 @@ namespace DH.Helpdesk.Services.Services
         {
             return _caseSolutionCategoryRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
+        public CaseSolutionCategoryLanguageEntity GetCaseSolutionCategoryLanguage(int categoryId, int languageId)
+        {
+            return _caseSolutionCategoryLanguageRepository.GetCaseSolutionCategoryLanguage(categoryId, languageId);
+        }
         public CaseSolutionLanguageEntity GetCaseSolutionLanguage(int id, int languageId)
         {
             return _caseSolutionLanguageRepository.GetCaseSolutionLanguage(id,  languageId);
         }
+
         public CaseSolution GetCaseSolution(int id)
         {
             return CaseSolutionRepository.GetById(id);

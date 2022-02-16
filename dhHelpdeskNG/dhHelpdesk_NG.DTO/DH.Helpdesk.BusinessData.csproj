@@ -192,6 +192,7 @@
     <Compile Include="Models\CaseDocument\CaseDocumentTemplateModel.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentTextConditionIdentifierModel.cs" />
     <Compile Include="Models\CaseDocument\DocumentConditionOverview.cs" />
+    <Compile Include="Models\CaseSolution\CaseSolutionCategoryLanguage.cs" />
     <Compile Include="Models\CaseSolution\CaseSolutionLanguage.cs" />
     <Compile Include="Models\CaseSolution\CaseSolutionSelections.cs" />
     <Compile Include="Models\Case\CaseFileContent.cs" />

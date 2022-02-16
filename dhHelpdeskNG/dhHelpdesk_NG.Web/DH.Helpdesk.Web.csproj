@@ -44,7 +44,7 @@
     <Use64BitIISExpress />
     <TypeScriptToolsVersion>4.1</TypeScriptToolsVersion>
     <DontImportPostSharp>True</DontImportPostSharp>
-	<ExcludeFilesFromDeployment>Web.config</ExcludeFilesFromDeployment> 
+    <ExcludeFilesFromDeployment>Web.config</ExcludeFilesFromDeployment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -433,6 +433,7 @@
     <Compile Include="Infrastructure\JsonNetResult.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ComputerCopyBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\IComputerCopyBuilder.cs" />
+    <Compile Include="Models\CaseSolution\CaseSolutionCategoryViewModel.cs" />
     <Compile Include="Models\Case\AdvancedCaseSearchInput.cs" />
     <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />

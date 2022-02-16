@@ -129,6 +129,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<ICaseSettingRepository>().To<CaseSettingRepository>();
             this.Bind<ICaseSectionsRepository>().To<CaseSectionsRepository>();
             this.Bind<ICaseSolutionCategoryRepository>().To<CaseSolutionCategoryRepository>();
+            this.Bind<ICaseSolutionCategoryLanguageRepository>().To<CaseSolutionCategoryLanguageRepository>();
             this.Bind<ICaseSolutionRepository>().To<CaseSolutionRepository>();
             this.Bind<ICaseSolutionScheduleRepository>().To<CaseSolutionScheduleRepository>();
             this.Bind<ICaseTypeRepository>().To<CaseTypeRepository>();

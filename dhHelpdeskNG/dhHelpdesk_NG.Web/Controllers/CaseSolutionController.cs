@@ -366,8 +366,9 @@ namespace DH.Helpdesk.Web.Controllers
             ViewBag.PageId = backToPageId ?? 0;
             TempData["NewOrOld"] = "0";
             //ViewBag.IdVal = 0;
-
+            ViewBag.ShowLanguageList = false;
             var model = this.CreateInputViewModel(caseSolution);
+            //model.Languages.SelectedValue = SessionFacade.CurrentCustomer.Language_Id;
 
             return this.View(model);
         }
@@ -553,6 +554,7 @@ namespace DH.Helpdesk.Web.Controllers
             TempData["RequiredFields"] = errors;
 
             var model = CreateInputViewModel(caseSolution);
+
 
             return View(model);
         }
@@ -1211,9 +1213,8 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Edit(int id, int languageId, int? backToPageId)
         {
             var caseSolution = this._caseSolutionService.GetCaseSolution(id);
-            //Not necessary anymore
+
             var language = _caseSolutionService.GetCaseSolutionLanguage(id, languageId);
-            //caseSolution.CaseSolutionLanguages = languages;
 
             if (caseSolution == null)
                 return new HttpNotFoundResult("No case solution found...");
@@ -1228,7 +1229,7 @@ namespace DH.Helpdesk.Web.Controllers
             
             var model = this.CreateInputViewModel(caseSolution);
 
-            if(language != null && languageId != SessionFacade.CurrentUser.LanguageId)
+            if(language != null && languageId != SessionFacade.CurrentCustomer.Language_Id)
             {
                 model.CaseSolution.ShortDescription = language.ShortDescription;
                 model.CaseSolution.Name = language.CaseSolutionName;
@@ -1236,7 +1237,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 //Disable all fields in model
             }
-
+            ViewBag.ShowLanguageList = true;
             return this.View(model);
         }
 
@@ -1453,13 +1454,13 @@ namespace DH.Helpdesk.Web.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult Edit(CaseSolutionInputViewModel caseSolutionInputViewModel, CaseSolutionSettingModel[] CaseSolutionSettingModels, int PageId, string selectedValues)
+        public ActionResult Edit(CaseSolutionInputViewModel caseSolutionInputViewModel, CaseSolutionSettingModel[] CaseSolutionSettingModels, int? PageId, string selectedValues)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
             this.TempData["RequiredFields"] = null;
-
-            if(caseSolutionInputViewModel.LanguageId != 1)
+            ViewBag.ShowLanguageList = true;
+            if (caseSolutionInputViewModel.LanguageId != SessionFacade.CurrentCustomer.Language_Id)
             //hrmm
             {
                 //Only this fields should be updated
@@ -1650,7 +1651,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
 
-            ViewBag.PageId = PageId;
+            ViewBag.PageId = PageId ?? 0;
             var model = this.CreateInputViewModel(caseSolutionInputViewModel.CaseSolution);
 
 
@@ -2669,7 +2670,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         public ActionResult NewCategory()
         {
-            return this.View(new CaseSolutionCategory() { Customer_Id = SessionFacade.CurrentCustomer.Id });
+            return this.View(new CaseSolutionCategoryViewModel() { Customer_Id = SessionFacade.CurrentCustomer.Id });
         }
 
         [HttpPost]
@@ -2680,25 +2681,86 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "casesolution");
-
+            ViewBag.ShowLanguageList = false;
             return this.View(caseSolutionCategory);
         }
 
-        public ActionResult EditCategory(int id)
+        public ActionResult EditCategory(int id, int? languageId)
         {
             var caseSolutionCategory = this._caseSolutionService.GetCaseSolutionCategory(id);
 
             if (caseSolutionCategory == null)
                 return new HttpNotFoundResult("No case solution cateogry found...");
+            var model = new CaseSolutionCategoryViewModel()
+            {
+                Id = caseSolutionCategory.Id,
+                Customer_Id = caseSolutionCategory.Customer_Id,
+                Name = caseSolutionCategory.Name,
+                IsDefault = caseSolutionCategory.IsDefault,
+                Customer = caseSolutionCategory.Customer
+            };
+            var languageOverviewsOrginal = _languageService.GetOverviews(true);
+            var languageOverviews =
+                languageOverviewsOrginal.Select(
+                    o =>
+                        new ItemOverview(Translation.GetCoreTextTranslation(o.Name),
+                            o.Value.ToString())).ToList();
+            var languageList = new SelectList(languageOverviews, "Value", "Name");
 
-            return this.View(caseSolutionCategory);
+            model.Languages = languageList;
+
+            if (languageId != null && languageId != SessionFacade.CurrentCustomer.Language_Id)
+            {
+                  
+                var language = _caseSolutionService.GetCaseSolutionCategoryLanguage(id, languageId.Value);
+                if (language != null)
+                {
+                    model.Name = language.CaseSolutionCategoryName;
+                    model.LanguageId = languageId.Value;
+                }
+                else
+                {
+                    model.Name = caseSolutionCategory.Name;
+                    model.LanguageId = languageId.Value;
+                }
+            }
+            else
+            {
+                model.LanguageId = SessionFacade.CurrentCustomer.Language_Id;
+            }
+            
+            ViewBag.ShowLanguageList = true;
+
+            return this.View(model);
         }
 
         [HttpPost]
-        public ActionResult EditCategory(CaseSolutionCategory caseSolutionCategory)
+        public ActionResult EditCategory(CaseSolutionCategoryViewModel caseSolutionCategory)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._caseSolutionService.SaveCaseSolutionCategory(caseSolutionCategory, out errors);
+            if (caseSolutionCategory.LanguageId != SessionFacade.CurrentCustomer.Language_Id)
+            {
+                var catLanguage = new CaseSolutionCategoryLanguageEntity()
+                {
+                    Category_Id = caseSolutionCategory.Id,
+                    CaseSolutionCategoryName = caseSolutionCategory.Name,
+                    Language_Id = caseSolutionCategory.LanguageId
+                };
+                _caseSolutionService.UpdateCaseSolutionCategoryLanguage(catLanguage);
+            }
+            else
+            {
+                var csc = new CaseSolutionCategory()
+                {
+                    Id = caseSolutionCategory.Id,
+                    Name = caseSolutionCategory.Name,
+                    Customer_Id = caseSolutionCategory.Customer_Id
+                };
+
+
+                this._caseSolutionService.SaveCaseSolutionCategory(csc, out errors);
+            }
+
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "caseSolution");
@@ -2840,7 +2902,6 @@ namespace DH.Helpdesk.Web.Controllers
                     o =>
                         new ItemOverview(Translation.GetCoreTextTranslation(o.Name),
                             o.Value.ToString())).ToList();
-            //var languages = _caseSolutionService.GetCaseSolutionLanguages(caseSolution.Id);
             var languageList = new SelectList(languageOverviews, "Value", "Name");
 
             var regionList = this._regionService.GetActiveRegions(curCustomerId);

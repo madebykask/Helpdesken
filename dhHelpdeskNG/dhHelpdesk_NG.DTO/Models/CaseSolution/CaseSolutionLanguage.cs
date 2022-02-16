@@ -12,7 +12,7 @@ namespace DH.Helpdesk.BusinessData.Models.CaseSolution
         {
             CaseSolutionId = caseSolutionId;
             CaseSolutionName = name;
-            ShortDescription = ShortDescription;
+            ShortDescription = shortDescription;
             LanguageId = languageId;
             Information = information;
 

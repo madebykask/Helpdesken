@@ -1,19 +1,20 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Domain.CaseSolutionCategory
+@model DH.Helpdesk.Web.Models.CaseSolution.CaseSolutionCategoryViewModel 
 
 
 
 <div class="content">
- @{
-    string err = (string) TempData["Error"];
-    
-    if (!string.IsNullOrEmpty(err))
-    {
-        <div class="alert alert-error">
-            @Translation.Get(err, Enums.TranslationSource.TextTranslation)
-        </div>    
+    @{
+        string err = (string)TempData["Error"];
+
+
+        if (!string.IsNullOrEmpty(err))
+        {
+            <div class="alert alert-error">
+                @Translation.Get(err, Enums.TranslationSource.TextTranslation)
+            </div>
+        }
     }
-  }
 
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
@@ -25,28 +26,39 @@
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
+                                @if (ViewBag.ShowLanguageList != null && ViewBag.ShowLanguageList)
+                                {
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Språk")
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DropDownListFor(model => model.LanguageId, Model.Languages, new { id = "languageList" })
+                                        </td>
+                                    </tr>
+                                }
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation) 
-                                        @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation) 
-                                        <span class="mandatorystar">*</span> 
+                                        @Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
+                                        <span class="mandatorystar">*</span>
                                     </td>
                                     <td class="span9">
-                                        @Html.TextBoxFor(model => model.Name, new { maxlength = "50", style = "width: 200px;" })                                                                           
-                                    </td>                                                                        
-                                </tr>                                
+                                        @Html.TextBoxFor(model => model.Name, new { maxlength = "50", style = "width: 200px;" })
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td>
-                                         @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
-                                    </td>                                    
-                                    <td class="checkbox">                                        
-                                        <input type="checkbox" name="IsDefault" @(Model.IsDefault== 1 ? "checked=checked" : "") value ="1" class="switchcheckbox" />                                        
-                                        <input type="hidden" name="IsDefault" value="0" />                                                                      
-                                    </td>                                   
-                                </tr>               
+                                        @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="checkbox">
+                                        <input type="checkbox" name="IsDefault" @(Model.IsDefault == 1 ? "checked=checked" : "") value="1" class="switchcheckbox" />
+                                        <input type="hidden" name="IsDefault" value="0" />
+                                    </td>
+                                </tr>
                             </table>
                             @Html.HiddenFor(model => model.Customer_Id)
-                            @Html.HiddenFor(model => model.Id)                         
+                            @Html.HiddenFor(model => model.Id)
 
                         </div>
                     </div>
@@ -56,7 +68,8 @@
     </div>
 </div>
 
-<script type="text/javascript">                  
+<script type="text/javascript">
+
 
         var validator = $("#target").validate({
             rules: {
@@ -65,7 +78,7 @@
                 }
             },
             messages: {
-                "Name": {                    
+                "Name": {
                     required: "@Translation.GetForJS("Du måste ange en driftsloggskategori", Enums.TranslationSource.TextTranslation)"
                     }
                 },
@@ -73,6 +86,14 @@
                     form.submit();
                 }
             });
-        
 
+        $(function() {
+        $("#languageList").change(function() {
+            var selectedItem = $(this).val();
+            window.location.href = '@Url.Action("EditCategory","CaseSolution")?id=' + @Model.Id + "&languageId=" + selectedItem;
+
+        });
+    });
 </script>
+
+
