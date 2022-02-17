@@ -44,7 +44,11 @@ export class AuthenticationApiService extends HttpApiServiceBase {
   }
 
   microsoftLogin(): Observable<boolean> {
-    return this.msalService.loginPopup().pipe(
+
+    const accessTokenRequest = {
+      scopes: ["user.read"]
+    }
+    return this.msalService.acquireTokenPopup(accessTokenRequest).pipe(
       take(1),
       switchMap(response => {
         //login successful if there's a token in the response
