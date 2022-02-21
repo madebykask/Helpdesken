@@ -11,6 +11,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
       // add authorization header with token if available
+
       let newRequest: HttpRequest<any> = null;
       if (request.headers.has(AuthConstants.NoAuthHeader)) {
         newRequest = request.clone({ headers: request.headers.delete(AuthConstants.NoAuthHeader)});

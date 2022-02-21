@@ -8,6 +8,7 @@ import { throwError, Subject } from 'rxjs';
 import { ErrorHandlingService } from '../../../services/logging/error-handling.service';
 import { config } from '@env/environment';
 import { CommunicationService, Channels } from 'src/app/services/communication';
+import { MsalService } from '@azure/msal-angular';
 
 
 @Component({
@@ -45,6 +46,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         private authenticationService: AuthenticationService,
         private userSettingsService: UserSettingsApiService,
         private errorHandlingService: ErrorHandlingService,
+
+        private msalAuthService: MsalService,
         ) {}
 
     ngOnInit() {
@@ -57,30 +60,22 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.authenticationService.logout();
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+
+        this.msalAuthService.handleRedirectCallback((authError, response) => {
+
+          if (authError) {
+            console.error('Redirect Error: ', authError.errorMessage);
+            return;
+          }
+    
+          console.log('Redirect Success: ', response);
+        });
     }
 
     microsoftLogin() {
-      this.showLoginError = false;
-      this.isLoading = true;
+
+      this.msalAuthService.loginRedirect();
       
-      this.authenticationService.microsoftLogin().pipe(
-        take(1),
-        switchMap(currentUser => {
-          this.communicationService.publish(Channels.UserLoggedIn, currentUser);
-          return this.userSettingsService.applyUserSettings();
-        }),
-        finalize(() => this.isLoading = false)
-      ).subscribe(res => {
-            this.showLoginError = false;
-            this.router.navigateByUrl(this.returnUrl);
-        },
-        error => {
-          if ((error.name && error.name === "BrowserAuthError") || (error.status && error.status === 400)) {  
-            this.showLoginError = true;
-          } else {
-              this.errorHandlingService.handleError(error);
-          }
-        });
     }
   
 

@@ -1,12 +1,12 @@
 import { MbscModule } from '@mobiscroll/angular';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { APP_INITIALIZER } from '@angular/core';
 import { LoginComponent, HeaderTitleComponent } from './shared/components';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TranslateModule, TranslateLoader, TranslateService as NgxTranslateService} from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader, TranslateService as NgxTranslateService } from '@ngx-translate/core';
 import { AppComponent } from './app.component';
 import { LocalStorageService } from './services/local-storage';
 import { LoggerService } from './services/logging';
@@ -31,27 +31,32 @@ import { RouteReuseStrategy } from '@angular/router';
 import { CaseRouteReuseStrategy } from './helpers/case-route-resolver.stategy';
 import { CasesStatusComponent } from './components/cases-status/cases-status.component';
 import { VersionComponent } from './components/version.component';
-import { MsalModule, MSAL_INSTANCE, MsalService } from '@azure/msal-angular';
-import { MSALInstanceFactory } from './services/authentication/MSALInstanceFactory';
+import { MsalInterceptor, MsalModule } from '@azure/msal-angular';
+import { config } from '@env/environment';
 
+const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
+
+export const protectedResourceMap: [string, string[]][] = [
+  ['https://graph.microsoft.com/v1.0/me', ['user.read']]
+];
 
 @NgModule({
-  bootstrap: [ AppComponent],
+  bootstrap: [AppComponent],
   declarations: [AppComponent, AppLayoutComponent, PageNotFoundComponent,
-     HeaderTitleComponent, FooterComponent,
-     LoginComponent,
-     HomeComponent,
-     CaseTemplateComponent,
-     RequireAuthDirective,
-     ErrorComponent,
-     AltLayoutComponent,
-     TestComponent,
-     LanguageComponent,
-     CasesStatusComponent,
-     VersionComponent
+    HeaderTitleComponent, FooterComponent,
+    LoginComponent,
+    HomeComponent,
+    CaseTemplateComponent,
+    RequireAuthDirective,
+    ErrorComponent,
+    AltLayoutComponent,
+    TestComponent,
+    LanguageComponent,
+    CasesStatusComponent,
+    VersionComponent
   ],
-  imports: [ 
-    MbscModule,  
+  imports: [
+    MbscModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
@@ -67,7 +72,29 @@ import { MSALInstanceFactory } from './services/authentication/MSALInstanceFacto
     }),
     SharedModule,
     //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    MsalModule
+    MsalModule.forRoot({
+      auth: {
+        clientId: config.microsoftClientId,
+        authority: config.microsoftAuthority + (config.microsoftAuthority.endsWith('/') ? '' : '/') + config.microsoftTenant,
+        validateAuthority: true,
+        redirectUri: config.microsoftRedirectUri,
+        navigateToLoginRequestUrl: true,
+      },
+      cache: {
+        cacheLocation: 'localStorage',
+        storeAuthStateInCookie: isIE, // set to true for IE 11
+      },
+    }, {
+      popUp: !isIE,
+      consentScopes: [
+        'user.read',
+        'openid',
+      ],
+      unprotectedResources: ['https://www.microsoft.com/en-us/'],
+      protectedResourceMap,
+      extraQueryParameters: {}
+    }
+    )
   ],
   providers: [
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
@@ -75,8 +102,11 @@ import { MSALInstanceFactory } from './services/authentication/MSALInstanceFacto
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     // { provide: LOCALE_ID, useValue: "sv-SE" },
     // { provide: LOCALE_ID, deps: [SettingsService], useFactory: (settingsService) => settingsService.getLanguage()},
-    { provide: MSAL_INSTANCE, useFactory: MSALInstanceFactory },
-      MsalService,
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: MsalInterceptor,
+    //   multi: true
+    // },
     {
       provide: APP_INITIALIZER,
       useFactory: initApplication,

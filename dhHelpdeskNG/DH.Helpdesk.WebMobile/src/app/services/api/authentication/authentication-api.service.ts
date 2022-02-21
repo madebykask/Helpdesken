@@ -45,44 +45,44 @@ export class AuthenticationApiService extends HttpApiServiceBase {
 
   microsoftLogin(): Observable<boolean> {
 
-    const accessTokenRequest = {
-      scopes: ["user.read"]
-    }
-    return this.msalService.acquireTokenPopup(accessTokenRequest).pipe(
-      take(1),
-      switchMap(response => {
-        //login successful if there's a token in the response
+    // const accessTokenRequest = {
+    //   scopes: ["user.read"]
+    // }
+    // return this.msalService.acquireTokenPopup(accessTokenRequest).pipe(
+    //   take(1),
+    //   switchMap(response => {
+    //     //login successful if there's a token in the response
         
-        if (response && response.idToken) {
-          const postData = { Email: response.account.username, ClientId: config.clientId, IdToken: response.idToken };
+    //     if (response && response.idToken) {
+    //       const postData = { Email: response.account.username, ClientId: config.clientId, IdToken: response.idToken };
 
-          return this.postJson<any>(this.buildResourseUrl('/api/account/SignInWithMicrosoft', undefined, false), postData)
-            .pipe(
-              take(1),
-              map(data => {
-                let isSuccess = false;
-                // login successful if there's a token in the response
-                if (data && data.access_token) {
-                  const user = CurrentUser.createAuthenticated(data);
-                  user.currentData.name = response.account.username;
-                  user.version = config.version;
+    //       return this.postJson<any>(this.buildResourseUrl('/api/account/SignInWithMicrosoft', undefined, false), postData)
+    //         .pipe(
+    //           take(1),
+    //           map(data => {
+    //             let isSuccess = false;
+    //             // login successful if there's a token in the response
+    //             if (data && data.access_token) {
+    //               const user = CurrentUser.createAuthenticated(data);
+    //               user.currentData.name = response.account.username;
+    //               user.version = config.version;
 
-                  // store user details and token in local storage to keep user logged in between page refreshes
-                  this.localStorageService.setCurrentUser(user);
-                  isSuccess = true;
-                }
-                return isSuccess;
-              }))
-        }
+    //               // store user details and token in local storage to keep user logged in between page refreshes
+    //               this.localStorageService.setCurrentUser(user);
+    //               isSuccess = true;
+    //             }
+    //             return isSuccess;
+    //           }))
+    //     }
         return of(false);
-      }))
+      // }))
   }
 
   microsoftLogout() {
-    if(this.msalService.instance.getAllAccounts().length) {
-      this.msalService.logout();
-      return true;
-    };
+    // if(this.msalService.instance.getAllAccounts().length) {
+    //   this.msalService.logout();
+    //   return true;
+    // };
     return false;
   }
 
