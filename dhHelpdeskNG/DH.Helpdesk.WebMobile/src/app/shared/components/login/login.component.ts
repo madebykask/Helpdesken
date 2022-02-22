@@ -48,6 +48,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private errorHandlingService: ErrorHandlingService,
 
         private msalAuthService: MsalService,
+        
         ) {}
 
     ngOnInit() {
@@ -67,17 +68,34 @@ export class LoginComponent implements OnInit, OnDestroy {
             console.error('Redirect Error: ', authError.errorMessage);
             return;
           }
+          this.showLoginError = false;
+          this.isLoading = true;
     
-          console.log('Redirect Success: ', response);
+          this.authenticationService.microsoftLogin(response).pipe(
+            take(1),
+            switchMap(currentUser => {
+              this.communicationService.publish(Channels.UserLoggedIn, currentUser);
+              return this.userSettingsService.applyUserSettings();
+            }),
+            finalize(() => this.isLoading = false)
+          ).subscribe(res => {
+                this.showLoginError = false;
+                this.router.navigateByUrl(this.returnUrl);
+            },
+            error => {
+              if (error.status && error.status === 400) {
+                  this.showLoginError = true;
+              } else {
+                  this.errorHandlingService.handleError(error);
+              }
+            });
         });
     }
 
     microsoftLogin() {
-
       this.msalAuthService.loginRedirect();
-      
-    }
-  
+    } 
+    
 
     // setLoginDisplay() {
     //   // this.loginDisplay = this.authServiceMsal.instance.getAllAccounts().length > 0;
@@ -104,6 +122,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     onSubmit() {
+
         this.submitted = true;
 
         // stop here if form is invalid

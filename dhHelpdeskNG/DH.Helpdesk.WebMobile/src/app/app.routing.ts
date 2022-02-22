@@ -45,9 +45,7 @@ const appRoutes: Routes = [{
   },
  */
   //no layout routes
-  { path: 'login', component: LoginComponent,     canActivate: [
-    MsalGuard
-  ]},
+  { path: 'login', component: LoginComponent },
   { path: 'error', component: ErrorComponent },
   { path: '',   redirectTo: '/', pathMatch: 'full' },
 

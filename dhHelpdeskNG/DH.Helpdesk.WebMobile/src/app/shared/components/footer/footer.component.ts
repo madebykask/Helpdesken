@@ -57,7 +57,7 @@ export class FooterComponent implements OnInit {
   logout() {
     // reset microsoft login data
     if (this.showMicrosoftLogin) {
-      this.authenticationService.microsoftLogout();
+        this.authenticationService.microsoftLogout();
     }
     this.goTo('/login');
   }

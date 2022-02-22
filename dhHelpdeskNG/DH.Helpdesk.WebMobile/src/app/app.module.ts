@@ -36,9 +36,9 @@ import { config } from '@env/environment';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
-export const protectedResourceMap: [string, string[]][] = [
-  ['https://graph.microsoft.com/v1.0/me', ['user.read']]
-];
+// export const protectedResourceMap: [string, string[]][] = [
+//   ['https://graph.microsoft.com/v1.0/me', ['user.read']]
+// ];
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -78,21 +78,14 @@ export const protectedResourceMap: [string, string[]][] = [
         authority: config.microsoftAuthority + (config.microsoftAuthority.endsWith('/') ? '' : '/') + config.microsoftTenant,
         validateAuthority: true,
         redirectUri: config.microsoftRedirectUri,
-        navigateToLoginRequestUrl: true,
+        // navigateToLoginRequestUrl: true,
       },
       cache: {
         cacheLocation: 'localStorage',
         storeAuthStateInCookie: isIE, // set to true for IE 11
       },
     }, {
-      popUp: !isIE,
-      consentScopes: [
-        'user.read',
-        'openid',
-      ],
-      unprotectedResources: ['https://www.microsoft.com/en-us/'],
-      protectedResourceMap,
-      extraQueryParameters: {}
+      popUp: false
     }
     )
   ],
@@ -100,13 +93,6 @@ export const protectedResourceMap: [string, string[]][] = [
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    // { provide: LOCALE_ID, useValue: "sv-SE" },
-    // { provide: LOCALE_ID, deps: [SettingsService], useFactory: (settingsService) => settingsService.getLanguage()},
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: MsalInterceptor,
-    //   multi: true
-    // },
     {
       provide: APP_INITIALIZER,
       useFactory: initApplication,
@@ -121,10 +107,4 @@ export const protectedResourceMap: [string, string[]][] = [
   exports: [LanguageComponent]
 })
 export class AppModule { }
-
-/* import { registerLocaleData } from '@angular/common';
-import localeSv from '@angular/common/locales/sv';
-
-// the second parameter 'fr' is optional
-registerLocaleData(localeSv, ); */
 

@@ -39,8 +39,8 @@ export class AuthenticationService {
           );
     }
 
-    microsoftLogin(): Observable<CurrentUser> {
-      return this.authApiService.microsoftLogin()
+    microsoftLogin(response): Observable<CurrentUser> {
+      return this.authApiService.microsoftLogin(response)
       .pipe(
           take(1),
           switchMap(isSuccess => {
