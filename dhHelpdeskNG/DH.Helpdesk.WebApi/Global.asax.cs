@@ -20,6 +20,7 @@ namespace DH.Helpdesk.WebApi
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
         {
             Response.Headers.Remove("Server");
+            Response.Headers.Remove("x-aspnet-version");
             Response.Headers.Remove("X-AspNetWebPages-Version");
         }
         protected void Application_EndRequest(object sender, EventArgs e)
