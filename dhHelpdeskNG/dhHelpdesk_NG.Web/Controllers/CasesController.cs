@@ -586,10 +586,10 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CurrentCaseSearch = this.InitCaseSearchModel(customerId, userId);
 
             var m = new JsonCaseIndexViewModel();
-
+            var lang = SessionFacade.CurrentLanguageId;
             var customerUser = _customerUserService.GetCustomerUserSettings(customerId, userId);
             m.CaseSearchFilterData = CreateCaseSearchFilterData(customerId, SessionFacade.CurrentUser, customerUser, SessionFacade.CurrentCaseSearch);
-            m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.OnCaseOverview);
+            m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.OnCaseOverview, lang);
             _caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
 
             m.CaseSetting = GetCaseSettingModel(customerId, userId);
@@ -3211,13 +3211,13 @@ namespace DH.Helpdesk.Web.Controllers
             return "";
         }
 
-        private CaseTemplateTreeModel GetCaseTemplateTreeModel(int customerId, int userId, CaseSolutionLocationShow location)
+        private CaseTemplateTreeModel GetCaseTemplateTreeModel(int customerId, int userId, CaseSolutionLocationShow location, int? languageId)
         {
             var model = new CaseTemplateTreeModel
             {
                 CustomerId = customerId,
                 CaseTemplateCategoryTree =
-                    _caseSolutionService.GetCaseSolutionCategoryTree(customerId, userId, location)
+                    _caseSolutionService.GetCaseSolutionCategoryTree(customerId, userId, location, languageId)
                         .Where(c => c.CaseTemplates == null || (c.CaseTemplates != null && c.CaseTemplates.Any())).ToList()
             };
 
@@ -4995,7 +4995,7 @@ namespace DH.Helpdesk.Web.Controllers
                 customerCaseSolutions.Where(x => x.ConnectedButton == 0 && x.Status > 0)
                     .Select(x => x.CaseSolutionId)
                     .ToList();
-
+            var langId = SessionFacade.CurrentLanguageId;
             m.WorkflowSteps =
                 _caseSolutionService.GetWorkflowSteps(customerId,
                     m.case_,
@@ -5003,7 +5003,8 @@ namespace DH.Helpdesk.Web.Controllers
                     isRelatedCase,
                     SessionFacade.CurrentUser,
                     ApplicationType.Helpdesk,
-                    templateId);
+                    templateId,
+                    langId);
 
             m.CaseMailSetting = new CaseMailSetting(
                 customer.NewCaseEmailList,
@@ -5932,7 +5933,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.MapCaseToCaseInputViewModel(case_, userTimeZone);
             }
 
-            m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.InsideTheCase);
+            m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.InsideTheCase, SessionFacade.CurrentLanguageId);
             m.CasePrintView = new ReportModel(false);
             m.UserHasInvoicePermission = userHasInvoicePermission;
             m.UserHasInventoryViewPermission = userHasInventoryViewPermission;

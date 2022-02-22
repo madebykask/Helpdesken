@@ -9,9 +9,9 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface ICaseSolutionCategoryLanguageRepository : IRepository<CaseSolutionCategoryLanguageEntity>
     {
-        CaseSolutionCategoryLanguageEntity GetCaseSolutionCategoryLanguage(int categoryId, int languageId);
+        CaseSolutionCategoryLanguageEntity GetCaseSolutionCategoryTranslation(int categoryId, int languageId);
         void UpdateOtherLanguageCaseSolutionCategory(CaseSolutionCategoryLanguageEntity caseSolutionCategoryLang);
-        IEnumerable<CaseSolutionCategory> GetCategoryLanguageList(int languageId, int customerId);
+        IEnumerable<CaseSolutionCategory> GetTranslatedCategoryList(int languageId, int customerId);
     }
 
     public class CaseSolutionCategoryLanguageRepository : RepositoryBase<CaseSolutionCategoryLanguageEntity>, ICaseSolutionCategoryLanguageRepository
@@ -22,13 +22,13 @@ namespace DH.Helpdesk.Dal.Repositories
         {
         }
 
-        public CaseSolutionCategoryLanguageEntity GetCaseSolutionCategoryLanguage(int categoryId, int languageId)
+        public CaseSolutionCategoryLanguageEntity GetCaseSolutionCategoryTranslation(int categoryId, int languageId)
         {
             var lang = this.DataContext.CaseSolutionCategoryLanguages.Where(c => c.Category_Id == categoryId && c.Language_Id == languageId).FirstOrDefault();
             return lang;
         }
 
-        public IEnumerable<CaseSolutionCategory> GetCategoryLanguageList(int languageId, int customerId)
+        public IEnumerable<CaseSolutionCategory> GetTranslatedCategoryList(int languageId, int customerId)
         {
             var cats = DataContext.CaseSolutionCategories.AsEnumerable().Where(c => c.Customer_Id == customerId)
                .Select(q => new CaseSolutionCategory
