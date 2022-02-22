@@ -11,6 +11,7 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         CaseSolutionCategoryLanguageEntity GetCaseSolutionCategoryLanguage(int categoryId, int languageId);
         void UpdateOtherLanguageCaseSolutionCategory(CaseSolutionCategoryLanguageEntity caseSolutionCategoryLang);
+        IEnumerable<CaseSolutionCategory> GetCategoryLanguageList(int languageId, int customerId);
     }
 
     public class CaseSolutionCategoryLanguageRepository : RepositoryBase<CaseSolutionCategoryLanguageEntity>, ICaseSolutionCategoryLanguageRepository
@@ -27,6 +28,28 @@ namespace DH.Helpdesk.Dal.Repositories
             return lang;
         }
 
+        public IEnumerable<CaseSolutionCategory> GetCategoryLanguageList(int languageId, int customerId)
+        {
+            var cats = DataContext.CaseSolutionCategories.AsEnumerable().Where(c => c.Customer_Id == customerId)
+               .Select(q => new CaseSolutionCategory
+               {
+                   Id = q.Id,
+                   Name = q.Name
+               }).OrderBy(c => c.Name).ToList();
+         
+            foreach (var cat in cats)
+            {
+                var catLang = DataContext.CaseSolutionCategoryLanguages.AsEnumerable().Where(c => c.Category_Id == cat.Id && c.Language_Id == languageId).Select(x => x.CaseSolutionCategoryName).FirstOrDefault();
+                if(catLang != null)
+                {
+                    cat.Name = catLang;
+                }
+                   
+            }
+
+            return cats.ToList();
+
+        }
         public void UpdateOtherLanguageCaseSolutionCategory(CaseSolutionCategoryLanguageEntity caseSolutionCategoryLang)
         {
             var catLang = DataContext.CaseSolutionCategoryLanguages.SingleOrDefault(l => l.Category_Id == caseSolutionCategoryLang.Category_Id && l.Language_Id == caseSolutionCategoryLang.Language_Id);

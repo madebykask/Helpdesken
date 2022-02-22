@@ -94,7 +94,7 @@
                                         @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.DropDownListFor(model => model.CaseSolution.CaseSolutionCategory_Id, Model.CsCategories, "")
+                                        @Html.DropDownListFor(model => model.CaseSolution.CaseSolutionCategory_Id, Model.CsCategories, "", new { id = "CaseSolutionCategory" })
                                     </td>
                                 </tr>
                                 <tr>
@@ -2765,6 +2765,7 @@
             $("#Information").prop("disabled", false);
             $("#languageList").prop("disabled", false);
             $("#hidId").prop("disabled", false);
+            $("#CaseSolutionCategory").prop("disabled", false);
             $(".bootstrap-switch-container").hide();
         })
     }

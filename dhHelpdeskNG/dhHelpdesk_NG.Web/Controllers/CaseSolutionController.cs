@@ -1215,6 +1215,7 @@ namespace DH.Helpdesk.Web.Controllers
             var caseSolution = this._caseSolutionService.GetCaseSolution(id);
 
             var language = _caseSolutionService.GetCaseSolutionLanguage(id, languageId);
+            
 
             if (caseSolution == null)
                 return new HttpNotFoundResult("No case solution found...");
@@ -1234,8 +1235,21 @@ namespace DH.Helpdesk.Web.Controllers
                 model.CaseSolution.ShortDescription = language.ShortDescription;
                 model.CaseSolution.Name = language.CaseSolutionName;
                 model.CaseSolution.Information = language.Information;
+                if(caseSolution.CaseSolutionCategory_Id.HasValue)
+                {
+                    //var catLangList = this._caseSolutionService.GetCategoryLanguageList(languageId, SessionFacade.CurrentCustomer.Id);
+                    var catLangList = this._caseSolutionService.GetCategoryLanguageList(languageId, SessionFacade.CurrentCustomer.Id)
+                                         .Select(x => new SelectListItem
+                                         {
+                                             Text = x.Name,
+                                             Value = x.Id.ToString(),
+                                             Selected = x.Id == caseSolution.CaseSolutionCategory_Id
+                                         }).ToList();
 
-                //Disable all fields in model
+                    var categoryLang = _caseSolutionService.GetCaseSolutionCategoryLanguage(caseSolution.CaseSolutionCategory_Id.Value, languageId);
+                    model.CsCategories = catLangList;
+                }
+               
             }
             ViewBag.ShowLanguageList = true;
             return this.View(model);
@@ -1463,6 +1477,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (caseSolutionInputViewModel.LanguageId != SessionFacade.CurrentCustomer.Language_Id)
             //hrmm
             {
+                var lang = SessionFacade.CurrentLanguageId;
                 //Only this fields should be updated
                 var caseSolutionLang = new CaseSolutionLanguageEntity();
                 caseSolutionLang.Language_Id = caseSolutionInputViewModel.LanguageId;
@@ -2674,15 +2689,21 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult NewCategory(CaseSolutionCategory caseSolutionCategory)
+        public ActionResult NewCategory(CaseSolutionCategoryViewModel caseCatView)
         {
+            var caseSolutionCat = new CaseSolutionCategory()
+                {
+                IsDefault = caseCatView.IsDefault,
+                Name = caseCatView.Name,
+                Customer_Id = Convert.ToInt32(SessionFacade.CurrentCustomer.CustomerID)
+            };
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._caseSolutionService.SaveCaseSolutionCategory(caseSolutionCategory, out errors);
+            this._caseSolutionService.SaveCaseSolutionCategory(caseSolutionCat, out errors);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "casesolution");
             ViewBag.ShowLanguageList = false;
-            return this.View(caseSolutionCategory);
+            return this.View(caseCatView);
         }
 
         public ActionResult EditCategory(int id, int? languageId)

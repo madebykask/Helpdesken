@@ -57,6 +57,7 @@ namespace DH.Helpdesk.Services.Services
         CaseSolutionLanguageEntity GetCaseSolutionLanguage(int id, int language);
         void UpdateCaseSolutionLanguage(CaseSolutionLanguageEntity caseLang);
         void UpdateCaseSolutionCategoryLanguage(CaseSolutionCategoryLanguageEntity caseLang);
+        IEnumerable<CaseSolutionCategory> GetCategoryLanguageList(int languageId, int customerId);
     }
 
     public class CaseSolutionService : BaseCaseSolutionService, ICaseSolutionService
@@ -1664,6 +1665,10 @@ namespace DH.Helpdesk.Services.Services
         public CaseSolutionCategoryLanguageEntity GetCaseSolutionCategoryLanguage(int categoryId, int languageId)
         {
             return _caseSolutionCategoryLanguageRepository.GetCaseSolutionCategoryLanguage(categoryId, languageId);
+        }
+        public IEnumerable<CaseSolutionCategory> GetCategoryLanguageList(int languageId, int customerId)
+        {
+            return _caseSolutionCategoryLanguageRepository.GetCategoryLanguageList(languageId, customerId);
         }
         public CaseSolutionLanguageEntity GetCaseSolutionLanguage(int id, int languageId)
         {
