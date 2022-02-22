@@ -31,7 +31,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { CaseRouteReuseStrategy } from './helpers/case-route-resolver.stategy';
 import { CasesStatusComponent } from './components/cases-status/cases-status.component';
 import { VersionComponent } from './components/version.component';
-import { MsalModule, MsalService, MSAL_CONFIG } from '@azure/msal-angular';
+import { MsalAngularConfiguration, MsalModule, MsalService, MSAL_CONFIG, MSAL_CONFIG_ANGULAR } from '@azure/msal-angular';
 import { config } from '@env/environment';
 import { Configuration } from 'msal';
 
@@ -88,6 +88,10 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
     {
       provide: MSAL_CONFIG,
       useFactory: MSALConfigFactory
+    },
+    {
+      provide: MSAL_CONFIG_ANGULAR,
+      useFactory: MSALAngularConfigFactory
     }, MsalService
   ],
   exports: [LanguageComponent]
@@ -109,4 +113,11 @@ export function MSALConfigFactory(): Configuration {
       storeAuthStateInCookie: isIE // set to true for IE 11
     },
   };
+}
+
+export function MSALAngularConfigFactory(): MsalAngularConfiguration {
+  return {
+    consentScopes: [],
+    protectedResourceMap: []
+  }
 }
