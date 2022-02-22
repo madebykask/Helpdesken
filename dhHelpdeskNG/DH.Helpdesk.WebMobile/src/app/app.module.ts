@@ -31,14 +31,11 @@ import { RouteReuseStrategy } from '@angular/router';
 import { CaseRouteReuseStrategy } from './helpers/case-route-resolver.stategy';
 import { CasesStatusComponent } from './components/cases-status/cases-status.component';
 import { VersionComponent } from './components/version.component';
-import { MsalInterceptor, MsalModule } from '@azure/msal-angular';
+import { MsalModule, MsalService, MSAL_CONFIG } from '@azure/msal-angular';
 import { config } from '@env/environment';
+import { Configuration } from 'msal';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
-
-// export const protectedResourceMap: [string, string[]][] = [
-//   ['https://graph.microsoft.com/v1.0/me', ['user.read']]
-// ];
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -72,22 +69,7 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
     }),
     SharedModule,
     //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    MsalModule.forRoot({
-      auth: {
-        clientId: config.microsoftClientId,
-        authority: config.microsoftAuthority + (config.microsoftAuthority.endsWith('/') ? '' : '/') + config.microsoftTenant,
-        validateAuthority: true,
-        redirectUri: config.microsoftRedirectUri,
-        // navigateToLoginRequestUrl: true,
-      },
-      cache: {
-        cacheLocation: 'localStorage',
-        storeAuthStateInCookie: isIE, // set to true for IE 11
-      },
-    }, {
-      popUp: false
-    }
-    )
+    MsalModule
   ],
   providers: [
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
@@ -102,9 +84,29 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
     {
       provide: RouteReuseStrategy,
       useClass: CaseRouteReuseStrategy
-    }
+    },
+    {
+      provide: MSAL_CONFIG,
+      useFactory: MSALConfigFactory
+    }, MsalService
   ],
   exports: [LanguageComponent]
 })
 export class AppModule { }
 
+export function MSALConfigFactory(): Configuration {
+  return {
+    auth: {
+      clientId: config.microsoftClientId,
+      authority: config.microsoftAuthority + (config.microsoftAuthority.endsWith('/') ? '' : '/') + config.microsoftTenant,
+      validateAuthority: true,
+      redirectUri: config.microsoftRedirectUri
+      // ,
+      // postLogoutRedirectUri: "Enter_the_Logout_Redirect_Uri_Here", // This is your logout redirect URI ex:https://localhost:4200/logout
+    },
+    cache: {
+      cacheLocation: "localStorage",
+      storeAuthStateInCookie: isIE // set to true for IE 11
+    },
+  };
+}

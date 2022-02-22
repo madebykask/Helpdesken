@@ -8,7 +8,7 @@ import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
 import { TestComponent } from './components/test/test.component';
 import { CaseTemplateComponent } from './components/case-template/case-template.component';
 import { LanguageComponent } from './components/language/language/language.component';
-import { MsalGuard } from '@azure/msal-angular';
+
 
 const appRoutes: Routes = [{
     path: '',
