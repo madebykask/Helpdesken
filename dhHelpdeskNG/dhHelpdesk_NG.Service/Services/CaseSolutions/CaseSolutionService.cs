@@ -54,7 +54,7 @@ namespace DH.Helpdesk.Services.Services
         IList<int> GetWorkflowCaseSolutionIds(int customerId, int? userId = null);
         
         bool CheckIfExtendedFormExistForSolutionsInCategories(int customerId, List<int> list);
-        CaseSolutionLanguageEntity GetCaseSolutionLanguage(int id, int language);
+        CaseSolutionLanguageEntity GetCaseSolutionTranslation(int id, int language);
         void UpdateCaseSolutionLanguage(CaseSolutionLanguageEntity caseLang);
         void UpdateCaseSolutionCategoryLanguage(CaseSolutionCategoryLanguageEntity caseLang);
         IEnumerable<CaseSolutionCategory> GetCategoryLanguageList(int languageId, int customerId);
@@ -200,7 +200,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach(var sol in solutionsWithoutCategory)
                 {
-                    var solLang = _caseSolutionLanguageRepository.GetCaseSolutionLanguage(sol.CategoryId, languageId.Value);
+                    var solLang = _caseSolutionLanguageRepository.GetCaseSolutionTranslation(sol.CategoryId, languageId.Value);
                     if(solLang != null)
                     {
                         //E.G Templatename
@@ -217,7 +217,7 @@ namespace DH.Helpdesk.Services.Services
                     }
                     foreach(var temp in sol.CaseTemplates)
                     {
-                        var tempLang = _caseSolutionLanguageRepository.GetCaseSolutionLanguage(temp.CaseTemplateId, languageId.Value);
+                        var tempLang = _caseSolutionLanguageRepository.GetCaseSolutionTranslation(temp.CaseTemplateId, languageId.Value);
                         if(tempLang != null)
                         {
                             temp.CaseTemplateName = tempLang.CaseSolutionName;
@@ -251,7 +251,7 @@ namespace DH.Helpdesk.Services.Services
         public IList<CaseTemplateData> GetSelfServiceCaseTemplates(int customerId)
         {
             // x.ConnectedButton != 0 - exclude workflow steps templates
-            return
+           var ret = 
                 CaseSolutionRepository.GetMany(
                         x => x.Customer_Id == customerId &&
                              x.ShowInSelfService &&
@@ -271,6 +271,7 @@ namespace DH.Helpdesk.Services.Services
                     })
                     .ToList();
 
+            return ret;
         }
 
         //todo: review. not performance optimised
@@ -415,10 +416,10 @@ namespace DH.Helpdesk.Services.Services
                         //If value exist in NextStepState - use it. Otherwise check if caseSolution.StateSecondary_id have value, otherwise return 0;
                         NextStep = cs.NextStepState ?? (cs.StateSecondary?.StateSecondaryId ?? 0) 
                     };
-                    if (languageId != null && languageId.HasValue)
+                    if (languageId != null && languageId.HasValue && languageId != 0)
                     {
                         //If translation exists - Use it - otherwise name of template in tblCaseSolution
-                        var tempLang = _caseSolutionLanguageRepository.GetCaseSolutionLanguage(workFlowStepModel.CaseTemplateId, languageId.Value);
+                        var tempLang = _caseSolutionLanguageRepository.GetCaseSolutionTranslation(workFlowStepModel.CaseTemplateId, languageId.Value);
                         if (tempLang != null)
                         {
                             workFlowStepModel.Name = tempLang.CaseSolutionName;
@@ -1714,9 +1715,9 @@ namespace DH.Helpdesk.Services.Services
         {
             return _caseSolutionCategoryLanguageRepository.GetTranslatedCategoryList(languageId, customerId);
         }
-        public CaseSolutionLanguageEntity GetCaseSolutionLanguage(int id, int languageId)
+        public CaseSolutionLanguageEntity GetCaseSolutionTranslation(int id, int languageId)
         {
-            return _caseSolutionLanguageRepository.GetCaseSolutionLanguage(id,  languageId);
+            return _caseSolutionLanguageRepository.GetCaseSolutionTranslation(id,  languageId);
         }
 
         public CaseSolution GetCaseSolution(int id)

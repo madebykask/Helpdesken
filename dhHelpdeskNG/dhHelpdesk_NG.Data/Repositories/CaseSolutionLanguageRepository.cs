@@ -8,7 +8,7 @@
 
     public interface ICaseSolutionLanguageRepository : IRepository<CaseSolutionLanguageEntity>
     {
-        CaseSolutionLanguageEntity GetCaseSolutionLanguage(int casSolutionId, int languageId);
+        CaseSolutionLanguageEntity GetCaseSolutionTranslation(int casSolutionId, int languageId);
         void UpdateOtherLanguageCaseSolution(CaseSolutionLanguageEntity caseSolutionLang);
     }
 
@@ -19,7 +19,7 @@
             : base(databaseFactory)
         {
         }
-        public CaseSolutionLanguageEntity GetCaseSolutionLanguage(int casSolutionId, int languageId)
+        public CaseSolutionLanguageEntity GetCaseSolutionTranslation(int casSolutionId, int languageId)
         {
             var lang = this.DataContext.CaseSolutionLanguages.Where(c => c.CaseSolution_Id == casSolutionId && c.Language_Id == languageId).FirstOrDefault();
             return lang;

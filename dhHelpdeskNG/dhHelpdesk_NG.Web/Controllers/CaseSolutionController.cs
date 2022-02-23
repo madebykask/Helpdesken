@@ -1214,7 +1214,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var caseSolution = this._caseSolutionService.GetCaseSolution(id);
 
-            var language = _caseSolutionService.GetCaseSolutionLanguage(id, languageId);
+            var language = _caseSolutionService.GetCaseSolutionTranslation(id, languageId);
             
 
             if (caseSolution == null)

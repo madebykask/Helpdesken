@@ -2517,7 +2517,12 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             var workflowCaseSolutions = _caseSolutionService.GetWorkflowCaseSolutionIds(customerId);
-            var lang = SessionFacade.CurrentLanguageId;
+            int lang = SessionFacade.CurrentLanguageId;
+            if (lang == SessionFacade.CurrentCustomer.Language_Id)
+            {
+                lang = 0;
+            }
+
             if (caseEntity != null)
             {
                 var isRelatedCase = caseId > 0 && _caseService.IsRelated(caseId);

@@ -587,6 +587,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var m = new JsonCaseIndexViewModel();
             var lang = SessionFacade.CurrentLanguageId;
+
             var customerUser = _customerUserService.GetCustomerUserSettings(customerId, userId);
             m.CaseSearchFilterData = CreateCaseSearchFilterData(customerId, SessionFacade.CurrentUser, customerUser, SessionFacade.CurrentCaseSearch);
             m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.OnCaseOverview, lang);
