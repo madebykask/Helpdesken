@@ -417,6 +417,7 @@ namespace DH.Helpdesk.Services.Services
                     };
                     if (languageId != null && languageId.HasValue)
                     {
+                        //If translation exists - Use it - otherwise name of template in tblCaseSolution
                         var tempLang = _caseSolutionLanguageRepository.GetCaseSolutionLanguage(workFlowStepModel.CaseTemplateId, languageId.Value);
                         if (tempLang != null)
                         {
