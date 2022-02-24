@@ -296,7 +296,6 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
             }
                 
-           
             var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
             var isMultiCustomerMode = globalSettings.MultiCustomersSearch.ToBool();
             // check only if multi customer is not enabled. Allow user to see own cases for different customers.
