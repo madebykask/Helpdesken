@@ -88,3 +88,9 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Upkeeper' 
     artifactName: 'DH.Helpdesk.UpKeeper'
+
+- task: PublishBuildArtifacts@1
+  displayName: PublishBuildArtifacts-TaskScheduler
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.TaskScheduler' 
+    artifactName: 'DH.Helpdesk.TaskScheduler'
