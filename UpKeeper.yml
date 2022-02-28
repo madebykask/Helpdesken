@@ -59,6 +59,12 @@ steps:
     Contents: '**'
     TargetFolder: '$(build.artifactstagingdirectory)/DH.Helpdesk.Upkeeper'
 
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)/dhHelpdeskNG/DH.Helpdesk.TaskScheduler/bin/$(buildConfiguration)'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)/DH.Helpdesk.TaskScheduler'
+    
 # - task: PublishBuildArtifacts@1
 #   inputs:
 #     pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
