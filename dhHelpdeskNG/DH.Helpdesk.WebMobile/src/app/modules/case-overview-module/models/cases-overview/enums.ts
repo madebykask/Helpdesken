@@ -17,6 +17,8 @@ export enum CaseStandardSearchFilters {
 }
 
 export enum FilterFields {
+  InitiatorFilter,
+  InitiatorSearchScopeFilter,
   RegionFilter,
   DepartmentFilter,
   CaseTypeFilter,

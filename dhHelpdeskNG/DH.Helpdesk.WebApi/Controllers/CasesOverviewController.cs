@@ -394,7 +394,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             if (ids == null)
                 return ret;
 
-            var depIds = ids.Where(x => x > 0).ToList();
+            var depIds = ids.Where(x => x > 0 || x == int.MinValue).ToList();
             if (depIds.Any())
                 ret = string.Join(",", depIds);
             return ret;

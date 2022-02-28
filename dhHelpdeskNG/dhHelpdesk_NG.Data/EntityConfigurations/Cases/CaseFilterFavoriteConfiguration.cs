@@ -7,19 +7,21 @@
     {
         internal CaseFilteFavoriteConfiguration()
         {            
-            this.HasKey(f => f.Id);            
+            this.HasKey(f => f.Id);
 
             this.Property(f => f.Customer_Id).IsRequired();
             this.Property(f => f.User_Id).IsRequired();
             this.Property(f => f.Name).IsRequired().HasMaxLength(80);
 
+            this.Property(f => f.InitiatorFilter).IsOptional().HasMaxLength(200);
+            this.Property(f => f.InitiatorSearchScopeFilter).IsOptional().HasMaxLength(200);
             this.Property(f => f.AdministratorFilter).IsOptional().HasMaxLength(200);
             this.Property(f => f.CaseTypeFilter).IsOptional().HasMaxLength(200);
             this.Property(f => f.ClosingReasonFilter).IsOptional().HasMaxLength(200);
-            this.Property(f => f.DepartmentFilter).IsOptional().HasMaxLength(200);            
+            this.Property(f => f.DepartmentFilter).IsOptional().HasMaxLength(200);
             this.Property(f => f.PriorityFilter).IsOptional().HasMaxLength(200);
             this.Property(f => f.ProductAreaFilter).IsOptional().HasMaxLength(200);
-            this.Property(f => f.RegionFilter).IsOptional().HasMaxLength(200);            
+            this.Property(f => f.RegionFilter).IsOptional().HasMaxLength(200);
             this.Property(f => f.RemainingTimeFilter).IsOptional().HasMaxLength(200);
             this.Property(f => f.ResponsibleFilter).IsOptional().HasMaxLength(200);
             this.Property(f => f.StatusFilter).IsOptional().HasMaxLength(200);

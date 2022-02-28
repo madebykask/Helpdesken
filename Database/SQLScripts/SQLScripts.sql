@@ -55,6 +55,25 @@ IF(OBJECT_ID('tblCaseSolution_tblLanguage', 'U') IS NULL)
 
 	END
 GO
+
+RAISERROR ('Add Column InitiatorFilter to tblCaseFilterFavorite', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCaseFilterFavorite','InitiatorFilter') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblCaseFilterFavorite
+		ADD [InitiatorFilter] nvarchar(200) Null
+	End
+
+Go
+
+RAISERROR ('Add Column InitiatorSearchScopeFilter to tblCaseFilterFavorite', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCaseFilterFavorite','InitiatorSearchScopeFilter') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblCaseFilterFavorite
+		ADD InitiatorSearchScopeFilter nvarchar(200) Null
+	End
+
+Go
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.54'
 GO
