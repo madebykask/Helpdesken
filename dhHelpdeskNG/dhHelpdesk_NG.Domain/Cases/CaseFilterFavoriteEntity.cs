@@ -8,9 +8,11 @@ namespace DH.Helpdesk.Domain.Cases
     public class CaseFilterFavoriteEntity : Entity
     {
         public int Customer_Id { get; set; }
-        public int User_Id { get; set; }    
-   
-		public string Name { get; set; }
+        public int User_Id { get; set; }
+        public string Name { get; set; }
+
+        public string InitiatorFilter { get; set; }
+        public string InitiatorSearchScopeFilter { get; set; }
 		public string RegionFilter { get; set; }
 		public string DepartmentFilter { get; set; }		
 		public string CaseTypeFilter { get; set; }

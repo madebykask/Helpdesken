@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CasesOverviewFilter } from '../../models/cases-overview/cases-overview-filter.model';
 import { FavoriteFilterModel, CustomerFavoriteFilterModel } from '../../models/cases-overview/favorite-filter.model';
-import { FilterFields, CaseStandardSearchFilters } from '../../models/cases-overview/enums';
+import { FilterFields, CaseStandardSearchFilters, InitiatorSearchScope } from '../../models/cases-overview/enums';
 import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
 import { SearchFilterApiService } from './search-filter-api.service';
 import { map, catchError } from 'rxjs/operators';
@@ -61,6 +61,15 @@ export class SearchFilterService {
       for (const fieldKey of Object.keys(selectedFilter.fields)) {
           const filterField = <FilterFields>FilterFields[fieldKey];
           switch (filterField) {
+            case FilterFields.InitiatorFilter:
+              filter.Initiator = this.getFilterFieldValue(fieldKey, selectedFilter.fields);
+              break;
+            case FilterFields.InitiatorSearchScopeFilter:
+              filter.InitiatorSearchScope = this.getFilterFieldSingleValue(fieldKey, selectedFilter.fields);
+              filter.InitiatorSearchScope = filter.InitiatorSearchScope == null 
+                ? +InitiatorSearchScope.UserAndIsAbout 
+                : filter.InitiatorSearchScope
+              break;
             case FilterFields.RegionFilter:
               filter.RegionIds = this.getFilterFieldMultiValue(fieldKey, selectedFilter.fields);
               break;
@@ -121,6 +130,15 @@ export class SearchFilterService {
           }
       }
     }
+  }
+
+  getFilterFieldValue(fieldKey: string, fields: { [key: string]: string }): string | null {
+    let res = null;
+    if (fieldKey in fields) {
+      const fieldVal = fields[fieldKey];
+      res = fieldVal;
+    }
+    return res;
   }
 
   getFilterFieldSingleValue(fieldKey: string, fields: { [key: string]: string }): number | null {

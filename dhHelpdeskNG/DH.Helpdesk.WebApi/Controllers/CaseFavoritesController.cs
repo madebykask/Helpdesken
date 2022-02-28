@@ -55,7 +55,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         public async Task<List<CustomerCaseFavoriteFilterModel>> ForCurrentUser()
         {
             var model = new List<CustomerCaseFavoriteFilterModel>();
-            var customers = _customerUserService.GetCustomerUsersForHomeIndexPage(UserId).Where(c => c.Active == 1);
+            var customers = _customerUserService.GetCustomerUsersForHomeIndexPage(UserId).Where(c => c.Active == 1).ToArray();
             if (!customers.Any())
                 return model;
 
