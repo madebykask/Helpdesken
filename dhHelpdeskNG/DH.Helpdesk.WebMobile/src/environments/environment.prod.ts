@@ -15,5 +15,6 @@ export const config = {
   microsoftClientId: 'Microsoft.ClientId',
   microsoftTenant: 'Microsoft.Tenant',
   microsoftAuthority: 'Microsoft.Authority',
-  microsoftRedirectUri: 'Microsoft.RedirectUri'
+  microsoftRedirectUri: 'Microsoft.RedirectUri',
+  microsoftDefaultAuthority : "https://login.microsoftonline.com/common/login"
 };
