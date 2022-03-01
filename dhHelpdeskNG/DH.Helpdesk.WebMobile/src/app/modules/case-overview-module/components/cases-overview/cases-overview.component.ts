@@ -299,7 +299,8 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
                            this.selectedFilterId.startsWith(CaseOverviewConstants.CaseOverviewCustomerPrefix);
     this.filter = new CasesOverviewFilter();
     this.filter.FreeTextSearch = this.filtersForm.controls.freeSearch.value;
-    this.filter.InitiatorSearchScope = +InitiatorSearchScope.UserAndIsAbout;
+    //this.filter.InitiatorFilter = this.filtersForm.controls.InitiatorFilter.value;
+    this.filter.InitiatorSearchScope =  +InitiatorSearchScope.UserAndIsAbout;
     this.filter.PageSize = this.pageSize || PagingConstants.pageSize;
     this.filter.Page = PagingConstants.page;
     this.filter.Ascending = this.selectedSortFieldOrder === SortOrder.SortAsc;

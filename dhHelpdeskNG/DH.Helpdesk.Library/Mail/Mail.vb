@@ -193,17 +193,21 @@ Public Class Mail
                     Dim sLinkTextSelfService As String = Mid(sBody, iPos1 + 5, iPos2 - iPos1 - 5)
 
                     If objGlobalSettings.DBVersion > "5" Then
-                        sLinkSelfService = "<br><a href=""" & sProtocol & "://" & objGlobalSettings.ExternalSite & "/case/index/" & sEMailLogGUID & """>" & sLinkTextSelfService & "</a>"
+                        'sLinkSelfService = "<br><a href=""" & sProtocol & "://" & objGlobalSettings.ExternalSite & "/case/index/" & sEMailLogGUID & """>" & sLinkTextSelfService & "</a>"
+                        sLinkSelfService = "<a href=""" & sProtocol & "://" & objGlobalSettings.ExternalSite & "/case/index/" & sEMailLogGUID & """>" & sLinkTextSelfService & "</a>"
                     Else
-                        sLinkSelfService = "<br><a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & "/CI.asp?Id=" & objCase.CaseGUID & """>" & sLinkTextSelfService & "</a>"
+                        'sLinkSelfService = "<br><a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & "/CI.asp?Id=" & objCase.CaseGUID & """>" & sLinkTextSelfService & "</a>"
+                        sLinkSelfService = "<a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & "/CI.asp?Id=" & objCase.CaseGUID & """>" & sLinkTextSelfService & "</a>"
                     End If
 
                     sBody = Replace(sBody, sTextToReplace, sLinkSelfService, 1, 1)
                 Else
                     If objGlobalSettings.DBVersion > "5" Then
-                        sLinkSelfService = "<br><a href=""" & sProtocol & "://" & objGlobalSettings.ExternalSite & "/case/index/" & sEMailLogGUID & """>" & sProtocol & "://" & objGlobalSettings.ExternalSite & "/case/index/" & sEMailLogGUID & "</a>"
+                        'sLinkSelfService = "<br><a href=""" & sProtocol & "://" & objGlobalSettings.ExternalSite & "/case/index/" & sEMailLogGUID & """>" & sProtocol & "://" & objGlobalSettings.ExternalSite & "/case/index/" & sEMailLogGUID & "</a>"
+                        sLinkSelfService = "<a href=""" & sProtocol & "://" & objGlobalSettings.ExternalSite & "/case/index/" & sEMailLogGUID & """>" & sProtocol & "://" & objGlobalSettings.ExternalSite & "/case/index/" & sEMailLogGUID & "</a>"
                     Else
-                        sLinkSelfService = "<br><a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & "/CI.asp?Id=" & objCase.CaseGUID & """>" & sProtocol & "://" & objGlobalSettings.ServerName & "/CI.asp?Id=" & objCase.CaseGUID & "</a>"
+                        'sLinkSelfService = "<br><a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & "/CI.asp?Id=" & objCase.CaseGUID & """>" & sProtocol & "://" & objGlobalSettings.ServerName & "/CI.asp?Id=" & objCase.CaseGUID & "</a>"
+                        sLinkSelfService = "<a href=""" & sProtocol & "://" & objGlobalSettings.ServerName & "/CI.asp?Id=" & objCase.CaseGUID & """>" & sProtocol & "://" & objGlobalSettings.ServerName & "/CI.asp?Id=" & objCase.CaseGUID & "</a>"
                     End If
 
                     sBody = Replace(sBody, "[#98]", sLinkSelfService, 1, 1)

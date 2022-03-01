@@ -102,7 +102,7 @@ export function MSALConfigFactory(): Configuration {
   return {
     auth: {
       clientId: config.microsoftClientId,
-      authority: config.microsoftAuthority + (config.microsoftAuthority.endsWith('/') ? '' : '/') + config.microsoftTenant,
+      authority: config.microsoftShowLogin ? config.microsoftAuthority + (config.microsoftAuthority.endsWith('/') ? '' : '/') + config.microsoftTenant : config.microsoftDefaultAuthority,
       validateAuthority: true,
       redirectUri: config.microsoftRedirectUri
       // ,

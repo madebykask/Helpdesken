@@ -21,13 +21,15 @@
                 return;
             }
 
+            entity.InitiatorFilter = businessModel.Fields.InitiatorFilter;
+            entity.InitiatorSearchScopeFilter = businessModel.Fields.InitiatorSearchScopeFilter.GetSelectedStrOrNull();
             entity.AdministratorFilter = businessModel.Fields.AdministratorFilter.GetSelectedStrOrNull();
             entity.CaseTypeFilter = businessModel.Fields.CaseTypeFilter.GetSelectedStrOrNull();
             entity.ClosingReasonFilter = businessModel.Fields.ClosingReasonFilter.GetSelectedStrOrNull();
             entity.DepartmentFilter = businessModel.Fields.DepartmentFilter.GetSelectedStrOrNull();
             entity.PriorityFilter = businessModel.Fields.PriorityFilter.GetSelectedStrOrNull();
             entity.ProductAreaFilter = businessModel.Fields.ProductAreaFilter.GetSelectedStrOrNull();
-            entity.RegionFilter = businessModel.Fields.RegionFilter.GetSelectedStrOrNull();            
+            entity.RegionFilter = businessModel.Fields.RegionFilter.GetSelectedStrOrNull();
             entity.RemainingTimeFilter = businessModel.Fields.RemainingTimeFilter.GetSelectedStrOrNull();
             entity.ResponsibleFilter = businessModel.Fields.ResponsibleFilter.GetSelectedStrOrNull();
             entity.StatusFilter = businessModel.Fields.StatusFilter.GetSelectedStrOrNull();
