@@ -19,23 +19,25 @@ namespace DH.Helpdesk.WebApi.Controllers
     public class CaseTemplatesController : BaseApiController
     {
         private readonly ITranslateCacheService _translateCacheService;
-        private readonly IBaseCaseSolutionService _caseSolutionService;
+        private readonly IBaseCaseSolutionService _baseCaseSolutionService;
         private readonly IFinishingCauseService _finishingCauseService;
         private readonly IProductAreaService _productAreaService;
         private readonly ICaseTypeService _caseTypeService;
         private readonly IUserService _userService;
         private readonly ICustomerUserService _customerUserService;
         private readonly IMapper _mapper;
-        
-        public CaseTemplatesController(IBaseCaseSolutionService caseSolutionService, ITranslateCacheService translateCacheService,
+        private readonly ICaseSolutionService _caseSolutionService;
+
+        public CaseTemplatesController(IBaseCaseSolutionService baseCaseSolutionService, ITranslateCacheService translateCacheService,
             IFinishingCauseService finishingCauseService,
             IProductAreaService productAreaService,
             ICaseTypeService caseTypeService,
             IUserService userService,
             IMapper mapper,
-            ICustomerUserService customerUserService)
+            ICustomerUserService customerUserService,
+            ICaseSolutionService caseSolutionService)
         {
-            _caseSolutionService = caseSolutionService;
+            _baseCaseSolutionService = baseCaseSolutionService;
             _translateCacheService = translateCacheService;
             _finishingCauseService = finishingCauseService;
             _productAreaService = productAreaService;
@@ -43,6 +45,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _userService = userService;
             _mapper = mapper;
             _customerUserService = customerUserService;
+            _caseSolutionService = caseSolutionService;
         }
 
         [HttpGet]
@@ -54,12 +57,14 @@ namespace DH.Helpdesk.WebApi.Controllers
             if (!customers.Any())
                 return model;
 
-            var caseSolutions = await _caseSolutionService.GetCustomersMobileCaseSolutionsAsync(customers.Select(c => c.Customer.Customer_Id).ToList());
+            var caseSolutions = await _baseCaseSolutionService.GetCustomersMobileCaseSolutionsAsync(customers.Select(c => c.Customer.Customer_Id).ToList());
 
             var translatedCaseSolutions = caseSolutions.Apply(item =>
             {
-                item.Name = _translateCacheService.GetMasterDataTextTranslation(item.Name, langId);
+                item.Name = _caseSolutionService.GetCaseSolutionTranslation(item.CaseSolutionId, langId).CaseSolutionName;
                 item.CategoryName = _translateCacheService.GetMasterDataTextTranslation(item.CategoryName, langId);
+                //item.Name = "Kattas trans";
+                //item.CategoryName = "Kattas Kategori";
             });
 
             model = customers.Where(c => caseSolutions.Any(cs => cs.CustomerId == c.Customer.Customer_Id))
@@ -90,7 +95,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         public async Task<IHttpActionResult> Get([FromUri]int templateId, [FromUri] int cid, [FromUri] int langId,
             [FromUri] bool mobileOnly = false)
         {
-            var caseSolution = await _caseSolutionService.GetCaseSolutionAsync(templateId);
+            var caseSolution = await _baseCaseSolutionService.GetCaseSolutionAsync(templateId);
 
             if (caseSolution == null)
                 return NotFound();
