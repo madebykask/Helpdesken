@@ -19,12 +19,11 @@ namespace upKeeper2Helpdesk.entities
 		public string HardwareId { get; set; }
 		public string MACAddress { get; set; }
 		public string Location2 { get; set; }
-
 		public int? Domain_Id { get; set; }
 
 		public DateTime ScanDate { get; set; }
 		public DateTime? ScrapDate { get; set; }
-
+		public DateTime? WarrantyEndDate { get; set; }
 		public User ClientInformation { get; set; }
 		public List<Software> Software { get; set; }
 		public List<Hotfix> Hotfix { get; set; }

@@ -63,6 +63,8 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 settings.ContractFieldsSettingsModel.AccountingDimension5FieldSettingModel);
             var document = MapFieldSetting(
                 settings.ContractFieldsSettingsModel.DocumentsFieldSettingModel);
+            var warrantyEndDate = MapFieldSetting(
+                settings.ContractFieldsSettingsModel.WarrantyEndDateSettingModel);
             var contractFieldsSettings = new ContractFieldsSettings(
                 status,
                 number,
@@ -74,7 +76,8 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 accounting3,
                 accounting4,
                 accounting5,
-                document);
+                document,
+                warrantyEndDate);
 
             var video = MapFieldSetting(settings.GraphicsFieldsSettingsModel.VideoCardFieldSettingModel);
             var graphicsFieldsSettings = new GraphicsFieldsSettings(video);

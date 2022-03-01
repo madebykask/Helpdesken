@@ -1665,6 +1665,69 @@ EditPage.prototype.init = function (p) {
     self.loadExtendedCaseIfNeeded();
     self.loadExtendedSectionsIfNeeded();
 
+    const logTab$ = $('#logtab');
+    if (logTab$.length > 0) {
+        const maxRows = 3;
+        const table$ = logTab$.find('.caselog');
+        const rows$ = table$.find('tr:gt(0)');
+
+        // process rows height
+        const lineHeight = 20;
+        const classPreffix = 'less';
+        rows$.each((i, row) => {
+            const row$ = $(row);
+            const isFirstRow = i === 0;
+            const maxTdRows = isFirstRow ? 7 : 3;
+            const className = classPreffix + maxTdRows;
+            let isRowAllVisible = false;
+            const tds = row$.find('td');
+            const externalCellRowsCount = Math.ceil(($(tds[2]).find('a>div>div').height() || 1) / lineHeight);
+            const internalCellRowsCount = Math.ceil(($(tds[3]).find('a>div>div').height() || 1) / lineHeight);
+            const filesCellRowsCount = Math.ceil(($(tds[5]).find('>div>div').height() || 1) / lineHeight);
+            if (externalCellRowsCount > maxTdRows) {
+                $(tds[2]).find('.row-all').show();
+                isRowAllVisible = true;
+            }
+            if (internalCellRowsCount > maxTdRows) {
+                $(tds[3]).find('.row-all').show();
+                isRowAllVisible = true;
+            }
+            if (filesCellRowsCount > maxTdRows) {
+                $(tds[5]).find('.row-all').show();
+                isRowAllVisible = true;
+            }
+            if (isRowAllVisible) {
+                row$.find('.row-all').on('click',
+                    function(e) {
+                        e.preventDefault();
+                        const currRow$ = $(e.target).closest('tr');
+                        currRow$.toggleClass(className);
+                    });
+            } else {
+                row$.removeClass(className);
+            }
+        });
+
+        // process table height
+        const logTabsRowsCount = rows$.length;
+        if (logTabsRowsCount > maxRows) {
+            const more$ = logTab$.find('.all.more');
+            const less$ = logTab$.find('.all.less');
+            const toggleRows = function () {
+                more$.is(':visible')
+                    ? table$.find('tr:gt(' + maxRows + ')').hide()
+                    : table$.find('tr:gt(' + maxRows + ')').show();
+            }
+            toggleRows();
+            more$.add(less$).on('click', function(e) {
+                e.preventDefault();
+                more$.toggle();
+                less$.toggle();
+                toggleRows();
+            });
+        }
+        //$("#logtab .caselog tr td:eq(14) a div div")[0].getClientRects().length
+    }
 
     self.$watchDateChangers.on('change', function (d, source) {
         var deptId = parseInt(self.$department.val(), 10);

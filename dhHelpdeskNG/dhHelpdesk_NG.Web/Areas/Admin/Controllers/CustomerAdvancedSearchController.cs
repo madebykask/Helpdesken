@@ -209,8 +209,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             };
 
             model.Seperator = Separator.ToString();
-            foreach (var cs in model.CaseSettings)
-                model.SortedFields +=  Separator.ToString() + cs.Id.ToString();
+            if(model.CaseSettings.Count > 1)
+            {
+                foreach (var cs in model.CaseSettings)
+                    model.SortedFields += Separator.ToString() + cs.Id.ToString();
+            }
+
             
             return model;
         }

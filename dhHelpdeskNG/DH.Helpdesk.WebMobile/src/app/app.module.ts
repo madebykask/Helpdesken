@@ -1,12 +1,12 @@
 import { MbscModule } from '@mobiscroll/angular';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { APP_INITIALIZER } from '@angular/core';
 import { LoginComponent, HeaderTitleComponent } from './shared/components';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TranslateModule, TranslateLoader, TranslateService as NgxTranslateService} from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader, TranslateService as NgxTranslateService } from '@ngx-translate/core';
 import { AppComponent } from './app.component';
 import { LocalStorageService } from './services/local-storage';
 import { LoggerService } from './services/logging';
@@ -31,24 +31,29 @@ import { RouteReuseStrategy } from '@angular/router';
 import { CaseRouteReuseStrategy } from './helpers/case-route-resolver.stategy';
 import { CasesStatusComponent } from './components/cases-status/cases-status.component';
 import { VersionComponent } from './components/version.component';
+import { MsalAngularConfiguration, MsalModule, MsalService, MSAL_CONFIG, MSAL_CONFIG_ANGULAR } from '@azure/msal-angular';
+import { config } from '@env/environment';
+import { Configuration } from 'msal';
+
+const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
 @NgModule({
-  bootstrap: [ AppComponent],
+  bootstrap: [AppComponent],
   declarations: [AppComponent, AppLayoutComponent, PageNotFoundComponent,
-     HeaderTitleComponent, FooterComponent,
-     LoginComponent,
-     HomeComponent,
-     CaseTemplateComponent,
-     RequireAuthDirective,
-     ErrorComponent,
-     AltLayoutComponent,
-     TestComponent,
-     LanguageComponent,
-     CasesStatusComponent,
-     VersionComponent
+    HeaderTitleComponent, FooterComponent,
+    LoginComponent,
+    HomeComponent,
+    CaseTemplateComponent,
+    RequireAuthDirective,
+    ErrorComponent,
+    AltLayoutComponent,
+    TestComponent,
+    LanguageComponent,
+    CasesStatusComponent,
+    VersionComponent
   ],
-  imports: [ 
-    MbscModule,  
+  imports: [
+    MbscModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
@@ -64,13 +69,12 @@ import { VersionComponent } from './components/version.component';
     }),
     SharedModule,
     //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    MsalModule
   ],
   providers: [
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    // { provide: LOCALE_ID, useValue: "sv-SE" },
-    // { provide: LOCALE_ID, deps: [SettingsService], useFactory: (settingsService) => settingsService.getLanguage()},
     {
       provide: APP_INITIALIZER,
       useFactory: initApplication,
@@ -80,15 +84,40 @@ import { VersionComponent } from './components/version.component';
     {
       provide: RouteReuseStrategy,
       useClass: CaseRouteReuseStrategy
-    }
+    },
+    {
+      provide: MSAL_CONFIG,
+      useFactory: MSALConfigFactory
+    },
+    {
+      provide: MSAL_CONFIG_ANGULAR,
+      useFactory: MSALAngularConfigFactory
+    }, MsalService
   ],
   exports: [LanguageComponent]
 })
 export class AppModule { }
 
-/* import { registerLocaleData } from '@angular/common';
-import localeSv from '@angular/common/locales/sv';
+export function MSALConfigFactory(): Configuration {
+  return {
+    auth: {
+      clientId: config.microsoftClientId,
+      authority: config.microsoftShowLogin ? config.microsoftAuthority + (config.microsoftAuthority.endsWith('/') ? '' : '/') + config.microsoftTenant : config.microsoftDefaultAuthority,
+      validateAuthority: true,
+      redirectUri: config.microsoftRedirectUri
+      // ,
+      // postLogoutRedirectUri: "Enter_the_Logout_Redirect_Uri_Here", // This is your logout redirect URI ex:https://localhost:4200/logout
+    },
+    cache: {
+      cacheLocation: "localStorage",
+      storeAuthStateInCookie: isIE // set to true for IE 11
+    },
+  };
+}
 
-// the second parameter 'fr' is optional
-registerLocaleData(localeSv, ); */
-
+export function MSALAngularConfigFactory(): MsalAngularConfiguration {
+  return {
+    consentScopes: [],
+    protectedResourceMap: []
+  }
+}

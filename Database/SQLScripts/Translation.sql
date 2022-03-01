@@ -8223,6 +8223,25 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 2106 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2106, 2, 'Dropdown Menu')
 GO
+--New sprint 71
+If not exists (select * from tbltext where id = 2107)
+	insert into tbltext (id, TextString) VALUES (2107, 'Garanti slutdatum')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2107 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2107, 2, 'Warranty end date')
+GO
+If not exists (select * from tbltext where id = 2108)
+	insert into tbltext (id, TextString) VALUES (2108, 'Visa hela Ärendeloggen')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2108 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2108, 2, 'Show full Case log')
+GO
+If not exists (select * from tbltext where id = 2109)
+	insert into tbltext (id, TextString) VALUES (2109, 'Visa endast senaste')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2109 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2109, 2, 'Show only latest')
+GO
 
 
 -- Generate id sequence for customer generated IDs

@@ -4,7 +4,7 @@
 
     public class ContractFieldsSettings
     {
-        public ContractFieldsSettings(FieldSettingOverview contractStatusFieldSetting, FieldSettingOverview contractNumberFieldSetting, FieldSettingOverview contractStartDateFieldSetting, FieldSettingOverview contractEndDateFieldSetting, FieldSettingOverview purchasePriceFieldSetting, FieldSettingOverview purchaseDateFieldSetting, FieldSettingOverview accountingDimension1FieldSetting, FieldSettingOverview accountingDimension2FieldSetting, FieldSettingOverview accountingDimension3FieldSetting, FieldSettingOverview accountingDimension4FieldSetting, FieldSettingOverview accountingDimension5FieldSetting)
+        public ContractFieldsSettings(FieldSettingOverview contractStatusFieldSetting, FieldSettingOverview contractNumberFieldSetting, FieldSettingOverview contractStartDateFieldSetting, FieldSettingOverview contractEndDateFieldSetting, FieldSettingOverview purchasePriceFieldSetting, FieldSettingOverview purchaseDateFieldSetting, FieldSettingOverview accountingDimension1FieldSetting, FieldSettingOverview accountingDimension2FieldSetting, FieldSettingOverview accountingDimension3FieldSetting, FieldSettingOverview accountingDimension4FieldSetting, FieldSettingOverview accountingDimension5FieldSetting, FieldSettingOverview warrantyEndDateFieldSetting)
         {
             this.ContractStatusFieldSetting = contractStatusFieldSetting;
             this.ContractNumberFieldSetting = contractNumberFieldSetting;
@@ -17,6 +17,7 @@
             this.AccountingDimension3FieldSetting = accountingDimension3FieldSetting;
             this.AccountingDimension4FieldSetting = accountingDimension4FieldSetting;
             this.AccountingDimension5FieldSetting = accountingDimension5FieldSetting;
+            this.WarrantyEndDateFieldSetting = warrantyEndDateFieldSetting;
         }
 
         [NotNull]
@@ -51,5 +52,8 @@
 
         [NotNull]
         public FieldSettingOverview AccountingDimension5FieldSetting { get; set; }
+
+        [NotNull]
+        public FieldSettingOverview WarrantyEndDateFieldSetting { get; set; }
     }
 }

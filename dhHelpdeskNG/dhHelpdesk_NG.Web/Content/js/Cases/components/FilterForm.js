@@ -592,12 +592,6 @@ FilterForm.prototype.initControlsMap = function() {
                     control = CreateInstance(BaseField, { $el: $el, defaultValue: "0" });
                 }
                 break;
-            //case 'initiatorSearchScope':
-            //    $el = $("", me.$el);
-            //    if (!window.is$ElEmpty($el)) {
-            //        control = CreateInstance(JQueryChosenField, { $el: $el });
-            //    }
-            //    break;
             case 'lstFilterRegion':
             case 'lstfilterDepartment':
             case 'lstfilterUser':
@@ -679,6 +673,8 @@ FilterForm.prototype.getCurrentFilters = function () {
             case 'hidFilterProductAreaId':
             case 'hidFilterCategoryId':
             case 'hidFilterClosingReasonId':
+            case 'CaseInitiatorFilter':
+            case 'InitiatorSearchScope':
                 $el = me.$el.find(searchEl);
                 if (!window.is$ElEmpty($el)) {
                     res.push({ AttributeName: controlName, AttributeValue: ($el.val() == null) ? "" : $el.val() });

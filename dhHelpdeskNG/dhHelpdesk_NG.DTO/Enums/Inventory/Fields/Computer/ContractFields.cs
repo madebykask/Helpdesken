@@ -21,5 +21,7 @@
         public static readonly string AccountingDimension4 = "Contract.AccountingDimension4";
 
         public static readonly string AccountingDimension5 = "Contract.AccountingDimension5";
+
+        public static readonly string WarrantyEndDate = "Contract.WarrantyEndDate";
     }
 }

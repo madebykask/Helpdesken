@@ -9,6 +9,8 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity
         public CaseFilterFavorite Map(CaseFilterFavoriteEntity entity)
         {           
             var fields = new CaseFilterFavoriteFields(
+                    entity.InitiatorFilter ?? "",
+                    new SelectedItems(entity.InitiatorSearchScopeFilter, false), 
                     new SelectedItems(entity.RegionFilter, false),
                     new SelectedItems(entity.DepartmentFilter, false),
                     new SelectedItems(entity.CaseTypeFilter, false),

@@ -1,6 +1,6 @@
 {
   "name": "#{SiteNameLong}",
-  "short_name": #{SiteNameShort}",
+  "short_name": "#{SiteNameShort}",
   "theme_color": "#fff",
   "background_color": "#fff",
   "display": "standalone",

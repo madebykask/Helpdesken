@@ -63,8 +63,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 sourceModel.ContractFieldsViewModel.ContractFieldsModel.ContractStatusId, settings.ContractFieldsSettings.ContractStatusFieldSetting);
             CopyField(destModel.ContractFieldsViewModel.ContractFieldsModel.PurchaseDate, // purchase date was moved from Inventory to Contract on UI.
                 sourceModel.ContractFieldsViewModel.ContractFieldsModel.PurchaseDate, settings.ContractFieldsSettings.PurchaseDateFieldSetting);
-            CopyField(destModel.ContractFieldsViewModel.ContractFieldsModel.PurchasePrice, 
+            CopyField(destModel.ContractFieldsViewModel.ContractFieldsModel.PurchasePrice,
                 sourceModel.ContractFieldsViewModel.ContractFieldsModel.PurchasePrice, settings.ContractFieldsSettings.PurchasePriceFieldSetting);
+            CopyField(destModel.ContractFieldsViewModel.ContractFieldsModel.WarrantyEndDate,
+                sourceModel.ContractFieldsViewModel.ContractFieldsModel.WarrantyEndDate, settings.ContractFieldsSettings.WarrantyEndDateFieldSetting);
 
 
             // destModel dont' have DateFields so just ignor it

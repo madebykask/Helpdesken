@@ -13,14 +13,21 @@ export const environment = {
 
 export const config = {
     // apiUrl: 'http://dhutvas3.datahalland.se:8049',
-    apiUrl: 'http://localhost:8049',
+    // apiUrl: 'http://localhost:8049',
+    apiUrl: 'https://localhost:447',
     //apiUrl: 'http://192.168.1.102:8049',
     clientId: 'hd',
     version: VERSION.fullVersion,
     internalVersion: require('../../package.json').version,
     enableLog: true,
+    microsoftShowLogin: false,
+    microsoftClientId: "",
+    microsoftTenant: "",
+    microsoftAuthority: "",
+    microsoftRedirectUri: "",
+    microsoftDefaultAuthority : "https://login.microsoftonline.com/common/login"
 };
-
+ 
 /*
  * In development mode, to ignore zone related error stack frames such as
  * `zone.run`, `zoneDelegate.invokeTask` for easier debugging, you can

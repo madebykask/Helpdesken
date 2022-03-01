@@ -39,6 +39,19 @@ export class AuthenticationService {
           );
     }
 
+    microsoftLogin(response): Observable<CurrentUser> {
+      return this.authApiService.microsoftLogin(response)
+      .pipe(
+          take(1),
+          switchMap(isSuccess => {
+              if (!isSuccess) { throwError('Something wrong.'); }
+              return this.userSettingsApiService.loadUserSettings();
+          }),
+          // tap(() => this._logger.log(`Log in action.`)),
+          finalize(() => this.raiseAuthenticationChanged())
+      );
+    }
+
     refreshToken(): Observable<boolean> {
         const user = this.authStateService.getUser();
         if (user && user.authData && user.authData.refresh_token) {
@@ -70,6 +83,13 @@ export class AuthenticationService {
         this.appStore.reset();
         // this._logger.log(`Log out action.`);
         this.raiseAuthenticationChanged();
+    }
+
+    microsoftLogout() {
+      this.authApiService.microsoftLogout();
+      this.appStore.reset();
+      // this._logger.log(`Log out action.`);
+      this.raiseAuthenticationChanged();
     }
 
     setAuthHeader(request: HttpRequest<any>): HttpRequest<any> {

@@ -48,6 +48,8 @@
     <add key="ida:ProviderSelection" value="#{AdfsProviderSection}" />
     <add key="SmtpServer" value="#{SmptServer}" />
     <add key="SmtpPort" value="#{SmptPort"}" />-->
+	 
+	  <add key="SignOutUrl" value="" /> <!-- If value is set, logout option will show. Eg. https://www.example.com -->
 
     <add key="CaseList" value="manager,coworkers" />
     <add key="CurrentApplication" value="SelfService" />
@@ -149,6 +151,7 @@
   </system.web>
   <system.webServer>
     <validation validateIntegratedModeConfiguration="false" />
+	  <modules runAllManagedModulesForAllRequests="true"/>
     <!--<modules runAllManagedModulesForAllRequests="true">
             <remove name="FormsAuthentication" />            
     	    This is for Single Sign 
@@ -167,6 +170,11 @@
       <remove name="TRACEVerbHandler" />
       <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" resourceType="Unspecified" requireAccess="Script" preCondition="integratedMode,runtimeVersionv4.0" />
     </handlers>
+	  <httpProtocol>
+		  <customHeaders>
+			  <remove name="X-Powered-By" />
+		  </customHeaders>
+	  </httpProtocol>
   </system.webServer>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">

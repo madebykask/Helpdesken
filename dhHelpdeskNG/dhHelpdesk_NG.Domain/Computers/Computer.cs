@@ -99,6 +99,8 @@ namespace DH.Helpdesk.Domain.Computers
 
         public DateTime? SyncChangedDate { get; set; }
 
+        public DateTime? WarrantyEndDate { get; set; }
+
         public int? OU_Id { get; set; }
         public int? Region_Id { get; set; }
 

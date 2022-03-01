@@ -190,6 +190,7 @@ $(function () {
                 $("#popupError").css("display", "none");
 
                 var note = self._elements.logNoteInput.val() || '';
+                var templateId = self._elements.stepsInput.val() || 0;
                 if (note === '') {
                     if (isPopup) {
                         $("#popupError").text(logMandatoryText);
@@ -200,7 +201,7 @@ $(function () {
                     }
                 } else {
                     changeState.call(self, true);
-                    $.post(saveLogMessageUrl, { caseId: caseId, note: note, logFileGuid: logFileKey },
+                    $.post(saveLogMessageUrl, { caseId: caseId, note: note, logFileGuid: logFileKey, templateId: templateId },
                         function(res) {
                             if (isPopup) {
                                 if (caseEmailGuid != null && caseEmailGuid !== '') {
@@ -214,6 +215,7 @@ $(function () {
                                 self._elements.logNoteInput.val('');
                                 self.reloadLogFiles();
                                 changeState.call(self, false);
+                                window.parent.location.reload(true);
                             }
                         }).fail(function(e) {
                             console.error(e);
@@ -242,6 +244,7 @@ $(function () {
                 return {
                     logFilesTable: $('#LogFile_table', $parent),    
                     logNoteInput: $('#logNote', $parent),
+                    stepsInput: $('#steps', $parent),
                     logNotesDiv: $('#CaseLogPartial', $parent),
                     sendButton: $('#btnSendLog', $parent),
                     sendInidicator: $('#sendLogIndicator', $parent),
@@ -315,6 +318,11 @@ $(function () {
     });
 
     $('#btnSendLog').click(function (e) {
+        e.preventDefault();
+        var src = $(this).data('src');
+        selfService.caseLog.saveLogMessage(src);
+    });
+    $('#btnSendLog2').click(function (e) {
         e.preventDefault();
         var src = $(this).data('src');
         selfService.caseLog.saveLogMessage(src);

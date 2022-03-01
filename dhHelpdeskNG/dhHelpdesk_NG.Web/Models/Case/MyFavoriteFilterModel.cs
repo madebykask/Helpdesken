@@ -44,6 +44,14 @@
             {
                 switch (field.AttributeName)
                 {
+                    case CaseFilterFields.InitiatorNameAttribute:
+                        ret.InitiatorFilter = field.AttributeValue;
+                        break;
+                        
+                    case CaseFilterFields.InitiatorSearchScopeAttribute:
+                        ret.InitiatorSearchScopeFilter = new SelectedItems(field.AttributeValue, false);
+                        break;
+
                     case CaseFilterFields.PerformerNameAttribute:
                         ret.AdministratorFilter = new SelectedItems(field.AttributeValue, false);
                         break;
@@ -157,33 +165,35 @@
 
         public void AddFields(List<MyFavoriteFilterJSField> jsFields)
         {
-            foreach (var field in jsFields)                
+            foreach (var field in jsFields)
                 this.AddField(field.AttributeName, field.AttributeValue);
         }
 
         public void AddFields(CaseFilterFavoriteFields filterFields)
         {
+            this.AddField(CaseFilterFields.InitiatorNameAttribute, filterFields.InitiatorFilter);
+            this.AddField(CaseFilterFields.InitiatorSearchScopeAttribute, filterFields.InitiatorSearchScopeFilter.GetSelectedStr());
             this.AddField(CaseFilterFields.PerformerNameAttribute, filterFields.AdministratorFilter.GetSelectedStr());
             this.AddField(CaseFilterFields.CaseTypeIdNameAttribute, filterFields.CaseTypeFilter.GetSelectedStr());
             this.AddField(CaseFilterFields.ClosingReasonNameAttribute, filterFields.ClosingReasonFilter.GetSelectedStr());
             this.AddField(CaseFilterFields.DepartmentNameAttribute, filterFields.DepartmentFilter.GetSelectedStr());
             this.AddField(CaseFilterFields.PriorityNameAttribute, filterFields.PriorityFilter.GetSelectedStr());
             this.AddField(CaseFilterFields.ProductAreaIdNameAttribute, filterFields.ProductAreaFilter.GetSelectedStr());
-            this.AddField(CaseFilterFields.RegionNameAttribute, filterFields.RegionFilter.GetSelectedStr());            
+            this.AddField(CaseFilterFields.RegionNameAttribute, filterFields.RegionFilter.GetSelectedStr());
             this.AddField(CaseFilterFields.CaseRemainingTimeAttribute, filterFields.RemainingTimeFilter.GetSelectedStr());
             this.AddField(CaseFilterFields.ResponsibleNameAttribute, filterFields.ResponsibleFilter.GetSelectedStr());
             this.AddField(CaseFilterFields.StatusNameAttribute, filterFields.StatusFilter.GetSelectedStr());
-            this.AddField(CaseFilterFields.StateSecondaryNameAttribute, filterFields.SubStatusFilter.GetSelectedStr());            
+            this.AddField(CaseFilterFields.StateSecondaryNameAttribute, filterFields.SubStatusFilter.GetSelectedStr());
             this.AddField(CaseFilterFields.WorkingGroupNameAttribute, filterFields.WorkingGroupFilter.GetSelectedStr());
             this.AddField(CaseFilterFields.RegisteredByNameAttribute, filterFields.RegisteredByFilter.GetSelectedStr());
             
             this.AddField(CaseFilterFields.CaseClosingDateStartFilterNameAttribute, filterFields.ClosingDateFilter.FromDate.ToFormattedDate());
             this.AddField(CaseFilterFields.CaseClosingDateEndFilterNameAttribute, filterFields.ClosingDateFilter.ToDate.ToFormattedDate());
             
-            this.AddField(CaseFilterFields.CaseRegistrationDateStartFilterNameAttribute, filterFields.RegistrationDateFilter.FromDate.ToFormattedDate());            
+            this.AddField(CaseFilterFields.CaseRegistrationDateStartFilterNameAttribute, filterFields.RegistrationDateFilter.FromDate.ToFormattedDate());
             this.AddField(CaseFilterFields.CaseRegistrationDateEndFilterFilterNameAttribute, filterFields.RegistrationDateFilter.ToDate.ToFormattedDate());
             
-            this.AddField(CaseFilterFields.CaseWatchDateStartFilterNameAttribute, filterFields.WatchDateFilter.FromDate.ToFormattedDate());           
+            this.AddField(CaseFilterFields.CaseWatchDateStartFilterNameAttribute, filterFields.WatchDateFilter.FromDate.ToFormattedDate());
             this.AddField(CaseFilterFields.CaseWatchDateEndFilterNameAttribute, filterFields.WatchDateFilter.ToDate.ToFormattedDate());
         }
     }

@@ -466,7 +466,7 @@ window.extendedCasePage =
             var url = self.SAVE_CASE_URL;
             var $exCaseContainer = self.getExtendedCaseContainer();
 
-            if (recaptchaKey != "" && id == 0) {
+            if (recaptchaKey !== "" && id === 0) {
                 var res = captchaChecker();
                 if (res == "") {
                     ShowToastMessage(recaptchaMessage, "warning", false);
@@ -528,7 +528,7 @@ window.extendedCasePage =
             var lastClickTimeStamp = null;
             var nextAllowedClickDelay = 5000;
 
-            /// controls binding
+            // controls binding
             self.$caseButtonsToLock = $('input.save-button, input.go-button');
             self.$Form = $('#extendedCaseForm');
             self.$caseTab = $("#tabsArea li a");

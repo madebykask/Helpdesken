@@ -9,6 +9,7 @@ import { TestComponent } from './components/test/test.component';
 import { CaseTemplateComponent } from './components/case-template/case-template.component';
 import { LanguageComponent } from './components/language/language/language.component';
 
+
 const appRoutes: Routes = [{
     path: '',
     component: AppLayoutComponent,
@@ -44,7 +45,7 @@ const appRoutes: Routes = [{
   },
  */
   //no layout routes
-  { path: 'login', component: LoginComponent},
+  { path: 'login', component: LoginComponent },
   { path: 'error', component: ErrorComponent },
   { path: '',   redirectTo: '/', pathMatch: 'full' },
 
@@ -57,7 +58,7 @@ const appRoutes: Routes = [{
       RouterModule.forRoot(
         appRoutes,
         // { enableTracing: true } // <-- debugging purposes only
-        { preloadingStrategy: PreloadAllModules }
+        { useHash: false, preloadingStrategy: PreloadAllModules }
       )
     ],
     exports: [

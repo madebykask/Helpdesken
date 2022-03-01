@@ -42,6 +42,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Owin
             //log request and response side by side 
             if (requestMethod.Equals("POST",  StringComparison.OrdinalIgnoreCase) &&
                 (requestUrl.IndexOf("/Token", StringComparison.OrdinalIgnoreCase) != -1 || 
+                 requestUrl.IndexOf("/SignInWithMicrosoft", StringComparison.OrdinalIgnoreCase) != -1 || 
                  requestUrl.IndexOf("/Login", StringComparison.OrdinalIgnoreCase) != -1))
                 requestBody = "<sensetive>";
 

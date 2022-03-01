@@ -17,7 +17,7 @@
                 case StartPage.AdvancedSearch:
                     return urlHelper.Action("AdvancedSearch", "Cases");
                 default:
-                    return FormsAuthentication.DefaultUrl;
+                    return urlHelper.Action("Index", "Home");
             }
         }
 

@@ -47,11 +47,14 @@
 
                                 <div>
                                     @foreach (var l in current.Emaillogs)
-                                    {    
-                                        List<string> emails;
+                                    {
+                                        var emails = new List<string>();
                                         {
-                                            emails = l.EmailAddress.Split(',').ToList();
-                                            if (l.CcEmailAddress.Any())
+                                            if (!string.IsNullOrWhiteSpace(l.EmailAddress))
+                                            {
+                                                emails.AddRange(l.EmailAddress.Split(',').ToList());
+                                            }
+                                            if (!string.IsNullOrWhiteSpace(l.CcEmailAddress))
                                             {
                                                 emails.AddRange(l.CcEmailAddress.Split(','));
                                             }

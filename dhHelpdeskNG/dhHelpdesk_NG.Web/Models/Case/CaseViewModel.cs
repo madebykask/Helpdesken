@@ -133,7 +133,6 @@ namespace DH.Helpdesk.Web.Models.Case
                 UserTimeZone = UserTimeZone,
                 CurrentCaseLanguageId = CurrentCaseLanguageId,
                 IsCaseReopened = IsCaseReopened,
-                Department = case_?.Department,
                 CaseFiles = CaseFilesModel,
                 HelpdeskEmail = case_?.Customer?.HelpdeskEmail,
                 CaseInternalLogAccess = CaseInternalLogAccess,

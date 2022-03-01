@@ -21,10 +21,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             Name = name;
             Fields = fields;
 
-            if (createdDate.HasValue)
-                CreatedDate = createdDate.Value;
-            else
-                CreatedDate = DateTime.Now;
+            CreatedDate = createdDate ?? DateTime.Now;
         }
 
         public int Id { get; set; }
@@ -46,6 +43,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public CaseFilterFavoriteFields()
         {
+            InitiatorFilter = "";
+            InitiatorSearchScopeFilter = new SelectedItems();
             RegionFilter = new SelectedItems();
             DepartmentFilter = new SelectedItems();
             CaseTypeFilter = new SelectedItems();
@@ -65,6 +64,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         }
 
         public CaseFilterFavoriteFields(
+            string initiatorFilter,
+            SelectedItems initiatorSearchScopeFilter,
             SelectedItems regionFilter,
             SelectedItems departmentFilter,
             SelectedItems caseTypeFilter,
@@ -82,6 +83,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             DateToDate watchDateFilter,
             DateToDate closingDateFilter)
         {
+            InitiatorFilter = initiatorFilter;
+            InitiatorSearchScopeFilter = initiatorSearchScopeFilter;
             RegionFilter = regionFilter;
             DepartmentFilter = departmentFilter;
             CaseTypeFilter = caseTypeFilter;
@@ -103,6 +106,10 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         #endregion
 
         #region Properties
+
+        public string InitiatorFilter { get; set; }
+
+        public SelectedItems InitiatorSearchScopeFilter { get; set; }
 
         public SelectedItems RegionFilter { get; set; }
 
@@ -142,6 +149,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         {
             return new Dictionary<string, string>
             {
+                [nameof(InitiatorFilter)] = InitiatorFilter,
+                [nameof(InitiatorSearchScopeFilter)] = InitiatorSearchScopeFilter.GetSelectedStrOrNull(),
                 [nameof(RegionFilter)] = RegionFilter.GetSelectedStrOrNull(),
                 [nameof(DepartmentFilter)] = DepartmentFilter.GetSelectedStrOrNull(),
                 [nameof(CaseTypeFilter)] = CaseTypeFilter.GetSelectedStrOrNull(),

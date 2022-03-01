@@ -48,6 +48,7 @@ export abstract class HttpApiServiceBase {
         }));
   }
 
+
   protected sendOptions(url: string, headers: any, noAuth: boolean): Observable<any> {
     return this.http
       .options(url, {

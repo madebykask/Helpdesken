@@ -296,7 +296,6 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
             }
                 
-           
             var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
             var isMultiCustomerMode = globalSettings.MultiCustomersSearch.ToBool();
             // check only if multi customer is not enabled. Allow user to see own cases for different customers.
@@ -806,10 +805,36 @@ namespace DH.Helpdesk.SelfService.Controllers
         //TODO: should be refactored to methods with single responsibility!
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult _CaseLogNote(int caseId, string note, string logFileGuid)
+        public ActionResult _CaseLogNote(int caseId, string note, string logFileGuid, int? templateId)
         {
             SaveLogMessage(caseId, note, logFileGuid);
-            
+            //Also save Workflowsteps
+            if (templateId.HasValue && templateId.Value > 0)
+            {
+                var caseTemplate = _caseSolutionService.GetCaseSolution(templateId.Value);
+
+                if (caseTemplate.Status == 0)
+                {
+                    return Json(new { success = false, Error = "Selected template is not available anymore!" });
+                }
+
+                var caseModel = _universalCaseService.GetCase(caseId);
+
+                // Apply template values to case:
+                ApplyTemplate(caseTemplate, caseModel, true);
+
+                var localUserId = SessionFacade.CurrentLocalUser?.Id ?? 0;
+                var auxModel = new AuxCaseModel(SessionFacade.CurrentLanguageId,
+                    localUserId,
+                    SessionFacade.CurrentUserIdentity.UserId,
+                    ConfigurationService.AppSettings.HelpdeskPath,
+                    CreatedByApplications.SelfService5,
+                    TimeZoneInfo.Local);
+
+                decimal caseNum;
+                var res = _universalCaseService.SaveCaseCheckSplit(caseModel, auxModel, out caseId, out caseNum);
+            }
+
             var model = GetCaseLogsModel(caseId);
             return PartialView(model);
         }
@@ -1359,7 +1384,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 ActionLeadTime = currentCase.LeadTime - oldLeadTime,
                 LeadTime = currentCase.LeadTime
             };
-
+            //This only if changed workflow is not true?
             var caseHistoryId = 
                 _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5, out errors, SessionFacade.CurrentUserIdentity.UserId, extraFields);
 

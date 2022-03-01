@@ -191,6 +191,7 @@
             CreateSettingIfNeeded(ContractFields.ContractNumber, customerId, settingNames, settings);
             CreateSettingIfNeeded(ContractFields.ContractStartDate, customerId, settingNames, settings);
             CreateSettingIfNeeded(ContractFields.ContractEndDate, customerId, settingNames, settings);
+            CreateSettingIfNeeded(ContractFields.WarrantyEndDate, customerId, settingNames, settings);
             CreateSettingIfNeeded(ContractFields.PurchasePrice, customerId, settingNames, settings);
             CreateSettingIfNeeded(ContractFields.AccountingDimension1, customerId, settingNames, settings);
             CreateSettingIfNeeded(ContractFields.AccountingDimension2, customerId, settingNames, settings);

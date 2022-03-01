@@ -151,7 +151,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 string smtpServer = emailsettings.SmtpSettings.Server;
                 var smtpPort = emailsettings.SmtpSettings.Port;
 
-                if (!string.IsNullOrWhiteSpace(smtpServer) && !string.IsNullOrWhiteSpace(from) && !string.IsNullOrWhiteSpace(to))
+                if (!string.IsNullOrWhiteSpace(smtpServer) && !string.IsNullOrWhiteSpace(from) && (!string.IsNullOrWhiteSpace(to) || !string.IsNullOrWhiteSpace(cc)))
                 {
                     if (IsValidEmail(from))
                     {
@@ -256,17 +256,20 @@ namespace DH.Helpdesk.Services.Services.Concrete
             switch (emailType)
             {
                 case EmailType.ToMail:
-                    msg.To.Add(to);
+                    if (!string.IsNullOrEmpty(to))
+                        msg.To.Add(to);
                     if (!string.IsNullOrEmpty(cc))
                         msg.CC.Add(cc);
                     break;
 
                 case EmailType.CcMail:
-                    msg.CC.Add(to);
+                    if (!string.IsNullOrEmpty(to))
+                        msg.To.Add(to);
                     break;
 
                 case EmailType.BccMail:
-                    msg.Bcc.Add(to);
+                    if (!string.IsNullOrEmpty(to))
+                        msg.To.Add(to);
                     break;
 
                 default:
