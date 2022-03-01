@@ -11,5 +11,9 @@ export const config = {
   version: VERSION.fullVersion,
   internalVersion: require('../../package.json').version,
   enableLog: false,
-  microsoftLogin: true
+  microsoftShowLogin: 'Microsoft.ShowLogin',
+  microsoftClientId: 'Microsoft.ClientId',
+  microsoftTenant: 'Microsoft.Tenant',
+  microsoftAuthority: 'Microsoft.Authority',
+  microsoftRedirectUri: 'Microsoft.RedirectUri'
 };

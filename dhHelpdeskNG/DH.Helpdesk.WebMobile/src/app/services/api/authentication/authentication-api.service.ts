@@ -8,7 +8,6 @@ import { LocalStorageService } from '../../local-storage';
 import { Observable, of } from 'rxjs';
 import { ErrorHandlingService } from '../../logging/error-handling.service';
 import { MsalService } from '@azure/msal-angular';
-import { AuthenticationResult } from '@azure/msal-browser';
 
 
 @Injectable({ providedIn: 'root' })
@@ -43,36 +42,39 @@ export class AuthenticationApiService extends HttpApiServiceBase {
         }));
   }
 
-  microsoftLogin(): Observable<boolean> {
-    return this.msalService.loginPopup().pipe(
-      take(1),
-      switchMap(response => {
-        //login successful if there's a token in the response
-        
-        if (response && response.idToken) {
-          const postData = { Email: response.account.username, ClientId: config.clientId, IdToken: response.idToken };
+  microsoftLogin(response): Observable<boolean> {
 
-          return this.postJsonWithSubscription<any>(this.buildResourseUrl('/api/account/SignInWithMicrosoft', undefined, false), postData)
-            .pipe(
-              take(1),
-              map(data => {
-                let isSuccess = false;
-                // login successful if there's a token in the response
-                if (data && data.access_token) {
-                  const user = CurrentUser.createAuthenticated(data);
-                  user.currentData.name = response.account.username;
-                  user.version = config.version;
+    if (response && response.idToken) {
+      const postData = { Email: response.account.userName, ClientId: config.clientId, IdToken: response.idToken.rawIdToken };
 
-                  // store user details and token in local storage to keep user logged in between page refreshes
-                  this.localStorageService.setCurrentUser(user);
-                  isSuccess = true;
-                }
-                return isSuccess;
-              }))
-        }
-        return of(false);
-      }))
+      return this.postJson<any>(this.buildResourseUrl('/api/account/SignInWithMicrosoft', undefined, false), postData)
+        .pipe(
+          take(1),
+          map(data => {
+            let isSuccess = false;
+            // login successful if there's a token in the response
+            if (data && data.access_token) {
+              const user = CurrentUser.createAuthenticated(data);
+              user.currentData.name = response.account.userName;
+              user.version = config.version;
+
+              // store user details and token in local storage to keep user logged in between page refreshes
+              this.localStorageService.setCurrentUser(user);
+              isSuccess = true;
+            }
+            return isSuccess;
+          }))
+    }
   }
+
+  microsoftLogout() {
+    if(this.msalService.getAccount()) {
+      this.msalService.logout();
+      return true;
+    };
+    return false;
+  }
+
   refreshToken(refreshToken: string): Observable<any> {
     const params = {
       refreshToken: refreshToken,

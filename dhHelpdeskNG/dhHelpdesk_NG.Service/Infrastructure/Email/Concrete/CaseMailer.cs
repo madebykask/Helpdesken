@@ -382,7 +382,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 
                 foreach (var eLog in emailLogs)
                 {
-                    if (!string.IsNullOrWhiteSpace(eLog.Value.EmailAddress))
+                    if (!string.IsNullOrWhiteSpace(eLog.Value.EmailAddress) || !string.IsNullOrWhiteSpace(eLog.Value.Cc))
                     {
                         eLog.Value.Log_Id = log.Id;
 

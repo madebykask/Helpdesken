@@ -16,9 +16,15 @@ mbsc-button {
     }
 }
 
-.microsoftLogin {
-  position: absolute;
+.microsoft-login {
+  text-align: center;
+  position:flex;
   left: 50%;
-  top: 50%;
+  margin-top: 50px;
   transform: translate(-50%, -50%)
+}
+
+.md-load-btn {
+  margin-top: -10px;
+  padding-top: 0px;
 }

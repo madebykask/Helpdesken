@@ -99,6 +99,11 @@
         if (hasWorkflows) {
             $(".save-button").val(self.saveText);
             $(".workflowStepsPanel").show();
+            $(".workflowStepsPanel2").hide();
+        }
+        else {
+            $(".workflowStepsPanel2").show();
+            $(".workflowStepsPanel").hide();
         }
     }
 
