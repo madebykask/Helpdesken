@@ -151,7 +151,8 @@
   </system.web>
   <system.webServer>
     <validation validateIntegratedModeConfiguration="false" />
-	  <modules runAllManagedModulesForAllRequests="true"/>
+	  <!-- if set to true below, no static files will show server name etc in response headers, but might have affect on performance-->
+	  <modules runAllManagedModulesForAllRequests="false" />
     <!--<modules runAllManagedModulesForAllRequests="true">
             <remove name="FormsAuthentication" />            
     	    This is for Single Sign 
