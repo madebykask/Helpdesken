@@ -53,7 +53,8 @@
 			<remove name="TRACEVerbHandler" />
 			<add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
 		</handlers>
-		<modules runAllManagedModulesForAllRequests="true">
+		<!-- if set to true below, no static files will show server name etc in response headers, but might have affect on performance-->
+		<modules runAllManagedModulesForAllRequests="false">
 			<remove name="WebDAVModule"/>
 		</modules>
 		<httpProtocol>
