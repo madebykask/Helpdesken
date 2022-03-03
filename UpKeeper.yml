@@ -78,6 +78,12 @@ steps:
     Contents: '**'
     TargetFolder: '$(build.artifactstagingdirectory)/DH.Helpdesk.Schedule'
 
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)/dhHelpdeskNG/dhHelpdesk_NG.Web/bin/$(buildConfiguration)'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)/dhHelpdesk_NG.Web'
+
 - task: PublishBuildArtifacts@1
   displayName: PublishBuildArtifacts-LDAP-AD
   inputs:
