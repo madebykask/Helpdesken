@@ -74,6 +74,59 @@ IF COL_LENGTH('dbo.tblCaseFilterFavorite','InitiatorSearchScopeFilter') IS NULL
 
 Go
 
+---------------------------------------------------------------------------------
+-- tblCase
+IF EXISTS (SELECT * FROM sys.fulltext_indexes fti WHERE fti.object_id = OBJECT_ID(N'[dbo].[tblCase]'))
+	DROP FULLTEXT INDEX ON [dbo].[tblCase]
+GO
+
+CREATE FULLTEXT INDEX ON dbo.tblCase  
+(			    ReportedBy,
+				Persons_Name,
+				RegUserName,
+				Persons_EMail,
+				Persons_Phone,
+				Persons_CellPhone,
+				Place,
+				Caption,
+				[Description],
+				Miscellaneous,
+				ReferenceNumber,
+				InvoiceNumber,
+				InventoryNumber,
+				UserCode,
+				InventoryType,
+				InventoryLocation,
+				VerifiedDescription,
+				CostCentre,
+				Available
+				)  
+KEY INDEX PK_tblCase
+ON SearchCasesFTS  
+WITH STOPLIST = SYSTEM
+GO
+
+---------------------------------------------------------------------------------
+--CaseIsAbout
+IF  EXISTS (SELECT * FROM sys.fulltext_indexes fti WHERE fti.object_id = OBJECT_ID(N'[dbo].[tblCaseIsAbout]'))
+	DROP FULLTEXT INDEX ON [dbo].[tblCaseIsAbout]
+GO
+
+CREATE FULLTEXT INDEX ON dbo.tblCaseIsAbout  
+(			 
+				ReportedBy,
+				Person_Name,
+				UserCode,
+				Person_Email,
+				Place,
+				Person_CellPhone,
+				Person_Phone,
+				CostCentre)  
+KEY INDEX [PK_tblCaseIsAbout]
+ON SearchCasesFTS  
+WITH STOPLIST = SYSTEM
+GO
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.54'
 GO
