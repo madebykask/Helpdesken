@@ -95,3 +95,9 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.TaskScheduler' 
     artifactName: 'DH.Helpdesk.TaskScheduler'
+
+- task: PublishBuildArtifacts@1
+  displayName: PublishBuildArtifacts-EmailEngine
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.EmailEngine.WinService' 
+    artifactName: 'DH.Helpdesk.EmailEngine.WinService'
