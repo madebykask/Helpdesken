@@ -65,11 +65,12 @@ steps:
     Contents: '**'
     TargetFolder: '$(build.artifactstagingdirectory)/DH.Helpdesk.TaskScheduler'
     
-# - task: PublishBuildArtifacts@1
-#   inputs:
-#     pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-#     artifactName: 'DH.Helpdesk'
 
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(system.defaultworkingdirectory)/dhHelpdeskNG/DH.Helpdesk.EmailEngine.WinService/bin/$(buildConfiguration)'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)/DH.Helpdesk.EmailEngine.WinService'
 
 - task: PublishBuildArtifacts@1
   displayName: PublishBuildArtifacts-LDAP-AD
