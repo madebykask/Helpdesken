@@ -120,3 +120,9 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Schedule' 
     artifactName: 'DH.Helpdesk.Schedule'
+
+- task: PublishBuildArtifacts@1
+  displayName: PublishBuildArtifacts-Web
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/dhHelpdesk_NG.Web' 
+    artifactName: 'dhHelpdesk_NG.Web'
