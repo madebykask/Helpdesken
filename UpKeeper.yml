@@ -82,7 +82,7 @@ steps:
   inputs:
     SourceFolder: '$(system.defaultworkingdirectory)/dhHelpdeskNG/dhHelpdesk_NG.Web'
     Contents: 'dhHelpdesk_NG.Web/Properties/PublishProfiles/DH.Helpdesk.Web.Release.pubxml'
-    TargetFolder: '$(build.artifactStagingDirectory)/dhHelpdesk_NG.Web'
+    TargetFolder: '$(build.artifactstagingdirectory)/dhHelpdesk_NG.Web'
     OverWrite: true
 
 - task: PublishBuildArtifacts@1
