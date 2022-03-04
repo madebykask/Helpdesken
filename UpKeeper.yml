@@ -80,9 +80,10 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(system.defaultworkingdirectory)/dhHelpdeskNG/dhHelpdesk_NG.Web/bin/$(buildConfiguration)'
-    Contents: '**'
-    TargetFolder: '$(build.artifactstagingdirectory)/dhHelpdesk_NG.Web'
+    SourceFolder: '$(system.defaultworkingdirectory)/dhHelpdeskNG/dhHelpdesk_NG.Web'
+    Contents: 'dhHelpdesk_NG.Web/Properties/PublishProfiles/DH.Helpdesk.Web.Release.pubxml'
+    TargetFolder: '$(build.artifactStagingDirectory)/dhHelpdesk_NG.Web'
+    OverWrite: true
 
 - task: PublishBuildArtifacts@1
   displayName: PublishBuildArtifacts-LDAP-AD
