@@ -48,7 +48,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     isRelatedCase,
                     userSettings,
                     ApplicationType.Helpdesk,
-                    null);
+                    null,
+                    langId);
             return workflowSteps.Select(w => new ItemOverview(Translate(w.Name, langId, TranslationTextTypes.MasterData), w.CaseTemplateId.ToString()))
                 .OrderBy(w => w.Name);
         }

@@ -26,7 +26,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IUserService _userService;
         private readonly ICustomerUserService _customerUserService;
         private readonly IMapper _mapper;
-        
+
         public CaseTemplatesController(IBaseCaseSolutionService caseSolutionService, ITranslateCacheService translateCacheService,
             IFinishingCauseService finishingCauseService,
             IProductAreaService productAreaService,
@@ -56,11 +56,31 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             var caseSolutions = await _caseSolutionService.GetCustomersMobileCaseSolutionsAsync(customers.Select(c => c.Customer.Customer_Id).ToList());
 
-            var translatedCaseSolutions = caseSolutions.Apply(item =>
+            //var translatedCaseSolutions = caseSolutions.Apply(item =>
+            //{
+            //    item.Name = _translateCacheService.GetMasterDataTextTranslation(item.Name, langId);
+            //    item.CategoryName = _translateCacheService.GetMasterDataTextTranslation(item.CategoryName, langId);
+            //    //item.Name = "Kattas trans";
+            //    ////item.CategoryName = "Kattas Kategori";
+            //});
+
+            foreach (var caseSol in caseSolutions)
             {
-                item.Name = _translateCacheService.GetMasterDataTextTranslation(item.Name, langId);
-                item.CategoryName = _translateCacheService.GetMasterDataTextTranslation(item.CategoryName, langId);
-            });
+                var solName = _caseSolutionService.GetCaseSolutionTranslation(caseSol.CaseSolutionId, langId);
+                if (solName != null)
+                {
+                    caseSol.Name = solName.CaseSolutionName;
+                }
+                if (caseSol.CategoryId != null && caseSol.CategoryId.HasValue)
+                {
+                    var catName = _caseSolutionService.GetCaseSolutionCategoryTranslation(caseSol.CategoryId.Value, langId);
+                    if (catName != null)
+                    {
+                        caseSol.CategoryName = catName.CaseSolutionCategoryName;
+                    }
+                }
+            }
+
 
             model = customers.Where(c => caseSolutions.Any(cs => cs.CustomerId == c.Customer.Customer_Id))
                 .Select(c => new CustomerCaseSolution()
@@ -70,7 +90,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 Items = new List<CustomerCaseSolutionOverviewItem>()
             }).ToList();
 
-            model.ForEach(m => m.Items = translatedCaseSolutions
+            model.ForEach(m => m.Items = caseSolutions
                     .Where(cs => cs.CustomerId == m.CustomerId)
                     .OrderBy(c => c.Name)
                 .Select(cs => new CustomerCaseSolutionOverviewItem()

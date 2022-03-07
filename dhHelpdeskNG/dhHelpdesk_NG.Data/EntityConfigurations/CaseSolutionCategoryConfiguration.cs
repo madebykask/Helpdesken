@@ -17,6 +17,11 @@
                 .HasForeignKey(x => x.Customer_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasMany(f => f.CaseSolutionCategoryLanguages)
+                .WithRequired(f => f.CaseSolutionCategory)
+                .HasForeignKey(f => f.Category_Id)
+                .WillCascadeOnDelete(false);
+
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.IsDefault).IsRequired().HasColumnName("isDefault");
             this.Property(x => x.Name).IsRequired().HasColumnName("CaseSolutionCategory");

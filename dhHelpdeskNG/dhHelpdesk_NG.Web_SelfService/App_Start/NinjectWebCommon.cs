@@ -148,6 +148,8 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ISelfServiceConfigurationService>().To<SelfServiceConfigurationService>().InSingletonScope();
 
             // Repositories
+            kernel.Bind<ICaseSolutionLanguageRepository>().To<CaseSolutionLanguageRepository>();
+            kernel.Bind<ICaseSolutionCategoryLanguageRepository>().To<CaseSolutionCategoryLanguageRepository>();
             kernel.Bind<ICircularRepository>().To<CircularRepository>();
             kernel.Bind<IQuestionnaireQuestionOptionRepository>().To<QuestionnaireQuestionOptionRepository>();
             kernel.Bind<IQuestionnaireQuestionRepository>().To<QuestionnaireQuestionRepository>();

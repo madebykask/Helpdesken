@@ -32,6 +32,7 @@ namespace DH.Helpdesk.Services.Services
 
         IList<ApplicationTypeEntity> GetApplicationTypes(int customerId);
         IList<CaseSolutionCategory> GetCaseSolutionCategories(int customerId);
+        CaseSolutionCategoryLanguageEntity GetCaseSolutionCategoryLanguage(int categoryId, int languageId);
         IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch SearchCaseSolutions, bool isFirstNamePresentation);
 
         void ApplyCaseSolution(ICaseEntity model, CaseSolution caseSolution);
@@ -42,17 +43,21 @@ namespace DH.Helpdesk.Services.Services
         DeleteMessage DeleteCaseSolution(int id, int customerId);
         DeleteMessage DeleteCaseSolutionCategory(int id);
 
-        List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId, CaseSolutionLocationShow location);
+        List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId, CaseSolutionLocationShow location, int? languageId);
         void SaveCaseSolution(CaseSolution caseSolution, CaseSolutionSchedule caseSolutionSchedule, IList<CaseFieldSetting> CaseFieldSetting, out IDictionary<string, string> errors);
         void SaveCaseSolutionCategory(CaseSolutionCategory caseSolutionCategory, out IDictionary<string, string> errors);
         void SaveEmptyForm(Guid formGuid, int caseId);
         
-        IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case case_, IList<int> workFlowCaseSolutionIds, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId);
+        IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case case_, IList<int> workFlowCaseSolutionIds, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId, int? languageId);
 
         IList<CaseSolution> GetCaseSolutions();
         IList<int> GetWorkflowCaseSolutionIds(int customerId, int? userId = null);
         
         bool CheckIfExtendedFormExistForSolutionsInCategories(int customerId, List<int> list);
+        CaseSolutionLanguageEntity GetCaseSolutionTranslation(int id, int language);
+        void UpdateCaseSolutionLanguage(CaseSolutionLanguageEntity caseLang);
+        void UpdateCaseSolutionCategoryLanguage(CaseSolutionCategoryLanguageEntity caseLang);
+        IEnumerable<CaseSolutionCategory> GetCategoryLanguageList(int languageId, int customerId);
     }
 
     public class CaseSolutionService : BaseCaseSolutionService, ICaseSolutionService
@@ -72,6 +77,8 @@ namespace DH.Helpdesk.Services.Services
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
         private readonly IComputerUserCategoryRepository _computerUserCategoryRepository;
+        private readonly ICaseSolutionLanguageRepository _caseSolutionLanguageRepository;
+        private readonly ICaseSolutionCategoryLanguageRepository _caseSolutionCategoryLanguageRepository;
 
         public CaseSolutionService(
             ICaseSolutionRepository caseSolutionRepository,
@@ -86,7 +93,9 @@ namespace DH.Helpdesk.Services.Services
             ICacheProvider cache,
             IWorkingGroupService workingGroupService,
             IComputerUserCategoryRepository computerUserCategoryRepository,
-            IUnitOfWorkFactory unitOfWorkFactory) 
+            IUnitOfWorkFactory unitOfWorkFactory,
+            ICaseSolutionLanguageRepository caseSolutionLanguageRepository,
+            ICaseSolutionCategoryLanguageRepository caseSolutionCategoryLanguageRepository) 
             : base(caseSolutionRepository, caseSolutionCategoryRepository) 
         {
             _caseSolutionCategoryRepository = caseSolutionCategoryRepository;
@@ -101,8 +110,21 @@ namespace DH.Helpdesk.Services.Services
             _caseSolutionConditionRepository = caseSolutionConditionRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
             _computerUserCategoryRepository = computerUserCategoryRepository;
+            _caseSolutionLanguageRepository = caseSolutionLanguageRepository;
+            _caseSolutionCategoryLanguageRepository = caseSolutionCategoryLanguageRepository;
         }
-        
+        public void UpdateCaseSolutionLanguage(CaseSolutionLanguageEntity caseLang)
+        {
+            _caseSolutionLanguageRepository.UpdateOtherLanguageCaseSolution(caseLang);
+
+            _caseSolutionLanguageRepository.Commit();
+        }
+        public void UpdateCaseSolutionCategoryLanguage(CaseSolutionCategoryLanguageEntity caseLang)
+        {
+            _caseSolutionCategoryLanguageRepository.UpdateOtherLanguageCaseSolutionCategory(caseLang);
+
+            _caseSolutionCategoryLanguageRepository.Commit();
+        }
         public IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, int? userId = null)
         {
             var customerCaseSolutions = GetCustomerCaseSolutionsCached(customerId);
@@ -121,8 +143,9 @@ namespace DH.Helpdesk.Services.Services
         }
 
         //todo : check if case solutions can be passed as an arguement
-        public List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId, CaseSolutionLocationShow location)
+        public List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId, CaseSolutionLocationShow location, int? languageId)
         {
+
             var customerCaseSolutions = 
                 GetCustomerCaseSolutionsOverview(customerId, userId) //uses cached version
                     .Where(cs => cs.ConnectedButton != 0 &&
@@ -171,7 +194,41 @@ namespace DH.Helpdesk.Services.Services
             }
 
             #endregion
-            
+
+            #region Check Language
+            if(languageId != null && languageId.HasValue)
+            {
+                foreach(var sol in solutionsWithoutCategory)
+                {
+                    var solLang = _caseSolutionLanguageRepository.GetCaseSolutionTranslation(sol.CategoryId, languageId.Value);
+                    if(solLang != null)
+                    {
+                        //E.G Templatename
+                        sol.CategoryName = solLang.CaseSolutionName;
+                    }
+                    
+                }
+                foreach (var sol in solutionsWithCategory)
+                {
+                    var solLang = _caseSolutionCategoryLanguageRepository.GetCaseSolutionCategoryTranslation(sol.CategoryId, languageId.Value);
+                    if (solLang != null)
+                    {
+                        sol.CategoryName = solLang.CaseSolutionCategoryName;
+                    }
+                    foreach(var temp in sol.CaseTemplates)
+                    {
+                        var tempLang = _caseSolutionLanguageRepository.GetCaseSolutionTranslation(temp.CaseTemplateId, languageId.Value);
+                        if(tempLang != null)
+                        {
+                            temp.CaseTemplateName = tempLang.CaseSolutionName;
+                        }
+                    }
+
+                }
+            }
+
+            #endregion
+
             if (solutionsWithoutCategory.Any() && solutionsWithCategory.Any())
             {
                 var maxLen = solutionsWithoutCategory.Concat(solutionsWithCategory).Max(x => x.CategoryName?.Length ?? 0);
@@ -194,7 +251,7 @@ namespace DH.Helpdesk.Services.Services
         public IList<CaseTemplateData> GetSelfServiceCaseTemplates(int customerId)
         {
             // x.ConnectedButton != 0 - exclude workflow steps templates
-            return
+           var ret = 
                 CaseSolutionRepository.GetMany(
                         x => x.Customer_Id == customerId &&
                              x.ShowInSelfService &&
@@ -214,6 +271,7 @@ namespace DH.Helpdesk.Services.Services
                     })
                     .ToList();
 
+            return ret;
         }
 
         //todo: review. not performance optimised
@@ -324,7 +382,7 @@ namespace DH.Helpdesk.Services.Services
             model.FinishingDescription = caseTemplate.FinishingDescription.IfNullThenElse(model.FinishingDescription);
         }
 
-        public IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case caseEntity, IList<int> caseSolutionsIds, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId)
+        public IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case caseEntity, IList<int> caseSolutionsIds, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId, int? languageId)
         {
             var modelList = new List<WorkflowStepModel>();
             var workflowStepsContext = new WorkflowConditionsContext
@@ -353,15 +411,24 @@ namespace DH.Helpdesk.Services.Services
                     var workFlowStepModel = new WorkflowStepModel
                     {
                         CaseTemplateId = cs.CaseSolutionId,
+                       
                         Name = cs.Name,
                         //If value exist in NextStepState - use it. Otherwise check if caseSolution.StateSecondary_id have value, otherwise return 0;
                         NextStep = cs.NextStepState ?? (cs.StateSecondary?.StateSecondaryId ?? 0) 
                     };
-
+                    if (languageId != null && languageId.HasValue && languageId != 0)
+                    {
+                        //If translation exists - Use it - otherwise name of template in tblCaseSolution
+                        var tempLang = _caseSolutionLanguageRepository.GetCaseSolutionTranslation(workFlowStepModel.CaseTemplateId, languageId.Value);
+                        if (tempLang != null)
+                        {
+                            workFlowStepModel.Name = tempLang.CaseSolutionName;
+                        }
+                    }
                     modelList.Add(workFlowStepModel);
                 }
             }
-
+           
             return modelList.ToList();
         }
 
@@ -1639,6 +1706,18 @@ namespace DH.Helpdesk.Services.Services
         public IList<CaseSolutionCategory> GetCaseSolutionCategories(int customerId)
         {
             return _caseSolutionCategoryRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+        }
+        public CaseSolutionCategoryLanguageEntity GetCaseSolutionCategoryLanguage(int categoryId, int languageId)
+        {
+            return _caseSolutionCategoryLanguageRepository.GetCaseSolutionCategoryTranslation(categoryId, languageId);
+        }
+        public IEnumerable<CaseSolutionCategory> GetCategoryLanguageList(int languageId, int customerId)
+        {
+            return _caseSolutionCategoryLanguageRepository.GetTranslatedCategoryList(languageId, customerId);
+        }
+        public CaseSolutionLanguageEntity GetCaseSolutionTranslation(int id, int languageId)
+        {
+            return _caseSolutionLanguageRepository.GetCaseSolutionTranslation(id,  languageId);
         }
 
         public CaseSolution GetCaseSolution(int id)

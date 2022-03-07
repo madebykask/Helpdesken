@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.CaseSolution;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Domain;
@@ -17,6 +18,8 @@ namespace DH.Helpdesk.Dal.Repositories
         IQueryable<CaseSolution> GetCustomerCaseSolutions(IList<int> customersIds);
         IList<CaseSolutionOverview> GetCaseSolutionsWithConditions(IList<int> Ids);
         IQueryable<CaseSolution> GetCaseSolutionsWithExtendeCaseForm(int customerId, int? extendedCaseFormId);
+        CaseSolutionLanguageEntity GetCaseSolutionTranslation(int casSolutionId, int languageId);
+        CaseSolutionCategoryLanguageEntity GetCaseSolutionCategoryTranslation(int categoryId, int languageId);
     }
 
     public class CaseSolutionRepository : RepositoryBase<CaseSolution>, ICaseSolutionRepository
@@ -26,7 +29,16 @@ namespace DH.Helpdesk.Dal.Repositories
             : base(databaseFactory)
         {
         }
-
+        public CaseSolutionCategoryLanguageEntity GetCaseSolutionCategoryTranslation(int categoryId, int languageId)
+        {
+            var lang = this.DataContext.CaseSolutionCategoryLanguages.Where(c => c.Category_Id == categoryId && c.Language_Id == languageId).FirstOrDefault();
+            return lang;
+        }
+        public CaseSolutionLanguageEntity GetCaseSolutionTranslation(int casSolutionId, int languageId)
+        {
+            var lang = this.DataContext.CaseSolutionLanguages.Where(c => c.CaseSolution_Id == casSolutionId && c.Language_Id == languageId).FirstOrDefault();
+            return lang;
+        }
         public CaseSolutionInfo GetGetSolutionInfo(int id, int customerId)
         {
             var caseSolutionInfo =
@@ -63,6 +75,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return query.Include(c => c.Customer);
         }
+
 
         public IList<CaseSolutionOverview> GetCaseSolutionsWithConditions(IList<int> Ids)
         {

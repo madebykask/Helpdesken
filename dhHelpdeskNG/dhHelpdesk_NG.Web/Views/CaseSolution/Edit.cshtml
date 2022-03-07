@@ -8,7 +8,7 @@
 
 @using (Html.BeginForm("Edit", "casesolution", new { id = Model.CaseSolution.Id }, FormMethod.Post, new { id = "target" }))
 {
-    @Html.Hidden("PageId", backPageId)
+    @Html.Hidden("PageId", backPageId )
     @Html.Hidden("selectedValues", SelectedValues)
     
     <div class="secnavs fixed">

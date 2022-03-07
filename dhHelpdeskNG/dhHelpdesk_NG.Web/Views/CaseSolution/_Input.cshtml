@@ -58,7 +58,20 @@
                                 @Html.HiddenFor(model => model.CaseSolution.TemplatePath)
                                 @Html.HiddenFor(model => model.CaseSolution.ValidateOnChange)
                                 @Html.HiddenFor(model => model.CaseSolution.NextStepState)
-
+                                @Html.HiddenFor(model => model.CaseSolution.Id)
+                                <tr>
+                                <tr>
+                                    @if(ViewBag.ShowLanguageList != null && ViewBag.ShowLanguageList)
+                                    {
+                                    <tr>
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Språk")
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(model => model.LanguageId, Model.Languages, new { id = "languageList" })
+                                        </td>
+                                    </tr>
+                                    }
                                 <tr>
                                     <td style="width:200px">
                                         @Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
@@ -81,7 +94,7 @@
                                         @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.DropDownListFor(model => model.CaseSolution.CaseSolutionCategory_Id, Model.CsCategories, "")
+                                        @Html.DropDownListFor(model => model.CaseSolution.CaseSolutionCategory_Id, Model.CsCategories, "", new { id = "CaseSolutionCategory" })
                                     </td>
                                 </tr>
                                 <tr>
@@ -2706,8 +2719,11 @@
 
     }
 
-    $( document ).ready(function() {
-
+    $(document).ready(function () {
+        //TODO - Default Language
+        if (document.getElementById('languageList').value != 1) {
+            DisableControls();
+        }
         if (document.getElementById('Casesolution_ShowInsideCase').checked)
         {
             if(document.getElementById('ConnectTo').value==0  && document.getElementById('ConnectTo').value!='')
@@ -2725,4 +2741,29 @@
         }
 
     });
+</script>
+<script type="text/javascript">
+    $(function() {
+        $("#languageList").change(function() {
+            var selectedItem = $(this).val();
+            //If not default language
+            //Disable controls
+            
+            window.location.href = '@Url.Action("Edit","CaseSolution")?id=' + @Model.CaseSolution.Id + "&languageId=" + selectedItem;
+            
+        });
+    });
+    function DisableControls() {
+        $(document).ready(function () {
+
+            $("#target :input").prop("disabled", true);
+            $("#Name").prop("disabled", false);
+            $("#ShortDescription").prop("disabled", false);
+            $("#Information").prop("disabled", false);
+            $("#languageList").prop("disabled", false);
+            $("#hidId").prop("disabled", false);
+            $("#CaseSolutionCategory").prop("disabled", false);
+            $(".bootstrap-switch-container").hide();
+        })
+    }
 </script>

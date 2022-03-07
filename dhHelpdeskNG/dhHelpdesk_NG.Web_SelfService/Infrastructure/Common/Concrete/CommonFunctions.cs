@@ -39,7 +39,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
             _configurationService = configurationService;
         }
 
-        public List<CaseTemplateTreeViewModel> GetCaseTemplateTreeModel(int customerId, bool groupedView)
+        public List<CaseTemplateTreeViewModel> GetCaseTemplateTreeModel(int customerId, bool groupedView, int languageId)
         {
             var ret = new List<CaseTemplateTreeViewModel>();
             if (groupedView)
@@ -51,7 +51,6 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
                     Id = a.CaseSolutionCategory_Id,
                     Name = a.CaseSolutionCategoryName ?? string.Empty
                 }).Distinct().ToList();
-
                 ret = allCategories.Select(cat => new CaseTemplateTreeViewModel
                 {
                     CategoryId = cat.Id ?? 0,
@@ -97,14 +96,57 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
                 
                 ret.Add(root);
             }
+            if (languageId != 0)
+            {
 
+                foreach (var tree in ret)
+                {
+                    tree.CategoryName = GetTranslationForCategory(tree.CategoryId ?? 0, languageId, tree.CategoryName);
+                    if (tree.Templates != null)
+                    {
+                        foreach (var temp in tree.Templates)
+                        {
+                            var trans = GetTranslationForTemplate(temp.Id, languageId, temp.Name, temp.ShortDescription);
+                            temp.Name = trans.CaseSolutionName;
+                            temp.ShortDescription = trans.ShortDescription;
+                        }
+                    }
+                }
+            }
             /*Show Templates without group first then groups sorted by name*/
             var sortedView = ret.Where(r => r.CategoryId == 0).ToList();
             sortedView.AddRange(ret.Where(r => r.CategoryId != 0).OrderBy(r=> r.CategoryName).ToList());
 
             return sortedView;
         }
+        public string GetTranslationForCategory(int categoryId, int languageId, string ordName)
+        {
+            var catName =  _caseSolutionService.GetCaseSolutionCategoryLanguage(categoryId, languageId);
+            return catName != null ? catName.CaseSolutionCategoryName : ordName;
+        }
+        public CaseSolutionLanguageEntity GetTranslationForTemplate(int templateId, int languageId, string ordName, string ordDesc)
+        {
+            var temp = _caseSolutionService.GetCaseSolutionTranslation(templateId, languageId);
+            if(temp != null)
+            {
+                if (string.IsNullOrEmpty(temp.CaseSolutionName))
+                {
+                    temp.CaseSolutionName = ordName;
+                }
 
+                if (string.IsNullOrEmpty(temp.ShortDescription))
+                {
+                    temp.ShortDescription = ordDesc;
+                }
+            }
+            else
+            {
+                temp = new CaseSolutionLanguageEntity();
+                temp.CaseSolutionName = ordName;
+                temp.ShortDescription = ordDesc;
+            }
+            return temp;
+        }
         public List<ActionSetting> GetActionSettings(int customerId)
         {
             return this._actionSettingService.GetActionSettings(customerId);
@@ -165,9 +207,11 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
                 CurrentLanguageId = SessionFacade.CurrentLanguageId,
                 HasError = SessionFacade.LastError != null && !string.IsNullOrEmpty(SessionFacade.LastError.Message)
             };
-
+            var lang = SessionFacade.CurrentLanguageId;
+            if (lang == SessionFacade.CurrentCustomer.Language_Id)
+                lang = 0;
             if (!model.HasError && !model.HideMenu && model.CurrentCustomer != null && model.CurrentCustomer.ShowCaseOnExternalPage != 0)
-                model.CaseTemplatesGroups = GetCaseTemplateTreeModel(pCustomerId, model.CurrentCustomer.GroupCaseTemplates != 0);
+                model.CaseTemplatesGroups = GetCaseTemplateTreeModel(pCustomerId, model.CurrentCustomer.GroupCaseTemplates != 0, lang);
             else
                 model.CaseTemplatesGroups = null;
 

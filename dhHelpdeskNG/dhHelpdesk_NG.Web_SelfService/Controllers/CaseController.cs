@@ -2516,6 +2516,11 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             var workflowCaseSolutions = _caseSolutionService.GetWorkflowCaseSolutionIds(customerId);
+            int lang = SessionFacade.CurrentLanguageId;
+            if (lang == SessionFacade.CurrentCustomer.Language_Id)
+            {
+                lang = 0;
+            }
 
             if (caseEntity != null)
             {
@@ -2528,7 +2533,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                     isRelatedCase,
                     null,
                     ApplicationType.LineManager, // this is used for purpose since its comapred against ApplicationTypes table values where Selfservice = 2
-                    templateId);
+                    templateId,
+                    lang);
             }
 
             if (res.Any())
