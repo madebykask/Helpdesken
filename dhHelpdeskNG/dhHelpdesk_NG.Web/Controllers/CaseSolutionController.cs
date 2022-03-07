@@ -2823,11 +2823,13 @@ namespace DH.Helpdesk.Web.Controllers
 
             var curUserItem = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION));
             var connectedToButton = Translation.GetCoreTextTranslation("Knapp");
+            var langId = SessionFacade.CurrentLanguageId;
             var _rows = caseSolutions.Select(cs => new RowIndexViewModel
             {
                 Id = cs.Id,
-                Name = cs.Name,
-                CategoryName = cs.CaseSolutionCategory == null ? string.Empty : cs.CaseSolutionCategory.Name,
+                Name = _caseSolutionService.GetCaseSolutionTranslation(cs.Id, langId) == null? cs.Name : _caseSolutionService.GetCaseSolutionTranslation(cs.Id, langId).CaseSolutionName,
+                CategoryName = cs.CaseSolutionCategory == null ? string.Empty: _caseSolutionService.GetCaseSolutionCategoryTranslation(cs.CaseSolutionCategory_Id.Value, langId) == null ? cs.CaseSolutionCategory.Name : _caseSolutionService.GetCaseSolutionCategoryTranslation(cs.CaseSolutionCategory_Id.Value, langId).CaseSolutionCategoryName,
+                //CategoryName = cs.CaseSolutionCategory == null ? string.Empty : cs.CaseSolutionCategory.Name,
                 CaseCaption = cs.Caption,
                 PerformerUserName = cs.PerformerUser == null ?
                                                                                 (cs.SetCurrentUserAsPerformer == 1 ? curUserItem : string.Empty) :
@@ -2885,11 +2887,11 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             IList<CaseSolutionCategory> csc = this._caseSolutionService.GetCaseSolutionCategories(customerId);
-            csc = csc.OrderBy(x => x.Name).ToList();
             foreach (var k in csc)
             {
-                k.Name = Translation.Get(k.Name, Enums.TranslationSource.TextTranslation);
+                k.Name = _caseSolutionService.GetCaseSolutionCategoryTranslation(k.Id, langId) == null ? k.Name : _caseSolutionService.GetCaseSolutionCategoryTranslation(k.Id, langId).CaseSolutionCategoryName;
             }
+            csc = csc.OrderBy(x => x.Name).ToList();
 
             var model = new CaseSolutionIndexViewModel(activeTab)
             {
