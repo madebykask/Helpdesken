@@ -17,6 +17,7 @@
             this.Property(f => f.InitiatorSearchScopeFilter).IsOptional().HasMaxLength(200);
             this.Property(f => f.AdministratorFilter).IsOptional().HasMaxLength(200);
             this.Property(f => f.CaseTypeFilter).IsOptional().HasMaxLength(200);
+            this.Property(f => f.CategoryTypeFilter).IsOptional().HasMaxLength(200);
             this.Property(f => f.ClosingReasonFilter).IsOptional().HasMaxLength(200);
             this.Property(f => f.DepartmentFilter).IsOptional().HasMaxLength(200);
             this.Property(f => f.PriorityFilter).IsOptional().HasMaxLength(200);

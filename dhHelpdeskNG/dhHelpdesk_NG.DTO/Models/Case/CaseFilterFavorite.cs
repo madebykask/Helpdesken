@@ -48,6 +48,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             RegionFilter = new SelectedItems();
             DepartmentFilter = new SelectedItems();
             CaseTypeFilter = new SelectedItems();
+            CategoryTypeFilter = new SelectedItems();
             ProductAreaFilter = new SelectedItems();
             WorkingGroupFilter = new SelectedItems();
             ResponsibleFilter = new SelectedItems();
@@ -69,6 +70,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             SelectedItems regionFilter,
             SelectedItems departmentFilter,
             SelectedItems caseTypeFilter,
+            SelectedItems categoryTypeFilter,
             SelectedItems productAreaFilter,
             SelectedItems workingGroupFilter,
             SelectedItems responsibleFilter,
@@ -88,6 +90,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             RegionFilter = regionFilter;
             DepartmentFilter = departmentFilter;
             CaseTypeFilter = caseTypeFilter;
+            CategoryTypeFilter = categoryTypeFilter;
             ProductAreaFilter = productAreaFilter;
             WorkingGroupFilter = workingGroupFilter;
             ResponsibleFilter = responsibleFilter;
@@ -102,7 +105,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             WatchDateFilter = watchDateFilter;
             ClosingDateFilter = closingDateFilter;
         }
-
+        
         #endregion
 
         #region Properties
@@ -116,6 +119,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public SelectedItems DepartmentFilter { get; set; }
 
         public SelectedItems CaseTypeFilter { get; set; }
+
+        public SelectedItems CategoryTypeFilter { get; set; }
 
         public SelectedItems ProductAreaFilter { get; set; }
 

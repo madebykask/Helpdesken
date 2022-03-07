@@ -16,7 +16,8 @@ namespace DH.Helpdesk.Domain.Cases
 		public string RegionFilter { get; set; }
 		public string DepartmentFilter { get; set; }		
 		public string CaseTypeFilter { get; set; }
-		public string ProductAreaFilter { get; set; }
+        public string CategoryTypeFilter { get; set; }
+        public string ProductAreaFilter { get; set; }
 		public string WorkingGroupFilter { get; set; }
 		public string ResponsibleFilter { get; set; }
 		public string AdministratorFilter { get; set; }
