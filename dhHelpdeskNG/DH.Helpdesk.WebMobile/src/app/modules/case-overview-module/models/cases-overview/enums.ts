@@ -22,6 +22,7 @@ export enum FilterFields {
   RegionFilter,
   DepartmentFilter,
   CaseTypeFilter,
+  CategoryTypeFilter,
   ProductAreaFilter,
   WorkingGroupFilter,
   ResponsibleFilter,

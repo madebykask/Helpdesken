@@ -159,6 +159,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
                 [nameof(RegionFilter)] = RegionFilter.GetSelectedStrOrNull(),
                 [nameof(DepartmentFilter)] = DepartmentFilter.GetSelectedStrOrNull(),
                 [nameof(CaseTypeFilter)] = CaseTypeFilter.GetSelectedStrOrNull(),
+                [nameof(CategoryTypeFilter)] = CategoryTypeFilter.GetSelectedStrOrNull(),
                 [nameof(ProductAreaFilter)] = ProductAreaFilter.GetSelectedStrOrNull(),
                 [nameof(WorkingGroupFilter)] = WorkingGroupFilter.GetSelectedStrOrNull(),
                 [nameof(ResponsibleFilter)] = ResponsibleFilter.GetSelectedStrOrNull(),
