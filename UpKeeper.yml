@@ -34,12 +34,6 @@ steps:
     feedsToUse: 'select'
     vstsFeed: '1e2f294e-d4e3-4681-bb74-833f682abc75'
 
-- task: MSBuild@1
-  inputs:
-    msbuildVersion: '14.0'  
-    solution: '**/dhHelpdesk_NG.Web/DH.Helpdesk.Web.csproj'
-    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:OutDir="$(build.artifactStagingDirectory)"'
-
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
