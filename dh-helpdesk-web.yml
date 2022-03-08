@@ -31,5 +31,5 @@ steps:
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
-    TargetFolder: '$(build.artifactStagingDirectory)\_PublishedWebsites\WebUI'
-    OverWrite: true
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)/dhHelpdesk_NG.Web'
