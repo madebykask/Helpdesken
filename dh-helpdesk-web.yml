@@ -31,7 +31,7 @@ steps:
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: '**'
+    Contents: 'dhHelpdesk_NG.Web\Properties\PublishProfiles\DH.Helpdesk.Web.Release.pubxml'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Web'
 
 - task: PublishBuildArtifacts@1
