@@ -28,4 +28,14 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Web'
 
+- task: PublishBuildArtifacts@1
+  displayName: PublishBuildArtifacts-Web
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Web' 
+    artifactName: 'DH.Helpdesk.Web'

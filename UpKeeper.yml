@@ -78,13 +78,6 @@ steps:
     Contents: '**'
     TargetFolder: '$(build.artifactstagingdirectory)/DH.Helpdesk.Schedule'
 
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(system.defaultworkingdirectory)/dhHelpdeskNG/dhHelpdesk_NG.Web'
-    Contents: 'dhHelpdesk_NG.Web/Properties/PublishProfiles/DH.Helpdesk.Web.Release.pubxml'
-    TargetFolder: '$(build.artifactstagingdirectory)/dhHelpdesk_NG.Web'
-    OverWrite: true
-
 - task: PublishBuildArtifacts@1
   displayName: PublishBuildArtifacts-LDAP-AD
   inputs:
@@ -120,9 +113,3 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Schedule' 
     artifactName: 'DH.Helpdesk.Schedule'
-
-- task: PublishBuildArtifacts@1
-  displayName: PublishBuildArtifacts-Web
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)/dhHelpdesk_NG.Web' 
-    artifactName: 'dhHelpdesk_NG.Web'
