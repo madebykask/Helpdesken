@@ -4997,15 +4997,18 @@ namespace DH.Helpdesk.Web.Controllers
                     .Select(x => x.CaseSolutionId)
                     .ToList();
             var langId = SessionFacade.CurrentLanguageId;
-            m.WorkflowSteps =
-                _caseSolutionService.GetWorkflowSteps(customerId,
-                    m.case_,
-                    workflowCaseSolutionIds,
-                    isRelatedCase,
-                    SessionFacade.CurrentUser,
-                    ApplicationType.Helpdesk,
-                    templateId,
-                    langId);
+            if(m.case_.FinishingDate == null)
+            {
+                 m.WorkflowSteps = _caseSolutionService.GetWorkflowSteps(customerId,
+                   m.case_,
+                   workflowCaseSolutionIds,
+                   isRelatedCase,
+                   SessionFacade.CurrentUser,
+                   ApplicationType.Helpdesk,
+                   templateId,
+                   langId);
+            }
+
 
             m.CaseMailSetting = new CaseMailSetting(
                 customer.NewCaseEmailList,
