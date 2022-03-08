@@ -32,7 +32,7 @@ steps:
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
     Contents: '**'
-    TargetFolder: '$(build.artifactstagingdirectory)/dhHelpdesk_NG.Web'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/dhHelpdesk_NG.Web'
 
 - task: PublishBuildArtifacts@1
   displayName: PublishBuildArtifacts-Web
