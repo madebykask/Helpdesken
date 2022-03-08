@@ -28,4 +28,8 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    TargetFolder: '$(build.artifactStagingDirectory)\_PublishedWebsites\WebUI'
+    OverWrite: true
