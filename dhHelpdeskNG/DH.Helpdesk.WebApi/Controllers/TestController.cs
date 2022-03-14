@@ -30,6 +30,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         [AllowAnonymous]
         public IHttpActionResult Test()
         {
+            //Just for test purpose
             return Ok("success");
         }
 
