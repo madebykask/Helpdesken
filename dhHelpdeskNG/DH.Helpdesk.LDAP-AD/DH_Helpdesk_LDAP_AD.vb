@@ -11,6 +11,7 @@ Module DH_Helpdesk_LDAP_AD
     Private miDomain_Id As Integer
     Private miCustomer_Id As Integer
 
+
     Public Sub Main()
         ' 1: SyncByCustomer
         ' 2: SyncByCustomerHTTP
