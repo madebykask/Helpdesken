@@ -1482,8 +1482,8 @@ namespace DH.Helpdesk.Web.Controllers
                 var caseSolutionLang = new CaseSolutionLanguageEntity();
                 caseSolutionLang.Language_Id = caseSolutionInputViewModel.LanguageId;
                 caseSolutionLang.CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id;
-                caseSolutionLang.Information = caseSolutionInputViewModel.CaseSolution.Information;
-                caseSolutionLang.ShortDescription = caseSolutionInputViewModel.CaseSolution.ShortDescription;
+                caseSolutionLang.Information = caseSolutionInputViewModel.CaseSolution.Information == null ? string.Empty : caseSolutionInputViewModel.CaseSolution.Information;
+                caseSolutionLang.ShortDescription = caseSolutionInputViewModel.CaseSolution.ShortDescription == null ? string.Empty : caseSolutionInputViewModel.CaseSolution.ShortDescription;
                 caseSolutionLang.CaseSolutionName = caseSolutionInputViewModel.CaseSolution.Name;
                 _caseSolutionService.UpdateCaseSolutionLanguage(caseSolutionLang);
             }
