@@ -10,7 +10,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/DH.Helpdesk.Web.csproj'
+  solution: '**/DH.Helpdesk.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
