@@ -10,7 +10,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/DH.Helpdesk.sln'
+  solution: '**/DH.Helpdesk.Web.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -28,16 +28,30 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-
+# this code takes all the files in $(Build.ArtifactStagingDirectory) and uploads them as an artifact of your build.
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'DH.Helpdesk.Web'
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: '**/dhHelpdesk_NG.Web/Properties/PublishProfiles/DH.Helpdesk.Web.Release.pubxml'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Web'
+    SourceFolder: '$(Build.artifactstagingdirectory)'
+    Contents: |
+      **
+      !**/web.config
+    OverWrite: true
+    CleanTargetFolder: true
+    TargetFolder: '$(Build.artifactstagingdirectory)'
+
+# - task: CopyFiles@2
+#   inputs:
+#     SourceFolder: '$(Build.SourcesDirectory)'
+#     Contents: '**/dhHelpdesk_NG.Web/Properties/PublishProfiles/DH.Helpdesk.Web.Release.pubxml'
+#     TargetFolder: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Web'
 
 - task: PublishBuildArtifacts@1
   displayName: PublishBuildArtifacts-Web
   inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Web' 
     artifactName: 'DH.Helpdesk.Web'
