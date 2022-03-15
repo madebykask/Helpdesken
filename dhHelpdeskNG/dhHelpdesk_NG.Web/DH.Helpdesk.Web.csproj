@@ -767,6 +767,7 @@
     <Content Include="Content\css\bootstrap-tagsinput.css" />
     <Content Include="Content\css\clickmultimenu_dropdown.css" />
     <Content Include="Content\css\custom\dynamic-cases.css" />
+    <Content Include="Content\css\extendedcase-editor.css" />
     <Content Include="Content\css\extendedcase.css" />
     <Content Include="Content\css\font-awesome.min.css" />
     <Content Include="Content\css\images\sort_asc.png" />
