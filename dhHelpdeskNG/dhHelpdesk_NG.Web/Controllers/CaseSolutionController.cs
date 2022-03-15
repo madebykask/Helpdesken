@@ -1437,7 +1437,6 @@ namespace DH.Helpdesk.Web.Controllers
 
             this._caseSolutionConditionService.Add(Convert.ToInt32(caid), Convert.ToInt32(condid));
 
-
             //Get not selected case solution conditions
             var lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(Convert.ToInt32(caid));
 
