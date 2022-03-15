@@ -1475,7 +1475,6 @@ namespace DH.Helpdesk.Web.Controllers
             this.TempData["RequiredFields"] = null;
             ViewBag.ShowLanguageList = true;
             if (caseSolutionInputViewModel.LanguageId != SessionFacade.CurrentCustomer.Language_Id)
-            //hrmm
             {
                 var lang = SessionFacade.CurrentLanguageId;
                 //Only this fields should be updated
