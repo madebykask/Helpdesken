@@ -24,7 +24,7 @@ steps:
 - task: VSBuild@1
   inputs:
     solution: '**/dhHelpdesk_NG.Web/DH.Helpdesk.Web.csproj'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
@@ -36,13 +36,13 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Build.artifactstagingdirectory)'
+    SourceFolder: '$(Build.ArtifactStagingDirectory)'
     Contents: |
       **
       !**/web.config
     OverWrite: true
     CleanTargetFolder: true
-    TargetFolder: '$(Build.artifactstagingdirectory)'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 # - task: CopyFiles@2
 #   inputs:
