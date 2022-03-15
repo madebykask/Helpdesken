@@ -1495,7 +1495,6 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
 
-
                 // Positive: Send Mail to...
                 if (caseSolutionInputViewModel.CaseSolution.NoMailToNotifier == 0)
                     caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 1;
