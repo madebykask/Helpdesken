@@ -13,7 +13,6 @@ variables:
   solution: '**/DH.Helpdesk.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  projectFolder: '**/dhHelpdesk_NG.Web/DH.Helpdesk.Web.csproj'
 
 steps:
 - task: NuGetToolInstaller@1
@@ -24,16 +23,16 @@ steps:
 
 - task: VSBuild@1
   inputs:
-    solution: '$(projectFolder)'
+    solution: '**/dhHelpdesk_NG.Web/DH.Helpdesk.Web.csproj'
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:PackageAsSingleFile=false /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)" p:OutDir="$(build.artifactStagingDirectory)"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-# this code takes all the files in $(Build.ArtifactStagingDirectory) and uploads them as an artifact of your build.
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-    artifactName: 'DH.Helpdesk.Web'
+# # this code takes all the files in $(Build.ArtifactStagingDirectory) and uploads them as an artifact of your build.
+# - task: PublishBuildArtifacts@1
+#   inputs:
+#     pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+#     artifactName: 'DH.Helpdesk.Web'
 
 - task: CopyFiles@2
   inputs:
