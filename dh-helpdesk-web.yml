@@ -31,7 +31,8 @@ steps:
   inputs:
     msbuildVersion: '16.0'  
     solution: '**/dhHelpdesk_NG.Web/DH.Helpdesk.Web.csproj'
-    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:OutDir="$(build.artifactStagingDirectory)"'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:OutDir="$(build.artifactStagingDirectory)" -skip:objectName=filePath,absolutePath=\web.config'
+    
 
 - task: CopyFiles@2
   inputs:
