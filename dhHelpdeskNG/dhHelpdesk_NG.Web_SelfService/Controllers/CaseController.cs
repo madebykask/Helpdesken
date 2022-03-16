@@ -400,6 +400,11 @@ namespace DH.Helpdesk.SelfService.Controllers
                 model.NewCase.CurrentCaseSolution_Id = caseTemplateId;
 
                 model.Information = caseTemplate.Information;
+                var caseSolutionTranslation = _caseSolutionService.GetCaseSolutionTranslation(caseTemplateId.Value, languageId);
+                if (caseSolutionTranslation != null)
+                {
+                    model.Information = caseSolutionTranslation.Information;
+                }
 
                 if (!string.IsNullOrEmpty(caseTemplate.Text_External) ||
                     !string.IsNullOrEmpty(caseTemplate.Text_Internal) || caseTemplate.FinishingCause_Id.HasValue)

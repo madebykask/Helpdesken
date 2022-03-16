@@ -4979,7 +4979,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var customerCaseSolutions =
                 _caseSolutionService.GetCustomerCaseSolutionsOverview(customerId, userId);
-
+            var langId = SessionFacade.CurrentLanguageId;
             //TODO: reuse case solutions!
             m.CaseTemplateButtons =
                 customerCaseSolutions.Where(c => c.ShowInsideCase != 0 && c.ConnectedButton.HasValue && c.ConnectedButton > 0) // ConnectedButton = 0 reserved for workflow steps 
@@ -4991,12 +4991,18 @@ namespace DH.Helpdesk.Web.Controllers
                     })
                     .OrderBy(c => c.ButtonNumber)
                     .ToList();
-
+            foreach(var button in m.CaseTemplateButtons)
+            {
+                if (_caseSolutionService.GetCaseSolutionTranslation(button.CaseTemplateId, langId) != null)
+                {
+                    button.CaseTemplateName = _caseSolutionService.GetCaseSolutionTranslation(button.CaseTemplateId, langId).CaseSolutionName;
+                }
+            }
             var workflowCaseSolutionIds =
                 customerCaseSolutions.Where(x => x.ConnectedButton == 0 && x.Status > 0)
                     .Select(x => x.CaseSolutionId)
                     .ToList();
-            var langId = SessionFacade.CurrentLanguageId;
+            
             if(m.case_.FinishingDate == null)
             {
                  m.WorkflowSteps = _caseSolutionService.GetWorkflowSteps(customerId,
