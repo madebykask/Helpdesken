@@ -38,7 +38,6 @@ steps:
     SourceFolder: '$(build.artifactStagingDirector)'
     Contents: |
       **
-      !**/web.config
     OverWrite: true
     CleanTargetFolder: true
     TargetFolder: '$(build.artifactStagingDirector)\DH.Helpdesk.Web'
