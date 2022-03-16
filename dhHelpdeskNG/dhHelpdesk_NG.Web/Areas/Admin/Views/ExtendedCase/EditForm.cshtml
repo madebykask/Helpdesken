@@ -178,11 +178,11 @@
             let optionRows = (options) => {
                 let res = "<tr class='table-light'><td style='width:100%'><ul class='selectOptions" + selectionCls + "' data-dhhelpdesk-controlId='" + idName + "' data-dhhelpdesk-langId='" + activeLanguage.Id + "'>";
                 for (let o = 0; o < options.length; o++) {
-                    //res = res + "<tr class='table-light'><td style='width:5%'><span aria-hidden='true'><i class='fa fa-circle'></i></span></td><td style='width:100%'><input type='text' placeholder='" + options[o] + "'></td><td><a class='fa fa-trash fa-lg' style='color:black' aria-hidden='true'></a></td></tr>"
+                    
                     res = res + OptionListItemComponent(idName, options[o], activeLanguage, controlType, savedId, options.length);
                 }
                 res = res + "</ul></td></tr>";
-                //res = res + "<div style='border: 1px solid black; margin-left:5px:margin-right:5px'><ul><li><input style='width:95%' type='text' placeholder='Option 1'><span><a class='fa fa-trash fa-lg' style='color:black' aria-hidden='true'></a></span></li></ul></div>"
+                
                 return res;
             };
 
@@ -535,7 +535,7 @@
             for (let i = 0; i < listItems.length; i++) {
                 let listItemId = listItems[i].getAttribute('data-dhhelpdesk-listid');
                 if (listItemId > nextListItemId) {
-                    nextListItemId = listItemId;
+                    nextListItemId = parseInt(listItemId);
                 }
             }
 
@@ -889,6 +889,8 @@
         let fieldTranslations = [];
 
         let counter = 0
+
+        //Loop through all sections
         $('.sectionLabel').each(function (i, obj) {
 
             counter++;
@@ -901,6 +903,7 @@
             let newId = sTranslationsProperty[0].value + counter;
             let idSection = savedId != null ? savedId : newId;
 
+            //Add section items
             items[i] = {};
             items[i].id = idSection;
             items[i].sectionName = document.getElementById(obj.id).innerText;
@@ -908,6 +911,7 @@
 
             items[i].translationId = document.getElementById(obj.id).getAttribute('data-dhhelpdesk-id');
 
+            //Add translations for the different sections
             for (s = 0; s < sTranslations.length; s++) {
                 let translation = {};
                 translation.Languageid = sTranslations[s].getAttribute('data-dhhelpdesk-langid');
@@ -917,7 +921,7 @@
                 translation.TranslationId = sTranslations[s].getAttribute('data-dhhelpdesk-id');
                 fieldTranslations.push(translation);
             }
-
+            //Loop through all controls inside a section
             getNextUntil(obj.parentElement.parentElement.parentElement.parentElement, "[data-type='section']").forEach(function (obj, n) {
                 counter++;
                 let controlType = obj.getAttribute('data-type');
@@ -932,11 +936,12 @@
                     var fTranslations = obj.querySelectorAll(".trTransField");
 
                     var fTranslationsProperty = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguage.Id);
-                    var dataSrc = null;
 
+                    var dataSrc = null;
+                    
                     if (fTranslationsProperty.length > 1) {
                         dataSrc = [];
-
+                        
                         if (fTranslationsProperty[1].querySelector('.selectOptions') !== null) {
                             let optionLst = fTranslationsProperty[1].querySelector('.selectOptions').getElementsByTagName("li");
 
@@ -945,10 +950,11 @@
                                 let savedId = optionLst[o].getAttribute('data-dhhelpdesk-savedid');
 
                                 let newId = 'lst' + optionLst[o].getAttribute('data-dhhelpdesk-listid') + '_' + optionLst[o].querySelectorAll('.labelName')[0].value;
+
                                 optionId = savedId != null ? savedId : newId;
 
                                 let option = optionLst[o].querySelector('.labelName');
-                                dataSrc.push({ value: optionId, text: option.value })
+                                dataSrc.push({ value: optionId, text: option.value });
                             }
                         }
                     }
@@ -992,7 +998,7 @@
                             fieldTranslations.push(translation);
                         }
                     }
-
+                    
                     let optionTextTranslations = [];
                     optionTextTranslations = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-options') == "true");
                     let listItemCount = 0;
@@ -1001,14 +1007,14 @@
 
                         let optionElms = [];
 
-                        for (let o = 0; o < optionTextTranslations.length; o++) {
+                        for (let o = 0; o < optionTextTranslations.length; o++) {                            
                             let selectOptions = optionTextTranslations[o].querySelector('.selectOptions');
                             let optionItems = selectOptions.getElementsByTagName('li');
-
+                            
                             for (let i = 0; i < optionItems.length; i++) {
                                 let listItemId = optionItems[i].getAttribute('data-dhhelpdesk-listid');
                                 if (listItemId > listItemCount) {
-                                    listItemCount = listItemId;
+                                    listItemCount = parseInt(listItemId);
                                 }
                                 optionElms.push(optionItems[i]);
                             }
@@ -1028,6 +1034,7 @@
 
                                 let savedId = options[p].parentElement.getAttribute('data-dhhelpdesk-savedId');
                                 let newId = 'lst' + options[p].parentElement.getAttribute('data-dhhelpdesk-listid') + '_' + idOptionProperty[0].value;
+
                                 let idOption = savedId != null ? savedId : newId;
 
                                 let translation = {};
@@ -1092,75 +1099,79 @@
                     }
                 });
 
-                });
+            });
 
-                if (checkForDuplicates(items)) {
-                    ShowToastMessage("Sektionerna får ej ha samma namn", "error");
-                    return;
-                }
+            // Check that sections do not have the same name
+            if (checkForDuplicates(items)) {
+                ShowToastMessage("Sektionerna får ej ha samma namn", "error");
+                return;
+            }
 
-                let tabTranslations = document.getElementById("formtabs").querySelectorAll(".labelName");
-                let tabTranslationsProperty = [...tabTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguage.Id);
+            //Tab translations
+            let tabTranslations = document.getElementById("formtabs").querySelectorAll(".labelName");
+            let tabTranslationsProperty = [...tabTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguage.Id);
 
-                let savedId = $('#formtabs').attr('data-dhhelpdesk-savedid');
+            let savedId = $('#formtabs').attr('data-dhhelpdesk-savedid');
 
-                let newId = tabTranslationsProperty[0].value + "0";
-                let tabId = savedId != null ? savedId : newId;
+            let newId = tabTranslationsProperty[0].value + "0";
+            let tabId = savedId != null ? savedId : newId;
 
-                tabs[0] = {
-                    id: tabId,
-                    name: tabId,
-                    columnCount: "1",
-                    sections: items
-                }
+            tabs[0] = {
+                id: tabId,
+                name: tabId,
+                columnCount: "1",
+                sections: items
+            }
 
-                for (let t = 0; t < tabTranslations.length; t++) {
-                    let translation = {};
-                    translation.Languageid = tabTranslations[t].getAttribute('data-dhhelpdesk-langid');
-                    translation.Property = tabId;
-                    translation.Text = tabTranslations[t].value;
-                    translation.ControlType = tabTranslations[t].getAttribute('data-dhhelpdesk-controlType');
-                    translation.TranslationId = tabTranslations[t].getAttribute('data-dhhelpdesk-id');
-                    fieldTranslations.push(translation);
-                }
+            for (let t = 0; t < tabTranslations.length; t++) {
+                let translation = {};
+                translation.Languageid = tabTranslations[t].getAttribute('data-dhhelpdesk-langid');
+                translation.Property = tabId;
+                translation.Text = tabTranslations[t].value;
+                translation.ControlType = tabTranslations[t].getAttribute('data-dhhelpdesk-controlType');
+                translation.TranslationId = tabTranslations[t].getAttribute('data-dhhelpdesk-id');
+                fieldTranslations.push(translation);
+            }
 
-                var dataToSend = {
-                    id: getUrlVars()["extendedCaseFormId"],
-                    customerId: getUrlVars()["customerId"],
-                    customerGuid: "@Model.Customer.CustomerGUID",
-                    languageId: currentLanguageId,
-                    description: document.getElementById("formDescription").value,
-                    status: selectedCaseSolutions.length == 0 ? "false" : "true",
-                    caseSolutionIds: selectedCaseSolutions,
-                    tabs: tabs,
-                    translations: fieldTranslations
-            };
+            //Set up data to post
+            var dataToSend = {
+                id: getUrlVars()["extendedCaseFormId"],
+                customerId: getUrlVars()["customerId"],
+                customerGuid: "@Model.Customer.CustomerGUID",
+                languageId: currentLanguageId,
+                description: document.getElementById("formDescription").value,
+                status: selectedCaseSolutions.length == 0 ? "false" : "true",
+                caseSolutionIds: selectedCaseSolutions,
+                tabs: tabs,
+                translations: fieldTranslations
+        };
 
-            $.ajax({
-                url: "/admin/ExtendedCase/SaveForm",
-                type: "POST",
-                data: JSON.stringify(dataToSend),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-                    if (data.result == true) {
-                        if (typeof (getUrlVars()["extendedCaseFormId"]) == "undefined") {
-                            let url = "EditForm?extendedCaseFormId=" + data.formId + "&languageId=" + currentLanguageId;
-                            window.location.href = url;
-                        }
-                    ShowToastMessage('@Html.Raw(Translation.GetForJS("Sparat"))')
+        //POST editor form data
+        $.ajax({
+            url: "/admin/ExtendedCase/SaveForm",
+            type: "POST",
+            data: JSON.stringify(dataToSend),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.result == true) {
+                    if (typeof (getUrlVars()["extendedCaseFormId"]) == "undefined") {
+                        let url = "EditForm?extendedCaseFormId=" + data.formId + "&languageId=" + currentLanguageId;
+                        window.location.href = url;
                     }
-                    else {
-                        ShowToastMessage(data.error, "error")
-                    }
+                ShowToastMessage('@Html.Raw(Translation.GetForJS("Sparat"))')
                 }
+                else {
+                    ShowToastMessage(data.error, "error")
+                }
+            }
             //,
             //error: function (request) {
 
             //    ShowToastMessage(, "error");
             //}
-            });
-        }
+        });
+    }
 
     // Helper fucntions
     function checkForDuplicates(array) {
