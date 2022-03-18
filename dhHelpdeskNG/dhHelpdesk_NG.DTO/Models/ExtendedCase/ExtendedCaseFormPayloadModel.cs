@@ -83,8 +83,11 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
         public string Label { get; set; } 
         
         [JsonProperty("required")]
-        public bool Required { get; set; }   
-        
+        public bool Required { get; set; }
+
+        [JsonProperty("requiredSelfService")]
+        public bool RequiredSelfService { get; set; }
+
         [JsonProperty("valueBinding")]
         public object ValueBinding { get; set; }
 

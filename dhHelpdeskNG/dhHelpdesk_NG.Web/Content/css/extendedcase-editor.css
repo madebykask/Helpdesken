@@ -115,6 +115,14 @@ input[type=text] {
     visibility: hidden;
 }
 
+.chkRequired {
+    vertical-align: top;
+}
+
+.chkRequiredSelfService {
+    vertical-align: top;
+}
+
 .required-defaultLng {
     color: red;
 }
@@ -197,7 +205,6 @@ input[type=text] {
     width: 98%;
 }
 
-
 .table-borderless > tbody > tr > td,
 .table-borderless > tbody > tr > th,
 .table-borderless > tfoot > tr > td,
@@ -210,6 +217,10 @@ input[type=text] {
 .table-borderless > tbody > tr {
     border: 1px solid #dddddd;
     border-radius: 5px;
+}
+
+.tr-transparent {
+    border-color:transparent !important;
 }
 
 .table-borderless {

@@ -178,11 +178,11 @@
             let optionRows = (options) => {
                 let res = "<tr class='table-light'><td style='width:100%'><ul class='selectOptions" + selectionCls + "' data-dhhelpdesk-controlId='" + idName + "' data-dhhelpdesk-langId='" + activeLanguage.Id + "'>";
                 for (let o = 0; o < options.length; o++) {
-                    
+
                     res = res + OptionListItemComponent(idName, options[o], activeLanguage, controlType, savedId, options.length);
                 }
                 res = res + "</ul></td></tr>";
-                
+
                 return res;
             };
 
@@ -247,7 +247,7 @@
             }
 
             if (editfields.hasRequiredChk) {
-                res = res + "<tr><td><label for='" + editfields.idName + "required" + "' class=''>" + '@Translation.GetCoreTextTranslation("Obligatorisk")' + "</label></td><td><input type='checkbox' " + (editfields.isRequired == true ? 'checked' : '') + " class='chkRequired' id = '" + editfields.idName + "required" + "' ></td ></tr > ";
+                res = res + "<tr style='background-color:#f9f9f9'><td><label>" + '@Translation.GetCoreTextTranslation("Obligatorisk")' + "</label></td><td style='padding-top: 4px; padding-bottom: 2px;'><table class='table table-borderless'><tr class='tr-transparent'><td style='width: 5%'><label for='" + editfields.idName + "required" + "' class=''>Helpdesk</label></td><td style='width: 2%'><input type='checkbox' " + (editfields.isRequired == true ? 'checked' : '') + " class='chkRequired' id = '" + editfields.idName + "required" + "'></td><td style='width: 8%'></td><td style='width: 8%'><label for='" + editfields.idName + "requiredSelfService" + "'>" + '@Translation.GetCoreTextTranslation("Självservice")' + "</label></td><td><input type='checkbox' " + (editfields.isRequiredSelfService == true ? 'checked' : '') + " class='chkRequiredSelfService' id='" + editfields.idName + "requiredSelfService" + "' /></td></tr></table></td></tr> ";
             }
 
             res = res + "</tbody></table></div></div>";
@@ -590,41 +590,53 @@
                         let idName = formData.tabs[t].sections[s].id;
                         if (idName != "HiddenFields" && idName != "InitiatorInfo") {
                             let currentLanguageSectionName = [...translations].filter(item => item.Language.Id == currentLanguageId && formData.tabs[t].sections[s].name == item.Name);
-                            let sectioneditfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].name, controlType: "Section", hasRequiredChk: false, isRequired: false };
+                            let sectionEditFields = { idName: idName, placeHolder: formData.tabs[t].sections[s].name, controlType: "Section", hasRequiredChk: false, isRequired: false };
 
-                            $("#dropzone").append(ListComponent("section", SectionDivComponent(EditFieldComponent(sectioneditfields), idName, "field-label sectionLabel", currentLanguageSectionName[0].TranslationText, idName)));
+                            $("#dropzone").append(ListComponent("section", SectionDivComponent(EditFieldComponent(sectionEditFields), idName, "field-label sectionLabel", currentLanguageSectionName[0].TranslationText, idName)));
 
                             for (var c = 0; c < formData.tabs[t].sections[s].controls.length; c++) {
                                 let idName = formData.tabs[t].sections[s].controls[c].id;
 
                                 let dataType = formData.tabs[t].sections[s].controls[c].type;
                                 let isRequired = false;
-
+                                let isRequiredSelfService = false;
+                                //debugger
                                 if (formData.tabs[t].sections[s].controls[c].validators) {
-                                    isRequired = formData.tabs[t].sections[s].controls[c].validators.onSave[0].type == "required" ? true : false;
+                                    let requiredObj = formData.tabs[t].sections[s].controls[c].validators.onSave[0];
+                                    if (requiredObj.type == "required") {
+
+                                        if (requiredObj.enabled != null) {
+                                            isRequired = requiredObj.enabled.toLowerCase().includes("helpdesk");
+                                            isRequiredSelfService = requiredObj.enabled.toLowerCase().includes("selfservice");
+                                        }
+                                        else {
+                                            isRequired = true;
+                                            isRequiredSelfService = true;
+                                        }
+                                    }
                                 }
 
                                 let currentLanguageLabel = [...translations].filter(item => item.Language.Id == currentLanguageId && formData.tabs[t].sections[s].controls[c].label == item.Name);
                                 let editfields;
                                 if (dataType == "textbox") {
-                                    editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "TextBox", hasRequiredChk: true, isRequired: isRequired };
+                                    editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "TextBox", hasRequiredChk: true, isRequired: isRequired, isRequiredSelfService: isRequiredSelfService };
                                     $("#dropzone").append(ListComponent(dataType, "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id='" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + HeaderActionsComponent(idName) + "</div><div class='control' id='" + idName + "_control'><input type='text' class='form-control form-control-width' readonly></div>" + EditFieldComponent(editfields) + "</div>"));
                                 }
 
                                 else if (dataType == "textarea") {
-                                    editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "Textarea", hasRequiredChk: true, isRequired: isRequired };
+                                    editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "Textarea", hasRequiredChk: true, isRequired: isRequired, isRequiredSelfService: isRequiredSelfService };
                                     $("#dropzone").append(ListComponent(dataType, "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + HeaderActionsComponent(idName) + "</div><div class='control' id='" + idName + "_control'><textarea class='form-control form-control-width' readonly></textarea></div>" + EditFieldComponent(editfields) + "</div>"));
                                 }
 
                                 else if (dataType == "date") {
-                                    editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "Date", hasRequiredChk: true, isRequired: isRequired };
+                                    editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "Date", hasRequiredChk: true, isRequired: isRequired, isRequiredSelfService: isRequiredSelfService };
                                     $("#dropzone").append(ListComponent(dataType, "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + HeaderActionsComponent(idName) + "</div><div class='control' id='" + idName + "_control'><input type='date' class='form-control form-control-width' readonly></div>" + EditFieldComponent(editfields) + "</div>"), null);
                                 }
 
                                 else if (dataType == "fileupload") {
                                     let currentLanguageFieldTextName = [...translations].filter(item => item.Language.Id == currentLanguageId && formData.tabs[t].sections[s].controls[c].addonText == item.Name);
 
-                                    editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "fileUpload", hasRequiredChk: true, isRequired: false, labelFields: [{ Text: currentLanguageFieldTextName[0].Name }] };
+                                    editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "fileUpload", hasRequiredChk: true, isRequired: isRequired, isRequiredSelfService: isRequiredSelfService, labelFields: [{ Text: currentLanguageFieldTextName[0].Name }] };
                                     $("#dropzone").append(ListComponent(dataType, "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + HeaderActionsComponent(idName) + "</div><div class='control' id='" + idName + "_control'><input type='text' id='" + idName + "fileUploadText' value='" + currentLanguageFieldTextName[0].TranslationText + "' class='file-upload' readonly></div>" + EditFieldComponent(editfields) + "</div>"), null);
                                 }
 
@@ -636,7 +648,7 @@
                                         radioOptions.push({ id: formData.tabs[t].sections[s].controls[c].dataSource[r].value, name: formData.tabs[t].sections[s].controls[c].dataSource[r].text });
                                     }
 
-                                    editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "radio", hasRequiredChk: true, isRequired: false, labelFields: null, options: radioOptions, savedId: idName };
+                                    editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "radio", hasRequiredChk: true, isRequired: isRequired, isRequiredSelfService: isRequiredSelfService, labelFields: null, options: radioOptions, savedId: idName };
                                     $("#dropzone").append(ListComponent(dataType, "<div class='field' data-dhhelpdesk-savedid='" + idName + "''><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + HeaderActionsComponent(idName) + "</div><div class='control' id='" + idName + "_control'>" + DraggedItemInputFieldComponent(dataType, radioOptions, [...activeLanguages].filter(l => l.Id == currentLanguageId)[0], [...translations]) + "</div>" + EditFieldComponent(editfields) + "</div>"), null);
                                 }
 
@@ -646,7 +658,7 @@
                                         chkOptions.push({ id: formData.tabs[t].sections[s].controls[c].dataSource[r].value, name: formData.tabs[t].sections[s].controls[c].dataSource[r].text });
                                     }
 
-                                    editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "checkbox-list", hasRequiredChk: true, isRequired: false, labelFields: null, options: chkOptions, savedId: idName };
+                                    editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "checkbox-list", hasRequiredChk: true, isRequired: isRequired, isRequiredSelfService: isRequiredSelfService, labelFields: null, options: chkOptions, savedId: idName };
                                     $("#dropzone").append(ListComponent(dataType, "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + HeaderActionsComponent(idName) + "</div><div class='control' id='" + idName + "_control'>" + DraggedItemInputFieldComponent(dataType, chkOptions, [...activeLanguages].filter(l => l.Id == currentLanguageId)[0], [...translations]) + "</div>" + EditFieldComponent(editfields) + "</div>"));
                                 }
 
@@ -655,17 +667,17 @@
                                     for (let r = 0; r < formData.tabs[t].sections[s].controls[c].dataSource.length; r++) {
                                         drpOptions.push({ id: formData.tabs[t].sections[s].controls[c].dataSource[r].value, name: formData.tabs[t].sections[s].controls[c].dataSource[r].text });
                                     }
-                                    editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "dropdown", hasRequiredChk: true, isRequired: false, labelFields: null, options: drpOptions, savedId: idName };
+                                    editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "dropdown", hasRequiredChk: true, isRequired: isRequired, isRequiredSelfService: isRequiredSelfService, labelFields: null, options: drpOptions, savedId: idName };
                                     $("#dropzone").append(ListComponent(dataType, "<div class='field' data-dhhelpdesk-savedid='" + idName + "'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>" + currentLanguageLabel[0].TranslationText + "</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + HeaderActionsComponent(idName) + "</div><div class='control' id='" + idName + "_control'>" + DraggedItemInputFieldComponent(dataType, drpOptions, [...activeLanguages].filter(l => l.Id == currentLanguageId)[0], [...translations]) + "</div>" + EditFieldComponent(editfields) + "</div>"));
                                 }
 
                                 else if (dataType = "html") {
 
-                                    editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "html", hasRequiredChk: false, isRequired: false, labelFields: null, placeholderOnly: true };
+                                    editfields = { idName: idName, placeHolder: formData.tabs[t].sections[s].controls[c].label, controlType: "html", hasRequiredChk: false, isRequired: false, isRequiredSelfService: false, labelFields: null, placeholderOnly: true };
                                     $("#dropzone").append(ListComponent("html", "<div class='field'><div class='header'><div class='header-label'><label class='field-label' id='" + idName + "header" + "'><span id= '" + idName + "headerName" + "'>@Translation.GetCoreTextTranslation("Infofält")</span> <span class='required' id='" + idName + "requiredSpan" + "'>*</span></label></div>" + HeaderActionsComponent(idName) + "</div><div class='control' id='" + idName + "_control'</div><p class='form-control form-control-width' readonly></p></div>" + EditFieldComponent(editfields) + "</div>"));
                                 }
 
-                                if (isRequired) {
+                                if (isRequired || isRequiredSelfService) {
                                     $("#" + idName + "requiredSpan").css('visibility', 'visible');
                                 }
                             }
@@ -693,15 +705,32 @@
         });
 
         $(document).on("change", ".chkRequired", function (e) {
-            var id = $(this).attr('id').replace('required', 'requiredSpan');
+            var idSpan = $(this).attr('id').replace('required', 'requiredSpan');
             if ($(this).prop("checked")) {
-                document.getElementById(id).style.visibility = "visible";
+                document.getElementById(idSpan).style.visibility = "visible";
             }
             else {
-                document.getElementById(id).style.visibility = "hidden";
+                let requiredInSelfServiceChk = document.getElementById($(this).attr('id').replace('required', 'requiredSelfService'));
+                
+                if (!requiredInSelfServiceChk.checked) {
+                    document.getElementById(idSpan).style.visibility = "hidden";
+                }
             }
         });
 
+        $(document).on("change", ".chkRequiredSelfService", function (e) {
+            var idSpan = $(this).attr('id').replace('requiredSelfService', 'requiredSpan');
+            if ($(this).prop("checked")) {
+                document.getElementById(idSpan).style.visibility = "visible";
+            }
+            else {
+                let requiredInHdChk = document.getElementById($(this).attr('id').replace('requiredSelfService', 'required'));
+
+                if (!requiredInHdChk.checked) {
+                    document.getElementById(idSpan).style.visibility = "hidden";
+                }
+            }
+        });
 
         // Clear button click event
         $(function () {
@@ -930,6 +959,7 @@
                     var label = document.getElementById(id.replace('header', 'headerName')) != null ? document.getElementById(id.replace('header', 'headerName')).innerText : "infoField";
 
                     var required = document.getElementById(id.replace('header', 'required')) ? document.getElementById(id.replace('header', 'required')).checked : false;
+                    var requiredSelfService = document.getElementById(id.replace('header', 'requiredSelfService')) ? document.getElementById(id.replace('header', 'requiredSelfService')).checked : false;
                     //var content = contentSummerNote ? 'function(m) { return ' + contentSummerNote + ' }' : "";
 
                     var fileuploadText = document.getElementById(id.replace('header', 'labelFieldText') + defaultLanguage.Id) != null ? document.getElementById(id.replace('header', 'labelFieldText') + defaultLanguage.Id).value : '';
@@ -938,10 +968,10 @@
                     var fTranslationsProperty = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-langid') == defaultLanguage.Id);
 
                     var dataSrc = null;
-                    
+
                     if (fTranslationsProperty.length > 1) {
                         dataSrc = [];
-                        
+
                         if (fTranslationsProperty[1].querySelector('.selectOptions') !== null) {
                             let optionLst = fTranslationsProperty[1].querySelector('.selectOptions').getElementsByTagName("li");
 
@@ -976,6 +1006,7 @@
                         type: obj.getAttribute('data-type'),
                         label: label,
                         required: required,
+                        requiredSelfService: requiredSelfService,
                         valueBinding: controlType == "html" ? idControl : "",
                         addonText: fileuploadText,
                         dataSource: dataSrc
@@ -998,7 +1029,7 @@
                             fieldTranslations.push(translation);
                         }
                     }
-                    
+
                     let optionTextTranslations = [];
                     optionTextTranslations = [...fTranslations].filter(item => item.getAttribute('data-dhhelpdesk-options') == "true");
                     let listItemCount = 0;
@@ -1007,10 +1038,10 @@
 
                         let optionElms = [];
 
-                        for (let o = 0; o < optionTextTranslations.length; o++) {                            
+                        for (let o = 0; o < optionTextTranslations.length; o++) {
                             let selectOptions = optionTextTranslations[o].querySelector('.selectOptions');
                             let optionItems = selectOptions.getElementsByTagName('li');
-                            
+
                             for (let i = 0; i < optionItems.length; i++) {
                                 let listItemId = optionItems[i].getAttribute('data-dhhelpdesk-listid');
                                 if (listItemId > listItemCount) {
