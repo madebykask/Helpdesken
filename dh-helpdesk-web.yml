@@ -54,5 +54,5 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: PublishBuildArtifacts-Web
   inputs:
-    pathtoPublish: $(build.artifactStagingDirector)\DH.Helpdesk.Web' 
+    pathtoPublish: $(Build.ArtifactStagingDirectory)\DH.Helpdesk.Web' 
     artifactName: 'DH.Helpdesk.Web'
