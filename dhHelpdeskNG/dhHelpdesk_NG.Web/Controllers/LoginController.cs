@@ -152,6 +152,14 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
+            appconfig = new ApplicationConfiguration();
+            var msLogin = appconfig.GetAppKeyValueMicrosoft;
+            ViewBag.ShowMsButton = false;
+            if (msLogin == "1")
+            {
+                ViewBag.ShowMsButton = true;
+            }
+
             return View("Login");
 
 
