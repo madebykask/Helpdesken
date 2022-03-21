@@ -142,7 +142,7 @@
                                         @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        <input type="checkbox" name="Casesolution.Status" @(Model.CaseSolution.Status != 0 ? "checked=checked" : "") value="1" class="switchcheckbox" />
+                                        <input type="checkbox" name="Casesolution.Status" @(Model.CaseSolution.Status != 0 ? "checked=checked" : "") value="1" class="switchcheckbox" id="caseSolutionStatus" />
                                         <input type="hidden" name="Casesolution.Status" value="0" />
                                     </td>
                                 </tr>
@@ -253,7 +253,7 @@
                                                         @Translation.Get("Ersätt alltid befintliga värden", SessionFacade.CurrentLanguageId)
                                                     </td>
                                                     <td>
-                                                        <input type="checkbox" name="CaseSolution.OverWritePopUp" @(Model.CaseSolution.OverWritePopUp == 1 ? "checked=checked" : "") value="1" class="switchcheckbox" />
+                                                        <input type="checkbox" name="CaseSolution.OverWritePopUp" @(Model.CaseSolution.OverWritePopUp == 1 ? "checked=checked" : "") value="1" class="switchcheckbox" id="overWritePopUp"/>
                                                         <input type="hidden" name="CaseSolution.OverWritePopUp" value="0" />
                                                     </td>
                                                 </tr>
@@ -737,7 +737,7 @@
                                                 @Translation.Get("Spara användaruppgifter", SessionFacade.CurrentLanguageId)
                                             </td>
                                             <td>
-                                                <input type="checkbox" name="CaseSolution.UpdateNotifierInformation" @(Model.CaseSolution.UpdateNotifierInformation == 1 ? "checked=checked" : "") value="1" class="switchcheckbox acceptRules" standardId='@GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString()' />
+                                                <input type="checkbox" name="CaseSolution.UpdateNotifierInformation" @(Model.CaseSolution.UpdateNotifierInformation == 1 ? "checked=checked" : "") value="1" class="switchcheckbox acceptRules" standardId='@GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString()' id="updateNotifierInformation" />
                                                 <input type="hidden" name="CaseSolution.UpdateNotifierInformation" value="0" />
                                             </td>
                                             <td>
@@ -1481,7 +1481,7 @@
                                         <td>
                                             @*@if (Model.CaseSolution.ContactBeforeAction == 1)
                                 {
-                                            *@<input type="checkbox" name="CaseSolution.ContactBeforeAction" @(Model.CaseSolution.ContactBeforeAction == 1 ? "checked=checked" : "") value="1" class="switchcheckbox acceptRules" standardId='@GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()' />
+                                            *@<input type="checkbox" name="CaseSolution.ContactBeforeAction" @(Model.CaseSolution.ContactBeforeAction == 1 ? "checked=checked" : "") value="1" class="switchcheckbox acceptRules" standardId='@GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()' id="contactBeforeAction"/>
                                             <input type="hidden" name="CaseSolution.ContactBeforeAction" value="0" />
                                             @*}
                                 else
@@ -2762,8 +2762,15 @@
             $("#Information").prop("disabled", false);
             $("#languageList").prop("disabled", false);
             $("#hidId").prop("disabled", false);
-            $("#CaseSolutionCategory").prop("disabled", false);
-            $(".bootstrap-switch-container").hide();
+/*            $("#CaseSolutionCategory").prop("disabled", false);*/
+            //Disable switchboxes
+            $('#caseSolutionStatus').bootstrapSwitch('disabled', true);
+            $('#overWritePopUp').bootstrapSwitch('disabled', true);
+            $('#updateNotifierInformation').bootstrapSwitch('disabled', true);
+            $('#contactBeforeAction').bootstrapSwitch('disabled', true);
+
+            //const inputs = document.querySelectorAll('input.switchcheckbox');
+            //inputs.forEach(input => input.bootstrapSwitch('disabled', true));
         })
     }
 </script>

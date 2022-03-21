@@ -21,23 +21,38 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-- task: VSBuild@1
+# - task: VSBuild@1
+#   inputs:
+#     solution: '**/dhHelpdesk_NG.Web/DH.Helpdesk.Web.csproj'
+#     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:PackageAsSingleFile=false /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)" p:OutDir="$(build.artifactStagingDirectory)"'
+#     platform: '$(buildPlatform)'
+#     configuration: '$(buildConfiguration)'
+- task: MSBuild@1
   inputs:
+    msbuildVersion: '16.0'  
     solution: '**/dhHelpdesk_NG.Web/DH.Helpdesk.Web.csproj'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(build.artifactStagingDirectory)"'
+    
 
-
+# - task: CopyFiles@2
+#   inputs:
+#     SourceFolder: '$(build.artifactStagingDirector)'
+#     Contents: |
+#       **
+#     OverWrite: true
+#     CleanTargetFolder: true
+#     TargetFolder: '$(build.artifactStagingDirector)\DH.Helpdesk.Web'
 
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: '**/dhHelpdesk_NG.Web/Properties/PublishProfiles/DH.Helpdesk.Web.Release.pubxml'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Web'
+    # Contents: '**/dhHelpdesk_NG.Web/Properties/PublishProfiles/DH.Helpdesk.Web.Release.pubxml'
+    Contents: |
+      **
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Web'
 
 - task: PublishBuildArtifacts@1
   displayName: PublishBuildArtifacts-Web
   inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Web' 
+    pathtoPublish: $(Build.ArtifactStagingDirectory)\DH.Helpdesk.Web' 
     artifactName: 'DH.Helpdesk.Web'

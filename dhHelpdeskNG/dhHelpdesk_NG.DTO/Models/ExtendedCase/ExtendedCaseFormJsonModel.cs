@@ -63,6 +63,9 @@ namespace DH.Helpdesk.BusinessData.Models.ExtendedCase
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string messageName { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string enabled { get; set; }
     }
 
     public class ValidatorsElement

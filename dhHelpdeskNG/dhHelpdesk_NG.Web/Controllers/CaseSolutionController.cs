@@ -1437,7 +1437,6 @@ namespace DH.Helpdesk.Web.Controllers
 
             this._caseSolutionConditionService.Add(Convert.ToInt32(caid), Convert.ToInt32(condid));
 
-
             //Get not selected case solution conditions
             var lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(Convert.ToInt32(caid));
 
@@ -1475,15 +1474,14 @@ namespace DH.Helpdesk.Web.Controllers
             this.TempData["RequiredFields"] = null;
             ViewBag.ShowLanguageList = true;
             if (caseSolutionInputViewModel.LanguageId != SessionFacade.CurrentCustomer.Language_Id)
-            //hrmm
             {
                 var lang = SessionFacade.CurrentLanguageId;
                 //Only this fields should be updated
                 var caseSolutionLang = new CaseSolutionLanguageEntity();
                 caseSolutionLang.Language_Id = caseSolutionInputViewModel.LanguageId;
                 caseSolutionLang.CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id;
-                caseSolutionLang.Information = caseSolutionInputViewModel.CaseSolution.Information;
-                caseSolutionLang.ShortDescription = caseSolutionInputViewModel.CaseSolution.ShortDescription;
+                caseSolutionLang.Information = caseSolutionInputViewModel.CaseSolution.Information == null ? string.Empty : caseSolutionInputViewModel.CaseSolution.Information;
+                caseSolutionLang.ShortDescription = caseSolutionInputViewModel.CaseSolution.ShortDescription == null ? string.Empty : caseSolutionInputViewModel.CaseSolution.ShortDescription;
                 caseSolutionLang.CaseSolutionName = caseSolutionInputViewModel.CaseSolution.Name;
                 _caseSolutionService.UpdateCaseSolutionLanguage(caseSolutionLang);
             }
@@ -1495,7 +1493,6 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
-
 
                 // Positive: Send Mail to...
                 if (caseSolutionInputViewModel.CaseSolution.NoMailToNotifier == 0)
