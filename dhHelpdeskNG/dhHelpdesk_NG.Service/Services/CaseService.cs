@@ -101,8 +101,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICategoryRepository _categoryRepository;
         private readonly IEntityToBusinessModelMapper<CaseFilterFavoriteEntity, CaseFilterFavorite> _caseFilterFavoriteToBusinessModelMapper;
         private readonly ICustomerUserRepository _customerUserRepository;
-		private readonly IGlobalSettingService _globalSettingService;
+        private readonly IGlobalSettingService _globalSettingService;
         private readonly IContractLogRepository _contractLogRepository;
+        private readonly ICircularService _circularService;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -152,8 +153,9 @@ namespace DH.Helpdesk.Services.Services
             ICaseTypeRepository caseTypeRepository,
             ICategoryRepository categoryRepository,
             ICustomerUserRepository customerUserRepository,
-			IGlobalSettingService globalSettingService,
-            IContractLogRepository contractLogRepository)
+            IGlobalSettingService globalSettingService,
+            IContractLogRepository contractLogRepository,
+            ICircularService circularService)
         {
             _customerUserRepository = customerUserRepository;
             _caseFilterFavoriteToBusinessModelMapper = caseFilterFavoriteToBusinessModelMapper;
@@ -204,8 +206,9 @@ namespace DH.Helpdesk.Services.Services
             _translateCacheService = translateCacheService;
             _caseTypeRepository = caseTypeRepository;
             _categoryRepository = categoryRepository;
-			_globalSettingService = globalSettingService;
+            _globalSettingService = globalSettingService;
             _contractLogRepository = contractLogRepository;
+            _circularService = circularService;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -331,14 +334,14 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
-            var extendedCaseFormData = 
+            var extendedCaseFormData =
                 caseId == 0
                     ? _extendedCaseFormRepository.GetCaseSectionExtendedCaseFormForSolution(caseSolutionId, customerId, caseSectionType)
                     : _extendedCaseFormRepository.GetCaseSectionExtendedCaseFormForCase(caseId, customerId);
 
             if (extendedCaseFormData != null)
             {
-                extendedCaseFormData.StateSecondaryId = caseStateSecondaryId; 
+                extendedCaseFormData.StateSecondaryId = caseStateSecondaryId;
                 if (string.IsNullOrWhiteSpace(extendedCaseFormData.ExtendedCaseFormName))
                 {
                     extendedCaseFormData.ExtendedCaseFormName = caseSolution.Name;
@@ -347,7 +350,7 @@ namespace DH.Helpdesk.Services.Services
                 //create extendedcase empty record
                 if (caseId == 0)
                 {
-                    extendedCaseFormData.ExtendedCaseGuid = 
+                    extendedCaseFormData.ExtendedCaseGuid =
                         _extendedCaseFormRepository.CreateExtendedCaseData(extendedCaseFormData.ExtendedCaseFormId, userGuid);
                 }
             }
@@ -375,8 +378,8 @@ namespace DH.Helpdesk.Services.Services
                 {
                     rep.Add(new Case_ExtendedCaseEntity() { Case_Id = caseId, ExtendedCaseData_Id = extendedCaseDataId, ExtendedCaseForm_Id = extendedCaseFormId });
                     uow.Save();
-                    
-                }                                
+
+                }
             }
 
             if (extendedCaseFormId.HasValue)
@@ -385,7 +388,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     var rep = uow.GetRepository<ExtendedCaseDataEntity>();
                     var entity = rep.Find(it => it.Id == extendedCaseDataId).FirstOrDefault();
-                    if (entity !=  null)
+                    if (entity != null)
                     {
                         if (entity.ExtendedCaseFormId != extendedCaseFormId.Value)
                         {
@@ -394,7 +397,7 @@ namespace DH.Helpdesk.Services.Services
                             rep.Update(entity);
                             uow.Save();
                         }
-                       
+
                     }
                 }
             }
@@ -402,6 +405,7 @@ namespace DH.Helpdesk.Services.Services
 
         public Guid Delete(int id, string basePath, int? parentCaseId)
         {
+
             Guid ret = Guid.Empty;
 
             if (parentCaseId.HasValue)
@@ -533,20 +537,24 @@ namespace DH.Helpdesk.Services.Services
             // delete contract log
             var contractLog = _contractLogRepository.getContractLogByCaseId(id);
             if (contractLog != null)
-            _contractLogRepository.Delete(contractLog);
+                _contractLogRepository.Delete(contractLog);
 
             //delete FollowUp
             _caseFollowUpService.DeleteFollowUp(id);
             _caseExtraFollowersService.DeleteByCase(id);
 
             if (c.CaseSectionExtendedCaseDatas != null && c.CaseSectionExtendedCaseDatas.Any())
-            {                
+            {
                 c.CaseSectionExtendedCaseDatas.Clear();
                 DeletetblCase_tblCaseSection_ExtendedCaseData(id);
             }
             ret = c.CaseGUID;
 
+            // delete caseQuestionnaireCircular
+            _circularService.DeleteConnectedCase(id);
+
             DeleteCaseById(id);
+
             return ret;
         }
         public void DeleteExCaseWhenCaseMove(int id)
@@ -565,7 +573,7 @@ namespace DH.Helpdesk.Services.Services
 
         public List<CaseFilterFavorite> GetMyFavoritesWithFields(int customerId, int userId)
         {
-            var favorites = 
+            var favorites =
                 _caseFilterFavoriteRepository.GetUserFavoriteFilters(customerId, userId).ToList();
 
             var res = favorites.Select(_caseFilterFavoriteToBusinessModelMapper.Map).ToList();
@@ -678,7 +686,7 @@ namespace DH.Helpdesk.Services.Services
             return _caseRepository.GetMyCases(userId, count);
         }
 
-		public StateSecondary GetCaseSubStatus(int caseId)
+        public StateSecondary GetCaseSubStatus(int caseId)
         {
             return _caseRepository.GetCaseSubStatus(caseId);
         }
@@ -732,7 +740,7 @@ namespace DH.Helpdesk.Services.Services
                         .Count();
             }
         }
-        
+
         public bool IsRelated(int caseId)
         {
             if (caseId <= 0)
@@ -754,12 +762,12 @@ namespace DH.Helpdesk.Services.Services
 
             return false;
         }
-        
+
         public List<ChildCaseOverview> GetChildCasesFor(int caseId)
         {
             return _caseRepository.GetChildCasesFor(caseId);
         }
-        
+
         public ParentCaseInfo GetParentInfo(int caseId)
         {
             var parentCaseInfo = _caseRepository.GetParentInfo(caseId);
@@ -867,7 +875,7 @@ namespace DH.Helpdesk.Services.Services
 
             return c;
         }
-        
+
         public IList<Case> GetProblemCases(int problemId)
         {
             return _caseRepository.GetProblemCases(problemId);
@@ -940,7 +948,7 @@ namespace DH.Helpdesk.Services.Services
 
             SaveCaseHistory(c, userId, adUser, createdByApp, out errors, "", extraFields);
         }
-        
+
         public void Commit()
         {
             _unitOfWork.Commit();
@@ -994,11 +1002,11 @@ namespace DH.Helpdesk.Services.Services
             else
             {
                 c.ChangeTime = DateTime.UtcNow;
-                c.ChangeByUser_Id = userId == 0 ? (int?) null : userId;
+                c.ChangeByUser_Id = userId == 0 ? (int?)null : userId;
 
                 _caseRepository.Update(c);
             }
-            
+
             _caseRepository.Commit();
             _caseStatService.UpdateCaseStatistic(c);
 
@@ -1130,7 +1138,7 @@ namespace DH.Helpdesk.Services.Services
             using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var computerRep = uow.GetRepository<Computer>();
-                    
+
                 return computerRep.GetAll().GetRelatedInventoriesCount(userId, currentUser, customerId);
             }
         }
@@ -1339,7 +1347,7 @@ namespace DH.Helpdesk.Services.Services
             var currentCase = _caseRepository.GetCaseIncluding(currentCaseId);
             var customerId = currentCase.Customer_Id;
             var customerSettings = _settingService.GetCustomerSetting(customerId);
-            var sep = new [] { ';' };
+            var sep = new[] { ';' };
             var templateId = 0;
             var emailList = new List<string>();
 
@@ -1650,7 +1658,7 @@ namespace DH.Helpdesk.Services.Services
             ret.Add(new Field { Key = "[#17]", StringValue = c.InventoryNumber });
             var caseTypeName = _caseTypeRepository.GetCaseType(c.CaseType_Id).Select(ct => ct.Name).DefaultIfEmpty(string.Empty).FirstOrDefault();
             ret.Add(new Field { Key = "[#25]", StringValue = caseTypeName });
-            var catName = c.Category_Id.HasValue ? 
+            var catName = c.Category_Id.HasValue ?
                 _categoryRepository.GetCategory(c.Category_Id.Value).Select(ct => ct.Name).DefaultIfEmpty(string.Empty).FirstOrDefault() :
                 string.Empty;
             ret.Add(new Field { Key = "[#26]", StringValue = catName });
@@ -1692,17 +1700,17 @@ namespace DH.Helpdesk.Services.Services
                 if (c.ProductArea.Parent_ProductArea_Id.HasValue && c.ProductArea.Parent_ProductArea_Id > 0)
                 {
                     var names = _productAreaService.GetParentPath(c.ProductArea_Id.Value, c.Customer_Id).ToList();
-                    ret.Add(new Field {Key = "[#28]", StringValue = string.Join(" - ", names)});
+                    ret.Add(new Field { Key = "[#28]", StringValue = string.Join(" - ", names) });
                 }
                 else
                 {
-                    ret.Add(new Field {Key = "[#28]", StringValue = c.ProductArea != null ? c.ProductArea.Name : string.Empty});
+                    ret.Add(new Field { Key = "[#28]", StringValue = c.ProductArea != null ? c.ProductArea.Name : string.Empty });
                 }
             }
 
             ret.Add(new Field { Key = "[#10]", StringValue = l?.TextExternal ?? "" });
             ret.Add(new Field { Key = "[#11]", StringValue = l?.TextInternal ?? "" });
-            
+
             // selfservice site
             if (cms != null)
             {
@@ -1717,10 +1725,10 @@ namespace DH.Helpdesk.Services.Services
             // heldesk site
             if (cms != null)
             {
-				var globalSetting = _globalSettingService.GetGlobalSettings().First();
-				var editCasePath = globalSetting.UseMobileRouting ?
-					CasePaths.EDIT_CASE_MOBILEROUTE :
-					CasePaths.EDIT_CASE_DESKTOP;
+                var globalSetting = _globalSettingService.GetGlobalSettings().First();
+                var editCasePath = globalSetting.UseMobileRouting ?
+                    CasePaths.EDIT_CASE_MOBILEROUTE :
+                    CasePaths.EDIT_CASE_DESKTOP;
 
                 var site = cms.AbsoluterUrl + editCasePath + c.Id.ToString();
                 var url = "<br><a href='" + site + "'>" + site + "</a>";
