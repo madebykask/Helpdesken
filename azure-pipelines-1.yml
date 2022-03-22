@@ -1,0 +1,40 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- Development
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/DH.Helpdesk.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: MSBuild@1
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/DH.Helpdesk.WebApi/DH.Helpdesk.WebApi.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
+
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.WebApi'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-WebApi'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-WebApi'
+    artifactName: 'DH-Helpdesk-WebApi'
