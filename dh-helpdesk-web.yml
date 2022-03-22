@@ -46,10 +46,15 @@ steps:
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
-    # Contents: '**/dhHelpdesk_NG.Web/Properties/PublishProfiles/DH.Helpdesk.Web.Release.pubxml'
     Contents: |
       **
     TargetFolder: '$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Web'
+    
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)/Database'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Database'
 
 - task: PublishBuildArtifacts@1
   displayName: PublishBuildArtifacts-Web
