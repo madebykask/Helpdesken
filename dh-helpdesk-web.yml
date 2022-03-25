@@ -34,14 +34,6 @@ steps:
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(build.artifactStagingDirectory)"'
     
 
-# - task: CopyFiles@2
-#   inputs:
-#     SourceFolder: '$(build.artifactStagingDirector)'
-#     Contents: |
-#       **
-#     OverWrite: true
-#     CleanTargetFolder: true
-#     TargetFolder: '$(build.artifactStagingDirector)\DH.Helpdesk.Web'
 
 - task: CopyFiles@2
   inputs:
