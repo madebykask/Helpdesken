@@ -170,10 +170,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             string firstTabName = metaData.Substring(firstIndex, secondIndex - 2);
             metaData = metaData.Replace("]},"+ ExtendedCaseFormsHelper.GetEditorInitiatorData(firstTabName, viewModel.Customer.CustomerGUID.ToString()), "");
             metaData = metaData.Replace(@""" },""dataSource", @" "",""dataSource");
-            metaData = metaData.Replace(@"function(m) { if (m.formInfo.applicationType == ""helpdesk"" && (this.value == undefined || this.value === """")) return true; }",
-                                        @"""function(m) { if (m.formInfo.applicationType == helpdesk && (this.value == undefined || this.value === )) return true; }""")
-                                .Replace(@"function(m) { if (m.formInfo.applicationType == ""selfservice"" && (this.value == undefined || this.value === """")) return true; }",
-                                        @"""function(m) { if (m.formInfo.applicationType == selfservice && (this.value == undefined || this.value === )) return true; }""");
+            metaData = metaData.Replace(@"function(m) { if (m.formInfo.applicationType == ""helpdesk"") return true; }",
+                                        @"""function(m) { if (m.formInfo.applicationType == helpdesk) return true; }""")
+                                .Replace(@"function(m) { if (m.formInfo.applicationType == ""selfservice"") return true; }",
+                                        @"""function(m) { if (m.formInfo.applicationType == selfservice) return true; }""");
             viewModel.FormFields = JsonConvert.DeserializeObject<ExtendedCaseFormJsonModel>(metaData);
             viewModel.FieldTranslations = _languageService.GetExtendedCaseTranslations(viewModel.FormFields, languageId, initialTranslations);
             return View("EditForm", viewModel);

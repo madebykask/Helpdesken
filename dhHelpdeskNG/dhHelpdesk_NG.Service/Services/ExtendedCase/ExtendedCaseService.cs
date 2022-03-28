@@ -464,8 +464,8 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                                     {
                                         type = c.Required || c.RequiredSelfService ? "required" : "",
                                         enabled = c.Required && c.RequiredSelfService ? null 
-                                                    : (c.Required ? @"function(m) { if (m.formInfo.applicationType == ""helpdesk"" && (this.value == undefined || this.value === """")) return true; }"
-                                                    : (c.RequiredSelfService ?  @"function(m) { if (m.formInfo.applicationType == ""selfservice"" && (this.value == undefined || this.value === """")) return true; }"
+                                                    : (c.Required ? @"function(m) { if (m.formInfo.applicationType == ""helpdesk"") return true; }"
+                                                    : (c.RequiredSelfService ?  @"function(m) { if (m.formInfo.applicationType == ""selfservice"") return true; }"
                                                     : null))
                                     }
                                         }

@@ -514,10 +514,10 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                                 .Replace(@"""function(m) { return ", @"function(m) { return """)
                                 .Replace(@"> }""", @">"";}")
                                 .Replace(@"; }"",", @""" },")
-                                .Replace(@"""function(m) { if (m.formInfo.applicationType == helpdesk && (this.value == undefined || this.value === )) return true; }""",
-                                        @"function(m) { if (m.formInfo.applicationType == ""helpdesk"" && (this.value == undefined || this.value === """")) return true; }")
-                                .Replace(@"""function(m) { if (m.formInfo.applicationType == selfservice && (this.value == undefined || this.value === )) return true; }""",
-                                        @"function(m) { if (m.formInfo.applicationType == ""selfservice"" && (this.value == undefined || this.value === """")) return true; }")
+                                .Replace(@"""function(m) { if (m.formInfo.applicationType == helpdesk) return true; }""",
+                                        @"function(m) { if (m.formInfo.applicationType == ""helpdesk"") return true; }")
+                                .Replace(@"""function(m) { if (m.formInfo.applicationType == selfservice) return true; }""",
+                                        @"function(m) { if (m.formInfo.applicationType == ""selfservice"") return true; }")
 
                                 .Replace(@"tabs.EditorInitiator.", "tabs." + entity.tabs[0].id + ".")
                                 .Replace("{\"id\":\"InitiatorSectionData_" + entity.id.ToString() + "\",\"name\":\"@Translation.Section.InitiatorSectionData_" + entity.id.ToString() + "\",\"controls\":[]}", ExtendedCaseFormsHelper.GetEditorInitiatorData(entity.tabs[0].id, entity.customerGuid) + "]}");
