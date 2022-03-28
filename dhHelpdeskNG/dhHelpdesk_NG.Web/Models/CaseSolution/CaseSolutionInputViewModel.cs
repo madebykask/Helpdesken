@@ -13,6 +13,7 @@ using DH.Helpdesk.Web.Models.CaseRules;
 
 using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 using DH.Helpdesk.BusinessData.Models.CaseSolution;
+using DH.Helpdesk.Web.Infrastructure;
 
 namespace DH.Helpdesk.Web.Models.CaseSolution
 {
@@ -135,5 +136,12 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
         [LocalizedDisplay("LanquageId")]
         public int LanguageId { get; set; }
         public CaseSolutionLanguage CaseSolutionLanguage { get; set; }
+        public int CustomerDefaultLanguage
+        {
+            get
+            {
+                return SessionFacade.CurrentCustomer.Language_Id;
+            }
+        }
     }
 }

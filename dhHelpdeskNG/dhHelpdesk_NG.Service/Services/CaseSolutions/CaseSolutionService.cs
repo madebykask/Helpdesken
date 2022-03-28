@@ -1759,6 +1759,8 @@ namespace DH.Helpdesk.Services.Services
                         foreach (var link in caseSolutionLinks)
                             _linkRepository.Delete(x => x.Id == link.Id);
 
+                    _caseSolutionLanguageRepository.DeleteByCaseSolutionId(id);
+
                     CaseSolutionRepository.Delete(caseSolution);
 
                     Commit();

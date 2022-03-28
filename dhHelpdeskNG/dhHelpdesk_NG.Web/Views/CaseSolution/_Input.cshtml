@@ -2397,6 +2397,8 @@
                             </table>
                             @Html.HiddenFor(model => model.CaseSolution.Customer_Id)
                             @Html.HiddenFor(model => model.CaseSolution.Id, new { id = "hidId" })
+                            @Html.HiddenFor(model => model.isCopy, new { id = "isCopy" })
+                            @Html.HiddenFor(model => model.CustomerDefaultLanguage, new { id = "customerDefaultLanguage" })
 
                             @Html.HiddenFor(model => model.CaseSolution.FormGUID)
                             @Html.HiddenFor(model => model.ContainsExtendedForm)
@@ -2452,7 +2454,7 @@
     });
 </script>
 <script>
-    
+
     function checkVisibility()
     {
         var $elementChosen = $('#SplitToCaseSolutionIds');
@@ -2462,7 +2464,7 @@
         if ($element.val() == '0')
         {
             $elementChosen.val('');
-            $elementChosen.trigger("chosen:updated"); 
+            $elementChosen.trigger("chosen:updated");
 
 
             if (!$elementDiv.hasClass('hidden'))
@@ -2478,11 +2480,11 @@
             }
         }
     }
-    
+
     $('#Casesolution_CaseRelationType').change(function () {
         checkVisibility();
     });
-    
+
     //$('#CaseSolution_Text_External').on('onchange', function () {
     //    checkLength(this);
     //});
@@ -2535,9 +2537,11 @@
 
         $('#CopyCaseSolution').on('click', function () {
 
-            var t = document.getElementById('inputCopy');
-            document.getElementById('hidId').value=0;
+            var t = document.getElementById('inputCopy');         
+            document.getElementById('hidId').value = 0;
+            document.getElementById('isCopy').value = "True";
             t.style.display = 'block';
+            
 
         })
     });
@@ -2563,7 +2567,7 @@
         if (SelectedValue == 'both') {
             if ($activeTabSelfservice.hasClass('hidden')) {
                 $activeTabSelfservice.removeClass('hidden');
-            }          
+            }
         }
         else {
             $activeTabSelfservice.addClass('hidden');
@@ -2623,7 +2627,7 @@
         h.value=final;
     }
 
- 
+
 
     function RemoveCondition (v)
     {
@@ -2721,7 +2725,9 @@
 
     $(document).ready(function () {
         //TODO - Default Language
-        if (document.getElementById('languageList').value != 1) {
+        var defaultLanguage = document.getElementById('customerDefaultLanguage').value;
+        console.log("Default lang: " +defaultLanguage);
+        if (document.getElementById('languageList').value != defaultLanguage) {
             DisableControls();
         }
         if (document.getElementById('Casesolution_ShowInsideCase').checked)
@@ -2746,9 +2752,7 @@
     $(function() {
         $("#languageList").change(function() {
             var selectedItem = $(this).val();
-            //If not default language
-            //Disable controls
-            
+            console.log("Changed language");
             window.location.href = '@Url.Action("Edit","CaseSolution")?id=' + @Model.CaseSolution.Id + "&languageId=" + selectedItem;
             
         });

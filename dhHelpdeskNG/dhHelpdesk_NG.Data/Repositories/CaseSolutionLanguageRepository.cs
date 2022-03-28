@@ -10,6 +10,7 @@
     {
         CaseSolutionLanguageEntity GetCaseSolutionTranslation(int casSolutionId, int languageId);
         void UpdateOtherLanguageCaseSolution(CaseSolutionLanguageEntity caseSolutionLang);
+        void DeleteByCaseSolutionId(int id);
     }
 
     public class CaseSolutionLanguageRepository : RepositoryBase<CaseSolutionLanguageEntity>, ICaseSolutionLanguageRepository
@@ -23,6 +24,11 @@
         {
             var lang = this.DataContext.CaseSolutionLanguages.Where(c => c.CaseSolution_Id == casSolutionId && c.Language_Id == languageId).FirstOrDefault();
             return lang;
+        }
+        public void DeleteByCaseSolutionId(int id)
+        {
+            List<CaseSolutionLanguageEntity> entities = this.DataContext.CaseSolutionLanguages.Where(x => x.CaseSolution_Id == id).ToList();
+            entities.ForEach(x => this.DataContext.CaseSolutionLanguages.Remove(x));
         }
         public void UpdateOtherLanguageCaseSolution(CaseSolutionLanguageEntity caseSolutionLang)
         {

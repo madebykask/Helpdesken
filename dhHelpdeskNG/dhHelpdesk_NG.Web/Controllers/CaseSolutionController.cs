@@ -1251,6 +1251,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
                
             }
+            ViewBag.DefaultLanguage = SessionFacade.CurrentCustomer.Language_Id;
             ViewBag.ShowLanguageList = true;
             return this.View(model);
         }
@@ -1473,7 +1474,7 @@ namespace DH.Helpdesk.Web.Controllers
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
             this.TempData["RequiredFields"] = null;
             ViewBag.ShowLanguageList = true;
-            if (caseSolutionInputViewModel.LanguageId != SessionFacade.CurrentCustomer.Language_Id)
+            if (caseSolutionInputViewModel.LanguageId != SessionFacade.CurrentCustomer.Language_Id && !caseSolutionInputViewModel.isCopy)
             {
                 var lang = SessionFacade.CurrentLanguageId;
                 //Only this fields should be updated
@@ -1487,6 +1488,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
             {
+
                 if (CaseSolutionSettingModels == null)
                 {
                     CaseSolutionSettingModels = new CaseSolutionSettingModel[0];
@@ -1535,9 +1537,10 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 // reset Id if its a copy template request 
-                var isCopy = caseSolutionInputViewModel.CaseSolution.Id == 0;
+                var isCopy = caseSolutionInputViewModel.isCopy;
                 if (isCopy)
                 {
+                    caseSolutionInputViewModel.CaseSolution.Id = 0;
                     foreach (var cs in CaseSolutionSettingModels)
                     {
                         cs.Id = 0;
@@ -1660,8 +1663,9 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }
                 this.TempData["RequiredFields"] = errors;
-            }
 
+
+            }
 
             ViewBag.PageId = PageId ?? 0;
             var model = this.CreateInputViewModel(caseSolutionInputViewModel.CaseSolution);
@@ -2746,7 +2750,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 model.LanguageId = SessionFacade.CurrentCustomer.Language_Id;
             }
-            
+            ViewBag.DefaultLanguage = SessionFacade.CurrentCustomer.Language_Id;
             ViewBag.ShowLanguageList = true;
 
             return this.View(model);
