@@ -26,7 +26,7 @@ steps:
   inputs:  
     command: custom  
     verbose: false  
-    customCommand: 'run build'
+    customCommand: 'ng build'
     workingDir: '$(System.DefaultWorkingDirectory)/DH.Helpdesk.WebMobile'
 
 # - script: |
