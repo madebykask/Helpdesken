@@ -1,8 +1,3 @@
-# ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
-
 trigger:
 - Development
 
@@ -29,27 +24,55 @@ steps:
 #     configuration: '$(buildConfiguration)'
 - task: MSBuild@1
   inputs:
-    msbuildVersion: '16.0'  
+    msbuildVersion: '17.0'  
     solution: '**/dhHelpdesk_NG.Web/DH.Helpdesk.Web.csproj'
-    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(build.artifactStagingDirectory)"'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
+
+- task: MSBuild@1
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdesk_NG.Web_SelfService/DH.Helpdesk.SelfService.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
     
 
+# - task: CopyFiles@2
+#   inputs:
+#     SourceFolder: '$(build.artifactStagingDirector)'
+#     Contents: |
+#       **
+#     OverWrite: true
+#     CleanTargetFolder: true
+#     TargetFolder: '$(build.artifactStagingDirector)\DH.Helpdesk.Web'
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: |
-      **
-    TargetFolder: '$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Web'
-    
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(Build.SourcesDirectory)/Database'
+    SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.Web'
     Contents: '**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Database'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Web'
 
-- task: PublishBuildArtifacts@1
-  displayName: PublishBuildArtifacts-Web
+- task: CopyFiles@2
   inputs:
-    pathtoPublish: $(Build.ArtifactStagingDirectory)\DH.Helpdesk.Web' 
-    artifactName: 'DH.Helpdesk.Web'
+    SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.Selfservice'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Selfservice'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)/Database/SQLScripts'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\DH-Helpdesk-Database'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Web'
+    artifactName: 'DH-Helpdesk-Web'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Database'
+    artifactName: 'DH-Helpdesk-Database'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Selfservice'
+    artifactName: 'DH-Helpdesk-Selfservice'
