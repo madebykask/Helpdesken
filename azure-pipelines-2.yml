@@ -27,7 +27,7 @@ steps:
     command: custom  
     verbose: false  
     customCommand: 'ng build_prod'
-    workingDir: '$(System.DefaultWorkingDirectory)/DH.Helpdesk.WebMobile'
+    workingDir: '$(Build.SourcesDirectory)/DH.Helpdesk.WebMobile'
 
 # - script: |
 #     npm i
