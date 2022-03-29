@@ -21,7 +21,7 @@ steps:
     verbose: false  
     customCommand: 'install @angular/cli'  
 
-- script: echo "name is $(System.DefaultWorkingDirectory)"
+- script: echo "name is $(Build.SourcesDirectory)"
 
 - task: Npm@1  
   displayName: Build  
