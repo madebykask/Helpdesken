@@ -27,6 +27,7 @@ steps:
     command: custom  
     verbose: false  
     customCommand: 'run build'
+    workingDir: '$(System.DefaultWorkingDirectory)/DH.Helpdesk.WebMobile'
 
 # - script: |
 #     npm i
