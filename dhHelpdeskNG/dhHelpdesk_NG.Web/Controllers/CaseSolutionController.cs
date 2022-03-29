@@ -1229,6 +1229,10 @@ namespace DH.Helpdesk.Web.Controllers
 
             
             var model = this.CreateInputViewModel(caseSolution);
+            if(caseSolution.ExtendedCaseForms != null && caseSolution.ExtendedCaseForms.Count > 0)
+            {
+                model.ContainsExtendedForm = true;
+            }
 
             if(language != null && languageId != SessionFacade.CurrentCustomer.Language_Id)
             {
