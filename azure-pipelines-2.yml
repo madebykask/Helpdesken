@@ -13,14 +13,13 @@ steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '10.x'
-    displayName: 'Install Node.js'
 
 - script: |
     npm i
     npm install -g @angular/cli
     npm run ng build
-    build_dev-prod
-  workingDirectory: '$(System.DefaultWorkingDirectory)/src/Web'
+    npm run build_prod --verbose
+  workingDirectory: '$(System.DefaultWorkingDirectory)/DH.Helpdesk.WebMobile'
   displayName: 'npm install and build'
 
 - task: CopyFiles@2
