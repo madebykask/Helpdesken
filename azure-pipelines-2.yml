@@ -19,7 +19,7 @@ steps:
     npm install -g @angular/cli
     npm run ng build
     npm run build_prod --verbose
-  workingDirectory: '$(System.DefaultWorkingDirectory)/DH.Helpdesk.WebMobile'
+  workingDirectory: '$(System.SourcesDirectory)/DH.Helpdesk.WebMobile'
   displayName: 'npm install and build'
 
 - task: CopyFiles@2
