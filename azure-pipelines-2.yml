@@ -13,10 +13,44 @@ steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '10.x'
-  displayName: 'Install Node.js'
 
-- script: |
-    npm install -g @angular/cli
-    npm install
-    ng build --prod
-  displayName: 'npm install and build'
+- task: Npm@1  
+  displayName: 'Angular CLI'  
+  inputs:  
+    command: custom  
+    verbose: false  
+    customCommand: 'install @angular/cli'  
+
+- task: Npm@1  
+  displayName: Build  
+  inputs:  
+    command: custom  
+    verbose: false  
+    customCommand: 'run build'
+    workingDir: '$(System.DefaultWorkingDirectory)/DH.Helpdesk.WebMobile'
+
+# - script: |
+#     npm i
+#     npm install -g @angular/cli
+#     npm run ng build
+#     npm run build_prod --verbose
+#   workingDirectory: '$(System.DefaultWorkingDirectory)/DH.Helpdesk.WebMobile'
+#   displayName: 'npm install and build'
+
+- task: CopyFiles@2
+  displayName: 'Copy Files'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)/DH.Helpdesk.WebMobile/wwwroot/build/mobile'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+
+# - task: ArchiveFiles@2
+#   displayName: 'Archive $(Build.ArtifactStagingDirectory)'
+#   inputs:
+#     rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'Helpdesk_Mobile'
+    publishLocation: 'Container'
