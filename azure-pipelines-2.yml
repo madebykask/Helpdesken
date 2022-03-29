@@ -14,13 +14,27 @@ steps:
   inputs:
     versionSpec: '10.x'
 
-- script: |
-    npm i
-    npm install -g @angular/cli
-    npm run ng build
-    npm run build_prod --verbose
-  workingDirectory: '$(System.DefaultWorkingDirectory)/DH.Helpdesk.WebMobile'
-  displayName: 'npm install and build'
+- task: Npm@1  
+  displayName: 'Angular CLI'  
+  inputs:  
+    command: custom  
+    verbose: false  
+    customCommand: 'install @angular/cli'  
+
+- task: Npm@1  
+  displayName: Build  
+  inputs:  
+    command: custom  
+    verbose: false  
+    customCommand: 'run build'
+
+# - script: |
+#     npm i
+#     npm install -g @angular/cli
+#     npm run ng build
+#     npm run build_prod --verbose
+#   workingDirectory: '$(System.DefaultWorkingDirectory)/DH.Helpdesk.WebMobile'
+#   displayName: 'npm install and build'
 
 - task: CopyFiles@2
   displayName: 'Copy Files'
