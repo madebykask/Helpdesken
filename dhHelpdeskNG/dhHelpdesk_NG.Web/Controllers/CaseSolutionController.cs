@@ -1695,7 +1695,7 @@ namespace DH.Helpdesk.Web.Controllers
             else
             {
                 this.TempData.Add("Error", string.Empty);
-                return this.RedirectToAction("edit", "casesolution", new { id = id });
+                return this.RedirectToAction("edit", "casesolution", new { id = id, languageId = SessionFacade.CurrentCustomer.Language_Id});
             }
         }
 
