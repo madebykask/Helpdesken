@@ -34,6 +34,11 @@ steps:
     solution: '**/dhHelpdesk_NG.Web_SelfService/DH.Helpdesk.SelfService.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
     
+- task: MSBuild@1
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdesk_NG.Web_SelfService/DH.Helpdesk.WebApi.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
 
 # - task: CopyFiles@2
 #   inputs:
@@ -58,6 +63,12 @@ steps:
 
 - task: CopyFiles@2
   inputs:
+    SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.WebApi'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-WebApi'
+
+- task: CopyFiles@2
+  inputs:
     SourceFolder: '$(Build.SourcesDirectory)/Database/SQLScripts'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)\DH-Helpdesk-Database'
@@ -76,3 +87,7 @@ steps:
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Selfservice'
     artifactName: 'DH-Helpdesk-Selfservice'
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-WebApi'
+    artifactName: 'DH-Helpdesk-WebApi'
