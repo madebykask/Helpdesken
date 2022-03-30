@@ -17,7 +17,7 @@ steps:
 - script: |
     npm install -g @angular/cli@8.3.29
     npm install
-    npm run ng build --output-path=wwwroot/build
+    npm run ng build --output-path=$(Build.ArtifactStagingDirectory)
   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
   displayName: 'npm install ng build'
 
