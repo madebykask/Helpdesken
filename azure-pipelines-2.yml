@@ -48,7 +48,7 @@ steps:
   displayName: 'Copy Files'
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)/DH.Helpdesk.WebMobile/wwwroot/build/mobile'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/Helpdesk_Mobile'
 
 
 # - task: ArchiveFiles@2
