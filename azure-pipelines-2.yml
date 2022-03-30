@@ -37,10 +37,17 @@ steps:
 #   displayName: 'npm install and build'
 
 
+# - script: |
+#     npm i
+#     npm install -g @angular/cli
+#     npm run ng build
+#   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
+#   displayName: 'npm install and build'
+
 - script: |
     npm i
     npm install -g @angular/cli
-    npm run ng build
+    npm run ng build --stats-json --prod --configuration=dev-prod --output-hashing all
   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
   displayName: 'npm install and build'
 
