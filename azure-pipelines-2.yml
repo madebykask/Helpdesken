@@ -46,13 +46,14 @@ steps:
 - script: |
     npm install -g @angular/cli
     npm install
+    npm run ng build
   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
   displayName: 'npm install'
 
-- script: |
-    node ./node_modules/@angular/cli/bin/ng build
-  displayName: 'ng build prod'
-  workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
+# - script: |
+#     node ./node_modules/@angular/cli/bin/ng build
+#   displayName: 'ng build prod'
+#   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
 
 - task: CopyFiles@2
   displayName: 'Copy Files'
