@@ -26,11 +26,11 @@ steps:
 #   displayName: 'ng build prod'
 #   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
 
-- task: CopyFiles@2
-  displayName: 'Copy Files'
-  inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile/wwwroot/build'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/Helpdesk_Mobile'
+# - task: CopyFiles@2
+#   displayName: 'Copy Files'
+#   inputs:
+#     SourceFolder: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile/wwwroot/build'
+#     TargetFolder: '$(Build.ArtifactStagingDirectory)/Helpdesk_Mobile'
 
 
 # - task: ArchiveFiles@2
