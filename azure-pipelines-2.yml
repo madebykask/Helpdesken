@@ -34,7 +34,7 @@ steps:
   inputs:
     Contents: '**'
     SourceFolder: './dist'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/Helpdesk_Mobile'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 
 # - task: ArchiveFiles@2
