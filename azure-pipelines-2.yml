@@ -17,9 +17,9 @@ steps:
 - script: |
     npm install -g @angular/cli@8.3.29
     npm install
-    ng build --prod
+    npm run ng build --prod
   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
-  displayName: 'npm install and build'
+  displayName: 'npm install ng build'
 
 # - script: |
 #     node ./node_modules/@angular/cli/bin/ng build
@@ -29,8 +29,9 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy Files'
   inputs:
-    SourceFolder: 'wwwroot/**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    Contents: '**'
+    SourceFolder: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/Helpdesk_Mobile'
 
 
 # - task: ArchiveFiles@2
