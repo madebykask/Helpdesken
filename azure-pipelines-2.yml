@@ -29,7 +29,7 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy Files'
   inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
+    SourceFolder: '$(Build.ArtifactStagingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/Helpdesk_Mobile'
 
 
