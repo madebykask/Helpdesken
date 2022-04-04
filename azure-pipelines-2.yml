@@ -13,13 +13,23 @@ steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '10.18.1'
+  - script:
+      npm i @angular/cli@8.3.29
+      workingDirectory: '$(System.DefaultWorkingDirectory)'
+  - script:
+      npm install --force
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+  - script:  
+      node ./node_modules/@angular/cli/bin/ng build --prod
+    displayName: 'ng build prod'
+    workingDirectory: $(System.DefaultWorkingDirectory)
 
-- script: |
-    npm install -g @angular/cli@8.3.29
-    npm install
-    ng build --prod
-  workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
-  displayName: 'npm install and build'
+# - script: |
+#     npm install -g @angular/cli@8.3.29
+#     npm install
+#     ng build --prod
+#   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
+#   displayName: 'npm install and build'
 
 # - script: |
 #     node ./node_modules/@angular/cli/bin/ng build
