@@ -39,12 +39,8 @@ steps:
 #     TargetFolder: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.WebMobile'
 
 
-# - task: ArchiveFiles@2
-#   displayName: 'Archive $(Build.ArtifactStagingDirectory)'
-#   inputs:
-#     rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.WebMobile'
-    ArtifactName: 'Helpdesk_Mobile'
+# - task: PublishBuildArtifacts@1
+#   inputs:
+#     PathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.WebMobile'
+#     ArtifactName: 'Helpdesk_Mobile'
