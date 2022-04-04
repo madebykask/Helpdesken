@@ -9,7 +9,6 @@ pool:
   vmImage: 'windows-latest'
 
 steps:
-
 - script: |
     npm install -g @angular/cli@8.3.29
     npm install
