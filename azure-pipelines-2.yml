@@ -29,6 +29,7 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy Files'
   inputs:
+    Contents: '**'
     SourceFolder: '$(Build.ArtifactStagingDirectory)'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/Helpdesk_Mobile'
 
