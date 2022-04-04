@@ -27,6 +27,7 @@ steps:
   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
   displayName: 'ng build prod'
 
+
 # - script: |
 #     node ./node_modules/@angular/cli/bin/ng build
 #   displayName: 'ng build prod'
@@ -35,7 +36,7 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy Files'
   inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)/DH.Helpdesk.WebMobile/wwwroot/**'
+    SourceFolder: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile/wwwroot/**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-WebMobile'
 
 
