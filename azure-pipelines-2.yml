@@ -42,5 +42,5 @@ steps:
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
     ArtifactName: 'Helpdesk_Mobile'
