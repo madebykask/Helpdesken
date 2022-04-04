@@ -30,7 +30,7 @@ steps:
   displayName: 'Copy Files'
   inputs:
     Contents: '**'
-    SourceFolder: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
+    SourceFolder: './dist'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/Helpdesk_Mobile'
 
 
