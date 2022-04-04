@@ -40,8 +40,7 @@ steps:
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 
-
-# - task: PublishBuildArtifacts@1
-#   inputs:
-#     PathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.WebMobile'
-#     ArtifactName: 'Helpdesk_Mobile'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'Helpdesk_Mobile'
