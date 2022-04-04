@@ -36,7 +36,7 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy Files'
   inputs:
-    Contents: 'build/**' 
+    Contents: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile/wwwroot/build/**' 
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 
