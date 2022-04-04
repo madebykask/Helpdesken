@@ -5,10 +5,15 @@
 
 trigger:
 - Development
+
 pool:
   vmImage: 'windows-latest'
 
 steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.18.1'
+
 - script: |
     npm install -g @angular/cli@8.3.29
     npm install
@@ -21,11 +26,11 @@ steps:
 #   displayName: 'ng build prod'
 #   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
 
-# - task: CopyFiles@2
-#   displayName: 'Copy Files'
-#   inputs:
-#     SourceFolder: 'wwwroot/**'
-#     TargetFolder: '$(Build.ArtifactStagingDirectory)'
+- task: CopyFiles@2
+  displayName: 'Copy Files'
+  inputs:
+    SourceFolder: 'wwwroot/**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 
 # - task: ArchiveFiles@2
@@ -35,5 +40,6 @@ steps:
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(System.DefaultWorkingDirectory)/dist/'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'Helpdesk_Mobile'
+    publishLocation: 'Container'
