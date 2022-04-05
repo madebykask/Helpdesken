@@ -1,0 +1,206 @@
+﻿<?xml version="1.0"?>
+<configuration>
+	<configSections>
+		<!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
+		<section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false"/>
+	</configSections>
+	<connectionStrings>
+		<add name="HelpdeskOleDbContext" connectionString="Provider=SQLOLEDB;Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword};" providerName="System.Data.OleDb"/>
+		<add name="HelpdeskSqlServerDbContext" connectionString="Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword};MultipleActiveResultSets=True;Connection Lifetime=3;Max Pool Size=3;" providerName="System.Data.SqlClient"/>
+		<add name="HelpdeskIndexingService" connectionString="provider=Search.CollatorDSO.1;EXTENDED PROPERTIES='Application=Windows';"/>
+		<add name="DSN" connectionString="Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword};" />
+	</connectionStrings>
+	<appSettings>
+		<add key="webpages:Version" value="3.0.0.0" />
+		<add key="webpages:Enabled" value="false" />
+		<add key="PreserveLoginUrl" value="true" />
+		<add key="dh_maskedpassword" value="||||||||"/>
+		<add key="dh_filesDirectory" value="#{FilesDirectory}"/>
+		<add key="dh_selfserviceaddress" value="#{SelfserviceAddress}"/>
+		<add key="encryptionkey" value="JRI!8KST3V0E#DS9SU}RFBCGHZL6E4M7" />
+		<add key="Application.DefaultCulture" value="sv"/>
+		<add key="ClientValidationEnabled" value="true"/>
+		<add key="UnobtrusiveJavaScriptEnabled" value="true"/>
+		<add key="InitFromSelfService" value="false"/>
+		<add key="InitFromSelfServiceWorkflowInitValue" value="10"/>
+		<add key="log4net.Internal.Debug" value="false"/>
+		<add key="SmtpServer" value="smtp.datahalland.se"/>
+		<add key="SmtpPort" value="25"/>
+		<add key="aspnet:MaxJsonDeserializerMembers" value="150000"/>
+		<add key="LoginMode" value="Windows"/>
+	</appSettings>
+	<system.web.extensions>
+		<scripting>
+			<webServices>
+				<jsonSerialization maxJsonLength="36000000"/>
+			</webServices>
+		</scripting>
+	</system.web.extensions>
+	<system.web>
+		<compilation debug="true" targetFramework="4.7.2" />
+		<customErrors mode="Off"/>
+		<pages>
+			<namespaces>
+				<add namespace="System.Web.Helpers"/>
+				<add namespace="System.Web.Mvc"/>
+				<add namespace="System.Web.Mvc.Ajax"/>
+				<add namespace="System.Web.Mvc.Html"/>
+				<add namespace="System.Web.Routing"/>
+				<add namespace="System.Web.WebPages"/>
+			</namespaces>
+		</pages>
+		<!-- 50 mb in kilobytes --><!-- commit -->
+		<httpRuntime maxRequestLength="52428800" targetFramework="4.7.2"/>
+		<authentication mode="Windows">
+			<forms loginUrl="~/Login/Login" defaultUrl="~/"/>
+		</authentication>
+		<identity impersonate="false"/>
+		<httpHandlers>
+			<add path="Reserved.ReportViewerWebControl.axd" verb="*" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" validate="false"/>
+		</httpHandlers>
+		<sessionState cookieless="UseDeviceProfile" timeout="2880" />
+	</system.web>
+	<location path="." inheritInChildApplications="false">
+		<system.web>
+			<authorization>
+				<deny users="?" />
+			</authorization>
+		</system.web>
+	</location>
+	<system.webServer>
+		<!-- if set to true below, no static files will show server name etc in response headers, but might have affect on performance-->
+		<modules runAllManagedModulesForAllRequests="false" />
+		<security>
+			<requestFiltering allowDoubleEscaping="true">
+				<!-- for iis 7 >. 50 mb in bytes -->
+				<requestLimits maxAllowedContentLength="52428800" />
+			</requestFiltering>
+		</security>
+		<validation validateIntegratedModeConfiguration="false"/>
+		<handlers>
+			<add name="ReportViewerWebControlHandler" preCondition="integratedMode" verb="*" path="Reserved.ReportViewerWebControl.axd" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"/>
+			<remove name="ExtensionlessUrlHandler-Integrated-4.0" />
+			<remove name="OPTIONSVerbHandler" />
+			<remove name="TRACEVerbHandler" />
+			<add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
+			<add name="MiniProfiler" path="mini-profiler-resources/*" verb="*" type="System.Web.Routing.UrlRoutingModule" resourceType="Unspecified" preCondition="integratedMode" />
+		</handlers>
+		<httpProtocol>
+			<customHeaders>
+				<add name="X-Frame-Options" value="sameorigin" />
+				<remove name="X-Powered-By" />
+			</customHeaders>
+		</httpProtocol>
+	</system.webServer>
+	<runtime>
+		<assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+			<dependentAssembly>
+				<assemblyIdentity name="WebGrease" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-1.6.5135.21930" newVersion="1.6.5135.21930" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="System.Web.Optimization" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-1.1.0.0" newVersion="1.1.0.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="System.Xml" publicKeyToken="b77a5c561934e089" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="System" publicKeyToken="b77a5c561934e089" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="System.Core" publicKeyToken="b77a5c561934e089" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="System.Web" publicKeyToken="b03f5f7f11d50a3a" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="EPPlus" publicKeyToken="ea159fdaa78159a1" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-4.0.2.0" newVersion="4.0.2.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="System.Configuration" publicKeyToken="b03f5f7f11d50a3a" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" />
+				<bindingRedirect oldVersion="0.0.0.0-12.0.0.0" newVersion="12.0.0.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="System.Web.Razor" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35" />
+				<bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" />
+				<bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="System.Web.WebPages.Razor" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
+				<bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="System.Web.Http" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="System.Web.Http.WebHost" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="MiniProfiler" publicKeyToken="b44f9351044011a3" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-3.2.0.157" newVersion="3.2.0.157" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="System.Net.Http.Formatting" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
+			</dependentAssembly>
+			<!--New Owin Development-->
+			<dependentAssembly>
+				<assemblyIdentity name="Microsoft.Owin" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-4.2.0.0" newVersion="4.2.0.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="Microsoft.Owin.Security" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-4.2.0.0" newVersion="4.2.0.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="System.IdentityModel.Tokens.Jwt" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-5.3.0.0" newVersion="5.3.0.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="MiniProfiler" publicKeyToken="b44f9351044011a3" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-3.2.0.157" newVersion="3.2.0.157" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="Ninject" publicKeyToken="c7192dc5380945e7" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-3.3.4.0" newVersion="3.3.4.0" />
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="Ninject.Web.Common" publicKeyToken="c7192dc5380945e7" culture="neutral" />
+				<bindingRedirect oldVersion="0.0.0.0-3.3.1.0" newVersion="3.3.1.0" />
+			</dependentAssembly>
+		</assemblyBinding>
+	</runtime>
+	<entityFramework>
+		<defaultConnectionFactory type="System.Data.Entity.Infrastructure.LocalDbConnectionFactory, EntityFramework">
+			<parameters>
+				<parameter value="v11.0"/>
+			</parameters>
+		</defaultConnectionFactory>
+		<providers>
+			<provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer"/>
+		</providers>
+	</entityFramework>
+</configuration>
