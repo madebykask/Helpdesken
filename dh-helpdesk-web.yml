@@ -16,12 +16,6 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-# - task: VSBuild@1
-#   inputs:
-#     solution: '**/dhHelpdesk_NG.Web/DH.Helpdesk.Web.csproj'
-#     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:PackageAsSingleFile=false /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)" p:OutDir="$(build.artifactStagingDirectory)"'
-#     platform: '$(buildPlatform)'
-#     configuration: '$(buildConfiguration)'
 - task: MSBuild@1
   inputs:
     msbuildVersion: '17.0'  
@@ -40,14 +34,6 @@ steps:
     solution: '**/dhHelpdeskNG/DH.Helpdesk.WebApi/DH.Helpdesk.WebApi.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
 
-# - task: CopyFiles@2
-#   inputs:
-#     SourceFolder: '$(build.artifactStagingDirector)'
-#     Contents: |
-#       **
-#     OverWrite: true
-#     CleanTargetFolder: true
-#     TargetFolder: '$(build.artifactStagingDirector)\DH.Helpdesk.Web'
 
 - task: CopyFiles@2
   inputs:
