@@ -14,49 +14,60 @@
 		<add key="webpages:Version" value="3.0.0.0" />
 		<add key="webpages:Enabled" value="false" />
 		<add key="PreserveLoginUrl" value="true" />
-		<add key="dh_maskedpassword" value="||||||||"/>
+		<add key="dh_maskedpassword" value="||||||||" />
 		<add key="dh_filesDirectory" value="#{FilesDirectory}"/>
 		<add key="dh_selfserviceaddress" value="#{SelfserviceAddress}"/>
+		<add key="dh_webapiurl" value="http://dev.helpdesk.internal.datahalland.se/api/Account/Login" />
 		<add key="encryptionkey" value="JRI!8KST3V0E#DS9SU}RFBCGHZL6E4M7" />
-		<add key="Application.DefaultCulture" value="sv"/>
-		<add key="ClientValidationEnabled" value="true"/>
-		<add key="UnobtrusiveJavaScriptEnabled" value="true"/>
-		<add key="InitFromSelfService" value="false"/>
-		<add key="InitFromSelfServiceWorkflowInitValue" value="10"/>
-		<add key="log4net.Internal.Debug" value="false"/>
-		<add key="SmtpServer" value="smtp.datahalland.se"/>
-		<add key="SmtpPort" value="25"/>
-		<add key="aspnet:MaxJsonDeserializerMembers" value="150000"/>
-		<add key="LoginMode" value="Windows"/>
+		<add key="encryptionkey" value="JRI!8KST3V0E#DS9SU}RFBCGHZL6E4M7" />
+		<add key="Application.DefaultCulture" value="sv" />
+		<add key="ClientValidationEnabled" value="true" />
+		<add key="UnobtrusiveJavaScriptEnabled" value="true" />
+		<add key="InitFromSelfService" value="false" />
+		<add key="InitFromSelfServiceWorkflowInitValue" value="10" />
+		<add key="log4net.Internal.Debug" value="true" />
+		<add key="SmtpServer" value="smtp.datahalland.se" />
+		<add key="SmtpPort" value="25" />
+		<add key="DHProfiler:Application" value="Helpdesk" />
+		<add key="DHProfiler:Environment" value="Development" />
+		<add key="DHProfiler:MeasureLoggingPerformance" value="true" />
+		<add key="LoginMode" value="Windows" />
+		<add key="MicrosoftLogin" value="" />
+		<add key="ClientId" value="" />
+		<add key="Tenant" value="" />
+		<add key="Authority" value="" />
+		<add key="RedirectUri" value="" />
 	</appSettings>
 	<system.web.extensions>
 		<scripting>
 			<webServices>
-				<jsonSerialization maxJsonLength="36000000"/>
+				<jsonSerialization maxJsonLength="36000000" />
 			</webServices>
 		</scripting>
 	</system.web.extensions>
 	<system.web>
-		<compilation debug="true" targetFramework="4.7.2" />
-		<customErrors mode="Off"/>
+		<compilation targetFramework="4.7.2" />
 		<pages>
 			<namespaces>
-				<add namespace="System.Web.Helpers"/>
-				<add namespace="System.Web.Mvc"/>
-				<add namespace="System.Web.Mvc.Ajax"/>
-				<add namespace="System.Web.Mvc.Html"/>
-				<add namespace="System.Web.Routing"/>
-				<add namespace="System.Web.WebPages"/>
+				<add namespace="System.Web.Helpers" />
+				<add namespace="System.Web.Mvc" />
+				<add namespace="System.Web.Mvc.Ajax" />
+				<add namespace="System.Web.Mvc.Html" />
+				<add namespace="System.Web.Routing" />
+				<add namespace="System.Web.WebPages" />
 			</namespaces>
 		</pages>
-		<!-- 50 mb in kilobytes --><!-- commit -->
-		<httpRuntime maxRequestLength="52428800" targetFramework="4.7.2"/>
+		<!-- 50 mb in kilobytes -->
+		<httpRuntime maxRequestLength="52428800" targetFramework="4.7.2" enableVersionHeader="false" />
+		<!-- For windows -->
 		<authentication mode="Windows">
-			<forms loginUrl="~/Login/Login" defaultUrl="~/"/>
+			<forms loginUrl="~/Login/Login" defaultUrl="~/" />
 		</authentication>
-		<identity impersonate="false"/>
+
+		<identity impersonate="false" />
+		<machineKey validationKey="121B090935F6E49C2C797F69BBAAD8402ABD2EE0B667A8B44EA7DD4374267A75D7AD972A119482D15A4127461DB1DC347C1A63AE5F1CCFAACFF1B72A7F0A282C" decryptionKey="CBAB74D7EC5BB56D75D217CECBFB9628819BDB8BF91CFCD64568A145BE59718B" validation="SHA1" decryption="AES" />
 		<httpHandlers>
-			<add path="Reserved.ReportViewerWebControl.axd" verb="*" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" validate="false"/>
+			<add path="Reserved.ReportViewerWebControl.axd" verb="*" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" validate="false" />
 		</httpHandlers>
 		<sessionState cookieless="UseDeviceProfile" timeout="2880" />
 	</system.web>
@@ -68,25 +79,30 @@
 		</system.web>
 	</location>
 	<system.webServer>
-		<!-- if set to true below, no static files will show server name etc in response headers, but might have affect on performance-->
+		<!-- if set to true, no static files will show server name etc in response headers, but might have affect on performance-->
 		<modules runAllManagedModulesForAllRequests="false" />
 		<security>
-			<requestFiltering allowDoubleEscaping="true">
+			<requestFiltering>
 				<!-- for iis 7 >. 50 mb in bytes -->
 				<requestLimits maxAllowedContentLength="52428800" />
 			</requestFiltering>
 		</security>
-		<validation validateIntegratedModeConfiguration="false"/>
 		<handlers>
-			<add name="ReportViewerWebControlHandler" preCondition="integratedMode" verb="*" path="Reserved.ReportViewerWebControl.axd" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"/>
+			<!--<add name="ExtensionlessUrlHandler-Integrated-4.0" path="*" verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="" />-->
+			<add name="MiniProfiler" path="mini-profiler-resources/*" verb="*" type="System.Web.Routing.UrlRoutingModule" resourceType="Unspecified" preCondition="integratedMode" />
 			<remove name="ExtensionlessUrlHandler-Integrated-4.0" />
 			<remove name="OPTIONSVerbHandler" />
 			<remove name="TRACEVerbHandler" />
 			<add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
-			<add name="MiniProfiler" path="mini-profiler-resources/*" verb="*" type="System.Web.Routing.UrlRoutingModule" resourceType="Unspecified" preCondition="integratedMode" />
+			<add name="ReportViewerWebControlHandler" preCondition="integratedMode" verb="*" path="Reserved.ReportViewerWebControl.axd" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
+			<add name="CaseFileHandler" path="cases/casefiles/*/*.*" verb="GET,HEAD,POST,DEBUG,PUT,DELETE,PATCH,OPTIONS" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
+			<add name="CaseLogFileHandler" path="cases/caselogfiles/*/*/*.*" verb="GET,HEAD,POST,DEBUG,PUT,DELETE,PATCH,OPTIONS" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
+			<add name="DocsFileHandler" path="docs/*/*/*.*" verb="GET,HEAD,POST,DEBUG,PUT,DELETE,PATCH,OPTIONS" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
 		</handlers>
+		<validation validateIntegratedModeConfiguration="false" />
 		<httpProtocol>
 			<customHeaders>
+				<clear />
 				<add name="X-Frame-Options" value="sameorigin" />
 				<remove name="X-Powered-By" />
 			</customHeaders>
