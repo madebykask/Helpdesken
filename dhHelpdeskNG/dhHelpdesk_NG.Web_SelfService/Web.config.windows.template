@@ -27,34 +27,9 @@
     <add key="CurrentApplication" value="SelfService" />
 	<add key="ShowCommunicationForSelfService" value="#{ShowCommunicationForSelfService}" />
 
-    #{if IsRecaptchaConfigurable}
     <add key="reCaptchaSiteKey" value="#{reCaptchaSiteKey}" />
     <add key="reCaptchaSecretKey" value="#{reCaptchaSecretKey}" />
-    #{/if}
-    #{if IsSingleSignOnConfigurable}
-    <!-- Single Sign Keis-->
-    
 
-    <add key="ApplicationId" value="Self Service On Acct" />
-    <add key="ClaimDomain" value="DomainName" />
-    <add key="ClaimUserId" value="name" />
-    <add key="ClaimEmployeeNumber" value="EmployeeNumber" />
-    <add key="ClaimFirstName" value="givenname" />
-    <add key="ClaimLastName" value="surname" />
-    <add key="ClaimEmail" value="emailaddress" />
-    <add key="SSOLog" value="true" />
-    <add key="DefaultEmployeeNumber" value="" />
-    <add key="LogoutUrl" value="#{AdfsLogoutUrl}" />
-    #{/if}
-    #{if MicrosoftAuthConfigurable}
-    <add key="webpages:Enabled" value="false" />
-    <add key="ClientId" value="#{SelfserviceClientId}" /> 
-    <add key="Tenant" value="#{SelfserviceTenant}" /> <!--If your application supports My organization only, replace this value with the Tenant Id or Tenant name (for example, contoso.onmicrosoft.com)
-    If your application supports Accounts in any organizational directory, replace this value with "organizations"
-    If your application supports All Microsoft account users, replace this value with "common"-->
-    <add key="Authority" value="#{SelfserviceAuthority}" />
-    <add key="RedirectUri" value="#{SelfserviceRedirectUri}" />
-    #{/if}
   </appSettings>
 
   <!--
