@@ -51,6 +51,13 @@ steps:
     solution: '**/dhHelpdeskNG/DH.Helpdesk.Mail2Ticket/DH.Helpdesk.Mail2Ticket.vbproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Mail2Ticket"'
 
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.Schedule
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.Schedule/DH.Helpdesk.Schedule.vbproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Schedule"'
+
 
 - task: CopyFiles@2
   displayName: Copy DH-Helpdesk-Web
@@ -110,3 +117,9 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Mail2Ticket' 
     artifactName: 'DH.Helpdesk.Mail2Ticket'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.Schedule
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Schedule' 
+    artifactName: 'DH.Helpdesk.Schedule'
