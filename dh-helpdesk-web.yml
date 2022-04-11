@@ -17,6 +17,7 @@ steps:
     restoreSolution: '$(solution)'
 
 - task: MSBuild@1
+  displayName: MSBuild DH.Helpdesk.Web
   inputs:
     msbuildVersion: '17.0'  
     solution: '**/dhHelpdesk_NG.Web/DH.Helpdesk.Web.csproj'
