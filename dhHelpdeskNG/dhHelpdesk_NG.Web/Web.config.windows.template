@@ -19,7 +19,6 @@
 		<add key="dh_selfserviceaddress" value="#{SelfserviceAddress}"/>
 		<add key="dh_webapiurl" value="http://dev.helpdesk.internal.datahalland.se/api/Account/Login" />
 		<add key="encryptionkey" value="JRI!8KST3V0E#DS9SU}RFBCGHZL6E4M7" />
-		<add key="encryptionkey" value="JRI!8KST3V0E#DS9SU}RFBCGHZL6E4M7" />
 		<add key="Application.DefaultCulture" value="sv" />
 		<add key="ClientValidationEnabled" value="true" />
 		<add key="UnobtrusiveJavaScriptEnabled" value="true" />
