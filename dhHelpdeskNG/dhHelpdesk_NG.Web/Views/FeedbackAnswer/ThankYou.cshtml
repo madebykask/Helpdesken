@@ -10,32 +10,32 @@
         </div>
         @using (Html.BeginForm("SaveComment", "FeedbackAnswer", new { customerId = Model.CustomerId, languageId = Model.LanguageId, questionId = Model.QuestionId, noteText = Model.NoteText }, FormMethod.Post))
         {
-            if (Model.IsShowNote)
-            {
-                <div id="feedbackContent">
+            <div id="feedbackContent">
+                @if (Model.IsShowNote)
+                {
                     @Html.DisplayFor(m => m.NoteLabel)
-                    <br/>
-                    @Html.TextAreaFor(m => m.NoteText, new {id = "feedbackComment"})
-                    @Html.ValidationMessageFor(m => m.NoteText)
-                    @Html.HiddenFor(m => m.CustomerId)
-                    @Html.HiddenFor(m => m.LanguageId)
-                    @Html.HiddenFor(m => m.QuestionId)
-                    <br/>
-                    @if (Model.LanguageId == 1)
-                    {
-                        <a href="#" id="btnSaveComment" class="btn templateQuickButton"> Spara </a>
-                    }
-                    else if (Model.LanguageId == 2)
-                    {
-                        <a href="#" id="btnSaveComment" class="btn templateQuickButton"> Save </a>
-                    }
-                    else
-                    {
-                        <a href="#" id="btnSaveComment" class="btn templateQuickButton">@Translation.GetCoreTextTranslation("Spara")</a>
-                    }
+                }
+                <br />
+                @Html.TextAreaFor(m => m.NoteText, new { id = "feedbackComment" })
+                @Html.ValidationMessageFor(m => m.NoteText)
+                @Html.HiddenFor(m => m.CustomerId)
+                @Html.HiddenFor(m => m.LanguageId)
+                @Html.HiddenFor(m => m.QuestionId)
+                <br />
+                @if (Model.LanguageId == 1)
+                {
+                    <a href="#" id="btnSaveComment" class="btn templateQuickButton"> Spara </a>
+                }
+                else if (Model.LanguageId == 2)
+                {
+                    <a href="#" id="btnSaveComment" class="btn templateQuickButton"> Save </a>
+                }
+                else
+                {
+                    <a href="#" id="btnSaveComment" class="btn templateQuickButton">@Translation.GetCoreTextTranslation("Spara")</a>
+                }
 
-                </div>
-            }
+            </div>
         }
     </div>
 </div>
