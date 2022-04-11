@@ -41,19 +41,21 @@ steps:
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
 
 - task: CopyFiles@2
-  displayName: Copy DH-Helpdesk-Web files
+  displayName: Copy DH-Helpdesk-Web
   inputs:
     SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.Web'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Web'
 
 - task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-Selfservice
   inputs:
     SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.Selfservice'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Selfservice'
 
 - task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-WebApi
   inputs:
     SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.WebApi'
     Contents: '**'
