@@ -89,3 +89,9 @@ steps:
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-WebApi'
     artifactName: 'DH-Helpdesk-WebApi'
+
+- task: PublishBuildArtifacts@1
+  displayName: PublishBuildArtifacts-LDAP-AD
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.LDAP-AD' 
+    artifactName: 'DH.Helpdesk.LDAP-AD'
