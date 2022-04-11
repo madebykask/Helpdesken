@@ -924,6 +924,12 @@
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Web.config.ikea.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Web.config.windows.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

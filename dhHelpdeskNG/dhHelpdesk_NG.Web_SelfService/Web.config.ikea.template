@@ -10,22 +10,55 @@
     <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
    <!-- TODO: Parameters <section name="system.identityModel" type="System.IdentityModel.Configuration.SystemIdentityModelSection, System.IdentityModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089" />
     <section name="system.identityModel.services" type="System.IdentityModel.Services.Configuration.SystemIdentityModelServicesSection, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089" />-->
+
+    #{if IsFormLibConfigurable}
+    <sectionGroup name="formLibConfigurable">
+      <section name="accessManagment" type="ECT.FormLib.Configurable.AccessManagment" allowLocation="true" allowDefinition="Everywhere" />
+    </sectionGroup>
+    #{/if}
+
   </configSections>
 
+  #{if IsFormLibConfigurable}
+  <formLibConfigurable>
+    <accessManagment>
+      <api uriPath="#{AMUrl}" username="#{AmUsers}" password="#{AmPassword}" />
+      <countries>
+        <country helpdeskCustomerId="1" employeePrefix="00" code="SV" />
+      </countries>
+    </accessManagment>
+  </formLibConfigurable>
+  #{/if}
+  <connectionStrings>
+     <add name="DSN_AM" connectionString="Data Source=#{AmDatabaseServer};Initial Catalog=#{AmDatabaseName};User ID=#{AmDatabaseUser};Password=#{AmDatabaseServer};" providerName="System.Data.SqlClient" />
+  </connectionStrings>
   <appSettings>
-    <add key="LoginMode" value="#{LoginMode}" />
+    <add key="LoginMode" value="Windows" />
     <add key="ClientValidationEnabled" value="true" />
     <add key="UnobtrusiveJavaScriptEnabled" value="true" />
     <add key="dh_filesDirectory" value="#{FilesDirectory}" />
     <add key="dh_selfserviceaddress" value="#{SelfserviceAddress}" />
     <add key="dh_helpdeskaddress" value="#{HelpdeskAddress}" />
     <add key="webpages:Version" value="3.0.0.0" />
+    <!-- For self/service line manager -->
+    <add key="InitFromSelfService" value="#{InitFromSelfService}" />
+    <add key="InitFromSelfServiceWorkflowInitValue" value="#{InitFromSelfServiceWorkflowInitValue}" />
+  <!-- TODO: Parameters   <add key="ida:FederationMetadataLocation" value="#{AdfsFederationMetaDataLocation}" />
+    <add key="ida:Issuer" value="#{AdfsIssuerUrl}" />
+    <add key="ida:ProviderSelection" value="#{AdfsProviderSection}" />
+    <add key="SmtpServer" value="#{SmptServer}" />
+    <add key="SmtpPort" value="#{SmptPort"}" />-->
 	 
 	  <add key="SignOutUrl" value="" /> <!-- If value is set, logout option will show. Eg. https://www.example.com -->
 
     <add key="CaseList" value="manager,coworkers" />
     <add key="CurrentApplication" value="SelfService" />
-	<add key="ShowCommunicationForSelfService" value="#{SwowCommunication}" />
+
+    #{if ShowCommunication}
+    <add key="ShowCommunicationForSelfService" value="true" />
+    #{else}
+    <add key="ShowCommunicationForSelfService" value="false" />
+    #{/if}
 
     #{if IsRecaptchaConfigurable}
     <add key="reCaptchaSiteKey" value="#{reCaptchaSiteKey}" />
@@ -45,6 +78,15 @@
     <add key="SSOLog" value="true" />
     <add key="DefaultEmployeeNumber" value="" />
     <add key="LogoutUrl" value="#{AdfsLogoutUrl}" />
+    #{/if}
+    
+    #{if IsAccessManagementConfigurable}
+    <!-- TODO: -->
+    <!-- Access Management API Keis-->
+    <add key="AM_Api_UriPath" value="#{AmApiUri}" />
+    <add key="AM_Api_UserName" value="#{AmApiUserName}" />
+    <add key="AM_Api_Password" value="#{AmApiPassword}" />
+
     #{/if}
     #{if MicrosoftAuthConfigurable}
     <add key="webpages:Enabled" value="false" />

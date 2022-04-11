@@ -13,7 +13,7 @@
   </configSections>
 
   <appSettings>
-    <add key="LoginMode" value="#{LoginMode}" />
+    <add key="LoginMode" value="Windows" />
     <add key="ClientValidationEnabled" value="true" />
     <add key="UnobtrusiveJavaScriptEnabled" value="true" />
     <add key="dh_filesDirectory" value="#{FilesDirectory}" />
@@ -25,7 +25,7 @@
 
     <add key="CaseList" value="manager,coworkers" />
     <add key="CurrentApplication" value="SelfService" />
-	<add key="ShowCommunicationForSelfService" value="#{SwowCommunication}" />
+	<add key="ShowCommunicationForSelfService" value="#{ShowCommunicationForSelfService}" />
 
     #{if IsRecaptchaConfigurable}
     <add key="reCaptchaSiteKey" value="#{reCaptchaSiteKey}" />
