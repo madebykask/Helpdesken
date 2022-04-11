@@ -42,6 +42,7 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-Web files
   inputs:
     SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.Web'
     Contents: '**'
