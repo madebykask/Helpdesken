@@ -48,12 +48,12 @@
     #{/if}
     #{if MicrosoftAuthConfigurable}
     <add key="webpages:Enabled" value="false" />
-    <add key="ClientId" value="#{ClientId}" /> 
-    <add key="Tenant" value="#{Tenant}" /> <!--If your application supports My organization only, replace this value with the Tenant Id or Tenant name (for example, contoso.onmicrosoft.com)
+    <add key="ClientId" value="#{SelfserviceClientId}" /> 
+    <add key="Tenant" value="#{SelfserviceTenant}" /> <!--If your application supports My organization only, replace this value with the Tenant Id or Tenant name (for example, contoso.onmicrosoft.com)
     If your application supports Accounts in any organizational directory, replace this value with "organizations"
     If your application supports All Microsoft account users, replace this value with "common"-->
-    <add key="Authority" value="#{Authority}" />
-    <add key="RedirectUri" value="#{RedirectUri}" />
+    <add key="Authority" value="#{SelfserviceAuthority}" />
+    <add key="RedirectUri" value="#{SelfserviceRedirectUri}" />
     #{/if}
   </appSettings>
 
