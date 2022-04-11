@@ -34,7 +34,11 @@ steps:
     solution: '**/dhHelpdeskNG/DH.Helpdesk.WebApi/DH.Helpdesk.WebApi.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
 
-
+- task: MSBuild@1
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.LDAP-AD/DH.Helpdesk.LDAP_AD.vbproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
 
 - task: CopyFiles@2
   displayName: Copy DH-Helpdesk-Web files
@@ -80,21 +84,21 @@ steps:
     targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-WebApi'
     artifactName: 'DH-Helpdesk-WebApi'
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+# - task: VSBuild@1
+#   inputs:
+#     solution: '$(solution)'
+#     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+#     platform: '$(buildPlatform)'
+#     configuration: '$(buildConfiguration)'
 
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(system.defaultworkingdirectory)/dhHelpdeskNG/DH.Helpdesk.LDAP-AD/bin/$(buildConfiguration)'
-    Contents: '**'
-    TargetFolder: '$(build.artifactstagingdirectory)/DH.Helpdesk.LDAP-AD'
+# - task: CopyFiles@2
+#   inputs:
+#     SourceFolder: '$(system.defaultworkingdirectory)/dhHelpdeskNG/DH.Helpdesk.LDAP-AD/bin/$(buildConfiguration)'
+#     Contents: '**'
+#     TargetFolder: '$(build.artifactstagingdirectory)/DH.Helpdesk.LDAP-AD'
 
-- task: PublishBuildArtifacts@1
-  displayName: PublishBuildArtifacts-LDAP-AD
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.LDAP-AD' 
-    artifactName: 'DH.Helpdesk.LDAP-AD'
+# - task: PublishBuildArtifacts@1
+#   displayName: PublishBuildArtifacts-LDAP-AD
+#   inputs:
+#     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.LDAP-AD' 
+#     artifactName: 'DH.Helpdesk.LDAP-AD'
