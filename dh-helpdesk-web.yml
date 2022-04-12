@@ -58,6 +58,14 @@ steps:
     solution: '**/dhHelpdeskNG/DH.Helpdesk.Schedule/DH.Helpdesk.Schedule.vbproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Schedule"'
 
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.TaskScheduler
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.TaskScheduler/DH.Helpdesk.TaskScheduler.vbproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.TaskScheduler"'
+
+
 
 - task: CopyFiles@2
   displayName: Copy DH-Helpdesk-Web
@@ -123,3 +131,9 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Schedule' 
     artifactName: 'DH.Helpdesk.Schedule'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.TaskScheduler
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.TaskScheduler' 
+    artifactName: 'DH.Helpdesk.TaskScheduler'
