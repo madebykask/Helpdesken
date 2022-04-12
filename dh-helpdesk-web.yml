@@ -125,28 +125,28 @@ steps:
   displayName: Publish Artifact DH.Helpdesk.LDAP-AD
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.LDAP_AD' 
-    artifactName: 'DH.Helpdesk.LDAP-AD'
+    artifactName: 'DH.Helpdesk-LDAP-AD'
 
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifact DH.Helpdesk.Mail2Ticket
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Mail2Ticket' 
-    artifactName: 'DH.Helpdesk.Mail2Ticket'
+    artifactName: 'DH.Helpdesk-Mail2Ticket'
 
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifact DH.Helpdesk.Schedule
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Schedule' 
-    artifactName: 'DH.Helpdesk.Schedule'
+    artifactName: 'DH.Helpdesk-Schedule'
 
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifact DH.Helpdesk.TaskScheduler
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.TaskScheduler' 
-    artifactName: 'DH.Helpdesk.TaskScheduler'
+    artifactName: 'DH.Helpdesk-TaskScheduler'
 
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifact DH.Helpdesk.Upkeeper
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Upkeeper' 
-    artifactName: 'DH.Helpdesk.Upkeeper'
+    artifactName: 'DH.Helpdesk-Upkeeper'
