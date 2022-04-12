@@ -17,37 +17,78 @@ steps:
     restoreSolution: '$(solution)'
 
 - task: MSBuild@1
+  displayName: Build DH.Helpdesk.Web
   inputs:
     msbuildVersion: '17.0'  
     solution: '**/dhHelpdesk_NG.Web/DH.Helpdesk.Web.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
 
 - task: MSBuild@1
+  displayName: Build DH.Helpdesk.SelfService
   inputs:
     msbuildVersion: '17.0'  
     solution: '**/dhHelpdesk_NG.Web_SelfService/DH.Helpdesk.SelfService.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
     
 - task: MSBuild@1
+  displayName: Build DH.Helpdesk.WebApi
   inputs:
     msbuildVersion: '17.0'  
     solution: '**/dhHelpdeskNG/DH.Helpdesk.WebApi/DH.Helpdesk.WebApi.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
 
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.LDAP_AD
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.LDAP-AD/DH.Helpdesk.LDAP_AD.vbproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.LDAP_AD"'
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.Mail2Ticket
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.Mail2Ticket/DH.Helpdesk.Mail2Ticket.vbproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Mail2Ticket"'
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.Schedule
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.Schedule/DH.Helpdesk.Schedule.vbproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Schedule"'
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.TaskScheduler
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.TaskScheduler/DH.Helpdesk.TaskScheduler.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.TaskScheduler"'
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.Upkeeper
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.Upkeeper/DH.Helpdesk.Upkeeper.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Upkeeper"'
+
 
 - task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-Web
   inputs:
     SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.Web'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Web'
 
 - task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-Selfservice
   inputs:
     SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.Selfservice'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Selfservice'
 
 - task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-WebApi
   inputs:
     SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.WebApi'
     Contents: '**'
@@ -65,6 +106,7 @@ steps:
     artifactName: 'DH-Helpdesk-Web'
 
 - task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-Database
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Database'
     artifactName: 'DH-Helpdesk-Database'
@@ -77,3 +119,34 @@ steps:
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-WebApi'
     artifactName: 'DH-Helpdesk-WebApi'
+
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.LDAP-AD
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.LDAP_AD' 
+    artifactName: 'DH.Helpdesk-LDAP-AD'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.Mail2Ticket
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Mail2Ticket' 
+    artifactName: 'DH.Helpdesk-Mail2Ticket'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.Schedule
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Schedule' 
+    artifactName: 'DH.Helpdesk-Schedule'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.TaskScheduler
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.TaskScheduler' 
+    artifactName: 'DH.Helpdesk-TaskScheduler'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.Upkeeper
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Upkeeper' 
+    artifactName: 'DH.Helpdesk-Upkeeper'
