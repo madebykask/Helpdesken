@@ -158,3 +158,9 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Upkeeper' 
     artifactName: 'DH.Helpdesk-Upkeeper'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.EmailEngine.WinService
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.EmailEngine.WinService' 
+    artifactName: 'DH.Helpdesk.EmailEngine.WinService'
