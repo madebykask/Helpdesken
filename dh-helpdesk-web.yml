@@ -62,14 +62,14 @@ steps:
   displayName: Build DH.Helpdesk.TaskScheduler
   inputs:
     msbuildVersion: '17.0'  
-    solution: '**/dhHelpdeskNG/DH.Helpdesk.TaskScheduler/DH.Helpdesk.TaskScheduler.vbproj'
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.TaskScheduler/DH.Helpdesk.TaskScheduler.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.TaskScheduler"'
 
 - task: MSBuild@1
   displayName: Build DH.Helpdesk.Upkeeper
   inputs:
     msbuildVersion: '17.0'  
-    solution: '**/dhHelpdeskNG/DH.Helpdesk.Upkeeper/DH.Helpdesk.Upkeeper.vbproj'
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.Upkeeper/DH.Helpdesk.Upkeeper.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Upkeeper"'
 
 
@@ -106,6 +106,7 @@ steps:
     artifactName: 'DH-Helpdesk-Web'
 
 - task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-Database
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Database'
     artifactName: 'DH-Helpdesk-Database'
@@ -121,31 +122,31 @@ steps:
 
 
 - task: PublishBuildArtifacts@1
-  displayName: PublishBuildArtifacts-LDAP-AD
+  displayName: Publish Artifact DH.Helpdesk.LDAP-AD
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.LDAP_AD' 
-    artifactName: 'DH.Helpdesk.LDAP-AD'
+    artifactName: 'DH.Helpdesk-LDAP-AD'
 
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifact DH.Helpdesk.Mail2Ticket
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Mail2Ticket' 
-    artifactName: 'DH.Helpdesk.Mail2Ticket'
+    artifactName: 'DH.Helpdesk-Mail2Ticket'
 
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifact DH.Helpdesk.Schedule
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Schedule' 
-    artifactName: 'DH.Helpdesk.Schedule'
+    artifactName: 'DH.Helpdesk-Schedule'
 
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifact DH.Helpdesk.TaskScheduler
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.TaskScheduler' 
-    artifactName: 'DH.Helpdesk.TaskScheduler'
+    artifactName: 'DH.Helpdesk-TaskScheduler'
 
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifact DH.Helpdesk.Upkeeper
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Upkeeper' 
-    artifactName: 'DH.Helpdesk.Upkeeper'
+    artifactName: 'DH.Helpdesk-Upkeeper'
