@@ -106,6 +106,7 @@ steps:
     artifactName: 'DH-Helpdesk-Web'
 
 - task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-Database
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Database'
     artifactName: 'DH-Helpdesk-Database'
@@ -121,7 +122,7 @@ steps:
 
 
 - task: PublishBuildArtifacts@1
-  displayName: PublishBuildArtifacts-LDAP-AD
+  displayName: Publish Artifact DH.Helpdesk.LDAP-AD
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.LDAP_AD' 
     artifactName: 'DH.Helpdesk.LDAP-AD'
