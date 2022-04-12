@@ -65,6 +65,12 @@ steps:
     solution: '**/dhHelpdeskNG/DH.Helpdesk.TaskScheduler/DH.Helpdesk.TaskScheduler.vbproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.TaskScheduler"'
 
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.Upkeeper
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.Upkeeper/DH.Helpdesk.Upkeeper.vbproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Upkeeper"'
 
 
 - task: CopyFiles@2
@@ -137,3 +143,9 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.TaskScheduler' 
     artifactName: 'DH.Helpdesk.TaskScheduler'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.Upkeeper
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Upkeeper' 
+    artifactName: 'DH.Helpdesk.Upkeeper'
