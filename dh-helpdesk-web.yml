@@ -72,6 +72,14 @@ steps:
     solution: '**/dhHelpdeskNG/DH.Helpdesk.Upkeeper/DH.Helpdesk.Upkeeper.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Upkeeper"'
 
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.EmailEngine.WinService
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.EmailEngine.WinService/DH.Helpdesk.EmailEngine.WinService.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.EmailEngine.WinService"'
+
+
 
 - task: CopyFiles@2
   displayName: Copy DH-Helpdesk-Web
