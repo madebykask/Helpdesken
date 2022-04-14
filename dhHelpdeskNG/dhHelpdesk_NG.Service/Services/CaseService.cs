@@ -992,7 +992,10 @@ namespace DH.Helpdesk.Services.Services
             if (c.Performer_User_Id != userId && !c.FinishingDate.HasValue)
                 c.Unread = 1;
 
-            if (c.Id == 0)
+            
+            var currentCaseSolution = c.CurrentCaseSolution ?? new CaseSolution() { CaseRelationType = Common.Enums.CaseSolution.CaseRelationType.None };
+            
+            if (c.Id == 0 || currentCaseSolution.CaseRelationType == Common.Enums.CaseSolution.CaseRelationType.OnlyDescendants)
             {
                 c.RegTime = DateTime.UtcNow;
                 c.ChangeTime = DateTime.UtcNow;
