@@ -38,3 +38,17 @@ steps:
     msbuildVersion: '17.0'  
     solution: '**/dhHelpdeskNG/DH.Helpdesk.WebApi/DH.Helpdesk.WebApi.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.LDAP_AD
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.LDAP-AD/DH.Helpdesk.LDAP_AD.vbproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.LDAP_AD"'
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.Mail2Ticket
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.Mail2Ticket/DH.Helpdesk.Mail2Ticket.vbproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Mail2Ticket"'
