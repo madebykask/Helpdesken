@@ -23,7 +23,7 @@ steps:
   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
   displayName: 'npm install'
 - script: 
-    npm run ng build
+    npm run build_prod --verbose
   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
   displayName: 'ng build prod'
 

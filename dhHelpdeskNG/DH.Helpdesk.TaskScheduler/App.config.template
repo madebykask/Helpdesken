@@ -14,9 +14,9 @@
   <appSettings>
     <add key="EnvName" value="#{EnvironmentName}" />
     <add key="LogPath" value="#{LogPath}" />
-    <add key="DailyReport" value="#{if UseDailyReport}1#{else}0#{/if}" />
-    <add key="InitiatorImport" value="#{if UseInitiatorImport}1#{else}0#{/if}" />
-    <add key="GDPRTasks" value="#{if UseGDPRTasks}1#{else}0#{/if}" />
+    <add key="DailyReport" value="#{UseDailyReport}" />
+    <add key="InitiatorImport" value="#{UseInitiatorImport}" />
+    <add key="GDPRTasks" value="#{UseGDPRTasks}" />
     <add key="GDPRBatchSize" value="#{GDPRBatchSize}" />
   </appSettings>
   <connectionStrings>

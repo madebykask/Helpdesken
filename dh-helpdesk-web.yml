@@ -72,6 +72,14 @@ steps:
     solution: '**/dhHelpdeskNG/DH.Helpdesk.Upkeeper/DH.Helpdesk.Upkeeper.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Upkeeper"'
 
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.EmailEngine.WinService
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.EmailEngine.WinService/DH.Helpdesk.EmailEngine.WinService.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.EmailEngine.WinService"'
+
+
 
 - task: CopyFiles@2
   displayName: Copy DH-Helpdesk-Web
@@ -95,12 +103,14 @@ steps:
     TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-WebApi'
 
 - task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-Database
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)/Database/SQLScripts'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)\DH-Helpdesk-Database'
 
 - task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-Web
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Web'
     artifactName: 'DH-Helpdesk-Web'
@@ -112,10 +122,12 @@ steps:
     artifactName: 'DH-Helpdesk-Database'
 
 - task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-Selfservice
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Selfservice'
     artifactName: 'DH-Helpdesk-Selfservice'
 - task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-WebApi
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-WebApi'
     artifactName: 'DH-Helpdesk-WebApi'
@@ -150,3 +162,9 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Upkeeper' 
     artifactName: 'DH.Helpdesk-Upkeeper'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.EmailEngine.WinService
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.EmailEngine.WinService' 
+    artifactName: 'DH.Helpdesk.EmailEngine.WinService'
