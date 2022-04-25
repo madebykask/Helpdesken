@@ -27,4 +27,10 @@ steps:
     msbuildVersion: '17.0'  
     solution: '**/ExtendedCase/ExtendedCase.WebApi/ExtendedCase.WebApi.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
+  
+- task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-ExtendedCase-WebApi
+  inputs:
+   targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-ExtendedCase-WebApi'
+   artifactName: 'DH-Helpdesk-ExtendedCase-WebApi'
 
