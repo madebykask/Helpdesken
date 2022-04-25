@@ -6,15 +6,15 @@ export const environment = {
 };
 
 export const config = {
-  apiUrl: '${APIURL}',
+  apiUrl: '#{APIURL}',
   clientId: 'hd',
   version: VERSION.fullVersion,
   internalVersion: require('../../package.json').version,
   enableLog: false,
-  microsoftShowLogin: '${MicrosoftShowLogin}',
-  microsoftClientId: '${MicrosoftClientId}',
-  microsoftTenant: '${MicrosoftTenant}',
-  microsoftAuthority: '${MicrosoftAuthority}',
-  microsoftRedirectUri: '${MicrosoftRedirectUri}',
+  microsoftShowLogin: '#{MicrosoftShowLogin}',
+  microsoftClientId: '#{MicrosoftClientId}',
+  microsoftTenant: '#{MicrosoftTenant}',
+  microsoftAuthority: '#{MicrosoftAuthority}',
+  microsoftRedirectUri: '#{MicrosoftRedirectUri}',
   microsoftDefaultAuthority : "https://login.microsoftonline.com/common/login"
 };
