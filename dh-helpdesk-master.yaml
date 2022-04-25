@@ -22,3 +22,11 @@ steps:
     msbuildVersion: '17.0'  
     solution: '**/dhHelpdesk_NG.Web/DH.Helpdesk.Web.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
+
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.SelfService
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdesk_NG.Web_SelfService/DH.Helpdesk.SelfService.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
