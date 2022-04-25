@@ -10,7 +10,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/DH_Helpdesk/ExtendedCase/ExtendedCase.Api.sln'
+  solution: '**/ExtendedCase/ExtendedCase.Api.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -22,7 +22,7 @@ steps:
     restoreSolution: '$(solution)'
 
 - task: MSBuild@1
-  displayName: Build DH.Helpdesk.Web
+  displayName: Build DH.Helpdesk.ExtendedCase.Api
   inputs:
     msbuildVersion: '17.0'  
     solution: '**/ExtendedCase/ExtendedCase.WebApi/ExtendedCase.WebApi.csproj'
