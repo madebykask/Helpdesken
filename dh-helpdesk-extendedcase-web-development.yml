@@ -31,7 +31,7 @@ steps:
 - task: CopyFiles@2
   displayName: Copy DH-Helpdesk-ExtendedCase-Web
   inputs:
-    SourceFolder: '$(Build.ArtifactStagingDirectory)/ExtendedCase.Web/src/**'
+    SourceFolder: '$(Build.ArtifactStagingDirectory)/ExtendedCase/ExtendedCase.Web/src/**'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/ExtendedCase.Web'
   
