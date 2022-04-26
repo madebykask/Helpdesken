@@ -31,12 +31,12 @@ steps:
 - task: CopyFiles@2
   displayName: Copy DH-Helpdesk-ExtendedCase-Web
   inputs:
-    SourceFolder: '$(Build.ArtifactStagingDirectory)/ExtendedCase/ExtendedCase.Web'
+    SourceFolder: '**/ExtendedCase/ExtendedCase.Web'
     Contents: '**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/ExtendedCase.Web'
+    TargetFolder: '/ExtendedCase.Web'
   
 - task: PublishPipelineArtifact@1
   displayName: Publish Artifact DH-Helpdesk-ExtendedCase-Web
   inputs:
-   targetPath: '$(Build.ArtifactStagingDirectory)/ExtendedCase.Web'
+   targetPath: '/ExtendedCase.Web'
    artifactName: 'DH-Helpdesk-ExtendedCase-Web'
