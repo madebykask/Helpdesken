@@ -36,7 +36,7 @@ steps:
     TargetFolder: '$(Build.ArtifactStagingDirectory)/ExtendedCase.Web'
   
 - task: PublishPipelineArtifact@1
-  displayName: Publish Artifact DH-Helpdesk-ExtendedCase-WebApi
+  displayName: Publish Artifact DH-Helpdesk-ExtendedCase-Web
   inputs:
    targetPath: '$(Build.ArtifactStagingDirectory)/ExtendedCase.Web'
    artifactName: 'DH-Helpdesk-ExtendedCase-Web'
