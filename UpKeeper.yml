@@ -12,6 +12,7 @@ trigger:
     - Development
 
 
+
 pool:
   vmImage: 'windows-latest'
 
