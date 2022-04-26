@@ -27,9 +27,9 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy Files'
   inputs:
-    Contents: '$(System.DefaultWorkingDirectory)/ExtendedCase/ExtendedCase.WebComponent/**' 
+    Contents: '$(System.DefaultWorkingDirectory)/ExtendedCase/ExtendedCase.WebComponent/dist/**' 
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/ExtendedCase/ExtendedCase.WebComponent'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/ExtendedCase/ExtendedCase.WebComponent/dist'
     ArtifactName: 'Helpdesk_ExtendedCase_WebComponent'
