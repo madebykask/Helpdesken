@@ -1,4 +1,4 @@
-body {
+/*body {
   background:#f2f7fe;
 }
 
@@ -28,9 +28,9 @@ img
   }
 }
 
-.navbar-default {
+.navbar-default {*/
   /*background-color: #0067b2;*/
-  background-color: #49AD33;  
+  /*background-color: #49AD33;  
   border-color: #e7e7e7;
   margin-left:-20px;
 }
@@ -115,13 +115,13 @@ img
 }
 
 .blue {
-  background-color:#49AD33 !important;
+  background-color:#49AD33 !important;*/
   /*background-color:#0067b2 !important;*/
-}
+/*}
 
-.blue:hover, .blue:active, .blue:focus {
+.blue:hover, .blue:active, .blue:focus {*/
   /*background-color:#ffdf01 !important;*/
-  background-color:#FF9F37 !important;
+  /*background-color:#FF9F37 !important;
 }
 
 .green {
@@ -433,6 +433,6 @@ img
 table.com-files tr { background-color: #f5f5f5!important; }
 table.com-files a, table.com-files td { color: #428bca;border-bottom: dotted 1px #dddddd}
 table.logFiles td.del, table.com-files td.del { text-align: right; }
-table.com-files .glyphicon-remove   { color: red; }
+table.com-files .glyphicon-remove   { color: red; }*/
 
 
