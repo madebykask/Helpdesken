@@ -49,7 +49,7 @@
                         {
                             foreach (var c in Model.Calendar)
                             {
-                                <p> <strong> @Html.DisplayFor(m => c.CalendarDate, "Date") </strong> <br /> @Html.Raw(c.Text) </p>
+                                <p> <strong> @Html.DisplayFor(m => c.CalendarDate, "Date") <br /> @Html.Raw(c.Caption) </strong>  <br /> @Html.Raw(c.Text) </p>
                                 <br />
                             }
                         }
