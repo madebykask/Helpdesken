@@ -30,13 +30,13 @@
 		<add key="aspnet:MaxJsonDeserializerMembers" value="150000"/>
 		<add key="LoginMode" value="Application"/>
 		<add key="MicrosoftLogin" value="1" /><!-- 1 = Show Microsoft login-button, else 0-->
-		<add key="ClientId" value="#{ClientId}" /><!-- Your applications Client ID fromn Azure-->
+		<add key="ClientId" value="#{HelpdeskClientId}" /><!-- Your applications Client ID fromn Azure-->
 		<add key="Tenant" value="common" />
 		<!--If your application supports My organization only, replace this value with the Tenant Id or Tenant name (for example, contoso.onmicrosoft.com)
     If your application supports Accounts in any organizational directory, replace this value with "organizations"
     If your application supports All Microsoft account users, replace this value with "common"-->
 		<add key="Authority" value="https://login.microsoftonline.com/{0}/v2.0" />
-		<add key="RedirectUri" value="#{RedirectUri}" /><!-- Your applications RedirectUri from Azure eg homepage-->
+		<add key="RedirectUri" value="#{HelpdeskRedirectUri}" /><!-- Your applications RedirectUri from Azure eg homepage-->
 	</appSettings>
 	<system.web.extensions>
 		<scripting>

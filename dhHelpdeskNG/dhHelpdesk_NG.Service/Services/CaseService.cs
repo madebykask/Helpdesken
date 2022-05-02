@@ -1649,7 +1649,30 @@ namespace DH.Helpdesk.Services.Services
             {
                 var user = _userRepository.GetUserName(c.ChangeByUser_Id.Value);
                 if (user != null)
+                {
                     lastUserName = user.GetFullName();
+                }
+                   
+            }
+            else
+            {
+                if (c.User_Id.HasValue)
+                {
+                    var user = _userRepository.GetUserName(c.User_Id.Value);
+                    lastUserName = user != null ? user.GetFullName() : string.Empty;
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(c.RegUserName))
+                    {
+                        lastUserName = c.RegUserName;
+                    }
+
+                    if (!string.IsNullOrEmpty(c.RegUserId))
+                    {
+                        lastUserName = c.RegUserId;
+                    }
+                }
             }
             ret.Add(new Field { Key = "[#22]", StringValue = lastUserName });
             ret.Add(new Field { Key = "[#3]", StringValue = c.PersonsName });
