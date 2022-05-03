@@ -133,9 +133,13 @@
                             else
                             {
                                 @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
-                                    new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
+                                    new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool(), id = "SendMailAboutCaseToNotifier", onclick= "valueChanged()" })
                             }
-                            <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span>
+                            <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span><br />
+                            <span id="emailsTo" style="display:none;">
+                                @Translation.GetCoreTextTranslation("Till"): @Html.DisplayFor(model => model.case_.PersonsEmail)<br />
+                                <span id="extraEmailsInputShow"></span>
+                                                    </span>
                         </div>
                         @Html.HiddenFor(model => model.CaseLog.RegUser)
                         @Html.HiddenFor(model => model.CaseLog.LogType)
@@ -635,6 +639,20 @@
         e.preventDefault();
         $(this).parents(".section-block").removeClass("hideshow");
     });
+    function valueChanged() {
+        
+        if ($('#SendMailAboutCaseToNotifier').is(":checked")) {
+            var followers = 'cc: ' + $("#extraEmailsInput").val().replaceAll(";", "\n\r");
+            $('#extraEmailsInputShow').text(followers);
+            $("#emailsTo").show();
+        }
+
+        else {
+            console.log('unchecked');
+            $("#emailsTo").hide();
+        }
+           
+    }
 
 </script>
 
