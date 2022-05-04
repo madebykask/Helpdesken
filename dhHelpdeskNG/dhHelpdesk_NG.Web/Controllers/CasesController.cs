@@ -1144,6 +1144,19 @@ namespace DH.Helpdesk.Web.Controllers
         [ValidateInput(false)]
         public RedirectToRouteResult Edit(CaseEditInput m)
         {
+            var performerId = m.Performer_Id ?? 0;
+            if(m.caseLog.SendMailAboutCaseToPerformer && performerId > 0 && performerId != SessionFacade.CurrentUser.Id)
+            {
+                var performerEmail = _userService.GetUserEmail(performerId);
+
+                m.caseLog.EmailRecepientsInternalLogTo = m.caseLog.EmailRecepientsInternalLogTo ?? String.Empty;
+
+                if (!m.caseLog.EmailRecepientsInternalLogTo.Contains(performerEmail))
+                {
+                    m.caseLog.EmailRecepientsInternalLogTo += performerEmail + ";";
+                }
+            }
+
             // Save current case
             int caseId = Save(m);
             #region Case Split
@@ -1168,33 +1181,6 @@ namespace DH.Helpdesk.Web.Controllers
 
                     var template = _caseSolutionService.GetCaseSolution(m.SplitToCaseSolution_Id.Value);
 
-                    //var splitInput = this.GetCaseInputViewModel(
-                    //	userId,
-                    //	customerId,
-                    //	0,
-                    //	caseLockModel,
-                    //	customerCaseFieldSettings,
-                    //	string.Empty,
-                    //	null,
-                    //	 m.SplitToCaseSolution_Id.Value,
-                    //	null,
-                    //	false,
-                    //	0, 
-                    //	caseId);
-
-                    //var editModel = new CaseEditInput()
-                    //{
-                    //	CaseSolution_Id = m.SplitToCaseSolution_Id.Value,
-                    //	caseFieldSettings = new List<CaseFieldSetting>() ,
-                    //	caseLock = new CaseLock(),
-                    //	caseLog = splitInput.CaseLog,
-                    //	caseMailSetting = splitInput.CaseMailSetting,
-                    //	CurrentCaseSolution_Id = m.SplitToCaseSolution_Id.Value,
-                    //	case_ = splitInput.case_,
-                    //	IndependentChild = true,
-                    //	SplitToCaseSolution_Id = splitInput.CaseTemplateSplitToCaseSolutionID,
-                    //	ParentId = splitInput.ParentCaseInfo.ParentId
-                    //};
                     var identity = global::System.Security.Principal.WindowsIdentity.GetCurrent();
                     var windowsUser = identity != null ? identity.Name : null;
                     var child = _caseService.Copy(
@@ -1776,7 +1762,7 @@ namespace DH.Helpdesk.Web.Controllers
                             if (m.case_.StateSecondary.NoMailToNotifier == 1)
                                 m.CaseLog.SendMailAboutCaseToNotifier = false;
                             else
-                                m.CaseLog.SendMailAboutCaseToNotifier = true;
+                                m.CaseLog.SendMailAboutCaseToNotifier = true;                            
                         }
 
                     m.stateSecondaries = _stateSecondaryService.GetStateSecondaries(customerId);
@@ -5704,7 +5690,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (m.case_.StateSecondary != null)
                 {
                     m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1;
-                    m.CaseLog.SendMailAboutCaseToNotifier = false;
+                    m.CaseLog.SendMailAboutCaseToNotifier = false;                    
                     //if (m.case_.StateSecondary.NoMailToNotifier == 1)
                     //    m.CaseLog.SendMailAboutCaseToNotifier = false;
                     //else
@@ -7180,7 +7166,8 @@ namespace DH.Helpdesk.Web.Controllers
                                   user.FirstName,
                                   user.SurName,
                                   wg.WorkingGroupName,
-                                  wg.Id
+                                  wg.Id,
+                                  user.Email
                               );
                             performersToSearch.Add(newRecord);
                             foundWg = true;
@@ -7195,7 +7182,8 @@ namespace DH.Helpdesk.Web.Controllers
                                    user.FirstName,
                                    user.SurName,
                                    null,
-                                   0
+                                   0,
+                                   user.Email
                                );
                     performersToSearch.Add(newRecord);
                 }
