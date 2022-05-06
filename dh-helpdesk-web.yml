@@ -1,7 +1,7 @@
 trigger:
 - Development
 
-name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Rev:r)$(commitHash)
+name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Rev:r).$(Build.SourceVersion)
 
 pool:
   vmImage: 'windows-latest'
@@ -13,17 +13,6 @@ variables:
   group: build-variables
 
 steps:
-
-- task: PowerShell@2
-  displayName: Set commitHash.
-  inputs:
-    targetType: 'inline'
-    script: |
-      echo $(Build.SourceVersion)
-      set TestVar=$(Build.SourceVersion)
-      set MyCustomVar=%TestVar:~0,7%
-      echo %MyCustomVar%
-      echo ##vso[task.setvariable variable=commitHash]%MyCustomVar%
 
 - task: NuGetToolInstaller@1
 
