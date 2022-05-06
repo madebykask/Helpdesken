@@ -55,10 +55,12 @@ function LogInitForm() {
 
         $($txtInformPerformer).css('display', 'none');
         $($internalNoteRequired).css('display', 'none');
+        $('#CaseLog_TextInternal').prop('required', false);
         if (this.value.length || (hasCaseLogTextInternalEmailsTo || hasCaseLogTextInternalEmailsCc)) {
 
             $($txtInformPerformer).css('display', 'inline');
             $($internalNoteRequired).css('display', 'inline');
+            $('#CaseLog_TextInternal').prop('required', true);
             
             $('#CaseLog_SendMailAboutCaseToPerformer:not(:disabled)').attr('checked', 'checked');
         }
@@ -68,10 +70,12 @@ function LogInitForm() {
         if (e.currentTarget.checked) {
             $($txtInformPerformer).css('display', 'inline');
             $($internalNoteRequired).css('display', 'inline');
+            $('#CaseLog_TextInternal').prop('required', true);
         }
         else {
             $($txtInformPerformer).css('display', 'none');
-            $($internalNoteRequired).css('display', 'none');            
+            $($internalNoteRequired).css('display', 'none');
+            $('#CaseLog_TextInternal').prop('required', false);
         }
     });
 
@@ -89,6 +93,7 @@ function LogInitForm() {
         mutations_list.forEach(function (mutation) {
             var target = mutations_list[0].target.id;
             $($internalNoteRequired).css('display', 'none');
+            $('#CaseLog_TextInternal').prop('required', false);
 
             if (target === caseLogEmailRecepientsInternalLogTo) hasCaseLogTextInternalEmailsTo = false;
             if (target === caseLogEmailRecepientsInternalLogCc) hasCaseLogTextInternalEmailsCc = false;
@@ -104,7 +109,11 @@ function LogInitForm() {
             });            
         });
 
-        if (hasCaseLogTextInternalEmailsTo || hasCaseLogTextInternalEmailsCc || $caseLogSendMailAboutCaseToPerformer[0].checked) $($internalNoteRequired).css('display', 'inline');
+        if (hasCaseLogTextInternalEmailsTo || hasCaseLogTextInternalEmailsCc || $caseLogSendMailAboutCaseToPerformer[0].checked) {
+
+            $($internalNoteRequired).css('display', 'inline');
+            $('#CaseLog_TextInternal').prop('required', true);
+        }
     });
 
     observer.observe(document.querySelector('#' + caseLogEmailRecepientsInternalLogTo), observerAttributes);
