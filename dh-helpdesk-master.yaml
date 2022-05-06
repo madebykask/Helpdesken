@@ -1,7 +1,7 @@
 trigger:
 - Master
 
-name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Rev:r)
+name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Rev:r).$(Build.SourceVersion)
 
 pool:
   vmImage: 'windows-latest'
@@ -10,9 +10,9 @@ variables:
   solution: '**/DH.Helpdesk.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  group: build-variables
 
 steps:
-- script: echo $(projectName)
 
 - task: NuGetToolInstaller@1
 
@@ -27,15 +27,13 @@ steps:
     solution: '**/dhHelpdesk_NG.Web/DH.Helpdesk.Web.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
 
-
 - task: MSBuild@1
   displayName: Build DH.Helpdesk.SelfService
   inputs:
     msbuildVersion: '17.0'  
     solution: '**/dhHelpdesk_NG.Web_SelfService/DH.Helpdesk.SelfService.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
-
-
+    
 - task: MSBuild@1
   displayName: Build DH.Helpdesk.WebApi
   inputs:
@@ -86,6 +84,59 @@ steps:
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.EmailEngine.WinService"'
 
 
+
+- task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-Web
+  inputs:
+    SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.Web'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Web'
+
+- task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-Selfservice
+  inputs:
+    SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.Selfservice'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Selfservice'
+
+- task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-WebApi
+  inputs:
+    SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.WebApi'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-WebApi'
+
+- task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-Database
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)/Database/SQLScripts'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\DH-Helpdesk-Database'
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-Web
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Web'
+    artifactName: 'DH-Helpdesk-Web'
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-Database
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Database'
+    artifactName: 'DH-Helpdesk-Database'
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-Selfservice
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Selfservice'
+    artifactName: 'DH-Helpdesk-Selfservice'
+- task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-WebApi
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-WebApi'
+    artifactName: 'DH-Helpdesk-WebApi'
+
+
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifact DH.Helpdesk.LDAP-AD
   inputs:
@@ -97,7 +148,6 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Mail2Ticket' 
     artifactName: 'DH.Helpdesk-Mail2Ticket'
-
 
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifact DH.Helpdesk.Schedule
