@@ -4,6 +4,8 @@ trigger:
 pool:
   vmImage: 'windows-latest'
 
+name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Rev:r)
+
 variables:
   solution: '**/DH.Helpdesk.sln'
   buildPlatform: 'Any CPU'
