@@ -1,6 +1,8 @@
 trigger:
 - Development
 
+name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Rev:r)
+
 pool:
   vmImage: 'windows-latest'
 
@@ -8,8 +10,10 @@ variables:
   solution: '**/DH.Helpdesk.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  group: build-variables
 
 steps:
+
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
