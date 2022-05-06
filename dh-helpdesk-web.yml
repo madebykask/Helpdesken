@@ -14,7 +14,7 @@ variables:
 
 steps:
 - bash: |
-    short_hash=`git rev-parse --short=7 HEAD`  ## At least 7 digits, more if needed for uniqueness
+    commitHash=`git rev-parse --short=7 HEAD`  ## At least 7 digits, more if needed for uniqueness
     echo ""
     echo "Full git hash:  $(Build.SourceVersion)"
     echo "Short git hash: $commitHash"
