@@ -1,7 +1,7 @@
 trigger:
 - Master
 
-name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Rev:r).$(HASH)
+name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Rev:r)
 
 pool:
   vmImage: 'windows-latest'
@@ -10,9 +10,10 @@ variables:
   solution: '**/DH.Helpdesk.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  HASH: variables['Build.SourceVersion']
 
 steps:
+- script: echo $(projectName)
+
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
