@@ -1,0 +1,44 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- Master
+
+name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Rev:r).$(Build.SourceVersion)
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/ExtendedCase/ExtendedCase.Web.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+# - task: NuGetToolInstaller@1
+
+# - task: NuGetCommand@2
+#   inputs:
+#     restoreSolution: '$(solution)'
+
+# - task: MSBuild@1
+#   displayName: Build DH.Helpdesk.ExtendedCase.Web
+#   inputs:
+#     solution: '**/ExtendedCase/ExtendedCase.Web.sln'
+#     msbuildVersion: '17.0'  
+#     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
+
+- task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-ExtendedCase-Web
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)/ExtendedCase/ExtendedCase.Web/src'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/ExtendedCase.Web'
+  
+- task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-ExtendedCase-Web
+  inputs:
+   targetPath: '$(Build.ArtifactStagingDirectory)/ExtendedCase.Web'
+   artifactName: 'DH-Helpdesk-ExtendedCase-Web'
