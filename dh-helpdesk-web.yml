@@ -1,7 +1,7 @@
 trigger:
 - Development
 
-name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Rev:r).$(Build.SourceVersion)
+name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Rev:r).$(commitHash)
 
 pool:
   vmImage: 'windows-latest'
@@ -13,6 +13,15 @@ variables:
   group: build-variables
 
 steps:
+- script: |
+    echo $sourceVersion
+    commitHash=${sourceVersion:0:7}
+    echo $commitHash
+    echo "##vso[task.setvariable variable=commitHash]$commitHash" ## Set variable for using in other tasks.
+  env: { sourceVersion: $(Build.SourceVersion) }
+  displayName: Git Hash 7-digit
+  workingDirectory: #workingDirectory
+
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
