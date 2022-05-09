@@ -4,9 +4,9 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
 trigger:
-- Development
+- Master
 
-name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Rev:r).$(Build.SourceVersion)
+name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Rev:r).$(Build.SourceVersion)
 
 pool:
   vmImage: 'windows-latest'

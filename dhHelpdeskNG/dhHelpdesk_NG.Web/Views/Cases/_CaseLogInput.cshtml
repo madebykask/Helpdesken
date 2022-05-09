@@ -133,9 +133,13 @@
                             else
                             {
                                 @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
-                                    new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
+                                    new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool(), id = "SendMailAboutCaseToNotifier", onclick= "valueChanged()" })
                             }
-                            <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span>
+                            <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span><br />
+                            <span id="emailsTo" style="display:none;">
+                                @Translation.GetCoreTextTranslation("Till"): @Html.DisplayFor(model => model.case_.PersonsEmail)<br />
+                                <span id="extraEmailsInputShow"></span>
+                                                    </span>
                         </div>
                         @Html.HiddenFor(model => model.CaseLog.RegUser)
                         @Html.HiddenFor(model => model.CaseLog.LogType)
@@ -663,6 +667,26 @@ Model.EnableTwoAttachments))
         e.preventDefault();
         $(this).parents(".section-block").removeClass("hideshow");
     });
+    function valueChanged() {
+        
+        if ($('#SendMailAboutCaseToNotifier').is(":checked")) {
+            $("#emailsTo").show();
+            var extras = $("#extraEmailsInput").val();
+            if (extras != "") {
+                //.replaceAll(";", "\n\r")
+                var followers = 'cc: ' + $("#extraEmailsInput").val();
+                $('#extraEmailsInputShow').text(followers);
+                
+            }
+            
+        }
+
+        else {
+            console.log('unchecked');
+            $("#emailsTo").hide();
+        }
+           
+    }
 
     $("#Performer_Id").on("change", function (e) {
         e.preventDefault();
