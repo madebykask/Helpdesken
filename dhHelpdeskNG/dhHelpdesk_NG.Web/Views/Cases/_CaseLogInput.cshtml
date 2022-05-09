@@ -670,9 +670,15 @@ Model.EnableTwoAttachments))
     function valueChanged() {
         
         if ($('#SendMailAboutCaseToNotifier').is(":checked")) {
-            var followers = 'cc: ' + $("#extraEmailsInput").val().replaceAll(";", "\n\r");
-            $('#extraEmailsInputShow').text(followers);
             $("#emailsTo").show();
+            var extras = $("#extraEmailsInput").val();
+            if (extras != "") {
+                //.replaceAll(";", "\n\r")
+                var followers = 'cc: ' + $("#extraEmailsInput").val();
+                $('#extraEmailsInputShow').text(followers);
+                
+            }
+            
         }
 
         else {
