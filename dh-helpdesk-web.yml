@@ -1,7 +1,7 @@
 trigger:
 - Development
 
-name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Rev:r).$(Build.SourceVersion)
+name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Rev:r)
 
 pool:
   vmImage: 'windows-latest'
@@ -11,6 +11,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   group: build-variables
+  revision: $(Rev:r)
 
 steps:
 
@@ -30,8 +31,7 @@ steps:
     InsertAttributes: false
     FileEncoding: 'auto'
     WriteBOM: false
-    InformationalVersion: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Rev:r)'
-    FileVersionNumber: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Rev:r)'
+    InformationalVersion: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(revision)'
     LogLevel: 'verbose'
     FailOnWarning: false
     DisableTelemetry: false
