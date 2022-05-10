@@ -6,7 +6,7 @@
 trigger:
 - Development
 
-name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Rev:r).$(Build.SourceVersion)
+name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Rev:r)
 
 pool:
   vmImage: 'windows-latest'
@@ -17,18 +17,6 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-# - task: NuGetToolInstaller@1
-
-# - task: NuGetCommand@2
-#   inputs:
-#     restoreSolution: '$(solution)'
-
-# - task: MSBuild@1
-#   displayName: Build DH.Helpdesk.ExtendedCase.Web
-#   inputs:
-#     solution: '**/ExtendedCase/ExtendedCase.Web.sln'
-#     msbuildVersion: '17.0'  
-#     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
 
 - task: CopyFiles@2
   displayName: Copy DH-Helpdesk-ExtendedCase-Web
