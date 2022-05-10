@@ -39,7 +39,7 @@
 
         static ApplicationFacade()
         {
-            Version = DH.Helpdesk.Version.FULL_VERSION;
+            Version = Helpdesk.Version.FULL_VERSION;
         }
 
         public static string Version { get; private set; }
