@@ -30,7 +30,7 @@ steps:
     InsertAttributes: false
     FileEncoding: 'auto'
     WriteBOM: false
-    InformationalVersion: '$(release.versionMajor).$(release.versionMinor).$(patch)'
+    InformationalVersion: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Rev:r)'
     LogLevel: 'verbose'
     FailOnWarning: false
     DisableTelemetry: false
