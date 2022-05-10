@@ -6,7 +6,7 @@
 trigger:
 - Development
 
-name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Rev:r).$(Build.SourceVersion)
+name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Rev:r)
 
 pool:
   vmImage: 'windows-latest'
