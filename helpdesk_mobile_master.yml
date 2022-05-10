@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 trigger:
 - Master
-name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Rev:r).$(Build.SourceVersion)
+name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Rev:r)
 
 pool:
   vmImage: 'windows-latest'
