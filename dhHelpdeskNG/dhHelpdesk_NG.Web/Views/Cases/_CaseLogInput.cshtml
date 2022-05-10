@@ -159,7 +159,7 @@
                         CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename, "Bifogad fil").ToString(),
                         Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Filename, CaseSolutionFields.LogFileName),
                         Model.CaseLog.Id == 0 && !Model.newLog,
-    @* TODO: check why internal log note check was used! *@
+                                @* TODO: check why internal log note check was used! *@
 Model.EnableTwoAttachments
 ? Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote)
 : Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote),
@@ -192,23 +192,16 @@ Model.EnableTwoAttachments))
 
                                         <span class="inline-block-span lbl">
                                             @Translation.GetCoreTextTranslation("Informera handläggare")
-                                            @if (Model.PerformersToSearch != null)
-                                            {
-                                                <span id="txtInformPerformer" style="display: none">
-                                                    @Html.Raw("(")<span id="selected-performer-email">
-                                                        @{
-
-                                                            var selectedPerformer = Model.PerformersToSearch.FirstOrDefault(p => p.UserId == Model.Performer_Id);
-                                                            if (selectedPerformer != null)
-                                                            {
-                                                                @Model.PerformersToSearch.Where(p => p.UserId == Model.Performer_Id).FirstOrDefault().Email
-                                                            }
+                                            <span id="txtInformPerformer" style="display: none">
+                                                @Html.Raw("(")<span id="selected-performer-email">@{
+                                                        var selectedPerformer = Model.PerformersToSearch.FirstOrDefault(p => p.UserId == Model.Performer_Id);
+                                                        if (selectedPerformer != null)
+                                                        {
+                                                            @Model.PerformersToSearch.Where(p => p.UserId == Model.Performer_Id).FirstOrDefault().Email
                                                         }
-                                                    </span>@Html.Raw(")")
+                                                    }</span>@Html.Raw(")")
                                                 </span>
-                                            }
-                                        </span>
-
+                                            </span>
                                     </div>
 
                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote) && !readonlyMode)

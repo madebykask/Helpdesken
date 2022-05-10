@@ -11,7 +11,6 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   group: build-variables
-  revision: $(Rev:r)
 
 steps:
 
@@ -31,7 +30,8 @@ steps:
     InsertAttributes: false
     FileEncoding: 'auto'
     WriteBOM: false
-    InformationalVersion: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(revision)'
+    InformationalVersion: '$(Build.BuildNumber)'
+    FileVersionNumber: '$(Build.BuildNumber)'
     LogLevel: 'verbose'
     FailOnWarning: false
     DisableTelemetry: false
