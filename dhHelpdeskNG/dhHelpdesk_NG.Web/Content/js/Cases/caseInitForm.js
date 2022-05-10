@@ -1343,6 +1343,7 @@ function CaseInitForm(opt) {
         console.log('>>> Working group changed event.');
         // Remove after implementing http://redmine.fastdev.se/issues/10995
         // filter administrators
+
         var dontConnectUserToWorkingGroup = Number($('#CaseMailSetting_DontConnectUserToWorkingGroup').val() || '0');
         if (dontConnectUserToWorkingGroup === 0) {
             CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#Performer_Id', $('#DepartmentFilterFormat').val());
@@ -1359,6 +1360,7 @@ function CaseInitForm(opt) {
                     $('#case__StateSecondary_Id').trigger('change', 'case__WorkingGroup_Id');
                 });
         }
+        $('#Performer_Id').trigger('change');
     });
 
 

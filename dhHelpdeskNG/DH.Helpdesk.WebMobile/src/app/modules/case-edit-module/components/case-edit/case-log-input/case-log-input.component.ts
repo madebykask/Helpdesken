@@ -3,12 +3,15 @@ import { CaseEditInputModel, CaseAccessMode } from '../../../models';
 import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
 import { MbscListviewOptions, MbscFormOptions } from '@mobiscroll/angular';
 import { CaseLogApiService } from '../../../services/api/case/case-log-api.service';
-import { take } from 'rxjs/internal/operators';
+import { delay, take } from 'rxjs/internal/operators';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { CaseFormGroup, CaseFormControl } from 'src/app/modules/shared-module/models/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { LogFileType } from 'src/app/modules/shared-module/constants/logFileType.enum';
 import { FileUploadArgs } from '../controls/log-files-upload/log-files-upload.component';
+import { Channels, CommunicationService } from 'src/app/services/communication';
+import { EmailEventData } from 'src/app/services/communication/data/email-event-data';
+import { PerfomersService } from 'src/app/services/case-organization/perfomers-service';
 
 @Component({
   selector: 'case-log-input',
@@ -34,7 +37,9 @@ export class CaseLogInputComponent implements OnInit {
   isAttachedInternalFilesVisible = false;
   caseFieldsNames = CaseFieldsNames;
   isSendMailToNotifierDisabled = false; // have to use this variable and [disabled] binding, because control.disabled dont work on switch
+  isSendMailToPerformerDisabled = false;
   externalLogEmailsTo = '';
+  performerUserEmail = '';
 
   fileListSettings: MbscListviewOptions = {
     enhance: true,
@@ -56,7 +61,7 @@ export class CaseLogInputComponent implements OnInit {
       color: 'red',
       icon: 'fa-trash',
       confirm: true,
-      action:  (event, inst) => this.onFileDelete(event, LogFileType.Internal)
+      action: (event, inst) => this.onFileDelete(event, LogFileType.Internal)
     }]
   };
 
@@ -68,6 +73,7 @@ export class CaseLogInputComponent implements OnInit {
   };
 
   private sendExternalEmailsFormControl: CaseFormControl = null;
+  private sendInternalEmailsFormControl: CaseFormControl = null;
   private externalLogEmailsCcFormControl: CaseFormControl = null;
   private externalLogFormControl: CaseFormControl = null;
   private internalLogFormControl: CaseFormControl = null;
@@ -77,7 +83,10 @@ export class CaseLogInputComponent implements OnInit {
   private noEmailsText = '';
 
   constructor(private caseLogApiService: CaseLogApiService,
-    private translateService: TranslateService) {
+    private translateService: TranslateService,
+    private commService: CommunicationService,
+    
+    private performersService: PerfomersService) {
   }
 
   get hasFullAccess() {
@@ -95,8 +104,10 @@ export class CaseLogInputComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.personsEmailFormControl = this.getFormControl(CaseFieldsNames.PersonEmail);
-    this.sendExternalEmailsFormControl  = this.getFormControl(CaseFieldsNames.Log_SendMailToNotifier);
+    this.sendExternalEmailsFormControl = this.getFormControl(CaseFieldsNames.Log_SendMailToNotifier);
+    this.sendInternalEmailsFormControl = this.getFormControl(CaseFieldsNames.Log_SendMailToPerformer);
     this.externalLogEmailsCcFormControl = this.getFormControl(CaseFieldsNames.Log_ExternalEmailsCC);
     this.externalLogFormControl = this.getFormControl(CaseFieldsNames.Log_ExternalText);
     this.internalLogFormControl = this.getFormControl(CaseFieldsNames.Log_InternalText);
@@ -126,20 +137,51 @@ export class CaseLogInputComponent implements OnInit {
       this.updateExternalEmailsText();
     }
 
+    if (this.sendInternalEmailsFormControl) {
+      this.isSendMailToPerformerDisabled = this.sendInternalEmailsFormControl.disabled;
+      if (this.isSendMailToPerformerDisabled) {
+        this.onSendInternalEmailsStatusChanged(!this.isSendMailToPerformerDisabled);
+      }
+      // track send extneral control status change (disabled/enabled
+      this.sendInternalEmailsFormControl.statusChanges.pipe(
+        untilDestroyed(this)
+      ).subscribe(e => {
+        // process only if disabled state has changed, ignore same values
+        const isDisabled = this.sendInternalEmailsFormControl.isDisabled || this.internalLogFormControl.disabled;
+        if (this.isSendMailToPerformerDisabled !== isDisabled) {
+          this.isSendMailToPerformerDisabled = isDisabled;
+          this.onSendInternalEmailsStatusChanged(!isDisabled);
+        }
+      });
+
+      // external emails text logic (depends on personsEmail form control value and on this.sendExternalEmailsFormControl.disabled)
+      // this.updateExternalEmailsText();
+    }
+
     if (this.personsEmailFormControl) {
       this.personsEmailFormControl.valueChanges.pipe(
         untilDestroyed(this)
-        ).subscribe(v => {
-          this.updateExternalEmailsText();
-        });
+      ).subscribe(v => {
+        this.updateExternalEmailsText();
+      });
     }
 
+    this.commService.listen<EmailEventData>(Channels.CaseFieldValueChanged)
+      .pipe(
+        delay(0),
+        untilDestroyed(this)
+      )
+      .subscribe(e => {
+        e.eMail = e.eMail === undefined ? '' : e.eMail; 
+        this.performerUserEmail = e.eMail;
+      });
+
     if (this.externalLogFormControl) {
-      this.isExternalLogFieldVisible =  !this.externalLogFormControl.fieldInfo.isHidden;
+      this.isExternalLogFieldVisible = !this.externalLogFormControl.fieldInfo.isHidden;
     }
 
     if (this.internalLogFormControl) {
-      this.isInternalLogFieldVisible =  !this.internalLogFormControl.fieldInfo.isHidden;
+      this.isInternalLogFieldVisible = !this.internalLogFormControl.fieldInfo.isHidden;
     }
 
     if (this.logFileFormControl) {
@@ -149,6 +191,17 @@ export class CaseLogInputComponent implements OnInit {
     if (this.logFileInternalFormControl) {
       this.isAttachedInternalFilesVisible = !this.logFileInternalFormControl.fieldInfo.isHidden;
     }
+
+    let performanceUserId = this.caseData.fields.filter(x=> x.name === 'PerformerUserId')[0].value;
+    if (!isNaN(parseInt(performanceUserId))) {
+      let performerUserIdInt = parseInt(performanceUserId);
+      if (performerUserIdInt > 0) {
+        this.performersService.getPerformerEmail(performerUserIdInt).pipe(take(1)).subscribe((m) => {
+          // console.log(m)
+          this.commService.publish(Channels.CaseFieldValueChanged, new EmailEventData(m.eMail));
+        });
+      }   
+    } 
   }
 
   ngOnDestroy() {
@@ -158,13 +211,26 @@ export class CaseLogInputComponent implements OnInit {
   onSendExternalEmailsCheckChanged() {
     const val = this.sendExternalEmailsFormControl.value;
     if (val) {
-      this.externalLogEmailsCcFormControl.enable({onlySelf: true, emitEvent: true});
+      this.externalLogEmailsCcFormControl.enable({ onlySelf: true, emitEvent: true });
       this.externalLogEmailsCcFormControl.restorePrevValue();
     } else {
-      this.externalLogEmailsCcFormControl.disable({onlySelf: true, emitEvent: true});
+      this.externalLogEmailsCcFormControl.disable({ onlySelf: true, emitEvent: true });
       this.externalLogEmailsCcFormControl.setValue('');
     }
     this.updateExternalEmailsText();
+  }
+
+  onSendInternalEmailsCheckChanged() {
+    const val = this.sendInternalEmailsFormControl.value;
+   
+    if (val) {
+      this.sendInternalEmailsFormControl.enable({ onlySelf: true, emitEvent: true });
+      // this.externalLogEmailsCcFormControl.restorePrevValue();
+    } else {
+      this.sendInternalEmailsFormControl.disable({ onlySelf: true, emitEvent: true });
+      // this.externalLogEmailsCcFormControl.setValue('');
+    }
+    // this.updateExternalEmailsText();
   }
 
   processFileUploaded(params: FileUploadArgs) {
@@ -172,7 +238,7 @@ export class CaseLogInputComponent implements OnInit {
   }
 
   onFileDelete(event, type: LogFileType) {
-    const index = +event.index ;
+    const index = +event.index;
     const fileName = this.getFiles(type)[index];
 
     // todo:add delete confirmation
@@ -189,14 +255,25 @@ export class CaseLogInputComponent implements OnInit {
   private onSendExternalEmailsStatusChanged(enable) {
     if (enable) {
       this.sendExternalEmailsFormControl.setValue(true, { emitEvent: true });
-      this.externalLogEmailsCcFormControl.enable({onlySelf: true, emitEvent: true});
+      this.externalLogEmailsCcFormControl.enable({ onlySelf: true, emitEvent: true });
       this.externalLogEmailsCcFormControl.restorePrevValue();
     } else {
       this.sendExternalEmailsFormControl.setValue(false, { emitEvent: true });
-      this.externalLogEmailsCcFormControl.disable({onlySelf: true, emitEvent: true});
+      this.externalLogEmailsCcFormControl.disable({ onlySelf: true, emitEvent: true });
       this.externalLogEmailsCcFormControl.setValue('');
     }
     this.updateExternalEmailsText();
+  }
+
+  // handles switch enable/disable state change (case lock, Substatus change,..)
+  private onSendInternalEmailsStatusChanged(enable) {
+    if (enable) {
+      this.sendInternalEmailsFormControl.setValue(true, { emitEvent: true });
+    } 
+    else {
+      this.sendInternalEmailsFormControl.setValue(false, { emitEvent: true });
+    }
+    // this.updateExternalEmailsText();
   }
 
   private getFiles(type: LogFileType) {
@@ -205,7 +282,7 @@ export class CaseLogInputComponent implements OnInit {
 
   private updateExternalEmailsText() {
     if (this.sendExternalEmailsFormControl.value === false || this.isSendMailToNotifierDisabled) {
-      this.externalLogEmailsTo =  '&nbsp;'; // required to keep empty row, otherwise it gets collapsed (bug)
+      this.externalLogEmailsTo = '&nbsp;'; // required to keep empty row, otherwise it gets collapsed (bug)
     } else {
       const externalEmailTo = (this.personsEmailFormControl.value || '').toString();
       this.externalLogEmailsTo = externalEmailTo.toLowerCase() || this.noEmailsText;

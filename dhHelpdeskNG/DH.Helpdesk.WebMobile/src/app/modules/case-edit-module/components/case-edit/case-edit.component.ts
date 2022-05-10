@@ -257,6 +257,7 @@ export class CaseEditComponent {
     }
 
     saveCase(reload: boolean = false) {
+
       if (!this.canSave) { return; }
       if (this.caseData.extendedCaseData != null && !this.isEcLoaded) {
         return;
@@ -264,6 +265,7 @@ export class CaseEditComponent {
       this.extendedCaseValidationObserver.pipe(
         take(1),
         switchMap((isEcValid: boolean) => {
+
           this.isExtendedCaseInvalid = !isEcValid;
           this.form.submit();
           if (this.form.valid && isEcValid) {

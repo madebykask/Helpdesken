@@ -9,6 +9,8 @@
 @using DH.Helpdesk.Common.Extensions.Boolean
 @using DH.Helpdesk.Web.Common.Enums.Case
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@using System.Web.Mvc
+
 
 @Scripts.Render("~/bundles/Cases/_CaseLogInput")
 @{
@@ -133,13 +135,13 @@
                             else
                             {
                                 @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
-                                    new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool(), id = "SendMailAboutCaseToNotifier", onclick= "valueChanged()" })
+                                    new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool(), id = "SendMailAboutCaseToNotifier", onclick = "valueChanged()" })
                             }
                             <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span><br />
                             <span id="emailsTo" style="display:none;">
                                 @Translation.GetCoreTextTranslation("Till"): @Html.DisplayFor(model => model.case_.PersonsEmail)<br />
                                 <span id="extraEmailsInputShow"></span>
-                                                    </span>
+                            </span>
                         </div>
                         @Html.HiddenFor(model => model.CaseLog.RegUser)
                         @Html.HiddenFor(model => model.CaseLog.LogType)
@@ -190,7 +192,8 @@ Model.EnableTwoAttachments))
                                             new { InformPerformerBehavior = Model.InformPerformerBehavior.ToJavaScriptBool() })
 
                                         <span class="inline-block-span lbl">
-                                            @Translation.GetCoreTextTranslation("Informera handläggare")
+                                            @Translation.GetCoreTextTranslation("Informera") @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Performer_User_Id, "Handläggare")
+
                                             @if (Model.PerformersToSearch != null)
                                             {
                                                 <span id="txtInformPerformer" style="display: none">
@@ -668,7 +671,7 @@ Model.EnableTwoAttachments))
         $(this).parents(".section-block").removeClass("hideshow");
     });
     function valueChanged() {
-        
+
         if ($('#SendMailAboutCaseToNotifier').is(":checked")) {
             $("#emailsTo").show();
             var extras = $("#extraEmailsInput").val();
@@ -676,30 +679,42 @@ Model.EnableTwoAttachments))
                 //.replaceAll(";", "\n\r")
                 var followers = 'cc: ' + $("#extraEmailsInput").val();
                 $('#extraEmailsInputShow').text(followers);
-                
+
             }
-            
+
         }
 
         else {
             console.log('unchecked');
             $("#emailsTo").hide();
         }
-           
+
     }
 
     $("#Performer_Id").on("change", function (e) {
+        console.log('triggered')
+        debugger
         e.preventDefault();
+        
         let performerId = $("#Performer_Id").val();
-            $.ajax({
-                url: "/users/GetEmailById",
-                type: "GET",
-                data: { id: performerId, }
-                })
-                .done(function (result) {
-                    $("#selected-performer-email").html(result);
-                });
-            });
+
+        $("#selected-performer-email").html('');
+
+        if (performerId !== null) {
+            if (!isNaN(performerId)) {
+                if (parseInt(performerId) > 0) {
+                    $.ajax({
+                        url: "/users/GetEmailById",
+                        type: "GET",
+                        data: { id: performerId, }
+                    })
+                    .done(function (result) {
+                        $("#selected-performer-email").html(result);
+                    });
+                }
+            }
+        }
+    });
 
 </script>
 
