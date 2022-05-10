@@ -20,6 +20,21 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+
+- task: Assembly-Info-NetFramework@2
+  inputs:
+    Path: '$(Build.SourcesDirectory)'
+    FileNames: |
+      **\CommonAssembly\SharedAssemblyInfo.cs
+      **\CommonAssembly\SharedAssemblyInfo.vb
+    InsertAttributes: false
+    FileEncoding: 'auto'
+    WriteBOM: false
+    InformationalVersion: '$(release.versionMajor).$(release.versionMinor).$(patch)'
+    LogLevel: 'verbose'
+    FailOnWarning: false
+    DisableTelemetry: false
+
 - task: MSBuild@1
   displayName: Build DH.Helpdesk.Web
   inputs:
