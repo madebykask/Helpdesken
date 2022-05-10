@@ -1,10 +1,7 @@
-# ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
-
 trigger:
 - Development
+
+name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Rev:r)
 
 pool:
   vmImage: 'windows-latest'
@@ -13,22 +10,36 @@ variables:
   solution: '**/DH.Helpdesk.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  group: build-variables
 
 steps:
+
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
+- task: Assembly-Info-NetFramework@2
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    Path: '$(Build.SourcesDirectory)'
+    FileNames: |
+      **\CommonAssembly\SharedAssemblyInfo.cs
+      **\CommonAssembly\SharedAssemblyInfo.vb
+    InsertAttributes: false
+    FileEncoding: 'auto'
+    WriteBOM: false
+    InformationalVersion: '$(Build.BuildNumber)'
+    FileVersionNumber: '$(Build.BuildNumber)'
+    LogLevel: 'verbose'
+    FailOnWarning: false
+    DisableTelemetry: false
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.Web
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdesk_NG.Web/DH.Helpdesk.Web.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
+
