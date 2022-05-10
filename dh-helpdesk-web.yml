@@ -31,6 +31,7 @@ steps:
     FileEncoding: 'auto'
     WriteBOM: false
     InformationalVersion: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Rev:r)'
+    FileVersionNumber: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Rev:r)'
     LogLevel: 'verbose'
     FailOnWarning: false
     DisableTelemetry: false
