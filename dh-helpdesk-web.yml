@@ -11,7 +11,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   group: build-variables
-  revision: $[counter(format('{0}.{1}', variables['development.versionMajor'], variables['development.versionMinor']), 0)]
+  revision: $[counter(format('{0}.{1}.{2}', variables['development.versionMajor'], variables['development.versionMinor'], variables['development.versionSubMinor']), 0)]
 
 steps:
 
