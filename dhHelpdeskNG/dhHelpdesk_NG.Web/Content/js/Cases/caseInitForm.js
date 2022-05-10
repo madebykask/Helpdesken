@@ -1360,7 +1360,6 @@ function CaseInitForm(opt) {
                     $('#case__StateSecondary_Id').trigger('change', 'case__WorkingGroup_Id');
                 });
         }
-        $('#Performer_Id').trigger('change');
     });
 
 
