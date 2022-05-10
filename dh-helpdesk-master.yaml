@@ -11,6 +11,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   group: build-variables
+  revision: $(Rev:r)
 
 steps:
 
