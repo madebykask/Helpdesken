@@ -43,3 +43,15 @@ steps:
     solution: '**/dhHelpdesk_NG.Web/DH.Helpdesk.Web.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
 
+- task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-Web
+  inputs:
+    SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.Web'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Web'
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-Web
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Web'
+    artifactName: 'DH-Helpdesk-Web'
