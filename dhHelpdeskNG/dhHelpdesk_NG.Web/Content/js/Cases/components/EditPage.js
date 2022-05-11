@@ -3,8 +3,8 @@
 function EditPage() { };
 
 var caseButtonsToLock = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
-                          '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
-                          '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton');
+    '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,' +
+    '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton');
 
 
 /*** CONST BEGIN ***/
@@ -93,8 +93,8 @@ EditPage.prototype.dateToDisplayFormat = function (dateValue) {
         }
         else {
             return dateValue.getFullYear() + "-" +
-                   self.padLeft(dateValue.getMonth() + 1, 2, "0") + "-" +
-                   self.padLeft(dateValue.getDate(), 2, "0");
+                self.padLeft(dateValue.getMonth() + 1, 2, "0") + "-" +
+                self.padLeft(dateValue.getDate(), 2, "0");
         }
     }
     else {
@@ -301,47 +301,47 @@ EditPage.prototype.loadExtendedCase = function () {
 
     if (fieldValues != null) {
         $_ex_Container.contentWindow.loadExtendedCase(
-        {
-            formParameters: formParameters,
-            caseValues: {
-                administrator_id: { Value: fieldValues.AdministratorId },
-                reportedby: { Value: fieldValues.ReportedBy },
-                persons_name: { Value: fieldValues.PersonsName },
-                persons_phone: { Value: fieldValues.PersonsPhone },
-                usercode: { Value: fieldValues.UserCode },
-                region_id: { Value: fieldValues.RegionId },
-                department_id: { Value: fieldValues.DepartmentId },
-                ou_id_1: { Value: fieldValues.ParentOUId },
-                ou_id_2: { Value: fieldValues.ChildOUId },
-                productarea_id: { Value: fieldValues.ProductAreaId },
-                status_id: { Value: fieldValues.StatusId },
-                subStatus_id: { Value: fieldValues.SubStatusId },
-                plandate: { Value: fieldValues.PlanDate },
-                watchdate: { Value: fieldValues.WatchDate },
-                priority_id: { Value: fieldValues.PriorityId },
-                log_textinternal: { Value: '' },
-                case_relation_type: { Value: fieldValues.CaseRelationType },
-                persons_email: { Value: fieldValues.PersonsEmail },
-                persons_cellphone: { Value: fieldValues.PersonsCellphone },
-                place: { Value: fieldValues.Place },
-                costcentre: { Value: fieldValues.CostCentre },
-                caption: { Value: fieldValues.Caption },
-                inventorytype: { Value: fieldValues.InventoryType },
-                inventorylocation: { Value: fieldValues.InventoryLocation },
-                case_files: { Value: fieldValues.CaseFiles }
-            }
-        }).then(function() {
-            self.onExtendedCaseLoaded();
-        });
+            {
+                formParameters: formParameters,
+                caseValues: {
+                    administrator_id: { Value: fieldValues.AdministratorId },
+                    reportedby: { Value: fieldValues.ReportedBy },
+                    persons_name: { Value: fieldValues.PersonsName },
+                    persons_phone: { Value: fieldValues.PersonsPhone },
+                    usercode: { Value: fieldValues.UserCode },
+                    region_id: { Value: fieldValues.RegionId },
+                    department_id: { Value: fieldValues.DepartmentId },
+                    ou_id_1: { Value: fieldValues.ParentOUId },
+                    ou_id_2: { Value: fieldValues.ChildOUId },
+                    productarea_id: { Value: fieldValues.ProductAreaId },
+                    status_id: { Value: fieldValues.StatusId },
+                    subStatus_id: { Value: fieldValues.SubStatusId },
+                    plandate: { Value: fieldValues.PlanDate },
+                    watchdate: { Value: fieldValues.WatchDate },
+                    priority_id: { Value: fieldValues.PriorityId },
+                    log_textinternal: { Value: '' },
+                    case_relation_type: { Value: fieldValues.CaseRelationType },
+                    persons_email: { Value: fieldValues.PersonsEmail },
+                    persons_cellphone: { Value: fieldValues.PersonsCellphone },
+                    place: { Value: fieldValues.Place },
+                    costcentre: { Value: fieldValues.CostCentre },
+                    caption: { Value: fieldValues.Caption },
+                    inventorytype: { Value: fieldValues.InventoryType },
+                    inventorylocation: { Value: fieldValues.InventoryLocation },
+                    case_files: { Value: fieldValues.CaseFiles }
+                }
+            }).then(function () {
+                self.onExtendedCaseLoaded();
+            });
     } else {
         $_ex_Container.contentWindow.loadExtendedCase(
-        {
-            formParameters: formParameters, caseValues: {
-                log_textinternal: { Value: '' }
-            }
-        }).then(function() {
-            self.onExtendedCaseLoaded();
-        });
+            {
+                formParameters: formParameters, caseValues: {
+                    log_textinternal: { Value: '' }
+                }
+            }).then(function () {
+                self.onExtendedCaseLoaded();
+            });
     }
 }
 
@@ -350,7 +350,7 @@ EditPage.prototype.isExtendedCaseValid = function (showToast, isOnNext) {
     var self = this;
 
     //only if extended case exist
-    
+
     if (window.parameters.containsExtendedCase === "True") {
 
 
@@ -500,7 +500,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
 
     if (_caption != undefined)
         $('#' + _caseFields.Caption).val(_caption.Value);
-    
+
     var selectedOU_Id = '';
     var selectedOU_Name = '';
 
@@ -556,7 +556,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
             '#' + _caseFields.ProductAreaId,
             _productarea_id.Value);
     }
-    
+
     if (_status_id !== undefined) {
         $('#' + _caseFields.StatusId).val(_status_id.Value).change();
         $('#' + _caseFields.StatusName).val(_status_id.SecondaryValue);
@@ -1073,7 +1073,7 @@ EditPage.prototype.doSaveCase = function (submitUrl) {
 
     self.stopCaseLockTimer();
 
-    self.checkCaseIsAvaialble().done(function(data) {
+    self.checkCaseIsAvaialble().done(function (data) {
         if (data) {
             self.$form.submit();
         } else {
@@ -1373,7 +1373,7 @@ EditPage.prototype.recoverTokenIfNeeded = function () {
                     }
                 }
             }
-         );
+        );
     }
 }
 
@@ -1443,7 +1443,7 @@ EditPage.prototype.moveCaseToCustomer = function (caseId, customerId, isExternal
             customerId: customerId,
             lockGuid: caseLockGuid
         };
-        
+
         $.post(self.p.moveCaseToExternalCustomerUrl, $.param(inputData), function (result) {
             if (result.Success) {
                 self.stopCaseLockTimer();
@@ -1490,7 +1490,7 @@ EditPage.prototype.buildExtendedCasePrintMarkup = function () {
             var section = tab.sections[j];
 
             printMarkup += '<tr><td style="width:20%;word-wrap: break-word; margin-left:20px;line-height:10px;" class="textbold G"><p>' + section.name + '</p></td>' +
-                           '<td style="width:80%; word-wrap: break-word;line-height:10px;" class="G"><p>  </p></td></tr>';
+                '<td style="width:80%; word-wrap: break-word;line-height:10px;" class="G"><p>  </p></td></tr>';
 
             //section instances
             for (var k = 0; k < section.instances.length; k++) {
@@ -1512,7 +1512,7 @@ EditPage.prototype.buildExtendedCasePrintMarkup = function () {
     return printMarkup;
 };
 
-EditPage.prototype.checkCaseIsAvaialble = function() {
+EditPage.prototype.checkCaseIsAvaialble = function () {
     var self = this;
     var p = self.p;
     var data = {
@@ -1529,7 +1529,7 @@ EditPage.prototype.markAsUnread = function () {
     var self = this;
     var p = self.p;
 
-    self.checkCaseIsAvaialble().done(function(res) {
+    self.checkCaseIsAvaialble().done(function (res) {
         if (res) {
             var inputData = {
                 id: p.currentCaseId,
@@ -1551,7 +1551,7 @@ EditPage.prototype.markAsUnread = function () {
 EditPage.prototype.unlockCase = function (lockGuid, url) {
     var self = this;
     var p = self.p;
-    
+
     $.post(p.unlockCaseUrl, $.param({ lockGUID: lockGuid }), function (data) {
         if (data !== "Success") {
             ShowToastMessage(p.caseUnlockErrorMessage, "Error");
@@ -1563,7 +1563,7 @@ EditPage.prototype.unlockCase = function (lockGuid, url) {
     });
 };
 
-EditPage.prototype.unlockCaseById = function(caseId, url) {
+EditPage.prototype.unlockCaseById = function (caseId, url) {
     var self = this;
     var p = self.p;
     console.log("Unlocking");
@@ -1578,7 +1578,7 @@ EditPage.prototype.unlockCaseById = function(caseId, url) {
     });
 };
 
-EditPage.prototype.redirectToUrl = function(url) {
+EditPage.prototype.redirectToUrl = function (url) {
     window.location.href = url;
 };
 
@@ -1611,8 +1611,8 @@ EditPage.prototype.init = function (p) {
     self.$watchDateEdit = $('#case__WatchDate');
     self.$watchDate = $('#divCase__WatchDate');
     self.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
-                             '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,.btn.new-close-split,.btn.edit-close-split' +
-                             '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton');
+        '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,.btn.new-close-split,.btn.edit-close-split' +
+        '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton');
 
     self.$productAreaObj = $('#divProductArea');
     self.$productAreaChildObj = $('#ProductAreaHasChild');
@@ -1682,24 +1682,39 @@ EditPage.prototype.init = function (p) {
             const className = classPreffix + maxTdRows;
             let isRowAllVisible = false;
             const tds = row$.find('td');
-            const externalCellRowsCount = Math.ceil(($(tds[2]).find('a>div>div').height() || 1) / lineHeight);
-            const internalCellRowsCount = Math.ceil(($(tds[3]).find('a>div>div').height() || 1) / lineHeight);
-            const filesCellRowsCount = Math.ceil(($(tds[5]).find('>div>div').height() || 1) / lineHeight);
+            //const externalCellRowsCount = Math.ceil(($(tds[2]).find('a>div>div').height() || 1) / lineHeight);
+            //const internalCellRowsCount = Math.ceil(($(tds[3]).find('a>div>div').height() || 1) / lineHeight);
+            //const filesCellRowsCount = Math.ceil(($(tds[5]).find('>div>div').height() || 1) / lineHeight);
+            const externalCellRowsCount = Math.ceil(($(tds[3]).find('a>div>div').height() || 1) / lineHeight);
+            const internalCellRowsCount = Math.ceil(($(tds[4]).find('a>div>div').height() || 1) / lineHeight);
+            const filesCellRowsCount = Math.ceil(($(tds[6]).find('>div>div').height() || 1) / lineHeight);
+            //if (externalCellRowsCount > maxTdRows) {
+            //    $(tds[2]).find('.row-all').show();
+            //    isRowAllVisible = true;
+            //}
+            //if (internalCellRowsCount > maxTdRows) {
+            //    $(tds[3]).find('.row-all').show();
+            //    isRowAllVisible = true;
+            //}
+            //if (filesCellRowsCount > maxTdRows) {
+            //    $(tds[5]).find('.row-all').show();
+            //    isRowAllVisible = true;
+            //}
             if (externalCellRowsCount > maxTdRows) {
-                $(tds[2]).find('.row-all').show();
-                isRowAllVisible = true;
-            }
-            if (internalCellRowsCount > maxTdRows) {
                 $(tds[3]).find('.row-all').show();
                 isRowAllVisible = true;
             }
+            if (internalCellRowsCount > maxTdRows) {
+                $(tds[4]).find('.row-all').show();
+                isRowAllVisible = true;
+            }
             if (filesCellRowsCount > maxTdRows) {
-                $(tds[5]).find('.row-all').show();
+                $(tds[6]).find('.row-all').show();
                 isRowAllVisible = true;
             }
             if (isRowAllVisible) {
                 row$.find('.row-all').on('click',
-                    function(e) {
+                    function (e) {
                         e.preventDefault();
                         const currRow$ = $(e.target).closest('tr');
                         currRow$.toggleClass(className);
@@ -1720,7 +1735,7 @@ EditPage.prototype.init = function (p) {
                     : table$.find('tr:gt(' + maxRows + ')').show();
             }
             toggleRows();
-            more$.add(less$).on('click', function(e) {
+            more$.add(less$).on('click', function (e) {
                 e.preventDefault();
                 more$.toggle();
                 less$.toggle();
@@ -1814,44 +1829,44 @@ EditPage.prototype.init = function (p) {
     self.$btnPrint.click(function (e) {
 
         $.get("/Cases/ShowCasePrintPreview/",
-        {
-            caseId: p.currentCaseId,
-            caseNumber: p.currentCaseNumber,
-            curTime: Date.now()
-        },
-        function (reportPresentation) {
+            {
+                caseId: p.currentCaseId,
+                caseNumber: p.currentCaseNumber,
+                curTime: Date.now()
+            },
+            function (reportPresentation) {
 
-            var $reportTable = $(reportPresentation);
+                var $reportTable = $(reportPresentation);
 
-            //EXTENDED CASE handling
-            if (self.Current_EC_FormId) {
+                //EXTENDED CASE handling
+                if (self.Current_EC_FormId) {
 
-                var printMarkup = self.buildExtendedCasePrintMarkup();
+                    var printMarkup = self.buildExtendedCasePrintMarkup();
 
-                if (printMarkup && printMarkup.length) {
-                    $reportTable.find('#caseReportContainer table.printcase').append(printMarkup);
+                    if (printMarkup && printMarkup.length) {
+                        $reportTable.find('#caseReportContainer table.printcase').append(printMarkup);
+                    }
                 }
+
+                self.$printArea.html('');
+                self.$printArea.append($reportTable);
+
+                $('#PrintCaseDialog').draggable({
+                    handle: ".modal-header"
+                });
+
+                /* show true if you need to show case print preview*/
+                $('#PrintCaseDialog').modal({
+                    "backdrop": "static",
+                    "keyboard": true,
+                    "show": false
+                });
+
+                //var _iframe = $("#caseReportContainer").find("iframe");
+                //if (_iframe != null && _iframe != undefined) {
+                //    update_iFrame(_iframe.attr("id"));                        
+                //}
             }
-
-            self.$printArea.html('');
-            self.$printArea.append($reportTable);
-
-            $('#PrintCaseDialog').draggable({
-                handle: ".modal-header"
-            });
-
-            /* show true if you need to show case print preview*/
-            $('#PrintCaseDialog').modal({
-                "backdrop": "static",
-                "keyboard": true,
-                "show": false
-            });
-
-            //var _iframe = $("#caseReportContainer").find("iframe");
-            //if (_iframe != null && _iframe != undefined) {
-            //    update_iFrame(_iframe.attr("id"));                        
-            //}
-        }
         );
     });
 
@@ -1954,15 +1969,15 @@ EditPage.prototype.init = function (p) {
                     type: "GET",
                     data: { caseId: self.p.currentCaseId, curTime: Date.now() }
                 })
-                .done(function (result) {
-                    if (result.needUpdate) {
-                        if (result.shouldReload) {
-                            location.reload(true);
-                        } else {
-                            self.refreshCasePage(result.newData);
+                    .done(function (result) {
+                        if (result.needUpdate) {
+                            if (result.shouldReload) {
+                                location.reload(true);
+                            } else {
+                                self.refreshCasePage(result.newData);
+                            }
                         }
-                    }
-                });
+                    });
             }
 
             if (ev.target.className == "eform") {
