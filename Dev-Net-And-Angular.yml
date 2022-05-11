@@ -18,6 +18,7 @@ steps:
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
+  displayName: Restoring Nugets for DH.Helpdesk
   inputs:
     restoreSolution: '$(solution)'
 
@@ -75,29 +76,58 @@ steps:
    targetPath: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/ExtendedCase.WebApi'
    artifactName: 'DH-Helpdesk-ExtendedCase-WebApi'
 
-# #Trying to add Helpdesk-Mobile
+# Building Helpdesk-Mobile
 - task: NodeTool@0
   inputs:
     versionSpec: '10.18.1'
 - script: |
     npm install -g @angular/cli@8.3.29
   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
-  displayName: 'npm install cli for mobile'
+  displayName: 'npm install cli for Mobile'
 - script: 
     npm install
   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
-  displayName: 'npm install for mobile'
+  displayName: 'npm install for Mobile'
 - script: 
     npm run build_prod --verbose
   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
-  displayName: 'ng build prod mobile'
+  displayName: 'ng build prod Mobile'
 
 - task: CopyFiles@2
-  displayName: 'Copy Files'
+  displayName: 'Copying Files Mobile'
   inputs:
     Contents: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile/wwwroot/build/**' 
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 - task: PublishBuildArtifacts@1
+  displayName: 'Publishing Artifact Helpdesk_Mobile'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile/wwwroot/build'
     ArtifactName: 'Helpdesk_Mobile'
+
+# Building ExtendedCase WebComponents
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.18.1'
+- script: |
+    npm install -g @angular/cli@8.3.29
+  workingDirectory: '$(System.DefaultWorkingDirectory)/ExtendedCase/ExtendedCase.WebComponent'
+  displayName: 'npm install cli ExtendedCase'
+- script: 
+    npm install
+  workingDirectory: '$(System.DefaultWorkingDirectory)/ExtendedCase/ExtendedCase.WebComponent'
+  displayName: 'npm install'
+- script: 
+    npm run build-test --verbose
+  workingDirectory: '$(System.DefaultWorkingDirectory)/ExtendedCase/ExtendedCase.WebComponent'
+  displayName: 'ng build prod ExtendedCase'
+
+- task: CopyFiles@2
+  displayName: 'Copy Files ExtendedCase.WebComponent'
+  inputs:
+    Contents: '$(System.DefaultWorkingDirectory)/ExtendedCase/ExtendedCase.WebComponent/dist/**' 
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+- task: PublishBuildArtifacts@1
+  displayName: 'Publishing Artifact Helpdesk_ExtendedCase_WebComponent'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/ExtendedCase/ExtendedCase.WebComponent/dist'
+    ArtifactName: 'Helpdesk_ExtendedCase_WebComponent'
