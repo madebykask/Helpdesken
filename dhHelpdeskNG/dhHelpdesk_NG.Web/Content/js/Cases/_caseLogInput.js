@@ -12,7 +12,6 @@ function LogInitForm() {
     var $finishTypeId = $("#CaseLog_FinishingType");
     var $finishTypeBreadcrubs = $("#divBreadcrumbs_FinishingType");
     var $finishDate = $('#CaseLog_FinishingDate');
-    var $internalNoteRequired = $('#internalNoteRequired');
     var $txtInformPerformer = $('#txtInformPerformer');
     var $caseLogTextInternal = $('#CaseLog_TextInternal');
     var $caseLogTextExternal = $('#CaseLog_TextExternal');
@@ -54,12 +53,10 @@ function LogInitForm() {
         informPerformer.removeAttr('checked');
 
         $($txtInformPerformer).css('display', 'none');
-        $($internalNoteRequired).css('display', 'none');
         $('#CaseLog_TextInternal').prop('required', false);
         if (this.value.length || (hasCaseLogTextInternalEmailsTo || hasCaseLogTextInternalEmailsCc)) {
 
             $($txtInformPerformer).css('display', 'inline');
-            $($internalNoteRequired).css('display', 'inline');
             $('#CaseLog_TextInternal').prop('required', true);
             
             $('#CaseLog_SendMailAboutCaseToPerformer:not(:disabled)').attr('checked', 'checked');
@@ -69,12 +66,10 @@ function LogInitForm() {
     $('#CaseLog_SendMailAboutCaseToPerformer').on('change', function (e) {
         if (e.currentTarget.checked) {
             $($txtInformPerformer).css('display', 'inline');
-            $($internalNoteRequired).css('display', 'inline');
             $('#CaseLog_TextInternal').prop('required', true);
         }
         else {
             $($txtInformPerformer).css('display', 'none');
-            $($internalNoteRequired).css('display', 'none');
             $('#CaseLog_TextInternal').prop('required', false);
         }
     });
@@ -92,7 +87,6 @@ function LogInitForm() {
 
         mutations_list.forEach(function (mutation) {
             var target = mutations_list[0].target.id;
-            $($internalNoteRequired).css('display', 'none');
             $('#CaseLog_TextInternal').prop('required', false);
 
             if (target === caseLogEmailRecepientsInternalLogTo) hasCaseLogTextInternalEmailsTo = false;
@@ -111,7 +105,6 @@ function LogInitForm() {
 
         if (hasCaseLogTextInternalEmailsTo || hasCaseLogTextInternalEmailsCc || $caseLogSendMailAboutCaseToPerformer[0].checked) {
 
-            $($internalNoteRequired).css('display', 'inline');
             $('#CaseLog_TextInternal').prop('required', true);
         }
     });

@@ -168,7 +168,7 @@ Model.EnableTwoAttachments))
                 @if (Model.CaseInternalLogAccess)
                 {
                     <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote)">
-                        <td>@CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, "Intern notering")<span id="internalNoteRequired" class="mandatorystar" style="display:none"> * </span></td>
+                        <td>@CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, "Intern notering")</td>
                         <td>
                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote) && !readonlyMode)
                             {
