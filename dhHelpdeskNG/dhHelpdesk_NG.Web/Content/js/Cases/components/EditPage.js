@@ -298,7 +298,7 @@ EditPage.prototype.loadExtendedCase = function () {
     var fieldValues = self.Case_Field_Init_Values;
 
     $_ex_Container.contentWindow.setInitialData({ step: 0, isNextValidation: false });
-
+    
     if (fieldValues != null) {
         $_ex_Container.contentWindow.loadExtendedCase(
         {
@@ -464,8 +464,10 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
     var _inventorytype = fieldData.inventorytype;
     var _inventorylocation = fieldData.inventorylocation;
 
-    if (_administratorId != undefined)
+    if (_administratorId != undefined) {
         $('#' + _caseFields.AdministratorId).val(_administratorId.Value);
+        $('#' + _caseFields.AdministratorId).trigger('change');
+    }
 
     if (_reportedby != undefined)
         $('#' + _caseFields.ReportedBy).val(_reportedby.Value);
