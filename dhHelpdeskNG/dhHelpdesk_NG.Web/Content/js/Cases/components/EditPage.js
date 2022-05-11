@@ -1682,19 +1682,34 @@ EditPage.prototype.init = function (p) {
             const className = classPreffix + maxTdRows;
             let isRowAllVisible = false;
             const tds = row$.find('td');
-            const externalCellRowsCount = Math.ceil(($(tds[2]).find('a>div>div').height() || 1) / lineHeight);
-            const internalCellRowsCount = Math.ceil(($(tds[3]).find('a>div>div').height() || 1) / lineHeight);
-            const filesCellRowsCount = Math.ceil(($(tds[5]).find('>div>div').height() || 1) / lineHeight);
+            //const externalCellRowsCount = Math.ceil(($(tds[2]).find('a>div>div').height() || 1) / lineHeight);
+            //const internalCellRowsCount = Math.ceil(($(tds[3]).find('a>div>div').height() || 1) / lineHeight);
+            //const filesCellRowsCount = Math.ceil(($(tds[5]).find('>div>div').height() || 1) / lineHeight);
+            const externalCellRowsCount = Math.ceil(($(tds[3]).find('a>div>div').height() || 1) / lineHeight);
+            const internalCellRowsCount = Math.ceil(($(tds[4]).find('a>div>div').height() || 1) / lineHeight);
+            const filesCellRowsCount = Math.ceil(($(tds[6]).find('>div>div').height() || 1) / lineHeight);
+            //if (externalCellRowsCount > maxTdRows) {
+            //    $(tds[2]).find('.row-all').show();
+            //    isRowAllVisible = true;
+            //}
+            //if (internalCellRowsCount > maxTdRows) {
+            //    $(tds[3]).find('.row-all').show();
+            //    isRowAllVisible = true;
+            //}
+            //if (filesCellRowsCount > maxTdRows) {
+            //    $(tds[5]).find('.row-all').show();
+            //    isRowAllVisible = true;
+            //}
             if (externalCellRowsCount > maxTdRows) {
-                $(tds[2]).find('.row-all').show();
-                isRowAllVisible = true;
-            }
-            if (internalCellRowsCount > maxTdRows) {
                 $(tds[3]).find('.row-all').show();
                 isRowAllVisible = true;
             }
+            if (internalCellRowsCount > maxTdRows) {
+                $(tds[4]).find('.row-all').show();
+                isRowAllVisible = true;
+            }
             if (filesCellRowsCount > maxTdRows) {
-                $(tds[5]).find('.row-all').show();
+                $(tds[6]).find('.row-all').show();
                 isRowAllVisible = true;
             }
             if (isRowAllVisible) {
