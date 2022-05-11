@@ -8,6 +8,7 @@ pool:
 
 variables:
   solution: '**/DH.Helpdesk.sln'
+  solutionExtCaseApi: '**/ExtendedCase/ExtendedCase.Api.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   group: build-variables
@@ -19,7 +20,6 @@ steps:
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
-
 
 - task: Assembly-Info-NetFramework@2
   inputs:
@@ -56,6 +56,25 @@ steps:
     targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Web'
     artifactName: 'DH-Helpdesk-Web'
 
+#Ext-Case-Api
+- task: NuGetCommand@2
+  displayName: Restoring Nugets for ExtendedCase-Api
+  inputs:
+    restoreSolution: '$(solutionExtCaseApi)'
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.ExtendedCase.Api
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/ExtendedCase/ExtendedCase.WebApi/ExtendedCase.WebApi.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
+  
+- task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-ExtendedCase-WebApi
+  inputs:
+   targetPath: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/ExtendedCase.WebApi'
+   artifactName: 'DH-Helpdesk-ExtendedCase-WebApi'
+
 # #Trying to add Helpdesk-Mobile
 - task: NodeTool@0
   inputs:
@@ -63,15 +82,15 @@ steps:
 - script: |
     npm install -g @angular/cli@8.3.29
   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
-  displayName: 'npm install cli'
+  displayName: 'npm install cli for mobile'
 - script: 
     npm install
   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
-  displayName: 'npm install'
+  displayName: 'npm install for mobile'
 - script: 
     npm run build_prod --verbose
   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
-  displayName: 'ng build prod'
+  displayName: 'ng build prod mobile'
 
 - task: CopyFiles@2
   displayName: 'Copy Files'
