@@ -19,6 +19,8 @@ import { DateTime } from 'luxon';
 import { CaseDataStore } from './case-data.store';
 import { CaseFormGroup } from 'src/app/modules/shared-module/models/forms';
 import { StatusesService } from 'src/app/services/case-organization/statuses-service';
+import { PerfomersService } from 'src/app/services/case-organization/perfomers-service';
+import { EmailEventData } from 'src/app/services/communication/data/email-event-data';
 
 @Injectable({ providedIn: 'root' })
 export class CaseEditLogic {
@@ -32,14 +34,16 @@ export class CaseEditLogic {
     private notifierService: NotifierService,
     private caseDataHelpder: CaseEditDataHelper,
     private caseService: CaseService,
-    private statusesService: StatusesService) {
+    private statusesService: StatusesService,
+    private performersService: PerfomersService,
+    private commService: CommunicationService) {
 
   }
 
   public runUpdates(v: CaseFieldValueChangedEvent, dataSource: CaseDataStore, caseData: CaseEditInputModel, form: CaseFormGroup) { // TODO: move to new class
     const reducer = this.getCaseDataReducers(dataSource);
     const filters = this.caseDataHelpder.getFormCaseOptionsFilter(caseData, form);
-    const customerId =  dataSource.currentCaseCustomerId$.value;
+    const customerId = dataSource.currentCaseCustomerId$.value;
     const optionsHelper = this.caseService.getOptionsHelper(filters, customerId);
 
     // NOTE: remember to update case data reducer when adding new fields
@@ -79,26 +83,26 @@ export class CaseEditLogic {
       case CaseFieldsNames.CaseTypeId: {
         if (v.value) {
           this.caseTypesService.getCaseType(v.value, customerId).pipe(
-              take(1)
-            ).subscribe(ct => {
-              if (ct && ct.performerUserId != null && !this.getField(caseData, CaseFieldsNames.PerformerUserId).setByTemplate) {
-                if (!dataSource.performersStore$.value.some((e) => e.value === ct.performerUserId)) {
-                  // get new list of performers with casetype perfomer included
-                  filters.CasePerformerUserId = ct.performerUserId;
-                  optionsHelper.getPerformers(true).pipe(
-                    take(1)
-                  ).subscribe((o: OptionItem[]) => {
-                    reducer.caseDataReducer(CaseFieldsNames.PerformerUserId, { items: o });
-                  });
-                }
+            take(1)
+          ).subscribe(ct => {
+            if (ct && ct.performerUserId != null && !this.getField(caseData, CaseFieldsNames.PerformerUserId).setByTemplate) {
+              if (!dataSource.performersStore$.value.some((e) => e.value === ct.performerUserId)) {
+                // get new list of performers with casetype perfomer included
+                filters.CasePerformerUserId = ct.performerUserId;
+                optionsHelper.getPerformers(true).pipe(
+                  take(1)
+                ).subscribe((o: OptionItem[]) => {
+                  reducer.caseDataReducer(CaseFieldsNames.PerformerUserId, { items: o });
+                });
               }
-              if (ct && ct.workingGroupId != null) {
-                form.setSafe(CaseFieldsNames.WorkingGroupId, ct.workingGroupId);
-              }
-              if (ct && ct.performerUserId != null) {
-                form.setSafe(CaseFieldsNames.PerformerUserId, ct.performerUserId);
-              }
-            });
+            }
+            if (ct && ct.workingGroupId != null) {
+              form.setSafe(CaseFieldsNames.WorkingGroupId, ct.workingGroupId);
+            }
+            if (ct && ct.performerUserId != null) {
+              form.setSafe(CaseFieldsNames.PerformerUserId, ct.performerUserId);
+            }
+          });
         }
         optionsHelper.getProductAreas(null).pipe(
           take(1)
@@ -145,29 +149,29 @@ export class CaseEditLogic {
         let externalLogTextControl = form.get(CaseFieldsNames.Log_ExternalText);
         if (v.value) {
           this.stateSecondariesService.getStateSecondary(v.value, customerId)
-          .pipe(
-            take(1)
-          ).subscribe(ss => {
-            if (ss && ss.workingGroupId != null && form.contains(CaseFieldsNames.WorkingGroupId)
-                    && v.source !== CaseFieldsNames.StatusId && v.source !== CaseFieldsNames.WorkingGroupId) {
-              form.setSafe(CaseFieldsNames.WorkingGroupId, ss.workingGroupId);
-            }
-            const departmentCtrl = form.get(CaseFieldsNames.DepartmentId);
-            if (ss.recalculateWatchDate && departmentCtrl.value) {
+            .pipe(
+              take(1)
+            ).subscribe(ss => {
+              if (ss && ss.workingGroupId != null && form.contains(CaseFieldsNames.WorkingGroupId)
+                && v.source !== CaseFieldsNames.StatusId && v.source !== CaseFieldsNames.WorkingGroupId) {
+                form.setSafe(CaseFieldsNames.WorkingGroupId, ss.workingGroupId);
+              }
+              const departmentCtrl = form.get(CaseFieldsNames.DepartmentId);
+              if (ss.recalculateWatchDate && departmentCtrl.value) {
                 this.caseWatchDateApiService.getWatchDate(departmentCtrl.value, customerId).pipe(
                   take(1)
                 ).subscribe(date => form.setSafe(CaseFieldsNames.WatchDate, date));
-            }
-            // update extneral log field state
-            sendExternalEmailsControl = form.get(CaseFieldsNames.Log_SendMailToNotifier);
-            externalLogTextControl = form.get(CaseFieldsNames.Log_ExternalText);
-            if (ss.noMailToNotifier === true) {
-              sendExternalEmailsControl.disable({ onlySelf: true, emitEvent: true });
-            } else if (externalLogTextControl && externalLogTextControl.disabled === false) {
-              //enable only in case extneral log note text is enabled as well
-              sendExternalEmailsControl.enable({ onlySelf: true, emitEvent: true });
-            }
-          });
+              }
+              // update extneral log field state
+              sendExternalEmailsControl = form.get(CaseFieldsNames.Log_SendMailToNotifier);
+              externalLogTextControl = form.get(CaseFieldsNames.Log_ExternalText);
+              if (ss.noMailToNotifier === true) {
+                sendExternalEmailsControl.disable({ onlySelf: true, emitEvent: true });
+              } else if (externalLogTextControl && externalLogTextControl.disabled === false) {
+                //enable only in case extneral log note text is enabled as well
+                sendExternalEmailsControl.enable({ onlySelf: true, emitEvent: true });
+              }
+            });
         } else if (externalLogTextControl && externalLogTextControl.disabled === false) {
           //enable only in case extneral log note text is enabled as well
           sendExternalEmailsControl.enable({ onlySelf: true, emitEvent: true });
@@ -208,10 +212,22 @@ export class CaseEditLogic {
           this.notifierService.getNotifier(v.value, customerId).pipe(
             take(1)
           ).subscribe(x => {
-             this.processNotifierChanged(x, notifierType === NotifierType.Regarding, form);
+            this.processNotifierChanged(x, notifierType === NotifierType.Regarding, form);
           });
         } else {
           this.processNotifierChanged(null, notifierType === NotifierType.Regarding, form);
+        }
+        break;
+      }
+      case CaseFieldsNames.PerformerUserId: {
+        if (!isNaN(parseInt(v.value))) {
+          let performerUserId = parseInt(v.value);
+          if (performerUserId > 0) {
+            this.performersService.getPerformerEmail(performerUserId).pipe(take(1)).subscribe((m) => {
+              // console.log(m)
+              this.commService.publish(Channels.CaseFieldValueChanged, new EmailEventData(m.eMail));
+            });
+          }
         }
         break;
       }
@@ -252,11 +268,11 @@ export class CaseEditLogic {
       notifierFieldsSetter.setDepartment(departmentId || '');
       notifierFieldsSetter.setOU(ouId || '');
     } else {
-        // just set new department if exists
-        if (!isNaN(departmentId) && departmentId) {
-          notifierFieldsSetter.setDepartment(departmentId || '');
-          notifierFieldsSetter.setOU(ouId || '');
-        }
+      // just set new department if exists
+      if (!isNaN(departmentId) && departmentId) {
+        notifierFieldsSetter.setDepartment(departmentId || '');
+        notifierFieldsSetter.setOU(ouId || '');
+      }
     }
   }
 

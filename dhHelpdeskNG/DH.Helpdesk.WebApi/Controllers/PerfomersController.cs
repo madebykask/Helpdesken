@@ -6,6 +6,7 @@ using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.WebApi.Infrastructure;
+using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -56,6 +57,14 @@ namespace DH.Helpdesk.WebApi.Controllers
                     .Select(u => new ItemOverview($"{u.SurName} {u.FirstName}", u.Id.ToString())).ToList();
 
             return items;
+        }
+
+        [HttpGet]
+        [SkipCustomerAuthorization]
+        public IHttpActionResult GetEmailById(int id)
+        {
+            var email = _userService.GetUserEmail(id);
+            return Json(new { eMail = email });
         }
     }
 }

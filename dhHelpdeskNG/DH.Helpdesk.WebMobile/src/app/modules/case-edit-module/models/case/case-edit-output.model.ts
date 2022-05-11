@@ -75,6 +75,7 @@ export class CaseEditOutputModel {
   caseSolutionId?: number;
   description?: string;
   logSendMailToNotifier?: boolean;
+  logSendMailToPerformer?: boolean;
   logExternalEmailsCc?: string;
   extendedCaseGuid?: string;
 }

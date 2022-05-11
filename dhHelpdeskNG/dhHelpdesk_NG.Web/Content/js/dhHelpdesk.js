@@ -141,6 +141,9 @@ function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFi
             }
             $ctl.val(selected);
             $ctl.trigger('applyValue');
+            if (ctl == '#Performer_Id') {
+                $ctl.trigger('change')
+            }
         }
     });
 }

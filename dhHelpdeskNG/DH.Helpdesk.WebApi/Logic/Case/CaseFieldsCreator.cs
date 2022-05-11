@@ -1185,6 +1185,25 @@ namespace DH.Helpdesk.WebApi.Logic.Case
                 model.Fields.Add(field);
             }
 
+            // Log Internal Emails to (Performer)
+            {
+                field = new BaseCaseField<bool>()
+                {
+                    Name = CaseFieldsNamesApi.Log_SendMailToPerformer,
+                    Value = true,
+                    Label = _caseTranslationService.TranslateFieldLabel(languageId, "Till"),
+                    Section = CaseSectionType.Communication
+                };
+
+                if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, currentCase?.Id, caseTemplateSettings))
+                    AddReadOnlyOption(field.Options);
+
+                if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_Internal))
+                    AddHiddenOption(field.Options);
+
+                model.Fields.Add(field);
+            }
+
             // Log Internal
             if (userOverview.CaseInternalLogPermission.ToBool())
             {

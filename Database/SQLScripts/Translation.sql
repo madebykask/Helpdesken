@@ -8242,6 +8242,20 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 2109 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2109, 2, 'Show only latest')
 GO
+--New sprint 76
+If not exists (select * from tbltext where id = 2110)
+	insert into tbltext (id, TextString) VALUES (2110, 'Informera handläggare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2110 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2110, 2, 'Inform administrator')
+GO
+
+If not exists (select * from tbltext where id = 2111)
+	insert into tbltext (id, TextString) VALUES (2111, 'Informera')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2111 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2111, 2, 'Inform')
+GO
 
 
 -- Generate id sequence for customer generated IDs
