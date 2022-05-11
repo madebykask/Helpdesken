@@ -1,34 +1,103 @@
-# ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
-
 trigger:
 - Development
+
+name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Rev:r)
 
 pool:
   vmImage: 'windows-latest'
 
 variables:
   solution: '**/DH.Helpdesk.sln'
+  solutionExtCaseApi: '**/ExtendedCase/ExtendedCase.Api.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  group: build-variables
 
 steps:
+
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
 
-- task: VSBuild@1
+- task: Assembly-Info-NetFramework@2
   inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    Path: '$(Build.SourcesDirectory)'
+    FileNames: |
+      **\CommonAssembly\SharedAssemblyInfo.cs
+      **\CommonAssembly\SharedAssemblyInfo.vb
+    InsertAttributes: false
+    FileEncoding: 'auto'
+    WriteBOM: false
+    InformationalVersion: '$(Build.BuildNumber)'
+    FileVersionNumber: '$(Build.BuildNumber)'
+    LogLevel: 'verbose'
+    FailOnWarning: false
+    DisableTelemetry: false
 
-- task: VSTest@2
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.Web
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdesk_NG.Web/DH.Helpdesk.Web.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
+
+- task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-Web
+  inputs:
+    SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.Web'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Web'
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-Web
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Web'
+    artifactName: 'DH-Helpdesk-Web'
+
+#Ext-Case-Api
+- task: NuGetCommand@2
+  displayName: Restoring Nugets for ExtendedCase-Api
+  inputs:
+    restoreSolution: '$(solutionExtCaseApi)'
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.ExtendedCase.Api
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/ExtendedCase/ExtendedCase.WebApi/ExtendedCase.WebApi.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
+  
+- task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-ExtendedCase-WebApi
+  inputs:
+   targetPath: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/ExtendedCase.WebApi'
+   artifactName: 'DH-Helpdesk-ExtendedCase-WebApi'
+
+# #Trying to add Helpdesk-Mobile
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.18.1'
+- script: |
+    npm install -g @angular/cli@8.3.29
+  workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
+  displayName: 'npm install cli for mobile'
+- script: 
+    npm install
+  workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
+  displayName: 'npm install for mobile'
+- script: 
+    npm run build_prod --verbose
+  workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
+  displayName: 'ng build prod mobile'
+
+- task: CopyFiles@2
+  displayName: 'Copy Files'
+  inputs:
+    Contents: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile/wwwroot/build/**' 
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile/wwwroot/build'
+    ArtifactName: 'Helpdesk_Mobile'
