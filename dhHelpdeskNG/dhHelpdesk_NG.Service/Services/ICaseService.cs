@@ -166,5 +166,6 @@ namespace DH.Helpdesk.Services.Services
         Task<List<CaseHistoryMapperData>> GetCaseHistoriesAsync(int caseId);
         Task<CustomerCasesStatus> GetCustomerCasesStatusAsync(int customerId, int userId);
         Task<Case> GetDetachedCaseByIdAsync(int id);
+        void HandleSendMailAboutCaseToPerformer(int performerUserId, int currentUserId, CaseLog caseLog);
     }
 }

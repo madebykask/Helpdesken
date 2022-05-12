@@ -1159,6 +1159,21 @@ namespace DH.Helpdesk.Services.Services
             return 0;
         }
 
+        public void HandleSendMailAboutCaseToPerformer(int performerUserId, int currentUserId, CaseLog caseLog)
+        {
+            if (caseLog.SendMailAboutCaseToPerformer && performerUserId > 0 && performerUserId != currentUserId)
+            {
+                var performerEmail = _userService.GetUserEmail(performerUserId);
+
+                caseLog.EmailRecepientsInternalLogTo = caseLog.EmailRecepientsInternalLogTo ?? String.Empty;
+
+                if (!caseLog.EmailRecepientsInternalLogTo.Contains(performerEmail))
+                {
+                    caseLog.EmailRecepientsInternalLogTo += performerEmail + ";";
+                }
+            }
+        }
+
         #region Private methods
 
         private void DeleteChildCasesFor(int caseId)

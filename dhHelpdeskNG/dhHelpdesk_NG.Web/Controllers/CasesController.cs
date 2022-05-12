@@ -1144,18 +1144,9 @@ namespace DH.Helpdesk.Web.Controllers
         [ValidateInput(false)]
         public RedirectToRouteResult Edit(CaseEditInput m)
         {
-            var performerId = m.Performer_Id ?? 0;
-            if(m.caseLog.SendMailAboutCaseToPerformer && performerId > 0 && performerId != SessionFacade.CurrentUser.Id)
-            {
-                var performerEmail = _userService.GetUserEmail(performerId);
+            var performerUserId = m.Performer_Id ?? 0;
 
-                m.caseLog.EmailRecepientsInternalLogTo = m.caseLog.EmailRecepientsInternalLogTo ?? String.Empty;
-
-                if (!m.caseLog.EmailRecepientsInternalLogTo.Contains(performerEmail))
-                {
-                    m.caseLog.EmailRecepientsInternalLogTo += performerEmail + ";";
-                }
-            }
+            _caseService.HandleSendMailAboutCaseToPerformer(performerUserId, SessionFacade.CurrentUser.Id, m.caseLog);
 
             // Save current case
             int caseId = Save(m);
