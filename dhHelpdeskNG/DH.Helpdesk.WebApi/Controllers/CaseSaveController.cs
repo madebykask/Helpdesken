@@ -114,7 +114,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        [CheckUserCasePermissions(CaseIdParamName = "caseId")]
+        [CheckUserCasePermissions(CaseIdParamName = "caseId")] 
         [Route("save/{caseId:int=0}")]
         public async Task<IHttpActionResult> Save([FromUri] int? caseId, [FromUri]int cid, [FromUri] int langId, [FromBody]CaseEditInputModel model)
         {
@@ -315,7 +315,18 @@ namespace DH.Helpdesk.WebApi.Controllers
             currentCase.LatestSLACountDate = _caseStatService.CalculateLatestSLACountDate(oldCase?.StateSecondary_Id, model.StateSecondaryId, oldCase?.LatestSLACountDate);
 
             IDictionary<string, string> errors;
+            //var performerId = m.Performer_Id ?? 0;
+            //if (m.caseLog.SendMailAboutCaseToPerformer && performerId > 0 && performerId != SessionFacade.CurrentUser.Id)
+            //{
+            //    var performerEmail = _userService.GetUserEmail(performerId);
 
+            //    m.caseLog.EmailRecepientsInternalLogTo = m.caseLog.EmailRecepientsInternalLogTo ?? String.Empty;
+
+            //    if (!m.caseLog.EmailRecepientsInternalLogTo.Contains(performerEmail))
+            //    {
+            //        m.caseLog.EmailRecepientsInternalLogTo += performerEmail + ";";
+            //    }
+            //}
             var caseLog = new CaseLog()
             {
                 LogGuid = Guid.NewGuid(), //todo: check usages
@@ -329,6 +340,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 RegUser = string.Empty, 
                 UserId = UserId,
                 SendMailAboutCaseToNotifier = model.LogSendMailToNotifier,
+                SendMailAboutCaseToPerformer = model.LogSendMailToPerformer,
                 FinishingDate = userOverview.CloseCasePermission.ToBool() ? caseLogFinishingDate : new DateTime?(),
                 FinishingType = userOverview.CloseCasePermission.ToBool() ? model.ClosingReason : new int?()
             };

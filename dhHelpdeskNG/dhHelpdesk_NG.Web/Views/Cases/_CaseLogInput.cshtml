@@ -191,7 +191,7 @@ Model.EnableTwoAttachments))
                                             new { InformPerformerBehavior = Model.InformPerformerBehavior.ToJavaScriptBool() })
 
                                         <span class="inline-block-span lbl">
-                                            @Translation.GetCoreTextTranslation("Informera handläggare")
+                                            @Translation.GetCoreTextTranslation("Informera") @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Performer_User_Id, "Handläggare")
                                             @if (Model.PerformersToSearch != null)
                                             {
                                                 <span id="txtInformPerformer" style="display: none">
@@ -693,17 +693,26 @@ Model.EnableTwoAttachments))
     }
 
     $("#Performer_Id").on("change", function (e) {
+
         e.preventDefault();
+
         let performerId = $("#Performer_Id").val();
-            $.ajax({
-                url: "/users/GetEmailById",
-                type: "GET",
-                data: { id: performerId, }
-                })
-                .done(function (result) {
-                    $("#selected-performer-email").html(result);
-                });
-            });
+        $("#selected-performer-email").html('');
+        if (performerId !== null) {
+            if (!isNaN(performerId)) {
+                if (parseInt(performerId) > 0) {
+                    $.ajax({
+                        url: "/users/GetEmailById",
+                        type: "GET",
+                        data: { id: performerId, }
+                    })
+                        .done(function (result) {
+                            $("#selected-performer-email").html(result);
+                        });
+                }
+            }
+        }
+    });
 
 </script>
 

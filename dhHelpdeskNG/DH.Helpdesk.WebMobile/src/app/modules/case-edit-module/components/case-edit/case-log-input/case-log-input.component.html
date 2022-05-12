@@ -43,7 +43,7 @@
 
   <div class="bordered switch">
     <mbsc-switch #sendMailToPerformerControl 
-                 [disabled]="isSendMailToNotifierDisabled"
+                 [disabled]="isSendMailToPerformerDisabled"
                  [formControlName]="caseFieldsNames.Log_SendMailToPerformer"
                  (change)="onSendInternalEmailsCheckChanged()"
                  [options]="switchOptions">

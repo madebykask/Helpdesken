@@ -172,6 +172,7 @@ export class CaseLogInputComponent implements OnInit {
         untilDestroyed(this)
       )
       .subscribe(e => {
+        
         e.eMail = e.eMail === undefined ? '' : e.eMail; 
         this.performerUserEmail = e.eMail;
       });

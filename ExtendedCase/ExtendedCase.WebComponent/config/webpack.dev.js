@@ -29,7 +29,7 @@ module.exports = WebpackMerge(
       new Webpack.DefinePlugin({
         ENV: JSON.stringify(CONSTANTS.MODE),
         AppSettings: JSON.stringify({
-          apiHost: "http://localhost:63222",
+          apiHost: "https://localhost:447/extendedcase-api",
           showDebugProxyModel: true,
           debugMode: true,
         }),
