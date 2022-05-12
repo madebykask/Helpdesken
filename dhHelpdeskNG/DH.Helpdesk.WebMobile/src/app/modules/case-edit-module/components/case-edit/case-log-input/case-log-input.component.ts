@@ -40,6 +40,7 @@ export class CaseLogInputComponent implements OnInit {
   isSendMailToPerformerDisabled = false;
   externalLogEmailsTo = '';
   performerUserEmail = '';
+  performerLabel = '';
 
   fileListSettings: MbscListviewOptions = {
     enhance: true,
@@ -113,7 +114,7 @@ export class CaseLogInputComponent implements OnInit {
     this.internalLogFormControl = this.getFormControl(CaseFieldsNames.Log_InternalText);
     this.logFileFormControl = this.getFormControl(CaseFieldsNames.Log_FileName);
     this.logFileInternalFormControl = this.getFormControl(CaseFieldsNames.Log_FileName_Internal);
-
+    this.performerLabel = this.caseData.fields.filter(x=> x.name == 'PerformerUserId').map((x)=> x.label)[0];
     this.noEmailsText = this.translateService.instant('Ingen tillgänglig mailadress'); //No email address available
 
     if (this.sendExternalEmailsFormControl) {

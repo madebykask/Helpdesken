@@ -47,7 +47,7 @@
                  [formControlName]="caseFieldsNames.Log_SendMailToPerformer"
                  (change)="onSendInternalEmailsCheckChanged()"
                  [options]="switchOptions">
-      <span [ngClass]="{'mbsc-log-label': true, 'disabled': isSendMailToPerformerDisabled }">{{ 'Informera handläggare' | translate }}</span>
+      <span [ngClass]="{'mbsc-log-label': true, 'disabled': isSendMailToPerformerDisabled }">{{ 'Informera' | translate }} {{ performerLabel }}</span>
       <span class="mbsc-desc" [innerHtml]="performerUserEmail | sanitize:'html'" [style.display]="isSendMailToPerformerDisabled  ? 'none' : 'block'"></span>
     </mbsc-switch>
   </div>
