@@ -54,7 +54,7 @@ steps:
     FailOnWarning: false
     DisableTelemetry: false
 
-task: MSBuild@1
+- task: MSBuild@1
   displayName: Build DH.Helpdesk.Web
   inputs:
     msbuildVersion: '17.0'  
