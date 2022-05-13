@@ -1,7 +1,7 @@
 trigger:
 - Development
 
-name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Rev:r)
+name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(patch).$(Build.SourceVersion)
 
 pool:
   vmImage: 'windows-latest'
@@ -12,15 +12,32 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   group: build-variables
+  patch: $[counter(format('{0}.{1}', variables['development.versionMajor'], variables['development.versionMinor'], variables['development.versionSubMinor']), 0)]
 
 steps:
+- task: CmdLine@2
+  inputs:
+    script: |
+      echo $(Build.SourceVersion)
+      set sourceVersion=$(Build.SourceVersion)
+      set sourceVersionSubstring=%sourceVersion:~0,7%
+      echo %sourceVersionSubstring%
+      echo ##vso[task.setvariable variable=SourceVersionShort]%sourceVersionSubstring%
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "##vso[task.setvariable variable=myVar;]foo"
+      Write-Host "##vso[task.setvariable variable=ProjectBuildNumber;]$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(patch).$(SourceVersionShort)"
+      Write-Host "##vso[build.updatebuildnumber]$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(patch).$(SourceVersionShort)"
+
 
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
-  displayName: Restoring Nugets for DH.Helpdesk
   inputs:
     restoreSolution: '$(solution)'
+
 
 - task: Assembly-Info-NetFramework@2
   inputs:
@@ -31,8 +48,8 @@ steps:
     InsertAttributes: false
     FileEncoding: 'auto'
     WriteBOM: false
-    InformationalVersion: '$(Build.BuildNumber)'
-    FileVersionNumber: '$(Build.BuildNumber)'
+    InformationalVersion: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(patch).$(SourceVersionShort)'
+    FileVersionNumber: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(patch).$(SourceVersionShort)'
     LogLevel: 'verbose'
     FailOnWarning: false
     DisableTelemetry: false
@@ -44,6 +61,63 @@ steps:
     solution: '**/dhHelpdesk_NG.Web/DH.Helpdesk.Web.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
 
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.SelfService
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdesk_NG.Web_SelfService/DH.Helpdesk.SelfService.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
+    
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.WebApi
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.WebApi/DH.Helpdesk.WebApi.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.LDAP_AD
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.LDAP-AD/DH.Helpdesk.LDAP_AD.vbproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.LDAP_AD"'
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.Mail2Ticket
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.Mail2Ticket/DH.Helpdesk.Mail2Ticket.vbproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Mail2Ticket"'
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.Schedule
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.Schedule/DH.Helpdesk.Schedule.vbproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Schedule"'
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.TaskScheduler
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.TaskScheduler/DH.Helpdesk.TaskScheduler.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.TaskScheduler"'
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.Upkeeper
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.Upkeeper/DH.Helpdesk.Upkeeper.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Upkeeper"'
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.EmailEngine.WinService
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.EmailEngine.WinService/DH.Helpdesk.EmailEngine.WinService.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.EmailEngine.WinService"'
+
+#Copying files
 - task: CopyFiles@2
   displayName: Copy DH-Helpdesk-Web
   inputs:
@@ -51,11 +125,86 @@ steps:
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Web'
 
+- task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-Selfservice
+  inputs:
+    SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.Selfservice'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Selfservice'
+
+- task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-WebApi
+  inputs:
+    SourceFolder: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/DH.Helpdesk.WebApi'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-WebApi'
+
+- task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-Database
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)/Database/SQLScripts'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\DH-Helpdesk-Database'
+
 - task: PublishPipelineArtifact@1
   displayName: Publish Artifact DH-Helpdesk-Web
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Web'
     artifactName: 'DH-Helpdesk-Web'
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-Database
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Database'
+    artifactName: 'DH-Helpdesk-Database'
+
+- task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-Selfservice
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-Selfservice'
+    artifactName: 'DH-Helpdesk-Selfservice'
+- task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-WebApi
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/DH-Helpdesk-WebApi'
+    artifactName: 'DH-Helpdesk-WebApi'
+
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.LDAP-AD
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.LDAP_AD' 
+    artifactName: 'DH.Helpdesk-LDAP-AD'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.Mail2Ticket
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Mail2Ticket' 
+    artifactName: 'DH.Helpdesk-Mail2Ticket'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.Schedule
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Schedule' 
+    artifactName: 'DH.Helpdesk-Schedule'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.TaskScheduler
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.TaskScheduler' 
+    artifactName: 'DH.Helpdesk-TaskScheduler'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.Upkeeper
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Upkeeper' 
+    artifactName: 'DH.Helpdesk-Upkeeper'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.EmailEngine.WinService
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.EmailEngine.WinService' 
+    artifactName: 'DH.Helpdesk.EmailEngine.WinService'
 
 #Ext-Case-Api
 - task: NuGetCommand@2
