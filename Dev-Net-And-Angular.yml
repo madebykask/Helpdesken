@@ -225,6 +225,20 @@ steps:
    targetPath: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/ExtendedCase.WebApi'
    artifactName: 'DH-Helpdesk-ExtendedCase-WebApi'
 
+#Ext-Case-Web
+- task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-ExtendedCase-Web
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)/ExtendedCase/ExtendedCase.Web/src'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/ExtendedCase.Web'
+  
+- task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-ExtendedCase-Web
+  inputs:
+   targetPath: '$(Build.ArtifactStagingDirectory)/ExtendedCase.Web'
+   artifactName: 'DH-Helpdesk-ExtendedCase-Web'
+
 # Building Helpdesk-Mobile
 - task: NodeTool@0
   inputs:
