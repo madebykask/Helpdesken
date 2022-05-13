@@ -1161,15 +1161,17 @@ namespace DH.Helpdesk.Services.Services
 
         public void HandleSendMailAboutCaseToPerformer(int performerUserId, int currentUserId, CaseLog caseLog)
         {
-            if (caseLog.SendMailAboutCaseToPerformer && performerUserId > 0 && performerUserId != currentUserId)
+            if (performerUserId > 0)
             {
-                var performerEmail = _userService.GetUserEmail(performerUserId);
-
-                caseLog.EmailRecepientsInternalLogTo = caseLog.EmailRecepientsInternalLogTo ?? String.Empty;
-
-                if (!caseLog.EmailRecepientsInternalLogTo.Contains(performerEmail))
+                var currentPerformer = _userService.GetUser(performerUserId);
+                if (caseLog.SendMailAboutCaseToPerformer && performerUserId != currentUserId && currentPerformer.AllocateCaseMail == 0)
                 {
-                    caseLog.EmailRecepientsInternalLogTo += performerEmail + ";";
+                    caseLog.EmailRecepientsInternalLogTo = caseLog.EmailRecepientsInternalLogTo ?? String.Empty;
+
+                    if (!caseLog.EmailRecepientsInternalLogTo.Contains(currentPerformer.Email))
+                    {
+                        caseLog.EmailRecepientsInternalLogTo += currentPerformer.Email + ";";
+                    }
                 }
             }
         }
