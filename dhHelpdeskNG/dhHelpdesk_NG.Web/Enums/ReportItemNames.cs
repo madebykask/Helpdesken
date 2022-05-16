@@ -10,5 +10,6 @@
         public const string LogNoteDate = "Log Note Date";
         public const string FinishingMonth = "Finishing Month";
         public const string FinishingYear = "Finishing Year";
+        public const string RegisteredBy = "Registered by";
     }
 }

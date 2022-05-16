@@ -222,11 +222,11 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                         .Select(lg => new ReportedTimeDataResult
                         { Label = lg.Key.ToString(), DateTime = lg.Key, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime) });
                     break;
-                case ReportedTimeGroup.Performer_User_Id:
+                case ReportedTimeGroup.RegisteredBy:
                     result = query
-                        .GroupBy(l => new { l.Case.Performer_User_Id, l.Case.Administrator.FirstName, l.Case.Administrator.SurName })
+                        .GroupBy(l => new { l.User_Id, l.User.FirstName, l.User.SurName })
                         .Select(lg => new ReportedTimeDataResult
-                        { Id = lg.Key.Performer_User_Id ?? 0, Label = lg.Key.FirstName + " " + lg.Key.SurName, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime) });
+                        { Id = lg.Key.User_Id ?? 0, Label = lg.Key.FirstName + " " + lg.Key.SurName, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime) });
                     break;
                 case ReportedTimeGroup.WorkingGroup_Id:
                     result = query
