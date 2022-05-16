@@ -74,7 +74,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 //Get Helpdesk User if exists from verifyed email
                 var user = _masterDataService.GetUserByEmail(model.Email);
 
-                if(user == null)
+                if(user == null || user.IsActive != 1)
                 {
                     var responseString = "{\"error\":\"Invalid user!\",\"error_description\":\"The user name or password is incorrect.\"}";
                     var responseMsg = new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest)

@@ -9,7 +9,7 @@
 }
 
 .txtInput {
-    width: 97%
+    width: 97% !important;
 }
 
 .header-actions {
