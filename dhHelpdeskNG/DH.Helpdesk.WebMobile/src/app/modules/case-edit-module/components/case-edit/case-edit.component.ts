@@ -456,6 +456,10 @@ export class CaseEditComponent {
     else {
       const values = this.extendedCase.nativeElement.getCaseValues;
 
+      if (!values) {
+        return;
+      }
+
       if (!isNaN(parseInt(values.administrator_id.Value))) {
         let performerUserId = parseInt(values.administrator_id.Value);
         if (performerUserId > 0) {
@@ -474,9 +478,6 @@ export class CaseEditComponent {
         return;
       }
 
-      if (!values) {
-        return;
-      }
 
       if (values.administrator_id != null) {
         this.form.setSafe(CaseFieldsNames.PerformerUserId, values.administrator_id.Value);
