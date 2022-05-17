@@ -1,25 +1,43 @@
 trigger:
 - Master
 
-name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Rev:r)
+name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(patch).$(Build.SourceVersion)
 
 pool:
   vmImage: 'windows-latest'
 
 variables:
   solution: '**/DH.Helpdesk.sln'
+  solutionExtCaseApi: '**/ExtendedCase/ExtendedCase.Api.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   group: build-variables
-  revision: $(Rev:r)
+  patch: $[counter(format('{0}.{1}', variables['release.versionMajor'], variables['release.versionMinor'], variables['release.versionSubMinor']), 0)]
 
 steps:
+- task: CmdLine@2
+  inputs:
+    script: |
+      echo $(Build.SourceVersion)
+      set sourceVersion=$(Build.SourceVersion)
+      set sourceVersionSubstring=%sourceVersion:~0,7%
+      echo %sourceVersionSubstring%
+      echo ##vso[task.setvariable variable=SourceVersionShort]%sourceVersionSubstring%
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "##vso[task.setvariable variable=myVar;]foo"
+      Write-Host "##vso[task.setvariable variable=ProjectBuildNumber;]$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(patch).$(SourceVersionShort)"
+      Write-Host "##vso[build.updatebuildnumber]$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(patch).$(SourceVersionShort)"
+
 
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
+
 
 - task: Assembly-Info-NetFramework@2
   inputs:
@@ -30,7 +48,8 @@ steps:
     InsertAttributes: false
     FileEncoding: 'auto'
     WriteBOM: false
-    InformationalVersion: '$(Build.BuildNumber)'
+    InformationalVersion: '$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(patch).$(SourceVersionShort)'
+    FileVersionNumber: '$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(patch).$(SourceVersionShort)'
     LogLevel: 'verbose'
     FailOnWarning: false
     DisableTelemetry: false
@@ -98,8 +117,7 @@ steps:
     solution: '**/dhHelpdeskNG/DH.Helpdesk.EmailEngine.WinService/DH.Helpdesk.EmailEngine.WinService.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.EmailEngine.WinService"'
 
-
-
+#Copying files
 - task: CopyFiles@2
   displayName: Copy DH-Helpdesk-Web
   inputs:
@@ -187,3 +205,92 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.EmailEngine.WinService' 
     artifactName: 'DH.Helpdesk.EmailEngine.WinService'
+
+#Ext-Case-Api
+- task: NuGetCommand@2
+  displayName: Restoring Nugets for ExtendedCase-Api
+  inputs:
+    restoreSolution: '$(solutionExtCaseApi)'
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.ExtendedCase.Api
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/ExtendedCase/ExtendedCase.WebApi/ExtendedCase.WebApi.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)"'
+  
+- task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-ExtendedCase-WebApi
+  inputs:
+   targetPath: '$(Build.ArtifactStagingDirectory)/_PublishedWebsites/ExtendedCase.WebApi'
+   artifactName: 'DH-Helpdesk-ExtendedCase-WebApi'
+
+#Ext-Case-Web
+- task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-ExtendedCase-Web
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)/ExtendedCase/ExtendedCase.Web/src'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/ExtendedCase.Web'
+  
+- task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-ExtendedCase-Web
+  inputs:
+   targetPath: '$(Build.ArtifactStagingDirectory)/ExtendedCase.Web'
+   artifactName: 'DH-Helpdesk-ExtendedCase-Web'
+
+# Building Helpdesk-Mobile
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.18.1'
+- script: |
+    npm install -g @angular/cli@8.3.29
+  workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
+  displayName: 'npm install cli for Mobile'
+- script: 
+    npm install
+  workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
+  displayName: 'npm install for Mobile'
+- script: 
+    npm run build_prod --verbose
+  workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
+  displayName: 'ng build prod Mobile'
+
+- task: CopyFiles@2
+  displayName: 'Copying Files Mobile'
+  inputs:
+    Contents: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile/wwwroot/build/**' 
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+- task: PublishBuildArtifacts@1
+  displayName: 'Publishing Artifact Helpdesk_Mobile'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile/wwwroot/build'
+    ArtifactName: 'Helpdesk_Mobile'
+
+# Building ExtendedCase WebComponents
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.18.1'
+- script: |
+    npm install -g @angular/cli@8.3.29
+  workingDirectory: '$(System.DefaultWorkingDirectory)/ExtendedCase/ExtendedCase.WebComponent'
+  displayName: 'npm install cli ExtendedCase'
+- script: 
+    npm install
+  workingDirectory: '$(System.DefaultWorkingDirectory)/ExtendedCase/ExtendedCase.WebComponent'
+  displayName: 'npm install'
+- script: 
+    npm run build-test --verbose
+  workingDirectory: '$(System.DefaultWorkingDirectory)/ExtendedCase/ExtendedCase.WebComponent'
+  displayName: 'ng build prod ExtendedCase'
+
+- task: CopyFiles@2
+  displayName: 'Copy Files ExtendedCase.WebComponent'
+  inputs:
+    Contents: '$(System.DefaultWorkingDirectory)/ExtendedCase/ExtendedCase.WebComponent/dist/**' 
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+- task: PublishBuildArtifacts@1
+  displayName: 'Publishing Artifact Helpdesk_ExtendedCase_WebComponent'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/ExtendedCase/ExtendedCase.WebComponent/dist'
+    ArtifactName: 'Helpdesk_ExtendedCase_WebComponent'
