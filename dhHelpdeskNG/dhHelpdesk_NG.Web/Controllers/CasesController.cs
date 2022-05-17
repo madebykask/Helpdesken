@@ -6,8 +6,6 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Web;
-using System.Net;
-using System.Net.Mime;
 using System.Web.Mvc;
 using System.Web.Routing;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
