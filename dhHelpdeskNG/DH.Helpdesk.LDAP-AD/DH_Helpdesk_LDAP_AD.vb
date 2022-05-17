@@ -776,5 +776,4 @@ Module DH_Helpdesk_LDAP_AD
             objLogFile.WriteLine("{0}: {1}", Now(), msg)
         End If
     End Sub
-
 End Module
