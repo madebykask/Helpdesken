@@ -269,3 +269,7 @@
 .note-color-fore {
     padding-top: 5px;
 }
+
+.note-resize {
+    display: none !important;
+}
