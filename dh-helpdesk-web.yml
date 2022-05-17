@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - Release/Development/{tagname}
+      - Development
 
 name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(patch).$(Build.SourceVersion)
 
