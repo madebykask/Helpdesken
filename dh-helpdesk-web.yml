@@ -1,7 +1,4 @@
 trigger:
-  branches:
-    include:
-      - Development
   tags:
     include:
     - 'Release/Development*'
