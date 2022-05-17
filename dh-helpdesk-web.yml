@@ -2,6 +2,9 @@ trigger:
   branches:
     include:
       - Development
+  tags:
+    include:
+    - 'Release/Development*'
 
 name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(patch).$(Build.SourceVersion)
 
