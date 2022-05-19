@@ -53,6 +53,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         User GetUserForCopy(int id);
         User GetUserByEmail(string emailAddress);
+        IQueryable<User> GetUsersByEmail(string emailAddress);
         CustomerUserInfo GetUserInfo(int userId); //basic information - good perf
         UserOverview GetUser(int userid); // full information
         Task<UserOverview> GetUserAsync(int userId);
@@ -250,6 +251,21 @@ namespace DH.Helpdesk.Dal.Repositories
             else if(Table.FirstOrDefault(x => x.Email == emailAddress) != null)
             {
                 return Table.FirstOrDefault(x => x.Email == emailAddress);
+            }
+            return null;
+
+        }
+
+        public IQueryable<User> GetUsersByEmail(string emailAddress)
+        {
+
+            if (Table.Any(x => x.UserID == emailAddress))
+            {
+                return Table.Where(x => x.UserID == emailAddress);
+            }
+            else if (Table.Any(x => x.Email == emailAddress))
+            {
+                return Table.Where(x => x.Email == emailAddress);
             }
             return null;
 

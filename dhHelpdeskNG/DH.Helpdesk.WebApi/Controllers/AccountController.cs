@@ -67,14 +67,16 @@ namespace DH.Helpdesk.WebApi.Controllers
         [AllowAnonymous]
         public async Task<HttpResponseMessage> SignInWithMicrosoft([FromBody] MicrosoftUserModel model)
         {
-            var validUser = CheckValidUserLogin(model);
+            var validMicrosoftUser = CheckValidUserLogin(model);
 
-            if (validUser)
+            if (validMicrosoftUser)
             {
                 //Get Helpdesk User if exists from verifyed email
-                var user = _masterDataService.GetUserByEmail(model.Email);
+                var users = _masterDataService.GetUsersByEmail(model.Email);
 
-                if(user == null || user.IsActive != 1)
+                var user = users.FirstOrDefault(x => x.IsActive == 1);
+
+                if(user == null)
                 {
                     var responseString = "{\"error\":\"Invalid user!\",\"error_description\":\"The user name or password is incorrect.\"}";
                     var responseMsg = new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest)
