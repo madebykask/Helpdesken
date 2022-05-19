@@ -262,7 +262,7 @@
         }
 
         let ListComponent = (dataType, controlDiv) => "<li data-type='" + dataType + "' class='ui-draggable dropped-item' style='display: list-item'>" + controlDiv + "</li>";
-        let SummerNoteConfigComponent = (idName, data) => "<div id='" + idName + "_summernote'>" + data + "</div><script>$('#" + idName + "_summernote').summernote({placeholder: '', dialogsFade: true, tabsize: 2, height: 270, fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48' , '64', '82'], toolbar: [ ['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['fontsize', ['fontsize']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']] ], disableResizeEditor: true }); <" + "/script>"
+        let SummerNoteConfigComponent = (idName, data) => "<div id='" + idName + "_summernote'>" + data + "</div><script>$('#" + idName + "_summernote').summernote({placeholder: '', dialogsFade: true, tabsize: 2, height: 270, fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48' , '64', '82'], toolbar: [ ['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['fontsize', ['fontsize']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']] ], disableResizeImage: true }); <" + "/script>"
 
 
         //EVENTS
