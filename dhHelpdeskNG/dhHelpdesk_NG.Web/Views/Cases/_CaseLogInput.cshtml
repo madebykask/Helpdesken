@@ -150,7 +150,7 @@
                         @Html.HiddenFor(model => model.CaseLog.LogGuid)
                         @Html.HiddenFor(model => model.LogKey)
                         @Html.HiddenFor(model => model.CaseLog.OldLog_Id)
-                    </td> 
+                    </td>
                 </tr>
                 <!-- EXTERNAL Log note Attachments: If 2attachments feature is disabled it should be displayed as default  -->
                 @Html.Partial("_CaseLogInputFilesAttachment",
@@ -692,26 +692,45 @@ Model.EnableTwoAttachments))
 
     }
 
-    $("#Performer_Id").on("change", function (e) {
+    $("#Performer_Id").on("change", async function (e) {
 
         e.preventDefault();
 
         let performerId = $("#Performer_Id").val();
-        $("#selected-performer-email").html('');
-        if (performerId !== null) {
-            if (!isNaN(performerId)) {
-                if (parseInt(performerId) > 0) {
-                    $.ajax({
-                        url: "/users/GetEmailById",
-                        type: "GET",
-                        data: { id: performerId, }
-                    })
+        const getPerformerEmail = async () => {
+            let performerEmail = '';
+
+            $("#selected-performer-email").html('');
+            if (performerId !== null) {
+                if (!isNaN(performerId)) {
+                    if (parseInt(performerId) > 0) {
+                        await $.ajax({
+                            url: "/users/GetEmailById",
+                            type: "GET",
+                            data: { id: performerId, }
+                        })
                         .done(function (result) {
                             $("#selected-performer-email").html(result);
                         });
+                    }
                 }
             }
-        }
+        };
+
+        await getPerformerEmail().then(() => {
+            $("#selected-performer-email").trigger('change', performerId);
+        });
+    });
+
+
+    $("#selected-performer-email").on("change", function (e, obj) {
+        e.preventDefault();
+
+        let data = $(e.currentTarget).text();
+        let isInvalidPerformer = (data == '' || data == null || data == undefined || obj == @SessionFacade.CurrentUser.Id);
+        $('#CaseLog_SendMailAboutCaseToPerformer').attr('disabled', isInvalidPerformer);
+        $('#CaseLog_SendMailAboutCaseToPerformer').attr('checked', !isInvalidPerformer);
+
     });
 
 </script>
