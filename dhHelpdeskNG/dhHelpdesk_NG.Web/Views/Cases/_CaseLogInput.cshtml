@@ -729,8 +729,10 @@ Model.EnableTwoAttachments))
         let data = $(e.currentTarget).text();
         let isInvalidPerformer = (data == '' || data == null || data == undefined || obj == @SessionFacade.CurrentUser.Id);
         $('#CaseLog_SendMailAboutCaseToPerformer').attr('disabled', isInvalidPerformer);
-        $('#CaseLog_SendMailAboutCaseToPerformer').attr('checked', !isInvalidPerformer);
 
+        if (isInvalidPerformer) {
+            $('#CaseLog_SendMailAboutCaseToPerformer').attr('checked', false);
+        }
     });
 
 </script>
