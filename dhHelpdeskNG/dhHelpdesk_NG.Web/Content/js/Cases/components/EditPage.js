@@ -426,7 +426,7 @@ EditPage.prototype.setNextStep = function () {
     }
 };
 
-EditPage.prototype.syncCaseFromExCaseIfExists = function () {
+EditPage.prototype.syncCaseFromExCaseIfExists = function (isSave) {
     var self = this;
 
     var $_ex_Container = self.getExtendedCaseContainer();
@@ -440,7 +440,8 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
     }
 
     var _caseFields = self.Case_Field_Ids;
-    var _administratorId = fieldData.administrator_id;
+
+    var _administratorId = (isSave != true ? fieldData.administrator_id : null);
     var _reportedby = fieldData.reportedby;
     var _persons_name = fieldData.persons_name;
     var _persons_phone = fieldData.persons_phone;
@@ -466,7 +467,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
 
     if (_administratorId != undefined) {
         $('#' + _caseFields.AdministratorId).val(_administratorId.Value);
-        $('#' + _caseFields.AdministratorId).trigger('change');
+        $('#' + _caseFields.AdministratorId).trigger('change');  
     }
 
     if (_reportedby != undefined)
@@ -911,7 +912,7 @@ EditPage.prototype.isFormValid = function () {
 EditPage.prototype.primaryValidation = function (submitUrl) {
 
     var me = this;
-    me.syncCaseFromExCaseIfExists();
+    me.syncCaseFromExCaseIfExists(true);
     var finishDate = $('#CaseLog_FinishingDate').val();
 
     /* Check FinishigTime */
