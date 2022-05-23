@@ -243,11 +243,11 @@ namespace DH.Helpdesk.Dal.Repositories
         public User GetUserByEmail(string emailAddress)
         {
 
-            if(Table.FirstOrDefault(x => x.UserID == emailAddress) != null)
+            if(Table.FirstOrDefault(x => x.UserID == emailAddress && x.IsActive == 1) != null)
             {
                 return Table.FirstOrDefault(x => x.UserID == emailAddress);
             }
-            else if(Table.FirstOrDefault(x => x.Email == emailAddress) != null)
+            else if(Table.FirstOrDefault(x => x.Email == emailAddress && x.IsActive == 1) != null)
             {
                 return Table.FirstOrDefault(x => x.Email == emailAddress);
             }
