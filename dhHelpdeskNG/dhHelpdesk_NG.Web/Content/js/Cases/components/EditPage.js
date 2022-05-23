@@ -426,7 +426,7 @@ EditPage.prototype.setNextStep = function () {
     }
 };
 
-EditPage.prototype.syncCaseFromExCaseIfExists = function (isSave) {
+EditPage.prototype.syncCaseFromExCaseIfExists = function () {
     var self = this;
 
     var $_ex_Container = self.getExtendedCaseContainer();
@@ -441,7 +441,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function (isSave) {
 
     var _caseFields = self.Case_Field_Ids;
 
-    var _administratorId = (isSave != true ? fieldData.administrator_id : null);
+    var _administratorId = fieldData.administrator_id;
     var _reportedby = fieldData.reportedby;
     var _persons_name = fieldData.persons_name;
     var _persons_phone = fieldData.persons_phone;
@@ -912,7 +912,7 @@ EditPage.prototype.isFormValid = function () {
 EditPage.prototype.primaryValidation = function (submitUrl) {
 
     var me = this;
-    me.syncCaseFromExCaseIfExists(true);
+    me.syncCaseFromExCaseIfExists();
     var finishDate = $('#CaseLog_FinishingDate').val();
 
     /* Check FinishigTime */
