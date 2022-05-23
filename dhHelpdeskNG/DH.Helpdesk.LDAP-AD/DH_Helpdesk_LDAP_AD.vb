@@ -753,6 +753,7 @@ Module DH_Helpdesk_LDAP_AD
         objLogFile = New StreamWriter(sFilePath)
         objLogFile.WriteLine("----- Start -----")
     End Sub
+
     Private Sub closeLogFile()
         If objLogFile IsNot Nothing Then
             objLogFile.WriteLine("----- Slut -----")
@@ -760,6 +761,7 @@ Module DH_Helpdesk_LDAP_AD
             objLogFile = Nothing
         End If
     End Sub
+
     Private Sub LogToFile(msg As String, level As Integer)
         If level > 0 Then
             If objLogFile IsNot Nothing Then
