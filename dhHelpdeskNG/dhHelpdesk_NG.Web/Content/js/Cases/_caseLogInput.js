@@ -102,9 +102,9 @@ function LogInitForm() {
                 }
             });            
         });
-
+        
         if (hasCaseLogTextInternalEmailsTo || hasCaseLogTextInternalEmailsCc || $caseLogSendMailAboutCaseToPerformer[0].checked) {
-
+               
             $('#CaseLog_TextInternal').prop('required', true);
         }
     });
@@ -120,6 +120,12 @@ function LogInitForm() {
         window.caseChargeObj.show();
     });
 
+    $caseLogSendMailAboutCaseToPerformer.change(function (e) {
+        if (hasCaseLogTextInternalEmailsTo || hasCaseLogTextInternalEmailsCc || e.target.checked) {
+
+            $('#CaseLog_TextInternal').prop('required', true);
+        }
+    });
 
 
 }
