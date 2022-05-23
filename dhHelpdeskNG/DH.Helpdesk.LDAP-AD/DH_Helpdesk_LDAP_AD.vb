@@ -176,7 +176,6 @@ Module DH_Helpdesk_LDAP_AD
         Dim colComputerUserFieldSettings As New Collection
 
         Try
-
             objGlobalSettings = objGlobalSettingsData.getGlobalSettings()
             giDBType = objGlobalSettings.DBType
             gsDBVersion = objGlobalSettings.DBVersion
