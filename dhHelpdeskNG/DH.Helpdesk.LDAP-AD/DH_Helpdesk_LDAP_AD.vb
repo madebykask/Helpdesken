@@ -218,7 +218,6 @@ Module DH_Helpdesk_LDAP_AD
                           objCustomer.OverwriteFromMasterDirectory)
 
 
-
                 ' Kontrollera om ej synkade ska tas bort
                 If objCustomer.Days2WaitBeforeDelete > 0 Then
                     objComputerUserData.DeleteUsers(miCustomer_Id, miDomain_Id, objCustomer.Days2WaitBeforeDelete)
