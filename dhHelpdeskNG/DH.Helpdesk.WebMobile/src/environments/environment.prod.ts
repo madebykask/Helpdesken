@@ -8,8 +8,8 @@ export const environment = {
 export const config = {
   apiUrl: '#{APIURL}',
   clientId: 'hd',
-  version: VERSION.fullVersion,
-  internalVersion: require('../../package.json').version,
+  version: '#{ProductVersion}',
+  internalVersion: '#{FileVersion}',
   enableLog: false,
   microsoftShowLogin: '#{MicrosoftShowLogin}',
   microsoftClientId: '#{MicrosoftClientId}',
