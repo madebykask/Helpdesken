@@ -8,8 +8,8 @@ export const environment = {
 export const config = {
   apiUrl: '#{APIURL}',
   clientId: 'hd',
-  version: '#{ProductVersion}',
-  internalVersion: '#{FileVersion}',
+  version: '#{AssemblyInfo.ProductVersion}',
+  internalVersion: '#{AssemblyInfo.FileVersion}',
   enableLog: false,
   microsoftShowLogin: '#{MicrosoftShowLogin}',
   microsoftClientId: '#{MicrosoftClientId}',
