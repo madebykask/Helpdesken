@@ -4244,10 +4244,3 @@ div.chosen-container.chosen-container-single.error .chosen-single {
 .caselog .log-files a {
     margin-bottom: 10px;
 }
-
-.inline-block-span {
-    display: table-cell;
-    width: 100em;
-    margin-left: 0;
-    vertical-align: top;
-}

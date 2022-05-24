@@ -182,34 +182,33 @@ Model.EnableTwoAttachments))
 
                         <td>
                             <div class="checkbox">
-                                <div>
-                                    @Html.HiddenFor(model => model.CaseLog.EmailRecepientsInternalLogTo, new { id = "caseLog_EmailRecepientsInternalLogTo", @readonly = "true" })
 
-                                    <div class="checkbox commun">
+                                @Html.HiddenFor(model => model.CaseLog.EmailRecepientsInternalLogTo, new { id = "caseLog_EmailRecepientsInternalLogTo", @readonly = "true" })
 
-                                        @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToPerformer,
-                                            new { InformPerformerBehavior = Model.InformPerformerBehavior.ToJavaScriptBool() })
+                                <div class="checkbox commun" style="margin-bottom:5px;">
 
-                                        <span class="inline-block-span lbl">
-                                            @Translation.GetCoreTextTranslation("Informera") @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Performer_User_Id, "Handläggare")
-                                            @if (Model.PerformersToSearch != null)
-                                            {
-                                                <span id="txtInformPerformer" style="display: none">
-                                                    @Html.Raw("(")<span id="selected-performer-email">
-                                                        @{
-                                                            var selectedPerformer = Model.PerformersToSearch.FirstOrDefault(p => p.UserId == Model.Performer_Id);
-                                                            if (selectedPerformer != null)
-                                                            {
-                                                                @Model.PerformersToSearch.Where(p => p.UserId == Model.Performer_Id).FirstOrDefault().Email
-                                                            }
+                                    @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToPerformer,
+                                        new { InformPerformerBehavior = Model.InformPerformerBehavior.ToJavaScriptBool() })
+
+                                    <span class="lbl case-usersearch-textarea">
+                                        @Translation.GetCoreTextTranslation("Informera") @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Performer_User_Id, "Handläggare")
+                                        @if (Model.PerformersToSearch != null)
+                                        {
+                                            <span id="txtInformPerformer" style="display: none">
+                                                @Html.Raw("(")<span id="selected-performer-email">
+                                                    @{
+                                                        var selectedPerformer = Model.PerformersToSearch.FirstOrDefault(p => p.UserId == Model.Performer_Id);
+                                                        if (selectedPerformer != null)
+                                                        {
+                                                            @Model.PerformersToSearch.Where(p => p.UserId == Model.Performer_Id).FirstOrDefault().Email
                                                         }
-                                                    </span>@Html.Raw(")")
-
-                                                </span>
-                                            }
-                                        </span>
-                                    </div>
-
+                                                    }
+                                                </span>@Html.Raw(")")
+                                            </span>
+                                        }
+                                    </span>
+                                </div>
+                                <div>
                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote) && !readonlyMode)
                                     {
                                         <a href="#case_internal_log_to_btn" role="button" class="btn case-usersearch-btn" data-src="case" data-toggle="modal">@btnToLabel</a>
