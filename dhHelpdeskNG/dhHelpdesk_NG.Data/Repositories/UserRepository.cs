@@ -246,11 +246,11 @@ namespace DH.Helpdesk.Dal.Repositories
 
             if(Table.FirstOrDefault(x => x.UserID == emailAddress && x.IsActive == 1) != null)
             {
-                return Table.FirstOrDefault(x => x.UserID == emailAddress);
+                return Table.FirstOrDefault(x => x.UserID == emailAddress && x.IsActive == 1);
             }
             else if(Table.FirstOrDefault(x => x.Email == emailAddress && x.IsActive == 1) != null)
             {
-                return Table.FirstOrDefault(x => x.Email == emailAddress);
+                return Table.FirstOrDefault(x => x.Email == emailAddress && x.IsActive == 1);
             }
             return null;
 
