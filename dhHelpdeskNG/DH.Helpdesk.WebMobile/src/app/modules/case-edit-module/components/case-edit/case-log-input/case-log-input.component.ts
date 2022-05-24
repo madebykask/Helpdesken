@@ -12,6 +12,8 @@ import { FileUploadArgs } from '../controls/log-files-upload/log-files-upload.co
 import { Channels, CommunicationService } from 'src/app/services/communication';
 import { EmailEventData } from 'src/app/services/communication/data/email-event-data';
 import { PerfomersService } from 'src/app/services/case-organization/perfomers-service';
+import { CurrentUser } from 'src/app/models';
+import { AuthenticationStateService } from 'src/app/services/authentication';
 
 @Component({
   selector: 'case-log-input',
@@ -38,6 +40,7 @@ export class CaseLogInputComponent implements OnInit {
   caseFieldsNames = CaseFieldsNames;
   isSendMailToNotifierDisabled = false; // have to use this variable and [disabled] binding, because control.disabled dont work on switch
   isSendMailToPerformerDisabled = false;
+  isPerformerNullOrCurrentUser = false;
   externalLogEmailsTo = '';
   performerUserEmail = '';
   performerLabel = '';
@@ -82,12 +85,13 @@ export class CaseLogInputComponent implements OnInit {
   private logFileInternalFormControl: CaseFormControl = null;
   private personsEmailFormControl: CaseFormControl = null;
   private noEmailsText = '';
+  private currentUser : CurrentUser = null;
 
   constructor(private caseLogApiService: CaseLogApiService,
     private translateService: TranslateService,
     private commService: CommunicationService,
-    
-    private performersService: PerfomersService) {
+    private performersService: PerfomersService,
+    private authStateService: AuthenticationStateService) {
   }
 
   get hasFullAccess() {
@@ -114,7 +118,8 @@ export class CaseLogInputComponent implements OnInit {
     this.internalLogFormControl = this.getFormControl(CaseFieldsNames.Log_InternalText);
     this.logFileFormControl = this.getFormControl(CaseFieldsNames.Log_FileName);
     this.logFileInternalFormControl = this.getFormControl(CaseFieldsNames.Log_FileName_Internal);
-    this.performerLabel = this.caseData.fields.filter(x=> x.name == 'PerformerUserId').map((x)=> x.label)[0];
+    this.currentUser = this.authStateService.getUser();
+    this.performerLabel = this.caseData.fields.filter(x => x.name == 'PerformerUserId').map((x) => x.label)[0];
     this.noEmailsText = this.translateService.instant('Ingen tillgänglig mailadress'); //No email address available
 
     if (this.sendExternalEmailsFormControl) {
@@ -173,9 +178,13 @@ export class CaseLogInputComponent implements OnInit {
         untilDestroyed(this)
       )
       .subscribe(e => {
-        
-        e.eMail = e.eMail === undefined ? '' : e.eMail; 
+        e.eMail = e.eMail === undefined ? '' : e.eMail;
         this.performerUserEmail = e.eMail;
+
+        let performerId = this.form.value.PerformerUserId;
+        this.isPerformerNullOrCurrentUser = isNaN(parseInt(performerId)) || performerId == this.currentUser.id ? true : false;
+        this.onSendInternalEmailsStatusChanged(!this.isPerformerNullOrCurrentUser);
+
       });
 
     if (this.externalLogFormControl) {
@@ -194,7 +203,7 @@ export class CaseLogInputComponent implements OnInit {
       this.isAttachedInternalFilesVisible = !this.logFileInternalFormControl.fieldInfo.isHidden;
     }
 
-    let performanceUserId = this.caseData.fields.filter(x=> x.name === 'PerformerUserId')[0].value;
+    let performanceUserId = this.caseData.fields.filter(x => x.name === 'PerformerUserId')[0].value;
     if (!isNaN(parseInt(performanceUserId))) {
       let performerUserIdInt = parseInt(performanceUserId);
       if (performerUserIdInt > 0) {
@@ -202,8 +211,8 @@ export class CaseLogInputComponent implements OnInit {
           // console.log(m)
           this.commService.publish(Channels.CaseFieldValueChanged, new EmailEventData(m.eMail));
         });
-      }   
-    } 
+      }
+    }
   }
 
   ngOnDestroy() {
@@ -224,7 +233,7 @@ export class CaseLogInputComponent implements OnInit {
 
   onSendInternalEmailsCheckChanged() {
     const val = this.sendInternalEmailsFormControl.value;
-   
+
     if (val) {
       this.sendInternalEmailsFormControl.enable({ onlySelf: true, emitEvent: true });
       // this.externalLogEmailsCcFormControl.restorePrevValue();
@@ -271,7 +280,7 @@ export class CaseLogInputComponent implements OnInit {
   private onSendInternalEmailsStatusChanged(enable) {
     if (enable) {
       this.sendInternalEmailsFormControl.setValue(true, { emitEvent: true });
-    } 
+    }
     else {
       this.sendInternalEmailsFormControl.setValue(false, { emitEvent: true });
     }
