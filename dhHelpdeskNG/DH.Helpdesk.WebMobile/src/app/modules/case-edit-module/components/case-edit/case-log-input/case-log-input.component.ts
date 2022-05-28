@@ -85,7 +85,7 @@ export class CaseLogInputComponent implements OnInit {
   private logFileInternalFormControl: CaseFormControl = null;
   private personsEmailFormControl: CaseFormControl = null;
   private noEmailsText = '';
-  private currentUser : CurrentUser = null;
+  private currentUser: CurrentUser = null;
 
   constructor(private caseLogApiService: CaseLogApiService,
     private translateService: TranslateService,
@@ -173,18 +173,17 @@ export class CaseLogInputComponent implements OnInit {
     }
 
     this.commService.listen<EmailEventData>(Channels.CaseFieldValueChanged)
-      .pipe(
-        delay(0),
-        untilDestroyed(this)
-      )
+    
       .subscribe(e => {
-        e.eMail = e.eMail === undefined ? '' : e.eMail;
-        this.performerUserEmail = e.eMail;
+        // console.log(e)
+        if (EmailEventData.name === e.constructor.name) {
+          
+          this.performerUserEmail = e.eMail === undefined ? '' : e.eMail;;
 
-        let performerId = this.form.value.PerformerUserId;
-        this.isPerformerNullOrCurrentUser = isNaN(parseInt(performerId)) || performerId == this.currentUser.id ? true : false;
-        this.onSendInternalEmailsStatusChanged(!this.isPerformerNullOrCurrentUser);
-
+          let performerId = this.form.value.PerformerUserId;
+          this.isPerformerNullOrCurrentUser = isNaN(parseInt(performerId)) || performerId == this.currentUser.id ? true : false;
+          this.onSendInternalEmailsStatusChanged(!this.isPerformerNullOrCurrentUser);
+        }
       });
 
     if (this.externalLogFormControl) {
@@ -204,15 +203,7 @@ export class CaseLogInputComponent implements OnInit {
     }
 
     let performanceUserId = this.caseData.fields.filter(x => x.name === 'PerformerUserId')[0].value;
-    if (!isNaN(parseInt(performanceUserId))) {
-      let performerUserIdInt = parseInt(performanceUserId);
-      if (performerUserIdInt > 0) {
-        this.performersService.getPerformerEmail(performerUserIdInt).pipe(take(1)).subscribe((m) => {
-          // console.log(m)
-          this.commService.publish(Channels.CaseFieldValueChanged, new EmailEventData(m.eMail));
-        });
-      }
-    }
+    this.performersService.handlePerformerEmail(performanceUserId);
   }
 
   ngOnDestroy() {
