@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, ComponentFactoryResolver } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
 import { forkJoin, Subject, of, throwError, interval, EMPTY } from 'rxjs';
@@ -35,7 +35,7 @@ import { TabNames } from '../../constants/tab-names';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
 import { PerfomersService } from 'src/app/services/case-organization/perfomers-service';
-import { EmailEventData } from 'src/app/services/communication/data/email-event-data';
+
 
 @Component({
   selector: 'app-case-edit',
@@ -174,6 +174,7 @@ export class CaseEditComponent {
   }
 
   loadCaseData(caseId: number): any {
+    
     this.isLoaded = false;
     const sessionId = this.authStateService.getUser().authData.sessionId;
 
@@ -331,6 +332,7 @@ export class CaseEditComponent {
   }
 
   onClickWorkflow(id: number) {
+
     this.caseTemplateService.loadTemplate(id)
       .pipe(
         untilDestroyed(this)
@@ -450,37 +452,26 @@ export class CaseEditComponent {
   }
 
   private syncExtendedCaseValues() {
+
     if (this.caseData.extendedCaseData == null) {
       return;
     }
     else {
+      if (!this.isEcLoaded) {
+        return;
+      }
+
       const values = this.extendedCase.nativeElement.getCaseValues;
 
       if (!values) {
         return;
       }
 
-      if (!isNaN(parseInt(values.administrator_id.Value))) {
-        let performerUserId = parseInt(values.administrator_id.Value);
-        if (performerUserId > 0) {
-          this.performersService.getPerformerEmail(performerUserId).pipe(take(1)).subscribe((m) => {
-            // console.log(m)
-            this.commService.publish(Channels.CaseFieldValueChanged, new EmailEventData(m.eMail));
-          });
-        }
-      }
-      else {
-        this.commService.publish(Channels.CaseFieldValueChanged, new EmailEventData(''));
-      }
-
-
-      if (!this.isEcLoaded) {
-        return;
-      }
-
-
       if (values.administrator_id != null) {
         this.form.setSafe(CaseFieldsNames.PerformerUserId, values.administrator_id.Value);
+        if(values.administrator_id !== undefined) {
+          this.performersService.handlePerformerEmail(values.administrator_id.Value);
+        }
       }
       if (values.reportedby != null) {
         this.form.setSafe(CaseFieldsNames.ReportedBy, values.reportedby.Value);
@@ -554,6 +545,7 @@ export class CaseEditComponent {
       }
     }
   }
+
 
   private validateExtendedCase(isOnNext: boolean) {
     if (this.caseData.extendedCaseData == null) {
@@ -636,7 +628,7 @@ export class CaseEditComponent {
     // drop down value changed
     this.commService.listen(Channels.CaseFieldValueChanged).pipe(
       untilDestroyed(this)
-    ).subscribe((v: CaseFieldValueChangedEvent) => this.caseEditLogic.runUpdates(v, this.dataSource, this.caseData, this.form));
+    ).subscribe((v: CaseFieldValueChangedEvent) => { this.caseEditLogic.runUpdates(v, this.dataSource, this.caseData, this.form) });
   }
 
   private processCaseData() {

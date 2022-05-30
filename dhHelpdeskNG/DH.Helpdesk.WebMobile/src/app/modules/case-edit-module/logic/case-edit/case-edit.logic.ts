@@ -85,6 +85,7 @@ export class CaseEditLogic {
           this.caseTypesService.getCaseType(v.value, customerId).pipe(
             take(1)
           ).subscribe(ct => {
+
             if (ct && ct.performerUserId != null && !this.getField(caseData, CaseFieldsNames.PerformerUserId).setByTemplate) {
               if (!dataSource.performersStore$.value.some((e) => e.value === ct.performerUserId)) {
                 // get new list of performers with casetype perfomer included
@@ -109,6 +110,7 @@ export class CaseEditLogic {
         ).subscribe((o: MultiLevelOptionItem[]) => {
           reducer.caseDataReducer(CaseFieldsNames.ProductAreaId, { items: o });
         });
+
         break;
       }
       case CaseFieldsNames.StatusId: {
@@ -127,10 +129,14 @@ export class CaseEditLogic {
         break;
       }
       case CaseFieldsNames.WorkingGroupId: {
+
         optionsHelper.getPerformers(false).pipe(
           take(1)
         ).subscribe((o: OptionItem[]) => {
           reducer.caseDataReducer(CaseFieldsNames.PerformerUserId, { items: o });
+          if (form.getValue(CaseFieldsNames.PerformerUserId) == null || form.getValue(CaseFieldsNames.PerformerUserId) == '') {
+            this.performersService.handlePerformerEmail(0);
+          }
         });
 
         if (!!v.value && form.contains(CaseFieldsNames.StateSecondaryId)) {
@@ -142,6 +148,7 @@ export class CaseEditLogic {
             }
           });
         }
+
         break;
       }
       case CaseFieldsNames.StateSecondaryId: {
@@ -220,15 +227,7 @@ export class CaseEditLogic {
         break;
       }
       case CaseFieldsNames.PerformerUserId: {
-        if (!isNaN(parseInt(v.value))) {
-          let performerUserId = parseInt(v.value);
-          if (performerUserId > 0) {
-            this.performersService.getPerformerEmail(performerUserId).pipe(take(1)).subscribe((m) => {
-              // console.log(m)
-              this.commService.publish(Channels.CaseFieldValueChanged, new EmailEventData(m.eMail));
-            });
-          }
-        }
+        this.performersService.handlePerformerEmail(v.value);
         break;
       }
     }
