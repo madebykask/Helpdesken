@@ -13,7 +13,8 @@
             {
                 <thead>
                     <tr>
-                        <th></th>
+                        @*<th></th>*@
+                        <th class="sorting_disabled" rowspan="1" colspan="1" aria-label="" style="width: 18px;"></th>
                         @*<th></th>*@
                         <th>@Translation.GetCoreTextTranslation("Datum")</th>
                         <th>@Translation.GetCoreTextTranslation("Registrerad av")</th>
@@ -36,7 +37,7 @@
                             <tr id="@r.Id" class='@(r.Id == Model.Logs.First().Id ? "less7" : "less3")'>
 
                                 @* Edit  *@
-                                <td style="max-width: 110px" class="wordbreak">
+                                <td>
                                     <a href="@GetLogLink(r)">
                                         <img src="@Url.Content("~/Content/icons/doc-edit.png")" alt="Edit" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';" />
                                     </a>
