@@ -15,6 +15,7 @@ function LogInitForm() {
     var $txtInformPerformer = $('#txtInformPerformer');
     var $caseLogTextInternal = $('#CaseLog_TextInternal');
     var $caseLogTextExternal = $('#CaseLog_TextExternal');
+    var $initiatorEmail = $('#case__PersonsEmail')
     var $caseLogSendMailAboutCaseToPerformer = $('#CaseLog_SendMailAboutCaseToPerformer');
     var caseLogEmailRecepientsInternalLogTo = 'fake_CaseLog_EmailRecepientsInternalLogTo';
     var caseLogEmailRecepientsInternalLogCc = 'fake_CaseLog_EmailRecepientsInternalLogCc';
@@ -41,10 +42,23 @@ function LogInitForm() {
 
     $($caseLogTextExternal).bind('input propertychange', function () {
         var informNotifier = $('#CaseLog_SendMailAboutCaseToNotifier');
-
+  
         informNotifier.removeAttr('checked');
-        if (this.value.length || (hasCaseLogTextInternalEmailsTo || hasCaseLogTextInternalEmailsCc)) {
+        if (this.value.length) {
             $('#CaseLog_SendMailAboutCaseToNotifier:not(:disabled)').attr('checked', 'checked');
+            var to = $initiatorEmail.val();
+            var extras = $("#extraEmailsInput").val().replaceAll(";", " ");
+            if (to != '') {
+                $("#emailsTo").css('display', 'inline');
+                $("#emailsToTitle").css('display', 'inline');
+            }
+            if (extras != '') {
+                $('#extraEmailsInputShow').text(extras);
+                $('#extraEmailsInputShow').show();
+                $("#ccTitle").show();
+            }
+             
+
         }
     });
 
