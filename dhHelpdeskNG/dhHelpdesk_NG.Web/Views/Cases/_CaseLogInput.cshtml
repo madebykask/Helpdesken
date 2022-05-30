@@ -735,8 +735,10 @@ Model.EnableTwoAttachments))
     });
 
     $(document).ready(function () {
-        let data = $('#CaseLog_TextInternal').text();
-        let isInvalidPerformer = (data == '' || data == null || data == undefined || obj == @SessionFacade.CurrentUser.Id);
+        
+        let performerId = $("#Performer_Id").val();
+
+        let isInvalidPerformer = (performerId == @SessionFacade.CurrentUser.Id || performerId == "");
         $('#CaseLog_SendMailAboutCaseToPerformer').attr('disabled', isInvalidPerformer);
 
         if (isInvalidPerformer) {
