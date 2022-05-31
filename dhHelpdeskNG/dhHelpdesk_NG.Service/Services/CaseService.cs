@@ -51,6 +51,7 @@ namespace DH.Helpdesk.Services.Services
     using Common.Enums.Cases;
     using Common.Extensions.String;
     using Utils;
+    using DH.Helpdesk.BusinessData.Models.User;
 
     public partial class CaseService : ICaseService
     {
@@ -1159,18 +1160,20 @@ namespace DH.Helpdesk.Services.Services
             return 0;
         }
 
-        public void HandleSendMailAboutCaseToPerformer(int performerUserId, int currentUserId, CaseLog caseLog)
+        public void HandleSendMailAboutCaseToPerformer(CustomerUserInfo performerUser, int currentUserId, CaseLog caseLog)
         {
-            if (performerUserId > 0)
+            if (performerUser != null)
             {
-                var currentPerformer = _userService.GetUser(performerUserId);
-                if (caseLog.SendMailAboutCaseToPerformer && performerUserId != currentUserId && currentPerformer.AllocateCaseMail == 0)
+                if (performerUser.Id > 0)
                 {
-                    caseLog.EmailRecepientsInternalLogTo = caseLog.EmailRecepientsInternalLogTo ?? String.Empty;
-
-                    if (!caseLog.EmailRecepientsInternalLogTo.Contains(currentPerformer.Email))
+                    if (caseLog.SendMailAboutCaseToPerformer && performerUser.Id != currentUserId)
                     {
-                        caseLog.EmailRecepientsInternalLogTo += currentPerformer.Email + ";";
+                        caseLog.EmailRecepientsInternalLogTo = caseLog.EmailRecepientsInternalLogTo ?? String.Empty;
+
+                        if (!caseLog.EmailRecepientsInternalLogTo.Contains(performerUser.Email))
+                        {
+                            caseLog.EmailRecepientsInternalLogTo += performerUser.Email + ";";
+                        }
                     }
                 }
             }

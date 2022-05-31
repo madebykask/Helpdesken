@@ -334,10 +334,6 @@ namespace DH.Helpdesk.WebApi.Controllers
                 FinishingType = userOverview.CloseCasePermission.ToBool() ? model.ClosingReason : new int?()
             };
 
-            var performerUserId = currentCase.Performer_User_Id ?? 0;
-
-            _caseService.HandleSendMailAboutCaseToPerformer(performerUserId, UserId, caseLog);
-
             // -> SAVE CASE 
             var caseHistoryId = _caseService.SaveCase(
                 currentCase,

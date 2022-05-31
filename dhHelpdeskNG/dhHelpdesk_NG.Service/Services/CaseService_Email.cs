@@ -152,27 +152,40 @@ namespace DH.Helpdesk.Services.Services
             #region Send email to tblCase.Performer_User_Id
 
             if ((!isClosingCase && isCreatingCase && newCase.Performer_User_Id.HasValue ||
-                 !isCreatingCase && newCase.Performer_User_Id.HasValue && newCase.Performer_User_Id != oldCase.Performer_User_Id))
+                 !isCreatingCase && newCase.Performer_User_Id.HasValue))
             {
                 var admin = _userRepository.GetUserInfo(newCase.Performer_User_Id.Value);
-                if (admin.AllocateCaseMail == 1 && IsValidEmail(admin.Email))
+                var sentToAdmin = false;
+
+                if (newCase.Performer_User_Id != oldCase.Performer_User_Id)
                 {
-                    var emailList = new List<string> { admin.Email };
-                    if (currentLoggedInUser != null)
+
+                    if (admin.AllocateCaseMail == 1 && IsValidEmail(admin.Email))
                     {
-                        if (currentLoggedInUser.SettingForNoMail == 1 ||
-                           (currentLoggedInUser.Id == newCase.Performer_User_Id && currentLoggedInUser.SettingForNoMail == 1) ||
-                           (currentLoggedInUser.Id != newCase.Performer_User_Id && currentLoggedInUser.SettingForNoMail == 0))
+                        var emailList = new List<string> { admin.Email };
+                        if (currentLoggedInUser != null)
+                        {
+                            if (currentLoggedInUser.SettingForNoMail == 1 ||
+                               (currentLoggedInUser.Id == newCase.Performer_User_Id && currentLoggedInUser.SettingForNoMail == 1) ||
+                               (currentLoggedInUser.Id != newCase.Performer_User_Id && currentLoggedInUser.SettingForNoMail == 0))
+                            {
+                                SendTemplateEmail((int)GlobalEnums.MailTemplates.AssignedCaseToUser, newCase, log, caseHistoryId,
+                                    customerSetting, cms, cms.HelpdeskMailFromAdress, emailList, userTimeZone, null, 3);
+                                sentToAdmin = true;
+                            }
+                        }
+                        else
                         {
                             SendTemplateEmail((int)GlobalEnums.MailTemplates.AssignedCaseToUser, newCase, log, caseHistoryId,
                                 customerSetting, cms, cms.HelpdeskMailFromAdress, emailList, userTimeZone, null, 3);
+                            sentToAdmin = true;
                         }
                     }
-                    else
-                    {
-                        SendTemplateEmail((int)GlobalEnums.MailTemplates.AssignedCaseToUser, newCase, log, caseHistoryId,
-                            customerSetting, cms, cms.HelpdeskMailFromAdress, emailList, userTimeZone, null, 3);
-                    }
+                }
+
+                if (log.SendMailAboutCaseToPerformer && !sentToAdmin)
+                {
+                    this.HandleSendMailAboutCaseToPerformer(admin, currentLoggedInUser.Id, log);
                 }
 
                 // send sms to tblCase.Performer_User_Id 
@@ -758,7 +771,7 @@ namespace DH.Helpdesk.Services.Services
                 }
                 else
                 {
-                    if(ccEmailList != null && ccEmailList.Any())
+                    if (ccEmailList != null && ccEmailList.Any())
                         emailList = emailList.Union(ccEmailList).Where(IsValidEmail).ToList().ToDistintList(true);
                     foreach (var recepient in emailList)
                     {
@@ -773,10 +786,10 @@ namespace DH.Helpdesk.Services.Services
                     var siteSelfService = ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress] +
                                           eLog.Value.EmailLogGUID;
 
-					var globalSetting = _globalSettingService.GetGlobalSettings().First();
-					var caseEditPath = globalSetting.UseMobileRouting ?
-						CasePaths.EDIT_CASE_MOBILEROUTE :
-						CasePaths.EDIT_CASE_DESKTOP;
+                    var globalSetting = _globalSettingService.GetGlobalSettings().First();
+                    var caseEditPath = globalSetting.UseMobileRouting ?
+                        CasePaths.EDIT_CASE_MOBILEROUTE :
+                        CasePaths.EDIT_CASE_DESKTOP;
 
                     var siteHelpdesk = cms.AbsoluterUrl + caseEditPath + case_.Id;
 
@@ -810,8 +823,8 @@ namespace DH.Helpdesk.Services.Services
                     //exclude admin specific fields (fieldTemplate.ExcludeAdministrators) or those provided with filterFieldsEmails
                     // var applyFeedbackFilter = mailTpl.MailTemplate.SendMethod == EmailSendMethod.SeparateEmails;
                     var applyFeedbackFilter = true;
-                     var feedBackFields = GetFeedbackFields(mailTemplateId, case_, cms, fields, eLog.Key,
-                        ref body, filterFieldsEmails, applyFeedbackFilter);
+                    var feedBackFields = GetFeedbackFields(mailTemplateId, case_, cms, fields, eLog.Key,
+                       ref body, filterFieldsEmails, applyFeedbackFilter);
                     fieldsToUpdate.AddRange(feedBackFields);
 
                     var res =
@@ -849,7 +862,7 @@ namespace DH.Helpdesk.Services.Services
                 var adminEmails = newCase.Customer.Users.Where(x => x.UserGroup_Id != UserGroups.User)
                     .Select(x => x.Email)
                     .Distinct()
-                    .ToList();                
+                    .ToList();
 
                 var identifiers = _feedbackTemplateService.FindIdentifiers(body).ToList();
 
@@ -892,7 +905,7 @@ namespace DH.Helpdesk.Services.Services
             var emailList = case_.PersonsEmail.Split(';', ',').ToList();
             var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(case_.Id).Select(x => x.Follower).ToList();
 
-            if(allInTo)
+            if (allInTo)
                 emailList.AddRange(extraFollowers);
             else
                 emails.Add(EmailType.CcMail, extraFollowers.ToDistintList(true));
