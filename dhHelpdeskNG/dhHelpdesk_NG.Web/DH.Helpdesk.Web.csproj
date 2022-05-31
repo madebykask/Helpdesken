@@ -1953,6 +1953,7 @@
     <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
     <Compile Include="Models\Shared\SendToDialogModel.cs" />
     <Compile Include="Models\SurveyViewModel.cs" />
+    <Content Include="_app_offline.htm" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\base.css" />
