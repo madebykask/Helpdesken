@@ -110,10 +110,11 @@ namespace DH.Helpdesk.Upkeeper_New
                         idx += 1;
 
                         var computerId = c["Key"].ToString();
-                        logger.Debug("Key: " + computerId.ToString());
                         logger.Debug("computerId: " + computerId);
 
                         var computer = api.GetComputer(computerId, t, UpKeeperOrgNo);
+
+                        
 
                         if (computer != null)
                         {
@@ -197,9 +198,20 @@ namespace DH.Helpdesk.Upkeeper_New
                                             computer.OS_Id = data.ExistsObject(ObjectType.OS, hardware.Properties.FirstOrDefault(x => x.Property == "Operating System").Value);
                                         }
 
-                                        if (hardware.NetworkAdapters != null && hardware.NetworkAdapters.FirstOrDefault(x => x.Property == "Name") != null)
+                                        if (hardware.NetworkAdapters != null)
                                         {
-                                            computer.NIC_Id = data.ExistsObject(ObjectType.NetworkAdapter, hardware.NetworkAdapters.FirstOrDefault(x => x.Property == "Name").Value);
+                                            for (int i = 0; i < hardware.NetworkAdapters.Count; i++) {
+                                            
+                                                if (hardware.NetworkAdapters[i].Property == "Id" && hardware.NetworkAdapters[i].Value.Contains("Ethernet") && !hardware.NetworkAdapters[i].Value.Contains("802.3")) { 
+                                                    var nic = hardware.NetworkAdapters[i - 1].Value;
+                                                    var macaddress = hardware.NetworkAdapters[i + 1].Value;
+
+                                                    computer.NIC_Id = data.ExistsObject(ObjectType.NetworkAdapter, nic);
+                                                    computer.MACAddress = macaddress.Replace("-", ":");
+
+                                                    logger.Debug("MAC-address: " + computer.MACAddress);
+                                                }
+                                            }
                                         }
 
                                         if (hardware.Properties.FirstOrDefault(x => x.Property == "BIOS Version") != null)
