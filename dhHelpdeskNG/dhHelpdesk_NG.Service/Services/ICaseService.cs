@@ -8,6 +8,7 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
+using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.BusinessData.Models.User.Input;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.BusinessRule;
@@ -166,6 +167,6 @@ namespace DH.Helpdesk.Services.Services
         Task<List<CaseHistoryMapperData>> GetCaseHistoriesAsync(int caseId);
         Task<CustomerCasesStatus> GetCustomerCasesStatusAsync(int customerId, int userId);
         Task<Case> GetDetachedCaseByIdAsync(int id);
-        void HandleSendMailAboutCaseToPerformer(int performerUserId, int currentUserId, CaseLog caseLog);
+        void HandleSendMailAboutCaseToPerformer(CustomerUserInfo performerUser, int currentUserId, CaseLog caseLog);
     }
 }

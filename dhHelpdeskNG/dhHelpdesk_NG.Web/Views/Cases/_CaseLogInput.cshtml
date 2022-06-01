@@ -124,7 +124,7 @@
                         }
                     </td>
                     <td>
-                        <div class="checkbox commun">
+                        <div class="checkbox commun case-external-email">
                             @if (Model.Disable_SendMailAboutCaseToNotifier || Model.EditMode == AccessMode.ReadOnly)
                             {
                                 @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
@@ -133,14 +133,13 @@
                             else
                             {
                                 @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
-                                    new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool(), id = "SendMailAboutCaseToNotifier", onclick = "valueChanged()" })
+                                    new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
                             }
                             <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span><br />
-                            <span id="emailsTo" style="display: none;">
-                                @Translation.ToTitleCase(@Translation.GetCoreTextTranslation("Till")): @Html.DisplayFor(model => model.case_.PersonsEmail)<br />
+                            <span id="emailsToTitle" style="display: none;">
+                                @Translation.ToTitleCase(@Translation.GetCoreTextTranslation("Till")): </span><span id="emailsTo" style="display: none;">@Html.DisplayFor(model => model.case_.PersonsEmail)</span><br />
 
-                                <span id="ccTitle">@Translation.GetCoreTextTranslation("Kopia"): </span><span id="extraEmailsInputShow" style="white-space: break-spaces;"></span>
-                            </span>
+                                <span id="ccTitle" style="display: none;">@Translation.GetCoreTextTranslation("Kopia"): </span><span id="extraEmailsInputShow" style="overflow-wrap: break-word"></span>
                         </div>
                         @Html.HiddenFor(model => model.CaseLog.RegUser)
                         @Html.HiddenFor(model => model.CaseLog.LogType)
@@ -666,30 +665,6 @@ Model.EnableTwoAttachments))
         e.preventDefault();
         $(this).parents(".section-block").removeClass("hideshow");
     });
-    function valueChanged() {
-
-        if ($('#SendMailAboutCaseToNotifier').is(":checked")) {
-            $("#emailsTo").show();
-            var existingText = $('#extraEmailsInputShow').text();
-            //.replaceAll(";", "\r\n")
-            var extras = $("#extraEmailsInput").val().replaceAll(";", " ");
-
-            if (extras != "") {
-                console.log(existingText);
-                $('#extraEmailsInputShow').text(extras);
-                $('#extraEmailsInputShow').show();
-                $("#ccTitle").show();
-            }
-
-        }
-
-        else {
-            $("#emailsTo").hide();
-            $("#ccTitle").hide();
-            $('#extraEmailsInputShow').hide();
-        }
-
-    }
 
     $("#Performer_Id").on("change", async function (e) {
 
@@ -727,6 +702,18 @@ Model.EnableTwoAttachments))
 
         let data = $(e.currentTarget).text();
         let isInvalidPerformer = (data == '' || data == null || data == undefined || obj == @SessionFacade.CurrentUser.Id);
+        $('#CaseLog_SendMailAboutCaseToPerformer').attr('disabled', isInvalidPerformer);
+
+        if (isInvalidPerformer) {
+            $('#CaseLog_SendMailAboutCaseToPerformer').attr('checked', false);
+        }
+    });
+
+    $(document).ready(function () {
+        
+        let performerId = $("#Performer_Id").val();
+
+        let isInvalidPerformer = (performerId == @SessionFacade.CurrentUser.Id || performerId == "");
         $('#CaseLog_SendMailAboutCaseToPerformer').attr('disabled', isInvalidPerformer);
 
         if (isInvalidPerformer) {

@@ -555,7 +555,7 @@ var ApplyTemplate = function (data, doOverwrite) {
         el = $('#Performer_Id');
         SetValueIfElVisible(el, val, cfg);
     }
-
+    
     if (!isNullOrEmpty(data.CaseWorkingGroup_Id)) {
         val = data.CaseWorkingGroup_Id || '';
         el = $("#case__WorkingGroup_Id");
@@ -567,6 +567,7 @@ var ApplyTemplate = function (data, doOverwrite) {
         });
         SetValueIfElVisible(el, val, cfg);
         if (el && (el.val() == "" || cfg.doOverwrite)) {
+
             //Todo: refactor
             //if connected to workflow we need to set the value
             if ($('#steps').length) {
@@ -584,7 +585,7 @@ var ApplyTemplate = function (data, doOverwrite) {
         val = data.ProductArea_Id || '';
         SetValueToBtnGroup('#divProductArea', "#divBreadcrumbs_ProductArea", "#case__ProductArea_Id", val, doOverwrite);
     }
-
+    
     if (!isNullOrEmpty(data.Status_Id)) {
         val = data.Status_Id || '';
         el = $("#case__Status_Id");
@@ -1117,6 +1118,7 @@ function IsValueApplicableFor(templateFieldId, val) {
 }
 
 function LoadTemplate(id) {
+    
     var caseInvoiceIsActive = false;
     var curCaseId = $('#case__Id').val();
     if ($('#CustomerSettings_ModuleCaseInvoice') != undefined)

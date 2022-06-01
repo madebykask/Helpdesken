@@ -1141,10 +1141,6 @@ namespace DH.Helpdesk.Web.Controllers
         [ValidateInput(false)]
         public RedirectToRouteResult Edit(CaseEditInput m)
         {
-            var performerUserId = m.Performer_Id ?? 0;
-
-            _caseService.HandleSendMailAboutCaseToPerformer(performerUserId, SessionFacade.CurrentUser.Id, m.caseLog);
-
             // Save current case
             int caseId = Save(m);
             #region Case Split
