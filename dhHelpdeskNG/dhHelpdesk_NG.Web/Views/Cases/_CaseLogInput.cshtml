@@ -124,7 +124,7 @@
                         }
                     </td>
                     <td>
-                        <div class="checkbox commun case-external-email">
+                        <div class="checkbox commun">
                             @if (Model.Disable_SendMailAboutCaseToNotifier || Model.EditMode == AccessMode.ReadOnly)
                             {
                                 @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
@@ -136,10 +136,10 @@
                                     new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
                             }
                             <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span><br />
-                            <span id="emailsToTitle" style="display: none;">
+                            @*<span id="emailsToTitle" style="display: none;">
                                 @Translation.ToTitleCase(@Translation.GetCoreTextTranslation("Till")): </span><span id="emailsTo" style="display: none;">@Html.DisplayFor(model => model.case_.PersonsEmail)</span><br />
 
-                                <span id="ccTitle" style="display: none;">@Translation.GetCoreTextTranslation("Kopia"): </span><span id="extraEmailsInputShow" style="overflow-wrap: break-word"></span>
+                                <span id="ccTitle" style="display: none;">@Translation.GetCoreTextTranslation("Kopia"): </span><span id="extraEmailsInputShow" style="overflow-wrap: break-word"></span>*@
                         </div>
                         @Html.HiddenFor(model => model.CaseLog.RegUser)
                         @Html.HiddenFor(model => model.CaseLog.LogType)
