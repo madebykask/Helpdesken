@@ -1,22 +1,7 @@
 --update DB from 5.3.54 to 5.3.55 version
 
-RAISERROR ('Add Column WarrantyEndDate to tblComputer', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblComputer','WarrantyEndDate') IS NULL
-	BEGIN	 
-		ALTER TABLE [dbo].[tblComputer]
-		ADD [WarrantyEndDate] datetime Null
-	End
-
-Go
-
-if not exists(select * from tblReport WHERE Id=18)
-	begin
-		INSERT INTO tblReport(Id) VALUES(18)
-	end
-GO
-
-RAISERROR ('Create table tblCaseSolution_tblLanguage', 10, 1) WITH NOWAIT
-IF(OBJECT_ID('tblCaseSolution_tblLanguage', 'U') IS NULL)
+RAISERROR ('Create table tblCaseSolutionCategory_tblLanguage', 10, 1) WITH NOWAIT
+IF(OBJECT_ID('tblCaseSolutionCategory_tblLanguage', 'U') IS NULL)
 	Begin
 
 		CREATE TABLE [dbo].[tblCaseSolutionCategory_tblLanguage](
