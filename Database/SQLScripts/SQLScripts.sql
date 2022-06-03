@@ -49,6 +49,15 @@ IF COL_LENGTH('dbo.tblCaseFilterFavorite','Category') IS NULL
 
 Go
 
+RAISERROR ('Add Column CategoryTypeFilter to tblCaseFilterFavorite', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCaseFilterFavorite','CategoryTypeFilter') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblCaseFilterFavorite
+		ADD CategoryTypeFilter nvarchar(200) Null
+	End
+
+Go
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.55'
 GO
