@@ -400,6 +400,11 @@ namespace DH.Helpdesk.SelfService.Controllers
                 model.NewCase.CurrentCaseSolution_Id = caseTemplateId;
 
                 model.Information = caseTemplate.Information;
+                var caseSolutionTranslation = _caseSolutionService.GetCaseSolutionTranslation(caseTemplateId.Value, languageId);
+                if (caseSolutionTranslation != null)
+                {
+                    model.Information = caseSolutionTranslation.Information;
+                }
 
                 if (!string.IsNullOrEmpty(caseTemplate.Text_External) ||
                     !string.IsNullOrEmpty(caseTemplate.Text_Internal) || caseTemplate.FinishingCause_Id.HasValue)
@@ -616,6 +621,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         public ActionResult GetWorkflowSteps(int caseId, int templateId)
         {
             var customerId = caseId > 0 ? _caseService.GetCaseCustomerId(caseId) : SessionFacade.CurrentCustomerID;
+            //Check if closed
             var steps = GetWorkflowStepModel(customerId, caseId, templateId);
             return Json(new { sucess = true, items = steps }, JsonRequestBehavior.AllowGet);
         }
@@ -2516,8 +2522,13 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             var workflowCaseSolutions = _caseSolutionService.GetWorkflowCaseSolutionIds(customerId);
+            int lang = SessionFacade.CurrentLanguageId;
+            if (lang == SessionFacade.CurrentCustomer.Language_Id)
+            {
+                lang = 0;
+            }
 
-            if (caseEntity != null)
+            if (caseEntity != null && caseEntity.FinishingDate == null)
             {
                 var isRelatedCase = caseId > 0 && _caseService.IsRelated(caseId);
 
@@ -2528,7 +2539,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                     isRelatedCase,
                     null,
                     ApplicationType.LineManager, // this is used for purpose since its comapred against ApplicationTypes table values where Selfservice = 2
-                    templateId);
+                    templateId,
+                    lang);
             }
 
             if (res.Any())

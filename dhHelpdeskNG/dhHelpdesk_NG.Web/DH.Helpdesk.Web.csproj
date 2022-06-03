@@ -433,6 +433,7 @@
     <Compile Include="Infrastructure\JsonNetResult.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\Concrete\ComputerCopyBuilder.cs" />
     <Compile Include="Infrastructure\ModelFactories\Inventory\IComputerCopyBuilder.cs" />
+    <Compile Include="Models\CaseSolution\CaseSolutionCategoryViewModel.cs" />
     <Compile Include="Models\Case\AdvancedCaseSearchInput.cs" />
     <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />
@@ -766,6 +767,7 @@
     <Content Include="Content\css\bootstrap-tagsinput.css" />
     <Content Include="Content\css\clickmultimenu_dropdown.css" />
     <Content Include="Content\css\custom\dynamic-cases.css" />
+    <Content Include="Areas\Admin\Content\css\extendedcase-editor.css" />
     <Content Include="Content\css\extendedcase.css" />
     <Content Include="Content\css\font-awesome.min.css" />
     <Content Include="Content\css\images\sort_asc.png" />
@@ -4119,13 +4121,25 @@
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Web.Debug.config">
+    <Content Include="Web.config.windows.template">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Web.config.application.template">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Web.config.application.copy.template">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.Release.config">
+    </None>
+    <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
-    </Content>
+    </None>
     <Content Include="Content\js\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Content\js\jquery.validate.unobtrusive.min.js" />
     <Content Include="Content\js\MicrosoftAjax.js" />

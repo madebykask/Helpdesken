@@ -1,18 +1,13 @@
-﻿using System.Data.Entity;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using DH.Helpdesk.BusinessData.Models.Case;
+﻿using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.Common.Enums;
-using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
+using System.Data.Entity;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace DH.Helpdesk.Services.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
     using DH.Helpdesk.BusinessData.Enums.Admin.Users;
     using DH.Helpdesk.BusinessData.Enums.Users;
     using DH.Helpdesk.BusinessData.Models;
@@ -23,7 +18,7 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.BusinessData.Models.Users.Input;
     using DH.Helpdesk.BusinessData.Models.Users.Output;
     using DH.Helpdesk.Common.Extensions.Boolean;
-    using DH.Helpdesk.Common.Extensions.String;
+    using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Dal.Infrastructure.Translate;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Dal.NewInfrastructure;
@@ -36,13 +31,12 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
     using DH.Helpdesk.Services.BusinessLogic.Specifications;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.User;
-
     using LinqLib.Operators;
-
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
     using UserGroup = DH.Helpdesk.Domain.UserGroup;
-    using DH.Helpdesk.Common.Tools;
-    using System.Text.RegularExpressions;
 
     public interface IUserService
     {
@@ -201,6 +195,7 @@ namespace DH.Helpdesk.Services.Services
 
         bool VerifyUserCasePermissions(UserOverview user, int caseId);
         Expression<Func<Case, bool>> GetCasePermissionFilter(UserOverview user, int customerId);
+        string GetUserEmail(int id);
     }
 
     public class UserService : IUserService
@@ -1490,6 +1485,12 @@ namespace DH.Helpdesk.Services.Services
             }
 
             return errors;
+        }
+
+        public string GetUserEmail(int id)
+        {
+            var user = _userRepository.GetUser(id);
+            return user.Email;
         }
     }
 }

@@ -24,7 +24,8 @@ namespace DH.Helpdesk.Services.Services
 
 		void DeleteById(int id);
 
-        void DeleteConnectedCase(int cirularId, int caseId);
+        void DeleteConnectedCase(int caseId);
+
 	    List<int> GetAllCircularCasesIds(int circularId);
 
         QuestionnaireDetailedOverview GetQuestionnaire(Guid guid, int languageId);

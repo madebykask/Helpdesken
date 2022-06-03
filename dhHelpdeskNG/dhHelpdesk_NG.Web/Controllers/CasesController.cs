@@ -3,11 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
-using System.IO;
 using System.Linq;
 using System.Web;
-using System.Net;
-using System.Net.Mime;
 using System.Web.Mvc;
 using System.Web.Routing;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
@@ -198,7 +195,7 @@ namespace DH.Helpdesk.Web.Controllers
         #endregion
 
         private readonly int DefaultCaseLockBufferTime = 30; // Second
-        private readonly int DefaultExtendCaseLockTime = 60; // Second
+        private readonly int DefaultExtendCaseLockTime = 60; // Secondx§
 
         #region ***Constructor***
 
@@ -586,10 +583,11 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CurrentCaseSearch = this.InitCaseSearchModel(customerId, userId);
 
             var m = new JsonCaseIndexViewModel();
+            var lang = SessionFacade.CurrentLanguageId;
 
             var customerUser = _customerUserService.GetCustomerUserSettings(customerId, userId);
             m.CaseSearchFilterData = CreateCaseSearchFilterData(customerId, SessionFacade.CurrentUser, customerUser, SessionFacade.CurrentCaseSearch);
-            m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.OnCaseOverview);
+            m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.OnCaseOverview, lang);
             _caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
 
             m.CaseSetting = GetCaseSettingModel(customerId, userId);
@@ -1166,33 +1164,6 @@ namespace DH.Helpdesk.Web.Controllers
 
                     var template = _caseSolutionService.GetCaseSolution(m.SplitToCaseSolution_Id.Value);
 
-                    //var splitInput = this.GetCaseInputViewModel(
-                    //	userId,
-                    //	customerId,
-                    //	0,
-                    //	caseLockModel,
-                    //	customerCaseFieldSettings,
-                    //	string.Empty,
-                    //	null,
-                    //	 m.SplitToCaseSolution_Id.Value,
-                    //	null,
-                    //	false,
-                    //	0, 
-                    //	caseId);
-
-                    //var editModel = new CaseEditInput()
-                    //{
-                    //	CaseSolution_Id = m.SplitToCaseSolution_Id.Value,
-                    //	caseFieldSettings = new List<CaseFieldSetting>() ,
-                    //	caseLock = new CaseLock(),
-                    //	caseLog = splitInput.CaseLog,
-                    //	caseMailSetting = splitInput.CaseMailSetting,
-                    //	CurrentCaseSolution_Id = m.SplitToCaseSolution_Id.Value,
-                    //	case_ = splitInput.case_,
-                    //	IndependentChild = true,
-                    //	SplitToCaseSolution_Id = splitInput.CaseTemplateSplitToCaseSolutionID,
-                    //	ParentId = splitInput.ParentCaseInfo.ParentId
-                    //};
                     var identity = global::System.Security.Principal.WindowsIdentity.GetCurrent();
                     var windowsUser = identity != null ? identity.Name : null;
                     var child = _caseService.Copy(
@@ -1774,7 +1745,7 @@ namespace DH.Helpdesk.Web.Controllers
                             if (m.case_.StateSecondary.NoMailToNotifier == 1)
                                 m.CaseLog.SendMailAboutCaseToNotifier = false;
                             else
-                                m.CaseLog.SendMailAboutCaseToNotifier = true;
+                                m.CaseLog.SendMailAboutCaseToNotifier = true;                            
                         }
 
                     m.stateSecondaries = _stateSecondaryService.GetStateSecondaries(customerId);
@@ -3210,13 +3181,13 @@ namespace DH.Helpdesk.Web.Controllers
             return "";
         }
 
-        private CaseTemplateTreeModel GetCaseTemplateTreeModel(int customerId, int userId, CaseSolutionLocationShow location)
+        private CaseTemplateTreeModel GetCaseTemplateTreeModel(int customerId, int userId, CaseSolutionLocationShow location, int? languageId)
         {
             var model = new CaseTemplateTreeModel
             {
                 CustomerId = customerId,
                 CaseTemplateCategoryTree =
-                    _caseSolutionService.GetCaseSolutionCategoryTree(customerId, userId, location)
+                    _caseSolutionService.GetCaseSolutionCategoryTree(customerId, userId, location, languageId)
                         .Where(c => c.CaseTemplates == null || (c.CaseTemplates != null && c.CaseTemplates.Any())).ToList()
             };
 
@@ -4977,7 +4948,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var customerCaseSolutions =
                 _caseSolutionService.GetCustomerCaseSolutionsOverview(customerId, userId);
-
+            var langId = SessionFacade.CurrentLanguageId;
             //TODO: reuse case solutions!
             m.CaseTemplateButtons =
                 customerCaseSolutions.Where(c => c.ShowInsideCase != 0 && c.ConnectedButton.HasValue && c.ConnectedButton > 0) // ConnectedButton = 0 reserved for workflow steps 
@@ -4989,20 +4960,30 @@ namespace DH.Helpdesk.Web.Controllers
                     })
                     .OrderBy(c => c.ButtonNumber)
                     .ToList();
-
+            foreach(var button in m.CaseTemplateButtons)
+            {
+                if (_caseSolutionService.GetCaseSolutionTranslation(button.CaseTemplateId, langId) != null)
+                {
+                    button.CaseTemplateName = _caseSolutionService.GetCaseSolutionTranslation(button.CaseTemplateId, langId).CaseSolutionName;
+                }
+            }
             var workflowCaseSolutionIds =
                 customerCaseSolutions.Where(x => x.ConnectedButton == 0 && x.Status > 0)
                     .Select(x => x.CaseSolutionId)
                     .ToList();
+            
+            if(m.case_.FinishingDate == null)
+            {
+                 m.WorkflowSteps = _caseSolutionService.GetWorkflowSteps(customerId,
+                   m.case_,
+                   workflowCaseSolutionIds,
+                   isRelatedCase,
+                   SessionFacade.CurrentUser,
+                   ApplicationType.Helpdesk,
+                   templateId,
+                   langId);
+            }
 
-            m.WorkflowSteps =
-                _caseSolutionService.GetWorkflowSteps(customerId,
-                    m.case_,
-                    workflowCaseSolutionIds,
-                    isRelatedCase,
-                    SessionFacade.CurrentUser,
-                    ApplicationType.Helpdesk,
-                    templateId);
 
             m.CaseMailSetting = new CaseMailSetting(
                 customer.NewCaseEmailList,
@@ -5692,7 +5673,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (m.case_.StateSecondary != null)
                 {
                     m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1;
-                    m.CaseLog.SendMailAboutCaseToNotifier = false;
+                    m.CaseLog.SendMailAboutCaseToNotifier = false;                    
                     //if (m.case_.StateSecondary.NoMailToNotifier == 1)
                     //    m.CaseLog.SendMailAboutCaseToNotifier = false;
                     //else
@@ -5931,7 +5912,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.MapCaseToCaseInputViewModel(case_, userTimeZone);
             }
 
-            m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.InsideTheCase);
+            m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.InsideTheCase, SessionFacade.CurrentLanguageId);
             m.CasePrintView = new ReportModel(false);
             m.UserHasInvoicePermission = userHasInvoicePermission;
             m.UserHasInventoryViewPermission = userHasInventoryViewPermission;
@@ -7168,7 +7149,8 @@ namespace DH.Helpdesk.Web.Controllers
                                   user.FirstName,
                                   user.SurName,
                                   wg.WorkingGroupName,
-                                  wg.Id
+                                  wg.Id,
+                                  user.Email
                               );
                             performersToSearch.Add(newRecord);
                             foundWg = true;
@@ -7183,7 +7165,8 @@ namespace DH.Helpdesk.Web.Controllers
                                    user.FirstName,
                                    user.SurName,
                                    null,
-                                   0
+                                   0,
+                                   user.Email
                                );
                     performersToSearch.Add(newRecord);
                 }

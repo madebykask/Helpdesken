@@ -1,0 +1,275 @@
+﻿#fields {
+    margin: 0;
+    padding: 0;
+    width: 15%;
+    margin-right: 20px;
+    float: left;
+    border: 1px thin;
+    border-radius: 5px;
+}
+
+.txtInput {
+    width: 97% !important;
+}
+
+.header-actions {
+    opacity: 0.5;
+    visibility: hidden;
+}
+
+.header-actions a {
+    margin-right: 15px
+}
+
+
+#source {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+}
+
+.field {
+    background-color: #e8dfdf;
+    border-radius: 10px;
+}
+
+.header-label {
+    width: 80%;
+    float: left
+}
+
+.header-actions {
+    /*width: 20%;*/
+    display: flex;
+    justify-content: flex-end;
+    margin: 5px;
+    padding-top: 5px;
+}
+
+.field-label {
+    font-family: inherit;
+    font-size: large;
+    margin: 5px;
+    padding-top: 5px;
+    padding-right: 10px
+}
+
+.form-control {
+    margin: 10px;
+}
+
+.form-control-width {
+    width: 97%;
+}
+
+#btnClear {
+    margin-top: 15px;
+    margin-left: 5px;
+}
+
+#source li {
+    cursor: move;
+    padding: 10px;
+    border: 1px solid #dddddd;
+    background: #f5f5f5;
+}
+
+.label {
+    font-size: large;
+}
+
+.sectionLabel {
+    padding: 5px;
+    font-size: x-large;
+    font-weight: 600;
+}
+
+#dropzone {
+    min-height: 400px;
+    height: auto;
+    float: none;
+    overflow: hidden;
+    border: 1px dashed black;
+}
+
+.extendedCaseFormsLst {
+    list-style-type: none;
+    padding: 0;
+    margin: 5px;
+}
+
+.formtabs-li {
+    list-style-type: none;
+    padding: 0;
+    margin: 5px 5px 0px 5px;
+}
+
+.fa {
+    margin: 5px;
+}
+
+.required {
+    color: red;
+    visibility: hidden;
+}
+
+.chkRequired {
+    vertical-align: top;
+}
+
+.chkRequiredSelfService {
+    vertical-align: top;
+}
+
+.required-defaultLng {
+    color: red;
+}
+
+.ui-draggable {
+    list-style-type: none;
+    padding: 0;
+    margin: 5px;
+}
+
+.note-editor {
+    padding: 0px;
+}
+
+.note-modal {
+    height: max-content;
+}
+
+.file-upload {
+    margin: 10px;
+    border-color: black;
+    border: 1px dashed black !important;
+    height: 50px !important;
+    text-align: center !important;
+}
+
+.spanDefaultLabelName {
+    margin-left: 5px;
+    font-size: 12px;
+}
+
+.spanDefaultOptionName {
+    margin-left: 5px;
+    font-size: 12px;
+}
+
+.transField {
+    width: 200px;
+}
+
+#formtabs {
+    list-style-type: none;
+    /*min-height: 400px;*/
+    height: auto;
+    float: none;
+    overflow: hidden;
+    padding: 0;
+    margin: 0px 0px 5px 5px
+}
+
+#formtab-editheaderName {
+    background-color: #e8dfdf;
+    width: inherit;
+    font-family: inherit;
+    padding: 1px 6px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    margin: 5px 5px 5px 5px;
+    font-weight: bold;
+    font-size: 16px;
+    display: inline-block;
+    justify-content: space-between;
+    height: inherit
+}
+
+#formtab-edit {
+    background-color: #e8dfdf;
+}
+
+.general-fields {
+    width: 17%;
+}
+
+.editor-cols {
+    background-color: inherit;
+}
+
+.table.borderless {
+    margin: 5px 10px;
+    width: 98%;
+}
+
+.table-borderless > tbody > tr > td,
+.table-borderless > tbody > tr > th,
+.table-borderless > tfoot > tr > td,
+.table-borderless > tfoot > tr > th,
+.table-borderless > thead > tr > td,
+.table-borderless > thead > tr > th {
+    border: none;
+}
+
+.table-borderless > tbody > tr {
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+}
+
+.tr-transparent {
+    border-color:transparent !important;
+}
+
+.table-borderless {
+    margin-left: 5px;
+    margin-right: 30px;
+    margin-right: 0px;
+}
+
+.tdAddOption {
+    background-color: white;
+    margin-top: 0px;
+    border-top: none;
+}
+
+.selectOptions li {
+    list-style: none;
+    position: relative;
+}
+
+.selectOptions.radiolst li:before {
+    content: "\f1db"; /*"\f096"; */
+    font-family: FontAwesome;
+    display: inline-block;
+    margin-left: -1.3em;
+    width: 1.3em;
+    position: absolute;
+}
+
+.selectOptions.checkboxlst li:before {
+    content: "\f096";
+    font-family: FontAwesome;
+    display: inline-block;
+    margin-left: -1.3em;
+    width: 1.3em;
+    position: absolute;
+}
+
+.note-fontname {
+    padding-top: 5px;
+}
+
+.note-fontsize {
+    padding-top: 5px;
+}
+
+.note-color-fore {
+    padding-top: 5px;
+}
+
+.note-resize {
+    display: none !important;
+}

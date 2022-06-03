@@ -134,6 +134,7 @@
     <Compile Include="EntityConfigurations\CaseDocument\CaseDocumentConditionConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseDocument\CaseDocument_CaseDocumentParagraphConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseSolutionConditionPropertyConfiguration.cs" />
+    <Compile Include="EntityConfigurations\CaseSolutionCategoryLanguageConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseSolutionLanguageConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseSolution\CaseSolution_SplitToCaseSolutionConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseSolution_CaseSection_ExtendedCaseFormConfiguration.cs" />
@@ -505,6 +506,8 @@
     <Compile Include="Repositories\BusinessRules\Concrete\BusinessRuleRepository.cs" />
     <Compile Include="Repositories\BusinessRules\IBusinessRuleRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentTextConditionIdentifierRepository.cs" />
+    <Compile Include="Repositories\CaseSolutionCategoryLanguageRepository.cs" />
+    <Compile Include="Repositories\CaseSolutionLanguageRepository.cs" />
     <Compile Include="Repositories\Cases\Concrete\ExtendedCaseReportRepository.cs" />
     <Compile Include="Repositories\Computers\Concrete\ComputerStatusRepository.cs" />
     <Compile Include="Repositories\Computers\Concrete\ComputerTabsSettingsRepository.cs" />

@@ -174,7 +174,7 @@
                         new QuestionnaireCircularWorkingGroupEntity { WorkingGroupId = id });
                 }
 
-                foreach(var email in businessModel.ExtraEmails)
+                foreach (var email in businessModel.ExtraEmails)
                 {
                     entity.QuestionnaireCircularExtraEmailEntities.Add(new QuestionnaireCircularExtraEmailEntity { Email = email });
                 }
@@ -186,25 +186,25 @@
             }
         }
 
-		public void AddCaseToCircular(int circularID, int caseID)
-		{
-			using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
-			{
-				var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
-				var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+        public void AddCaseToCircular(int circularID, int caseID)
+        {
+            using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
+            {
+                var circularRepository = uof.GetRepository<QuestionnaireCircularEntity>();
+                var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
 
-				var circular = circularRepository.GetById(circularID);
+                var circular = circularRepository.GetById(circularID);
 
-				circularPartRepository.Add(new QuestionnaireCircularPartEntity
-				{
-					QuestionnaireCircular_Id = circular.Id,
-					CreatedDate = circular.ChangedDate,
-					Case_Id = caseID
-				});
+                circularPartRepository.Add(new QuestionnaireCircularPartEntity
+                {
+                    QuestionnaireCircular_Id = circular.Id,
+                    CreatedDate = circular.ChangedDate,
+                    Case_Id = caseID
+                });
 
-				uof.Save();
-			}
-		}
+                uof.Save();
+            }
+        }
 
         public void UpdateCircular(CircularForUpdate businessModel, List<int> caseIds = null)
         {
@@ -226,29 +226,29 @@
 
                 entity.MailTemplate_Id = businessModel.MailTemplateId;
 
-				if (caseIds != null)
-				{
-					var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
-					foreach (
-						var toDel in circularPartRepository.GetAll()
-							.Where(x => x.QuestionnaireCircular_Id == businessModel.Id && !caseIds.Contains(x.Case_Id))
-							.ToArray())
-					{
-						circularPartRepository.Delete(toDel);
-					}
+                if (caseIds != null)
+                {
+                    var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+                    foreach (
+                        var toDel in circularPartRepository.GetAll()
+                            .Where(x => x.QuestionnaireCircular_Id == businessModel.Id && !caseIds.Contains(x.Case_Id))
+                            .ToArray())
+                    {
+                        circularPartRepository.Delete(toDel);
+                    }
 
-					var existing = GetAllCircularCasesIds(businessModel.Id);
-					foreach (
-						var toIns in caseIds.Where(x => !existing.Contains(x)).ToArray())
-					{
-						circularPartRepository.Add(new QuestionnaireCircularPartEntity
-						{
-							QuestionnaireCircular_Id = businessModel.Id,
-							CreatedDate = businessModel.ChangedDate,
-							Case_Id = toIns
-						});
-					}
-				}
+                    var existing = GetAllCircularCasesIds(businessModel.Id);
+                    foreach (
+                        var toIns in caseIds.Where(x => !existing.Contains(x)).ToArray())
+                    {
+                        circularPartRepository.Add(new QuestionnaireCircularPartEntity
+                        {
+                            QuestionnaireCircular_Id = businessModel.Id,
+                            CreatedDate = businessModel.ChangedDate,
+                            Case_Id = toIns
+                        });
+                    }
+                }
 
                 var circularDepartmentRepository = uof.GetRepository<QuestionnaireCircularDepartmentEntity>();
                 circularDepartmentRepository.MergeList(x => x.QuestionnaireCircularId == businessModel.Id
@@ -295,11 +295,11 @@
                     }).ToList()
                     , (a, b) => a.Email.Equals(b.Email));
 
-				circularRepository.Update(
-				entity,
-				x => x.CreatedDate,
-				x => x.Questionnaire_Id,
-				x => x.Status);
+                circularRepository.Update(
+                entity,
+                x => x.CreatedDate,
+                x => x.Questionnaire_Id,
+                x => x.Status);
 
                 uof.Save();
             }
@@ -342,18 +342,32 @@
             }
         }
 
-        public void DeleteConnectedCase(int cirularId, int caseId)
+        public void DeleteConnectedCase(int caseId)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {
                 var circularPartRepository = uof.GetRepository<QuestionnaireCircularPartEntity>();
+                var caseQuestionnaireCircularParts = circularPartRepository.GetAll().Where(x => x.Case_Id == caseId);
 
-                circularPartRepository.DeleteWhere(x => x.QuestionnaireCircular_Id == cirularId && x.Case_Id == caseId);
+                foreach (var circularPart in caseQuestionnaireCircularParts)
+                {
+                    var questionnaireResultRepository = uof.GetRepository<QuestionnaireResultEntity>();
+                    var questionnaireQuestionResultRepository = uof.GetRepository<QuestionnaireQuestionResultEntity>();
+
+                    foreach (var qr in questionnaireResultRepository.GetAll().Where(x => x.QuestionnaireCircularPartic_Id == circularPart.Id))
+                    {
+                        questionnaireQuestionResultRepository.DeleteWhere(x => x.QuestionnaireResult_Id == qr.Id);
+                    }
+
+                    questionnaireResultRepository.DeleteWhere(x => x.QuestionnaireCircularPartic_Id == circularPart.Id);
+                }
+
+                circularPartRepository.DeleteWhere(x => x.Case_Id == caseId);
 
                 uof.Save();
             }
-        }
 
+        }
         public List<string> GetCircularExtraEmails(int circularId)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
@@ -435,7 +449,7 @@
             var circular = GetById(circularId);
             var mailTemplate = circular?.MailTemplateId != null
                 ? mailTemplateService.GetTemplateById(circular.MailTemplateId.Value, operationContext)
-                : mailTemplateService.GetTemplate((int) QuestionnaireTemplates.Questionnaire, operationContext);
+                : mailTemplateService.GetTemplate((int)QuestionnaireTemplates.Questionnaire, operationContext);
 
             List<BusinessLogic.MapperData.Participant> participants = this.GetAllParticipants(circularId);
             var extraEmails = GetCircularExtraEmails(circularId).ToList();
@@ -498,7 +512,7 @@
             }
 
             QuestionnaireOverview overview = GetQuestionnaireEntity(id, languageId);
-            return new QuestionnaireDetailedOverview { Questionnaire = overview, CaseId = caseId, Caption = caption, CaseNumber = caseNumber};
+            return new QuestionnaireDetailedOverview { Questionnaire = overview, CaseId = caseId, Caption = caption, CaseNumber = caseNumber };
         }
 
         public QuestionnaireOverview GetQuestionnaire(int id, OperationContext operationContext)
@@ -629,12 +643,12 @@
                 var questionnaireResultRepository = uof.GetRepository<QuestionnaireResultEntity>();
 
                 var query = from circularPart in circularPartRepository.GetAll().GetCircularCases(circularId)
-                    join participant in questionnaireResultRepository.GetAll() on circularPart.Id equals
-                        participant.QuestionnaireCircularPartic_Id into group1
-                    from g1 in group1.DefaultIfEmpty()
-                    where g1 == null
-                    select circularPart;
-                connectedCases  = query.MapToParticipants();
+                            join participant in questionnaireResultRepository.GetAll() on circularPart.Id equals
+                                participant.QuestionnaireCircularPartic_Id into group1
+                            from g1 in group1.DefaultIfEmpty()
+                            where g1 == null
+                            select circularPart;
+                connectedCases = query.MapToParticipants();
             }
 
             return connectedCases;
@@ -651,13 +665,13 @@
                 //var questionnaireResultRepository = uof.GetRepository<QuestionnaireResultEntity>();
 
                 var query = from circularPart in circularPartRepository.GetAll().GetCircularCases(circularId)
-                    orderby circularPart.CreatedDate descending 
-                    //join participant in questionnaireResultRepository.GetAll() on circularPart.Id equals
-                      //  participant.QuestionnaireCircularPartic_Id into group1
-                    //from g1 in group1.DefaultIfEmpty()
-                    //where g1 == null
-                    select circularPart;
-                connectedCases  = query.SingleOrDefault(p => p.Case_Id == caseId)?.MapToParticipant();
+                            orderby circularPart.CreatedDate descending
+                            //join participant in questionnaireResultRepository.GetAll() on circularPart.Id equals
+                            //  participant.QuestionnaireCircularPartic_Id into group1
+                            //from g1 in group1.DefaultIfEmpty()
+                            //where g1 == null
+                            select circularPart;
+                connectedCases = query.SingleOrDefault(p => p.Case_Id == caseId)?.MapToParticipant();
             }
 
             return connectedCases;
@@ -709,12 +723,12 @@
             }
         }
 
-		/// <summary>
-		/// Returns circularId, if entity not found returns -1
-		/// </summary>
-		/// <param name="questionnaireId"></param>
-		/// <returns></returns>
-		public int GetCircularIdByQuestionnaireId(int questionnaireId)
+        /// <summary>
+        /// Returns circularId, if entity not found returns -1
+        /// </summary>
+        /// <param name="questionnaireId"></param>
+        /// <returns></returns>
+        public int GetCircularIdByQuestionnaireId(int questionnaireId)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
             {

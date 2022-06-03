@@ -5,7 +5,7 @@
 
 trigger:
 - Master
-name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Rev:r)
+name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Rev:r).$(Build.SourceVersion)
 pool:
   vmImage: 'windows-latest'
 steps:

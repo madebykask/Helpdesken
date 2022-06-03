@@ -14,6 +14,7 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity
                     new SelectedItems(entity.RegionFilter, false),
                     new SelectedItems(entity.DepartmentFilter, false),
                     new SelectedItems(entity.CaseTypeFilter, false),
+                    new SelectedItems(entity.CategoryTypeFilter, false),
                     new SelectedItems(entity.ProductAreaFilter, false),
                     new SelectedItems(entity.WorkingGroupFilter, false),
                     new SelectedItems(entity.ResponsibleFilter, false),

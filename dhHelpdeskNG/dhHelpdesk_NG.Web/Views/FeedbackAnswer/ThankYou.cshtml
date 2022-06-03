@@ -5,22 +5,24 @@
 
 <div class="content">
     <div class="container">
-        <div id="feedbackThanksText" style="display: none">
+        <div id="feedbackThanksText" style="display: @(Model.IsShowNote ? "none" : "block")">
             @Html.Raw(Model.Html)
         </div>
-        @using (Html.BeginForm("SaveComment", "FeedbackAnswer", new { customerId = Model.CustomerId, languageId = Model.LanguageId, questionId = Model.QuestionId, noteText = Model.NoteText }, FormMethod.Post))
+        @if (Model.IsShowNote)
         {
-            if (Model.IsShowNote)
+            using (Html.BeginForm("SaveComment", "FeedbackAnswer", new { customerId = Model.CustomerId, languageId = Model.LanguageId, questionId = Model.QuestionId, noteText = Model.NoteText }, FormMethod.Post))
             {
                 <div id="feedbackContent">
+
                     @Html.DisplayFor(m => m.NoteLabel)
-                    <br/>
-                    @Html.TextAreaFor(m => m.NoteText, new {id = "feedbackComment"})
+
+                    <br />
+                    @Html.TextAreaFor(m => m.NoteText, new { id = "feedbackComment" })
                     @Html.ValidationMessageFor(m => m.NoteText)
                     @Html.HiddenFor(m => m.CustomerId)
                     @Html.HiddenFor(m => m.LanguageId)
                     @Html.HiddenFor(m => m.QuestionId)
-                    <br/>
+                    <br />
                     @if (Model.LanguageId == 1)
                     {
                         <a href="#" id="btnSaveComment" class="btn templateQuickButton"> Spara </a>
@@ -33,11 +35,10 @@
                     {
                         <a href="#" id="btnSaveComment" class="btn templateQuickButton">@Translation.GetCoreTextTranslation("Spara")</a>
                     }
-
                 </div>
             }
         }
-    </div>
+        </div>
 </div>
 
 <script type="text/javascript">

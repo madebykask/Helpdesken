@@ -35,6 +35,7 @@
               "src/web.config.template",
               "src/manifest.json",
               "src/manifest.json.template",
+              "src/pipe_change_variables.ps1",
               {
                 "glob": "**/*",
                 "input": "src/content/icons",

@@ -135,7 +135,11 @@
                                 @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
                                     new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
                             }
-                            <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span>
+                            <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span><br />
+                            @*<span id="emailsToTitle" style="display: none;">
+                                @Translation.ToTitleCase(@Translation.GetCoreTextTranslation("Till")): </span><span id="emailsTo" style="display: none;">@Html.DisplayFor(model => model.case_.PersonsEmail)</span><br />
+
+                                <span id="ccTitle" style="display: none;">@Translation.GetCoreTextTranslation("Kopia"): </span><span id="extraEmailsInputShow" style="overflow-wrap: break-word"></span>*@
                         </div>
                         @Html.HiddenFor(model => model.CaseLog.RegUser)
                         @Html.HiddenFor(model => model.CaseLog.LogType)
@@ -154,11 +158,11 @@
                         CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename, "Bifogad fil").ToString(),
                         Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Filename, CaseSolutionFields.LogFileName),
                         Model.CaseLog.Id == 0 && !Model.newLog,
-                        @* TODO: check why internal log note check was used! *@
-                        Model.EnableTwoAttachments
-                                ? Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote)
-                                : Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote),
-                        Model.EnableTwoAttachments))
+    @* TODO: check why internal log note check was used! *@
+Model.EnableTwoAttachments
+? Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote)
+: Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote),
+Model.EnableTwoAttachments))
 
                 @if (Model.CaseInternalLogAccess)
                 {
@@ -177,9 +181,33 @@
 
                         <td>
                             <div class="checkbox">
-                                <div>
-                                    @Html.HiddenFor(model => model.CaseLog.EmailRecepientsInternalLogTo, new { id = "caseLog_EmailRecepientsInternalLogTo", @readonly = "true" })
 
+                                @Html.HiddenFor(model => model.CaseLog.EmailRecepientsInternalLogTo, new { id = "caseLog_EmailRecepientsInternalLogTo", @readonly = "true" })
+
+                                <div class="checkbox commun" style="margin-bottom:5px;">
+
+                                    @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToPerformer,
+                                        new { InformPerformerBehavior = Model.InformPerformerBehavior.ToJavaScriptBool() })
+
+                                    <span class="lbl case-usersearch-textarea">
+                                        @Translation.GetCoreTextTranslation("Informera") @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Performer_User_Id, "Handläggare")
+                                        @if (Model.PerformersToSearch != null)
+                                        {
+                                            <span id="txtInformPerformer" style="display: none">
+                                                @Html.Raw("(")<span id="selected-performer-email">
+                                                    @{
+                                                        var selectedPerformer = Model.PerformersToSearch.FirstOrDefault(p => p.UserId == Model.Performer_Id);
+                                                        if (selectedPerformer != null)
+                                                        {
+                                                            @Model.PerformersToSearch.Where(p => p.UserId == Model.Performer_Id).FirstOrDefault().Email
+                                                        }
+                                                    }
+                                                </span>@Html.Raw(")")
+                                            </span>
+                                        }
+                                    </span>
+                                </div>
+                                <div>
                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote) && !readonlyMode)
                                     {
                                         <a href="#case_internal_log_to_btn" role="button" class="btn case-usersearch-btn" data-src="case" data-toggle="modal">@btnToLabel</a>
@@ -204,14 +232,15 @@
                                         <div id="fake_CaseLog_EmailRecepientsInternalLogCc" contenteditable="false" style="z-index: 1; background-color:#eeeeee;" class="case-send-emails-div case-usersearch-textarea @Model.getSearchEmailClass(CaseSectionType.Communication)"></div>
                                     }
                                 </div>
-
+                            </div>
+                            <div class="checkbox commun">
                                 @if (Model.templateistrue != 1 && !readonlyMode)
                                 {
                                     if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
                                     {
                                         if (Model.IsItParentCase() || Model.IsItChildCase())
                                         {
-                                            <br />@Html.CheckBox("CaseLog.SendLogToParentChildLog")
+                                            @Html.CheckBox("CaseLog.SendLogToParentChildLog")
                                             if (Model.IsItParentCase())
                                             {
                                                 <span class="lbl">@Translation.Get("Skicka intern loggpost till underärenden", SessionFacade.CurrentCaseLanguageId)</span>
@@ -244,11 +273,11 @@
                             false,// internal
                             CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal, "Intern bifogad fil").ToHtmlString(),
                             Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal, CaseSolutionFields.LogFileName_Internal),
-                            Model.CaseLog.Id == 0 && !Model.newLog, 
+                            Model.CaseLog.Id == 0 && !Model.newLog,
                             Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote),
                             Model.EnableTwoAttachments))
                 }
-               
+
                 @if (Model.newLog || Model.editLog)
                 {
                     <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.StateSecondary_Id, CaseSolutionFields.StateSecondary)">
@@ -384,7 +413,7 @@
             <div class="secnavs secnavmarg">
                 <div class="pull-left">
                     <ul class="secnav">
-                         <li><input type="button" id="btnCaseCharge" class="btn" style="@Model.ShowInvoiceFields.displayHtml()" value="@Translation.GetCoreTextTranslation("Debitering")" /></li>
+                        <li><input type="button" id="btnCaseCharge" class="btn" style="@Model.ShowInvoiceFields.displayHtml()" value="@Translation.GetCoreTextTranslation("Debitering")" /></li>
                     </ul>
                 </div>
             </div>
@@ -398,11 +427,11 @@
             <div class="span6">
                 <table class="tableform">
                     <thead>
-                    <tr>
-                        <th class="span3"></th>
-                        <th class="span4"></th>
-                        <th class="span5"></th>
-                    </tr>
+                        <tr>
+                            <th class="span3"></th>
+                            <th class="span4"></th>
+                            <th class="span5"></th>
+                        </tr>
                     </thead>
 
                     <tr id="invoiceField-Time">
@@ -615,6 +644,7 @@
                     $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
             });
 
+
     var maxLength = 3000;
     function checkLength(el) {
         if (el.value.length > maxLength) {
@@ -634,6 +664,61 @@
     $(".showbtn").on("click", function (e) {
         e.preventDefault();
         $(this).parents(".section-block").removeClass("hideshow");
+    });
+
+    $("#Performer_Id").on("change", async function (e) {
+
+        e.preventDefault();
+
+        let performerId = $("#Performer_Id").val();
+        const getPerformerEmail = async () => {
+            let performerEmail = '';
+
+            $("#selected-performer-email").html('');
+            if (performerId !== null) {
+                if (!isNaN(performerId)) {
+                    if (parseInt(performerId) > 0) {
+                        await $.ajax({
+                            url: "/users/GetEmailById",
+                            type: "GET",
+                            data: { id: performerId, }
+                        })
+                        .done(function (result) {
+                            $("#selected-performer-email").html(result);
+                        });
+                    }
+                }
+            }
+        };
+
+        await getPerformerEmail().then(() => {
+            $("#selected-performer-email").trigger('change', performerId);
+        });
+    });
+
+
+    $("#selected-performer-email").on("change", function (e, obj) {
+        e.preventDefault();
+
+        let data = $(e.currentTarget).text();
+        let isInvalidPerformer = (data == '' || data == null || data == undefined || obj == @SessionFacade.CurrentUser.Id);
+        $('#CaseLog_SendMailAboutCaseToPerformer').attr('disabled', isInvalidPerformer);
+
+        if (isInvalidPerformer) {
+            $('#CaseLog_SendMailAboutCaseToPerformer').attr('checked', false);
+        }
+    });
+
+    $(document).ready(function () {
+        
+        let performerId = $("#Performer_Id").val();
+
+        let isInvalidPerformer = (performerId == @SessionFacade.CurrentUser.Id || performerId == "");
+        $('#CaseLog_SendMailAboutCaseToPerformer').attr('disabled', isInvalidPerformer);
+
+        if (isInvalidPerformer) {
+            $('#CaseLog_SendMailAboutCaseToPerformer').attr('checked', false);
+        }
     });
 
 </script>

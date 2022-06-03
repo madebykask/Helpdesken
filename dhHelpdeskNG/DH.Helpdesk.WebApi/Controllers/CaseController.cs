@@ -108,7 +108,14 @@ namespace DH.Helpdesk.WebApi.Controllers
                 var caseSolution = _caseSolutionService.GetCaseSolution(caseSolutionId);
                 //_caseSolutionSettingService.GetCaseSolutionSettingOverviews(caseSolutionId);//TODO: Case solution settings participate in visibility check
                 if (caseSolution != null)
+                {
+                    if(_caseSolutionService.GetCaseSolutionTranslation(caseSolutionId, langId) != null)
+                    {
+                        caseSolution.Name = _caseSolutionService.GetCaseSolutionTranslation(caseSolutionId, langId).CaseSolutionName;
+                    }
                     model.CaseSolution = _mapper.Map<CaseSolutionInfo>(caseSolution);
+                }
+                
             }
 
             //if (!string.IsNullOrWhiteSpace(currentCase.ReportedBy))//TODO:
@@ -160,8 +167,13 @@ namespace DH.Helpdesk.WebApi.Controllers
                 throw new Exception("No template id found. Template id should be in parameter or set as default for customer.");
 
             var caseTemplate = _caseSolutionService.GetCaseSolution(templateId.Value);
+            
             if (caseTemplate == null)
                 throw new Exception($"Template '{templateId.Value}' can't be found.");
+            if(_caseSolutionService.GetCaseSolutionTranslation(templateId.Value, langId)!= null)
+            {
+                caseTemplate.Name = _caseSolutionService.GetCaseSolutionTranslation(templateId.Value, langId).CaseSolutionName;
+            }
 
             var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(cid);
             var caseTemplateSettings = _caseSolutionSettingService.GetCaseSolutionSettingOverviews(templateId.Value);

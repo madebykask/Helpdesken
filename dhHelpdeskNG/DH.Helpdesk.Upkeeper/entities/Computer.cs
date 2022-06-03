@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace upKeeper2Helpdesk.entities
@@ -17,6 +18,7 @@ namespace upKeeper2Helpdesk.entities
 		public int? NIC_Id { get; set; }
 		public string BIOSVersion { get; set; }
 		public string HardwareId { get; set; }
+		[JsonIgnore]
 		public string MACAddress { get; set; }
 		public string Location2 { get; set; }
 		public int? Domain_Id { get; set; }

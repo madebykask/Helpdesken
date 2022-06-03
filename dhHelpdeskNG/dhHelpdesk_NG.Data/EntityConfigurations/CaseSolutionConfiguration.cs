@@ -91,6 +91,11 @@ namespace DH.Helpdesk.Dal.EntityConfigurations
                  m.ToTable("tblCaseSolution_ExtendedCaseForms");
              });
 
+            this.HasMany(f => f.CaseSolutionLanguages)
+                .WithRequired(f => f.CaseSolution)
+                .HasForeignKey(f => f.CaseSolution_Id)
+                .WillCascadeOnDelete(false);
+
             this.HasMany(x => x.Conditions)
                 .WithOptional(x => x.CaseSolution)
                 .HasForeignKey(x => x.CaseSolution_Id);
@@ -100,6 +105,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations
             this.Property(x => x.CaseWorkingGroup_Id).IsOptional();
             this.Property(x => x.CaseType_Id).IsOptional();
             this.Property(x => x.Category_Id).IsOptional();
+            //this.Property(x => x.Language_Id).IsOptional();
             this.Property(x => x.Department_Id).IsOptional();
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.Description).IsOptional();

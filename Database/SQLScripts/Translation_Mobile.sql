@@ -677,8 +677,25 @@ If not exists (select * from tblTextTranslation where text_id = 30062 and Langua
 begin
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(30062, 2, 'does not have a valid file extension')
 end
+--New sprint 76
+If not exists (select * from tbltext where id = 30063)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (30063, 'Informera handläggare', @MobileType)
+end
 
+If not exists (select * from tblTextTranslation where text_id = 30063 and Language_Id = 2)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(30063, 2, 'Inform administrator')
+end
 
+If not exists (select * from tbltext where id = 30064)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (30064, 'Informera', @MobileType)
+end
 
-GO
+If not exists (select * from tblTextTranslation where text_id = 30064 and Language_Id = 2)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(30064, 2, 'Inform')
+end
+
 

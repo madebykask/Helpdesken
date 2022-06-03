@@ -24,6 +24,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public DateTime? FinishingDate { get; set; }
         public int Id { get; set; }
         public bool SendMailAboutCaseToNotifier { get; set; }
+        public bool SendMailAboutCaseToPerformer { get; set; }        
         public bool SendMailAboutLog { get; set; }
         public DateTime LogDate { get; set; }
         public int LogType { get; set; }

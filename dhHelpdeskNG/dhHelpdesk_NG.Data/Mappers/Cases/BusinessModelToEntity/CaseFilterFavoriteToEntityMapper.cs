@@ -25,6 +25,7 @@
             entity.InitiatorSearchScopeFilter = businessModel.Fields.InitiatorSearchScopeFilter.GetSelectedStrOrNull();
             entity.AdministratorFilter = businessModel.Fields.AdministratorFilter.GetSelectedStrOrNull();
             entity.CaseTypeFilter = businessModel.Fields.CaseTypeFilter.GetSelectedStrOrNull();
+            entity.CategoryTypeFilter = businessModel.Fields.CategoryTypeFilter.GetSelectedStrOrNull();
             entity.ClosingReasonFilter = businessModel.Fields.ClosingReasonFilter.GetSelectedStrOrNull();
             entity.DepartmentFilter = businessModel.Fields.DepartmentFilter.GetSelectedStrOrNull();
             entity.PriorityFilter = businessModel.Fields.PriorityFilter.GetSelectedStrOrNull();

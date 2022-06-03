@@ -330,8 +330,8 @@
             "case_.WatchDate": {
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Model.IsCaseReopened)"); }
             },
-            @if(Model.IsRequired(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost)) 
-            { 
+            @if(Model.IsRequired(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost))
+            {
                 <text>
                 "@Html.NameFor(m => m.case_.Cost)": {
                     require_from_group: {
@@ -671,6 +671,7 @@
             },
             "CaseLog.TextInternal": {
             @*maxlength: "@Translation.GetForJS("Ange inte mer än 3000 tecken", Enums.TranslationSource.TextTranslation)",*@
+            required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")",
             require_from_group: "@Translation.GetForJS("Något av följande fält måste fyllas i")"
             },
             "CaseLog.TextExternal": {

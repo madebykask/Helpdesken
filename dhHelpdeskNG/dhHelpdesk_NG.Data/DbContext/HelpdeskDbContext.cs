@@ -142,6 +142,7 @@ namespace DH.Helpdesk.Dal.DbContext
         public DbSet<CaseSettings> CaseSettings { get; set; }
 
         public DbSet<CaseSolutionCategory> CaseSolutionCategories { get; set; }
+        public DbSet<CaseSolutionCategoryLanguageEntity> CaseSolutionCategoryLanguages { get; set; }
 
         public DbSet<CaseSolutionSchedule> CaseSolutionSchedules { get; set; }
 
@@ -290,6 +291,8 @@ namespace DH.Helpdesk.Dal.DbContext
         public DbSet<FaqFileEntity> FAQFiles { get; set; }
 
         public DbSet<FaqLanguageEntity> FAQLanguages { get; set; }
+
+        public DbSet<CaseSolutionLanguageEntity> CaseSolutionLanguages { get; set; }
 
         public DbSet<FaqEntity> FAQs { get; set; }
 
@@ -712,7 +715,9 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new CaseQuestionConfiguration());
             modelBuilder.Configurations.Add(new CaseQuestionHeaderConfiguration());
             modelBuilder.Configurations.Add(new CaseSolutionCategoryConfiguration());
+            modelBuilder.Configurations.Add(new CaseSolutionCategoryLanguageConfiguration());
             modelBuilder.Configurations.Add(new CaseSolutionConfiguration());
+            modelBuilder.Configurations.Add(new CaseSolutionLanguageConfiguration());
             modelBuilder.Configurations.Add(new CaseSolutionScheduleConfiguration());
             modelBuilder.Configurations.Add(new CaseTypeConfiguration());
             modelBuilder.Configurations.Add(new CaseTypeProductAreaConfiguration());

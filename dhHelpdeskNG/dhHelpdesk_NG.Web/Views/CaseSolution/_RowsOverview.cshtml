@@ -1,6 +1,7 @@
 ﻿@model DH.Helpdesk.Web.Models.CaseSolution.RowIndexViewModel[]
 @using System.Web.Optimization
 @using DH.Helpdesk.Common.Enums.CaseSolution
+@using DH.Helpdesk.Common.Enums
 
 @{
     var searchText = (SessionFacade.CurrentCaseSolutionSearch != null &&
@@ -103,31 +104,31 @@
                 var inactiveVal = item.IsActive ? string.Empty : "inactive";
                 <tr>
                     <td>
-                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.Name)</a>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id, languageId = LanguageIds.Swedish })">@Html.DisplayFor(modelItem => item.Name)</a>
                     </td>
                     <td>
-                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CategoryName)</a>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id, languageId = LanguageIds.Swedish})">@Html.DisplayFor(modelItem => item.CategoryName)</a>
                     </td>
                     <td>
-                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CaseSolutionDescription)</a>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id, languageId = LanguageIds.Swedish })">@Html.DisplayFor(modelItem => item.CaseSolutionDescription)</a>
                     </td>
                     <td>
-                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })"> @item.ConnectedToButton</a>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id, languageId = LanguageIds.Swedish })"> @item.ConnectedToButton</a>
                     </td>
                     <td>
-                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.CaseCaption)</a>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id, languageId = LanguageIds.Swedish })">@Html.DisplayFor(modelItem => item.CaseCaption)</a>
                     </td>
                     <td>
-                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.PerformerUserName)</a>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id, languageId = LanguageIds.Swedish })">@Html.DisplayFor(modelItem => item.PerformerUserName)</a>
                     </td>
                     <td>
-                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.PriorityName)</a>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id, languageId = LanguageIds.Swedish })">@Html.DisplayFor(modelItem => item.PriorityName)</a>
                     </td>
                     <td>
-                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })"> @item.IsActive.BoolToYesNo()</a>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id, languageId = LanguageIds.Swedish })"> @item.IsActive.BoolToYesNo()</a>
                     </td>
                     <td>
-                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id })">@Html.DisplayFor(modelItem => item.SortOrder)</a>
+                        <a class="@inactiveVal" href="@Url.Action("edit", "casesolution", new { id = item.Id, languageId = LanguageIds.Swedish })">@Html.DisplayFor(modelItem => item.SortOrder)</a>
                     </td>
                 </tr>
             }
@@ -136,7 +137,7 @@
 </div>
 
 <script type="text/javascript">
-    
+
     $("#chkActive").on('switchChange.bootstrapSwitch', function () {
         test();
     });

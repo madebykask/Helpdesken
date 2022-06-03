@@ -3823,7 +3823,19 @@ div.case-dropdown-div > span.btn-group > ul.multiselect-container > div.options-
     border: 1px solid #cccccc;
     word-wrap: break-word;
 }
-
+.case-external-email {
+    overflow: hidden;
+    padding: 2px;
+    padding-left: 50px;
+    text-align: left;
+    /*    display: inline-block;*/
+    word-break:keep-all;
+    width: 44%;
+    position: absolute;
+    height: 100px;
+    text-overflow: ellipsis;
+    resize:both;
+}
 .case-email-selected {
     border: 1px solid #cccccc;
     padding-left: 2px;

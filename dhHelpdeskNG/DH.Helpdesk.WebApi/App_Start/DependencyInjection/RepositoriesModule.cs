@@ -133,6 +133,8 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<StateSecondaryRepository>().As<IStateSecondaryRepository>();
             builder.RegisterType<CaseSolutionRepository>().As<ICaseSolutionRepository>();
             builder.RegisterType<CaseSolutionCategoryRepository>().As<ICaseSolutionCategoryRepository>();
+            builder.RegisterType<CaseSolutionCategoryLanguageRepository>().As<ICaseSolutionCategoryLanguageRepository>();
+            builder.RegisterType<CaseSolutionLanguageRepository>().As<ICaseSolutionLanguageRepository>();
             builder.RegisterType<CaseSolutionConditionRepository>().As<ICaseSolutionConditionRepository>();
             builder.RegisterType<CaseSolutionScheduleRepository>().As<ICaseSolutionScheduleRepository>();
             builder.RegisterType<NotifierFieldSettingLanguageRepository>().As<INotifierFieldSettingLanguageRepository>();

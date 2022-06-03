@@ -58,24 +58,21 @@ namespace upKeeper2Helpdesk.api
 
             try
             {
-                //var client = new RestClient(_BaseUrl + "/api/68/ComputerDetail/" + ComputerId); //When connecting against UpKeeper test account
-                //var client = new RestClient(_BaseUrl + "/api/1/ComputerDetail/" + ComputerId);
+
                 var client = new RestClient(_BaseUrl + "/api/" + UpKeeperOrgNo + "/ComputerDetail/" + ComputerId);
                 var request = new RestRequest(Method.GET);
                 request.AddHeader("cache-control", "no-cache");
                 request.AddHeader("Authorization", "Bearer " + t.Access_token);
                 IRestResponse response = client.Execute(request);
 
-                //Console.WriteLine(response.StatusCode);
-
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     c = JsonConvert.DeserializeObject<Computer>(response.Content);
 
-                    if (c != null && c.MACAddress != null)
-                    {
-                        c.MACAddress = c.MACAddress.Replace("-", ":");
-                    }
+                    //if (c != null && c.MACAddress != null)
+                    //{
+                    //    c.MACAddress = c.MACAddress.Replace("-", ":");
+                    //}
                 }
                 else
                 {

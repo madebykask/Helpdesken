@@ -58,7 +58,20 @@
                                 @Html.HiddenFor(model => model.CaseSolution.TemplatePath)
                                 @Html.HiddenFor(model => model.CaseSolution.ValidateOnChange)
                                 @Html.HiddenFor(model => model.CaseSolution.NextStepState)
-
+                                @Html.HiddenFor(model => model.CaseSolution.Id)
+                                <tr>
+                                <tr>
+                                    @if(ViewBag.ShowLanguageList != null && ViewBag.ShowLanguageList)
+                                    {
+                                    <tr>
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Språk")
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(model => model.LanguageId, Model.Languages, new { id = "languageList" })
+                                        </td>
+                                    </tr>
+                                    }
                                 <tr>
                                     <td style="width:200px">
                                         @Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
@@ -81,7 +94,7 @@
                                         @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Html.DropDownListFor(model => model.CaseSolution.CaseSolutionCategory_Id, Model.CsCategories, "")
+                                        @Html.DropDownListFor(model => model.CaseSolution.CaseSolutionCategory_Id, Model.CsCategories, "", new { id = "CaseSolutionCategory" })
                                     </td>
                                 </tr>
                                 <tr>
@@ -129,7 +142,7 @@
                                         @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        <input type="checkbox" name="Casesolution.Status" @(Model.CaseSolution.Status != 0 ? "checked=checked" : "") value="1" class="switchcheckbox" />
+                                        <input type="checkbox" name="Casesolution.Status" @(Model.CaseSolution.Status != 0 ? "checked=checked" : "") value="1" class="switchcheckbox" id="caseSolutionStatus" />
                                         <input type="hidden" name="Casesolution.Status" value="0" />
                                     </td>
                                 </tr>
@@ -240,7 +253,7 @@
                                                         @Translation.Get("Ersätt alltid befintliga värden", SessionFacade.CurrentLanguageId)
                                                     </td>
                                                     <td>
-                                                        <input type="checkbox" name="CaseSolution.OverWritePopUp" @(Model.CaseSolution.OverWritePopUp == 1 ? "checked=checked" : "") value="1" class="switchcheckbox" />
+                                                        <input type="checkbox" name="CaseSolution.OverWritePopUp" @(Model.CaseSolution.OverWritePopUp == 1 ? "checked=checked" : "") value="1" class="switchcheckbox" id="overWritePopUp"/>
                                                         <input type="hidden" name="CaseSolution.OverWritePopUp" value="0" />
                                                     </td>
                                                 </tr>
@@ -724,7 +737,7 @@
                                                 @Translation.Get("Spara användaruppgifter", SessionFacade.CurrentLanguageId)
                                             </td>
                                             <td>
-                                                <input type="checkbox" name="CaseSolution.UpdateNotifierInformation" @(Model.CaseSolution.UpdateNotifierInformation == 1 ? "checked=checked" : "") value="1" class="switchcheckbox acceptRules" standardId='@GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString()' />
+                                                <input type="checkbox" name="CaseSolution.UpdateNotifierInformation" @(Model.CaseSolution.UpdateNotifierInformation == 1 ? "checked=checked" : "") value="1" class="switchcheckbox acceptRules" standardId='@GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString()' id="updateNotifierInformation" />
                                                 <input type="hidden" name="CaseSolution.UpdateNotifierInformation" value="0" />
                                             </td>
                                             <td>
@@ -1468,7 +1481,7 @@
                                         <td>
                                             @*@if (Model.CaseSolution.ContactBeforeAction == 1)
                                 {
-                                            *@<input type="checkbox" name="CaseSolution.ContactBeforeAction" @(Model.CaseSolution.ContactBeforeAction == 1 ? "checked=checked" : "") value="1" class="switchcheckbox acceptRules" standardId='@GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()' />
+                                            *@<input type="checkbox" name="CaseSolution.ContactBeforeAction" @(Model.CaseSolution.ContactBeforeAction == 1 ? "checked=checked" : "") value="1" class="switchcheckbox acceptRules" standardId='@GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()' id="contactBeforeAction"/>
                                             <input type="hidden" name="CaseSolution.ContactBeforeAction" value="0" />
                                             @*}
                                 else
@@ -2384,6 +2397,8 @@
                             </table>
                             @Html.HiddenFor(model => model.CaseSolution.Customer_Id)
                             @Html.HiddenFor(model => model.CaseSolution.Id, new { id = "hidId" })
+                            @Html.HiddenFor(model => model.isCopy, new { id = "isCopy" })
+                            @Html.HiddenFor(model => model.CustomerDefaultLanguage, new { id = "customerDefaultLanguage" })
 
                             @Html.HiddenFor(model => model.CaseSolution.FormGUID)
                             @Html.HiddenFor(model => model.ContainsExtendedForm)
@@ -2439,7 +2454,7 @@
     });
 </script>
 <script>
-    
+
     function checkVisibility()
     {
         var $elementChosen = $('#SplitToCaseSolutionIds');
@@ -2449,7 +2464,7 @@
         if ($element.val() == '0')
         {
             $elementChosen.val('');
-            $elementChosen.trigger("chosen:updated"); 
+            $elementChosen.trigger("chosen:updated");
 
 
             if (!$elementDiv.hasClass('hidden'))
@@ -2465,11 +2480,11 @@
             }
         }
     }
-    
+
     $('#Casesolution_CaseRelationType').change(function () {
         checkVisibility();
     });
-    
+
     //$('#CaseSolution_Text_External').on('onchange', function () {
     //    checkLength(this);
     //});
@@ -2522,9 +2537,11 @@
 
         $('#CopyCaseSolution').on('click', function () {
 
-            var t = document.getElementById('inputCopy');
-            document.getElementById('hidId').value=0;
+            var t = document.getElementById('inputCopy');         
+            document.getElementById('hidId').value = 0;
+            document.getElementById('isCopy').value = "True";
             t.style.display = 'block';
+            
 
         })
     });
@@ -2550,7 +2567,7 @@
         if (SelectedValue == 'both') {
             if ($activeTabSelfservice.hasClass('hidden')) {
                 $activeTabSelfservice.removeClass('hidden');
-            }          
+            }
         }
         else {
             $activeTabSelfservice.addClass('hidden');
@@ -2610,7 +2627,7 @@
         h.value=final;
     }
 
- 
+
 
     function RemoveCondition (v)
     {
@@ -2706,8 +2723,13 @@
 
     }
 
-    $( document ).ready(function() {
-
+    $(document).ready(function () {
+        //TODO - Default Language
+        var defaultLanguage = document.getElementById('customerDefaultLanguage').value;
+        console.log("Default lang: " +defaultLanguage);
+        if (document.getElementById('languageList').value != defaultLanguage) {
+            DisableControls();
+        }
         if (document.getElementById('Casesolution_ShowInsideCase').checked)
         {
             if(document.getElementById('ConnectTo').value==0  && document.getElementById('ConnectTo').value!='')
@@ -2725,4 +2747,34 @@
         }
 
     });
+</script>
+<script type="text/javascript">
+    $(function() {
+        $("#languageList").change(function() {
+            var selectedItem = $(this).val();
+            console.log("Changed language");
+            window.location.href = '@Url.Action("Edit","CaseSolution")?id=' + @Model.CaseSolution.Id + "&languageId=" + selectedItem;
+            
+        });
+    });
+    function DisableControls() {
+        $(document).ready(function () {
+
+            $("#target :input").prop("disabled", true);
+            $("#Name").prop("disabled", false);
+            $("#ShortDescription").prop("disabled", false);
+            $("#Information").prop("disabled", false);
+            $("#languageList").prop("disabled", false);
+            $("#hidId").prop("disabled", false);
+/*            $("#CaseSolutionCategory").prop("disabled", false);*/
+            //Disable switchboxes
+            $('#caseSolutionStatus').bootstrapSwitch('disabled', true);
+            $('#overWritePopUp').bootstrapSwitch('disabled', true);
+            $('#updateNotifierInformation').bootstrapSwitch('disabled', true);
+            $('#contactBeforeAction').bootstrapSwitch('disabled', true);
+
+            //const inputs = document.querySelectorAll('input.switchcheckbox');
+            //inputs.forEach(input => input.bootstrapSwitch('disabled', true));
+        })
+    }
 </script>

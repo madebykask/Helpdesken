@@ -79,6 +79,7 @@ export const CaseFieldsNames = {
    Log_FileName: 'LogFileName',
    Log_FileName_Internal: 'LogFileName_Internal',
    Log_SendMailToNotifier: 'Log_SendMailToNotifier',
+   Log_SendMailToPerformer: 'Log_SendMailToPerformer',
    Log_ExternalEmailsCC: 'Log_ExternalEmailsCC',
    Log_InternalEmailsTo: 'Log_InternalEmailsTo',
    Log_InternalEmailsCC: 'Log_InternalEmailsCC'

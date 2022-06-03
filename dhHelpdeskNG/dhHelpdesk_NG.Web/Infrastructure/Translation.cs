@@ -11,6 +11,7 @@ namespace DH.Helpdesk.Web.Infrastructure
     using DH.Helpdesk.Common.Extensions.String;
     using DH.Helpdesk.Common.Enums;
     using System.Collections.Generic;
+    using System.Globalization;
 
     public static class Translation
     {
@@ -100,7 +101,10 @@ namespace DH.Helpdesk.Web.Infrastructure
 
             return string.Empty;
         }
-
+        public static string ToTitleCase(string str)
+        {
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str.ToLower());
+        }
         /// <summary>
         /// Get translation for specific language
         /// </summary>

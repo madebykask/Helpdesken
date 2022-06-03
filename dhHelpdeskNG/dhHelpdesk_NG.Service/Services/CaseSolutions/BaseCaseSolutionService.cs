@@ -20,6 +20,8 @@ namespace DH.Helpdesk.Services.Services
         Task<List<CaseSolutionOverview>> GetCustomerMobileCaseSolutionsAsync(int customerId);
         Task<List<CaseSolutionOverview>> GetCustomersMobileCaseSolutionsAsync(IList<int> customersIds);
         CaseSolutionCategory GetCaseSolutionCategory(int id);
+        CaseSolutionLanguageEntity GetCaseSolutionTranslation(int casSolutionId, int languageId);
+        CaseSolutionCategoryLanguageEntity GetCaseSolutionCategoryTranslation(int categoryId, int languageId);
     }
 
     public class BaseCaseSolutionService : IBaseCaseSolutionService
@@ -38,7 +40,16 @@ namespace DH.Helpdesk.Services.Services
         }
 
         #endregion
-
+        public CaseSolutionLanguageEntity GetCaseSolutionTranslation(int casSolutionId, int languageId)
+        {
+            var lang = CaseSolutionRepository.GetCaseSolutionTranslation(casSolutionId, languageId);
+            return lang;
+        }
+        public CaseSolutionCategoryLanguageEntity GetCaseSolutionCategoryTranslation(int categoryId, int languageId)
+        {
+            var lang = CaseSolutionRepository.GetCaseSolutionCategoryTranslation(categoryId, languageId);
+            return lang;
+        }
         public CaseSolution GetCaseSolution(int id)
         {
             return CaseSolutionRepository.GetById(id);

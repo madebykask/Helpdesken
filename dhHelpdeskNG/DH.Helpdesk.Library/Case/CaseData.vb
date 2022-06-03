@@ -913,6 +913,28 @@ Public Class CaseData
             '                                    "FollowUpDate,RegistrationSource,RelatedCaseNumber,Problem_Id," &
             '                                    "Deleted,Status,RegLanguage_Id,RegUserId,RegUserDomain, RegistrationSourceCustomer_Id, getutcdate(),'" & Replace(sCreatedByUser, "'", "''") & "', tblCase.LeadTime  FROM tblCase WHERE Id=" & iCase_Id
 
+            'sSQL = "INSERT INTO tblCaseHistory(CaseHistoryGUID, Case_Id, ReportedBy, Persons_Name, Persons_EMail, Persons_Phone, Persons_CellPhone, Customer_Id, Region_Id, Department_Id, OU_Id, Place, UserCode, InventoryNumber, InventoryType," &
+            '              "InventoryLocation, Casenumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, ReferenceNumber, Caption, Description," &
+            '              "Miscellaneous, ContactBeforeAction, SMS, AgreedDate, Available, Cost, OtherCost, Currency, Performer_User_Id, CaseResponsibleUser_Id, Priority_Id, Status_Id, StateSecondary_Id, ExternalTime, Project_Id," &
+            '              "ProjectSchedule_Id, Verified, VerifiedDescription, SolutionRate, PlanDate, ApprovedDate, ApprovedBy_User_Id, WatchDate, LockCaseToWorkingGroup_Id, WorkingGroup_Id, FinishingDate, FinishingDescription, FollowUpDate," &
+            '              "RegistrationSource, RelatedCaseNumber, Problem_Id, Change_Id, Deleted, Status, RegLanguage_Id, RegUserId, RegUserDomain, ProductAreaQuestionVersion_Id, LeadTime, CreatedDate, CreatedByUser, CausingPartId, " &
+            '              "DefaultOwnerWG_Id, RegistrationSourceCustomer_Id, CostCentre, IsAbout_Persons_Name, IsAbout_ReportedBy, IsAbout_Persons_Phone, IsAbout_UserCode," &
+            '              "IsAbout_Department_Id, CreatedByApp, LatestSLACountDate, IsAbout_Persons_EMail, IsAbout_Persons_CellPhone, IsAbout_Region_Id, IsAbout_OU_Id, " &
+            '              "IsAbout_CostCentre, IsAbout_Place) " &
+            '           "Select top 1  '" & sCaseHistoryGUID & "', " & iCase_Id & " , " &
+            '                    "c.ReportedBy, c.Persons_Name, c.Persons_EMail, c.Persons_Phone, c.Persons_CellPhone, Customer_Id, c.Region_Id, c.Department_Id, c.OU_Id, c.Place, Replace(c.UserCode,'', NULL) UserCode, InventoryNumber, InventoryType," &
+            '                  "InventoryLocation, Casenumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, Replace(ReferenceNumber,'', NULL) ReferenceNumber,  Caption, Description," &
+            '                  "Miscellaneous, ContactBeforeAction, SMS, AgreedDate, Available, c.Cost, OtherCost, Replace(Currency,'', NULL) Currency, Performer_User_Id, CaseResponsibleUser_Id, Priority_Id, Status_Id, StateSecondary_Id, ExternalTime, Project_Id, " &
+            '                  "ProjectSchedule_Id, Verified, Replace(VerifiedDescription, '', NULL) VerifiedDescription, Replace(SolutionRate,'', NULL) SolutionRate, PlanDate, ApprovedDate, ApprovedBy_User_Id, WatchDate, LockCaseToWorkingGroup_Id, WorkingGroup_Id, FinishingDate, Replace(FinishingDescription,'', NULL) FinishingDescription, FollowUpDate, " &
+            '                  "RegistrationSource, RelatedCaseNumber, Problem_Id, Change_Id, Deleted, Status, RegLanguage_Id, Replace(RegUserId,NULL, '') RegUserId, Replace(RegUserDomain,NULL, '') RegUserDomain, ProductAreaQuestionVersion_Id, LeadTime, getutcdate(),'" & Replace(sCreatedByUser, "'", "''") & "', CausingPartId, " &
+            '                  "DefaultOwnerWG_Id, RegistrationSourceCustomer_Id, Replace(c.CostCentre, '', NULL) AS CostCentre , ca.Person_Name, ca.ReportedBy, ca.Person_Phone, ca.UserCode, " &
+            '                  "ca.Department_Id, '', LatestSLACountDate, ca.Person_Email, ca.Person_CellPhone,ca.Region_Id, ca.OU_Id, " &
+            '                  "Replace(ca.CostCentre, '', NULL) AS CostCentre , ca.Place " &
+            '           "From tblCase c " &
+            '           "LEFT JOIN tblCaseIsAbout ca ON c.Id = ca.Case_Id" &
+            '           " where c.Id = " & iCase_Id & " "
+
+
             sSQL = "INSERT INTO tblCaseHistory(CaseHistoryGUID, Case_Id, ReportedBy, Persons_Name, Persons_EMail, Persons_Phone, Persons_CellPhone, Customer_Id, Region_Id, Department_Id, OU_Id, Place, UserCode, InventoryNumber, InventoryType," &
                           "InventoryLocation, Casenumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, ReferenceNumber, Caption, Description," &
                           "Miscellaneous, ContactBeforeAction, SMS, AgreedDate, Available, Cost, OtherCost, Currency, Performer_User_Id, CaseResponsibleUser_Id, Priority_Id, Status_Id, StateSecondary_Id, ExternalTime, Project_Id," &
@@ -922,18 +944,17 @@ Public Class CaseData
                           "IsAbout_Department_Id, CreatedByApp, LatestSLACountDate, IsAbout_Persons_EMail, IsAbout_Persons_CellPhone, IsAbout_Region_Id, IsAbout_OU_Id, " &
                           "IsAbout_CostCentre, IsAbout_Place) " &
                        "Select top 1  '" & sCaseHistoryGUID & "', " & iCase_Id & " , " &
-                                "c.ReportedBy, c.Persons_Name, c.Persons_EMail, c.Persons_Phone, c.Persons_CellPhone, Customer_Id, c.Region_Id, c.Department_Id, c.OU_Id, c.Place, Replace(c.UserCode,'', NULL) UserCode, InventoryNumber, InventoryType," &
-                              "InventoryLocation, Casenumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, Replace(ReferenceNumber,'', NULL) ReferenceNumber,  Caption, Description," &
-                              "Miscellaneous, ContactBeforeAction, SMS, AgreedDate, Available, c.Cost, OtherCost, Replace(Currency,'', NULL) Currency, Performer_User_Id, CaseResponsibleUser_Id, Priority_Id, Status_Id, StateSecondary_Id, ExternalTime, Project_Id, " &
-                              "ProjectSchedule_Id, Verified, Replace(VerifiedDescription, '', NULL) VerifiedDescription, Replace(SolutionRate,'', NULL) SolutionRate, PlanDate, ApprovedDate, ApprovedBy_User_Id, WatchDate, LockCaseToWorkingGroup_Id, WorkingGroup_Id, FinishingDate, Replace(FinishingDescription,'', NULL) FinishingDescription, FollowUpDate, " &
-                              "RegistrationSource, RelatedCaseNumber, Problem_Id, Change_Id, Deleted, Status, RegLanguage_Id, Replace(RegUserId,NULL, '') RegUserId, Replace(RegUserDomain,NULL, '') RegUserDomain, ProductAreaQuestionVersion_Id, LeadTime, getutcdate(),'" & Replace(sCreatedByUser, "'", "''") & "', CausingPartId, " &
-                              "DefaultOwnerWG_Id, RegistrationSourceCustomer_Id, Replace(c.CostCentre, '', NULL) AS CostCentre , ca.Person_Name, ca.ReportedBy, ca.Person_Phone, ca.UserCode, " &
+                                "c.ReportedBy, c.Persons_Name, c.Persons_EMail, c.Persons_Phone, c.Persons_CellPhone, Customer_Id, c.Region_Id, c.Department_Id, c.OU_Id, c.Place, c.UserCode, InventoryNumber, InventoryType," &
+                              "InventoryLocation, Casenumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, ReferenceNumber,  Caption, Description," &
+                              "Miscellaneous, ContactBeforeAction, SMS, AgreedDate, Available, c.Cost, OtherCost, Currency, Performer_User_Id, CaseResponsibleUser_Id, Priority_Id, Status_Id, StateSecondary_Id, ExternalTime, Project_Id, " &
+                              "ProjectSchedule_Id, Verified, VerifiedDescription, SolutionRate, PlanDate, ApprovedDate, ApprovedBy_User_Id, WatchDate, LockCaseToWorkingGroup_Id, WorkingGroup_Id, FinishingDate, FinishingDescription, FollowUpDate, " &
+                              "RegistrationSource, RelatedCaseNumber, Problem_Id, Change_Id, Deleted, Status, RegLanguage_Id, RegUserId, RegUserDomain, ProductAreaQuestionVersion_Id, LeadTime, getutcdate(),'" & Replace(sCreatedByUser, "'", "''") & "', CausingPartId, " &
+                              "DefaultOwnerWG_Id, RegistrationSourceCustomer_Id, c.CostCentre, ca.Person_Name, ca.ReportedBy, ca.Person_Phone, ca.UserCode, " &
                               "ca.Department_Id, '', LatestSLACountDate, ca.Person_Email, ca.Person_CellPhone,ca.Region_Id, ca.OU_Id, " &
-                              "Replace(ca.CostCentre, '', NULL) AS CostCentre , ca.Place " &
+                              "ca.CostCentre, ca.Place " &
                        "From tblCase c " &
                        "LEFT JOIN tblCaseIsAbout ca ON c.Id = ca.Case_Id" &
                        " where c.Id = " & iCase_Id & " "
-
 
 
             '"Replace(c.ReportedBy, '', NULL) AS ReportedBy, " &

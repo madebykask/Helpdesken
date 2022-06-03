@@ -370,13 +370,14 @@
 
 
                         }
-
-                        @*At the moment we do not check access for this /TAN*@
-                        @if (!Model.CaseLock.IsLocked)
+                        @if(Model.case_.FinishingDate ==  null)
                         {
-                            @Html.Partial("WorkflowStep", Model.WorkflowSteps)
+                            if (!Model.CaseLock.IsLocked)
+                            {
+                                @Html.Partial("WorkflowStep", Model.WorkflowSteps)
+                            }
                         }
-                    </ul>
+                        </ul>
                 </div>
                 <div class="pull-right">
                     <ul class="secnav">

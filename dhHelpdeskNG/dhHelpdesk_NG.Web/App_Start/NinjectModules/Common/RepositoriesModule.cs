@@ -129,6 +129,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<ICaseSettingRepository>().To<CaseSettingRepository>();
             this.Bind<ICaseSectionsRepository>().To<CaseSectionsRepository>();
             this.Bind<ICaseSolutionCategoryRepository>().To<CaseSolutionCategoryRepository>();
+            this.Bind<ICaseSolutionCategoryLanguageRepository>().To<CaseSolutionCategoryLanguageRepository>();
             this.Bind<ICaseSolutionRepository>().To<CaseSolutionRepository>();
             this.Bind<ICaseSolutionScheduleRepository>().To<CaseSolutionScheduleRepository>();
             this.Bind<ICaseTypeRepository>().To<CaseTypeRepository>();
@@ -304,6 +305,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IEntityInfoRepository>().To<EntityInfoRepository>();
             this.Bind<IConditionRepository>().To<ConditionRepository>();
 			this.Bind<IComputerUserCategoryRepository>().To<ComputerUserCategoryRepository>();
+            this.Bind<ICaseSolutionLanguageRepository>().To<CaseSolutionLanguageRepository>();
             this.Bind<IGDPRDataPrivacyAccessRepository>().To<GDPRDataPrivacyAccessRepository>();
             this.Bind<IGDPROperationsAuditRespository>().To<GDPROperationsAuditRespository>();
             this.Bind<IGDPRDataPrivacyFavoriteRepository>().To<GDPRDataPrivacyFavoriteRepository>();

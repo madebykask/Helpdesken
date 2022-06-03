@@ -10,7 +10,7 @@ namespace DH.Helpdesk.BusinessData.Models.CaseSolution
     }
     
     public sealed class CaseTemplateCategoryNode
-    {
+    {   
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public bool IsRootTemplate { get; set; }

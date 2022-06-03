@@ -907,8 +907,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 new ListItem("4", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()), false),
                 new ListItem("5", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()), false),
                 new ListItem("6", GetReportFormTranslation(ReportItemNames.LogNoteDate), false),
-                new ListItem("7", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()), false),
-                new ListItem("8", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()), false)
+                new ListItem("7", GetReportFormTranslation(ReportItemNames.RegisteredBy.ToString()), false),
+                //new ListItem("8", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()), false)
             }.OrderBy(l => l.Value)
                 .ToList();
         }
@@ -948,7 +948,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             if (value.Equals(ReportItemNames.FinishingMonth))
                 return Translation.GetMasterDataTranslation(ReportItemNames.FinishingMonth);
             if (value.Equals(ReportItemNames.FinishingYear))
-                return Translation.GetMasterDataTranslation(ReportItemNames.FinishingYear);
+                return Translation.GetMasterDataTranslation(ReportItemNames.FinishingYear);            
+            if (value.Equals(ReportItemNames.RegisteredBy))
+                return Translation.GetMasterDataTranslation(ReportItemNames.RegisteredBy);
 
 
             var defaultValue = string.Empty;

@@ -17,23 +17,23 @@ namespace DH.Helpdesk.Upkeeper_New
 
         static void Main(string[] args)
         {
-            StreamWriter writer = null;
-            string logfilepath = System.Reflection.Assembly.GetExecutingAssembly().Location.ToString().Replace("\\DH.Helpdesk.Upkeeper.exe", "") + "\\logfiles\\";
-            if (!Directory.Exists(logfilepath))
-            {
-                Directory.CreateDirectory(logfilepath);
-            }
-            string logfilename = "Logfile_" + DateTime.Now.ToShortDateString().Replace(" ", "").Replace(":", "").Replace("-", "") + ".txt";
+            //StreamWriter writer = null;
+            //string logfilepath = System.Reflection.Assembly.GetExecutingAssembly().Location.ToString().Replace("\\DH.Helpdesk.Upkeeper.exe", "") + "\\logfiles\\";
+            //if (!Directory.Exists(logfilepath))
+            //{
+            //    Directory.CreateDirectory(logfilepath);
+            //}
+            //string logfilename = "Logfile_" + DateTime.Now.ToShortDateString().Replace(" ", "").Replace(":", "").Replace("-", "") + ".txt";
 
-            if (!System.IO.File.Exists(logfilepath + logfilename))
-            {
-                // Create a file to write to.                
-                writer = System.IO.File.CreateText(logfilepath + logfilename);
-            }
-            else
-            {
-                writer = System.IO.File.AppendText(logfilepath + logfilename);
-            }
+            //if (!System.IO.File.Exists(logfilepath + logfilename))
+            //{
+            //    // Create a file to write to.                
+            //    writer = System.IO.File.CreateText(logfilepath + logfilename);
+            //}
+            //else
+            //{
+            //    writer = System.IO.File.AppendText(logfilepath + logfilename);
+            //}
 
 
 
@@ -42,30 +42,14 @@ namespace DH.Helpdesk.Upkeeper_New
 
 
                 DateTime startTime = DateTime.Now;
-
-                writer.WriteLine(DateTime.Now.ToString() + " DateTime: " + startTime);
-
-                //var builder = new ConfigurationBuilder()
-                //.SetBasePath(Directory.GetCurrentDirectory())
-                //.AddJsonFile("appsettings.json", false);
-
-                //IConfigurationRoot configuration = builder.Build();
-
                 BaseAPI api = new BaseAPI(System.Configuration.ConfigurationManager.AppSettings["UpKeeperUrl"]);
-
-
-                //writer.WriteLine("Username: " + configuration.GetSection("UserName").Value);
-                //writer.WriteLine("Password: " + configuration.GetSection("Password").Value);
 
                 Token t = api.Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"]);
                 string UpKeeperOrgNo = System.Configuration.ConfigurationManager.AppSettings["UpKeeperOrgNo"];
 
-
-                writer.WriteLine("Token: " + t.Access_token.ToString());
+                logger.Debug("Token: " + t.Access_token.ToString());
 
                 int Customer_Id = 1;
-
-
 
                 if (System.Configuration.ConfigurationManager.AppSettings["Customer_Id"] != null)
                 {
@@ -76,7 +60,7 @@ namespace DH.Helpdesk.Upkeeper_New
                     }
                 }
 
-                writer.WriteLine("Customer Id: " + Customer_Id);
+                logger.Debug("Customer Id: " + Customer_Id);
 
                 bool CreateInventory = false;
                 if (System.Configuration.ConfigurationManager.AppSettings["CreateInventory"] != null && System.Configuration.ConfigurationManager.AppSettings["CreateInventory"].ToLower() == "true")
@@ -108,8 +92,7 @@ namespace DH.Helpdesk.Upkeeper_New
 
                     if (computers == null)
                     {
-                        writer.WriteLine("Computers is null, exiting....");
-                        writer.Close();
+                        logger.Error("Computers is null, exiting....");
                         return;
                     }
                     logger.Debug("Antal datorer: " + computers.Count());
@@ -127,17 +110,18 @@ namespace DH.Helpdesk.Upkeeper_New
                         idx += 1;
 
                         var computerId = c["Key"].ToString();
-                        writer.WriteLine("Key: " + computerId.ToString());
                         logger.Debug("computerId: " + computerId);
 
                         var computer = api.GetComputer(computerId, t, UpKeeperOrgNo);
 
+                        
+
                         if (computer != null)
                         {
                             computer.Customer_Id = Customer_Id;
-                            writer.WriteLine("CustomerId: " + Customer_Id.ToString());
+                            logger.Debug("CustomerId: " + Customer_Id.ToString());
                             logger.Debug("Synkroniserar: " + computer.Name + ", " + idx.ToString());
-                            writer.WriteLine("Synk: " + computer.Name + ", " + idx.ToString());
+
                             computer = data.GetComputerInfo(computer);
 
                             if (computer.Computer_Id == null && CreateInventory == true)
@@ -214,9 +198,20 @@ namespace DH.Helpdesk.Upkeeper_New
                                             computer.OS_Id = data.ExistsObject(ObjectType.OS, hardware.Properties.FirstOrDefault(x => x.Property == "Operating System").Value);
                                         }
 
-                                        if (hardware.NetworkAdapters != null && hardware.NetworkAdapters.FirstOrDefault(x => x.Property == "Name") != null)
+                                        if (hardware.NetworkAdapters != null)
                                         {
-                                            computer.NIC_Id = data.ExistsObject(ObjectType.NetworkAdapter, hardware.NetworkAdapters.FirstOrDefault(x => x.Property == "Name").Value);
+                                            for (int i = 0; i < hardware.NetworkAdapters.Count; i++) {
+                                            
+                                                if (hardware.NetworkAdapters[i].Property == "Id" && hardware.NetworkAdapters[i].Value.Contains("Ethernet") && !hardware.NetworkAdapters[i].Value.Contains("802.3")) { 
+                                                    var nic = hardware.NetworkAdapters[i - 1].Value;
+                                                    var macaddress = hardware.NetworkAdapters[i + 1].Value;
+
+                                                    computer.NIC_Id = data.ExistsObject(ObjectType.NetworkAdapter, nic);
+                                                    computer.MACAddress = macaddress.Replace("-", ":");
+
+                                                    logger.Debug("MAC-address: " + computer.MACAddress);
+                                                }
+                                            }
                                         }
 
                                         if (hardware.Properties.FirstOrDefault(x => x.Property == "BIOS Version") != null)
@@ -297,22 +292,10 @@ namespace DH.Helpdesk.Upkeeper_New
                     // Uppdatera program så att de syns i licensmodulen
                     data.UpdateApplication(Customer_Id);
 
-                    if (writer != null)
-                    {
-                        writer.WriteLine("Finished");
-                        writer.Close();
-                    }
-
                 }
             }
             catch (Exception ex)
             {
-                if (writer != null)
-                {
-                    writer.WriteLine(ex.Message + ex.Source + ex.InnerException);
-                    writer.Close();
-                }
-
                 logger.Error(ex.Message);
             }
 

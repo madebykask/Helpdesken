@@ -114,7 +114,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        [CheckUserCasePermissions(CaseIdParamName = "caseId")]
+        [CheckUserCasePermissions(CaseIdParamName = "caseId")] 
         [Route("save/{caseId:int=0}")]
         public async Task<IHttpActionResult> Save([FromUri] int? caseId, [FromUri]int cid, [FromUri] int langId, [FromBody]CaseEditInputModel model)
         {
@@ -128,7 +128,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 //todo: to be removed when case switching is implemented on mobile 
                 if (oldCase.Customer_Id != customerId)
-                    throw new Exception($"Case customer({oldCase.Customer_Id}) and current customer({customerId}) are different"); 
+                    throw new Exception($"Case customer({oldCase.Customer_Id}) and current customer({customerId}) are different");
 
                 var lockData = await _caseLockService.GetCaseLockAsync(caseId.Value);
                 if (lockData != null && lockData.UserId != UserId)
@@ -326,9 +326,10 @@ namespace DH.Helpdesk.WebApi.Controllers
                 EmailRecepientsExternalLog = string.Empty, // TODO: if AllocateCaseMail from working group = 1 set value
                 // in helpdesk Reguser is always empty, but Selfservice users CurrentSystemUser
                 // RegUser is only filled in selfservice
-                RegUser = string.Empty, 
+                RegUser = string.Empty,
                 UserId = UserId,
                 SendMailAboutCaseToNotifier = model.LogSendMailToNotifier,
+                SendMailAboutCaseToPerformer = model.LogSendMailToPerformer,
                 FinishingDate = userOverview.CloseCasePermission.ToBool() ? caseLogFinishingDate : new DateTime?(),
                 FinishingType = userOverview.CloseCasePermission.ToBool() ? model.ClosingReason : new int?()
             };
@@ -351,20 +352,20 @@ namespace DH.Helpdesk.WebApi.Controllers
             // todo: Check if new cases should be handled here. Save case files for new cases only!
             if (!isEdit)
             {
-                var temporaryFiles = _userTempFilesStorage.FindFiles(caseKey, ModuleName.Cases); 
+                var temporaryFiles = _userTempFilesStorage.FindFiles(caseKey, ModuleName.Cases);
                 var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, currentCase.Id, UserId)).ToList();
 
-				var paths = new List<KeyValuePair<CaseFileDto, string>>();
+                var paths = new List<KeyValuePair<CaseFileDto, string>>();
                 _caseFileService.AddFiles(newCaseFiles, paths);
 
-				if (!disableLogFileView)
-				{
-					foreach (var file in paths)
-					{
-						_fileViewLogService.Log(currentCase.Id, UserId, file.Key.FileName, file.Value, FileViewLogFileSource.WebApi, FileViewLogOperation.Add);
-					}
-				}
-			}
+                if (!disableLogFileView)
+                {
+                    foreach (var file in paths)
+                    {
+                        _fileViewLogService.Log(currentCase.Id, UserId, file.Key.FileName, file.Value, FileViewLogFileSource.WebApi, FileViewLogOperation.Add);
+                    }
+                }
+            }
 
             #region ExtendedCase sections
             if (isEdit)// TODO: attach Extended case if required
@@ -455,14 +456,14 @@ namespace DH.Helpdesk.WebApi.Controllers
                 var internalLogFiles = temporaryLogInternalFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, currentUser.Id, LogFileType.Internal, null)).ToList();
                 newLogFiles.AddRange(internalLogFiles);
             }
-			var logPaths = new List<KeyValuePair<CaseLogFileDto, string>>();
-			_logFileService.AddFiles(newLogFiles, logPaths, temporaryExLogFiles, caseLog.Id);
+            var logPaths = new List<KeyValuePair<CaseLogFileDto, string>>();
+            _logFileService.AddFiles(newLogFiles, logPaths, temporaryExLogFiles, caseLog.Id);
 
-            var allLogFiles = 
-                temporaryExLogFiles.Select(f => 
-                    new CaseLogFileDto(basePath, 
-                        f.Name, 
-                        f.IsExistCaseFile ? Convert.ToInt32(currentCase.CaseNumber) : f.LogId.Value, 
+            var allLogFiles =
+                temporaryExLogFiles.Select(f =>
+                    new CaseLogFileDto(basePath,
+                        f.Name,
+                        f.IsExistCaseFile ? Convert.ToInt32(currentCase.CaseNumber) : f.LogId.Value,
                         f.IsExistCaseFile)
                     {
                         LogType = f.IsInternalLogNote ? LogFileType.Internal : LogFileType.External,

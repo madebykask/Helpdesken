@@ -8,7 +8,7 @@
         Priority_Id = 4,
         ProductArea_Id = 5,
         LogNoteDate = 6,
-        Performer_User_Id = 7,
+        RegisteredBy = 7,
         WorkingGroup_Id = 8
     }
 }

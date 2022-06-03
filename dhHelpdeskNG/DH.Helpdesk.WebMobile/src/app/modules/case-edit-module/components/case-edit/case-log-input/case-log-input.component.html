@@ -41,6 +41,17 @@
     <case-textarea-control [field]="caseFieldsNames.Log_InternalText" [form]="form"></case-textarea-control>
   </div>
 
+  <div class="bordered switch">
+    <mbsc-switch #sendMailToPerformerControl 
+                [disabled]="isPerformerNullOrCurrentUser"
+                 [formControlName]="caseFieldsNames.Log_SendMailToPerformer"
+                 (change)="onSendInternalEmailsCheckChanged()"
+                 [options]="switchOptions">
+      <span [ngClass]="{'mbsc-log-label': true, 'disabled': isSendMailToPerformerDisabled || this.sendInternalEmailsFormControl.disabled || isPerformerNullOrCurrentUser}">{{ 'Informera' | translate }} {{ performerLabel }}</span>
+      <span [ngClass]="{'mbsc-desc': true, 'disabled': isSendMailToPerformerDisabled}" [innerHtml]="performerUserEmail | sanitize:'html'" [style.display]="isPerformerNullOrCurrentUser ? 'none' : 'block'"></span>
+    </mbsc-switch>
+  </div>
+
   <div class="bordered">
     <lognote-email-input [field]="caseFieldsNames.Log_InternalEmailsTo" [form]="form"></lognote-email-input>
   </div>

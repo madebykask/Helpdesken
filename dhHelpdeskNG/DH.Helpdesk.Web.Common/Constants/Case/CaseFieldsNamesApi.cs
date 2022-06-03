@@ -84,6 +84,6 @@
         public const string Log_Filename_Internal = "LogFileName_Internal";
         public const string Log_ExternalEmailsCC = "Log_ExternalEmailsCC";
         public const string Log_SendMailToNotifier = "Log_SendMailToNotifier";
-
+        public const string Log_SendMailToPerformer = "Log_SendMailToPerformer";
     }
 }

@@ -921,8 +921,17 @@
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\pub.pubxml" />
     <Content Include="img-profile\SelfService-StartPage.jpg" />
-    <Content Include="Web.config">
+    <None Include="Web.config">
       <SubType>Designer</SubType>
+    </None>
+    <Content Include="Web.config.ikea.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Web.config.windows.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Web.config.microsoft.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

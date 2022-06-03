@@ -29,17 +29,17 @@ input[type="checkbox"],
 }*/
 
 /****************TEMP QUALITY LOGO ON START PAGE*******************************/
-.startpage-brand {
+/*.startpage-brand {
     background: url(ikea-quality-text.png);
     background-repeat:no-repeat;
     background-size: contain;
     height: 300px;
     margin-top:30px;
-}
+}*/
 
 
 /*****************NAVIGATION**********************************************/
-.navbar
+/*.navbar
 {
                              margin-left: 0;
                              margin-right: 0;
@@ -51,18 +51,18 @@ input[type="checkbox"],
                              padding-left: 0;
                              padding-right: 0;
                              min-height: 45px;
-                             position: relative;
+                             position: relative;*/
                              /*background: #438eb9;
                              background: #f9d616;*/
-    background:#fff;
+    /*background:#fff;
                              
 }
 
 .navbar .navbar-brand
 {
-                             background: url(CHS-logo-H31px_140227.png);
+                             background: url(CHS-logo-H31px_140227.png);*/
                              /*background: url(../img/dhhelpdesk.png);*/
-                                                          background-position:0 10px;
+                                                          /*background-position:0 10px;
                                                           background-repeat:no-repeat;
                                                           color: #fff;
                                                           font-size: 24px;
@@ -78,8 +78,8 @@ input[type="checkbox"],
                                                           color: #fff;
                              }
 
-.navbar-admin /*ADMIN*/
-{
+.navbar-admin*/ /*ADMIN*/
+/*{
                              margin-left: 0;
                              margin-right: 0;
                              border: 0;
@@ -94,8 +94,8 @@ input[type="checkbox"],
                              background: #53378a;
 }
 
-.navbar .navbar-brand-admin /*ADMIN*/
-                             {
+.navbar .navbar-brand-admin*/ /*ADMIN*/
+                             /*{*/
                                                          /* background: url(../img/dhhelpdeskadministration.png);
                                                           background-position:0 10px;
                                                           background-repeat:no-repeat;
@@ -106,22 +106,22 @@ input[type="checkbox"],
                                                           padding-bottom: 10px;
                                                           width:243px !important;
                                                           height:25px;*/
-                             }
+                             /*}*/
 
 /************************LOGIN*************************************************************************/
-body.login {
+/*body.login {
         padding-top: 50px;
-        padding-bottom: 40px;
+        padding-bottom: 40px;*/
         /*background-color: #438eb9;*/
-        background:#fff;
+        /*background:#fff;
       }
 .form-signin {
         max-width: 300px;
         padding: 19px 60px 29px;
         margin: 0 auto 0;
-        background-color: #fff;
+        background-color: #fff;*/
         /*border: 1px solid #fff;*/
-        border: 1px solid #438eb9;
+        /*border: 1px solid #438eb9;
       }
       .form-signin .form-signin-heading,
       .form-signin .checkbox {
@@ -139,9 +139,9 @@ body.login {
                              max-width: 300px;
                              padding: 10px 60px 10px;
                              margin: 0 auto 20px;
-                             background-color: #fff;
+                             background-color: #fff;*/
                              /*border: 1px solid #fff;*/
-    border: 1px solid #438eb9;
+    /*border: 1px solid #438eb9;
                              background: #438eb9;
                              text-align:center;
                              color: #fff;
@@ -154,9 +154,9 @@ body.login {
 }
 
 .form-signin-heading
-{
+{*/
                              /*background: url(../img/dhhelpdesk-login.png);*/
-                             background: url(CHS-logo-W300_140227.png);
+                             /*background: url(CHS-logo-W300_140227.png);
                              background-position:0 5px;
                              background-repeat: no-repeat;
                              color: #fff;
@@ -164,12 +164,12 @@ body.login {
                              text-shadow: none;
                              padding-top: 10px;
                              padding-bottom: 10px;
-                             width:300px !important;
+                             width:300px !important;*/
                              /*height:80px;*/
-                             height:68px;
-}
+                             /*height:68px;
+}*/
 /*JQuery portlets*/
-.column {
+/*.column {
     width: 100%;
     float: left;
     padding-bottom: 100px;
@@ -178,4 +178,4 @@ body.login {
     border: 1px dotted black;
     margin: 0 1em 1em 0;
     height: 50px;
-  }
+  }*/

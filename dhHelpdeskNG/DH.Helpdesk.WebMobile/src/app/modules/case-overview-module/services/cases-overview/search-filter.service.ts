@@ -79,6 +79,9 @@ export class SearchFilterService {
             case FilterFields.CaseTypeFilter:
               filter.CaseTypeId = this.getFilterFieldSingleValue(fieldKey, selectedFilter.fields);
               break;
+            case FilterFields.CategoryTypeFilter:
+              filter.CategoryId = this.getFilterFieldSingleValue(fieldKey, selectedFilter.fields);
+              break;
             case FilterFields.ProductAreaFilter:
               filter.ProductAreaId = this.getFilterFieldSingleValue(fieldKey, selectedFilter.fields);
               break;

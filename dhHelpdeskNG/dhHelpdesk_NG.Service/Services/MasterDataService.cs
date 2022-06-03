@@ -30,6 +30,8 @@ namespace DH.Helpdesk.Services.Services
         bool IsCustomerUser(int customerId, int userId);
         User GetUser(int userId);
         User GetUserByEmail(string emailAddress);
+
+        IList<User> GetUsersByEmail(string emailAddress);
         IList<Language> GetLanguages();
         IList<Text> GetTranslationTexts(int? textType = null);
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int userId);
@@ -144,6 +146,12 @@ namespace DH.Helpdesk.Services.Services
         {
             return this._userRepository.GetUserByEmail(emailAddress);
         }
+
+        public IList<User> GetUsersByEmail(string emailAddress)
+        {
+            return this._userRepository.GetUsersByEmail(emailAddress).ToList();
+        }
+
         public Setting GetCustomerSettings(int customerId)
         {
             // store settings to be used during request processing

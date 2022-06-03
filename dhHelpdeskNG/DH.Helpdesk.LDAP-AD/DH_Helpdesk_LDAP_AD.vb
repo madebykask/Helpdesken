@@ -1,6 +1,5 @@
 ﻿Imports System.DirectoryServices
 Imports System.Data.SqlClient
-
 Imports System.Configuration
 Imports System.IO
 
@@ -176,7 +175,6 @@ Module DH_Helpdesk_LDAP_AD
         Dim colComputerUserFieldSettings As New Collection
 
         Try
-
             objGlobalSettings = objGlobalSettingsData.getGlobalSettings()
             giDBType = objGlobalSettings.DBType
             gsDBVersion = objGlobalSettings.DBVersion
@@ -216,7 +214,6 @@ Module DH_Helpdesk_LDAP_AD
                           objCustomer.LDAPAuthenticationType,
                           objCustomer.LDAPAllUsers,
                           objCustomer.OverwriteFromMasterDirectory)
-
 
 
                 ' Kontrollera om ej synkade ska tas bort
@@ -756,6 +753,7 @@ Module DH_Helpdesk_LDAP_AD
         objLogFile = New StreamWriter(sFilePath)
         objLogFile.WriteLine("----- Start -----")
     End Sub
+
     Private Sub closeLogFile()
         If objLogFile IsNot Nothing Then
             objLogFile.WriteLine("----- Slut -----")
@@ -763,6 +761,7 @@ Module DH_Helpdesk_LDAP_AD
             objLogFile = Nothing
         End If
     End Sub
+
     Private Sub LogToFile(msg As String, level As Integer)
         If level > 0 Then
             If objLogFile IsNot Nothing Then
@@ -775,5 +774,4 @@ Module DH_Helpdesk_LDAP_AD
             objLogFile.WriteLine("{0}: {1}", Now(), msg)
         End If
     End Sub
-
 End Module

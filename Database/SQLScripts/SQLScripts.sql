@@ -1,4 +1,4 @@
---update DB from 5.3.53 to 5.3.54 version
+--update DB from 5.3.54 to 5.3.55 version
 
 RAISERROR ('Add Column WarrantyEndDate to tblComputer', 10, 1) WITH NOWAIT
 IF COL_LENGTH('dbo.tblComputer','WarrantyEndDate') IS NULL
@@ -19,39 +19,31 @@ RAISERROR ('Create table tblCaseSolution_tblLanguage', 10, 1) WITH NOWAIT
 IF(OBJECT_ID('tblCaseSolution_tblLanguage', 'U') IS NULL)
 	Begin
 
-		CREATE TABLE [dbo].[tblCaseSolution_tblLanguage](
-			[CaseSolution_Id] [int] NOT NULL,
+		CREATE TABLE [dbo].[tblCaseSolutionCategory_tblLanguage](
+			[Category_Id] [int] NOT NULL,
 			[Language_Id] [int] NOT NULL,
-			[CaseSolutionName] [nvarchar](50) NOT NULL,
-			[ShortDescription] [nvarchar](100) NOT NULL,
-			[Information] [nvarchar](MAX) NULL,
-		 CONSTRAINT [PK_tblCaseSolution_tblLanguage] PRIMARY KEY CLUSTERED 
+			[CaseSolutionCategory] [nvarchar](100) NOT NULL,
+		 CONSTRAINT [PK_tblCaseSolutionCategory_tblLanguage] PRIMARY KEY CLUSTERED 
 		(
-			[CaseSolution_Id] ASC,
+			[Category_Id] ASC,
 			[Language_Id] ASC
 		)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 		) ON [PRIMARY]
 
-		ALTER TABLE [dbo].[tblCaseSolution_tblLanguage] ADD  CONSTRAINT [DF_tblCaseSolution_tblLanguage_CaseSolutionName]  DEFAULT ('') FOR [CaseSolutionName]
+		ALTER TABLE [dbo].[tblCaseSolutionCategory_tblLanguage] ADD  CONSTRAINT [DF_tblCaseSolutionCategory_tblLanguage_CaseSolutionCategory]  DEFAULT ('') FOR [CaseSolutionCategory]
 
 
-		ALTER TABLE [dbo].[tblCaseSolution_tblLanguage] ADD  CONSTRAINT [DF_tblCaseSolution_tblLanguage_ShortDescription]  DEFAULT ('') FOR [ShortDescription]
+		ALTER TABLE [dbo].[tblCaseSolutionCategory_tblLanguage]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseSolutionCategory_tblLanguage_tblCaseSolutionCategory] FOREIGN KEY([Category_Id])
+		REFERENCES [dbo].[tblCaseSolutionCategory] ([Id])
 
 
-		ALTER TABLE [dbo].[tblCaseSolution_tblLanguage] ADD  CONSTRAINT [DF_tblCaseSolution_tblLanguage_Information]  DEFAULT ('') FOR [Information]
+		ALTER TABLE [dbo].[tblCaseSolutionCategory_tblLanguage] CHECK CONSTRAINT [FK_tblCaseSolutionCategory_tblLanguage_tblCaseSolutionCategory]
 
 
-		ALTER TABLE [dbo].[tblCaseSolution_tblLanguage]  WITH CHECK ADD  CONSTRAINT [FK_tblCaseSolution_tblLanguage_tblCaseSolution] FOREIGN KEY([CaseSolution_Id])
-		REFERENCES [dbo].[tblCaseSolution] ([Id])
-
-
-		ALTER TABLE [dbo].[tblCaseSolution_tblLanguage] CHECK CONSTRAINT [FK_tblCaseSolution_tblLanguage_tblCaseSolution]
-
-
-		ALTER TABLE [dbo].[tblCaseSolution_tblLanguage] WITH CHECK ADD  CONSTRAINT [FK_tblCaseSolution_tblLanguage_tblLanguage] FOREIGN KEY([Language_Id])
+		ALTER TABLE [dbo].[tblCaseSolutionCategory_tblLanguage] WITH CHECK ADD  CONSTRAINT [FK_tblCaseSolutionCategory_tblLanguage_tblLanguage] FOREIGN KEY([Language_Id])
 		REFERENCES [dbo].[tblLanguage] ([Id])
 
-		ALTER TABLE [dbo].[tblCaseSolution_tblLanguage] CHECK CONSTRAINT [FK_tblCaseSolution_tblLanguage_tblLanguage]
+		ALTER TABLE [dbo].[tblCaseSolutionCategory_tblLanguage] CHECK CONSTRAINT [FK_tblCaseSolutionCategory_tblLanguage_tblLanguage]
 
 	END
 GO
@@ -63,70 +55,15 @@ IF COL_LENGTH('dbo.tblCaseFilterFavorite','InitiatorFilter') IS NULL
 		ADD [InitiatorFilter] nvarchar(200) Null
 	End
 
-Go
-
-RAISERROR ('Add Column InitiatorSearchScopeFilter to tblCaseFilterFavorite', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblCaseFilterFavorite','InitiatorSearchScopeFilter') IS NULL
+RAISERROR ('Add Column Category to tblCaseFilterFavorite', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCaseFilterFavorite','Category') IS NULL
 	BEGIN	 
 		ALTER TABLE [dbo].tblCaseFilterFavorite
-		ADD InitiatorSearchScopeFilter nvarchar(200) Null
+		ADD Category nvarchar(200) Null
 	End
 
 Go
 
----------------------------------------------------------------------------------
--- tblCase
-IF EXISTS (SELECT * FROM sys.fulltext_indexes fti WHERE fti.object_id = OBJECT_ID(N'[dbo].[tblCase]'))
-	DROP FULLTEXT INDEX ON [dbo].[tblCase]
-GO
-
-CREATE FULLTEXT INDEX ON dbo.tblCase  
-(			    ReportedBy,
-				Persons_Name,
-				RegUserName,
-				Persons_EMail,
-				Persons_Phone,
-				Persons_CellPhone,
-				Place,
-				Caption,
-				[Description],
-				Miscellaneous,
-				ReferenceNumber,
-				InvoiceNumber,
-				InventoryNumber,
-				UserCode,
-				InventoryType,
-				InventoryLocation,
-				VerifiedDescription,
-				CostCentre,
-				Available
-				)  
-KEY INDEX PK_tblCase
-ON SearchCasesFTS  
-WITH STOPLIST = SYSTEM
-GO
-
----------------------------------------------------------------------------------
---CaseIsAbout
-IF  EXISTS (SELECT * FROM sys.fulltext_indexes fti WHERE fti.object_id = OBJECT_ID(N'[dbo].[tblCaseIsAbout]'))
-	DROP FULLTEXT INDEX ON [dbo].[tblCaseIsAbout]
-GO
-
-CREATE FULLTEXT INDEX ON dbo.tblCaseIsAbout  
-(			 
-				ReportedBy,
-				Person_Name,
-				UserCode,
-				Person_Email,
-				Place,
-				Person_CellPhone,
-				Person_Phone,
-				CostCentre)  
-KEY INDEX [PK_tblCaseIsAbout]
-ON SearchCasesFTS  
-WITH STOPLIST = SYSTEM
-GO
-
   -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.54'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.55'
 GO

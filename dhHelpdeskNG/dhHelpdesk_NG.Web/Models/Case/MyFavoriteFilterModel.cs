@@ -60,6 +60,10 @@
                         ret.CaseTypeFilter = new SelectedItems(field.AttributeValue, false);
                         break;
 
+                    case CaseFilterFields.CategoryNameAttribute:
+                        ret.CategoryTypeFilter = new SelectedItems(field.AttributeValue, false);
+                        break;
+
                     case CaseFilterFields.ClosingReasonNameAttribute:
                         ret.ClosingReasonFilter = new SelectedItems(field.AttributeValue, false);
                         break;
@@ -175,6 +179,7 @@
             this.AddField(CaseFilterFields.InitiatorSearchScopeAttribute, filterFields.InitiatorSearchScopeFilter.GetSelectedStr());
             this.AddField(CaseFilterFields.PerformerNameAttribute, filterFields.AdministratorFilter.GetSelectedStr());
             this.AddField(CaseFilterFields.CaseTypeIdNameAttribute, filterFields.CaseTypeFilter.GetSelectedStr());
+            this.AddField(CaseFilterFields.CategoryNameAttribute, filterFields.CategoryTypeFilter.GetSelectedStr());
             this.AddField(CaseFilterFields.ClosingReasonNameAttribute, filterFields.ClosingReasonFilter.GetSelectedStr());
             this.AddField(CaseFilterFields.DepartmentNameAttribute, filterFields.DepartmentFilter.GetSelectedStr());
             this.AddField(CaseFilterFields.PriorityNameAttribute, filterFields.PriorityFilter.GetSelectedStr());

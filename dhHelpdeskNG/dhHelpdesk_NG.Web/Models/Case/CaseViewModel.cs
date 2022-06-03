@@ -331,6 +331,8 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public bool InformNotifierBehavior { get; set; }
 
+        public bool InformPerformerBehavior { get; set; }
+
         public bool UpdateNotifierInformation { get; set; }
 
         public bool AddFollowersBtn { get; set; }

@@ -25,6 +25,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
     using UserGroup = DH.Helpdesk.BusinessData.Enums.Admin.Users.UserGroup;
     using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
+    using System.Threading.Tasks;
 
     public class UsersController : BaseController
     {
@@ -1245,6 +1246,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
             else
                 throw new ArgumentNullException("The password fields do not  match, please re-type them...");
+        }
+        [HttpGet]
+        public string GetEmailById(int id)
+        {
+            return _userService.GetUserEmail(id);
         }
     }
 }

@@ -94,6 +94,7 @@ export class CaseSaveService {
     model.logSendMailToNotifier =  this.getBooleanValue(form, CaseFieldsNames.Log_SendMailToNotifier);
     model.logExternalEmailsCc = this.getStringValue(form, CaseFieldsNames.Log_ExternalEmailsCC);
 
+    model.logSendMailToPerformer =  this.getBooleanValue(form, CaseFieldsNames.Log_SendMailToPerformer);
     model.logInternalEmailTo = this.getStringValue(form, CaseFieldsNames.Log_InternalEmailsTo);
     model.logInternalEmailCc = this.getStringValue(form, CaseFieldsNames.Log_InternalEmailsCC);
 

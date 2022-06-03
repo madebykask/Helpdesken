@@ -1,0 +1,32 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- Development
+
+name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Rev:r)
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/ExtendedCase/ExtendedCase.Web.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+
+- task: CopyFiles@2
+  displayName: Copy DH-Helpdesk-ExtendedCase-Web
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)/ExtendedCase/ExtendedCase.Web/src'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/ExtendedCase.Web'
+  
+- task: PublishPipelineArtifact@1
+  displayName: Publish Artifact DH-Helpdesk-ExtendedCase-Web
+  inputs:
+   targetPath: '$(Build.ArtifactStagingDirectory)/ExtendedCase.Web'
+   artifactName: 'DH-Helpdesk-ExtendedCase-Web'

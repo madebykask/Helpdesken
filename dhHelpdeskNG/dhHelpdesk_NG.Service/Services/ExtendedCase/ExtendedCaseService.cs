@@ -456,13 +456,17 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                                     type = c.Type,
                                     label = c.Label,
                                     valueBinding = c.ValueBinding,
-                                    validators = c.Required ? new ValidatorsElement()
+                                    validators = (c.Required || c.RequiredSelfService) ? new ValidatorsElement()
                                     {
                                         onSave = new List<OnSaveElement>()
                                         {
                                     new OnSaveElement()
                                     {
-                                        type = c.Required ? "required" : ""
+                                        type = c.Required || c.RequiredSelfService ? "required" : "",
+                                        enabled = c.Required && c.RequiredSelfService ? null 
+                                                    : (c.Required ? @"function(m) { if (m.formInfo.applicationType == ""helpdesk"") return true; }"
+                                                    : (c.RequiredSelfService ?  @"function(m) { if (m.formInfo.applicationType == ""selfservice"") return true; }"
+                                                    : null))
                                     }
                                         }
                                     } : null,
