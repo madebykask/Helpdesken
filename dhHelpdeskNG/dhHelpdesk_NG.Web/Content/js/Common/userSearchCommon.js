@@ -147,6 +147,7 @@ function InitExtraEmailsSearch(admins, emailGroups, workingGroups) {
                     checkAndAddEmailsTo(newEmail, mainInput);
                 }
             }
+            console.log(getExtraEmails(mainInput.val()));    
             fakeInput.html(getHtmlFromEmails(mainInput.val()));
             if (e.type !== 'blur') placeCaretAtEnd(fakeInput);
         }
@@ -242,7 +243,31 @@ function getHtmlFromEmails(emails) {
 
     return result.join("");
 }
+function getHtmlFromEmails(emails) {
+    if (emails == undefined) {
+        return [];
+    }
+    var arr = emails.split(";");
+    var result = [];
+    for (var i = 0; i < arr.length - 1; i++) {
+        result.push("<span class='case-email-selected'>" + arr[i] + ";</span>");
+    }
+    if (result.length > 0) result.push("<span>&nbsp</span>");
 
+    return result.join("");
+}
+function getExtraEmails(emails) {
+    if (emails == undefined) {
+        return [];
+    }
+    var arr = emails.split(";");
+    var result = [];
+    for (var i = 0; i < arr.length - 1; i++) {
+        result.push( arr[i] + " ");
+    }
+
+    return result.join("");
+}
 function getEmailsFromHtml(html) {
     var result = [];
     var arr = html.replace(/<[^>]*>/g, "").split(";");
