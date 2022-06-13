@@ -122,7 +122,7 @@ function getCollapseCaption(cap) {
         self.gridSettings = appSettings.gridSettings;
 
         self.$table.addClass(appSettings.gridSettings.cls);
-
+        
         var columns = self.getColumnSettings(appSettings.gridSettings);
 
         var sortIndex = null;
@@ -193,8 +193,12 @@ function getCollapseCaption(cap) {
                             html.push('<img class="img-case-locked" title="', data.caseLockedIconTitle, '" alt="', data.caseLockedIconTitle, '" src="', data.caseLockedIconUrl, '" />');
                         }
                         html.push('</a>');
-
                         row.cells[0].innerHTML = html.join("");
+                        let caseClosedOrLocked = (data.isClosed == true || data.isCaseLocked == true);
+
+                        html = [];
+                        html.push('<input type="checkbox" class="bulkEditCaseSelect' + (caseClosedOrLocked ? 'Disabled' : '') + '" onclick="onClick_cbxBulkEditCaseSelect()" ' + (caseClosedOrLocked  ? 'disabled' : '') + ' id="cbxBulkEditSelectCaseId_' + data.case_id + '" /> ');
+                        row.cells[1].innerHTML = html.join("");
 
                         html = [];
                         if (data.ParentId > 0 || data.isParent) {
@@ -388,6 +392,7 @@ function getCollapseCaption(cap) {
         //};
         var columns = [];
         columns.push({ data: null, width: "18px", orderable: false, defaultContent: "&nbsp;" });
+        columns.push({ data: null, width: "10px", orderable: false, defaultContent: "&nbsp;", title: "<input type='checkbox' onclick='onClick_cbxBulkCaseEditAll(this)' id='cbxBulkCaseEditAll'/>" });
    
         $.each(gridSettings.columnDefs, function (idx, fieldSetting) {
 
@@ -527,7 +532,6 @@ $('#CasesTab').click(function (e) {
     $('#btnSaveCaseSetting').hide();
 });
 
-
 /**
 * @param { string } message
 * @param { string } msgType one of 'notice', 'warning', 'error', 'success'
@@ -544,6 +548,33 @@ function ShowToastMessage(message, msgType) {
         close: function () {
         }
     });
+}
+
+function onClick_cbxBulkEditCaseSelect() {
+    showHideBulkCaseEditBtn();
+}
+
+function onClick_cbxBulkCaseEditAll(e) {
+    let bulkCaseEditAll = document.getElementById(e.id);
+    if (bulkCaseEditAll.checked) {
+        $('.bulkEditCaseSelect:checkbox').prop('checked', true);
+    }
+    else {
+        $('.bulkEditCaseSelect:checkbox').prop('checked', false);
+    }
+
+    showHideBulkCaseEditBtn();
+}
+
+function showHideBulkCaseEditBtn() {
+    let selectedCases = $('.bulkEditCaseSelect:checkbox:checked').length;
+
+    if (selectedCases > 0) {
+        $('#btnBulkCaseEdit').show();
+    }
+    else {
+        $('#btnBulkCaseEdit').hide();
+    }
 }
 
 $(function () {
