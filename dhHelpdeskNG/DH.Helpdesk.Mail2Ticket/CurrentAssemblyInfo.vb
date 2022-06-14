@@ -2,12 +2,16 @@
 
 Public Class CurrentAssemblyInfo
 
-    Private Shared Readonly _currentAssembly As Assembly = Assembly.GetExecutingAssembly()
-    
     Public Shared ReadOnly Property Version() As String
         Get
-            Return _currentAssembly.GetName().Version.ToString()
+            Return AssemblyVersion()
         End Get
     End Property
-                                                                
+
+    Private Shared Function AssemblyVersion() As String
+        Dim assembly As Assembly = Assembly.GetExecutingAssembly()
+        Dim FileVersionInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location)
+        Return FileVersionInfo.ProductVersion
+    End Function
+
 End Class
