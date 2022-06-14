@@ -99,7 +99,7 @@
             runtimes: 'html5,html4',
             url: uploadContractFileUrl,
             multipart_params: { Id: ContractFileKey, myTime: Date.now() },
-            max_file_size: '10mb',
+            max_file_size: '25mb',
 
             init: {
                 FileUploaded: function () {
