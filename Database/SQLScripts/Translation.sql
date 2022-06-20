@@ -8264,6 +8264,13 @@ If not exists (select * from tblTextTranslation where text_id = 2112 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2112, 1, 'Registrerad av')
 GO
 
+If not exists (select * from tbltext where id = 2123)
+	insert into tbltext (id, TextString) VALUES (2123, 'Massredigera')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2123 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2123, 2, 'Bulk edit')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')

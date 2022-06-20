@@ -23,16 +23,20 @@
             <input type="hidden" id="hidExpandedGroup" value=""/>
             <ul class="secnav">
                 @if (SessionFacade.CurrentUser.CreateCasePermission == 1)
-                {                                        
+                {
                     <li id="btnNewCase">
-                        @Html.ActionLink(Translation.Get("Skapa ärende"), "new", "cases", new { customerId = Model.CaseSearchFilterData.filterCustomerId } , new { @class = "btn" })
+                        @Html.ActionLink(Translation.Get("Skapa ärende"), "new", "cases", new { customerId = Model.CaseSearchFilterData.filterCustomerId }, new { @class = "btn" })
                     </li>
-                    <li id="btnCaseTemplate">                   
+                    <li id="btnCaseTemplate">
                         @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton)
-                    </li>                
-                }                    
-                <li id="btnSaveCaseSetting" style= "display: none">                   
-                    <input type="button" class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" /> 
+                    </li>
+                    <li id="btnBulkCaseEdit" style="display: none">
+                        @Html.ActionLink(Translation.Get("Massredigera"), null, null, new { customerId = Model.CaseSearchFilterData.filterCustomerId }, new { @class = "btn" } )
+                    </li>
+
+                }
+                <li id="btnSaveCaseSetting" style="display: none">
+                    <input type="button" class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" />
                 </li>
             </ul>
         </div>

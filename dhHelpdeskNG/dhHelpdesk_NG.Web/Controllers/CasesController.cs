@@ -952,7 +952,7 @@ namespace DH.Helpdesk.Web.Controllers
                     {"caseIconUrl", $"/Content/icons/{searchRow.CaseIcon.CaseIconSrc()}"},
                     {"isUnread", searchRow.IsUnread},
                     {"isUrgent", searchRow.IsUrgent},
-                    {"isClosed", searchRow.IsUrgent},
+                    {"isClosed", searchRow.IsClosed},
                     {"isParent", searchRow.IsParent},
                     {"ParentId", searchRow.ParentId}
                 };
