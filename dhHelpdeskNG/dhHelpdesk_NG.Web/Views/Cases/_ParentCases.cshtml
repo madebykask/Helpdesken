@@ -14,6 +14,15 @@
         pageSettings.curUserId = '@(SessionFacade.CurrentUser != null ? SessionFacade.CurrentUser.UserId.ToLower(): string.Empty)';
 
         $("#case_connect_to_parent_btn").on("click", function () {
+            $("#tomerge").val('false');
+            var $src = $(this);
+            var $target = $("#divConnectParentToParent");
+            $target.attr("data-src", $src.attr("data-src"));
+            $target.modal("show");
+            LoadConnectToParent(pageSettings);
+        });
+        $("#merge_case_to_parent").on("click", function () {
+            $("#tomerge").val('true');
             var $src = $(this);
             var $target = $("#divConnectParentToParent");
             $target.attr("data-src", $src.attr("data-src"));

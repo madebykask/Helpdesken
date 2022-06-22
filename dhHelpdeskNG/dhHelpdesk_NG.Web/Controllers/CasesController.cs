@@ -632,7 +632,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 return new RedirectResult("~/Error/Unathorized");
             }
-
+            
             #region Code from old method. TODO: code review wanted
             var f = new CaseSearchFilter();
             f.CustomerId = SessionFacade.CurrentCustomer.Id;
@@ -666,6 +666,8 @@ namespace DH.Helpdesk.Web.Controllers
             f.CaseClosingReasonFilter = frm.ReturnFormValue(CaseFilterFields.ClosingReasonNameAttribute).ReturnCustomerUserValue();
             f.SearchInMyCasesOnly = frm.IsFormValueTrue("SearchInMyCasesOnly");
             f.IsConnectToParent = frm.IsFormValueTrue(CaseFilterFields.IsConnectToParent);
+            f.ToBeMerged = frm.IsFormValueTrue(CaseFilterFields.ToBeMerged);
+
             if (f.IsConnectToParent)
             {
                 var id = frm.ReturnFormValue(CaseFilterFields.CurrentCaseId);
@@ -940,7 +942,6 @@ namespace DH.Helpdesk.Web.Controllers
             var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
 
             var casesLocks = _caseLockService.GetLockedCasesToOverView(ids, globalSettings, this.DefaultCaseLockBufferTime).ToList();
-
             foreach (var searchRow in caseSearchResults)
             {
                 var caseId = searchRow.Id;
@@ -954,7 +955,9 @@ namespace DH.Helpdesk.Web.Controllers
                     {"isUrgent", searchRow.IsUrgent},
                     {"isClosed", searchRow.IsClosed},
                     {"isParent", searchRow.IsParent},
-                    {"ParentId", searchRow.ParentId}
+                    {"ParentId", searchRow.ParentId},
+                    {"IsMergeParent", searchRow.IsMergeParent},
+                    {"IsMergeChild", searchRow.IsMergeChild}
                 };
 
                 var caseLock = casesLocks.Where(x => x.CaseId == caseId).FirstOrDefault();
@@ -2563,7 +2566,46 @@ namespace DH.Helpdesk.Web.Controllers
         #endregion
 
         #region --Parent Child Case--
+        public ActionResult MergeCase(int parentCaseId)
+        {
+            if (SessionFacade.CurrentCustomer == null || SessionFacade.CurrentUser == null)
+            {
+                return new RedirectResult("~/Error/Unathorized");
+            }
 
+            if (SessionFacade.CurrentUser.CreateCasePermission != 1 || SessionFacade.CurrentUser.CreateSubCasePermission != 1)
+            {
+                return new RedirectResult("~/Error/Forbidden");
+            }
+
+            SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
+
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var userId = SessionFacade.CurrentUser.Id;
+            var caseLockModel = new CaseLockModel();
+            var customerFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+
+            var m = this.GetCaseInputViewModel(userId, customerId, 0, caseLockModel, customerFieldSettings, string.Empty, null, null, null, false, null, parentCaseId);
+
+            var caseParam = new NewCaseParams
+            {
+                customerId = SessionFacade.CurrentCustomer.Id,
+                templateId = null,
+                copyFromCaseId = null,
+                caseLanguageId = SessionFacade.CurrentCaseLanguageId
+            };
+
+            m.NewModeParams = caseParam;
+            AddViewDataValues();
+
+            // Positive: Send Mail to...
+            if (m.CaseMailSetting.DontSendMailToNotifier == false)
+                m.CaseMailSetting.DontSendMailToNotifier = true;
+            else
+                m.CaseMailSetting.DontSendMailToNotifier = false;
+
+            return this.View("New", m);
+        }
         public ActionResult NewChildCase(int parentCaseId)
         {
             if (SessionFacade.CurrentCustomer == null || SessionFacade.CurrentUser == null)
@@ -2735,32 +2777,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             return Json(new { CaseNumber = newCase.CaseNumber });
 
-            //var caseParam = new NewCaseParams
-            //{
-            //	customerId = SessionFacade.CurrentCustomer.Id,
-            //	templateId = m.CaseTemplateSplitToCaseSolutionID,
-            //	copyFromCaseId = parentCaseID,
-            //	caseLanguageId = SessionFacade.CurrentCaseLanguageId
-            //};
-
-            //m.NewModeParams = caseParam;
-            //m.IndependentChild = true;
-
-            //AddViewDataValues();
-
-            //// TODO: Why invert? 
-            //// Positive: Send Mail to...
-            //if (m.CaseMailSetting.DontSendMailToNotifier == false)
-            //	m.CaseMailSetting.DontSendMailToNotifier = true;
-            //else
-            //	m.CaseMailSetting.DontSendMailToNotifier = false;
-
-
-
-            //return this.View("New", m);
         }
 
-        public ActionResult ConnectToParentCase(int id, int parentCaseId)
+        public ActionResult ConnectToParentCase(int id, int parentCaseId, bool? tomerge = false)
         {
             if (SessionFacade.CurrentCustomer == null || SessionFacade.CurrentUser == null)
             {
@@ -2771,8 +2790,15 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 return new RedirectResult("~/Error/Forbidden");
             }
-
-            _caseService.AddParentCase(id, parentCaseId);
+            if(tomerge == false)
+            {
+                _caseService.AddParentCase(id, parentCaseId);
+            }
+            else
+            {
+                //TODO - Merge Case
+            }
+           
 
 
             return this.RedirectToAction("Edit", "cases", new { id = parentCaseId });

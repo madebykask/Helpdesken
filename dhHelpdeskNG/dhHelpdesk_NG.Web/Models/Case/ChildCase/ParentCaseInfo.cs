@@ -14,5 +14,7 @@
         public string Administrator;
 
         public bool IsCaseClosed;
+
+        public bool RelationType;
     }
 }

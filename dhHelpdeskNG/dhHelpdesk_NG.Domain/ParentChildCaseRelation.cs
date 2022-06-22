@@ -7,5 +7,6 @@
         public int DescendantId { get; set; }
 
 		public bool Independent { get; set; }
+        public bool RelationType { get; set; }
     }
 }

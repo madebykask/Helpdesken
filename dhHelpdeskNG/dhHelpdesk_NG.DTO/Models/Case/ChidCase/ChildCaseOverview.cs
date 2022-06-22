@@ -28,6 +28,8 @@
 
         public int ParentId { get; set; }
 
+        public bool RelationType { get; set; }
+
         public bool Indepandent { get; set; }
 
         // used for linq queries to avoid type casting in sql

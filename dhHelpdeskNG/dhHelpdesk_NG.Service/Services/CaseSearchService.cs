@@ -269,7 +269,11 @@ namespace DH.Helpdesk.Services.Services
                 result = ProcessSearchResults(context, searchResults, workTimeCalculator, out remainingTime, out aggregateData);
 
                 result = SortSearchResult(result, s);
-
+                if(f.ToBeMerged)
+                {
+                    result.Items = result.Items.Where(x => x.IsMergeChild == false).Where(x => x.IsParent == false).Where(x => x.ParentId == 0).ToList();
+                }
+                
                 //TODO: refactor when true server paging will be implemented
                 result.Count = result.Items.Count;
                 if (f.PageInfo != null && f.PageInfo.PageSize > 0)
@@ -517,6 +521,8 @@ namespace DH.Helpdesk.Services.Services
                         row.IsClosed = caseFinishingDate.HasValue;
                         row.IsParent = (context.f.FetchInfoAboutParentChild && dr.SafeGetInteger("IsParent") > 0);
                         row.ParentId = context.f.FetchInfoAboutParentChild ? dr.SafeGetInteger("ParentCaseId") : 0;
+                        row.IsMergeParent = (context.f.FetchInfoAboutParentChild && dr.SafeGetInteger("IsMergeParent") > 0);
+                        row.IsMergeChild = (context.f.FetchInfoAboutParentChild && dr.SafeGetInteger("IsMergeChild") > 0);
 
                         row.ExtendedSearchInfo = new ExtendedSearchInfo
                         {
