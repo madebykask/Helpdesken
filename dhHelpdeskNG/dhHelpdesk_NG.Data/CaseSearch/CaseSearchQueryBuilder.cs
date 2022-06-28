@@ -663,9 +663,10 @@ namespace DH.Helpdesk.Dal.Repositories
         private string GetParentChildInfo(string nestedTableAlias)
         {
             var columns = new List<string>();
-            columns.Add($"(select count(Ancestor_Id)  from tblParentChildCaseRelations where RelationType = 0 and Ancestor_Id = {nestedTableAlias}.Id) as IsParent");
-            columns.Add($"(select Top 1 (Ancestor_Id)  from tblParentChildCaseRelations where RelationType = 0  and Descendant_Id = {nestedTableAlias}.Id) as ParentCaseId");
-            columns.Add($"(select count(Ancestor_Id)  from tblParentChildCaseRelations where RelationType = 1 and  Descendant_Id = {nestedTableAlias}.Id) as IsMergeParent");
+            columns.Add($"(select count(Ancestor_Id)  from tblParentChildCaseRelations where RelationType = 0 and Ancestor_Id = {nestedTableAlias}.Id) as IsNestedParent");
+            columns.Add($"(select count(Ancestor_Id)  from tblParentChildCaseRelations where Ancestor_Id = {nestedTableAlias}.Id) as IsParent");
+            columns.Add($"(select Top 1 (Ancestor_Id)  from tblParentChildCaseRelations where Descendant_Id = {nestedTableAlias}.Id) as ParentCaseId");
+            columns.Add($"(select count(Ancestor_Id)  from tblParentChildCaseRelations where RelationType = 1 and  Ancestor_Id = {nestedTableAlias}.Id) as IsMergeParent");
             columns.Add($"(select count(Descendant_Id)  from tblParentChildCaseRelations where RelationType = 1 and  Descendant_Id = {nestedTableAlias}.Id) as IsMergeChild");
             return string.Join(",", columns);
         }

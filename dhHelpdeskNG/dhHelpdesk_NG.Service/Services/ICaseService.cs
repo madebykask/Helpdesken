@@ -25,7 +25,7 @@ namespace DH.Helpdesk.Services.Services
         IList<Case> GetProblemCases(int customerId, int problemId);
 
         IList<Case> GetCasesByCustomers(IEnumerable<int> customerIds);
-
+        bool MergeChildToParentCase(int childCaseId, int parentCaseId);
         Case InitCase(int customerId, int userId, int languageId, string ipAddress, CaseRegistrationSource source, Setting customerSetting, string adUser);
 
         Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, CaseRegistrationSource source, string adUser);

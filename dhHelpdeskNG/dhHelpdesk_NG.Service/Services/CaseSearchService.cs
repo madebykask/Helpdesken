@@ -262,18 +262,24 @@ namespace DH.Helpdesk.Services.Services
                 //run search
                 var searchResults = _caseSearchRepository.Search(context);
 
-                //calc work time
+                //calc work time    
                 var workTimeCalculator = InitCalcFromSQL(searchResults, context.workTimeCalcFactory, now);
 
                 //process results per customer settings 
                 result = ProcessSearchResults(context, searchResults, workTimeCalculator, out remainingTime, out aggregateData);
 
                 result = SortSearchResult(result, s);
-                if(f.ToBeMerged)
+                if (f.ToBeMerged)
                 {
-                    result.Items = result.Items.Where(x => x.IsMergeChild == false).Where(x => x.IsParent == false).Where(x => x.ParentId == 0).ToList();
+                    //- What to show:
+                    //- Case alreadey merged(merge-children) should NOT show up in list.
+                    //- Case that has other merged cases(merge - parent) SHOULD show in list.
+                    //- Case used as Children (existing functionality children) should NOT show up in list.
+                    //- Case used as Parent (existing functionality parent) should NOT show up in list.
+                    // - For some reason below seems to work // Katta
+                   result.Items = result.Items.Where(x => x.IsMergeParent == true || x.IsNestedParent == false).ToList();
                 }
-                
+
                 //TODO: refactor when true server paging will be implemented
                 result.Count = result.Items.Count;
                 if (f.PageInfo != null && f.PageInfo.PageSize > 0)
@@ -523,6 +529,7 @@ namespace DH.Helpdesk.Services.Services
                         row.ParentId = context.f.FetchInfoAboutParentChild ? dr.SafeGetInteger("ParentCaseId") : 0;
                         row.IsMergeParent = (context.f.FetchInfoAboutParentChild && dr.SafeGetInteger("IsMergeParent") > 0);
                         row.IsMergeChild = (context.f.FetchInfoAboutParentChild && dr.SafeGetInteger("IsMergeChild") > 0);
+                        row.IsNestedParent = (context.f.FetchInfoAboutParentChild && dr.SafeGetInteger("IsNestedParent") > 0);
 
                         row.ExtendedSearchInfo = new ExtendedSearchInfo
                         {

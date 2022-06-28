@@ -21,6 +21,8 @@
         public bool IsParent { get; set; }
 
         public bool IsMergeParent { get; set; }
+
+        public bool IsNestedParent { get; set; }
         public int ParentId { get; set; }
 
         public bool IsMergeChild { get; set; }

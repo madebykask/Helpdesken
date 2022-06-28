@@ -956,8 +956,9 @@ namespace DH.Helpdesk.Web.Controllers
                     {"isClosed", searchRow.IsClosed},
                     {"isParent", searchRow.IsParent},
                     {"ParentId", searchRow.ParentId},
-                    {"IsMergeParent", searchRow.IsMergeParent},
-                    {"IsMergeChild", searchRow.IsMergeChild}
+                    {"IsMergeParent", searchRow.IsMergeParent}, 
+                    {"IsMergeChild", searchRow.IsMergeChild}, //IsNestedParent
+                    {"IsNestedParent", searchRow.IsNestedParent}
                 };
 
                 var caseLock = casesLocks.Where(x => x.CaseId == caseId).FirstOrDefault();
@@ -2796,7 +2797,8 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
             {
-                //TODO - Merge Case
+                //Merge Case
+                _caseService.MergeChildToParentCase(id, parentCaseId);
             }
            
 
