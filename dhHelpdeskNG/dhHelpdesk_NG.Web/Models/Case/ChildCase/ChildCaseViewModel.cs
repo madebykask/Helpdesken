@@ -13,6 +13,7 @@ namespace DH.Helpdesk.Web.Models.Case.ChildCase
         }
 
         public OutputFormatter Formatter { get; set; }
+        public bool RelationType { get; set; }
         public IList<ChildCaseOverview> ChildCaseList { get; set; }
     }
 }

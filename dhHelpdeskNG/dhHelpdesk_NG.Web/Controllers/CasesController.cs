@@ -4956,17 +4956,23 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 var childCases = _caseService.GetChildCasesFor(caseId);
+                var numMerged = childCases.Where(x => x.RelationType == true).ToList().Count();
+
                 m.ChildCaseViewModel = new ChildCaseViewModel
                 {
                     Formatter = outputFormatter,
                     ChildCaseList = childCases
                 };
+                if (numMerged > 0)
+                {
+                    m.ChildCaseViewModel.RelationType = true;
+                }
                 m.ClosedChildCasesCount = childCases.Count(it => it.ClosingDate != null);
                 m.ParentCaseInfo = _caseService.GetParentInfo(caseId).MapBusinessToWebModel(outputFormatter);
 
                 if (m.ParentCaseInfo != null)
                 {
-                    m.IndependentChild = m.ParentCaseInfo.IsChildIndependent;
+                    m.IndependentChild = m.ParentCaseInfo.IsChildIndependent;                    
                 }
 
                 #endregion

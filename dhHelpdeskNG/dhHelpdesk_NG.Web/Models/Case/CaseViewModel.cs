@@ -394,7 +394,10 @@ namespace DH.Helpdesk.Web.Models.Case
         {
             return this.ParentCaseInfo != null && ParentCaseInfo.RelationType == true;
         }
-
+        public bool IsItMergedParent()
+        {
+            return this.ChildCaseViewModel != null && this.ChildCaseViewModel.RelationType == true;
+        }
         public bool IsItParentCase()
         {
             return this.ChildCaseViewModel != null && this.ChildCaseViewModel.ChildCaseList != null && this.ChildCaseViewModel.ChildCaseList.Count > 0;
@@ -414,6 +417,10 @@ namespace DH.Helpdesk.Web.Models.Case
             if (this.IsItMerged())
             {
                 return "Merged";
+            }
+            if (this.IsItMergedParent())
+            {
+                return "MergedParent";
             }
             return "";
         }

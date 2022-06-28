@@ -8271,6 +8271,27 @@ If not exists (select * from tblTextTranslation where text_id = 2123 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2123, 2, 'Bulk edit')
 GO
 
+If not exists (select * from tbltext where id = 2124)
+	insert into tbltext (id, TextString) VALUES (2124, 'Sammanfoga')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2124 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2124, 2, 'Merge')
+GO
+
+If not exists (select * from tbltext where id = 2125)
+	insert into tbltext (id, TextString) VALUES (2125, 'Sammanfogade ärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2125 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2125, 2, 'Merged cases')
+GO
+
+If not exists (select * from tbltext where id = 2126)
+	insert into tbltext (id, TextString) VALUES (2126, 'Detta är ett sammanfogat ärende till ärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2126 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2126, 2, 'This is a merged case to case')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')

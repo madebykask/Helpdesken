@@ -43,7 +43,16 @@
                         </a>
                     }
                 </li>
-                @if (Model.IsItParentCase())
+                @if (Model.IsItParentCase() && Model.IsItMergedParent())
+                {
+                    var merged = Model.IsItMergedParent();
+                    <li id="childCaseTabContainer">
+                        <a href="#childcases-tab" title="@string.Format("{0}/{1} {2}", Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Count, Translation.GetCoreTextTranslation("avslutade").ToLower())">
+                            @string.Format("{0} ({1}/{2} {3})", Translation.GetCoreTextTranslation("Sammanfogade ärenden"), Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Count, Translation.GetCoreTextTranslation("avslutade").ToLower())
+                        </a>
+                    </li>
+                }
+                else if(Model.IsItParentCase() && !Model.IsItMergedParent())
                 {
                     <li id="childCaseTabContainer">
                         <a href="#childcases-tab" title="@string.Format("{0}/{1} {2}", Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Count, Translation.GetCoreTextTranslation("avslutade").ToLower())">
@@ -207,7 +216,7 @@
                         @Html.Hidden("CaseRelationType", Model.CaseRelationType())
 
                         @*<input type="button" id="sla_test" value="SLA Test" onclick="CalcSLA();" />*@
-                        @if (Model.IsItChildCase())
+                        @if (Model.IsItChildCase() && !Model.IsItMerged())
                         {
                             <input type="hidden" name="ParentId" value="@Model.ParentCaseInfo.ParentId" />
                             <div class="alert alert-info">
@@ -220,6 +229,19 @@
                                 <br />
                                 @Translation.GetCoreTextTranslation("Fristående underärende")&nbsp;
                                 @Html.CheckBoxFor(model => Model.IndependentChild)
+                            </div>
+                        }
+                        else if (Model.IsItChildCase() && Model.IsItMerged())
+                        {
+                            <input type="hidden" name="ParentId" value="@Model.ParentCaseInfo.ParentId" />
+                            <div class="alert alert-info">
+                                @Translation.GetCoreTextTranslation("Detta är ett sammanfogat ärende till ärende")&nbsp;<a href="@Url.Action("Edit", new { id = Model.ParentCaseInfo.ParentId })"><strong>@Model.ParentCaseInfo.CaseNumber</strong></a>.
+                                @if (!string.IsNullOrEmpty(Model.ParentCaseInfo.Administrator))
+                                {
+                                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Model.case_.Customer_Id)
+                                    <strong>@Model.ParentCaseInfo.Administrator</strong>
+                                }
+                                <br />
                             </div>
                         }
 
@@ -334,7 +356,7 @@
                                                     }
                                                     else
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.PersonsEmail, new { maxlength = "100" , id="casePersonsEmail"})
+                                                        @Html.TextBoxFor(model => model.case_.PersonsEmail, new { maxlength = "100", id = "casePersonsEmail" })
                                                     }
                                                 </td>
                                                 <td style="@Model.GetFieldStyle(CaseSolutionFields.Email)">
@@ -1565,7 +1587,7 @@
                                                             </td>
                                                         }
                                                     </tr>
-                                                    <tr> 
+                                                    <tr>
                                                         <td id="costValidationMessage" colspan="3"></td>
                                                     </tr>
                                                 </table>
@@ -2190,11 +2212,11 @@
                                         <div class="span7">
                                             <table class="tableform" id="externalInvoices">
                                                 <thead>
-                                                <tr>
-                                                    <th class="span3">@Translation.GetCoreTextTranslation("Fakturanummer")</th>
-                                                    <th class="span1">@Translation.GetCoreTextTranslation("Fakturapris")</th>
-                                                    <th class="span8"></th>
-                                                </tr>
+                                                    <tr>
+                                                        <th class="span3">@Translation.GetCoreTextTranslation("Fakturanummer")</th>
+                                                        <th class="span1">@Translation.GetCoreTextTranslation("Fakturapris")</th>
+                                                        <th class="span8"></th>
+                                                    </tr>
                                                 </thead>
                                                 @{
                                                     var readonlyExternalInvoices = Model.ExternalInvoices.Where(x => x.InvoiceRow != null
