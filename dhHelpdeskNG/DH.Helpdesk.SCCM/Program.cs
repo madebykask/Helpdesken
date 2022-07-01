@@ -6,6 +6,10 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
+using DH.Helpdesk.SCCM.Entities;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace DH.Helpdesk.SCCM
 {
@@ -22,9 +26,33 @@ namespace DH.Helpdesk.SCCM
             {
                 throw new Exception("Configuration is invalid");
             }
-            
-            
+              
             string token = GetToken(ADALConfiguration);
+
+
+            //Fetch everything
+            ComputerSystemWrapper computerSystemWrapper = FetchData<ComputerSystemWrapper>(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Computer_System"].ToString());
+
+        }
+        
+        private static T FetchData<T>(string token, string endPath)
+        {
+            //Get all devices
+            Request request = new Request(token);
+            var response = request.Get(System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Computer_System"].ToString());
+
+            if (response.IsSuccessful)
+            {
+                ComputerSystemWrapper computerSystems = JsonConvert.DeserializeObject<ComputerSystemWrapper>(response.Content);
+
+                return (T)Convert.ChangeType(computerSystems, typeof(T));
+
+            }
+
+            else
+            {
+                throw new Exception("Failed request (" + response.StatusCode + ")");
+            }
         }
 
 
@@ -69,7 +97,7 @@ namespace DH.Helpdesk.SCCM
             string resource = ADALConfiguration.ADAL_Resource_ID;
             string token;
 
-            var credentials = new UserPasswordCredential(ADALConfiguration.ADAL_Username + "a", ADALConfiguration.ADAL_Password);
+            var credentials = new UserPasswordCredential(ADALConfiguration.ADAL_Username, ADALConfiguration.ADAL_Password);
 
             try
             {
