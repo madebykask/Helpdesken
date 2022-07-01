@@ -2797,8 +2797,28 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
             {
-                //Merge Case
+                //Todo - Rewrite Merge Case
                 _caseService.MergeChildToParentCase(id, parentCaseId);
+                // Todo - Close case...
+                var mergeCase = _caseService.GetCaseById(id);
+                IDictionary<string, string> errors;
+                var extraInfo = new CaseExtraInfo
+                {
+                    ActionExternalTime = 0,
+                    ActionLeadTime = 0,
+                    CreatedByApp = CreatedByApplications.Helpdesk5,
+                    LeadTimeForNow = 0
+                };
+
+                var caseLog = new CaseLog();
+                
+                var mergedFinishingCause = _finishingCauseService.GetMergedFinishingCause(mergeCase.Customer_Id);
+                mergeCase.FinishingDescription = mergedFinishingCause.Name;
+                mergeCase.FinishingDate = DateTime.UtcNow;
+                caseLog.FinishingDate = DateTime.UtcNow;
+                caseLog.FinishingType = mergedFinishingCause.Id;
+                caseLog.FinishingTypeName = mergedFinishingCause.Name;
+                _caseService.SaveCase(mergeCase, caseLog, SessionFacade.CurrentUser.Id, null, extraInfo, out errors);
             }
            
 

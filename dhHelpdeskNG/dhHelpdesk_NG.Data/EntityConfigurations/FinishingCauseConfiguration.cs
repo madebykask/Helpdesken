@@ -36,6 +36,7 @@
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.FinishingCauseGUID).IsOptional();
+            this.Property(x => x.Merged).IsOptional();
 
             this.ToTable("tblfinishingcause");
         }

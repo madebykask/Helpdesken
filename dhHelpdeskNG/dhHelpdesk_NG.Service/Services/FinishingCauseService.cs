@@ -32,6 +32,7 @@ namespace DH.Helpdesk.Services.Services
         void Commit();
 
         IEnumerable<FinishingCauseInfo> GetFinishingCauseInfos(int customerId);
+        FinishingCause GetMergedFinishingCause(int customerId);
     }
 
     public class FinishingCauseService : IFinishingCauseService
@@ -116,7 +117,10 @@ namespace DH.Helpdesk.Services.Services
         {
             return this._finishingCauseRepository.Get(x => x.Id == id);
         }
-
+        public FinishingCause GetMergedFinishingCause(int customerId)
+        {
+            return this._finishingCauseRepository.Get(x => x.Customer_Id == customerId && x.Merged == true);
+        }
         public IList<FinishingCause> GetSubFinishingCauses(int id)
         {
             return this._finishingCauseRepository.GetMany(x => x.Parent_FinishingCause_Id == id).ToList();
