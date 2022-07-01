@@ -1,0 +1,112 @@
+﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Authentication;
+using System.Text;
+using System.Threading.Tasks;
+using System.Configuration;
+
+namespace DH.Helpdesk.SCCM
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            //Get the configuration object
+            ADALConfiguration ADALConfiguration = GetConfiguration();
+
+
+            //Check if the configuration is valid
+            if (!ADALConfiguration.ValidConfiguration())
+            {
+                throw new Exception("Configuration is invalid");
+            }
+            
+            
+            string token = GetToken(ADALConfiguration);
+        }
+
+
+        private static ADALConfiguration GetConfiguration()
+        {
+            int ADAL_Retry_Connection_Count;
+            if (!Int32.TryParse(System.Configuration.ConfigurationManager.AppSettings["ADAL_Retry_Connection_Count"].ToString(), out ADAL_Retry_Connection_Count))
+            {
+                ADAL_Retry_Connection_Count = 0;
+            }
+
+            int ADAL_Retry_Connection_Increment_MS;
+            if (!Int32.TryParse(System.Configuration.ConfigurationManager.AppSettings["ADAL_Retry_Connection_Increment_MS"].ToString(), out ADAL_Retry_Connection_Increment_MS))
+            {
+                ADAL_Retry_Connection_Increment_MS = 0;
+            }
+
+            ADALConfiguration ADALConfiguration = new ADALConfiguration(
+                System.Configuration.ConfigurationManager.AppSettings["ADAL_Microsoft_Base_Url"].ToString(),
+                System.Configuration.ConfigurationManager.AppSettings["ADAL_Tenant_Name"].ToString(),
+                System.Configuration.ConfigurationManager.AppSettings["ADAL_Client_ID"].ToString(),
+                System.Configuration.ConfigurationManager.AppSettings["ADAL_Resource_ID"].ToString(),
+                System.Configuration.ConfigurationManager.AppSettings["ADAL_Username"].ToString(),
+                System.Configuration.ConfigurationManager.AppSettings["ADAL_Password"].ToString(),
+                ADAL_Retry_Connection_Count,
+                ADAL_Retry_Connection_Increment_MS
+            );
+
+            return ADALConfiguration;
+        }
+
+        private static string GetToken(ADALConfiguration ADALConfiguration)
+        {
+            // Get OAuth token using client credentials 
+            string tenantName = ADALConfiguration.ADAL_Tenant_Name;
+            string authString = ADALConfiguration.ADAL_Microsoft_Base_Url + tenantName;
+
+            AuthenticationContext authenticationContext = new AuthenticationContext(authString, false);
+
+            // Config for OAuth client credentials  
+            string clientId = ADALConfiguration.ADAL_Client_ID;
+            string resource = ADALConfiguration.ADAL_Resource_ID;
+            string token;
+
+            var credentials = new UserPasswordCredential(ADALConfiguration.ADAL_Username + "a", ADALConfiguration.ADAL_Password);
+
+            try
+            {
+                AuthenticationResult authenticationResult = authenticationContext.AcquireTokenAsync(resource, clientId, credentials).Result;
+                token = authenticationResult.AccessToken;
+                return token;
+            }
+            catch (AuthenticationException ex)
+            {
+                Console.WriteLine("Acquiring a token failed with the following error: {0}", ex.Message);
+                if (ex.InnerException != null)
+                {
+
+                    Console.WriteLine("Error detail: {0}", ex.InnerException.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null)
+                {
+
+                    Console.WriteLine("Error detail: {0}", ex.InnerException.Message);
+                }
+            }
+
+            //Retry logic
+            if (ADALConfiguration.ADAL_Retry_Connection_Count < 5)
+            {
+                ADALConfiguration.ADAL_Retry_Connection_Count++;
+                System.Threading.Thread.Sleep(ADALConfiguration.ADAL_Retry_Connection_Increment_MS);
+                return GetToken(ADALConfiguration);
+            }
+            else
+            {
+                throw new Exception("Acquiring a token failed");
+            }     
+
+        }
+    }
+}

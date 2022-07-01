@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31005.135
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.Web", "dhHelpdesk_NG.Web\DH.Helpdesk.Web.csproj", "{FFCFD298-57C0-46A4-8554-CB2163A49B25}"
 EndProject
@@ -52,6 +52,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.TaskScheduler.Console", "DH.Helpdesk.TaskScheduler.Console\DH.Helpdesk.TaskScheduler.Console.csproj", "{B25DB426-911D-429B-B537-CFA2FD1F5F0F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.Upkeeper", "DH.Helpdesk.Upkeeper\DH.Helpdesk.Upkeeper.csproj", "{93DC07BA-205B-4AA3-8C72-C97EF6D7D013}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.SCCM", "DH.Helpdesk.SCCM\DH.Helpdesk.SCCM.csproj", "{B0D605B8-51C1-48D1-BA96-5853780E4E30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -571,6 +573,30 @@ Global
 		{93DC07BA-205B-4AA3-8C72-C97EF6D7D013}.Template_Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{93DC07BA-205B-4AA3-8C72-C97EF6D7D013}.Template_Debug|x86.ActiveCfg = Debug|Any CPU
 		{93DC07BA-205B-4AA3-8C72-C97EF6D7D013}.Template_Debug|x86.Build.0 = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Debug|x86.Build.0 = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.DhDev|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.DhDev|Any CPU.Build.0 = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.DhDev|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.DhDev|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.DhDev|x86.ActiveCfg = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.DhDev|x86.Build.0 = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Release|x86.ActiveCfg = Release|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Release|x86.Build.0 = Release|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Template_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Template_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Template_Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Template_Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Template_Debug|x86.ActiveCfg = Debug|Any CPU
+		{B0D605B8-51C1-48D1-BA96-5853780E4E30}.Template_Debug|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
