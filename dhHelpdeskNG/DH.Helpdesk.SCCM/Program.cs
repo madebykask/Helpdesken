@@ -6,12 +6,24 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
+using DH.Helpdesk.SCCM.Entities;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace DH.Helpdesk.SCCM
 {
     internal class Program
     {
         static void Main(string[] args)
+        {
+
+            Run();
+
+
+        }
+
+        private static void Run()
         {
             //Get the configuration object
             ADALConfiguration ADALConfiguration = GetConfiguration();
@@ -22,9 +34,97 @@ namespace DH.Helpdesk.SCCM
             {
                 throw new Exception("Configuration is invalid");
             }
-            
-            
+
+            //Get the token
             string token = GetToken(ADALConfiguration);
+
+            //Fetch the data ASYNC
+            var result = FetchAllData(token).Result.ToList();
+
+            //Check if fetch was ok
+            if (!FetchIsOK(result))
+            {
+                throw new Exception("Fetch was not ok");
+            }
+
+            Wrapper wrapper = FormWrapper(result);
+
+
+        }
+
+        private static void FormModel(Wrapper wrapper)
+        {
+            List<Models.Computer> computers = new List<Models.Computer>();
+
+            foreach (var ComputerSystem in wrapper.ComputerSystemWrapper.value)
+            {
+                //Create the object
+                Models.Computer computer = new Models.Computer();
+
+                //Set the resource ID
+                computer.ResourceID = ComputerSystem.ResourceID;
+                
+                //Start mapping the object
+            }
+        }            
+            
+
+        private static Wrapper FormWrapper(List<RestSharp.RestResponse> restResponses)
+        {
+            Wrapper wrapper = new Wrapper()
+            {
+                ComputerSystemWrapper = JsonConvert.DeserializeObject<ComputerSystemWrapper>(restResponses[0].Content),
+                OperatingSystemWrapper = JsonConvert.DeserializeObject<OperatingSystemWrapper>(restResponses[1].Content),
+                PCBiosWrapper = JsonConvert.DeserializeObject<PCBiosWrapper>(restResponses[2].Content),
+                RSystemWrapper = JsonConvert.DeserializeObject<RSystemWrapper>(restResponses[3].Content),
+                VideoControllerDataWrapper = JsonConvert.DeserializeObject<VideoControllerDataWrapper>(restResponses[4].Content),
+                X86PCMemoryWrapper = JsonConvert.DeserializeObject<X86PCMemoryWrapper>(restResponses[5].Content)
+            };
+
+            return wrapper;
+
+        }
+
+
+        private static bool FetchIsOK(List<RestSharp.RestResponse> restResponses)
+        {
+            foreach (var restResponse in restResponses)
+            {
+                if (restResponse.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private static async Task<IEnumerable<RestSharp.RestResponse>> FetchAllData(string token)
+        {
+            //Fetch everything
+            Task<RestSharp.RestResponse> computerSystemWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Computer_System"].ToString());
+
+            Task<RestSharp.RestResponse> operatingSystemWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Operating_System"].ToString());
+
+            Task<RestSharp.RestResponse> PCBiosWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_PC_BIOS"].ToString());
+
+            Task<RestSharp.RestResponse> RSystemWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString());
+
+            Task<RestSharp.RestResponse> videoControllerDataWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Video_Controller"].ToString());
+
+            Task<RestSharp.RestResponse> X86PCMemoryWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_X86_PC_Memory"].ToString());
+
+            var result = await Task.WhenAll(computerSystemWrapper, operatingSystemWrapper, PCBiosWrapper, RSystemWrapper, videoControllerDataWrapper, X86PCMemoryWrapper);
+
+            return result;
+        }
+
+        private static Task<RestSharp.RestResponse> FetchDataSingular(string token, string endPath)
+        {
+            //Get all devices
+            Request request = new Request(token);
+            var response = request.Get(endPath);
+
+            return response;
         }
 
 
@@ -69,7 +169,7 @@ namespace DH.Helpdesk.SCCM
             string resource = ADALConfiguration.ADAL_Resource_ID;
             string token;
 
-            var credentials = new UserPasswordCredential(ADALConfiguration.ADAL_Username + "a", ADALConfiguration.ADAL_Password);
+            var credentials = new UserPasswordCredential(ADALConfiguration.ADAL_Username, ADALConfiguration.ADAL_Password);
 
             try
             {
@@ -105,7 +205,7 @@ namespace DH.Helpdesk.SCCM
             else
             {
                 throw new Exception("Acquiring a token failed");
-            }     
+            }
 
         }
     }
