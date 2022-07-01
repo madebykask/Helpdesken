@@ -13,6 +13,8 @@ namespace DH.Helpdesk.SCCM.Entities
 
         public long ResourceID { get; set; }
 
+        public long TotalPhysicalMemory { get; set; }
 
+        
     }
 }

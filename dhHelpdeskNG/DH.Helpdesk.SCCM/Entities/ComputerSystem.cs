@@ -13,6 +13,16 @@ namespace DH.Helpdesk.SCCM.Entities
 
         public long ResourceID { get; set; }
 
+        public string Name { get; set; }
 
+        public string Model { get; set; }
+
+        public string Manufacturer { get; set; }
+
+        public string UserName { get; set; }
+
+        public DateTime? TimeStamp { get; set; }
+
+        
     }
 }

@@ -13,6 +13,11 @@ namespace DH.Helpdesk.SCCM.Entities
 
         public long ResourceID { get; set; }
 
+        public string SerialNumber { get; set; }
+
+        public DateTime? ReleaseDate { get; set; }
+
+        public string SMBIOSBIOSVersion { get; set; }
 
     }
 }

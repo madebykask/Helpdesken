@@ -35,12 +35,68 @@ namespace DH.Helpdesk.SCCM
                 throw new Exception("Configuration is invalid");
             }
 
+            //Get the token
             string token = GetToken(ADALConfiguration);
 
-            var result = FetchAllData(token).Result;
-            
+            //Fetch the data ASYNC
+            var result = FetchAllData(token).Result.ToList();
+
+            //Check if fetch was ok
+            if (!FetchIsOK(result))
+            {
+                throw new Exception("Fetch was not ok");
+            }
+
+            Wrapper wrapper = FormWrapper(result);
+
+
         }
 
+        private static void FormModel(Wrapper wrapper)
+        {
+            List<Models.Computer> computers = new List<Models.Computer>();
+
+            foreach (var ComputerSystem in wrapper.ComputerSystemWrapper.value)
+            {
+                //Create the object
+                Models.Computer computer = new Models.Computer();
+
+                //Set the resource ID
+                computer.ResourceID = ComputerSystem.ResourceID;
+                
+                //Start mapping the object
+            }
+        }            
+            
+
+        private static Wrapper FormWrapper(List<RestSharp.RestResponse> restResponses)
+        {
+            Wrapper wrapper = new Wrapper()
+            {
+                ComputerSystemWrapper = JsonConvert.DeserializeObject<ComputerSystemWrapper>(restResponses[0].Content),
+                OperatingSystemWrapper = JsonConvert.DeserializeObject<OperatingSystemWrapper>(restResponses[1].Content),
+                PCBiosWrapper = JsonConvert.DeserializeObject<PCBiosWrapper>(restResponses[2].Content),
+                RSystemWrapper = JsonConvert.DeserializeObject<RSystemWrapper>(restResponses[3].Content),
+                VideoControllerDataWrapper = JsonConvert.DeserializeObject<VideoControllerDataWrapper>(restResponses[4].Content),
+                X86PCMemoryWrapper = JsonConvert.DeserializeObject<X86PCMemoryWrapper>(restResponses[5].Content)
+            };
+
+            return wrapper;
+
+        }
+
+
+        private static bool FetchIsOK(List<RestSharp.RestResponse> restResponses)
+        {
+            foreach (var restResponse in restResponses)
+            {
+                if (restResponse.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         private static async Task<IEnumerable<RestSharp.RestResponse>> FetchAllData(string token)
         {
@@ -61,14 +117,14 @@ namespace DH.Helpdesk.SCCM
 
             return result;
         }
-        
-        private static async Task<RestSharp.RestResponse> FetchDataSingular(string token, string endPath)
+
+        private static Task<RestSharp.RestResponse> FetchDataSingular(string token, string endPath)
         {
             //Get all devices
             Request request = new Request(token);
             var response = request.Get(endPath);
 
-            return await response;
+            return response;
         }
 
 
@@ -149,7 +205,7 @@ namespace DH.Helpdesk.SCCM
             else
             {
                 throw new Exception("Acquiring a token failed");
-            }     
+            }
 
         }
     }

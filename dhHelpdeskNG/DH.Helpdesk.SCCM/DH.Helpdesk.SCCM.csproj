@@ -140,6 +140,7 @@
     <Compile Include="ADALConfiguration.cs" />
     <Compile Include="Entities\RSystem.cs" />
     <Compile Include="Entities\VideoControllerData.cs" />
+    <Compile Include="Entities\Wrapper.cs" />
     <Compile Include="Entities\X86PCMemory.cs" />
     <Compile Include="Entities\PCBios.cs" />
     <Compile Include="Entities\OperatingSystem.cs" />

@@ -35,8 +35,6 @@ namespace DH.Helpdesk.SCCM
         
         public Task<RestResponse> Get(string endPath) {
 
-            Debug.WriteLine("Get: " + endPath);
-
             var request = new RestRequest(endPath, Method.Get);
             
             Task<RestResponse> t = client.ExecuteAsync(request);
