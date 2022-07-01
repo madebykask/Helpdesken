@@ -11,7 +11,7 @@ namespace DH.Helpdesk.SCCM.Models
 
         public long ResourceID { get; set; }
 
-        public Computer _Computer { get; set; }
+        public ComputerSystem _ComputerSystem { get; set; }
 
         public OperatingSystem _OperatingSystem { get; set; }
 
@@ -29,7 +29,6 @@ namespace DH.Helpdesk.SCCM.Models
 
     public class ComputerSystem
     {
-        public long ResourceID { get; set; }
 
         public string Name { get; set; }
 
@@ -44,7 +43,6 @@ namespace DH.Helpdesk.SCCM.Models
 
     public class OperatingSystem
     {
-        public long ResourceID { get; set; }
 
         public string Caption { get; set; }
 
@@ -55,7 +53,6 @@ namespace DH.Helpdesk.SCCM.Models
 
     public class PCBios
     {
-        public long ResourceID { get; set; }
 
         public string SerialNumber { get; set; }
 
@@ -66,21 +63,18 @@ namespace DH.Helpdesk.SCCM.Models
 
     public class RSystem
     {
-        public long ResourceID { get; set; }
 
         public string Company { get; set; }
     }
 
     public class VideoControllerData
     {
-        public long ResourceID { get; set; }
 
         public string Name { get; set; }
     }
 
     public class X86PCMemory
     {
-        public long ResourceID { get; set; }
 
         public long TotalPhysicalMemory { get; set; }
     }

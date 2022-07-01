@@ -14,5 +14,7 @@ namespace DH.Helpdesk.SCCM.Entities
         public long ResourceID { get; set; }
 
         public string Name { get; set; }
+
+        public string DeviceID { get; set; }
     }
 }

@@ -47,12 +47,16 @@ namespace DH.Helpdesk.SCCM
                 throw new Exception("Fetch was not ok");
             }
 
+            //Put all the fetches into better objects
             Wrapper wrapper = FormWrapper(result);
+
+            //Split the wrapper by resourceID and putinto model
+            List<Models.Computer> computers = FormModel(wrapper);
 
 
         }
 
-        private static void FormModel(Wrapper wrapper)
+        private static List<Models.Computer> FormModel(Wrapper wrapper)
         {
             List<Models.Computer> computers = new List<Models.Computer>();
 
@@ -63,9 +67,71 @@ namespace DH.Helpdesk.SCCM
 
                 //Set the resource ID
                 computer.ResourceID = ComputerSystem.ResourceID;
-                
+
                 //Start mapping the object
+                var computerSystemWrapper = wrapper.ComputerSystemWrapper.value.Where(x => x.ResourceID == ComputerSystem.ResourceID).DefaultIfEmpty(null).FirstOrDefault();
+                var operatingSystemWrapper = wrapper.OperatingSystemWrapper.value.Where(x => x.ResourceID == ComputerSystem.ResourceID).DefaultIfEmpty(null).FirstOrDefault();
+                var PCBiosWrapper = wrapper.PCBiosWrapper.value.Where(x => x.ResourceID == ComputerSystem.ResourceID).DefaultIfEmpty(null).FirstOrDefault();
+                var RSystemWrapper = wrapper.RSystemWrapper.value.Where(x => x.ResourceID == ComputerSystem.ResourceID).FirstOrDefault();
+                var videoControllerData = wrapper.VideoControllerDataWrapper.value.Where(x => x.DeviceID == "VideoController1").Where(x => x.ResourceID == ComputerSystem.ResourceID).DefaultIfEmpty(null).FirstOrDefault();
+                var x86PCMemory = wrapper.X86PCMemoryWrapper.value.Where(x => x.ResourceID == ComputerSystem.ResourceID).DefaultIfEmpty(null).FirstOrDefault();
+
+
+                computer._ComputerSystem = new Models.ComputerSystem()
+                {
+                    Manufacturer = computerSystemWrapper.Manufacturer,
+                    Model = computerSystemWrapper.Model,
+                    Name = computerSystemWrapper.Name,
+                    TimeStamp = computerSystemWrapper.TimeStamp,
+                    UserName = computerSystemWrapper.UserName,
+
+                };
+
+                computer._OperatingSystem = new Models.OperatingSystem()
+                {
+
+                    Caption = operatingSystemWrapper.Caption,
+                    CSDVersion = operatingSystemWrapper.CSDVersion,
+                    Version = operatingSystemWrapper.Version,
+
+                };
+
+                computer._PCBios = new Models.PCBios()
+                {
+
+                    SerialNumber = PCBiosWrapper.SerialNumber,
+                    ReleaseDate = PCBiosWrapper.ReleaseDate,
+                    SMBIOSBIOSVersion = PCBiosWrapper.SMBIOSBIOSVersion,
+
+                };
+
+                computer._RSystem = new Models.RSystem()
+                {
+
+                    Company = RSystemWrapper.Company,
+
+                };
+
+                computer._VideoControllerData = new Models.VideoControllerData()
+                {
+
+                    Name = videoControllerData.Name,
+                    
+                };
+
+                computer._X86PCMemory = new Models.X86PCMemory()
+                {
+
+                    TotalPhysicalMemory = x86PCMemory.TotalPhysicalMemory,
+
+                };
+
+                computers.Add(computer); 
+
+
             }
+
+            return computers;
         }            
             
 

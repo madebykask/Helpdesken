@@ -151,6 +151,7 @@
     <Compile Include="Entities\PCBiosWrapper.cs" />
     <Compile Include="Entities\OperatingSystemWrapper.cs" />
     <Compile Include="Entities\ComputerSystemWrapper.cs" />
+    <Compile Include="Models\Computer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Request.cs" />
@@ -159,8 +160,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
