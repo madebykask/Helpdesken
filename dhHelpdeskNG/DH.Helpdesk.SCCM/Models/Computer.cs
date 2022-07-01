@@ -49,6 +49,21 @@ namespace DH.Helpdesk.SCCM.Models
         public object CSDVersion { get; set; }
 
         public string Version { get; set; }
+
+        public int ComputerRole
+        {
+            get
+            {
+                if (Caption.Contains("Server"))
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
     }
 
     public class PCBios

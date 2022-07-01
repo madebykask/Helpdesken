@@ -10,6 +10,7 @@ using DH.Helpdesk.SCCM.Entities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using DH.Helpdesk.SCCM.DB;
 
 namespace DH.Helpdesk.SCCM
 {
@@ -53,7 +54,27 @@ namespace DH.Helpdesk.SCCM
             //Split the wrapper by resourceID and putinto model
             List<Models.Computer> computers = FormModel(wrapper);
 
+            SaveOrCreateComputerInDB(computers);
 
+
+        }
+
+        private static void SaveOrCreateComputerInDB(List<Models.Computer> computers)
+        {
+
+            Connector connector = new Connector(System.Configuration.ConfigurationManager.ConnectionStrings["conHD"].ToString());
+
+            foreach (var computer in computers)
+            {
+
+                //Check if computer exits in DB
+                if (!connector.ComputerExist(computer))
+                {
+                    //Create a computer in the DB
+                    
+                }
+
+            }
         }
 
         private static List<Models.Computer> FormModel(Wrapper wrapper)
@@ -77,54 +98,72 @@ namespace DH.Helpdesk.SCCM
                 var x86PCMemory = wrapper.X86PCMemoryWrapper.value.Where(x => x.ResourceID == ComputerSystem.ResourceID).DefaultIfEmpty(null).FirstOrDefault();
 
 
-                computer._ComputerSystem = new Models.ComputerSystem()
+                if (computerSystemWrapper != null)
                 {
-                    Manufacturer = computerSystemWrapper.Manufacturer,
-                    Model = computerSystemWrapper.Model,
-                    Name = computerSystemWrapper.Name,
-                    TimeStamp = computerSystemWrapper.TimeStamp,
-                    UserName = computerSystemWrapper.UserName,
+                    computer._ComputerSystem = new Models.ComputerSystem()
+                    {
+                        Manufacturer = computerSystemWrapper.Manufacturer,
+                        Model = computerSystemWrapper.Model,
+                        Name = computerSystemWrapper.Name,
+                        TimeStamp = computerSystemWrapper.TimeStamp,
+                        UserName = computerSystemWrapper.UserName,
 
-                };
+                    };
+                }
 
-                computer._OperatingSystem = new Models.OperatingSystem()
+                if (operatingSystemWrapper != null)
                 {
+                    computer._OperatingSystem = new Models.OperatingSystem()
+                    {
 
-                    Caption = operatingSystemWrapper.Caption,
-                    CSDVersion = operatingSystemWrapper.CSDVersion,
-                    Version = operatingSystemWrapper.Version,
+                        Caption = operatingSystemWrapper.Caption,
+                        CSDVersion = operatingSystemWrapper.CSDVersion,
+                        Version = operatingSystemWrapper.Version,
 
-                };
+                    };
+                }
 
-                computer._PCBios = new Models.PCBios()
+                if (PCBiosWrapper != null)
                 {
+                    computer._PCBios = new Models.PCBios()
+                    {
 
-                    SerialNumber = PCBiosWrapper.SerialNumber,
-                    ReleaseDate = PCBiosWrapper.ReleaseDate,
-                    SMBIOSBIOSVersion = PCBiosWrapper.SMBIOSBIOSVersion,
+                        SerialNumber = PCBiosWrapper.SerialNumber,
+                        ReleaseDate = PCBiosWrapper.ReleaseDate,
+                        SMBIOSBIOSVersion = PCBiosWrapper.SMBIOSBIOSVersion,
 
-                };
+                    };
+                }
 
-                computer._RSystem = new Models.RSystem()
+                if (RSystemWrapper != null)
                 {
+                    computer._RSystem = new Models.RSystem()
+                    {
 
-                    Company = RSystemWrapper.Company,
+                        Company = RSystemWrapper.Company,
 
-                };
+                    };
+                }
 
-                computer._VideoControllerData = new Models.VideoControllerData()
+                if (videoControllerData != null)
                 {
+                    computer._VideoControllerData = new Models.VideoControllerData()
+                    {
 
-                    Name = videoControllerData.Name,
-                    
-                };
+                        Name = videoControllerData.Name,
 
-                computer._X86PCMemory = new Models.X86PCMemory()
+                    };
+                }
+
+                if (x86PCMemory != null)
                 {
+                    computer._X86PCMemory = new Models.X86PCMemory()
+                    {
 
-                    TotalPhysicalMemory = x86PCMemory.TotalPhysicalMemory,
+                        TotalPhysicalMemory = x86PCMemory.TotalPhysicalMemory,
 
-                };
+                    };
+                }
 
                 computers.Add(computer); 
 
