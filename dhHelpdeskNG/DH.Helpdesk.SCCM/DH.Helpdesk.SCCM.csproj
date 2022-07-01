@@ -138,8 +138,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ADALConfiguration.cs" />
-    <Compile Include="Entities\Device.cs" />
-    <Compile Include="Entities\DeviceWrapper.cs" />
+    <Compile Include="Entities\RSystem.cs" />
+    <Compile Include="Entities\VideoControllerData.cs" />
+    <Compile Include="Entities\X86PCMemory.cs" />
+    <Compile Include="Entities\PCBios.cs" />
+    <Compile Include="Entities\OperatingSystem.cs" />
+    <Compile Include="Entities\ComputerSystem.cs" />
+    <Compile Include="Entities\RSystemWrapper.cs" />
+    <Compile Include="Entities\VideoControllerDataWrapper.cs" />
+    <Compile Include="Entities\X86PCMemoryWrapper.cs" />
+    <Compile Include="Entities\PCBiosWrapper.cs" />
+    <Compile Include="Entities\OperatingSystemWrapper.cs" />
+    <Compile Include="Entities\ComputerSystemWrapper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Request.cs" />
@@ -147,6 +157,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

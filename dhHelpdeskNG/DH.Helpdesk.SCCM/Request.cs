@@ -2,6 +2,7 @@
 using RestSharp.Authenticators.OAuth2;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,14 +33,15 @@ namespace DH.Helpdesk.SCCM
    
         public string Token { get; set; }
         
-        public RestResponse Get(string endPath) {
-            
+        public Task<RestResponse> Get(string endPath) {
+
+            Debug.WriteLine("Get: " + endPath);
 
             var request = new RestRequest(endPath, Method.Get);
- 
-            var response = client.Execute(request);
+            
+            Task<RestResponse> t = client.ExecuteAsync(request);
 
-            return response;       
+            return t;       
 
 
         }

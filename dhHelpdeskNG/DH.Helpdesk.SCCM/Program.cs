@@ -17,6 +17,14 @@ namespace DH.Helpdesk.SCCM
     {
         static void Main(string[] args)
         {
+
+            Run();
+
+
+        }
+
+        private static void Run()
+        {
             //Get the configuration object
             ADALConfiguration ADALConfiguration = GetConfiguration();
 
@@ -26,33 +34,41 @@ namespace DH.Helpdesk.SCCM
             {
                 throw new Exception("Configuration is invalid");
             }
-              
+
             string token = GetToken(ADALConfiguration);
 
+            var result = FetchAllData(token).Result;
+            
+        }
 
+
+        private static async Task<IEnumerable<RestSharp.RestResponse>> FetchAllData(string token)
+        {
             //Fetch everything
-            ComputerSystemWrapper computerSystemWrapper = FetchData<ComputerSystemWrapper>(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Computer_System"].ToString());
+            Task<RestSharp.RestResponse> computerSystemWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Computer_System"].ToString());
 
+            Task<RestSharp.RestResponse> operatingSystemWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Operating_System"].ToString());
+
+            Task<RestSharp.RestResponse> PCBiosWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_PC_BIOS"].ToString());
+
+            Task<RestSharp.RestResponse> RSystemWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString());
+
+            Task<RestSharp.RestResponse> videoControllerDataWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Video_Controller"].ToString());
+
+            Task<RestSharp.RestResponse> X86PCMemoryWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_X86_PC_Memory"].ToString());
+
+            var result = await Task.WhenAll(computerSystemWrapper, operatingSystemWrapper, PCBiosWrapper, RSystemWrapper, videoControllerDataWrapper, X86PCMemoryWrapper);
+
+            return result;
         }
         
-        private static T FetchData<T>(string token, string endPath)
+        private static async Task<RestSharp.RestResponse> FetchDataSingular(string token, string endPath)
         {
             //Get all devices
             Request request = new Request(token);
-            var response = request.Get(System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Computer_System"].ToString());
+            var response = request.Get(endPath);
 
-            if (response.IsSuccessful)
-            {
-                ComputerSystemWrapper computerSystems = JsonConvert.DeserializeObject<ComputerSystemWrapper>(response.Content);
-
-                return (T)Convert.ChangeType(computerSystems, typeof(T));
-
-            }
-
-            else
-            {
-                throw new Exception("Failed request (" + response.StatusCode + ")");
-            }
+            return await response;
         }
 
 
