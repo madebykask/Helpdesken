@@ -13,6 +13,7 @@
         public int? Parent_FinishingCause_Id { get; set; }
         public int PromptUser { get; set; }
         public string Name { get; set; }
+        public bool Merged { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid? FinishingCauseGUID { get; set; }
