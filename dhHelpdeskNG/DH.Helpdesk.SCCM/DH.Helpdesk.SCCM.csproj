@@ -156,8 +156,10 @@
     <Compile Include="Entities\PCBios.cs" />
     <Compile Include="Entities\OperatingSystem.cs" />
     <Compile Include="Entities\ComputerSystem.cs" />
+    <Compile Include="Models\CustomThreadObject.cs" />
     <Compile Include="Models\Device.cs" />
     <Compile Include="Other\Enums.cs" />
+    <Compile Include="Other\Extension.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Request.cs" />

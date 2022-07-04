@@ -165,9 +165,9 @@ namespace DH.Helpdesk.SCCM.Models
 
         public string FileSystem { get; set; }
 
-        public long Size { get; set; }
-
-        public long FreeSpace { get; set; }
+        public string Size { get; set; }
+        
+        public string FreeSpace { get; set; }
 
         public string DriveType { get; set; }
     }

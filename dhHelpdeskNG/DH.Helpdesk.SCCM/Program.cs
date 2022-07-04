@@ -11,12 +11,16 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using DH.Helpdesk.SCCM.DB;
+using DH.Helpdesk.SCCM.Other;
+using System.Threading;
 
 namespace DH.Helpdesk.SCCM
 {
     internal class Program
     {
 
+        private static long actions = 0;
+        
         
         static void Main(string[] args)
         {
@@ -49,17 +53,44 @@ namespace DH.Helpdesk.SCCM
             {
                 throw new Exception("Fetch was not ok");
             }
-            
- 
 
-            //Split the wrapper by resourceID and putinto model
-            List<Models.Device> computers = FormModel(token, result);
+            //Parse the data
+            var rSystemWrapper = JsonConvert.DeserializeObject<GenericValueWrapper<RSystem>>(result[0].Content).value;
 
-            UpdateOrCreateComputerInDB(computers);
+            //Chunk the data
+            var chunkedData = rSystemWrapper.ChunkBy(rSystemWrapper.Count / Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["Setting_Chunk_Page_Size"].ToString()));
 
+
+            var threadResult = runThreads(chunkedData, token).Result;
+
+            var apa = threadResult;
+            //UpdateOrCreateComputerInDB(computers);
 
         }
 
+        private static async Task<List<Models.Device>[]> runThreads(List<List<RSystem>> chunkedData, string token)
+        {
+            List<Task<List<Models.Device>>> threadedComputers = new List<Task<List<Models.Device>>>();
+
+            var threadIndex = 1;
+            foreach (var data in chunkedData)
+            {
+                Console.WriteLine("Init thread " + threadIndex);
+
+                Models.CustomThreadObject customThreadObject = new Models.CustomThreadObject(data, threadIndex, token);
+
+                Task<List<Models.Device>> computers = FormModel(customThreadObject.Token, customThreadObject.RSystem, customThreadObject.ThreadNumber);
+
+                threadIndex++;
+
+                threadedComputers.Add(computers);
+            }
+
+            return await Task.WhenAll(threadedComputers);
+
+        }
+
+        
         private static void UpdateOrCreateComputerInDB(List<Models.Device> computers)
         {
 
@@ -106,7 +137,7 @@ namespace DH.Helpdesk.SCCM
             computerDB.OS_Version = reference._OperatingSystem.Version;
             computerDB.OS_SP = reference._OperatingSystem.CSDVersion;
 
-            computerDB.Domain_Id = Int32.Parse(System.Configuration.ConfigurationManager.ConnectionStrings["DB_Domain_Id"].ToString());
+            computerDB.Domain_Id = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Domain_Id"].ToString());
 
             var userName = reference._ComputerSystem.UserName;
 
@@ -116,7 +147,7 @@ namespace DH.Helpdesk.SCCM
                 userName = splittedUserName;
             }
 
-            var computerUserID = connector.GetComputerUserByUserId(Int32.Parse(System.Configuration.ConfigurationManager.ConnectionStrings["DB_Customer_Id"].ToString()), userName);
+            var computerUserID = connector.GetComputerUserByUserId(Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Customer_Id"].ToString()), userName);
 
             if (computerUserID != null)
             {
@@ -144,228 +175,237 @@ namespace DH.Helpdesk.SCCM
 
 
 
-        private static List<Models.Device> FormModel(string token ,List<RestSharp.RestResponse> response)
+        private static Task<List<Models.Device>> FormModel(string token, List<RSystem> rSystemWrapper, int thread)
         {
             List<Models.Device> devices = new List<Models.Device>();
 
-            var rSystemWrapper = JsonConvert.DeserializeObject<GenericValueWrapper<RSystem>>(response[0].Content).value;
+            TaskCompletionSource<List<Models.Device>> tcs = new TaskCompletionSource<List<Models.Device>>();
 
-            foreach (var RSystem in rSystemWrapper)
+            Task.Run(() =>
             {
 
-                //Fetch additioan data for each computer
-                var computerAdditionalData = FetchAdditionalData(token, RSystem.ResourceID).Result.ToList();
-
-
-                //Error check
-                if (!FetchIsOK(computerAdditionalData))
-                {
-                    throw new Exception("Additional Fetch was not ok");
-                }
-                
-
-                var wrapper = FormWrapper(computerAdditionalData);
-
-
-                //Create the object
-                Models.Device computer = new Models.Device();
-
-                //Set the resource ID
-                computer.ResourceID = RSystem.ResourceID;
-
-
-                //Start mapping the object
-                var computerSystemWrapper = wrapper.ComputerSystem.value.DefaultIfEmpty(null).FirstOrDefault();
-                var operatingSystemWrapper = wrapper.OperatingSystem.value.DefaultIfEmpty(null).FirstOrDefault();
-                var PCBiosWrapper = wrapper.PCBios.value.DefaultIfEmpty(null).FirstOrDefault();
-                var videoControllerDataWrapper = wrapper.VideoControllerData.value.Where(x => x.DeviceID == "VideoController1").DefaultIfEmpty(null).FirstOrDefault();
-                var x86PCMemoryWrapper = wrapper.X86PCMemory.value.DefaultIfEmpty(null).FirstOrDefault();
-                var enclosureWrapper = wrapper.Enclosure.value.DefaultIfEmpty(null).FirstOrDefault();
-                var processorWrapper = wrapper.Processor.value.DefaultIfEmpty(null).FirstOrDefault();
-                var networkAdapterWrapper = wrapper.NetworkAdapter.value.DefaultIfEmpty(null).FirstOrDefault();
-                var networkAdapterConfigurationWrapper = wrapper.NetworkAdapterConfiguration.value.DefaultIfEmpty(null).FirstOrDefault();
-                var soundDeviceWrapper = wrapper.SoundDevice.value.DefaultIfEmpty(null).FirstOrDefault();
-                var programsWrapper = wrapper.Programs.value.DefaultIfEmpty(null).FirstOrDefault();
-                var logicalDiskWrapper = wrapper.LogicalDisk.value.DefaultIfEmpty(null).FirstOrDefault();
-
-
-
-                //Set the base
-                computer._RSystem = new Models.RSystem()
+                foreach (var RSystem in rSystemWrapper)
                 {
 
-                    Company = RSystem.Company,
+                    actions++;
+                    Console.WriteLine("Thread: " + thread + " - " + RSystem.ResourceID + " Action: " + actions);
 
-                };
+                    //Fetch additioan data for each computer
+                    var computerAdditionalData = FetchAdditionalData(token, RSystem.ResourceID).Result.ToList();
 
 
-                //Check if found
-                if (computerSystemWrapper != null)
-                {
-                    computer._ComputerSystem = new Models.ComputerSystem()
+                    //Error check
+                    if (!FetchIsOK(computerAdditionalData))
                     {
-                        Manufacturer = computerSystemWrapper.Manufacturer,
-                        Model = computerSystemWrapper.Model,
-                        Name = computerSystemWrapper.Name,
-                        TimeStamp = computerSystemWrapper.TimeStamp,
-                        UserName = computerSystemWrapper.UserName,
+                        throw new Exception("Additional Fetch was not ok");
+                    }
 
-                    };
-                }
 
-                //Check if found
-                if (operatingSystemWrapper != null)
-                {
-                    computer._OperatingSystem = new Models.OperatingSystem()
+                    var wrapper = FormWrapper(computerAdditionalData);
+
+
+                    //Create the object
+                    Models.Device computer = new Models.Device();
+
+                    //Set the resource ID
+                    computer.ResourceID = RSystem.ResourceID;
+
+
+                    //Start mapping the object
+                    var computerSystemWrapper = wrapper.ComputerSystem.value.DefaultIfEmpty(null).FirstOrDefault();
+                    var operatingSystemWrapper = wrapper.OperatingSystem.value.DefaultIfEmpty(null).FirstOrDefault();
+                    var PCBiosWrapper = wrapper.PCBios.value.DefaultIfEmpty(null).FirstOrDefault();
+                    var videoControllerDataWrapper = wrapper.VideoControllerData.value.Where(x => x.DeviceID == "VideoController1").DefaultIfEmpty(null).FirstOrDefault();
+                    var x86PCMemoryWrapper = wrapper.X86PCMemory.value.DefaultIfEmpty(null).FirstOrDefault();
+                    var enclosureWrapper = wrapper.Enclosure.value.DefaultIfEmpty(null).FirstOrDefault();
+                    var processorWrapper = wrapper.Processor.value.DefaultIfEmpty(null).FirstOrDefault();
+                    var networkAdapterWrapper = wrapper.NetworkAdapter.value.DefaultIfEmpty(null).FirstOrDefault();
+                    var networkAdapterConfigurationWrapper = wrapper.NetworkAdapterConfiguration.value.DefaultIfEmpty(null).FirstOrDefault();
+                    var soundDeviceWrapper = wrapper.SoundDevice.value.DefaultIfEmpty(null).FirstOrDefault();
+                    var programsWrapper = wrapper.Programs.value.DefaultIfEmpty(null).FirstOrDefault();
+                    var logicalDiskWrapper = wrapper.LogicalDisk.value.DefaultIfEmpty(null).FirstOrDefault();
+
+
+
+                    //Set the base
+                    computer._RSystem = new Models.RSystem()
                     {
 
-                        Caption = operatingSystemWrapper.Caption,
-                        CSDVersion = operatingSystemWrapper.CSDVersion,
-                        Version = operatingSystemWrapper.Version,
+                        Company = RSystem.Company,
 
                     };
-                }
 
-                //Check if found
-                if (PCBiosWrapper != null)
-                {
-                    computer._PCBios = new Models.PCBios()
+
+                    //Check if found
+                    if (computerSystemWrapper != null)
                     {
+                        computer._ComputerSystem = new Models.ComputerSystem()
+                        {
+                            Manufacturer = computerSystemWrapper.Manufacturer,
+                            Model = computerSystemWrapper.Model,
+                            Name = computerSystemWrapper.Name,
+                            TimeStamp = computerSystemWrapper.TimeStamp,
+                            UserName = computerSystemWrapper.UserName,
 
-                        SerialNumber = PCBiosWrapper.SerialNumber,
-                        ReleaseDate = PCBiosWrapper.ReleaseDate,
-                        SMBIOSBIOSVersion = PCBiosWrapper.SMBIOSBIOSVersion,
+                        };
+                    }
 
-                    };
-                }
-
-                //Check if found
-                if (videoControllerDataWrapper != null)
-                {
-                    computer._VideoControllerData = new Models.VideoControllerData()
+                    //Check if found
+                    if (operatingSystemWrapper != null)
                     {
+                        computer._OperatingSystem = new Models.OperatingSystem()
+                        {
 
-                        Name = videoControllerDataWrapper.Name,
+                            Caption = operatingSystemWrapper.Caption,
+                            CSDVersion = operatingSystemWrapper.CSDVersion,
+                            Version = operatingSystemWrapper.Version,
 
-                    };
-                }
+                        };
+                    }
 
-                //Check if found
-                if (x86PCMemoryWrapper != null)
-                {
-                    computer._X86PCMemory = new Models.X86PCMemory()
+                    //Check if found
+                    if (PCBiosWrapper != null)
                     {
+                        computer._PCBios = new Models.PCBios()
+                        {
 
-                        TotalPhysicalMemory = x86PCMemoryWrapper.TotalPhysicalMemory,
+                            SerialNumber = PCBiosWrapper.SerialNumber,
+                            ReleaseDate = PCBiosWrapper.ReleaseDate,
+                            SMBIOSBIOSVersion = PCBiosWrapper.SMBIOSBIOSVersion,
 
-                    };
-                }
+                        };
+                    }
 
-                //Check if found
-                if (enclosureWrapper != null)
-                {
-                    computer._Enclosure = new Models.Enclosure()
+                    //Check if found
+                    if (videoControllerDataWrapper != null)
                     {
+                        computer._VideoControllerData = new Models.VideoControllerData()
+                        {
 
-                        ChassisTypes = enclosureWrapper.ChassisTypes,
+                            Name = videoControllerDataWrapper.Name,
 
-                    };
-                }
+                        };
+                    }
 
-                //Check if found
-                if (enclosureWrapper != null)
-                {
-                    computer._Enclosure = new Models.Enclosure()
+                    //Check if found
+                    if (x86PCMemoryWrapper != null)
                     {
+                        computer._X86PCMemory = new Models.X86PCMemory()
+                        {
 
-                        ChassisTypes = enclosureWrapper.ChassisTypes,
+                            TotalPhysicalMemory = x86PCMemoryWrapper.TotalPhysicalMemory,
 
-                    };
-                }
+                        };
+                    }
 
-                //Check if found
-                if (processorWrapper != null)
-                {
-                    computer._Processor = new Models.Processor()
+                    //Check if found
+                    if (enclosureWrapper != null)
                     {
+                        computer._Enclosure = new Models.Enclosure()
+                        {
 
-                        Name = processorWrapper.Name,
+                            ChassisTypes = enclosureWrapper.ChassisTypes,
 
-                    };
-                }
+                        };
+                    }
 
-                //Check if found
-                if (networkAdapterWrapper != null)
-                {
-                    computer._NetworkAdapter = new Models.NetworkAdapter()
+                    //Check if found
+                    if (enclosureWrapper != null)
                     {
+                        computer._Enclosure = new Models.Enclosure()
+                        {
 
-                        Name = networkAdapterWrapper.Name,
+                            ChassisTypes = enclosureWrapper.ChassisTypes,
 
-                    };
-                }
+                        };
+                    }
 
-                //Check if found
-                if (networkAdapterConfigurationWrapper != null)
-                {
-                    computer._NetworkAdapterConfiguration = new Models.NetworkAdapterConfiguration()
+                    //Check if found
+                    if (processorWrapper != null)
                     {
+                        computer._Processor = new Models.Processor()
+                        {
 
-                        IPAddress = networkAdapterConfigurationWrapper.IPAddress,
-                        MacAddress = networkAdapterConfigurationWrapper.MacAddress,
+                            Name = processorWrapper.Name,
 
-                    };
-                }
+                        };
+                    }
 
-                //Check if found
-                if (soundDeviceWrapper != null)
-                {
-                    computer._SoundDevice = new Models.SoundDevice()
+                    //Check if found
+                    if (networkAdapterWrapper != null)
                     {
+                        computer._NetworkAdapter = new Models.NetworkAdapter()
+                        {
 
-                        Name = soundDeviceWrapper.Name,
+                            Name = networkAdapterWrapper.Name,
 
-                    };
-                }
+                        };
+                    }
 
-                //Check if found
-                if (programsWrapper != null)
-                {
-                    computer._Programs = new Models.Programs()
+                    //Check if found
+                    if (networkAdapterConfigurationWrapper != null)
                     {
+                        computer._NetworkAdapterConfiguration = new Models.NetworkAdapterConfiguration()
+                        {
 
-                        DisplayName = programsWrapper.DisplayName,
-                        Publisher = programsWrapper.Publisher,
-                        Version = programsWrapper.Version,
+                            IPAddress = networkAdapterConfigurationWrapper.IPAddress,
+                            MacAddress = networkAdapterConfigurationWrapper.MacAddress,
 
-                    };
-                }
+                        };
+                    }
 
-                //Check if found
-                if (logicalDiskWrapper != null)
-                {
-                    computer._LogicalDisk = new Models.LogicalDisk()
+                    //Check if found
+                    if (soundDeviceWrapper != null)
                     {
+                        computer._SoundDevice = new Models.SoundDevice()
+                        {
 
-                        DeviceId = logicalDiskWrapper.DeviceId,
-                        DriveType = logicalDiskWrapper.DriveType,
-                        FileSystem = logicalDiskWrapper.FileSystem,
-                        FreeSpace = logicalDiskWrapper.FreeSpace,
-                        Name = logicalDiskWrapper.Name,
-                        Size = logicalDiskWrapper.Size,
+                            Name = soundDeviceWrapper.Name,
 
-                    };
+                        };
+                    }
+
+                    //Check if found
+                    if (programsWrapper != null)
+                    {
+                        computer._Programs = new Models.Programs()
+                        {
+
+                            DisplayName = programsWrapper.DisplayName,
+                            Publisher = programsWrapper.Publisher,
+                            Version = programsWrapper.Version,
+
+                        };
+                    }
+
+                    //Check if found
+                    if (logicalDiskWrapper != null)
+                    {
+                        computer._LogicalDisk = new Models.LogicalDisk()
+                        {
+
+                            DeviceId = logicalDiskWrapper.DeviceId,
+                            DriveType = logicalDiskWrapper.DriveType,
+                            FileSystem = logicalDiskWrapper.FileSystem,
+                            FreeSpace = logicalDiskWrapper.FreeSpace,
+                            Name = logicalDiskWrapper.Name,
+                            Size = logicalDiskWrapper.Size,
+
+                        };
+                    }
+
+                    //Add to computers
+                    devices.Add(computer);
+
                 }
 
-                //Add to computers
-                devices.Add(computer); 
+                tcs.SetResult(devices);
 
+            });
 
-            }
+            return tcs.Task;
+        }
 
-            return devices;
-        }            
-            
 
         private static Wrapper FormWrapper(List<RestSharp.RestResponse> restResponses)
         {
@@ -536,5 +576,8 @@ namespace DH.Helpdesk.SCCM
             }
 
         }
+
+
     }
+
 }
