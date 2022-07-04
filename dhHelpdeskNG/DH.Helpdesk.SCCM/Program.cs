@@ -246,12 +246,12 @@ namespace DH.Helpdesk.SCCM
         {
             Wrapper wrapper = new Wrapper()
             {
-                ComputerSystemWrapper = JsonConvert.DeserializeObject<ComputerSystemWrapper>(restResponses[0].Content),
-                OperatingSystemWrapper = JsonConvert.DeserializeObject<OperatingSystemWrapper>(restResponses[1].Content),
-                PCBiosWrapper = JsonConvert.DeserializeObject<PCBiosWrapper>(restResponses[2].Content),
-                RSystemWrapper = JsonConvert.DeserializeObject<RSystemWrapper>(restResponses[3].Content),
-                VideoControllerDataWrapper = JsonConvert.DeserializeObject<VideoControllerDataWrapper>(restResponses[4].Content),
-                X86PCMemoryWrapper = JsonConvert.DeserializeObject<X86PCMemoryWrapper>(restResponses[5].Content)
+                ComputerSystemWrapper = JsonConvert.DeserializeObject<GenericValueWrapper<ComputerSystem>>(restResponses[0].Content),
+                OperatingSystemWrapper = JsonConvert.DeserializeObject<GenericValueWrapper<Entities.OperatingSystem>>(restResponses[1].Content),
+                PCBiosWrapper = JsonConvert.DeserializeObject<GenericValueWrapper<PCBios>>(restResponses[2].Content),
+                RSystemWrapper = JsonConvert.DeserializeObject<GenericValueWrapper<RSystem>>(restResponses[3].Content),
+                VideoControllerDataWrapper = JsonConvert.DeserializeObject<GenericValueWrapper<VideoControllerData>>(restResponses[4].Content),
+                X86PCMemoryWrapper = JsonConvert.DeserializeObject<GenericValueWrapper<X86PCMemory>>(restResponses[5].Content)
             };
 
             return wrapper;
