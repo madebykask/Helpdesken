@@ -16,6 +16,8 @@ namespace DH.Helpdesk.SCCM
 {
     internal class Program
     {
+
+        
         static void Main(string[] args)
         {
 
@@ -54,28 +56,94 @@ namespace DH.Helpdesk.SCCM
             //Split the wrapper by resourceID and putinto model
             List<Models.Computer> computers = FormModel(wrapper);
 
-            SaveOrCreateComputerInDB(computers);
+            UpdateOrCreateComputerInDB(computers);
 
 
         }
 
-        private static void SaveOrCreateComputerInDB(List<Models.Computer> computers)
+        private static void UpdateOrCreateComputerInDB(List<Models.Computer> computers)
         {
 
             Connector connector = new Connector(System.Configuration.ConfigurationManager.ConnectionStrings["conHD"].ToString());
 
             foreach (var computer in computers)
             {
+                ComputerDB computerDB;
+                ServerDB serverDB;
 
-                //Check if computer exits in DB
-                if (!connector.ComputerExist(computer))
+
+                //Computer
+                if (computer._OperatingSystem.ComputerRole == 0)
                 {
-                    //Create a computer in the DB
+                    computerDB = connector.GetComputer(computer);
+
+                    //If null, Create
+                    if (computerDB == null)
+                    {
+                        computerDB = connector.InsertComputerAndReturn(computer);
+                    }
+                }
+                //Server
+                else if (computer._OperatingSystem.ComputerRole == 1)
+                {
+                    serverDB = connector.GetServer(computer);
+
+                    //If null, Create
+                    if (serverDB == null)
+                    {
+                        serverDB = connector.InsertServerAndReturn(computer);
+                    }
                     
                 }
-
+                
             }
         }
+
+        private static void HandleComputerLogic(ComputerDB computerDB, Models.Computer reference, Connector connector)
+        {
+            computerDB.ScanDate = reference._ComputerSystem.TimeStamp;
+
+            computerDB.OS_Id = connector.ExistsObject(Other.Enums.ObjectType.OS, reference._OperatingSystem.Caption);
+            computerDB.OS_Version = reference._OperatingSystem.Version;
+            computerDB.OS_SP = reference._OperatingSystem.CSDVersion;
+
+            computerDB.Domain_Id = Int32.Parse(System.Configuration.ConfigurationManager.ConnectionStrings["DB_Domain_Id"].ToString());
+
+            var userName = reference._ComputerSystem.UserName;
+
+            if (!String.IsNullOrEmpty(userName))
+            {
+                var splittedUserName = userName.Split('\\')[1];
+                userName = splittedUserName;
+            }
+
+            var computerUserID = connector.GetComputerUserByUserId(Int32.Parse(System.Configuration.ConfigurationManager.ConnectionStrings["DB_Customer_Id"].ToString()), userName);
+
+            if (computerUserID != null)
+            {
+                computerDB.User_Id = computerUserID.Value;
+            }
+
+            computerDB.Manufacturer = reference._ComputerSystem.Manufacturer;
+
+            computerDB.ComputerModel_Id = connector.ExistsObject(Other.Enums.ObjectType.ComputerModel, reference._ComputerSystem.Model);
+            computerDB.ComputerModel = reference._ComputerSystem.Model;
+
+            computerDB.SerialNumber = reference._PCBios.SerialNumber;
+            computerDB.BIOSDate = reference._PCBios.ReleaseDate;
+            computerDB.BIOSVersion = reference._PCBios.SMBIOSBIOSVersion;
+
+            
+        }
+
+        private static void HandleServerLogic(ServerDB serverDB, Models.Computer reference, Connector connector)
+        {
+            serverDB.ScanDate = reference._ComputerSystem.TimeStamp;
+
+        }
+
+
+
 
         private static List<Models.Computer> FormModel(Wrapper wrapper)
         {

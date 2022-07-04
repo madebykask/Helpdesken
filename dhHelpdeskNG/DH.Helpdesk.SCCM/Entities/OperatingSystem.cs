@@ -15,7 +15,7 @@ namespace DH.Helpdesk.SCCM.Entities
 
         public string Caption { get; set; }
 
-        public object CSDVersion { get; set; }
+        public string CSDVersion { get; set; }
 
         public string Version { get; set; }
     }
