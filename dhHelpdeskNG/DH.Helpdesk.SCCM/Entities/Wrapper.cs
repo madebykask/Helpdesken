@@ -9,17 +9,31 @@ namespace DH.Helpdesk.SCCM.Entities
     public class Wrapper
     {
 
-        public ComputerSystemWrapper ComputerSystemWrapper { get; set; }
+        public GenericValueWrapper<ComputerSystem> ComputerSystem { get; set; }
 
-        public OperatingSystemWrapper OperatingSystemWrapper { get; set; }
+        public GenericValueWrapper<OperatingSystem> OperatingSystem { get; set; }
 
-        public PCBiosWrapper PCBiosWrapper { get; set; }
+        public GenericValueWrapper<PCBios> PCBios { get; set; }
 
-        public RSystemWrapper RSystemWrapper { get; set; }
+        public GenericValueWrapper<RSystem> RSystem { get; set; }
 
-        public VideoControllerDataWrapper VideoControllerDataWrapper { get; set; }
+        public GenericValueWrapper<VideoControllerData> VideoControllerData { get; set; }
 
-        public X86PCMemoryWrapper X86PCMemoryWrapper { get; set; }
+        public GenericValueWrapper<X86PCMemory> X86PCMemory { get; set; }
+
+        public GenericValueWrapper<Enclosure> Enclosure { get; set; }
+
+        public GenericValueWrapper<Processor> Processor { get; set; }
+
+        public GenericValueWrapper<NetworkAdapter> NetworkAdapter { get; set; }
+
+        public GenericValueWrapper<NetworkAdapterConfiguration> NetworkAdapterConfiguration { get; set; }
+
+        public GenericValueWrapper<SoundDevice> SoundDevice { get; set; }
+
+        public GenericValueWrapper<Programs> Programs { get; set; }
+
+        public GenericValueWrapper<LogicalDisk> LogicalDisk { get; set; }
 
     }
 }

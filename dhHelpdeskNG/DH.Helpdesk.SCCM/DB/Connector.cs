@@ -24,7 +24,7 @@ namespace DH.Helpdesk.SCCM.DB
             this.ConnectionString = ConnectionString;
         }
 
-        public ComputerDB GetComputer(Computer computer)
+        public ComputerDB GetComputer(Device computer)
         {
 
             ComputerDB res = null;
@@ -67,7 +67,7 @@ namespace DH.Helpdesk.SCCM.DB
             return res;
         }
 
-        public ServerDB GetServer(Computer computer)
+        public ServerDB GetServer(Device computer)
         {
             ServerDB res = null;
 
@@ -108,7 +108,7 @@ namespace DH.Helpdesk.SCCM.DB
             return res;
         }
 
-        public ComputerDB InsertComputerAndReturn(Computer computer)
+        public ComputerDB InsertComputerAndReturn(Device computer)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
@@ -127,7 +127,7 @@ namespace DH.Helpdesk.SCCM.DB
             return GetComputer(computer);
         }
 
-        public ServerDB InsertServerAndReturn(Computer computer)
+        public ServerDB InsertServerAndReturn(Device computer)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {

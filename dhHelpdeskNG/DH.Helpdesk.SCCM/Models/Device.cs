@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DH.Helpdesk.SCCM.Models
 {
-    public class Computer
+    public class Device
     {
 
         public long ResourceID { get; set; }
@@ -23,7 +23,19 @@ namespace DH.Helpdesk.SCCM.Models
 
         public X86PCMemory _X86PCMemory { get; set; }
 
+        public Enclosure _Enclosure { get; set; }
 
+        public Processor _Processor { get; set; }
+
+        public NetworkAdapter _NetworkAdapter { get; set; }
+
+        public NetworkAdapterConfiguration _NetworkAdapterConfiguration { get; set; }
+
+        public SoundDevice _SoundDevice { get; set; }
+
+        public Programs _Programs { get; set; }
+
+        public LogicalDisk _LogicalDisk { get; set; }
 
     }
 
@@ -93,4 +105,71 @@ namespace DH.Helpdesk.SCCM.Models
 
         public long TotalPhysicalMemory { get; set; }
     }
+
+    public class Enclosure
+    {
+
+        public string ChassisTypes { get; set; }
+
+    }
+
+    public class Processor
+    {
+
+        public string Name { get; set; }
+
+
+    }
+
+    public class NetworkAdapter
+    {
+
+
+        public string Name { get; set; }
+
+
+    }
+
+    public class NetworkAdapterConfiguration
+    {
+
+        public string IPAddress { get; set; }
+
+        public string MacAddress { get; set; }
+
+
+    }
+
+    public class SoundDevice
+    {
+
+        public string Name { get; set; }
+    }
+
+    public class Programs
+    {
+
+        public string DisplayName { get; set; }
+
+        public string Version { get; set; }
+
+        public string Publisher { get; set; }
+    }
+
+    public class LogicalDisk
+    {
+
+        public string Name { get; set; }
+
+        public string DeviceId { get; set; }
+
+        public string FileSystem { get; set; }
+
+        public long Size { get; set; }
+
+        public long FreeSpace { get; set; }
+
+        public string DriveType { get; set; }
+    }
+
 }
