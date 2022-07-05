@@ -64,6 +64,8 @@ namespace DH.Helpdesk.SCCM
             var threadResult = runThreads(chunkedData, token).Result;
 
             var apa = threadResult;
+
+            //TODO. Set a debug flag to limit the result of X. Run with this setting to make life easy
             //UpdateOrCreateComputerInDB(computers);
 
         }
@@ -481,8 +483,13 @@ namespace DH.Helpdesk.SCCM
 
             Task<RestSharp.RestResponse> logicalDisksWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Logical_Disk"].ToString());
 
-            var result = await Task.WhenAll(computerSystemWrapper, operatingSystemWrapper, PCBiosWrapper, videoControllerDataWrapper, X86PCMemoryWrapper, enclosureWrapper, processorWrapper, networkAdapterWrapper, networkAdapterConfigurationWrapper, soundDeviceWrapper, programsWrapper, logicalDisksWrapper);
+            Stopwatch stopwatch = new Stopwatch();
 
+            stopwatch.Start();
+            var result = await Task.WhenAll(computerSystemWrapper, operatingSystemWrapper, PCBiosWrapper, videoControllerDataWrapper, X86PCMemoryWrapper, enclosureWrapper, processorWrapper, networkAdapterWrapper, networkAdapterConfigurationWrapper, soundDeviceWrapper, programsWrapper, logicalDisksWrapper);
+            stopwatch.Stop();
+            Console.WriteLine("Time taken to fetch all data: " + stopwatch.ElapsedMilliseconds);
+            
             return result;
         }
 
