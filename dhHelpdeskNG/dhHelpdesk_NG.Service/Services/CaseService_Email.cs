@@ -157,7 +157,7 @@ namespace DH.Helpdesk.Services.Services
                 var admin = _userRepository.GetUserInfo(newCase.Performer_User_Id.Value);
                 var sentToAdmin = false;
 
-                if (newCase.Performer_User_Id != oldCase.Performer_User_Id)
+                if (oldCase == null || newCase.Performer_User_Id != oldCase.Performer_User_Id)
                 {
 
                     if (admin.AllocateCaseMail == 1 && IsValidEmail(admin.Email))
