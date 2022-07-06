@@ -27,15 +27,15 @@ namespace DH.Helpdesk.SCCM.Models
 
         public Processor _Processor { get; set; }
 
-        public NetworkAdapter _NetworkAdapter { get; set; }
+        public List<NetworkAdapter> _NetworkAdapter { get; set; }
 
-        public NetworkAdapterConfiguration _NetworkAdapterConfiguration { get; set; }
+        public List<NetworkAdapterConfiguration> _NetworkAdapterConfiguration { get; set; }
 
         public SoundDevice _SoundDevice { get; set; }
 
-        public Programs _Programs { get; set; }
+        public List<Programs> _Programs { get; set; }
 
-        public LogicalDisk _LogicalDisk { get; set; }
+        public List<LogicalDisk> _LogicalDisk { get; set; }
 
     }
 
@@ -91,7 +91,7 @@ namespace DH.Helpdesk.SCCM.Models
     public class RSystem
     {
 
-        public string Company { get; set; }
+        
     }
 
     public class VideoControllerData

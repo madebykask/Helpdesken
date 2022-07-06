@@ -57,16 +57,32 @@ namespace DH.Helpdesk.SCCM
             //Parse the data
             var rSystemWrapper = JsonConvert.DeserializeObject<GenericValueWrapper<RSystem>>(result[0].Content).value;
 
+            //Limit the data for debugging purposes
+            var setting_Limit_Devices = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["Setting_Limit_Devices"].ToString());
+
+            if (setting_Limit_Devices != 0)
+            {
+                rSystemWrapper = rSystemWrapper.Take(setting_Limit_Devices).ToList();
+            }
+            
+
             //Chunk the data
             var chunkedData = rSystemWrapper.ChunkBy(rSystemWrapper.Count / Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["Setting_Chunk_Page_Size"].ToString()));
 
-
+            //Run all the threads
             var threadResult = runThreads(chunkedData, token).Result;
 
-            var apa = threadResult;
 
-            //TODO. Set a debug flag to limit the result of X. Run with this setting to make life easy
-            //UpdateOrCreateComputerInDB(computers);
+            //Combine the thread result
+            List<Models.Device> computers = new List<Models.Device>();
+            foreach (var SingleThread in threadResult)
+            {
+                computers.AddRange(SingleThread);
+            }
+
+            var test = computers;
+
+            UpdateOrCreateComputerInDB(computers);
 
         }
 
@@ -114,6 +130,9 @@ namespace DH.Helpdesk.SCCM
                     {
                         computerDB = connector.InsertComputerAndReturn(computer);
                     }
+
+                    //Run data manipulation logic
+                    HandleComputerLogic(computerDB, computer, connector);
                 }
                 //Server
                 else if (computer._OperatingSystem.ComputerRole == 1)
@@ -165,6 +184,65 @@ namespace DH.Helpdesk.SCCM
             computerDB.BIOSDate = reference._PCBios.ReleaseDate;
             computerDB.BIOSVersion = reference._PCBios.SMBIOSBIOSVersion;
 
+            computerDB.ChassisType = Helpers.getChassisTypeName(Convert.ToInt32(reference._Enclosure.ChassisTypes));
+
+            computerDB.Processor_Id = connector.ExistsObject(Other.Enums.ObjectType.Processor, reference._Processor.Name);
+
+            computerDB.RAM_Id = connector.ExistsObject(Other.Enums.ObjectType.RAM, Helpers.getRAM(reference._X86PCMemory.TotalPhysicalMemory));
+
+            computerDB.NIC_Id = connector.ExistsObject(Other.Enums.ObjectType.NetworkAdapter, reference._NetworkAdapter.FirstOrDefault().Name);
+
+            string ipAdress = null;
+            string macAdress = null;
+            foreach (var networkAdapterConfiguration in reference._NetworkAdapterConfiguration)
+            {
+                if (networkAdapterConfiguration.IPAddress != null)
+                {
+                    var splitIdAddress = networkAdapterConfiguration.IPAddress.Split(',');
+                    ipAdress = splitIdAddress[0];
+                    macAdress = networkAdapterConfiguration.MacAddress;
+
+                    break;
+                }
+            }
+
+            computerDB.IPAddress = ipAdress;
+            computerDB.MACAddress = macAdress;
+
+            computerDB.SoundCard = reference._SoundDevice.Name;
+
+            computerDB.VideoCard = reference._VideoControllerData.Name;
+
+            foreach (var program in reference._Programs)
+            {
+                Software r = new Software()
+                {
+                    
+                    DisplayName = program.DisplayName,
+                    Publisher = program.Publisher,
+                    Version = program.Version,
+                };
+
+                computerDB.Softwares.Add(r);
+            }
+
+            foreach (var drive in reference._LogicalDisk)
+            {
+                LogicalDrive r = new LogicalDrive()
+                {
+                    DeviceId = drive.DeviceId,
+                    DriveType = drive.DriveType,
+                    FileSystem = drive.FileSystem,
+                    FreeSpace = drive.FreeSpace,
+                    Name = drive.Name,
+                    Size = drive.Size,
+                };
+
+                computerDB.LogicalDrives.Add(r);
+            }
+
+
+            
             
         }
 
@@ -221,21 +299,21 @@ namespace DH.Helpdesk.SCCM
                     var x86PCMemoryWrapper = wrapper.X86PCMemory.value.DefaultIfEmpty(null).FirstOrDefault();
                     var enclosureWrapper = wrapper.Enclosure.value.DefaultIfEmpty(null).FirstOrDefault();
                     var processorWrapper = wrapper.Processor.value.DefaultIfEmpty(null).FirstOrDefault();
-                    var networkAdapterWrapper = wrapper.NetworkAdapter.value.DefaultIfEmpty(null).FirstOrDefault();
-                    var networkAdapterConfigurationWrapper = wrapper.NetworkAdapterConfiguration.value.DefaultIfEmpty(null).FirstOrDefault();
+                    var networkAdapterWrapper = wrapper.NetworkAdapter.value.DefaultIfEmpty(null);                              //IS LIST
+                    var networkAdapterConfigurationWrapper = wrapper.NetworkAdapterConfiguration.value.DefaultIfEmpty(null);    //IS LIST
                     var soundDeviceWrapper = wrapper.SoundDevice.value.DefaultIfEmpty(null).FirstOrDefault();
-                    var programsWrapper = wrapper.Programs.value.DefaultIfEmpty(null).FirstOrDefault();
-                    var logicalDiskWrapper = wrapper.LogicalDisk.value.DefaultIfEmpty(null).FirstOrDefault();
+                    var programsWrapper = wrapper.Programs.value.DefaultIfEmpty(null);                                          //IS LIST
+                    var logicalDiskWrapper = wrapper.LogicalDisk.value.DefaultIfEmpty(null);                                    //IS LIST
 
 
 
                     //Set the base
-                    computer._RSystem = new Models.RSystem()
-                    {
+                    computer._RSystem = new Models.RSystem();
+                    //{
 
-                        Company = RSystem.Company,
+                    //    Company = RSystem.Company,
 
-                    };
+                    //};
 
 
                     //Check if found
@@ -336,24 +414,35 @@ namespace DH.Helpdesk.SCCM
                     //Check if found
                     if (networkAdapterWrapper != null)
                     {
-                        computer._NetworkAdapter = new Models.NetworkAdapter()
+                        computer._NetworkAdapter = new List<Models.NetworkAdapter>();
+  
+                        foreach (var networkAdapterWrapperSingle in networkAdapterWrapper)
                         {
+                            computer._NetworkAdapter.Add(new Models.NetworkAdapter()
+                            {
 
-                            Name = networkAdapterWrapper.Name,
+                                Name = networkAdapterWrapperSingle.Name,
 
-                        };
+                            });
+                        }
                     }
 
                     //Check if found
                     if (networkAdapterConfigurationWrapper != null)
                     {
-                        computer._NetworkAdapterConfiguration = new Models.NetworkAdapterConfiguration()
+                        computer._NetworkAdapterConfiguration = new List<Models.NetworkAdapterConfiguration>();
+
+                        foreach (var networkAdapterConfigurationWrapperSingle in networkAdapterConfigurationWrapper)
                         {
+                            computer._NetworkAdapterConfiguration.Add(new Models.NetworkAdapterConfiguration()
+                            {
 
-                            IPAddress = networkAdapterConfigurationWrapper.IPAddress,
-                            MacAddress = networkAdapterConfigurationWrapper.MacAddress,
+                                IPAddress = networkAdapterConfigurationWrapperSingle.IPAddress,
+                                MacAddress = networkAdapterConfigurationWrapperSingle.MacAddress,
 
-                        };
+                            });
+                        }
+
                     }
 
                     //Check if found
@@ -370,30 +459,43 @@ namespace DH.Helpdesk.SCCM
                     //Check if found
                     if (programsWrapper != null)
                     {
-                        computer._Programs = new Models.Programs()
+                        computer._Programs = new List<Models.Programs>();
+
+                        foreach (var programsWrapperSingle in programsWrapper)
                         {
+                            computer._Programs.Add(new Models.Programs()
+                            {
 
-                            DisplayName = programsWrapper.DisplayName,
-                            Publisher = programsWrapper.Publisher,
-                            Version = programsWrapper.Version,
+                                DisplayName = programsWrapperSingle.DisplayName,
+                                Publisher = programsWrapperSingle.Publisher,
+                                Version = programsWrapperSingle.Version,
 
-                        };
+                            });
+                        }
+
+
                     }
 
                     //Check if found
                     if (logicalDiskWrapper != null)
                     {
-                        computer._LogicalDisk = new Models.LogicalDisk()
+                        computer._LogicalDisk = new List<Models.LogicalDisk>();
+
+                        foreach (var logicalDiskWrapperSingle in logicalDiskWrapper)
                         {
+                            computer._LogicalDisk.Add(new Models.LogicalDisk()
+                            {
 
-                            DeviceId = logicalDiskWrapper.DeviceId,
-                            DriveType = logicalDiskWrapper.DriveType,
-                            FileSystem = logicalDiskWrapper.FileSystem,
-                            FreeSpace = logicalDiskWrapper.FreeSpace,
-                            Name = logicalDiskWrapper.Name,
-                            Size = logicalDiskWrapper.Size,
+                                DeviceId = logicalDiskWrapperSingle.DeviceId,
+                                DriveType = logicalDiskWrapperSingle.DriveType,
+                                FileSystem = logicalDiskWrapperSingle.FileSystem,
+                                FreeSpace = logicalDiskWrapperSingle.FreeSpace,
+                                Name = logicalDiskWrapperSingle.Name,
+                                Size = logicalDiskWrapperSingle.Size,
 
-                        };
+                            });
+                        }
+
                     }
 
                     //Add to computers

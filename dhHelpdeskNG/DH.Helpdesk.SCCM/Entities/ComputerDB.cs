@@ -164,5 +164,32 @@ namespace DH.Helpdesk.SCCM.Entities
         public int Region_Id { get; set; }
 
         public DateTime? WarrantyEndDate { get; set; }
+
+        public List<Software> Softwares { get; set; } = new List<Software>();
+        
+        public List<LogicalDrive> LogicalDrives { get; set; } = new List<LogicalDrive>();
+    }
+
+    public class Software
+    {
+        public string DisplayName { get; set; }
+        public string Version { get; set; }
+        public string Publisher { get; set; }
+    }
+
+    public class LogicalDrive
+    {
+
+        public string Name { get; set; }
+
+        public string DeviceId { get; set; }
+
+        public string FileSystem { get; set; }
+
+        public string Size { get; set; }
+
+        public string FreeSpace { get; set; }
+
+        public string DriveType { get; set; }
     }
 }
