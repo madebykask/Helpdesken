@@ -4118,6 +4118,7 @@
     <Content Include="Content\js\plupload\plupload.js" />
     <Content Include="Content\js\plupload\plupload.silverlight.js" />
     <Content Include="Content\js\plupload\plupload.silverlight.xap" />
+    <Content Include="Views\Cases\ModalDialogs\_BulkCaseEdit.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

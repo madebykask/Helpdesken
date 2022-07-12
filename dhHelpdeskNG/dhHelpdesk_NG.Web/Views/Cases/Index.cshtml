@@ -1,5 +1,7 @@
 ﻿@using System.Web.Script.Serialization
 @using System.Web.Optimization
+@using DH.Helpdesk.Web
+@using DH.Helpdesk.Web.Models.Case
 @model DH.Helpdesk.Web.Models.Case.JsonCaseIndexViewModel
 @{
     var jsSerializer = new JavaScriptSerializer();
@@ -20,7 +22,7 @@
 <div class="case-overview page">
     <div class="secnavs fixed">
         <div class="pull-left">
-            <input type="hidden" id="hidExpandedGroup" value=""/>
+            <input type="hidden" id="hidExpandedGroup" value="" />
             <ul class="secnav">
                 @if (SessionFacade.CurrentUser.CreateCasePermission == 1)
                 {
@@ -30,10 +32,9 @@
                     <li id="btnCaseTemplate">
                         @Html.Partial("_CaseTemplateTree", Model.CaseTemplateTreeButton)
                     </li>
-                    <li id="btnBulkCaseEdit" style="display: none">
-                        @Html.ActionLink(Translation.Get("Massredigera"), null, null, new { customerId = Model.CaseSearchFilterData.filterCustomerId }, new { @class = "btn" } )
+                    <li id="liBulkCaseEdit" style="display: none">
+                        <a data-toggle="modal" data-url="1" href="#divBulkCaseEdit" title="@Translation.Get("Massredigera")" class="btn">@Translation.Get("Massredigera")</a>
                     </li>
-
                 }
                 <li id="btnSaveCaseSetting" style="display: none">
                     <input type="button" class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" />
@@ -44,9 +45,13 @@
     <div class="content">
         <div class="container">
             <ul class="nav nav-tabs" id="myTab">
-                <li id="CasesTab"  class="active"><a href="#fragment-1">@Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation)</a></li>
+                <li id="CasesTab" class="active"><a href="#fragment-1">@Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation)</a></li>
                 <li id="SettingTab"><a href="#fragment-4">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
             </ul>
+            <div id="divBulkCaseEdit" role="dialog" class="modal modalBulkCaseEdit hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+                @Html.Partial("ModalDialogs/_BulkCaseEdit", Model.CaseInputViewModel)
+            </div>
+            
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
                     @Html.Partial("_Search", Model.CaseSearchFilterData)
@@ -61,9 +66,9 @@
                             </div>
                         </div>
                         <div class="no-data-msg">&nbsp;</div>
-                        <div class="error-msg">@Html.Raw(string.Format(Translation.Get("Ett fel inträffade, klicka")+" {0}" + Translation.Get("här")+"{1} " + Translation.Get("för att ladda om sidan."), "<a href=\"#refresh\" class=\"refresh-grid\">", "</a>"))</div>
-                    </div>     
-                    <div id="performanceData"> </div>               
+                        <div class="error-msg">@Html.Raw(string.Format(Translation.Get("Ett fel inträffade, klicka") + " {0}" + Translation.Get("här") + "{1} " + Translation.Get("för att ladda om sidan."), "<a href=\"#refresh\" class=\"refresh-grid\">", "</a>"))</div>
+                    </div>
+                    <div id="performanceData"> </div>
                 </div>
                 <div class="tab-pane tab-pane-border " id="fragment-4">
                     <div id="setting_result" class="container">

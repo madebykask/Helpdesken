@@ -1,0 +1,471 @@
+﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
+@using DH.Helpdesk.Web.Infrastructure
+@using System.Linq;
+@using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Common.Enums.Settings
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+@using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+@using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Common.Enums.Case
+
+@{
+    var readonlyMode = false;
+
+    var hasReadonlyLog = (ViewData.Keys.Any() && ViewData.Keys.Contains("readonlyLog"));
+
+    if (hasReadonlyLog || Model.EditMode == AccessMode.ReadOnly)
+    {
+        readonlyMode = Convert.ToBoolean(ViewData["readonlyLog"]);
+    }
+}
+<div class="modal-header">
+    <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i><strong>  @Translation.Get("Redigera valda ärenden", Enums.TranslationSource.TextTranslation)</strong>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="span12">
+            <table class="tableform">
+                <thead>
+                    <tr>
+                        <th class="span3"></th>
+                        <th class="span4"></th>
+                        <th class="span5"></th>
+                    </tr>
+                </thead>
+                <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup)">
+                    <td>
+                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, "Driftgrupp")
+                    </td>
+                    <td>
+                        @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup))
+                        {
+                            <select id="case__WorkingGroup_Id" name="case_.WorkingGroup_Id" data-field="workingGroup" class="working-group">
+                                <option value="">&nbsp;</option>
+                                @if (Model.workingGroups != null)
+                                {
+
+                                    foreach (var e in Model.workingGroups.Where(e => e.IsActive == 1 || Model.case_.WorkingGroup_Id == e.Id))
+                                    {
+                                        <option value="@e.Id" class="@(e.IsActive != 1 ? "inactive" : string.Empty)" @e.Id.IdIsSelected(Model.case_.WorkingGroup_Id.ToString())>@e.WorkingGroupName</option>
+                                    }
+                                }
+                            </select>
+                        }
+                        else
+                        {
+                            if (!Model.case_.WorkingGroup_Id.HasValue)
+                            {
+                                <input type="text" value="" readonly="readonly" id="workingGroup_Name" />
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.workingGroups.SingleOrDefault(x => x.Id == Model.case_.WorkingGroup_Id).WorkingGroupName, new { @readonly = true, id = "workingGroup_Name" })
+                            }
+
+                            @Html.HiddenFor(m => m.case_.WorkingGroup_Id)
+                        }
+                    </td>
+                </tr>
+
+                <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator)">
+                    <td>
+                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Performer_User_Id, "Handläggare")
+                    </td>
+                    <td>
+                        @*@if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))*@
+                        @if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup) == "display:none")
+                        {
+                            @Html.DropDownListFor(m => m.Performer_Id, Model.Performers, new { data_field = "administrator" })
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(m => m.Performer_Id, Model.Performers, new { data_field = "administrator", disabled = "disabled" })
+                            @Html.HiddenFor(m => m.Performer_Id)
+                        }
+                    </td>
+
+                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))
+                    {
+
+                        <td valign="bottom">
+                            <div style="position:relative;">
+                                <a href="#" id="performerSearch" data-field="administrator" style="" title="" class="btn"><i class="icon-search"></i></a>
+                                <span id="performersWithWg" style="display: none;position:absolute; left:45px; bottom:-2px;">
+                                    <select id="administratorSearchWithWg" data-field="administrator" class="chosen-select">
+                                        <option value="">&nbsp;</option>
+                                        @foreach (var e in Model.PerformersToSearch)
+                                        {
+                                            var option = e.FirstName + " " + e.LastName + " - " + e.WorkingGroupName;
+                                            <option value="@e.UserId,@e.WorkingGroupId">@option</option>
+                                        }
+                                    </select>
+                                </span>
+                            </div>
+                        </td>
+
+                    }
+                    else
+                    {
+                        <td>
+                            <a href="#" id="performerSearch" data-field="administrator" style="" title="" class="btn disabled"><i class="icon-search"></i></a>
+                        </td>
+                    }
+                </tr>
+                <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Priority_Id, CaseSolutionFields.Priority)">
+                    <td>
+                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Priority_Id, "Prioritet")
+                    </td>
+                    <td>
+                        @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Priority_Id, CaseSolutionFields.Priority))
+                        {
+                            <select id="case__Priority_Id" @Model.case_.Id.HtmlReadOnlyFlag(Model.customerUserSetting.PriorityPermission) name="case_.Priority_Id">
+                                <option value="">&nbsp;</option>
+                                @if (Model.priorities != null)
+                                {
+                                    foreach (var e in Model.priorities.Where(e => e.IsActive == 1 || Model.case_.Priority_Id == e.Id))
+                                    {
+                                        <option value="@e.Id" data-sla="@e.SolutionTime" @e.Id.IdIsSelected(Model.case_.Priority_Id.ToString())>@Translation.GetMasterDataTranslation(e.Name)</option>
+                                    }
+                                }
+                            </select>
+                            if (Model.customerUserSetting.PriorityPermission == 0)
+                            {
+                                var priority = Model.case_.Priority_Id.HasValue ? Model.priorities.SingleOrDefault(x => x.Id == Model.case_.Priority_Id) : null;
+                                if (priority == null)
+                                {
+                                    @Html.HiddenFor(m => m.case_.Priority_Id, new { @class = "sla-value", data_sla = "" })
+                                }
+                                else
+                                {
+                                    @Html.HiddenFor(x => x.case_.Priority_Id, new { @class = "sla-value", data_sla = priority.SolutionTime })
+                                }
+                            }
+                        }
+                        else
+                        {
+                            var priority = Model.case_.Priority_Id.HasValue ? Model.priorities.SingleOrDefault(x => x.Id == Model.case_.Priority_Id) : null;
+                            if (priority == null)
+                            {
+                                <input type="text" value="" readonly="readonly" id="priority_Name" />
+                                @Html.HiddenFor(m => Model.case_.Priority_Id, new { @class = "sla-value", data_sla = "" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => priority.Name, new { @readonly = true })
+                                @Html.HiddenFor(x => x.case_.Priority_Id, new { @class = "sla-value", data_sla = priority.SolutionTime })
+                            }
+                        }
+                    </td>
+                </tr>
+
+                <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.StateSecondary_Id, CaseSolutionFields.StateSecondary)">
+                    <td>
+                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.StateSecondary_Id, "Understatus")
+                    </td>
+                    <td>
+                        @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.StateSecondary_Id, CaseSolutionFields.StateSecondary))
+                        {
+                            <select id="case__StateSecondary_Id" @Model.case_.Id.HtmlReadOnlyFlag(Model.customerUserSetting.StateSecondaryPermission) name="case_.StateSecondary_Id">
+                                <option value="">&nbsp;</option>
+                                @if (Model.stateSecondaries != null)
+                                {
+                                    foreach (var e in Model.stateSecondaries.Where(e => e.IsActive == 1 || Model.case_.StateSecondary_Id == e.Id))
+                                    {
+                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.StateSecondary_Id.ToString())>@Translation.GetMasterDataTranslation(e.Name)</option>
+                                    }
+                                }
+                            </select>
+                            if (Model.customerUserSetting.StateSecondaryPermission == 0)
+                            {
+                                @Html.HiddenFor(x => x.case_.StateSecondary_Id, new { @class = "readonlySubstate" })
+                            }
+                        }
+                        else
+                        {
+                            if (!Model.case_.StateSecondary_Id.HasValue)
+                            {
+                                @Html.TextBoxFor(m => m.case_.StateSecondary_Id, new { @readonly = true })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.stateSecondaries.SingleOrDefault(x => x.Id == Model.case_.StateSecondary_Id).Name, new { @readonly = true, id = "subStateName" })
+                                @Html.HiddenFor(x => x.case_.StateSecondary_Id)
+                            }
+                        }
+                    </td>
+                </tr>
+                @if (Model.CustomerSettings.ModuleProject == true)
+                {
+                    if (Model.projects.Any())
+                    {
+                        <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Project, CaseSolutionFields.Project)">
+                            <td>
+                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Project, "Project")
+                            </td>
+                            <td>
+                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Project, CaseSolutionFields.Project))
+                                {
+                                    <select id="case__Project_Id" name="case_.Project_Id">
+                                        <option value="">&nbsp;</option>
+                                        @if (Model.projects != null)
+                                        {
+                                            foreach (var e in Model.projects.Where(e => e.IsActive == 1 || Model.case_.Project_Id == e.Id))
+                                            {
+                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Project_Id.ToString())>@e.Name</option>
+                                            }
+                                        }
+                                    </select>
+                                }
+                                else
+                                {
+                                    if (!Model.case_.Project_Id.HasValue)
+                                    {
+                                        @Html.TextBoxFor(m => m.case_.Project_Id, new { @readonly = true })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(m => m.projects.SingleOrDefault(x => x.Id == Model.case_.Project_Id).Name, new { @readonly = true })
+                                        @Html.HiddenFor(x => x.case_.Project_Id)
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                @if (Model.CustomerSettings.ModuleProblem == true)
+                {
+                    if (Model.problems.Any())
+                    {
+                        <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Problem, CaseSolutionFields.Problem)">
+                            <td>
+                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Problem, "Problem")
+                            </td>
+                            <td>
+                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Problem, CaseSolutionFields.Problem))
+                                {
+                                    <select id="case__Problem_Id" name="case_.Problem_Id">
+                                        <option value="">&nbsp;</option>
+                                        @foreach (var e in Model.problems.Where(e => e.FinishingDate == null || Model.case_.Problem_Id == e.Id))
+                                        {
+                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Problem_Id.ToString())>@e.Name @(string.IsNullOrWhiteSpace(e.ResponsibleUserName) ? "" : "(" + @e.ResponsibleUserName + ")") </option>
+                                        }
+                                    </select>
+                                    <div id="divProblemResponsible" style="display: none">
+                                        @Translation.GetCoreTextTranslation("Ansvarig")
+                                    </div>
+                                }
+                                else
+                                {
+                                    if (!Model.case_.Problem_Id.HasValue)
+                                    {
+                                        @Html.TextBoxFor(m => m.case_.Problem_Id, new { @readonly = true })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(m => m.problems.SingleOrDefault(x => x.Id == Model.case_.Problem_Id).Name, new { @readonly = true })
+                                        @Html.HiddenFor(x => x.case_.Problem_Id)
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                @*@if (SessionFacade.CurrentUser.CloseCasePermission == 1 && !Model.newLog)
+        {
+            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription)">
+                <td>
+                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription, "Avslutsbeskrivning")
+                    @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()).Required == 1)
+                    {
+                        <span class="mandatorystar">*</span>
+                    }
+                </td>
+                <td>
+                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription) && !readonlyMode)
+                    {
+                        @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "300" })
+                    }
+                    else
+                    {
+                        @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "300", @readonly = true })
+                    }
+                </td>
+            </tr>
+        }
+        @if (SessionFacade.CurrentUser.CloseCasePermission == 1)
+        {
+            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)">
+                <td>
+                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ClosingReason, "Avslutsorsak")
+                </td>
+                <td>
+                    <div id="divFinishingType" class="btn-group dropdown-menu-parent">
+                        @{
+                            string disabled = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause);
+                            if (readonlyMode || (Model.IsItParentCase() && Model.IsAnyNotClosedChild(true)))
+                            {
+                                disabled = "disabled";
+                            }
+                        }
+                        <div class="btn @disabled" id="divBreadcrumbs_FinishingType">
+
+                            @(string.IsNullOrEmpty(Model.FinishingCause) ? Translation.Get("--") : Model.FinishingCause)
+                        </div>
+                        <button class="btn dropdown-toggle" data-toggle="dropdown" @disabled>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" style="z-index:99999999999;">
+                            <li><a href="#">@Translation.Get("--")</a></li>
+                            @Html.FinishingCauseDropdownButtonString(Model.finishingCauses)
+                        </ul>
+                        @Html.HiddenFor(model => Model.CaseLog.FinishingType)
+                    </div>
+                </td>
+            </tr>
+            <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)">
+                <td>
+                    @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDate, "Avslutsdatum")
+                </td>
+                <td>
+                    @if (!(Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)
+                        || readonlyMode || (Model.IsItParentCase() && Model.IsAnyNotClosedChild(true))))
+                    {
+                        if (Model.Setting.DisableCaseEndDate == 0)
+                        {
+                            @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePicker", new { id = "divCaseLog_FinishingDate" })
+                        }
+                        else
+                        {
+                            @Html.EditorFor(m => m.CaseLog.FinishingDate, "DateReadOnlyLocalTz", new { id = "divCaseLog_FinishingDate" })
+                        }
+                    }
+                    else
+                    {
+                        @Html.EditorFor(m => m.case_.FinishingDate, "DateReadOnlyLocalTz")
+                    }
+                </td>
+            </tr>
+        }*@
+
+            </table>
+        </div>
+    </div>
+    @*<input type="hidden" id="customerId" value="@Model.Customer.Id" />*@
+</div>
+<div class="modal-footer">
+    <button id="btnBulkCaseEdit" onclick="bulkCaseEdit(null)" class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
+</div>
+<div class="loading-msg">
+    <div class="content-wrapper">
+        <div class="loader">@Translation.Get("Laddar...")</div>
+    </div>
+</div>
+<script type="text/javascript">
+    //var $finishTypeId = $("#CaseLog_FinishingType");
+    //var $finishDate = $('#CaseLog_FinishingDate');
+
+    $(document).ready(function () {
+    //    var $finishTypeContainer = $('#divFinishingType');
+    //    var $finishTypeBreadcrubs = $("#divBreadcrumbs_FinishingType");
+    //    $finishTypeContainer.find('ul.dropdown-menu li a').click(function (e) {
+    //        e.preventDefault();
+    //        var value = $(this).attr('value');
+    //        $finishTypeBreadcrubs.text(window.getBreadcrumbs(this));
+    //        $finishTypeId.val(value).trigger('change');
+    //    });
+
+    //    $finishTypeId.on('change', function (ev) {
+    //        var value = $(ev.target).val();
+    //        if (value == '' || value === undefined) {
+    //            $finishDate.val('');
+    //        } else {
+    //            if ($finishDate.val() == '') {
+    //                $finishDate.val(window.today());
+    //            }
+    //        }
+        //    });
+        $('#divBulkCaseEdit').on("hide", function () {
+            resetBulkEditModal();
+        });
+    });
+    function resetBulkEditModal() {
+        $('#case__WorkingGroup_Id').val('');
+        $('#Performer_Id').val('');
+        $('#case__Priority_Id').val('');
+        $('#case__StateSecondary_Id').val('');
+        $('#case__Problem_Id').val('');
+    }
+
+    function showGlobalProgress(show) {
+        debugger
+        //var self = this;
+        var progressDiv$ = $("#operationProgress");
+
+        if (show) {
+            //self.blockUI(true, this.loaders.inProcessLoader);
+            progressDiv$.show();
+        } else {
+            progressDiv$.hide();
+            //self.blockUI(false);
+        }
+    };
+
+    function wait(ms) {
+        var start = new Date().getTime();
+        var end = start;
+        while (end < start + ms) {
+            end = new Date().getTime();
+        }
+    }
+
+    function bulkCaseEdit() {
+
+        let selectedCases = [];
+        $('.bulkEditCaseSelect:checkbox:checked').each((c, v) => {
+            selectedCases.push(v.getAttribute('data-caseid'));
+        });
+
+        let inputData = {
+            caseIs: selectedCases,
+            priorityId: $('#case__Priority_Id option:selected').val(),
+            stateSecondaryId: $('#case__StateSecondary_Id option:selected').val(),
+            problemId: $('#case__Problem_Id option:selected').val(),
+            //finishDescription: $('#case__FinishingDescription').val(),
+            //finishTypeId: $finishTypeId.val(),
+            //finishDate: $finishDate.val()
+        };
+
+        $.ajax({
+            url: self.urls.DataPrivacyAction,
+            type: "POST",
+            data: $.param(inputData),
+            dataType: "json"
+        }).done(function (result) {
+            if (result.success) {
+                self.startOperationProgress(result.taskId);
+            } else {
+                window.ShowToastMessage("Operation has failed.", "error");
+            }
+        }).always(function () {
+            //todo: add ajax time out error  handling
+        });
+    };
+
+</script>
+
+@functions    {
+
+    private MvcHtmlString CaseFieldCaption(GlobalEnums.TranslationCaseFields field, string defaultCaption = "")
+    {
+        var res = Html.CaseFieldCaption(
+                    Model.caseFieldSettings,
+                    Model.CaseFieldSettingWithLangauges,
+                    field,
+                    Model.case_.Customer_Id,
+                    Model.IsCaseReopened,
+                    SessionFacade.CurrentLanguageId,
+                    defaultCaption);
+        return res;
+    }
+}

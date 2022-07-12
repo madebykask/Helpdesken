@@ -583,6 +583,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public PageSettingsModel PageSettings { get; set; }
 
         public CaseRemainingTimeViewModel RemainingTime { get; set; }
+        public CaseInputViewModel CaseInputViewModel { get; set; }
     }
 
     public class AdvancedSearchIndexViewModel

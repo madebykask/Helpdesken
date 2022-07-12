@@ -197,7 +197,7 @@ function getCollapseCaption(cap) {
                         let caseClosedOrLocked = (data.isClosed == true || data.isCaseLocked == true);
 
                         html = [];
-                        html.push('<input type="checkbox" class="bulkEditCaseSelect' + (caseClosedOrLocked ? 'Disabled' : '') + '" onclick="onClick_cbxBulkEditCaseSelect()" ' + (caseClosedOrLocked  ? 'disabled' : '') + ' id="cbxBulkEditSelectCaseId_' + data.case_id + '" /> ');
+                        html.push('<input type="checkbox" class="bulkEditCaseSelect' + (caseClosedOrLocked ? 'Disabled' : '') + '" onclick="onClick_cbxBulkEditCaseSelect()" ' + (caseClosedOrLocked  ? 'disabled' : '') + ' id="cbxBulkEditSelectCaseId_' + data.case_id + '" data-caseid="' + data.case_id +'" /> ');
                         row.cells[1].innerHTML = html.join("");
 
                         html = [];
@@ -579,10 +579,10 @@ function showHideBulkCaseEditBtn() {
     let selectedCases = $('.bulkEditCaseSelect:checkbox:checked').length;
 
     if (selectedCases > 0) {
-        $('#btnBulkCaseEdit').show();
+        $('#liBulkCaseEdit').show();
     }
     else {
-        $('#btnBulkCaseEdit').hide();
+        $('#liBulkCaseEdit').hide();
     }
 }
 

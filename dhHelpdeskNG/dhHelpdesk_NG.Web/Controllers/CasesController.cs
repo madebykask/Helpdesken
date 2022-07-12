@@ -37,71 +37,71 @@ using Microsoft.Ajax.Utilities;
 
 namespace DH.Helpdesk.Web.Controllers
 {
-	using DH.Helpdesk.BusinessData.Enums.Case;
-	using DH.Helpdesk.BusinessData.Models;
-	using DH.Helpdesk.BusinessData.Models.Case;
-	using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
-	using DH.Helpdesk.BusinessData.Models.Grid;
-	using DH.Helpdesk.BusinessData.Models.Shared;
-	using DH.Helpdesk.BusinessData.Models.User.Input;
-	using DH.Helpdesk.BusinessData.OldComponents;
-	using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-	using DH.Helpdesk.Common.Enums;
-	using DH.Helpdesk.Common.Extensions.Integer;
-	using DH.Helpdesk.Common.Tools;
-	using DH.Helpdesk.Dal.Enums;
-	using DH.Helpdesk.Dal.Infrastructure.Context;
-	using DH.Helpdesk.Domain;
-	using DH.Helpdesk.Services.Infrastructure;
-	using DH.Helpdesk.Services.Services;
-	using DH.Helpdesk.Services.Services.Concrete;
-	using DH.Helpdesk.Services.Services.Grid;
-	using DH.Helpdesk.Services.Utils;
-	using DH.Helpdesk.Web.Infrastructure;
-	using DH.Helpdesk.Web.Infrastructure.Attributes;
-	using DH.Helpdesk.Web.Infrastructure.Case;
-	using DH.Helpdesk.Web.Infrastructure.CaseOverview;
-	using DH.Helpdesk.Web.Infrastructure.Configuration;
-	using DH.Helpdesk.Web.Infrastructure.Extensions;
-	using DH.Helpdesk.Web.Infrastructure.Grid;
-	using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
-	using DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers;
-	using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
-	using DH.Helpdesk.Web.Infrastructure.Tools;
-	using DH.Helpdesk.Web.Models;
-	using DH.Helpdesk.Web.Models.Case;
-	using DH.Helpdesk.Web.Models.Case.ChildCase;
-	using DH.Helpdesk.Web.Models.Case.Input;
-	using DH.Helpdesk.Web.Models.Case.Output;
-	using DH.Helpdesk.Web.Models.CaseLock;
-	using DH.Helpdesk.Web.Models.Shared;
-	using DH.Helpdesk.Common.Extensions.DateTime;
+    using DH.Helpdesk.BusinessData.Enums.Case;
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
+    using DH.Helpdesk.BusinessData.Models.Grid;
+    using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.BusinessData.Models.User.Input;
+    using DH.Helpdesk.BusinessData.OldComponents;
+    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Common.Extensions.Integer;
+    using DH.Helpdesk.Common.Tools;
+    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Services.Infrastructure;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Services.Services.Concrete;
+    using DH.Helpdesk.Services.Services.Grid;
+    using DH.Helpdesk.Services.Utils;
+    using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Attributes;
+    using DH.Helpdesk.Web.Infrastructure.Case;
+    using DH.Helpdesk.Web.Infrastructure.CaseOverview;
+    using DH.Helpdesk.Web.Infrastructure.Configuration;
+    using DH.Helpdesk.Web.Infrastructure.Extensions;
+    using DH.Helpdesk.Web.Infrastructure.Grid;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers;
+    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Invoice;
+    using DH.Helpdesk.Web.Infrastructure.Tools;
+    using DH.Helpdesk.Web.Models;
+    using DH.Helpdesk.Web.Models.Case;
+    using DH.Helpdesk.Web.Models.Case.ChildCase;
+    using DH.Helpdesk.Web.Models.Case.Input;
+    using DH.Helpdesk.Web.Models.Case.Output;
+    using DH.Helpdesk.Web.Models.CaseLock;
+    using DH.Helpdesk.Web.Models.Shared;
+    using DH.Helpdesk.Common.Extensions.DateTime;
 
-	using DHDomain = DH.Helpdesk.Domain;
-	using ParentCaseInfo = DH.Helpdesk.BusinessData.Models.Case.ChidCase.ParentCaseInfo;
-	using DH.Helpdesk.Web.Enums;
-	using DH.Helpdesk.Services.Services.Reports;
-	using DH.Helpdesk.Common.Enums.CaseSolution;
-	using DH.Helpdesk.Common.Enums.BusinessRule;
-	using Services.BusinessLogic.Admin.Users;
-	using Services.BusinessLogic.Mappers.Users;
-	using BusinessData.Enums.Admin.Users;
-	using System.Diagnostics;
-	using Models.CaseRules;
-	using Infrastructure.ModelFactories.Case.Concrete;
-	using static BusinessData.OldComponents.GlobalEnums;
-	using System.Threading;
-	using Models.WebApi;
-	using Infrastructure.WebApi;
-	using System.Configuration;
-	using Infrastructure.Helpers;
-	using Infrastructure.Cryptography;
-	using Domain.Computers;
-	using BusinessData.Models.ProductArea.Output;
-	using DH.Helpdesk.Common.Extensions.Boolean;
-	using Common.Tools.Files;
-	using BusinessData.Models.FinishingCause;
-	using Infrastructure.Mvc;
+    using DHDomain = DH.Helpdesk.Domain;
+    using ParentCaseInfo = DH.Helpdesk.BusinessData.Models.Case.ChidCase.ParentCaseInfo;
+    using DH.Helpdesk.Web.Enums;
+    using DH.Helpdesk.Services.Services.Reports;
+    using DH.Helpdesk.Common.Enums.CaseSolution;
+    using DH.Helpdesk.Common.Enums.BusinessRule;
+    using Services.BusinessLogic.Admin.Users;
+    using Services.BusinessLogic.Mappers.Users;
+    using BusinessData.Enums.Admin.Users;
+    using System.Diagnostics;
+    using Models.CaseRules;
+    using Infrastructure.ModelFactories.Case.Concrete;
+    using static BusinessData.OldComponents.GlobalEnums;
+    using System.Threading;
+    using Models.WebApi;
+    using Infrastructure.WebApi;
+    using System.Configuration;
+    using Infrastructure.Helpers;
+    using Infrastructure.Cryptography;
+    using Domain.Computers;
+    using BusinessData.Models.ProductArea.Output;
+    using DH.Helpdesk.Common.Extensions.Boolean;
+    using Common.Tools.Files;
+    using BusinessData.Models.FinishingCause;
+    using Infrastructure.Mvc;
     using System.Net.Mime;
     using DH.Helpdesk.Common.Enums.Logs;
     using DH.Helpdesk.Common.Extensions;
@@ -385,7 +385,7 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CaseOverviewGridSettings = null;
                 if (!keepAdvancedSearch.HasValue || !keepAdvancedSearch.Value)
                     SessionFacade.CurrentAdvancedSearch = null;
-				SessionFacade.ClearSearches();
+                SessionFacade.ClearSearches();
             }
             else
             {
@@ -395,8 +395,8 @@ namespace DH.Helpdesk.Web.Controllers
                     SessionFacade.CaseOverviewGridSettings = null;
                     if (!keepAdvancedSearch.HasValue || !keepAdvancedSearch.Value)
                         SessionFacade.CurrentAdvancedSearch = null;
-					SessionFacade.ClearSearches();
-				}
+                    SessionFacade.ClearSearches();
+                }
             }
 
             if (SessionFacade.CurrentCustomer == null)
@@ -451,7 +451,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             //var caseLockViewModel = GetCaseLockModel(int.Parse(id), userId, false, "");
 
-            var customerId =  _caseService.GetCaseCustomerId(int.Parse(id));
+            var customerId = _caseService.GetCaseCustomerId(int.Parse(id));
 
             //var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
             //CaseInputViewModel m = this.GetCaseInputViewModel(userId, customerId, int.Parse(id), caseLockViewModel, caseFieldSettings, "", "", null, null, false);
@@ -466,19 +466,19 @@ namespace DH.Helpdesk.Web.Controllers
             var pathToFile = string.Empty;
             if (c != null)
             {
-                var basePath = _masterDataService.GetFilePath(c.CustomerId) +"\\";
+                var basePath = _masterDataService.GetFilePath(c.CustomerId) + "\\";
 
                 if (logId != null)
                 {
                     var prefix = "";
-                    if(type == CaseFileType.LogExternal)
+                    if (type == CaseFileType.LogExternal)
                     {
                         prefix = DH.Helpdesk.Common.Enums.ModuleName.Log;
                     }
                     else
                     {
                         //Check permission to see internal lognotes.
-                        if(!SessionFacade.CurrentUser.CaseInternalLogPermission.ToBool())
+                        if (!SessionFacade.CurrentUser.CaseInternalLogPermission.ToBool())
                             return RedirectToAction("index", "home");
 
                         prefix = DH.Helpdesk.Common.Enums.ModuleName.LogInternal;
@@ -490,7 +490,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     pathToFile = basePath + c.CaseNumber + "\\" + fileName;
                 }
-                
+
             }
             _fileViewLogService.Log(int.Parse(id), userId, fileName, pathToFile, FileViewLogFileSource.Helpdesk, FileViewLogOperation.View);
 
@@ -592,7 +592,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             m.CaseSetting = GetCaseSettingModel(customerId, userId);
             m.CaseSearchFilterData.IsAboutEnabled = m.CaseSetting.ColumnSettingModel.CaseFieldSettings.GetIsAboutEnabled();
-
+            m.CaseInputViewModel = this.NewBulkCaseEdit(m.CaseSetting.CustomerId, null);
             var user = _userService.GetUser(userId);
 
             SessionFacade.CaseOverviewGridSettings.pageOptions.pageIndex =
@@ -778,7 +778,7 @@ namespace DH.Helpdesk.Web.Controllers
                         SessionFacade.CurrentUser.Id,
                         GridSettingsService.CASE_OVERVIEW_GRID_ID);
                 }
-                
+
             }
             else
             {
@@ -801,10 +801,10 @@ namespace DH.Helpdesk.Web.Controllers
                         SessionFacade.CurrentUser.Id,
                         SessionFacade.CurrentUser.UserGroupId);
                 }
-            }    
-                               
+            }
+
             var m = new CaseSearchResultModel
-            {             
+            {
                 GridSettings = f.IsConnectToParent
                     ? _caseOverviewSettingsService.GetSettings(
                         SessionFacade.CurrentCustomer.Id,
@@ -815,7 +815,7 @@ namespace DH.Helpdesk.Web.Controllers
                         SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.Id)
             };
-            
+
 
             var gridSettings = SessionFacade.CaseOverviewGridSettings;
 
@@ -1289,7 +1289,7 @@ namespace DH.Helpdesk.Web.Controllers
             string err = "";
 
             var tmpLog = _logService.GetLogById(id);
-            var logFiles = _logService.GetLogFilesByLogId(id);           
+            var logFiles = _logService.GetLogFilesByLogId(id);
 
             var logFileStr = string.Empty;
             if (logFiles.Any())
@@ -1638,11 +1638,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             //If case has been moved to customer with no access, extended case has been removed and therefore active tab should be "case-tab"
             //Template still has DefaultTab "extendedcase-tab" in db (tblcasesolution)
-            if(m.ContainsExtendedCase == false)
+            if (m.ContainsExtendedCase == false)
             {
                 m.ActiveTab = "";
             }
-            
+
 
             return this.View(m);
         }
@@ -1686,14 +1686,14 @@ namespace DH.Helpdesk.Web.Controllers
                     m.case_ = _caseService.GetCaseById(m.CaseLog.CaseId);
                     m.IsCaseReopened = isCaseReopened;
 
-					var lastLog = m.case_.Logs.OrderByDescending(o => o.Id).FirstOrDefault();
-					if (lastLog.FinishingType.HasValue)
-					{
-						var finishingCausesInfos = _finishingCauseService.GetFinishingCauseInfos(customerId).ToArray();
-						m.FinishingCause = CommonHelper.GetFinishingCauseFullPath(finishingCausesInfos, lastLog.FinishingType);
-					}
+                    var lastLog = m.case_.Logs.OrderByDescending(o => o.Id).FirstOrDefault();
+                    if (lastLog.FinishingType.HasValue)
+                    {
+                        var finishingCausesInfos = _finishingCauseService.GetFinishingCauseInfos(customerId).ToArray();
+                        m.FinishingCause = CommonHelper.GetFinishingCauseFullPath(finishingCausesInfos, lastLog.FinishingType);
+                    }
 
-					var virtualDirPath = _masterDataService.GetVirtualDirectoryPath(customerId);
+                    var virtualDirPath = _masterDataService.GetVirtualDirectoryPath(customerId);
                     var useVD = !string.IsNullOrEmpty(virtualDirPath);
                     m.CaseFilesUrlBuilder = new CaseFilesUrlBuilder(virtualDirPath, RequestExtension.GetAbsoluteUrl());
 
@@ -1750,7 +1750,7 @@ namespace DH.Helpdesk.Web.Controllers
                             if (m.case_.StateSecondary.NoMailToNotifier == 1)
                                 m.CaseLog.SendMailAboutCaseToNotifier = false;
                             else
-                                m.CaseLog.SendMailAboutCaseToNotifier = true;                            
+                                m.CaseLog.SendMailAboutCaseToNotifier = true;
                         }
 
                     m.stateSecondaries = _stateSecondaryService.GetStateSecondaries(customerId);
@@ -2273,7 +2273,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 var finishingType = _finishingCauseService.GetFinishingCause(id.Value);
                 if (finishingType != null)
-                { 
+                {
 
                     if (finishingType.SubFinishingCauses != null && finishingType.SubFinishingCauses.Where(s => s.IsActive != 0).Any())
                         hasChild = 1;
@@ -3177,32 +3177,88 @@ namespace DH.Helpdesk.Web.Controllers
             return PartialView("_MoveCase", model);
         }
 
-	/*	[HttpGet]
-		//[Route("Files/{type:string}/{id:int}/filename:string}")]
-		public UnicodeFileContentResult CaseFiles(string caseId, string filename)
-		{
-			return DownloadFile(caseId, filename);
-		}
 
-		public UnicodeFileContentResult CaseLogFiles(string type, string logId, string filename)
-		{
-			LogFileType logFileType;
-			if (Enum.TryParse(type, out logFileType))
-			{
-				return (UnicodeFileContentResult)DownloadLogFile(logId, filename, logFileType);
-			}
+        private CaseInputViewModel NewBulkCaseEdit(
+         int customerId,
+         int[] selectedCases)
+        {
+            CaseInputViewModel m = null;
 
-			throw new ArgumentException("Invalid log file type", "type");
-		}  test */
+            SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
+            if (SessionFacade.CurrentUser != null)
+            {
+                var userId = SessionFacade.CurrentUser.Id;
+                var caseLockModel = new CaseLockModel();
+
+                var customerCaseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+
+                m = this.GetCaseInputViewModel(
+                    userId,
+                    customerId,
+                    0,
+                    caseLockModel,
+                    customerCaseFieldSettings,
+                    string.Empty,
+                    null,
+                    null,
+                    null,
+                    false,
+                    null, null, null);
+
+                var caseParam = new NewCaseParams
+                {
+                    customerId = customerId,
+                    templateId = null,
+                    copyFromCaseId = null,
+                    caseLanguageId = null
+                };
+
+                m.NewModeParams = caseParam;
+                AddViewDataValues();
+
+                // Positive: Send Mail to...
+                if (m.CaseMailSetting.DontSendMailToNotifier == false) m.CaseMailSetting.DontSendMailToNotifier = true;
+                else m.CaseMailSetting.DontSendMailToNotifier = false;
+
+                var moduleCaseInvoice = GetCustomerSettings(customerId).ModuleCaseInvoice;
+                if (moduleCaseInvoice == 1)
+                {
+                    var caseInvoices = _invoiceArticleService.GetCaseInvoicesWithTimeZone(m.case_.Id, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                    var invoiceArticles = _invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
+                    m.InvoiceModel = new CaseInvoiceModel(customerId, m.case_.Id, invoiceArticles, "", m.CaseKey, m.LogKey);
+                }
+                m.Performer_Id = 0;
+                return m;
+            }
+
+            return null;
+        }
+        /*	[HttpGet]
+            //[Route("Files/{type:string}/{id:int}/filename:string}")]
+            public UnicodeFileContentResult CaseFiles(string caseId, string filename)
+            {
+                return DownloadFile(caseId, filename);
+            }
+
+            public UnicodeFileContentResult CaseLogFiles(string type, string logId, string filename)
+            {
+                LogFileType logFileType;
+                if (Enum.TryParse(type, out logFileType))
+                {
+                    return (UnicodeFileContentResult)DownloadLogFile(logId, filename, logFileType);
+                }
+
+                throw new ArgumentException("Invalid log file type", "type");
+            }  test */
 
 
-		#endregion
+        #endregion
 
-		#region ***Private Methods***
+        #region ***Private Methods***
 
-		#region --Case Template--
+        #region --Case Template--
 
-		private void CheckTemplateParameters(int? templateId, int caseId)
+        private void CheckTemplateParameters(int? templateId, int caseId)
         {
             if (templateId.HasValue)
             {
@@ -3552,7 +3608,7 @@ namespace DH.Helpdesk.Web.Controllers
                     _caseService.CreateExtendedCaseSectionRelationship(case_.Id, exData.Id, CaseSectionType.Regarding, curCustomer.Id);
                 }
             }
-            if(edit) // If edit existing case
+            if (edit) // If edit existing case
             {
                 if (m.ExtendedInitiatorGUID.HasValue)
                 {
@@ -3705,7 +3761,7 @@ namespace DH.Helpdesk.Web.Controllers
             #endregion
 
             if (movedFromCustomerId.HasValue)
-            {                
+            {
                 var fromBasePath = _masterDataService.GetFilePath(movedFromCustomerId.Value);
                 _caseService.DeleteExCaseWhenCaseMove(case_.Id);
 
@@ -4304,19 +4360,19 @@ namespace DH.Helpdesk.Web.Controllers
             string ret = string.Empty;
             var ids = departments_OrganizationUnits.Split(',');
             var depIds = new List<int>();
-			if (ids.Length > 0)
-			{
-				for (int i = 0; i < ids.Length; i++)
-				{
-					if (!string.IsNullOrEmpty(ids[i].Trim()))
-					{
-						var id = int.Parse(ids[i].Trim());
-						if (id > 0 || id == ObjectExtensions.notAssignedDepartment().Id)
-						{
-							depIds.Add(id);
-						}
-					}
-				}
+            if (ids.Length > 0)
+            {
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    if (!string.IsNullOrEmpty(ids[i].Trim()))
+                    {
+                        var id = int.Parse(ids[i].Trim());
+                        if (id > 0 || id == ObjectExtensions.notAssignedDepartment().Id)
+                        {
+                            depIds.Add(id);
+                        }
+                    }
+                }
             }
             if (depIds.Any())
                 ret = string.Join(",", depIds);
@@ -4330,17 +4386,17 @@ namespace DH.Helpdesk.Web.Controllers
             var ouIds = new List<int>();
             if (ids.Length > 0)
             {
-				for (int i = 0; i < ids.Length; i++)
-				{
-					if (!string.IsNullOrEmpty(ids[i].Trim()))
-					{
-						var id = int.Parse(ids[i].Trim());
-						if (id < 0 && id != ObjectExtensions.notAssignedDepartment().Id)
-						{
-							ouIds.Add(-id);
-						}
-					}
-				}
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    if (!string.IsNullOrEmpty(ids[i].Trim()))
+                    {
+                        var id = int.Parse(ids[i].Trim());
+                        if (id < 0 && id != ObjectExtensions.notAssignedDepartment().Id)
+                        {
+                            ouIds.Add(-id);
+                        }
+                    }
+                }
             }
             if (ouIds.Any())
                 ret = string.Join(",", ouIds);
@@ -4419,13 +4475,13 @@ namespace DH.Helpdesk.Web.Controllers
                 filterCustomerId = cusId
             };
 
-			//region
-			if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseRegionFilter))
-			{
-				var regions = _regionService.GetRegions(cusId);
-				regions.Insert(0, ObjectExtensions.notAssignedRegion());
-				fd.filterRegion = regions;
-			}
+            //region
+            if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseRegionFilter))
+            {
+                var regions = _regionService.GetRegions(cusId);
+                regions.Insert(0, ObjectExtensions.notAssignedRegion());
+                fd.filterRegion = regions;
+            }
 
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseDepartmentFilter))
             {
@@ -4433,18 +4489,18 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (!departments.Any())
                 {
-					departments =
+                    departments =
                         _departmentService.GetDepartments(cusId)
                             .ToList();
                 }
 
-				if (fd.customerSetting != null && fd.customerSetting.ShowOUsOnDepartmentFilter != 0)
+                if (fd.customerSetting != null && fd.customerSetting.ShowOUsOnDepartmentFilter != 0)
                     departments = AddOrganizationUnitsToDepartments(departments);
 
-				departments.Insert(0, ObjectExtensions.notAssignedDepartment());
+                departments.Insert(0, ObjectExtensions.notAssignedDepartment());
 
-				fd.filterDepartment = departments;
-			}
+                fd.filterDepartment = departments;
+            }
 
             //ärendetyp
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCaseTypeFilter))
@@ -4503,29 +4559,29 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
 
-			//fd.filterCategory = _categoryService.GetActiveCategories(cusId);
-			//prio
-			if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CasePriorityFilter))
-			{
-				var priorities = _priorityService.GetPriorities(cusId);
-				priorities.Insert(0, ObjectExtensions.notAssignedPriority());
-				fd.filterPriority = priorities;
-				
-			}
-			//status
-			if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseStatusFilter))
-			{
-				var status = _statusService.GetStatuses(cusId);
-				status.Insert(0, ObjectExtensions.notAssignedStatus());
-				fd.filterStatus = status;
-			}
-			//understatus
-			if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseStateSecondaryFilter))
-			{
-				var stateSecondaries = _stateSecondaryService.GetStateSecondaries(cusId);
-				stateSecondaries.Insert(0, ObjectExtensions.notAssignedStateSecondary());
-				fd.filterStateSecondary = stateSecondaries;
-			}
+            //fd.filterCategory = _categoryService.GetActiveCategories(cusId);
+            //prio
+            if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CasePriorityFilter))
+            {
+                var priorities = _priorityService.GetPriorities(cusId);
+                priorities.Insert(0, ObjectExtensions.notAssignedPriority());
+                fd.filterPriority = priorities;
+
+            }
+            //status
+            if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseStatusFilter))
+            {
+                var status = _statusService.GetStatuses(cusId);
+                status.Insert(0, ObjectExtensions.notAssignedStatus());
+                fd.filterStatus = status;
+            }
+            //understatus
+            if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseStateSecondaryFilter))
+            {
+                var stateSecondaries = _stateSecondaryService.GetStateSecondaries(cusId);
+                stateSecondaries.Insert(0, ObjectExtensions.notAssignedStateSecondary());
+                fd.filterStateSecondary = stateSecondaries;
+            }
 
             fd.filterCaseProgress = ObjectExtensions.GetFilterForCases(SessionFacade.CurrentUser.FollowUpPermission, cusId);
             fd.CaseRegistrationDateStartFilter = fd.customerUserSetting.CaseRegistrationDateStartFilter;
@@ -4727,9 +4783,9 @@ namespace DH.Helpdesk.Web.Controllers
             var acccessToGroups = _userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
             var deps = _departmentService.GetDepartmentsByUserPermissions(userId, customerId);
 
-			var whiteList = _globalSettingService.GetFileUploadWhiteList();
-			m.HasFileUploadWhiteList = whiteList != null;
-			m.FileUploadWhiteList = whiteList;
+            var whiteList = _globalSettingService.GetFileUploadWhiteList();
+            m.HasFileUploadWhiteList = whiteList != null;
+            m.FileUploadWhiteList = whiteList;
 
             var currentUser = UsersMapper.MapToUser(SessionFacade.CurrentUser);
 
@@ -5015,7 +5071,7 @@ namespace DH.Helpdesk.Web.Controllers
                     })
                     .OrderBy(c => c.ButtonNumber)
                     .ToList();
-            foreach(var button in m.CaseTemplateButtons)
+            foreach (var button in m.CaseTemplateButtons)
             {
                 if (_caseSolutionService.GetCaseSolutionTranslation(button.CaseTemplateId, langId) != null)
                 {
@@ -5026,17 +5082,17 @@ namespace DH.Helpdesk.Web.Controllers
                 customerCaseSolutions.Where(x => x.ConnectedButton == 0 && x.Status > 0)
                     .Select(x => x.CaseSolutionId)
                     .ToList();
-            
-            if(m.case_.FinishingDate == null)
+
+            if (m.case_.FinishingDate == null)
             {
-                 m.WorkflowSteps = _caseSolutionService.GetWorkflowSteps(customerId,
-                   m.case_,
-                   workflowCaseSolutionIds,
-                   isRelatedCase,
-                   SessionFacade.CurrentUser,
-                   ApplicationType.Helpdesk,
-                   templateId,
-                   langId);
+                m.WorkflowSteps = _caseSolutionService.GetWorkflowSteps(customerId,
+                  m.case_,
+                  workflowCaseSolutionIds,
+                  isRelatedCase,
+                  SessionFacade.CurrentUser,
+                  ApplicationType.Helpdesk,
+                  templateId,
+                  langId);
             }
 
 
@@ -5223,7 +5279,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var performersListForSearch = _userService.GetAvailablePerformersOrUserId(customerId, null, true);
             m.PerformersToSearch = createPerformerforSearchList(customerId, performersListForSearch);
-           
+
             m.FollowersModel =
                 m.SendToDialogModel =
                     _sendToDialogModelFactory.CreateNewSendToDialogModel(
@@ -5728,7 +5784,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (m.case_.StateSecondary != null)
                 {
                     m.Disable_SendMailAboutCaseToNotifier = m.case_.StateSecondary.NoMailToNotifier == 1;
-                    m.CaseLog.SendMailAboutCaseToNotifier = false;                    
+                    m.CaseLog.SendMailAboutCaseToNotifier = false;
                     //if (m.case_.StateSecondary.NoMailToNotifier == 1)
                     //    m.CaseLog.SendMailAboutCaseToNotifier = false;
                     //else
@@ -6818,7 +6874,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var regions = _regionService.GetRegions(customerId);
             ret.RegionCheck = userCaseSettings.Region != string.Empty;
-			regions.Insert(0, ObjectExtensions.notAssignedRegion());
+            regions.Insert(0, ObjectExtensions.notAssignedRegion());
             ret.Regions = regions;
             ret.SelectedRegion = userCaseSettings.Region;
 
@@ -6839,11 +6895,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (customerSettings != null && customerSettings.ShowOUsOnDepartmentFilter != 0)
                 departments = AddOrganizationUnitsToDepartments(departments);
-               
-			departments.Insert(0, ObjectExtensions.notAssignedDepartment());
-			ret.Departments = departments;
 
-			ret.SelectedDepartments = userCaseSettings.Departments;
+            departments.Insert(0, ObjectExtensions.notAssignedDepartment());
+            ret.Departments = departments;
+
+            ret.SelectedDepartments = userCaseSettings.Departments;
 
             ret.RegisteredByCheck = userCaseSettings.RegisteredBy != string.Empty;
             ret.RegisteredByUserList = _userService.GetUserOnCases(customerId, IsTakeOnlyActive).MapToSelectList(customerSettings);
@@ -6919,9 +6975,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             var priorities = _priorityService.GetPriorities(customerId).OrderBy(p => p.Code).ToList();
             ret.PriorityCheck = (userCaseSettings.Priority != string.Empty);
-			priorities.Insert(0, ObjectExtensions.notAssignedPriority());
-			ret.Priorities = priorities;
-			ret.SelectedPriority = userCaseSettings.Priority;
+            priorities.Insert(0, ObjectExtensions.notAssignedPriority());
+            ret.Priorities = priorities;
+            ret.SelectedPriority = userCaseSettings.Priority;
 
             ret.Categories =
                 _categoryService.GetParentCategoriesWithChildren(customerId, true).OrderBy(c => Translation.GetMasterDataTranslation(c.Name)).ToList();
@@ -6947,13 +7003,13 @@ namespace DH.Helpdesk.Web.Controllers
 
             var states = _statusService.GetStatuses(customerId).OrderBy(s => s.Name).ToList();
             ret.StateCheck = (userCaseSettings.State != string.Empty);
-			states.Insert(0, ObjectExtensions.notAssignedStatus());
+            states.Insert(0, ObjectExtensions.notAssignedStatus());
             ret.States = states;
             ret.SelectedState = userCaseSettings.State;
 
             var subStates = _stateSecondaryService.GetStateSecondaries(customerId).OrderBy(s => s.Name).ToList();
             ret.SubStateCheck = (userCaseSettings.SubState != string.Empty);
-			subStates.Insert(0, ObjectExtensions.notAssignedStateSecondary());
+            subStates.Insert(0, ObjectExtensions.notAssignedStateSecondary());
             ret.SubStates = subStates;
             ret.SelectedSubState = userCaseSettings.SubState;
 
@@ -7188,7 +7244,7 @@ namespace DH.Helpdesk.Web.Controllers
             var performersToSearch = new List<CasePerformersSearch>();
             var customerWg = _workingGroupService.GetAllWorkingGroupsForCustomer(customerId);
             var foundWg = false;
-            foreach(var user in performers)
+            foreach (var user in performers)
             {
                 foundWg = false;
                 foreach (var uwg in user.WorkingGroups)
@@ -7209,7 +7265,7 @@ namespace DH.Helpdesk.Web.Controllers
                               );
                             performersToSearch.Add(newRecord);
                             foundWg = true;
-                        }                       
+                        }
                     }
                 }
                 if (!foundWg)
