@@ -2700,7 +2700,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                 IsDefault = caseCatView.IsDefault,
                 Name = caseCatView.Name,
-                Customer_Id = Convert.ToInt32(SessionFacade.CurrentCustomer.CustomerID)
+                Customer_Id = Convert.ToInt32(SessionFacade.CurrentCustomer.Id)
             };
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._caseSolutionService.SaveCaseSolutionCategory(caseSolutionCat, out errors);
