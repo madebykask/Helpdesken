@@ -773,6 +773,12 @@ namespace DH.Helpdesk.Dal.Repositories
                 criteriaCondition = criteriaCondition.AddWithSeparator($"({con})", false, " or ");
             }
 
+            if (criteria.MyCasesFollower && !string.IsNullOrEmpty(criteria.UserId))
+            {
+                var con = $"(exists (select 1 from tblUsers join tblCaseExtraFollowers on tblUsers.Email = tblCaseExtraFollowers.Follower and tblCaseExtraFollowers.Case_Id = tblCase.Id))";
+                criteriaCondition = criteriaCondition.AddWithSeparator($"({con})", false, " or ");
+            }
+
             if (criteria.MyCasesInitiator && (!string.IsNullOrEmpty(criteria.UserId) || !string.IsNullOrEmpty(criteria.UserEmployeeNumber)))
             {
                 var con = string.Empty;

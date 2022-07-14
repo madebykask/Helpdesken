@@ -275,13 +275,13 @@
                                         @Html.CheckBoxFor(m => m.Customer.MyCasesInitiator) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Anmälare")
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        @Html.CheckBoxFor(m => m.Customer.MyCasesFollower) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Följare")
+                                    </td>
+                                </tr>
                                 @*<tr>
-            <td></td>
-            <td>
-                @Html.CheckBoxFor(m => m.Customer.MyCasesFollower) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Följare")
-            </td>
-        </tr>
-        <tr>
             <td></td>
             <td>
                 @Html.CheckBoxFor(m => m.Customer.MyCasesRegarding) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Angående")
@@ -293,59 +293,61 @@
                                         @Html.CheckBoxFor(m => Model.Customer.MyCasesUserGroup) &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Användargrupp")
                                     </td>
                                 </tr>
-                                @if (Model.AvailableInitiators.Any()) { 
-                                <tr id="initiators">
-                                    <td class="span3">
-                                        <br />
-                                        @Translation.Get("Visa min avdelnings ärenden")
-                                    </td>
-                                    <td>
-                                        <table>
-                                            <tr>
-                                                <td>@Translation.Get("Tillgängliga")</td>
-                                                <td></td>
-                                                <td>@Translation.Get("Valda")</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <select id="AvailableInitiators" multiple="multiple" name="AvailableInitiators" style="width: 400px; height: 120px">
-                                                        @foreach (var op in Model.AvailableInitiators)
-                                                        {
-                                                            if (!op.Disabled)
+                                @if (Model.AvailableInitiators.Any())
+                                {
+                                    <tr id="initiators">
+                                        <td class="span3">
+                                            <br />
+                                            @Translation.Get("Visa min avdelnings ärenden")
+                                        </td>
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <td>@Translation.Get("Tillgängliga")</td>
+                                                    <td></td>
+                                                    <td>@Translation.Get("Valda")</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <select id="AvailableInitiators" multiple="multiple" name="AvailableInitiators" style="width: 400px; height: 120px">
+                                                            @foreach (var op in Model.AvailableInitiators)
                                                             {
-                                                                <option value="@op.Value" title="@op.Text">@op.Text</option>
+                                                                if (!op.Disabled)
+                                                                {
+                                                                    <option value="@op.Value" title="@op.Text">@op.Text</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@op.Value" class="DisabledChosen" title="@op.Text">@op.Text</option>
+                                                                }
                                                             }
-                                                            else
+                                                        </select>
+                                                    </td>
+                                                    <td style="vertical-align:middle">
+                                                        <input type="button" value="&lt;" class="btn" id="removeInitiators" />
+                                                        <input type="button" value="&gt;" class="btn" id="addInitiators" />
+                                                    </td>
+                                                    <td>
+                                                        <select id="SelectedInitiators" multiple="multiple" name="SelectedInitiators" style="width: 400px; height: 120px">
+                                                            @foreach (var op in Model.SelectedInitiators)
                                                             {
-                                                                <option value="@op.Value" class="DisabledChosen" title="@op.Text">@op.Text</option>
+                                                                if (!op.Disabled)
+                                                                {
+                                                                    <option value="@op.Value" title="@op.Text">@op.Text</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@op.Value" class="DisabledChosen" title="@op.Text">@op.Text</option>
+                                                                }
                                                             }
-                                                        }
-                                                    </select>
-                                                </td>
-                                                <td style="vertical-align:middle">
-                                                    <input type="button" value="&lt;" class="btn" id="removeInitiators" />
-                                                    <input type="button" value="&gt;" class="btn" id="addInitiators" />
-                                                </td>
-                                                <td>
-                                                    <select id="SelectedInitiators" multiple="multiple" name="SelectedInitiators" style="width: 400px; height: 120px">
-                                                        @foreach (var op in Model.SelectedInitiators)
-                                                        {
-                                                            if (!op.Disabled)
-                                                            {
-                                                                <option value="@op.Value" title="@op.Text">@op.Text</option>
-                                                            }
-                                                            else
-                                                            {
-                                                                <option value="@op.Value" class="DisabledChosen" title="@op.Text">@op.Text</option>
-                                                            }
-                                                        }
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                           
-                                        </table>
-                                    </td>
-                                </tr> }
+                                                        </select>
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+                                        </td>
+                                    </tr>
+}
                                 <tr id="caseTypes">
                                     <td class="span3">
                                         <br />
