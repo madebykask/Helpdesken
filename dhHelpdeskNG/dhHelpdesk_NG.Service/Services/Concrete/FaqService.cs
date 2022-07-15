@@ -87,6 +87,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             {
                 var faqRep = uow.GetRepository<FaqEntity>();
                 var faqFileRep = uow.GetRepository<FaqFileEntity>();
+                var faqLanguageRep = uow.GetRepository<FaqLanguageEntity>();
 
                 var faq = faqRep.GetAll()
                         .GetById(faqId)
@@ -101,8 +102,12 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 foreach (var fileId in fileIds)
                 {
                     faqFileRep.DeleteById(fileId);
+                    uow.Save();
                 }
 
+                faqLanguageRep.DeleteWhere(x=> x.FAQ_Id == faqId);
+                uow.Save();
+                
                 faqRep.DeleteById(faqId);
 
                 uow.Save();
