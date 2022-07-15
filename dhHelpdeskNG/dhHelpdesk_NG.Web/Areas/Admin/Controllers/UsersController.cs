@@ -275,7 +275,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Customer_Id = 0,
                 UserGroup_Id = 4,
                 TimeZoneId = SessionFacade.CurrentUser.TimeZoneId ?? TimeZoneInfo.Local.Id,
-                CaseInternalLogPermission = 1
+                CaseInternalLogPermission = 1,
+                MergeCasePermission = 1
             };
 
             var model = this.CreateInputViewModel(user, user.Id);
@@ -301,6 +302,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             userInputViewModel.User.BulletinBoardDate = DateTime.Now;
             userInputViewModel.User.ChangeTime = DateTime.Now;
             userInputViewModel.User.CloseCasePermission = 1;
+            userInputViewModel.User.MergeCasePermission = 1;
             userInputViewModel.User.CopyCasePermission = 1;
             userInputViewModel.User.DeleteCasePermission = 1;
             if (userInputViewModel.User.UserGroup_Id != (int)UserGroup.Administrator)

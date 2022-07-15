@@ -42,6 +42,7 @@
         /// Allows user to create subcases
         /// </summary>
         public int CreateSubCasePermission { get; set; }
+        public int MergeCasePermission { get; set; }
         public int CopyCasePermission { get; set; }
         public int Customer_Id { get; set; }
         public int DailyReportReminder { get; set; }

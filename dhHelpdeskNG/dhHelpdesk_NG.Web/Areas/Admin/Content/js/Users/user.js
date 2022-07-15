@@ -49,6 +49,7 @@ $(function () {
         performerPermission : 'performerPermission',
         createCasePermission: 'createCasePermission',
         createSubCasePermission: 'createSubCasePermission',
+        mergeCasePermission: 'mergeCasePermission',
         copyCasePermission: 'copyCasePermission',
         deleteCasePermission: 'deleteCasePermission',
         deleteAttachedFilePermission: 'deleteAttachedFilePermission',
@@ -207,6 +208,7 @@ $(function () {
         * Handler when user group was changed
         */
         var setUserGroup = function (ug, sp) {
+            
             var permissions = dhHelpdesk.admin.users.permissionType;
             var setPermissions = sp !== 'undefined' ? sp : true;
             userGroup = ug;
@@ -217,6 +219,7 @@ $(function () {
                         var type = permission.getType();
                         var hasAccess = type == dhHelpdesk.admin.users.permissionType.createCasePermission ||
                                         type == dhHelpdesk.admin.users.permissionType.createSubCasePermission ||
+                                        type == dhHelpdesk.admin.users.permissionType.mergeCasePermission ||
                                         type == dhHelpdesk.admin.users.permissionType.closeCasePermission ||
                                         //type == dhHelpdesk.admin.users.permissionType.restrictedCasePermission ||
                                         type == dhHelpdesk.admin.users.permissionType.caseInternalLogPermission;
@@ -226,6 +229,7 @@ $(function () {
                         if (setPermissions || !permission.getIsHasAccess()) {
                             var hasPermission = type == dhHelpdesk.admin.users.permissionType.createCasePermission ||
                                                 type == dhHelpdesk.admin.users.permissionType.createSubCasePermission ||
+                                                type == dhHelpdesk.admin.users.permissionType.mergeCasePermission ||
                                                 //type == dhHelpdesk.admin.users.permissionType.restrictedCasePermission ||
                                                 type == dhHelpdesk.admin.users.permissionType.closeCasePermission;
                             permission.setHasPermission(hasPermission);
@@ -243,6 +247,7 @@ $(function () {
                             var isChecked = type == permissions.performerPermission ||
                                 type == permissions.createCasePermission ||
                                 type == permissions.createSubCasePermission ||
+                                type == permissions.mergeCasePermission ||
                                 type == permissions.copyCasePermission ||
                                 type == permissions.activateCasePermission ||
                                 type == permissions.closeCasePermission ||
@@ -530,6 +535,7 @@ $(function () {
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="performerPermission"]'), type: dhHelpdesk.admin.users.permissionType.performerPermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="createCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.createCasePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="createSubCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.createSubCasePermission }));
+        casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="mergeCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.mergeCasePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="copyCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.copyCasePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="deleteCasePermission"]'), type: dhHelpdesk.admin.users.permissionType.deleteCasePermission }));
         casePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="deleteAttachedFilePermission"]'), type: dhHelpdesk.admin.users.permissionType.deleteAttachedFilePermission }));

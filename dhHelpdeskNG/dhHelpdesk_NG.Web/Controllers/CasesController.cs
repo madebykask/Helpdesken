@@ -2574,6 +2574,11 @@ namespace DH.Helpdesk.Web.Controllers
                 return new RedirectResult("~/Error/Unathorized");
             }
 
+            if (SessionFacade.CurrentUser.MergeCasePermission != 1)
+            {
+                return new RedirectResult("~/Error/Unathorized");
+            }
+
             if (SessionFacade.CurrentUser.CreateCasePermission != 1 || SessionFacade.CurrentUser.CreateSubCasePermission != 1)
             {
                 return new RedirectResult("~/Error/Forbidden");

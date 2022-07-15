@@ -265,7 +265,7 @@
                                                 @Html.HiddenFor(m => m.case_.Id, new { @id = "connect_to_parent_childId" })
                                             }
                                         }
-                                        @if (!Model.IsItMerged() && SessionFacade.CurrentUser.CreateSubCasePermission == 1 && !Model.IsItChildCase() && !Model.IsItParentCase())
+                                        @if (!Model.IsItMerged() && SessionFacade.CurrentUser.CreateSubCasePermission == 1 && !Model.IsItChildCase() && !Model.IsItParentCase() && SessionFacade.CurrentUser.MergeCasePermission == 1)
                                         {
                                             @*<li>@Html.ActionLink(Translation.GetCoreTextTranslation("Sammanfoga"), "MergeCase", new { parentCaseId = Model.case_.Id })</li>*@
                                             var merged = Model.IsItMerged();
