@@ -1,13 +1,20 @@
 ﻿--update DB from 5.3.55 to 5.3.56 version
 
 
-RAISERROR ('Add Column RelationType to tblParentChildCaseRelations', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblParentChildCaseRelations','RelationType') IS NULL
-	BEGIN	 
-		ALTER TABLE [dbo].[tblParentChildCaseRelations]
-		ADD RelationType bit not null default 0
-	End
-Go
+RAISERROR ('Create table tblMergedCases', 10, 1) WITH NOWAIT
+IF(OBJECT_ID('tblMergedCases', 'U') IS NULL)
+Begin
+CREATE TABLE [dbo].[tblMergedCases](
+	[MergedParent_Id] [int] NOT NULL,
+	[MergedChild_Id] [int] NOT NULL
+ CONSTRAINT [PK_tblMergedCases] PRIMARY KEY CLUSTERED 
+(
+	[MergedParent_Id] ASC,
+	[MergedChild_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
 
 RAISERROR ('Add Column Merged to tblFinishingCause', 10, 1) WITH NOWAIT
 IF COL_LENGTH('dbo.tblFinishingCause','Merged') IS NULL
