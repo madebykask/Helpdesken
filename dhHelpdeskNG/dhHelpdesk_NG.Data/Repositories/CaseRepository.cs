@@ -804,7 +804,6 @@ namespace DH.Helpdesk.Dal.Repositories
                     Id = childCase.Id,
                     ParentId = rel.AncestorId,
                     Indepandent = rel.Independent,
-                    RelationType = rel.RelationType,
                     CaseNoDecimal = childCase.CaseNumber,
                     Subject = childCase.Caption,
                     CasePerformer = new UserNamesStruct
@@ -837,7 +836,6 @@ namespace DH.Helpdesk.Dal.Repositories
                     ParentId = rel.AncestorId,
                     CaseNumber = (int)parentCase.CaseNumber,
                     IsChildIndependent = rel.Independent,
-                    RelationType = rel.RelationType,
                     CaseAdministrator = new UserNamesStruct
                     {
                         FirstName = perf.FirstName ?? "", //keep "" for linq correct translation

@@ -671,27 +671,29 @@ namespace DH.Helpdesk.Services.Services
         {
             if (childCaseId == parentCaseId)
                 return false;
-            using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
-            {
-                var parentChildRelationRepo = uow.GetRepository<ParentChildRelation>();
-                var allreadyExists = parentChildRelationRepo.GetAll()
-                        .Where(it => it.DescendantId == childCaseId // allready a child for [other|this] case
-                            || it.AncestorId == childCaseId // child case is a parent already
-                            || it.DescendantId == parentCaseId) // parent case is a child
-                        .FirstOrDefault();
-                if (allreadyExists != null)
-                {
-                    return false;
-                }
 
-                parentChildRelationRepo.Add(new ParentChildRelation()
-                {
-                    AncestorId = parentCaseId,
-                    DescendantId = childCaseId,
-                    RelationType = true
-                });
-                uow.Save();
-            }
+            //Todo - Redo
+            //using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            //{
+            //    var parentChildRelationRepo = uow.GetRepository<ParentChildRelation>();
+            //    var allreadyExists = parentChildRelationRepo.GetAll()
+            //            .Where(it => it.DescendantId == childCaseId // allready a child for [other|this] case
+            //                || it.AncestorId == childCaseId // child case is a parent already
+            //                || it.DescendantId == parentCaseId) // parent case is a child
+            //            .FirstOrDefault();
+            //    if (allreadyExists != null)
+            //    {
+            //        return false;
+            //    }
+
+            //    parentChildRelationRepo.Add(new ParentChildRelation()
+            //    {
+            //        AncestorId = parentCaseId,
+            //        DescendantId = childCaseId,
+            //        RelationType = true
+            //    });
+            //    uow.Save();
+            //}
             return true;
         }
         /// <summary>

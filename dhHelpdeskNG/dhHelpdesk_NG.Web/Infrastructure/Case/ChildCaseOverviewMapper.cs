@@ -19,8 +19,7 @@
                                CaseNumber = bm.CaseNumber,
                                Administrator = formatter.FormatUserName(bm.CaseAdministrator),
                                IsCaseClosed = bm.FinishingDate.HasValue,
-							   IsChildIndependent = bm.IsChildIndependent,
-                                RelationType = bm.RelationType
+							   IsChildIndependent = bm.IsChildIndependent
                            };
             }
 

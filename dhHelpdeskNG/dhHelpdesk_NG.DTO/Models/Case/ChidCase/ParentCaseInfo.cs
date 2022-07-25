@@ -15,6 +15,5 @@
 
         public DateTime? FinishingDate { get; set; }
 		public bool IsChildIndependent { get; internal set; }
-        public bool RelationType { get; internal set; } // 1 = Merged, 0 = Parent/Child
     }
 }
