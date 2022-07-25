@@ -217,6 +217,8 @@
     <Compile Include="Models\Case\ExtendedCaseReportModel.cs" />
     <Compile Include="Models\Case\Input\CasePerformersSearch.cs" />
     <Compile Include="Models\Case\LogFileContent.cs" />
+    <Compile Include="Models\Case\MergedCase\MergedChildOverview.cs" />
+    <Compile Include="Models\Case\MergedCase\MergedParentInfo.cs" />
     <Compile Include="Models\Case\Output\CustomerCasesStatus.cs" />
     <Compile Include="Models\Case\Output\CustomerUserCase.cs" />
     <Compile Include="Models\Case\UserWorkingGroupOverview.cs" />

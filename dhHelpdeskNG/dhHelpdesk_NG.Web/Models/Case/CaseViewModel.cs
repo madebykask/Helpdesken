@@ -392,11 +392,11 @@ namespace DH.Helpdesk.Web.Models.Case
         }
         public bool IsItMerged()
         {
-            return this.ParentCaseInfo != null && ParentCaseInfo.RelationType == true;
+            return this.ParentCaseInfo != null;
         }
         public bool IsItMergedParent()
         {
-            return this.ChildCaseViewModel != null && this.ChildCaseViewModel.RelationType == true;
+            return this.ChildCaseViewModel != null;
         }
         public bool IsItParentCase()
         {
