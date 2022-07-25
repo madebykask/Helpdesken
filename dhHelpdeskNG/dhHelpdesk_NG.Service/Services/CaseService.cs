@@ -672,28 +672,26 @@ namespace DH.Helpdesk.Services.Services
             if (childCaseId == parentCaseId)
                 return false;
 
-            //Todo - Redo
-            //using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
-            //{
-            //    var parentChildRelationRepo = uow.GetRepository<ParentChildRelation>();
-            //    var allreadyExists = parentChildRelationRepo.GetAll()
-            //            .Where(it => it.DescendantId == childCaseId // allready a child for [other|this] case
-            //                || it.AncestorId == childCaseId // child case is a parent already
-            //                || it.DescendantId == parentCaseId) // parent case is a child
-            //            .FirstOrDefault();
-            //    if (allreadyExists != null)
-            //    {
-            //        return false;
-            //    }
+            //Todo - Redo again?
+            using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var merged = uow.GetRepository<MergedCases>();
+                var allreadyExists = merged.GetAll()
+                        .Where(it => it.MergedChildId == childCaseId // allready a child for [other|this] case
+                            && it.MergedParentId == parentCaseId) // child case is a parent already
+                        .FirstOrDefault();
+                if (allreadyExists != null)
+                {
+                    return false;
+                }
 
-            //    parentChildRelationRepo.Add(new ParentChildRelation()
-            //    {
-            //        AncestorId = parentCaseId,
-            //        DescendantId = childCaseId,
-            //        RelationType = true
-            //    });
-            //    uow.Save();
-            //}
+                merged.Add(new MergedCases()
+                {
+                    MergedParentId = parentCaseId,
+                    MergedChildId = childCaseId,
+                });
+                uow.Save();
+            }
             return true;
         }
         /// <summary>
