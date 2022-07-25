@@ -627,6 +627,8 @@ namespace DH.Helpdesk.Dal.DbContext
 
         public DbSet<ParentChildRelation> ParentChildRelations { get; set; }
 
+        public DbSet<MergedCases> MergedCases { get; set; }
+
         public DbSet<GDPRDataPrivacyAccess> GDPRDataPrivacyAccess { get; set; }
         public DbSet<GDPROperationsAudit> GDPROperationsAudit { get; set; }
         public DbSet<GDPRDataPrivacyFavorite> GDPRDataPrivacyFavorites { get; set; }
@@ -925,6 +927,7 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new GridSettingsEntityConfiguration());
 
             modelBuilder.Configurations.Add(new ParentChildRelationConfiguration());
+            modelBuilder.Configurations.Add(new MergedCasesConfiguration());
 
             modelBuilder.Configurations.Add(new InvoiceRowConfiguration());
             modelBuilder.Configurations.Add(new InvoiceHeaderConfiguration());

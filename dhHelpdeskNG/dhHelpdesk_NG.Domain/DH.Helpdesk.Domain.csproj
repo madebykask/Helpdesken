@@ -222,6 +222,7 @@
     <Compile Include="FormUrl.cs" />
     <Compile Include="FileViewLogEntity.cs" />
     <Compile Include="Grid\GridSettingsEntity.cs" />
+    <Compile Include="MergedCases.cs" />
     <Compile Include="MetaData\EntityInfo.cs" />
     <Compile Include="MetaData\MetaData.cs" />
     <Compile Include="MetaData\EntityRelationship.cs" />
