@@ -8286,10 +8286,10 @@ If not exists (select * from tblTextTranslation where text_id = 2125 and Languag
 GO
 
 If not exists (select * from tbltext where id = 2126)
-	insert into tbltext (id, TextString) VALUES (2126, 'Detta är ett sammanfogat ärende till ärende')
+	insert into tbltext (id, TextString) VALUES (2126, 'Detta ärende är sammanfogat till')
 GO
 If not exists (select * from tblTextTranslation where text_id = 2126 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2126, 2, 'This is a merged case to case')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2126, 2, 'This case is merged to')
 GO
 
 If not exists (select * from tbltext where id = 2127)

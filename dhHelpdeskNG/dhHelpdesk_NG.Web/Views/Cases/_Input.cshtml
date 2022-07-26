@@ -215,7 +215,7 @@
                         @Html.Hidden("CaseRelationType", Model.CaseRelationType())
 
                         @*<input type="button" id="sla_test" value="SLA Test" onclick="CalcSLA();" />*@
-                        @if (Model.IsItChildCase() && !Model.IsItMerged())
+                        @if (Model.IsItChildCase() && !Model.IsItMergedChild())
                         {
                             <input type="hidden" name="ParentId" value="@Model.ParentCaseInfo.ParentId" />
                             <div class="alert alert-info">
@@ -230,15 +230,15 @@
                                 @Html.CheckBoxFor(model => Model.IndependentChild)
                             </div>
                         }
-                        else if (Model.IsItChildCase() && Model.IsItMerged())
+                        else if (Model.IsItMergedChild())
                         {
-                            <input type="hidden" name="ParentId" value="@Model.ParentCaseInfo.ParentId" />
+                            <input type="hidden" name="ParentId" value="@Model.MergedParentInfo.ParentId" />
                             <div class="alert alert-info">
-                                @Translation.GetCoreTextTranslation("Detta är ett sammanfogat ärende till ärende")&nbsp;<a href="@Url.Action("Edit", new { id = Model.ParentCaseInfo.ParentId })"><strong>@Model.ParentCaseInfo.CaseNumber</strong></a>.
-                                @if (!string.IsNullOrEmpty(Model.ParentCaseInfo.Administrator))
+                                @Translation.GetCoreTextTranslation("Detta ärende är sammanfogat till")&nbsp;<a href="@Url.Action("Edit", new { id = Model.MergedParentInfo.ParentId })"><strong>@Model.MergedParentInfo.CaseNumber</strong></a>.
+                                @if (!string.IsNullOrEmpty(Model.MergedParentInfo.Administrator.ToString()))
                                 {
                                     @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Model.case_.Customer_Id)
-                                    <strong>@Model.ParentCaseInfo.Administrator</strong>
+                                    <strong>@Model.MergedParentInfo.Administrator</strong>
                                 }
                                 <br />
                             </div>

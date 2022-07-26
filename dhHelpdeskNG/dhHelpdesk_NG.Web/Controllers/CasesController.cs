@@ -5048,7 +5048,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 m.ClosedChildCasesCount = childCases.Count(it => it.ClosingDate != null);
                 m.ParentCaseInfo = _caseService.GetParentInfo(caseId).MapBusinessToWebModel(outputFormatter);
-
+                m.MergedParentInfo = _caseService.GetMergedParentInfo(caseId).MapBusinessToWebModel(outputFormatter);
                 //This means it's a child if not null (not merged)
                 if (m.ParentCaseInfo != null)
                 {

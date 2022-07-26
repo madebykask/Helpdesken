@@ -256,7 +256,7 @@
                                                 @Translation.GetCoreTextTranslation("Markera ärendet som oläst")
                                             </a>
                                         </li>
-                                        @if (!Model.IsItChildCase() && SessionFacade.CurrentUser.CreateSubCasePermission == 1 && !Model.IsItMerged())
+                                        @if (!Model.IsItChildCase() && SessionFacade.CurrentUser.CreateSubCasePermission == 1)
                                         {
                                             <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Skapa underärende"), "NewChildCase", new { parentCaseId = Model.case_.Id })</li>
                                             if (!Model.IsItParentCase())
@@ -265,11 +265,11 @@
                                                 @Html.HiddenFor(m => m.case_.Id, new { @id = "connect_to_parent_childId" })
                                             }
                                         }
-                                        @if (!Model.IsItMerged() && SessionFacade.CurrentUser.CreateSubCasePermission == 1 && !Model.IsItChildCase() && !Model.IsItParentCase() && SessionFacade.CurrentUser.MergeCasePermission == 1)
+                                        @if (SessionFacade.CurrentUser.CreateSubCasePermission == 1 && SessionFacade.CurrentUser.MergeCasePermission == 1)
                                         {
                                             @*<li>@Html.ActionLink(Translation.GetCoreTextTranslation("Sammanfoga"), "MergeCase", new { parentCaseId = Model.case_.Id })</li>*@
-                                            var merged = Model.IsItMerged();
-                                            if (!Model.IsItMerged())
+                                            var merged = Model.IsItMergedChild();
+                                            if (!merged)
                                             {
                                                 <li><a data-toggle="modal" id="merge_case_to_parent" href="#">@Translation.GetCoreTextTranslation("Sammanfoga")</a></li>
                                                 @Html.HiddenFor(m => m.case_.Id, new { @id = "merge_to_parent" })

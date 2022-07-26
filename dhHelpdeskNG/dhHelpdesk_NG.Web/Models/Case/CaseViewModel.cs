@@ -32,7 +32,9 @@ using DH.Helpdesk.Web.Models.Invoice;
 using DH.Helpdesk.Web.Models.Shared;
 
 using ParentCaseInfo = DH.Helpdesk.Web.Models.Case.ChildCase.ParentCaseInfo;
+using MergedParentInfo = DH.Helpdesk.Web.Models.Case.ChildCase.MergedParentInfo;
 using DH.Helpdesk.BusinessData.Models.Case.Input;
+using DH.Helpdesk.BusinessData.Models.Case.MergedCase;
 
 namespace DH.Helpdesk.Web.Models.Case
 {
@@ -377,7 +379,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public int ClosedChildCasesCount { get; set; }
 
         public ParentCaseInfo ParentCaseInfo { get; set; }
-
+        public MergedParentInfo MergedParentInfo { get; set; }
         public ReportModel CasePrintView { get; set; }
 
         public int? MovedFromCustomerId { get; set; }
@@ -390,13 +392,13 @@ namespace DH.Helpdesk.Web.Models.Case
         {
             return this.ParentCaseInfo != null && ParentCaseInfo.ParentId != 0;
         }
-        public bool IsItMerged()
+        public bool IsItMergedChild()
         {
-            return this.ParentCaseInfo != null;
+            return this.MergedParentInfo != null && MergedParentInfo.ParentId != 0;
         }
         public bool IsItMergedParent()
         {
-            return this.ChildCaseViewModel != null;
+            return this.ChildCaseViewModel != null && this.ChildCaseViewModel.MergedChildList != null && this.ChildCaseViewModel.MergedChildList.Count > 0;
         }
         public bool IsItParentCase()
         {
@@ -414,7 +416,7 @@ namespace DH.Helpdesk.Web.Models.Case
             {
                 return "Parent";
             }
-            if (this.IsItMerged())
+            if (this.IsItMergedChild())
             {
                 return "Merged";
             }
