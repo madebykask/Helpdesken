@@ -1,0 +1,45 @@
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.BusinessData.Enums.Case.Fields
+@using DH.Helpdesk.Web.Infrastructure.CaseOverview
+@model DH.Helpdesk.Web.Models.Case.ChildCase.ChildCaseViewModel
+@Scripts.Render("~/bundles/Cases/_ChildCases")
+<div class="tab-pane tab-pane-border " id="mergedcases-tab">
+    <table class="table table-striped table-bordered table-hover table-cases child-cases order-column">
+        @if (Model.MergedChildList != null && Model.MergedChildList.Count > 0)
+        {
+            <thead>
+                <tr>
+                    <th style="width:18px;"></th>
+                    <th>@Translation.CaseString(CaseInfoFields.Case)</th>
+                    <th>@Translation.CaseString(CaseInfoFields.RegistrationDate)</th>
+                    <th>@Translation.CaseString(CaseInfoFields.Caption)</th>
+                    <th>@Translation.CaseString(CaseInfoFields.CaseType)</th>
+                    <th>@Translation.CaseString(OtherFields.Administrator)</th>
+                    <th>@Translation.CaseString(OtherFields.SubState)</th>
+                    <th>@Translation.CaseString(LogFields.FinishingDate)</th>
+                    <th>@Translation.CaseString(OtherFields.Priority)</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var mergedChild in Model.MergedChildList)
+                {
+                    var backUrl = Url.Action("Edit", new { mergedChild.ParentId }) + "#mergedcases-tab";
+                    <tr>
+                        <td><a href="@Url.Action("Edit", new { mergedChild.Id, backUrl })">@Html.ImgForCase(mergedChild)</a></td>
+                        <td><a href="@Url.Action("Edit", new { mergedChild.Id, backUrl })">@mergedChild.CaseNo.ToString()</a></td>
+                        <td><a href="@Url.Action("Edit", new { mergedChild.Id, backUrl })">@Html.FormaDate(mergedChild.RegistrationDate, Model.Formatter)</a></td>
+                        <td><a href="@Url.Action("Edit", new { mergedChild.Id, backUrl })">@mergedChild.Subject</a></td>
+                        <td><a href="@Url.Action("Edit", new { mergedChild.Id, backUrl })">@mergedChild.CaseType</a></td>
+                        <td><a href="@Url.Action("Edit", new { mergedChild.Id, backUrl })">@Html.FormatUserName(mergedChild.CasePerformer, Model.Formatter)</a></td>
+                        <td><a href="@Url.Action("Edit", new { mergedChild.Id, backUrl })">@mergedChild.SubStatus</a></td>
+                        <td><a href="@Url.Action("Edit", new { mergedChild.Id, backUrl })">@Html.FormaDate(mergedChild.ClosingDate, Model.Formatter)</a></td>
+                        <td><a href="@Url.Action("Edit", new { mergedChild.Id, backUrl })">@mergedChild.Priority</a></td>
+
+                    </tr>
+                }
+            </tbody>
+        }
+
+    </table>
+</div>

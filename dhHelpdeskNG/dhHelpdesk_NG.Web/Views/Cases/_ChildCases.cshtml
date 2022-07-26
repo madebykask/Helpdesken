@@ -5,50 +5,48 @@
 @Scripts.Render("~/bundles/Cases/_ChildCases")
 <div class="tab-pane tab-pane-border " id="childcases-tab">
     <table class="table table-striped table-bordered table-hover table-cases child-cases order-column">
-        <thead>
-            <tr>
-                <th style="width:18px;"></th>
-                <th>@Translation.CaseString(CaseInfoFields.Case)</th>
-                <th>@Translation.CaseString(CaseInfoFields.RegistrationDate)</th>
-                <th>@Translation.CaseString(CaseInfoFields.Caption)</th>
-                <th>@Translation.CaseString(CaseInfoFields.CaseType)</th>
-                <th>@Translation.CaseString(OtherFields.Administrator)</th>
-                <th>@Translation.CaseString(OtherFields.SubState)</th>
-                <th>@Translation.CaseString(LogFields.FinishingDate)</th>
-                <th>@Translation.CaseString(OtherFields.Priority)</th>
-                @if(Model.RelationType != true)
-                {
+        @if (Model.ChildCaseList != null && Model.ChildCaseList.Count > 0)
+        {
+            <thead>
+                <tr>
+                    <th style="width:18px;"></th>
+                    <th>@Translation.CaseString(CaseInfoFields.Case)</th>
+                    <th>@Translation.CaseString(CaseInfoFields.RegistrationDate)</th>
+                    <th>@Translation.CaseString(CaseInfoFields.Caption)</th>
+                    <th>@Translation.CaseString(CaseInfoFields.CaseType)</th>
+                    <th>@Translation.CaseString(OtherFields.Administrator)</th>
+                    <th>@Translation.CaseString(OtherFields.SubState)</th>
+                    <th>@Translation.CaseString(LogFields.FinishingDate)</th>
+                    <th>@Translation.CaseString(OtherFields.Priority)</th>
                     <th>@Translation.GetCoreTextTranslation("Koppla från")</th>
-                }
-                
-                </tr>
-        </thead>
-        <tbody>
-            @foreach (var childCase in Model.ChildCaseList)
-            {
-                var backUrl = Url.Action("Edit", new {childCase.ParentId}) + "#childcases-tab";
-            <tr>
-                <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@Html.ImgForCase(childCase)</a></td>
-                <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@childCase.CaseNo.ToString()</a></td>
-                <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@Html.FormaDate(childCase.RegistrationDate, Model.Formatter)</a></td>
-                <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@childCase.Subject</a></td>
-                <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@childCase.CaseType</a></td>
-                <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@Html.FormatUserName(childCase.CasePerformer, Model.Formatter)</a></td>
-                <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@childCase.SubStatus</a></td>
-                <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@Html.FormaDate(childCase.ClosingDate, Model.Formatter)</a></td>
-                <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@childCase.Priority</a></td>
 
-                @if (childCase.RelationType != true)
-                {
-                    <td>
-                        <a title="@Translation.GetCoreTextTranslation("Koppla från moder")" href="@Url.Action("RemoveChild", new {childCase.Id, childCase.ParentId})">
-                            <i class="icon-remove"></i>
-                        </a>
-                    </td>
-                  }
-                    
                 </tr>
-            }
-        </tbody>
+            </thead>
+            <tbody>
+                @foreach (var childCase in Model.ChildCaseList)
+                {
+                    var backUrl = Url.Action("Edit", new { childCase.ParentId }) + "#childcases-tab";
+                    <tr>
+                        <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@Html.ImgForCase(childCase)</a></td>
+                        <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@childCase.CaseNo.ToString()</a></td>
+                        <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@Html.FormaDate(childCase.RegistrationDate, Model.Formatter)</a></td>
+                        <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@childCase.Subject</a></td>
+                        <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@childCase.CaseType</a></td>
+                        <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@Html.FormatUserName(childCase.CasePerformer, Model.Formatter)</a></td>
+                        <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@childCase.SubStatus</a></td>
+                        <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@Html.FormaDate(childCase.ClosingDate, Model.Formatter)</a></td>
+                        <td><a href="@Url.Action("Edit", new { childCase.Id, backUrl })">@childCase.Priority</a></td>
+                        <td>
+                            <a title="@Translation.GetCoreTextTranslation("Koppla från moder")" href="@Url.Action("RemoveChild", new {childCase.Id, childCase.ParentId})">
+                                <i class="icon-remove"></i>
+                            </a>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        }
+ 
+
     </table>
 </div>

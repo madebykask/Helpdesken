@@ -74,6 +74,8 @@ namespace DH.Helpdesk.Dal.Repositories
         StateSecondary GetCaseSubStatus(int caseId);
         List<ChildCaseOverview> GetChildCasesFor(int parentCaseId);
         ParentCaseInfo GetParentInfo(int childCaseId);
+        List<MergedChildOverview> GetMergedCasesFor(int parentCaseId);
+        MergedParentInfo GetMergedParentInfo(int childCaseId);
         List<Case> GetTop100CasesToTest();
         Case GetCaseQuickOpen(UserOverview user, Expression<Func<Case, bool>> casePermissionFilter, string searchFor);
         int GetCaseCustomerId(int caseId);

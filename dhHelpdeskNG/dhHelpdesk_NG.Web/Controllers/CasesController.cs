@@ -5036,21 +5036,20 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 var childCases = _caseService.GetChildCasesFor(caseId);
-                //Todo - Check in another way
-                //var numMerged = childCases.Where(x => x.RelationType == true).ToList().Count();
+                var mergedCases = _caseService.GetMergedCasesFor(caseId);
+
 
                 m.ChildCaseViewModel = new ChildCaseViewModel
                 {
                     Formatter = outputFormatter,
-                    ChildCaseList = childCases
+                    ChildCaseList = childCases,
+                    MergedChildList = mergedCases
                 };
-                //if (numMerged > 0)
-                //{
-                //    m.ChildCaseViewModel.RelationType = true;
-                //}
+
                 m.ClosedChildCasesCount = childCases.Count(it => it.ClosingDate != null);
                 m.ParentCaseInfo = _caseService.GetParentInfo(caseId).MapBusinessToWebModel(outputFormatter);
 
+                //This means it's a child if not null (not merged)
                 if (m.ParentCaseInfo != null)
                 {
                     m.IndependentChild = m.ParentCaseInfo.IsChildIndependent;                    

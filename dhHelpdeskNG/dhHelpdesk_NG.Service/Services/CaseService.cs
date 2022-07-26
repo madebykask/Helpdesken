@@ -52,6 +52,7 @@ namespace DH.Helpdesk.Services.Services
     using Common.Extensions.String;
     using Utils;
     using DH.Helpdesk.BusinessData.Models.User;
+    using DH.Helpdesk.BusinessData.Models.Case.MergedCase;
 
     public partial class CaseService : ICaseService
     {
@@ -798,6 +799,17 @@ namespace DH.Helpdesk.Services.Services
         public ParentCaseInfo GetParentInfo(int caseId)
         {
             var parentCaseInfo = _caseRepository.GetParentInfo(caseId);
+            return parentCaseInfo;
+        }
+
+        public List<MergedChildOverview> GetMergedCasesFor(int caseId)
+        {
+            return _caseRepository.GetMergedCasesFor(caseId);
+        }
+
+        public MergedParentInfo GetMergedParentInfo(int caseId)
+        {
+            var parentCaseInfo = _caseRepository.GetMergedParentInfo(caseId);
             return parentCaseInfo;
         }
 

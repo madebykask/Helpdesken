@@ -144,6 +144,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             model.ChildCasesIds = _caseService.GetChildCasesFor(caseId).Select(c => c.Id).ToList();
             model.ParentCaseId = _caseService.GetParentInfo(caseId)?.ParentId;
 
+            //Todo - Check for merged cases
+
             _caseService.MarkAsRead(caseId);
 
             var stateSecondaryId = currentCase?.StateSecondary_Id ?? 0;

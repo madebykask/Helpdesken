@@ -7,6 +7,7 @@ using DH.Helpdesk.BusinessData.Models.BusinessRules;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
+using DH.Helpdesk.BusinessData.Models.Case.MergedCase;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.BusinessData.Models.User.Input;
@@ -139,6 +140,9 @@ namespace DH.Helpdesk.Services.Services
         List<ChildCaseOverview> GetChildCasesFor(int caseId);
 
         ParentCaseInfo GetParentInfo(int caseId);
+
+        List<MergedChildOverview> GetMergedCasesFor(int parentCaseId);
+        MergedParentInfo GetMergedParentInfo(int childCaseId);
 
         int? SaveInternalLogMessage(int id, string textInternal, out IDictionary<string, string> errors);
 

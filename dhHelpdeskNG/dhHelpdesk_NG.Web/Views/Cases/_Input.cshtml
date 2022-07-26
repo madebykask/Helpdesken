@@ -43,16 +43,15 @@
                         </a>
                     }
                 </li>
-                @if (Model.IsItParentCase() && Model.IsItMergedParent())
+                @if (Model.ChildCaseViewModel.MergedChildList != null && Model.ChildCaseViewModel.MergedChildList.Count > 0)
                 {
-                    var merged = Model.IsItMergedParent();
-                    <li id="childCaseTabContainer">
-                        <a href="#childcases-tab" title="@string.Format("{0}/{1} {2}", Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Count, Translation.GetCoreTextTranslation("avslutade").ToLower())">
-                            @string.Format("{0} ({1}/{2} {3})", Translation.GetCoreTextTranslation("Sammanfogade ärenden"), Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Count, Translation.GetCoreTextTranslation("avslutade").ToLower())
+                    <li id="mergedCaseTabContainer">                       
+                        <a href="#mergedcases-tab" title="@Translation.GetCoreTextTranslation("Sammanfogade ärenden")">
+                            @string.Format("{0} ({1})", Translation.GetCoreTextTranslation("Sammanfogade ärenden"), Model.ChildCaseViewModel.MergedChildList.Count)
                         </a>
                     </li>
                 }
-                else if(Model.IsItParentCase() && !Model.IsItMergedParent())
+                @if(Model.ChildCaseViewModel.ChildCaseList != null && Model.ChildCaseViewModel.ChildCaseList.Count > 0)
                 {
                     <li id="childCaseTabContainer">
                         <a href="#childcases-tab" title="@string.Format("{0}/{1} {2}", Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Count, Translation.GetCoreTextTranslation("avslutade").ToLower())">
@@ -577,10 +576,10 @@
                                                 <td colspan="2">
                                                     <div id="extendedSection-Initiator" style="display:none">
                                                         <!--<h4>
-                                        <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
-                                        <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
-                                        Vendor details <!-- TODO: Bind on category name and translation
-                                    </h4>-->
+                                                <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
+                                                <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                                                Vendor details <!-- TODO: Bind on category name and translation
+                                            </h4>-->
 
                                                         <input type="hidden" id="ExtendedInitiatorGUID" name="ExtendedInitiatorGUID" value="@(Model.ExtendedCaseSections.ContainsKey(CaseSectionType.Initiator) ? Model.ExtendedCaseSections[CaseSectionType.Initiator].ExtendedCaseGuid.ToString() : "")" />
                                                         <iframe id="extendedSection-iframe-Initiator" src="" frameborder="0" scrolling="no" style="width:500px; height:180px; margin-top: 10px"></iframe>
@@ -872,10 +871,10 @@
                                             <td colspan="2">
                                                 <div id="extendedSection-Regarding" style="display:none">
                                                     <!--<h4>
-                                    <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
-                                    <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
-                                    Vendor details <!-- TODO: Bind on category name and translation
-                                </h4>-->
+                                            <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
+                                            <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                                            Vendor details <!-- TODO: Bind on category name and translation
+                                        </h4>-->
 
                                                     <input type="hidden" id="ExtendedRegardingGUID" name="ExtendedRegardingGUID" value="@(Model.ExtendedCaseSections.ContainsKey(CaseSectionType.Regarding) ? Model.ExtendedCaseSections[CaseSectionType.Regarding].ExtendedCaseGuid.ToString() : "")" />
                                                     <iframe id="extendedSection-iframe-Regarding" src="" style="width:500px; height:180px; margin-top:10px" frameborder="0" scrolling="no"></iframe>
@@ -2369,7 +2368,10 @@
                 {
                     @Html.Partial("_ChildCases", Model.ChildCaseViewModel);
                 }
-
+                @if (Model.ChildCaseViewModel.MergedChildList != null && Model.ChildCaseViewModel.MergedChildList.Count > 0)
+                {
+                    @Html.Partial("_MergedCases", Model.ChildCaseViewModel);
+                }
                 @if (Model.Setting.AttachmentPlacement == 1)
                 {
                     <div id="attachment-container" class="tab-pane tab-pane-border">
