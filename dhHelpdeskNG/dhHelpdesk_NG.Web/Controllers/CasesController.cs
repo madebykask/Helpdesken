@@ -2801,10 +2801,33 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
             {
-                //Todo - Rewrite Merge Case
                 _caseService.MergeChildToParentCase(id, parentCaseId);
-                // Todo - Close case...
+
+                //Case to be Merged
                 var mergeCase = _caseService.GetCaseById(id);
+
+                //Move followers and initiator to mergeparent
+                var newFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(id);
+                var existingFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(parentCaseId);
+                var newParentFollowers = new List<string>();
+                if(!String.IsNullOrEmpty(mergeCase.PersonsEmail))
+                {
+                    var extraFollower = new ExtraFollower()
+                    {
+                        CaseId = id,
+                        Follower = mergeCase.PersonsEmail
+                    };
+                    newFollowers.Add(extraFollower);
+                }
+                
+                var result = existingFollowers.Union(newFollowers).ToList();
+                newParentFollowers = result.Select(f => f.Follower).Distinct().ToList();
+
+                if (newParentFollowers.Count() > 0)
+                {
+                     _caseExtraFollowersService.SaveExtraFollowers(parentCaseId, newParentFollowers, _workContext.User.UserId);
+                }
+                // Close case...
                 IDictionary<string, string> errors;
                 var extraInfo = new CaseExtraInfo
                 {
