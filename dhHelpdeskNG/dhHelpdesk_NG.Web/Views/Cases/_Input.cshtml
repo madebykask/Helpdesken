@@ -43,22 +43,26 @@
                         </a>
                     }
                 </li>
-                @if (Model.ChildCaseViewModel.MergedChildList != null && Model.ChildCaseViewModel.MergedChildList.Count > 0)
+                @if (Model.ChildCaseViewModel != null)
                 {
-                    <li id="mergedCaseTabContainer">                       
-                        <a href="#mergedcases-tab" title="@Translation.GetCoreTextTranslation("Sammanfogade ärenden")">
-                            @string.Format("{0} ({1})", Translation.GetCoreTextTranslation("Sammanfogade ärenden"), Model.ChildCaseViewModel.MergedChildList.Count)
-                        </a>
-                    </li>
+                    if (Model.ChildCaseViewModel.MergedChildList != null && Model.ChildCaseViewModel.MergedChildList.Count > 0)
+                    {
+                        <li id="mergedCaseTabContainer">
+                            <a href="#mergedcases-tab" title="@Translation.GetCoreTextTranslation("Sammanfogade ärenden")">
+                                @string.Format("{0} ({1})", Translation.GetCoreTextTranslation("Sammanfogade ärenden"), Model.ChildCaseViewModel.MergedChildList.Count)
+                            </a>
+                        </li>
+                    }
+                    if (Model.ChildCaseViewModel.ChildCaseList != null && Model.ChildCaseViewModel.ChildCaseList.Count > 0)
+                    {
+                        <li id="childCaseTabContainer">
+                            <a href="#childcases-tab" title="@string.Format("{0}/{1} {2}", Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Count, Translation.GetCoreTextTranslation("avslutade").ToLower())">
+                                @string.Format("{0} ({1}/{2} {3})", Translation.GetCoreTextTranslation("Underärenden"), Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Count, Translation.GetCoreTextTranslation("avslutade").ToLower())
+                            </a>
+                        </li>
+                    }
                 }
-                @if(Model.ChildCaseViewModel.ChildCaseList != null && Model.ChildCaseViewModel.ChildCaseList.Count > 0)
-                {
-                    <li id="childCaseTabContainer">
-                        <a href="#childcases-tab" title="@string.Format("{0}/{1} {2}", Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Count, Translation.GetCoreTextTranslation("avslutade").ToLower())">
-                            @string.Format("{0} ({1}/{2} {3})", Translation.GetCoreTextTranslation("Underärenden"), Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Count, Translation.GetCoreTextTranslation("avslutade").ToLower())
-                        </a>
-                    </li>
-                }
+
 
                 @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
                 {
@@ -2368,7 +2372,7 @@
                 {
                     @Html.Partial("_ChildCases", Model.ChildCaseViewModel);
                 }
-                @if (Model.ChildCaseViewModel.MergedChildList != null && Model.ChildCaseViewModel.MergedChildList.Count > 0)
+                @if(Model.IsItMergedParent())
                 {
                     @Html.Partial("_MergedCases", Model.ChildCaseViewModel);
                 }

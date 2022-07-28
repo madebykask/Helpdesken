@@ -278,7 +278,7 @@ namespace DH.Helpdesk.Services.Services
                     //- Case used as Children (existing functionality children) should NOT show up in list.
                     //- Case used as Parent (existing functionality parent) should NOT show up in list.
                     // - For some reason below seems to work // Katta
-                   //result.Items = result.Items.Where(x => x.IsMergeParent == true || x.IsNestedParent == false).ToList();
+                   result.Items = result.Items.Where(x => x.IsMergeChild != true).ToList();
                 }
 
                 //TODO: refactor when true server paging will be implemented
