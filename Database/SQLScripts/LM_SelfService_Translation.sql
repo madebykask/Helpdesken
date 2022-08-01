@@ -783,5 +783,11 @@ If not exists (select * from tblTextTranslation where text_id = 2122 and Languag
     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2122, 1, 'Vänligen bekräfta att du inte är en robot.')
 Go
 
+If not exists (select * from tbltext where id = 2129 AND TextType = 300)
+	insert into tbltext (id, TextString, TextType) VALUES (2129, 'This case is merged to', 300)
+Go
+If not exists (select * from tblTextTranslation where text_id = 2129 and Language_Id = 1)
+    insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2129, 1, 'Detta ärende är sammanfogat till')
+Go
 -- NOTE: Please check Translations.sql to avoid tblText.Id collision
 	

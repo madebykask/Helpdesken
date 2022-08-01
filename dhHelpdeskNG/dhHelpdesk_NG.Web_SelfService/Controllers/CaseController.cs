@@ -99,6 +99,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly IStatusService _statusService;
         private readonly ICaseSectionService _caseSectionService;
 
+
         private const string ParentPathDefaultValue = "--";
         private const string EnterMarkup = "<br />";
         private readonly IOrganizationService _orgService;
@@ -108,6 +109,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private const string ShowRegistrationMessageKey = "showRegistrationMessage";
         private readonly IFileViewLogService _fileViewLogService;
         private readonly IFeatureToggleService _featureToggleService;
+        private readonly IFinishingCauseService _finishingCauseService;
 
         public CaseController(
             ICaseService caseService,
@@ -157,7 +159,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             IStatusService statusService,
             ICaseSectionService caseSectionService,
             IFileViewLogService fileViewLogService,
-            IFeatureToggleService featureToggleService)
+            IFeatureToggleService featureToggleService,
+            IFinishingCauseService finishingCauseService)
             : base(configurationService, masterDataService, caseSolutionService)
         {
             _caseControllerBehavior = new CaseControllerBehavior(masterDataService, caseService, caseSearchService,
@@ -210,7 +213,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             _caseSectionService = caseSectionService;
             _fileViewLogService = fileViewLogService;
             _featureToggleService = featureToggleService;
-        }
+            _finishingCauseService = finishingCauseService; 
+    }
 
         [HttpGet]
         public ActionResult Index(string id, bool showRegistrationMessage = false)
@@ -2181,7 +2185,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var followerUsers = caseFolowerUsers.Any() ? string.Join(";", caseFolowerUsers) + ";" : string.Empty;
 
             var whiteList = _globalSettingService.GetFileUploadWhiteList();
-
+            var mergedFinishingCauseForCustomer = _finishingCauseService.GetMergedFinishingCause(SessionFacade.CurrentCustomerID);
             //
             var model = new CaseOverviewModel
             {
@@ -2205,7 +2209,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                 ClosedCaseAlertModel = new ClosedCaseAlertModel()
                 {
                     FinishingDate = currentCase?.FinishingDate,
-                    CaseComplaintDays = customersettings.CaseComplaintDays
+                    CaseComplaintDays = customersettings.CaseComplaintDays,
+                    FinishingCause = currentCase.FinishingDescription
                 },
 
                 AttachmentPlacement = customersettings.AttachmentPlacement,
@@ -2216,6 +2221,12 @@ namespace DH.Helpdesk.SelfService.Controllers
                 FileUploadWhiteList = whiteList
             };
 
+            if(!String.IsNullOrEmpty(model.ClosedCaseAlertModel.FinishingCause) && model.ClosedCaseAlertModel.FinishingCause == mergedFinishingCauseForCustomer.Name)
+            {
+                model.ClosedCaseAlertModel.IsMerged = true;
+                model.ClosedCaseAlertModel.MergedParentInfo = _caseService.GetMergedParentInfo(caseId);
+            }
+            
             return model;
         }
 
