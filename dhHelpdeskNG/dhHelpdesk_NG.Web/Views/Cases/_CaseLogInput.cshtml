@@ -138,7 +138,7 @@
                             <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span><br />
                             <span id="emailsToTitle" style="display: none;">
                                 @Translation.ToTitleCase(@Translation.GetCoreTextTranslation("Till")):
-                            </span><span id="emailsTo" style="display: none;">@Html.DisplayFor(model => model.case_.PersonsEmail)</span><br />
+                            </span><span id="emailsTo" style="display: none;"></span><br />
                             <span id="ccTitle" style="display: none;">@Translation.GetCoreTextTranslation("Kopia"): </span><span id="extraEmailsInputShow" style="overflow-wrap: break-word"></span>
                         </div>
                         @Html.HiddenFor(model => model.CaseLog.RegUser)

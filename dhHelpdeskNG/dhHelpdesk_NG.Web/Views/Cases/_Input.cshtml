@@ -359,7 +359,7 @@
                                                     }
                                                     else
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.PersonsEmail, new { maxlength = "100", id = "casePersonsEmail" })
+                                                        @Html.TextBoxFor(model => model.case_.PersonsEmail, new { maxlength = "100" })
                                                     }
                                                 </td>
                                                 <td style="@Model.GetFieldStyle(CaseSolutionFields.Email)">
@@ -2464,11 +2464,10 @@
 
         var scope = dhHelpdesk.cases.scope(window.parameters.casesScopeInitParameters);
     });
-    $("#casePersonsEmail").on("change", function (e) {
-        var email = $("#casePersonsEmail").val();
+    $("#case__PersonsEmail").on("change", function (e) {
+        var email = $("#case__PersonsEmail").val();
         $("#emailsTo").text(email);
         e.preventDefault();
-        console.log(email);
     });
 
 </script>

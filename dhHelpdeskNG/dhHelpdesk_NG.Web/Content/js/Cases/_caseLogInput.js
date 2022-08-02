@@ -49,6 +49,7 @@ function LogInitForm() {
             var to = $initiatorEmail.val();
             var extras = $("#extraEmailsInput").val().replaceAll(";", " ");
             if (to != '') {
+                $("#emailsTo").html(to);
                 $("#emailsTo").css('display', 'inline');
                 $("#emailsToTitle").css('display', 'inline');
             }
