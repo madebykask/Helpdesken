@@ -2805,12 +2805,13 @@ namespace DH.Helpdesk.Web.Controllers
 
                 //Case to be Merged
                 var mergeCase = _caseService.GetCaseById(id);
+                var parentCase = _caseService.GetCaseById(parentCaseId);
 
                 //Move followers and initiator to mergeparent
                 var newFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(id);
                 var existingFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(parentCaseId);
                 var newParentFollowers = new List<string>();
-                if(!String.IsNullOrEmpty(mergeCase.PersonsEmail))
+                if(!String.IsNullOrEmpty(mergeCase.PersonsEmail) && mergeCase.PersonsEmail != parentCase.PersonsEmail)
                 {
                     var extraFollower = new ExtraFollower()
                     {
@@ -2825,7 +2826,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (newParentFollowers.Count() > 0)
                 {
-                     _caseExtraFollowersService.SaveExtraFollowers(parentCaseId, newParentFollowers, _workContext.User.UserId);
+                    _caseExtraFollowersService.SaveExtraFollowers(parentCaseId, newParentFollowers, _workContext.User.UserId);
                 }
                 // Close case...
                 IDictionary<string, string> errors;

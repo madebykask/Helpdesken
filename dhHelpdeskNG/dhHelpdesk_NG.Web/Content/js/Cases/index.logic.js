@@ -211,16 +211,16 @@ function getCollapseCaption(cap) {
                                 link = '/Cases/Edit/' + data.case_id + '#childcases-tab';
                                 icon = 'fa fa-sitemap'; 
                             }
-                            if (data.IsMergeParent) {
-                                text = 'Merge Parent';
-                                link = '/Cases/Edit/' + data.case_id + '#childcases-tab';
-                                icon = 'fa fa-umbrella';
-                            }
-                            if (data.IsMergeChild) {
-                                text = 'Merge Child';
-                                link = '/Cases/Edit/' + data.case_id + '#childcases-tab';
-                                icon = 'fa fa-child';
-                            }
+                            //if (data.IsMergeParent) {
+                            //    text = 'Merge Parent';
+                            //    link = '/Cases/Edit/' + data.case_id + '#childcases-tab';
+                            //    icon = 'fa fa-umbrella';
+                            //}
+                            //if (data.IsMergeChild) {
+                            //    text = 'Merge Child';
+                            //    link = '/Cases/Edit/' + data.case_id + '#childcases-tab';
+                            //    icon = 'fa fa-child';
+                            //}
                            html.push('<a class="btn btn-mini" href="' + link + '" title="' + text + '"><i style="color: #000 !important;" class="' + icon + '"></i></a>');
                         }
                                                     
