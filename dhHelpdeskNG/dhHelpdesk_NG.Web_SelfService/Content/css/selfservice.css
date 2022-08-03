@@ -1281,3 +1281,14 @@ div .multitext i {
 .start-page .panel-body, .start-page .panel-heading {
     overflow-wrap: break-word;
 }
+
+.case-followers {
+    overflow: hidden;
+    padding: 2px;
+    padding-left: 700px;
+    text-align: left;
+    position: absolute;
+    text-overflow: ellipsis;
+    resize: both;
+    word-break: break-word;
+}

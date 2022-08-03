@@ -48,24 +48,24 @@
                 @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()))
                 {
                     <div class="form-group row">
-                        <label class="col-md-3">
+                        <div class="col-md-3">
                             @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
+                        </div>
                         <div class="col-md-3">
                             @Model.CasePreview.PersonsName
                         </div>
-                        <label class="col-md-1">
+                        <div class="col-md-1">
                             @if (Model.FollowerUsers != "")
                             {
                                 @Translation.Get("Followers")
                             }
-                        </label>
-                        <label class="col-md-5">
+                        </div>
+                        <div class="col-md-5 case-followers" style="width: 1200px; height: 200px;">
                             @if (Model.FollowerUsers != "")
                             {
                                 @Model.FollowerUsers
                             }
-                        </label>
+                        </div>
                     </div>
                 }
                 @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()))
@@ -74,7 +74,7 @@
                         <label class="col-md-3">
                             @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
                         </label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             @Model.CasePreview.PersonsEmail
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                         <label class="col-md-3">
                             @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
                         </label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             @Model.CasePreview.PersonsPhone
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                         <label class="col-md-3">
                             @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
                         </label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             @Model.CasePreview.PersonsCellphone
                         </div>
                     </div>
@@ -107,7 +107,7 @@
                         <label class="col-md-3">
                             @Translation.Get(GlobalEnums.TranslationCaseFields.Customer_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
                         </label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             @Model.CasePreview.Customer.Name
                         </div>
                     </div>
@@ -118,7 +118,7 @@
                         <label class="col-md-3">
                             @Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
                         </label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             @Model.Regions.Where(r => r.Id == Model.CasePreview.Region_Id).Select(r => r.Name).FirstOrDefault()
                         </div>
                     </div>
@@ -129,7 +129,7 @@
                         <label class="col-md-3">
                             @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
                         </label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             @if (Model.CasePreview.Department != null)
                             {
                                 @Model.CasePreview.Department.DepartmentName
@@ -143,7 +143,7 @@
                         <label class="col-md-3">
                             @Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
                         </label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             @Model.CasePreview.Ou.getOUParentPath()
                         </div>
                     </div>
@@ -154,7 +154,7 @@
                         <label class="col-md-3">
                             @Translation.Get(GlobalEnums.TranslationCaseFields.CostCentre.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
                         </label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             @Model.CasePreview.CostCentre
                         </div>
                     </div>
@@ -165,7 +165,7 @@
                         <label class="col-md-3">
                             @Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
                         </label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             @Model.CasePreview.Place
                         </div>
                     </div>
@@ -176,7 +176,7 @@
                         <label class="col-md-3">
                             @Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
                         </label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
                             @Model.CasePreview.UserCode
                         </div>
                     </div>
