@@ -265,7 +265,7 @@
                                                 @Html.HiddenFor(m => m.case_.Id, new { @id = "connect_to_parent_childId" })
                                             }
                                         }
-                                        @if (SessionFacade.CurrentUser.CreateSubCasePermission == 1 && SessionFacade.CurrentUser.MergeCasePermission == 1)
+                                        @if (SessionFacade.CurrentUser.MergeCasePermission == 1)
                                         {
                                             if (!Model.IsItMergedChild() && !Model.IsItMergedParent())
                                             {
