@@ -1034,6 +1034,7 @@ Module DH_Helpdesk_Mail
                                     ' Uppdatera ärendet och aktivera om det är avslutat
                                     If objCase.FinishingDate <> Date.MinValue Then
                                         ' Aktivera ärendet
+
                                         objCaseData.activateCase(objCase, objCustomer.OpenCase_StateSecondary_Id, objCustomer.WorkingDayStart, objCustomer.WorkingDayEnd, objCustomer.TimeZone_offset)
                                     Else
                                         If objCustomer.ModuleAccount = 1 Then

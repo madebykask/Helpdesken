@@ -805,6 +805,34 @@ Public Class CaseData
         End Try
     End Function
 
+    Public Function checkIfCaseIsMerged(ByVal CaseId As Long) As Boolean
+        Dim sSQL As String = ""
+        Dim dt As DataTable
+
+        Try
+            sSQL = "SELECT tblEMailLog.MailId " &
+                   "FROM tblEMailLog " &
+                   "WHERE MessageId=" & CaseId & ""
+
+
+            dt = getDataTable(gsConnectionString, sSQL)
+
+
+            If dt.Rows.Count > 0 Then
+                Return True 'dt.Rows(0)("MailId")
+            Else
+                Return False
+            End If
+
+        Catch ex As Exception
+            If giLoglevel > 0 Then
+                objLogFile.WriteLine(Now() & ", ERROR getMailIDByMessageID " & ex.Message.ToString & ", " & sSQL)
+            End If
+
+            Return 0
+        End Try
+    End Function
+
     Private Function getCases(Optional ByVal iPerformerUser_Id As Integer = 0, Optional ByVal iPlanDate As Integer = 0, Optional ByVal iApproval As Integer = 0, Optional ByVal iWatchdate As Integer = 0, Optional ByVal iReminder As Integer = 0) As Collection
         Dim colCase As New Collection
         Dim sSQL As String
