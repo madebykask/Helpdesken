@@ -810,9 +810,9 @@ Public Class CaseData
         Dim dt As DataTable
 
         Try
-            sSQL = "SELECT tblEMailLog.MailId " &
-                   "FROM tblEMailLog " &
-                   "WHERE MessageId=" & CaseId & ""
+            sSQL = "SELECT TOP 1 tblMergedCases.MergedParent_Id " &
+                   "FROM tblMergedCases " &
+                   "WHERE MergedChild_Id=" & CaseId & ""
 
 
             dt = getDataTable(gsConnectionString, sSQL)
@@ -826,7 +826,7 @@ Public Class CaseData
 
         Catch ex As Exception
             If giLoglevel > 0 Then
-                objLogFile.WriteLine(Now() & ", ERROR getMailIDByMessageID " & ex.Message.ToString & ", " & sSQL)
+                objLogFile.WriteLine(Now() & ", ERROR checkIfCaseIsMerged " & ex.Message.ToString & ", " & sSQL)
             End If
 
             Return 0
