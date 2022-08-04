@@ -1036,115 +1036,93 @@ Module DH_Helpdesk_Mail
                                     '    sff = ""
                                     'End If
                                     ' Uppdatera ärendet och aktivera om det är avslutat
+                                    Dim caseismerged As Boolean = False
+                                    caseismerged = objCaseData.checkIfCaseIsMerged(objCase.Id)
                                     If objCase.FinishingDate <> Date.MinValue Then
-                                            ' Aktivera ärendet
-                                            Dim caseismerged As Boolean = False
-                                            caseismerged = objCaseData.checkIfCaseIsMerged(objCase.Id)
-                                            If caseismerged = False Then
-                                                objCaseData.activateCase(objCase, objCustomer.OpenCase_StateSecondary_Id, objCustomer.WorkingDayStart, objCustomer.WorkingDayEnd, objCustomer.TimeZone_offset)
-                                            End If
-                                        Else
-                                            If objCustomer.ModuleAccount = 1 Then
-                                                ' Kontrollera om det finns en kopplad beställning
-                                                Dim ad As New AccountData
+                                        ' Aktivera ärendet
 
-                                                Dim a As Account = ad.getAccountByCaseNumber(objCase.Casenumber)
+                                        If caseismerged = False Then
+                                            objCaseData.activateCase(objCase, objCustomer.OpenCase_StateSecondary_Id, objCustomer.WorkingDayStart, objCustomer.WorkingDayEnd, objCustomer.TimeZone_offset)
+                                        End If
+                                    Else
+                                        If objCustomer.ModuleAccount = 1 Then
+                                            ' Kontrollera om det finns en kopplad beställning
+                                            Dim ad As New AccountData
 
-                                                If Not a Is Nothing Then
-                                                    If InStr(a.AccountActivity.CloseCase_M2T_Sender, sFromEMailAddress, CompareMethod.Text) <> 0 Then
-                                                        iFinishingCause_Id = a.AccountActivity.CloseCase_FinishingCause_Id
-                                                    End If
-                                                End If
+                                            Dim a As Account = ad.getAccountByCaseNumber(objCase.Casenumber)
 
-                                                If iFinishingCause_Id <> 0 Then
-                                                    ' Avsluta ärendet
-                                                    objCaseData.closeCase(objCase)
+                                            If Not a Is Nothing Then
+                                                If InStr(a.AccountActivity.CloseCase_M2T_Sender, sFromEMailAddress, CompareMethod.Text) <> 0 Then
+                                                    iFinishingCause_Id = a.AccountActivity.CloseCase_FinishingCause_Id
                                                 End If
                                             End If
 
-                                        End If
-
-                                        If objCase.ResetOnExternalUpdate = 1 Then
-                                            objCaseData.resetStateSecondary(objCase, objCustomer.WorkingDayStart, objCustomer.WorkingDayEnd, objCustomer.TimeZone_offset)
-                                        End If
-
-                                        iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, objCase.Persons_EMail)
-
-                                        Dim isInternalLogUsed As Boolean = CheckInternalLogConditions(iMailID, objCustomer, sFromEMailAddress, sToEMailAddress)
-
-                                        ' Save Logs (Logga händelsen)
-                                        If isInternalLogUsed Then
-                                            ' Save as Internal Log (Lägg in som intern loggpost)
-                                            iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
-                                        Else
-                                            iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", sBodyText, 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
-                                        End If
-
-                                        Dim isTwoAttachmentsActive As Boolean = CheckIfTwoAttachmentsModeEnabled(objCaseData, objCustomer.Id)
-                                        Dim bIsInternalLogFile = isInternalLogUsed AndAlso isTwoAttachmentsActive ' Mark file as internal only 2attachments is enabled
-                                        Dim logSubFolderPrefix = If(bIsInternalLogFile, "LL", "L") ' LL - Internal log subfolder, L - external log subfolder
-
-                                        Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
-                                        Dim sPDFFileName As String = CreatePdfFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
-
-                                        If Not IsNullOrEmpty(sPDFFileName) Then
-                                            iHTMLFile = 1
-
-                                            ' Lägg in i databasen
-                                            objLogData.saveFileInfo(iLog_Id, "Mail/" & sPDFFileName, bIsInternalLogFile)
-                                        End If
-
-                                        If Not IsNullOrEmpty(sHTMLFileName) Then
-                                            'iHTMLFile = 1
-
-                                            ' Lägg in i databasen
-                                            'objCaseData.saveFileInfo(objCase.Id, "html/" & sHTMLFileName)
-
-                                            DeleteFilesInsideFolder(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html", True)
-                                        End If
-
-                                        ' Process attached log files 
-                                        Dim logFiles As List(Of String) = ProcessMessageAttachments(message, iHTMLFile, objCustomer, iLog_Id.ToString(), logSubFolderPrefix, iPop3DebugLevel, objGlobalSettings)
-                                        If (logFiles IsNot Nothing AndAlso logFiles.Any()) Then
-                                            For Each logFilePath As String In logFiles
-                                                Dim sFileName = Path.GetFileName(logFilePath)
-                                                objLogData.saveFileInfo(iLog_Id, sFileName, bIsInternalLogFile)
-
-                                                'add file to files attachment list
-                                                attachedFiles.Add(New MailFile(sFileName, logFilePath, bIsInternalLogFile))
-                                            Next
-                                        End If
-
-                                        ' Meddela handläggaren att ärendet uppdaterat / send case was updated notification 
-                                        If objCase.ExternalUpdateMail = 1 And Len(objCase.PerformerEMail) > 6 Then
-                                            objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.CaseIsUpdated, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
-
-                                            If Not objMailTemplate Is Nothing Then
-                                                Dim objUser As User = objUserData.getUserById(objCase.Performer_User_Id)
-                                                If Not objUser Is Nothing And objUser.Status = 1 And Not String.IsNullOrWhiteSpace(objUser.EMail) Then
-                                                    Dim objMail As New Mail
-                                                    Dim objLog As New Log
-
-                                                    ' Set appropriate log text property
-                                                    objLog.Text_External = If(Not isInternalLogUsed, sBodyText, String.Empty)
-                                                    objLog.Text_Internal = If(isInternalLogUsed, sBodyText, String.Empty)
-
-                                                    sMessageId = createMessageId(objCustomer.HelpdeskEMail)
-                                                    sSendTime = Date.Now()
-
-                                                    Dim sEMailLogGUID As String = Guid.NewGuid().ToString
-
-                                                    sRet_SendMail =
-                                                        objMail.sendMail(objCase, objLog, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings,
-                                                                         sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
-
-                                                    objLogData.createEMailLog(iCaseHistory_Id, objCase.PerformerEMail, MailTemplates.CaseIsUpdated, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
-                                                End If
+                                            If iFinishingCause_Id <> 0 Then
+                                                ' Avsluta ärendet
+                                                objCaseData.closeCase(objCase)
                                             End If
-                                        ElseIf iFinishingCause_Id <> 0 And Len(objCase.Persons_EMail) > 6 Then
-                                            objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.ClosedCase, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                                        End If
 
-                                            If Not objMailTemplate Is Nothing Then
+                                    End If
+
+                                    If objCase.ResetOnExternalUpdate = 1 Then
+                                        objCaseData.resetStateSecondary(objCase, objCustomer.WorkingDayStart, objCustomer.WorkingDayEnd, objCustomer.TimeZone_offset)
+                                    End If
+
+                                    iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, objCase.Persons_EMail)
+
+                                    Dim isInternalLogUsed As Boolean = CheckInternalLogConditions(iMailID, objCustomer, sFromEMailAddress, sToEMailAddress)
+
+                                    ' Save Logs (Logga händelsen)
+                                    If isInternalLogUsed Then
+                                        ' Save as Internal Log (Lägg in som intern loggpost)
+                                        iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
+                                    Else
+                                        iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", sBodyText, 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
+                                    End If
+
+                                    Dim isTwoAttachmentsActive As Boolean = CheckIfTwoAttachmentsModeEnabled(objCaseData, objCustomer.Id)
+                                    Dim bIsInternalLogFile = isInternalLogUsed AndAlso isTwoAttachmentsActive ' Mark file as internal only 2attachments is enabled
+                                    Dim logSubFolderPrefix = If(bIsInternalLogFile, "LL", "L") ' LL - Internal log subfolder, L - external log subfolder
+
+                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
+                                    Dim sPDFFileName As String = CreatePdfFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
+
+                                    If Not IsNullOrEmpty(sPDFFileName) Then
+                                        iHTMLFile = 1
+
+                                        ' Lägg in i databasen
+                                        objLogData.saveFileInfo(iLog_Id, "Mail/" & sPDFFileName, bIsInternalLogFile)
+                                    End If
+
+                                    If Not IsNullOrEmpty(sHTMLFileName) Then
+                                        'iHTMLFile = 1
+
+                                        ' Lägg in i databasen
+                                        'objCaseData.saveFileInfo(objCase.Id, "html/" & sHTMLFileName)
+
+                                        DeleteFilesInsideFolder(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html", True)
+                                    End If
+
+                                    ' Process attached log files 
+                                    Dim logFiles As List(Of String) = ProcessMessageAttachments(message, iHTMLFile, objCustomer, iLog_Id.ToString(), logSubFolderPrefix, iPop3DebugLevel, objGlobalSettings)
+                                    If (logFiles IsNot Nothing AndAlso logFiles.Any()) Then
+                                        For Each logFilePath As String In logFiles
+                                            Dim sFileName = Path.GetFileName(logFilePath)
+                                            objLogData.saveFileInfo(iLog_Id, sFileName, bIsInternalLogFile)
+
+                                            'add file to files attachment list
+                                            attachedFiles.Add(New MailFile(sFileName, logFilePath, bIsInternalLogFile))
+                                        Next
+                                    End If
+
+                                    ' Meddela handläggaren att ärendet uppdaterat / send case was updated notification 
+                                    If objCase.ExternalUpdateMail = 1 And Len(objCase.PerformerEMail) > 6 Then
+                                        objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.CaseIsUpdated, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+
+                                        If Not objMailTemplate Is Nothing Then
+                                            Dim objUser As User = objUserData.getUserById(objCase.Performer_User_Id)
+                                            If Not objUser Is Nothing And objUser.Status = 1 And Not String.IsNullOrWhiteSpace(objUser.EMail) Then
                                                 Dim objMail As New Mail
                                                 Dim objLog As New Log
 
@@ -1158,18 +1136,41 @@ Module DH_Helpdesk_Mail
                                                 Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
                                                 sRet_SendMail =
-                                                    objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings,
+                                                    objMail.sendMail(objCase, objLog, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings,
                                                                      sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
 
-                                                objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, MailTemplates.ClosedCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
-
+                                                objLogData.createEMailLog(iCaseHistory_Id, objCase.PerformerEMail, MailTemplates.CaseIsUpdated, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             End If
                                         End If
-                                    End If
+                                    ElseIf iFinishingCause_Id <> 0 And Len(objCase.Persons_EMail) > 6 Then
+                                        objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.ClosedCase, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
-                                    'here tit
-                                    ' spara e-post adresser
-                                    If message IsNot Nothing AndAlso objCase IsNot Nothing Then
+                                        If Not objMailTemplate Is Nothing Then
+                                            Dim objMail As New Mail
+                                            Dim objLog As New Log
+
+                                            ' Set appropriate log text property
+                                            objLog.Text_External = If(Not isInternalLogUsed, sBodyText, String.Empty)
+                                            objLog.Text_Internal = If(isInternalLogUsed, sBodyText, String.Empty)
+
+                                            sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+                                            sSendTime = Date.Now()
+
+                                            Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+
+                                            sRet_SendMail =
+                                                objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings,
+                                                                 sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
+
+                                            objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, MailTemplates.ClosedCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+
+                                        End If
+                                    End If
+                                End If
+
+                                'here tit
+                                ' spara e-post adresser
+                                If message IsNot Nothing AndAlso objCase IsNot Nothing Then
                                     Dim messageId As String = message.MessageId.ToString()
                                     objMailTicket.Save(objCase.Id, iLog_Id, "to", message.To.ToString(), message.Subject, messageId) ' Saving subject only for to address...
                                     objMailTicket.Save(objCase.Id, iLog_Id, "cc", message.CC.ToString(), Nothing, messageId)
