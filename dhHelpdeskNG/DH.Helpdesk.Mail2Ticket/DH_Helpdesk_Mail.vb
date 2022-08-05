@@ -1031,11 +1031,19 @@ Module DH_Helpdesk_Mail
                                     ' Markera ärendet som oläst
                                     objCaseData.markCaseUnread(objCase)
 
+                                    'If objCase.Casenumber = "19851" Then
+                                    '    Dim sff As String
+                                    '    sff = ""
+                                    'End If
                                     ' Uppdatera ärendet och aktivera om det är avslutat
+                                    Dim caseismerged As Boolean = False
+                                    caseismerged = objCaseData.checkIfCaseIsMerged(objCase.Id)
                                     If objCase.FinishingDate <> Date.MinValue Then
                                         ' Aktivera ärendet
 
-                                        objCaseData.activateCase(objCase, objCustomer.OpenCase_StateSecondary_Id, objCustomer.WorkingDayStart, objCustomer.WorkingDayEnd, objCustomer.TimeZone_offset)
+                                        If caseismerged = False Then
+                                            objCaseData.activateCase(objCase, objCustomer.OpenCase_StateSecondary_Id, objCustomer.WorkingDayStart, objCustomer.WorkingDayEnd, objCustomer.TimeZone_offset)
+                                        End If
                                     Else
                                         If objCustomer.ModuleAccount = 1 Then
                                             ' Kontrollera om det finns en kopplad beställning
