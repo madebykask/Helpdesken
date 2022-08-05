@@ -1036,12 +1036,20 @@ Module DH_Helpdesk_Mail
                                     '    sff = ""
                                     'End If
                                     ' Uppdatera ärendet och aktivera om det är avslutat
-                                    Dim caseismerged As Boolean = False
+                                    Dim caseismerged As Integer = 0
                                     caseismerged = objCaseData.checkIfCaseIsMerged(objCase.Id)
-                                    If objCase.FinishingDate <> Date.MinValue Then
+                                    Dim dFinDate As Date
+                                    dFinDate = objCase.FinishingDate
+                                    If caseismerged > 0 Then
+                                        objCase = Nothing
+                                        objCase = objCaseData.getCase(caseismerged)
+                                    End If
+
+                                    'If objCase.FinishingDate <> Date.MinValue Then
+                                    If dFinDate <> Date.MinValue Then
                                         ' Aktivera ärendet
 
-                                        If caseismerged = False Then
+                                        If caseismerged = 0 Then
                                             objCaseData.activateCase(objCase, objCustomer.OpenCase_StateSecondary_Id, objCustomer.WorkingDayStart, objCustomer.WorkingDayEnd, objCustomer.TimeZone_offset)
                                         End If
                                     Else
@@ -1071,14 +1079,19 @@ Module DH_Helpdesk_Mail
 
                                     iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, objCase.Persons_EMail)
 
+
                                     Dim isInternalLogUsed As Boolean = CheckInternalLogConditions(iMailID, objCustomer, sFromEMailAddress, sToEMailAddress)
 
                                     ' Save Logs (Logga händelsen)
                                     If isInternalLogUsed Then
                                         ' Save as Internal Log (Lägg in som intern loggpost)
+
                                         iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
+
                                     Else
+
                                         iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", sBodyText, 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
+
                                     End If
 
                                     Dim isTwoAttachmentsActive As Boolean = CheckIfTwoAttachmentsModeEnabled(objCaseData, objCustomer.Id)
@@ -1136,8 +1149,8 @@ Module DH_Helpdesk_Mail
                                                 Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
                                                 sRet_SendMail =
-                                                    objMail.sendMail(objCase, objLog, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings,
-                                                                     sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
+                                                objMail.sendMail(objCase, objLog, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings,
+                                                                 sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
 
                                                 objLogData.createEMailLog(iCaseHistory_Id, objCase.PerformerEMail, MailTemplates.CaseIsUpdated, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             End If
@@ -1159,8 +1172,8 @@ Module DH_Helpdesk_Mail
                                             Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
                                             sRet_SendMail =
-                                                objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings,
-                                                                 sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
+                                            objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings,
+                                                             sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
 
                                             objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, MailTemplates.ClosedCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
 
