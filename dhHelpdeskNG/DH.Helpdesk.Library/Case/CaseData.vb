@@ -805,7 +805,7 @@ Public Class CaseData
         End Try
     End Function
 
-    Public Function checkIfCaseIsMerged(ByVal CaseId As Long) As Boolean
+    Public Function checkIfCaseIsMerged(ByVal CaseId As Long) As Integer
         Dim sSQL As String = ""
         Dim dt As DataTable
 
@@ -819,9 +819,9 @@ Public Class CaseData
 
 
             If dt.Rows.Count > 0 Then
-                Return True 'dt.Rows(0)("MailId")
+                Return dt.Rows(0)("MergedParent_Id")
             Else
-                Return False
+                Return 0
             End If
 
         Catch ex As Exception
