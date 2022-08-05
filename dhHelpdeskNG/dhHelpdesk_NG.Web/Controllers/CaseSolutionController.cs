@@ -3169,7 +3169,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 Categories = this._categoryService.GetActiveParentCategoriesOverviews(curCustomerId),
 
-                FinishingCauses = this._finishingCauseService.GetFinishingCausesWithChilds(curCustomerId),
+                FinishingCauses = this._finishingCauseService.GetFinishingCausesWithChilds(curCustomerId).Where(x => x.Merged == false).ToList(),
 
                 PerformerUsers = performersList,
 
