@@ -71,7 +71,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     Id = c.Id,
                     ParentId = c.Parent_FinishingCause_Id,
                     Name = c.Name,
-                    IsActive = c.IsActive
+                    IsActive = c.IsActive,
+                    Merged = c.Merged
                 });
         }
 

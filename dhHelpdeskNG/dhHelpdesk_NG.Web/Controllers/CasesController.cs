@@ -1681,7 +1681,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
                     m.CaseFieldSettingWithLangauges = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
                     m.CaseSectionModels = _caseSectionService.GetCaseSections(customerId, SessionFacade.CurrentLanguageId);
-                    m.finishingCauses = _finishingCauseService.GetFinishingCausesWithChilds(customerId);
+                    m.finishingCauses = _finishingCauseService.GetFinishingCausesWithChilds(customerId).Where(x => x.Merged == false).ToList();
                     m.case_ = _caseService.GetCaseById(m.CaseLog.CaseId);
                     m.IsCaseReopened = isCaseReopened;
 
@@ -2828,8 +2828,11 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     _caseExtraFollowersService.SaveExtraFollowers(parentCaseId, newParentFollowers, _workContext.User.UserId);
                 }
-                // Close case...
                 IDictionary<string, string> errors;
+                string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                _caseService.SaveCaseHistory(parentCase, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, null, null);
+                // Close case...
+
                 var extraInfo = new CaseExtraInfo
                 {
                     ActionExternalTime = 0,
@@ -5051,7 +5054,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (m.Logs != null)
                 {
-                    var finishingCauses = _finishingCauseService.GetFinishingCauseInfos(customerId);
+                    var finishingCauses = _finishingCauseService.GetFinishingCauseInfos(customerId).Where(x => x.Merged == false).ToList();
                     var lastLog = m.Logs.FirstOrDefault(); //todo: check if its correct - order
                     if (lastLog != null)
                     {
@@ -5290,7 +5293,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.changes = _changeService.GetChanges(customerId);
             }
 
-            m.finishingCauses = _finishingCauseService.GetFinishingCausesWithChilds(customerId);
+            m.finishingCauses = _finishingCauseService.GetFinishingCausesWithChilds(customerId).Where(x => x.Merged == false).ToList();
             m.problems = _problemService.GetCustomerProblems(customerId, false);
             m.currencies = _currencyService.GetCurrencies();
 
