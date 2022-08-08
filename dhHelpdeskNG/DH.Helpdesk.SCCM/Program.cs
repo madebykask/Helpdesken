@@ -144,10 +144,81 @@ namespace DH.Helpdesk.SCCM
                     {
                         serverDB = connector.InsertServerAndReturn(computer);
                     }
-                    
+
+                    //Run data manipulation logic
+                    HandleServerLogic(serverDB, computer, connector);
+
                 }
                 
             }
+        }
+        
+        private static void HandleServerLogic(ServerDB serverDB, Models.Device reference, Connector connector)
+        {
+            serverDB.ScanDate = reference._ComputerSystem.TimeStamp;
+
+            serverDB.OS_Id = connector.ExistsObject(Other.Enums.ObjectType.OS, reference._OperatingSystem.Caption);
+            serverDB.OS_Version = reference._OperatingSystem.Version;
+            serverDB.OS_SP = reference._OperatingSystem.CSDVersion;
+
+            serverDB.Domain_Id = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Domain_Id"].ToString());
+
+            var userName = reference._ComputerSystem.UserName;
+
+            if (!String.IsNullOrEmpty(userName))
+            {
+                var splittedUserName = userName.Split('\\')[1];
+                userName = splittedUserName;
+            }
+
+            var computerUserID = connector.GetComputerUserByUserId(Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Customer_Id"].ToString()), userName);
+
+            if (computerUserID != null)
+            {
+                serverDB.User_Id = computerUserID.Value;
+            }
+
+            serverDB.Manufacturer = reference._ComputerSystem.Manufacturer;
+
+            serverDB.ComputerModel_Id = connector.ExistsObject(Other.Enums.ObjectType.ComputerModel, reference._ComputerSystem.Model);
+            serverDB.ComputerModel = reference._ComputerSystem.Model;
+
+            serverDB.SerialNumber = reference._PCBios.SerialNumber;
+            serverDB.BIOSDate = reference._PCBios.ReleaseDate;
+            serverDB.BIOSVersion = reference._PCBios.SMBIOSBIOSVersion;
+
+            serverDB.ChassisType = Helpers.getChassisTypeName(Convert.ToInt32(reference._Enclosure.ChassisTypes));
+
+            serverDB.Processor_Id = connector.ExistsObject(Other.Enums.ObjectType.Processor, reference._Processor.Name);
+
+            serverDB.RAM_Id = connector.ExistsObject(Other.Enums.ObjectType.RAM, Helpers.getRAM(reference._X86PCMemory.TotalPhysicalMemory));
+
+            serverDB.NIC_Id = connector.ExistsObject(Other.Enums.ObjectType.NetworkAdapter, reference._NetworkAdapter.FirstOrDefault().Name);
+
+            string ipAdress = null;
+            string macAdress = null;
+            foreach (var networkAdapterConfiguration in reference._NetworkAdapterConfiguration)
+            {
+                if (networkAdapterConfiguration.IPAddress != null)
+                {
+                    var splitIdAddress = networkAdapterConfiguration.IPAddress.Split(',');
+                    ipAdress = splitIdAddress[0];
+                    macAdress = networkAdapterConfiguration.MacAddress;
+
+                    break;
+                }
+            }
+
+            serverDB.IPAddress = ipAdress;
+            serverDB.MACAddress = macAdress;
+
+            serverDB.SoundCard = reference._SoundDevice.Name;
+
+            serverDB.VideoCard = reference._VideoControllerData.Name;
+
+            //Save computer
+
+            connector.SaveServer(serverDB);
         }
 
         private static void HandleComputerLogic(ComputerDB computerDB, Models.Device reference, Connector connector)
@@ -242,13 +313,10 @@ namespace DH.Helpdesk.SCCM
             }
 
 
-            
-            
-        }
+            //Save computer
 
-        private static void HandleServerLogic(ServerDB serverDB, Models.Device reference, Connector connector)
-        {
-            serverDB.ScanDate = reference._ComputerSystem.TimeStamp;
+            connector.SaveComputer(computerDB);
+
 
         }
 

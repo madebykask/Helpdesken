@@ -36,8 +36,9 @@ namespace DH.Helpdesk.SCCM.DB
 
                     var customerID = System.Configuration.ConfigurationManager.AppSettings["DB_Customer_Id"].ToString();
 
-                    command.CommandText = "SELECT TOP 1 * FROM tblComputer where Customer_Id = " + customerID + " AND UPPER(ComputerName) = " + computer._ComputerSystem.Name.ToUpper();
+                    command.CommandText = "SELECT TOP 1 * FROM tblComputer where Customer_Id = " + customerID + " AND UPPER(ComputerName) = '" + computer._ComputerSystem.Name.ToUpper() + "'";
 
+                    connection.Open();
 
                     var reader = command.ExecuteReader();
 
@@ -55,10 +56,11 @@ namespace DH.Helpdesk.SCCM.DB
 
                         }
                     }
-                    finally
+                    catch (Exception ex)
                     {
-                        reader.Close();
+                        Console.WriteLine(ex);
                     }
+
 
 
                 }
@@ -80,6 +82,7 @@ namespace DH.Helpdesk.SCCM.DB
 
                     command.CommandText = "SELECT TOP 1 * FROM tblServer where Customer_Id = " + customerID + " AND UPPER(ServerName) = " + computer._ComputerSystem.Name.ToUpper();
 
+                    connection.Open();
 
                     var reader = command.ExecuteReader();
 
@@ -92,13 +95,13 @@ namespace DH.Helpdesk.SCCM.DB
 
 
                             res.Id = Convert.ToInt32(reader["Id"].ToString());
-                            res.ServerName = Convert.ToString(reader["ServerName"].ToString());
+                            res.ComputerName = Convert.ToString(reader["ServerName"].ToString());
                             res.Customer_Id = Convert.ToInt32(reader["Customer_Id"].ToString());
                         }
                     }
-                    finally
+                    catch (Exception ex)
                     {
-                        reader.Close();
+                        Console.WriteLine(ex);
                     }
 
 
@@ -120,6 +123,9 @@ namespace DH.Helpdesk.SCCM.DB
                     command.CommandText = "INSERT INTO tblComputer (ComputerName, Customer_Id) VALUES (@ComputerName, @Customer_Id)";
                     command.Parameters.AddWithValue("@ComputerName", computer._ComputerSystem.Name);
                     command.Parameters.AddWithValue("@Customer_Id", customerID);
+
+                    connection.Open();
+
                     command.ExecuteNonQuery();
                 }
             }
@@ -139,6 +145,9 @@ namespace DH.Helpdesk.SCCM.DB
                     command.CommandText = "INSERT INTO tblServer (ServerName, Customer_Id) VALUES (@ServerName, @Customer_Id)";
                     command.Parameters.AddWithValue("@ServerName", computer._ComputerSystem.Name);
                     command.Parameters.AddWithValue("@Customer_Id", customerID);
+
+                    connection.Open();
+
                     command.ExecuteNonQuery();
                 }
             }
@@ -191,6 +200,7 @@ namespace DH.Helpdesk.SCCM.DB
 
                     command.CommandText = "SELECT TOP 1 tblComputerUsers.*, tblDepartment.Region_Id FROM tblComputerUsers LEFT JOIN tblDepartment ON tblComputerUsers.Department_Id=tblDepartment.Id WHERE tblComputerUsers.Customer_Id=" + customerID + " AND  LOWER(tblComputerUsers.UserId) = '" + username.ToLower() + "'";
 
+                    connection.Open();
 
                     var reader = command.ExecuteReader();
 
@@ -202,9 +212,9 @@ namespace DH.Helpdesk.SCCM.DB
                             result = Convert.ToInt32(reader["Id"].ToString());
                         }
                     }
-                    finally
+                    catch (Exception ex)
                     {
-                        reader.Close();
+                        Console.WriteLine(ex);
                     }
 
 
@@ -214,7 +224,102 @@ namespace DH.Helpdesk.SCCM.DB
             return result;
         }
 
-        public void Save(ComputerDB c)
+        public void SaveServer(ServerDB c)
+        {
+
+            string s = "";
+
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                try
+                {
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandType = CommandType.Text;
+
+                        s = "update tblComputer set " +
+                                        "SerialNumber='" + c.SerialNumber + "', " +
+                                        "Manufacturer='" + c.Manufacturer + "', ";
+
+                        if (c.ComputerModel_Id != 0)
+                            s = s + "MACAddress='" + c.MACAddress + "', ";
+                        else
+                            s = s + "MACAddress='', ";
+
+
+                        if (c.ComputerModel_Id != 0)
+                            s = s + "ComputerModel_Id=" + c.ComputerModel_Id + ", ";
+                        else
+                            s = s + "ComputerModel_Id=Null, ";
+
+                        if (c.RAM_Id != 0)
+                            s = s + "RAM_Id=" + c.RAM_Id + ", ";
+                        else
+                            s = s + "RAM_Id=Null, ";
+
+                        if (c.Processor_Id != 0)
+                            s = s + "Processor_Id=" + c.Processor_Id + ", ";
+                        else
+                            s = s + "Processor_Id=Null, ";
+
+                        if (c.OS_Id != 0)
+                            s = s + "OS_Id=" + c.OS_Id + ", ";
+                        else
+                            s = s + "OS_Id=Null, ";
+
+                        if (c.NIC_Id != 0)
+                            s = s + "NIC_Id=" + c.NIC_Id + ", ";
+                        else
+                            s = s + "NIC_Id=Null, ";
+
+                        s = s + "BIOSVersion='" + (c.BIOSVersion.Length > 40 ? c.BIOSVersion.Substring(0, 40) : c.BIOSVersion) + "', ";
+
+                        if (c.User_Id != 0)
+                        {
+                            s = s + "User_Id=" + c.User_Id + ", ";
+                        }
+                        else
+                        {
+                            s = s + "User_Id=Null, ";
+                        }
+
+                        if (c.Domain_Id != 0)
+                        {
+                            s = s + "Domain_Id=" + c.Domain_Id + ", ";
+                        }
+                        else
+                        {
+                            s = s + "Domain_Id=Null, ";
+                        }
+                        if (c.WarrantyEndDate != null)
+                        {
+                            s = s + "WarrantyEndDate='" + c.WarrantyEndDate + "', ";
+                        }
+                        else
+                        {
+                            s = s + "WarrantyEndDate=Null, ";
+                        }
+                        s = s + "ScanDate='" + c.ScanDate + "', " +
+                                "SyncChangedDate=getdate() " +
+                                "where computerName='" + c.ComputerName + "' and Customer_Id=" + c.Customer_Id;
+
+                        command.CommandText = s;
+                        connection.Open();
+                        command.ExecuteNonQuery();
+
+
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new System.InvalidOperationException(s);
+
+                }
+            }
+        }
+
+        public void SaveComputer(ComputerDB c)
         {
 
             string s = "";
@@ -306,23 +411,13 @@ namespace DH.Helpdesk.SCCM.DB
                         {
                             foreach (var software in c.Softwares)
                             {
-                                string sql = "insert into tblSoftware (Computer_Id, Name, Version, Manufacturer) values(" + c.Id + ", '" + software.DisplayName.Replace("'", "").Substring(0, Math.Min(software.DisplayName.Replace("'", "").Length, 100)) + "', '" + software.Version + "', '" + software.Publisher + "', '" + ")";
+                                string sql = "insert into tblSoftware (Computer_Id, Name, Version, Manufacturer) values(" + c.Id + ", '" + software.DisplayName.Replace("'", "").Substring(0, Math.Min(software.DisplayName.Replace("'", "").Length, 100)) + "', '" + software.Version + "', '" + software.Publisher + "')";
 
                                 command.CommandText = sql;
                                 command.ExecuteNonQuery();
                             }
                         }
 
-                        //if (c.Hotfix != null)
-                        //{
-                        //    foreach (var hotfix in c.Hotfix)
-                        //    {
-                        //        string sql = "insert into tblSoftware (Computer_Id, Name) values(" + c.Computer_Id + ", '" + hotfix.HotFixId + "')";
-
-                        //        command.CommandText = sql;
-                        //        command.ExecuteNonQuery();
-                        //    }
-                        //}
 
                         command.CommandText = "delete from tblLogicalDrive where Computer_Id=" + c.Id.ToString();
                         command.ExecuteNonQuery();
@@ -331,7 +426,7 @@ namespace DH.Helpdesk.SCCM.DB
                         {
                             foreach (var logicalDrive in c.LogicalDrives)
                             {
-                                string sql = "insert into tblLogicalDrive (Computer_Id, DriveLetter, DriveType, TotalBytes, FreeBytes, FileSystemName) values(" + c.Id + ", '" + (logicalDrive.Name.Length > 10 ? logicalDrive.Name.Substring(0, 10) : logicalDrive.Name) + "', " + logicalDrive.DriveType + ", " + logicalDrive.Size + ", " + logicalDrive.FreeSpace + ", '')";
+                                string sql = "insert into tblLogicalDrive (Computer_Id, DriveLetter, DriveType, TotalBytes, FreeBytes, FileSystemName) values(" + c.Id + ", '" + (logicalDrive.Name.Length > 10 ? logicalDrive.Name.Substring(0, 10) : logicalDrive.Name) + "', " + logicalDrive.DriveType + ", " + logicalDrive.Size + ", " + logicalDrive.FreeSpace + ", '" + logicalDrive.FileSystem + "')";
 
                                 command.CommandText = sql;
                                 command.ExecuteNonQuery();
