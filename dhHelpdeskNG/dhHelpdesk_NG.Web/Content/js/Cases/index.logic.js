@@ -337,7 +337,11 @@ function getCollapseCaption(cap) {
 
     Page.prototype.autoReloadCheck = function () {
         var self = this;
-        if (self.getGridUpdatedAgo() >= self.settings.refreshContent && self.getGridState() === window.GRID_STATE.IDLE) {
+        let numBulkEditSelectedCases = $('.bulkEditCaseSelect:checkbox:checked').length;
+
+        let noBulkEditSelectedCases = numBulkEditSelectedCases == 0 || numBulkEditSelectedCases == undefined || numBulkEditSelectedCases == null;
+
+        if (self.getGridUpdatedAgo() >= self.settings.refreshContent && self.getGridState() === window.GRID_STATE.IDLE && noBulkEditSelectedCases) {
             self.table.ajax.reload();
         }
     };
