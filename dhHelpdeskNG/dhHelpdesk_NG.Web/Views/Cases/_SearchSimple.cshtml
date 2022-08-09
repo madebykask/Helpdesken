@@ -1,0 +1,74 @@
+﻿@model DH.Helpdesk.Web.Models.Case.Output.CaseSearchFilterData
+@using System.Web.Script.Serialization
+@using DH.Helpdesk.BusinessData.Enums.Case
+@using DH.Helpdesk.BusinessData.Models.Case
+@using DH.Helpdesk.Web.Enums
+@using DH.Helpdesk.BusinessData.OldComponents
+
+@using DH.Helpdesk.Web.Infrastructure.Extensions
+
+
+
+@if (Model != null)
+{
+    <form id="frmCaseSearchSimple" name="frmCaseSearchSimple">
+        <div class="container">
+            <div class="row">
+                <div class="span8">
+
+
+
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+
+                                <tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Kund")
+                                    </td>
+                                    <td>
+                                        <select id="lstfilterCustomersCustom" name="lstfilterCustomersCustom">
+                                            @foreach (var e in Model.filterCustomersCustom)
+                                            {
+                                                if (e.Active)
+                                                {
+                                                    <option value="@e.Value" @Int32.Parse(e.Value).IdIsSelected(Model.filterCustomerId.ToString())>@e.Name</option>
+                                                }
+
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Sök")
+                                    </td>
+
+                                    <td>
+                                        <input type="text" id="txtFreeTextSearch" value="@Model.caseSearchFilter.FreeTextSearch" name="@CaseFilterFields.FreeTextSearchNameAttribute"
+                                               rel="tooltip"
+                                               title="@Translation.Get("Använd # för att söka efter") @Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), SessionFacade.CurrentCustomer.Id)" />
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        <input type="submit" class="submit btn" value="@Translation.Get("Sök")" />
+                                    </td>
+                                    <td class="span5">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </form>
+
+
+}
