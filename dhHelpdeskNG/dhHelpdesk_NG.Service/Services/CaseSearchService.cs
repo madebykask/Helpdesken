@@ -277,8 +277,9 @@ namespace DH.Helpdesk.Services.Services
                     //- Case that has other merged cases(merge - parent) SHOULD show in list.
                     //- Case used as Children (existing functionality children) should NOT show up in list.
                     //- Case used as Parent (existing functionality parent) should NOT show up in list.
-                    // - For some reason below seems to work // Katta
-                   result.Items = result.Items.Where(x => x.IsMergeChild != true).ToList();
+                    //- For some reason below seems to work // Katta
+                    result.Items = result.Items.Where(x => x.IsMergeChild != true).ToList();
+                    //result.Items = result.Items.Where(x => x.)
                 }
 
                 //TODO: refactor when true server paging will be implemented
@@ -964,6 +965,7 @@ namespace DH.Helpdesk.Services.Services
         private CaseSearchFilter DoFilterValidation(CaseSearchFilter filter)
         {
             var filterValidate = filter.Copy(filter);
+
 
             //Applied in FreeTextSearchSafeForSQLInject
             //if (!string.IsNullOrEmpty(filterValidate.FreeTextSearch))

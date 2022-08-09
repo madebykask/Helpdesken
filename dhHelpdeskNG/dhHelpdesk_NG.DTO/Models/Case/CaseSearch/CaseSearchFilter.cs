@@ -168,6 +168,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.CurrentCaseId = o.CurrentCaseId;
             r.IsExtendedSearch = o.IsExtendedSearch;
             r.FetchInfoAboutParentChild = o.FetchInfoAboutParentChild;
+            r.ToBeMerged = o.ToBeMerged;
 
             if (CaseOverviewCriteria != null)
             {
