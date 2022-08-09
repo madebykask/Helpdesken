@@ -55,6 +55,50 @@ Go
 UPDATE [dbo].[tblUsers]
 SET MergeCasePermission = 1;
 GO
+
+--New mailtemplate for Merged Cases
+If not exists (select * from tblMailTemplate where MailID = 18 and Customer_Id is null)
+	insert into tblMailTemplate (MailID, IsStandard, SendMethod) Values(18, 1, 0)
+GO
+
+Declare @mailID int
+Set @mailID = (Select Id from tblMailTemplate where MailID = 18 and Customer_Id is null)
+
+If not exists (select * from tblMailTemplate_tblLanguage where MailTemplate_Id = @mailID and Language_Id = 1)
+	Insert into tblMailTemplate_tblLanguage (MailTemplate_Id, Language_Id, MailTemplateName, Subject, Body) Values(@mailID, 1, 'Sammanfogat ärende', 'Sammanfogat ärende', 'Sammanfogat ärende')
+
+
+If not exists (select * from tblMailTemplate_tblLanguage where MailTemplate_Id = @mailID and Language_Id = 2)
+	Insert into tblMailTemplate_tblLanguage (MailTemplate_Id, Language_Id, MailTemplateName, Subject, Body) Values(@mailID, 2, 'Merged Case', 'Merged Case', 'Merged Case')
+GO
+
+--Insert the new template for all customers..
+
+insert into tblMailTemplate (MailID, Customer_Id, isStandard, SendMethod)
+select 18, Id, 1, 0 from tblCustomer where Id not in(select Customer_Id from tblMailTemplate where MailID = 18 and Customer_Id is not null)
+
+GO
+
+--Insert mailtemplates for all customers
+
+insert into tblMailTemplate_tblLanguage ([MailTemplate_Id]
+      ,[Language_Id]
+      ,[MailTemplateName]
+      ,[Subject]
+      ,[Body])
+
+
+
+SELECT        dbo.tblMailTemplate.Id, dbo.tblMailTemplate_tblLanguage.Language_Id, dbo.tblMailTemplate_tblLanguage.MailTemplateName, dbo.tblMailTemplate_tblLanguage.Subject, dbo.tblMailTemplate_tblLanguage.Body
+FROM            dbo.tblMailTemplate INNER JOIN
+                         dbo.tblMailTemplate AS tblMailTemplate_1 ON dbo.tblMailTemplate.MailID = tblMailTemplate_1.MailID INNER JOIN
+                         dbo.tblMailTemplate_tblLanguage ON tblMailTemplate_1.Id = dbo.tblMailTemplate_tblLanguage.MailTemplate_Id
+WHERE        (dbo.tblMailTemplate.MailID = 18) AND (dbo.tblMailTemplate.Customer_Id IS NOT NULL) AND (tblMailTemplate_1.Customer_Id IS NULL)
+
+AND  dbo.tblMailTemplate.Id not in (select MailTemplate_Id from tblmailtemplate_tbllanguage)
+
+GO
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.56'
 GO

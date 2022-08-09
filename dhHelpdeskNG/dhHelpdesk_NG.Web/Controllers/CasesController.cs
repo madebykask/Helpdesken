@@ -3012,7 +3012,17 @@ namespace DH.Helpdesk.Web.Controllers
                 caseLog.FinishingDate = DateTime.UtcNow;
                 caseLog.FinishingType = mergedFinishingCause.Id;
                 caseLog.FinishingTypeName = mergedFinishingCause.Name;
-                _caseService.SaveCase(mergeCase, caseLog, SessionFacade.CurrentUser.Id, null, extraInfo, out errors);
+                int caseHistoryId =_caseService.SaveCase(mergeCase, caseLog, SessionFacade.CurrentUser.Id, null, extraInfo, out errors);
+
+                //Send Closing email/Merged Case
+                var customer = _customerService.GetCustomer(parentCase.Customer_Id);
+                var caseMailSetting = new CaseMailSetting(string.Empty, customer.HelpdeskEmail, RequestExtension.GetAbsoluteUrl(), 1)
+                {
+                    DontSendMailToNotifier = false,
+                };
+                var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+                var currentLoggedInUser = _userService.GetUser(SessionFacade.CurrentUser.Id);
+                _caseService.SendMergedCaseEmail(mergeCase, parentCase, caseMailSetting, caseHistoryId, userTimeZone, caseLog, newParentFollowers);
             }
            
 

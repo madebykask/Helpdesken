@@ -275,7 +275,7 @@
                                         }
                                         @if (SessionFacade.CurrentUser.MergeCasePermission == 1)
                                         {
-                                            if (!Model.IsItMergedChild() && !Model.IsItMergedParent())
+                                            if (!Model.IsItMergedChild() && !Model.IsItMergedParent() && !Model.IsItParentCase())
                                             {
                                                 <li><a data-toggle="modal" id="merge_case_to_parent" href="#">@Translation.GetCoreTextTranslation("Sammanfoga")</a></li>
                                                 @Html.HiddenFor(m => m.case_.Id, new { @id = "merge_to_parent" })

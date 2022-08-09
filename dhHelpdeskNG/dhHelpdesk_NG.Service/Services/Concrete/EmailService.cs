@@ -327,6 +327,40 @@ namespace DH.Helpdesk.Services.Services.Concrete
                             field.StringValue = urlSelfService;
                 }
             }
+            if (body.Contains("[/#MP98]"))
+            {
+                var count = Regex.Matches(body, "/#MP98").Count;
+
+                var str1 = "[#MP98]";
+                var str2 = "[/#MP98]";
+                var LinkText = "";
+
+                for (int i = 1; i <= count; i++)
+                {
+                    int Pos1 = body.IndexOf(str1) + str1.Length;
+                    int Pos2 = body.IndexOf(str2);
+                    LinkText = body.Substring(Pos1, Pos2 - Pos1);
+
+                    urlSelfService = "<a href='" + siteSelfService + "'>" + LinkText + "</a>";
+
+                    var regex = new Regex(Regex.Escape(LinkText + "[/#MP98]"));
+                    body = regex.Replace(body, string.Empty, 1);
+
+                    regex = new Regex(Regex.Escape("[#MP98]"));
+                    body = regex.Replace(body, urlSelfService, 1);
+                }
+            }
+            else
+            {
+                urlSelfService = "<a href='" + siteSelfService + "'>" + siteSelfService + "</a>";
+
+                if (fields != null)
+                {
+                    foreach (var field in fields)
+                        if (field.Key == "[#MP98]")
+                            field.StringValue = urlSelfService;
+                }
+            }
 
             if (body.Contains("[/#99]"))
             {
@@ -362,6 +396,44 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
                     foreach (var field in fields)
                         if (field.Key == "[#99]")
+                            field.StringValue = urlHelpdesk;
+                }
+
+            }
+            if (body.Contains("[/#MP99]"))
+            {
+                int count = Regex.Matches(body, "/#MP99").Count;
+
+                for (int i = 1; i <= count; i++)
+                {
+
+                    string str1 = "[#MP99]";
+                    string str2 = "[/#MP99]";
+                    string LinkText;
+
+                    int Pos1 = body.IndexOf(str1) + str1.Length;
+                    int Pos2 = body.IndexOf(str2);
+                    LinkText = body.Substring(Pos1, Pos2 - Pos1);
+
+                    urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+
+                    var regex = new Regex(Regex.Escape(LinkText + "[/#MP99]"));
+                    body = regex.Replace(body, string.Empty, 1);
+
+                    regex = new Regex(Regex.Escape("[#MP99]"));
+                    body = regex.Replace(body, urlHelpdesk, 1);
+                }
+
+            }
+            else
+            {
+                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
+
+                if (fields != null)
+                {
+
+                    foreach (var field in fields)
+                        if (field.Key == "[#MP99]")
                             field.StringValue = urlHelpdesk;
                 }
 
