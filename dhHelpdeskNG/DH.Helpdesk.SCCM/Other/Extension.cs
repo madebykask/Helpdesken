@@ -18,5 +18,29 @@ namespace DH.Helpdesk.SCCM.Other
                 .ToList();
         }
 
+        public static string IntNullCheck(this string value)
+        {
+            if (value == null)
+            {
+                return "0";
+            }
+            else
+            {
+                return value;
+            }
+        }
+
+        public static string StringNullCheck(this string value)
+        {
+            if (value == null)
+            {
+                return "";
+            }
+            else
+            {
+                return value;
+            }
+        }
+
     }
 }
