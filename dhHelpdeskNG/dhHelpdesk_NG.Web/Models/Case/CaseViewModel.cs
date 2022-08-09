@@ -111,6 +111,7 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public CaseInputViewModel()
         {
+
             CaseSolutionSettingModels = CaseSolutionSettingModel.CreateDefaultModel();
             CustomerRegistrationSources = new List<SelectListItem>()
             {
@@ -123,6 +124,7 @@ namespace DH.Helpdesk.Web.Models.Case
             ExternalInvoices = new List<ExternalInvoiceModel>();
             SelectedWorkflowStep = 0;
             CaseLock = new CaseLockModel();
+            NumberOfCustomers = 0;
         }
 
         public CaseLogViewModel CreateCaseLogViewModel()
@@ -192,6 +194,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public string ActiveTab { get; set; }
         public int? SelectedWorkflowStep { get; set; }
         public int CurrentCaseLanguageId { get; set; }
+        public int NumberOfCustomers { get; set; }
 
         [Obsolete("Put all fields that you required into this CaseInputViewModel model")]
         public Domain.Case case_  { get; set; }

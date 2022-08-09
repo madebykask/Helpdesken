@@ -1692,7 +1692,7 @@ namespace DH.Helpdesk.Services.Services
             return h;
         }
 
-        private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, string emailLogGuid, int stateHelper, TimeZoneInfo userTimeZone)
+        private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, string emailLogGuid, int stateHelper, TimeZoneInfo userTimeZone, Case mergeParent = null)
         {
             var ret = new List<Field>();
             var userLocal_RegTime = TimeZoneInfo.ConvertTimeFromUtc(c.RegTime, userTimeZone);
@@ -1820,7 +1820,7 @@ namespace DH.Helpdesk.Services.Services
             if (cms != null)
             {
                 // if case is closed and was no vote in survey - add HTML inormation about survey
-                if (c.IsClosed() && (_surveyService.GetByCaseId(c.Id) == null))
+                if (c.IsClosed() && (_surveyService.GetByCaseId(c.Id) == null) && mergeParent == null)
                 {
                     var template = new SurveyTemplate()
                     {
@@ -1850,6 +1850,57 @@ namespace DH.Helpdesk.Services.Services
                     ret.Add(new Field { Key = "[#777]", StringValue = string.Empty });
                 }
             }
+
+            //Merge Parent
+            if(mergeParent != null)
+            {
+                userLocal_RegTime = TimeZoneInfo.ConvertTimeFromUtc(mergeParent.RegTime, userTimeZone);
+                ret.Add(new Field { Key = "[#MP1]", StringValue = mergeParent.CaseNumber.ToString() });
+                ret.Add(new Field { Key = "[#MP16]", StringValue = userLocal_RegTime.ToString() });
+                ret.Add(new Field { Key = "[#MP3]", StringValue = mergeParent.PersonsName });
+                ret.Add(new Field { Key = "[#MP4]", StringValue = mergeParent.Caption });
+                ret.Add(new Field { Key = "[#MP5]", StringValue = mergeParent.Description });
+                if (mergeParent.User_Id.HasValue)
+                {
+                    var user = _userRepository.GetUserName(mergeParent.User_Id.Value);
+                    ret.Add(new Field { Key = "[#MP29]", StringValue = user != null ? user.GetFullName() : string.Empty });
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(c.RegUserName))
+                    {
+                        ret.Add(new Field { Key = "[#MP29]", StringValue = c.RegUserName });
+                    }
+
+                    if (!string.IsNullOrEmpty(c.RegUserId))
+                    {
+                        ret.Add(new Field { Key = "[#MP29]", StringValue = c.RegUserId });
+                    }
+                }
+                //helpdesk site
+                if (cms != null)
+                {
+                    var globalSetting = _globalSettingService.GetGlobalSettings().First();
+                    var editCasePath = globalSetting.UseMobileRouting ?
+                        CasePaths.EDIT_CASE_MOBILEROUTE :
+                        CasePaths.EDIT_CASE_DESKTOP;
+
+                    var site = cms.AbsoluterUrl + editCasePath + mergeParent.Id.ToString();
+                    var url = "<br><a href='" + site + "'>" + site + "</a>";
+                    ret.Add(new Field { Key = "[#MP99]", StringValue = url });
+                }
+                // selfservice site
+                if (cms != null)
+                {
+                    if (emailLogGuid == string.Empty)
+                        emailLogGuid = " >> *" + stateHelper.ToString() + "*";
+
+                    var site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + emailLogGuid;
+                    var url = "<br><a href='" + site + "'>" + site + "</a>";
+                    ret.Add(new Field { Key = "[#MP98]", StringValue = url });
+                }
+            }
+            
 
             return ret;
         }

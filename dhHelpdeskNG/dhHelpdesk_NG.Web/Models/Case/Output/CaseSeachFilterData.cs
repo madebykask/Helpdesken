@@ -34,6 +34,7 @@ namespace DH.Helpdesk.Web.Models.Case.Output
         public IList<Field> filterCaseProgress { get; set; }
         public IList<ItemOverview> filterCustomers { get; set; }
         public IList<ItemOverview> filterMaxRows { get; set; }
+        public IList<ItemOverview> filterCustomersCustom { get; set; }
         //public CaseRemainingTimeViewModel filterCaseRemainingTime { get; set; }
 
         public IList<SelectListItem> filterCaseRemainingTime { get; set; }

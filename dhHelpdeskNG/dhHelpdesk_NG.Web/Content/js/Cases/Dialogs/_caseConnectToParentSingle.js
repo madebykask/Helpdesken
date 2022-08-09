@@ -1,4 +1,4 @@
-﻿function LoadConnectToParent(pageSettings) {
+﻿function LoadConnectToParentSingle(pageSettings) {
     "use strict";
 
     var GRID_STATE = {
@@ -43,7 +43,7 @@
 
             self.filterForm = new FilterForm();
             self.filterForm.init({
-                $el: $("#frmCaseSearch"),
+                $el: $("#frmCaseSearchSimple"),
                 filter: appSettings.searchFilter.data,
                 favorites: appSettings.userFilterFavorites,
                 onBeforeSearch: callAsMe(self.canMakeSearch, self),
@@ -72,6 +72,7 @@
 
             var columns = self.getColumnSettings(appSettings.gridSettings);
 
+
             var sortIndex = null;
             for (var i = 0; i < columns.length; i++) {
                 if (columns[i].data === appSettings.gridSettings.sortOptions.sortBy) {
@@ -80,7 +81,7 @@
                 }
             }
 
-            self.table = InitDataTable("caseResults",
+            self.table = InitDataTable("caseResultsSimple",
                 appSettings.perPageText,
                 appSettings.perShowingText,
                 {
@@ -89,7 +90,7 @@
                     serverSide: true,
                     ordering: true,
                     ajax: {
-                        url: "/Cases/SearchAjax",
+                        url: "/Cases/SearchAjaxSimple",
                         type: "POST",
                         data: function(data) {
                             var params = self.getFetchParams(appSettings.gridSettings);
@@ -239,31 +240,31 @@
             "use strict";
             var self = this;
 
+
+            var nativeLangCaseNumber = "Number"
+            if (gridSettings.columnDefs.filter(x => x.field == "CaseNumber").length > 0) {
+                if (gridSettings.columnDefs.filter(x => x.field == "CaseNumber")[0].displayName != "") {
+                    if (typeof gridSettings.columnDefs.filter(x => x.field == "CaseNumber")[0].displayName != undefined) {
+                        nativeLangCaseNumber = gridSettings.columnDefs.filter(x => x.field == "CaseNumber")[0].displayName;
+                    }
+                }         
+            }
+
+            var nativeLangCaption = "Title"
+            if (gridSettings.columnDefs.filter(x => x.field == "Caption").length > 0) {
+                if (gridSettings.columnDefs.filter(x => x.field == "Caption")[0].displayName != "") {
+                    if (typeof gridSettings.columnDefs.filter(x => x.field == "Caption")[0].displayName != undefined) {
+                        nativeLangCaption = gridSettings.columnDefs.filter(x => x.field == "Caption")[0].displayName;
+                    }
+                }
+            }
+
+
             var columns = [];
             columns.push({ data: null, width: "18px", orderable: false, defaultContent: "&nbsp;" });
-            $.each(gridSettings.columnDefs,
-                function(idx, fieldSetting) {
+            columns.push({ data: "CaseNumber", width: null, orderable: true, title: nativeLangCaseNumber, defaultContent: "&nbsp;" });
+            columns.push({ data: "Caption", width: null, orderable: true, title: nativeLangCaption, defaultContent: "&nbsp;" });
 
-                    columns.push({
-                        data: fieldSetting.field,
-                        title: fieldSetting.displayName,
-                        className: "thpointer " + fieldSetting.field + " " + fieldSetting.cls,
-                        visible: !fieldSetting.isHidden,
-                        width: fieldSetting.width,
-                        defaultContent: "&nbsp;",
-                        createdCell: function(td, cellData, rowData, row, col) {
-                            if (!fieldSetting.isHidden) {
-                                if (cellData === null || cellData === undefined) {
-                                    td.innerHTML = self.formatCell(rowData.case_id, '');
-                                    if (Page.isDebug)
-                                        console.warn('could not find field "' + fieldSetting.field + '" in record');
-                                } else {
-                                    td.innerHTML = self.formatCell(rowData.case_id, cellData);
-                                }
-                            }
-                        }
-                    });
-                });
 
             return columns;
         };

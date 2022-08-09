@@ -33,6 +33,7 @@ namespace DH.Helpdesk.BusinessData.OldComponents
             SmsClosedCase = 14,
             CaseIsActivated = 15,
             ReminderTo = 17,
+            MergedCase = 18,
             OperationLog = 60,
         }
 

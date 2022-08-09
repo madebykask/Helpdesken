@@ -935,6 +935,165 @@ namespace DH.Helpdesk.Web.Controllers
             });
         }
 
+
+        [ValidateInput(false)]
+        public ActionResult SearchAjaxSimple(FormCollection frm)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+
+            if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
+            {
+                return new RedirectResult("~/Error/Unathorized");
+            }
+
+            int selectedCustomer = Int32.Parse(frm.ReturnFormValue("lstfilterCustomersCustom"));
+
+            var f = new CaseSearchFilter();
+            f.CustomerId = selectedCustomer; //SessionFacade.CurrentCustomer.Id;
+            f.UserId = SessionFacade.CurrentUser.Id;
+
+            if (f.IsConnectToParent)
+            {
+                var id = frm.ReturnFormValue(CaseFilterFields.CurrentCaseId);
+                int currentCaseId;
+                if (!string.IsNullOrEmpty(id) && int.TryParse(id, out currentCaseId))
+                {
+                    f.CurrentCaseId = currentCaseId;
+                }
+            }
+
+
+            f.FreeTextSearch = frm.ReturnFormValue(CaseFilterFields.FreeTextSearchNameAttribute);
+
+           
+
+            CaseSearchModel sm;
+            sm = SessionFacade.CurrentCaseSearch;
+            f.CustomFilter = sm.CaseSearchFilter.CustomFilter;
+
+            ResolveParentPathesForFilter(f);
+            sm.CaseSearchFilter = f;
+
+
+            var sortBy = frm.ReturnFormValue(CaseFilterFields.OrderColumnNum);
+            var sort = frm.ReturnFormValue(CaseFilterFields.OrderColumnDir);
+            var sortDir = !string.IsNullOrEmpty(sort)
+                ? GridSortOptions.SortDirectionFromString(sort)
+                : SortingDirection.Asc;
+
+
+            if (sortBy != SessionFacade.CaseOverviewGridSettings.sortOptions.sortBy
+                || sortDir != SessionFacade.CaseOverviewGridSettings.sortOptions.sortDir)
+            {
+                SessionFacade.CaseOverviewGridSettings.sortOptions.sortBy = sortBy;
+                SessionFacade.CaseOverviewGridSettings.sortOptions.sortDir = sortDir;
+                _gridSettingsService.SaveCaseoviewSettings(
+                    SessionFacade.CaseOverviewGridSettings,
+                    selectedCustomer, //SessionFacade.CurrentCustomer.Id,
+                    SessionFacade.CurrentUser.Id,
+                    SessionFacade.CurrentUser.UserGroupId);
+            }
+
+            var m = new CaseSearchResultModel
+            {
+                GridSettings = f.IsConnectToParent
+                    ? _caseOverviewSettingsService.GetSettings(
+                        selectedCustomer, //SessionFacade.CurrentCustomer.Id,
+                        SessionFacade.CurrentUser.UserGroupId,
+                        SessionFacade.CurrentUser.Id, GridSettingsService.CASE_CONNECTPARENT_GRID_ID)
+                    : _caseOverviewSettingsService.GetSettings(
+                        selectedCustomer, //SessionFacade.CurrentCustomer.Id,
+                        SessionFacade.CurrentUser.UserGroupId,
+                        SessionFacade.CurrentUser.Id)
+            };
+
+
+            var gridSettings = SessionFacade.CaseOverviewGridSettings;
+
+            sm.Search.SortBy = gridSettings.sortOptions.sortBy;
+            sm.Search.Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc;
+
+            m.caseSettings = _caseSettingService.GetCaseSettingsWithUser(selectedCustomer /*f.CustomerId*/, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
+            
+            var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(selectedCustomer/*f.CustomerId*/).ToArray();
+            var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
+            CaseRemainingTimeData remainingTimeData;
+            CaseAggregateData aggregateData;
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+            f.MaxTextCharacters = MaxTextCharCount;
+
+            //Show Parent/child icons with hint on Case overview
+            f.FetchInfoAboutParentChild = true;
+
+            int recPerPage;
+            int pageStart;
+            if (int.TryParse(frm.ReturnFormValue(CaseFilterFields.PageSize), out recPerPage) && int.TryParse(frm.ReturnFormValue(CaseFilterFields.PageStart), out pageStart))
+            {
+                f.PageInfo = new PageInfo
+                {
+                    PageSize = recPerPage,
+                    PageNumber = recPerPage != 0 ? pageStart / recPerPage : 0
+                };
+                if (!f.IsConnectToParent)
+                    SessionFacade.CaseOverviewGridSettings.pageOptions.recPerPage = recPerPage;
+            }
+
+            var currentUserId = SessionFacade.CurrentUser.Id;
+            var customerId = selectedCustomer;//SessionFacade.CurrentCustomer.Id;
+            var customerUserSettings = _customerUserService.GetCustomerUserSettings(customerId, currentUserId);
+
+            var searchResult = _caseSearchService.Search(
+                f,
+                m.caseSettings,
+                caseFieldSettings,
+                SessionFacade.CurrentUser.Id,
+                SessionFacade.CurrentUser.UserId,
+                SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
+                SessionFacade.CurrentUser.UserGroupId,
+                customerUserSettings.RestrictedCasePermission,
+                sm.Search,
+                _workContext.Customer.WorkingDayStart,
+                _workContext.Customer.WorkingDayEnd,
+                userTimeZone,
+                ApplicationTypes.Helpdesk,
+                showRemainingTime,
+                out remainingTimeData,
+                out aggregateData);
+
+            m.cases = searchResult.Items;
+
+            m.cases = CommonHelper.TreeTranslate(m.cases, f.CustomerId, _productAreaService);
+            sm.Search.IdsForLastSearch = GetIdsFromSearchResult(m.cases);
+
+
+
+
+            var customerSettings = GetCustomerSettings(f.CustomerId);
+
+            var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1, userTimeZone);
+
+            var data = BuildSearchResultData(m.cases, gridSettings, outputFormatter);
+
+            var remainingView = string.Empty;
+            string statisticsView = null;
+
+            
+
+            sw.Stop();
+            var duration = sw.ElapsedMilliseconds;
+            return Json(new
+            {
+                result = "success",
+                data = data,
+                remainingView = remainingView,
+                statisticsView = statisticsView,
+                recordsTotal = searchResult.Count,
+                recordsFiltered = searchResult.Count,
+                processDuration = duration
+            });
+        }
+
         private IList<Dictionary<string, object>> BuildSearchResultData(IList<CaseSearchResult> caseSearchResults, GridSettingsModel gridSettings, OutputFormatter outputFormatter)
         {
             var data = new List<Dictionary<string, object>>();
@@ -1481,8 +1640,12 @@ namespace DH.Helpdesk.Web.Controllers
                 //todo: check if GetCaseById can be used in model!
                 var customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : _caseService.GetCaseCustomerId(id);
 
+                
+
                 var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
                 m = this.GetCaseInputViewModel(userId, customerId, id, caseLockViewModel, caseFieldSettings, redirectFrom, backUrl, null, null, updateState);
+
+                m.NumberOfCustomers = _masterDataService.GetCustomers(userId).Count;
 
                 m.ActiveTab = (!string.IsNullOrEmpty(caseLockViewModel.ActiveTab) ? caseLockViewModel.ActiveTab : activeTab);
                 m.ActiveTab = (m.ActiveTab == "") ? GetActiveTab(m.case_.CaseSolution_Id, id) : activeTab; //Fallback to casesolution
@@ -2849,7 +3012,17 @@ namespace DH.Helpdesk.Web.Controllers
                 caseLog.FinishingDate = DateTime.UtcNow;
                 caseLog.FinishingType = mergedFinishingCause.Id;
                 caseLog.FinishingTypeName = mergedFinishingCause.Name;
-                _caseService.SaveCase(mergeCase, caseLog, SessionFacade.CurrentUser.Id, null, extraInfo, out errors);
+                int caseHistoryId =_caseService.SaveCase(mergeCase, caseLog, SessionFacade.CurrentUser.Id, null, extraInfo, out errors);
+
+                //Send Closing email/Merged Case
+                var customer = _customerService.GetCustomer(parentCase.Customer_Id);
+                var caseMailSetting = new CaseMailSetting(string.Empty, customer.HelpdeskEmail, RequestExtension.GetAbsoluteUrl(), 1)
+                {
+                    DontSendMailToNotifier = false,
+                };
+                var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+                var currentLoggedInUser = _userService.GetUser(SessionFacade.CurrentUser.Id);
+                _caseService.SendMergedCaseEmail(mergeCase, parentCase, caseMailSetting, caseHistoryId, userTimeZone, caseLog, newParentFollowers);
             }
            
 
@@ -4505,6 +4678,15 @@ namespace DH.Helpdesk.Web.Controllers
                 customerSetting = GetCustomerSettings(cusId),
                 filterCustomerId = cusId
             };
+
+            //Customers
+            var customers = _masterDataService.GetCustomers(userId);
+            List<ItemOverview> customersList = new List<ItemOverview>();
+            foreach (var customer in customers)
+            {
+                customersList.Add(new ItemOverview(customer.Name, customer.Id.ToString(), customer.Active));
+            }
+            fd.filterCustomersCustom = customersList;
 
             //region
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseRegionFilter))
