@@ -116,8 +116,16 @@ steps:
   displayName: Build DH.Helpdesk.EmailEngine.WinService
   inputs:
     msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.SCCM/DH.Helpdesk.SCCM.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.SCCM"'
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.SCCM
+  inputs:
+    msbuildVersion: '17.0'  
     solution: '**/dhHelpdeskNG/DH.Helpdesk.EmailEngine.WinService/DH.Helpdesk.EmailEngine.WinService.csproj'
-    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.EmailEngine.WinService"'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.8 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.EmailEngine.WinService"'
+
 
 #Copying files
 - task: CopyFiles@2
@@ -207,6 +215,12 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.EmailEngine.WinService' 
     artifactName: 'DH.Helpdesk.EmailEngine.WinService'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.SCCM
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.SCCM' 
+    artifactName: 'DH.Helpdesk.SCCM'
 
 #Ext-Case-Api
 - task: NuGetCommand@2
