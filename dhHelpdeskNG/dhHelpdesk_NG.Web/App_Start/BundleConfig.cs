@@ -517,6 +517,7 @@
                 "~/Content/js/Common/userSearchCommon.js"));
             bundles.Add(new ScriptBundle(ScriptNames.CaseConnectToParent).Include(
                 "~/Content/js/Cases/Dialogs/_caseConnectToParent.js",
+                "~/Content/js/Cases/Dialogs/_caseConnectToParentSingle.js",
                 "~/Content/js/Cases/components/FilterForm.js",
                 "~/Content/js/Cases/components/BaseField.js",
                 "~/Content/js/Cases/components/JQueryChosenField.js",

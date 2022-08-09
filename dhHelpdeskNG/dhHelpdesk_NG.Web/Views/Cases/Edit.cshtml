@@ -264,7 +264,13 @@
                                                 <li><a data-toggle="modal" id="case_connect_to_parent_btn" href="#">@Translation.GetCoreTextTranslation("Koppla till huvudärende")</a></li>
                                                 @Html.HiddenFor(m => m.case_.Id, new { @id = "connect_to_parent_childId" })
 
-    
+
+                                                if (Model.NumberOfCustomers > 1)
+                                                {
+                                                    <li><a data-toggle="modal2" id="case_connect_to_parent_single_btn" href="#">@Translation.GetCoreTextTranslation("Koppla till huvudärende med annan kund")</a></li>
+                                                }
+
+
                                             }
                                         }
                                         @if (SessionFacade.CurrentUser.MergeCasePermission == 1)
@@ -381,14 +387,14 @@
 
 
                         }
-                        @if(Model.case_.FinishingDate ==  null)
+                        @if (Model.case_.FinishingDate == null)
                         {
                             if (!Model.CaseLock.IsLocked)
                             {
                                 @Html.Partial("WorkflowStep", Model.WorkflowSteps)
                             }
                         }
-                        </ul>
+                    </ul>
                 </div>
                 <div class="pull-right">
                     <ul class="secnav">
@@ -424,6 +430,10 @@
         {
             <div id="divConnectParentToParent" role="dialog" class="modal hide fade case-connect-to-parent" aria-labelledby="myModalLabel" aria-hidden="true">
                 @Html.Partial("_ParentCases", Model.ConnectToParentModel)
+            </div>
+
+            <div id="divConnectParentToParentSingle" role="dialog" class="modal hide fade case-connect-to-parent" aria-labelledby="myModalLabel" aria-hidden="true">
+                @Html.Partial("_ParentCasesSingle", Model.ConnectToParentModel)
             </div>
         }
         <div id="caseLockedWarning" role="dialog" class="modal fade" aria-hidden="true">

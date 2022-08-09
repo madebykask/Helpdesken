@@ -944,7 +944,8 @@ namespace DH.Helpdesk.Dal.Repositories
             sb.Append(" where (tblCase.Customer_Id = " + searchFilter.CustomerId + ")");
             sb.Append(" and (tblCase.Deleted = 0)");
 
-            if (searchFilter.IsConnectToParent)
+
+            if (searchFilter.IsConnectToParent && searchFilter.ToBeMerged == false)
             {
                 sb.AppendFormat(" AND tblCase.Id NOT IN (select Descendant_Id From tblParentChildCaseRelations) ");
                 if (searchFilter.CurrentCaseId.HasValue)

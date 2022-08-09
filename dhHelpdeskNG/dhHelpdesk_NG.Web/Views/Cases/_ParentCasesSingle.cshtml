@@ -13,36 +13,34 @@
         pageSettings.perShowingText = '@perShowingText';
         pageSettings.curUserId = '@(SessionFacade.CurrentUser != null ? SessionFacade.CurrentUser.UserId.ToLower(): string.Empty)';
 
-        $("#case_connect_to_parent_btn").on("click", function () {
+
+        $("#case_connect_to_parent_single_btn").on("click", function () {
             $("#tomerge").val('false');
             var $src = $(this);
-            var $target = $("#divConnectParentToParent");
+            var $target = $("#divConnectParentToParentSingle");
             $target.attr("data-src", $src.attr("data-src"));
             $target.modal("show");
-            LoadConnectToParent(pageSettings);
-        });
-        $("#merge_case_to_parent").on("click", function () {
-            $("#tomerge").val('true');
-            var $src = $(this);
-            var $target = $("#divConnectParentToParent");
-            $target.attr("data-src", $src.attr("data-src"));
-            $target.modal("show");
-            LoadConnectToParent(pageSettings);
+            LoadConnectToParentSingle(pageSettings);
         });
 
     });
 </script>
 
-<button type="button" class="close" data-dismiss="modal" style="margin-right: 5px;">&times;</button>
-<div id="case_connect_to_parent_popup">
+
+<button type="button" class="close" data-dismiss="modal2" style="margin-right: 5px;">&times;</button>
+<div id="case_connect_to_parent_single_popup">
     <div class="content modalpopup">
         <div>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
-                    @Html.Partial("_Search", Model.CaseSearchFilterData)
+
+
+                    @Html.Partial("_SearchSimple", Model.CaseSearchFilterData)
+
+
                     <div>@Translation.GetCoreTextTranslation("Poster i sökresultat"): <span data-field="TotalAmountCases"></span><span id="caseLimitInfo" style="display: none;">&nbsp;(@Translation.GetCoreTextTranslation("Antal ärende som visas är begränsade till 500."))</span></div>
                     <div class="container" id="search_result">
-                        <table id="caseResults" class="table table-striped table-bordered table-hover table-cases"><thead></thead><tbody></tbody></table>
+                        <table id="caseResultsSimple" class="table table-striped table-bordered table-hover table-cases"><thead></thead><tbody></tbody></table>
                         <div class="nofields-msg">@Translation.GetCoreTextTranslation("Inga standardkolumner har valts för din användare på denna kund, för att visa kolumner, klicka på fliken Inställningar och gå till Filter Ärendeöversikt")</div>
                         <div class="noavailablefields-msg">@Translation.GetCoreTextTranslation("Inga ärendefält har valts för denna kund, kontakta systemadministratören.")</div>
                         <div class="loading-msg">
@@ -58,6 +56,5 @@
         </div>
     </div>
 </div>
-
 
 @Scripts.Render(BundleConfig.ScriptNames.CaseConnectToParent)

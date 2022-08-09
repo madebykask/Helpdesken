@@ -896,6 +896,7 @@
     <Content Include="Content\js\Cases\commonHandlers.js" />
     <Content Include="Content\js\Cases\Dialogs\CaseCharge.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseAttachExistFile.js" />
+    <Content Include="Content\js\Cases\Dialogs\_caseConnectToParentSingle.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseConnectToParent.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseIntLogSearch.js" />
     <Content Include="Content\js\Cases\externalInvoice.js" />
@@ -4122,6 +4123,8 @@
     <Content Include="Content\js\plupload\plupload.silverlight.xap" />
     <Content Include="Views\Cases\ModalDialogs\_BulkCaseEdit.cshtml" />
     <Content Include="Views\Cases\_MergedCases.cshtml" />
+    <Content Include="Views\Cases\_ParentCasesSingle.cshtml" />
+    <Content Include="Views\Cases\_SearchSimple.cshtml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

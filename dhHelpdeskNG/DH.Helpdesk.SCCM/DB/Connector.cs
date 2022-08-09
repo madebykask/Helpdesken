@@ -189,6 +189,11 @@ namespace DH.Helpdesk.SCCM.DB
         public int? GetComputerUserByUserId(int CustomerId, string username)
         {
 
+            if (username == null)
+            {
+                return null;
+            }
+
             int? result = null;
 
             using (var connection = new SqlConnection(ConnectionString))
@@ -411,7 +416,7 @@ namespace DH.Helpdesk.SCCM.DB
                         {
                             foreach (var software in c.Softwares)
                             {
-                                string sql = "insert into tblSoftware (Computer_Id, Name, Version, Manufacturer) values(" + c.Id + ", '" + software.DisplayName.Replace("'", "").Substring(0, Math.Min(software.DisplayName.Replace("'", "").Length, 100)) + "', '" + software.Version + "', '" + software.Publisher + "')";
+                                string sql = "insert into tblSoftware (Computer_Id, Name, Version, Manufacturer) values(" + c.Id + ", '" + Other.Extension.StringNullCheck(software.DisplayName).Replace("'", "").Substring(0, Math.Min(Other.Extension.StringNullCheck(software.DisplayName).Replace("'", "").Length, 100)) + "', '" + software.Version + "', '" + software.Publisher + "')";
 
                                 command.CommandText = sql;
                                 command.ExecuteNonQuery();
@@ -422,11 +427,12 @@ namespace DH.Helpdesk.SCCM.DB
                         command.CommandText = "delete from tblLogicalDrive where Computer_Id=" + c.Id.ToString();
                         command.ExecuteNonQuery();
 
+
                         if (c.LogicalDrives != null)
                         {
                             foreach (var logicalDrive in c.LogicalDrives)
                             {
-                                string sql = "insert into tblLogicalDrive (Computer_Id, DriveLetter, DriveType, TotalBytes, FreeBytes, FileSystemName) values(" + c.Id + ", '" + (logicalDrive.Name.Length > 10 ? logicalDrive.Name.Substring(0, 10) : logicalDrive.Name) + "', " + logicalDrive.DriveType + ", " + logicalDrive.Size + ", " + logicalDrive.FreeSpace + ", '" + logicalDrive.FileSystem + "')";
+                                string sql = "insert into tblLogicalDrive (Computer_Id, DriveLetter, DriveType, TotalBytes, FreeBytes, FileSystemName) values(" + c.Id + ", '" + (Other.Extension.StringNullCheck(logicalDrive.Name).Length > 10 ? Other.Extension.StringNullCheck(logicalDrive.Name).Substring(0, 10) : logicalDrive.Name) + "', " + logicalDrive.DriveType + ", " + Other.Extension.IntNullCheck(logicalDrive.Size)+ ", " + Other.Extension.IntNullCheck(logicalDrive.FreeSpace)+ ", '" + logicalDrive.FileSystem + "')";
 
                                 command.CommandText = sql;
                                 command.ExecuteNonQuery();
