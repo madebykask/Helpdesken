@@ -2823,7 +2823,7 @@ namespace DH.Helpdesk.Web.Controllers
                 
                 var result = existingFollowers.Union(newFollowers).ToList();
                 newParentFollowers = result.Select(f => f.Follower).Distinct().ToList();
-
+                var emailList = newFollowers.Select(f => f.Follower).Distinct().ToList();
                 if (newParentFollowers.Count() > 0)
                 {
                     _caseExtraFollowersService.SaveExtraFollowers(parentCaseId, newParentFollowers, _workContext.User.UserId);
@@ -2852,14 +2852,18 @@ namespace DH.Helpdesk.Web.Controllers
                 int caseHistoryId =_caseService.SaveCase(mergeCase, caseLog, SessionFacade.CurrentUser.Id, null, extraInfo, out errors);
 
                 //Send Closing email/Merged Case
-                var customer = _customerService.GetCustomer(parentCase.Customer_Id);
+                var customer = _customerService.GetCustomer(mergeCase.Customer_Id);
                 var caseMailSetting = new CaseMailSetting(string.Empty, customer.HelpdeskEmail, RequestExtension.GetAbsoluteUrl(), 1)
                 {
                     DontSendMailToNotifier = false,
                 };
+
+                var mailSenders = new MailSenders { SystemEmail = caseMailSetting.HelpdeskMailFromAdress };
+                caseMailSetting.CustomeMailFromAddress = mailSenders;
+
                 var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
                 var currentLoggedInUser = _userService.GetUser(SessionFacade.CurrentUser.Id);
-                _caseService.SendMergedCaseEmail(mergeCase, parentCase, caseMailSetting, caseHistoryId, userTimeZone, caseLog, newParentFollowers);
+                _caseService.SendMergedCaseEmail(mergeCase, parentCase, caseMailSetting, caseHistoryId, userTimeZone, caseLog);
             }
            
 

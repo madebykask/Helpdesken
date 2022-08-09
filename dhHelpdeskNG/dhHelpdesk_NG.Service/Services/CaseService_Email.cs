@@ -366,9 +366,9 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        public void SendMergedCaseEmail(Case mergedCase, Case mergeParent, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, List<string> followers)
+        public void SendMergedCaseEmail(Case mergedCase, Case mergeParent, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog)
         {
-            SendMergedAndClosedCaseMail(mergedCase, mergeParent, cms, caseHistoryId, userTimeZone, caseLog, followers);
+            SendMergedAndClosedCaseMail(mergedCase, mergeParent, cms, caseHistoryId, userTimeZone, caseLog);
         }
 
         public void SendSelfServiceCaseLogEmail(int caseId,
@@ -628,13 +628,12 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        private void SendMergedAndClosedCaseMail(Case mergedCase, Case mergeParent, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, List<string> followers)
+        private void SendMergedAndClosedCaseMail(Case mergedCase, Case mergeParent, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog)
         {
             var mailTemplateId = (int)GlobalEnums.MailTemplates.MergedCase;
-            var emailSender = "testhelpdesk@dhsolutions.se";
+            var emailSender = GetWgOrSystemEmailSender(cms);
             var customerSetting = _settingService.GetCustomerSetting(mergeParent.Customer_Id);
-            var smtpInfo = CreateSmtpSettings(customerSetting);
-            var emailList = GetCaseFollowersEmails(mergeParent);
+            var emailList = GetCaseFollowersEmails(mergedCase);
 
             var mailTpl = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(mergedCase.Customer_Id, mergedCase.RegLanguage_Id, mailTemplateId);
             if (mailTpl != null)
