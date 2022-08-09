@@ -25,7 +25,7 @@
 
 
 		<!--This is the subselector/looper. EG. HTTPS://ALMHULTCMG.ALMHULT.SE/CCM_Proxy_ServerAuth/72057594037927939/adminservice/wmi/SMS_R_System(16777909)/SMS_G_System_OPERATING_SYSTEM -->
-		<add key="SCCM_URL_R_System" value="SMS_R_System"/>
+		<add key="SCCM_URL_R_System" value="#{SCCM_URL_R_System}"/>
 
 
 		<!--URL's to get additional data from the REST API-->
@@ -45,8 +45,8 @@
 
 		<!--DB Settings-->
 		<add key="DB_Connection_Timeout_Seconds" value="60"/>
-		<add key="DB_Customer_Id" value="1133"/>
-		<add key="DB_Domain_Id" value="1"/>
+		<add key="DB_Customer_Id" value="#{DB_Customer_Id}"/>
+		<add key="DB_Domain_Id" value="#{DB_Domain_Id}"/>
 
 		<!--Program settings-->
 
@@ -57,7 +57,7 @@
 		<add key="Setting_Chunk_Page_Size" value="4"/>
 
 		<!--This is used to debugging purposes only, set to 0 in production. Else, dont fetch data for all of the devices-->
-		<add key="Setting_Limit_Devices" value="10"/>
+		<add key="Setting_Limit_Devices" value="#{Setting_Limit_Devices}"/>
 
 	</appSettings>
 	
