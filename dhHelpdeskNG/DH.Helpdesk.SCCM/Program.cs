@@ -239,6 +239,7 @@ namespace DH.Helpdesk.SCCM
                 userName = splittedUserName;
             }
 
+
             var computerUserID = connector.GetComputerUserByUserId(Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Customer_Id"].ToString()), userName);
 
             if (computerUserID != null)
