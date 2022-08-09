@@ -366,6 +366,11 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
+        public void SendMergedCaseEmail(Case mergedCase, Case mergeParent, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, List<string> followers)
+        {
+            SendMergedAndClosedCaseMail(mergedCase, mergeParent, cms, caseHistoryId, userTimeZone, caseLog, followers);
+        }
+
         public void SendSelfServiceCaseLogEmail(int caseId,
                 CaseMailSetting cms,
                 int caseHistoryId,
@@ -623,6 +628,23 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
+        private void SendMergedAndClosedCaseMail(Case mergedCase, Case mergeParent, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, List<string> followers)
+        {
+            var mailTemplateId = (int)GlobalEnums.MailTemplates.MergedCase;
+            var emailSender = "testhelpdesk@dhsolutions.se";
+            var customerSetting = _settingService.GetCustomerSetting(mergeParent.Customer_Id);
+            var smtpInfo = CreateSmtpSettings(customerSetting);
+            var emailList = GetCaseFollowersEmails(mergeParent);
+
+            var mailTpl = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(mergedCase.Customer_Id, mergedCase.RegLanguage_Id, mailTemplateId);
+            if (mailTpl != null)
+            {
+                if (!string.IsNullOrEmpty(mailTpl.Body) && !string.IsNullOrEmpty(mailTpl.Subject))
+                {
+                    SendTemplateEmail(mailTemplateId, mergedCase, caseLog, caseHistoryId, customerSetting, cms, emailSender, emailList[EmailType.ToMail], userTimeZone, null, 1, false, null, mergeParent);
+                }
+            }
+        }
         private void SendCaseClosedEmail(Case newCase, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog log, List<MailFile> files, Setting customerSetting,
             bool isProblemSend = false, bool dontSendMailToNotfier = false, string helpdeskMailFromAdress = null)
         {
@@ -714,14 +736,16 @@ namespace DH.Helpdesk.Services.Services
             List<MailFile> files = null,
             int stateHelper = 1,
             bool highPriority = false,
-            IList<string> ccEmailList = null)
+            IList<string> ccEmailList = null,
+            Case mergeParent = null)
         {
             var mailTpl = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(case_.Customer_Id, case_.RegLanguage_Id, mailTemplateId);
 
             if (!string.IsNullOrEmpty(mailTpl?.Body) && !string.IsNullOrEmpty(mailTpl.Subject))
             {
                 SendTemplateEmail(mailTemplateId, mailTpl, case_, log, caseHistoryId, customerSetting, cms, senderEmail, emailList,
-                    userTimeZone, files, stateHelper, null, highPriority, ccEmailList);
+                    userTimeZone, files, stateHelper, null, highPriority, ccEmailList, mergeParent);
+
             }
         }
 
@@ -740,7 +764,8 @@ namespace DH.Helpdesk.Services.Services
             int stateHelper = 1,
             IList<string> filterFieldsEmails = null,
             bool highPriority = false,
-            IList<string> ccEmailList = null)
+            IList<string> ccEmailList = null,
+            Case mergeParent = null)
         {
             senderEmail = (senderEmail ?? string.Empty).Trim();
 
@@ -794,9 +819,9 @@ namespace DH.Helpdesk.Services.Services
                     var siteHelpdesk = cms.AbsoluterUrl + caseEditPath + case_.Id;
 
                     var fields = stateHelper == 99
-                        ? GetCaseFieldsForEmail(case_, log, cms, string.Empty, stateHelper, userTimeZone)
+                        ? GetCaseFieldsForEmail(case_, log, cms, string.Empty, stateHelper, userTimeZone, mergeParent)
                         : GetCaseFieldsForEmail(case_, log, cms, eLog.Value.EmailLogGUID.ToString(), stateHelper,
-                            userTimeZone);
+                            userTimeZone, mergeParent);
 
                     if (mailTemplateId == (int)GlobalEnums.MailTemplates.SmsClosedCase)
                     {

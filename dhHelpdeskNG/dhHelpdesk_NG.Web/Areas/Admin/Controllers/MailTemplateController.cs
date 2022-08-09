@@ -497,6 +497,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Text = Translation.Get("Påminnelse") + " (" + Translation.Get("Anmälare") + ")",
                 Value = "17",
             });
+            _regularCase.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Sammanfogat ärende") + " (" + Translation.Get("Anmälare") + ")",
+                Value = "18",
+            });
             #endregion
 
             #region CaseSMS
