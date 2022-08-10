@@ -32,6 +32,7 @@ namespace DH.Helpdesk.Services.Services
         void Commit();
 
         IEnumerable<FinishingCauseInfo> GetFinishingCauseInfos(int customerId);
+        IEnumerable<FinishingCauseInfo> GetAllFinishingCauseInfos(int customerId);
         FinishingCause GetMergedFinishingCause(int customerId);
     }
 
@@ -224,6 +225,11 @@ namespace DH.Helpdesk.Services.Services
         public IEnumerable<FinishingCauseInfo> GetFinishingCauseInfos(int customerId)
         {
             return this._finishingCauseRepository.GetFinishingCauseInfos(customerId);
+        }
+
+        public IEnumerable<FinishingCauseInfo> GetAllFinishingCauseInfos(int customerId)
+        {
+            return this._finishingCauseRepository.GetAllFinishingCauseInfos(customerId);
         }
 
         private void CreateFinishingCauseOverviewTree(FinishingCauseOverview parentCategory, IList<FinishingCauseOverview> allCategories)

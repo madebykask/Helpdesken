@@ -26,7 +26,9 @@ namespace DH.Helpdesk.Dal.Repositories
 
         IEnumerable<FinishingCauseInfo> GetFinishingCauseInfos(int customerId);
 
-		IQueryable<FinishingCause> GetManyWithSubFinishingCauses(Expression<Func<FinishingCause, bool>> where);
+        IEnumerable<FinishingCauseInfo> GetAllFinishingCauseInfos(int customerId);
+
+        IQueryable<FinishingCause> GetManyWithSubFinishingCauses(Expression<Func<FinishingCause, bool>> where);
 	}
 
     public class FinishingCauseRepository : RepositoryBase<FinishingCause>, IFinishingCauseRepository
@@ -95,7 +97,24 @@ namespace DH.Helpdesk.Dal.Repositories
                 });
         }
 
-		public IQueryable<FinishingCause> GetManyWithSubFinishingCauses(Expression<Func<FinishingCause, bool>> where)
+        public IEnumerable<FinishingCauseInfo> GetAllFinishingCauseInfos(int customerId)
+        {
+            var entities =
+                this.DataContext.FinishingCauses.Where(c => c.Customer_Id == customerId)
+                    .Select(c => new { c.Id, ParentId = c.Parent_FinishingCause_Id, c.Name })
+                    .OrderBy(c => c.Name)
+                    .ToList();
+
+            return entities
+                .Select(c => new FinishingCauseInfo
+                {
+                    Id = c.Id,
+                    ParentId = c.ParentId,
+                    Name = c.Name
+                });
+        }
+
+        public IQueryable<FinishingCause> GetManyWithSubFinishingCauses(Expression<Func<FinishingCause, bool>> where)
 		{
 			return this.DataContext.FinishingCauses.Include("SubFinishingCauses").Where(where);
 		}

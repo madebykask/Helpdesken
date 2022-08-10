@@ -632,7 +632,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 return new RedirectResult("~/Error/Unathorized");
             }
-            
+
             #region Code from old method. TODO: code review wanted
             var f = new CaseSearchFilter();
             f.CustomerId = SessionFacade.CurrentCustomer.Id;
@@ -966,7 +966,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             f.FreeTextSearch = frm.ReturnFormValue(CaseFilterFields.FreeTextSearchNameAttribute);
 
-           
+
 
             CaseSearchModel sm;
             sm = SessionFacade.CurrentCaseSearch;
@@ -1015,7 +1015,7 @@ namespace DH.Helpdesk.Web.Controllers
             sm.Search.Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc;
 
             m.caseSettings = _caseSettingService.GetCaseSettingsWithUser(selectedCustomer /*f.CustomerId*/, SessionFacade.CurrentUser.Id, SessionFacade.CurrentUser.UserGroupId);
-            
+
             var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(selectedCustomer/*f.CustomerId*/).ToArray();
             var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
             CaseRemainingTimeData remainingTimeData;
@@ -1078,7 +1078,7 @@ namespace DH.Helpdesk.Web.Controllers
             var remainingView = string.Empty;
             string statisticsView = null;
 
-            
+
 
             sw.Stop();
             var duration = sw.ElapsedMilliseconds;
@@ -1115,7 +1115,7 @@ namespace DH.Helpdesk.Web.Controllers
                     {"isClosed", searchRow.IsClosed},
                     {"isParent", searchRow.IsParent},
                     {"ParentId", searchRow.ParentId},
-                    {"IsMergeParent", searchRow.IsMergeParent}, 
+                    {"IsMergeParent", searchRow.IsMergeParent},
                     {"IsMergeChild", searchRow.IsMergeChild}
                 };
 
@@ -1640,7 +1640,7 @@ namespace DH.Helpdesk.Web.Controllers
                 //todo: check if GetCaseById can be used in model!
                 var customerId = moveToCustomerId.HasValue ? moveToCustomerId.Value : _caseService.GetCaseCustomerId(id);
 
-                
+
 
                 var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
                 m = this.GetCaseInputViewModel(userId, customerId, id, caseLockViewModel, caseFieldSettings, redirectFrom, backUrl, null, null, updateState);
@@ -2958,7 +2958,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 return new RedirectResult("~/Error/Forbidden");
             }
-            if(tomerge == false)
+            if (tomerge == false)
             {
                 _caseService.AddParentCase(id, parentCaseId);
             }
@@ -2974,7 +2974,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var newFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(id);
                 var existingFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(parentCaseId);
                 var newParentFollowers = new List<string>();
-                if(!String.IsNullOrEmpty(mergeCase.PersonsEmail) && mergeCase.PersonsEmail != parentCase.PersonsEmail)
+                if (!String.IsNullOrEmpty(mergeCase.PersonsEmail) && mergeCase.PersonsEmail != parentCase.PersonsEmail)
                 {
                     var extraFollower = new ExtraFollower()
                     {
@@ -2983,7 +2983,7 @@ namespace DH.Helpdesk.Web.Controllers
                     };
                     newFollowers.Add(extraFollower);
                 }
-                
+
                 var result = existingFollowers.Union(newFollowers).ToList();
                 newParentFollowers = result.Select(f => f.Follower).Distinct().ToList();
                 var emailList = newFollowers.Select(f => f.Follower).Distinct().ToList();
@@ -3005,14 +3005,14 @@ namespace DH.Helpdesk.Web.Controllers
                 };
 
                 var caseLog = new CaseLog();
-                
+
                 var mergedFinishingCause = _finishingCauseService.GetMergedFinishingCause(mergeCase.Customer_Id);
                 mergeCase.FinishingDescription = mergedFinishingCause.Name;
                 mergeCase.FinishingDate = DateTime.UtcNow;
                 caseLog.FinishingDate = DateTime.UtcNow;
                 caseLog.FinishingType = mergedFinishingCause.Id;
                 caseLog.FinishingTypeName = mergedFinishingCause.Name;
-                int caseHistoryId =_caseService.SaveCase(mergeCase, caseLog, SessionFacade.CurrentUser.Id, null, extraInfo, out errors);
+                int caseHistoryId = _caseService.SaveCase(mergeCase, caseLog, SessionFacade.CurrentUser.Id, null, extraInfo, out errors);
 
                 //Send Closing email/Merged Case
                 var customer = _customerService.GetCustomer(mergeCase.Customer_Id);
@@ -3028,7 +3028,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var currentLoggedInUser = _userService.GetUser(SessionFacade.CurrentUser.Id);
                 _caseService.SendMergedCaseEmail(mergeCase, parentCase, caseMailSetting, caseHistoryId, userTimeZone, caseLog);
             }
-           
+
 
 
             return this.RedirectToAction("Edit", "cases", new { id = parentCaseId });
@@ -5240,7 +5240,15 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (m.Logs != null)
                 {
-                    var finishingCauses = _finishingCauseService.GetFinishingCauseInfos(customerId).Where(x => x.Merged == false).ToList();
+                    var finishingCauses = new List<FinishingCauseInfo>();
+                    if (case_.FinishingDate == null)
+                    {
+                        finishingCauses = _finishingCauseService.GetFinishingCauseInfos(customerId).Where(x => x.Merged == false).ToList();
+                    }
+                    else
+                    {
+                        finishingCauses = _finishingCauseService.GetAllFinishingCauseInfos(customerId).Where(x => x.Merged == false).ToList();
+                    }
                     var lastLog = m.Logs.FirstOrDefault(); //todo: check if its correct - order
                     if (lastLog != null)
                     {
@@ -5265,7 +5273,7 @@ namespace DH.Helpdesk.Web.Controllers
                 //This means it's a child if not null (not merged)
                 if (m.ParentCaseInfo != null)
                 {
-                    m.IndependentChild = m.ParentCaseInfo.IsChildIndependent;                    
+                    m.IndependentChild = m.ParentCaseInfo.IsChildIndependent;
                 }
 
                 #endregion
