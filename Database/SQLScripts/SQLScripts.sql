@@ -65,11 +65,26 @@ Declare @mailID int
 Set @mailID = (Select Id from tblMailTemplate where MailID = 18 and Customer_Id is null)
 
 If not exists (select * from tblMailTemplate_tblLanguage where MailTemplate_Id = @mailID and Language_Id = 1)
-	Insert into tblMailTemplate_tblLanguage (MailTemplate_Id, Language_Id, MailTemplateName, Subject, Body) Values(@mailID, 1, 'Sammanfogat ärende', 'Sammanfogat ärende', 'Sammanfogat ärende')
+	Insert into tblMailTemplate_tblLanguage (MailTemplate_Id, Language_Id, MailTemplateName, Subject, Body) Values(@mailID, 1, 'Sammanfogat ärende', 'DH Helpdesk Avslutat ärende - [#1]: [#4]', 'Hej [#3]
+Ditt ärende [#1] har blivit sammanfogat med [#MP1] skapat av [#MP3].
+Om du vill tillföra något till ärendet, tveka inte att svara på detta mejl. Ditt svar kommer att tillskrivas det sammanfogade ärendet.
+
+[#MP98]Se ärendeinformation[/#MP98]
+
+<strong>Ärendeinformation:</strong><br><table><tr valign="top"><td>Registreringsdatum:</td><td>[#MP16]</td></tr><tr valign="top"><td>Rubrik:</td><td>[#MP4]</td></tr><tr valign="top"><td>Beskrivning:</td><td>[#MP5]</td></tr></table>
+
+Vänliga hälsningar')
 
 
 If not exists (select * from tblMailTemplate_tblLanguage where MailTemplate_Id = @mailID and Language_Id = 2)
-	Insert into tblMailTemplate_tblLanguage (MailTemplate_Id, Language_Id, MailTemplateName, Subject, Body) Values(@mailID, 2, 'Merged Case', 'Merged Case', 'Merged Case')
+	Insert into tblMailTemplate_tblLanguage (MailTemplate_Id, Language_Id, MailTemplateName, Subject, Body) Values(@mailID, 2, 'Merged Case', 'DH Helpdesk Closed case - [#1]: [#4]', 'Hello [#3]
+Your case [#1] has been merged to another similar case [#MP1] created by [#MP3].
+If you want to add something on the subject, do not hesitate to reply to this email, your imput will be moved to the merged case.
+[#MP98]View case details[/#MP98]
+
+<strong>Case information:</strong><br><table><tr valign="top"><td>Registration date:</td><td>[#MP16]</td></tr><tr valign="top"><td>Subject:</td><td>[#MP4]</td></tr><tr valign="top"><td>Description:</td><td>[#MP5]</td></tr></table>
+
+Best Regards')
 GO
 
 --Insert the new template for all customers..
