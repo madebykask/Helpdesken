@@ -271,15 +271,9 @@ namespace DH.Helpdesk.Services.Services
                 result = SortSearchResult(result, s);
                 if (f.ToBeMerged)
                 {
-                    //Todo - Not myself
                     //- What to show:
-                    //- Case alreadey merged(merge-children) should NOT show up in list.
-                    //- Case that has other merged cases(merge - parent) SHOULD show in list.
-                    //- Case used as Children (existing functionality children) should NOT show up in list.
-                    //- Case used as Parent (existing functionality parent) should NOT show up in list.
-                    //- For some reason below seems to work // Katta
-                    result.Items = result.Items.Where(x => x.IsMergeChild != true).ToList();
-                    //result.Items = result.Items.Where(x => x.)
+                    //- Not myself and Not Merge Children
+                    result.Items = result.Items.Where(x => x.IsMergeChild != true && x.Id != f.CurrentCaseId).ToList();
                 }
 
                 //TODO: refactor when true server paging will be implemented
