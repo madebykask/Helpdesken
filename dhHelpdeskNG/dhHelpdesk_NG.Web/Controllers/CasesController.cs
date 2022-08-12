@@ -2966,14 +2966,14 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 _caseService.MergeChildToParentCase(id, parentCaseId);
 
-                //Case to be Merged
-                var mergeCase = _caseService.GetCaseById(id);
-                var parentCase = _caseService.GetCaseById(parentCaseId);
+
+                Case mergeCase = _caseService.GetCaseById(id);
+                Case parentCase = _caseService.GetCaseById(parentCaseId);
 
                 //Move followers and initiator to mergeparent
-                var newFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(id);
-                var existingFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(parentCaseId);
-                var newParentFollowers = new List<string>();
+                List<ExtraFollower> newFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(id);
+                List<ExtraFollower> existingFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(parentCaseId);
+                List<string> newParentFollowers = new List<string>();
                 if (!String.IsNullOrEmpty(mergeCase.PersonsEmail) && mergeCase.PersonsEmail != parentCase.PersonsEmail)
                 {
                     var extraFollower = new ExtraFollower()
@@ -2984,19 +2984,23 @@ namespace DH.Helpdesk.Web.Controllers
                     newFollowers.Add(extraFollower);
                 }
 
-                var result = existingFollowers.Union(newFollowers).ToList();
+                List<ExtraFollower> result = existingFollowers.Union(newFollowers).ToList();
                 newParentFollowers = result.Select(f => f.Follower).Distinct().ToList();
-                var emailList = newFollowers.Select(f => f.Follower).Distinct().ToList();
+                List<string> emailList = new List<string> { mergeCase.PersonsEmail };
+                List<string> ccEmailList = newFollowers.Select(f => f.Follower).Distinct().ToList();
+
                 if (newParentFollowers.Count() > 0)
                 {
                     _caseExtraFollowersService.SaveExtraFollowers(parentCaseId, newParentFollowers, _workContext.User.UserId);
                 }
+
+                //Save Case History
                 IDictionary<string, string> errors;
                 string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
                 _caseService.SaveCaseHistory(parentCase, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, null, null);
+                
                 // Close case...
-
-                var extraInfo = new CaseExtraInfo
+                CaseExtraInfo extraInfo = new CaseExtraInfo
                 {
                     ActionExternalTime = 0,
                     ActionLeadTime = 0,
@@ -3004,9 +3008,9 @@ namespace DH.Helpdesk.Web.Controllers
                     LeadTimeForNow = 0
                 };
 
-                var caseLog = new CaseLog();
+                CaseLog caseLog = new CaseLog();
 
-                var mergedFinishingCause = _finishingCauseService.GetMergedFinishingCause(mergeCase.Customer_Id);
+                FinishingCause mergedFinishingCause = _finishingCauseService.GetMergedFinishingCause(mergeCase.Customer_Id);
                 mergeCase.FinishingDescription = mergedFinishingCause.Name;
                 mergeCase.FinishingDate = DateTime.UtcNow;
                 caseLog.FinishingDate = DateTime.UtcNow;
@@ -3015,18 +3019,18 @@ namespace DH.Helpdesk.Web.Controllers
                 int caseHistoryId = _caseService.SaveCase(mergeCase, caseLog, SessionFacade.CurrentUser.Id, null, extraInfo, out errors);
 
                 //Send Closing email/Merged Case
-                var customer = _customerService.GetCustomer(mergeCase.Customer_Id);
-                var caseMailSetting = new CaseMailSetting(string.Empty, customer.HelpdeskEmail, RequestExtension.GetAbsoluteUrl(), 1)
+                Customer customer = _customerService.GetCustomer(mergeCase.Customer_Id);
+                CaseMailSetting caseMailSetting = new CaseMailSetting(string.Empty, customer.HelpdeskEmail, RequestExtension.GetAbsoluteUrl(), 1)
                 {
                     DontSendMailToNotifier = false,
                 };
 
-                var mailSenders = new MailSenders { SystemEmail = caseMailSetting.HelpdeskMailFromAdress };
+                MailSenders mailSenders = new MailSenders { SystemEmail = caseMailSetting.HelpdeskMailFromAdress };
                 caseMailSetting.CustomeMailFromAddress = mailSenders;
 
-                var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
-                var currentLoggedInUser = _userService.GetUser(SessionFacade.CurrentUser.Id);
-                _caseService.SendMergedCaseEmail(mergeCase, parentCase, caseMailSetting, caseHistoryId, userTimeZone, caseLog);
+                TimeZoneInfo userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+                User currentLoggedInUser = _userService.GetUser(SessionFacade.CurrentUser.Id);
+                _caseService.SendMergedCaseEmail(mergeCase, parentCase, caseMailSetting, caseHistoryId, userTimeZone, caseLog, ccEmailList);
             }
 
 

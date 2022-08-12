@@ -366,9 +366,9 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        public void SendMergedCaseEmail(Case mergedCase, Case mergeParent, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog)
+        public void SendMergedCaseEmail(Case mergedCase, Case mergeParent, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, IList<string> ccEmailList)
         {
-            SendMergedAndClosedCaseMail(mergedCase, mergeParent, cms, caseHistoryId, userTimeZone, caseLog);
+            SendMergedAndClosedCaseMail(mergedCase, mergeParent, cms, caseHistoryId, userTimeZone, caseLog, ccEmailList);
         }
 
         public void SendSelfServiceCaseLogEmail(int caseId,
@@ -628,19 +628,19 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        private void SendMergedAndClosedCaseMail(Case mergedCase, Case mergeParent, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog)
+        private void SendMergedAndClosedCaseMail(Case mergedCase, Case mergeParent, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, IList<string> ccEmailList)
         {
             var mailTemplateId = (int)GlobalEnums.MailTemplates.MergedCase;
             var emailSender = GetWgOrSystemEmailSender(cms);
             var customerSetting = _settingService.GetCustomerSetting(mergeParent.Customer_Id);
-            var emailList = GetCaseFollowersEmails(mergedCase);
+            var emailList = new List<string> { mergedCase.PersonsEmail };
 
             var mailTpl = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(mergedCase.Customer_Id, mergedCase.RegLanguage_Id, mailTemplateId);
             if (mailTpl != null)
             {
                 if (!string.IsNullOrEmpty(mailTpl.Body) && !string.IsNullOrEmpty(mailTpl.Subject))
                 {
-                    SendTemplateEmail(mailTemplateId, mergedCase, caseLog, caseHistoryId, customerSetting, cms, emailSender, emailList[EmailType.ToMail], userTimeZone, null, 1, false, null, mergeParent);
+                    SendTemplateEmail(mailTemplateId, mergedCase, caseLog, caseHistoryId, customerSetting, cms, emailSender, emailList, userTimeZone, null, 1, false, ccEmailList, mergeParent);
                 }
             }
         }

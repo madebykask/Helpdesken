@@ -1788,7 +1788,14 @@ namespace DH.Helpdesk.Services.Services
                     ret.Add(new Field { Key = "[#28]", StringValue = c.ProductArea != null ? c.ProductArea.Name : string.Empty });
                 }
             }
-
+            else
+            {
+                ret.Add(new Field
+                {
+                    Key = "[#28]",
+                    StringValue = string.Empty
+                });
+            }
             ret.Add(new Field { Key = "[#10]", StringValue = l?.TextExternal ?? "" });
             ret.Add(new Field { Key = "[#11]", StringValue = l?.TextInternal ?? "" });
 
