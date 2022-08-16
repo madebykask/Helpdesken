@@ -121,6 +121,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator
 		public List<string> ExtendedCaseTranslationFieldIds { get; internal set; }
 		public int ReportTypeId { get; set; }
 
+        public string ReportName { get; set; }
+
 		public ReportGeneratorFilterModel GetFilter()
         {
             SortField sortField = null;

@@ -267,7 +267,10 @@
                 return;
 
             var filters = getBaseFilters();
-            
+
+            var reportName = $(reportList).find("option:selected").data("identity");
+
+       
             var reportTypeId = $('#lstReports option:selected').attr("data-orig-report-id");
             if (!reportTypeId)
                 reportTypeId = $('#lstReports option:selected').attr("data-id");
@@ -290,10 +293,13 @@
                 SortName: "",
                 SortBy: "",
                 CloseFrom: filters.closeDateFrom,
-                CloseTo: filters.closeDateTo
+                CloseTo: filters.closeDateTo,
+                ReportName: reportName
             };
 
+
             var getParams = $.param(getDataForParams, true);
+
 
             var isPreview = ($(this).data("preview") === true);
             if ($(this).data("excel") === true) {
@@ -644,6 +650,7 @@
             var control$ = $('#lstReports').find('option:selected');
             var origReportId = control$.data("origReportId");
             var reportId = origReportId || control$.data('id');
+
             switch (reportId) {
                 case dhHelpdesk.reports.reportType.HistoricalReport: 
                     dhHelpdesk.reports.onHistoricalShow.call(this, e);
@@ -1102,6 +1109,7 @@
             dhHelpdesk.reports.onReportChange.call(document.getElementById("lstReports"));
 
             $("#lstReports").on("change", dhHelpdesk.reports.onReportChange);
+
 
             $(showReportButton).on("click", dhHelpdesk.reports.onShowReport);
             $("#btnDeleteFavorite").on('click', dhHelpdesk.reports.deleteFavorite);

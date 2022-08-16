@@ -4,6 +4,8 @@
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+    using DH.Helpdesk.BusinessData.Models.ReportService;
+    using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Common.ValidationAttributes;
@@ -92,7 +94,27 @@
 		public List<string> ExtendedCaseFormFieldIds { get; private set; }
 		public int? ExtendedCaseFormId { get; private set; }
 
-		public static ReportGeneratorFilterModel CreateDefault()
+        public  ReportSelectedFilter MapToSelectedFilter(ReportGeneratorFilterModel reportFilter)
+        {
+
+
+            var ret = new ReportSelectedFilter();
+            //ret.SelectedCustomers.AddItems(reportFilter.SelectedCustomers);
+            ret.SeletcedDepartments.AddItems(reportFilter.DepartmentIds);
+            //ret.SeletcedOUs.AddItems(reportFilter.SeletcedOUs);
+            ret.SelectedWorkingGroups.AddItems(reportFilter.WorkingGroupIds);
+            ret.SelectedAdministrator.AddItems(reportFilter.AdministratorIds);
+            ret.SelectedCaseTypes.AddItems(reportFilter.CaseTypeIds);
+            ret.SelectedProductAreas.AddItems(reportFilter.ProductAreaIds);
+            ret.SelectedCaseStatus.AddItems(reportFilter.CaseStatusIds);
+            ret.CaseCreationDate = new DateToDate(reportFilter.PeriodFrom, reportFilter.PeriodUntil);
+            ret.CaseClosingDate = new DateToDate(reportFilter.CloseFrom, reportFilter.CloseTo);
+            //ret.SelectedReportCategory.AddItems(reportFilter.SelectedReportCategory);
+            //ret.SelectedReportCategoryRt.AddItems(reportFilter.SelectedReportCategoryRt);
+            return ret;
+        }
+
+        public static ReportGeneratorFilterModel CreateDefault()
         {
             return new ReportGeneratorFilterModel
                        {
@@ -102,5 +124,7 @@
                            PeriodUntil = DateTime.Today
                        };
         }
+
+
     }
 }

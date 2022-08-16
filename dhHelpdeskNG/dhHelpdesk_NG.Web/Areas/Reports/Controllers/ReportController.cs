@@ -113,6 +113,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
             var model = new ReportsOptions();
             var lastState = SessionFacade.ReportService;
+
+
             model.ReportServiceOverview = GetReportServiceModel(customerId, userId, lastState);
 
             return View(model);
@@ -331,6 +333,15 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
 
                 SessionFacade.SavePageFilters(PageName.ReportsReportGenerator, filters);
+
+                
+                var selectedReport = filters.MapToSelectedFilter(filters);
+
+                SessionFacade.ReportService = new ReportServiceSessionModel()
+                {
+                    ReportName = options.ReportName,
+                    SelectedFilter = selectedReport
+                };
 
 
                 if (options != null && options.IsPreview)
