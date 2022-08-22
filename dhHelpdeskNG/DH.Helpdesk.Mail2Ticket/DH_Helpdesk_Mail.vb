@@ -1305,6 +1305,7 @@ Module DH_Helpdesk_Mail
         service.Url = New Uri(server)
         service.Credentials = New OAuthCredentials(result.AccessToken)
         service.ImpersonatedUserId = New ImpersonatedUserId(ConnectingIdType.SmtpAddress, userName)
+        service.HttpHeaders.Add("X-AnchorMailbox", userName)
 
         Dim inbox As Folder
         If emailFolder.Equals(InboxMailFolderName, StringComparison.InvariantCultureIgnoreCase) Then
