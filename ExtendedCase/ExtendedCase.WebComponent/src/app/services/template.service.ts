@@ -7,7 +7,7 @@ import {
 } from '../models/template.model';
 
 import { LogService } from '../services/log.service';
-import { ValidateOn } from '../shared/validation-types';
+import { Trigger, ValidateOn } from '../shared/validation-types';
 import { AppConfig } from '../shared/app-config/app-config';
 import { FormControlType } from '../models/form.model';
 import { ErrorHandlingService } from './error-handling.service';
@@ -252,6 +252,7 @@ export class TemplateService {
         const controlValidators = new TemplateValidators();
 
         const createTemplate = (items: Array<any>, mode: ValidateOn): Array<TemplateValidator> => {
+
             return items.map((item: any): TemplateValidator => {
 
                 let validatorTpl = new TemplateValidator({
@@ -260,7 +261,8 @@ export class TemplateService {
                     enabled: this.getBinding(item.enabled, globalFunctions) || null,
                     valid: this.getBinding(item.valid, globalFunctions) || null,
                     value: this.resolveValue(item.value, globalFunctions) || null,
-                    validationMode: mode
+                    validationMode: mode,
+                    trigger: this.getTrigger(item)
                 });
 
                 if (item.hasOwnProperty('emptyValues')) {
@@ -283,6 +285,25 @@ export class TemplateService {
         if (!controlValidators.onSave && !controlValidators.onNext) { this.logService.warning('Invalid template validators section.'); }
 
         return controlValidators;
+    }
+
+    private getTrigger(item: any): Trigger{
+
+        //Check if trigger is an property, if not. Return an default enum(0)
+        if(!item.hasOwnProperty('trigger')){
+            return Trigger.Normal;
+        }
+        else {
+
+            //Capatalize first char of trigger attribute
+            let localTrigger = item.trigger.charAt(0).toUpperCase() + item.trigger.slice(1);
+
+            //Parse to enum
+            var triggerEnum : Trigger = Trigger[localTrigger as keyof typeof Trigger];
+
+            //Cast to trigger and return
+            return triggerEnum
+        }
     }
 
     private getValidatorMessage(item: any, messages: any): string {

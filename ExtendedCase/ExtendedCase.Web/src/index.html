@@ -39,15 +39,15 @@
           });
       }
 
-      window.saveExtendedCase = function (isOnNext) {
+      window.saveExtendedCase = function (isOnNext, finishingType = 0) {
           return window.extendedCaseComponentRef.zone.run(function () {
-              return window.extendedCaseComponentRef.component.save(isOnNext);
+              return window.extendedCaseComponentRef.component.save(isOnNext, finishingType);
           });
       }
 
-      window.validateExtendedCase = function (isOnNext) {
+      window.validateExtendedCase = function (isOnNext, finishingType = 0) {
           return window.extendedCaseComponentRef.zone.run(function () {
-              return window.extendedCaseComponentRef.component.validate(isOnNext || false);
+              return window.extendedCaseComponentRef.component.validate(isOnNext || false, finishingType);
           });
       }
 

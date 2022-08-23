@@ -377,8 +377,18 @@ EditPage.prototype.isExtendedCaseValid = function (showToast, isOnNext) {
             }
         }
 
+        var finishingType = parseInt(document.getElementById("CaseLog_FinishingType").value);
+
+        if (isNaN(finishingType)) {
+            finishingType = 0;
+        }
+
+
         var $_ex_Container = self.getExtendedCaseContainer();
-        var validationResult = $_ex_Container.contentWindow.validateExtendedCase(isOnNext);
+        var validationResult = $_ex_Container.contentWindow.validateExtendedCase(isOnNext, finishingType);
+
+        
+        
         if (validationResult == null) {
             //Change color
             if ($exTab.parent().hasClass('error')) {
@@ -1023,12 +1033,19 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
 EditPage.prototype.doTotalValidationAndSave = function (submitUrl) {
     var self = this;
 
+    var finishingType = parseInt(document.getElementById("CaseLog_FinishingType").value);
+
+    if (isNaN(finishingType)) {
+        finishingType = 0;
+    }
+
+
     if ($("#ExtendedInitiatorGUID").val().length > 0) {
-        $('#extendedSection-iframe-Initiator')[0].contentWindow.saveExtendedCase(false);
+        $('#extendedSection-iframe-Initiator')[0].contentWindow.saveExtendedCase(false, finishingType);
     }
 
     if ($("#ExtendedRegardingGUID").val().length > 0) {
-        $('#extendedSection-iframe-Regarding')[0].contentWindow.saveExtendedCase(false);
+        $('#extendedSection-iframe-Regarding')[0].contentWindow.saveExtendedCase(false, finishingType);
     }
 
     var $_ex_Container = self.getExtendedCaseContainer();
@@ -1043,7 +1060,7 @@ EditPage.prototype.doTotalValidationAndSave = function (submitUrl) {
             return false;
         }
 
-        var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
+        var promise = $_ex_Container.contentWindow.saveExtendedCase(false, finishingType);
         promise.then(
             function (res) {
                 if (res != null)

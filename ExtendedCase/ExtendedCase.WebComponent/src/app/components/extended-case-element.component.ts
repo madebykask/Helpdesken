@@ -186,12 +186,16 @@ export class ExtendedCaseElementComponent {
         return style;
     }
 
-    validate(isOnNext?: boolean): Array<ValidatorError> {
+    validate(isOnNext?: boolean, finishingType?: number): Array<ValidatorError> {
         this.config.isManualValidation = true;
 
         if (isOnNext !== undefined && isOnNext !== null) {
             this.config.validationMode = isOnNext ? ValidateOn.OnNext : ValidateOn.OnSave;
         }
+
+
+        this.validatorsService.setupValidators(this.formModel, finishingType)
+
 
         let allErrors = new Array<ValidatorError>();
         Object.keys(this.formModel.tabs).forEach((tabId: string) => {
@@ -205,6 +209,7 @@ export class ExtendedCaseElementComponent {
             }
         });
 
+
         // force to update * in label for required fields
         this.componentCommService.announceValidationModeChange(this.config.validationMode);
         this.config.isManualValidation = false;
@@ -212,8 +217,10 @@ export class ExtendedCaseElementComponent {
         return allErrors.length > 0 ? allErrors : null;
     }
 
-    save(isOnNext?: boolean): Promise<any> {
-        let validationResult = this.validate(isOnNext);
+    save(isOnNext?: boolean, finishingType?: number): Promise<any> {
+
+
+        let validationResult = this.validate(isOnNext, finishingType);
 
         if (validationResult && validationResult.length > 0) {
             this.logService.warning('Case has validation errors.');
@@ -328,7 +335,7 @@ export class ExtendedCaseElementComponent {
 
             // setup section validators
             setTimeout(() => {
-                this.validatorsService.setupSectionInstanceValidators(newSectionInstance, this.formModel.proxyModel);
+                this.validatorsService.setupSectionInstanceValidators(newSectionInstance, this.formModel.proxyModel, 0);
                 this.componentCommService.announceValidationModeChange(this.config.validationMode);
             }, 0);
         }
@@ -572,7 +579,7 @@ export class ExtendedCaseElementComponent {
         if (resultContext.isInitial) {
             this.subscribeValueChangedEvents();
             setTimeout(() => {
-                this.validatorsService.setupValidators(this.formModel);
+                this.validatorsService.setupValidators(this.formModel, 0);
                 this.componentCommService.announceValidationModeChange(this.config.validationMode);
             }, 0);
             this.isLoaded = true;
@@ -673,9 +680,12 @@ export class ExtendedCaseElementComponent {
     }
 
     private setupModels(metaData: any): void {
+
+
         this.logService.debug('setupModels');
         this.ngZone.runOutsideAngular(() => {
             this.templateModel = this.templateService.toTemplateModel(metaData);
+
 
             this.formModel = this.formModelService.buildForm(this.templateModel, new FormInfo(this.formParameters));
             this.selectedTabId = metaData.tabs[0].id;

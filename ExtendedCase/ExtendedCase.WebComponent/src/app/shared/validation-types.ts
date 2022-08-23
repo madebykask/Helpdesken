@@ -4,6 +4,11 @@ export enum ValidateOn {
     OnNext
 }
 
+export enum Trigger {
+    Normal,
+    OnCaseClose
+}
+
 export enum MinMax {
     Min,
     Max,
@@ -15,5 +20,6 @@ export class ValidatorError {
         public type: string,
         public label: string,
         public mode: ValidateOn,
-        public message: string) { }
+        public message: string,
+        public trigger: Trigger) { }
 }
