@@ -9,6 +9,8 @@ var GRID_STATE = {
 
 var statisticsExpandHiddenElm = '#hidExpandedGroup';
 var groupStatisticsCaptionPrefix = '#Caption_';
+var indexLogic = document.createElement('input');
+indexLogic.setAttribute("type", "hidden");
 
 function saveExpanded(id) {
     var curExpanded = $(statisticsExpandHiddenElm).val();
@@ -80,6 +82,10 @@ function getCollapseCaption(cap) {
                 self.autoReloadCheck.call(self);
             }, 5000);
         }
+
+        indexLogic.addEventListener('change', (event) => {
+            self.autoReloadCaseResultList();
+        }, false);
 
         //// Bind elements
         self.$table = $("#caseResults");
@@ -197,7 +203,7 @@ function getCollapseCaption(cap) {
                         let caseClosedOrLocked = (data.isClosed == true || data.isCaseLocked == true);
 
                         html = [];
-                        html.push('<input type="checkbox" class="bulkEditCaseSelect' + (caseClosedOrLocked ? 'Disabled' : '') + '" onclick="onClick_cbxBulkEditCaseSelect()" ' + (caseClosedOrLocked  ? 'disabled' : '') + ' id="cbxBulkEditSelectCaseId_' + data.case_id + '" data-caseid="' + data.case_id +'" /> ');
+                        html.push('<input type="checkbox" class="bulkEditCaseSelect' + (caseClosedOrLocked ? 'Disabled' : '') + '" onclick="onClick_cbxBulkEditCaseSelect()" ' + (caseClosedOrLocked ? 'disabled' : '') + ' id="cbxBulkEditSelectCaseId_' + data.case_id + '" data-caseid="' + data.case_id + '" data-caseno="' + data.CaseNumber + '" data-casecaption="' + data.case_caption + '" />');
                         row.cells[1].innerHTML = html.join("");
 
                         html = [];
@@ -344,6 +350,11 @@ function getCollapseCaption(cap) {
         if (self.getGridUpdatedAgo() >= self.settings.refreshContent && self.getGridState() === window.GRID_STATE.IDLE && noBulkEditSelectedCases) {
             self.table.ajax.reload();
         }
+    };
+
+    Page.prototype.autoReloadCaseResultList = function () {
+        var self = this;
+        self.table.ajax.reload();
     };
 
     Page.prototype.getGridUpdatedAgo = function () {

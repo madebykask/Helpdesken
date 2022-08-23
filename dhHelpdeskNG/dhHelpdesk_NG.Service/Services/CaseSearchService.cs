@@ -525,6 +525,7 @@ namespace DH.Helpdesk.Services.Services
                         row.ParentId = context.f.FetchInfoAboutParentChild ? dr.SafeGetInteger("ParentCaseId") : 0;
                         row.IsMergeParent = (context.f.FetchInfoAboutParentChild && dr.SafeGetInteger("IsMergeParent") > 0);
                         row.IsMergeChild = (context.f.FetchInfoAboutParentChild && dr.SafeGetInteger("IsMergeChild") > 0);
+                        row.CaseCaption = dr.SafeGetString("Caption");
 
                         row.ExtendedSearchInfo = new ExtendedSearchInfo
                         {

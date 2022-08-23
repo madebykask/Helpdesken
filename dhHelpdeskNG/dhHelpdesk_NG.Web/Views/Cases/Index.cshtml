@@ -48,7 +48,7 @@
                 <li id="CasesTab" class="active"><a href="#fragment-1">@Translation.Get("Ärenden", Enums.TranslationSource.TextTranslation)</a></li>
                 <li id="SettingTab"><a href="#fragment-4">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></li>
             </ul>
-            <div id="divBulkCaseEdit" role="dialog" class="modal modalBulkCaseEdit hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div id="divBulkCaseEdit" role="dialog" class="modal modalBulkCaseEdit hide fade" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                 @Html.Partial("ModalDialogs/_BulkCaseEdit", Model.CaseInputViewModel)
             </div>
             

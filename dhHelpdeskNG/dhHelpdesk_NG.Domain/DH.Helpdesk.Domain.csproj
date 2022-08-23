@@ -104,6 +104,7 @@
     <Compile Include="Application.cs" />
     <Compile Include="ApplicationTypeEntity.cs" />
     <Compile Include="Building.cs" />
+    <Compile Include="BulkEditCase.cs" />
     <Compile Include="BulletinBoard.cs" />
     <Compile Include="BulletinBoardSearch.cs" />
     <Compile Include="BusinessRules\BRRuleEntity.cs" />

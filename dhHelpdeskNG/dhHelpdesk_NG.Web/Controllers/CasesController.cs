@@ -106,6 +106,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Common.Enums.Logs;
     using DH.Helpdesk.Common.Extensions;
     using System.IO;
+    using System.Net;
 
     public partial class CasesController : BaseController
     {
@@ -592,7 +593,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             m.CaseSetting = GetCaseSettingModel(customerId, userId);
             m.CaseSearchFilterData.IsAboutEnabled = m.CaseSetting.ColumnSettingModel.CaseFieldSettings.GetIsAboutEnabled();
-            m.CaseInputViewModel = this.NewBulkCaseEdit(m.CaseSetting.CustomerId, null);
+            m.CaseInputViewModel = this.PopulateBulkCaseEditModal(m.CaseSetting.CustomerId);
             var user = _userService.GetUser(userId);
 
             SessionFacade.CaseOverviewGridSettings.pageOptions.pageIndex =
@@ -1116,7 +1117,8 @@ namespace DH.Helpdesk.Web.Controllers
                     {"isParent", searchRow.IsParent},
                     {"ParentId", searchRow.ParentId},
                     {"IsMergeParent", searchRow.IsMergeParent},
-                    {"IsMergeChild", searchRow.IsMergeChild}
+                    {"IsMergeChild", searchRow.IsMergeChild},
+                    {"case_caption", searchRow.CaseCaption }
                 };
 
                 var caseLock = casesLocks.Where(x => x.CaseId == caseId).FirstOrDefault();
@@ -1297,6 +1299,123 @@ namespace DH.Helpdesk.Web.Controllers
             int caseId = this.Save(m);
             CheckTemplateParameters(templateId, caseId);
             return this.RedirectToAction("new", "cases", new { customerId = m.case_.Customer_Id });
+        }
+
+        [UserCasePermissions]
+        [HttpPost]
+        public JsonResult EditCaseProperties(BulkEditCase inputData)
+        {
+            var caseToUpdate = _caseService.GetCaseById(inputData.Id);
+            var oldCase = new Case();
+            oldCase = _caseService.GetDetachedCaseById(inputData.Id);
+
+            try
+            {
+                if (caseToUpdate == null)
+                {
+                    string errorMsg = Translation.Get("Ärendet hittades inte!");
+                    throw new Exception(errorMsg);
+                }
+
+                if (SessionFacade.CurrentUser == null)
+                {
+                    string errorMsg = Translation.Get("Åtkomst nekad");
+                    throw new Exception(errorMsg);
+                }
+
+                var userId = SessionFacade.CurrentUser.Id;
+
+                var caseLockViewModel = GetCaseLockModel(inputData.Id, userId, true);
+
+                if(caseLockViewModel != null)
+                {
+                    if(caseLockViewModel.IsLocked) 
+                    {
+                        //string errorMsg = Translation.GetCoreTextTranslation("Låst");
+
+                        string errorMsg = Translation.GetCoreTextTranslation("Nätverksförbindelsen bröts. Användare <name> har låst ärendet.");
+                        errorMsg = errorMsg.Replace("<name>", caseLockViewModel.User.FirstName + " " + caseLockViewModel.User.SurName);
+                        throw new Exception(errorMsg);
+                    }
+                }
+
+                IDictionary<string, string> errors;
+                var mailSenders = new MailSenders();
+                var customer = _customerService.GetCustomer(caseToUpdate.Customer_Id);
+                var caseMailSetting = new CaseMailSetting(string.Empty, customer.HelpdeskEmail, RequestExtension.GetAbsoluteUrl(), 1);
+
+                mailSenders.SystemEmail = caseMailSetting.HelpdeskMailFromAdress;
+
+                // Positive: Send Mail to...
+                caseMailSetting.DontSendMailToNotifier = caseMailSetting.DontSendMailToNotifier == false;
+
+                if (caseToUpdate.DefaultOwnerWG_Id.HasValue && caseToUpdate.DefaultOwnerWG_Id.Value > 0)
+                {
+                    var defaultWGEmail = _workingGroupService.GetWorkingGroup(caseToUpdate.DefaultOwnerWG_Id.Value).EMail;
+                    mailSenders.DefaultOwnerWGEMail = defaultWGEmail;
+                }
+
+                bool updateCase = false;
+
+                if (inputData.WorkingGroup_Id > 0 && caseToUpdate.WorkingGroup_Id != inputData.WorkingGroup_Id)
+                {
+                    var curWG = _workingGroupService.GetWorkingGroup(inputData.WorkingGroup_Id);
+                    if (curWG != null)
+                        if (!string.IsNullOrWhiteSpace(curWG.EMail) && _emailService.IsValidEmail(curWG.EMail))
+                            mailSenders.WGEmail = curWG.EMail;
+
+                    caseToUpdate.WorkingGroup_Id = inputData.WorkingGroup_Id;
+                    updateCase = true;
+                }
+
+                if (inputData.Performer_User_Id > 0 && caseToUpdate.Performer_User_Id != inputData.Performer_User_Id)
+                {
+                    caseToUpdate.Performer_User_Id = inputData.Performer_User_Id;
+                    updateCase = true;
+                }
+
+                //if (inputData.Priority_Id > 0 && caseToUpdate.Priority_Id != inputData.Priority_Id)
+                //{
+                //    caseToUpdate.Priority_Id = inputData.Priority_Id;
+                //    updateCase = true;
+                //}
+
+                if (inputData.StateSecondary_Id > 0 && caseToUpdate.StateSecondary_Id != inputData.StateSecondary_Id)
+                {
+                    caseToUpdate.StateSecondary_Id = inputData.StateSecondary_Id;
+                    updateCase = true;
+                }
+
+                if (inputData.Problem_Id > 0 && caseToUpdate.Problem_Id != inputData.Problem_Id)
+                {
+                    caseToUpdate.Problem_Id = inputData.Problem_Id;
+                    updateCase = true;
+                }
+
+                if (updateCase)
+                {
+                    caseMailSetting.CustomeMailFromAddress = mailSenders;
+
+                    var currentLoggedInUser = _userService.GetUser(SessionFacade.CurrentUser.Id);
+                    var basePath = _masterDataService.GetFilePath(caseToUpdate.Customer_Id);
+                    var caseHistoryId = _caseService.SaveCase(caseToUpdate, null, SessionFacade.CurrentUser.Id, User.Identity.Name, new CaseExtraInfo(), out errors);
+                    var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+                    // send emails
+                    _caseService.SendCaseEmail(caseToUpdate.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, new CaseLog(), null, currentLoggedInUser);
+                }
+
+                if (caseLockViewModel.IsLocked && !string.IsNullOrEmpty(caseLockViewModel.LockGUID))
+                {
+                    _caseLockService.UnlockCaseByGUID(new Guid(caseLockViewModel.LockGUID));
+                }
+
+                return Json(new CaseOperationResult() { Success = true, Message = Translation.Get("Uppdaterad", Enums.TranslationSource.TextTranslation), CaseId = inputData.Id, CaseNumber = caseToUpdate.CaseNumber.ToString()} );
+            }
+
+            catch(Exception e)
+            {
+                return Json(new CaseOperationResult() { Success = false, Message = e.Message, CaseId = inputData.Id, CaseNumber = caseToUpdate.CaseNumber.ToString() });
+            }
         }
 
         [HttpPost]
@@ -2998,7 +3117,7 @@ namespace DH.Helpdesk.Web.Controllers
                 IDictionary<string, string> errors;
                 string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
                 _caseService.SaveCaseHistory(parentCase, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, null, null);
-                
+
                 // Close case...
                 CaseExtraInfo extraInfo = new CaseExtraInfo
                 {
@@ -3389,62 +3508,6 @@ namespace DH.Helpdesk.Web.Controllers
             return PartialView("_MoveCase", model);
         }
 
-
-        private CaseInputViewModel NewBulkCaseEdit(
-         int customerId,
-         int[] selectedCases)
-        {
-            CaseInputViewModel m = null;
-
-            SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
-            if (SessionFacade.CurrentUser != null)
-            {
-                var userId = SessionFacade.CurrentUser.Id;
-                var caseLockModel = new CaseLockModel();
-
-                var customerCaseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
-
-                m = this.GetCaseInputViewModel(
-                    userId,
-                    customerId,
-                    0,
-                    caseLockModel,
-                    customerCaseFieldSettings,
-                    string.Empty,
-                    null,
-                    null,
-                    null,
-                    false,
-                    null, null, null);
-
-                var caseParam = new NewCaseParams
-                {
-                    customerId = customerId,
-                    templateId = null,
-                    copyFromCaseId = null,
-                    caseLanguageId = null
-                };
-
-                m.NewModeParams = caseParam;
-                AddViewDataValues();
-
-                // Positive: Send Mail to...
-                if (m.CaseMailSetting.DontSendMailToNotifier == false) m.CaseMailSetting.DontSendMailToNotifier = true;
-                else m.CaseMailSetting.DontSendMailToNotifier = false;
-
-                var moduleCaseInvoice = GetCustomerSettings(customerId).ModuleCaseInvoice;
-                if (moduleCaseInvoice == 1)
-                {
-                    var caseInvoices = _invoiceArticleService.GetCaseInvoicesWithTimeZone(m.case_.Id, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
-                    var invoiceArticles = _invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
-                    m.InvoiceModel = new CaseInvoiceModel(customerId, m.case_.Id, invoiceArticles, "", m.CaseKey, m.LogKey);
-                }
-                m.Performer_Id = 0;
-                return m;
-            }
-
-            return null;
-        }
         /*	[HttpGet]
             //[Route("Files/{type:string}/{id:int}/filename:string}")]
             public UnicodeFileContentResult CaseFiles(string caseId, string filename)
@@ -3509,6 +3572,61 @@ namespace DH.Helpdesk.Web.Controllers
             };
 
             return model;
+        }
+
+        private CaseInputViewModel PopulateBulkCaseEditModal(
+         int customerId)
+        {
+            CaseInputViewModel m = null;
+
+            SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
+            if (SessionFacade.CurrentUser != null)
+            {
+                var userId = SessionFacade.CurrentUser.Id;
+                var caseLockModel = new CaseLockModel();
+
+                var customerCaseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+
+                m = this.GetCaseInputViewModel(
+                    userId,
+                    customerId,
+                    0,
+                    caseLockModel,
+                    customerCaseFieldSettings,
+                    string.Empty,
+                    null,
+                    null,
+                    null,
+                    false,
+                    null, null, null);
+
+                var caseParam = new NewCaseParams
+                {
+                    customerId = customerId,
+                    templateId = null,
+                    copyFromCaseId = null,
+                    caseLanguageId = null
+                };
+
+                m.NewModeParams = caseParam;
+                AddViewDataValues();
+
+                // Positive: Send Mail to...
+                if (m.CaseMailSetting.DontSendMailToNotifier == false) m.CaseMailSetting.DontSendMailToNotifier = true;
+                else m.CaseMailSetting.DontSendMailToNotifier = false;
+
+                var moduleCaseInvoice = GetCustomerSettings(customerId).ModuleCaseInvoice;
+                if (moduleCaseInvoice == 1)
+                {
+                    var caseInvoices = _invoiceArticleService.GetCaseInvoicesWithTimeZone(m.case_.Id, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                    var invoiceArticles = _invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
+                    m.InvoiceModel = new CaseInvoiceModel(customerId, m.case_.Id, invoiceArticles, "", m.CaseKey, m.LogKey);
+                }
+                m.Performer_Id = 0;
+                return m;
+            }
+
+            return null;
         }
 
         #endregion
