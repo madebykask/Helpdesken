@@ -262,8 +262,33 @@
 
             var columns = [];
             columns.push({ data: null, width: "18px", orderable: false, defaultContent: "&nbsp;" });
-            columns.push({ data: "CaseNumber", width: null, orderable: true, title: nativeLangCaseNumber, defaultContent: "&nbsp;" });
-            columns.push({ data: "Caption", width: null, orderable: true, title: nativeLangCaption, defaultContent: "&nbsp;" });
+            columns.push({
+                data: "CaseNumber", width: null, orderable: true, title: nativeLangCaseNumber, defaultContent: "&nbsp;", className: "thpointer " + "CaseNumber", createdCell: function (td, cellData, rowData, row, col) {
+
+                    if (cellData === null || cellData === undefined) {
+                        td.innerHTML = self.formatCell(rowData.case_id, '');
+                        if (Page.isDebug)
+                            console.warn('could not find field "' + fieldSetting.field + '" in record');
+                    } else {
+                        td.innerHTML = self.formatCell(rowData.case_id, cellData);
+                    }
+
+                }
+            });
+            columns.push({
+                data: "Caption", width: null, orderable: true, title: nativeLangCaption, defaultContent: "&nbsp;", className: "thpointer " + "Caption", createdCell: function (td, cellData, rowData, row, col) {
+
+                    if (cellData === null || cellData === undefined) {
+                        td.innerHTML = self.formatCell(rowData.case_id, '');
+                        if (Page.isDebug)
+                            console.warn('could not find field "' + fieldSetting.field + '" in record');
+                    } else {
+                        td.innerHTML = self.formatCell(rowData.case_id, cellData);
+                    }
+
+                }
+            });
+
 
 
             return columns;
