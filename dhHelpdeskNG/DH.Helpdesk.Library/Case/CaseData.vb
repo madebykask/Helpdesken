@@ -838,7 +838,7 @@ Public Class CaseData
         Dim dt As DataTable
 
         Try
-            sSQL = "UPDATE tblCase SET ChangeTime = getDate() WHERE MergedChild_Id=" & CaseId & ""
+            sSQL = "UPDATE tblCase SET ChangeTime = getDate() WHERE MergedChild_Id=" & CaseId & ", Status=1 "
 
 
             executeSQL(gsConnectionString, sSQL)
