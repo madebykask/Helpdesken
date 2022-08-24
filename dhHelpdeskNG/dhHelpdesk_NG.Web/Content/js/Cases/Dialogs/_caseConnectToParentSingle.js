@@ -240,6 +240,8 @@
             "use strict";
             var self = this;
 
+            console.log(gridSettings)
+
 
             var nativeLangCaseNumber = "Number"
             if (gridSettings.columnDefs.filter(x => x.field == "CaseNumber").length > 0) {
@@ -255,6 +257,15 @@
                 if (gridSettings.columnDefs.filter(x => x.field == "Caption")[0].displayName != "") {
                     if (typeof gridSettings.columnDefs.filter(x => x.field == "Caption")[0].displayName != undefined) {
                         nativeLangCaption = gridSettings.columnDefs.filter(x => x.field == "Caption")[0].displayName;
+                    }
+                }
+            }
+
+            var nativeRegTimeCaption = "Reg.Date"
+            if (gridSettings.columnDefs.filter(x => x.field == "Caption").length > 0) {
+                if (gridSettings.columnDefs.filter(x => x.field == "RegTime")[0].displayName != "") {
+                    if (typeof gridSettings.columnDefs.filter(x => x.field == "RegTime")[0].displayName != undefined) {
+                        nativeRegTimeCaption = gridSettings.columnDefs.filter(x => x.field == "RegTime")[0].displayName;
                     }
                 }
             }
@@ -277,6 +288,20 @@
             });
             columns.push({
                 data: "Caption", width: null, orderable: true, title: nativeLangCaption, defaultContent: "&nbsp;", className: "thpointer " + "Caption", createdCell: function (td, cellData, rowData, row, col) {
+
+                    if (cellData === null || cellData === undefined) {
+                        td.innerHTML = self.formatCell(rowData.case_id, '');
+                        if (Page.isDebug)
+                            console.warn('could not find field "' + fieldSetting.field + '" in record');
+                    } else {
+                        td.innerHTML = self.formatCell(rowData.case_id, cellData);
+                    }
+
+                }
+            });
+
+            columns.push({
+                data: "RegTime", width: null, orderable: true, title: nativeRegTimeCaption, defaultContent: "&nbsp;", className: "thpointer " + "RegTime", createdCell: function (td, cellData, rowData, row, col) {
 
                     if (cellData === null || cellData === undefined) {
                         td.innerHTML = self.formatCell(rowData.case_id, '');
