@@ -1041,8 +1041,10 @@ Module DH_Helpdesk_Mail
                                     Dim dFinDate As Date
                                     dFinDate = objCase.FinishingDate
                                     If caseismerged > 0 Then
+                                        objCaseData.updateChangeTime(objCase.Id)
                                         objCase = Nothing
                                         objCase = objCaseData.getCase(caseismerged)
+
                                     End If
 
                                     'If objCase.FinishingDate <> Date.MinValue Then
