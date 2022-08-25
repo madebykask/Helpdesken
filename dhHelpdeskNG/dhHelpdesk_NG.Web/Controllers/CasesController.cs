@@ -1310,6 +1310,8 @@ namespace DH.Helpdesk.Web.Controllers
             var caseLog = new CaseLog();
             oldCase = _caseService.GetDetachedCaseById(inputData.Id);
 
+            CaseLockModel caseLockViewModel = null;
+
             try
             {
                 if (caseToUpdate == null)
@@ -1326,7 +1328,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var userId = SessionFacade.CurrentUser.Id;
 
-                var caseLockViewModel = GetCaseLockModel(inputData.Id, userId, true);
+                caseLockViewModel = GetCaseLockModel(inputData.Id, userId, true);
 
                 if(caseLockViewModel != null)
                 {
@@ -1442,7 +1444,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 //if (caseLockViewModel.IsLocked && !string.IsNullOrEmpty(caseLockViewModel.LockGUID))
                 //{
-                _caseLockService.UnlockCaseByCaseId(caseToUpdate.Id);
+                //_caseLockService.UnlockCaseByCaseId(caseToUpdate.Id);
                 //_caseLockService.UnlockCaseByGUID(new Guid(caseLockViewModel.LockGUID));
                 //}
 
@@ -1455,7 +1457,16 @@ namespace DH.Helpdesk.Web.Controllers
             }
             finally
             {
-                if (caseToUpdate != null)
+                var unlocked = false;
+                if(caseLockViewModel != null)
+                {
+                    if (!string.IsNullOrEmpty(caseLockViewModel.LockGUID))
+                    {
+                        _caseLockService.UnlockCaseByGUID(new Guid(caseLockViewModel.LockGUID));
+                        unlocked = true;
+                    }
+                }
+                if (!unlocked && caseToUpdate != null)
                 {
                     _caseLockService.UnlockCaseByCaseId(caseToUpdate.Id);
                 }
