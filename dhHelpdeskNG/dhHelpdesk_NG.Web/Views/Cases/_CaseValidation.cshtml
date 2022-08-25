@@ -19,12 +19,12 @@
         backUrl: '@Model.BackUrl',
         productAreaErrorMessage:
             '@Html.Raw(Translation.GetForJS("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält") + " [" +
-                                           Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + "] " +
-                                           Translation.GetForJS("inte har valts. Vänligen kontrollera ärendet."))',
+                                   Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + "] " +
+                                   Translation.GetForJS("inte har valts. Vänligen kontrollera ärendet."))',
         finishingTypeErrorMessage:
             '@Html.Raw(Translation.GetForJS("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält") + " [" +
-                                    Translation.GetForJS(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + "] " +
-                                    Translation.GetForJS("inte har valts. Vänligen kontrollera ärendet."))',
+                            Translation.GetForJS(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + "] " +
+                            Translation.GetForJS("inte har valts. Vänligen kontrollera ärendet."))',
         caseLockGuid: '@Model.CaseLock.LockGUID',
         caseChangedTime: '@Model.case_.ChangeTime',
         userCaseLocker: '@Model.CaseLock.UserId',
@@ -54,10 +54,12 @@
         finishingDateMessage: '@Html.Raw(Translation.GetForJS(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + " " + Translation.Get("kan inte vara tidigare än registreringsdatum."))',
         finishingDateMessage2: '@Html.Raw(Translation.GetForJS(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + " " + Translation.Get("kan inte vara tidigare än senast sparat datum. (Se historik fliken)"))',
         checkInactiveDataErrorMessage: '@Html.Raw(Translation.GetForJS("Problem med kommunikation med servern."))',
-        productAreaChangeMessage: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(),Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + " " + '@Translation.GetForJS("kan inte ändra eftersom det finns order som inte är skickade.")',
+        productAreaChangeMessage: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + " " + '@Translation.GetForJS("kan inte ändra eftersom det finns order som inte är skickade.")',
         caseTemplateChangeMessage: '@Translation.GetForJS("Du kan inte använda ärendemall eftersom det finns order som inte är skickade.")',
         caseRegDate: '@Model.case_.RegTime',
         isCaseFileMandatory: '@Model.caseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.Filename.ToString())',
+        isCaseFileMandatoryOnReOpen: '@Model.caseFieldSettings.getRequiredIfReopened(GlobalEnums.TranslationCaseFields.Filename.ToString())',
+        isCaseReOpen: '@Model.IsCaseReopened',
         caseFileCaption: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)',
         closeBtn: '@Html.Raw(Translation.GetForJS("Stäng"))',
         selectedLabel: '@Translation.GetForJS("vald")',
@@ -67,10 +69,10 @@
         containsExtendedCase: '@Model.ContainsExtendedCase',
         hasExtendedComputerUsers: '@Model.HasExtendedComputerUsers',
         containsEForm: '@(Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)',
-        extendedCaseFormId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Id.ToString() : "" )',
-        extendedCaseGuid: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().ExtendedCaseGuid.ToString() : "" )',
-        extendedCaseLanguageId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().LanguageId.ToString() : "" )',
-        extendedCasePath: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Path.ToString() : "" )',
+        extendedCaseFormId: '@(Model.ContainsExtendedCase ? Model.ExtendedCases.First().Id.ToString() : "" )',
+        extendedCaseGuid: '@(Model.ContainsExtendedCase ? Model.ExtendedCases.First().ExtendedCaseGuid.ToString() : "" )',
+        extendedCaseLanguageId: '@(Model.ContainsExtendedCase ? Model.ExtendedCases.First().LanguageId.ToString() : "" )',
+        extendedCasePath: '@(Model.ContainsExtendedCase ? Model.ExtendedCases.First().Path.ToString() : "" )',
         extendedSections: @Html.Raw(Model.ExtendedSectionsToJS()),
         extendedCaseInvalidMessage: '@Translation.GetForJS("Utökat ärende är inte giltigt")',
         computerUserCategories: @Html.Raw(Json.Encode(Model.ComputerUserCategories != null ? Model.ComputerUserCategories.Select(o => new { o.Name, o.IsReadOnly, o.Id }).ToDictionary(o => o.Id.ToString(), o => o) : null)),
@@ -140,13 +142,13 @@
             UserCode: @Html.Raw(Json.Encode(Model.case_.UserCode)),
             RegionId: '@Model.case_.Region_Id',
             DepartmentId: '@Model.case_.Department_Id',
-            ParentOUId: '@(Model.case_.Ou != null && Model.case_.Ou.Parent_OU_Id != null? Model.case_.Ou.Parent_OU_Id: null)',
+            ParentOUId: '@(Model.case_.Ou != null && Model.case_.Ou.Parent_OU_Id != null ? Model.case_.Ou.Parent_OU_Id : null)',
             ChildOUId: '@Model.case_.OU_Id',
             ProductAreaId: '@Model.case_.ProductArea_Id',
             StatusId: '@Model.case_.Status_Id',
             SubStatusId: '@Model.case_.StateSecondary_Id',
-            PlanDate: '@(Model.case_.PlanDate !=null ? Model.case_.PlanDate.Value.ToString() : "" )',
-            WatchDate: '@(Model.case_.WatchDate !=null ? Model.case_.WatchDate.Value.ToString() : "" )',
+            PlanDate: '@(Model.case_.PlanDate != null ? Model.case_.PlanDate.Value.ToString() : "" )',
+            WatchDate: '@(Model.case_.WatchDate != null ? Model.case_.WatchDate.Value.ToString() : "" )',
             PriorityId: '@Model.case_.Priority_Id',
             CaseRelationType: '@Model.CaseRelationType()',
             PersonsEmail: @Html.Raw(Json.Encode(Model.case_.PersonsEmail)),
@@ -164,7 +166,7 @@
             getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")',
             getDepartmentUsersUrl: '@Url.Action("GetDepartmentUsers", "Ajax")',
             relatedCasesUrl: '@Url.Action("RelatedCasesFull", "Cases")',
-            relatedInventoryUrl: '@Url.Action("RelatedInventoryFull", "Workstation", new { area ="Inventory" })',
+            relatedInventoryUrl: '@Url.Action("RelatedInventoryFull", "Workstation", new { area = "Inventory" })',
             relatedCasesCountUrl: '@Url.Action("RelatedCasesCount", "Cases")',
             relatedInventoryCountUrl: '@Url.Action("RelatedInventoryCount", "Cases")',
             getDepartmentOusUrl: '@Url.Action("ChangeDepartment", "Cases")',
@@ -177,7 +179,7 @@
             mandatoryFieldsText: '@Translation.GetForJS("Obligatoriska fält")',
             formatFieldsText: '@Translation.GetForJS("Giltiga Format är")',
             descriptionText: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)',
-            getInventoryUrl: '@Url.Action("GetInventoryUrlByName", "InventoryRouting", new {  area = "Inventory" })',
+            getInventoryUrl: '@Url.Action("GetInventoryUrlByName", "InventoryRouting", new { area = "Inventory" })',
             initiatorDetailsUrl: '@Url.Action("NotifierPopup", "Notifiers")',
             checkInitiatorUrl: '@Url.Action("GetNotifierInfo", "Notifiers")',
         },
@@ -187,10 +189,12 @@
         }
     };
 
-    function getRules(){
+    function getRules() {
+
+
         var rules = {
             "case_.ReportedBy": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber))
+                required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.PersonsName": {
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Model.IsCaseReopened)"); }
@@ -211,7 +215,7 @@
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.Department_Id": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Department_Id, CaseSolutionFields.Department))
+                required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.Project_Id": {
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Project.ToString(), Model.IsCaseReopened)"); }
@@ -262,10 +266,10 @@
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.ProductArea_Id": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea))
+                required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.CaseType_Id": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType))
+                required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.System_Id": {
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Model.IsCaseReopened)"); }
@@ -277,7 +281,7 @@
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.Category_Id": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Category_Id, CaseSolutionFields.Category))
+                required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.Supplier_Id": {
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Model.IsCaseReopened)"); }
@@ -289,13 +293,13 @@
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.Caption": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Caption, CaseSolutionFields.Caption))
+                required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Caption.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.Description": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
+                required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Description.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.Miscellaneous": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Miscellaneous, CaseSolutionFields.Miscellaneous))
+                required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.AgreedDate": {
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Model.IsCaseReopened)"); }
@@ -304,7 +308,7 @@
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Available.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.WorkingGroup_Id": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup))
+                required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.CausingPartId": {
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CausingPart.ToString(), Model.IsCaseReopened)"); }
@@ -313,10 +317,10 @@
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Model.IsCaseReopened)"); }
            },
             "Performer_Id": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))
+                required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.Priority_Id": {
-                required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Priority_Id, CaseSolutionFields.Priority))
+                required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Model.IsCaseReopened)"); }
             },
             "case_.Status_Id": {
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), Model.IsCaseReopened)"); }
@@ -330,29 +334,7 @@
             "case_.WatchDate": {
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.WatchDate.ToString(), Model.IsCaseReopened)"); }
             },
-            @if(Model.IsRequired(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost))
-            {
-                <text>
-                "@Html.NameFor(m => m.case_.Cost)": {
-                    require_from_group: {
-                        param: [3, ".cost-field"],
-                        depends: @Json.Encode(Model.IsRequired(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost))
-                    }
-                },
-                "@Html.NameFor(m => m.case_.OtherCost)": {
-                    require_from_group: {
-                        param: [3, ".cost-field"],
-                        depends: @Json.Encode(Model.IsRequired(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost))
-                    }
-                },
-                "@Html.NameFor(m => m.case_.Currency)": {
-                    require_from_group: {
-                        param: [3, ".cost-field"],
-                        depends: @Json.Encode(Model.IsRequired(GlobalEnums.TranslationCaseFields.Cost, CaseSolutionFields.Cost))
-                    }
-                },
-                </text>
-            }
+
             "CaseLog.FinishingType": {
                 required: function () {
                     if ($('#CaseLog_FinishingDate').closest('tr').css('display') !== 'none' && $('#CaseLog_FinishingType').closest('tr').css('display') !== 'none') {
@@ -392,7 +374,7 @@
                     return $('#divCaseLogFiles.externalLog-files tr').length > 0;
                 },
                 @if (Model.CustomerSettings.ModuleInvoice)
-                    {
+                {
                         <text>
                         require_from_group: {
                             param: [1, ".log-field"],
@@ -409,12 +391,12 @@
                             }
                         }
                         </text>
-                    }
+                }
                 },
                 "CaseLog.TextInternal": {
 /*                    maxlength: 3000,*/
                     @if (Model.CustomerSettings.ModuleInvoice)
-                        {
+                    {
                             <text>
                             require_from_group: {
                                 param: [1, ".log-field"],
@@ -431,7 +413,7 @@
                                 }
                             }
                             </text>
-                        }
+                    }
                     },
                     "CaseLog.WorkingTimeHour": {
                         require_from_group: {
@@ -481,9 +463,48 @@
                             }
                         }
                     }
-                }
+            }
 
-        return rules;
+            //Cost special
+            @{
+            var costFlag = Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Cost.ToString(), Model.IsCaseReopened);
+            }
+
+            rules["@Html.NameFor(m => m.case_.Cost)"] = {
+                    require_from_group: {
+                        param: [3, ".cost-field"],
+                        depends: function(element) {
+
+                            return FieldIsRequired("@costFlag");
+
+                        }
+                    }
+            }
+
+            rules["@Html.NameFor(m => m.case_.OtherCost)"] = {
+                    require_from_group: {
+                        param: [3, ".cost-field"],
+                        depends: function(element) {
+
+                            return FieldIsRequired("@costFlag");
+
+                        }
+                    }
+            }
+
+            rules["@Html.NameFor(m => m.case_.Currency)"] = {
+                    require_from_group: {
+                        param: [3, ".cost-field"],
+                        depends: function(element) {
+
+                            return FieldIsRequired("@costFlag");
+
+                        }
+                    }
+            }
+
+
+            return rules;
     }
 
     var validator = $("#target").validate({
@@ -723,6 +744,7 @@
         }
         return ret;
     }
+
 
     @if (Model.newLog || Model.editLog)
     {

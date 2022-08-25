@@ -890,9 +890,31 @@ EditPage.prototype.isFormValid = function () {
         };
     }
 
+    var finished = true;
+    var finishingTypeId = "CaseLog_FinishingType";
+    if (document.getElementById(finishingTypeId) != null) {
+        if (document.getElementById(finishingTypeId).value == "" || document.getElementById(finishingTypeId).value == null || typeof document.getElementById(finishingTypeId).value == 'undefined') {
+            finished = false;
+        }
+    }
+
     var isCaseFileValid = true;
     var err = '';
+
     if (me.isCaseFileMandatory != 0) {
+
+        var caseFiles = $('#case_files_table tbody tr');
+        if (caseFiles != null && caseFiles != undefined) {
+            if (caseFiles.length < 1) {
+                $('#btnAddCaseFile').addClass('error');
+                isCaseFileValid = false;
+                err = '<br />' + '[' + me.p.caseFileCaption + ']';
+            }
+        }
+    }
+
+    if (me.isCaseFileMandatoryOnReOpen == 1 && finished == true) {
+
         var caseFiles = $('#case_files_table tbody tr');
         if (caseFiles != null && caseFiles != undefined) {
             if (caseFiles.length < 1) {
@@ -918,6 +940,7 @@ EditPage.prototype.isFormValid = function () {
 
     return true;
 };
+
 
 EditPage.prototype.primaryValidation = function (submitUrl) {
 
@@ -1665,6 +1688,8 @@ EditPage.prototype.init = function (p) {
     self.$btnGo = $('#btnGo');
     self.isRelated = self.p.isRelated;
     self.isCaseFileMandatory = self.p.isCaseFileMandatory;
+    self.isCaseFileMandatoryOnReOpen = self.p.isCaseFileMandatoryOnReOpen;
+    self.isCaseReOpen = self.p.isCaseReOpen;
 
     var invoiceElm = $('#CustomerSettings_ModuleCaseInvoice').val();
     self.invoiceIsActive = invoiceElm != undefined && invoiceElm != null && invoiceElm.toString().toLowerCase() == 'true';
