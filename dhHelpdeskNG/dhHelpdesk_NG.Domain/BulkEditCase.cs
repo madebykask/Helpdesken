@@ -19,5 +19,12 @@ namespace DH.Helpdesk.Domain
         public int StateSecondary_Id { get; set; }
 
         public int Problem_Id { get; set; }
+
+        public string FinishDescription { get; set; }
+
+        public int? FinishTypeId { get; set; }
+
+        public DateTime? FinishDate { get; set; }
+
     }
 }

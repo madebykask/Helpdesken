@@ -272,6 +272,82 @@
                     }
                 }
 
+                @if (SessionFacade.CurrentUser.CloseCasePermission == 1 && !Model.newLog)
+                {
+                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription)">
+                        <td>
+                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription, "Avslutsbeskrivning")
+                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()).Required == 1)
+                            {
+                                <span class="mandatorystar">*</span>
+                            }
+                        </td>
+                        <td>
+                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription) && !readonlyMode)
+                            {
+                                @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "300" })
+                            }
+                            else
+                            {
+                                @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "300", @readonly = true })
+                            }
+                        </td>
+                    </tr>
+                }
+                @if (SessionFacade.CurrentUser.CloseCasePermission == 1)
+                {
+                    <tr style="                            @Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)" >
+                        <td>
+                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ClosingReason, "Avslutsorsak")
+                        </td>
+                        <td>
+                            <div id="divFinishingType" class="btn-group dropdown-menu-parent">
+                                @{
+                                    string disabled = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause);
+                                    if (readonlyMode || (Model.IsItParentCase() && Model.IsAnyNotClosedChild(true)))
+                                    {
+                                        disabled = "disabled";
+                                    }
+                                }
+                                <div class="btn @disabled" id="divBreadcrumbs_FinishingType">
+                                    @(string.IsNullOrEmpty(Model.FinishingCause) ? Translation.Get("--") : Model.FinishingCause)
+                                </div>
+                                <button class="btn dropdown-toggle" data-toggle="dropdown" @disabled>
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">@Translation.Get("--")</a></li>
+                                    @Html.FinishingCauseDropdownButtonString(Model.finishingCauses)
+                                </ul>
+                                @Html.HiddenFor(model => Model.CaseLog.FinishingType)
+                            </div>
+                        </td>
+                    </tr>
+                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)">
+                        <td>
+                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDate, "Avslutsdatum")
+                        </td>
+                        <td>
+                            @if (!(Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)
+                                || readonlyMode || (Model.IsItParentCase() && Model.IsAnyNotClosedChild(true))))
+                            {
+                                if (Model.Setting.DisableCaseEndDate == 0)
+                                {
+                                    @Html.EditorFor(m => m.CaseLog.FinishingDate, "DatePicker", new { id = "divCaseLog_FinishingDate" })
+                                }
+                                else
+                                {
+                                    @Html.EditorFor(m => m.CaseLog.FinishingDate, "DateReadOnlyLocalTz", new { id = "divCaseLog_FinishingDate" })
+                                }
+                            }
+                            else
+                            {
+                                @Html.EditorFor(m => m.case_.FinishingDate, "DateReadOnlyLocalTz")
+                            }
+                        </td>
+                    </tr>
+                }
+
             </table>
         </div>
     </div>
@@ -300,157 +376,202 @@
     </div>
 </div>
 <script type="text/javascript">
-    let $caseWorkingGroupId = $('#case__WorkingGroup_Id');
-    let $casePerformer_Id = $('#Performer_Id');
-    //let $casePriorityId= $('#case__Priority_Id');
-    let $caseStateSecondaryId = $('#case__StateSecondary_Id');
-    let $caseProblemId = $('#case__Problem_Id');
-    let $bulkCaseEditProgressDiv = $('#bulkCaseEditProgressDiv');
-    let $bulkCaseEditProgressList = $('#bulkCaseEditProgressList');
-    let $bulkCaseEditProgressListBody = $('#bulkCaseEditProgressListBody');
-    let $btnBulkCaseEdit = $('#btnBulkCaseEdit');
-    let $btnBulkCaseEditCancel = $('#btnBulkCaseEditCancel');
+            let $finishTypeId = $("#CaseLog_FinishingType");
+            let $finishDate = $('#CaseLog_FinishingDate');
+            let $caseWorkingGroupId = $('#case__WorkingGroup_Id');
+            let $casePerformer_Id = $('#Performer_Id');
+            //let $casePriorityId= $('#case__Priority_Id');
+            let $caseStateSecondaryId = $('#case__StateSecondary_Id');
+            let $caseProblemId = $('#case__Problem_Id');
+            let $bulkCaseEditProgressDiv = $('#bulkCaseEditProgressDiv');
+            let $bulkCaseEditProgressList = $('#bulkCaseEditProgressList');
+            let $bulkCaseEditProgressListBody = $('#bulkCaseEditProgressListBody');
+            let $btnBulkCaseEdit = $('#btnBulkCaseEdit');
+            let $btnBulkCaseEditCancel = $('#btnBulkCaseEditCancel');
+            let $finishTypeContainer = $('#divFinishingType');
+            let $finishTypeBreadcrubs = $("#divBreadcrumbs_FinishingType");
+            let $finishDescription = $('#case__FinishingDescription')
 
-    $(document).ready(function () {
+            $(document).ready(function () {
 
-        resetBulkEditModal();
+                resetBulkEditModal();
 
-        $('#divBulkCaseEdit').on("hide", function () {
-            resetBulkEditModal();
-            indexLogic.dispatchEvent(new Event("change"));
-        });
+                let updatedCases = 0;
 
-        $btnBulkCaseEdit.on("click", async function bulkCaseEdit() {
-            await handleBulkCaseEdit()
-        });
+                $('#divBulkCaseEdit').on("hide", function () {                    
+                    if (updatedCases > 0) {
+                        let inputData = getInputData();
+                        if (!nothingToUpdate(inputData)) {
+                            indexLogic.dispatchEvent(new Event("change"));
+                        }
+                    }
+                    resetBulkEditModal();
+                });
+
+                $btnBulkCaseEdit.on("click", async function bulkCaseEdit() {
+                    await handleBulkCaseEdit()
+                });
 
 
-        const handleBulkCaseEdit = async () => {
-            let selectedCases = [];
-            $('.bulkEditCaseSelect:checkbox:checked').each((c, v) => {
-                selectedCases.push({ id: v.getAttribute('data-caseid'), caseno: v.getAttribute('data-caseno'), casecaption: v.getAttribute('data-casecaption') });
+                const handleBulkCaseEdit = async () => {
+                    let selectedCases = [];
+                    $('.bulkEditCaseSelect:checkbox:checked').each((c, v) => {
+                        selectedCases.push({ id: v.getAttribute('data-caseid'), caseno: v.getAttribute('data-caseno'), casecaption: v.getAttribute('data-casecaption') });
+                    });
+
+                    let inputData = getInputData();
+
+                    if (validateBulkCaseEditData(inputData, selectedCases)) {
+                        $bulkCaseEditProgressDiv.css("display", "block");
+                        //$btnBulkCaseEditCancel.prop("disabled", "true");
+
+                        selectedCases.forEach(async (c) => {
+
+                            inputData.Id = c.id
+                            return new Promise((resolve, reject) => {
+                                $.ajax({
+                                    url: '@Url.Action("EditCaseProperties")',
+                                    type: "post",
+                                    headers: { 'Content-Type': 'application/json' },
+                                    data: JSON.stringify(inputData),
+                                    dataType: "json",
+                                    beforeSend: function () {
+                                        $bulkCaseEditProgressListBody.append('<tr><td style="border:none; width:30px;"><i id="st_inProgress' + c.id + '" class="gif-loader" style="">&nbsp;</i></td><td style="border:none; width:60px; text-align:left;">' + c.caseno + '</td><td style="border:none; text-align:left;">' + c.casecaption + '</td></tr>')
+
+                                        var content = $bulkCaseEditProgressListBody.html();
+                                        $bulkCaseEditProgressListBody.html(content);
+                                    },
+                                    success: function (data) {
+                                        let success = data.Success;
+                                        let message = data.Message;
+
+                                        if (success) {
+                                            $("#st_inProgress" + c.id).removeClass();
+                                            $("#st_inProgress" + c.id).addClass("fa fa-check-circle fa-lg");
+                                            $("#st_inProgress" + c.id).prop("aria-hidden", "true");
+                                            $("#st_inProgress" + c.id).css("color", "green");
+                                            updatedCases++;
+
+                                        }
+
+                                        else {
+                                            $("#st_inProgress" + c.id).removeClass();
+                                            $("#st_inProgress" + c.id).addClass("fa fa-exclamation-circle fa-lg");
+                                            $("#st_inProgress" + c.id).prop("aria-hidden", "true");
+                                            $("#st_inProgress" + c.id).css("color", "red");
+                                        }
+                                        $("#st_inProgress" + c.id).prop("title", message);
+                                        console.log(message);
+                                        resolve(data)
+                                    },
+                                    error: function (jqXHR, textStatus, errorThrown) {
+                                        $("#st_inProgress" + c.id).removeClass();
+                                        $("#st_inProgress" + c.id).addClass("fa fa-exclamation-circle fa-lg");
+                                        $("#st_inProgress" + c.id).prop("aria-hidden", "true");
+                                        $("#st_inProgress" + c.id).css("color", "red");
+                                        console.log(jqXHR);
+                                        console.log(textStatus);
+                                        console.log(errorThrown);
+                                        reject(data)
+                                    }
+                                });
+                            })
+                        });
+                    }
+                    $btnBulkCaseEdit.hide();
+                    //$btnBulkCaseEditCancel.removeAttr('disabled');
+                }
+
+                $caseWorkingGroupId.change(function (d, source) {
+                    console.log('>>> Working group changed event.');
+                    // Remove after implementing http://redmine.fastdev.se/issues/10995
+                    // filter administrators
+
+                    var dontConnectUserToWorkingGroup = Number($('#CaseMailSetting_DontConnectUserToWorkingGroup').val() || '0');
+                    if (dontConnectUserToWorkingGroup === 0) {
+                        CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#Performer_Id', $('#DepartmentFilterFormat').val());
+                    } else {
+                        $('#Performer_Id').off('applyValue');
+                    }
+                    if (source !== 'case__StateSecondary_Id') {
+                        //set state secondary
+                        SelectValueInOtherDropdownOnChange($(this).val(),
+                            '/Cases/ChangeWorkingGroupSetStateSecondary/',
+                            '#case__StateSecondary_Id',
+                            '.readonlySubstate')
+                            .done(function () {
+                                $('#case__StateSecondary_Id').trigger('change', 'case__WorkingGroup_Id');
+                            });
+                    }
+                });
+
+                $finishTypeContainer.find('ul.dropdown-menu li a').click(function (e) {
+                    e.preventDefault();
+                    let value = $(this).attr('value');
+                    $finishTypeBreadcrubs.text(window.getBreadcrumbs(this));
+                    $finishTypeId.val(value).trigger('change');
+                });
+                $finishTypeId.on('change', function (ev) {
+                    let value = $(ev.target).val();
+                    if (value == '' || value === undefined) {
+                        $finishDate.val('');
+                    } else {
+                        if ($finishDate.val() == '') {
+                            $finishDate.val(window.today());
+                        }
+                    }
+                });
             });
 
-            let inputData = {
-                Id: null,
-                //Priority_Id: $($casePriorityId.selector + ' option:selected').val(),
-                Performer_User_Id: $($casePerformer_Id.selector + ' option:selected').val(),
-                WorkingGroup_Id: $($caseWorkingGroupId.selector + ' option:selected').val(),
-                StateSecondary_Id: $($caseStateSecondaryId.selector + ' option:selected').val(),
-                Problem_Id: $($caseProblemId.selector + ' option:selected').val(),
-            };
-
-            if (validateBulkCaseEditData(inputData, selectedCases)) {
-                $bulkCaseEditProgressDiv.css("display", "block");
-                //$btnBulkCaseEditCancel.prop("disabled", "true");
-
-                selectedCases.forEach(async (c) => {
-
-                    inputData.Id = c.id
-                    return new Promise((resolve, reject) => {
-                        $.ajax({
-                            url: '@Url.Action("EditCaseProperties")',
-                            type: "post",
-                            headers: { 'Content-Type': 'application/json' },
-                            data: JSON.stringify(inputData),
-                            dataType: "json",
-                            beforeSend: function () {
-                                $bulkCaseEditProgressListBody.append('<tr><td style="border:none; width:30px;"><i id="st_inProgress' + c.id + '" class="gif-loader" style="">&nbsp;</i></td><td style="border:none; width:60px; text-align:left;">' + c.caseno + '</td><td style="border:none; text-align:left;">' + c.casecaption + '</td></tr>')
-
-                                var content = $bulkCaseEditProgressListBody.html();
-                                $bulkCaseEditProgressListBody.html(content);
-                            },
-                            success: function (data) {
-                                let success = data.Success;
-                                let message = data.Message;
-
-                                if (success) {
-                                    $("#st_inProgress" + c.id).removeClass();
-                                    $("#st_inProgress" + c.id).addClass("fa fa-check-circle fa-lg");
-                                    $("#st_inProgress" + c.id).prop("aria-hidden", "true");
-                                    $("#st_inProgress" + c.id).css("color", "green");
-
-                                }
-
-                                else {
-                                    $("#st_inProgress" + c.id).removeClass();
-                                    $("#st_inProgress" + c.id).addClass("fa fa-exclamation-circle fa-lg");
-                                    $("#st_inProgress" + c.id).prop("aria-hidden", "true");
-                                    $("#st_inProgress" + c.id).css("color", "red");
-                                }
-                                $("#st_inProgress" + c.id).prop("title", message);
-                                console.log(message);
-                                resolve(data)
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                $("#st_inProgress" + c.id).removeClass();
-                                $("#st_inProgress" + c.id).addClass("fa fa-exclamation-circle fa-lg");
-                                $("#st_inProgress" + c.id).prop("aria-hidden", "true");
-                                $("#st_inProgress" + c.id).css("color", "red");
-                                console.log(jqXHR);
-                                console.log(textStatus);
-                                console.log(errorThrown);
-                                reject(data)
-                            }
-                        });
-                    })
-                });
+            function getInputData() {
+                return {
+                    Id: null,
+                        //Priority_Id: $($casePriorityId.selector + ' option:selected').val(),
+                        Performer_User_Id: $($casePerformer_Id.selector + ' option:selected').val(),
+                            WorkingGroup_Id: $($caseWorkingGroupId.selector + ' option:selected').val(),
+                                StateSecondary_Id: $($caseStateSecondaryId.selector + ' option:selected').val(),
+                                    Problem_Id: $($caseProblemId.selector + ' option:selected').val(),
+                                        FinishDescription: $finishDescription.val(),
+                                            FinishTypeId: $finishTypeId.val(),
+                                                FinishDate: $finishDate.val()
+                };
             }
-            $btnBulkCaseEdit.hide();
-            //$btnBulkCaseEditCancel.removeAttr('disabled');
-        }
 
-        $caseWorkingGroupId.change(function (d, source) {
-            console.log('>>> Working group changed event.');
-            // Remove after implementing http://redmine.fastdev.se/issues/10995
-            // filter administrators
+            function resetBulkEditModal() {
+                $caseWorkingGroupId.val('');
+                $casePerformer_Id.val('');
+                //$casePriorityId.val('');
+                $caseStateSecondaryId.val('');
+                $caseProblemId.val('');
+                $btnBulkCaseEdit.show();
+                $bulkCaseEditProgressListBody.html('');
+                $bulkCaseEditProgressDiv.css("display", "none");
+                $finishDescription.val(''),
+                $finishTypeId.val(''),
+                $finishDate.val('')
 
-            var dontConnectUserToWorkingGroup = Number($('#CaseMailSetting_DontConnectUserToWorkingGroup').val() || '0');
-            if (dontConnectUserToWorkingGroup === 0) {
-                CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#Performer_Id', $('#DepartmentFilterFormat').val());
-            } else {
-                $('#Performer_Id').off('applyValue');
+                updatedCases = 0;
             }
-            if (source !== 'case__StateSecondary_Id') {
-                //set state secondary
-                SelectValueInOtherDropdownOnChange($(this).val(),
-                    '/Cases/ChangeWorkingGroupSetStateSecondary/',
-                    '#case__StateSecondary_Id',
-                    '.readonlySubstate')
-                    .done(function () {
-                        $('#case__StateSecondary_Id').trigger('change', 'case__WorkingGroup_Id');
-                    });
-            }
-        });
-    });
 
-
-    function resetBulkEditModal() {
-        $caseWorkingGroupId.val('');
-        $casePerformer_Id.val('');
-        //$casePriorityId.val('');
-        $caseStateSecondaryId.val('');
-        $caseProblemId.val('');
-        $btnBulkCaseEdit.show();
-        $bulkCaseEditProgressListBody.html('');
-        $bulkCaseEditProgressDiv.css("display", "none");
-    }
-
-    function validateBulkCaseEditData(data, selectedCases) {
-        let validation = false;
-        if (selectedCases.length > 0) {
-            if (data.Problem_Id == '' && data.Performer_User_Id == '' && data.WorkingGroup_Id == '' && data.StateSecondary_Id == '') {
-                ShowToastMessage('@Html.Raw(Translation.GetForJS("Inget att uppdatera"))', "warning");
+            function nothingToUpdate(data) {
+                return data.Problem_Id == '' && data.Performer_User_Id == '' && data.WorkingGroup_Id == '' && data.StateSecondary_Id == '' && data.FinishDescription == '' && data.FinishTypeId == '' && data.FinishDate == '';
             }
-            else {
-                validation = true;
+
+            function validateBulkCaseEditData(data, selectedCases) {
+                let validation = false;
+                if (selectedCases.length > 0) {
+                    if (nothingToUpdate(data)) {
+                        ShowToastMessage('@Html.Raw(Translation.GetForJS("Inget att uppdatera"))', "warning");
+                    }
+                    else {
+                        validation = true;
+                    }
+                }
+                else {
+                    ShowToastMessage('@Html.Raw(Translation.GetForJS("Det finns inga ärenden som matchar angivet urval"))', "warning");
+                }
+                return validation;
             }
-        }
-        else {
-            ShowToastMessage("Inget ärende är valt.", "warning");
-        }
-        return validation;
-    }
 
 </script>
 
