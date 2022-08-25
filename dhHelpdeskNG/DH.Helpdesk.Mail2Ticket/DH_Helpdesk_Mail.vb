@@ -671,6 +671,8 @@ Module DH_Helpdesk_Mail
                                     End If
                                 End If
 
+
+
                                 objComputerUser = objComputerUserData.getComputerUserByEMail(sFromEMailAddress, objCustomer.Id)
 
                                 If message.HasBodyText = True Then
@@ -1037,6 +1039,10 @@ Module DH_Helpdesk_Mail
                                     'End If
                                     ' Uppdatera ärendet och aktivera om det är avslutat
                                     Dim caseismerged As Integer = 0
+                                    'If objCase.Casenumber = "19965" Or objCase.Casenumber = "19964" Then
+                                    '    Dim g As String
+                                    '    g = ""
+                                    'End If
                                     caseismerged = objCaseData.checkIfCaseIsMerged(objCase.Id)
                                     Dim dFinDate As Date
                                     dFinDate = objCase.FinishingDate
