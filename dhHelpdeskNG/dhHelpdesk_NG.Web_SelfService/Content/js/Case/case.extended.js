@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 window.extendedCasePage =
-    (function($) {
+    (function ($) {
 
         function ExtendedCasePage() {
         };
@@ -19,6 +19,7 @@ window.extendedCasePage =
         ExtendedCasePage.prototype.case_Is_In_Saving_Mode = false;
         ExtendedCasePage.prototype.$Form = null;
         ExtendedCasePage.prototype.SAVE_CASE_URL = "";
+        ExtendedCasePage.prototype.GET_WORKFLOWFINISHINGCAUSE_URL = "";
         ExtendedCasePage.prototype.Case_Field_Ids = null;
         ExtendedCasePage.prototype.Case_Field_Init_Values = null;
         ExtendedCasePage.prototype.Current_EC_FormId = "";
@@ -240,7 +241,7 @@ window.extendedCasePage =
                             place: { Value: fieldValues.Place },
                             costcentre: { Value: fieldValues.CostCentre },
                             caption: { Value: fieldValues.Caption },
-                            inventorytype: {Value: fieldValues.InventoryType},
+                            inventorytype: { Value: fieldValues.InventoryType },
                             inventorylocation: { Value: fieldValues.InventoryLocation },
                             case_files: { Value: fieldValues.CaseFiles }
                         }
@@ -257,7 +258,7 @@ window.extendedCasePage =
             }
         }
 
-        ExtendedCasePage.prototype.isExtendedCaseValid = function (showToast, isOnNext) {
+        ExtendedCasePage.prototype.isExtendedCaseValid = function (showToast, isOnNext, finishingCauseId = 0) {
             var self = this;
 
             //if no input param sent in, set show toast to true
@@ -273,7 +274,8 @@ window.extendedCasePage =
             var $exTab = $(self.ExTab_Prefix + self.Current_EC_FormId);
             var $exCaseContainer = self.getExtendedCaseContainer();
 
-            var validationResult = $exCaseContainer.contentWindow.validateExtendedCase(isOnNext);
+
+            var validationResult = $exCaseContainer.contentWindow.validateExtendedCase(isOnNext, finishingCauseId);
 
             if (validationResult == null) {
                 //Change color
@@ -434,21 +436,21 @@ window.extendedCasePage =
         ExtendedCasePage.prototype.setCaseStatus = function (status) {
             var self = this;
             switch (status) {
-            case self.CASE_IN_IDLE:
-                self.case_Is_In_Saving_Mode = false;
-                self.$caseButtonsToLock.removeClass('disabled');
-                self.$caseButtonsToLock.css("pointer-events", "");
-                return true;
+                case self.CASE_IN_IDLE:
+                    self.case_Is_In_Saving_Mode = false;
+                    self.$caseButtonsToLock.removeClass('disabled');
+                    self.$caseButtonsToLock.css("pointer-events", "");
+                    return true;
 
-            case self.CASE_IN_SAVING:
-                self.case_Is_In_Saving_Mode = true;
-                self.$caseButtonsToLock.addClass('disabled');
-                self.$caseButtonsToLock.css("pointer-events", "none");
-                return true;
+                case self.CASE_IN_SAVING:
+                    self.case_Is_In_Saving_Mode = true;
+                    self.$caseButtonsToLock.addClass('disabled');
+                    self.$caseButtonsToLock.css("pointer-events", "none");
+                    return true;
 
-            default:
-                ShowToastMessage("Case status is not defined!", "error", true);
-                return false;
+                default:
+                    ShowToastMessage("Case status is not defined!", "error", true);
+                    return false;
             }
         };
 
@@ -460,9 +462,9 @@ window.extendedCasePage =
             self.$Form.submit();
         };
 
-    ExtendedCasePage.prototype.onSaveClick = function () {
-        var self = this;
-        var id = self.Case_Field_Init_Values.CaseId;
+        ExtendedCasePage.prototype.onSaveClick = function () {
+            var self = this;
+            var id = self.Case_Field_Init_Values.CaseId;
             var url = self.SAVE_CASE_URL;
             var $exCaseContainer = self.getExtendedCaseContainer();
 
@@ -474,7 +476,7 @@ window.extendedCasePage =
                     return;
                 }
             }
-            
+
             self.setCaseStatus(self.CASE_IN_SAVING);
 
             if (!self.isNullOrUndefined($exCaseContainer)) {
@@ -509,6 +511,7 @@ window.extendedCasePage =
         ExtendedCasePage.prototype.init = function (params) {
             var self = this;
 
+            self.GET_WORKFLOWFINISHINGCAUSE_URL = params.getWorkflowFinishingCauseUrl;
             self.SAVE_CASE_URL = params.saveCaseUrl;
             self.Case_Field_Ids = params.caseFieldIds;
             self.Case_Field_Init_Values = params.caseInitValues;
@@ -566,16 +569,49 @@ window.extendedCasePage =
 
                 var templateId = parseInt(self.$selectListStep.first().val()) || 0;
 
+                var finishingCauseId = 0;
+
+                if (templateId > 0) {
+                    var url = self.GET_WORKFLOWFINISHINGCAUSE_URL + "?templateId=" + templateId;
+
+                    //Do ajax
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        async: false,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "JSON",
+                        success: function (result) {
+                            finishingCauseId = result.Data;
+                        },
+                        error: function (result) {
+                            finishingCauseId = result.Data;
+                            if (result.Error) {
+                                ShowToastMessage(result.Error, "error", false);
+                            }
+                            else {
+                                ShowToastMessage("Error", "error", false);
+                            }
+
+                        }
+                    });
+
+                    if (finishingCauseId == null || finishingCauseId == "" || typeof finishingCauseId == 'undefined' || finishingCauseId == NaN) {
+                        finishingCauseId = 0;
+                    }
+                }
+
+
                 //only load if templateId exist
                 if (templateId > 0) {
                     var isValid = false;
 
                     var stepId = parseInt(self.$selectListStep.first().val()) || 0;
                     if (stepId > 0) {
-                        isValid = self.isExtendedCaseValid(true, true);
+                        isValid = self.isExtendedCaseValid(true, true, finishingCauseId);
                     }
                     else {
-                        isValid = self.isExtendedCaseValid(true, false);
+                        isValid = self.isExtendedCaseValid(true, false, finishingCauseId);
                     }
 
                     if (isValid) {

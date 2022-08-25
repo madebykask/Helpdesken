@@ -622,6 +622,24 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
+        public ActionResult GetWorkflowFinishingCause(int templateId)
+        {
+            var caseTemplate = _caseSolutionService.GetCaseSolution(templateId);
+
+            if (caseTemplate == null)
+            {
+                return Json(new { success = false, Error = "Selected template is not available anymore!", Data = 0 }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (caseTemplate.Status == 0)
+            {
+                return Json(new { success = false, Error = "Selected template is not available anymore!", Data = 0 }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { success = true, Error = "", Data = caseTemplate.FinishingCause_Id }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
         public ActionResult GetWorkflowSteps(int caseId, int templateId)
         {
             var customerId = caseId > 0 ? _caseService.GetCaseCustomerId(caseId) : SessionFacade.CurrentCustomerID;

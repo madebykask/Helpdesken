@@ -410,6 +410,7 @@ Imports System.Text.RegularExpressions
 
                     If iPos > 0 Then
                         iPos = iPos + Len(vEMailSubjectPattern(Index))
+                        Dim iStart As Integer = iPos
 
                         ' Starta på iPos och stega till höger tills det inte är ett numeriskt tecken
                         For i As Integer = iPos To Len(sSubject)
@@ -419,6 +420,10 @@ Imports System.Text.RegularExpressions
                             Else
                                 If FirstNumericCharFound = True Then
                                     Exit For
+                                Else
+                                    If iStart = iPos And Mid(sSubject, i, 1) <> " " And Mid(sSubject, i, 1) <> "" Then
+                                        Exit For
+                                    End If
                                 End If
 
                             End If

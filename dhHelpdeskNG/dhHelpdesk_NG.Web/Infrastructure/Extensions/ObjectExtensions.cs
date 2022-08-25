@@ -209,12 +209,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
         public static int CaseFieldSettingRequiredCheck(this IList<CaseFieldSetting> cfs, string valueToFind, bool isCaseReopend)
         {
+
             int ret = 0;
             if (cfs != null)
                 foreach (CaseFieldSetting c in cfs)
                 {
                     if (string.Compare(c.Name, valueToFind.getCaseFieldName(), true) == 0)
                     {
+
                         if (isCaseReopend && c.RequiredIfReopened == 1 && c.ShowOnStartPage == 1)
                         {
                             ret = 2;
