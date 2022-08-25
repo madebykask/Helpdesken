@@ -26,5 +26,7 @@ namespace DH.Helpdesk.Domain
 
         public DateTime? FinishDate { get; set; }
 
+        public int[] CasesToBeUpdated { get; set; }
+
     }
 }

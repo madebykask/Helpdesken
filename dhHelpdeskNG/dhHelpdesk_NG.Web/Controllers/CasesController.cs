@@ -1405,6 +1405,19 @@ namespace DH.Helpdesk.Web.Controllers
                     var lastLog = caseToUpdate.Logs.OrderByDescending(o => o.Id).FirstOrDefault() ?? new Log();
                     if (!lastLog.FinishingType.HasValue || lastLog.FinishingType.Value != inputData.FinishTypeId)
                     {
+
+                        var childrenCases = _caseService.GetChildCasesFor(inputData.Id);
+
+                        if (childrenCases != null)
+                        {
+                            var childrenNotIncludedForDeletion = childrenCases.Where(x=> !inputData.CasesToBeUpdated.Contains(x.Id));
+                            if(childrenNotIncludedForDeletion.Any(x=> x.ClosingDate == null))
+                            {
+                                string errorMsg = Translation.Get("Ärende har underärenden som ej ska avslutas");
+                                throw new Exception(errorMsg);
+                            }
+                        }
+
                         caseLog.CaseId = inputData.Id;
                         caseLog.FinishingType = inputData.FinishTypeId;
                         caseLog.FinishingDate = DateTime.UtcNow;
@@ -1429,7 +1442,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 //if (caseLockViewModel.IsLocked && !string.IsNullOrEmpty(caseLockViewModel.LockGUID))
                 //{
-                    _caseLockService.UnlockCaseByGUID(new Guid(caseLockViewModel.LockGUID));
+                _caseLockService.UnlockCaseByCaseId(caseToUpdate.Id);
+                //_caseLockService.UnlockCaseByGUID(new Guid(caseLockViewModel.LockGUID));
                 //}
 
                 return Json(new CaseOperationResult() { Success = true, Message = Translation.Get("Uppdaterad", Enums.TranslationSource.TextTranslation), CaseId = inputData.Id, CaseNumber = caseToUpdate.CaseNumber.ToString()} );
@@ -1438,6 +1452,13 @@ namespace DH.Helpdesk.Web.Controllers
             catch(Exception e)
             {
                 return Json(new CaseOperationResult() { Success = false, Message = e.Message, CaseId = inputData.Id, CaseNumber = caseToUpdate.CaseNumber.ToString() });
+            }
+            finally
+            {
+                if (caseToUpdate != null)
+                {
+                    _caseLockService.UnlockCaseByCaseId(caseToUpdate.Id);
+                }
             }
         }
 

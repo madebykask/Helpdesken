@@ -398,7 +398,7 @@
 
                 let updatedCases = 0;
 
-                $('#divBulkCaseEdit').on("hide", function () {                    
+                $('#divBulkCaseEdit').on("hide", function () {
                     if (updatedCases > 0) {
                         let inputData = getInputData();
                         if (!nothingToUpdate(inputData)) {
@@ -420,6 +420,7 @@
                     });
 
                     let inputData = getInputData();
+                    inputData.CasesToBeUpdated = selectedCases.map(e => e.id);
 
                     if (validateBulkCaseEditData(inputData, selectedCases)) {
                         $bulkCaseEditProgressDiv.css("display", "block");
@@ -526,14 +527,14 @@
             function getInputData() {
                 return {
                     Id: null,
-                        //Priority_Id: $($casePriorityId.selector + ' option:selected').val(),
-                        Performer_User_Id: $($casePerformer_Id.selector + ' option:selected').val(),
-                            WorkingGroup_Id: $($caseWorkingGroupId.selector + ' option:selected').val(),
-                                StateSecondary_Id: $($caseStateSecondaryId.selector + ' option:selected').val(),
-                                    Problem_Id: $($caseProblemId.selector + ' option:selected').val(),
-                                        FinishDescription: $finishDescription.val(),
-                                            FinishTypeId: $finishTypeId.val(),
-                                                FinishDate: $finishDate.val()
+                    //Priority_Id: $($casePriorityId.selector + ' option:selected').val(),
+                    Performer_User_Id: $($casePerformer_Id.selector + ' option:selected').val(),
+                    WorkingGroup_Id: $($caseWorkingGroupId.selector + ' option:selected').val(),
+                    StateSecondary_Id: $($caseStateSecondaryId.selector + ' option:selected').val(),
+                    Problem_Id: $($caseProblemId.selector + ' option:selected').val(),
+                    FinishDescription: $finishDescription.val(),
+                    FinishTypeId: $finishTypeId.val(),
+                    FinishDate: $finishDate.val()
                 };
             }
 
@@ -546,9 +547,10 @@
                 $btnBulkCaseEdit.show();
                 $bulkCaseEditProgressListBody.html('');
                 $bulkCaseEditProgressDiv.css("display", "none");
-                $finishDescription.val(''),
-                $finishTypeId.val(''),
-                $finishDate.val('')
+                $finishDescription.val('');
+                $finishTypeId.val('');
+                $finishDate.val('');
+                $finishTypeBreadcrubs.text('@Html.Raw(Translation.Get("--"))');
 
                 updatedCases = 0;
             }
