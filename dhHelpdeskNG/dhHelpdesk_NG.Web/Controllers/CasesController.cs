@@ -1313,7 +1313,10 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var caseToUpdate = _caseService.GetCaseById(inputData.Id);
             var oldCase = new Case();
+            var caseLog = new CaseLog();
             oldCase = _caseService.GetDetachedCaseById(inputData.Id);
+
+            CaseLockModel caseLockViewModel = null;
 
             try
             {
@@ -1331,7 +1334,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var userId = SessionFacade.CurrentUser.Id;
 
-                var caseLockViewModel = GetCaseLockModel(inputData.Id, userId, true);
+                caseLockViewModel = GetCaseLockModel(inputData.Id, userId, true);
 
                 if(caseLockViewModel != null)
                 {
@@ -1398,22 +1401,58 @@ namespace DH.Helpdesk.Web.Controllers
                     updateCase = true;
                 }
 
+                if (!String.IsNullOrEmpty(inputData.FinishDescription) && caseToUpdate.FinishingDescription != inputData.FinishDescription)
+                {
+                    caseToUpdate.FinishingDescription = inputData.FinishDescription;
+                    updateCase = true;
+                }
+                
+
+                if (inputData.FinishTypeId > 0)
+                {
+                    var lastLog = caseToUpdate.Logs.OrderByDescending(o => o.Id).FirstOrDefault() ?? new Log();
+                    if (!lastLog.FinishingType.HasValue || lastLog.FinishingType.Value != inputData.FinishTypeId)
+                    {
+
+                        var childrenCases = _caseService.GetChildCasesFor(inputData.Id);
+
+                        if (childrenCases != null)
+                        {
+                            var childrenNotIncludedForDeletion = childrenCases.Where(x=> !inputData.CasesToBeUpdated.Contains(x.Id));
+                            if(childrenNotIncludedForDeletion.Any(x=> x.ClosingDate == null))
+                            {
+                                string errorMsg = Translation.Get("Ärende har underärenden som ej ska avslutas");
+                                throw new Exception(errorMsg);
+                            }
+                        }
+
+                        caseLog.CaseId = inputData.Id;
+                        caseLog.FinishingType = inputData.FinishTypeId;
+                        caseLog.FinishingDate = DateTime.UtcNow;
+                        caseToUpdate.FinishingDate = DateTime.UtcNow;
+                        updateCase = true;
+                    }
+                }
+
                 if (updateCase)
                 {
                     caseMailSetting.CustomeMailFromAddress = mailSenders;
 
                     var currentLoggedInUser = _userService.GetUser(SessionFacade.CurrentUser.Id);
                     var basePath = _masterDataService.GetFilePath(caseToUpdate.Customer_Id);
-                    var caseHistoryId = _caseService.SaveCase(caseToUpdate, null, SessionFacade.CurrentUser.Id, User.Identity.Name, new CaseExtraInfo(), out errors);
+                    var caseHistoryId = _caseService.SaveCase(caseToUpdate, caseLog, SessionFacade.CurrentUser.Id, User.Identity.Name, new CaseExtraInfo(), out errors);
+                    caseLog.CaseHistoryId = caseHistoryId;
+                    var logId = _logService.SaveLog(caseLog, 0, out errors);
                     var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
                     // send emails
-                    _caseService.SendCaseEmail(caseToUpdate.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, new CaseLog(), null, currentLoggedInUser);
+                    _caseService.SendCaseEmail(caseToUpdate.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, null, currentLoggedInUser);
                 }
 
-                if (caseLockViewModel.IsLocked && !string.IsNullOrEmpty(caseLockViewModel.LockGUID))
-                {
-                    _caseLockService.UnlockCaseByGUID(new Guid(caseLockViewModel.LockGUID));
-                }
+                //if (caseLockViewModel.IsLocked && !string.IsNullOrEmpty(caseLockViewModel.LockGUID))
+                //{
+                //_caseLockService.UnlockCaseByCaseId(caseToUpdate.Id);
+                //_caseLockService.UnlockCaseByGUID(new Guid(caseLockViewModel.LockGUID));
+                //}
 
                 return Json(new CaseOperationResult() { Success = true, Message = Translation.Get("Uppdaterad", Enums.TranslationSource.TextTranslation), CaseId = inputData.Id, CaseNumber = caseToUpdate.CaseNumber.ToString()} );
             }
@@ -1421,6 +1460,22 @@ namespace DH.Helpdesk.Web.Controllers
             catch(Exception e)
             {
                 return Json(new CaseOperationResult() { Success = false, Message = e.Message, CaseId = inputData.Id, CaseNumber = caseToUpdate.CaseNumber.ToString() });
+            }
+            finally
+            {
+                var unlocked = false;
+                if(caseLockViewModel != null)
+                {
+                    if (!string.IsNullOrEmpty(caseLockViewModel.LockGUID))
+                    {
+                        _caseLockService.UnlockCaseByGUID(new Guid(caseLockViewModel.LockGUID));
+                        unlocked = true;
+                    }
+                }
+                if (!unlocked && caseToUpdate != null)
+                {
+                    _caseLockService.UnlockCaseByCaseId(caseToUpdate.Id);
+                }
             }
         }
 
