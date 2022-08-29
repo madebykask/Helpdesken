@@ -256,7 +256,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         public ActionResult GetArticleProductAreaList(InvoiceArticleProductAreaSelectedFilterJS jsfilter)
         {
-            var ResolveName = true;
             var filter = jsfilter.ToModel();
             var res = new List<InvoiceArticleProductAreaIndexRowModel>();
 

@@ -26,8 +26,11 @@
     public class ChangePriorityService : IChangePriorityService
     {
         private readonly IChangePriorityRepository _changePriorityRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public ChangePriorityService(
             IChangePriorityRepository changePriorityRepository,
             IUnitOfWork unitOfWork)
@@ -35,6 +38,7 @@
             this._changePriorityRepository = changePriorityRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IDictionary<string, string> Validate(ChangePriorityEntity changePriorityToValidate)
         {

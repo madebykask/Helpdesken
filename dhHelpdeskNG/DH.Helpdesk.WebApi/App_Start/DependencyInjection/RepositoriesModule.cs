@@ -57,7 +57,9 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<SqlDbQueryExecutor>().As<IDbQueryExecutor>();
             builder.RegisterType<SqlDbQueryExecutorFactory>().As<IDbQueryExecutorFactory>();
             builder.RegisterType<DatabaseFactory>().As<IDatabaseFactory>();
+#pragma warning disable 0618
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
+#pragma warning restore 0618
             builder.RegisterType<HelpdeskSessionFactory>().As<ISessionFactory>();
             builder.RegisterType<UnitOfWorkFactory>().As<IUnitOfWorkFactory>();
 

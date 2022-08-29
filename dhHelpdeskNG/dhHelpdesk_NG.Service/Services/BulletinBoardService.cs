@@ -37,7 +37,9 @@
     {
         private readonly IBulletinBoardRepository _bulletinBoardRepository;
 
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
@@ -45,6 +47,7 @@
 
         private readonly IUserService _userService;
 
+#pragma warning disable 0618
         public BulletinBoardService(
             IBulletinBoardRepository bulletinBoardRepository,
             IUnitOfWork unitOfwork,
@@ -58,6 +61,7 @@
             this.workContext = workContext;
             this._userService = userService;
         }
+#pragma warning restore 0618
 
         public IList<BulletinBoard> GetBulletinBoards(int customerId, bool secure = false, bool bulletinBoardWGRestriction = false)
         {

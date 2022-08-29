@@ -23,8 +23,11 @@
     public class ProgramService : IProgramService
     {
         private readonly IProgramRepository _programRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public ProgramService(
             IProgramRepository programRepository,
             IUnitOfWork unitOfWork)
@@ -32,6 +35,7 @@
             this._programRepository = programRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<Program> GetPrograms(int customerId)
         {

@@ -129,6 +129,7 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public CaseLogViewModel CreateCaseLogViewModel()
         {
+#pragma warning disable 0618
             return new CaseLogViewModel
             {
                 CustomerId = CustomerId,
@@ -153,6 +154,7 @@ namespace DH.Helpdesk.Web.Models.Case
                 ShowExternalInvoiceFields = ShowExternalInvoiceFields,
                 ExternalInvoices = ExternalInvoices,
             };
+#pragma warning restore 0618
         }
 
         public CaseHistoryViewModel CreateHistoryViewModel()

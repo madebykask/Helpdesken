@@ -23,8 +23,11 @@
     public class BuildingService : IBuildingService
     {
         private readonly IBuildingRepository _buildingRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public BuildingService(
             IBuildingRepository buildingRepository,
             IUnitOfWork unitOfWork)
@@ -32,6 +35,7 @@
             this._buildingRepository = buildingRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<Building> GetBuildings(int customerId)
         {

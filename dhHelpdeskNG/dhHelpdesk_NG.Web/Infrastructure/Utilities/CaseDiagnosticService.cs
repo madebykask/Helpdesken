@@ -121,7 +121,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Utilities
 
                 _logProgramService.UpdateUserLogin(logProgramModel);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

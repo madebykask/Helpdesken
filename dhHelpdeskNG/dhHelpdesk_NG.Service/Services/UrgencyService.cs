@@ -24,9 +24,12 @@
     public class UrgencyService : IUrgencyService
     {
         private readonly IPriorityImpactUrgencyRepository _priorityImpactUrgencyRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly IUrgencyRepository _urgencyRepository;
 
+#pragma warning disable 0618
         public UrgencyService(
             IPriorityImpactUrgencyRepository priorityImpactUrgencyRepository,
             IUnitOfWork unitOfWork,
@@ -37,6 +40,7 @@
             this._unitOfWork = unitOfWork;
             this._urgencyRepository = urgencyRepository;
         }
+#pragma warning restore 0618
 
         public IList<PriorityImpactUrgency> GetPriorityImpactUrgencies(int customerId)
         {

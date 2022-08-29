@@ -64,10 +64,13 @@ namespace DH.Helpdesk.Services.Services
 
         private readonly IHolidayHeaderRepository _holidayHeaderRepository;
 
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
         private readonly IDepartmentService _departmentService;
 
+#pragma warning disable 0618
         public HolidayService(
             IHolidayRepository holidayRepository,
             IHolidayHeaderRepository holidayHeaderRepository,
@@ -79,6 +82,7 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork = unitOfWork;
             this._departmentService = departmentService;
         }
+#pragma warning restore 0618
 
         public IEnumerable<Holiday> GetAll()
         {

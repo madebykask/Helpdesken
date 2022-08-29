@@ -404,7 +404,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
                 return this.PartialView("Reports/ReportGenerator", model);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 SessionFacade.SavePageFilters(PageName.ReportsReportGenerator, ReportGeneratorFilterModel.CreateDefault());
                 throw;

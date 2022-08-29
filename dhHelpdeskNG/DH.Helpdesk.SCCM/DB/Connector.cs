@@ -15,9 +15,9 @@ namespace DH.Helpdesk.SCCM.DB
     {
 
 
-        private string ConnectionString;
+        private readonly string ConnectionString;
 
-        private int ConnectionTimeout = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Connection_Timeout_Seconds"].ToString());
+        private readonly int ConnectionTimeout = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Connection_Timeout_Seconds"].ToString());
 
         public Connector(string ConnectionString)
         {
@@ -316,7 +316,7 @@ namespace DH.Helpdesk.SCCM.DB
 
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw new System.InvalidOperationException(s);
 
@@ -440,7 +440,7 @@ namespace DH.Helpdesk.SCCM.DB
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw new System.InvalidOperationException(s);
 

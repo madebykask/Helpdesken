@@ -66,7 +66,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly IReportRepository _reportRepository;
         private readonly IReportCustomerRepository _reportCustomerRepository;
         private readonly IUserRepository _userRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly ICaseSettingRepository _caseSettingRepository;
 
 
@@ -74,6 +76,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ISettingService _settingService;
         private readonly IUserService _userService;
 
+#pragma warning disable 0618
         public CustomerService(
             ICaseFieldSettingRepository caseFieldSettingRepository,
             ICaseFieldSettingLanguageRepository caseFieldSettingLanguageRepository,
@@ -100,6 +103,7 @@ namespace DH.Helpdesk.Services.Services
             _settingService = settingService;
             _userService = userService;
         }
+#pragma warning restore 0618
 
         public IList<Customer> GetAllCustomers()
         {

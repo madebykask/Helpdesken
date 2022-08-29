@@ -162,7 +162,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 var validuser = !string.IsNullOrEmpty(userName) && (userName.Trim() == model.Email.Trim());
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

@@ -835,7 +835,6 @@ Public Class CaseData
 
     Public Function updateChangeTime(ByVal CaseId As Long) As Integer
         Dim sSQL As String = ""
-        Dim dt As DataTable
 
         Try
             sSQL = "UPDATE tblCase SET ChangeTime = getDate(), Status=0 WHERE Id=" & CaseId & ""

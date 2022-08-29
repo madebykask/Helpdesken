@@ -60,10 +60,8 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <summary>
         /// Get case data.
         /// </summary>
-        /// <param name="input"></param>
         /// <param name="langId"></param>
         /// <param name="caseId"></param>
-        /// <param name="cid"></param>
         /// <param name="sessionId"></param>
         /// <returns></returns>
         [HttpGet]

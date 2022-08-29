@@ -285,7 +285,7 @@ Module DH_Helpdesk_Mail
         Dim sNewCaseToEmailAddress As String = ""
         Dim sSubject As String
         Dim sBodyText As String = ""
-        Dim j As Integer
+        'Dim j As Integer
         Dim iLog_Id As Integer
         Dim iCaseNumber As Integer
         Dim iListCount As Integer = 0

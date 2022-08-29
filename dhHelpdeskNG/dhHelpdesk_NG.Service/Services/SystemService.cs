@@ -38,9 +38,13 @@
     public class SystemService : ISystemService
     {
         private readonly ISystemRepository _systemRepository;
+
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly IOperatingSystemRepository _operatingSystemRepository;
 
+#pragma warning disable 0618
         public SystemService(
             ISystemRepository systemRepository,
             IUnitOfWork unitOfWork,
@@ -50,6 +54,7 @@
             this._unitOfWork = unitOfWork;
             this._operatingSystemRepository = operatingSystemRepository;
         }
+#pragma warning restore 0618
 
         public IList<Domain.System> GetSystems(int customerId, bool activeOnly = false, int? includeId = null)
         {

@@ -505,7 +505,7 @@ Module DH_Helpdesk_Schedule
         Dim objUserData As New UserData
         Dim objUser As User
         Dim objComputerUserData As New ComputerUserData
-        Dim objComputerUser As ComputerUser
+        'Dim objComputerUser As ComputerUser
         Dim sMessageId As String
 
         gsConnectionString = sConnectionString
@@ -608,7 +608,7 @@ Module DH_Helpdesk_Schedule
         Dim objLogData As New LogData
         Dim objUserData As New UserData
         Dim objUser As User
-        Dim objComputerUser As ComputerUser
+        'Dim objComputerUser As ComputerUser
         Dim objComputerUserData As New ComputerUserData
         Dim sMessageId As String
 

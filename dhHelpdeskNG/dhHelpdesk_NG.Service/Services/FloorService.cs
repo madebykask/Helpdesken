@@ -23,8 +23,11 @@
     public class FloorService : IFloorService
     {
         private readonly IFloorRepository _floorRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public FloorService(
             IFloorRepository floorRepository,
             IUnitOfWork unitOfWork)
@@ -32,6 +35,7 @@
             this._floorRepository = floorRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<Floor> GetFloors()
         {

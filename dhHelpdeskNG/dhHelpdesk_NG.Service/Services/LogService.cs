@@ -273,7 +273,6 @@ namespace DH.Helpdesk.Services.Services
                 throw new ArgumentException("caseLog is null");
             }
 
-            IDictionary<string, string> errors;
             IEnumerable<CaseHistory> newCaseHistories;
             using (var uow = _unitOfWorkFactory.Create())
             {

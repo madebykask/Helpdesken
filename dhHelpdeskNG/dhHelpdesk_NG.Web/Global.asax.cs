@@ -505,7 +505,7 @@ namespace DH.Helpdesk.Web
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Ignore all errors here
             }

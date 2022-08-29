@@ -375,7 +375,7 @@ namespace DH.Helpdesk.Web.Controllers
                         _fileViewLogService.Log(l.CaseId, userId, fileName, model.FilePath, FileViewLogFileSource.Helpdesk, FileViewLogOperation.View);
                     }
                 }
-                catch (FileNotFoundException e)
+                catch (FileNotFoundException)
                 {
                     return HttpNotFound("File not found");
                 }

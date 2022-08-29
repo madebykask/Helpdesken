@@ -46,8 +46,11 @@ namespace DH.Helpdesk.Services.Services
     public class LanguageService : ILanguageService //TODO: needs refactoring
     {
         private readonly ILanguageRepository _languageRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public LanguageService(
             ILanguageRepository languageRepository,
             IUnitOfWork unitOfWork)
@@ -55,6 +58,7 @@ namespace DH.Helpdesk.Services.Services
             this._languageRepository = languageRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<Language> GetLanguages(bool active = true)
         {

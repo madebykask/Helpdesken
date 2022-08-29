@@ -65,7 +65,9 @@ namespace DH.Helpdesk.Services.Services
     public class OperationLogService : IOperationLogService
     {
         private readonly IOperationLogRepository _operationLogRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly IWorkingGroupRepository _workingGroupRepository;
 
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
@@ -77,6 +79,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ISettingService _settingService;
         private readonly IEmailSendingSettingsProvider _emailSendingSettingsProvider;
 
+#pragma warning disable 0618
         public OperationLogService(
             IOperationLogRepository operationLogRepository,
             IUnitOfWork unitOfWork,
@@ -100,6 +103,7 @@ namespace DH.Helpdesk.Services.Services
             this._settingService = settingService;
             _emailSendingSettingsProvider = emailSendingSettingsProvider;
         }
+#pragma warning restore 0618
 
         public IList<OperationLog> GetOperationLogs(int customerId)
         {

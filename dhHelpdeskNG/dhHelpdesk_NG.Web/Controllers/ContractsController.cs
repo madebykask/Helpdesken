@@ -1049,7 +1049,7 @@ namespace DH.Helpdesk.Web.Controllers
                 else
                     return this.RedirectToAction("index", "Contracts");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return this.RedirectToAction("index", "Contracts");
             }

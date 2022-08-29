@@ -36,8 +36,11 @@
     public class SupplierService : ISupplierService
     {
         private readonly ISupplierRepository _supplierRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public SupplierService(
             ISupplierRepository supplierRepository,
             IUnitOfWork unitOfWork)
@@ -45,6 +48,7 @@
             this._supplierRepository = supplierRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<Supplier> GetSuppliers(int customerId)
         {

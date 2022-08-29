@@ -38,9 +38,12 @@ namespace DH.Helpdesk.Services.Services
     public class CaseSettingsService : ICaseSettingsService
     {
         private readonly ICaseSettingRepository _caseSettingRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly ICaseFieldSettingService _caseFieldSettingService;
 
+#pragma warning disable 0618
         public CaseSettingsService(
             ICaseSettingRepository caseSettingRepository,
             IUnitOfWork unitOfWork,
@@ -50,6 +53,7 @@ namespace DH.Helpdesk.Services.Services
             _unitOfWork = unitOfWork;
             _caseFieldSettingService = caseFieldSettingService;
         }
+#pragma warning restore 0618
 
         public IList<CaseSettings> GetCaseSettings(int customerId, int? userId = null, CaseSettingTypes? type = CaseSettingTypes.CaseOverview)
         {
