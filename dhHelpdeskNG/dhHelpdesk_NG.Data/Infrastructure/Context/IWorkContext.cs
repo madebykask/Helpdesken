@@ -27,7 +27,10 @@ namespace DH.Helpdesk.Dal.Infrastructure.Context
         /// <summary>
         /// Gets the cache.
         /// </summary>
+        /// 
+#pragma warning disable 0618
         ICacheContext Cache { get; }
+#pragma warning restore 0618
 
         /// <summary>
         /// The refresh.

@@ -956,10 +956,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             var result = string.Empty;
             if (section != null)
             {
+#pragma warning disable 0618
                 if (model.case_.IsNew() && section.IsNewCollapsed)
                     result = "hidefollowers";
                 if (!model.case_.IsNew() && section.IsEditCollapsed)
                     result = "hidefollowers";
+#pragma warning restore 0618
             }
             return result;
         }
@@ -1028,6 +1030,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
             foreach (var caseFieldSetting in fields)
             {
+#pragma warning disable 0618
                 #region Initiator
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.ReportedBy.ToString())
                 {
@@ -1079,9 +1082,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     result.Add(model.case_.UserCode);
                 }
+#pragma warning restore 0618
                 #endregion
                 #region Regarding
 
+#pragma warning disable 0618
                 if (model.case_.IsAbout != null)
                 {
                     if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString())
@@ -1135,7 +1140,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                         result.Add(model.case_.IsAbout.UserCode);
                     }
                 }
+#pragma warning restore 0618
 
+#pragma warning disable 0618
                 #endregion
                 #region Computer info
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.InventoryNumber.ToString())
@@ -1151,18 +1158,25 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     result.Add(model.case_.InventoryLocation);
                 }
                 #endregion
+#pragma warning restore 0618
                 #region Case info
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.CaseNumber.ToString())
                 {
+#pragma warning disable 0618
                     result.Add(model.case_.CaseNumber.ToString());
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.RegTime.ToString())
-                {                    
+                {
+#pragma warning disable 0618
                     result.Add(TimeZoneInfo.ConvertTimeFromUtc(model.case_.RegTime, userTimeZone).ToString());
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.ChangeTime.ToString())
                 {
+#pragma warning disable 0618
                     result.Add(TimeZoneInfo.ConvertTimeFromUtc(model.case_.ChangeTime, userTimeZone).ToString());
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.User_Id.ToString())
                 {
@@ -1177,6 +1191,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     }
                     else
                     {
+#pragma warning disable 0618
                         if (!string.IsNullOrEmpty(model.case_.RegUserName))
                         {
                             str = str + " " + model.case_.RegUserName;
@@ -1189,6 +1204,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     }
                     str = str + " " + model.case_.IpAddress;
                     result.Add(str);
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())
                 {
@@ -1196,6 +1212,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())
                 {
+#pragma warning disable 0618
                     var cur = model.caseTypes.SingleOrDefault(d => d.Id == model.case_.CaseType_Id);
                     if (cur != null)
                         result.Add(Translation.Get(cur.Name));
@@ -1207,9 +1224,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                             result.Add(Translation.Get(curCt.Name));
                         }
                     }
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())
                 {
+#pragma warning disable 0618
                     var cur = model.productAreas.SingleOrDefault(d => d.Id == model.case_.ProductArea_Id);
                     if (cur != null)
                         result.Add(Translation.Get(cur.Name));
@@ -1224,27 +1243,35 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                             }
                         }
                     }
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.System_Id.ToString())
                 {
+#pragma warning disable 0618
                     var cur = model.systems.SingleOrDefault(d => d.Id == model.case_.System_Id);
                     if (cur != null)
                         result.Add(cur.SystemName);
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())
                 {
+#pragma warning disable 0618
                     var cur = model.urgencies.SingleOrDefault(d => d.Id == model.case_.Urgency_Id);
                     if (cur != null)
                         result.Add(cur.Name);
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Impact_Id.ToString())
                 {
+#pragma warning disable 0618
                     var cur = model.impacts.SingleOrDefault(d => d.Id == model.case_.Impact_Id);
                     if (cur != null)
                         result.Add(cur.Name);
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Category_Id.ToString())
                 {
+#pragma warning disable 0618
                     var cur = model.categories.SingleOrDefault(d => d.Id == model.case_.Category_Id);
                     if (cur != null)
                         result.Add(cur.Name);
@@ -1259,27 +1286,37 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                             }
                         }
                     }
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())
                 {
+#pragma warning disable 0618
                     var cur = model.suppliers.SingleOrDefault(d => d.Id == model.case_.Supplier_Id);
                     if (cur != null)
                         result.Add(cur.Name);
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())
                 {
+#pragma warning disable 0618
                     result.Add(model.case_.InvoiceNumber);
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())
                 {
+#pragma warning disable 0618
                     result.Add(model.case_.ReferenceNumber);
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Caption.ToString())
                 {
+#pragma warning disable 0618
                     result.Add(model.case_.Caption);
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Description.ToString())
                 {
+#pragma warning disable 0618
                     if (!string.IsNullOrEmpty(model.case_.Description))
                     {
                         if (model.case_.Description.Length > 30)
@@ -1289,9 +1326,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                             result.Add(model.case_.Description);
                         }
                     }
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())
                 {
+#pragma warning disable 0618
                     if (!string.IsNullOrEmpty(model.case_.Miscellaneous))
                     {
                         if (model.case_.Miscellaneous.Length > 30)
@@ -1301,24 +1340,32 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                             result.Add(model.case_.Miscellaneous);
                         }
                     }
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.AgreedDate.ToString())
                 {
+#pragma warning disable 0618
                     if (model.case_.AgreedDate.HasValue)
                     result.Add(model.case_.AgreedDate.Value.ToShortDateString());
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Available.ToString())
                 {
+#pragma warning disable 0618
                     result.Add(model.case_.Available);
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.Cost.ToString())
                 {
+#pragma warning disable 0618
                     var str = model.case_.Cost + " " + model.case_.OtherCost + " " + model.case_.Currency;
                     result.Add(str);
+#pragma warning restore 0618
                 }
                 #endregion
                 #region Case management
 
+#pragma warning disable 0618
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())
                 {
                     var cur = model.workingGroups.SingleOrDefault(r => r.Id == model.case_.WorkingGroup_Id);
@@ -1403,6 +1450,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     result.Add(model.case_.SolutionRate);
                 }
+#pragma warning restore 0618
 
                 #endregion
                 #region Status
@@ -1412,11 +1460,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.FinishingDate.ToString())
                 {
+#pragma warning disable 0618
                     if (model.case_.FinishingDate.HasValue)
                         result.Add(model.case_.FinishingDate.Value.ToShortDateString());
+#pragma warning restore 0618
                 }
                 if (caseFieldSetting.Name == GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())
                 {
+#pragma warning disable 0618
                     if (!string.IsNullOrEmpty(model.case_.FinishingDescription))
                     {
                         if (model.case_.FinishingDescription.Length > 30)
@@ -1426,6 +1477,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                             result.Add(model.case_.FinishingDescription);
                         }
                     }
+#pragma warning restore 0618
                 }
                 #endregion
             }

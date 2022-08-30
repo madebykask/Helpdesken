@@ -1585,7 +1585,9 @@ namespace DH.Helpdesk.Web.Controllers
         {
             m.ActiveTab = "";
             this.Save(m);
+#pragma warning disable 0618
             return string.IsNullOrEmpty(BackUrl) ? this.Redirect(Url.Action("index", "cases", new { customerId = m.case_.Customer_Id })) : this.Redirect(BackUrl);
+#pragma warning restore 0618
         }
 
         [HttpPost]
@@ -1593,7 +1595,9 @@ namespace DH.Helpdesk.Web.Controllers
         public RedirectToRouteResult EditAndAddCase(CaseEditInput m)
         {
             this.Save(m);
+#pragma warning disable 0618
             return this.RedirectToAction("new", "cases", new { customerId = m.case_.Customer_Id });
+#pragma warning restore 0618
         }
 
         [HttpPost]
@@ -1770,9 +1774,11 @@ namespace DH.Helpdesk.Web.Controllers
                     var moduleCaseInvoice = GetCustomerSettings(customerId.Value).ModuleCaseInvoice;
                     if (moduleCaseInvoice == 1)
                     {
+#pragma warning disable 0618
                         var caseInvoices = _invoiceArticleService.GetCaseInvoicesWithTimeZone(m.case_.Id, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
                         var invoiceArticles = _invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
                         m.InvoiceModel = new CaseInvoiceModel(customerId.Value, m.case_.Id, invoiceArticles, "", m.CaseKey, m.LogKey);
+#pragma warning restore 0618
                     }
 
                     return this.View(m);
@@ -1828,7 +1834,9 @@ namespace DH.Helpdesk.Web.Controllers
                 m.NumberOfCustomers = _masterDataService.GetCustomers(userId).Count;
 
                 m.ActiveTab = (!string.IsNullOrEmpty(caseLockViewModel.ActiveTab) ? caseLockViewModel.ActiveTab : activeTab);
+#pragma warning disable 0618
                 m.ActiveTab = (m.ActiveTab == "") ? GetActiveTab(m.case_.CaseSolution_Id, id) : activeTab; //Fallback to casesolution
+#pragma warning restore 0618
 
                 if (uni.HasValue)
                 {
@@ -1865,6 +1873,7 @@ namespace DH.Helpdesk.Web.Controllers
                 // move case to another customer
                 if (moveToCustomerId.HasValue)
                 {
+#pragma warning disable 0618
                     m.MovedFromCustomerId = m.case_.Customer_Id;
                     m.case_.Customer_Id = moveToCustomerId.Value;
                     m.case_.CaseType_Id = 0;
@@ -1898,6 +1907,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.ParantPath_ProductArea = ParentPathDefaultValue;
                     m.ParantPath_Category = ParentPathDefaultValue;
                     m.ParantPath_OU = ParentPathDefaultValue;
+
                 }
 
                 var caseCustomerSettings = GetCustomerSettings(m.case_.Customer_Id);
@@ -1912,6 +1922,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.CustomerSettings = _workContext.Customer.Settings; //current customer settings
                 m.CustomerSettings.ModuleCaseInvoice = Convert.ToBoolean(caseCustomerSettings.ModuleCaseInvoice); // TODO FIX
 
+#pragma warning restore 0618
                 #region ConnectToParentModel
 
                 m.ConnectToParentModel = new JsonCaseIndexViewModel();
@@ -2025,10 +2036,14 @@ namespace DH.Helpdesk.Web.Controllers
                     m.CaseFieldSettingWithLangauges = _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(customerId, SessionFacade.CurrentLanguageId);
                     m.CaseSectionModels = _caseSectionService.GetCaseSections(customerId, SessionFacade.CurrentLanguageId);
                     m.finishingCauses = _finishingCauseService.GetFinishingCausesWithChilds(customerId).Where(x => x.Merged == false).ToList();
+#pragma warning disable 0618
                     m.case_ = _caseService.GetCaseById(m.CaseLog.CaseId);
+#pragma warning restore 0618
                     m.IsCaseReopened = isCaseReopened;
 
+#pragma warning disable 0618
                     var lastLog = m.case_.Logs.OrderByDescending(o => o.Id).FirstOrDefault();
+#pragma warning restore 0618
                     if (lastLog.FinishingType.HasValue)
                     {
                         var finishingCausesInfos = _finishingCauseService.GetFinishingCauseInfos(customerId).ToArray();
@@ -2056,7 +2071,9 @@ namespace DH.Helpdesk.Web.Controllers
                     }
 
                     const bool isAddEmpty = true;
+#pragma warning disable 0618
                     var responsibleUsersAvailable = _userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
+#pragma warning restore 0618
                     m.OutFormatter = new OutputFormatter(cs.IsUserFirstLastNameRepresentation == 1, userTimeZone);
                     m.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(cs, isAddEmpty);
 
@@ -2070,6 +2087,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                     // check department info
                     m.ShowInvoiceFields = 0;
+#pragma warning disable 0618
                     if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)
                     {
                         var d = _departmentService.GetDepartment(m.case_.Department_Id.Value);
@@ -2080,11 +2098,13 @@ namespace DH.Helpdesk.Web.Controllers
                             m.TimeRequired = d.ChargeMandatory.ToBool();
                         }
                     }
+#pragma warning restore 0618
 
                     m.CaseLog.SendMailAboutCaseToNotifier = !string.IsNullOrEmpty(m.CaseLog.TextExternal);// customer.CommunicateWithNotifier.ToBool();
 
                     // check state secondary info
                     m.Disable_SendMailAboutCaseToNotifier = false;
+#pragma warning disable 0618
                     if (m.case_.StateSecondary_Id > 0)
                         if (m.case_.StateSecondary != null)
                         {
@@ -2094,6 +2114,7 @@ namespace DH.Helpdesk.Web.Controllers
                             else
                                 m.CaseLog.SendMailAboutCaseToNotifier = true;
                         }
+#pragma warning restore 0618
 
                     m.stateSecondaries = _stateSecondaryService.GetStateSecondaries(customerId);
 
@@ -3019,7 +3040,9 @@ namespace DH.Helpdesk.Web.Controllers
             var caseLockModel = new CaseLockModel();
             var customerFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
 
+#pragma warning disable 0618
             var parentCaseID = caseEditInput.case_.Id;
+#pragma warning restore 0618
             // Template to split to
             int? splitToCaseSolutionID;
             if (caseEditInput.CurrentCaseSolution_Id.HasValue)
@@ -3074,7 +3097,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
 
+#pragma warning disable 0618
             var parentCaseID = caseEditInput.case_.Id;
+#pragma warning restore 0618
 
 
             return RedirectToAction("Split", new { parentCaseID = parentCaseID });
@@ -3679,9 +3704,11 @@ namespace DH.Helpdesk.Web.Controllers
                 var moduleCaseInvoice = GetCustomerSettings(customerId).ModuleCaseInvoice;
                 if (moduleCaseInvoice == 1)
                 {
+#pragma warning disable 0618
                     var caseInvoices = _invoiceArticleService.GetCaseInvoicesWithTimeZone(m.case_.Id, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
                     var invoiceArticles = _invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
                     m.InvoiceModel = new CaseInvoiceModel(customerId, m.case_.Id, invoiceArticles, "", m.CaseKey, m.LogKey);
+#pragma warning restore 0618
                 }
                 m.Performer_Id = 0;
                 return m;
@@ -3703,7 +3730,9 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var utcNow = DateTime.UtcNow;
             var movedFromCustomerId = m.MovedFromCustomerId;
+#pragma warning disable 0618
             var case_ = m.case_;
+#pragma warning restore 0618
             var caseLog = m.caseLog;
             var caseMailSetting = m.caseMailSetting;
             var updateNotifierInformation = m.updateNotifierInformation;
@@ -3988,6 +4017,7 @@ namespace DH.Helpdesk.Web.Controllers
                     var exData = _caseService.GetExtendedCaseData(m.ExtendedCaseGuid);
                     _caseService.CreateExtendedCaseRelationship(case_.Id, exData.Id, exData.ExtendedCaseFormId);
                 }
+#pragma warning disable 0618
                 if (m.case_.ReportedBy != null && m.ExtendedInitiatorGUID.HasValue)
                 {
                     var exData = _caseService.GetExtendedCaseData(m.ExtendedInitiatorGUID.Value);
@@ -3996,29 +4026,39 @@ namespace DH.Helpdesk.Web.Controllers
                 if (m.case_.IsAbout.ReportedBy != null && m.ExtendedRegardingGUID.HasValue)
                 {
                     var exData = _caseService.GetExtendedCaseData(m.ExtendedRegardingGUID.Value);
+                  
                     _caseService.CreateExtendedCaseSectionRelationship(case_.Id, exData.Id, CaseSectionType.Regarding, curCustomer.Id);
                 }
+#pragma warning restore 0618
             }
             if (edit) // If edit existing case
             {
                 if (m.ExtendedInitiatorGUID.HasValue)
                 {
+#pragma warning disable 0618
                     var exData = _caseService.GetExtendedCaseData(m.ExtendedInitiatorGUID.Value);
                     _caseService.CheckAndUpdateExtendedCaseSectionData(exData.Id, m.case_.Id, m.case_.Customer_Id, CaseSectionType.Initiator);
+#pragma warning restore 0618
                 }
                 else
                 {
+#pragma warning disable 0618
                     _caseService.RemoveAllExtendedCaseSectionData(case_.Id, m.case_.Customer_Id, CaseSectionType.Initiator);
+#pragma warning restore 0618
                 }
 
                 if (m.ExtendedRegardingGUID.HasValue)
                 {
+#pragma warning disable 0618
                     var exData = _caseService.GetExtendedCaseData(m.ExtendedRegardingGUID.Value);
                     _caseService.CheckAndUpdateExtendedCaseSectionData(exData.Id, m.case_.Id, m.case_.Customer_Id, CaseSectionType.Regarding);
+#pragma warning restore 0618
                 }
                 else
                 {
+#pragma warning disable 0618
                     _caseService.RemoveAllExtendedCaseSectionData(case_.Id, m.case_.Customer_Id, CaseSectionType.Regarding);
+#pragma warning restore 0618
 
                 }
             }
@@ -4580,16 +4620,19 @@ namespace DH.Helpdesk.Web.Controllers
                 return AccessMode.NoAccess;
             }
 
+#pragma warning disable 0618
             if (m.case_ == null)
             {
                 return AccessMode.NoAccess;
             }
+#pragma warning restore 0618
 
             if (departmensForUser != null)
             {
                 var accessToDepartments = departmensForUser.Select(d => d.Id).ToList();
                 if (SessionFacade.CurrentUser.UserGroupId < 3)
                 {
+#pragma warning disable 0618
                     if (accessToDepartments.Count > 0 && m.case_.Department_Id.HasValue)
                     {
                         if (!accessToDepartments.Contains(m.case_.Department_Id.Value))
@@ -4597,6 +4640,7 @@ namespace DH.Helpdesk.Web.Controllers
                             return AccessMode.NoAccess;
                         }
                     }
+#pragma warning restore 0618
                 }
             }
 
@@ -4606,6 +4650,7 @@ namespace DH.Helpdesk.Web.Controllers
              * there is no ticket. (Per knows more info)
              */
 
+#pragma warning disable 0618
             if (accessToWorkinggroups != null && m.case_.Id != 0)
             {
                 if (SessionFacade.CurrentUser.UserGroupId < 3)
@@ -4625,11 +4670,14 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }
             }
+#pragma warning restore 0618
 
+#pragma warning disable 0618
             if (m.case_.FinishingDate.HasValue)
             {
                 return AccessMode.ReadOnly;
             }
+#pragma warning restore 0618
 
             if (m.CaseLock != null && m.CaseLock.IsLocked)
             {
@@ -5223,13 +5271,17 @@ namespace DH.Helpdesk.Web.Controllers
             if (!isCreateNewCase)
             {
                 var markCaseAsRead = string.IsNullOrWhiteSpace(redirectFrom);
+#pragma warning disable 0618
                 m.case_ = _caseService.GetCaseById(caseId); //todo: check if case has been requested before and can be reused!
+#pragma warning restore 0618
 
+#pragma warning disable 0618
                 if (m.CurrentCaseSolution == null && m.case_.CurrentCaseSolution_Id.HasValue)
                 {
                     m.CurrentCaseSolution = _caseSolutionService.GetCaseSolution(m.case_.CurrentCaseSolution_Id.Value);
                     m.CaseTemplateSplitToCaseSolutionID = m.CurrentCaseSolution.SplitToCaseSolution_Id;
                 }
+#pragma warning restore 0618
 
 
                 //TODO: update code to use CAseHistorues instead of m.case.CaseHistory
@@ -5238,15 +5290,21 @@ namespace DH.Helpdesk.Web.Controllers
                 m.IsFollowUp = _caseFollowUpService.IsCaseFollowUp(SessionFacade.CurrentUser.Id, caseId);
 
 
+#pragma warning disable 0618
                 var editMode = EditMode(m, ModuleName.Cases, deps, acccessToGroups);
                 if (m.case_.Unread != 0 && updateState && editMode == AccessMode.FullAccess)
                     _caseService.MarkAsRead(caseId);
+#pragma warning restore 0618
 
+#pragma warning disable 0618
                 //todo: review
                 customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
                 //SessionFacade.CurrentCaseLanguageId = m.case_.RegLanguage_Id;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
                 var userLocal_ChangeTime = TimeZoneInfo.ConvertTimeFromUtc(m.case_.ChangeTime, userTimeZone);
+#pragma warning restore 0618
                 m.ChangeTime = userLocal_ChangeTime;
                 m.ExternalInvoices = GetExternalInvoices(caseId);
                 var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(caseId);
@@ -5260,7 +5318,9 @@ namespace DH.Helpdesk.Web.Controllers
             if (customerUserSetting == null)
                 throw new ArgumentException(string.Format("No customer settings for this customer '{0}' and user '{1}'", customerId, userId));
 
+#pragma warning disable 0618
             var case_ = m.case_;
+#pragma warning restore 0618
             var customer = _customerService.GetCustomer(customerId);
             var customerSetting = GetCustomerSettings(customerId);
             var outputFormatter = new OutputFormatter(customerSetting.IsUserFirstLastNameRepresentation == 1, userTimeZone);
@@ -5345,6 +5405,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var userName = SessionFacade.CurrentUserIdentity?.GetUserIdWithDomain();
                 if (copyFromCaseId.HasValue)
                 {
+#pragma warning disable 0618
                     m.case_ = _caseService.Copy(
                         copyFromCaseId.Value,
                         userId,
@@ -5354,9 +5415,11 @@ namespace DH.Helpdesk.Web.Controllers
                         userName);
 
                     m.MapToFollowerUsers(m.case_.CaseFollowers);
+#pragma warning restore 0618
                 }
                 else if (parentCaseId.HasValue)
                 {
+#pragma warning disable 0618
                     ParentCaseInfo parentCaseInfo;
                     m.case_ = _caseService.InitChildCaseFromCase(
                        parentCaseId.Value,
@@ -5365,11 +5428,13 @@ namespace DH.Helpdesk.Web.Controllers
                        CaseRegistrationSource.Administrator,
                        userName,
                        out parentCaseInfo);
+#pragma warning restore 0618
 
                     m.ParentCaseInfo = parentCaseInfo.MapBusinessToWebModel(outputFormatter);
                 }
                 else
                 {
+#pragma warning disable 0618
                     m.case_ = _caseService.InitCase(
                         customerId,
                         userId,
@@ -5378,6 +5443,7 @@ namespace DH.Helpdesk.Web.Controllers
                         CaseRegistrationSource.Administrator,
                         customerSetting,
                         userName);
+#pragma warning restore 0618
 
                     //m.case_ = _caseService.InitCase(
                     //        customerId,
@@ -5393,7 +5459,9 @@ namespace DH.Helpdesk.Web.Controllers
                 var defaultStateSecondary = _stateSecondaryService.GetDefaultOverview(customerId);
                 if (defaultStateSecondary != null)
                 {
+#pragma warning disable 0618
                     m.case_.StateSecondary_Id = int.Parse(defaultStateSecondary.Value);
+#pragma warning restore 0618
                 }
 
                 // todo: Set default search category based on case section settings
@@ -5416,10 +5484,12 @@ namespace DH.Helpdesk.Web.Controllers
 
                 m.CaseFilesModel = new CaseFilesModel(caseId.ToString(), caseFiles.ToArray(), m.SavedFiles, useVd);
 
+#pragma warning disable 0618
                 if (m.case_.User_Id.HasValue)
                 {
                     m.RegByUser = _userService.GetUser(m.case_.User_Id.Value);
                 }
+#pragma warning restore 0618
 
                 if (m.Logs != null)
                 {
@@ -5491,6 +5561,7 @@ namespace DH.Helpdesk.Web.Controllers
                     .Select(x => x.CaseSolutionId)
                     .ToList();
 
+#pragma warning disable 0618
             if (m.case_.FinishingDate == null)
             {
                 m.WorkflowSteps = _caseSolutionService.GetWorkflowSteps(customerId,
@@ -5502,6 +5573,7 @@ namespace DH.Helpdesk.Web.Controllers
                   templateId,
                   langId);
             }
+#pragma warning restore 0618
 
 
             m.CaseMailSetting = new CaseMailSetting(
@@ -5535,9 +5607,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m.caseFieldSettings.ShowOnPage(TranslationCaseFields.ProductArea_Id))
             {
+#pragma warning disable 0618
                 m.productAreas =
                     _productAreaService.GetTopProductAreasForUserOnCase(customerId, m.case_.ProductArea_Id, SessionFacade.CurrentUser)
                         .OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
+#pragma warning restore 0618
             }
 
             if (m.caseFieldSettings.ShowOnPage(TranslationCaseFields.Region_Id))
@@ -5563,7 +5637,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m.caseFieldSettings.ShowOnPage(TranslationCaseFields.System_Id))
             {
+#pragma warning disable 0618
                 m.systems = _systemService.GetSystems(customerId, true, m.case_.System_Id);
+#pragma warning restore 0618
             }
 
             if (m.caseFieldSettings.ShowOnPage(TranslationCaseFields.Urgency_Id))
@@ -5573,8 +5649,10 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m.caseFieldSettings.ShowOnPage(TranslationCaseFields.CausingPart))
             {
+#pragma warning disable 0618
                 var causingParts = GetCausingPartsModel(customerId, m.case_.CausingPartId);
                 m.causingParts = causingParts;
+#pragma warning restore 0618
                 //#1
                 //m.causingParts = _causingPartService.GetCausingParts(customerId);
             }
@@ -5591,11 +5669,14 @@ namespace DH.Helpdesk.Web.Controllers
                 var defWorkingGroup = m.workingGroups.Where(it => it.IsDefault == 1).FirstOrDefault();
                 if (defWorkingGroup != null)
                 {
+#pragma warning disable 0618
                     m.case_.WorkingGroup_Id = defWorkingGroup.Id;
+#pragma warning restore 0618
                 }
             }
 
             // Set working group and performerId from the case type working group if any for New case only
+#pragma warning disable 0618
             if (isCreateNewCase && m.case_.CaseType_Id > 0)
             {
                 var caseType = _caseTypeService.GetCaseType(m.case_.CaseType_Id);
@@ -5608,7 +5689,9 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.Performer_User_Id = caseType.User_Id.Value;
                 }
             }
+#pragma warning restore 0618
 
+#pragma warning disable 0618
             //product area should override working group set by case type before
             if (isCreateNewCase && m.case_.ProductArea_Id.HasValue)
             {
@@ -5626,6 +5709,7 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }
             }
+#pragma warning restore 0618
 
             // "RegistrationSourceCustomer" field
             if (m.caseFieldSettings.ShowOnPage(TranslationCaseFields.RegistrationSourceCustomer))
@@ -5633,6 +5717,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var customerSources =
                     _registrationSourceCustomerService.GetCustomersActiveRegistrationSources(customerId).ToArray();
 
+#pragma warning disable 0618
                 if (m.case_.RegistrationSourceCustomer_Id.HasValue)
                 {
                     m.CustomerRegistrationSourceId = m.case_.RegistrationSourceCustomer_Id.Value;
@@ -5649,6 +5734,7 @@ namespace DH.Helpdesk.Web.Controllers
                         m.SelectedCustomerRegistrationSource = defaultSource.SourceName;
                     }
                 }
+#pragma warning restore 0618
 
                 m.CustomerRegistrationSources.AddRange(
                     customerSources.Select(
@@ -5683,7 +5769,9 @@ namespace DH.Helpdesk.Web.Controllers
             m.standardTexts = _standardTextService.GetStandardTexts(customerId);
             m.Languages = _languageService.GetActiveLanguages();
 
+#pragma warning disable 0618
             var responsibleUsersList = _userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
+#pragma warning restore 0618
 
             var performersListForSearch = _userService.GetAvailablePerformersOrUserId(customerId, null, true);
             m.PerformersToSearch = createPerformerforSearchList(customerId, performersListForSearch);
@@ -5694,15 +5782,19 @@ namespace DH.Helpdesk.Web.Controllers
                         customerId, responsibleUsersList.ToList(), customerSetting, _emailGroupService, _workingGroupService, _emailService);
 
             m.CaseLog = _logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
+#pragma warning disable 0618
             m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString(global::System.Globalization.CultureInfo.InvariantCulture);
+#pragma warning restore 0618
             m.LogKey = m.CaseLog.LogGuid.ToString();
             m.CurrentCaseLanguageId = SessionFacade.CurrentCaseLanguageId;
 
+#pragma warning disable 0618
             if (m.case_.Supplier_Id > 0 && m.suppliers != null)
             {
                 var sup = m.suppliers.FirstOrDefault(x => x.Id == m.case_.Supplier_Id.GetValueOrDefault());
                 m.CountryId = sup?.Country_Id.GetValueOrDefault();
             }
+#pragma warning restore 0618
 
             if (caseTemplate != null)
             {
@@ -5712,26 +5804,36 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     if (caseTemplate.CaseType_Id.HasValue)
                     {
+#pragma warning disable 0618
                         m.case_.CaseType_Id = caseTemplate.CaseType_Id.Value;
+#pragma warning restore 0618
                     }
 
                     if (caseTemplate.SetCurrentUserAsPerformer.ToBool())
                     {
+#pragma warning disable 0618
                         m.case_.Performer_User_Id = SessionFacade.CurrentUser.Id;
+#pragma warning restore 0618
                     }
                     else
                     {
+#pragma warning disable 0618
                         m.case_.Performer_User_Id = caseTemplate.PerformerUser_Id;
+#pragma warning restore 0618
                     }
 
                     if (caseTemplate.Category_Id != null)
                     {
+#pragma warning disable 0618
                         m.case_.Category_Id = caseTemplate.Category_Id.Value;
+#pragma warning restore 0618
                     }
 
                     if (caseTemplate.CausingPartId.HasValue)
                     {
+#pragma warning disable 0618
                         m.case_.CausingPartId = caseTemplate.CausingPartId.Value;
+#pragma warning restore 0618
                         if (m.causingParts != null)
                         {
                             var templateCausingPart = m.causingParts.Where(c => c.Value == caseTemplate.CausingPartId.Value.ToString()).SingleOrDefault();
@@ -5751,46 +5853,68 @@ namespace DH.Helpdesk.Web.Controllers
                     }
 
                     if (caseTemplate.Supplier_Id != null)
+#pragma warning disable 0618
                         m.case_.Supplier_Id = caseTemplate.Supplier_Id.Value;
+#pragma warning restore 0618
 
                     var isCopy = parentCaseId.HasValue;
 
                     if (!string.IsNullOrEmpty(caseTemplate.ReportedBy))
+#pragma warning disable 0618
                         m.case_.ReportedBy = caseTemplate.ReportedBy;
+#pragma warning restore 0618
 
                     if (caseTemplate.Department_Id != null)
+#pragma warning disable 0618
                         m.case_.Department_Id = caseTemplate.Department_Id;
+#pragma warning restore 0618
 
                     m.CaseMailSetting.DontSendMailToNotifier = caseTemplate.NoMailToNotifier.ToBool();
 
                     if (caseTemplate.ProductArea_Id != null)
+#pragma warning disable 0618
                         m.case_.ProductArea_Id = caseTemplate.ProductArea_Id;
+#pragma warning restore 0618
 
                     if (caseTemplate.ProductArea_Id.HasValue)
+#pragma warning disable 0618
                         m.case_.ProductArea = _productAreaService.GetProductArea(caseTemplate.ProductArea_Id.Value);
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.Caption))
+#pragma warning disable 0618
                         m.case_.Caption = caseTemplate.Caption;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.Description))
+#pragma warning disable 0618
                         m.case_.Description = caseTemplate.Description;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.Miscellaneous))
+#pragma warning disable 0618
                         m.case_.Miscellaneous = caseTemplate.Miscellaneous;
+#pragma warning restore 0618
 
                     // Set WORKING GROUP from Case Template:
                     if (caseTemplate.SetCurrentUsersWorkingGroup == 1)
                     {
                         var userDefaultWGId = _userService.GetUserDefaultWorkingGroupId(SessionFacade.CurrentUser.Id, customer.Id);
+#pragma warning disable 0618
                         m.case_.WorkingGroup_Id = userDefaultWGId;
+#pragma warning restore 0618
                     }
                     else if (caseTemplate.CaseWorkingGroup_Id.HasValue)
                     {
+#pragma warning disable 0618
                         m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id.Value;
+#pragma warning restore 0618
                     }
 
                     if (caseTemplate.Priority_Id != null)
+#pragma warning disable 0618
                         m.case_.Priority_Id = caseTemplate.Priority_Id;
+#pragma warning restore 0618
 
                     /*Disabled maybe we need this in the future*/
                     // 
@@ -5803,7 +5927,9 @@ namespace DH.Helpdesk.Web.Controllers
                     //}
 
                     if (caseTemplate.Project_Id.HasValue)
+#pragma warning disable 0618
                         m.case_.Project_Id = caseTemplate.Project_Id;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.Text_External))
                     {
@@ -5821,123 +5947,201 @@ namespace DH.Helpdesk.Web.Controllers
                         m.CaseLog.FinishingDate = DateTime.UtcNow;
 
                     if (!string.IsNullOrEmpty(caseTemplate.PersonsName))
+#pragma warning disable 0618
                         m.case_.PersonsName = caseTemplate.PersonsName;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.PersonsEmail))
+#pragma warning disable 0618
                         m.case_.PersonsEmail = caseTemplate.PersonsEmail;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.PersonsPhone))
+#pragma warning disable 0618
                         m.case_.PersonsPhone = caseTemplate.PersonsPhone;
+#pragma warning restore 0618
 
                     if (caseTemplate.Region_Id.HasValue)
+#pragma warning disable 0618
                         m.case_.Region_Id = caseTemplate.Region_Id;
+#pragma warning restore 0618
 
                     if (caseTemplate.OU_Id.HasValue)
+#pragma warning disable 0618
                         m.case_.OU_Id = caseTemplate.OU_Id;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.Place))
+#pragma warning disable 0618
                         m.case_.Place = caseTemplate.Place;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.UserCode))
+#pragma warning disable 0618
                         m.case_.UserCode = caseTemplate.UserCode;
+#pragma warning restore 0618
 
                     if (caseTemplate.Urgency_Id.HasValue)
+#pragma warning disable 0618
                         m.case_.Urgency_Id = caseTemplate.Urgency_Id;
+#pragma warning restore 0618
 
                     if (caseTemplate.Impact_Id.HasValue)
+#pragma warning disable 0618
                         m.case_.Impact_Id = caseTemplate.Impact_Id;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.InventoryNumber))
+#pragma warning disable 0618
                         m.case_.InvoiceNumber = caseTemplate.InvoiceNumber;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.ReferenceNumber))
+#pragma warning disable 0618
                         m.case_.ReferenceNumber = caseTemplate.ReferenceNumber;
+#pragma warning restore 0618
 
                     if (caseTemplate.Status_Id.HasValue)
+#pragma warning disable 0618
                         m.case_.Status_Id = caseTemplate.Status_Id;
+#pragma warning restore 0618
 
                     if (caseTemplate.StateSecondary_Id.HasValue)
+#pragma warning disable 0618
                         m.case_.StateSecondary_Id = caseTemplate.StateSecondary_Id;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.VerifiedDescription))
+#pragma warning disable 0618
                         m.case_.VerifiedDescription = caseTemplate.VerifiedDescription;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.SolutionRate))
+#pragma warning disable 0618
                         m.case_.SolutionRate = caseTemplate.SolutionRate;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.InventoryNumber))
+#pragma warning disable 0618
                         m.case_.InventoryNumber = caseTemplate.InventoryNumber;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.InventoryType))
+#pragma warning disable 0618
                         m.case_.InventoryType = caseTemplate.InventoryType;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.InventoryLocation))
+#pragma warning disable 0618
                         m.case_.InventoryLocation = caseTemplate.InventoryLocation;
+#pragma warning restore 0618
 
                     if (caseTemplate.System_Id.HasValue)
+#pragma warning disable 0618
                         m.case_.System_Id = caseTemplate.System_Id;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.Currency))
+#pragma warning disable 0618
                         m.case_.Currency = caseTemplate.Currency;
+#pragma warning restore 0618
 
                     if (caseTemplate.Cost != 0)
+#pragma warning disable 0618
                         m.case_.Cost = caseTemplate.Cost;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.InventoryNumber))
+#pragma warning disable 0618
                         m.case_.OtherCost = caseTemplate.OtherCost;
+#pragma warning restore 0618
 
                     if (caseTemplate.AgreedDate.HasValue)
+#pragma warning disable 0618
                         m.case_.AgreedDate = caseTemplate.AgreedDate;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.Available))
+#pragma warning disable 0618
                         m.case_.Available = caseTemplate.Available;
+#pragma warning restore 0618
 
                     if (caseTemplate.ContactBeforeAction != 0)
+#pragma warning disable 0618
                         m.case_.ContactBeforeAction = caseTemplate.ContactBeforeAction;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.CostCentre))
+#pragma warning disable 0618
                         m.case_.CostCentre = caseTemplate.CostCentre;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.PersonsCellPhone))
+#pragma warning disable 0618
                         m.case_.PersonsCellphone = caseTemplate.PersonsCellPhone;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
                     if (m.case_.IsAbout == null)
                         m.case_.IsAbout = new CaseIsAboutEntity();
 
                     m.case_.IsAbout.Id = 0;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.IsAbout_ReportedBy))
+#pragma warning disable 0618
                         m.case_.IsAbout.ReportedBy = caseTemplate.IsAbout_ReportedBy;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.IsAbout_PersonsName))
+#pragma warning disable 0618
                         m.case_.IsAbout.Person_Name = caseTemplate.IsAbout_PersonsName;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.IsAbout_PersonsEmail))
+#pragma warning disable 0618
                         m.case_.IsAbout.Person_Email = caseTemplate.IsAbout_PersonsEmail;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.IsAbout_PersonsPhone))
+#pragma warning disable 0618
                         m.case_.IsAbout.Person_Phone = caseTemplate.IsAbout_PersonsPhone;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.IsAbout_PersonsCellPhone))
+#pragma warning disable 0618
                         m.case_.IsAbout.Person_Cellphone = caseTemplate.IsAbout_PersonsCellPhone;
+#pragma warning restore 0618
 
                     if (caseTemplate.IsAbout_Region_Id.HasValue)
+#pragma warning disable 0618
                         m.case_.IsAbout.Region_Id = caseTemplate.IsAbout_Region_Id;
+#pragma warning restore 0618
 
                     if (caseTemplate.IsAbout_Department_Id.HasValue)
+#pragma warning disable 0618
                         m.case_.IsAbout.Department_Id = caseTemplate.IsAbout_Department_Id;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.Available))
+#pragma warning disable 0618
                         m.case_.IsAbout.OU_Id = caseTemplate.IsAbout_OU_Id;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.IsAbout_CostCentre))
+#pragma warning disable 0618
                         m.case_.IsAbout.CostCentre = caseTemplate.IsAbout_CostCentre;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.IsAbout_Place))
+#pragma warning disable 0618
                         m.case_.IsAbout.Place = caseTemplate.IsAbout_Place;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.UserCode))
+#pragma warning disable 0618
                         m.case_.IsAbout.UserCode = caseTemplate.UserCode;
+#pragma warning restore 0618
 
                     if (caseTemplate.RegistrationSource.HasValue)
                     {
@@ -5949,10 +6153,13 @@ namespace DH.Helpdesk.Web.Controllers
                     // "watch date" 
                     if (caseTemplate.WatchDate.HasValue)
                     {
+#pragma warning disable 0618
                         m.case_.WatchDate = caseTemplate.WatchDate;
+#pragma warning restore 0618
                     }
                     else
                     {
+#pragma warning disable 0618
                         if (m.case_.Department_Id.HasValue && m.case_.Priority_Id.HasValue)
                         {
                             var dept = _departmentService.GetDepartment(m.case_.Department_Id.Value);
@@ -5964,34 +6171,51 @@ namespace DH.Helpdesk.Web.Controllers
                                     _watchDateCalendarService.GetClosestDateTo(dept.WatchDateCalendar_Id.Value, DateTime.UtcNow);
                             }
                         }
+#pragma warning restore 0618
                     }
 
                     if (caseTemplate.Project_Id.HasValue)
+#pragma warning disable 0618
                         m.case_.Project_Id = caseTemplate.Project_Id;
+#pragma warning restore 0618
 
                     if (caseTemplate.Problem_Id.HasValue)
+#pragma warning disable 0618
                         m.case_.Problem_Id = caseTemplate.Problem_Id;
+#pragma warning restore 0618
 
                     if (caseTemplate.Change_Id.HasValue)
+#pragma warning disable 0618
                         m.case_.Change_Id = caseTemplate.Change_Id;
+#pragma warning restore 0618
 
                     if (caseTemplate.FinishingDate.HasValue)
+#pragma warning disable 0618
                         m.case_.FinishingDate = caseTemplate.FinishingDate;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.FinishingDescription))
+#pragma warning disable 0618
                         m.case_.FinishingDescription = caseTemplate.FinishingDescription;
+#pragma warning restore 0618
 
                     if (caseTemplate.PlanDate.HasValue)
+#pragma warning disable 0618
                         m.case_.PlanDate = caseTemplate.PlanDate;
+#pragma warning restore 0618
 
                     if (!string.IsNullOrEmpty(caseTemplate.Name))
                         m.CaseTemplateName = caseTemplate.Name;
 
                     if (caseTemplate.SMS != 0)
+#pragma warning disable 0618
                         m.case_.SMS = caseTemplate.SMS;
+#pragma warning restore 0618
 
                     if (caseTemplate.Verified != 0)
+#pragma warning disable 0618
                         m.case_.Verified = caseTemplate.Verified;
+#pragma warning restore 0618
 
                     // This is used for hide fields(which are not in casetemplate) in new case input
                     m.templateistrue = templateistrue;
@@ -6000,7 +6224,9 @@ namespace DH.Helpdesk.Web.Controllers
                     m.FinishingCause = CommonHelper.GetFinishingCauseFullPath(finishingCauses.ToArray(), caseTemplate.FinishingCause_Id);
 
                     //save case original working group 
+#pragma warning disable 0618
                     int? caseWorkingGroupId = m.case_.WorkingGroup_Id;
+#pragma warning restore 0618
 
                     //set working group and performer from CaseType if they have not been set before
                     if (caseTemplate.CaseType_Id.HasValue)
@@ -6009,10 +6235,14 @@ namespace DH.Helpdesk.Web.Controllers
                         if (caseType != null)
                         {
                             if (caseWorkingGroupId == null && caseType.WorkingGroup_Id.HasValue)
+#pragma warning disable 0618
                                 m.case_.WorkingGroup_Id = caseType.WorkingGroup_Id;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
                             if (m.case_.Performer_User_Id == null && caseType.User_Id.HasValue)
                                 m.case_.Performer_User_Id = caseType.User_Id.Value;
+#pragma warning restore 0618
                         }
                     }
 
@@ -6023,10 +6253,14 @@ namespace DH.Helpdesk.Web.Controllers
                         if (productArea != null)
                         {
                             if (caseWorkingGroupId == null && productArea.WorkingGroup_Id.HasValue)
+#pragma warning disable 0618
                                 m.case_.WorkingGroup_Id = productArea.WorkingGroup_Id;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
                             if (m.case_.Priority_Id == null && productArea.Priority_Id.HasValue)
                                 m.case_.Priority_Id = productArea.Priority_Id.Value;
+#pragma warning restore 0618
                         }
                     }
                 }
@@ -6053,6 +6287,7 @@ namespace DH.Helpdesk.Web.Controllers
                 #endregion
             }
 
+#pragma warning disable 0618
             if (m.case_.ReportedBy != null)
             {
                 var reportedByUser = _computerService.GetComputerUserByUserID(m.case_.ReportedBy);
@@ -6065,7 +6300,9 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }
             }
+#pragma warning restore 0618
 
+#pragma warning disable 0618
             if (m.case_.IsAbout != null && m.case_.IsAbout.ReportedBy != null)
             {
                 var reportedByUser = _computerService.GetComputerUserByUserID(m.case_.IsAbout.ReportedBy);
@@ -6078,18 +6315,23 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }
             }
+#pragma warning restore 0618
 
             BusinessData.Models.User.CustomerUserInfo admUser = null;
+#pragma warning disable 0618
             if (m.case_.Performer_User_Id.HasValue)
             {
                 admUser = _userService.GetUserInfo(m.case_.Performer_User_Id.Value);
             }
+#pragma warning restore 0618
 
             var performersList = responsibleUsersList;
+#pragma warning disable 0618
             if (customerSetting.DontConnectUserToWorkingGroup == 0 && m.case_.WorkingGroup_Id > 0)
             {
                 performersList = _userService.GetAvailablePerformersForWorkingGroup(customerId, m.case_.WorkingGroup_Id);
             }
+#pragma warning restore 0618
 
             if (admUser != null && !performersList.Any(u => u.Id == admUser.Id))
             {
@@ -6105,18 +6347,23 @@ namespace DH.Helpdesk.Web.Controllers
             if (m.caseFieldSettings.ShowOnPage(TranslationCaseFields.OU_Id))
             {
                 //m.ous = _ouService.GetOUs(customerId);
+#pragma warning disable 0618
                 m.ous = _organizationService.GetOUs(m.case_.Department_Id).ToList();
+#pragma warning restore 0618
             }
 
             if (m.caseFieldSettings.ShowOnPage(TranslationCaseFields.IsAbout_OU_Id))
             {
+#pragma warning disable 0618
                 if (m.case_.IsAbout != null)
                     m.isaboutous = _organizationService.GetOUs(m.case_.IsAbout.Department_Id).ToList();
                 else
                     m.isaboutous = null;
+#pragma warning restore 0618
             }
 
             // hämta parent path för casetype
+#pragma warning disable 0618
             if (m.case_.CaseType_Id > 0)
             {
                 var caseType = _caseTypeService.GetCaseType(m.case_.CaseType_Id);
@@ -6126,9 +6373,11 @@ namespace DH.Helpdesk.Web.Controllers
                     m.ParantPath_CaseType = caseType.getCaseTypeParentPath();
                 }
             }
+#pragma warning restore 0618
 
             // hämta parent path för productArea 
             m.ProductAreaHasChild = 0;
+#pragma warning disable 0618
             if (m.case_.ProductArea_Id.HasValue)
             {
                 var p = _productAreaService.GetProductArea(m.case_.ProductArea_Id.GetValueOrDefault());
@@ -6143,12 +6392,14 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }
             }
+#pragma warning restore 0618
 
             //Check if FinishingCases has childs
             m.FinishingCauseHasChild = 0;
 
             // hämta parent path för Category
             m.CategoryHasChild = 0;
+#pragma warning disable 0618
             if (m.case_.Category_Id.HasValue)
             {
                 var c = _categoryService.GetCategory(m.case_.Category_Id.GetValueOrDefault(), customerId);
@@ -6166,9 +6417,11 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }
             }
+#pragma warning restore 0618
 
             // check department info
             m.ShowInvoiceFields = 0;
+#pragma warning disable 0618
             if (m.case_.Department_Id > 0 && m.case_.Department_Id.HasValue)
             {
                 var d = _departmentService.GetDepartment(m.case_.Department_Id.Value);
@@ -6179,6 +6432,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.TimeRequired = d.ChargeMandatory.ToBool();
                 }
             }
+#pragma warning restore 0618
 
             // check state secondary info
             if (string.IsNullOrEmpty(m.CaseLog.TextExternal))
@@ -6187,6 +6441,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             m.Disable_SendMailAboutCaseToNotifier = false;
+#pragma warning disable 0618
             if (m.case_.StateSecondary_Id > 0)
             {
                 if (m.case_.StateSecondary != null)
@@ -6205,9 +6460,11 @@ namespace DH.Helpdesk.Web.Controllers
                         m.CaseLog.SendMailAboutCaseToNotifier = true;
                 }
             }
+#pragma warning restore 0618
 
             if (isCreateNewCase)
             {
+#pragma warning disable 0618
                 m.case_.DefaultOwnerWG_Id = null;
                 if (m.case_.User_Id.HasValue && m.case_.User_Id != 0)
                 {
@@ -6223,13 +6480,16 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.DefaultOwnerWG_Id = userDefaultWorkingGroupId;
                     }
                 }
+#pragma warning restore 0618
             }
             else
             {
+#pragma warning disable 0618
                 if (m.case_.DefaultOwnerWG_Id.HasValue && m.case_.DefaultOwnerWG_Id.Value > 0)
                 {
                     m.CaseOwnerDefaultWorkingGroup = _workingGroupService.GetWorkingGroup(m.case_.DefaultOwnerWG_Id.Value);
                 }
+#pragma warning restore 0618
             }
 
             // TODO: Should mix CustomerSettings & Setting                 
@@ -6237,32 +6497,42 @@ namespace DH.Helpdesk.Web.Controllers
             m.Setting = customerSetting;
 
             // "Responsible"
+#pragma warning disable 0618
             m.ResponsibleUser_Id = m.case_.CaseResponsibleUser_Id ?? 0;
+#pragma warning restore 0618
             const bool isAddEmpty = true;
             m.ResponsibleUsersAvailable = responsibleUsersList.MapToSelectList(m.Setting, isAddEmpty);
 
             // "Administrator" (Performer)
+#pragma warning disable 0618
             m.Performer_Id = m.case_.Performer_User_Id ?? 0;
+#pragma warning restore 0618
 
             m.Performers =
                 performersList.Where(it => it.IsActive == 1 && (it.Performer == 1 || it.Id == m.Performer_Id)).MapToSelectList(m.Setting, isAddEmpty);
 
+#pragma warning disable 0618
             m.DynamicCase = _caseService.GetDynamicCase(m.case_.Id);
+#pragma warning restore 0618
             if (m.DynamicCase != null)
             {
                 var l = m.Languages.Where(x => x.Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
 
+#pragma warning disable 0618
                 //ex: unitedkingdom/Hiring/edit/[CaseId]/?UserId=[UserId]&language=[Language]
                 m.DynamicCase.FormPath = m.DynamicCase.FormPath
                     .Replace("[CaseId]", m.case_.Id.ToString())
                     .Replace("[UserId]", HttpUtility.UrlEncode(SessionFacade.CurrentUser.UserId.ToString()))
                     .Replace("[ApplicationType]", "HD5")
                     .Replace("[Language]", l.LanguageId);
+#pragma warning restore 0618
             }
 
+#pragma warning disable 0618
             var caseSolutionId = (m.case_.CaseSolution_Id != null)
                 ? m.case_.CaseSolution_Id.Value
                 : templateId ?? 0;
+#pragma warning restore 0618
 
             m.HasExtendedComputerUsers =
                 _caseSolutionService.CheckIfExtendedFormExistForSolutionsInCategories(customerId, m.ComputerUserCategories.Select(c => c.Id).ToList());
@@ -6303,7 +6573,9 @@ namespace DH.Helpdesk.Web.Controllers
 
                     //CHECK HOW TO HANDLE WHEN FROM EMAIL
                     //At the moment we are only fetching 1 extended case since it is only programmed that way in editPage.js
+#pragma warning disable 0618
                     var stateSecondaryId = m?.case_?.StateSecondary_Id ?? 0;
+#pragma warning restore 0618
 
                     m.ExtendedCases =
                         GetExtendedCaseFormModel(customerId, caseId, caseSolutionId, stateSecondaryId, extendedCasePathMask,
@@ -6363,6 +6635,7 @@ namespace DH.Helpdesk.Web.Controllers
                         userRole = userWorkingGroupId;
                     }
 
+#pragma warning disable 0618
                     // Load if existing
                     if (m.case_.Id != 0)
                     {
@@ -6372,6 +6645,7 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         m.ExtendedCaseSections = new Dictionary<CaseSectionType, ExtendedCaseFormForCaseModel>();
                     }
+#pragma warning restore 0618
 
                     //var sections = (Dictionary <CaseSectionType, ExtendedCaseFormModel>)_caseService.GetExtendedCaseSectionModels(customerId, caseId);
                     //m.ExtendedCaseSections = Enum
@@ -6422,7 +6696,9 @@ namespace DH.Helpdesk.Web.Controllers
             //OM case har extendedcase, hämta värden 
 
 
+#pragma warning disable 0618
             m.CaseDocuments = _caseDocumentService.GetCaseDocuments(customerId, m.case_, SessionFacade.CurrentUser, ApplicationType.Helpdesk);
+#pragma warning restore 0618
 
             #endregion
 
@@ -6435,7 +6711,9 @@ namespace DH.Helpdesk.Web.Controllers
             m.CasePrintView = new ReportModel(false);
             m.UserHasInvoicePermission = userHasInvoicePermission;
             m.UserHasInventoryViewPermission = userHasInventoryViewPermission;
+#pragma warning disable 0618
             m.IsCaseReopened = m.case_.CaseHistories != null && m.case_.CaseHistories.Where(ch => ch.FinishingDate.HasValue).Any();
+#pragma warning restore 0618
 
             m.StatusBar = isCreateNewCase ? new Dictionary<string, string>() : GetStatusBar(m);
 

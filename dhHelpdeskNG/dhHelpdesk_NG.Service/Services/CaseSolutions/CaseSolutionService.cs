@@ -590,7 +590,7 @@ namespace DH.Helpdesk.Services.Services
 
                     return false;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //throw;
                     //TODO?
@@ -1771,7 +1771,7 @@ namespace DH.Helpdesk.Services.Services
 
                     return DeleteMessage.Success;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return DeleteMessage.UnExpectedError;
                 }

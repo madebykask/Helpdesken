@@ -27,7 +27,6 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <summary>
         /// User Authentication.
         /// </summary>
-        /// <param name="model"></param>
         /// <returns> Returns access token, type, expiration date, refresh token </returns>
         /// Will have a look in this first i think
         /// 

@@ -35,14 +35,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Print
         /// The header elements.
         /// </summary>
         /// 
-#pragma warning disable 0618
-        private readonly ArrayList headerElements;
-#pragma warning restore 0618
+        private readonly ArrayList headerElements = null;
 
         /// <summary>
         /// The footer elements.
         /// </summary>
-        private readonly ArrayList footerElements;
+        private readonly ArrayList footerElements = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PrintPdfEvents"/> class.
