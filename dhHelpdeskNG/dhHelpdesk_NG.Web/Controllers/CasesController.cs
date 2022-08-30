@@ -3221,7 +3221,15 @@ namespace DH.Helpdesk.Web.Controllers
                 caseLog.FinishingDate = DateTime.UtcNow;
                 caseLog.FinishingType = mergedFinishingCause.Id;
                 caseLog.FinishingTypeName = mergedFinishingCause.Name;
+                caseLog.CaseId = mergeCase.Id;
+                caseLog.UserId = SessionFacade.CurrentUser.Id;
+                caseLog.LogGuid = Guid.NewGuid();
+                caseLog.TextInternal = mergedFinishingCause.Name;
+
+
                 int caseHistoryId = _caseService.SaveCase(mergeCase, caseLog, SessionFacade.CurrentUser.Id, null, extraInfo, out errors);
+                caseLog.CaseHistoryId = caseHistoryId;
+                int caseLogId = _logService.SaveLog(caseLog, 0, out errors);
 
                 //Send Closing email/Merged Case
                 Customer customer = _customerService.GetCustomer(mergeCase.Customer_Id);
