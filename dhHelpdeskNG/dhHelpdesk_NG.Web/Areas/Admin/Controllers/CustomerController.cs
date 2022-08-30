@@ -1157,7 +1157,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 newCustomerFinishingCause.Parent_FinishingCause_Id = fc.Parent_FinishingCause_Id;
                 newCustomerFinishingCause.FinishingCauseCategory_Id = fc.FinishingCauseCategory_Id;
                 newCustomerFinishingCause.PromptUser = fc.PromptUser;
-
+                newCustomerFinishingCause.Merged = fc.Merged;
+                newCustomerFinishingCause.IsActive = fc.IsActive;
                 this._finishingCauseService.SaveFinishingCause(newCustomerFinishingCause, out errors);
             }
 
