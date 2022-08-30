@@ -355,6 +355,7 @@ function getCollapseCaption(cap) {
     Page.prototype.autoReloadCaseResultList = function () {
         var self = this;
         self.table.ajax.reload();
+        $("#cbxBulkCaseEditAll").prop('checked', false);
     };
 
     Page.prototype.getGridUpdatedAgo = function () {
@@ -547,6 +548,7 @@ $('#SettingTab').click(function (e) {
     $('#btnMyCases').hide();
     $('#btnNewCase').hide();
     $('#btnCaseTemplate').hide();
+    $('#liBulkCaseEdit').hide();
 });
 
 $('#CasesTab').click(function (e) {
@@ -554,6 +556,7 @@ $('#CasesTab').click(function (e) {
     $('#btnMyCases').show();
     $('#btnCaseTemplate').show();
     $('#btnSaveCaseSetting').hide();
+    showHideBulkCaseEditBtn();
 });
 
 /**

@@ -312,7 +312,7 @@
                                 <div class="btn @disabled" id="divBreadcrumbs_FinishingType">
                                     @(string.IsNullOrEmpty(Model.FinishingCause) ? Translation.Get("--") : Model.FinishingCause)
                                 </div>
-                                <button class="btn dropdown-toggle" data-toggle="dropdown" @disabled>
+                                <button id="btnFinishingTypeLst" class="btn dropdown-toggle" data-toggle="dropdown" @disabled>
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
@@ -390,13 +390,13 @@
             let $btnBulkCaseEditCancel = $('#btnBulkCaseEditCancel');
             let $finishTypeContainer = $('#divFinishingType');
             let $finishTypeBreadcrubs = $("#divBreadcrumbs_FinishingType");
-            let $finishDescription = $('#case__FinishingDescription')
+            let $finishDescription = $('#case__FinishingDescription');
+            let $btnFinishingTypeLst = $('#btnFinishingTypeLst');
+            let updatedCases = 0;
 
             $(document).ready(function () {
 
                 resetBulkEditModal();
-
-                let updatedCases = 0;
 
                 $('#divBulkCaseEdit').on("hide", function () {
                     if (updatedCases > 0) {
@@ -425,6 +425,8 @@
                     if (validateBulkCaseEditData(inputData, selectedCases)) {
                         $bulkCaseEditProgressDiv.css("display", "block");
                         //$btnBulkCaseEditCancel.prop("disabled", "true");
+
+                        disableBulkCaseEditInputFields();
 
                         selectedCases.forEach(async (c) => {
 
@@ -480,7 +482,7 @@
                         });
                     }
                     $btnBulkCaseEdit.hide();
-                    //$btnBulkCaseEditCancel.removeAttr('disabled');
+                    $btnBulkCaseEditCancel.removeAttr('disabled');                    
                 }
 
                 $caseWorkingGroupId.change(function (d, source) {
@@ -538,6 +540,27 @@
                 };
             }
 
+            function disableBulkCaseEditInputFields() {
+                $caseWorkingGroupId.attr('disabled', true);
+                $casePerformer_Id.attr('disabled', true);
+                $caseStateSecondaryId.attr('disabled', true);
+                $caseProblemId.attr('disabled', true);
+                $finishDescription.attr('disabled', true);
+                $finishTypeBreadcrubs.attr('disabled', true);
+                $btnFinishingTypeLst.attr('disabled', true);
+            }
+
+            function enableBulkCaseEditInputFields() {
+                $caseWorkingGroupId.attr('disabled', false);
+                $casePerformer_Id.attr('disabled', false);
+                $caseStateSecondaryId.attr('disabled', false);
+                $caseProblemId.attr('disabled', false);
+                $finishDescription.attr('disabled', false);
+                $finishTypeBreadcrubs.attr('disabled', false);
+                $btnFinishingTypeLst.attr('disabled', false);
+            }
+
+
             function resetBulkEditModal() {
                 $caseWorkingGroupId.val('');
                 $casePerformer_Id.val('');
@@ -551,7 +574,7 @@
                 $finishTypeId.val('');
                 $finishDate.val('');
                 $finishTypeBreadcrubs.text('@Html.Raw(Translation.Get("--"))');
-
+                enableBulkCaseEditInputFields();
                 updatedCases = 0;
             }
 
