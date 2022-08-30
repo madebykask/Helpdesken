@@ -2124,7 +2124,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         {
             DateTime? ret = null;
             /* -1: Blank | 0: Non-Counting | 1: Counting */
-            var oldSubStateMode = -1;
+            //var oldSubStateMode = -1;
             var newSubStateMode = -1;
 
             if (newSubStateId.HasValue)

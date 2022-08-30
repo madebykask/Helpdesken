@@ -732,6 +732,32 @@ BEGIN
 END
 GO
 
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 1 AND Property = 'Section.InitiatorInfo')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (1
+           ,'Section.InitiatorInfo'
+           ,'Anmälarinfo')
+		   END
+GO
+
+IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 2 AND Property = 'Section.InitiatorInfo')
+BEGIN	 
+INSERT INTO [dbo].[ExtendedCaseTranslations]
+           ([LanguageId]
+           ,[Property]
+           ,[Text])
+     VALUES
+           (1
+           ,'Section.InitiatorInfo'
+           ,'Initiator info')
+		   END
+GO
+
 
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.56'

@@ -159,6 +159,7 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public CaseHistoryViewModel CreateHistoryViewModel()
         {
+#pragma warning disable 0618
             return new CaseHistoryViewModel()
             {
                 CaseCustomerId = case_?.Customer_Id,
@@ -169,6 +170,7 @@ namespace DH.Helpdesk.Web.Models.Case
                 CaseHistories = CaseHistories?.OrderByDescending(x => x.Id).ToList() ?? new List<CaseHistoryOverview>(),
                 MailTemplates = MailTemplates
             };
+#pragma warning restore 0618
         }
 
         public string CaseKey { get; set; }
@@ -203,18 +205,24 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public int CaseId
         {
+#pragma warning disable 0618
             get { return case_?.Id ?? 0; }
+#pragma warning restore 0618
         }
 
 
         public int CustomerId
         {
+#pragma warning disable 0618
             get { return case_?.Customer_Id ?? 0; }
+#pragma warning restore 0618
         }
 
         public decimal CaseNumber
         {
+#pragma warning disable 0618
             get { return case_?.CaseNumber ?? 0; }
+#pragma warning restore 0618
         }
 
         public IList<string> WhiteFilesList { get; set; }
