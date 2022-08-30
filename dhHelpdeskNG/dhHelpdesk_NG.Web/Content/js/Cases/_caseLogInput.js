@@ -47,7 +47,7 @@ function LogInitForm() {
         if (this.value.length) {
             $('#CaseLog_SendMailAboutCaseToNotifier:not(:disabled)').attr('checked', 'checked');
             var to = $initiatorEmail.val();
-            var extras = $("#extraEmailsInput").val().replaceAll(";", " ");
+            var extras = $("#extraEmailsInput").val().replaceAll(";", " ").replaceAll(to, "");
             if (to != '') {
                 $("#emailsTo").html(to);
                 $("#emailsTo").css('display', 'inline');
