@@ -157,7 +157,7 @@ namespace DH.Helpdesk.BusinessData.Models.BusinessRules
 
         private byte idField;
 
-        private bool idFieldSpecified;
+        //private bool idFieldSpecified;
 
         private string valueField;
 
@@ -217,7 +217,7 @@ namespace DH.Helpdesk.BusinessData.Models.BusinessRules
                 xmlSerializer.Serialize(textWriter, it);
                 return textWriter.ToString();
             }
-            return string.Empty;
+
         }
 
         public static RuleParameter ConvertXMLToRuleParameter(this string it)

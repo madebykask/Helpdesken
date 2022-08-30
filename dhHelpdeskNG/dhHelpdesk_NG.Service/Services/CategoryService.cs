@@ -55,8 +55,12 @@
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
+#pragma warning disable 0618
+        private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
+
+#pragma warning disable 0618
         public CategoryService(
             ICategoryRepository categoryRepository,            
             IUnitOfWork unitOfWork)
@@ -64,6 +68,7 @@
             this._categoryRepository = categoryRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
 
         //public IList<Category> GetCategoriesSelected(int customerId, string[] reg)

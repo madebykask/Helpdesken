@@ -69,7 +69,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly IFormRepository _formRepository;
         private readonly ILinkService _linkService;
         private readonly ILinkRepository _linkRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly ICacheProvider _cache;
 
         private readonly ICaseSolutionConditionRepository _caseSolutionConditionRepository;
@@ -80,6 +82,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseSolutionLanguageRepository _caseSolutionLanguageRepository;
         private readonly ICaseSolutionCategoryLanguageRepository _caseSolutionCategoryLanguageRepository;
 
+#pragma warning disable 0618
         public CaseSolutionService(
             ICaseSolutionRepository caseSolutionRepository,
             ICaseSolutionCategoryRepository caseSolutionCategoryRepository,
@@ -113,6 +116,7 @@ namespace DH.Helpdesk.Services.Services
             _caseSolutionLanguageRepository = caseSolutionLanguageRepository;
             _caseSolutionCategoryLanguageRepository = caseSolutionCategoryLanguageRepository;
         }
+#pragma warning restore 0618
         public void UpdateCaseSolutionLanguage(CaseSolutionLanguageEntity caseLang)
         {
             _caseSolutionLanguageRepository.UpdateOtherLanguageCaseSolution(caseLang);

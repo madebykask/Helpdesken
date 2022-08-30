@@ -1264,7 +1264,9 @@ namespace DH.Helpdesk.Web.Controllers
         [ValidateInput(false)]
         public RedirectResult NewAndClose(CaseEditInput m, int? templateId, string BackUrl)
         {
+#pragma warning disable 0618
             var newChild = m.case_.Id == 0 && m.ParentId != null;
+#pragma warning restore 0618
 
             m.ActiveTab = "";
 
@@ -1286,7 +1288,9 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
             {
+#pragma warning disable 0618
                 url = this.GetLinkWithHash(string.Empty, new { customerId = m.case_.Customer_Id }, "Index");
+#pragma warning restore 0618
             }
 
             return this.Redirect(url);
@@ -1298,7 +1302,9 @@ namespace DH.Helpdesk.Web.Controllers
         {
             int caseId = this.Save(m);
             CheckTemplateParameters(templateId, caseId);
+#pragma warning disable 0618
             return this.RedirectToAction("new", "cases", new { customerId = m.case_.Customer_Id });
+#pragma warning restore 0618
         }
 
         [UserCasePermissions]
@@ -6562,6 +6568,7 @@ namespace DH.Helpdesk.Web.Controllers
             public int ExtendedCaseFormID { get; set; }
         }
 
+#pragma warning disable 0618
         private Dictionary<string, string> GetStatusBar(CaseInputViewModel model)
         {
             var values = new Dictionary<string, string>();
@@ -6850,6 +6857,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             return values;
         }
+#pragma warning restore 0618
 
         private CaseSearchResultModel GetUnfilteredCases(
                    string sortBy,

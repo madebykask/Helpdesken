@@ -23,8 +23,11 @@
     public class ContractCategoryService : IContractCategoryService
     {
         private readonly IContractCategoryRepository _contractCategoryRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfwork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public ContractCategoryService(
             IContractCategoryRepository contractCategoryRepository,
             IUnitOfWork unitOfWork)
@@ -32,6 +35,7 @@
             this._contractCategoryRepository = contractCategoryRepository;
             this._unitOfwork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<ContractCategory> GetContractCategories(int customerId)
         {

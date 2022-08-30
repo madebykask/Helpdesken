@@ -38,14 +38,18 @@ namespace DH.Helpdesk.Services.Services
     public class OUService : IOUService
     {
         private readonly IOrganizationUnitRepository _ouRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public OUService(IOrganizationUnitRepository ouRepository,
             IUnitOfWork unitOfWork)
         {
             this._ouRepository = ouRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<OU> GetAllOUs()
         {

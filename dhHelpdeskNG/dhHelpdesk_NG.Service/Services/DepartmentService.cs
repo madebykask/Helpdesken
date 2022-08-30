@@ -63,10 +63,13 @@ namespace DH.Helpdesk.Services.Services
     public class DepartmentService : IDepartmentService
     {
         private readonly IDepartmentRepository _departmentRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IOrganizationUnitRepository _ouRepository;
 
+#pragma warning disable 0618
         public DepartmentService(
             IDepartmentRepository departmentRepository,
             IUnitOfWork unitOfWork, 
@@ -78,6 +81,7 @@ namespace DH.Helpdesk.Services.Services
             _unitOfWorkFactory = unitOfWorkFactory;
             _ouRepository = ouRepository;
         }
+#pragma warning restore 0618
 
         public List<int> GetDepartmentsIds(int customerId, ActivationStatus activeStatus = ActivationStatus.Active)
         {

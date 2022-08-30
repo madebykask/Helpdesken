@@ -35,8 +35,11 @@ namespace DH.Helpdesk.Services.Services
         private readonly IPriorityRepository _priorityRepository;
         private readonly IPriorityLanguageRepository _priorityLangaugeRepository;
         private readonly IPriorityImpactUrgencyRepository _priorityImpactUrgencyRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public PriorityService(
             IPriorityRepository priorityRepository,
             IPriorityLanguageRepository priorityLanguageRepository,
@@ -48,7 +51,8 @@ namespace DH.Helpdesk.Services.Services
             this._priorityImpactUrgencyRepository = priorityImpactUrgencyRepository;
             this._unitOfWork = unitOfWork;
         }
-        
+#pragma warning restore 0618
+
         public IList<Priority> GetPriorities(int customerId, bool activeOnly = false)
         {
             var query = _priorityRepository.GetMany(x => x.Customer_Id == customerId);

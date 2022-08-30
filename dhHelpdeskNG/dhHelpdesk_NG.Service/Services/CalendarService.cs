@@ -111,7 +111,10 @@ namespace DH.Helpdesk.Services.Services
         /// <summary>
         /// The unit of work.
         /// </summary>
+        /// 
+#pragma warning disable 0618
         private readonly IUnitOfWork unitOfWork;
+#pragma warning restore 0618
 
         /// <summary>
         /// The working group repository.
@@ -122,6 +125,7 @@ namespace DH.Helpdesk.Services.Services
 
         private readonly IWorkContext workContext;
 
+#pragma warning disable 0618
         public CalendarService(
             ICalendarRepository calendarRepository,
             IUnitOfWork unitOfwork,
@@ -135,6 +139,7 @@ namespace DH.Helpdesk.Services.Services
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.workContext = workContext;
         }
+#pragma warning restore 0618
 
         /// <summary>
         /// The get calendars.

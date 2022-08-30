@@ -26,8 +26,11 @@
     public class ChangeImplementationStatusService : IChangeImplementationStatusService
     {
         private readonly IChangeImplementationStatusRepository _changeImplementationStatusRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public ChangeImplementationStatusService(
             IChangeImplementationStatusRepository changeImplementationStatusRepository,
             IUnitOfWork unitOfWork)
@@ -35,6 +38,7 @@
             this._changeImplementationStatusRepository = changeImplementationStatusRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IDictionary<string, string> Validate(ChangeImplementationStatusEntity changeImplementationStatusToValidate)
         {

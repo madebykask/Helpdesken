@@ -47,7 +47,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Attributes.Api
 				else
 					AntiForgery.Validate(cookie.Value, currentToken);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				return ErrorResponse(actionContext);
 			}

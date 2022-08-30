@@ -206,7 +206,10 @@ namespace DH.Helpdesk.Services.Services
         /// <summary>
         /// The _unit of work.
         /// </summary>
+        /// 
+#pragma warning disable 0618
         private readonly IUnitOfWork unitOfWork;
+#pragma warning restore 0618
 
         /// <summary>
         /// The work context.
@@ -214,7 +217,8 @@ namespace DH.Helpdesk.Services.Services
         private readonly IWorkContext workContext;
 
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
-        
+
+#pragma warning disable 0618
         public DocumentService(
             IDocumentRepository documentRepository,
             IDocumentCategoryRepository documentCategoryRepository,
@@ -232,6 +236,7 @@ namespace DH.Helpdesk.Services.Services
             this.workContext = workContext;
             this.unitOfWorkFactory = unitOfWorkFactory;
         }
+#pragma warning restore 0618
 
         /// <summary>
         /// The get documents.

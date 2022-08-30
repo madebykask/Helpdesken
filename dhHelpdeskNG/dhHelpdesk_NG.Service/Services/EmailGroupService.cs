@@ -25,8 +25,11 @@
     {
         private readonly IEmailGroupRepository _emailGroupRepository;
         private readonly IEmailGroupEmailRepository _emailGroupEmailRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public EmailGroupService(
             IEmailGroupRepository emailGroupRepository,
             IEmailGroupEmailRepository emailGroupEmailRepository,
@@ -36,6 +39,7 @@
             this._emailGroupEmailRepository = emailGroupEmailRepository; 
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<EmailGroupEntity> GetEmailGroups(int customerId)
         {

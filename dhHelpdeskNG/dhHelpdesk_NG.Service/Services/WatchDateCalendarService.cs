@@ -38,8 +38,11 @@ namespace DH.Helpdesk.Services.Services
     {
         private readonly IWatchDateCalendarRepository _watchDateCalendarRepository;
         private readonly IWatchDateCalendarValueRepository _watchDateCalendarValueRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public WatchDateCalendarService(
             IWatchDateCalendarRepository watchDateCalendarRepository,
             IWatchDateCalendarValueRepository watchDateCalendarValueRepository,
@@ -49,6 +52,7 @@ namespace DH.Helpdesk.Services.Services
             this._watchDateCalendarValueRepository = watchDateCalendarValueRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IEnumerable<WatchDateCalendar> GetAllWatchDateCalendars()
         {

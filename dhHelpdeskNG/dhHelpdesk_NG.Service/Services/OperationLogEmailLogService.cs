@@ -20,8 +20,11 @@
     public class OperationLogEmailLogService : IOperationLogEmailLogService
     {
         private readonly IOperationLogEMailLogRepository _operationLogEmailLogRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public OperationLogEmailLogService(
             IOperationLogEMailLogRepository operationLogEmailLogRepository,
             IUnitOfWork unitOfWork)
@@ -29,6 +32,7 @@
             this._operationLogEmailLogRepository = operationLogEmailLogRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IDictionary<string, string> Validate(OperationLogCategory operationLogCategoryToValidate)
         {

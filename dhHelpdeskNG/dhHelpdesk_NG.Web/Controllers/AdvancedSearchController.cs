@@ -87,7 +87,6 @@ namespace DH.Helpdesk.Web.Controllers
             var extendedCustomers = _settingService.GetExtendedSearchIncludedCustomers();
 
             AdvancedSearchDataModel searchDataModel;
-			var fileIndexingFailed = false;
 			try
 			{
 				searchDataModel = _advancedSearchBehavior.RunAdvancedSearchForCustomer(searchFilter,

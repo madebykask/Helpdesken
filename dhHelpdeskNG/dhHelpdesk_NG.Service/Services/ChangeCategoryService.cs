@@ -26,8 +26,11 @@
     public class ChangeCategoryService : IChangeCategoryService
     {
         private readonly IChangeCategoryRepository _changeCategoryRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public ChangeCategoryService(
             IChangeCategoryRepository changeCategoryRepository,            
             IUnitOfWork unitOfWork)
@@ -35,7 +38,8 @@
             this._changeCategoryRepository = changeCategoryRepository;            
             this._unitOfWork = unitOfWork;
         }
-        
+#pragma warning restore 0618
+
         public IDictionary<string, string> Validate(ChangeCategoryEntity changeCategoryToValidate)
         {
             if (changeCategoryToValidate == null)

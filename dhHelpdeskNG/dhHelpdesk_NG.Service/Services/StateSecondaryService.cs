@@ -36,8 +36,11 @@ namespace DH.Helpdesk.Services.Services
     public class StateSecondaryService : IStateSecondaryService
     {
         private readonly IStateSecondaryRepository _stateSecondaryRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public StateSecondaryService(
             IStateSecondaryRepository stateSecondaryRepository,
             IUnitOfWork unitOfWork)
@@ -45,7 +48,8 @@ namespace DH.Helpdesk.Services.Services
             this._stateSecondaryRepository = stateSecondaryRepository;
             this._unitOfWork = unitOfWork;
         }
-        
+#pragma warning restore 0618
+
         //public IList<StateSecondary> GetStateSecondariesSelected(int customerId, string[] reg)
         //{
         //    return _stateSecondaryRepository.GetStateSecondariesSelected(customerId, reg).ToList();
@@ -55,7 +59,7 @@ namespace DH.Helpdesk.Services.Services
         //{
         //    return _stateSecondaryRepository.GetStateSecondariesAvailable(customerId, reg).ToList();
         //}
-        
+
         public IList<StateSecondary> GetStateSecondaries(int customerId)
         {
             return _stateSecondaryRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();

@@ -285,7 +285,7 @@ Module DH_Helpdesk_Mail
         Dim sNewCaseToEmailAddress As String = ""
         Dim sSubject As String
         Dim sBodyText As String = ""
-        Dim j As Integer
+        'Dim j As Integer
         Dim iLog_Id As Integer
         Dim iCaseNumber As Integer
         Dim iListCount As Integer = 0
@@ -1833,7 +1833,7 @@ Module DH_Helpdesk_Mail
 
                 Select Case d.Key.ToLower
                     Case "isabout_reportedby"
-                        ret.UserId = Left(d.Value, 40)
+                        ret.UserId = Left(d.Value, 200)
                         NoOfIsAboutFields = NoOfIsAboutFields + 1
                     Case "isabout_persons_name"
                         ret.FirstName = Left(d.Value, 50)
@@ -2330,7 +2330,7 @@ Module DH_Helpdesk_Mail
             If Not IsNullOrEmpty(d.Value) Then
                 Select Case d.Key.ToLower
                     Case "reportedby"
-                        c.ReportedBy = Left(d.Value, 40)
+                        c.ReportedBy = Left(d.Value, 200)
                     Case "persons_name"
                         c.Persons_Name = Left(d.Value, 50)
                     Case "persons_email"

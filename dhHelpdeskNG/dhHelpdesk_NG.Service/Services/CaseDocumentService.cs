@@ -119,7 +119,7 @@ namespace DH.Helpdesk.Services.Services
 
                 return value;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 var name = displayName.Replace("<", "").Replace(">", "").Replace("[", "").Replace("]", "");
 
@@ -598,7 +598,7 @@ namespace DH.Helpdesk.Services.Services
                         FieldException = parseEx
                     };
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return new CaseDocumentConditionResult
                     {

@@ -59,7 +59,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseRepository _caseRepository;
         private readonly ICaseFileRepository _caseFileRepository;
         private readonly ICaseHistoryRepository _caseHistoryRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly IPriorityService _priorityService;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IUserRepository _userRepository;
@@ -107,6 +109,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IContractLogRepository _contractLogRepository;
         private readonly ICircularService _circularService;
 
+#pragma warning disable 0618
         public CaseService(
             ICaseRepository caseRepository,
             ICaseFileRepository caseFileRepository,
@@ -212,6 +215,8 @@ namespace DH.Helpdesk.Services.Services
             _contractLogRepository = contractLogRepository;
             _circularService = circularService;
         }
+
+#pragma warning restore 0618
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
         {
@@ -829,7 +834,7 @@ namespace DH.Helpdesk.Services.Services
             var c = _caseRepository.GetDetachedCaseById(copyFromCaseid);
             if (c.IsAbout == null)
             {
-                var tt = 1;
+                
             }
             if (c == null)
             {

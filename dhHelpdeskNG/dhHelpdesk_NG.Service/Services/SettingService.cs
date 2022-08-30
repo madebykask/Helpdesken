@@ -96,7 +96,10 @@ namespace DH.Helpdesk.Services.Services
         /// <summary>
         /// The unit of work.
         /// </summary>
+        /// 
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
         private readonly IEntityToBusinessModelMapper<Setting, CustomerSettings> _toBusinessModelMapper;
 
@@ -109,6 +112,8 @@ namespace DH.Helpdesk.Services.Services
         /// <param name="unitOfWork">
         /// The unit of work.
         /// </param>
+        /// 
+#pragma warning disable 0618
         public SettingService(ISettingRepository settingRepository, 
                               IUnitOfWork unitOfWork,
                               IEntityToBusinessModelMapper<Setting, CustomerSettings> businessModelMapper)
@@ -117,6 +122,7 @@ namespace DH.Helpdesk.Services.Services
             _unitOfWork = unitOfWork;
             _toBusinessModelMapper = businessModelMapper;
         }
+#pragma warning restore 0618
 
         /// <summary>
         /// The get customer setting.

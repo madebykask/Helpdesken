@@ -19,6 +19,8 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
     /// <summary>
     /// The cache context.
     /// </summary>
+    /// 
+#pragma warning disable 0618
     internal sealed class CacheContext : ICacheContext
     {
         /// <summary>
@@ -79,4 +81,5 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
             HttpContext.Current.Cache.Remove(CacheHolidays);
         }
     }
+#pragma warning restore 0618
 }

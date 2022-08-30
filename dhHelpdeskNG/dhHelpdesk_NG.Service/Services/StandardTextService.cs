@@ -23,8 +23,11 @@
     public class StandardTextService : IStandardTextService
     {
         private readonly IStandardTextRepository _standardTextRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public StandardTextService(
             IStandardTextRepository standardTextRepository,
             IUnitOfWork unitOfWork)
@@ -32,6 +35,7 @@
             this._standardTextRepository = standardTextRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<StandardText> GetStandardTexts(int customerId)
         {

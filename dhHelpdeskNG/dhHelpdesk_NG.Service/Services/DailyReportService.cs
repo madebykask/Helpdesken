@@ -41,11 +41,14 @@ namespace DH.Helpdesk.Services.Services
     public class DailyReportService : IDailyReportService
     {
         private readonly IDailyReportSubjectRepository _dailyReportSubjectRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly IDailyReportRepository _dailyReportRepository;
 
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
+#pragma warning disable 0618
         public DailyReportService(
             IDailyReportSubjectRepository dailyReportSubjectRepository,
             IUnitOfWork unitOfWork,
@@ -57,6 +60,7 @@ namespace DH.Helpdesk.Services.Services
             _dailyReportRepository = dailyReportRepository;
             this.unitOfWorkFactory = unitOfWorkFactory;
         }
+#pragma warning restore 0618
 
         public IList<DailyReportSubject> GetDailyReportSubjects(int customerId)
         {

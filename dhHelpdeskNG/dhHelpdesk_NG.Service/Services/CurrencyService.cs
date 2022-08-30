@@ -25,8 +25,11 @@
     public class CurrencyService : ICurrencyService
     {
         private readonly ICurrencyRepository _currencyRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public CurrencyService(
             ICurrencyRepository currencyRepository,
             IUnitOfWork unitOfWork)
@@ -34,6 +37,7 @@
             this._currencyRepository = currencyRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IDictionary<string, string> Validate(Currency currencyToValidate)
         {

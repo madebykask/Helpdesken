@@ -157,7 +157,7 @@ namespace DH.Helpdesk.Web.Infrastructure
                         translate = !string.IsNullOrEmpty(text) ? text : translate;
                     }
                 }
-                catch(Exception ex)
+                catch(Exception)
                 {
                 }
             }

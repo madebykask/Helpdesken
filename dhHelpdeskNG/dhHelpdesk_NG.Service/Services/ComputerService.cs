@@ -78,10 +78,13 @@ namespace DH.Helpdesk.Services.Services
         private readonly IComputerRepository _computerRepository;
         private readonly IOrganizationUnitRepository _ouRespository;
         private readonly INotifierFieldSettingLanguageRepository _computerUserFieldSettingLanguageRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IComputerUserCategoryRepository _computerUserCategoryRepository;
-        
+
+#pragma warning disable 0618
         public ComputerService(
             INotifierFieldSettingRepository computerUserFieldSettingsRepository,
             INotifierGroupRepository computerUserGroupRepository,
@@ -107,6 +110,7 @@ namespace DH.Helpdesk.Services.Services
             _inventoryRepository = inventoryRepository;
 
         }
+#pragma warning restore 0618
 
         public IDictionary<string, string> Validate(ComputerUsersBlackList computerUsersBlackListToValidate)
         {

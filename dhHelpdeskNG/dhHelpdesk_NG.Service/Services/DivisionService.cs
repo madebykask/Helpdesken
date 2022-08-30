@@ -24,8 +24,11 @@
     public class DivisionService : IDivisionService
     {
         private readonly IDivisionRepository _divisionRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public DivisionService(
             IDivisionRepository divisionRepository,
             IUnitOfWork unitOfWork)
@@ -33,6 +36,7 @@
             this._divisionRepository = divisionRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<Division> GetAllDivisions()
         {

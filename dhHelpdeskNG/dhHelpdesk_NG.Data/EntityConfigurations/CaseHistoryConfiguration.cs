@@ -163,7 +163,7 @@
             this.Property(x => x.RelatedCaseNumber).IsRequired();
             this.Property(x => x.RegUserDomain).IsOptional().HasMaxLength(20);
             this.Property(x => x.RegUserId).IsOptional();
-            this.Property(x => x.ReportedBy).IsOptional().HasMaxLength(40);
+            this.Property(x => x.ReportedBy).IsOptional().HasMaxLength(200);
             this.Property(x => x.SMS).IsRequired();
             this.Property(x => x.SolutionRate).IsOptional().HasMaxLength(10);
             this.Property(x => x.UserCode).IsOptional().HasMaxLength(50);

@@ -46,9 +46,12 @@
         private readonly IMailTemplateRepository _mailTemplateRepository;
         private readonly IMailTemplateLanguageRepository _mailTemplateLanguageRepository;
         private readonly IMailTemplateIdentifierRepository _mailTemplateIdentifierRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly ISettingService _settingService;
 
+#pragma warning disable 0618
         public MailTemplateService(
             IMailTemplateRepository mailTemplateRepository,
             IMailTemplateLanguageRepository mailTemplateLanguageRepository,
@@ -62,6 +65,7 @@
             this._unitOfWork = unitOfWork;
             this._settingService = settingSevice;
         }
+#pragma warning restore 0618
 
         public IDictionary<string, string> Validate(MailTemplateEntity mailTemplateToValidate)
         {

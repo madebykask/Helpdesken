@@ -40,8 +40,11 @@ namespace DH.Helpdesk.Services.Services
     {
         private readonly IFinishingCauseCategoryRepository _finishingCauseCategoryRepository;
         private readonly IFinishingCauseRepository _finishingCauseRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public FinishingCauseService(
             IFinishingCauseCategoryRepository finishingCauseCategoryRepository,
             IFinishingCauseRepository finishingCauseRepository,
@@ -51,6 +54,7 @@ namespace DH.Helpdesk.Services.Services
             this._finishingCauseRepository = finishingCauseRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public string GetFinishingTypeName(int id)
         {

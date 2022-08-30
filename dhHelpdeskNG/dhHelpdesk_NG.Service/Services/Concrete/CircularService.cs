@@ -624,7 +624,7 @@
                         var result = entity.QuestionnaireQuestionResultEntities.Single();
                         return result.Id;
                     }
-                    catch (InvalidOperationException ex)
+                    catch (InvalidOperationException)
                     {
                         return 0;
                     }

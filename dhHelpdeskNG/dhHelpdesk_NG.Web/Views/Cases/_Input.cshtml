@@ -285,11 +285,11 @@
                                                     @Html.Hidden("ShowReportedBy", Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage)
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber))
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", data_field = "userId", onblur = "EditPage.prototype.getLanguage()" })
+                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "200", autocomplete = "Off", data_field = "userId", onblur = "EditPage.prototype.getLanguage()" })
                                                     }
                                                     else
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", @readonly = true, data_field = "userId", onblur = "EditPage.prototype.getLanguage()" })
+                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "200", autocomplete = "Off", @readonly = true, data_field = "userId", onblur = "EditPage.prototype.getLanguage()" })
                                                     }
                                                 </td>
                                                 <td>

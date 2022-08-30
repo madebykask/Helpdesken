@@ -49,10 +49,13 @@
     {
         private readonly ITextRepository _textRepository;
         private readonly ITextTranslationRepository _textTranslationRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly ITextTypeRepository _textTypeRepository;
         private const int MobileIdStart = 30000;
 
+#pragma warning disable 0618
         public TextTranslationService(
             ITextRepository textRepository,
             ITextTranslationRepository textTranslationRepository,
@@ -64,6 +67,7 @@
             this._unitOfWork = unitOfWork;
             this._textTypeRepository = textTypeRepository;
         }
+#pragma warning restore 0618
 
         public IEnumerable<Text> GetAllNewTexts(int texttypeId)
         {

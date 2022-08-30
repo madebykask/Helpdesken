@@ -45,7 +45,9 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IMailUniqueIdentifierProvider>().To<MailUniqueIdentifierProvider>().InSingletonScope();
             this.Bind<TemporaryIdProvider>().To<TemporaryIdProvider>().InSingletonScope();
             this.Bind<ISendToDialogModelFactory>().To<SendToDialogModelFactory>().InSingletonScope();
+#pragma warning disable 0618
             this.Bind<IUnitOfWork>().To<UnitOfWork>();
+#pragma warning restore 0618
             this.Bind<IEditorStateCacheFactory>().To<EditorStateCacheFactory>().InSingletonScope();
             this.Bind<ITemporaryFilesCacheFactory>().To<TemporaryFilesCacheFactory>().InSingletonScope();
 

@@ -68,7 +68,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Binders
                 actualValue = Convert.ToDecimal(valueResult.AttemptedValue, CultureInfo.CurrentCulture);
                 return actualValue;
             }
-            catch (FormatException e)
+            catch (FormatException)
             {
             }
 
@@ -77,7 +77,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Binders
                 actualValue = Convert.ToDecimal(valueResult.AttemptedValue, CultureInfo.CurrentUICulture);
                 return actualValue;
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
 
@@ -86,7 +86,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Binders
                 actualValue = Convert.ToDecimal(valueResult.AttemptedValue, CultureInfo.InvariantCulture);
                 return actualValue;
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
 

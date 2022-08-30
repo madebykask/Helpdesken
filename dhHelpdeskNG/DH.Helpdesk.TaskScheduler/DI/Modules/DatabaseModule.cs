@@ -32,7 +32,9 @@ namespace DH.Helpdesk.TaskScheduler.DI.Modules
             Bind<IDbQueryExecutorFactory>().To<SqlDbQueryExecutorFactory>();
 
             //EF
+#pragma warning disable 0618
             Bind<IUnitOfWork>().To<UnitOfWork>();
+#pragma warning restore 0618
             Bind<IDatabaseFactory>().To<DatabaseFactory>();
             
             Bind<ISessionFactory>().To<HelpdeskSessionFactory>();

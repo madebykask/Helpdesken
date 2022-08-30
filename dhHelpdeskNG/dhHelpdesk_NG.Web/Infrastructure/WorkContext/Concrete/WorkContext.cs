@@ -29,7 +29,10 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         /// <summary>
         /// The cache.
         /// </summary>
+        /// 
+#pragma warning disable 0618
         private readonly ICacheContext cache;
+#pragma warning restore 0618
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkContext"/> class.
@@ -43,12 +46,15 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         /// <param name="customer">
         /// The customer.
         /// </param>
+        /// 
+#pragma warning disable 0618
         public WorkContext(IUserContext userContext, ICacheContext cache, ICustomerContext customer)
         {
             this.user = userContext;
             this.cache = cache;
             this.customer = customer;
         }
+#pragma warning restore 0618
 
         /// <summary>
         /// Gets the user.
@@ -72,6 +78,8 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         /// <summary>
         /// Gets the cache.
         /// </summary>
+        /// 
+#pragma warning disable 0618
         public ICacheContext Cache
         {
             get
@@ -79,6 +87,7 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
                 return this.cache;
             }
         }
+#pragma warning restore 0618
 
         /// <summary>
         /// The refresh.

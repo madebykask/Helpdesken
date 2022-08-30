@@ -121,7 +121,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Filters
                     }
                 }
                 //TODO: remove empty catch
-                catch (Exception e)
+                catch (Exception)
                 {
                 }
             }

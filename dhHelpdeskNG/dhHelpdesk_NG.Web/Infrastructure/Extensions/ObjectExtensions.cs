@@ -940,10 +940,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             var result = string.Empty;
             if (section != null)
             {
+#pragma warning disable 0618
                 if (model.case_.IsNew() && section.IsNewCollapsed)
                     result = "hideshow";
                 if (!model.case_.IsNew() && section.IsEditCollapsed)
                     result = "hideshow";
+#pragma warning restore 0618
             }
             return result;
         }
