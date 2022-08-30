@@ -340,6 +340,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 case 17:
                     ret = Translation.GetCoreTextTranslation("Påminnelse");
                     break;
+                case 18:
+                    ret = Translation.GetCoreTextTranslation("Sammanfogat ärende");
+                    break;
                 default:
                     if (value > 99 && customMailTemplates.Any())
                     {
