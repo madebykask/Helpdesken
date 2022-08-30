@@ -356,6 +356,7 @@ function getCollapseCaption(cap) {
         var self = this;
         self.table.ajax.reload();
         $("#cbxBulkCaseEditAll").prop('checked', false);
+        $('#liBulkCaseEdit').hide();
     };
 
     Page.prototype.getGridUpdatedAgo = function () {

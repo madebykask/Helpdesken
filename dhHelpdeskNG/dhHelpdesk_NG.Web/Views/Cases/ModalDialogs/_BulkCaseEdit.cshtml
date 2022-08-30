@@ -369,6 +369,7 @@
 <div class="modal-footer">
     <button id="btnBulkCaseEdit" class="btn" aria-hidden="true">@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)</button>
     <button id="btnBulkCaseEditCancel" class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
+    <a style="display: flex; justify-content: right;"><span id="processedNumCases">0</span>&nbsp;/&nbsp;<span id="totalNumSelectedCases">0</span></a>
 </div>
 <div class="loading-msg">
     <div class="content-wrapper">
@@ -392,14 +393,17 @@
             let $finishTypeBreadcrubs = $("#divBreadcrumbs_FinishingType");
             let $finishDescription = $('#case__FinishingDescription');
             let $btnFinishingTypeLst = $('#btnFinishingTypeLst');
-            let updatedCases = 0;
+            let $processedNumCases = $('#processedNumCases');
+            let $totalNumSelectedCases = $('#totalNumSelectedCases');
+            let selectedCases = [];
+            let processedCases = 0;
 
             $(document).ready(function () {
-
+                
                 resetBulkEditModal();
 
                 $('#divBulkCaseEdit').on("hide", function () {
-                    if (updatedCases > 0) {
+                    if (processedCases > 0) {
                         let inputData = getInputData();
                         if (!nothingToUpdate(inputData)) {
                             indexLogic.dispatchEvent(new Event("change"));
@@ -408,23 +412,27 @@
                     resetBulkEditModal();
                 });
 
+                $('#divBulkCaseEdit').on("show", function () {
+                    selectedCases = []
+                    $('.bulkEditCaseSelect:checkbox:checked').each((c, v) => {
+                        selectedCases.push({ id: v.getAttribute('data-caseid'), caseno: v.getAttribute('data-caseno'), casecaption: v.getAttribute('data-casecaption') });
+                    });
+
+                    $totalNumSelectedCases.text(selectedCases.length);
+                });
+
                 $btnBulkCaseEdit.on("click", async function bulkCaseEdit() {
                     await handleBulkCaseEdit()
                 });
 
 
                 const handleBulkCaseEdit = async () => {
-                    let selectedCases = [];
-                    $('.bulkEditCaseSelect:checkbox:checked').each((c, v) => {
-                        selectedCases.push({ id: v.getAttribute('data-caseid'), caseno: v.getAttribute('data-caseno'), casecaption: v.getAttribute('data-casecaption') });
-                    });
-
+                    
                     let inputData = getInputData();
                     inputData.CasesToBeUpdated = selectedCases.map(e => e.id);
 
                     if (validateBulkCaseEditData(inputData, selectedCases)) {
-                        $bulkCaseEditProgressDiv.css("display", "block");
-                        //$btnBulkCaseEditCancel.prop("disabled", "true");
+                        $bulkCaseEditProgressDiv.css("display", "block");                        
 
                         disableBulkCaseEditInputFields();
 
@@ -440,7 +448,7 @@
                                     dataType: "json",
                                     beforeSend: function () {
                                         $bulkCaseEditProgressListBody.append('<tr><td style="border:none; width:30px;"><i id="st_inProgress' + c.id + '" class="gif-loader" style="">&nbsp;</i></td><td style="border:none; width:60px; text-align:left;">' + c.caseno + '</td><td style="border:none; text-align:left;">' + c.casecaption + '</td></tr>')
-
+                                        
                                         var content = $bulkCaseEditProgressListBody.html();
                                         $bulkCaseEditProgressListBody.html(content);
                                     },
@@ -453,7 +461,6 @@
                                             $("#st_inProgress" + c.id).addClass("fa fa-check-circle fa-lg");
                                             $("#st_inProgress" + c.id).prop("aria-hidden", "true");
                                             $("#st_inProgress" + c.id).css("color", "green");
-                                            updatedCases++;
 
                                         }
 
@@ -475,14 +482,21 @@
                                         console.log(jqXHR);
                                         console.log(textStatus);
                                         console.log(errorThrown);
-                                        reject(data)
+                                        reject(data);
+                                    },
+                                    complete: () => {
+                                        processedCases++;
+                                        $processedNumCases.text(processedCases);
+
+                                        if ($processedNumCases.text() == $totalNumSelectedCases.text()) {
+                                            $btnBulkCaseEditCancel.attr('disabled', false);
+                                        }                                            
                                     }
                                 });
                             })
                         });
                     }
-                    $btnBulkCaseEdit.hide();
-                    $btnBulkCaseEditCancel.removeAttr('disabled');                    
+                    $btnBulkCaseEdit.hide();              
                 }
 
                 $caseWorkingGroupId.change(function (d, source) {
@@ -548,6 +562,7 @@
                 $finishDescription.attr('disabled', true);
                 $finishTypeBreadcrubs.attr('disabled', true);
                 $btnFinishingTypeLst.attr('disabled', true);
+                $btnBulkCaseEditCancel.attr('disabled', true);
             }
 
             function enableBulkCaseEditInputFields() {
@@ -575,7 +590,8 @@
                 $finishDate.val('');
                 $finishTypeBreadcrubs.text('@Html.Raw(Translation.Get("--"))');
                 enableBulkCaseEditInputFields();
-                updatedCases = 0;
+                $processedNumCases.text('0');
+                processedCases = 0;
             }
 
             function nothingToUpdate(data) {
