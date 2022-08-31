@@ -3118,7 +3118,7 @@
                             @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.tblLog_Charge.ToString()])
                         </td>
                         <td>
-                            <input type="checkbox" name="CaseFieldSettings[49].ShowOnStartPage" disabled="disabled" />
+                            <input type="checkbox" name="CaseFieldSettings[49].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.tblLog_Charge.ToString()) == 1 ? "checked=checked" : "") value="1" />
                             <input type="hidden" name="CaseFieldSettings[49].ShowOnStartPage" value="0" />
                             <input type="hidden" name="CaseFieldSettings[49].Customer_Id" value="@Model.Customer.Id" />
                             <input type="hidden" name="CaseFieldSettings[49].Name" value="tblLog.Charge" />
