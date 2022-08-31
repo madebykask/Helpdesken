@@ -517,10 +517,10 @@ Model.EnableTwoAttachments))
 
                             }
                         </td>
-
+                        
                         <td></td>
                     </tr>
-                    <tr>
+                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Charge, CaseSolutionFields.Charge)">
                         <td>
                             @Translation.Get("Debitering", SessionFacade.CurrentCaseLanguageId)
                         </td>
@@ -621,7 +621,10 @@ Model.EnableTwoAttachments))
             ", #" + "@Html.IdFor(x => x.CaseLog.OvertimeHour)" +
             ", #" + "@Html.IdFor(x => x.CaseLog.OvertimeMinute)"
             , function () {
-                $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+                if ('@Model.IsCaseFieldVisible(GlobalEnums.TranslationCaseFields.tblLog_Charge, CaseSolutionFields.Charge)' == 'True') {
+                    $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+                }
+
             });
 
     $(document)
@@ -632,7 +635,10 @@ Model.EnableTwoAttachments))
             , function () {
                 var val = $(this).val();
                 if (val && val !== "0")
-                    $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+                    if ('@Model.IsCaseFieldVisible(GlobalEnums.TranslationCaseFields.tblLog_Charge, CaseSolutionFields.Charge)' == 'True') {
+                        $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+                    }
+
             });
 
     $(document)
@@ -640,8 +646,13 @@ Model.EnableTwoAttachments))
             , "[id^='ExternalInvoices['][id$='].Name']"
             , function () {
                 var val = $(this).val();
-                if (val)
-                    $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+                if (val) {
+                    if ('@Model.IsCaseFieldVisible(GlobalEnums.TranslationCaseFields.tblLog_Charge, CaseSolutionFields.Charge)' == 'True') {
+                        $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+                    }
+
+                }
+
             });
 
 
@@ -711,7 +722,7 @@ Model.EnableTwoAttachments))
     });
 
     $(document).ready(function () {
-        
+
         let performerId = $("#Performer_Id").val();
 
         let isInvalidPerformer = (performerId == @SessionFacade.CurrentUser.Id || performerId == "");

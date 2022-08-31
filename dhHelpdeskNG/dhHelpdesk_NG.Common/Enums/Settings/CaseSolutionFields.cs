@@ -73,5 +73,6 @@
         UserSearchCategory_Id = 69,
         IsAbout_UserSearchCategory_Id = 70,
         LogFileName_Internal = 71,
+        Charge = 72,
     }
 }
