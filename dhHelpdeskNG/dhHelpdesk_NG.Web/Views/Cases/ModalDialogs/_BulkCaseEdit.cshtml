@@ -473,6 +473,7 @@
                                         $("#st_inProgress" + c.id).prop("title", message);
                                         console.log(message);
                                         resolve(data)
+                                        handleProcessedCase();
                                     },
                                     error: function (jqXHR, textStatus, errorThrown) {
                                         $("#st_inProgress" + c.id).removeClass();
@@ -483,14 +484,7 @@
                                         console.log(textStatus);
                                         console.log(errorThrown);
                                         reject(data);
-                                    },
-                                    complete: () => {
-                                        processedCases++;
-                                        $processedNumCases.text(processedCases);
-
-                                        if ($processedNumCases.text() == $totalNumSelectedCases.text()) {
-                                            $btnBulkCaseEditCancel.attr('disabled', false);
-                                        }                                            
+                                        handleProcessedCase();
                                     }
                                 });
                             })
@@ -539,6 +533,15 @@
                     }
                 });
             });
+
+            function handleProcessedCase() {
+                processedCases++;
+                $processedNumCases.text(processedCases);
+
+                if ($processedNumCases.text() == $totalNumSelectedCases.text()) {
+                    $btnBulkCaseEditCancel.attr('disabled', false);
+                }   
+            }
 
             function getInputData() {
                 return {
