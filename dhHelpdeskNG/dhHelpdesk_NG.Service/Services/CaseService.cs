@@ -1901,15 +1901,26 @@ namespace DH.Helpdesk.Services.Services
                     var url = "<br><a href='" + site + "'>" + site + "</a>";
                     ret.Add(new Field { Key = "[#MP99]", StringValue = url });
                 }
-                // selfservice site
+                // selfservice site link to merge parent
                 if (cms != null)
                 {
+                    var mergeParentHistoryId = _caseHistoryRepository.GetCaseHistoryByCaseId(mergeParent.Id).Last().Id;
+                    var emailLog = new EmailLog(mergeParentHistoryId, 18, cms.HelpdeskMailFromAdress,
+                        _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                    emailLog.SendTime = DateTime.Now;
+                    emailLog.CreatedDate = DateTime.Now;
+                    emailLog.ChangedDate = DateTime.Now;
+                    emailLog.SendStatus = 0;
+                    _emailLogRepository.Add(emailLog);
+                    _emailLogRepository.Commit();
+
                     if (emailLogGuid == string.Empty)
                         emailLogGuid = " >> *" + stateHelper.ToString() + "*";
 
-                    var site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + emailLogGuid;
+                    var site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + emailLog.EmailLogGUID;
                     var url = "<br><a href='" + site + "'>" + site + "</a>";
                     ret.Add(new Field { Key = "[#MP98]", StringValue = url });
+                    ret.Add(new Field { Key = "[#MP98Link]", StringValue = site });
                 }
             }
             

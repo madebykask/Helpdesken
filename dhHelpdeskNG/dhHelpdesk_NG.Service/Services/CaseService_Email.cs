@@ -792,6 +792,7 @@ namespace DH.Helpdesk.Services.Services
                         _emailService.GetMailMessageId(senderEmail));
                     emailLog.Cc = ccRecepients;
                     emailLogs.Add(recepients, emailLog);
+                    
                 }
                 else
                 {
@@ -851,6 +852,11 @@ namespace DH.Helpdesk.Services.Services
                        ref body, filterFieldsEmails, applyFeedbackFilter);
                     fieldsToUpdate.AddRange(feedBackFields);
 
+                    var siteSelfServiceMergeParent = "";
+                    if (mergeParent != null)
+                    {
+                        siteSelfServiceMergeParent = fields.FirstOrDefault(x => x.Key == "[#MP98Link]").StringValue; ;
+                    }
                     var res =
                         _emailService.SendEmail(eLog.Value,
                             senderEmail,
@@ -864,8 +870,9 @@ namespace DH.Helpdesk.Services.Services
                             highPriority,
                             files,
                             siteSelfService,
-                            siteHelpdesk);
-
+                            siteHelpdesk,
+                            EmailType.ToMail,
+                            siteSelfServiceMergeParent);
                     SaveEmailLog(eLog.Value, res);
                 }
 

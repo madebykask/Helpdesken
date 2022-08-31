@@ -364,10 +364,9 @@
                                                 </td>
                                                 <td style="@Model.GetFieldStyle(CaseSolutionFields.Email)">
                                                     <div>
-                                                        @*<label class="checkbox">*@
                                                         @if (!Model.IsReadOnly(CaseSolutionFields.Email))
                                                         {
-                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier)
+                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @onclick = "setSessionVariable()" })
                                                         }
                                                         else
                                                         {
@@ -2469,6 +2468,14 @@
         $("#emailsTo").text(email);
         e.preventDefault();
     });
-
+    function setSessionVariable() {
+        var sendEmail = document.getElementById('CaseMailSetting_DontSendMailToNotifier');
+        if (sendEmail.checked) {
+            $("#dontSendMailToNotifier").val('false');
+        } else {
+            $("#dontSendMailToNotifier").val('true');
+        }
+        e.preventDefault();
+    }
 </script>
 

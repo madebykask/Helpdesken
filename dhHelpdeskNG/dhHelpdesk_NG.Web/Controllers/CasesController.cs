@@ -3152,7 +3152,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         }
 
-        public ActionResult ConnectToParentCase(int id, int parentCaseId, bool? tomerge = false)
+        public ActionResult ConnectToParentCase(int id, int parentCaseId, bool? tomerge = false, bool? nomail = false)
         {
             if (SessionFacade.CurrentCustomer == null || SessionFacade.CurrentUser == null)
             {
@@ -3189,20 +3189,17 @@ namespace DH.Helpdesk.Web.Controllers
                     newFollowers.Add(extraFollower);
                 }
 
-                List<ExtraFollower> result = existingFollowers.Union(newFollowers).ToList();
-                newParentFollowers = result.Select(f => f.Follower).Distinct().ToList();
+                List<ExtraFollower> result = existingFollowers.Union(newFollowers).Distinct().ToList();
+                newParentFollowers = result.Where(x => x.Follower != parentCase.PersonsEmail).Select(f => f.Follower).Distinct().ToList();
                 List<string> emailList = new List<string> { mergeCase.PersonsEmail };
-                List<string> ccEmailList = newFollowers.Select(f => f.Follower).Distinct().ToList();
+                List<string> ccEmailList = newParentFollowers;
 
                 if (newParentFollowers.Count() > 0)
                 {
                     _caseExtraFollowersService.SaveExtraFollowers(parentCaseId, newParentFollowers, _workContext.User.UserId);
                 }
 
-                //Save Case History
                 IDictionary<string, string> errors;
-                string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                _caseService.SaveCaseHistory(parentCase, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, null, null);
 
                 // Close case...
                 CaseExtraInfo extraInfo = new CaseExtraInfo
@@ -3228,25 +3225,24 @@ namespace DH.Helpdesk.Web.Controllers
 
 
                 int caseHistoryId = _caseService.SaveCase(mergeCase, caseLog, SessionFacade.CurrentUser.Id, null, extraInfo, out errors);
+                int mergeParentHistoryId = _caseService.SaveCase(parentCase, caseLog, SessionFacade.CurrentUser.Id, null, extraInfo, out errors);
                 caseLog.CaseHistoryId = caseHistoryId;
                 int caseLogId = _logService.SaveLog(caseLog, 0, out errors);
 
-                //Send Closing email/Merged Case
                 Customer customer = _customerService.GetCustomer(mergeCase.Customer_Id);
-                CaseMailSetting caseMailSetting = new CaseMailSetting(string.Empty, customer.HelpdeskEmail, RequestExtension.GetAbsoluteUrl(), 1)
+                CaseMailSetting caseMailSetting = new CaseMailSetting(string.Empty, customer.HelpdeskEmail, RequestExtension.GetAbsoluteUrl(), 1);
+                if(nomail == false)
                 {
-                    DontSendMailToNotifier = false,
-                };
+                    caseMailSetting.DontSendMailToNotifier = false;
+                    MailSenders mailSenders = new MailSenders { SystemEmail = caseMailSetting.HelpdeskMailFromAdress };
+                    caseMailSetting.CustomeMailFromAddress = mailSenders;
 
-                MailSenders mailSenders = new MailSenders { SystemEmail = caseMailSetting.HelpdeskMailFromAdress };
-                caseMailSetting.CustomeMailFromAddress = mailSenders;
-
-                TimeZoneInfo userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
-                User currentLoggedInUser = _userService.GetUser(SessionFacade.CurrentUser.Id);
-                _caseService.SendMergedCaseEmail(mergeCase, parentCase, caseMailSetting, caseHistoryId, userTimeZone, caseLog, ccEmailList);
+                    TimeZoneInfo userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+                    User currentLoggedInUser = _userService.GetUser(SessionFacade.CurrentUser.Id);
+                    _caseService.SendMergedCaseEmail(mergeCase, parentCase, caseMailSetting, caseHistoryId, userTimeZone, caseLog, ccEmailList);
+                }
+               
             }
-
-
 
             return this.RedirectToAction("Edit", "cases", new { id = parentCaseId });
         }

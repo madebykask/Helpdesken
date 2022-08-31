@@ -280,6 +280,7 @@
                                                 <li><a data-toggle="modal" id="merge_case_to_parent" href="#">@Translation.GetCoreTextTranslation("Sammanfoga")</a></li>
                                                 @Html.HiddenFor(m => m.case_.Id, new { @id = "merge_to_parent" })
                                                 <input type="hidden" id="tomerge" name="tomerge" value="false" />
+                                                <input type="hidden" id="dontSendMailToNotifier" name="dontSendMailToNotifier" value="false" />
                                             }
                                         }
                                         @if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue && (!Model.IsItChildCase() || (Model.IsItChildCase() && !Model.ParentCaseInfo.IsCaseClosed)))

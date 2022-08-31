@@ -15,6 +15,7 @@
 
         $("#case_connect_to_parent_btn").on("click", function () {
             $("#tomerge").val('false');
+            $("#dontSendMailToNotifier").val('false');
             var $src = $(this);
             var $target = $("#divConnectParentToParent");
             $target.attr("data-src", $src.attr("data-src"));
@@ -22,6 +23,12 @@
             LoadConnectToParent(pageSettings);
         });
         $("#merge_case_to_parent").on("click", function () {
+            var sendEmail = document.getElementById('CaseMailSetting_DontSendMailToNotifier');
+            if (sendEmail.checked) {
+                $("#dontSendMailToNotifier").val('false');
+            } else {
+                $("#dontSendMailToNotifier").val('true');
+            }
             $("#tomerge").val('true');
             var $src = $(this);
             var $target = $("#divConnectParentToParent");
