@@ -4136,10 +4136,6 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Web.config.application.copy.template">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
@@ -4433,9 +4429,6 @@
     <Content Include="Views\Cases\_CaseLogInputFilesAttachment.cshtml" />
     <Content Include="Views\Cases\_CaseAttachExistFileList.cshtml" />
     <Content Include="Views\Cases\_Documents.cshtml" />
-    <Content Include="Web.config.template.variables.dev.xml">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">
