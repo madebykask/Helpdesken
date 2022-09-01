@@ -15,6 +15,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using DH.Helpdesk.Web.Models.Case;
     using DH.Helpdesk.Web.Models;
     using Models.CaseSolution;
+    using System.Web;
+    using HtmlAgilityPack;
 
     public static class GeneralExtensions
     {
@@ -75,6 +77,29 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 return string.Empty;
             else
                 return "|||||||||||";
+        }
+
+        public static string HTMLToTableCell(this string input)
+        {
+
+            if (string.IsNullOrEmpty(input))
+            {
+                return input;
+            }
+            
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(input);
+
+            var itemList = doc.DocumentNode.SelectNodes("//img");
+
+            //for (int i = 0; i < itemList.Count; i++)
+            //{
+            //    var item = itemList[i];
+
+            //    item.SetAttributeValue("style", "")
+            //}
+
+            return input;
         }
 
         public static string GetFieldStyle(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
