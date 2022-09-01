@@ -1956,6 +1956,8 @@
     <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
     <Compile Include="Models\Shared\SendToDialogModel.cs" />
     <Compile Include="Models\SurveyViewModel.cs" />
+    <Content Include="Scripts\jquery.cookie-1.4.1.min.js" />
+    <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="_app_offline.htm" />
   </ItemGroup>
   <ItemGroup>
@@ -3682,7 +3684,6 @@
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.min.js" />
-    <Content Include="Scripts\jquery.cookie.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
