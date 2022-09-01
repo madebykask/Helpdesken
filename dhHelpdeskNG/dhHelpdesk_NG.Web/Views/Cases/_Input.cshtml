@@ -580,10 +580,10 @@
                                                 <td colspan="2">
                                                     <div id="extendedSection-Initiator" style="display:none">
                                                         <!--<h4>
-                                                <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
-                                                <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
-                                                Vendor details <!-- TODO: Bind on category name and translation
-                                            </h4>-->
+                                                            <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
+                                                            <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                                                            Vendor details <!-- TODO: Bind on category name and translation
+                                                        </h4>-->
 
                                                         <input type="hidden" id="ExtendedInitiatorGUID" name="ExtendedInitiatorGUID" value="@(Model.ExtendedCaseSections.ContainsKey(CaseSectionType.Initiator) ? Model.ExtendedCaseSections[CaseSectionType.Initiator].ExtendedCaseGuid.ToString() : "")" />
                                                         <iframe id="extendedSection-iframe-Initiator" src="" frameborder="0" scrolling="no" style="width:500px; height:180px; margin-top: 10px"></iframe>
@@ -875,10 +875,10 @@
                                             <td colspan="2">
                                                 <div id="extendedSection-Regarding" style="display:none">
                                                     <!--<h4>
-                                            <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
-                                            <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
-                                            Vendor details <!-- TODO: Bind on category name and translation
-                                        </h4>-->
+                                                        <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
+                                                        <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                                                        Vendor details <!-- TODO: Bind on category name and translation
+                                                    </h4>-->
 
                                                     <input type="hidden" id="ExtendedRegardingGUID" name="ExtendedRegardingGUID" value="@(Model.ExtendedCaseSections.ContainsKey(CaseSectionType.Regarding) ? Model.ExtendedCaseSections[CaseSectionType.Regarding].ExtendedCaseGuid.ToString() : "")" />
                                                     <iframe id="extendedSection-iframe-Regarding" src="" style="width:500px; height:180px; margin-top:10px" frameborder="0" scrolling="no"></iframe>
@@ -1430,27 +1430,27 @@
                                             </td>
                                             <td colspan="3">
 
-                                                @{
-                                                    var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.TranslationCaseFields.Description.ToString());
-                                                    if (descriptionSize == 0)
-                                                    {
-                                                        descriptionSize = 5;
-                                                    }
-                                                }
+                                                <div class="summernote-desc-flex-container" style="align-items:center">
 
-                                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
-                                                {
-                                                    @Html.TextAreaFor(model => model.case_.Description, new { rows = descriptionSize, @class = "case-description width90" })
-                                                }
-                                                else
-                                                {
-                                                    @Html.TextAreaFor(model => model.case_.Description, new { rows = descriptionSize, @class = "case-description width90", @readonly = true })
-                                                }
-                                                <span id="caseDescriptionPreview"
-                                                      rel="tooltip"
-                                                      class="icon-circle-arrow-up cursor-pointer"
-                                                      title="@Translation.GetCoreTextTranslation("Förhandsgranska")"
-                                                      style="@(string.IsNullOrEmpty(Model.case_.Description) ? "visibility: hidden" : "")"></span>
+                                                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
+                                                    {
+                                                        <div id="textDescriptionOuter" style="width: 648px">
+                                                            @Html.TextAreaFor(model => model.case_.Description, new { @class = "case-description summernotedesc" })
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div id="textDescriptionOuter" style="width: 648px">
+                                                            @Html.TextAreaFor(model => model.case_.Description, new { @class = "case-description summernotedesc", @readonly = true })
+                                                        </div>
+                                                    }
+                                                    <span id="caseDescriptionPreview"
+                                                          rel="tooltip"
+                                                          class="icon-circle-arrow-up cursor-pointer"
+                                                          title="@Translation.GetCoreTextTranslation("Förhandsgranska")"
+                                                          style="@(string.IsNullOrEmpty(Model.case_.Description) ? "visibility: hidden" : "")"></span>
+
+                                                </div>
 
                                             </td>
 
@@ -2372,7 +2372,7 @@
                 {
                     @Html.Partial("_ChildCases", Model.ChildCaseViewModel);
                 }
-                @if(Model.IsItMergedParent())
+                @if (Model.IsItMergedParent())
                 {
                     @Html.Partial("_MergedCases", Model.ChildCaseViewModel);
                 }
@@ -2470,5 +2470,77 @@
         e.preventDefault();
     });
 
+</script>
+
+<script>
+
+@{
+var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.TranslationCaseFields.Description.ToString());
+    if (descriptionSize == 0)
+    {
+        descriptionSize = 5;
+    }
+}
+
+    //Declare height
+    let height = 100;
+
+
+    let summerNoteConfig = {
+        placeholder: '',
+        dialogsFade: true,
+        tabsize: 1,
+        fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82'],
+        toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['fontsize', ['fontsize']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
+        disableResizeImage: true,
+        disableResizeEditor: true,
+    }
+
+    let summerNoteDescConfig = {
+        placeholder: '',
+        dialogsFade: true,
+        tabsize: 1,
+        fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82'],
+        toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['fontsize', ['fontsize']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
+        disableResizeImage: true,
+        disableResizeEditor: false,
+        height: @descriptionSize * 25
+    }
+
+    //Init summernote
+    $(document).ready(function () {
+        $('.summernote').summernote(summerNoteConfig)
+        $('.summernotedesc').summernote(summerNoteDescConfig)
+
+        function sizeChanged(element) {
+
+            let elementId = "#" + element[0].target.id;
+
+            let toolBarHeight = $(elementId + ' .note-toolbar')[0].offsetHeight;
+            let footerHeight = $(elementId + ' .note-resizebar')[0].offsetHeight;
+            let padding = 53;
+
+            //Rescale summernote
+            $(elementId + ' .note-editable').height(element[0].target.offsetHeight - toolBarHeight - footerHeight - padding);
+
+        }
+
+        //Set default true height
+        $('textExternalOuter.note-editable').height(height);
+        $('textInternalOuter.note-editable').height(height);
+
+        //Trigger resize
+        new ResizeObserver(sizeChanged).observe(textExternalOuter)
+        new ResizeObserver(sizeChanged).observe(textInternalOuter)
+
+        //Loop all .summernote to try to find the disabled ones
+        $(".summernote").each(function () {
+
+            if (this.readOnly) {
+                $("#" + this.id).summernote("disable");
+            }
+
+        });
+    });
 </script>
 

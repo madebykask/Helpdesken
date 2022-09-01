@@ -420,6 +420,7 @@
                             param: [1, ".time-field"],
                             depends: function(element) {
                                 var setting = window.parameters.departmentInvoiceMandatory && window.parameters.showInvoiceTime;
+
                                 var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
                                     || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
 
