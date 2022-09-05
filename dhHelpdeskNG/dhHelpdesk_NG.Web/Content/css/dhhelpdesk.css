@@ -2924,7 +2924,6 @@ body.login {
 }
 
 
-
 .infop {
     margin: 20px;
     padding: 30px 0;
@@ -4316,4 +4315,14 @@ div.chosen-container.chosen-container-single.error {
     display: flex;
     -webkit-flex-direction: row;
     flex-direction: row;
+}
+
+.note-modal {
+    z-index: 99999 !important;
+    left: 50% !important;
+    bottom: auto !important;
+}
+
+.note-input{
+    padding: 0 !important
 }
