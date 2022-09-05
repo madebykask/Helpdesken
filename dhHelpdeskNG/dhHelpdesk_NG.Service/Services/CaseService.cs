@@ -1065,8 +1065,9 @@ namespace DH.Helpdesk.Services.Services
                 var fc = _finishingCauseService.GetFinishingTypeName(caseLog.FinishingType.Value);
                 extraFields.ClosingReason = fc;
             }
-
-            if (parentCase != null)
+            //Check if it is a merged case
+            var mergeParent = GetMergedParentInfo(cases.Id);
+            if (parentCase != null && mergeParent == null)
             {
                 this.AddChildCase(cases.Id, parentCase.Id, out errors);
             }

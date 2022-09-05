@@ -3966,8 +3966,8 @@ namespace DH.Helpdesk.Web.Controllers
                         out errors,
                         parentCase,
                         m.FollowerUsers);
-
-            if (isItChildCase)
+            var mergeParent = _caseService.GetMergedParentInfo(case_.Id);
+            if (isItChildCase && mergeParent == null)
             {
                 _caseService.SetIndependentChild(case_.Id, m.IndependentChild);
             }
