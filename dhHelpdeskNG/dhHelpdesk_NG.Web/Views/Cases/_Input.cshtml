@@ -2541,6 +2541,14 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
             }
 
         });
+
+        $(".summernotedesc").each(function () {
+
+            if (this.readOnly) {
+                $("#" + this.id).summernote("disable");
+            }
+
+        });
     });
 </script>
 

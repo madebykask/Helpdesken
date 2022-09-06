@@ -191,6 +191,7 @@ function getCollapseCaption(cap) {
                 },
                 createdRow: function (row, data, dataIndex) {
                     if (data) {
+                       
                         $(row).addClass(self.getClsRow(data) + " caseid=" + data.case_id);
                         var html = [];
                         html.push('<a class="img-case-parent" href="/Cases/Edit/', data.case_id, '">');
@@ -430,13 +431,38 @@ function getCollapseCaption(cap) {
                 width: fieldSetting.width,
                 defaultContent: "&nbsp;",
                 createdCell: function (td, cellData, rowData, row, col) {
+
+
                     if (!fieldSetting.isHidden) {
                         if (cellData === null || cellData === undefined) {
                             td.innerHTML = self.formatCell(rowData.case_id, '');
                             if (Page.isDebug)
                                 console.warn('could not find field "' + fieldSetting.field + '" in record');
                         } else {
-                            td.innerHTML = self.formatCell(rowData.case_id, cellData);
+
+
+                            if ($(td).hasClass("Description")) {
+
+                                var unEcodedString = $("<p/>").html(cellData).text();
+
+                                var aElementString = self.formatCell(rowData.case_id, cellData);
+
+                                var aElementEncoded = $.parseHTML(aElementString);
+
+                                var aElementToAppendTo = $(aElementEncoded)[0];
+
+                                var codedInnerHTML = $(aElementToAppendTo).html(unEcodedString)[0];
+
+                                td.innerHTML = "";
+                                $(td).append(codedInnerHTML)
+
+                            }
+                            else {
+                                td.innerHTML = self.formatCell(rowData.case_id, cellData);
+                            }
+ 
+
+                            
                         }
                     }
                 }
@@ -501,6 +527,7 @@ function getCollapseCaption(cap) {
         var out = [strJoin('<a href="/Cases/Edit/', caseId, '">', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a>')];
         return out.join(JOINER);
     };
+
 
     Page.prototype.onRemainingViewClick = function (aElement) {
         var self = this;
