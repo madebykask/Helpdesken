@@ -251,6 +251,10 @@ namespace DH.Helpdesk.Services.Services
         {
             return CaseSolutionRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
+        public IList<CaseSolution> GetCaseSolutionsWithSpecificCategory(int categoryId)
+        {
+            return CaseSolutionRepository.GetMany(x => x.Category_Id == categoryId).ToList();
+        }
 
         public IList<CaseTemplateData> GetSelfServiceCaseTemplates(int customerId)
         {
@@ -1788,13 +1792,28 @@ namespace DH.Helpdesk.Services.Services
             {
                 try
                 {
-                    _caseSolutionCategoryRepository.Delete(caseSolutionCategory);
-                    Commit();
+                    var isInUse = GetCaseSolutionsWithSpecificCategory(id);
+                    if(isInUse.Count() == 0)
+                    {
+                        _caseSolutionCategoryLanguageRepository.DeleteCategoryTranslation(id);
+                        _caseSolutionCategoryRepository.Delete(caseSolutionCategory);
 
-                    return DeleteMessage.Success;
+                        _caseSolutionCategoryLanguageRepository.Commit();
+                        _caseSolutionCategoryRepository.Commit();
+
+                        return DeleteMessage.Success;
+                    }
+                    else
+                    {
+                        return DeleteMessage.UnExpectedError;
+                    }
+                    
+
+                    
                 }
-                catch
+                catch(Exception er)
                 {
+                    var error = er.Message;
                     return DeleteMessage.UnExpectedError;
                 }
             }

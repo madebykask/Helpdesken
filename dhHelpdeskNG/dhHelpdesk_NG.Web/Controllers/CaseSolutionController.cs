@@ -2797,11 +2797,17 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public ActionResult DeleteCategory(int id)
         {
+            //Check if category is used
+            var isInUse = 
             if (this._caseSolutionService.DeleteCaseSolutionCategory(id) == DeleteMessage.Success)
+            {
+                
                 return this.RedirectToAction("index", "casesolution");
+            }
+                
             else
             {
-                this.TempData.Add("Error", "You cant delete an used building");
+                this.TempData.Add("Error", Translation.GetCoreTextTranslation("Du kan inte ta bort en kategori som används"));
                 return this.RedirectToAction("editcategory", "casesolution", new { id = id });
             }
         }

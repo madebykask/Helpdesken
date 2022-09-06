@@ -22,6 +22,7 @@ namespace DH.Helpdesk.Services.Services
         CaseSolutionCategory GetCaseSolutionCategory(int id);
         CaseSolutionLanguageEntity GetCaseSolutionTranslation(int casSolutionId, int languageId);
         CaseSolutionCategoryLanguageEntity GetCaseSolutionCategoryTranslation(int categoryId, int languageId);
+        IList<CaseSolution> GetCaseSolutions(int customerId);
     }
 
     public class BaseCaseSolutionService : IBaseCaseSolutionService
