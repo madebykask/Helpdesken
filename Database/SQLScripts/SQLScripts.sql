@@ -752,7 +752,7 @@ INSERT INTO [dbo].[ExtendedCaseTranslations]
            ,[Property]
            ,[Text])
      VALUES
-           (1
+           (2
            ,'Section.InitiatorInfo'
            ,'Initiator info')
 		   END
