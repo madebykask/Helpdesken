@@ -288,14 +288,8 @@ namespace DH.Helpdesk.SCCM.DB
                             s = s + "User_Id=Null, ";
                         }
 
-                        if (c.Domain_Id != 0)
-                        {
-                            s = s + "Domain_Id=" + c.Domain_Id + ", ";
-                        }
-                        else
-                        {
-                            s = s + "Domain_Id=Null, ";
-                        }
+                        s = s + "Domain_Id=Null, ";
+                        
                         if (c.WarrantyEndDate != null)
                         {
                             s = s + "WarrantyEndDate='" + c.WarrantyEndDate + "', ";
@@ -383,14 +377,8 @@ namespace DH.Helpdesk.SCCM.DB
                             s = s + "User_Id=Null, ";
                         }
 
-                        if (c.Domain_Id != 0)
-                        {
-                            s = s + "Domain_Id=" + c.Domain_Id + ", ";
-                        }
-                        else
-                        {
-                            s = s + "Domain_Id=Null, ";
-                        }
+                        s = s + "Domain_Id=Null, ";
+                        
                         if (c.WarrantyEndDate != null)
                         {
                             s = s + "WarrantyEndDate='" + c.WarrantyEndDate + "', ";

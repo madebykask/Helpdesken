@@ -161,7 +161,6 @@ namespace DH.Helpdesk.SCCM
             serverDB.OS_Version = reference._OperatingSystem.Version;
             serverDB.OS_SP = reference._OperatingSystem.CSDVersion;
 
-            serverDB.Domain_Id = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Domain_Id"].ToString());
 
             var userName = reference._ComputerSystem.UserName;
 
@@ -229,7 +228,6 @@ namespace DH.Helpdesk.SCCM
             computerDB.OS_Version = reference._OperatingSystem.Version;
             computerDB.OS_SP = reference._OperatingSystem.CSDVersion;
 
-            computerDB.Domain_Id = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Domain_Id"].ToString());
 
             var userName = reference._ComputerSystem.UserName;
 

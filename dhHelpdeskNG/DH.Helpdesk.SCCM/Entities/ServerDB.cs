@@ -118,8 +118,6 @@ namespace DH.Helpdesk.SCCM.Entities
 
         public int OU_Id { get; set; }
 
-        public int Domain_Id { get; set; }
-
         public int ComputerRole { get; set; }
 
         public string LDAPPath { get; set; }
