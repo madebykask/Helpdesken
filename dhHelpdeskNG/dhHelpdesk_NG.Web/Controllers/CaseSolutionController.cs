@@ -2780,7 +2780,8 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     Id = caseSolutionCategory.Id,
                     Name = caseSolutionCategory.Name,
-                    Customer_Id = caseSolutionCategory.Customer_Id
+                    Customer_Id = caseSolutionCategory.Customer_Id,
+                    IsDefault = caseSolutionCategory.IsDefault,
                 };
 
 
@@ -2798,7 +2799,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult DeleteCategory(int id)
         {
             //Check if category is used
-            var isInUse = 
+
             if (this._caseSolutionService.DeleteCaseSolutionCategory(id) == DeleteMessage.Success)
             {
                 
@@ -2807,7 +2808,7 @@ namespace DH.Helpdesk.Web.Controllers
                 
             else
             {
-                this.TempData.Add("Error", Translation.GetCoreTextTranslation("Du kan inte ta bort en kategori som används"));
+                this.TempData.Add("Error", Translation.GetCoreTextTranslation("Kategori som används går inte att ta bort"));
                 return this.RedirectToAction("editcategory", "casesolution", new { id = id });
             }
         }
