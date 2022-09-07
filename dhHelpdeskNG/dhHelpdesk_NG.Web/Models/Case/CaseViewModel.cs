@@ -585,6 +585,11 @@ namespace DH.Helpdesk.Web.Models.Case
         public Dictionary<string, string> messages { get; set; }
 
         public int refreshContent { get; set; }
+
+        public string HelperRegTime { get; set; }
+
+        public string HelperCaption { get; set; }
+
     }
 
     public class JsonCaseIndexViewModel

@@ -617,7 +617,9 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     { "information", Translation.GetCoreTextTranslation("Information") },
                     { "records_limited_msg", Translation.GetCoreTextTranslation("Antal ärende som visas är begränsade till 500.") },
-                }
+                },
+                HelperRegTime = Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id),
+                HelperCaption = Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id)
             };
 
             return View("Index", m);
@@ -1976,8 +1978,11 @@ namespace DH.Helpdesk.Web.Controllers
                                 "records_limited_msg",
                                 Translation.GetCoreTextTranslation("Antal ärende som visas är begränsade till 500.")
                             },
-                        }
+                        },
+                        HelperRegTime = Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id),
+                        HelperCaption = Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id)
                     };
+
                 }
 
                 #endregion

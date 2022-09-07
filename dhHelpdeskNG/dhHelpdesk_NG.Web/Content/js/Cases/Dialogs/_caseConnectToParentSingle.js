@@ -1,6 +1,8 @@
 ﻿function LoadConnectToParentSingle(pageSettings) {
     "use strict";
 
+    console.log(pageSettings)
+
     var GRID_STATE = {
         IDLE: 0,
         LOADING: 1,
@@ -23,6 +25,8 @@
         function CTP() {};
 
         CTP.prototype.init = function (appSettings) {
+
+
             "use strict";
             var self = this;
 
@@ -72,7 +76,7 @@
 
             self.$table.addClass(appSettings.gridSettings.cls);
 
-            var columns = self.getColumnSettings(appSettings.gridSettings);
+            var columns = self.getColumnSettings(appSettings.gridSettings, appSettings.HelperCaption, appSettings.HelperRegTime);
 
 
             var sortIndex = null;
@@ -238,7 +242,7 @@
             return this._gridState;
         };
 
-        CTP.prototype.getColumnSettings = function (gridSettings) {
+        CTP.prototype.getColumnSettings = function (gridSettings, helperCaption, helperRegTime) {
             "use strict";
             var self = this;
 
@@ -254,23 +258,9 @@
                 }         
             }
 
-            var nativeLangCaption = "Title"
-            if (gridSettings.columnDefs.filter(x => x.field == "Caption").length > 0) {
-                if (gridSettings.columnDefs.filter(x => x.field == "Caption")[0].displayName != "") {
-                    if (typeof gridSettings.columnDefs.filter(x => x.field == "Caption")[0].displayName != undefined) {
-                        nativeLangCaption = gridSettings.columnDefs.filter(x => x.field == "Caption")[0].displayName;
-                    }
-                }
-            }
+            var nativeLangCaption = helperCaption;
 
-            var nativeRegTimeCaption = "Reg.Date"
-            if (gridSettings.columnDefs.filter(x => x.field == "Caption").length > 0) {
-                if (gridSettings.columnDefs.filter(x => x.field == "RegTime")[0].displayName != "") {
-                    if (typeof gridSettings.columnDefs.filter(x => x.field == "RegTime")[0].displayName != undefined) {
-                        nativeRegTimeCaption = gridSettings.columnDefs.filter(x => x.field == "RegTime")[0].displayName;
-                    }
-                }
-            }
+            var nativeRegTimeCaption = helperRegTime;
 
 
             var columns = [];
