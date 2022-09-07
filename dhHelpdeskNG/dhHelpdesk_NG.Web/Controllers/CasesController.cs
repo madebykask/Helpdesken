@@ -1448,8 +1448,15 @@ namespace DH.Helpdesk.Web.Controllers
 
                         caseLog.CaseId = inputData.Id;
                         caseLog.FinishingType = inputData.FinishTypeId;
-                        caseLog.FinishingDate = DateTime.UtcNow;
-                        caseToUpdate.FinishingDate = DateTime.UtcNow;
+
+                        DateTime validatedDate;
+                        DateTime finishDate = DateTime.UtcNow;
+                        if (DateTime.TryParse(inputData.FinishDate.ToString(), out validatedDate))
+                        {
+                            finishDate = validatedDate;
+                        }
+                        caseLog.FinishingDate = finishDate;
+                        caseToUpdate.FinishingDate = finishDate;
                         updateCase = true;
                     }
                 }

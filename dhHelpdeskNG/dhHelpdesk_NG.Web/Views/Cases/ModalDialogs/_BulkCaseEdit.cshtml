@@ -402,14 +402,16 @@
 
         resetBulkEditModal();
 
-        $('#divBulkCaseEdit').on("hide", function () {
-            if (processedCases > 0) {
-                let inputData = getInputData();
-                if (!nothingToUpdate(inputData)) {
-                    indexLogic.dispatchEvent(new Event("change"));
+        $('#divBulkCaseEdit').on("hide", function (e) {
+            if (e.target === this) {
+                if (processedCases > 0) {
+                    let inputData = getInputData();
+                    if (!nothingToUpdate(inputData)) {
+                        indexLogic.dispatchEvent(new Event("change"));
+                    }
                 }
+                resetBulkEditModal();
             }
-            resetBulkEditModal();
         });
 
         $('#divBulkCaseEdit').on("show", function () {
@@ -420,6 +422,7 @@
 
             $totalNumSelectedCases.text(selectedCases.length);
         });
+
 
         $btnBulkCaseEdit.on("click", async function bulkCaseEdit() {
             await handleBulkCaseEdit()
@@ -605,7 +608,7 @@
     }
 
 
-    function resetBulkEditModal() {
+    function resetBulkEditModal() {        
         $caseWorkingGroupId.val('');
         $casePerformer_Id.val('');
         //$casePriorityId.val('');
