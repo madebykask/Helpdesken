@@ -1133,6 +1133,24 @@ namespace DH.Helpdesk.Web.Controllers
                     jsRow.Add("caseLockedIconUrl", $"/Content/icons/{CaseIcon.Locked.CaseIconSrc()}");
                 }
 
+                if(searchRow.ExtendedSearchInfo != null)
+                {
+                    var workinggroupsForUserAndCustomer = _userService
+                                                        .GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, searchRow.ExtendedSearchInfo.CustomerId)
+                                                        .FirstOrDefault(x => x.IsActive && x.WorkingGroup_Id == searchRow.ExtendedSearchInfo.WorkingGroupId);
+                    if (workinggroupsForUserAndCustomer != null)
+                    {
+                        var cc = _caseService.GetCaseById(caseId);
+                        var accessMode = CalcEditMode(searchRow.ExtendedSearchInfo.CustomerId, SessionFacade.CurrentUser.Id, cc);
+
+                        if (!workinggroupsForUserAndCustomer.IsMemberOfGroup && workinggroupsForUserAndCustomer.WorkingGroup_Id > 0 
+                            && accessMode != AccessMode.FullAccess)
+                        {
+                            jsRow.Add("isNotMemberOfGroup", true);
+                        }
+                    }
+                }
+
                 foreach (var col in gridSettings.columnDefs)
                 {
                     var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);
@@ -1421,9 +1439,9 @@ namespace DH.Helpdesk.Web.Controllers
                         if (childrenCases != null)
                         {
                             var childrenNotIncludedForDeletion = childrenCases.Where(x=> !inputData.CasesToBeUpdated.Contains(x.Id));
-                            if(childrenNotIncludedForDeletion.Any(x=> x.ClosingDate == null))
+                            if(childrenNotIncludedForDeletion.Any(x=> x.ClosingDate == null && !x.Indepandent))
                             {
-                                string errorMsg = Translation.Get("Ärende har underärenden som ej ska avslutas");
+                                string errorMsg = Translation.Get("Ärendet har underärende som ej är avslutade");
                                 throw new Exception(errorMsg);
                             }
                         }
@@ -2000,7 +2018,6 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 m.ActiveTab = "";
             }
-
 
             return this.View(m);
         }

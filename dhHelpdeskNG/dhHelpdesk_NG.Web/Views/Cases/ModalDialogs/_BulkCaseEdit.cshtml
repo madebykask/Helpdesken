@@ -296,7 +296,7 @@
                 }
                 @if (SessionFacade.CurrentUser.CloseCasePermission == 1)
                 {
-                    <tr style="                            @Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)" >
+                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)" >
                         <td>
                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ClosingReason, "Avslutsorsak")
                         </td>
@@ -377,254 +377,271 @@
     </div>
 </div>
 <script type="text/javascript">
-            let $finishTypeId = $("#CaseLog_FinishingType");
-            let $finishDate = $('#CaseLog_FinishingDate');
-            let $caseWorkingGroupId = $('#case__WorkingGroup_Id');
-            let $casePerformer_Id = $('#Performer_Id');
-            //let $casePriorityId= $('#case__Priority_Id');
-            let $caseStateSecondaryId = $('#case__StateSecondary_Id');
-            let $caseProblemId = $('#case__Problem_Id');
-            let $bulkCaseEditProgressDiv = $('#bulkCaseEditProgressDiv');
-            let $bulkCaseEditProgressList = $('#bulkCaseEditProgressList');
-            let $bulkCaseEditProgressListBody = $('#bulkCaseEditProgressListBody');
-            let $btnBulkCaseEdit = $('#btnBulkCaseEdit');
-            let $btnBulkCaseEditCancel = $('#btnBulkCaseEditCancel');
-            let $finishTypeContainer = $('#divFinishingType');
-            let $finishTypeBreadcrubs = $("#divBreadcrumbs_FinishingType");
-            let $finishDescription = $('#case__FinishingDescription');
-            let $btnFinishingTypeLst = $('#btnFinishingTypeLst');
-            let $processedNumCases = $('#processedNumCases');
-            let $totalNumSelectedCases = $('#totalNumSelectedCases');
-            let selectedCases = [];
-            let processedCases = 0;
+    let $finishTypeId = $("#CaseLog_FinishingType");
+    let $finishDate = $('#CaseLog_FinishingDate');
+    let $caseWorkingGroupId = $('#case__WorkingGroup_Id');
+    let $casePerformer_Id = $('#Performer_Id');
+    //let $casePriorityId= $('#case__Priority_Id');
+    let $caseStateSecondaryId = $('#case__StateSecondary_Id');
+    let $caseProblemId = $('#case__Problem_Id');
+    let $bulkCaseEditProgressDiv = $('#bulkCaseEditProgressDiv');
+    let $bulkCaseEditProgressList = $('#bulkCaseEditProgressList');
+    let $bulkCaseEditProgressListBody = $('#bulkCaseEditProgressListBody');
+    let $btnBulkCaseEdit = $('#btnBulkCaseEdit');
+    let $btnBulkCaseEditCancel = $('#btnBulkCaseEditCancel');
+    let $finishTypeContainer = $('#divFinishingType');
+    let $finishTypeBreadcrubs = $("#divBreadcrumbs_FinishingType");
+    let $finishDescription = $('#case__FinishingDescription');
+    let $btnFinishingTypeLst = $('#btnFinishingTypeLst');
+    let $processedNumCases = $('#processedNumCases');
+    let $totalNumSelectedCases = $('#totalNumSelectedCases');
+    let selectedCases = [];
+    let processedCases = 0;
 
-            $(document).ready(function () {
+    $(document).ready(function () {
 
-                resetBulkEditModal();
+        resetBulkEditModal();
 
-                $('#divBulkCaseEdit').on("hide", function () {
-                    if (processedCases > 0) {
-                        let inputData = getInputData();
-                        if (!nothingToUpdate(inputData)) {
-                            indexLogic.dispatchEvent(new Event("change"));
-                        }
-                    }
-                    resetBulkEditModal();
-                });
-
-                $('#divBulkCaseEdit').on("show", function () {
-                    selectedCases = []
-                    $('.bulkEditCaseSelect:checkbox:checked').each((c, v) => {
-                        selectedCases.push({ id: v.getAttribute('data-caseid'), caseno: v.getAttribute('data-caseno'), casecaption: v.getAttribute('data-casecaption') });
-                    });
-
-                    $totalNumSelectedCases.text(selectedCases.length);
-                });
-
-                $btnBulkCaseEdit.on("click", async function bulkCaseEdit() {
-                    await handleBulkCaseEdit()
-                });
-
-
-                const handleBulkCaseEdit = async () => {
-
-                    let inputData = getInputData();
-                    inputData.CasesToBeUpdated = selectedCases.map(e => e.id);
-
-                    if (validateBulkCaseEditData(inputData, selectedCases)) {
-                        $bulkCaseEditProgressDiv.css("display", "block");
-
-                        disableBulkCaseEditInputFields();
-
-                        selectedCases.forEach(async (c) => {
-
-                            inputData.Id = c.id
-                            return new Promise((resolve, reject) => {
-                                $.ajax({
-                                    url: '@Url.Action("EditCaseProperties")',
-                                    type: "post",
-                                    headers: { 'Content-Type': 'application/json' },
-                                    data: JSON.stringify(inputData),
-                                    dataType: "json",
-                                    beforeSend: function () {
-                                        $bulkCaseEditProgressListBody.append('<tr><td style="border:none; width:30px;"><i id="st_inProgress' + c.id + '" class="gif-loader" style="">&nbsp;</i></td><td style="border:none; width:60px; text-align:left;">' + c.caseno + '</td><td style="border:none; text-align:left;">' + c.casecaption + '</td></tr>')
-
-                                        var content = $bulkCaseEditProgressListBody.html();
-                                        $bulkCaseEditProgressListBody.html(content);
-                                    },
-                                    success: function (data) {
-                                        let success = data.Success;
-                                        let message = data.Message;
-
-                                        if (success) {
-                                            $("#st_inProgress" + c.id).removeClass();
-                                            $("#st_inProgress" + c.id).addClass("fa fa-check-circle fa-lg");
-                                            $("#st_inProgress" + c.id).prop("aria-hidden", "true");
-                                            $("#st_inProgress" + c.id).css("color", "green");
-
-                                        }
-
-                                        else {
-                                            $("#st_inProgress" + c.id).removeClass();
-                                            $("#st_inProgress" + c.id).addClass("fa fa-exclamation-circle fa-lg");
-                                            $("#st_inProgress" + c.id).prop("aria-hidden", "true");
-                                            $("#st_inProgress" + c.id).css("color", "red");
-                                        }
-                                        $("#st_inProgress" + c.id).prop("title", message);
-                                        console.log(message);
-                                        resolve(data)
-                                        handleProcessedCase();
-                                    },
-                                    error: function (jqXHR, textStatus, errorThrown) {
-                                        $("#st_inProgress" + c.id).removeClass();
-                                        $("#st_inProgress" + c.id).addClass("fa fa-exclamation-circle fa-lg");
-                                        $("#st_inProgress" + c.id).prop("aria-hidden", "true");
-                                        $("#st_inProgress" + c.id).css("color", "red");
-                                        console.log(jqXHR);
-                                        console.log(textStatus);
-                                        console.log(errorThrown);
-                                        reject(data);
-                                        handleProcessedCase();
-                                    }
-                                });
-                            })
-                        });
-                    }
-                    $btnBulkCaseEdit.hide();
+        $('#divBulkCaseEdit').on("hide", function () {
+            if (processedCases > 0) {
+                let inputData = getInputData();
+                if (!nothingToUpdate(inputData)) {
+                    indexLogic.dispatchEvent(new Event("change"));
                 }
+            }
+            resetBulkEditModal();
+        });
 
-                $caseWorkingGroupId.change(function (d, source) {
-                    console.log('>>> Working group changed event.');
-
-                    // Remove after implementing http://redmine.fastdev.se/issues/10995
-                    // filter administrators
-                    if ($caseWorkingGroupId.val() !== '') {
-                        $casePerformer_Id.attr('disabled', false);
-                    }
-                    else {
-                        $casePerformer_Id.attr('disabled', true);
-                    }
-
-                    var dontConnectUserToWorkingGroup = Number($('#CaseMailSetting_DontConnectUserToWorkingGroup').val() || '0');
-                    if (dontConnectUserToWorkingGroup === 0) {
-                        CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#Performer_Id', $('#DepartmentFilterFormat').val());
-                    } else {
-                        $('#Performer_Id').off('applyValue');
-                    }
-                    if (source !== 'case__StateSecondary_Id') {
-                        //set state secondary
-                        SelectValueInOtherDropdownOnChange($(this).val(),
-                            '/Cases/ChangeWorkingGroupSetStateSecondary/',
-                            '#case__StateSecondary_Id',
-                            '.readonlySubstate')
-                            .done(function () {
-                                $('#case__StateSecondary_Id').trigger('change', 'case__WorkingGroup_Id');
-                            });
-                    }
-                });
-
-                $finishTypeContainer.find('ul.dropdown-menu li a').click(function (e) {
-                    e.preventDefault();
-                    let value = $(this).attr('value');
-                    $finishTypeBreadcrubs.text(window.getBreadcrumbs(this));
-                    $finishTypeId.val(value).trigger('change');
-                });
-                $finishTypeId.on('change', function (ev) {
-                    let value = $(ev.target).val();
-                    if (value == '' || value === undefined) {
-                        $finishDate.val('');
-                    } else {
-                        if ($finishDate.val() == '') {
-                            $finishDate.val(window.today());
-                        }
-                    }
-                });
+        $('#divBulkCaseEdit').on("show", function () {
+            selectedCases = []
+            $('.bulkEditCaseSelect:checkbox:checked').each((c, v) => {
+                selectedCases.push({ id: v.getAttribute('data-caseid'), caseno: v.getAttribute('data-caseno'), casecaption: v.getAttribute('data-casecaption') });
             });
 
-            function handleProcessedCase() {
-                processedCases++;
-                $processedNumCases.text(processedCases);
+            $totalNumSelectedCases.text(selectedCases.length);
+        });
 
-                if ($processedNumCases.text() == $totalNumSelectedCases.text()) {
-                    $btnBulkCaseEditCancel.attr('disabled', false);
-                }
+        $btnBulkCaseEdit.on("click", async function bulkCaseEdit() {
+            await handleBulkCaseEdit()
+        });
+
+
+        const handleBulkCaseEdit = async () => {
+
+            let inputData = getInputData();
+            inputData.CasesToBeUpdated = selectedCases.map(e => e.id);
+
+            if (validateBulkCaseEditData(inputData, selectedCases)) {
+                $bulkCaseEditProgressDiv.css("display", "block");
+
+                disableBulkCaseEditInputFields();
+
+                selectedCases.forEach(async (c) => {
+
+                    inputData.Id = c.id
+                    return new Promise((resolve, reject) => {
+                        $.ajax({
+                            url: '@Url.Action("EditCaseProperties")',
+                            type: "post",
+                            headers: { 'Content-Type': 'application/json' },
+                            data: JSON.stringify(inputData),
+                            dataType: "json",
+                            beforeSend: function () {
+                                $bulkCaseEditProgressListBody.append('<tr><td style="border:none; width:30px;"><i id="st_inProgress' + c.id + '" class="gif-loader" style="">&nbsp;</i></td><td style="border:none; width:60px; text-align:left;">' + c.caseno + '</td><td style="border:none; text-align:left;">' + c.casecaption + '</td></tr>')
+
+                                var content = $bulkCaseEditProgressListBody.html();
+                                $bulkCaseEditProgressListBody.html(content);
+                            },
+                            success: function (data) {
+                                let success = data.Success;
+                                let message = data.Message;
+
+                                if (success) {
+                                    $("#st_inProgress" + c.id).removeClass();
+                                    $("#st_inProgress" + c.id).addClass("fa fa-check-circle fa-lg");
+                                    $("#st_inProgress" + c.id).prop("aria-hidden", "true");
+                                    $("#st_inProgress" + c.id).css("color", "green");
+
+                                }
+
+                                else {
+                                    $("#st_inProgress" + c.id).removeClass();
+                                    $("#st_inProgress" + c.id).addClass("fa fa-exclamation-circle fa-lg");
+                                    $("#st_inProgress" + c.id).prop("aria-hidden", "true");
+                                    $("#st_inProgress" + c.id).css("color", "red");
+                                }
+                                $("#st_inProgress" + c.id).prop("title", message);
+                                console.log(message);
+                                resolve(data)
+                                handleProcessedCase();
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                $("#st_inProgress" + c.id).removeClass();
+                                $("#st_inProgress" + c.id).addClass("fa fa-exclamation-circle fa-lg");
+                                $("#st_inProgress" + c.id).prop("aria-hidden", "true");
+                                $("#st_inProgress" + c.id).css("color", "red");
+                                console.log(jqXHR);
+                                console.log(textStatus);
+                                console.log(errorThrown);
+                                reject(data);
+                                handleProcessedCase();
+                            }
+                        });
+                    })
+                });
             }
+            $btnBulkCaseEdit.hide();
+        }
 
-            function getInputData() {
-                return {
-                    Id: null,
-                    //Priority_Id: $($casePriorityId.selector + ' option:selected').val(),
-                    Performer_User_Id: $($casePerformer_Id.selector + ' option:selected').val(),
-                    WorkingGroup_Id: $($caseWorkingGroupId.selector + ' option:selected').val(),
-                    StateSecondary_Id: $($caseStateSecondaryId.selector + ' option:selected').val(),
-                    Problem_Id: $($caseProblemId.selector + ' option:selected').val(),
-                    FinishDescription: $finishDescription.val(),
-                    FinishTypeId: $finishTypeId.val(),
-                    FinishDate: $finishDate.val()
-                };
+        $caseWorkingGroupId.change(function (d, source) {
+            console.log('>>> Working group changed event.');
+
+            // Remove after implementing http://redmine.fastdev.se/issues/10995
+            // filter administrators
+            if ($caseWorkingGroupId.val() !== '') {
+                $casePerformer_Id.attr('disabled', false);
             }
-
-            function disableBulkCaseEditInputFields() {
-                $caseWorkingGroupId.attr('disabled', true);
+            else {
                 $casePerformer_Id.attr('disabled', true);
-                $caseStateSecondaryId.attr('disabled', true);
-                $caseProblemId.attr('disabled', true);
-                $finishDescription.attr('disabled', true);
-                $finishTypeBreadcrubs.attr('disabled', true);
-                $btnFinishingTypeLst.attr('disabled', true);
-                $btnBulkCaseEditCancel.attr('disabled', true);
             }
 
-            function enableBulkCaseEditInputFields() {
-                var isWorkingGroupDisplayed = '@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup)';
-
-                $caseWorkingGroupId.attr('disabled', false);
-                if(isWorkingGroupDisplayed === 'display:none') $casePerformer_Id.attr('disabled', false);
-                $caseStateSecondaryId.attr('disabled', false);
-                $caseProblemId.attr('disabled', false);
-                $finishDescription.attr('disabled', false);
-                $finishTypeBreadcrubs.attr('disabled', false);
-                $btnFinishingTypeLst.attr('disabled', false);
+            var dontConnectUserToWorkingGroup = Number($('#CaseMailSetting_DontConnectUserToWorkingGroup').val() || '0');
+            if (dontConnectUserToWorkingGroup === 0) {
+                CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#Performer_Id', $('#DepartmentFilterFormat').val());
+            } else {
+                $('#Performer_Id').off('applyValue');
             }
+            if (source !== 'case__StateSecondary_Id') {
+                //set state secondary
+                SelectValueInOtherDropdownOnChange($(this).val(),
+                    '/Cases/ChangeWorkingGroupSetStateSecondary/',
+                    '#case__StateSecondary_Id',
+                    '.readonlySubstate')
+                    .done(function () {
+                        $caseStateSecondaryId.trigger('change', 'case__WorkingGroup_Id');
+                    });
+            }
+        });
 
 
-            function resetBulkEditModal() {
-                $caseWorkingGroupId.val('');
-                $casePerformer_Id.val('');
-                //$casePriorityId.val('');
-                $caseStateSecondaryId.val('');
-                $caseProblemId.val('');
-                $btnBulkCaseEdit.show();
-                $bulkCaseEditProgressListBody.html('');
-                $bulkCaseEditProgressDiv.css("display", "none");
-                $finishDescription.val('');
-                $finishTypeId.val('');
+        $caseStateSecondaryId.change(function (d, source) {
+
+            $.post('/Cases/ChangeStateSecondary', { 'id': $(this).val() }, function (data) {
+
+                // set workinggroup id
+                var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
+                if (exists > 0 && data.WorkingGroup_Id > 0 && source !== 'case__WorkingGroup_Id') {
+                    $caseWorkingGroupId
+                        .val(data.WorkingGroup_Id)
+                        .trigger('change', 'case__StateSecondary_Id');
+                }
+            });
+        });
+
+        $finishTypeContainer.find('ul.dropdown-menu li a').click(function (e) {
+            e.preventDefault();
+            let value = $(this).attr('value');
+            $finishTypeBreadcrubs.text(window.getBreadcrumbs(this));
+            $finishTypeId.val(value).trigger('change');
+        });
+
+        $finishTypeId.on('change', function (ev) {
+            let value = $(ev.target).val();
+            if (value == '' || value === undefined) {
                 $finishDate.val('');
-                $finishTypeBreadcrubs.text('@Html.Raw(Translation.Get("--"))');
-                enableBulkCaseEditInputFields();
-                $processedNumCases.text('0');
-                processedCases = 0;
-            }
-
-            function nothingToUpdate(data) {
-                return data.Problem_Id == '' && data.Performer_User_Id == '' && data.WorkingGroup_Id == '' && data.StateSecondary_Id == '' && data.FinishDescription == '' && data.FinishTypeId == '' && data.FinishDate == '';
-            }
-
-            function validateBulkCaseEditData(data, selectedCases) {
-                let validation = false;
-                if (selectedCases.length > 0) {
-                    if (nothingToUpdate(data)) {
-                        ShowToastMessage('@Html.Raw(Translation.GetForJS("Inget att uppdatera"))', "warning");
-                    }
-                    else {
-                        validation = true;
-                    }
+            } else {
+                if ($finishDate.val() == '') {
+                    $finishDate.val(window.today());
                 }
-                else {
-                    ShowToastMessage('@Html.Raw(Translation.GetForJS("Det finns inga ärenden som matchar angivet urval"))', "warning");
-                }
-                return validation;
             }
+        });
+    });
+
+    function handleProcessedCase() {
+        processedCases++;
+        $processedNumCases.text(processedCases);
+
+        if ($processedNumCases.text() == $totalNumSelectedCases.text()) {
+            $btnBulkCaseEditCancel.attr('disabled', false);
+        }
+    }
+
+    function getInputData() {
+        return {
+            Id: null,
+            //Priority_Id: $($casePriorityId.selector + ' option:selected').val(),
+            Performer_User_Id: $($casePerformer_Id.selector + ' option:selected').val(),
+            WorkingGroup_Id: $($caseWorkingGroupId.selector + ' option:selected').val(),
+            StateSecondary_Id: $($caseStateSecondaryId.selector + ' option:selected').val(),
+            Problem_Id: $($caseProblemId.selector + ' option:selected').val(),
+            FinishDescription: $finishDescription.val(),
+            FinishTypeId: $finishTypeId.val(),
+            FinishDate: $finishDate.val()
+        };
+    }
+
+    function disableBulkCaseEditInputFields() {
+        $caseWorkingGroupId.attr('disabled', true);
+        $casePerformer_Id.attr('disabled', true);
+        $caseStateSecondaryId.attr('disabled', true);
+        $caseProblemId.attr('disabled', true);
+        $finishDescription.attr('disabled', true);
+        $finishTypeBreadcrubs.attr('disabled', true);
+        $btnFinishingTypeLst.attr('disabled', true);
+        $btnBulkCaseEditCancel.attr('disabled', true);
+    }
+
+    function enableBulkCaseEditInputFields() {
+        var isWorkingGroupDisplayed = '@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup)';
+        var canChangeCaseStateSecondary = '@Model.customerUserSetting.StateSecondaryPermission';
+
+        $caseWorkingGroupId.attr('disabled', false);
+        if(isWorkingGroupDisplayed === 'display:none') $casePerformer_Id.attr('disabled', false);
+        if (canChangeCaseStateSecondary != '0') $caseStateSecondaryId.attr('disabled', false);
+        $caseProblemId.attr('disabled', false);
+        $finishDescription.attr('disabled', false);
+        $finishTypeBreadcrubs.attr('disabled', false);
+        $btnFinishingTypeLst.attr('disabled', false);
+    }
+
+
+    function resetBulkEditModal() {
+        $caseWorkingGroupId.val('');
+        $casePerformer_Id.val('');
+        //$casePriorityId.val('');
+        $caseStateSecondaryId.val('');
+        $caseProblemId.val('');
+        $btnBulkCaseEdit.show();
+        $bulkCaseEditProgressListBody.html('');
+        $bulkCaseEditProgressDiv.css("display", "none");
+        $finishDescription.val('');
+        $finishTypeId.val('');
+        $finishDate.val('');
+        $finishTypeBreadcrubs.text('@Html.Raw(Translation.Get("--"))');
+        enableBulkCaseEditInputFields();
+        $processedNumCases.text('0');
+        processedCases = 0;
+    }
+
+    function nothingToUpdate(data) {
+        return data.Problem_Id == '' && data.Performer_User_Id == '' && data.WorkingGroup_Id == '' && data.StateSecondary_Id == '' && data.FinishDescription == '' && data.FinishTypeId == '' && data.FinishDate == '';
+    }
+
+    function validateBulkCaseEditData(data, selectedCases) {
+        let validation = false;
+        if (selectedCases.length > 0) {
+            if (nothingToUpdate(data)) {
+                ShowToastMessage('@Html.Raw(Translation.GetForJS("Inget att uppdatera"))', "warning");
+            }
+            else {
+                validation = true;
+            }
+        }
+        else {
+            ShowToastMessage('@Html.Raw(Translation.GetForJS("Det finns inga ärenden som matchar angivet urval"))', "warning");
+        }
+        return validation;
+    }
 
 </script>
 
