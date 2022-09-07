@@ -1420,19 +1420,19 @@ Module DH_Helpdesk_Mail
                             If Not attach.IsInline Then
                                 Dim b As Boolean = False
                                 Dim strName As String = fileAttach.Name
-                                If InStr(strName, "/") > 0 Or InStr(strName, "~") > 0 Or InStr(strName, ":") > 0 Or InStr(strName, "\") > 0 Then
+                                If InStr(strName, "/") > 0 Or InStr(strName, "~") > 0 Or InStr(strName, ":") > 0 Or InStr(strName, "\") > 0 Or InStr(strName, "*") > 0 Or InStr(strName, "?") > 0 Or InStr(strName, Chr(34)) > 0 Or InStr(strName, "<") > 0 Or InStr(strName, ">") > 0 Or InStr(strName, "|") > 0 Then
                                     If InStr(strName, "\") > 0 Then
                                         Dim iRevPos As Integer
                                         iRevPos = InStrRev(strName, "\")
                                         Dim strNewFileName As String
                                         strNewFileName = Mid(strName, iRevPos + 1, Len(strName) - (iRevPos))
-                                        strNewFileName = Replace(Replace(Replace(strNewFileName, "/", ""), "~", ""), ":", "")
+                                        strNewFileName = Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(strNewFileName, "/", ""), "~", ""), ":", ""), "*", ""), "?", ""), Chr(34), ""), "<", ""), ">", ""), "|", "")
                                         strName = strNewFileName
                                         fileAttach.Load(temppath & "\" & strName)
                                         retval = temppath & "\" & strName
                                         b = True
                                     Else
-                                        strName = Replace(Replace(Replace(Replace(strName, "/", ""), "~", ""), ":", ""), "\", "")
+                                        strName = Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(strName, "/", ""), "~", ""), ":", ""), "\", ""), "*", ""), "?", ""), Chr(34), ""), "<", ""), ">", ""), "|", "")
                                         fileAttach.Load(temppath & "\" & strName)
                                         retval = temppath & "\" & strName
                                         b = True
