@@ -3176,25 +3176,26 @@ namespace DH.Helpdesk.Web.Controllers
                 Case parentCase = _caseService.GetCaseById(parentCaseId);
 
                 //Move followers and initiator to mergeparent
-                List<ExtraFollower> newFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(id);
-                List<ExtraFollower> existingFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(parentCaseId);
-                List<string> newParentFollowers = new List<string>();
-                if (!String.IsNullOrEmpty(mergeCase.PersonsEmail) && mergeCase.PersonsEmail != parentCase.PersonsEmail)
+                List<ExtraFollower> mergeCaseFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(id);
+                List<ExtraFollower> mergeParentFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(parentCaseId);
+
+                var exists = mergeParentFollowers.Where(x => x.Follower == mergeCase.PersonsEmail).FirstOrDefault();
+
+                if (!String.IsNullOrEmpty(mergeCase.PersonsEmail) && mergeCase.PersonsEmail != parentCase.PersonsEmail && exists == null)
                 {
                     var extraFollower = new ExtraFollower()
                     {
-                        CaseId = id,
+                        CaseId = parentCaseId,
                         Follower = mergeCase.PersonsEmail
                     };
-                    newFollowers.Add(extraFollower);
+                    mergeParentFollowers.Add(extraFollower);
                 }
+                mergeParentFollowers = mergeParentFollowers.Union(mergeCaseFollowers).Where(y => y.Follower != parentCase.PersonsEmail).DistinctBy(x => x.Follower).ToList();
 
-                List<ExtraFollower> result = existingFollowers.Union(newFollowers).Distinct().ToList();
-                newParentFollowers = result.Where(x => x.Follower != parentCase.PersonsEmail).Select(f => f.Follower).Distinct().ToList();
-                List<string> emailList = new List<string> { mergeCase.PersonsEmail };
-                List<string> ccEmailList = newParentFollowers;
+                List<string> newParentFollowers = mergeParentFollowers.Select(x => x.Follower).ToList();
+                List<string> ccEmailList = mergeCaseFollowers.Select(x => x.Follower).ToList();
 
-                if (newParentFollowers.Count() > 0)
+                if (mergeParentFollowers.Count() > 0)
                 {
                     _caseExtraFollowersService.SaveExtraFollowers(parentCaseId, newParentFollowers, _workContext.User.UserId);
                 }
@@ -3224,8 +3225,9 @@ namespace DH.Helpdesk.Web.Controllers
                 caseLog.TextInternal = mergedFinishingCause.Name;
 
 
+
                 int caseHistoryId = _caseService.SaveCase(mergeCase, caseLog, SessionFacade.CurrentUser.Id, null, extraInfo, out errors);
-                int mergeParentHistoryId = _caseService.SaveCase(parentCase, caseLog, SessionFacade.CurrentUser.Id, null, extraInfo, out errors);
+                int mergeParentHistoryId = _caseService.SaveCase(parentCase, null, SessionFacade.CurrentUser.Id, null, extraInfo, out errors);
                 caseLog.CaseHistoryId = caseHistoryId;
                 int caseLogId = _logService.SaveLog(caseLog, 0, out errors);
 

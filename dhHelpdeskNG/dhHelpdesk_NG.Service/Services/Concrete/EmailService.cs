@@ -169,7 +169,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
                         _smtpClient.EnableSsl = emailsettings.SmtpSettings.IsSecured;
 
-                        var msg = GetMailMessage(from, to, cc, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType);
+                        var msg = GetMailMessage(from, to, cc, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType, siteSelfServiceMergeParent);
 
                         if (msg.To.Count > 0 || msg.Bcc.Count > 0 || msg.CC.Count > 0)
                         {

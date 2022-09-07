@@ -48,20 +48,25 @@
                                 <div>
                                     @foreach (var l in current.Emaillogs)
                                     {
-                                        var emails = new List<string>();
+                                        if (!string.IsNullOrEmpty(l.ResponseMessage))
                                         {
-                                            if (!string.IsNullOrWhiteSpace(l.EmailAddress))
+                                            var emails = new List<string>();
                                             {
-                                                emails.AddRange(l.EmailAddress.Split(',').ToList());
+                                                if (!string.IsNullOrWhiteSpace(l.EmailAddress))
+                                                {
+                                                    emails.AddRange(l.EmailAddress.Split(',').ToList());
+                                                }
+                                                if (!string.IsNullOrWhiteSpace(l.CcEmailAddress))
+                                                {
+                                                    emails.AddRange(l.CcEmailAddress.Split(','));
+                                                }
                                             }
-                                            if (!string.IsNullOrWhiteSpace(l.CcEmailAddress))
+                                            foreach (var e in emails.OrderBy(e => e))
                                             {
-                                                emails.AddRange(l.CcEmailAddress.Split(','));
+                                                <p>@e (@l.MailId.GetMailTemplateName(Model.MailTemplates))</p>
                                             }
                                         }
-                                        foreach (var e in emails.OrderBy(e => e)) {
-                                            <p>@e (@l.MailId.GetMailTemplateName(Model.MailTemplates))</p>
-                                         }
+
                                     }
                                 </div>
                             }

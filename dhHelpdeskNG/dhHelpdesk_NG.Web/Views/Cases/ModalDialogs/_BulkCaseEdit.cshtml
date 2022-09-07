@@ -74,13 +74,13 @@
                     <td>
                         @*@if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))*@
                         @if (Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup) == "display:none"
-                            || (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator)))
+                            && (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator)))
                         {
                             @Html.DropDownListFor(m => m.Performer_Id, Model.Performers, new { data_field = "administrator" })
                         }
                         else
                         {
-                            @Html.DropDownListFor(m => m.Performer_Id, Model.Performers, new { data_field = "administrator", disabled = "disabled" })
+                            @Html.DropDownListFor(m => m.Performer_Id, Model.Performers, new { @disabled = "disabled", data_field = "administrator" })
                             @Html.HiddenFor(m => m.Performer_Id)
                         }
                     </td>
@@ -399,7 +399,7 @@
             let processedCases = 0;
 
             $(document).ready(function () {
-                
+
                 resetBulkEditModal();
 
                 $('#divBulkCaseEdit').on("hide", function () {
@@ -427,12 +427,12 @@
 
 
                 const handleBulkCaseEdit = async () => {
-                    
+
                     let inputData = getInputData();
                     inputData.CasesToBeUpdated = selectedCases.map(e => e.id);
 
                     if (validateBulkCaseEditData(inputData, selectedCases)) {
-                        $bulkCaseEditProgressDiv.css("display", "block");                        
+                        $bulkCaseEditProgressDiv.css("display", "block");
 
                         disableBulkCaseEditInputFields();
 
@@ -448,7 +448,7 @@
                                     dataType: "json",
                                     beforeSend: function () {
                                         $bulkCaseEditProgressListBody.append('<tr><td style="border:none; width:30px;"><i id="st_inProgress' + c.id + '" class="gif-loader" style="">&nbsp;</i></td><td style="border:none; width:60px; text-align:left;">' + c.caseno + '</td><td style="border:none; text-align:left;">' + c.casecaption + '</td></tr>')
-                                        
+
                                         var content = $bulkCaseEditProgressListBody.html();
                                         $bulkCaseEditProgressListBody.html(content);
                                     },
@@ -490,13 +490,20 @@
                             })
                         });
                     }
-                    $btnBulkCaseEdit.hide();              
+                    $btnBulkCaseEdit.hide();
                 }
 
                 $caseWorkingGroupId.change(function (d, source) {
                     console.log('>>> Working group changed event.');
+
                     // Remove after implementing http://redmine.fastdev.se/issues/10995
                     // filter administrators
+                    if ($caseWorkingGroupId.val() !== '') {
+                        $casePerformer_Id.attr('disabled', false);
+                    }
+                    else {
+                        $casePerformer_Id.attr('disabled', true);
+                    }
 
                     var dontConnectUserToWorkingGroup = Number($('#CaseMailSetting_DontConnectUserToWorkingGroup').val() || '0');
                     if (dontConnectUserToWorkingGroup === 0) {
@@ -540,7 +547,7 @@
 
                 if ($processedNumCases.text() == $totalNumSelectedCases.text()) {
                     $btnBulkCaseEditCancel.attr('disabled', false);
-                }   
+                }
             }
 
             function getInputData() {
@@ -569,8 +576,10 @@
             }
 
             function enableBulkCaseEditInputFields() {
+                var isWorkingGroupDisplayed = '@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup)';
+
                 $caseWorkingGroupId.attr('disabled', false);
-                $casePerformer_Id.attr('disabled', false);
+                if(isWorkingGroupDisplayed === 'display:none') $casePerformer_Id.attr('disabled', false);
                 $caseStateSecondaryId.attr('disabled', false);
                 $caseProblemId.attr('disabled', false);
                 $finishDescription.attr('disabled', false);
