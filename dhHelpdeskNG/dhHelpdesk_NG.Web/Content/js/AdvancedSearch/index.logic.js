@@ -426,12 +426,17 @@ var GRID_STATE = {
                 $.each(me.gridSettings.columnDefs, function (idx, columnSettings) {
                     if (!columnSettings.isHidden) {
                         if (record[columnSettings.field] == null) {
+
                             rowOut.push(me.formatCell(record.case_id, columnSettings, false, false, record.ExtendedAvailable));
-                            if (Page.isDebug)
+
+                            if (Page.isDebug) { 
                                 console.warn('could not find field "' + columnSettings.field + '" in record');
+                            }
                         } else {
                             var isBold = jQuery.inArray('textbold', rowClass) >= 0 || rowClass == 'textbold';
+
                             rowOut.push(me.formatCell(record.case_id, record[columnSettings.field], columnSettings, isBold, record.ExtendedAvailable));
+
                         }
                     }
                 });

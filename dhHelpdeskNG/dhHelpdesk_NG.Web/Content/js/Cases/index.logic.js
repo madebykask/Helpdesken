@@ -353,6 +353,7 @@ function getCollapseCaption(cap) {
         }
     };
 
+
     Page.prototype.autoReloadCaseResultList = function () {
         var self = this;
         self.table.ajax.reload();
@@ -452,6 +453,12 @@ function getCollapseCaption(cap) {
                                 var aElementToAppendTo = $(aElementEncoded)[0];
 
                                 var codedInnerHTML = $(aElementToAppendTo).html(unEcodedString)[0];
+
+                                //Remove the width elements
+                                $(codedInnerHTML).find('*').each(function () {
+                                    $(this).css('width', '');
+                                });
+
 
                                 td.innerHTML = "";
                                 $(td).append(codedInnerHTML)

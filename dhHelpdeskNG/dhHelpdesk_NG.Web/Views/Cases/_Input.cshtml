@@ -21,6 +21,9 @@
     @Scripts.Render(BundleConfig.ScriptNames.UserSearchCommon)
 }
 
+<link href="~/Content/css/summernote.css" rel="stylesheet" />
+<script src="~/Content/summernote-0.8.18/summernote.js"></script>
+
 @if (Model.case_ != null)
 {
     <div class="content onemenu editcase" id="mm1">
@@ -2509,8 +2512,12 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
 
     //Init summernote
     $(document).ready(function () {
+
+
         $('.summernote').summernote(summerNoteConfig)
         $('.summernotedesc').summernote(summerNoteDescConfig)
+
+
 
         function sizeChanged(element) {
 
@@ -2530,8 +2537,13 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
         $('textInternalOuter.note-editable').height(height);
 
         //Trigger resize
-        new ResizeObserver(sizeChanged).observe(textExternalOuter)
-        new ResizeObserver(sizeChanged).observe(textInternalOuter)
+        if (typeof textExternalOuter != 'undefined') {
+            new ResizeObserver(sizeChanged).observe(textExternalOuter)
+        }
+        if (typeof textInternalOuter != 'undefined') {
+            new ResizeObserver(sizeChanged).observe(textInternalOuter)
+        }
+            
 
         //Loop all .summernote to try to find the disabled ones
         $(".summernote").each(function () {
@@ -2545,6 +2557,9 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
         $(".summernotedesc").each(function () {
 
             if (this.readOnly) {
+
+                console.log("Read only")
+
                 $("#" + this.id).summernote("disable");
             }
 

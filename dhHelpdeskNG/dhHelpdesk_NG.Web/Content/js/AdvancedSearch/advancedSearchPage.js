@@ -594,6 +594,7 @@ window.advancedSearchPage =
             var out = '';
             var addExtendedInfo = false;
 
+
             if (self.isExtendedSearch && !extendedAvailable) {
                 if (colSetting.field !== "CaseNumber" && colSetting.field !== "Persons_Name" && colSetting.field !== "Caption") {
                     cellValue = null;
@@ -603,6 +604,21 @@ window.advancedSearchPage =
 
             var url = encodeURIComponent(strJoin('/Cases/AdvancedSearch?', 'doSearchAtBegining=true', "&isExtSearch=" + self.isExtendedSearch));
             cellValue = isNullOrUndefined(cellValue) ? '&nbsp;' : cellValue.toString(); 
+
+
+            if (colSetting.field == "Description") {
+                cellValue = $("<p/>").html(cellValue).text();
+
+                //Remove the width elements
+                $(cellValue).find('*').each(function () {
+
+                    console.log($(this).css('width'))
+
+                    $(this).css('width', '');
+                });
+
+            }
+            
             
             if (colSetting.isExpandable) {
 
