@@ -1376,7 +1376,7 @@ namespace DH.Helpdesk.Web.Controllers
                 mailSenders.SystemEmail = caseMailSetting.HelpdeskMailFromAdress;
 
                 // Positive: Send Mail to...
-                caseMailSetting.DontSendMailToNotifier = caseMailSetting.DontSendMailToNotifier == false;
+                //caseMailSetting.DontSendMailToNotifier = caseMailSetting.DontSendMailToNotifier == false;
 
                 if (caseToUpdate.DefaultOwnerWG_Id.HasValue && caseToUpdate.DefaultOwnerWG_Id.Value > 0)
                 {
