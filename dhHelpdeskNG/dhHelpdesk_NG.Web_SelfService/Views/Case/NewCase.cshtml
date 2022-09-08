@@ -31,6 +31,9 @@
             withManadatory);
     } }
 
+<link href="~/Content/css/summernote.css" rel="stylesheet" />
+<script src="~/Content/summernote-0.8.18/summernote.js"></script>
+
 <script type="text/javascript">
     window.appOptions = '@Html.Raw(jsSerializer.Serialize(Model.JsApplicationOptions))';
     window.fieldSettings = @Html.Raw(jsSerializer.Serialize(Model.JsFieldSettings));
@@ -391,8 +394,8 @@
                                 </div>
                             </div>
                         </div>
-                    } 
-                    <!-- Computer Information --> 
+                    }
+                    <!-- Computer Information -->
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.ComputerInformation))
                     {
                         <h4 style="@Model.DisplayComputerInfo()">@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.ComputerInfo, CaseSectionsEnglish.ComputerInfoHeader)</h4>
@@ -432,7 +435,7 @@
                                 </div>
                             </div>
                         </div>
-                    } 
+                    }
                     <!-- Case Info Fields -->
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseInfo))
                     {
@@ -461,7 +464,7 @@
                                     }
                                     else
                                     {
-                                        <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()"/>
+                                        <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()" />
                                     }
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()))
@@ -713,7 +716,9 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Description)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextAreaFor(d => Model.NewCase.Description, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Description.ToString() })
+
+                                                @Html.TextAreaFor(d => Model.NewCase.Description, new { @class = "hasAttribute summernotedesc", standardName = GlobalEnums.TranslationCaseFields.Description.ToString() })
+
                                             </div>
                                         </div>
                                     }
@@ -871,7 +876,7 @@
 
                     if (Model.NewCase.Id == 0 && (recaptchaSiteKey != "" || recaptchaSiteKey != null))
                     {
-                        <div id="cap1" class="g-recaptcha" data-sitekey=@recaptchaSiteKey></div>                      
+                        <div id="cap1" class="g-recaptcha" data-sitekey=@recaptchaSiteKey></div>
                     }
 
                 }
@@ -884,7 +889,7 @@
                 <div class="container-fluid dh-container">
                     @Html.Partial("_FilesAttachButtons", new ViewDataDictionary(ViewData)
                         {
-                            {"fieldCaption", null }, 
+                            {"fieldCaption", null },
                             {"hasFiles", Model.NewCase.CaseFiles != null && Model.NewCase.CaseFiles.Any()}
                         })
                 </div>
@@ -931,7 +936,7 @@
     {
         <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
     }
-        <script type="text/javascript">
+    <script type="text/javascript">
 
         var requiredText = '@Translation.GetForJS("must be specified")';
         var recaptchaMessage = '@Translation.GetForJS("Check the captcha")';
@@ -945,6 +950,8 @@
         var $selectedWorkflow = null;
         var $selectListStep = null;
         var $buttonsToDisable = null;
+
+        let validator = null;
 
         var captchaChecker = function () { };
         var recaptcha_widget;
@@ -1112,8 +1119,8 @@
             // alternative: run this method before unobstrusive parse
             $mainForm.data("unobtrusiveValidation", null);
             $mainForm.data("validator", null);
-            $mainForm.validate({
-                ignore: "",
+            validator = $mainForm.validate({
+                ignore: ".note-editor *",
                 rules: {
                     "NewCase.ReportedBy": {
                         required: FieldIsRequired(
@@ -1463,7 +1470,36 @@
             }
             return ret;
         }
-        </script>
+
+    let summerNoteDescConfig = {
+        placeholder: '',
+        dialogsFade: true,
+        tabsize: 1,
+        fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82'],
+        toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['fontsize', ['fontsize']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
+        disableResizeImage: true,
+        disableResizeEditor: false,
+        height: 100,
+        callbacks: {
+            onChange: function (contents, $editable) {
+
+                $('.summernotedesc').val($('.summernotedesc').summernote('isEmpty') ? "" : contents);
+
+                validator.element($('.summernotedesc'));
+            }
+        }
     }
+
+    //Init summernote
+    $(document).ready(function () {
+
+        $('.summernotedesc').summernote(summerNoteDescConfig)
+
+    });
+
+
+
+    </script>
+}
 
 
