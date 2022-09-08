@@ -2946,7 +2946,8 @@ body.login {
 }
 
 .modal.modalBulkCaseEdit .modal-body {
-    overflow-x: hidden;
+    overflow-x: visible;
+    overflow-y: visible;
 }
 /**************************** Validation **************************************************/
 
