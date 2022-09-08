@@ -250,14 +250,14 @@ namespace DH.Helpdesk.Dal.Repositories
                         Name = caseHistory.Impact.Name,
                     } : null,
 
-                    //EmailLogs = caseHistory.Emaillogs.Select(t => new EmailLogsOverview
-                    //{
-                    //    Id = t.Id,
-                    //    MailId = t.MailId,
-                    //    EmailAddress = t.EmailAddress ?? "",
-                    //    CcEmailAddress = t.Cc ?? "",
-                    //    ResponseMessage = t.ResponseMessage ?? null
-                    //}).ToList()
+                    EmailLogs = caseHistory.Emaillogs.Select(t => new EmailLogsOverview
+                    {
+                        Id = t.Id,
+                        MailId = t.MailId,
+                        EmailAddress = t.EmailAddress ?? "",
+                        CcEmailAddress = t.Cc ?? "",
+                        ResponseMessage = t.ResponseMessage ?? null
+                    }).ToList()
                 };
         }
 
