@@ -5,6 +5,7 @@
 
     using DH.Helpdesk.BusinessData.Models.User.Input;
     using DH.Helpdesk.Domain;
+    using HtmlAgilityPack;
 
     public static class GeneralExtensions
     {
@@ -60,6 +61,89 @@
                 return string.Empty;
             else
                 return "|||||||||||";
+        }
+
+        public static string HTMLToTableCell(this string input)
+        {
+
+            if (string.IsNullOrEmpty(input))
+            {
+                return input;
+            }
+
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(input);
+
+
+            HtmlNodeCollection divs = doc.DocumentNode.SelectNodes("//div[@style]");
+            if (divs != null)
+            {
+                foreach (HtmlNode div in divs)
+                {
+                    string style = div.Attributes["style"].Value;
+                    string newStyle = CleanWidth(style);
+                    div.Attributes["style"].Value = newStyle;
+
+                }
+            }
+
+            HtmlNodeCollection a = doc.DocumentNode.SelectNodes("//a[@style]");
+            if (a != null)
+            {
+                foreach (HtmlNode singlea in a)
+                {
+
+
+                    string style = singlea.Attributes["style"].Value;
+                    string newStyle = CleanWidth(style);
+                    singlea.Attributes["style"].Value = newStyle;
+
+                }
+            }
+
+            HtmlNodeCollection imgs = doc.DocumentNode.SelectNodes("//img[@style]");
+            if (imgs != null)
+            {
+                foreach (HtmlNode img in imgs)
+                {
+
+
+                    string style = img.Attributes["style"].Value;
+                    string newStyle = CleanWidth(style);
+                    img.Attributes["style"].Remove();
+
+                }
+            }
+
+            HtmlNode allNodes = doc.DocumentNode;
+            var ret = allNodes.InnerHtml;
+
+            return ret;
+        }
+
+        private static string CleanWidth(string oldStyles)
+        {
+            string newStyles = "";
+            foreach (var entries in oldStyles.Split(';'))
+            {
+                var values = entries.Split(':');
+                switch (values[0].ToLower().Trim())
+                {
+
+                    case "width":
+                        break;
+
+                    default:
+                        if (values.Length == 2)
+                        {
+                            newStyles += values[0] + ":" + values[1] + ";";
+                        }
+
+                        break;
+
+                }
+            }
+            return newStyles;
         }
     }
 }
