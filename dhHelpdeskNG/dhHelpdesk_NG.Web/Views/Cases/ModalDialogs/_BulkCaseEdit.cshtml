@@ -425,15 +425,15 @@
 
 
         $btnBulkCaseEdit.on("click", async function bulkCaseEdit() {
-            await handleBulkCaseEdit()
+            await handleBulkCaseEdit();
         });
-
 
         const handleBulkCaseEdit = async () => {
 
             let inputData = getInputData();
             inputData.CasesToBeUpdated = selectedCases.map(e => e.id);
 
+            let requests = [];
             if (validateBulkCaseEditData(inputData, selectedCases)) {
                 $bulkCaseEditProgressDiv.css("display", "block");
 
@@ -442,7 +442,7 @@
                 selectedCases.forEach(async (c) => {
 
                     inputData.Id = c.id
-                    return new Promise((resolve, reject) => {
+                    let request =
                         $.ajax({
                             url: '@Url.Action("EditCaseProperties")',
                             type: "post",
@@ -474,8 +474,6 @@
                                     $("#st_inProgress" + c.id).css("color", "red");
                                 }
                                 $("#st_inProgress" + c.id).prop("title", message);
-                                console.log(message);
-                                resolve(data)
                                 handleProcessedCase();
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
@@ -486,14 +484,17 @@
                                 console.log(jqXHR);
                                 console.log(textStatus);
                                 console.log(errorThrown);
-                                reject(data);
                                 handleProcessedCase();
                             }
                         });
-                    })
+                    requests.push(request);
                 });
             }
             $btnBulkCaseEdit.hide();
+            Promise.all(requests).then(() => {
+                //console.log('done');                
+                $btnBulkCaseEditCancel.attr('disabled', false);
+            })
         }
 
         $caseWorkingGroupId.change(function (d, source) {
@@ -563,10 +564,6 @@
     function handleProcessedCase() {
         processedCases++;
         $processedNumCases.text(processedCases);
-
-        if ($processedNumCases.text() == $totalNumSelectedCases.text()) {
-            $btnBulkCaseEditCancel.attr('disabled', false);
-        }
     }
 
     function getInputData() {
