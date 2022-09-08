@@ -537,8 +537,8 @@
             } else if (element.hasClass("cost-field")) {
                 $("#costValidationMessage").html(error);
             } else if (element.hasClass("summernoteinternal") || element.hasClass("summernotedesc") || element.hasClass("summernoteexternal")) {
+              
                 error.insertAfter(element.siblings(".note-editor"));
-
 
             } else {
                 if (element.is("select.chosen-single-select")) {

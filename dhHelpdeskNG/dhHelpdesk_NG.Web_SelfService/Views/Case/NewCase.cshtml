@@ -1457,7 +1457,40 @@
                         if (validator.errorMap.hasOwnProperty(prop))
                             console.log(prop, ":", validator.errorMap[prop]);
                     }
-                }
+                },
+                errorPlacement: function (error, element) {
+                    if (element.hasClass("summernotedesc")) {
+                        
+                        error.insertAfter(element.siblings(".note-editor"));
+                        
+                    } else {
+                        
+                        error.insertAfter(element);
+
+                    }
+                },
+                highlight: function (element, errorClass, validClass) {
+
+
+                    if ($(element).hasClass("summernotedesc")) {
+
+                        $(element).siblings(".note-editor").addClass("error")
+
+                    } else {
+
+                        $(element).addClass("error");
+                    }
+                },
+                unhighlight: function (element, errorClass, validClass) {
+
+                    if ($(element).hasClass("summernotedesc")) {
+
+                        $(element).siblings(".note-editor").removeClass("error")
+
+                    } else {
+                        $(element).removeClass("error");
+                    }
+                },
             });
 
         }
