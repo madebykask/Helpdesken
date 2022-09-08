@@ -2499,9 +2499,9 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
         disableResizeEditor: true,
         callbacks: {
             onChange: function (contents, $editable) {
-                if (contents == "<p><br></p>") {
-                    $('.summernoteinternal').summernote('code', '');
-                }
+                $('.summernoteinternal').val($('.summernoteinternal').summernote('isEmpty') ? "" : contents);
+
+                validator.element($('.summernoteinternal'));
             }
         }
     }
@@ -2516,9 +2516,11 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
         disableResizeEditor: true,
         callbacks: {
             onChange: function (contents, $editable) {
-                if (contents == "<p><br></p>") {
-                    $('.summernoteexternal').summernote('code', '');
-                }
+
+                $('.summernoteexternal').val($('.summernoteexternal').summernote('isEmpty') ? "" : contents);
+
+                validator.element($('.summernoteexternal'));
+
             }
         }
     }
@@ -2534,9 +2536,10 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
         height: @descriptionSize * 25,
         callbacks: {
             onChange: function (contents, $editable) {
-                if (contents == "<p><br></p>") {
-                    $('.summernotedesc').summernote('code', '');
-                }
+
+                $('.summernotedesc').val($('.summernotedesc').summernote('isEmpty') ? "" : contents);
+
+                validator.element($('.summernotedesc'));
             }
         }
     }

@@ -378,7 +378,12 @@
                         <text>
                         require_from_group: {
                             param: [1, ".log-field"],
-                            depends: function(element) {
+                            depends: function (element) {
+
+                                var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
+                                || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
+
+
                                 var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
                                 var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
                                 var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
@@ -387,7 +392,9 @@
                                     && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
                                 var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
                                     && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
-                                return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
+
+
+                                return (timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price) && !logPopulated;
                             }
                         }
                         </text>
@@ -399,8 +406,12 @@
                     {
                             <text>
                             require_from_group: {
-                                param: [1, ".log-field"],
-                                depends: function(element) {
+                            param: [1, ".log-field"],
+                            depends: function (element) {
+
+                                    var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
+                                    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
+
                                     var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
                                     var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
                                     var overTimeHour = $("#CaseLog_OvertimeHour").val().replace(/\r/g, "") !== "";
@@ -408,8 +419,9 @@
                                     var material = $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "0"
                                         && $("#" + "@Html.IdFor(x => x.CaseLog.EquipmentPrice)").val().replace(/\r/g, "") !== "";
                                     var price = $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "0"
-                                        && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
-                                    return timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price;
+                                    && $("#" + "@Html.IdFor(x => x.CaseLog.Price)").val().replace(/\r/g, "") !== "";
+
+                                    return (timeSpentHour || timeSpentMin || overTimeHour || overTimeMin || material || price) && !logPopulated;
                                 }
                             }
                             </text>
@@ -423,6 +435,8 @@
 
                                 var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
                                     || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
+
+                                console.log("logPopulated", logPopulated)
 
                                 return setting && logPopulated;
                             }
@@ -524,7 +538,7 @@
                 $("#costValidationMessage").html(error);
             } else if (element.hasClass("summernoteinternal") || element.hasClass("summernotedesc") || element.hasClass("summernoteexternal")) {
                 error.insertAfter(element.siblings(".note-editor"));
-                
+
 
             } else {
                 if (element.is("select.chosen-single-select")) {
@@ -758,6 +772,7 @@
     }
 
     function FieldIsRequired(value) {
+
         var ret = false;
         if (value == '1') {
             ret = true;
@@ -866,5 +881,6 @@
     $("#case__Description-error").live("click", function () {
         $(".summernotedesc").summernote("focus");
     });
+
 
 </script>
