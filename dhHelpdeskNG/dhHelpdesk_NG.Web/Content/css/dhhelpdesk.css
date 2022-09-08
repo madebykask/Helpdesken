@@ -954,6 +954,12 @@ input[type=text].error, select.error, textarea.error, .btn-group.error .btn {
     background-color: #ffeeee;
 }
 
+.note-editor.error {
+    border: 1px solid #ff0000 !important;
+    background-color: #ffeeee !important;
+}
+
+
 
 a.error, input[type='button'].error .btn {
     border: 1px solid #ff0000;
@@ -4325,4 +4331,8 @@ div.chosen-container.chosen-container-single.error {
 
 .note-input{
     padding: 0 !important
+}
+
+.note-editor.note-frame {
+    margin-bottom: 5px !important;
 }

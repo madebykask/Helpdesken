@@ -2489,7 +2489,7 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
     let height = 100;
 
 
-    let summerNoteConfig = {
+    let summerNoteInternalConfig = {
         placeholder: '',
         dialogsFade: true,
         tabsize: 1,
@@ -2497,6 +2497,30 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
         toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['fontsize', ['fontsize']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
         disableResizeImage: true,
         disableResizeEditor: true,
+        callbacks: {
+            onChange: function (contents, $editable) {
+                if (contents == "<p><br></p>") {
+                    $('.summernoteinternal').summernote('code', '');
+                }
+            }
+        }
+    }
+
+    let summerNoteExternalConfig = {
+        placeholder: '',
+        dialogsFade: true,
+        tabsize: 1,
+        fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82'],
+        toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['fontsize', ['fontsize']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
+        disableResizeImage: true,
+        disableResizeEditor: true,
+        callbacks: {
+            onChange: function (contents, $editable) {
+                if (contents == "<p><br></p>") {
+                    $('.summernoteexternal').summernote('code', '');
+                }
+            }
+        }
     }
 
     let summerNoteDescConfig = {
@@ -2507,14 +2531,22 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
         toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['fontsize', ['fontsize']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
         disableResizeImage: true,
         disableResizeEditor: false,
-        height: @descriptionSize * 25
+        height: @descriptionSize * 25,
+        callbacks: {
+            onChange: function (contents, $editable) {
+                if (contents == "<p><br></p>") {
+                    $('.summernotedesc').summernote('code', '');
+                }
+            }
+        }
     }
 
     //Init summernote
     $(document).ready(function () {
 
 
-        $('.summernote').summernote(summerNoteConfig)
+        $('.summernoteinternal').summernote(summerNoteInternalConfig)
+        $('.summernoteexternal').summernote(summerNoteExternalConfig)
         $('.summernotedesc').summernote(summerNoteDescConfig)
 
 
@@ -2546,7 +2578,15 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
             
 
         //Loop all .summernote to try to find the disabled ones
-        $(".summernote").each(function () {
+        $(".summernoteinternal").each(function () {
+
+            if (this.readOnly) {
+                $("#" + this.id).summernote("disable");
+            }
+
+        });
+
+        $(".summernoteexternal").each(function () {
 
             if (this.readOnly) {
                 $("#" + this.id).summernote("disable");
@@ -2557,8 +2597,6 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
         $(".summernotedesc").each(function () {
 
             if (this.readOnly) {
-
-                console.log("Read only")
 
                 $("#" + this.id).summernote("disable");
             }
