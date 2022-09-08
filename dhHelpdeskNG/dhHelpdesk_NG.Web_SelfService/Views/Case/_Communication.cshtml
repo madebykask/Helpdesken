@@ -16,6 +16,9 @@
     var isReadOnly = ViewData["readonly"] != null && (bool)ViewData["readonly"];
 }
 
+<link href="~/Content/css/summernote.css" rel="stylesheet" />
+<script src="~/Content/summernote-0.8.18/summernote.js"></script>
+
 <div id="communicationPanel" class="siteCom">
     <div id="btnOpenLog" class="mapButtonclose mapButton @expand"><span class="glyphicon glyphicon-remove"></span></div>
 
@@ -48,7 +51,7 @@
                         <div class="form-group col-md-10">
                             <label for="logNote">@Translation.Get("Add comment"):</label>
                             <div class="form-group">
-                                <textarea id="logNote" style="width: 450px; height: 100px;"></textarea>
+                                <textarea class="summernotecomment" id="logNote" style="height: 150px"></textarea>
                             </div>
                         </div>
                         <div class="form-group col-md-10">
@@ -77,7 +80,7 @@
                             </div>
 
                         </div>
-                  </form>
+                    </form>
                 </div>
             </div>
         }
@@ -88,3 +91,32 @@
         </div>
     </div>
 </div>
+
+<script>
+
+    let summerNoteCommentConfig = {
+        placeholder: '',
+        dialogsFade: true,
+        tabsize: 1,
+        fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82'],
+        toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['fontsize', ['fontsize']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
+        disableResizeImage: true,
+        disableResizeEditor: false,
+        callbacks: {
+            onChange: function (contents, $editable) {
+
+                //$('.summernotedesc').val($('.summernotedesc').summernote('isEmpty') ? "" : contents);
+
+                //validator.element($('.summernotedesc'));
+            }
+        }
+    }
+
+    //Init summernote
+    $(document).ready(function () {
+
+        $('.summernotecomment').summernote(summerNoteCommentConfig)
+
+    });
+
+</script>
