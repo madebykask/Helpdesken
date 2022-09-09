@@ -609,24 +609,28 @@
 
 <script>
 
-    let summerNoteCommentConfig = {
-        placeholder: '',
-        dialogsFade: true,
-        tabsize: 1,
-        fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82'],
-        toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['fontsize', ['fontsize']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
-        disableResizeImage: true,
-        disableResizeEditor: false,
-        height: 150,
-        callbacks: {
-            onChange: function (contents, $editable) {
+    if (typeof summerNoteCommentConfig != 'undefined') {
+        let summerNoteCommentConfig = {
+            placeholder: '',
+            dialogsFade: true,
+            tabsize: 1,
+            fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82'],
+            toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['fontsize', ['fontsize']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
+            disableResizeImage: true,
+            disableResizeEditor: false,
+            height: 150,
+            callbacks: {
+                onChange: function (contents, $editable) {
 
-                //$('.summernotedesc').val($('.summernotedesc').summernote('isEmpty') ? "" : contents);
+                    //$('.summernotedesc').val($('.summernotedesc').summernote('isEmpty') ? "" : contents);
 
-                //validator.element($('.summernotedesc'));
+                    //validator.element($('.summernotedesc'));
+                }
             }
-        }
+        } 
     }
+
+    
 
     //Init summernote
     $(document).ready(function () {
