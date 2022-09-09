@@ -495,7 +495,7 @@
                     });
 
                     Promise.all(requests).then(() => {
-                        console.log('done');
+                        //console.log('done');
                         if ($processedNumCases.text() == $totalNumSelectedCases.text()) {
                             $btnBulkCaseEditCancel.attr('disabled', false);
                         }
@@ -595,6 +595,7 @@
         $finishDescription.attr('disabled', true);
         $finishTypeBreadcrubs.attr('disabled', true);
         $btnFinishingTypeLst.attr('disabled', true);
+        $finishDate.attr('disabled', true);
         $btnBulkCaseEditCancel.attr('disabled', true);
     }
 
@@ -609,6 +610,7 @@
         $finishDescription.attr('disabled', false);
         $finishTypeBreadcrubs.attr('disabled', false);
         $btnFinishingTypeLst.attr('disabled', false);
+        $finishDate.attr('disabled', false);
     }
 
 
