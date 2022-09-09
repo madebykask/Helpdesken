@@ -436,14 +436,20 @@ namespace DH.Helpdesk.SCCM
                     //Check if found
                     if (computerSystemWrapper != null)
                     {
+                        //Check what type of user to use
+                        var userName = computerSystemWrapper.UserName;
+                        if (Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["UseLastLoginUser"].ToString()) == 1)
+                        {
+                            userName = RSystem.LastLogonUserName;
+                        }
+
                         computer._ComputerSystem = new Models.ComputerSystem()
                         {
                             Manufacturer = computerSystemWrapper.Manufacturer,
                             Model = computerSystemWrapper.Model,
                             Name = computerSystemWrapper.Name,
                             TimeStamp = computerSystemWrapper.TimeStamp,
-                            //UserName = computerSystemWrapper.UserName,
-                            UserName = RSystem.LastLogonUserName, //Changed to lastLogonUserName from Rsystem
+                            UserName = userName
 
                         };
                     }
