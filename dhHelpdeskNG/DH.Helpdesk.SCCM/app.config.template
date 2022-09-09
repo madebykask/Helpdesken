@@ -48,6 +48,10 @@
 		<add key="DB_Customer_Id" value="#{DB_Customer_Id}"/>
 
 		<!--Program settings-->
+		<add key="Show_Token" value="1" />
+
+		<!--Depends on Show_Token, Show_Token must be set to 1 for this to take effect-->
+		<add key="Copy_Token_To_Clipboard" value="1" />
 
 		<!--This is a threading option. The payload is divided into x batches, every batch contains a nested 
 		inner batch. If this value is for example set to 8. 16 hyper threads will be consumed to run the application.

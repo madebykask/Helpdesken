@@ -13,6 +13,7 @@ using System.Diagnostics;
 using DH.Helpdesk.SCCM.DB;
 using DH.Helpdesk.SCCM.Other;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace DH.Helpdesk.SCCM
 {
@@ -20,8 +21,9 @@ namespace DH.Helpdesk.SCCM
     {
 
         private static long actions = 0;
-        
-        
+
+
+        [STAThread]
         static void Main(string[] args)
         {
 
@@ -30,6 +32,7 @@ namespace DH.Helpdesk.SCCM
 
         }
 
+        
         private static void Run()
         {
             //Get the configuration object
@@ -42,8 +45,12 @@ namespace DH.Helpdesk.SCCM
                 throw new Exception("Configuration is invalid");
             }
 
+
             //Get the token
             string token = GetToken(ADALConfiguration);
+
+            TokenUtility(token);
+
 
             //Fetch the data ASYNC
             var result = FetchBaseData(token).Result.ToList();
@@ -64,7 +71,7 @@ namespace DH.Helpdesk.SCCM
             {
                 rSystemWrapper = rSystemWrapper.Take(setting_Limit_Devices).ToList();
             }
-            
+
 
             //Chunk the data
             var chunkedData = rSystemWrapper.ChunkBy(rSystemWrapper.Count / Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["Setting_Chunk_Page_Size"].ToString()));
@@ -84,6 +91,33 @@ namespace DH.Helpdesk.SCCM
 
             UpdateOrCreateComputerInDB(computers);
 
+        }
+
+        private static void TokenUtility(string token)
+        {
+            try
+            {
+                //If to show the token in the console
+                if (Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["Show_Token"].ToString()) == 1)
+                {
+                    Console.WriteLine("TOKEN");
+                    Console.WriteLine("------------------------------------|.|------------------------------------");
+                    Console.WriteLine(token);
+                    Console.WriteLine("------------------------------------|.|------------------------------------");
+
+                    //If to copy to clipboard
+                    if (Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["Copy_Token_To_Clipboard"].ToString()) == 1)
+                    {
+                        Clipboard.SetText(token);
+                        Console.WriteLine("Copied token to clipboard");
+                        Console.WriteLine("------------------------------------|.|------------------------------------");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Show_Token || Copy_Token_To_Clipboard has invalid configuration");
+            }
         }
 
         private static async Task<List<Models.Device>[]> runThreads(List<List<RSystem>> chunkedData, string token)
@@ -166,8 +200,16 @@ namespace DH.Helpdesk.SCCM
 
             if (!String.IsNullOrEmpty(userName))
             {
-                var splittedUserName = userName.Split('\\')[1];
-                userName = splittedUserName;
+                var splittedUserName = userName.Split('\\');
+
+                if (splittedUserName.Length > 1)
+                {
+                    userName = splittedUserName[1];
+                }
+                else
+                {
+                    userName = splittedUserName[0];
+                }
             }
 
             var computerUserID = connector.GetComputerUserByUserId(Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Customer_Id"].ToString()), userName);
@@ -233,8 +275,16 @@ namespace DH.Helpdesk.SCCM
 
             if (!String.IsNullOrEmpty(userName))
             {
-                var splittedUserName = userName.Split('\\')[1];
-                userName = splittedUserName;
+                var splittedUserName = userName.Split('\\');
+
+                if (splittedUserName.Length > 1)
+                {
+                    userName = splittedUserName[1];
+                }
+                else
+                {
+                    userName = splittedUserName[0];
+                }
             }
 
 
@@ -392,7 +442,8 @@ namespace DH.Helpdesk.SCCM
                             Model = computerSystemWrapper.Model,
                             Name = computerSystemWrapper.Name,
                             TimeStamp = computerSystemWrapper.TimeStamp,
-                            UserName = computerSystemWrapper.UserName,
+                            //UserName = computerSystemWrapper.UserName,
+                            UserName = RSystem.LastLogonUserName, //Changed to lastLogonUserName from Rsystem
 
                         };
                     }
