@@ -58,11 +58,11 @@ Module DH_Helpdesk_Mail
 
         'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a case123456 that is created 220101", "Case#")
         'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a case that is created 220101", "Case#")
-        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a case 220101 dfgldsfg", "Case#")
+        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a case 220101 dfgldsfg", "Case #")
         'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a case 220101", "Case#")
         'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a case", "Case#")
         'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a 220101", "Case#")
-        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a case 123456 that is created 220101", "Case#")
+        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a Ärende:12345 that is created 220101", "Ärende: #")
 
 
 
