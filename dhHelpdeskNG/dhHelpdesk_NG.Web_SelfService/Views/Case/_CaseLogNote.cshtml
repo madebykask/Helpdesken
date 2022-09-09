@@ -21,7 +21,10 @@
     MvcHtmlString FormatLogText(CaseLogModel logItem)
     {
         var logText = GetLogText(logItem).AddCharacterInParts(70, Environment.NewLine, Environment.NewLine);
-        var formatted = MvcHtmlString.Create(Html.Encode(logText).Replace(Environment.NewLine, "<br />").Replace("\n", "<br />"));
+
+
+
+        var formatted = MvcHtmlString.Create(logText);
         return formatted;
     }
 }
@@ -35,7 +38,7 @@
             <div class="list-arrow"></div>
             <p>@GetLogUser(logModel) | @Html.DisplayFor(l => regDate)</p>
             @*<p>@Html.Raw(FormatLogText(logItem))</p>*@
-            <p>@FormatLogText(logModel)</p>
+            <p>@Html.Raw(FormatLogText(logModel))</p>
             <p>
                 @if (logModel.Files != null)
                 {
