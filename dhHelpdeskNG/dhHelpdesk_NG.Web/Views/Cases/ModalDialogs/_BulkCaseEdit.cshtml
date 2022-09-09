@@ -433,68 +433,75 @@
             let inputData = getInputData();
             inputData.CasesToBeUpdated = selectedCases.map(e => e.id);
 
-            let requests = [];
             if (validateBulkCaseEditData(inputData, selectedCases)) {
                 $bulkCaseEditProgressDiv.css("display", "block");
-
+                $btnBulkCaseEdit.hide();
                 disableBulkCaseEditInputFields();
 
-                selectedCases.forEach(async (c) => {
+                for (var i = 0; i < selectedCases.length; i += 5) {
+                    let requests = []
+                    batchCasesToProcess = []
+                    batchCasesToProcess = selectedCases.slice(i, i + 5);
 
-                    inputData.Id = c.id
-                    let request =
-                        $.ajax({
-                            url: '@Url.Action("EditCaseProperties")',
-                            type: "post",
-                            headers: { 'Content-Type': 'application/json' },
-                            data: JSON.stringify(inputData),
-                            dataType: "json",
-                            beforeSend: function () {
-                                $bulkCaseEditProgressListBody.append('<tr><td style="border:none; width:30px;"><i id="st_inProgress' + c.id + '" class="gif-loader" style="">&nbsp;</i></td><td style="border:none; width:60px; text-align:left;">' + c.caseno + '</td><td style="border:none; text-align:left;">' + c.casecaption + '</td></tr>')
+                    batchCasesToProcess.forEach(async (c) => {
 
-                                var content = $bulkCaseEditProgressListBody.html();
-                                $bulkCaseEditProgressListBody.html(content);
-                            },
-                            success: function (data) {
-                                let success = data.Success;
-                                let message = data.Message;
+                        inputData.Id = c.id
+                        let request =
+                            $.ajax({
+                                url: '@Url.Action("EditCaseProperties")',
+                                type: "post",
+                                headers: { 'Content-Type': 'application/json' },
+                                data: JSON.stringify(inputData),
+                                dataType: "json",
+                                beforeSend: function () {
+                                    $bulkCaseEditProgressListBody.append('<tr><td style="border:none; width:30px;"><i id="st_inProgress' + c.id + '" class="gif-loader" style="">&nbsp;</i></td><td style="border:none; width:60px; text-align:left;">' + c.caseno + '</td><td style="border:none; text-align:left;">' + c.casecaption + '</td></tr>')
 
-                                if (success) {
-                                    $("#st_inProgress" + c.id).removeClass();
-                                    $("#st_inProgress" + c.id).addClass("fa fa-check-circle fa-lg");
-                                    $("#st_inProgress" + c.id).prop("aria-hidden", "true");
-                                    $("#st_inProgress" + c.id).css("color", "green");
+                                    var content = $bulkCaseEditProgressListBody.html();
+                                    $bulkCaseEditProgressListBody.html(content);
+                                },
+                                success: function (data) {
+                                    let success = data.Success;
+                                    let message = data.Message;
 
-                                }
+                                    if (success) {
+                                        $("#st_inProgress" + c.id).removeClass();
+                                        $("#st_inProgress" + c.id).addClass("fa fa-check-circle fa-lg");
+                                        $("#st_inProgress" + c.id).prop("aria-hidden", "true");
+                                        $("#st_inProgress" + c.id).css("color", "green");
 
-                                else {
+                                    }
+
+                                    else {
+                                        $("#st_inProgress" + c.id).removeClass();
+                                        $("#st_inProgress" + c.id).addClass("fa fa-exclamation-circle fa-lg");
+                                        $("#st_inProgress" + c.id).prop("aria-hidden", "true");
+                                        $("#st_inProgress" + c.id).css("color", "red");
+                                    }
+                                    $("#st_inProgress" + c.id).prop("title", message);
+                                    handleProcessedCase();
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
                                     $("#st_inProgress" + c.id).removeClass();
                                     $("#st_inProgress" + c.id).addClass("fa fa-exclamation-circle fa-lg");
                                     $("#st_inProgress" + c.id).prop("aria-hidden", "true");
                                     $("#st_inProgress" + c.id).css("color", "red");
+                                    console.log(jqXHR);
+                                    console.log(textStatus);
+                                    console.log(errorThrown);
+                                    handleProcessedCase();
                                 }
-                                $("#st_inProgress" + c.id).prop("title", message);
-                                handleProcessedCase();
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                $("#st_inProgress" + c.id).removeClass();
-                                $("#st_inProgress" + c.id).addClass("fa fa-exclamation-circle fa-lg");
-                                $("#st_inProgress" + c.id).prop("aria-hidden", "true");
-                                $("#st_inProgress" + c.id).css("color", "red");
-                                console.log(jqXHR);
-                                console.log(textStatus);
-                                console.log(errorThrown);
-                                handleProcessedCase();
-                            }
-                        });
-                    requests.push(request);
-                });
+                            });
+                        requests.push(request);
+                    });
+
+                    Promise.all(requests).then(() => {
+                        console.log('done');
+                        if ($processedNumCases.text() == $totalNumSelectedCases.text()) {
+                            $btnBulkCaseEditCancel.attr('disabled', false);
+                        }
+                    });
+                }
             }
-            $btnBulkCaseEdit.hide();
-            Promise.all(requests).then(() => {
-                //console.log('done');                
-                $btnBulkCaseEditCancel.attr('disabled', false);
-            })
         }
 
         $caseWorkingGroupId.change(function (d, source) {
