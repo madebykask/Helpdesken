@@ -822,9 +822,14 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 ret.Items.AddItem(customReport.Value, customReport.Text);
             }
 
-            var defaultSelected = ret.Items.FirstOrDefault(i => i.Value.ToLower() == defaultReportName.ToLower());
-            if (defaultSelected != null)
-                ret.SelectedItems.AddItem(int.Parse(defaultSelected.Id));
+            if (!String.IsNullOrEmpty(defaultReportName))
+            {
+                var defaultSelected = ret.Items.FirstOrDefault(i => i.Value.ToLower() == defaultReportName.ToLower());
+                if (defaultSelected != null)
+                    ret.SelectedItems.AddItem(int.Parse(defaultSelected.Id));
+
+            }
+
 
             return ret;
         }
