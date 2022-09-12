@@ -27,6 +27,8 @@
 		<add key="SmtpServer" value="smtp.datahalland.se"/>
 		<add key="SmtpPort" value="25"/>
 		<add key="aspnet:MaxJsonDeserializerMembers" value="150000"/>
+        <add key="aspnet:RequestQueueLimitPerSession" value="2147483647"/>
+        <add key="aspnet:AllowConcurrentRequestsPerSession" value="true" />
 		<add key="LoginMode" value="Application"/>
 		<add key="MicrosoftLogin" value="1" /><!-- 1 = Show Microsoft login-button, else 0-->
 		<add key="ClientId" value="#{HelpdeskClientId}" /><!-- Your applications Client ID fromn Azure-->
