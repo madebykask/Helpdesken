@@ -2807,7 +2807,7 @@ namespace DH.Helpdesk.Web.Controllers
                 finishingCause.SubFinishingCauses.Where(f => f.IsActive != 0).ToList().Count > 0)
                 res = "true";
 
-            return Json(res);
+            return Json(res, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

@@ -2,7 +2,7 @@
 {
     public static class NotifierConstraint
     {
-        public const int UserIdMaxLength = 50;
+        public const int UserIdMaxLength = 200;
 
         public const int LoginNameMaxLength = 50;
 

@@ -758,6 +758,13 @@ INSERT INTO [dbo].[ExtendedCaseTranslations]
 		   END
 GO
 
+RAISERROR ('Alter tblComputerUsers.UserId from 50 nvarchar to 200 nvarchar', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblComputerUsers','UserId') IS NOT NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblComputerUsers]
+		ALTER COLUMN UserId nvarchar(200) NULL
+	End
+Go
 
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.56'

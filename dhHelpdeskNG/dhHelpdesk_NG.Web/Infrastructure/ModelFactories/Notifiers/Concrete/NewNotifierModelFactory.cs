@@ -33,7 +33,7 @@
             List<ItemOverview> languages,
 			ComputerUserCategoryModel model)
         {
-            var userId = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.UserId, (inputParams.ContainsKey("UserId") ? inputParams["UserId"] : null));
+            var userId = this.notifierInputFieldModelFactory.CreateInputTextBoxModel(settings.UserId, (inputParams.ContainsKey("UserId") ? inputParams["UserId"] : null), 200);
 
             DropDownFieldModel domain;
 

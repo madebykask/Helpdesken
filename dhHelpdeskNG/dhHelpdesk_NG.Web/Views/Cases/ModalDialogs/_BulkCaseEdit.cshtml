@@ -296,7 +296,7 @@
                 }
                 @if (SessionFacade.CurrentUser.CloseCasePermission == 1)
                 {
-                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)" >
+                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)">
                         <td>
                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ClosingReason, "Avslutsorsak")
                         </td>
@@ -431,77 +431,80 @@
         const handleBulkCaseEdit = async () => {
 
             let inputData = getInputData();
-            inputData.CasesToBeUpdated = selectedCases.map(e => e.id);
+            validateBulkCaseEditData(inputData, selectedCases).then(valid => {
+                
+                inputData.CasesToBeUpdated = selectedCases.map(e => e.id);
 
-            if (validateBulkCaseEditData(inputData, selectedCases)) {
-                $bulkCaseEditProgressDiv.css("display", "block");
-                $btnBulkCaseEdit.hide();
-                disableBulkCaseEditInputFields();
+                if (valid) {
+                    $bulkCaseEditProgressDiv.css("display", "block");
+                    $btnBulkCaseEdit.hide();
+                    disableBulkCaseEditInputFields();
 
-                for (var i = 0; i < selectedCases.length; i += 5) {
-                    let requests = []
-                    batchCasesToProcess = []
-                    batchCasesToProcess = selectedCases.slice(i, i + 5);
+                    for (var i = 0; i < selectedCases.length; i += 5) {
+                        let requests = []
+                        batchCasesToProcess = []
+                        batchCasesToProcess = selectedCases.slice(i, i + 5);
 
-                    batchCasesToProcess.forEach(async (c) => {
+                        batchCasesToProcess.forEach(async (c) => {
 
-                        inputData.Id = c.id
-                        let request =
-                            $.ajax({
-                                url: '@Url.Action("EditCaseProperties")',
-                                type: "post",
-                                headers: { 'Content-Type': 'application/json' },
-                                data: JSON.stringify(inputData),
-                                dataType: "json",
-                                beforeSend: function () {
-                                    $bulkCaseEditProgressListBody.append('<tr><td style="border:none; width:30px;"><i id="st_inProgress' + c.id + '" class="gif-loader" style="">&nbsp;</i></td><td style="border:none; width:60px; text-align:left;">' + c.caseno + '</td><td style="border:none; text-align:left;">' + c.casecaption + '</td></tr>')
+                            inputData.Id = c.id
+                            let request =
+                                $.ajax({
+                                    url: '@Url.Action("EditCaseProperties")',
+                                    type: "post",
+                                    headers: { 'Content-Type': 'application/json' },
+                                    data: JSON.stringify(inputData),
+                                    dataType: "json",
+                                    beforeSend: function () {
+                                        $bulkCaseEditProgressListBody.append('<tr><td style="border:none; width:30px;"><i id="st_inProgress' + c.id + '" class="gif-loader" style="">&nbsp;</i></td><td style="border:none; width:60px; text-align:left;">' + c.caseno + '</td><td style="border:none; text-align:left;">' + c.casecaption + '</td></tr>')
 
-                                    var content = $bulkCaseEditProgressListBody.html();
-                                    $bulkCaseEditProgressListBody.html(content);
-                                },
-                                success: function (data) {
-                                    let success = data.Success;
-                                    let message = data.Message;
+                                        var content = $bulkCaseEditProgressListBody.html();
+                                        $bulkCaseEditProgressListBody.html(content);
+                                    },
+                                    success: function (data) {
+                                        let success = data.Success;
+                                        let message = data.Message;
 
-                                    if (success) {
-                                        $("#st_inProgress" + c.id).removeClass();
-                                        $("#st_inProgress" + c.id).addClass("fa fa-check-circle fa-lg");
-                                        $("#st_inProgress" + c.id).prop("aria-hidden", "true");
-                                        $("#st_inProgress" + c.id).css("color", "green");
+                                        if (success) {
+                                            $("#st_inProgress" + c.id).removeClass();
+                                            $("#st_inProgress" + c.id).addClass("fa fa-check-circle fa-lg");
+                                            $("#st_inProgress" + c.id).prop("aria-hidden", "true");
+                                            $("#st_inProgress" + c.id).css("color", "green");
 
-                                    }
+                                        }
 
-                                    else {
+                                        else {
+                                            $("#st_inProgress" + c.id).removeClass();
+                                            $("#st_inProgress" + c.id).addClass("fa fa-exclamation-circle fa-lg");
+                                            $("#st_inProgress" + c.id).prop("aria-hidden", "true");
+                                            $("#st_inProgress" + c.id).css("color", "red");
+                                        }
+                                        $("#st_inProgress" + c.id).prop("title", message);
+                                        handleProcessedCase();
+                                    },
+                                    error: function (jqXHR, textStatus, errorThrown) {
                                         $("#st_inProgress" + c.id).removeClass();
                                         $("#st_inProgress" + c.id).addClass("fa fa-exclamation-circle fa-lg");
                                         $("#st_inProgress" + c.id).prop("aria-hidden", "true");
                                         $("#st_inProgress" + c.id).css("color", "red");
+                                        console.log(jqXHR);
+                                        console.log(textStatus);
+                                        console.log(errorThrown);
+                                        handleProcessedCase();
                                     }
-                                    $("#st_inProgress" + c.id).prop("title", message);
-                                    handleProcessedCase();
-                                },
-                                error: function (jqXHR, textStatus, errorThrown) {
-                                    $("#st_inProgress" + c.id).removeClass();
-                                    $("#st_inProgress" + c.id).addClass("fa fa-exclamation-circle fa-lg");
-                                    $("#st_inProgress" + c.id).prop("aria-hidden", "true");
-                                    $("#st_inProgress" + c.id).css("color", "red");
-                                    console.log(jqXHR);
-                                    console.log(textStatus);
-                                    console.log(errorThrown);
-                                    handleProcessedCase();
-                                }
-                            });
-                        requests.push(request);
-                    });
+                                });
+                            requests.push(request);
+                        });
 
-                    Promise.all(requests).then(() => {
-                        //console.log('done');
-                        if ($processedNumCases.text() == $totalNumSelectedCases.text()) {
-                            $btnBulkCaseEditCancel.attr('disabled', false);
-                        }
-                    });
+                        Promise.all(requests).then(() => {
+                            //console.log('done');
+                            if ($processedNumCases.text() == $totalNumSelectedCases.text()) {
+                                $btnBulkCaseEditCancel.attr('disabled', false);
+                            }
+                        });
+                    }
                 }
-            }
+            });
         }
 
         $caseWorkingGroupId.change(function (d, source) {
@@ -557,6 +560,7 @@
         });
 
         $finishTypeId.on('change', function (ev) {
+            $finishTypeContainer.removeClass("error");
             let value = $(ev.target).val();
             if (value == '' || value === undefined) {
                 $finishDate.val('');
@@ -614,7 +618,7 @@
     }
 
 
-    function resetBulkEditModal() {        
+    function resetBulkEditModal() {
         $caseWorkingGroupId.val('');
         $casePerformer_Id.val('');
         //$casePriorityId.val('');
@@ -629,6 +633,7 @@
         $finishTypeBreadcrubs.text('@Html.Raw(Translation.Get("--"))');
         enableBulkCaseEditInputFields();
         $processedNumCases.text('0');
+        $finishTypeContainer.removeClass("error");
         processedCases = 0;
     }
 
@@ -637,19 +642,54 @@
     }
 
     function validateBulkCaseEditData(data, selectedCases) {
-        let validation = false;
-        if (selectedCases.length > 0) {
-            if (nothingToUpdate(data)) {
-                ShowToastMessage('@Html.Raw(Translation.GetForJS("Inget att uppdatera"))', "warning");
+        return isFinishingTypeValidAsync().then(finishingTypeValid => {
+            let validation = false;
+
+            if (selectedCases.length > 0) {
+                if (nothingToUpdate(data)) {
+                    ShowToastMessage('@Html.Raw(Translation.GetForJS("Inget att uppdatera"))', "warning");
+                    $(".toast-container").addClass("case-followers-toastmessage");
+                }
+                else {
+                    
+                    if (finishingTypeValid == false) {
+                        $finishTypeContainer.addClass("error");
+
+                        let finishingTypeErrorMessage =
+                            '@Html.Raw(Translation.GetForJS("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält") + " [" +
+                                Translation.GetForJS(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, Model.customerUserSetting.Customer_Id) + "] " +
+                                Translation.GetForJS("inte har valts. Vänligen kontrollera ärendet."))';
+
+                        ShowToastMessage(finishingTypeErrorMessage, "error");
+                        $(".toast-container").addClass("case-followers-toastmessage");
+                    }
+                    else {
+                        validation = true;
+                    }
+                }
             }
             else {
-                validation = true;
+                this.ShowToastMessage('@Html.Raw(Translation.GetForJS("Det finns inga ärenden som matchar angivet urval"))', "warning");
+                $(".toast-container").addClass("case-followers-toastmessage");
             }
+            return validation;
+        });
+    }
+
+    async function isFinishingTypeValidAsync() {
+        if ($finishTypeId.val()) {
+            let result = await finishingCauseHasChild($finishTypeId.val());
+            let ret = false;
+
+            if (result == 'false') {
+                ret = true;
+            }
+
+            return ret;
         }
         else {
-            ShowToastMessage('@Html.Raw(Translation.GetForJS("Det finns inga ärenden som matchar angivet urval"))', "warning");
+            return true;
         }
-        return validation;
     }
 
 </script>
