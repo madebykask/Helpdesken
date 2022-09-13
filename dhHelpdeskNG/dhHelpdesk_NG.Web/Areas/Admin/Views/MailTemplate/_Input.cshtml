@@ -308,64 +308,66 @@
                                 }
                                 if (Model.MailTemplateLanguage.MailTemplate.MailID == 18)
                                 {
-                                    @Translation.GetCoreTextTranslation("Sammanfogat ärende")
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Sammanfogat ärende")
+                                     </td>
                                 }
                                 if (Model.MailTemplateLanguage.MailTemplate.MailID == 60)
                                 {
                                     <td>
                                         @Translation.GetCoreTextTranslation("Driftlogg")
                                     </td>
-                                }
+                                    }
                                 if (Model.MailTemplateLanguage.MailTemplate.MailID == 50)
                                 {
-                                    <td>
-                                        @Translation.GetCoreTextTranslation("Tilldelad ändring")
-                                    </td>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Tilldelad ändring")
+                                </td>
                                 }
                                 if (Model.MailTemplateLanguage.MailTemplate.MailID == 51)
                                 {
-                                    <td>
-                                        @Translation.GetCoreTextTranslation("Skicka loggpost till")
-                                    </td>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Skicka loggpost till")
+                                </td>
                                 }
                                 if (Model.MailTemplateLanguage.MailTemplate.MailID == 52)
                                 {
-                                    <td>
-                                        @Translation.GetCoreTextTranslation("CAB")
-                                    </td>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("CAB")
+                                </td>
                                 }
                                 if (Model.MailTemplateLanguage.MailTemplate.MailID == 53)
                                 {
-                                    <td>
-                                        @Translation.GetCoreTextTranslation("PIR")
-                                    </td>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("PIR")
+                                </td>
                                 }
                                 if (Model.MailTemplateLanguage.MailTemplate.MailID == 54)
                                 {
-                                    <td>
-                                        @Translation.GetCoreTextTranslation("Statusändring")
-                                    </td>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Statusändring")
+                                </td>
                                 }
                                 if (Model.MailTemplateLanguage.MailTemplate.MailID == 55)
                                 {
-                                    <td>
-                                        @Translation.GetCoreTextTranslation("Ändring")
-                                    </td>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Ändring")
+                                </td>
                                 }
                                 if (Model.MailTemplateLanguage.MailTemplate.MailID >= 99)
                                 {
-                                    <td>
-                                        @Html.TextBoxFor(model => model.MailTemplateLanguage.MailTemplateName, new { maxlength = "50", })
-                                    </td>
-                                }
-                            }
-                            else
-                            {
                                 <td>
                                     @Html.TextBoxFor(model => model.MailTemplateLanguage.MailTemplateName, new { maxlength = "50", })
                                 </td>
-                            }
-                        </tr>
+                                }
+                                }
+                                else
+                                {
+                                <td>
+                                    @Html.TextBoxFor(model => model.MailTemplateLanguage.MailTemplateName, new { maxlength = "50", })
+                                </td>
+                                }
+                                </tr>
                             <tr>
                                 <td>
                                     @Translation.GetCoreTextTranslation("Ämne")

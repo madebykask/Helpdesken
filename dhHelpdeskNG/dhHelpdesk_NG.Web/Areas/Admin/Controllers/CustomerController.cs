@@ -1230,7 +1230,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                         //Id = id,
                         MailID = mailTemplateToCopy.MailID,
                         Customer_Id = newCustomerToSave.Id,
-                        SendMethod = mailTemplateToCopy.SendMethod
+                        SendMethod = mailTemplateToCopy.SendMethod,
+                        IsStandard = mailTemplateToCopy.IsStandard, 
                     };
 
                     this._mailTemplateService.SaveMailTemplate(mailTemplateToSave, out errors);
