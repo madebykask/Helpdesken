@@ -772,10 +772,9 @@ namespace DH.Helpdesk.Dal.Repositories
                 var con = $"tblCase.[RegUserId] = '{criteria.UserId.SafeForSqlInject()}'";
                 criteriaCondition = criteriaCondition.AddWithSeparator($"({con})", false, " or ");
             }
-
             if (criteria.MyCasesFollower && !string.IsNullOrEmpty(criteria.UserId))
             {
-                var con = $"(exists (select 1 from tblUsers join tblCaseExtraFollowers on tblUsers.Email = tblCaseExtraFollowers.Follower and tblCaseExtraFollowers.Case_Id = tblCase.Id))";
+                var con = $"(exists (select 1 from tblComputerUsers join tblCaseExtraFollowers on tblComputerUsers.Email = tblCaseExtraFollowers.Follower and tblCaseExtraFollowers.Follower = (Select Email from tblComputerUsers where UserId = '{criteria.UserId.SafeForSqlInject()}') and tblCaseExtraFollowers.Case_Id = tblCase.Id))";
                 criteriaCondition = criteriaCondition.AddWithSeparator($"({con})", false, " or ");
             }
 

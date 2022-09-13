@@ -1759,8 +1759,8 @@ namespace DH.Helpdesk.SelfService.Controllers
 
         private bool UserHasAccessToCase(Case currentCase)
         {
-            //var curUser = SessionFacade.CurrentUserIdentity.UserId;
-            //var userEmployeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
+            var curUser = SessionFacade.CurrentUserIdentity.UserId;
+           
 
             //Hide this to next release #57742
             if (currentCase.CaseType.ShowOnExtPageCases == 0 || (currentCase.ProductArea != null && currentCase.ProductArea.ShowOnExtPageCases == 0))
@@ -1770,12 +1770,9 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();
-
-            // Only when it is microsoft authentication
-            if (ConfigurationService.AppSettings.LoginMode == LoginMode.Microsoft)
-            {
-                criteria.PersonEmail = criteria.UserId;
-            }
+            //Get User Email from logged in user
+            var user = _computerService.GetComputerUserByUserID(curUser);
+            criteria.PersonEmail = user.Email;
 
 
             /*User creator*/
@@ -1785,6 +1782,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 {
                     return true;
                 }
+                //Is this neccecary??
                 else
                 {
                     _logger.Warn($"UserHasAccessToCase: currentCase.RegUserId ('{currentCase.RegUserId}') != CurrentUserIdenity.UserId ('{criteria.UserId}')");
@@ -1804,7 +1802,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                     return true;
             }
 
-            // Only when it is microsoft authentication
+            // Compare with email
             if (criteria.MyCasesInitiator && !string.IsNullOrEmpty(currentCase.PersonsEmail) &&
                 !string.IsNullOrEmpty(criteria.PersonEmail))
             {
@@ -1816,16 +1814,12 @@ namespace DH.Helpdesk.SelfService.Controllers
             /*User follower*/
             if (criteria.MyCasesFollower)
             {
-                if ((currentCase.CaseFollowers != null && currentCase.CaseFollowers.Any()) &&
-                (!string.IsNullOrEmpty(criteria.UserId) || !string.IsNullOrEmpty(criteria.UserEmployeeNumber)))
+                if ((currentCase.CaseFollowers != null && currentCase.CaseFollowers.Any()) && (!string.IsNullOrEmpty(criteria.PersonEmail)))
                 {
-                    if (!string.IsNullOrEmpty(criteria.UserId)
-                        && currentCase.CaseFollowers.Where(m => m.Follower.Equals(SessionFacade.CurrentUserIdentity.Email, StringComparison.CurrentCultureIgnoreCase)).Any())
-                    { return true; }
-
-                    //if (!string.IsNullOrEmpty(criteria.UserEmployeeNumber)
-                    //    && currentCase.CaseFollowers.Where(m => m.Follower.Equals(criteria.UserEmployeeNumber, StringComparison.CurrentCultureIgnoreCase)).Any())
-                    //{ return true; }
+                    if (currentCase.CaseFollowers.Where(m => m.Follower.Equals(criteria.PersonEmail, StringComparison.CurrentCultureIgnoreCase)).Any())
+                    { 
+                        return true; 
+                    }
                 }
 
             }
@@ -1858,7 +1852,6 @@ namespace DH.Helpdesk.SelfService.Controllers
         private bool UserHasAccessToCase(CaseModel currentCase)
         {
             var curUser = SessionFacade.CurrentUserIdentity.UserId;
-            var userEmployeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
 
             //Hide this to next release #57742
             var caseType = _caseTypeService.GetCaseType(currentCase.CaseType_Id);
@@ -1868,12 +1861,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                 return false;
 
             var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();
+            //Get User Email from logged in user
+            var user = _computerService.GetComputerUserByUserID(curUser);
+            criteria.PersonEmail = user.Email;
 
-            // Only when it is microsoft authentication
-            if (ConfigurationService.AppSettings.LoginMode == LoginMode.Microsoft)
-            {
-                criteria.PersonEmail = criteria.UserId;
-            }
 
             /*User creator*/
             if (criteria.MyCasesRegistrator && !string.IsNullOrEmpty(criteria.UserId) && !string.IsNullOrEmpty(currentCase.RegUserId))
@@ -1895,7 +1886,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                     return true;
             }
 
-            // Only when it is microsoft authentication
+            // Compare with email
             if (criteria.MyCasesInitiator && !string.IsNullOrEmpty(currentCase.PersonsEmail) &&
                 !string.IsNullOrEmpty(criteria.PersonEmail))
             {
@@ -1909,16 +1900,17 @@ namespace DH.Helpdesk.SelfService.Controllers
             {
                 var caseFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(currentCase.Id);
 
-                if ((caseFollowers != null && caseFollowers.Any()) &&
-                (!string.IsNullOrEmpty(criteria.UserId) || !string.IsNullOrEmpty(criteria.UserEmployeeNumber)))
+                /*User follower*/
+                if (criteria.MyCasesFollower)
                 {
-                    if (!string.IsNullOrEmpty(criteria.UserId)
-                        && caseFollowers.Where(m => m.Follower.Equals(SessionFacade.CurrentUserIdentity.Email, StringComparison.CurrentCultureIgnoreCase)).Any())
-                    { return true; }
+                    if ((caseFollowers != null && caseFollowers.Any()) && (!string.IsNullOrEmpty(criteria.PersonEmail)))
+                    {
+                        if (caseFollowers.Where(m => m.Follower.Equals(criteria.PersonEmail, StringComparison.CurrentCultureIgnoreCase)).Any())
+                        {
+                            return true;
+                        }
+                    }
 
-                    //if (!string.IsNullOrEmpty(criteria.UserEmployeeNumber)
-                    //    && caseFollowers.Where(m => m.Follower.Equals(criteria.UserEmployeeNumber, StringComparison.CurrentCultureIgnoreCase)).Any())
-                    //{ return true; }
                 }
 
             }
