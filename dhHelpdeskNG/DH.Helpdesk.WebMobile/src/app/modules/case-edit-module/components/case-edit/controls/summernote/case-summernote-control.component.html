@@ -1,16 +1,12 @@
 <ng-container [formGroup]="form">
-    <div class="form-group">
-        <label class="control-label" [attr.for]="field">{{formControl.label}}{{ requiredSymbol }}</label>
-        <textarea #input [ngxSummernote] [formControlName]="field" [ngClass]="{ 'disabled': formControl.disabled }">{{ formControl.label }}{{ requiredSymbol }}</textarea>
-        <div *ngIf="form.controls[field].invalid && form.controls[field].touched" class="invalid-feedback">
-            <div *ngIf="form.controls[field].errors">{{getErrorMessage()}}</div>
-        </div>
+  <div class="form-group">
+    <label class="control-label" [attr.for]="field">{{formControl.label}}{{ requiredSymbol }}</label>
+    <textarea #input [ngxSummernote] [formControlName]="field"
+      [ngClass]="{ 'disabled': formControl.disabled }">{{ formControl.label }}{{ requiredSymbol }}</textarea>
+    <div *ngIf="form.controls[field].invalid && form.controls[field].touched" class="invalid-feedback">
+      <div *ngIf="form.controls[field].errors">{{getErrorMessage()}}</div>
+    </div>
 
-        </div>
-
-
-
-
-
+  </div>
 
 </ng-container>
