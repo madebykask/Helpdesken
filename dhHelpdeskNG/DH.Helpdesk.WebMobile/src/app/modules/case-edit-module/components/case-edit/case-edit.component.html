@@ -122,6 +122,9 @@
                       <case-xxx-control *ngIf="showField(caseFieldsNames.Mail2Ticket)" [field]="caseFieldsNames.Mail2Ticket" [form]="form"></case-xxx-control>
                       -->
                       <case-textarea-control *ngIf="showField(caseFieldsNames.Description)" [field]="caseFieldsNames.Description" [form]="form"></case-textarea-control>
+
+                      <case-summernote-control *ngIf="showField(caseFieldsNames.Description)" [field]="caseFieldsNames.Description" [form]="form"></case-summernote-control>
+
                       <!-- TODO:
                       <case-mailtoticket-control *ngIf="showField(caseFieldsNames.CaseRegistrationSource) && caseFieldsNames.CaseRegistrationSource.value === 3" [field]="caseFieldsNames.CaseRegistrationSource"></case-mailtoticket-control>
                       -->

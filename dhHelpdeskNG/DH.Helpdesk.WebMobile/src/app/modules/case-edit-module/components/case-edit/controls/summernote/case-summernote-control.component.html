@@ -1,0 +1,6 @@
+<ng-container [formGroup]="form">
+    <mbsc-textarea #input [formControlName]="field"
+      [error]="getErrorState()"
+      [errorMessage]="getErrorMessage()"
+      [ngClass]="{ 'disabled': formControl.disabled }">{{ formControl.label }}{{ requiredSymbol }}</mbsc-textarea> 
+</ng-container>

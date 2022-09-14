@@ -39,6 +39,7 @@ import { FilterExtDirective } from './directives/filter-ext.directive';
 import { LognoteEmailInputComponent } from './components/case-edit/controls/lognote-email-input/lognote-email-input.component';
 import { CaseMenuComponent } from './components/case-menu/case-menu.component';
 import { PinchZoomModule } from 'ngx-pinch-zoom';
+import { CaseSummernoteComponent } from './components/case-edit/controls/summernote/case-summernote-control.component';
 
 @NgModule({
   declarations: [ CaseEditComponent,
@@ -48,7 +49,7 @@ import { PinchZoomModule } from 'ngx-pinch-zoom';
     CaseActionContainerComponent, GeneralActionComponent, FieldChangeActionComponent, LogNoteActionComponent, ActionsFilterPipe,
     CaseLogInputComponent, LogFilesUploadComponent, FilePreviewComponent, PdfFileViewerComponent, CommonFileViewerComponent, ImageFileViewerComponent,
     TextFileViewerComponent, Pdf2FileViewerComponent, Pdf3FileViewerComponent, NotifierSearchComponent, MbscFormGroupExpandDirective,
-    FilterExtDirective, LognoteEmailInputComponent, CaseMenuComponent
+    FilterExtDirective, LognoteEmailInputComponent, CaseMenuComponent, CaseSummernoteComponent
 ],
   imports: [
     MbscModule,
