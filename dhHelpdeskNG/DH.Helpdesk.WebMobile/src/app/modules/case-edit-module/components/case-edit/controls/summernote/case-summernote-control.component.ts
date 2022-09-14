@@ -1,6 +1,5 @@
 import { Component, Input, ViewChild, ElementRef, Renderer2, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { BaseControl } from '../base-control';
-import { MbscTextarea } from '@mobiscroll/angular';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
@@ -9,7 +8,7 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
     styleUrls: ['./case-summernote-control.component.scss']
   })
   export class CaseSummernoteComponent extends BaseControl<string> implements OnInit, AfterViewInit, OnDestroy {
-    @ViewChild('input', { static: true }) control: MbscTextarea;
+    @ViewChild('input', { static: true }) control: HTMLTextAreaElement;
     @Input() disabled = false;
 
     constructor(private elem: ElementRef, private renderer: Renderer2) {
@@ -17,6 +16,10 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
     }
 
     ngOnInit(): void {
+
+      console.log("Mattias");
+      console.log(this.fieldName);
+
       this.init(this.fieldName);
       this.updateDisabledState();
 

@@ -41,6 +41,8 @@ import { CaseMenuComponent } from './components/case-menu/case-menu.component';
 import { PinchZoomModule } from 'ngx-pinch-zoom';
 import { CaseSummernoteComponent } from './components/case-edit/controls/summernote/case-summernote-control.component';
 
+import { NgxSummernoteModule } from 'ngx-summernote';
+
 @NgModule({
   declarations: [ CaseEditComponent,
     CaseTextboxComponent, CaseDateComponent, CaseDropdownComponent,  CaseMultiDropdownComponent,
@@ -60,7 +62,8 @@ import { CaseSummernoteComponent } from './components/case-edit/controls/summern
     FileUploadModule, // todo: check if required?
     PdfViewerModule, // todo: replace with different approach?
     CaseEditRoutingModule,
-    PinchZoomModule
+    PinchZoomModule,
+    NgxSummernoteModule
   ],
   entryComponents: [FieldChangeActionComponent, LogNoteActionComponent, GeneralActionComponent],
   exports: [],

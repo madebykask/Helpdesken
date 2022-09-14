@@ -1,6 +1,16 @@
 <ng-container [formGroup]="form">
-    <mbsc-textarea #input [formControlName]="field"
-      [error]="getErrorState()"
-      [errorMessage]="getErrorMessage()"
-      [ngClass]="{ 'disabled': formControl.disabled }">{{ formControl.label }}{{ requiredSymbol }}</mbsc-textarea> 
+    <div class="form-group">
+        <label class="control-label" [attr.for]="field">{{formControl.label}}{{ requiredSymbol }}</label>
+        <textarea #input [ngxSummernote] [formControlName]="field" [ngClass]="{ 'disabled': formControl.disabled }">{{ formControl.label }}{{ requiredSymbol }}</textarea>
+        <div *ngIf="form.controls[field].invalid && form.controls[field].touched" class="invalid-feedback">
+            <div *ngIf="form.controls[field].errors">{{getErrorMessage()}}</div>
+        </div>
+
+        </div>
+
+
+
+
+
+
 </ng-container>
