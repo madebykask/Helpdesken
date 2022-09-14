@@ -837,11 +837,8 @@ Public Class CaseData
         Dim sSQL As String = ""
 
         Try
-            Dim s As String
-            s = Now
 
-            sSQL = "UPDATE tblCase SET ChangeTime = '" & Now & "', Status=0 WHERE Id=" & CaseId & ""
-
+            sSQL = "UPDATE tblCase SET ChangeTime = '" & Now.ToUniversalTime & "', Status=0 WHERE Id=" & CaseId & ""
 
             executeSQL(gsConnectionString, sSQL)
 
