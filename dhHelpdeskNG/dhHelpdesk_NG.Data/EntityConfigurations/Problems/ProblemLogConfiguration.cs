@@ -35,7 +35,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Problems
             this.Property(x => x.FinishingCause_Id).IsOptional();
             this.Property(x => x.FinishingDate).IsOptional();
 
-            this.Property(x => x.ProblemLogGUID).IsRequired();
+            this.Property(x => x.ProblemLogGUID).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.ShowOnCase).IsRequired();
             this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
