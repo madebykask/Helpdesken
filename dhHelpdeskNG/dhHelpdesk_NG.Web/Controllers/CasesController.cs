@@ -3251,7 +3251,7 @@ namespace DH.Helpdesk.Web.Controllers
                 caseLog.CaseId = mergeCase.Id;
                 caseLog.UserId = SessionFacade.CurrentUser.Id;
                 caseLog.LogGuid = Guid.NewGuid();
-                caseLog.TextInternal = mergedFinishingCause.Name;
+                caseLog.TextInternal = Translation.GetCoreTextTranslation(mergedFinishingCause.Name);
 
 
 
