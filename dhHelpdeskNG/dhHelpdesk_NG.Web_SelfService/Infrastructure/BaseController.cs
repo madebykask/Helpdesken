@@ -576,7 +576,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 LastName = initiator?.LastName,
                 EmployeeNumber = employeeNum,
                 Phone = initiator?.Phone,
-                Email = initiator?.Email ?? mailAddress
+                Email = mailAddress ?? initiator?.Email,
             };
 
             return userIdentity;

@@ -76,7 +76,8 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
                 MyCasesInitiatorDepartmentId = showOnExtPageDepartmentCases ? initiator.Department_Id : null,
                 UserId = curUser,
                 UserEmployeeNumber = userEmployeeNumber,
-                GroupMember = new List<string>()
+                GroupMember = new List<string>(),
+                PersonEmail = SessionFacade.CurrentUserIdentity.Email,
             };
 
             if (criteria.MyCasesUserGroup)
@@ -228,14 +229,7 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
                 RegUserId = currentUser,
                 CaseOverviewCriteria = GetCaseOverviewCriteria()
             };
-            if (loginMode == LoginMode.Microsoft)
-            {
-                searchFilter.CaseOverviewCriteria.PersonEmail = currentUser;
-            }
-            if (loginMode == LoginMode.Windows)
-            {
-                searchFilter.CaseOverviewCriteria.PersonEmail = SessionFacade.CurrentUserIdentity.Email;
-            }
+
 
             CaseRemainingTimeData remainingTimeData;
             CaseAggregateData aggregateData;
