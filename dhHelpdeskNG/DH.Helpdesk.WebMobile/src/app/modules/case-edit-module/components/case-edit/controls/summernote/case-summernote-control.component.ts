@@ -17,9 +17,6 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
 
     ngOnInit(): void {
 
-      console.log("Mattias");
-      console.log(this.fieldName);
-
       this.init(this.fieldName);
       this.updateDisabledState();
 
@@ -53,5 +50,18 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
             this.updateDisabledState();
           }
         });
+    }
+
+    summerNoteConfig = {
+      height: '200px',
+      toolbar: [
+          ['misc', ['undo', 'redo']],
+          ['style', ['bold', 'italic', 'underline', 'clear']],
+          ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+          ['fontsize', ['fontname', 'fontsize', 'color']],
+          ['para', ['style', 'ul', 'ol', 'paragraph', 'height']]
+      ],
+      fontNames: ['Helvetica', 'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Roboto', 'Times'],
+      airMode: false,
     }
   }
