@@ -418,6 +418,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 columns.Add("tblCase.CostCentre");
                 columns.Add("tblCase.PlanDate");
                 columns.Add("tblProject.Name as Project");
+                columns.Add("tblCaseExtraFollowers.Follower as Follower");
 
                 if (customerSettings != null)
                 {
@@ -728,6 +729,7 @@ namespace DH.Helpdesk.Dal.Repositories
             tables.Add("left outer join tblUsers as tblUsers3 on tblCase.CaseResponsibleUser_Id = tblUsers3.Id ");
             tables.Add("left outer join tblProblem on tblCase.Problem_Id = tblProblem.Id ");
             tables.Add("left outer join tblUsers as tblUsers4 on tblProblem.ResponsibleUser_Id = tblUsers4.Id ");
+            tables.Add("left outer join tblcaseextrafollowers on  tblcaseextrafollowers.Case_Id = tblCase.Id ");
 
             if (caseSettings.ContainsKey(GlobalEnums.TranslationCaseFields.CausingPart.ToString()))
             {
@@ -772,9 +774,9 @@ namespace DH.Helpdesk.Dal.Repositories
                 var con = $"tblCase.[RegUserId] = '{criteria.UserId.SafeForSqlInject()}'";
                 criteriaCondition = criteriaCondition.AddWithSeparator($"({con})", false, " or ");
             }
-            if (criteria.MyCasesFollower && !string.IsNullOrEmpty(criteria.UserId))
+            if ((criteria.MyCasesFollower && !string.IsNullOrEmpty(criteria.UserId)) || (criteria.MyCasesFollower && !string.IsNullOrEmpty(criteria.PersonEmail)))
             {
-                var con = $"(exists (select 1 from tblComputerUsers join tblCaseExtraFollowers on tblComputerUsers.Email = tblCaseExtraFollowers.Follower and tblCaseExtraFollowers.Follower = (Select Email from tblComputerUsers where UserId = '{criteria.UserId.SafeForSqlInject()}') and tblCaseExtraFollowers.Case_Id = tblCase.Id))";
+                var con = $"tblcaseextrafollowers.Follower = '{criteria.UserId.SafeForSqlInject()}' or tblcaseextrafollowers.Follower = '{criteria.PersonEmail.SafeForSqlInject()}'";
                 criteriaCondition = criteriaCondition.AddWithSeparator($"({con})", false, " or ");
             }
 
@@ -826,7 +828,8 @@ namespace DH.Helpdesk.Dal.Repositories
             if (!criteria.MyCasesRegistrator && 
                 !criteria.MyCasesInitiator && 
                 !criteria.MyCasesUserGroup && 
-                !criteria.MyCasesInitiatorDepartmentId.HasValue)
+                !criteria.MyCasesInitiatorDepartmentId.HasValue &&
+                !criteria.MyCasesFollower)
                 sb.Append(" AND ( 1=2 )");
 
             // arende progress - iShow i gammal helpdesk

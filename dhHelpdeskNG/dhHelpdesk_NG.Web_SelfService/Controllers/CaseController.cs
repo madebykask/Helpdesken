@@ -1760,7 +1760,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private bool UserHasAccessToCase(Case currentCase)
         {
             var curUser = SessionFacade.CurrentUserIdentity.UserId;
-           
+            
 
             //Hide this to next release #57742
             if (currentCase.CaseType.ShowOnExtPageCases == 0 || (currentCase.ProductArea != null && currentCase.ProductArea.ShowOnExtPageCases == 0))
@@ -1771,8 +1771,14 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();
             //Get User Email from logged in user
-            var user = _computerService.GetComputerUserByUserID(curUser);
-            criteria.PersonEmail = user.Email;
+            if (ConfigurationService.AppSettings.LoginMode == LoginMode.Microsoft)
+            {
+                criteria.PersonEmail = curUser;
+            }
+            if (ConfigurationService.AppSettings.LoginMode == LoginMode.Windows)
+            {
+                criteria.PersonEmail = SessionFacade.CurrentUserIdentity.Email;
+            }
 
 
             /*User creator*/

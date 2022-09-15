@@ -232,6 +232,10 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
             {
                 searchFilter.CaseOverviewCriteria.PersonEmail = currentUser;
             }
+            if (loginMode == LoginMode.Windows)
+            {
+                searchFilter.CaseOverviewCriteria.PersonEmail = SessionFacade.CurrentUserIdentity.Email;
+            }
 
             CaseRemainingTimeData remainingTimeData;
             CaseAggregateData aggregateData;
