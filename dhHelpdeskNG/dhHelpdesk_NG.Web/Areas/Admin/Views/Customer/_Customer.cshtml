@@ -230,6 +230,14 @@
             </td>
         </tr>
         <tr>
+            <td>
+                @Translation.Get("Informera HandläggareX som standard")?
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.Customer.CommunicateWithPerformer, Model.CWPSelect)
+            </td>
+        </tr>
+        <tr>
             <td class="span3">
                 @Translation.Get("Helpdesk e-post")
             </td>

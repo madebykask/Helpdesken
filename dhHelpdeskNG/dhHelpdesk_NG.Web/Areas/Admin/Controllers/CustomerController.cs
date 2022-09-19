@@ -357,6 +357,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             customerToSave.OrderPermission = this.returnOrderPermissionForSave(id, vmodel);
             customerToSave.CommunicateWithNotifier = vmodel.Customer.CommunicateWithNotifier;
+            customerToSave.CommunicateWithPerformer = vmodel.Customer.CommunicateWithPerformer;
             customerToSave.Status = vmodel.Active ? 1 : 0;
 
             var b = this.TryUpdateModel(customerToSave, "customer");
@@ -518,6 +519,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 MinimumPasswordLength = sl,
                 PasswordHistory = sli,
                 CWNSelect = cn,
+                CWPSelect = cn,
                 Regions = this._regionService.GetRegions(customer.Id),
                 Setting = settings,
                 Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem

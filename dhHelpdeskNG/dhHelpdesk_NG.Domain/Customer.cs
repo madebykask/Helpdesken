@@ -51,6 +51,7 @@
         public DateTime RegTime { get; set; }
         public Guid CustomerGUID { get; set; }
         public int CommunicateWithNotifier { get; set; }
+        public int CommunicateWithPerformer { get; set; }
         public int ShowDocumentsOnExternalPage { get; set; }
         public int? ShowFAQOnExternalStartPage { get; set; }
         public int ShowCoWorkersOnExternalPage { get; set; }
