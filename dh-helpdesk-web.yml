@@ -116,9 +116,9 @@ steps:
   displayName: Build DH.Helpdesk.EmailEngine.WinService
   inputs:
     msbuildVersion: '17.0'  
-    solution: '**/dhHelpdeskNG/DH.Helpdesk.SCCM/DH.Helpdesk.SCCM.csproj'
-    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.SCCM"'
-
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.EmailEngine.WinService/DH.Helpdesk.EmailEngine.WinService.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.EmailEngine.WinService"'
+    
 - task: MSBuild@1
   displayName: Build DH.Helpdesk.SCCM
   inputs:
