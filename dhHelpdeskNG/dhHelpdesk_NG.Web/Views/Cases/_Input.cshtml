@@ -43,14 +43,26 @@
                         </a>
                     }
                 </li>
-                @if (Model.IsItParentCase())
+                @if (Model.ChildCaseViewModel != null)
                 {
-                    <li id="childCaseTabContainer">
-                        <a href="#childcases-tab" title="@string.Format("{0}/{1} {2}", Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Count, Translation.GetCoreTextTranslation("avslutade").ToLower())">
-                            @string.Format("{0} ({1}/{2} {3})", Translation.GetCoreTextTranslation("Underärenden"), Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Count, Translation.GetCoreTextTranslation("avslutade").ToLower())
-                        </a>
-                    </li>
+                    if (Model.ChildCaseViewModel.MergedChildList != null && Model.ChildCaseViewModel.MergedChildList.Count > 0)
+                    {
+                        <li id="mergedCaseTabContainer">
+                            <a href="#mergedcases-tab" title="@Translation.GetCoreTextTranslation("Sammanfogade ärenden")">
+                                @string.Format("{0} ({1})", Translation.GetCoreTextTranslation("Sammanfogade ärenden"), Model.ChildCaseViewModel.MergedChildList.Count)
+                            </a>
+                        </li>
+                    }
+                    if (Model.ChildCaseViewModel.ChildCaseList != null && Model.ChildCaseViewModel.ChildCaseList.Count > 0)
+                    {
+                        <li id="childCaseTabContainer">
+                            <a href="#childcases-tab" title="@string.Format("{0}/{1} {2}", Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Count, Translation.GetCoreTextTranslation("avslutade").ToLower())">
+                                @string.Format("{0} ({1}/{2} {3})", Translation.GetCoreTextTranslation("Underärenden"), Model.ClosedChildCasesCount, Model.ChildCaseViewModel.ChildCaseList.Count, Translation.GetCoreTextTranslation("avslutade").ToLower())
+                            </a>
+                        </li>
+                    }
                 }
+
 
                 @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
                 {
@@ -207,7 +219,7 @@
                         @Html.Hidden("CaseRelationType", Model.CaseRelationType())
 
                         @*<input type="button" id="sla_test" value="SLA Test" onclick="CalcSLA();" />*@
-                        @if (Model.IsItChildCase())
+                        @if (Model.IsItChildCase() && !Model.IsItMergedChild())
                         {
                             <input type="hidden" name="ParentId" value="@Model.ParentCaseInfo.ParentId" />
                             <div class="alert alert-info">
@@ -220,6 +232,19 @@
                                 <br />
                                 @Translation.GetCoreTextTranslation("Fristående underärende")&nbsp;
                                 @Html.CheckBoxFor(model => Model.IndependentChild)
+                            </div>
+                        }
+                        else if (Model.IsItMergedChild())
+                        {
+                            <input type="hidden" name="ParentId" value="@Model.MergedParentInfo.ParentId" />
+                            <div class="alert alert-info">
+                                @Translation.GetCoreTextTranslation("Detta ärende är sammanfogat till")&nbsp;<a href="@Url.Action("Edit", new { id = Model.MergedParentInfo.ParentId })"><strong>@Model.MergedParentInfo.CaseNumber</strong></a>.
+                                @if (!string.IsNullOrEmpty(Model.MergedParentInfo.Administrator.ToString()))
+                                {
+                                    @Translation.GetForCase(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Model.case_.Customer_Id)
+                                    <strong>@Model.MergedParentInfo.Administrator</strong>
+                                }
+                                <br />
                             </div>
                         }
 
@@ -260,11 +285,11 @@
                                                     @Html.Hidden("ShowReportedBy", Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage)
                                                     @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber))
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", data_field = "userId", onblur = "EditPage.prototype.getLanguage()" })
+                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "200", autocomplete = "Off", data_field = "userId", onblur = "EditPage.prototype.getLanguage()" })
                                                     }
                                                     else
                                                     {
-                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "40", autocomplete = "Off", @readonly = true, data_field = "userId", onblur = "EditPage.prototype.getLanguage()" })
+                                                        @Html.TextBoxFor(model => model.case_.ReportedBy, new { maxlength = "200", autocomplete = "Off", @readonly = true, data_field = "userId", onblur = "EditPage.prototype.getLanguage()" })
                                                     }
                                                 </td>
                                                 <td>
@@ -339,10 +364,9 @@
                                                 </td>
                                                 <td style="@Model.GetFieldStyle(CaseSolutionFields.Email)">
                                                     <div>
-                                                        @*<label class="checkbox">*@
                                                         @if (!Model.IsReadOnly(CaseSolutionFields.Email))
                                                         {
-                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier)
+                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @onclick = "setSessionVariable()" })
                                                         }
                                                         else
                                                         {
@@ -555,10 +579,10 @@
                                                 <td colspan="2">
                                                     <div id="extendedSection-Initiator" style="display:none">
                                                         <!--<h4>
-                                        <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
-                                        <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
-                                        Vendor details <!-- TODO: Bind on category name and translation
-                                    </h4>-->
+                                                <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
+                                                <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                                                Vendor details <!-- TODO: Bind on category name and translation
+                                            </h4>-->
 
                                                         <input type="hidden" id="ExtendedInitiatorGUID" name="ExtendedInitiatorGUID" value="@(Model.ExtendedCaseSections.ContainsKey(CaseSectionType.Initiator) ? Model.ExtendedCaseSections[CaseSectionType.Initiator].ExtendedCaseGuid.ToString() : "")" />
                                                         <iframe id="extendedSection-iframe-Initiator" src="" frameborder="0" scrolling="no" style="width:500px; height:180px; margin-top: 10px"></iframe>
@@ -850,10 +874,10 @@
                                             <td colspan="2">
                                                 <div id="extendedSection-Regarding" style="display:none">
                                                     <!--<h4>
-                                    <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
-                                    <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
-                                    Vendor details <!-- TODO: Bind on category name and translation
-                                </h4>-->
+                                            <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
+                                            <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                                            Vendor details <!-- TODO: Bind on category name and translation
+                                        </h4>-->
 
                                                     <input type="hidden" id="ExtendedRegardingGUID" name="ExtendedRegardingGUID" value="@(Model.ExtendedCaseSections.ContainsKey(CaseSectionType.Regarding) ? Model.ExtendedCaseSections[CaseSectionType.Regarding].ExtendedCaseGuid.ToString() : "")" />
                                                     <iframe id="extendedSection-iframe-Regarding" src="" style="width:500px; height:180px; margin-top:10px" frameborder="0" scrolling="no"></iframe>
@@ -1565,7 +1589,7 @@
                                                             </td>
                                                         }
                                                     </tr>
-                                                    <tr> 
+                                                    <tr>
                                                         <td id="costValidationMessage" colspan="3"></td>
                                                     </tr>
                                                 </table>
@@ -2144,7 +2168,7 @@
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ClosingReason, "Avslutsorsak")
                                                 </td>
                                                 <td>
-                                                    @Model.FinishingCause
+                                                    @Translation.GetCoreTextTranslation(@Model.FinishingCause)
                                                 </td>
                                                 <td></td>
                                             </tr>
@@ -2163,7 +2187,7 @@
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription, "Avslutsbeskrivning")
                                                 </td>
                                                 <td>
-                                                    @Model.case_.FinishingDescription
+                                                    @Translation.GetCoreTextTranslation(@Model.case_.FinishingDescription)
                                                 </td>
                                                 <td></td>
                                             </tr>
@@ -2190,11 +2214,11 @@
                                         <div class="span7">
                                             <table class="tableform" id="externalInvoices">
                                                 <thead>
-                                                <tr>
-                                                    <th class="span3">@Translation.GetCoreTextTranslation("Fakturanummer")</th>
-                                                    <th class="span1">@Translation.GetCoreTextTranslation("Fakturapris")</th>
-                                                    <th class="span8"></th>
-                                                </tr>
+                                                    <tr>
+                                                        <th class="span3">@Translation.GetCoreTextTranslation("Fakturanummer")</th>
+                                                        <th class="span1">@Translation.GetCoreTextTranslation("Fakturapris")</th>
+                                                        <th class="span8"></th>
+                                                    </tr>
                                                 </thead>
                                                 @{
                                                     var readonlyExternalInvoices = Model.ExternalInvoices.Where(x => x.InvoiceRow != null
@@ -2347,7 +2371,10 @@
                 {
                     @Html.Partial("_ChildCases", Model.ChildCaseViewModel);
                 }
-
+                @if(Model.IsItMergedParent())
+                {
+                    @Html.Partial("_MergedCases", Model.ChildCaseViewModel);
+                }
                 @if (Model.Setting.AttachmentPlacement == 1)
                 {
                     <div id="attachment-container" class="tab-pane tab-pane-border">
@@ -2436,5 +2463,19 @@
 
         var scope = dhHelpdesk.cases.scope(window.parameters.casesScopeInitParameters);
     });
+    $("#case__PersonsEmail").on("change", function (e) {
+        var email = $("#case__PersonsEmail").val();
+        $("#emailsTo").text(email);
+        e.preventDefault();
+    });
+    function setSessionVariable() {
+        var sendEmail = document.getElementById('CaseMailSetting_DontSendMailToNotifier');
+        if (sendEmail.checked) {
+            $("#dontSendMailToNotifier").val('false');
+        } else {
+            $("#dontSendMailToNotifier").val('true');
+        }
+        e.preventDefault();
+    }
 </script>
 

@@ -663,8 +663,11 @@ namespace DH.Helpdesk.Dal.Repositories
         private string GetParentChildInfo(string nestedTableAlias)
         {
             var columns = new List<string>();
-            columns.Add($"(select count(Ancestor_Id)  from tblParentChildCaseRelations where  Ancestor_Id = {nestedTableAlias}.Id) as IsParent");
-            columns.Add($"(select Top 1 (Ancestor_Id)  from tblParentChildCaseRelations where  Descendant_Id = {nestedTableAlias}.Id) as ParentCaseId");
+
+            columns.Add($"(select count(Ancestor_Id)  from tblParentChildCaseRelations where Ancestor_Id = {nestedTableAlias}.Id) as IsParent");
+            columns.Add($"(select Top 1 (Ancestor_Id)  from tblParentChildCaseRelations where Descendant_Id = {nestedTableAlias}.Id) as ParentCaseId");
+            columns.Add($"(select count(MergedParent_Id)  from tblMergedCases where MergedParent_Id = {nestedTableAlias}.Id) as IsMergeParent");
+            columns.Add($"(select count(MergedChild_Id)  from tblMergedCases where MergedChild_Id = {nestedTableAlias}.Id) as IsMergeChild");
             return string.Join(",", columns);
         }
 
@@ -769,6 +772,11 @@ namespace DH.Helpdesk.Dal.Repositories
                 var con = $"tblCase.[RegUserId] = '{criteria.UserId.SafeForSqlInject()}'";
                 criteriaCondition = criteriaCondition.AddWithSeparator($"({con})", false, " or ");
             }
+            if ((criteria.MyCasesFollower && !string.IsNullOrEmpty(criteria.UserId)) || (criteria.MyCasesFollower && !string.IsNullOrEmpty(criteria.PersonEmail)))
+            {
+                var con = $"(exists (select 1 Follower from tblCaseExtraFollowers where (tblCaseExtraFollowers.Follower = '{criteria.UserId.SafeForSqlInject()}' or  tblcaseextrafollowers.Follower = '{criteria.PersonEmail.SafeForSqlInject()}') and tblCaseExtraFollowers.Case_Id = tblCase.Id))";
+                criteriaCondition = criteriaCondition.AddWithSeparator($"({con})", false, " or ");
+            }
 
             if (criteria.MyCasesInitiator && (!string.IsNullOrEmpty(criteria.UserId) || !string.IsNullOrEmpty(criteria.UserEmployeeNumber)))
             {
@@ -818,7 +826,8 @@ namespace DH.Helpdesk.Dal.Repositories
             if (!criteria.MyCasesRegistrator && 
                 !criteria.MyCasesInitiator && 
                 !criteria.MyCasesUserGroup && 
-                !criteria.MyCasesInitiatorDepartmentId.HasValue)
+                !criteria.MyCasesInitiatorDepartmentId.HasValue &&
+                !criteria.MyCasesFollower)
                 sb.Append(" AND ( 1=2 )");
 
             // arende progress - iShow i gammal helpdesk
@@ -935,7 +944,8 @@ namespace DH.Helpdesk.Dal.Repositories
             sb.Append(" where (tblCase.Customer_Id = " + searchFilter.CustomerId + ")");
             sb.Append(" and (tblCase.Deleted = 0)");
 
-            if (searchFilter.IsConnectToParent)
+
+            if (searchFilter.IsConnectToParent && searchFilter.ToBeMerged == false)
             {
                 sb.AppendFormat(" AND tblCase.Id NOT IN (select Descendant_Id From tblParentChildCaseRelations) ");
                 if (searchFilter.CurrentCaseId.HasValue)

@@ -212,6 +212,7 @@
     <Compile Include="EntityConfigurations\Orders\OrderLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\Orders\OrderPropertyConfiguration.cs" />
     <Compile Include="EntityConfigurations\ADFS\SSOLogConfiguration.cs" />
+    <Compile Include="EntityConfigurations\MergedCasesConfiguration.cs" />
     <Compile Include="EntityConfigurations\ParentChildCaseRelationConfiguration.cs" />
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireCircularCaseTypeConfiguration.cs" />
     <Compile Include="EntityConfigurations\Questionnaire\QuestionnaireCircularDepartmentConfiguration.cs" />

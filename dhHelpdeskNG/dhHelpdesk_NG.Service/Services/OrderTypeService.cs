@@ -27,9 +27,12 @@
     public class OrderTypeService : IOrderTypeService
     {
         private readonly IOrderTypeRepository _orderTypeRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly IOrderFieldSettingsRepository _orderFieldSettingsRepository;
 
+#pragma warning disable 0618
         public OrderTypeService(
             IOrderTypeRepository orderTypeRepository,
             IOrderFieldSettingsRepository orderFieldSettingsRepository,
@@ -39,6 +42,7 @@
             this._unitOfWork = unitOfWork;
             this._orderFieldSettingsRepository = orderFieldSettingsRepository;
         }
+#pragma warning restore 0618
 
         public IList<OrderType> GetOrderTypesForMailTemplate(int customerId)
         {
@@ -88,7 +92,7 @@
 
                     return DeleteMessage.Success;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return DeleteMessage.UnExpectedError;
                 }

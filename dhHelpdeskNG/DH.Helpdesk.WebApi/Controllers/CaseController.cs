@@ -60,10 +60,8 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <summary>
         /// Get case data.
         /// </summary>
-        /// <param name="input"></param>
         /// <param name="langId"></param>
         /// <param name="caseId"></param>
-        /// <param name="cid"></param>
         /// <param name="sessionId"></param>
         /// <returns></returns>
         [HttpGet]
@@ -143,6 +141,8 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             model.ChildCasesIds = _caseService.GetChildCasesFor(caseId).Select(c => c.Id).ToList();
             model.ParentCaseId = _caseService.GetParentInfo(caseId)?.ParentId;
+
+            //Todo - Check for merged cases
 
             _caseService.MarkAsRead(caseId);
 

@@ -29,7 +29,11 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
         {
             Bind<IWorkContext>().To<WorkContext>().InRequestScope();
             Bind<IUserContext>().To<UserContext>().InRequestScope();
+
+#pragma warning disable 0618
             Bind<ICacheContext>().To<CacheContext>().InRequestScope();
+
+#pragma warning restore 0618
             Bind<ICustomerContext>().To<CustomerContext>().InRequestScope();
             Bind<ISessionContext>().To<SessionContext>().InRequestScope();
             Bind<IApplicationContext>().To<ApplicationContext>().InRequestScope();

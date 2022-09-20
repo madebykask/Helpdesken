@@ -124,7 +124,7 @@
                         }
                     </td>
                     <td>
-                        <div class="checkbox commun">
+                        <div class="checkbox commun case-external-email">
                             @if (Model.Disable_SendMailAboutCaseToNotifier || Model.EditMode == AccessMode.ReadOnly)
                             {
                                 @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
@@ -136,10 +136,10 @@
                                     new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
                             }
                             <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span><br />
-                            @*<span id="emailsToTitle" style="display: none;">
-                                @Translation.ToTitleCase(@Translation.GetCoreTextTranslation("Till")): </span><span id="emailsTo" style="display: none;">@Html.DisplayFor(model => model.case_.PersonsEmail)</span><br />
-
-                                <span id="ccTitle" style="display: none;">@Translation.GetCoreTextTranslation("Kopia"): </span><span id="extraEmailsInputShow" style="overflow-wrap: break-word"></span>*@
+                            <span id="emailsToTitle" style="display: none;">
+                                @Translation.ToTitleCase(@Translation.GetCoreTextTranslation("Till")):
+                            </span><span id="emailsTo" style="display: none;"></span><br />
+                            <span id="ccTitle" style="display: none;">@Translation.GetCoreTextTranslation("Kopia"): </span><span id="extraEmailsInputShow" style="overflow-wrap: break-word"></span>
                         </div>
                         @Html.HiddenFor(model => model.CaseLog.RegUser)
                         @Html.HiddenFor(model => model.CaseLog.LogType)
@@ -517,10 +517,10 @@ Model.EnableTwoAttachments))
 
                             }
                         </td>
-
+                        
                         <td></td>
                     </tr>
-                    <tr>
+                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Charge, CaseSolutionFields.Charge)">
                         <td>
                             @Translation.Get("Debitering", SessionFacade.CurrentCaseLanguageId)
                         </td>
@@ -621,7 +621,10 @@ Model.EnableTwoAttachments))
             ", #" + "@Html.IdFor(x => x.CaseLog.OvertimeHour)" +
             ", #" + "@Html.IdFor(x => x.CaseLog.OvertimeMinute)"
             , function () {
-                $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+                if ('@Model.IsCaseFieldVisible(GlobalEnums.TranslationCaseFields.tblLog_Charge, CaseSolutionFields.Charge)' == 'True') {
+                    $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+                }
+
             });
 
     $(document)
@@ -632,7 +635,10 @@ Model.EnableTwoAttachments))
             , function () {
                 var val = $(this).val();
                 if (val && val !== "0")
-                    $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+                    if ('@Model.IsCaseFieldVisible(GlobalEnums.TranslationCaseFields.tblLog_Charge, CaseSolutionFields.Charge)' == 'True') {
+                        $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+                    }
+
             });
 
     $(document)
@@ -640,8 +646,13 @@ Model.EnableTwoAttachments))
             , "[id^='ExternalInvoices['][id$='].Name']"
             , function () {
                 var val = $(this).val();
-                if (val)
-                    $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+                if (val) {
+                    if ('@Model.IsCaseFieldVisible(GlobalEnums.TranslationCaseFields.tblLog_Charge, CaseSolutionFields.Charge)' == 'True') {
+                        $("#" + "@Html.IdFor(x => x.CaseLog.Charge)").attr("checked", "checked");
+                    }
+
+                }
+
             });
 
 
@@ -665,6 +676,7 @@ Model.EnableTwoAttachments))
         e.preventDefault();
         $(this).parents(".section-block").removeClass("hideshow");
     });
+    //casePersonsEmail
 
     $("#Performer_Id").on("change", async function (e) {
 
@@ -710,7 +722,7 @@ Model.EnableTwoAttachments))
     });
 
     $(document).ready(function () {
-        
+
         let performerId = $("#Performer_Id").val();
 
         let isInvalidPerformer = (performerId == @SessionFacade.CurrentUser.Id || performerId == "");

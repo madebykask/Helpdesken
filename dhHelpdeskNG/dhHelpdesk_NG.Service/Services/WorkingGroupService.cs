@@ -68,12 +68,15 @@ namespace DH.Helpdesk.Services.Services
 
     public partial class WorkingGroupService : IWorkingGroupService
     {
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly IWorkingGroupRepository _workingGroupRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUserWorkingGroupRepository _userWorkingGroupRepository;
         private readonly ISettingService _settingService;
 
+#pragma warning disable 0618
         public WorkingGroupService(
             IUnitOfWork unitOfWork,
             IUserRepository userRepository,
@@ -87,6 +90,7 @@ namespace DH.Helpdesk.Services.Services
             this._userWorkingGroupRepository = userWorkingGroupRepository;
             this._settingService = settingService;
         }
+#pragma warning restore 0618
 
         public IList<WorkingGroupEntity> GetAllWorkingGroups()
         {

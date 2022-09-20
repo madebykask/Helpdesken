@@ -22,8 +22,12 @@ namespace DH.Helpdesk.Services.Services
     public class AccountFieldSettingsService : IAccountFieldSettingsService
     {
         private readonly IAccountFieldSettingsRepository _accountFieldSettingsRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+
+#pragma warning disable 0618
         public AccountFieldSettingsService(
             IAccountFieldSettingsRepository accountFieldSettingsRepository,
             IUnitOfWork unitOfWork)
@@ -31,6 +35,7 @@ namespace DH.Helpdesk.Services.Services
             this._accountFieldSettingsRepository = accountFieldSettingsRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<AccountFieldSettings> GetAccountFieldSettings(int customerId, int? accountactivityId)
         {

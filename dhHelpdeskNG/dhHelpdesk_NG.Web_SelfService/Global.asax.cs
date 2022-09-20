@@ -27,7 +27,6 @@ namespace DH.Helpdesk.SelfService
 
 	public class MvcApplication : System.Web.HttpApplication
     {
-        private static ILog _logger;
         const string SessionIdKey = "_sessionId";
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)

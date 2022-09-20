@@ -1,6 +1,6 @@
 ﻿import { IMap } from '../shared/common-types'
 import { ProxyModel } from './proxy.model'
-import { ValidateOn } from '../shared/validation-types';
+import { Trigger, ValidateOn } from '../shared/validation-types';
 
 export type CustomDataSourceTypes = CustomStaticDataSourceTemplateModel | CustomQueryDataSourceTemplateModel;
 export type ControlDataSourceTemplateModelTypes = DataSourceItemTemplateModel[] | OptionsDataSourceTemplateModel |
@@ -179,6 +179,7 @@ export class TemplateValidator {
     value?: any;
     validationMode: ValidateOn;
     emptyValues: Array<string>;
+    trigger: Trigger
 
     constructor(options: {
         type: string,
@@ -187,6 +188,7 @@ export class TemplateValidator {
         valid?: (proxyModel: ProxyModel) => boolean,
         value?: any,
         validationMode?: ValidateOn;
+        trigger?: Trigger;
     }) {
         this.type = options.type;
         this.message = options.message;
@@ -194,6 +196,7 @@ export class TemplateValidator {
         this.valid = options.valid;
         this.value = options.value;
         this.validationMode = options.validationMode || ValidateOn.OnSave;
+        this.trigger = options.trigger;
     }
 }
 

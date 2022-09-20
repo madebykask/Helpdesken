@@ -9,6 +9,8 @@ var GRID_STATE = {
 
 var statisticsExpandHiddenElm = '#hidExpandedGroup';
 var groupStatisticsCaptionPrefix = '#Caption_';
+var indexLogic = document.createElement('input');
+indexLogic.setAttribute("type", "hidden");
 
 function saveExpanded(id) {
     var curExpanded = $(statisticsExpandHiddenElm).val();
@@ -81,6 +83,10 @@ function getCollapseCaption(cap) {
             }, 5000);
         }
 
+        indexLogic.addEventListener('change', (event) => {
+            self.autoReloadCaseResultList();
+        }, false);
+
         //// Bind elements
         self.$table = $("#caseResults");
         //self.$tableHeader = $('table.table-cases thead');
@@ -122,7 +128,7 @@ function getCollapseCaption(cap) {
         self.gridSettings = appSettings.gridSettings;
 
         self.$table.addClass(appSettings.gridSettings.cls);
-
+        
         var columns = self.getColumnSettings(appSettings.gridSettings);
 
         var sortIndex = null;
@@ -193,12 +199,16 @@ function getCollapseCaption(cap) {
                             html.push('<img class="img-case-locked" title="', data.caseLockedIconTitle, '" alt="', data.caseLockedIconTitle, '" src="', data.caseLockedIconUrl, '" />');
                         }
                         html.push('</a>');
-
                         row.cells[0].innerHTML = html.join("");
+
+                        let caseNotAccessible = (data.isClosed == true || data.isCaseLocked == true || data.isNotMemberOfGroup == true);
+
+                        html = [];
+                        html.push('<input type="checkbox" class="bulkEditCaseSelect' + (caseNotAccessible ? 'Disabled' : '') + '" onclick="onClick_cbxBulkEditCaseSelect()" ' + (caseNotAccessible ? 'disabled' : '') + ' id="cbxBulkEditSelectCaseId_' + data.case_id + '" data-caseid="' + data.case_id + '" data-caseno="' + data.CaseNumber + '" data-casecaption="' + data.case_caption + '" />');
+                        row.cells[1].innerHTML = html.join("");
 
                         html = [];
                         if (data.ParentId > 0 || data.isParent) {
-
                             var link = '/Cases/Edit/' + data.ParentId;
                             var text = appSettings.isParentText; 
                             var icon = 'fa fa-link';
@@ -207,7 +217,17 @@ function getCollapseCaption(cap) {
                                 text = appSettings.isChildText;
                                 link = '/Cases/Edit/' + data.case_id + '#childcases-tab';
                                 icon = 'fa fa-sitemap'; 
-                           }
+                            }
+                            //if (data.IsMergeParent) {
+                            //    text = 'Merge Parent';
+                            //    link = '/Cases/Edit/' + data.case_id + '#childcases-tab';
+                            //    icon = 'fa fa-umbrella';
+                            //}
+                            //if (data.IsMergeChild) {
+                            //    text = 'Merge Child';
+                            //    link = '/Cases/Edit/' + data.case_id + '#childcases-tab';
+                            //    icon = 'fa fa-child';
+                            //}
                            html.push('<a class="btn btn-mini" href="' + link + '" title="' + text + '"><i style="color: #000 !important;" class="' + icon + '"></i></a>');
                         }
                                                     
@@ -324,9 +344,20 @@ function getCollapseCaption(cap) {
 
     Page.prototype.autoReloadCheck = function () {
         var self = this;
-        if (self.getGridUpdatedAgo() >= self.settings.refreshContent && self.getGridState() === window.GRID_STATE.IDLE) {
+        let numBulkEditSelectedCases = $('.bulkEditCaseSelect:checkbox:checked').length;
+
+        let noBulkEditSelectedCases = numBulkEditSelectedCases == 0 || numBulkEditSelectedCases == undefined || numBulkEditSelectedCases == null;
+
+        if (self.getGridUpdatedAgo() >= self.settings.refreshContent && self.getGridState() === window.GRID_STATE.IDLE && noBulkEditSelectedCases) {
             self.table.ajax.reload();
         }
+    };
+
+    Page.prototype.autoReloadCaseResultList = function () {
+        var self = this;
+        self.table.ajax.reload();
+        $("#cbxBulkCaseEditAll").prop('checked', false);
+        $('#liBulkCaseEdit').hide();
     };
 
     Page.prototype.getGridUpdatedAgo = function () {
@@ -388,6 +419,7 @@ function getCollapseCaption(cap) {
         //};
         var columns = [];
         columns.push({ data: null, width: "18px", orderable: false, defaultContent: "&nbsp;" });
+        columns.push({ data: null, width: "10px", orderable: false, defaultContent: "&nbsp;", title: "<input type='checkbox' onclick='onClick_cbxBulkCaseEditAll(this)' id='cbxBulkCaseEditAll'/>" });
    
         $.each(gridSettings.columnDefs, function (idx, fieldSetting) {
 
@@ -518,6 +550,7 @@ $('#SettingTab').click(function (e) {
     $('#btnMyCases').hide();
     $('#btnNewCase').hide();
     $('#btnCaseTemplate').hide();
+    $('#liBulkCaseEdit').hide();
 });
 
 $('#CasesTab').click(function (e) {
@@ -525,8 +558,8 @@ $('#CasesTab').click(function (e) {
     $('#btnMyCases').show();
     $('#btnCaseTemplate').show();
     $('#btnSaveCaseSetting').hide();
+    showHideBulkCaseEditBtn();
 });
-
 
 /**
 * @param { string } message
@@ -544,6 +577,33 @@ function ShowToastMessage(message, msgType) {
         close: function () {
         }
     });
+}
+
+function onClick_cbxBulkEditCaseSelect() {
+    showHideBulkCaseEditBtn();
+}
+
+function onClick_cbxBulkCaseEditAll(e) {
+    let bulkCaseEditAll = document.getElementById(e.id);
+    if (bulkCaseEditAll.checked) {
+        $('.bulkEditCaseSelect:checkbox').prop('checked', true);
+    }
+    else {
+        $('.bulkEditCaseSelect:checkbox').prop('checked', false);
+    }
+
+    showHideBulkCaseEditBtn();
+}
+
+function showHideBulkCaseEditBtn() {
+    let selectedCases = $('.bulkEditCaseSelect:checkbox:checked').length;
+
+    if (selectedCases > 0) {
+        $('#liBulkCaseEdit').show();
+    }
+    else {
+        $('#liBulkCaseEdit').hide();
+    }
 }
 
 $(function () {

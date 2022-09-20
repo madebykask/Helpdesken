@@ -58,13 +58,16 @@ namespace DH.Helpdesk.Services.Services
     public class LinkService : ILinkService
     {
         private readonly ILinkRepository _linkRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly ILinkGroupRepository _linkGroupRepository;
 
         private readonly IWorkContext _workContext;
 
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
+#pragma warning disable 0618
         public LinkService(
             ILinkRepository linkRepository,
             ILinkGroupRepository linkGroupRepository,
@@ -78,6 +81,7 @@ namespace DH.Helpdesk.Services.Services
             _unitOfWorkFactory = unitOfWorkFactory;
             _linkGroupRepository = linkGroupRepository;
         }
+#pragma warning restore 0618
 
         public IList<Link> GetLinks(int customerId)
         {

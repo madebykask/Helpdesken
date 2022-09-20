@@ -32,8 +32,11 @@ namespace DH.Helpdesk.Services.Services
     public class ChecklistActionService : IChecklistActionService
     {
         private readonly IChecklistActionRepository _checklistActionRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public ChecklistActionService(
             IChecklistActionRepository checklistActionRepository,
             IUnitOfWork unitOfWork)
@@ -41,6 +44,7 @@ namespace DH.Helpdesk.Services.Services
             this._checklistActionRepository = checklistActionRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IDictionary<string, string> Validate(ChecklistAction checklistActionToValidate)
         {

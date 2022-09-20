@@ -126,7 +126,7 @@ namespace DH.Helpdesk.Services.Services.Grid
                     }
 
                     //todo: check why sortBy gets reset?
-                    res.sortOptions.sortBy = string.Empty;
+                    //res.sortOptions.sortBy = string.Empty;
                     return res;
                 }
 

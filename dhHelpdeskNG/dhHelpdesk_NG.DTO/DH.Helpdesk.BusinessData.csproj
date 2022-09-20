@@ -94,6 +94,7 @@
     <Compile Include="Enums\Case\Fields\LogFields.cs" />
     <Compile Include="Enums\Case\Fields\OtherFields.cs" />
     <Compile Include="Enums\Case\Fields\UserFields.cs" />
+    <Compile Include="Enums\Case\RelationType.cs" />
     <Compile Include="Enums\Changes\Fields\AnalyzeField.cs" />
     <Compile Include="Enums\Changes\Fields\EvaluationField.cs" />
     <Compile Include="Enums\Changes\Fields\GeneralField.cs" />
@@ -216,6 +217,8 @@
     <Compile Include="Models\Case\ExtendedCaseReportModel.cs" />
     <Compile Include="Models\Case\Input\CasePerformersSearch.cs" />
     <Compile Include="Models\Case\LogFileContent.cs" />
+    <Compile Include="Models\Case\MergedCase\MergedChildOverview.cs" />
+    <Compile Include="Models\Case\MergedCase\MergedParentInfo.cs" />
     <Compile Include="Models\Case\Output\CustomerCasesStatus.cs" />
     <Compile Include="Models\Case\Output\CustomerUserCase.cs" />
     <Compile Include="Models\Case\UserWorkingGroupOverview.cs" />

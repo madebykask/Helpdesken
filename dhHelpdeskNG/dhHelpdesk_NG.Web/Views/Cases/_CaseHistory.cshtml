@@ -26,47 +26,57 @@
                 </tr>
             </thead>
             <tbody>
-                @for(var i = 0; i < histories.Length; i++)
+                @for (var i = 0; i < histories.Length; i++)
                 {
                     var current = histories[i];
                     var previous = i < histories.Length - 1 ? histories[i + 1] : null;
-                    <tr>
-                        <td style="width: 15%">
-                            @{ current.CreatedDate = CreateDateTimeToUserTimeZone(current.CreatedDate); }
-                            @Html.DisplayFor(m => current.CreatedDate, "DateAndTime")
-                        </td>
-                        <td style="width:15%">@current.CreatedByUser</td>
-                        <td style="width:45%">
-                            <table class="tableintable">
-                                @current.GetCaseHistoryInfo(previous, Model.CaseCustomerId ?? 0, Model.DepartmentFilterFormat, Model.caseFieldSettings, Model.OutFormatter)
-                            </table>
-                        </td>
-                        <td style="width:25%">
-                            @if (current.Emaillogs != null) 
-                            {
+                    var hasChanged = current.GetCaseHistoryInfo(previous, Model.CaseCustomerId ?? 0, Model.DepartmentFilterFormat, Model.caseFieldSettings, Model.OutFormatter);
+                    if (!MvcHtmlString.IsNullOrEmpty(hasChanged))
+                    {
+                        <tr>
+                            <td style="width: 15%">
+                                @{ current.CreatedDate = CreateDateTimeToUserTimeZone(current.CreatedDate); }
+                                @Html.DisplayFor(m => current.CreatedDate, "DateAndTime")
+                            </td>
+                            <td style="width:15%">@current.CreatedByUser</td>
+                            <td style="width:45%">
+                                <table class="tableintable">
+                                    @current.GetCaseHistoryInfo(previous, Model.CaseCustomerId ?? 0, Model.DepartmentFilterFormat, Model.caseFieldSettings, Model.OutFormatter)
+                                </table>
+                            </td>
+                            <td style="width:25%">
+                                @if (current.Emaillogs != null)
+                                {
 
-                                <div>
-                                    @foreach (var l in current.Emaillogs)
-                                    {
-                                        var emails = new List<string>();
+                                    <div>
+                                        @foreach (var l in current.Emaillogs)
                                         {
-                                            if (!string.IsNullOrWhiteSpace(l.EmailAddress))
+                                            if (!string.IsNullOrEmpty(l.ResponseMessage))
                                             {
-                                                emails.AddRange(l.EmailAddress.Split(',').ToList());
+                                                var emails = new List<string>();
+                                                {
+                                                    if (!string.IsNullOrWhiteSpace(l.EmailAddress))
+                                                    {
+                                                        emails.AddRange(l.EmailAddress.Split(',').ToList());
+                                                    }
+                                                    if (!string.IsNullOrWhiteSpace(l.CcEmailAddress))
+                                                    {
+                                                        emails.AddRange(l.CcEmailAddress.Split(','));
+                                                    }
+                                                }
+                                                foreach (var e in emails.OrderBy(e => e))
+                                                {
+                                                    <p>@e (@l.MailId.GetMailTemplateName(Model.MailTemplates))</p>
+                                                }
                                             }
-                                            if (!string.IsNullOrWhiteSpace(l.CcEmailAddress))
-                                            {
-                                                emails.AddRange(l.CcEmailAddress.Split(','));
-                                            }
+
                                         }
-                                        foreach (var e in emails.OrderBy(e => e)) {
-                                            <p>@e (@l.MailId.GetMailTemplateName(Model.MailTemplates))</p>
-                                         }
-                                    }
-                                </div>
-                            }
-                        </td>
-                    </tr>
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                    }
+
                 }
             </tbody>
         }

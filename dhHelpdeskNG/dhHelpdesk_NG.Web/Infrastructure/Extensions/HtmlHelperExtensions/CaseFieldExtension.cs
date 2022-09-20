@@ -24,6 +24,7 @@
         {
             var caption = "";
 
+#pragma warning disable 0618
             if (languageId == 0)
                 caption = Translation.Get(field.ToString(), Enums.TranslationSource.CaseTranslation, customerId);
             else
@@ -31,6 +32,7 @@
 
             if (string.IsNullOrEmpty(caption) && defaultCaption != "")
                 caption = Translation.Get(defaultCaption, languageId, Enums.TranslationSource.TextTranslation, customerId);
+#pragma warning restore 0618
 
             var setting = settings.getCaseSettingsValue(field.ToString());
             var description = settingsEx.getFieldHelp(field.ToString());

@@ -134,7 +134,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
             List<MailFile> files = null,
             string siteSelfService = "",
             string siteHelpdesk = "",
-            EmailType emailType = EmailType.ToMail)
+            EmailType emailType = EmailType.ToMail,
+            string siteSelfServiceMergeParent = "")
         {
             var res = emailsettings.Response;
             var sendTime = DateTime.Now;
@@ -168,7 +169,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
                         _smtpClient.EnableSsl = emailsettings.SmtpSettings.IsSecured;
 
-                        var msg = GetMailMessage(from, to, cc, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType);
+                        var msg = GetMailMessage(from, to, cc, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType, siteSelfServiceMergeParent);
 
                         if (msg.To.Count > 0 || msg.Bcc.Count > 0 || msg.CC.Count > 0)
                         {
@@ -217,11 +218,12 @@ namespace DH.Helpdesk.Services.Services.Concrete
             List<MailFile> files = null,
             string siteSelfService = "",
             string siteHelpdesk = "",
-            EmailType emailType = EmailType.ToMail)
+            EmailType emailType = EmailType.ToMail,
+             string siteSelfServiceMergeParent = "")
         {
             return emailsettings.BatchEmail
-                ? EnqueueEmail(el, from, to, cc, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType)
-                : SendEmail(from, to, cc, subject, body, fields, emailsettings, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType);
+                ? EnqueueEmail(el, from, to, cc, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType, siteSelfServiceMergeParent)
+                : SendEmail(from, to, cc, subject, body, fields, emailsettings, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType, siteSelfServiceMergeParent);
         }
 
         private MailMessage GetMailMessage(
@@ -236,7 +238,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
             List<MailFile> files = null,
             string siteSelfService = "",
             string siteHelpdesk = "",
-            EmailType emailType = EmailType.ToMail
+            EmailType emailType = EmailType.ToMail,
+            string siteSelfServiceMergeParent = ""
         )
         {
             var msg = new MailMessage();
@@ -327,6 +330,40 @@ namespace DH.Helpdesk.Services.Services.Concrete
                             field.StringValue = urlSelfService;
                 }
             }
+            if (body.Contains("[/#MP98]"))
+            {
+                var count = Regex.Matches(body, "/#MP98").Count;
+
+                var str1 = "[#MP98]";
+                var str2 = "[/#MP98]";
+                var LinkText = "";
+
+                for (int i = 1; i <= count; i++)
+                {
+                    int Pos1 = body.IndexOf(str1) + str1.Length;
+                    int Pos2 = body.IndexOf(str2);
+                    LinkText = body.Substring(Pos1, Pos2 - Pos1);
+
+                    urlSelfService = "<a href='" + siteSelfServiceMergeParent + "'>" + LinkText + "</a>";
+
+                    var regex = new Regex(Regex.Escape(LinkText + "[/#MP98]"));
+                    body = regex.Replace(body, string.Empty, 1);
+
+                    regex = new Regex(Regex.Escape("[#MP98]"));
+                    body = regex.Replace(body, urlSelfService, 1);
+                }
+            }
+            else
+            {
+                urlSelfService = "<a href='" + siteSelfServiceMergeParent + "'>" + siteSelfServiceMergeParent + "</a>";
+
+                if (fields != null)
+                {
+                    foreach (var field in fields)
+                        if (field.Key == "[#MP98]")
+                            field.StringValue = urlSelfService;
+                }
+            }
 
             if (body.Contains("[/#99]"))
             {
@@ -362,6 +399,44 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
                     foreach (var field in fields)
                         if (field.Key == "[#99]")
+                            field.StringValue = urlHelpdesk;
+                }
+
+            }
+            if (body.Contains("[/#MP99]"))
+            {
+                int count = Regex.Matches(body, "/#MP99").Count;
+
+                for (int i = 1; i <= count; i++)
+                {
+
+                    string str1 = "[#MP99]";
+                    string str2 = "[/#MP99]";
+                    string LinkText;
+
+                    int Pos1 = body.IndexOf(str1) + str1.Length;
+                    int Pos2 = body.IndexOf(str2);
+                    LinkText = body.Substring(Pos1, Pos2 - Pos1);
+
+                    urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + LinkText + "</a>";
+
+                    var regex = new Regex(Regex.Escape(LinkText + "[/#MP99]"));
+                    body = regex.Replace(body, string.Empty, 1);
+
+                    regex = new Regex(Regex.Escape("[#MP99]"));
+                    body = regex.Replace(body, urlHelpdesk, 1);
+                }
+
+            }
+            else
+            {
+                urlHelpdesk = "<a href='" + siteHelpdesk + "'>" + siteHelpdesk + "</a>";
+
+                if (fields != null)
+                {
+
+                    foreach (var field in fields)
+                        if (field.Key == "[#MP99]")
                             field.StringValue = urlHelpdesk;
                 }
 
@@ -422,7 +497,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 List<MailFile> files = null,
                 string siteSelfService = "",
                 string siteHelpdesk = "",
-                EmailType emailType = EmailType.ToMail
+                EmailType emailType = EmailType.ToMail,
+                string siteSelfServiceMergeParent = ""
             )
         {
             var res = new EmailResponse { NumberOfTry = 1 };
@@ -446,7 +522,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 }
 
                 var msg = GetMailMessage(from, to, cc, subject, body, fields,
-                    mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType);
+                    mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType, siteSelfServiceMergeParent);
 
                 el.Body = msg.Body;
                 el.Subject = msg.Subject;

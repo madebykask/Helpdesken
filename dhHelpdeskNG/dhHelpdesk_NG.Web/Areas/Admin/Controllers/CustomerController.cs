@@ -158,6 +158,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 CaseComplaintDays = 14
             };
 
+            //Get mandatory Finishingcause 'Sammanfogat ärende' from logged in customer
+            var mergedFinishingCause = _finishingCauseService.GetMergedFinishingCause(SessionFacade.CurrentCustomer.Id);
+            var addMandatoryMerged = new FinishingCause {
+                Customer_Id = customer.Id,
+                Name = mergedFinishingCause.Name,
+                IsActive = 1,
+                Merged = true              
+            };
+
+            //Add it to new customer
+            this._finishingCauseService.SaveFinishingCause(addMandatoryMerged, out errors);
+
             this._customerService.SaveCustomerSettings(customer, newCustomerSetting, null, customer.Language_Id, out errors);
 
 
@@ -1145,7 +1157,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 newCustomerFinishingCause.Parent_FinishingCause_Id = fc.Parent_FinishingCause_Id;
                 newCustomerFinishingCause.FinishingCauseCategory_Id = fc.FinishingCauseCategory_Id;
                 newCustomerFinishingCause.PromptUser = fc.PromptUser;
-
+                newCustomerFinishingCause.Merged = fc.Merged;
+                newCustomerFinishingCause.IsActive = fc.IsActive;
                 this._finishingCauseService.SaveFinishingCause(newCustomerFinishingCause, out errors);
             }
 
@@ -1217,7 +1230,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                         //Id = id,
                         MailID = mailTemplateToCopy.MailID,
                         Customer_Id = newCustomerToSave.Id,
-                        SendMethod = mailTemplateToCopy.SendMethod
+                        SendMethod = mailTemplateToCopy.SendMethod,
+                        IsStandard = mailTemplateToCopy.IsStandard, 
                     };
 
                     this._mailTemplateService.SaveMailTemplate(mailTemplateToSave, out errors);

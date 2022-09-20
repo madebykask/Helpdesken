@@ -176,7 +176,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // CostCentre 
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CostCentre.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.CostCentre != prev.CostCentre)
+                if ((cur.CostCentre ?? "") != (prev.CostCentre ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.CostCentre.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -191,7 +191,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Placement 
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Place.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.Place != prev.Place)
+                if ((cur.Place ?? "") != (prev.Place ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -206,7 +206,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // UserCode
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.UserCode.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.UserCode != prev.UserCode)
+                if ((cur.UserCode ?? "") != (prev.UserCode ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -616,7 +616,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // ReferenceNumber
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.ReferenceNumber != prev.ReferenceNumber)
+                if ((cur.ReferenceNumber ?? "") != (prev.ReferenceNumber ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -949,7 +949,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Verified description (Verifierad beskrivning)
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.VerifiedDescription != prev.VerifiedDescription)
+                if ((cur.VerifiedDescription ?? "") != (prev.VerifiedDescription ?? ""))
                 {
                     var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(), customerId);
                     var prevValue = prev.VerifiedDescription.RemoveHtmlTags().HtmlEncode();
@@ -962,7 +962,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Resolution rate (Lösningsgrad)
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.SolutionRate.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.SolutionRate != prev.SolutionRate)
+                if ((cur.SolutionRate ?? "") != (prev.SolutionRate ?? ""))
                 {
                     var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.SolutionRate.ToString(), customerId);
                     var prevValue = prev.SolutionRate.RemoveHtmlTags().HtmlEncode();

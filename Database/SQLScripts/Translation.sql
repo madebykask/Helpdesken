@@ -8264,6 +8264,77 @@ If not exists (select * from tblTextTranslation where text_id = 2112 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2112, 1, 'Registrerad av')
 GO
 
+If not exists (select * from tbltext where id = 2123)
+	insert into tbltext (id, TextString) VALUES (2123, 'Massredigera')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2123 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2123, 2, 'Bulk edit')
+GO
+
+If not exists (select * from tbltext where id = 2124)
+	insert into tbltext (id, TextString) VALUES (2124, 'Sammanfoga')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2124 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2124, 2, 'Merge')
+GO
+
+If not exists (select * from tbltext where id = 2125)
+	insert into tbltext (id, TextString) VALUES (2125, 'Sammanfogade ärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2125 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2125, 2, 'Merged cases')
+GO
+
+If not exists (select * from tbltext where id = 2126)
+	insert into tbltext (id, TextString) VALUES (2126, 'Detta ärende är sammanfogat till')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2126 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2126, 2, 'This case is merged to')
+GO
+
+If not exists (select * from tbltext where id = 2127)
+	insert into tbltext (id, TextString) VALUES (2127, 'Sammanfogat ärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2127 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2127, 2, 'Merged case')
+GO
+
+If not exists (select * from tbltext where id = 2128)
+	insert into tbltext (id, TextString) VALUES (2128, 'Användaren får sammanfoga ärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2128 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2128, 2, 'User has permission to merge cases')
+GO
+
+If not exists (select * from tbltext where id = 2130)
+	insert into tbltext (id, TextString) VALUES (2130, 'Inget att uppdatera')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2130 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2130, 2, 'Nothing to update')
+GO
+
+If not exists (select * from tbltext where id = 2131)
+	insert into tbltext (id, TextString) VALUES (2131, 'Redigera valda ärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2131 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2131, 2, 'Edit selected cases')
+GO
+
+If not exists (select * from tbltext where id = 2132)
+	insert into tbltext (id, TextString) VALUES (2132, 'Ärendet har underärende som ej är avslutade')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2132 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2132, 2, 'The case has sub-cases that are not closed')
+GO
+
+If not exists (select * from tbltext where id = 2133)
+	insert into tbltext (id, TextString) VALUES (2133, 'Koppla till huvudärende med annan kund')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2133 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2133, 2, 'Connect to parent with another customer')
+GO
+
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')

@@ -93,7 +93,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Utilities
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Ignore all errors here
             }
@@ -121,7 +121,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Utilities
 
                 _logProgramService.UpdateUserLogin(logProgramModel);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

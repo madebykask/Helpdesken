@@ -33,16 +33,20 @@ namespace DH.Helpdesk.Web.Infrastructure
         //[System.Obsolete("This is obsolete. Please use either GetMasterDataTranslation, GetCoreTextTranslation, GetForCase, or GetTextTranslationByTextType. This is spotty because it can give translations that isn't necessarily correct (based on texttype) and can give faulty translations")]
         public static string Get(string translate, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, int customerId = 0)
         {
+#pragma warning disable 0618
             translate = Get(translate, SessionFacade.CurrentLanguageId, source, customerId);            
             return translate;
+#pragma warning restore 0618
         }
 
         public static string GetForJS(string translate, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, int customerId = 0)
         {
+#pragma warning disable 0618
             translate = Get(translate, SessionFacade.CurrentLanguageId, source, customerId);
             translate = translate.Replace("'", "\\'");
             translate = translate.Replace("\"", "\\'");
             return translate;
+#pragma warning restore 0618
         }
 
         internal static CaseType TranslateCaseType(CaseType caseType)
@@ -157,7 +161,7 @@ namespace DH.Helpdesk.Web.Infrastructure
                         translate = !string.IsNullOrEmpty(text) ? text : translate;
                     }
                 }
-                catch(Exception ex)
+                catch(Exception)
                 {
                 }
             }

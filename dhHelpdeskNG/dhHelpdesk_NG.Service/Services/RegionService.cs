@@ -37,8 +37,11 @@ namespace DH.Helpdesk.Services.Services
     public class RegionService : IRegionService
     {
         private readonly IRegionRepository _regionRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public RegionService(
             IRegionRepository regionRepository,
             IUnitOfWork unitOfWork)
@@ -46,6 +49,7 @@ namespace DH.Helpdesk.Services.Services
             this._regionRepository = regionRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<Region> GetAllRegions()
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.DirectoryServices.AccountManagement;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
@@ -507,7 +508,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
             string fullName = user.Name;
             string userId = fullName.GetUserFromAdPath();
-
+            string userDomain = fullName.GetDomainFromAdPath();
             var defaultUserId = AppConfigHelper.GetAppSetting(AppSettingsKey.DefaultUserId);
             if (!string.IsNullOrEmpty(defaultUserId))
                 userId = defaultUserId;
@@ -516,7 +517,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             if (!string.IsNullOrEmpty(defaultEmployeeNumber))
                 employeeNum = defaultEmployeeNumber;
 
-            string userDomain = fullName.GetDomainFromAdPath();
+            
             var initiator = _masterDataService.GetInitiatorByUserId(userId, customerId);
             userIdentity = new UserIdentity()
             {
@@ -529,6 +530,12 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 Email = initiator?.Email
             };
 
+            if(string.IsNullOrEmpty(userIdentity.Email))
+            {
+                var domain = new PrincipalContext(ContextType.Domain);
+                
+                userIdentity.Email = UserPrincipal.FindByIdentity(domain, User.Identity.Name).EmailAddress ?? "";
+            }
             return userIdentity;
         }
 
@@ -569,7 +576,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 LastName = initiator?.LastName,
                 EmployeeNumber = employeeNum,
                 Phone = initiator?.Phone,
-                Email = initiator?.Email ?? mailAddress
+                Email = mailAddress ?? initiator?.Email,
             };
 
             return userIdentity;

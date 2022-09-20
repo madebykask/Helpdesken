@@ -805,26 +805,72 @@ Public Class CaseData
         End Try
     End Function
 
+    Public Function checkIfCaseIsMerged(ByVal CaseId As Long) As Integer
+        Dim sSQL As String = ""
+        Dim dt As DataTable
+
+        Try
+            sSQL = "SELECT TOP 1 tblMergedCases.MergedParent_Id " &
+                   "FROM tblMergedCases " &
+                   "WHERE MergedChild_Id=" & CaseId & ""
+
+
+            dt = getDataTable(gsConnectionString, sSQL)
+
+
+            If dt.Rows.Count > 0 Then
+                Return dt.Rows(0)("MergedParent_Id")
+            Else
+                Return 0
+            End If
+
+        Catch ex As Exception
+            If giLoglevel > 0 Then
+                objLogFile.WriteLine(Now() & ", ERROR checkIfCaseIsMerged " & ex.Message.ToString & ", " & sSQL)
+            End If
+
+            Return 0
+        End Try
+    End Function
+
+    Public Function updateChangeTime(ByVal CaseId As Long) As Integer
+        Dim sSQL As String = ""
+
+        Try
+
+            sSQL = "UPDATE tblCase SET ChangeTime = '" & Now.ToUniversalTime & "', Status=0 WHERE Id=" & CaseId & ""
+
+            executeSQL(gsConnectionString, sSQL)
+
+        Catch ex As Exception
+            If giLoglevel > 0 Then
+                objLogFile.WriteLine(Now() & ", Error updateChangeTime " & ex.Message.ToString & ", " & sSQL)
+            End If
+
+            Return 0
+        End Try
+    End Function
+
     Private Function getCases(Optional ByVal iPerformerUser_Id As Integer = 0, Optional ByVal iPlanDate As Integer = 0, Optional ByVal iApproval As Integer = 0, Optional ByVal iWatchdate As Integer = 0, Optional ByVal iReminder As Integer = 0) As Collection
         Dim colCase As New Collection
         Dim sSQL As String
         Dim dr As DataRow
 
         Try
-            sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, " &
+            sSQL = "Select tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, " &
                         "tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " &
-                        "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
+                        "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name As CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
                         "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, " &
-                        "tblUsers.FirstName AS PerformerFirstName, tblUsers.SurName AS PerformerSurName, tblUsers.EMail AS PerformerEMail, " &
-                        "u2.FirstName AS RegUserFirstName, u2.SurName AS RegUserSurName, tblCase.WorkingGroup_Id," &
+                        "tblUsers.FirstName As PerformerFirstName, tblUsers.SurName As PerformerSurName, tblUsers.EMail As PerformerEMail, " &
+                        "u2.FirstName As RegUserFirstName, u2.SurName As RegUserSurName, tblCase.WorkingGroup_Id," &
                         "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName,  tblPriority.PriorityDescription, " &
                         "tblCase.Project_Id, tblCase.System_Id, tblCase.Urgency_Id, tblCase.Impact_Id, tblCase.Supplier_Id, tblCase.SMS, tblCase.VerifiedDescription, " &
                         "tblCase.SolutionRate, tblCase.InventoryType, tblCase.InventoryLocation, tblCase.Cost, tblCase.OtherCost, tblCase.Currency, tblCase.ContactBeforeAction, " &
                         "tblCase.Change_Id,  tblCase.Problem_Id, tblCase.FinishingDescription, tblCase.PlanDate, tblCase.CausingPartId, tblCase.AgreedDate, tblCase.Verified, " &
                         "tblCase.RegistrationSourceCustomer_Id," &
-                        "tblCase.RegTime, tblCase.ChangeTime, u3.FirstName AS ChangedName, u3.SurName AS ChangedSurName, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " &
-                        "tblWorkingGroup.WorkingGroup AS PerformerWorkingGroup, tblWorkingGroup.Id AS PerformerWorkingGroup_Id, tblWorkingGroup.AllocateCaseMail AS PerformerWorkingGroupAllocateCaseMail, " &
-                        "tblWorkingGroup_1.WorkingGroup AS CaseWorkingGroup, ISNULL(tblWorkingGroup_1.WorkingGroupEMail, '') AS WorkingGroupEMail, tblWorkingGroup_1.AllocateCaseMail AS AllocateCaseMail, " &
+                        "tblCase.RegTime, tblCase.ChangeTime, u3.FirstName As ChangedName, u3.SurName As ChangedSurName, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " &
+                        "tblWorkingGroup.WorkingGroup As PerformerWorkingGroup, tblWorkingGroup.Id As PerformerWorkingGroup_Id, tblWorkingGroup.AllocateCaseMail As PerformerWorkingGroupAllocateCaseMail, " &
+                        "tblWorkingGroup_1.WorkingGroup As CaseWorkingGroup, ISNULL(tblWorkingGroup_1.WorkingGroupEMail, '') AS WorkingGroupEMail, tblWorkingGroup_1.AllocateCaseMail AS AllocateCaseMail, " &
                         "tblCase.CaseSolution_Id, tblCase.FinishingDate, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
                         "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.RegistrationSource, tblCase.WatchDate, tblCase.Available, tblCase.ReferenceNumber, " &
                         "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics, tblCase.ExternalTime, tblCase.LeadTime " &

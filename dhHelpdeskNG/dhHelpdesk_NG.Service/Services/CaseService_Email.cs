@@ -366,6 +366,11 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
+        public void SendMergedCaseEmail(Case mergedCase, Case mergeParent, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, IList<string> ccEmailList)
+        {
+            SendMergedAndClosedCaseMail(mergedCase, mergeParent, cms, caseHistoryId, userTimeZone, caseLog, ccEmailList);
+        }
+
         public void SendSelfServiceCaseLogEmail(int caseId,
                 CaseMailSetting cms,
                 int caseHistoryId,
@@ -623,6 +628,22 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
+        private void SendMergedAndClosedCaseMail(Case mergedCase, Case mergeParent, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, IList<string> ccEmailList)
+        {
+            var mailTemplateId = (int)GlobalEnums.MailTemplates.MergedCase;
+            var emailSender = GetWgOrSystemEmailSender(cms);
+            var customerSetting = _settingService.GetCustomerSetting(mergeParent.Customer_Id);
+            var emailList = new List<string> { mergedCase.PersonsEmail };
+
+            var mailTpl = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(mergedCase.Customer_Id, mergedCase.RegLanguage_Id, mailTemplateId);
+            if (mailTpl != null)
+            {
+                if (!string.IsNullOrEmpty(mailTpl.Body) && !string.IsNullOrEmpty(mailTpl.Subject))
+                {
+                    SendTemplateEmail(mailTemplateId, mergedCase, caseLog, caseHistoryId, customerSetting, cms, emailSender, emailList, userTimeZone, null, 1, false, ccEmailList, mergeParent);
+                }
+            }
+        }
         private void SendCaseClosedEmail(Case newCase, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog log, List<MailFile> files, Setting customerSetting,
             bool isProblemSend = false, bool dontSendMailToNotfier = false, string helpdeskMailFromAdress = null)
         {
@@ -714,14 +735,16 @@ namespace DH.Helpdesk.Services.Services
             List<MailFile> files = null,
             int stateHelper = 1,
             bool highPriority = false,
-            IList<string> ccEmailList = null)
+            IList<string> ccEmailList = null,
+            Case mergeParent = null)
         {
             var mailTpl = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(case_.Customer_Id, case_.RegLanguage_Id, mailTemplateId);
 
             if (!string.IsNullOrEmpty(mailTpl?.Body) && !string.IsNullOrEmpty(mailTpl.Subject))
             {
                 SendTemplateEmail(mailTemplateId, mailTpl, case_, log, caseHistoryId, customerSetting, cms, senderEmail, emailList,
-                    userTimeZone, files, stateHelper, null, highPriority, ccEmailList);
+                    userTimeZone, files, stateHelper, null, highPriority, ccEmailList, mergeParent);
+
             }
         }
 
@@ -740,7 +763,8 @@ namespace DH.Helpdesk.Services.Services
             int stateHelper = 1,
             IList<string> filterFieldsEmails = null,
             bool highPriority = false,
-            IList<string> ccEmailList = null)
+            IList<string> ccEmailList = null,
+            Case mergeParent = null)
         {
             senderEmail = (senderEmail ?? string.Empty).Trim();
 
@@ -768,6 +792,7 @@ namespace DH.Helpdesk.Services.Services
                         _emailService.GetMailMessageId(senderEmail));
                     emailLog.Cc = ccRecepients;
                     emailLogs.Add(recepients, emailLog);
+                    
                 }
                 else
                 {
@@ -794,9 +819,9 @@ namespace DH.Helpdesk.Services.Services
                     var siteHelpdesk = cms.AbsoluterUrl + caseEditPath + case_.Id;
 
                     var fields = stateHelper == 99
-                        ? GetCaseFieldsForEmail(case_, log, cms, string.Empty, stateHelper, userTimeZone)
+                        ? GetCaseFieldsForEmail(case_, log, cms, string.Empty, stateHelper, userTimeZone, mergeParent)
                         : GetCaseFieldsForEmail(case_, log, cms, eLog.Value.EmailLogGUID.ToString(), stateHelper,
-                            userTimeZone);
+                            userTimeZone, mergeParent);
 
                     if (mailTemplateId == (int)GlobalEnums.MailTemplates.SmsClosedCase)
                     {
@@ -827,6 +852,11 @@ namespace DH.Helpdesk.Services.Services
                        ref body, filterFieldsEmails, applyFeedbackFilter);
                     fieldsToUpdate.AddRange(feedBackFields);
 
+                    var siteSelfServiceMergeParent = "";
+                    if (mergeParent != null)
+                    {
+                        siteSelfServiceMergeParent = fields.FirstOrDefault(x => x.Key == "[#MP98Link]").StringValue; ;
+                    }
                     var res =
                         _emailService.SendEmail(eLog.Value,
                             senderEmail,
@@ -840,8 +870,9 @@ namespace DH.Helpdesk.Services.Services
                             highPriority,
                             files,
                             siteSelfService,
-                            siteHelpdesk);
-
+                            siteHelpdesk,
+                            EmailType.ToMail,
+                            siteSelfServiceMergeParent);
                     SaveEmailLog(eLog.Value, res);
                 }
 

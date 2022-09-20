@@ -7,6 +7,7 @@ using DH.Helpdesk.BusinessData.Models.BusinessRules;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
+using DH.Helpdesk.BusinessData.Models.Case.MergedCase;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.BusinessData.Models.User.Input;
@@ -25,7 +26,7 @@ namespace DH.Helpdesk.Services.Services
         IList<Case> GetProblemCases(int customerId, int problemId);
 
         IList<Case> GetCasesByCustomers(IEnumerable<int> customerIds);
-
+        bool MergeChildToParentCase(int childCaseId, int parentCaseId);
         Case InitCase(int customerId, int userId, int languageId, string ipAddress, CaseRegistrationSource source, Setting customerSetting, string adUser);
 
         Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, CaseRegistrationSource source, string adUser);
@@ -140,6 +141,9 @@ namespace DH.Helpdesk.Services.Services
 
         ParentCaseInfo GetParentInfo(int caseId);
 
+        List<MergedChildOverview> GetMergedCasesFor(int parentCaseId);
+        MergedParentInfo GetMergedParentInfo(int childCaseId);
+
         int? SaveInternalLogMessage(int id, string textInternal, out IDictionary<string, string> errors);
 
         Dictionary<int, string> GetCaseFiles(List<int> caseIds);
@@ -168,5 +172,6 @@ namespace DH.Helpdesk.Services.Services
         Task<CustomerCasesStatus> GetCustomerCasesStatusAsync(int customerId, int userId);
         Task<Case> GetDetachedCaseByIdAsync(int id);
         void HandleSendMailAboutCaseToPerformer(CustomerUserInfo performerUser, int currentUserId, CaseLog caseLog);
+        void SendMergedCaseEmail(Case mergedCase, Case mergeParent, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, IList<string> ccEmailList);
     }
 }

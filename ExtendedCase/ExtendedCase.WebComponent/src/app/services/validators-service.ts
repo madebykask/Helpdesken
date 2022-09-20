@@ -1,4 +1,4 @@
-﻿import { ValidatorError, MinMax } from '../shared/validation-types';
+﻿import { ValidatorError, MinMax, Trigger } from '../shared/validation-types';
 import { AbstractControl, ValidatorFn, Validators, ValidationErrors, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { LogService } from '../services/log.service';
 import { Injectable, Inject, forwardRef } from '@angular/core';
@@ -20,24 +20,31 @@ export class ValidatorsService {
         @Inject(forwardRef(() => AppConfig)) private config: IAppConfig) {
     }
 
-    setupValidators(formModel: FormModel): void {
+    setupValidators(formModel: FormModel, finishingType: number): void {
         let fieldIterator = formModel.createFieldsIterator();
+
+
         fieldIterator.forEach(
-            (fieldModel, fieldPath) => this.setFieldValidators(fieldModel, formModel.proxyModel));
+            (fieldModel, fieldPath) => this.setFieldValidators(fieldModel, formModel.proxyModel, finishingType));
     }
 
-    setupSectionInstanceValidators(sectionInstance: SectionInstanceModel, proxyModel: ProxyModel): void {
+    setupSectionInstanceValidators(sectionInstance: SectionInstanceModel, proxyModel: ProxyModel, finishingType: number): void {
         for (let fieldKey of Object.keys(sectionInstance.fields)) {
             let fieldModel = sectionInstance.fields[fieldKey];
-            this.setFieldValidators(fieldModel, proxyModel);
+            this.setFieldValidators(fieldModel, proxyModel, finishingType);
         }
     }
 
-    private setFieldValidators(fieldModel: FieldModelBase, proxyModel: ProxyModel) {
+    private setFieldValidators(fieldModel: FieldModelBase, proxyModel: ProxyModel, finishingType: number) {
         let controlTpl = fieldModel.template;
-        if (controlTpl.validators) {
+        let validators = controlTpl.validators;
+        if (validators) {
+            
+
             this.logService.debugFormatted('Validation({0}): applying validators', fieldModel.id);
-            fieldModel.getControlGroup().setValidators(this.validatorFactory(fieldModel, proxyModel));
+            fieldModel.getControlGroup().setValidators(this.validatorFactory(fieldModel, proxyModel, finishingType));
+
+
         }
     }
 
@@ -135,14 +142,46 @@ export class ValidatorsService {
         return true;
     }
 
-    private validatorFactory(fieldModel: FieldModelBase, proxyModel: ProxyModel): ValidatorFn[] {
+    private validatorFactory(fieldModel: FieldModelBase, proxyModel: ProxyModel, finishingType: number): ValidatorFn[] {
         //this.logService.debug(`Validation(${controlTemplateModel.id}): validatorFactory`);
         let controlTemplateModel = fieldModel.template;
         const validators = new Array<ValidatorFn>();
+
         if (controlTemplateModel.validators.onSave) {
+
+
+
             controlTemplateModel.validators.onSave.forEach((item: TemplateValidator) => {
-                validators.push(this.createValidator(item, fieldModel, proxyModel, controlTemplateModel));
+
+
+
+                if(finishingType == 0 || finishingType == NaN){
+                    if (item.trigger == Trigger.Normal) {
+
+
+                        validators.push(this.createValidator(item, fieldModel, proxyModel, controlTemplateModel));
+    
+                    }
+                }
+                else{
+                    if (item.trigger == Trigger.Normal) {
+
+
+                        validators.push(this.createValidator(item, fieldModel, proxyModel, controlTemplateModel));
+    
+                    }
+                    else if(item.trigger == Trigger.OnCaseClose){
+
+                        validators.push(this.createValidator(item, fieldModel, proxyModel, controlTemplateModel));
+
+                    }
+                }
+
+
             });
+
+
+
         }
         if (controlTemplateModel.validators.onNext) {
             controlTemplateModel.validators.onNext.forEach((item: TemplateValidator) => {
@@ -336,7 +375,7 @@ export class ValidatorsService {
             const errorName = `${localValidationTemplate.type}_${UuidGenerator.createUuid()}`;
             errorResult[errorName] = new ValidatorError(localControlTemplate.id,
                 localValidationTemplate.type, localControlTemplate.label,
-                localValidationTemplate.validationMode, localValidationTemplate.message);
+                localValidationTemplate.validationMode, localValidationTemplate.message, localValidationTemplate.trigger);
             return isError ? errorResult : null;
         };
     }

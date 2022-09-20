@@ -25,8 +25,11 @@
     public class OperationObjectService : IOperationObjectService
     {
         private readonly IOperationObjectRepository _operationObjectRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public OperationObjectService(
             IOperationObjectRepository operationObjectRepository,
             IUnitOfWork unitOfWork)
@@ -34,6 +37,7 @@
             this._operationObjectRepository = operationObjectRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<OperationObject> GetOperationObjects(int customerId)
         {

@@ -34,7 +34,7 @@
         {
             var customer = this._customerService.GetCustomer(customerId);
 
-            var finishingCauses = this._finishingCauseService.GetFinishingCauses(customer.Id);
+            var finishingCauses = this._finishingCauseService.GetFinishingCauses(customer.Id).Where(x => x.Merged == false).ToList(); 
 
             var model = new FinishingCauseIndexViewModel { FinishingCauses = finishingCauses, Customer = customer, IsShowOnlyActive = SessionFacade.ShowOnlyActiveFinishingCausesInAdmin };
             return this.View(model);

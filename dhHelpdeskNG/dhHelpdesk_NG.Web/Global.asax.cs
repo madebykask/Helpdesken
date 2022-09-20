@@ -505,7 +505,7 @@ namespace DH.Helpdesk.Web
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Ignore all errors here
             }
@@ -523,7 +523,7 @@ namespace DH.Helpdesk.Web
                 sw.Stop();
                 return sw.Elapsed.Milliseconds;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return -1;
             }
@@ -558,7 +558,7 @@ namespace DH.Helpdesk.Web
 
                 _logProgramService.UpdateUserLogin(logProgramModel);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }

@@ -561,6 +561,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     ShowNotAssignedWorkingGroups = x.ShowNotAssignedWorkingGroups,
                     CreateCasePermission = x.CreateCasePermission,
                     CreateSubCasePermission = x.CreateSubCasePermission,
+                    MergeCasePermission = x.MergeCasePermission,
                     CopyCasePermission = x.CopyCasePermission,
                     OrderPermission = x.OrderPermission,
                     CaseSolutionPermission = x.CaseSolutionPermission,

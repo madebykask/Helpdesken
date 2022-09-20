@@ -7,8 +7,9 @@
         BAD_CONFIG: 2,
         NO_COL_SELECTED: 3
     };
-
     var childId = $("#connect_to_parent_childId").val();
+    var tomerge = $("#tomerge").val();
+    var dontSendMailToNotifier = $("#dontSendMailToNotifier").val();
 
     (function($) {
         /// message types
@@ -97,6 +98,7 @@
                             params.push({ name: "length", value: data.length });
                             params.push({ name: "IsConnectToParent", value: true });
                             params.push({ name: "currentCaseId", value: childId });
+                            params.push({ name: "ToBeMerged", value: tomerge });
                             params.push({
                                 name: "order",
                                 value: data.order.length === 1 ? data.columns[data.order[0].column].data : ""
@@ -109,7 +111,7 @@
                     createdRow: function(row, data, dataIndex) {
                         if (data) {
                             $(row).addClass(self.getClsRow(data) + " caseid=" + data.case_id);
-                            row.cells[0].innerHTML = strJoin('<a href="/Cases/ConnectToParentCase?id=', childId, "&parentCaseId=", data.case_id, '"><img title="', data.caseIconTitle, '" alt="', data.caseIconTitle, '" src="', data.caseIconUrl, '" /></a>');
+                            row.cells[0].innerHTML = strJoin('<a href="/Cases/ConnectToParentCase?id=', childId, "&parentCaseId=", data.case_id, "&tomerge=", tomerge, "&nomail=", dontSendMailToNotifier,'"><img title="', data.caseIconTitle, '" alt="', data.caseIconTitle, '" src="', data.caseIconUrl, '" /></a>');
                         }
                     },
                     columns: columns,
@@ -316,7 +318,7 @@
         };
 
         CTP.prototype.formatCell = function (caseId, cellValue) {
-            var out = [strJoin('<a href="/Cases/ConnectToParentCase?id=', childId, "&parentCaseId=", caseId, '">', cellValue == null ? "&nbsp;" : cellValue.replace(/<[^>]+>/ig, ""),"</a>")];
+            var out = [strJoin('<a href="/Cases/ConnectToParentCase?id=', childId, "&parentCaseId=", caseId, "&tomerge=", tomerge, "&nomail=", dontSendMailToNotifier,'">', cellValue == null ? "&nbsp;" : cellValue.replace(/<[^>]+>/ig, ""),"</a>")];
             return out.join(JOINER);
         };
 
@@ -324,3 +326,4 @@
         ctp.init.call(window.ctp, pageSettings);
     })($);
 };
+

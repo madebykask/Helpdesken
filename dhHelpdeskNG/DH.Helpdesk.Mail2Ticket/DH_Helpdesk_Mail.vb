@@ -53,7 +53,18 @@ Module DH_Helpdesk_Mail
     Dim eMailConnectionType As MailConnectionType
 
 
+
     Public Sub Main()
+
+        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a case123456 that is created 220101", "Case#")
+        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a case that is created 220101", "Case#")
+        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a case 220101 dfgldsfg", "Case #")
+        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a case 220101", "Case#")
+        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a case", "Case#")
+        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a 220101", "Case#")
+        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a Ärende:12345 that is created 220101", "Ärende: #")
+
+
 
         Dim secureConnectionString As String = GetAppSettingValue("SecureConnectionString")
         If (Not IsNullOrEmpty(secureConnectionString) AndAlso secureConnectionString.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase)) Then
@@ -274,7 +285,7 @@ Module DH_Helpdesk_Mail
         Dim sNewCaseToEmailAddress As String = ""
         Dim sSubject As String
         Dim sBodyText As String = ""
-        Dim j As Integer
+        'Dim j As Integer
         Dim iLog_Id As Integer
         Dim iCaseNumber As Integer
         Dim iListCount As Integer = 0
@@ -671,6 +682,8 @@ Module DH_Helpdesk_Mail
                                     End If
                                 End If
 
+
+
                                 objComputerUser = objComputerUserData.getComputerUserByEMail(sFromEMailAddress, objCustomer.Id)
 
                                 If message.HasBodyText = True Then
@@ -1031,10 +1044,35 @@ Module DH_Helpdesk_Mail
                                     ' Markera ärendet som oläst
                                     objCaseData.markCaseUnread(objCase)
 
+                                    'If objCase.Casenumber = "19851" Then
+                                    '    Dim sff As String
+                                    '    sff = ""
+                                    'End If
                                     ' Uppdatera ärendet och aktivera om det är avslutat
-                                    If objCase.FinishingDate <> Date.MinValue Then
+                                    Dim caseismerged As Integer = 0
+                                    'If objCase.Casenumber = "19965" Or objCase.Casenumber = "19964" Then
+                                    '    Dim g As String
+                                    '    g = ""
+                                    'End If
+                                    caseismerged = objCaseData.checkIfCaseIsMerged(objCase.Id)
+                                    Dim dFinDate As Date
+                                    dFinDate = objCase.FinishingDate
+                                    If caseismerged > 0 Then
+                                        'objCaseData.updateChangeTime(objCase.Id)
+
+                                        objCaseData.updateChangeTime(caseismerged)
+                                        objCase = Nothing
+                                        objCase = objCaseData.getCase(caseismerged)
+
+                                    End If
+
+                                    'If objCase.FinishingDate <> Date.MinValue Then
+                                    If dFinDate <> Date.MinValue Then
                                         ' Aktivera ärendet
-                                        objCaseData.activateCase(objCase, objCustomer.OpenCase_StateSecondary_Id, objCustomer.WorkingDayStart, objCustomer.WorkingDayEnd, objCustomer.TimeZone_offset)
+
+                                        If caseismerged = 0 Then
+                                            objCaseData.activateCase(objCase, objCustomer.OpenCase_StateSecondary_Id, objCustomer.WorkingDayStart, objCustomer.WorkingDayEnd, objCustomer.TimeZone_offset)
+                                        End If
                                     Else
                                         If objCustomer.ModuleAccount = 1 Then
                                             ' Kontrollera om det finns en kopplad beställning
@@ -1062,14 +1100,19 @@ Module DH_Helpdesk_Mail
 
                                     iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, objCase.Persons_EMail)
 
+
                                     Dim isInternalLogUsed As Boolean = CheckInternalLogConditions(iMailID, objCustomer, sFromEMailAddress, sToEMailAddress)
 
                                     ' Save Logs (Logga händelsen)
                                     If isInternalLogUsed Then
                                         ' Save as Internal Log (Lägg in som intern loggpost)
+
                                         iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
+
                                     Else
+
                                         iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", sBodyText, 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
+
                                     End If
 
                                     Dim isTwoAttachmentsActive As Boolean = CheckIfTwoAttachmentsModeEnabled(objCaseData, objCustomer.Id)
@@ -1127,8 +1170,8 @@ Module DH_Helpdesk_Mail
                                                 Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
                                                 sRet_SendMail =
-                                                    objMail.sendMail(objCase, objLog, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings,
-                                                                     sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
+                                                objMail.sendMail(objCase, objLog, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings,
+                                                                 sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
 
                                                 objLogData.createEMailLog(iCaseHistory_Id, objCase.PerformerEMail, MailTemplates.CaseIsUpdated, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             End If
@@ -1150,8 +1193,8 @@ Module DH_Helpdesk_Mail
                                             Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
                                             sRet_SendMail =
-                                                objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings,
-                                                                 sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
+                                            objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings,
+                                                             sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
 
                                             objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, MailTemplates.ClosedCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
 
@@ -1379,19 +1422,19 @@ Module DH_Helpdesk_Mail
                             If Not attach.IsInline Then
                                 Dim b As Boolean = False
                                 Dim strName As String = fileAttach.Name
-                                If InStr(strName, "/") > 0 Or InStr(strName, "~") > 0 Or InStr(strName, ":") > 0 Or InStr(strName, "\") > 0 Then
+                                If InStr(strName, "/") > 0 Or InStr(strName, "~") > 0 Or InStr(strName, ":") > 0 Or InStr(strName, "\") > 0 Or InStr(strName, "*") > 0 Or InStr(strName, "?") > 0 Or InStr(strName, Chr(34)) > 0 Or InStr(strName, "<") > 0 Or InStr(strName, ">") > 0 Or InStr(strName, "|") > 0 Then
                                     If InStr(strName, "\") > 0 Then
                                         Dim iRevPos As Integer
                                         iRevPos = InStrRev(strName, "\")
                                         Dim strNewFileName As String
                                         strNewFileName = Mid(strName, iRevPos + 1, Len(strName) - (iRevPos))
-                                        strNewFileName = Replace(Replace(Replace(strNewFileName, "/", ""), "~", ""), ":", "")
+                                        strNewFileName = Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(strNewFileName, "/", ""), "~", ""), ":", ""), "*", ""), "?", ""), Chr(34), ""), "<", ""), ">", ""), "|", "")
                                         strName = strNewFileName
                                         fileAttach.Load(temppath & "\" & strName)
                                         retval = temppath & "\" & strName
                                         b = True
                                     Else
-                                        strName = Replace(Replace(Replace(Replace(strName, "/", ""), "~", ""), ":", ""), "\", "")
+                                        strName = Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(strName, "/", ""), "~", ""), ":", ""), "\", ""), "*", ""), "?", ""), Chr(34), ""), "<", ""), ">", ""), "|", "")
                                         fileAttach.Load(temppath & "\" & strName)
                                         retval = temppath & "\" & strName
                                         b = True
@@ -1441,11 +1484,11 @@ Module DH_Helpdesk_Mail
 
                                 Dim itemAttachment As ItemAttachment = attach
                                 itemAttachment.Load(ItemSchema.MimeContent)
-                                'Dim fileName As String = "C:\\Temp\\" + itemAttachment.Item.Subject + ".eml"
-                                Dim fileName As String = temppath & "\" & itemAttachment.Item.Subject.Replace(":", "").Replace(",", "").Replace("?", "").Replace(" ", "").Replace("/", "-") + ".eml"
-                                '// Write the bytes of the attachment into a file.
+
+                                Dim fileName As String = temppath & "\" & itemAttachment.Item.Subject.Replace(":", "").Replace(",", "").Replace("?", "").Replace(" ", "").Replace("/", "-").Replace("~", "").Replace("\", "").Replace("*", "").Replace(Chr(34), "").Replace(">", "").Replace("<", "").Replace("|", "") + ".eml"
+
                                 File.WriteAllBytes(fileName, itemAttachment.Item.MimeContent.Content)
-                                'message.Attachments.Add(New Rebex.Mail.Attachment("C:\\Temp\\" + itemAttachment.Item.Subject + ".eml"))
+
                                 message.Attachments.Add(New Rebex.Mail.Attachment(fileName))
 
                                 System.IO.File.Delete(fileName)
@@ -1792,7 +1835,7 @@ Module DH_Helpdesk_Mail
 
                 Select Case d.Key.ToLower
                     Case "isabout_reportedby"
-                        ret.UserId = Left(d.Value, 40)
+                        ret.UserId = Left(d.Value, 200)
                         NoOfIsAboutFields = NoOfIsAboutFields + 1
                     Case "isabout_persons_name"
                         ret.FirstName = Left(d.Value, 50)
@@ -2289,7 +2332,7 @@ Module DH_Helpdesk_Mail
             If Not IsNullOrEmpty(d.Value) Then
                 Select Case d.Key.ToLower
                     Case "reportedby"
-                        c.ReportedBy = Left(d.Value, 40)
+                        c.ReportedBy = Left(d.Value, 200)
                     Case "persons_name"
                         c.Persons_Name = Left(d.Value, 50)
                     Case "persons_email"

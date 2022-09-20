@@ -81,7 +81,6 @@ namespace DH.Helpdesk.Common.Extensions.DateTime
         {
             if (date.HasValue)
             {
-                var d = date.Value;
                 return date.Value.ToString("s", CultureInfo.InvariantCulture);
             }
             else

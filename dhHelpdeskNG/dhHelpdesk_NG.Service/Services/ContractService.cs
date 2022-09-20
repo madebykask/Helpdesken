@@ -46,8 +46,11 @@ namespace DH.Helpdesk.Services.Services
         private readonly IContractLogRepository _contractLogRepository;
         private readonly IContractFieldSettingsRepository _contractFieldSettingsRepository;
         private readonly IContractFileRepository _contractFileRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfwork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public ContractService(
             IContractRepository contractRepository,
             IContractHistoryRepository contractHistoryRepository,
@@ -63,6 +66,7 @@ namespace DH.Helpdesk.Services.Services
             _contractFileRepository = contractFileRepository;
             _unitOfwork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter, int userId, List<int> userCategories)
         {

@@ -1,6 +1,6 @@
 ﻿@model DH.Helpdesk.SelfService.Models.Case.ClosedCaseAlertModel
 
-@if (Model.FinishingDate != null)
+@if (Model.FinishingDate != null & Model.IsMerged == false)
 {
     <div class="alert alert-success">
         @if (Model.CaseComplaintDays != 0)
@@ -16,4 +16,14 @@
         @Translation.Get(": ")
         @Html.DisplayFor(m => m.FinishingDate, "Date")
     </div>
+}
+else
+{
+<div class="alert alert-success">
+
+    @Translation.Get("This case is merged to")
+    @Translation.Get(": ")
+    @Html.ActionLink(Model.MergedParentInfo.CaseNumber.ToString(), "Index", new { id = Model.MergedParentInfo.ParentId })
+
+</div>
 }

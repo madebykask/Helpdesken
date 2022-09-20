@@ -39,6 +39,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
     using System.ComponentModel;
     using System.Data;
     using System.Web;
+    using DH.Helpdesk.BusinessData.Models.Case.MergedCase;
 
     public static class HtmlHelperExtension
     {
@@ -1116,6 +1117,27 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         }
 
         private static GlobalEnums.CaseIcon GetCaseIcon(ChildCaseOverview ci)
+        {
+            var ret = GlobalEnums.CaseIcon.Normal;
+            // TODO Hantera icon för urgent
+            if (ci.ClosingDate != null)
+                if (ci.IsRequriedToApprive && ci.ApprovedDate == null)
+                    ret = GlobalEnums.CaseIcon.FinishedNotApproved;
+                else
+                    ret = GlobalEnums.CaseIcon.Finished;
+
+            return ret;
+        }
+        public static MvcHtmlString ImgForCase(this HtmlHelper helper, MergedChildOverview ci)
+        {
+            var icoCode = GetCaseIcon(ci);
+            var icoTitle = GetCaseIconTitle(icoCode);
+            var content = string.Format("<img title='{0}' alt='{0}' src='/Content/icons/{1}' />", icoTitle, GetCaseIconSrc(icoCode));
+
+            return new MvcHtmlString(content);
+        }
+
+        private static GlobalEnums.CaseIcon GetCaseIcon(MergedChildOverview ci)
         {
             var ret = GlobalEnums.CaseIcon.Normal;
             // TODO Hantera icon för urgent

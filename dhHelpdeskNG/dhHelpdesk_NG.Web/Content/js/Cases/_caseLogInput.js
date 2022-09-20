@@ -46,17 +46,18 @@ function LogInitForm() {
         informNotifier.removeAttr('checked');
         if (this.value.length) {
             $('#CaseLog_SendMailAboutCaseToNotifier:not(:disabled)').attr('checked', 'checked');
-            //var to = $initiatorEmail.val();
-            //var extras = $("#extraEmailsInput").val().replaceAll(";", " ");
-            //if (to != '') {
-            //    $("#emailsTo").css('display', 'inline');
-            //    $("#emailsToTitle").css('display', 'inline');
-            //}
-            //if (extras != '') {
-            //    $('#extraEmailsInputShow').text(extras);
-            //    $('#extraEmailsInputShow').show();
-            //    $("#ccTitle").show();
-            //}
+            var to = $initiatorEmail.val();
+            var extras = $("#extraEmailsInput").val().replaceAll(";", " ").replaceAll(to, "");
+            if (to != '') {
+                $("#emailsTo").html(to);
+                $("#emailsTo").css('display', 'inline');
+                $("#emailsToTitle").css('display', 'inline');
+            }
+            if (extras != '') {
+                $('#extraEmailsInputShow').text(extras);
+                $('#extraEmailsInputShow').show();
+                $("#ccTitle").show();
+            }
              
 
         }

@@ -406,19 +406,28 @@ Imports System.Text.RegularExpressions
                     vEMailSubjectPattern(Index) = Left(vEMailSubjectPattern(Index), iPosCaseNumber - 1)
 
                     ' Leta upp var möstret börjar
+                    'iPos = InStr(sSubject, vEMailSubjectPattern(Index), CompareMethod.Text)
                     iPos = InStr(sSubject, vEMailSubjectPattern(Index), CompareMethod.Text)
 
                     If iPos > 0 Then
                         iPos = iPos + Len(vEMailSubjectPattern(Index))
+                        Dim iStart As Integer = iPos
 
                         ' Starta på iPos och stega till höger tills det inte är ett numeriskt tecken
                         For i As Integer = iPos To Len(sSubject)
+                            If iPos = iStart And Mid(sSubject, i, 1) = " " Then
+                                Exit For
+                            End If
                             If IsNumeric(Mid(sSubject, i, 1)) Then
                                 FirstNumericCharFound = True
                                 sTemp = sTemp & Mid(sSubject, i, 1)
                             Else
                                 If FirstNumericCharFound = True Then
                                     Exit For
+                                Else
+                                    If iStart = iPos And Mid(sSubject, i, 1) <> " " And Mid(sSubject, i, 1) <> "" Then
+                                        Exit For
+                                    End If
                                 End If
 
                             End If

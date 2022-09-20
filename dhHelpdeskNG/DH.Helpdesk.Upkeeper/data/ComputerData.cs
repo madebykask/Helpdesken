@@ -165,7 +165,7 @@ namespace upKeeper2Helpdesk.data
 
 					}
 				}
-				catch (Exception ex)
+				catch (Exception)
 				{
 					throw new System.InvalidOperationException(s);
 

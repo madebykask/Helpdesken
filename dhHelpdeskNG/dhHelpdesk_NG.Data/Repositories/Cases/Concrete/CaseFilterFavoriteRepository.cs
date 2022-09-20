@@ -74,7 +74,6 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                  }
              }
 
-             return "Unexpected error!";
          }
 
          public string DeleteFavorite(int favoriteId)

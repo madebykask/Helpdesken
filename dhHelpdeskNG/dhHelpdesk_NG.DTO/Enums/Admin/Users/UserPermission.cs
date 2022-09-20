@@ -27,6 +27,7 @@
         InvoicePermission,
         CaseUnlockPermission,
         CaseInternalLogPermission,
-        InvoiceTimePermission
+        InvoiceTimePermission,
+        MergeCasePermission
     }
 }

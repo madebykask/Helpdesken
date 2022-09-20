@@ -797,6 +797,7 @@ var ApplyTemplate = function (data, doOverwrite) {
 
             if ($("#dynamicCaseTabContainer").length > 0)
             { $(newTab).insertAfter($("#dynamicCaseTabContainer")); }
+            else if ($("#mergedCaseTabContainer").length > 0) { $(newTab).insertAfter($("#mergedCaseTabContainer")); }
             else if ($("#childCaseTabContainer").length > 0)
             { $(newTab).insertAfter($("#childCaseTabContainer")); }
             else if ($("#caseTabContainer").length > 0)

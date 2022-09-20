@@ -52,13 +52,16 @@ namespace DH.Helpdesk.Services.Services
     using Common.Extensions.String;
     using Utils;
     using DH.Helpdesk.BusinessData.Models.User;
+    using DH.Helpdesk.BusinessData.Models.Case.MergedCase;
 
     public partial class CaseService : ICaseService
     {
         private readonly ICaseRepository _caseRepository;
         private readonly ICaseFileRepository _caseFileRepository;
         private readonly ICaseHistoryRepository _caseHistoryRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly IPriorityService _priorityService;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IUserRepository _userRepository;
@@ -106,6 +109,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IContractLogRepository _contractLogRepository;
         private readonly ICircularService _circularService;
 
+#pragma warning disable 0618
         public CaseService(
             ICaseRepository caseRepository,
             ICaseFileRepository caseFileRepository,
@@ -211,6 +215,8 @@ namespace DH.Helpdesk.Services.Services
             _contractLogRepository = contractLogRepository;
             _circularService = circularService;
         }
+
+#pragma warning restore 0618
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
         {
@@ -667,7 +673,33 @@ namespace DH.Helpdesk.Services.Services
             }
             return true;
         }
+        public bool MergeChildToParentCase(int childCaseId, int parentCaseId)
+        {
+            if (childCaseId == parentCaseId)
+                return false;
 
+            //Todo - Redo again?
+            using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var merged = uow.GetRepository<MergedCases>();
+                var allreadyExists = merged.GetAll()
+                        .Where(it => it.MergedChildId == childCaseId // allready a child for [other|this] case
+                            && it.MergedParentId == parentCaseId) // child case is a parent already
+                        .FirstOrDefault();
+                if (allreadyExists != null)
+                {
+                    return false;
+                }
+
+                merged.Add(new MergedCases()
+                {
+                    MergedParentId = parentCaseId,
+                    MergedChildId = childCaseId,
+                });
+                uow.Save();
+            }
+            return true;
+        }
         /// <summary>
         /// The get case overview.
         /// </summary>
@@ -775,6 +807,17 @@ namespace DH.Helpdesk.Services.Services
             return parentCaseInfo;
         }
 
+        public List<MergedChildOverview> GetMergedCasesFor(int caseId)
+        {
+            return _caseRepository.GetMergedCasesFor(caseId);
+        }
+
+        public MergedParentInfo GetMergedParentInfo(int caseId)
+        {
+            var parentCaseInfo = _caseRepository.GetMergedParentInfo(caseId);
+            return parentCaseInfo;
+        }
+
         public int? SaveInternalLogMessage(int id, string textInternal, out IDictionary<string, string> errors)
         {
             throw new NotImplementedException();
@@ -791,7 +834,7 @@ namespace DH.Helpdesk.Services.Services
             var c = _caseRepository.GetDetachedCaseById(copyFromCaseid);
             if (c.IsAbout == null)
             {
-                var tt = 1;
+                
             }
             if (c == null)
             {
@@ -1022,8 +1065,9 @@ namespace DH.Helpdesk.Services.Services
                 var fc = _finishingCauseService.GetFinishingTypeName(caseLog.FinishingType.Value);
                 extraFields.ClosingReason = fc;
             }
-
-            if (parentCase != null)
+            //Check if it is a merged case
+            var mergeParent = GetMergedParentInfo(cases.Id);
+            if (parentCase != null && mergeParent == null)
             {
                 this.AddChildCase(cases.Id, parentCase.Id, out errors);
             }
@@ -1654,7 +1698,7 @@ namespace DH.Helpdesk.Services.Services
             return h;
         }
 
-        private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, string emailLogGuid, int stateHelper, TimeZoneInfo userTimeZone)
+        private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, string emailLogGuid, int stateHelper, TimeZoneInfo userTimeZone, Case mergeParent = null)
         {
             var ret = new List<Field>();
             var userLocal_RegTime = TimeZoneInfo.ConvertTimeFromUtc(c.RegTime, userTimeZone);
@@ -1750,7 +1794,14 @@ namespace DH.Helpdesk.Services.Services
                     ret.Add(new Field { Key = "[#28]", StringValue = c.ProductArea != null ? c.ProductArea.Name : string.Empty });
                 }
             }
-
+            else
+            {
+                ret.Add(new Field
+                {
+                    Key = "[#28]",
+                    StringValue = string.Empty
+                });
+            }
             ret.Add(new Field { Key = "[#10]", StringValue = l?.TextExternal ?? "" });
             ret.Add(new Field { Key = "[#11]", StringValue = l?.TextInternal ?? "" });
 
@@ -1782,7 +1833,7 @@ namespace DH.Helpdesk.Services.Services
             if (cms != null)
             {
                 // if case is closed and was no vote in survey - add HTML inormation about survey
-                if (c.IsClosed() && (_surveyService.GetByCaseId(c.Id) == null))
+                if (c.IsClosed() && (_surveyService.GetByCaseId(c.Id) == null) && mergeParent == null)
                 {
                     var template = new SurveyTemplate()
                     {
@@ -1812,6 +1863,68 @@ namespace DH.Helpdesk.Services.Services
                     ret.Add(new Field { Key = "[#777]", StringValue = string.Empty });
                 }
             }
+
+            //Merge Parent
+            if(mergeParent != null)
+            {
+                userLocal_RegTime = TimeZoneInfo.ConvertTimeFromUtc(mergeParent.RegTime, userTimeZone);
+                ret.Add(new Field { Key = "[#MP1]", StringValue = mergeParent.CaseNumber.ToString() });
+                ret.Add(new Field { Key = "[#MP16]", StringValue = userLocal_RegTime.ToString() });
+                ret.Add(new Field { Key = "[#MP3]", StringValue = mergeParent.PersonsName });
+                ret.Add(new Field { Key = "[#MP4]", StringValue = mergeParent.Caption });
+                ret.Add(new Field { Key = "[#MP5]", StringValue = mergeParent.Description });
+                if (mergeParent.User_Id.HasValue)
+                {
+                    var user = _userRepository.GetUserName(mergeParent.User_Id.Value);
+                    ret.Add(new Field { Key = "[#MP29]", StringValue = user != null ? user.GetFullName() : string.Empty });
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(c.RegUserName))
+                    {
+                        ret.Add(new Field { Key = "[#MP29]", StringValue = c.RegUserName });
+                    }
+
+                    if (!string.IsNullOrEmpty(c.RegUserId))
+                    {
+                        ret.Add(new Field { Key = "[#MP29]", StringValue = c.RegUserId });
+                    }
+                }
+                //helpdesk site
+                if (cms != null)
+                {
+                    var globalSetting = _globalSettingService.GetGlobalSettings().First();
+                    var editCasePath = globalSetting.UseMobileRouting ?
+                        CasePaths.EDIT_CASE_MOBILEROUTE :
+                        CasePaths.EDIT_CASE_DESKTOP;
+
+                    var site = cms.AbsoluterUrl + editCasePath + mergeParent.Id.ToString();
+                    var url = "<br><a href='" + site + "'>" + site + "</a>";
+                    ret.Add(new Field { Key = "[#MP99]", StringValue = url });
+                }
+                // selfservice site link to merge parent
+                if (cms != null)
+                {
+                    var mergeParentHistoryId = _caseHistoryRepository.GetCaseHistoryByCaseId(mergeParent.Id).Last().Id;
+                    var emailLog = new EmailLog(mergeParentHistoryId, 18, cms.HelpdeskMailFromAdress,
+                        _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                    emailLog.SendTime = DateTime.Now;
+                    emailLog.CreatedDate = DateTime.Now;
+                    emailLog.ChangedDate = DateTime.Now;
+                    emailLog.SendStatus = 0;
+                    _emailLogRepository.Add(emailLog);
+                    _emailLogRepository.Commit();
+
+                    if (emailLogGuid == string.Empty)
+                        emailLogGuid = " >> *" + stateHelper.ToString() + "*";
+
+                    var site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + emailLog.EmailLogGUID;
+                    var url = "<br><a href='" + site + "'>" + site + "</a>";
+                    ret.Add(new Field { Key = "[#MP98]", StringValue = url });
+                    ret.Add(new Field { Key = "[#MP98Link]", StringValue = site });
+                }
+            }
+            
 
             return ret;
         }

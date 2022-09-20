@@ -38,6 +38,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly IUserService _userService;
 
+        private readonly ILogService _logService;
+
         public ProblemsController(
                 IProblemService problemService,
                 IMasterDataService masterDataService,
@@ -46,7 +48,8 @@ namespace DH.Helpdesk.Web.Controllers
                 ICaseService caseService,
                 ISettingService settingService,
                 IFinishingCauseService finishingCauseService,
-                ICustomerService customerService)
+                ICustomerService customerService,
+                ILogService logService)
             : base(masterDataService)
         {
             _problemService = problemService;
@@ -56,6 +59,7 @@ namespace DH.Helpdesk.Web.Controllers
             _finishingCauseService = finishingCauseService;
             _settingService = settingService;
             _customerService = customerService;
+            _logService = logService;
         }
 
         public ProblemOutputModel MapProblemOverviewToOutputModel(ProblemOverview problemOverview, bool isFirstNameFirst)
@@ -340,6 +344,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             //Save LogNote - SaveCaseLog
             SendProblemLogEmailAndSaveHistory(log);
+
+            //Save entry in TblLog
+            SaveLogFile(log);
+
+
             return this.RedirectToAction("ProblemActiveLog", new { id = log.ProblemId });
         }
 
@@ -362,6 +371,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var logDto = new NewProblemLogDto(
+                
                 SessionFacade.CurrentUser.Id,
                 log.LogText,
                 showInCaseLog,
@@ -370,7 +380,12 @@ namespace DH.Helpdesk.Web.Controllers
                 log.FinishConnectedCases ? 1 : 0) { ProblemId = log.ProblemId, Id = log.Id };
 
             this._problemLogService.UpdateLog(logDto);
+
             SendProblemLogEmailAndSaveHistory(log);
+
+            //Save entry in TblLog
+            SaveLogFile(log);
+
             return this.RedirectToAction("ProblemActiveLog", new { id = log.ProblemId });
         }
 
@@ -408,10 +423,41 @@ namespace DH.Helpdesk.Web.Controllers
             var userOutputModels = users.Select(x => new SelectListItem 
                 { 
                     Text = (isFirstName? string.Format("{0} {1}", x.FirstName, x.SurName) : string.Format("{0} {1}", x.SurName, x.FirstName)), 
-                    Value = x.Id.ToString(CultureInfo.InvariantCulture) 
-                }).OrderBy(x=> x.Text).ToList();
+                    Value = x.Id.ToString(CultureInfo.InvariantCulture)
+            }).OrderBy(x => x.Text).ToList();
 
             return new ProblemEditViewModel { Problem = problemOutputModel, Users = userOutputModels, Logs = outputLogs, Cases = outputCases };
+        }
+
+        private void SaveLogFile(LogEditModel log)
+        {
+
+            if (log.FinishConnectedCases)
+            {
+                var cases = _caseService.GetProblemCases(log.ProblemId);
+
+                foreach (var c in cases)
+                {
+
+                    var caseHistoryId = _problemService.GetCaseHistoryId(c.Id, log.ProblemId);
+
+                    var caseLog = new CaseLog
+                    {
+                        LogGuid = Guid.NewGuid(),
+                        CaseHistoryId = caseHistoryId,
+                        CaseId = c.Id,
+                        TextInternal = log.InternNotering ? log.LogText : "",
+                        TextExternal = log.ExternNotering ? log.LogText : "",
+                        UserId = SessionFacade.CurrentUser.Id,
+                        FinishingDate = log.FinishConnectedCases ? (log.FinishingDate.HasValue ? log.FinishingDate : DateTime.Now) : null,
+                        FinishingType = log.FinishConnectedCases ? log.FinishingCauseId : null,
+                    };
+                    IDictionary<string, string> errors;
+                    int logId = _logService.SaveLog(caseLog, 0, out errors);
+                }
+
+            }
+
         }
 
         private void SendProblemLogEmailAndSaveHistory(LogEditModel log)
@@ -435,6 +481,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                     var caseLog = new CaseLog
                     {
+                        LogGuid = Guid.NewGuid(),
                         CaseId = c.Id,
                         FinishingDate = log.FinishConnectedCases ? (log.FinishingDate.HasValue ? log.FinishingDate : DateTime.Now) : null,
                         FinishingType = log.FinishConnectedCases ? log.FinishingCauseId : null,

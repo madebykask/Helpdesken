@@ -12,7 +12,9 @@ namespace DH.Helpdesk.SelfService.Infrastructure.WorkContext.Concrete
 
         public ICustomerContext Customer { get; private set; }
 
+#pragma warning disable 0618
         public ICacheContext Cache { get; private set; }
+#pragma warning restore 0618
 
         public void Refresh()
         {

@@ -117,7 +117,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             {
                 fileContent = _faqService.GetFileContentByFaqIdAndFileName(int.Parse(faqId), baseFilePath, fileName);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }

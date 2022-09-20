@@ -93,6 +93,14 @@
         <tr>
             <td></td>
             <td>
+                <input data-field="mergeCasePermission" type="checkbox" name="User.MergeCasePermission" @(Model.User.MergeCasePermission == 1 ? "checked=checked" : "") value="1" />
+                <input type="hidden" name="User.MergeCasePermission" value="0" />
+                &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren får sammanfoga ärenden")
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
                 <input data-field="copyCasePermission" type="checkbox" name="User.CopyCasePermission" @(Model.User.CopyCasePermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.CopyCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren får kopiera ärenden")

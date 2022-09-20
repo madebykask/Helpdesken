@@ -15,7 +15,7 @@
             this.Property(u => u.Customer_Id).IsOptional();
             this.HasOptional(u => u.Customer).WithMany().HasForeignKey(u => u.Customer_Id).WillCascadeOnDelete(false);
             this.Property(u => u.UserGUID).IsRequired().HasMaxLength(100);
-            this.Property(u => u.UserId).IsOptional().HasMaxLength(50);
+            this.Property(u => u.UserId).IsOptional().HasMaxLength(200);
             this.Property(u => u.Domain_Id).IsOptional();
             this.HasOptional(u => u.Domain).WithMany().HasForeignKey(u => u.Domain_Id).WillCascadeOnDelete(false);
             this.Property(u => u.LogonName).IsRequired().HasMaxLength(50);

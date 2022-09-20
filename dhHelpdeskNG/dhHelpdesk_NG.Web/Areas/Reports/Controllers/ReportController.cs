@@ -113,6 +113,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
             var model = new ReportsOptions();
             var lastState = SessionFacade.ReportService;
+
+
             model.ReportServiceOverview = GetReportServiceModel(customerId, userId, lastState);
 
             return View(model);
@@ -332,6 +334,15 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
                 SessionFacade.SavePageFilters(PageName.ReportsReportGenerator, filters);
 
+                
+                var selectedReport = filters.MapToSelectedFilter(filters);
+
+                SessionFacade.ReportService = new ReportServiceSessionModel()
+                {
+                    ReportName = options.ReportName,
+                    SelectedFilter = selectedReport
+                };
+
 
                 if (options != null && options.IsPreview)
                 {
@@ -393,7 +404,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
                 return this.PartialView("Reports/ReportGenerator", model);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 SessionFacade.SavePageFilters(PageName.ReportsReportGenerator, ReportGeneratorFilterModel.CreateDefault());
                 throw;
@@ -811,9 +822,14 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 ret.Items.AddItem(customReport.Value, customReport.Text);
             }
 
-            var defaultSelected = ret.Items.FirstOrDefault(i => i.Value.ToLower() == defaultReportName.ToLower());
-            if (defaultSelected != null)
-                ret.SelectedItems.AddItem(int.Parse(defaultSelected.Id));
+            if (!String.IsNullOrEmpty(defaultReportName))
+            {
+                var defaultSelected = ret.Items.FirstOrDefault(i => i.Value.ToLower() == defaultReportName.ToLower());
+                if (defaultSelected != null)
+                    ret.SelectedItems.AddItem(int.Parse(defaultSelected.Id));
+
+            }
+
 
             return ret;
         }

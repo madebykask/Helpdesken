@@ -114,9 +114,12 @@ namespace DH.Helpdesk.Services.Services
     {
         private readonly IProductAreaRepository _productAreaRepository;
         private readonly IWorkingGroupRepository _workingGroupRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
+#pragma warning disable 0618
         public ProductAreaService(
             IProductAreaRepository productAreaRepository,
             IWorkingGroupRepository workingGroupRepository,
@@ -128,6 +131,7 @@ namespace DH.Helpdesk.Services.Services
             _unitOfWork = unitOfWork;
             _unitOfWorkFactory = unitOfWorkFactory;
         }
+#pragma warning restore 0618
 
         public ProductAreaEntity[] GetProductAreasForCustomer(int customerId)
         {

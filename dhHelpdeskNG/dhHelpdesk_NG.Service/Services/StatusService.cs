@@ -35,8 +35,11 @@
     public class StatusService : IStatusService
     {
         private readonly IStatusRepository _statusRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public StatusService(
             IStatusRepository statusRepository,
             IUnitOfWork unitOfWork)
@@ -44,6 +47,7 @@
             this._statusRepository = statusRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<Status> GetStatuses(int customerId)
         {

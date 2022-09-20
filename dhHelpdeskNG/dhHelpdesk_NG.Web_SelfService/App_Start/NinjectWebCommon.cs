@@ -133,7 +133,9 @@ namespace DH.Helpdesk.SelfService
         private static void RegisterServices(IKernel kernel)
         {
             // Data Infrastructure
+#pragma warning disable 0618
             kernel.Bind<IUnitOfWork>().To<UnitOfWork>();
+#pragma warning restore 0618
             kernel.Bind<IFilesStorage>().To<FilesStorage>().InRequestScope();
             kernel.Bind<IUserTemporaryFilesStorageFactory>().To<UserTemporaryFilesStorageFactory>().InRequestScope();
             kernel.Bind<IDatabaseFactory>().To<DatabaseFactory>().InRequestScope();

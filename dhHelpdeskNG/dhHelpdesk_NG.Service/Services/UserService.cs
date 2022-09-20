@@ -206,7 +206,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly IDepartmentRepository _departmentRepository;
         private readonly IOrderTypeRepository _orderTypeRepository;
         private readonly IContractCategoryRepository _contractCategoryRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly IUserRepository _userRepository;
         private readonly IUserGroupRepository _userGroupRepository;
         private readonly IUserRoleRepository _userRoleRepository;
@@ -222,8 +224,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly ISettingRepository _settingRepository;
 
         private readonly IEntityToBusinessModelMapper<Setting, CustomerSettings> _customerSettingsToBusinessModelMapper;
-        
 
+
+#pragma warning disable 0618
         public UserService(
             IAccountActivityRepository accountActivityRepository,
             ICustomerRepository customerRepository,
@@ -269,6 +272,7 @@ namespace DH.Helpdesk.Services.Services
             _customerSettingsToBusinessModelMapper = customerSettingsToBusinessModelMapper;
             _settingRepository = settingRepository;
         }
+#pragma warning restore 0618
 
 
         public bool UserHasActiveCase(int customerId, int userId, List<int> workingGroups)

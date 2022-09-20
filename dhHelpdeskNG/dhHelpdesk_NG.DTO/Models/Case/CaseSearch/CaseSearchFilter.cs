@@ -102,7 +102,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public PageInfo PageInfo { get; set; }
 
         public bool IsConnectToParent { get; set; }
-
+        public bool ToBeMerged { get; set; }
         public bool IsExtendedSearch { get; set; }
 
         public int? CurrentCaseId { get; set; }
@@ -168,6 +168,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.CurrentCaseId = o.CurrentCaseId;
             r.IsExtendedSearch = o.IsExtendedSearch;
             r.FetchInfoAboutParentChild = o.FetchInfoAboutParentChild;
+            r.ToBeMerged = o.ToBeMerged;
 
             if (CaseOverviewCriteria != null)
             {

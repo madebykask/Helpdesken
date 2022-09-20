@@ -14,18 +14,34 @@
         pageSettings.curUserId = '@(SessionFacade.CurrentUser != null ? SessionFacade.CurrentUser.UserId.ToLower(): string.Empty)';
 
         $("#case_connect_to_parent_btn").on("click", function () {
+            $("#tomerge").val('false');
+            $("#dontSendMailToNotifier").val('false');
             var $src = $(this);
             var $target = $("#divConnectParentToParent");
             $target.attr("data-src", $src.attr("data-src"));
             $target.modal("show");
             LoadConnectToParent(pageSettings);
         });
-        
+        $("#merge_case_to_parent").on("click", function () {
+            var sendEmail = document.getElementById('CaseMailSetting_DontSendMailToNotifier');
+            if (sendEmail.checked) {
+                $("#dontSendMailToNotifier").val('false');
+            } else {
+                $("#dontSendMailToNotifier").val('true');
+            }
+            $("#tomerge").val('true');
+            var $src = $(this);
+            var $target = $("#divConnectParentToParent");
+            $target.attr("data-src", $src.attr("data-src"));
+            $target.modal("show");
+            LoadConnectToParent(pageSettings);
+        });
+
     });
 </script>
 
 <button type="button" class="close" data-dismiss="modal" style="margin-right: 5px;">&times;</button>
-<div id="case_connect_to_parent_popup" >
+<div id="case_connect_to_parent_popup">
     <div class="content modalpopup">
         <div>
             <div class="tab-content">
@@ -42,11 +58,13 @@
                             </div>
                         </div>
                         <div class="no-data-msg">&nbsp;</div>
-                        <div class="error-msg">@Html.Raw(string.Format(Translation.GetCoreTextTranslation("Ett fel inträffade, klicka")+" {0}" + Translation.GetCoreTextTranslation("här")+"{1} " + Translation.GetCoreTextTranslation("för att ladda om sidan."), "<a href=\"#refresh\" class=\"refresh-grid\">", "</a>"))</div>
+                        <div class="error-msg">@Html.Raw(string.Format(Translation.GetCoreTextTranslation("Ett fel inträffade, klicka") + " {0}" + Translation.GetCoreTextTranslation("här") + "{1} " + Translation.GetCoreTextTranslation("för att ladda om sidan."), "<a href=\"#refresh\" class=\"refresh-grid\">", "</a>"))</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
 @Scripts.Render(BundleConfig.ScriptNames.CaseConnectToParent)

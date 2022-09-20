@@ -34,12 +34,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Print
         /// <summary>
         /// The header elements.
         /// </summary>
-        private ArrayList headerElements;
+        /// 
+        private readonly ArrayList headerElements = null;
 
         /// <summary>
         /// The footer elements.
         /// </summary>
-        private ArrayList footerElements;
+        private readonly ArrayList footerElements = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PrintPdfEvents"/> class.

@@ -35,8 +35,11 @@
     public class ImpactService : IImpactService
     {
         private readonly IImpactRepository _impactRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public ImpactService(
             IImpactRepository impactRepository,
             IUnitOfWork unitOfWork)
@@ -44,6 +47,7 @@
             this._impactRepository = impactRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<Impact> GetImpacts(int customerId)
         {

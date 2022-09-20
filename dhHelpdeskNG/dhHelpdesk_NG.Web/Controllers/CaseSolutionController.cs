@@ -2700,7 +2700,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                 IsDefault = caseCatView.IsDefault,
                 Name = caseCatView.Name,
-                Customer_Id = Convert.ToInt32(SessionFacade.CurrentCustomer.CustomerID)
+                Customer_Id = Convert.ToInt32(SessionFacade.CurrentCustomer.Id)
             };
             IDictionary<string, string> errors = new Dictionary<string, string>();
             this._caseSolutionService.SaveCaseSolutionCategory(caseSolutionCat, out errors);
@@ -3169,7 +3169,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 Categories = this._categoryService.GetActiveParentCategoriesOverviews(curCustomerId),
 
-                FinishingCauses = this._finishingCauseService.GetFinishingCausesWithChilds(curCustomerId),
+                FinishingCauses = this._finishingCauseService.GetFinishingCausesWithChilds(curCustomerId).Where(x => x.Merged == false).ToList(),
 
                 PerformerUsers = performersList,
 

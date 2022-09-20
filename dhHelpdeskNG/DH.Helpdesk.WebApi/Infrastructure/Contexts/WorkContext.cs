@@ -36,7 +36,10 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Contexts
         /// <summary>
         /// Gets the cache.
         /// </summary>
+        /// 
+#pragma warning disable 0618
         public ICacheContext Cache { get; }
+#pragma warning restore 0618
 
         /// <summary>
         /// The refresh.

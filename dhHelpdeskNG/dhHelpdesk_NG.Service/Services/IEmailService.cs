@@ -36,7 +36,8 @@ namespace DH.Helpdesk.Services.Services
             List<MailFile> files = null,
             string siteSelfService = "",
             string siteHelpdesk = "",
-            EmailType emailType = EmailType.ToMail);
+            EmailType emailType = EmailType.ToMail,
+            string siteSelfServiceMergeParent = "");
 
         EmailResponse SendEmail(
             EmailLog el,
@@ -52,7 +53,9 @@ namespace DH.Helpdesk.Services.Services
             List<MailFile> files = null,
             string siteSelfService = "",
             string siteHelpdesk = "",
-            EmailType emailType = EmailType.ToMail);
+            EmailType emailType = EmailType.ToMail,
+            string siteSelfServiceMergeParent = ""
+            );
 
         EmailResponse SendEmail(EmailLog el, EmailItem item, EmailSettings emailsettings, string siteSelfService = "",
             string siteHelpdesk = "", EmailType emailType = EmailType.ToMail);

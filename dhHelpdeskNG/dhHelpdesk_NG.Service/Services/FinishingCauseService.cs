@@ -32,14 +32,19 @@ namespace DH.Helpdesk.Services.Services
         void Commit();
 
         IEnumerable<FinishingCauseInfo> GetFinishingCauseInfos(int customerId);
+        IEnumerable<FinishingCauseInfo> GetAllFinishingCauseInfos(int customerId);
+        FinishingCause GetMergedFinishingCause(int customerId);
     }
 
     public class FinishingCauseService : IFinishingCauseService
     {
         private readonly IFinishingCauseCategoryRepository _finishingCauseCategoryRepository;
         private readonly IFinishingCauseRepository _finishingCauseRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public FinishingCauseService(
             IFinishingCauseCategoryRepository finishingCauseCategoryRepository,
             IFinishingCauseRepository finishingCauseRepository,
@@ -49,6 +54,7 @@ namespace DH.Helpdesk.Services.Services
             this._finishingCauseRepository = finishingCauseRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public string GetFinishingTypeName(int id)
         {
@@ -116,7 +122,10 @@ namespace DH.Helpdesk.Services.Services
         {
             return this._finishingCauseRepository.Get(x => x.Id == id);
         }
-
+        public FinishingCause GetMergedFinishingCause(int customerId)
+        {
+            return this._finishingCauseRepository.Get(x => x.Customer_Id == customerId && x.Merged == true);
+        }
         public IList<FinishingCause> GetSubFinishingCauses(int id)
         {
             return this._finishingCauseRepository.GetMany(x => x.Parent_FinishingCause_Id == id).ToList();
@@ -220,6 +229,11 @@ namespace DH.Helpdesk.Services.Services
         public IEnumerable<FinishingCauseInfo> GetFinishingCauseInfos(int customerId)
         {
             return this._finishingCauseRepository.GetFinishingCauseInfos(customerId);
+        }
+
+        public IEnumerable<FinishingCauseInfo> GetAllFinishingCauseInfos(int customerId)
+        {
+            return this._finishingCauseRepository.GetAllFinishingCauseInfos(customerId);
         }
 
         private void CreateFinishingCauseOverviewTree(FinishingCauseOverview parentCategory, IList<FinishingCauseOverview> allCategories)

@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
+using DH.Helpdesk.BusinessData.Models.Case.MergedCase;
 using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Dal.Repositories
@@ -73,6 +74,8 @@ namespace DH.Helpdesk.Dal.Repositories
         StateSecondary GetCaseSubStatus(int caseId);
         List<ChildCaseOverview> GetChildCasesFor(int parentCaseId);
         ParentCaseInfo GetParentInfo(int childCaseId);
+        List<MergedChildOverview> GetMergedCasesFor(int parentCaseId);
+        MergedParentInfo GetMergedParentInfo(int childCaseId);
         List<Case> GetTop100CasesToTest();
         Case GetCaseQuickOpen(UserOverview user, Expression<Func<Case, bool>> casePermissionFilter, string searchFor);
         int GetCaseCustomerId(int caseId);
@@ -823,6 +826,39 @@ namespace DH.Helpdesk.Dal.Repositories
             return query.AsNoTracking().ToList();
         }
 
+        public List<MergedChildOverview> GetMergedCasesFor(int parentCaseId)
+        {
+            var query =
+                from childCase in DataContext.Cases
+                join rel in DataContext.MergedCases on childCase.Id equals rel.MergedChildId
+                join perf in DataContext.Users on childCase.Performer_User_Id equals perf.Id into perfGroup
+                from perf in perfGroup.DefaultIfEmpty()
+                join subState in DataContext.StateSecondaries on childCase.StateSecondary_Id equals subState.Id into subStatesGroup
+                from subState in subStatesGroup.DefaultIfEmpty()
+                where rel.MergedParentId == parentCaseId
+                select new MergedChildOverview
+                {
+                    Id = childCase.Id,
+                    ParentId = rel.MergedParentId,
+                    CaseNoDecimal = childCase.CaseNumber,
+                    Subject = childCase.Caption,
+                    CasePerformer = new UserNamesStruct
+                    {
+                        FirstName = perf.FirstName ?? "", //keep for linq to sql correct translation 
+                        LastName = perf.SurName ?? "",
+                    },
+                    SubStatus = subState.Name ?? "",
+                    Priority = childCase.Priority.Name ?? "",
+                    CaseType = childCase.CaseType.Name ?? "",
+                    IsRequriedToApprive = childCase.CaseType.RequireApproving == 1,
+                    RegistrationDate = childCase.RegTime,
+                    ClosingDate = childCase.FinishingDate,
+                    ApprovedDate = childCase.ApprovedDate
+                };
+
+            return query.AsNoTracking().ToList();
+        }
+
         public ParentCaseInfo GetParentInfo(int childCaseId)
         {
             var query =
@@ -847,7 +883,30 @@ namespace DH.Helpdesk.Dal.Repositories
             return query.AsNoTracking().FirstOrDefault();
         }
 
-		public class CaseCustomer
+        public MergedParentInfo GetMergedParentInfo(int childCaseId)
+        {
+            var query =
+                from parentCase in DataContext.Cases
+                join rel in DataContext.MergedCases on parentCase.Id equals rel.MergedParentId
+                join perf in DataContext.Users on parentCase.Performer_User_Id equals perf.Id into perfGroup
+                from perf in perfGroup.DefaultIfEmpty()
+                where rel.MergedChildId == childCaseId
+                select new MergedParentInfo
+                {
+                    ParentId = rel.MergedParentId,
+                    CaseNumber = (int)parentCase.CaseNumber,
+                    CaseAdministrator = new UserNamesStruct
+                    {
+                        FirstName = perf.FirstName ?? "", //keep "" for linq correct translation
+                        LastName = perf.SurName ?? "",
+                    },
+                    FinishingDate = parentCase.FinishingDate
+                };
+
+            return query.AsNoTracking().FirstOrDefault();
+        }
+
+        public class CaseCustomer
 		{
 			public Case Case { get; set; }
 			public Customer Customer { get; set; }

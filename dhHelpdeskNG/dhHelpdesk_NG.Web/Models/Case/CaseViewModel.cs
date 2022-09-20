@@ -32,7 +32,9 @@ using DH.Helpdesk.Web.Models.Invoice;
 using DH.Helpdesk.Web.Models.Shared;
 
 using ParentCaseInfo = DH.Helpdesk.Web.Models.Case.ChildCase.ParentCaseInfo;
+using MergedParentInfo = DH.Helpdesk.Web.Models.Case.ChildCase.MergedParentInfo;
 using DH.Helpdesk.BusinessData.Models.Case.Input;
+using DH.Helpdesk.BusinessData.Models.Case.MergedCase;
 
 namespace DH.Helpdesk.Web.Models.Case
 {
@@ -109,6 +111,7 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public CaseInputViewModel()
         {
+
             CaseSolutionSettingModels = CaseSolutionSettingModel.CreateDefaultModel();
             CustomerRegistrationSources = new List<SelectListItem>()
             {
@@ -121,10 +124,12 @@ namespace DH.Helpdesk.Web.Models.Case
             ExternalInvoices = new List<ExternalInvoiceModel>();
             SelectedWorkflowStep = 0;
             CaseLock = new CaseLockModel();
+            NumberOfCustomers = 0;
         }
 
         public CaseLogViewModel CreateCaseLogViewModel()
         {
+#pragma warning disable 0618
             return new CaseLogViewModel
             {
                 CustomerId = CustomerId,
@@ -149,10 +154,12 @@ namespace DH.Helpdesk.Web.Models.Case
                 ShowExternalInvoiceFields = ShowExternalInvoiceFields,
                 ExternalInvoices = ExternalInvoices,
             };
+#pragma warning restore 0618
         }
 
         public CaseHistoryViewModel CreateHistoryViewModel()
         {
+#pragma warning disable 0618
             return new CaseHistoryViewModel()
             {
                 CaseCustomerId = case_?.Customer_Id,
@@ -163,6 +170,7 @@ namespace DH.Helpdesk.Web.Models.Case
                 CaseHistories = CaseHistories?.OrderByDescending(x => x.Id).ToList() ?? new List<CaseHistoryOverview>(),
                 MailTemplates = MailTemplates
             };
+#pragma warning restore 0618
         }
 
         public string CaseKey { get; set; }
@@ -190,24 +198,31 @@ namespace DH.Helpdesk.Web.Models.Case
         public string ActiveTab { get; set; }
         public int? SelectedWorkflowStep { get; set; }
         public int CurrentCaseLanguageId { get; set; }
+        public int NumberOfCustomers { get; set; }
 
         [Obsolete("Put all fields that you required into this CaseInputViewModel model")]
         public Domain.Case case_  { get; set; }
 
         public int CaseId
         {
+#pragma warning disable 0618
             get { return case_?.Id ?? 0; }
+#pragma warning restore 0618
         }
 
 
         public int CustomerId
         {
+#pragma warning disable 0618
             get { return case_?.Customer_Id ?? 0; }
+#pragma warning restore 0618
         }
 
         public decimal CaseNumber
         {
+#pragma warning disable 0618
             get { return case_?.CaseNumber ?? 0; }
+#pragma warning restore 0618
         }
 
         public IList<string> WhiteFilesList { get; set; }
@@ -377,7 +392,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public int ClosedChildCasesCount { get; set; }
 
         public ParentCaseInfo ParentCaseInfo { get; set; }
-
+        public MergedParentInfo MergedParentInfo { get; set; }
         public ReportModel CasePrintView { get; set; }
 
         public int? MovedFromCustomerId { get; set; }
@@ -390,7 +405,14 @@ namespace DH.Helpdesk.Web.Models.Case
         {
             return this.ParentCaseInfo != null && ParentCaseInfo.ParentId != 0;
         }
-
+        public bool IsItMergedChild()
+        {
+            return this.MergedParentInfo != null && MergedParentInfo.ParentId != 0;
+        }
+        public bool IsItMergedParent()
+        {
+            return this.ChildCaseViewModel != null && this.ChildCaseViewModel.MergedChildList != null && this.ChildCaseViewModel.MergedChildList.Count > 0;
+        }
         public bool IsItParentCase()
         {
             return this.ChildCaseViewModel != null && this.ChildCaseViewModel.ChildCaseList != null && this.ChildCaseViewModel.ChildCaseList.Count > 0;
@@ -407,7 +429,14 @@ namespace DH.Helpdesk.Web.Models.Case
             {
                 return "Parent";
             }
-
+            if (this.IsItMergedChild())
+            {
+                return "Merged";
+            }
+            if (this.IsItMergedParent())
+            {
+                return "MergedParent";
+            }
             return "";
         }
 
@@ -556,6 +585,11 @@ namespace DH.Helpdesk.Web.Models.Case
         public Dictionary<string, string> messages { get; set; }
 
         public int refreshContent { get; set; }
+
+        public string HelperRegTime { get; set; }
+
+        public string HelperCaption { get; set; }
+
     }
 
     public class JsonCaseIndexViewModel
@@ -569,6 +603,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public PageSettingsModel PageSettings { get; set; }
 
         public CaseRemainingTimeViewModel RemainingTime { get; set; }
+        public CaseInputViewModel CaseInputViewModel { get; set; }
     }
 
     public class AdvancedSearchIndexViewModel

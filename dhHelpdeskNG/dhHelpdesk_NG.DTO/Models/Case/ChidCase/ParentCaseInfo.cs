@@ -15,5 +15,5 @@
 
         public DateTime? FinishingDate { get; set; }
 		public bool IsChildIndependent { get; internal set; }
-	}
+    }
 }

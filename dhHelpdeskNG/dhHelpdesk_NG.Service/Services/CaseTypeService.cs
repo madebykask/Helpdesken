@@ -46,9 +46,12 @@ namespace DH.Helpdesk.Services.Services
     public class CaseTypeService : ICaseTypeService
     {
         private readonly ICaseTypeRepository _caseTypeRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
         private readonly ICaseRepository _caseRepository;
-        
+
+#pragma warning disable 0618
         public CaseTypeService(
             ICaseTypeRepository caseTypeRepository,
             ICaseRepository caseRepository,
@@ -58,6 +61,7 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
         }
+#pragma warning restore 0618
 
         public IList<CaseType> GetCaseTypes(int customerId, bool isTakeOnlyActive = false)
         {

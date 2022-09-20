@@ -25,8 +25,12 @@
     public class DomainService : IDomainService
     {
         private readonly IDomainRepository _domainRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
+#pragma warning disable 0618
+        private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
+
+#pragma warning disable 0618
         public DomainService(
             IDomainRepository domainRepository,
             IUnitOfWork unitOfWork)
@@ -34,6 +38,7 @@
             this._domainRepository = domainRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<Domain.Domain> GetAllDomains()
         {

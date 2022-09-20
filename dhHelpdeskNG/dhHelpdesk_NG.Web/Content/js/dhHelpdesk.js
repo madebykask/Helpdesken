@@ -289,10 +289,9 @@ function productAreaHasChild(productAreaId) {
     });
 }
 
-function finishingCauseHasChild(finishingCauseId) {
-    $.get('/Cases/FinishingCauseHasChild', { fId: finishingCauseId, now: Date.now() }, function (data) {
-        return data;
-    });
+async function finishingCauseHasChild(finishingCauseId) {
+    let ret = await $.get('/Cases/FinishingCauseHasChild', { fId: finishingCauseId, now: Date.now() });
+    return ret;
 }
 
 function SendToDialogCaseCallback(email) {

@@ -23,15 +23,19 @@
     public class GlobalSettingService : IGlobalSettingService
     {
         private readonly IGlobalSettingRepository _globalSettingRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
         #region ctor()
 
+#pragma warning disable 0618
         public GlobalSettingService(IGlobalSettingRepository globalSettingRepository, IUnitOfWork unitOfWork)
         {
             this._globalSettingRepository = globalSettingRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         #endregion
 

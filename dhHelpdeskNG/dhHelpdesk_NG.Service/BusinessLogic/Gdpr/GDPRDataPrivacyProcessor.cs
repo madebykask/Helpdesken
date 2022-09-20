@@ -113,7 +113,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
         
         public void Process(int customerId, int userId, DataPrivacyParameters p, int batchSize)
         {
-            bool res = true;
             var processedCasesIds = new List<int>();
             var filesToDelete = new List<CaseFileEntity>();
 

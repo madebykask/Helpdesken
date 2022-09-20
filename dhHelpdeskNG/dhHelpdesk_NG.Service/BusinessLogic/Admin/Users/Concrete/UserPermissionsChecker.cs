@@ -162,6 +162,11 @@
                 permissions.Add(UserPermission.InvoiceTimePermission);
             }
 
+            if (user.MergeCasePermission.ToBool())
+            {
+                permissions.Add(UserPermission.MergeCasePermission);
+            }
+
             return permissions;
         }
 

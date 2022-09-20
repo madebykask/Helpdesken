@@ -28,8 +28,11 @@
     public class RegistrationSourceCustomerService : IRegistrationSourceCustomerService
     {
         private readonly IRegistrationSourceCustomerRepository _registrationSourceCustomerRepository;
+#pragma warning disable 0618
         private readonly IUnitOfWork _unitOfWork;
+#pragma warning restore 0618
 
+#pragma warning disable 0618
         public RegistrationSourceCustomerService(
             IRegistrationSourceCustomerRepository registrationSourceCustomerRepository,
             IUnitOfWork unitOfWork)
@@ -37,6 +40,7 @@
             this._registrationSourceCustomerRepository = registrationSourceCustomerRepository;
             this._unitOfWork = unitOfWork;
         }
+#pragma warning restore 0618
 
         public IList<RegistrationSourceCustomer> GetRegistrationSources(int customerId)
         {
