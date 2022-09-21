@@ -1104,6 +1104,10 @@ namespace DH.Helpdesk.Web.Controllers
             var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
 
             var casesLocks = _caseLockService.GetLockedCasesToOverView(ids, globalSettings, this.DefaultCaseLockBufferTime).ToList();
+
+            var workinggroupsForUserAndCustomer = _userService
+                                    .GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
+
             foreach (var searchRow in caseSearchResults)
             {
                 var caseId = searchRow.Id;
@@ -1135,15 +1139,13 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if(searchRow.ExtendedSearchInfo != null)
                 {
-                    var workinggroupsForUserAndCustomer = _userService
-                                                        .GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, searchRow.ExtendedSearchInfo.CustomerId)
-                                                        .FirstOrDefault(x => x.IsActive && x.WorkingGroup_Id == searchRow.ExtendedSearchInfo.WorkingGroupId);
-                    if (workinggroupsForUserAndCustomer != null)
+                    var wg = workinggroupsForUserAndCustomer.FirstOrDefault(x => x.WorkingGroup_Id == searchRow.ExtendedSearchInfo.WorkingGroupId);
+                    if (wg != null)
                     {
                         var cc = _caseService.GetCaseById(caseId);
                         var accessMode = CalcEditMode(searchRow.ExtendedSearchInfo.CustomerId, SessionFacade.CurrentUser.Id, cc);
 
-                        if (!workinggroupsForUserAndCustomer.IsMemberOfGroup && workinggroupsForUserAndCustomer.WorkingGroup_Id > 0 
+                        if (!wg.IsMemberOfGroup && wg.WorkingGroup_Id > 0 
                             && accessMode != AccessMode.FullAccess)
                         {
                             jsRow.Add("isNotMemberOfGroup", true);
