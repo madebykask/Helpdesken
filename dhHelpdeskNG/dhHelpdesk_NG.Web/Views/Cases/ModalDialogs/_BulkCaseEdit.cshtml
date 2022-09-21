@@ -512,12 +512,7 @@
 
             // Remove after implementing http://redmine.fastdev.se/issues/10995
             // filter administrators
-            if ($caseWorkingGroupId.val() !== '') {
-                $casePerformer_Id.attr('disabled', false);
-            }
-            else {
-                $casePerformer_Id.attr('disabled', true);
-            }
+            handlePerformingIdBasedOnWorkingGroup();
 
             var dontConnectUserToWorkingGroup = Number($('#CaseMailSetting_DontConnectUserToWorkingGroup').val() || '0');
             if (dontConnectUserToWorkingGroup === 0) {
@@ -635,6 +630,16 @@
         $processedNumCases.text('0');
         $finishTypeContainer.removeClass("error");
         processedCases = 0;
+        handlePerformingIdBasedOnWorkingGroup();
+    }
+
+    function handlePerformingIdBasedOnWorkingGroup() {
+        if ($caseWorkingGroupId.val() !== '') {
+            $casePerformer_Id.attr('disabled', false);
+        }
+        else {
+            $casePerformer_Id.attr('disabled', true);
+        }
     }
 
     function nothingToUpdate(data) {
