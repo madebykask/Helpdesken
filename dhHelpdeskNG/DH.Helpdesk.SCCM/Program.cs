@@ -1,18 +1,14 @@
-﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
+﻿using DH.Helpdesk.SCCM.DB;
+using DH.Helpdesk.SCCM.Entities;
+using DH.Helpdesk.SCCM.Other;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Authentication;
-using System.Text;
 using System.Threading.Tasks;
-using System.Configuration;
-using DH.Helpdesk.SCCM.Entities;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Diagnostics;
-using DH.Helpdesk.SCCM.DB;
-using DH.Helpdesk.SCCM.Other;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace DH.Helpdesk.SCCM
@@ -91,6 +87,10 @@ namespace DH.Helpdesk.SCCM
 
             UpdateOrCreateComputerInDB(computers);
 
+            Connector connector = new Connector(System.Configuration.ConfigurationManager.ConnectionStrings["conHD"].ToString());
+            int Customer_Id = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Customer_Id"].ToString();
+
+            connector.UpdateApplication(Customer_Id);
         }
 
         private static void TokenUtility(string token)
