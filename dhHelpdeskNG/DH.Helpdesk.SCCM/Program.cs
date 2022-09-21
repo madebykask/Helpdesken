@@ -92,7 +92,7 @@ namespace DH.Helpdesk.SCCM
             UpdateOrCreateComputerInDB(computers);
 
             Connector connector = new Connector(System.Configuration.ConfigurationManager.ConnectionStrings["conHD"].ToString());
-            int Customer_Id = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Customer_Id"].ToString();
+            int Customer_Id = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Customer_Id"].ToString());
 
             connector.UpdateApplication(Customer_Id);
 
