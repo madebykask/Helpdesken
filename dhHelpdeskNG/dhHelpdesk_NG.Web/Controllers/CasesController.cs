@@ -1859,6 +1859,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m = this.GetCaseInputViewModel(userId, customerId, id, caseLockViewModel, caseFieldSettings, redirectFrom, backUrl, null, null, updateState);
 
                 m.NumberOfCustomers = _masterDataService.GetCustomers(userId).Count;
+                
 
                 m.ActiveTab = (!string.IsNullOrEmpty(caseLockViewModel.ActiveTab) ? caseLockViewModel.ActiveTab : activeTab);
 #pragma warning disable 0618
@@ -1936,7 +1937,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.ParantPath_OU = ParentPathDefaultValue;
 
                 }
-
+                
                 var caseCustomerSettings = GetCustomerSettings(m.case_.Customer_Id);
                 var moduleCaseInvoice = caseCustomerSettings.ModuleCaseInvoice;
                 if (moduleCaseInvoice == 1)
@@ -1948,7 +1949,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 m.CustomerSettings = _workContext.Customer.Settings; //current customer settings
                 m.CustomerSettings.ModuleCaseInvoice = Convert.ToBoolean(caseCustomerSettings.ModuleCaseInvoice); // TODO FIX
-
+                Customer cus = _customerService.GetCustomer(m.case_.Customer_Id);
+                m.CaseLog.AutoCheckPerformerCheckbox = cus.CommunicateWithPerformer.ToBool();
 #pragma warning restore 0618
                 #region ConnectToParentModel
 
@@ -2130,6 +2132,7 @@ namespace DH.Helpdesk.Web.Controllers
 #pragma warning restore 0618
 
                     m.CaseLog.SendMailAboutCaseToNotifier = !string.IsNullOrEmpty(m.CaseLog.TextExternal);// customer.CommunicateWithNotifier.ToBool();
+                    
 
                     // check state secondary info
                     m.Disable_SendMailAboutCaseToNotifier = false;

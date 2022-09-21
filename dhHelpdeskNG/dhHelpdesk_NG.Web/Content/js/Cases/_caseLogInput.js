@@ -63,18 +63,19 @@ function LogInitForm() {
         }
     });
 
-    $($caseLogTextInternal).bind('input propertychange', function () {
-        var informPerformer = $('#CaseLog_SendMailAboutCaseToPerformer');
-        informPerformer.removeAttr('checked');
-
+    $($caseLogTextInternal).bind('input propertychange', function () {      
         $($txtInformPerformer).css('display', 'none');
         $('#CaseLog_TextInternal').prop('required', false);
         if (this.value.length || (hasCaseLogTextInternalEmailsTo || hasCaseLogTextInternalEmailsCc)) {
 
             $($txtInformPerformer).css('display', 'inline');
             $('#CaseLog_TextInternal').prop('required', true);
-            
-            $('#CaseLog_SendMailAboutCaseToPerformer:not(:disabled)').attr('checked', 'checked');
+            //Check customerProp from hidden
+            var auto = $('#autoCheckPerformerCheckbox').val();
+            //var checked = $('#CaseLog_SendMailAboutCaseToPerformer').prop('checked');
+            if (auto == 'True') {
+                $('#CaseLog_SendMailAboutCaseToPerformer:not(:disabled)').attr('checked', 'checked');
+            } 
         }
     });
 
