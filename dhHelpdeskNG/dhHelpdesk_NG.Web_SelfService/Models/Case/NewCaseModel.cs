@@ -7,6 +7,7 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Domain;
     using Shared;
 
@@ -47,6 +48,8 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public bool ShowCommunicationForSelfService { get; set; }
 
         public int? SelectedWorkflowStep { get; set; }
+
+        public int? RegardingCategoryId { get; set; }
 
         public CaseLog CaseLog { get; set; }
 
@@ -102,9 +105,12 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
 		public List<string> FileUploadWhiteList { get; set; }
 
-		#region Methods
+        public IList<ComputerUserCategoryOverview> ComputerUserCategories { get; internal set; }
+        public string EmptyComputerCategoryName { get; internal set; }
 
-		public CaseControlsPanelModel CreateCaseControlsPanelModel(int position = 1)
+        #region Methods
+
+        public CaseControlsPanelModel CreateCaseControlsPanelModel(int position = 1)
         {
             return new CaseControlsPanelModel(position, false);
         }
