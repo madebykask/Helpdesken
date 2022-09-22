@@ -225,48 +225,6 @@ using System;
             var findByRegistrator = customer.MyCasesRegistrator;
             var findByGroupUsers = customer.MyCasesUserGroup;
             var showasFollower = customer.MyCasesFollower && !string.IsNullOrEmpty(userEmail) ? true: false;
-            //var queryable = (from _case in DataContext.Cases.AsNoTracking()
-            //                 from cuser in DataContext.ComputerUsers.Where(cu => userId == cu.UserId && cu.ShowOnExtPageDepartmentCases).DefaultIfEmpty()
-            //                 from caseFollowers in DataContext.CaseExtraFollowers.Where(cf => cf.Case_Id == _case.Id && cf.Follower == userEmail).DefaultIfEmpty()
-            //                 where (findByInitiator || findByRegistrator || findByGroupUsers || showasFollower) &&
-            //                    (
-            //                        (findByRegistrator && (userId != null && userId.Trim() != "") && _case.RegUserId == userId) ||
-            //                        (
-            //                            findByInitiator &&
-            //                            (
-            //                                ((userId != null && userId.Trim() != "") && _case.ReportedBy == userId) ||
-            //                                ((userId != null && userId.Trim() != "") && _case.PersonsEmail == userId) ||
-            //                                ((employeeNumber != null && employeeNumber.Trim() != "") && _case.ReportedBy == employeeNumber)
-            //                            )
-
-            //                        ) ||
-            //                        (
-            //                            findByGroupUsers &&
-            //                            (
-            //                                ((_case.ReportedBy == null || _case.ReportedBy.Trim() == "") && _case.RegUserId == userId) ||
-            //                                employees.Contains(_case.ReportedBy)
-            //                            )
-            //                        ) ||
-            //                        (
-            //                            showasFollower &&
-            //                            (
-            //                                caseFollowers.Follower == userEmail
-            //                            )
-            //                        )
-            //                    ) ||
-            //                    (
-            //                        (cuser.Customer_Id == _case.Customer_Id && cuser.Department_Id != null && cuser.Department_Id == _case.Department_Id)
-            //                    )
-            //                    &&
-            //                    _case.Deleted == 0
-            //                 group _case by new { CustomerId = _case.Customer_Id, CustomerName = _case.Customer.Name } into grouppedCases
-            //                 select new UserCustomerOverview
-            //                 {
-            //                     CustomerId = grouppedCases.Key.CustomerId,
-            //                     CustomerName = grouppedCases.Key.CustomerName,
-            //                     CasesCount = grouppedCases.Count()
-            //                 }).OrderByDescending(x => x.CasesCount);
-            //return queryable.ToList();
             
             if (showasFollower)
             {
@@ -298,7 +256,6 @@ using System;
                                                 caseFollowers.Follower == userEmail
                                             )
                                         )
-                                    //Todo - show extrafollower 
                                     ) ||
                                     (
                                         (cuser.Customer_Id == _case.Customer_Id && cuser.Department_Id != null && cuser.Department_Id == _case.Department_Id)
@@ -318,7 +275,7 @@ using System;
             {
                 var queryable = (from _case in DataContext.Cases.AsNoTracking()
                                  from cuser in DataContext.ComputerUsers.Where(cu => userId == cu.UserId && cu.ShowOnExtPageDepartmentCases).DefaultIfEmpty()
-                                 where (findByInitiator || findByRegistrator || findByGroupUsers || showasFollower) &&
+                                 where (findByInitiator || findByRegistrator || findByGroupUsers) &&
                                     (
                                         (findByRegistrator && (userId != null && userId.Trim() != "") && _case.RegUserId == userId) ||
                                         (
@@ -337,7 +294,6 @@ using System;
                                                 employees.Contains(_case.ReportedBy)
                                             )
                                         )
-                                    //Todo - show extrafollower 
                                     ) ||
                                     (
                                         (cuser.Customer_Id == _case.Customer_Id && cuser.Department_Id != null && cuser.Department_Id == _case.Department_Id)

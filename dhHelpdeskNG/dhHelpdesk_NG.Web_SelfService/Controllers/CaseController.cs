@@ -1771,15 +1771,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();
-            ////Get User Email from logged in user
-            //if (ConfigurationService.AppSettings.LoginMode == LoginMode.Microsoft)
-            //{
-            //    criteria.PersonEmail = SessionFacade.CurrentUserIdentity.Email;
-            //}
-            //if (ConfigurationService.AppSettings.LoginMode == LoginMode.Windows)
-            //{
-            //    criteria.PersonEmail = SessionFacade.CurrentUserIdentity.Email;
-            //}
 
 
             /*User creator*/
