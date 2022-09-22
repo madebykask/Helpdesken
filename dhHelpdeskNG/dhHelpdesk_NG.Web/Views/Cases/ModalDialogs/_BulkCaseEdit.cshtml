@@ -195,44 +195,7 @@
                         }
                     </td>
                 </tr>
-                @if (Model.CustomerSettings.ModuleProject == true)
-                {
-                    if (Model.projects.Any())
-                    {
-                        <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Project, CaseSolutionFields.Project)">
-                            <td>
-                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Project, "Project")
-                            </td>
-                            <td>
-                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Project, CaseSolutionFields.Project))
-                                {
-                                    <select id="case__Project_Id" name="case_.Project_Id">
-                                        <option value="">&nbsp;</option>
-                                        @if (Model.projects != null)
-                                        {
-                                            foreach (var e in Model.projects.Where(e => e.IsActive == 1 || Model.case_.Project_Id == e.Id))
-                                            {
-                                                <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Project_Id.ToString())>@e.Name</option>
-                                            }
-                                        }
-                                    </select>
-                                }
-                                else
-                                {
-                                    if (!Model.case_.Project_Id.HasValue)
-                                    {
-                                        @Html.TextBoxFor(m => m.case_.Project_Id, new { @readonly = true })
-                                    }
-                                    else
-                                    {
-                                        @Html.TextBoxFor(m => m.projects.SingleOrDefault(x => x.Id == Model.case_.Project_Id).Name, new { @readonly = true })
-                                        @Html.HiddenFor(x => x.case_.Project_Id)
-                                    }
-                                }
-                            </td>
-                        </tr>
-                    }
-                }
+                
                 @if (Model.CustomerSettings.ModuleProblem == true)
                 {
                     if (Model.problems.Any())
