@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web.Http;
 using DH.Helpdesk.BusinessData.Models.FinishingCause;
@@ -21,12 +23,18 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// List of Finishing causes
         /// </summary>
         /// <param name="cid"></param>
+        /// <param name="excludeMergedCause"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("options")]
-        public async Task<IEnumerable<FinishingCauseOverview>> Get(int cid)
+        public async Task<IEnumerable<FinishingCauseOverview>> Get(int cid, bool excludeMergedCause = false)
         {
             var closingReasons = await _finishingCauseService.GetFinishingCausesWithChildsAsync(cid);
+            
+            if(excludeMergedCause)
+            {
+                closingReasons.Remove(closingReasons.SingleOrDefault(x=> x.Merged));
+            }
             return closingReasons;
         }
     }
