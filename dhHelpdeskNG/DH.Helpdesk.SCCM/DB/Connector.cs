@@ -435,5 +435,42 @@ namespace DH.Helpdesk.SCCM.DB
                 }
             }
         }
+
+        public void UpdateApplication(int Customer_Id)
+        {
+
+            string s = "";
+
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                try
+                {
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandType = CommandType.Text;
+
+                        // Ta bort gamla program som inte används
+                        s = "DELETE FROM tblApplication WHERE Id NOT IN (SELECT Application_Id FROM tblProduct_tblApplication)";
+
+                        command.CommandText = s;
+                        connection.Open();
+                        command.ExecuteNonQuery();
+
+                        // Lägg in alla program som inventeras i licensmodulen
+                        s = "INSERT INTO tblApplication(Customer_Id, Application) " +
+                            "SELECT DISTINCT " + Customer_Id + ", Name FROM tblSoftware WHERE Name Not IN (SELECT Application FROM tblApplication WHERE Customer_Id=" + Customer_Id + ")";
+
+                        command.CommandText = s;
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch
+                {
+                    throw new System.InvalidOperationException(s);
+
+                }
+            }
+
+        }
     }
 }
