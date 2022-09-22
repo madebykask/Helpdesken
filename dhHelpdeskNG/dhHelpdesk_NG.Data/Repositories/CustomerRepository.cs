@@ -192,7 +192,7 @@ using System;
         bool CheckUserCasePermissions(int userId, int caseId, Expression<Func<Case, bool>> casePermissionsFilter = null);
         CustomerUser GetCustomerSettingsByCustomer(int customerId);
 
-        IList<UserCustomerOverview> ListCustomersByUserCases(string userId, string employeeNumber, IList<string> employees, Customer customer);
+        IList<UserCustomerOverview> ListCustomersByUserCases(string userId, string employeeNumber, IList<string> employees, Customer customer, string userEmail = "");
         IList<UserCustomerOverview> GetUserCustomersWithCases(int userId);
 
     }
@@ -219,15 +219,61 @@ using System;
             return GetCustomerSettingsQuery(customerId, userId).FirstOrDefaultAsync();
         }
 
-        public IList<UserCustomerOverview> ListCustomersByUserCases(string userId, string employeeNumber, IList<string> employees, Customer customer)
+        public IList<UserCustomerOverview> ListCustomersByUserCases(string userId, string employeeNumber, IList<string> employees, Customer customer, string userEmail = "")
         {
             var findByInitiator = customer.MyCasesInitiator;
             var findByRegistrator = customer.MyCasesRegistrator;
             var findByGroupUsers = customer.MyCasesUserGroup;
+            var showasFollower = customer.MyCasesFollower && !string.IsNullOrEmpty(userEmail) ? true: false;
+            //var queryable = (from _case in DataContext.Cases.AsNoTracking()
+            //                 from cuser in DataContext.ComputerUsers.Where(cu => userId == cu.UserId && cu.ShowOnExtPageDepartmentCases).DefaultIfEmpty()
+            //                 from caseFollowers in DataContext.CaseExtraFollowers.Where(cf => cf.Case_Id == _case.Id && cf.Follower == userEmail).DefaultIfEmpty()
+            //                 where (findByInitiator || findByRegistrator || findByGroupUsers || showasFollower) &&
+            //                    (
+            //                        (findByRegistrator && (userId != null && userId.Trim() != "") && _case.RegUserId == userId) ||
+            //                        (
+            //                            findByInitiator &&
+            //                            (
+            //                                ((userId != null && userId.Trim() != "") && _case.ReportedBy == userId) ||
+            //                                ((userId != null && userId.Trim() != "") && _case.PersonsEmail == userId) ||
+            //                                ((employeeNumber != null && employeeNumber.Trim() != "") && _case.ReportedBy == employeeNumber)
+            //                            )
 
-            var queryable = (from _case in DataContext.Cases.AsNoTracking()
-                             from cuser in DataContext.ComputerUsers.Where(cu => userId == cu.UserId && cu.ShowOnExtPageDepartmentCases).DefaultIfEmpty()
-                             where  (findByInitiator || findByRegistrator || findByGroupUsers) &&
+            //                        ) ||
+            //                        (
+            //                            findByGroupUsers &&
+            //                            (
+            //                                ((_case.ReportedBy == null || _case.ReportedBy.Trim() == "") && _case.RegUserId == userId) ||
+            //                                employees.Contains(_case.ReportedBy)
+            //                            )
+            //                        ) ||
+            //                        (
+            //                            showasFollower &&
+            //                            (
+            //                                caseFollowers.Follower == userEmail
+            //                            )
+            //                        )
+            //                    ) ||
+            //                    (
+            //                        (cuser.Customer_Id == _case.Customer_Id && cuser.Department_Id != null && cuser.Department_Id == _case.Department_Id)
+            //                    )
+            //                    &&
+            //                    _case.Deleted == 0
+            //                 group _case by new { CustomerId = _case.Customer_Id, CustomerName = _case.Customer.Name } into grouppedCases
+            //                 select new UserCustomerOverview
+            //                 {
+            //                     CustomerId = grouppedCases.Key.CustomerId,
+            //                     CustomerName = grouppedCases.Key.CustomerName,
+            //                     CasesCount = grouppedCases.Count()
+            //                 }).OrderByDescending(x => x.CasesCount);
+            //return queryable.ToList();
+            
+            if (showasFollower)
+            {
+                var queryable = (from _case in DataContext.Cases.AsNoTracking()
+                                 from cuser in DataContext.ComputerUsers.Where(cu => userId == cu.UserId && cu.ShowOnExtPageDepartmentCases).DefaultIfEmpty()
+                                 from caseFollowers in DataContext.CaseExtraFollowers.Where(cf => cf.Case_Id == _case.Id && cf.Follower == userEmail).DefaultIfEmpty()
+                                 where (findByInitiator || findByRegistrator || findByGroupUsers || showasFollower) &&
                                     (
                                         (findByRegistrator && (userId != null && userId.Trim() != "") && _case.RegUserId == userId) ||
                                         (
@@ -240,26 +286,74 @@ using System;
 
                                         ) ||
                                         (
-                                            findByGroupUsers && 
+                                            findByGroupUsers &&
+                                            (
+                                                ((_case.ReportedBy == null || _case.ReportedBy.Trim() == "") && _case.RegUserId == userId) ||
+                                                employees.Contains(_case.ReportedBy)
+                                            )
+                                        ) ||
+                                        (
+                                            showasFollower &&
+                                            (
+                                                caseFollowers.Follower == userEmail
+                                            )
+                                        )
+                                    //Todo - show extrafollower 
+                                    ) ||
+                                    (
+                                        (cuser.Customer_Id == _case.Customer_Id && cuser.Department_Id != null && cuser.Department_Id == _case.Department_Id)
+                                    )
+                                    &&
+                                    _case.Deleted == 0
+                                 group _case by new { CustomerId = _case.Customer_Id, CustomerName = _case.Customer.Name } into grouppedCases
+                                 select new UserCustomerOverview
+                                 {
+                                     CustomerId = grouppedCases.Key.CustomerId,
+                                     CustomerName = grouppedCases.Key.CustomerName,
+                                     CasesCount = grouppedCases.Count()
+                                 }).OrderByDescending(x => x.CasesCount);
+                return queryable.ToList();
+            }
+            else
+            {
+                var queryable = (from _case in DataContext.Cases.AsNoTracking()
+                                 from cuser in DataContext.ComputerUsers.Where(cu => userId == cu.UserId && cu.ShowOnExtPageDepartmentCases).DefaultIfEmpty()
+                                 where (findByInitiator || findByRegistrator || findByGroupUsers || showasFollower) &&
+                                    (
+                                        (findByRegistrator && (userId != null && userId.Trim() != "") && _case.RegUserId == userId) ||
+                                        (
+                                            findByInitiator &&
+                                            (
+                                                ((userId != null && userId.Trim() != "") && _case.ReportedBy == userId) ||
+                                                ((userId != null && userId.Trim() != "") && _case.PersonsEmail == userId) ||
+                                                ((employeeNumber != null && employeeNumber.Trim() != "") && _case.ReportedBy == employeeNumber)
+                                            )
+
+                                        ) ||
+                                        (
+                                            findByGroupUsers &&
                                             (
                                                 ((_case.ReportedBy == null || _case.ReportedBy.Trim() == "") && _case.RegUserId == userId) ||
                                                 employees.Contains(_case.ReportedBy)
                                             )
                                         )
+                                    //Todo - show extrafollower 
                                     ) ||
                                     (
                                         (cuser.Customer_Id == _case.Customer_Id && cuser.Department_Id != null && cuser.Department_Id == _case.Department_Id)
-                                    ) &&
+                                    )
+                                    &&
                                     _case.Deleted == 0
-                             group _case by new { CustomerId = _case.Customer_Id, CustomerName = _case.Customer.Name } into grouppedCases
-                             select new UserCustomerOverview
-                             {
-                                 CustomerId = grouppedCases.Key.CustomerId,
-                                 CustomerName = grouppedCases.Key.CustomerName,
-                                 CasesCount = grouppedCases.Count()
-                             }).OrderByDescending(x => x.CasesCount);
+                                 group _case by new { CustomerId = _case.Customer_Id, CustomerName = _case.Customer.Name } into grouppedCases
+                                 select new UserCustomerOverview
+                                 {
+                                     CustomerId = grouppedCases.Key.CustomerId,
+                                     CustomerName = grouppedCases.Key.CustomerName,
+                                     CasesCount = grouppedCases.Count()
+                                 }).OrderByDescending(x => x.CasesCount);
+                return queryable.ToList();
+            }
 
-            return queryable.ToList();
         }
 
         public IList<UserCustomerOverview> GetUserCustomersWithCases(int userId)

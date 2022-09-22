@@ -692,6 +692,12 @@ namespace DH.Helpdesk.Dal.Repositories
                 tables.Add("LEFT JOIN (SELECT DISTINCT sfr.CaseId " +
                            "           FROM SearchFreeTextFilter sfr) freeTextSearchResults ON tblCase.Id = freeTextSearchResults.CaseId");
             }
+            if(ctx.Criterias.ApplicationType.ToLower() == "selfservice")
+            {
+                tables.Add("left outer join (select Distinct cef.Case_Id " +
+                           "           FROM tblCaseExtrafollowers cef) follower ON tblCase.Id = follower.Case_Id");
+            }
+            
 
             tables.Add("left outer join tblDepartment on tblDepartment.Id = tblCase.Department_Id ");
             tables.Add("left outer join tblRegion on tblCase.Region_Id = tblRegion.Id ");
@@ -774,6 +780,7 @@ namespace DH.Helpdesk.Dal.Repositories
             }
             if ((criteria.MyCasesFollower && !string.IsNullOrEmpty(criteria.UserId)) || (criteria.MyCasesFollower && !string.IsNullOrEmpty(criteria.PersonEmail)))
             {
+                //Skit
                 var con = $"(exists (select 1 Follower from tblCaseExtraFollowers where (tblCaseExtraFollowers.Follower = '{criteria.UserId.SafeForSqlInject()}' or  tblcaseextrafollowers.Follower = '{criteria.PersonEmail.SafeForSqlInject()}') and tblCaseExtraFollowers.Case_Id = tblCase.Id))";
                 criteriaCondition = criteriaCondition.AddWithSeparator($"({con})", false, " or ");
             }
