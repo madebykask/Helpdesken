@@ -1056,6 +1056,7 @@ Module DH_Helpdesk_Mail
                                     'End If
                                     caseismerged = objCaseData.checkIfCaseIsMerged(objCase.Id)
                                     Dim dFinDate As Date
+                                    Dim casefinsihed As Boolean = False
                                     dFinDate = objCase.FinishingDate
                                     If caseismerged > 0 Then
                                         'objCaseData.updateChangeTime(objCase.Id)
@@ -1063,6 +1064,11 @@ Module DH_Helpdesk_Mail
                                         objCaseData.updateChangeTime(caseismerged)
                                         objCase = Nothing
                                         objCase = objCaseData.getCase(caseismerged)
+                                        If IsDate(objCase.FinishingDate) Then
+                                            If objCase.FinishingDate <> Date.MinValue And objCase.FinishingDate <> Date.MaxValue Then
+                                                casefinsihed = True
+                                            End If
+                                        End If
 
                                     End If
 
@@ -1070,7 +1076,7 @@ Module DH_Helpdesk_Mail
                                     If dFinDate <> Date.MinValue Then
                                         ' Aktivera ärendet
 
-                                        If caseismerged = 0 Then
+                                        If caseismerged = 0 Or casefinsihed = True Then
                                             objCaseData.activateCase(objCase, objCustomer.OpenCase_StateSecondary_Id, objCustomer.WorkingDayStart, objCustomer.WorkingDayEnd, objCustomer.TimeZone_offset)
                                         End If
                                     Else
