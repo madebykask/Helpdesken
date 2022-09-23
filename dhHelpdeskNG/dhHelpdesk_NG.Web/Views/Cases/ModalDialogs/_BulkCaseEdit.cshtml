@@ -32,7 +32,7 @@
                         <th class="span5"></th>
                     </tr>
                 </thead>
-                <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup)">
+                <tr id="tr_WorkingGroup" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup)">
                     <td>
                         @CaseFieldCaption(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, "Driftgrupp")
                     </td>
@@ -597,11 +597,18 @@
     }
 
     function handlePerformingIdBasedOnWorkingGroup() {
+
+        if ($('#tr_WorkingGroup').css('display') == 'none') {
+            $casePerformer_Id.attr('disabled', false);
+            return;
+        }
+
         if ($caseWorkingGroupId.val() !== '') {
             $casePerformer_Id.attr('disabled', false);
         }
         else {
             $casePerformer_Id.attr('disabled', true);
+            $casePerformer_Id.val('');
         }
     }
 
