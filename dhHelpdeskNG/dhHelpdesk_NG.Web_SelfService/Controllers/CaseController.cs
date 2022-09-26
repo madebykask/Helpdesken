@@ -790,6 +790,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpGet]
         public ActionResult MultiCustomerUserCases(string progressId = "")
         {
+            //return RedirectToAction("UserCases", new { customerId = SessionFacade.CurrentCustomerID });
             var globalSettings = _globalSettingService.GetGlobalSettings().First();
             if (globalSettings.MultiCustomersSearch == 0)
                 return RedirectToAction("UserCases", new { customerId = SessionFacade.CurrentCustomerID });
@@ -814,7 +815,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 : new List<string>();
 
             var customers = _customerUserService.ListCustomersByUserCases(userId, employeeNumber, employees,
-                SessionFacade.CurrentCustomer);
+                SessionFacade.CurrentCustomer, SessionFacade.CurrentUserIdentity.Email);
 
             var model = new MultiCustomerUserFilterModel
             {
@@ -1770,15 +1771,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();
-            //Get User Email from logged in user
-            if (ConfigurationService.AppSettings.LoginMode == LoginMode.Microsoft)
-            {
-                criteria.PersonEmail = curUser;
-            }
-            if (ConfigurationService.AppSettings.LoginMode == LoginMode.Windows)
-            {
-                criteria.PersonEmail = SessionFacade.CurrentUserIdentity.Email;
-            }
 
 
             /*User creator*/
