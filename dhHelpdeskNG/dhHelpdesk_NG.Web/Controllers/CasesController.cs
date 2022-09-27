@@ -3967,7 +3967,8 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                     else
                     {
-                        caseLog.FinishingDate = DateTime.SpecifyKind(caseLog.FinishingDate.Value, DateTimeKind.Local).ToUniversalTime();
+                        //Manually set
+                        caseLog.FinishingDate = caseLog.FinishingDate.Value.AddHours(8);
                     }
                 }
 
