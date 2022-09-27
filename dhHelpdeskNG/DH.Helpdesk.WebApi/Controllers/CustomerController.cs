@@ -27,5 +27,13 @@ namespace DH.Helpdesk.WebApi.Controllers
             var customer = await _customerService.GetCustomerDetailsAsync(cid);
             return customer;
         }
+
+        [HttpGet]
+        [Route("communicatewithnotifier")]
+        public async Task<bool> GetCommunicateWithNotifier([FromUri] int cid)
+        {
+            var communicateWithNotifier = await _customerService.GetCommunicateWithNotifier(cid);
+            return communicateWithNotifier == 1 ? true: false;
+        }
     }
 }
