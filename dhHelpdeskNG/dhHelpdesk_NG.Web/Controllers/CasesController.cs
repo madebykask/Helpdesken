@@ -3248,7 +3248,7 @@ namespace DH.Helpdesk.Web.Controllers
                 mergeCase.FinishingDate = DateTime.UtcNow;
                 caseLog.FinishingDate = DateTime.UtcNow;
                 caseLog.FinishingType = mergedFinishingCause.Id;
-                caseLog.FinishingTypeName = mergedFinishingCause.Name;
+                caseLog.FinishingTypeName = Translation.GetCoreTextTranslation(mergedFinishingCause.Name);
                 caseLog.CaseId = mergeCase.Id;
                 caseLog.UserId = SessionFacade.CurrentUser.Id;
                 caseLog.LogGuid = Guid.NewGuid();

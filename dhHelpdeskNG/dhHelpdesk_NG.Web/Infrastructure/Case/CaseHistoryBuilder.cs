@@ -38,7 +38,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Reported by
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.ReportedBy != prev.ReportedBy)
+                if ((cur.ReportedBy ?? "") != (prev.ReportedBy ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -53,7 +53,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Persons name
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.PersonsName != prev.PersonsName)
+                if ((cur.PersonsName ?? "") != (prev.PersonsName ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -68,7 +68,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Persons e-mail
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.PersonsEmail != prev.PersonsEmail)
+                if ((cur.PersonsEmail ?? "") != (prev.PersonsEmail ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -83,7 +83,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Persons_phone 
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.PersonsPhone != prev.PersonsPhone)
+                if ((cur.PersonsPhone ?? "") != (prev.PersonsPhone ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -98,7 +98,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Persons mobile no 
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.PersonsCellphone != prev.PersonsCellphone)
+                if ((cur.PersonsCellphone ?? "") != (prev.PersonsCellphone ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -113,6 +113,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Region
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1)
             {
+                // Tod0 - check nullable int?
                 if (cur.Region_Id != prev.Region_Id)
                 {
                     sb.Append("<tr>");
@@ -221,7 +222,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // IsAbout user
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.IsAbout_ReportedBy != prev.IsAbout_ReportedBy)
+                if ((cur.IsAbout_ReportedBy ?? "") != (prev.IsAbout_ReportedBy ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -236,7 +237,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             //IsAbout Persons name
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.IsAbout_Persons_Name != prev.IsAbout_Persons_Name)
+                if ((cur.IsAbout_Persons_Name ?? "") != (prev.IsAbout_Persons_Name ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -251,7 +252,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // IsAbout Persons e-mail
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.IsAbout_Persons_EMail != prev.IsAbout_Persons_EMail)
+                if ((cur.IsAbout_Persons_EMail ?? "") != (prev.IsAbout_Persons_EMail ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -266,7 +267,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // IsAbout Persons_phone 
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.IsAbout_Persons_Phone != prev.IsAbout_Persons_Phone)
+                if ((cur.IsAbout_Persons_Phone ?? "") != (prev.IsAbout_Persons_Phone  ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -281,7 +282,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // IsAbout Persons_cellphone 
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.IsAbout_Persons_CellPhone != prev.IsAbout_Persons_CellPhone)
+                if ((cur.IsAbout_Persons_CellPhone ?? "") != (prev.IsAbout_Persons_CellPhone ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -359,7 +360,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // IsAbout Costcentre
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.IsAbout_CostCentre != prev.IsAbout_CostCentre)
+                if ((cur.IsAbout_CostCentre ?? "") != (prev.IsAbout_CostCentre ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -374,7 +375,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // IsAbout Place
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.IsAbout_Place != prev.IsAbout_Place)
+                if ((cur.IsAbout_Place ?? "") != (prev.IsAbout_Place ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -389,7 +390,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // IsAbout UserCode
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.IsAbout_UserCode != prev.IsAbout_UserCode)
+                if ((cur.IsAbout_UserCode ?? "") != (prev.IsAbout_UserCode ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -404,7 +405,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Inventory Number
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.InventoryNumber != prev.InventoryNumber)
+                if ((cur.InventoryNumber ?? "") != (prev.InventoryNumber ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -419,7 +420,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Inventory Type
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.InventoryType != prev.InventoryType)
+                if ((cur.InventoryType ?? "") != (prev.InventoryType ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -434,7 +435,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Inventory Location
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.InventoryLocation != prev.InventoryLocation)
+                if ((cur.InventoryLocation ?? "") != (prev.InventoryLocation ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -601,7 +602,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Invoice number
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.InvoiceNumber != prev.InvoiceNumber)
+                if ((cur.InvoiceNumber ?? "") != (prev.InvoiceNumber ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -631,7 +632,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Caption
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Caption.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.Caption != prev.Caption)
+                if ((cur.Caption ?? "") != (prev.Caption ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -646,7 +647,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Description
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Description.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.Description != prev.Description)
+                if ((cur.Description ?? "") != (prev.Description ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -661,7 +662,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Miscellaneous
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.Miscellaneous != prev.Miscellaneous)
+                if ((cur.Miscellaneous ?? "") != (prev.Miscellaneous ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -711,7 +712,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Available
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Available.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.Available != prev.Available)
+                if ((cur.Available ?? "") != (prev.Available ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -975,7 +976,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // CaseFile
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Filename.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.CaseFile != prev.CaseFile && !string.IsNullOrEmpty(cur.CaseFile))
+                if ((cur.CaseFile ?? "") != (prev.CaseFile ?? ""))
                 {
                     sb.Append("<tr>");
                     var caption = string.Empty;
@@ -1008,7 +1009,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // LogFile
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.LogFile != prev.LogFile && !string.IsNullOrEmpty(cur.LogFile))
+                if ((cur.LogFile ?? "") != (prev.LogFile ?? ""))
                 {
                     sb.Append("<tr>");
                     var caption = string.Empty;
@@ -1047,7 +1048,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()).ShowOnStartPage == 1 ||
                 cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.CaseLog != prev.CaseLog && !string.IsNullOrEmpty(cur.CaseLog))
+                if ((cur.CaseLog ?? "") != (prev.CaseLog ?? ""))
                 {
                     var caption = string.Empty;
                     sb.Append("<tr>");
@@ -1097,7 +1098,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Closing Reason
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.ClosingReason != prev.ClosingReason && cur.ClosingReason != null)
+                if ((cur.ClosingReason ?? "") != (prev.ClosingReason ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
