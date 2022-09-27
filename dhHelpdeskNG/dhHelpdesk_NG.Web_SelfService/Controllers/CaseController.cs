@@ -761,6 +761,10 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpGet]
         public ActionResult UserCases(int customerId, string progressId = "")
         {
+            if (ConfigurationService.AppSettings.LoginMode == LoginMode.Anonymous)
+            {
+                return Redirect("Index");
+            }
             var res = _caseControllerBehavior.ValidateCustomer();
             if (!res.Valid) return HandleError(res);
 
@@ -790,7 +794,10 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpGet]
         public ActionResult MultiCustomerUserCases(string progressId = "")
         {
-            //return RedirectToAction("UserCases", new { customerId = SessionFacade.CurrentCustomerID });
+            if (ConfigurationService.AppSettings.LoginMode == LoginMode.Anonymous)
+            {
+                return Redirect("Index");
+            }
             var globalSettings = _globalSettingService.GetGlobalSettings().First();
             if (globalSettings.MultiCustomersSearch == 0)
                 return RedirectToAction("UserCases", new { customerId = SessionFacade.CurrentCustomerID });
