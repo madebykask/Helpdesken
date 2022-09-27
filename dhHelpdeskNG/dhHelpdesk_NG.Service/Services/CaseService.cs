@@ -1765,8 +1765,12 @@ namespace DH.Helpdesk.Services.Services
             ret.Add(new Field { Key = "[#15]", StringValue = wg != null ? c.Workinggroup.WorkingGroupName : string.Empty });
             ret.Add(new Field { Key = "[#13]", StringValue = wg != null ? c.Workinggroup.EMail : string.Empty });
             var admin = c.Performer_User_Id.HasValue ? _userRepository.GetUserName(c.Performer_User_Id.Value) : null;
+            var adminFields = c.Performer_User_Id.HasValue ? _userRepository.GetUserInfo(c.Performer_User_Id.Value) : null;
             ret.Add(new Field { Key = "[#6]", StringValue = admin != null ? admin.FirstName : string.Empty });
             ret.Add(new Field { Key = "[#7]", StringValue = admin != null ? admin.LastName : string.Empty });
+            ret.Add(new Field { Key = "[#70]", StringValue = admin != null ? adminFields.Phone : string.Empty });
+            ret.Add(new Field { Key = "[#71]", StringValue = admin != null ? adminFields.CellPhone : string.Empty });
+            ret.Add(new Field { Key = "[#72]", StringValue = admin != null ? adminFields.Email : string.Empty });
             var priority = c.Priority_Id.HasValue ? _priorityService.GetPriority(c.Priority_Id.Value) : null;
             ret.Add(new Field { Key = "[#12]", StringValue = priority != null ? priority.Name : string.Empty });
             ret.Add(new Field { Key = "[#20]", StringValue = priority != null ? priority.Description : string.Empty });
