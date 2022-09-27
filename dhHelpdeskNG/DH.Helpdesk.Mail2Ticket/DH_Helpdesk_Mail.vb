@@ -551,9 +551,18 @@ Module DH_Helpdesk_Mail
                         End If
 
 
-
+                        Dim caseismerged As Integer = 0
+                        Dim dFinDate As Date
+                        Dim casefinsihed As Boolean = False
+                        Dim caseisactivated As Boolean = False
                         If iListCount > 0 Then
                             For iListIndex As Integer = 0 To iListCount - 1
+
+                                caseismerged = 0
+                                dFinDate = Date.MinValue
+                                casefinsihed = False
+                                caseisactivated = False
+
                                 iFinishingCause_Id = 0
                                 sBodyText = ""
                                 iLog_Id = 0
@@ -1049,14 +1058,13 @@ Module DH_Helpdesk_Mail
                                     '    sff = ""
                                     'End If
                                     ' Uppdatera ärendet och aktivera om det är avslutat
-                                    Dim caseismerged As Integer = 0
+
                                     'If objCase.Casenumber = "19965" Or objCase.Casenumber = "19964" Then
                                     '    Dim g As String
                                     '    g = ""
                                     'End If
                                     caseismerged = objCaseData.checkIfCaseIsMerged(objCase.Id)
-                                    Dim dFinDate As Date
-                                    Dim casefinsihed As Boolean = False
+
                                     dFinDate = objCase.FinishingDate
                                     If caseismerged > 0 Then
                                         'objCaseData.updateChangeTime(objCase.Id)
@@ -1064,6 +1072,9 @@ Module DH_Helpdesk_Mail
                                         objCaseData.updateChangeTime(caseismerged)
                                         objCase = Nothing
                                         objCase = objCaseData.getCase(caseismerged)
+                                        If objCase Is Nothing Then
+                                            Continue For
+                                        End If
                                         If IsDate(objCase.FinishingDate) Then
                                             If objCase.FinishingDate <> Date.MinValue And objCase.FinishingDate <> Date.MaxValue Then
                                                 casefinsihed = True
@@ -1078,6 +1089,7 @@ Module DH_Helpdesk_Mail
 
                                         If caseismerged = 0 Or casefinsihed = True Then
                                             objCaseData.activateCase(objCase, objCustomer.OpenCase_StateSecondary_Id, objCustomer.WorkingDayStart, objCustomer.WorkingDayEnd, objCustomer.TimeZone_offset)
+                                            caseisactivated = True
                                         End If
                                     Else
                                         If objCustomer.ModuleAccount = 1 Then
@@ -1184,6 +1196,29 @@ Module DH_Helpdesk_Mail
                                         End If
                                     ElseIf iFinishingCause_Id <> 0 And Len(objCase.Persons_EMail) > 6 Then
                                         objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.ClosedCase, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+
+                                        If Not objMailTemplate Is Nothing Then
+                                            Dim objMail As New Mail
+                                            Dim objLog As New Log
+
+                                            ' Set appropriate log text property
+                                            objLog.Text_External = If(Not isInternalLogUsed, sBodyText, String.Empty)
+                                            objLog.Text_Internal = If(isInternalLogUsed, sBodyText, String.Empty)
+
+                                            sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+                                            sSendTime = Date.Now()
+
+                                            Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+
+                                            sRet_SendMail =
+                                            objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings,
+                                                             sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
+
+                                            objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, MailTemplates.ClosedCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+
+                                        End If
+                                    ElseIf casefinsihed = True And caseisactivated = True Then
+                                        objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.CaseIsActivated, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
                                         If Not objMailTemplate Is Nothing Then
                                             Dim objMail As New Mail
