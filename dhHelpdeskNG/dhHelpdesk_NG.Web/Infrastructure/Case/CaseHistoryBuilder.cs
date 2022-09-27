@@ -113,7 +113,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Region
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1)
             {
-                // Tod0 - check int?
+                // Tod0 - check nullable int?
                 if (cur.Region_Id != prev.Region_Id)
                 {
                     sb.Append("<tr>");
@@ -405,7 +405,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Inventory Number
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()).ShowOnStartPage == 1)
             {
-                if ((cur.InventoryNumber ?? "") != (prev.InventoryNumber))
+                if ((cur.InventoryNumber ?? "") != (prev.InventoryNumber ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -976,7 +976,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // CaseFile
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Filename.ToString()).ShowOnStartPage == 1)
             {
-                if ((cur.CaseFile ?? "") != (prev.CaseFile ?? "") && !string.IsNullOrEmpty(cur.CaseFile))
+                if ((cur.CaseFile ?? "") != (prev.CaseFile ?? ""))
                 {
                     sb.Append("<tr>");
                     var caption = string.Empty;
@@ -1009,7 +1009,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // LogFile
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()).ShowOnStartPage == 1)
             {
-                if ((cur.LogFile ?? "") != (prev.LogFile ?? "") && !string.IsNullOrEmpty(cur.LogFile))
+                if ((cur.LogFile ?? "") != (prev.LogFile ?? ""))
                 {
                     sb.Append("<tr>");
                     var caption = string.Empty;
@@ -1048,7 +1048,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()).ShowOnStartPage == 1 ||
                 cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString()).ShowOnStartPage == 1)
             {
-                if ((cur.CaseLog ?? "") != (prev.CaseLog ?? "") && !string.IsNullOrEmpty(cur.CaseLog))
+                if ((cur.CaseLog ?? "") != (prev.CaseLog ?? ""))
                 {
                     var caption = string.Empty;
                     sb.Append("<tr>");
@@ -1098,7 +1098,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Closing Reason
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()).ShowOnStartPage == 1)
             {
-                if ((cur.ClosingReason ?? "") != (prev.ClosingReason ?? "") && cur.ClosingReason != null)
+                if ((cur.ClosingReason ?? "") != (prev.ClosingReason ?? ""))
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
