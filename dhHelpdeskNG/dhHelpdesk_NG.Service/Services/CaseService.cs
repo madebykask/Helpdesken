@@ -1062,8 +1062,16 @@ namespace DH.Helpdesk.Services.Services
             var extraFields = new ExtraFieldCaseHistory();
             if (caseLog != null && caseLog.FinishingType != null)
             {
-                var fc = _finishingCauseService.GetFinishingTypeName(caseLog.FinishingType.Value);
-                extraFields.ClosingReason = fc;
+                //This because it was not translated if Merged case
+                if (!string.IsNullOrEmpty(caseLog.FinishingTypeName))
+                    extraFields.ClosingReason = caseLog.FinishingTypeName;
+                else
+                {
+                    var fc = _finishingCauseService.GetFinishingTypeName(caseLog.FinishingType.Value);
+
+                    extraFields.ClosingReason = fc;
+                }
+                
             }
             //Check if it is a merged case
             var mergeParent = GetMergedParentInfo(cases.Id);
