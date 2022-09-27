@@ -6,6 +6,7 @@
 @using DH.Helpdesk.Common.Extensions.Boolean
 @using System.Configuration;
 @using DH.Helpdesk.Common.Enums;
+@using DH.Helpdesk.SelfService.Infrastructure.Extensions.HtmlHelperExtensions;
 
 @model DH.Helpdesk.SelfService.Models.Case.NewCaseModel
 
@@ -20,7 +21,9 @@
 }
 
 @functions
-{ private MvcHtmlString CaseFieldCaption(GlobalEnums.TranslationCaseFields field, bool withManadatory = true)
+{
+
+    private MvcHtmlString CaseFieldCaption(GlobalEnums.TranslationCaseFields field, bool withManadatory = true)
     {
         return Html.CaseFieldCaption(
             Model.CaseFieldSettings,
@@ -29,7 +32,9 @@
             Model.NewCase.Customer_Id,
             SessionFacade.CurrentLanguageId,
             withManadatory);
-    } }
+    }
+
+}
 
 <script type="text/javascript">
     window.appOptions = '@Html.Raw(jsSerializer.Serialize(Model.JsApplicationOptions))';
@@ -391,8 +396,99 @@
                                 </div>
                             </div>
                         </div>
-                    } 
-                    <!-- Computer Information --> 
+                    }
+
+                    <!-- Regarding -->
+                    if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseRegarding))
+                    {
+                        <h4 style="@Model.DisplayRegardingInfo()">@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.Regarding, CaseSectionsEnglish.RegardingHeader)</h4>
+                        <div class="row">
+                            <div class="col-md-3 dh-col">
+                                <div class="container form-horizontal">
+
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()))
+                                    {
+                                        if (Model.ComputerUserCategories.Any())
+                                        {
+                                            <div class="form-group row @GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()">
+                                                <label class="col-md-3">@CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id)</label>
+                                                <div class="col-md-9">
+                                                    <select id="IsAboutCategory" name="IsAboutCategory" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.System_Id.ToString()">
+                                                            <option value="">&nbsp;</option>
+                                                            @if (Model.ComputerUserCategories != null)
+                                                            {
+                                                                foreach (var e in GeneralExtensions.BuildComputerCategoriesSelectList(Model.ComputerUserCategories, Model, true))
+                                                                {
+                                                                    <option value="@e.Value" @(e.Selected ? "selected": "")>@e.Text</option>
+                                                                }
+                                                            }
+                                                        </select>
+             
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()))
+                                    {
+                                        <div class="form-group row @GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()">
+                                            <label class="col-md-3">
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy)
+                                            </label>
+                                            <div class="col-md-9">
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_ReportedBy, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString() })
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()))
+                                    {
+                                        <div class="form-group row @GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()">
+                                            <label class="col-md-3">
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name)
+                                            </label>
+                                            <div class="col-md-9">
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsName, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString() })
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()))
+                                    {
+                                        <div class="form-group row @GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()">
+                                            <label class="col-md-3">
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail)
+                                            </label>
+                                            <div class="col-md-9">
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsEmail, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString() })
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()))
+                                    {
+                                        <div class="form-group row @GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()">
+                                            <label class="col-md-3">
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone)
+                                            </label>
+                                            <div class="col-md-9">
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsPhone, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString() })
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()))
+                                    {
+                                        <div class="form-group row @GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()">
+                                            <label class="col-md-3">
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone)
+                                            </label>
+                                            <div class="col-md-9">
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsCellPhone, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString() })
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Computer Information -->
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.ComputerInformation))
                     {
                         <h4 style="@Model.DisplayComputerInfo()">@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.ComputerInfo, CaseSectionsEnglish.ComputerInfoHeader)</h4>
@@ -432,7 +528,7 @@
                                 </div>
                             </div>
                         </div>
-                    } 
+                    }
                     <!-- Case Info Fields -->
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseInfo))
                     {
@@ -461,7 +557,7 @@
                                     }
                                     else
                                     {
-                                        <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()"/>
+                                        <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()" />
                                     }
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()))
@@ -871,7 +967,7 @@
 
                     if (Model.NewCase.Id == 0 && (recaptchaSiteKey != "" || recaptchaSiteKey != null))
                     {
-                        <div id="cap1" class="g-recaptcha" data-sitekey=@recaptchaSiteKey></div>                      
+                        <div id="cap1" class="g-recaptcha" data-sitekey=@recaptchaSiteKey></div>
                     }
 
                 }
@@ -884,7 +980,7 @@
                 <div class="container-fluid dh-container">
                     @Html.Partial("_FilesAttachButtons", new ViewDataDictionary(ViewData)
                         {
-                            {"fieldCaption", null }, 
+                            {"fieldCaption", null },
                             {"hasFiles", Model.NewCase.CaseFiles != null && Model.NewCase.CaseFiles.Any()}
                         })
                 </div>
@@ -931,7 +1027,7 @@
     {
         <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
     }
-        <script type="text/javascript">
+    <script type="text/javascript">
 
         var requiredText = '@Translation.GetForJS("must be specified")';
         var recaptchaMessage = '@Translation.GetForJS("Check the captcha")';
@@ -1463,7 +1559,7 @@
             }
             return ret;
         }
-        </script>
-    }
+    </script>
+}
 
 

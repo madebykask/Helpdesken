@@ -68,6 +68,8 @@
             public static readonly string Other = "Other";
 
             public static readonly string CaseLog = "CaseLog";
+
+            public static readonly string CaseRegarding = "CaseRegarding";
             
         }
 
