@@ -56,6 +56,7 @@ namespace DH.Helpdesk.Services.Services
 
         ItemOverview GetItemOverview(int customerId);
         CaseDefaultsInfo GetCustomerDefaults(int customerId);
+        Task<int> GetCommunicateWithNotifier(int cid);
     }
 
     public class CustomerService : ICustomerService
@@ -778,6 +779,12 @@ namespace DH.Helpdesk.Services.Services
                 res.AddRange(allowCaseMoveCustomers);
 
             return res.OrderBy(x => x.Name).ToList();
+        }
+
+        public async Task<int> GetCommunicateWithNotifier(int customerId)
+        {
+            var customer = await GetCustomerAsync(customerId);
+            return customer.CommunicateWithNotifier;
         }
 
         public void Commit()

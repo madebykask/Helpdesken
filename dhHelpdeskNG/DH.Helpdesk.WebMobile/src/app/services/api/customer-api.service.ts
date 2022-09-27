@@ -20,5 +20,10 @@ export class CustomerApiService extends HttpApiServiceBase {
       map(data => Object.assign(new CustomerModel(), data))
     );
   }
+
+  getCommunicateWithNotifier(customerId: number): Observable<boolean> {
+    const url = this.buildResourseUrl(`api/customer/communicatewithnotifier?cid=${customerId}`, null, false, false);
+    return this.getJson<any>(url, null, false);
+  }
 }
 

@@ -27,6 +27,7 @@ namespace DH.Helpdesk.SelfService.Controllers
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.SelfService.Infrastructure;
     using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
     using DH.Helpdesk.SelfService.Infrastructure.Extensions;
@@ -46,6 +47,7 @@ namespace DH.Helpdesk.SelfService.Controllers
     using System.Net;
     using System.Web.Mvc;
     using System.Web.WebPages;
+    using static DH.Helpdesk.BusinessData.OldComponents.GlobalEnums;
 
     public class CaseController : BaseController
     {
@@ -2255,6 +2257,8 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var whiteList = _globalSettingService.GetFileUploadWhiteList();
 
+            ComputerUserCategory regardingComputerUserCategory = GetRegardingComputerUserCategory(customerId);
+
             var model = new NewCaseModel
             {
                 NewCase = new Case { Customer_Id = customerId },
@@ -2311,8 +2315,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                 ApplicationType = CurrentApplicationType,
                 ShowCommunicationForSelfService = appSettings.ShowCommunicationForSelfService,
                 FileUploadWhiteList = whiteList,
-                ComputerUserCategories = _computerService.GetComputerUserCategoriesByCustomerID(customerId, true)
-        };
+                ComputerUserCategories = _computerService.GetComputerUserCategoriesByCustomerID(customerId, true),
+                RegardingComputerUserCategory = regardingComputerUserCategory
+            };
 
             if (currentUserIdentity != null)
             {
@@ -2383,7 +2388,23 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             return model;
-        }        
+        }
+
+        private ComputerUserCategory GetRegardingComputerUserCategory(int customerId)
+        {
+            var defaultCategoryId = ComputerUserCategory.EmptyCategoryId;
+            ComputerUserCategory regardingComputerUserCategory = null;
+            var customerFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+            var regFieldSettings = customerFieldSettings.getCaseSettingsValue(TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString());
+
+            //set default value only for new case
+            if (Int32.TryParse(regFieldSettings.DefaultValue, out defaultCategoryId))
+            {
+                regardingComputerUserCategory = _computerService.GetComputerUserCategoryByID(defaultCategoryId);
+            }
+
+            return regardingComputerUserCategory;
+        }
 
         private List<string> GetVisibleFieldGroups(List<CaseListToCase> fieldList)
         {

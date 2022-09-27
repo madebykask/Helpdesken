@@ -23,28 +23,28 @@ namespace DH.Helpdesk.WebApi
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
             
             //register cors for owin components (auth provider) only 
-            app.UseCors(new CorsOptions
-            {
-                PolicyProvider = new CorsPolicyProvider()
-                {
-                    PolicyResolver = request =>
-                        (request.Path.Value ?? string.Empty).Equals("/token", StringComparison.OrdinalIgnoreCase) 
-                            ? Task.FromResult(new CorsPolicy
-                            {
-                                AllowAnyHeader = true,
-                                AllowAnyMethod = true,
-                                AllowAnyOrigin = true,
-                                SupportsCredentials = false,
-                                PreflightMaxAge = 600
-                            })
-                            : Task.FromResult<CorsPolicy>(null)
-                }
-            });
+            //app.UseCors(new CorsOptions
+            //{
+            //    PolicyProvider = new CorsPolicyProvider()
+            //    {
+            //        PolicyResolver = request =>
+            //            (request.Path.Value ?? string.Empty).Equals("/token", StringComparison.OrdinalIgnoreCase) 
+            //                ? Task.FromResult(new CorsPolicy
+            //                {
+            //                    AllowAnyHeader = true,
+            //                    AllowAnyMethod = true,
+            //                    AllowAnyOrigin = true,
+            //                    SupportsCredentials = false,
+            //                    PreflightMaxAge = 600
+            //                })
+            //                : Task.FromResult<CorsPolicy>(null)
+            //    }
+            //});
 
             RegisterMiddlewareComponents(container, app);
 
             app.UseAutofacWebApi(config);
-
+            app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
             ConfigureAuth(app, config.DependencyResolver);
 
             WebApiConfig.InitLogging();
