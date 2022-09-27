@@ -413,17 +413,17 @@
                                             <div class="form-group row @GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()">
                                                 <label class="col-md-3">@CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id)</label>
                                                 <div class="col-md-9">
-                                                    <select id="IsAboutCategory" name="IsAboutCategory" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.System_Id.ToString()">
-                                                            <option value="">&nbsp;</option>
-                                                            @if (Model.ComputerUserCategories != null)
+                                                    <select id="IsAboutCategory" name="IsAboutCategory" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()">
+                                                        <option value="">&nbsp;</option>
+                                                        @if (Model.ComputerUserCategories != null)
+                                                        {
+                                                            foreach (var e in GeneralExtensions.BuildComputerCategoriesSelectList(Model.ComputerUserCategories, Model, true))
                                                             {
-                                                                foreach (var e in GeneralExtensions.BuildComputerCategoriesSelectList(Model.ComputerUserCategories, Model, true))
-                                                                {
-                                                                    <option value="@e.Value" @(e.Selected ? "selected": "")>@e.Text</option>
-                                                                }
+                                                                <option value="@e.Value" @(e.Selected ? "selected" : "")>@e.Text</option>
                                                             }
-                                                        </select>
-             
+                                                        }
+                                                    </select>
+
                                                 </div>
                                             </div>
                                         }
@@ -435,7 +435,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_ReportedBy, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString() })
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_ReportedBy, new { id = "IsAbout_ReportedBy", @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -1044,6 +1044,11 @@
 
         var captchaChecker = function () { };
         var recaptcha_widget;
+
+        $(document).ready(function () {
+            $("#IsAbout_ReportedBy").typeahead(GetComputerUserSearchOptionsForIsAbout());
+        });
+
         var onloadCallback = function () {
             if ($('#cap1').length) {
                 recaptcha_widget = grecaptcha.render('cap1', {
@@ -1057,8 +1062,6 @@
             }
 
         };
-
-
 
         $(function() {
             $mainForm = $("#newCaseForm");
@@ -1558,6 +1561,170 @@
                 ret = true;
             }
             return ret;
+        }
+
+        function GetComputerUserSearchOptionsForIsAbout() {
+
+            var delayFunc = CommonUtils.createDelayFunc();
+
+            var options = {
+                items: 20,
+                minLength: 2,
+                source: function (query, process) {
+                    lastIsAboutSearchKey = generateRandomKey();
+
+                    delayFunc(function () {
+
+                        var categoryID = null;
+                        var isAboutCategory = $('#IsAboutCategory');
+                        if (isAboutCategory.length > 0)
+                            categoryID = isAboutCategory.val();
+
+                        $.ajax({
+                            url: '/casesearch/search_user',
+                            type: 'post',
+                            data: { query: query, customerId: @SessionFacade.CurrentCustomerID, searchKey: lastIsAboutSearchKey, categoryID: categoryID },
+                            dataType: 'json',
+                            success: function (result) {
+                                if (result.searchKey != lastIsAboutSearchKey)
+                                    return;
+
+                                var resultList = jQuery.map(result.result, function (item) {
+                                    var aItem = {
+                                        id: item.Id
+                                        , num: item.UserId
+                                        , name: item.FirstName + ' ' + item.SurName
+                                        , email: item.Email
+                                        , place: item.Location
+                                        , phone: item.Phone
+                                        , usercode: item.UserCode
+                                        , cellphone: item.CellPhone
+                                        , regionid: item.Region_Id
+                                        , regionname: item.RegionName
+                                        , departmentid: item.Department_Id
+                                        , departmentname: item.DepartmentName
+                                        , ouid: item.OU_Id
+                                        , ouname: item.OUName
+                                        , name_family: item.SurName + ' ' + item.FirstName
+                                        , customername: item.CustomerName
+                                        , costcentre: item.CostCentre
+                                        , isReadOnly: item.IsReadOnly
+                                        , categoryID: item.CategoryID
+                                        , categoryName: item.CategoryName
+
+                                    };
+                                    return JSON.stringify(aItem);
+                                });
+                                if (resultList.length === 0) {
+                                    var noRes = {
+                                        name: window.parameters.noResultLabel,
+                                        isNoResult: true
+                                    }
+                                    resultList.push(JSON.stringify(noRes));
+                                }
+
+                                return process(resultList);
+                            }
+                        });
+                    },
+                        300);
+                },
+
+                matcher: function (obj) {
+                    var item = JSON.parse(obj);
+                    if (~item.isNoResult) {
+                        return 1;
+                    }
+                    //console.log(JSON.stringify(item));
+                    return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
+                        || ~item.name_family.toLowerCase().indexOf(this.query.toLowerCase())
+                        || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
+                        || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
+                        || ~item.email.toLowerCase().indexOf(this.query.toLowerCase())
+                        || ~item.usercode.toLowerCase().indexOf(this.query.toLowerCase());
+                },
+
+                sorter: function (items) {
+                    var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
+                    while (aItem = items.shift()) {
+                        var item = JSON.parse(aItem);
+                        if (!item.isNoResult) {
+                            if (!item.num
+                                .toLowerCase()
+                                .indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                            else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                            else caseInsensitive.push(JSON.stringify(item));
+                        } else caseInsensitive.push(JSON.stringify(item));
+                    }
+
+                    return beginswith.concat(caseSensitive, caseInsensitive);
+                },
+
+                highlighter: function (obj) {
+                    var item = JSON.parse(obj);
+                    if (item.isNoResult) {
+                        return item.name;
+                    }
+                    var orgQuery = this.query;
+                    if (item.departmentname == null)
+                        item.departmentname = ""
+                    var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+                    var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
+                    var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
+
+                    if (result.toLowerCase().indexOf(orgQuery.toLowerCase()) > -1)
+                        return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                            return '<strong>' + match + '</strong>';
+                        });
+                    else
+                        return resultBy_NameFamily.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                            return '<strong>' + match + '</strong>';
+                        });
+
+                },
+
+                updater: function (obj) {
+                    var item = JSON.parse(obj);
+                    if (!item.isNoResult) {
+                        var regardingSectionType = 1;
+
+                        $('#IsAbout_ReportedBy').val(item.num);
+
+                        // Raise event about UserId changed.
+                        $(document).trigger("OnUserIdChanged", [item.num, regardingSectionType]);
+
+
+                        // Case Is About
+                        if (item.name != "" && item.name != null)
+                            $('#NewCase_IsAbout_PersonsName').val(item.name);
+
+                        if (item.email != null)
+                            $('#NewCase_IsAbout_PersonsEmail').val(item.email);
+
+                        if (item.phone != null)
+                            $('#NewCase_IsAbout_PersonsPhone').val(item.phone);
+
+                        if (item.cellphone != null)
+                            $('#NewCase_IsAbout_PersonsCellPhone').val(item.cellphone);
+
+                        //loadExtendedCaseSectionIfExist(item.categoryID, regardingSectionType);
+
+                        return item.num;
+                    }
+                    return this.query;
+                }
+            };
+
+            return options;
+        }
+
+        function generateRandomKey() {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
+            return s4() + '-' + s4() + '-' + s4();
         }
     </script>
 }

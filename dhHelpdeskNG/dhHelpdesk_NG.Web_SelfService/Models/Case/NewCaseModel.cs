@@ -9,6 +9,7 @@ namespace DH.Helpdesk.SelfService.Models.Case
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Computers;
     using Shared;
 
     public class NewCaseModel
@@ -49,7 +50,12 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
         public int? SelectedWorkflowStep { get; set; }
 
-        public int? RegardingCategoryId { get; set; }
+        public int? RegardingCategoryId
+        {
+            get { return RegardingComputerUserCategory?.ID; }
+        }
+
+        public ComputerUserCategory RegardingComputerUserCategory { get; internal set; }
 
         public CaseLog CaseLog { get; set; }
 
