@@ -91,6 +91,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         public IList<SelectListItem> UserGroups { get; set; }
 
         public IList<SelectListItem> CWNSelect { get; set; }
+        public IList<SelectListItem> CWPSelect { get; set; }
         public IList<SelectListItem> LockedFieldOptions { get; set; }
 
         public CustomerCaseSummaryViewModel CustomerCaseSummaryViewModel { get; set; }
