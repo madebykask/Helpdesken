@@ -766,6 +766,81 @@ IF COL_LENGTH('dbo.tblComputerUsers','UserId') IS NOT NULL
 	End
 Go
 
+RAISERROR ('Recreated SearchCasesFTS Fulltext index on tblCase', 10, 1) WITH NOWAIT
+IF EXISTS (SELECT 1 
+			FROM sys.objects AS t 
+			INNER JOIN sys.fulltext_indexes AS fi 
+				ON t.[object_id] = fi.[object_id] 
+			INNER JOIN sys.fulltext_catalogs AS c 
+				ON fi.fulltext_catalog_id = c.fulltext_catalog_id
+			INNER JOIN sys.indexes AS i
+				ON fi.unique_index_id = i.index_id AND fi.[object_id] = i.[object_id]
+			 WHERE c.[name] = 'SearchCasesFTS' AND i.[name] = 'PK_tblCase'
+		)
+BEGIN
+	DROP FULLTEXT INDEX ON dbo.tblCase;
+END
+GO
+
+CREATE FULLTEXT INDEX ON dbo.tblCase
+  (   
+	Place Language 1033,   
+	Persons_Name Language 1033,   
+	Persons_EMail Language 1033,
+	Caption Language 1033,	  
+	Persons_Phone Language 1033,
+	[Description] Language 1033,
+	Miscellaneous Language 1033,
+	ReportedBy Language 1033,
+	InventoryNumber Language 1033,
+	Available Language 1033,
+	Persons_CellPhone Language 1033,
+	InventoryType Language 1033,
+	InventoryLocation Language 1033,
+	InvoiceNumber Language 1033,
+	UserCode Language 1033,
+	ReferenceNumber Language 1033,
+	VerifiedDescription Language 1033,
+	RegUserName Language 1033,
+	CostCentre Language 1033
+  )  
+  KEY INDEX PK_tblCase  
+  ON SearchCasesFTS
+          WITH STOPLIST = SYSTEM, CHANGE_TRACKING AUTO;  
+GO  
+
+RAISERROR ('Recreated SearchCasesFTS Fulltext index on tblCaseIsAbout', 10, 1) WITH NOWAIT
+IF EXISTS (SELECT 1 
+			FROM sys.objects AS t 
+			INNER JOIN sys.fulltext_indexes AS fi 
+				ON t.[object_id] = fi.[object_id] 
+			INNER JOIN sys.fulltext_catalogs AS c 
+				ON fi.fulltext_catalog_id = c.fulltext_catalog_id
+			INNER JOIN sys.indexes AS i
+				ON fi.unique_index_id = i.index_id AND fi.[object_id] = i.[object_id]
+			 WHERE c.[name] = 'SearchCasesFTS' AND i.[name] = 'PK_tblCaseIsAbout'
+		)
+BEGIN
+	DROP FULLTEXT INDEX ON dbo.tblCaseIsAbout;
+END
+GO
+
+CREATE FULLTEXT INDEX ON dbo.tblCaseIsAbout
+  (   
+	CostCentre Language 1033,
+	Person_CellPhone Language 1033,
+	Person_Email Language 1033,
+	Person_Name Language 1033,
+	Person_Phone Language 1033,
+	Place Language 1033,
+	ReportedBy Language 1033,
+	UserCode Language 1033
+  )  
+  KEY INDEX PK_tblCaseIsAbout  
+  ON SearchCasesFTS
+          WITH STOPLIST = SYSTEM, CHANGE_TRACKING AUTO;  
+GO  
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.56'
 GO
