@@ -572,6 +572,9 @@ $.extend($.fn.dataTableExt.oPagination, {
             var an = oSettings.aanFeatures.p;
             var i, ien, j, sClass, iStart, iEnd, iHalf = Math.floor(iListLength / 2);
 
+            $("#cbxBulkCaseEditAll").prop('checked', false);
+            $('#liBulkCaseEdit').hide();
+
             if (oPaging.iTotalPages < iListLength) {
                 iStart = 1;
                 iEnd = oPaging.iTotalPages;
