@@ -5,15 +5,17 @@ RAISERROR ('Add Column SiteURL to tblSettings', 10, 1) WITH NOWAIT
 IF COL_LENGTH('dbo.tblSettings','SiteURL') IS NULL
 	BEGIN	 
 		ALTER TABLE [dbo].tblSettings
-		ADD SiteURL nchar(100) Null
+		ADD SiteURL nvarchar(100) Null
 	End
+Go
 
 RAISERROR ('Add Column SelfServiceURL to tblSettings', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblSettings','SitSelfServiceURLeURL') IS NULL
+IF COL_LENGTH('dbo.tblSettings','SelfServiceURL') IS NULL
 	BEGIN	 
 		ALTER TABLE [dbo].tblSettings
-		ADD SelfServiceURL nchar(100) Null
+		ADD SelfServiceURL nvarchar(100) Null
 	End
+Go
 
 RAISERROR ('Create table tblMergedCases', 10, 1) WITH NOWAIT
 IF(OBJECT_ID('tblMergedCases', 'U') IS NULL)
