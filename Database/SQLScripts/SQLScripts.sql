@@ -1,6 +1,20 @@
 ﻿--update DB from 5.3.55 to 5.3.56 version
 
 
+RAISERROR ('Add Column SiteURL to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','SiteURL') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblSettings
+		ADD SiteURL nchar(100) Null
+	End
+
+RAISERROR ('Add Column SelfServiceURL to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','SitSelfServiceURLeURL') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblSettings
+		ADD SelfServiceURL nchar(100) Null
+	End
+
 RAISERROR ('Create table tblMergedCases', 10, 1) WITH NOWAIT
 IF(OBJECT_ID('tblMergedCases', 'U') IS NULL)
 Begin
