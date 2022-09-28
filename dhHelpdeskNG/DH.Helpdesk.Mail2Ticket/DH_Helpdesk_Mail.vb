@@ -1217,29 +1217,29 @@ Module DH_Helpdesk_Mail
                                             objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, MailTemplates.ClosedCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
 
                                         End If
-                                    ElseIf casefinsihed = True And caseisactivated = True Then
-                                        objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.CaseIsActivated, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                                        'ElseIf casefinsihed = True And caseisactivated = True Then
+                                        '    objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.CaseIsActivated, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
-                                        If Not objMailTemplate Is Nothing Then
-                                            Dim objMail As New Mail
-                                            Dim objLog As New Log
+                                        '    If Not objMailTemplate Is Nothing Then
+                                        '        Dim objMail As New Mail
+                                        '        Dim objLog As New Log
 
-                                            ' Set appropriate log text property
-                                            objLog.Text_External = If(Not isInternalLogUsed, sBodyText, String.Empty)
-                                            objLog.Text_Internal = If(isInternalLogUsed, sBodyText, String.Empty)
+                                        '        ' Set appropriate log text property
+                                        '        objLog.Text_External = If(Not isInternalLogUsed, sBodyText, String.Empty)
+                                        '        objLog.Text_Internal = If(isInternalLogUsed, sBodyText, String.Empty)
 
-                                            sMessageId = createMessageId(objCustomer.HelpdeskEMail)
-                                            sSendTime = Date.Now()
+                                        '        sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+                                        '        sSendTime = Date.Now()
 
-                                            Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+                                        '        Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
-                                            sRet_SendMail =
-                                            objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings,
-                                                             sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
+                                        '        sRet_SendMail =
+                                        '        objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings,
+                                        '                         sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
 
-                                            objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, MailTemplates.ClosedCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                        '        objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, MailTemplates.ClosedCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
 
-                                        End If
+                                        '    End If
                                     End If
                                 End If
 
