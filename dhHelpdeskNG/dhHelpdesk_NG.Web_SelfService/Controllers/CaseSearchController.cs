@@ -27,7 +27,6 @@
             return this.View();
         }
 
-        [ValidateInput(false)]
         [HttpPost]
         public ActionResult Search_User(string query, int customerId, string searchKey, int? categoryID = null)
         {
