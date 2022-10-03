@@ -1364,7 +1364,7 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         //string errorMsg = Translation.GetCoreTextTranslation("Låst");
 
-                        string errorMsg = Translation.GetCoreTextTranslation("Nätverksförbindelsen bröts. Användare <name> har låst ärendet.");
+                        string errorMsg = Translation.GetCoreTextTranslation("OBS! Detta ärende är öppnat av") + " <name>.";
                         errorMsg = errorMsg.Replace("<name>", caseLockViewModel.User.FirstName + " " + caseLockViewModel.User.SurName);
                         throw new Exception(errorMsg);
                     }
