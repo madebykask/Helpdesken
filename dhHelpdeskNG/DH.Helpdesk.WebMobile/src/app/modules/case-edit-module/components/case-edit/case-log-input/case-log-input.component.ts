@@ -87,6 +87,10 @@ export class CaseLogInputComponent implements OnInit {
   private noEmailsText = '';
   private currentUser: CurrentUser = null;
 
+  private isSendMailToNotifierChecked = false;
+
+  private isSendMailToPerformerChecked = false;
+
   constructor(private caseLogApiService: CaseLogApiService,
     private translateService: TranslateService,
     private commService: CommunicationService,
@@ -122,6 +126,9 @@ export class CaseLogInputComponent implements OnInit {
     this.performerLabel = this.caseData.fields.filter(x => x.name == 'PerformerUserId').map((x) => x.label)[0];
     this.noEmailsText = this.translateService.instant('Ingen tillgänglig mailadress'); //No email address available
 
+    this.isSendMailToNotifierChecked = this.caseData.customerEmailSettings.communicateWithNotifier === 1;
+    // this.isSendMailToPerformerChecked = this.caseData.customerEmailSettings.communicateWithPerformer === 1;
+
     if (this.sendExternalEmailsFormControl) {
       this.isSendMailToNotifierDisabled = this.sendExternalEmailsFormControl.disabled;
       if (this.isSendMailToNotifierDisabled) {
@@ -136,6 +143,7 @@ export class CaseLogInputComponent implements OnInit {
         if (this.isSendMailToNotifierDisabled !== isDisabled) {
           this.isSendMailToNotifierDisabled = isDisabled;
           this.onSendExternalEmailsStatusChanged(!this.isSendMailToNotifierDisabled);
+          this.isSendMailToNotifierChecked = this.caseData.customerEmailSettings.communicateWithNotifier === 1;
         }
       });
 
@@ -157,6 +165,7 @@ export class CaseLogInputComponent implements OnInit {
         if (this.isSendMailToPerformerDisabled !== isDisabled) {
           this.isSendMailToPerformerDisabled = isDisabled;
           this.onSendInternalEmailsStatusChanged(!isDisabled);
+          // this.isSendMailToPerformerChecked = this.caseData.customerEmailSettings.communicateWithPerformer === 1;
         }
       });
 
@@ -183,6 +192,7 @@ export class CaseLogInputComponent implements OnInit {
           let performerId = this.form.value.PerformerUserId;
           this.isPerformerNullOrCurrentUser = isNaN(parseInt(performerId)) || performerId == this.currentUser.id ? true : false;
           this.onSendInternalEmailsStatusChanged(!this.isPerformerNullOrCurrentUser);
+          // this.isSendMailToPerformerChecked = this.caseData.customerEmailSettings.communicateWithPerformer === 1;
         }
       });
 

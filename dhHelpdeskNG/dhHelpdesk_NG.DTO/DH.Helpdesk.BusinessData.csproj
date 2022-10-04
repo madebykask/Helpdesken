@@ -306,6 +306,7 @@
     <Compile Include="Models\Contract\FieldDifference.cs" />
     <Compile Include="Models\Customer\CaseDefaultsInfo.cs" />
     <Compile Include="Models\Customer\CustomerDetails.cs" />
+    <Compile Include="Models\Customer\CustomerEmailSettings.cs" />
     <Compile Include="Models\Customer\Input\MoveCaseCustomersListItem.cs" />
     <Compile Include="Models\Customer\UserCustomerOverview.cs" />
     <Compile Include="Models\DailyReport\Input\DailyReportUpdate.cs" />

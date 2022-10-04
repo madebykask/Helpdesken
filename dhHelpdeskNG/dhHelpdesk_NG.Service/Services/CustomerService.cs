@@ -53,7 +53,7 @@ namespace DH.Helpdesk.Services.Services
 
         CustomerDetails GetCustomerDetails(int id);
         Task<CustomerDetails> GetCustomerDetailsAsync(int id);
-
+        Task<CustomerEmailSettings> GetCustomerEmailSettingsAsync(int id);
         ItemOverview GetItemOverview(int customerId);
         CaseDefaultsInfo GetCustomerDefaults(int customerId);
         Task<int> GetCommunicateWithNotifier(int cid);
@@ -698,6 +698,24 @@ namespace DH.Helpdesk.Services.Services
                     Language_Id = c.Language_Id
                 });
         }
+
+        public Task<CustomerEmailSettings> GetCustomerEmailSettingsAsync(int id)
+        {
+            var customerEmailSettings = GetCustomerEmailSettingsQueryable(id).SingleOrDefaultAsync();
+            return customerEmailSettings;        
+        }
+
+        private IQueryable<CustomerEmailSettings> GetCustomerEmailSettingsQueryable(int id)
+        {
+            return _customerRepository.GetMany(c => c.Id == id && c.Status == 1).AsQueryable()
+                .Select(c => new CustomerEmailSettings()
+                {
+                    CustomerId = c.Id,
+                    CommunicateWithNotifier = c.CommunicateWithNotifier,
+                    CommunicateWithPerformer = c.CommunicateWithPerformer
+                });
+        }
+
 
         public CaseDefaultsInfo GetCustomerDefaults(int customerId)
         {

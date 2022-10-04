@@ -10,12 +10,14 @@ namespace DH.Helpdesk.WebApi.Controllers
     public class CustomerController : BaseApiController
     {
         private readonly ICustomerService _customerService;
+        private readonly ISettingService _settingService;
 
         #region ctor()
 
-        public CustomerController(ICustomerService customerService)
+        public CustomerController(ICustomerService customerService, ISettingService settingService)
         {
             _customerService = customerService;
+            _settingService = settingService;
         }
 
         #endregion
@@ -29,11 +31,12 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("communicatewithnotifier")]
-        public async Task<bool> GetCommunicateWithNotifier([FromUri] int cid)
+        [Route("customeremailsettings")]
+        [AllowAnonymous]
+        public async Task<CustomerEmailSettings> GetCustomerEmailSettings([FromUri] int cid)
         {
-            var communicateWithNotifier = await _customerService.GetCommunicateWithNotifier(cid);
-            return communicateWithNotifier == 1 ? true: false;
+            var customerEmailSettings = await _customerService.GetCustomerEmailSettingsAsync(cid);
+            return customerEmailSettings;
         }
     }
 }
