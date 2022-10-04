@@ -127,7 +127,7 @@ export class CaseLogInputComponent implements OnInit {
     this.noEmailsText = this.translateService.instant('Ingen tillgänglig mailadress'); //No email address available
 
     this.isSendMailToNotifierChecked = this.caseData.customerEmailSettings.communicateWithNotifier === 1;
-    // this.isSendMailToPerformerChecked = this.caseData.customerEmailSettings.communicateWithPerformer === 1;
+    this.isSendMailToPerformerChecked = this.caseData.customerEmailSettings.communicateWithPerformer === 1;
 
     if (this.sendExternalEmailsFormControl) {
       this.isSendMailToNotifierDisabled = this.sendExternalEmailsFormControl.disabled;
@@ -164,8 +164,8 @@ export class CaseLogInputComponent implements OnInit {
         const isDisabled = this.sendInternalEmailsFormControl.isDisabled || this.internalLogFormControl.disabled;
         if (this.isSendMailToPerformerDisabled !== isDisabled) {
           this.isSendMailToPerformerDisabled = isDisabled;
-          this.onSendInternalEmailsStatusChanged(!isDisabled);
-          // this.isSendMailToPerformerChecked = this.caseData.customerEmailSettings.communicateWithPerformer === 1;
+          // this.onSendInternalEmailsStatusChanged(!isDisabled);
+          this.isSendMailToPerformerChecked = this.caseData.customerEmailSettings.communicateWithPerformer === 1;
         }
       });
 
@@ -191,8 +191,9 @@ export class CaseLogInputComponent implements OnInit {
 
           let performerId = this.form.value.PerformerUserId;
           this.isPerformerNullOrCurrentUser = isNaN(parseInt(performerId)) || performerId == this.currentUser.id ? true : false;
-          this.onSendInternalEmailsStatusChanged(!this.isPerformerNullOrCurrentUser);
-          // this.isSendMailToPerformerChecked = this.caseData.customerEmailSettings.communicateWithPerformer === 1;
+          this.isSendMailToPerformerDisabled = this.isPerformerNullOrCurrentUser ? true : false;
+          // this.onSendInternalEmailsStatusChanged(!this.isPerformerNullOrCurrentUser);
+          this.isSendMailToPerformerChecked = this.caseData.customerEmailSettings.communicateWithPerformer === 1;
         }
       });
 
