@@ -24,13 +24,11 @@ export class CustomerApiService extends HttpApiServiceBase {
       .pipe(
       take(1),
       map((data: any) => {
-        console.log(data)
           if (data) {
             
             const customerEmailSettings: CustomerEmailSettingsModel = {id: data.id, communicateWithNotifier: data.communicateWithNotifier, communicateWithPerformer: data.communicateWithPerformer};
             return customerEmailSettings;
           } else {
-            console.log('no data')
             return null;
           }
         }),
