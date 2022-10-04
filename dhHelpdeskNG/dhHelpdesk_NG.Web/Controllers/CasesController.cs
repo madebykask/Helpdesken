@@ -935,7 +935,7 @@ namespace DH.Helpdesk.Web.Controllers
                 recordsTotal = searchResult.Count,
                 recordsFiltered = searchResult.Count,
                 processDuration = duration
-            });
+            }, JsonRequestBehavior.AllowGet);
         }
 
 
