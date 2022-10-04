@@ -1027,7 +1027,7 @@
     {
         <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
     }
-    <script type="text/javascript">
+<script type="text/javascript">
 
         var requiredText = '@Translation.GetForJS("must be specified")';
         var recaptchaMessage = '@Translation.GetForJS("Check the captcha")';
@@ -1581,7 +1581,7 @@
                             categoryID = isAboutCategory.val();
 
                         $.ajax({
-                            url: '/casesearch/search_user',
+                            url: '@Url.Action("Search_User", "CaseSearch")',
                             type: 'post',
                             data: { query: query, customerId: @SessionFacade.CurrentCustomerID, searchKey: lastIsAboutSearchKey, categoryID: categoryID },
                             dataType: 'json',
@@ -1726,7 +1726,7 @@
             }
             return s4() + '-' + s4() + '-' + s4();
         }
-    </script>
+</script>
 }
 
 

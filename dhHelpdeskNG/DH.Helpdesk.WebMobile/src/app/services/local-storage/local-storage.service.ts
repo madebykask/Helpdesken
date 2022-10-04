@@ -26,18 +26,7 @@ export class LocalStorageService {
   removeCurrentUser() {
     localStorage.removeItem(StorageNameConstants.userDataStorageName);
   }
-
-  getCustomerCommunicateWithNotifier(customerId: number) {
-    localStorage.getItem(StorageNameConstants.customerCommunicateWithNotifier);
-  }
-
-  setCustomerCommunicateWithNotifier(communicateWithNotifier: boolean) {
-    localStorage.setItem(StorageNameConstants.customerCommunicateWithNotifier, JSON.stringify(communicateWithNotifier));
-  }
   
-  removeCustomerCommunicateWithNotifier() {
-    localStorage.removeItem(StorageNameConstants.customerCommunicateWithNotifier);
-  }  
   getLanguages(): Language[] {
     const json = localStorage.getItem(StorageNameConstants.languages);
     const data = JSON.parse(json);

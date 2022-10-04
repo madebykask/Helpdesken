@@ -6,6 +6,5 @@ export const StorageNameConstants = {
     userDataStorageName: 'userData',
     timezoneName: 'timezoneinfo',
     caseSearchState: 'caseSearchState',
-    languages: 'languages',
-    customerCommunicateWithNotifier: 'communicateWithNotifier'
+    languages: 'languages'
 };

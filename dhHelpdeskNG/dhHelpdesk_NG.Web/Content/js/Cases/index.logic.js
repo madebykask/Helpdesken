@@ -204,7 +204,7 @@ function getCollapseCaption(cap) {
                         let caseNotAccessible = (data.isClosed == true || data.isCaseLocked == true || data.isNotMemberOfGroup == true);
 
                         html = [];
-                        html.push('<input type="checkbox" class="bulkEditCaseSelect' + (caseNotAccessible ? 'Disabled' : '') + '" onclick="onClick_cbxBulkEditCaseSelect()" ' + (caseNotAccessible ? 'disabled' : '') + ' id="cbxBulkEditSelectCaseId_' + data.case_id + '" data-caseid="' + data.case_id + '" data-caseno="' + data.CaseNumber + '" data-casecaption="' + data.case_caption + '" />');
+                        html.push('<input type="checkbox" class="bulkEditCaseSelect' + (caseNotAccessible ? 'Disabled' : '') + '" onclick="onClick_cbxBulkEditCaseSelect()" ' + (caseNotAccessible ? 'disabled' : '') + ' id="cbxBulkEditSelectCaseId_' + data.case_id + '" data-caseid="' + data.case_id + '" data-caseno="' + data.CaseNumber + '" data-casecaption="' + data.case_caption.replace(/<[^>]*>?/gm, '') + '" />');
                         row.cells[1].innerHTML = html.join("");
 
                         html = [];
