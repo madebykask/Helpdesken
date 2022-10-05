@@ -36,6 +36,7 @@
               "src/manifest.json",
               "src/manifest.json.template",
               "src/pipe_change_variables.ps1",
+              "src/_app_offline.htm",
               {
                 "glob": "**/*",
                 "input": "src/content/icons",
@@ -124,7 +125,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/manifest.json"
+              "src/manifest.json",
+              "src/_app_offline.htm"
             ]
           }
         },
