@@ -34,7 +34,8 @@
             withManadatory);
     }
 
-}
+<link href="~/Content/css/summernote.css" rel="stylesheet" />
+<script src="~/Content/summernote-0.8.18/summernote.js"></script>
 
 <script type="text/javascript">
     window.appOptions = '@Html.Raw(jsSerializer.Serialize(Model.JsApplicationOptions))';
@@ -809,7 +810,9 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Description)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextAreaFor(d => Model.NewCase.Description, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Description.ToString() })
+
+                                                @Html.TextAreaFor(d => Model.NewCase.Description, new { @class = "hasAttribute summernotedesc", standardName = GlobalEnums.TranslationCaseFields.Description.ToString() })
+
                                             </div>
                                         </div>
                                     }
@@ -1027,7 +1030,7 @@
     {
         <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
     }
-<script type="text/javascript">
+    <script type="text/javascript">
 
         var requiredText = '@Translation.GetForJS("must be specified")';
         var recaptchaMessage = '@Translation.GetForJS("Check the captcha")';
@@ -1041,6 +1044,8 @@
         var $selectedWorkflow = null;
         var $selectListStep = null;
         var $buttonsToDisable = null;
+
+        let validator = null;
 
         var captchaChecker = function () { };
         var recaptcha_widget;
@@ -1211,8 +1216,8 @@
             // alternative: run this method before unobstrusive parse
             $mainForm.data("unobtrusiveValidation", null);
             $mainForm.data("validator", null);
-            $mainForm.validate({
-                ignore: "",
+            validator = $mainForm.validate({
+                ignore: ".note-editor *",
                 rules: {
                     "NewCase.ReportedBy": {
                         required: FieldIsRequired(
@@ -1549,7 +1554,40 @@
                         if (validator.errorMap.hasOwnProperty(prop))
                             console.log(prop, ":", validator.errorMap[prop]);
                     }
-                }
+                },
+                errorPlacement: function (error, element) {
+                    if (element.hasClass("summernotedesc")) {
+                        
+                        error.insertAfter(element.siblings(".note-editor"));
+                        
+                    } else {
+                        
+                        error.insertAfter(element);
+
+                    }
+                },
+                highlight: function (element, errorClass, validClass) {
+
+
+                    if ($(element).hasClass("summernotedesc")) {
+
+                        $(element).siblings(".note-editor").addClass("error")
+
+                    } else {
+
+                        $(element).addClass("error");
+                    }
+                },
+                unhighlight: function (element, errorClass, validClass) {
+
+                    if ($(element).hasClass("summernotedesc")) {
+
+                        $(element).siblings(".note-editor").removeClass("error")
+
+                    } else {
+                        $(element).removeClass("error");
+                    }
+                },
             });
 
         }
@@ -1562,6 +1600,37 @@
             }
             return ret;
         }
+
+    let summerNoteDescConfig = {
+        placeholder: '',
+        dialogsFade: true,
+        tabsize: 1,
+        fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82'],
+        toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['fontsize', ['fontsize']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
+        disableResizeImage: true,
+        disableResizeEditor: false,
+        height: 100,
+        callbacks: {
+            onChange: function (contents, $editable) {
+
+                $('.summernotedesc').val($('.summernotedesc').summernote('isEmpty') ? "" : contents);
+
+                validator.element($('.summernotedesc'));
+            }
+        }
+    }
+
+    //Init summernote
+    $(document).ready(function () {
+
+        $('.summernotedesc').summernote(summerNoteDescConfig)
+
+    });
+
+
+
+    </script>
+}
 
         function GetComputerUserSearchOptionsForIsAbout() {
 

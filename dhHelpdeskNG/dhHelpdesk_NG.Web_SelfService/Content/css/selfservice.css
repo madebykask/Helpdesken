@@ -725,6 +725,10 @@ a.error, input[type=¨button].error .btn {
     background-color: #438eb9;
 }
 
+.modal-backdrop, .modal-backdrop.in {
+    display: none;
+}
+
 .mapText {
     color: #fff;
     /*white-space: nowrap;*/
@@ -1292,3 +1296,14 @@ div .multitext i {
     resize: both;
     word-break: break-word;
 }
+
+/*SUMMERNOTE*/
+
+.note-editor {
+    margin-bottom: 5px !important;
+}
+
+    .note-editor.error {
+        border: 1px solid #ff0000 !important;
+        background-color: #ffeeee !important;
+    }

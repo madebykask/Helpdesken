@@ -7,8 +7,9 @@
     }
 
     input[type=text], input[type=button], button:not(.dropdown-toggle):not(.navbar-toggle), select, textarea {
-        width: 100% !important;
+        /*width: 100% !important;*/ /* Why? */
     }
+
 
     input[type=text] {
         padding: 6px 12px;
@@ -27,7 +28,7 @@
     }
 
     button[data-toggle="dropdown"] {
-        width: 40px !important;
+        /*width: 40px !important;*/ /* Why? */
     }
 
     /***** DROP DOWN SUB MENUS - OVERRIDES */

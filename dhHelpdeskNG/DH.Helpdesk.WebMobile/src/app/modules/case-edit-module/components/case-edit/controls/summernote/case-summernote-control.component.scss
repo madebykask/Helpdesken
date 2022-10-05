@@ -1,0 +1,27 @@
+::ng-deep {
+    .form-group {
+        background-color: white;
+        padding: 0 1em;
+    }
+    .control-label{
+        font-size: 0.75em;
+    }
+    .summer-note-outer{
+        background-color: white;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .summer-note-hr{
+        background-color: white;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        opacity: 0.5;
+    }
+    .invalid-feedback{
+        padding-top: 15px;
+    }
+    .invalid-feedback-inner{
+        color: #d8332a;
+        font-size: 0.75em;
+    }
+}

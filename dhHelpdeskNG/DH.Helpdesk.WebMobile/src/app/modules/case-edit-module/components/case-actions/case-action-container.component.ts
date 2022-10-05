@@ -39,11 +39,17 @@ export class CaseActionContainerComponent implements OnInit, OnDestroy {
     }
 
     renderComponent(vc: ViewContainerRef) {
+
+
+
       const cmp = this.resolveComponent();
       const componentFactory = this.componentFactoryResolver.resolveComponentFactory(cmp);
       const componentRef = vc.createComponent(componentFactory);
 
+
       const componentInst = <CaseActionBaseComponent<CaseActionDataType>>componentRef.instance;
+      
+
       //set component properties
       componentInst.caseKey = this.caseKey;
       componentInst.caseAction = this.caseAction;
