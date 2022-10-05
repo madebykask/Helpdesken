@@ -35,6 +35,7 @@ window.dataPrivacyForm =
         this.calculateRegistrationDate$ = form$.find("#CalculateRegistrationDate");
         this.retentionPeriod$ = form$.find("#retentionPeriod");
         this.filterFields$ = form$.find("#lstFilterFields");
+        this.caseTypeFields$ = form$.find("#lstFilterCaseTypes");
         this.closedOnly$ = form$.find("#ClosedOnly");
         this.replaceDataWith$ = form$.find("#ReplaceDataWith");
         this.replaceDatesWith$ = form$.find("#ReplaceDatesWith");
@@ -409,7 +410,7 @@ window.dataPrivacyForm =
                 this.enableControl(this.btnFavorite$, numberOfInvalids === 0);
             }
         };
-
+        //Todo - the same for CaseTypes
         this.loadCustomerFields = function (customerId) {
             var self = this;
             if (customerId) {
@@ -452,7 +453,7 @@ window.dataPrivacyForm =
                 });
             self.filterFields$.trigger("chosen:updated");
         }
-
+        //End todo
 
         this.runDataPrivacy = function () {
             var self = this;

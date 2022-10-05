@@ -1515,7 +1515,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                 // add additional fields
                 fields.AddRange(additionalFields);
-
+                //Todo - add fields from customer - CaseType & ProductArea
                 var data =
                     fields.Select(f => new SelectListItem
                     {

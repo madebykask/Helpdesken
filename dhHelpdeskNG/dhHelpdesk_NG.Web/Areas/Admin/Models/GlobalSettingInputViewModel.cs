@@ -76,8 +76,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         public DateTime? RegisterDateTo { get; set; }
         public bool ClosedOnly { get; set; }
         public bool CalculateRegistrationDate { get; set; }
-        public List<SelectListItem> Fields { get; set; }
+        public List<SelectListItem> Fields { get; set; }        
         public List<string> FieldsNames { get; set; }
+        public List<SelectListItem> CaseTypes { get; set; }
+        public List<string> CaseTypeNames { get; set; }
         public bool ReplaceEmails { get; set; }
         public string ReplaceDataWith { get; set; }
         public DateTime? ReplaceDatesWith { get; set; }
