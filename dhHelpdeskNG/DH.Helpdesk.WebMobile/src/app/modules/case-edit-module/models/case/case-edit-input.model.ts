@@ -1,5 +1,6 @@
 import { CaseFieldOptions } from 'src/app/modules/shared-module/constants';
 import { CaseSectionType } from './case-section-input.model';
+import { CustomerEmailSettingsModel } from 'src/app//models/customer/customer-email-settings.model';
 
 export interface IKeyValue {
   key: string;
@@ -35,6 +36,7 @@ export class CaseEditInputModel {
     mailToTickets: MailToTicketInfo[];
     childCasesIds: number[] | null;
     parentCaseId: number | null;
+    customerEmailSettings: CustomerEmailSettingsModel;
 }
 
 export enum CaseAccessMode {

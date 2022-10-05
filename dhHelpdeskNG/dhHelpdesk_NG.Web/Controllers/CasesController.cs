@@ -617,7 +617,9 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     { "information", Translation.GetCoreTextTranslation("Information") },
                     { "records_limited_msg", Translation.GetCoreTextTranslation("Antal ärende som visas är begränsade till 500.") },
-                }
+                },
+                HelperRegTime = Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id),
+                HelperCaption = Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id)
             };
 
             return View("Index", m);
@@ -933,7 +935,7 @@ namespace DH.Helpdesk.Web.Controllers
                 recordsTotal = searchResult.Count,
                 recordsFiltered = searchResult.Count,
                 processDuration = duration
-            });
+            }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -1102,6 +1104,10 @@ namespace DH.Helpdesk.Web.Controllers
             var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
 
             var casesLocks = _caseLockService.GetLockedCasesToOverView(ids, globalSettings, this.DefaultCaseLockBufferTime).ToList();
+            
+            var workinggroupsForUserAndCustomer = _userService
+                                .GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
+
             foreach (var searchRow in caseSearchResults)
             {
                 var caseId = searchRow.Id;
@@ -1129,6 +1135,22 @@ namespace DH.Helpdesk.Web.Controllers
                     jsRow.Add("isCaseLocked", true);
                     jsRow.Add("caseLockedIconTitle", $"{caseLock.User.FirstName} {caseLock.User.LastName} ({caseLock.User.UserId})");
                     jsRow.Add("caseLockedIconUrl", $"/Content/icons/{CaseIcon.Locked.CaseIconSrc()}");
+                }
+
+                if(searchRow.ExtendedSearchInfo != null)
+                {
+                    var wg = workinggroupsForUserAndCustomer.FirstOrDefault(x => x.WorkingGroup_Id == searchRow.ExtendedSearchInfo.WorkingGroupId);
+                    if (wg != null)
+                    {
+                        var cc = _caseService.GetCaseById(caseId);
+                        var accessMode = CalcEditMode(searchRow.ExtendedSearchInfo.CustomerId, SessionFacade.CurrentUser.Id, cc);
+
+                        if (!wg.IsMemberOfGroup && wg.WorkingGroup_Id > 0
+                            && accessMode != AccessMode.FullAccess)
+                        {
+                            jsRow.Add("isNotMemberOfGroup", true);
+                        }
+                    }
                 }
 
                 foreach (var col in gridSettings.columnDefs)
@@ -1342,7 +1364,7 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         //string errorMsg = Translation.GetCoreTextTranslation("Låst");
 
-                        string errorMsg = Translation.GetCoreTextTranslation("Nätverksförbindelsen bröts. Användare <name> har låst ärendet.");
+                        string errorMsg = Translation.GetCoreTextTranslation("OBS! Detta ärende är öppnat av") + " <name>.";
                         errorMsg = errorMsg.Replace("<name>", caseLockViewModel.User.FirstName + " " + caseLockViewModel.User.SurName);
                         throw new Exception(errorMsg);
                     }
@@ -1356,7 +1378,7 @@ namespace DH.Helpdesk.Web.Controllers
                 mailSenders.SystemEmail = caseMailSetting.HelpdeskMailFromAdress;
 
                 // Positive: Send Mail to...
-                caseMailSetting.DontSendMailToNotifier = caseMailSetting.DontSendMailToNotifier == false;
+                //caseMailSetting.DontSendMailToNotifier = caseMailSetting.DontSendMailToNotifier == false;
 
                 if (caseToUpdate.DefaultOwnerWG_Id.HasValue && caseToUpdate.DefaultOwnerWG_Id.Value > 0)
                 {
@@ -1419,17 +1441,24 @@ namespace DH.Helpdesk.Web.Controllers
                         if (childrenCases != null)
                         {
                             var childrenNotIncludedForDeletion = childrenCases.Where(x=> !inputData.CasesToBeUpdated.Contains(x.Id));
-                            if(childrenNotIncludedForDeletion.Any(x=> x.ClosingDate == null))
+                            if(childrenNotIncludedForDeletion.Any(x=> x.ClosingDate == null && !x.Indepandent))
                             {
-                                string errorMsg = Translation.Get("Ärende har underärenden som ej ska avslutas");
+                                string errorMsg = Translation.Get("Ärendet har underärende som ej är avslutade");
                                 throw new Exception(errorMsg);
                             }
                         }
 
                         caseLog.CaseId = inputData.Id;
                         caseLog.FinishingType = inputData.FinishTypeId;
-                        caseLog.FinishingDate = DateTime.UtcNow;
-                        caseToUpdate.FinishingDate = DateTime.UtcNow;
+
+                        DateTime validatedDate;
+                        DateTime finishDate = DateTime.UtcNow;
+                        if (DateTime.TryParse(inputData.FinishDate.ToString(), out validatedDate))
+                        {
+                            finishDate = validatedDate;
+                        }
+                        caseLog.FinishingDate = finishDate;
+                        caseToUpdate.FinishingDate = finishDate;
                         updateCase = true;
                     }
                 }
@@ -1832,6 +1861,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m = this.GetCaseInputViewModel(userId, customerId, id, caseLockViewModel, caseFieldSettings, redirectFrom, backUrl, null, null, updateState);
 
                 m.NumberOfCustomers = _masterDataService.GetCustomers(userId).Count;
+                
 
                 m.ActiveTab = (!string.IsNullOrEmpty(caseLockViewModel.ActiveTab) ? caseLockViewModel.ActiveTab : activeTab);
 #pragma warning disable 0618
@@ -1909,7 +1939,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.ParantPath_OU = ParentPathDefaultValue;
 
                 }
-
+                
                 var caseCustomerSettings = GetCustomerSettings(m.case_.Customer_Id);
                 var moduleCaseInvoice = caseCustomerSettings.ModuleCaseInvoice;
                 if (moduleCaseInvoice == 1)
@@ -1921,7 +1951,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 m.CustomerSettings = _workContext.Customer.Settings; //current customer settings
                 m.CustomerSettings.ModuleCaseInvoice = Convert.ToBoolean(caseCustomerSettings.ModuleCaseInvoice); // TODO FIX
-
+                Customer cus = _customerService.GetCustomer(m.case_.Customer_Id);
+                m.CaseLog.AutoCheckPerformerCheckbox = cus.CommunicateWithPerformer.ToBool();
 #pragma warning restore 0618
                 #region ConnectToParentModel
 
@@ -1976,8 +2007,11 @@ namespace DH.Helpdesk.Web.Controllers
                                 "records_limited_msg",
                                 Translation.GetCoreTextTranslation("Antal ärende som visas är begränsade till 500.")
                             },
-                        }
+                        },
+                        HelperRegTime = Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id),
+                        HelperCaption = Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id)
                     };
+
                 }
 
                 #endregion
@@ -1995,7 +2029,6 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 m.ActiveTab = "";
             }
-
 
             return this.View(m);
         }
@@ -2101,6 +2134,7 @@ namespace DH.Helpdesk.Web.Controllers
 #pragma warning restore 0618
 
                     m.CaseLog.SendMailAboutCaseToNotifier = !string.IsNullOrEmpty(m.CaseLog.TextExternal);// customer.CommunicateWithNotifier.ToBool();
+                    
 
                     // check state secondary info
                     m.Disable_SendMailAboutCaseToNotifier = false;
@@ -2778,7 +2812,7 @@ namespace DH.Helpdesk.Web.Controllers
                 finishingCause.SubFinishingCauses.Where(f => f.IsActive != 0).ToList().Count > 0)
                 res = "true";
 
-            return Json(res);
+            return Json(res, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -3152,7 +3186,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         }
 
-        public ActionResult ConnectToParentCase(int id, int parentCaseId, bool? tomerge = false)
+        public ActionResult ConnectToParentCase(int id, int parentCaseId, bool? tomerge = false, bool? nomail = false)
         {
             if (SessionFacade.CurrentCustomer == null || SessionFacade.CurrentUser == null)
             {
@@ -3176,33 +3210,31 @@ namespace DH.Helpdesk.Web.Controllers
                 Case parentCase = _caseService.GetCaseById(parentCaseId);
 
                 //Move followers and initiator to mergeparent
-                List<ExtraFollower> newFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(id);
-                List<ExtraFollower> existingFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(parentCaseId);
-                List<string> newParentFollowers = new List<string>();
-                if (!String.IsNullOrEmpty(mergeCase.PersonsEmail) && mergeCase.PersonsEmail != parentCase.PersonsEmail)
+                List<ExtraFollower> mergeCaseFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(id);
+                List<ExtraFollower> mergeParentFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(parentCaseId);
+
+                var exists = mergeParentFollowers.Where(x => x.Follower == mergeCase.PersonsEmail).FirstOrDefault();
+
+                if (!String.IsNullOrEmpty(mergeCase.PersonsEmail) && mergeCase.PersonsEmail != parentCase.PersonsEmail && exists == null)
                 {
                     var extraFollower = new ExtraFollower()
                     {
-                        CaseId = id,
+                        CaseId = parentCaseId,
                         Follower = mergeCase.PersonsEmail
                     };
-                    newFollowers.Add(extraFollower);
+                    mergeParentFollowers.Add(extraFollower);
                 }
+                mergeParentFollowers = mergeParentFollowers.Union(mergeCaseFollowers).Where(y => y.Follower != parentCase.PersonsEmail).DistinctBy(x => x.Follower).ToList();
 
-                List<ExtraFollower> result = existingFollowers.Union(newFollowers).ToList();
-                newParentFollowers = result.Select(f => f.Follower).Distinct().ToList();
-                List<string> emailList = new List<string> { mergeCase.PersonsEmail };
-                List<string> ccEmailList = newFollowers.Select(f => f.Follower).Distinct().ToList();
+                List<string> newParentFollowers = mergeParentFollowers.Select(x => x.Follower).ToList();
+                List<string> ccEmailList = mergeCaseFollowers.Select(x => x.Follower).ToList();
 
-                if (newParentFollowers.Count() > 0)
+                if (mergeParentFollowers.Count() > 0)
                 {
                     _caseExtraFollowersService.SaveExtraFollowers(parentCaseId, newParentFollowers, _workContext.User.UserId);
                 }
 
-                //Save Case History
                 IDictionary<string, string> errors;
-                string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                _caseService.SaveCaseHistory(parentCase, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, null, null);
 
                 // Close case...
                 CaseExtraInfo extraInfo = new CaseExtraInfo
@@ -3220,33 +3252,33 @@ namespace DH.Helpdesk.Web.Controllers
                 mergeCase.FinishingDate = DateTime.UtcNow;
                 caseLog.FinishingDate = DateTime.UtcNow;
                 caseLog.FinishingType = mergedFinishingCause.Id;
-                caseLog.FinishingTypeName = mergedFinishingCause.Name;
+                caseLog.FinishingTypeName = Translation.GetCoreTextTranslation(mergedFinishingCause.Name);
                 caseLog.CaseId = mergeCase.Id;
                 caseLog.UserId = SessionFacade.CurrentUser.Id;
                 caseLog.LogGuid = Guid.NewGuid();
-                caseLog.TextInternal = mergedFinishingCause.Name;
+                caseLog.TextInternal = Translation.GetCoreTextTranslation(mergedFinishingCause.Name);
+
 
 
                 int caseHistoryId = _caseService.SaveCase(mergeCase, caseLog, SessionFacade.CurrentUser.Id, null, extraInfo, out errors);
+                int mergeParentHistoryId = _caseService.SaveCase(parentCase, null, SessionFacade.CurrentUser.Id, null, extraInfo, out errors);
                 caseLog.CaseHistoryId = caseHistoryId;
                 int caseLogId = _logService.SaveLog(caseLog, 0, out errors);
 
-                //Send Closing email/Merged Case
                 Customer customer = _customerService.GetCustomer(mergeCase.Customer_Id);
-                CaseMailSetting caseMailSetting = new CaseMailSetting(string.Empty, customer.HelpdeskEmail, RequestExtension.GetAbsoluteUrl(), 1)
+                CaseMailSetting caseMailSetting = new CaseMailSetting(string.Empty, customer.HelpdeskEmail, RequestExtension.GetAbsoluteUrl(), 1);
+                if(nomail == false)
                 {
-                    DontSendMailToNotifier = false,
-                };
+                    caseMailSetting.DontSendMailToNotifier = false;
+                    MailSenders mailSenders = new MailSenders { SystemEmail = caseMailSetting.HelpdeskMailFromAdress };
+                    caseMailSetting.CustomeMailFromAddress = mailSenders;
 
-                MailSenders mailSenders = new MailSenders { SystemEmail = caseMailSetting.HelpdeskMailFromAdress };
-                caseMailSetting.CustomeMailFromAddress = mailSenders;
-
-                TimeZoneInfo userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
-                User currentLoggedInUser = _userService.GetUser(SessionFacade.CurrentUser.Id);
-                _caseService.SendMergedCaseEmail(mergeCase, parentCase, caseMailSetting, caseHistoryId, userTimeZone, caseLog, ccEmailList);
+                    TimeZoneInfo userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+                    User currentLoggedInUser = _userService.GetUser(SessionFacade.CurrentUser.Id);
+                    _caseService.SendMergedCaseEmail(mergeCase, parentCase, caseMailSetting, caseHistoryId, userTimeZone, caseLog, ccEmailList);
+                }
+               
             }
-
-
 
             return this.RedirectToAction("Edit", "cases", new { id = parentCaseId });
         }
@@ -3935,7 +3967,8 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                     else
                     {
-                        caseLog.FinishingDate = DateTime.SpecifyKind(caseLog.FinishingDate.Value, DateTimeKind.Local).ToUniversalTime();
+                        //Manually set
+                        caseLog.FinishingDate = caseLog.FinishingDate.Value.AddHours(8);
                     }
                 }
 
@@ -3970,8 +4003,8 @@ namespace DH.Helpdesk.Web.Controllers
                         out errors,
                         parentCase,
                         m.FollowerUsers);
-
-            if (isItChildCase)
+            var mergeParent = _caseService.GetMergedParentInfo(case_.Id);
+            if (isItChildCase && mergeParent == null)
             {
                 _caseService.SetIndependentChild(case_.Id, m.IndependentChild);
             }

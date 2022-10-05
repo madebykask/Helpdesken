@@ -726,7 +726,7 @@
                             <input type="hidden" name="CaseFieldSettings[74].Hide" value="false" />
                         </td>
                         <td>
-                            @*<input type="checkbox" name="CaseFieldSettings[74].ShowExternal" disabled="disabled" />*@
+                            <input type="checkbox" name="CaseFieldSettings[74].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                             <input type="hidden" name="CaseFieldSettings[74].ShowExternal" value="0" />
                         </td>
                         <td>
@@ -769,7 +769,7 @@
                         </td>
                         <td></td>
                         <td>
-                            @*<input type="checkbox" name="CaseFieldSettings[59].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()) == 1 ? "checked=checked" : "") value="1" />*@
+                            <input type="checkbox" name="CaseFieldSettings[59].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()) == 1 ? "checked=checked" : "") value="1" />
                             <input type="hidden" name="CaseFieldSettings[59].ShowExternal" value="0" />
                         </td>
                         <td>
@@ -809,8 +809,8 @@
                         </td>
                         <td></td>
                         <td>
-                            @*<input type="checkbox" name="CaseFieldSettings[60].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()) == 1 ? "checked=checked" : "") value="1" />*@
-                            <input type="hidden" name="CaseFieldSettings[60].ShowExternal" value="@Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString())" />
+                            <input type="checkbox" name="CaseFieldSettings[60].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()) == 1 ? "checked=checked" : "") value="1" />
+                            <input type="hidden" name="CaseFieldSettings[60].ShowExternal" value="0" />
                         </td>
                         <td>
                             <input type="text" name="CaseFieldSettingWithLangauges[60].Label" value="@Model.CaseFieldSettingWithLangauges.getLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString())" />
@@ -849,7 +849,7 @@
                         </td>
                         <td></td>
                         <td>
-                            @*<input type="checkbox" name="CaseFieldSettings[61].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()) == 1 ? "checked=checked" : "") value="1" />*@
+                            <input type="checkbox" name="CaseFieldSettings[61].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()) == 1 ? "checked=checked" : "") value="1" />
                             <input type="hidden" name="CaseFieldSettings[61].ShowExternal" value="0" />
                         </td>
                         <td>
@@ -891,7 +891,7 @@
                         </td>
                         <td></td>
                         <td>
-                            @*<input type="checkbox" name="CaseFieldSettings[62].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()) == 1 ? "checked=checked" : "") value="1" />*@
+                            <input type="checkbox" name="CaseFieldSettings[62].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()) == 1 ? "checked=checked" : "") value="1" />
                             <input type="hidden" name="CaseFieldSettings[62].ShowExternal" value="0" />
                         </td>
                         <td>
@@ -933,7 +933,7 @@
                         </td>
                         <td></td>
                         <td>
-                            @*<input type="checkbox" name="CaseFieldSettings[63].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()) == 1 ? "checked=checked" : "") value="1" />*@
+                            <input type="checkbox" name="CaseFieldSettings[63].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()) == 1 ? "checked=checked" : "") value="1" />
                             <input type="hidden" name="CaseFieldSettings[63].ShowExternal" value="0" />
                         </td>
                         <td>

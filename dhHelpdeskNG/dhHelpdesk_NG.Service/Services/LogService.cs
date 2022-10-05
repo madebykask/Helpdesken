@@ -156,7 +156,7 @@ namespace DH.Helpdesk.Services.Services
 
             if (caseOverview?.ProblemId != null)
             {
-                var problemLogs = _problemLogService.GetProblemLogs(caseOverview.ProblemId.Value);
+                var problemLogs = _problemLogService.GetProblemLogs(caseOverview.ProblemId.Value).Where(p => p.FinnishConnectedCases == 0);
                 if (problemLogs != null)
                 {
                     result.AddRange(problemLogs

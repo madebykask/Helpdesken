@@ -1,14 +1,18 @@
 ﻿function LoadConnectToParentSingle(pageSettings) {
     "use strict";
 
+    console.log(pageSettings)
+
     var GRID_STATE = {
         IDLE: 0,
         LOADING: 1,
         BAD_CONFIG: 2,
         NO_COL_SELECTED: 3
     };
+
     var childId = $("#connect_to_parent_childId").val();
     var tomerge = $("#tomerge").val();
+    var dontSendMailToNotifier = $("#dontSendMailToNotifier").val();
 
     (function($) {
         /// message types
@@ -21,6 +25,8 @@
         function CTP() {};
 
         CTP.prototype.init = function (appSettings) {
+
+
             "use strict";
             var self = this;
 
@@ -70,7 +76,7 @@
 
             self.$table.addClass(appSettings.gridSettings.cls);
 
-            var columns = self.getColumnSettings(appSettings.gridSettings);
+            var columns = self.getColumnSettings(appSettings.gridSettings, appSettings.HelperCaption, appSettings.HelperRegTime);
 
 
             var sortIndex = null;
@@ -111,7 +117,7 @@
                     createdRow: function(row, data, dataIndex) {
                         if (data) {
                             $(row).addClass(self.getClsRow(data) + " caseid=" + data.case_id);
-                            row.cells[0].innerHTML = strJoin('<a href="/Cases/ConnectToParentCase?id=', childId, "&parentCaseId=", data.case_id, "&tomerge=", tomerge, '"><img title="', data.caseIconTitle, '" alt="', data.caseIconTitle, '" src="', data.caseIconUrl, '" /></a>');
+                            row.cells[0].innerHTML = strJoin('<a href="/Cases/ConnectToParentCase?id=', childId, "&parentCaseId=", data.case_id, "&tomerge=", tomerge, "&nomail=", dontSendMailToNotifier, '"><img title="', data.caseIconTitle, '" alt="', data.caseIconTitle, '" src="', data.caseIconUrl, '" /></a>');
                         }
                     },
                     columns: columns,
@@ -236,7 +242,7 @@
             return this._gridState;
         };
 
-        CTP.prototype.getColumnSettings = function (gridSettings) {
+        CTP.prototype.getColumnSettings = function (gridSettings, helperCaption, helperRegTime) {
             "use strict";
             var self = this;
 
@@ -252,23 +258,9 @@
                 }         
             }
 
-            var nativeLangCaption = "Title"
-            if (gridSettings.columnDefs.filter(x => x.field == "Caption").length > 0) {
-                if (gridSettings.columnDefs.filter(x => x.field == "Caption")[0].displayName != "") {
-                    if (typeof gridSettings.columnDefs.filter(x => x.field == "Caption")[0].displayName != undefined) {
-                        nativeLangCaption = gridSettings.columnDefs.filter(x => x.field == "Caption")[0].displayName;
-                    }
-                }
-            }
+            var nativeLangCaption = helperCaption;
 
-            var nativeRegTimeCaption = "Reg.Date"
-            if (gridSettings.columnDefs.filter(x => x.field == "Caption").length > 0) {
-                if (gridSettings.columnDefs.filter(x => x.field == "RegTime")[0].displayName != "") {
-                    if (typeof gridSettings.columnDefs.filter(x => x.field == "RegTime")[0].displayName != undefined) {
-                        nativeRegTimeCaption = gridSettings.columnDefs.filter(x => x.field == "RegTime")[0].displayName;
-                    }
-                }
-            }
+            var nativeRegTimeCaption = helperRegTime;
 
 
             var columns = [];
@@ -368,7 +360,7 @@
         };
 
         CTP.prototype.formatCell = function (caseId, cellValue) {
-            var out = [strJoin('<a href="/Cases/ConnectToParentCase?id=', childId, "&parentCaseId=", caseId, "&tomerge=", tomerge, '">', cellValue == null ? "&nbsp;" : cellValue.replace(/<[^>]+>/ig, ""),"</a>")];
+            var out = [strJoin('<a href="/Cases/ConnectToParentCase?id=', childId, "&parentCaseId=", caseId, "&tomerge=", tomerge, "&nomail=", dontSendMailToNotifier, '">', cellValue == null ? "&nbsp;" : cellValue.replace(/<[^>]+>/ig, ""),"</a>")];
             return out.join(JOINER);
         };
 

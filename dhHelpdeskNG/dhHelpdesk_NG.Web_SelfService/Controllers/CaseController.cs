@@ -1,42 +1,33 @@
-﻿using System.Threading;
-using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
+﻿using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.BusinessData.Models.Email;
-using DH.Helpdesk.BusinessData.Models.FileViewLog;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums.FileViewLog;
 using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Extensions;
-using DH.Helpdesk.SelfService.Controllers.Behaviors;
-using DH.Helpdesk.SelfService.Entites;
-using DH.Helpdesk.SelfService.Infrastructure.Configuration;
-using log4net;
-using WebGrease.Css.Extensions;
 using DH.Helpdesk.Common.Extensions.Lists;
 using DH.Helpdesk.Common.Types;
-using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.SelfService.Controllers.Behaviors;
+using DH.Helpdesk.SelfService.Entites;
 using DH.Helpdesk.SelfService.Infrastructure.Attributes;
+using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Services.Utils;
+using log4net;
+using System.Threading;
+using WebGrease.Css.Extensions;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Web;
-    using System.Web.Mvc;
-    using System.Web.WebPages;
-
+    using BusinessData.Models.ExtendedCase;
+    using Common.Extensions.Integer;
     using DH.Helpdesk.BusinessData.Enums.Case;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.SelfService.Infrastructure;
     using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
     using DH.Helpdesk.SelfService.Infrastructure.Extensions;
@@ -44,14 +35,19 @@ namespace DH.Helpdesk.SelfService.Controllers
     using DH.Helpdesk.SelfService.Models.Case;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Services.Services.Concrete;
-    using Models.Shared;
-    using BusinessData.Models.ExtendedCase;
-    using Services.Services.UniversalCase;
-    using Common.Extensions.Integer;
     using Models.Message;
-    using Services.Infrastructure;
+    using Models.Shared;
     using Newtonsoft.Json.Linq;
+    using Services.Infrastructure;
+    using Services.Services.UniversalCase;
+    using System;
+    using System.Collections.Generic;
     using System.Configuration;
+    using System.Linq;
+    using System.Net;
+    using System.Web.Mvc;
+    using System.Web.WebPages;
+    using static DH.Helpdesk.BusinessData.OldComponents.GlobalEnums;
 
     public class CaseController : BaseController
     {
@@ -761,6 +757,10 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpGet]
         public ActionResult UserCases(int customerId, string progressId = "")
         {
+            if (ConfigurationService.AppSettings.LoginMode == LoginMode.Anonymous)
+            {
+                return Redirect("Index");
+            }
             var res = _caseControllerBehavior.ValidateCustomer();
             if (!res.Valid) return HandleError(res);
 
@@ -790,6 +790,10 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpGet]
         public ActionResult MultiCustomerUserCases(string progressId = "")
         {
+            if (ConfigurationService.AppSettings.LoginMode == LoginMode.Anonymous)
+            {
+                return Redirect("Index");
+            }
             var globalSettings = _globalSettingService.GetGlobalSettings().First();
             if (globalSettings.MultiCustomersSearch == 0)
                 return RedirectToAction("UserCases", new { customerId = SessionFacade.CurrentCustomerID });
@@ -814,7 +818,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 : new List<string>();
 
             var customers = _customerUserService.ListCustomersByUserCases(userId, employeeNumber, employees,
-                SessionFacade.CurrentCustomer);
+                SessionFacade.CurrentCustomer, SessionFacade.CurrentUserIdentity.Email);
 
             var model = new MultiCustomerUserFilterModel
             {
@@ -1759,8 +1763,8 @@ namespace DH.Helpdesk.SelfService.Controllers
 
         private bool UserHasAccessToCase(Case currentCase)
         {
-            //var curUser = SessionFacade.CurrentUserIdentity.UserId;
-            //var userEmployeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
+            var curUser = SessionFacade.CurrentUserIdentity.UserId;
+            
 
             //Hide this to next release #57742
             if (currentCase.CaseType.ShowOnExtPageCases == 0 || (currentCase.ProductArea != null && currentCase.ProductArea.ShowOnExtPageCases == 0))
@@ -1771,12 +1775,6 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();
 
-            // Only when it is microsoft authentication
-            if (ConfigurationService.AppSettings.LoginMode == LoginMode.Microsoft)
-            {
-                criteria.PersonEmail = criteria.UserId;
-            }
-
 
             /*User creator*/
             if (criteria.MyCasesRegistrator && !string.IsNullOrEmpty(criteria.UserId) && !string.IsNullOrEmpty(currentCase.RegUserId))
@@ -1785,6 +1783,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 {
                     return true;
                 }
+                //Is this neccecary??
                 else
                 {
                     _logger.Warn($"UserHasAccessToCase: currentCase.RegUserId ('{currentCase.RegUserId}') != CurrentUserIdenity.UserId ('{criteria.UserId}')");
@@ -1804,7 +1803,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                     return true;
             }
 
-            // Only when it is microsoft authentication
+            // Compare with email
             if (criteria.MyCasesInitiator && !string.IsNullOrEmpty(currentCase.PersonsEmail) &&
                 !string.IsNullOrEmpty(criteria.PersonEmail))
             {
@@ -1816,16 +1815,12 @@ namespace DH.Helpdesk.SelfService.Controllers
             /*User follower*/
             if (criteria.MyCasesFollower)
             {
-                if ((currentCase.CaseFollowers != null && currentCase.CaseFollowers.Any()) &&
-                (!string.IsNullOrEmpty(criteria.UserId) || !string.IsNullOrEmpty(criteria.UserEmployeeNumber)))
+                if ((currentCase.CaseFollowers != null && currentCase.CaseFollowers.Any()) && (!string.IsNullOrEmpty(criteria.PersonEmail)))
                 {
-                    if (!string.IsNullOrEmpty(criteria.UserId)
-                        && currentCase.CaseFollowers.Where(m => m.Follower.Equals(SessionFacade.CurrentUserIdentity.Email, StringComparison.CurrentCultureIgnoreCase)).Any())
-                    { return true; }
-
-                    //if (!string.IsNullOrEmpty(criteria.UserEmployeeNumber)
-                    //    && currentCase.CaseFollowers.Where(m => m.Follower.Equals(criteria.UserEmployeeNumber, StringComparison.CurrentCultureIgnoreCase)).Any())
-                    //{ return true; }
+                    if (currentCase.CaseFollowers.Where(m => m.Follower.Equals(criteria.PersonEmail, StringComparison.CurrentCultureIgnoreCase)).Any())
+                    { 
+                        return true; 
+                    }
                 }
 
             }
@@ -1858,7 +1853,6 @@ namespace DH.Helpdesk.SelfService.Controllers
         private bool UserHasAccessToCase(CaseModel currentCase)
         {
             var curUser = SessionFacade.CurrentUserIdentity.UserId;
-            var userEmployeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
 
             //Hide this to next release #57742
             var caseType = _caseTypeService.GetCaseType(currentCase.CaseType_Id);
@@ -1868,12 +1862,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                 return false;
 
             var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();
+            //Get User Email from logged in user
+            var user = _computerService.GetComputerUserByUserID(curUser);
+            criteria.PersonEmail = user.Email;
 
-            // Only when it is microsoft authentication
-            if (ConfigurationService.AppSettings.LoginMode == LoginMode.Microsoft)
-            {
-                criteria.PersonEmail = criteria.UserId;
-            }
 
             /*User creator*/
             if (criteria.MyCasesRegistrator && !string.IsNullOrEmpty(criteria.UserId) && !string.IsNullOrEmpty(currentCase.RegUserId))
@@ -1895,7 +1887,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                     return true;
             }
 
-            // Only when it is microsoft authentication
+            // Compare with email
             if (criteria.MyCasesInitiator && !string.IsNullOrEmpty(currentCase.PersonsEmail) &&
                 !string.IsNullOrEmpty(criteria.PersonEmail))
             {
@@ -1909,16 +1901,17 @@ namespace DH.Helpdesk.SelfService.Controllers
             {
                 var caseFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(currentCase.Id);
 
-                if ((caseFollowers != null && caseFollowers.Any()) &&
-                (!string.IsNullOrEmpty(criteria.UserId) || !string.IsNullOrEmpty(criteria.UserEmployeeNumber)))
+                /*User follower*/
+                if (criteria.MyCasesFollower)
                 {
-                    if (!string.IsNullOrEmpty(criteria.UserId)
-                        && caseFollowers.Where(m => m.Follower.Equals(SessionFacade.CurrentUserIdentity.Email, StringComparison.CurrentCultureIgnoreCase)).Any())
-                    { return true; }
+                    if ((caseFollowers != null && caseFollowers.Any()) && (!string.IsNullOrEmpty(criteria.PersonEmail)))
+                    {
+                        if (caseFollowers.Where(m => m.Follower.Equals(criteria.PersonEmail, StringComparison.CurrentCultureIgnoreCase)).Any())
+                        {
+                            return true;
+                        }
+                    }
 
-                    //if (!string.IsNullOrEmpty(criteria.UserEmployeeNumber)
-                    //    && caseFollowers.Where(m => m.Follower.Equals(criteria.UserEmployeeNumber, StringComparison.CurrentCultureIgnoreCase)).Any())
-                    //{ return true; }
                 }
 
             }
@@ -2271,6 +2264,8 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var whiteList = _globalSettingService.GetFileUploadWhiteList();
 
+            ComputerUserCategory regardingComputerUserCategory = GetRegardingComputerUserCategory(customerId);
+
             var model = new NewCaseModel
             {
                 NewCase = new Case { Customer_Id = customerId },
@@ -2326,7 +2321,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                 AttachmentPlacement = customerSettings.AttachmentPlacement,
                 ApplicationType = CurrentApplicationType,
                 ShowCommunicationForSelfService = appSettings.ShowCommunicationForSelfService,
-                FileUploadWhiteList = whiteList
+                FileUploadWhiteList = whiteList,
+                ComputerUserCategories = _computerService.GetComputerUserCategoriesByCustomerID(customerId, true),
+                RegardingComputerUserCategory = regardingComputerUserCategory
             };
 
             if (currentUserIdentity != null)
@@ -2400,6 +2397,22 @@ namespace DH.Helpdesk.SelfService.Controllers
             return model;
         }
 
+        private ComputerUserCategory GetRegardingComputerUserCategory(int customerId)
+        {
+            var defaultCategoryId = ComputerUserCategory.EmptyCategoryId;
+            ComputerUserCategory regardingComputerUserCategory = null;
+            var customerFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+            var regFieldSettings = customerFieldSettings.getCaseSettingsValue(TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString());
+
+            //set default value only for new case
+            if (Int32.TryParse(regFieldSettings.DefaultValue, out defaultCategoryId))
+            {
+                regardingComputerUserCategory = _computerService.GetComputerUserCategoryByID(defaultCategoryId);
+            }
+
+            return regardingComputerUserCategory;
+        }
+
         private List<string> GetVisibleFieldGroups(List<CaseListToCase> fieldList)
         {
             List<string> ret = new List<string>();
@@ -2426,6 +2439,16 @@ namespace DH.Helpdesk.SelfService.Controllers
                             GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(),
                             GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()
                         };
+
+            string[] caseRegardingGroup = new string[]
+            {
+                            GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString(),
+                            GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString(),
+                            GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString(),
+                            GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString(),
+                            GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString(),
+                            GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()
+            };
 
             string[] caseInfoGroup = new string[]
                         {
@@ -2478,6 +2501,9 @@ namespace DH.Helpdesk.SelfService.Controllers
 
                 if (computerInformationGroup.Contains(field.Name))
                     ret.Add(Enums.CaseFieldGroups.ComputerInformation);
+
+                if (caseRegardingGroup.Contains(field.Name))
+                    ret.Add(Enums.CaseFieldGroups.CaseRegarding);
 
                 if (caseInfoGroup.Contains(field.Name))
                     ret.Add(Enums.CaseFieldGroups.CaseInfo);

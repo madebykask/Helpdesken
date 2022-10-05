@@ -289,10 +289,9 @@ function productAreaHasChild(productAreaId) {
     });
 }
 
-function finishingCauseHasChild(finishingCauseId) {
-    $.get('/Cases/FinishingCauseHasChild', { fId: finishingCauseId, now: Date.now() }, function (data) {
-        return data;
-    });
+async function finishingCauseHasChild(finishingCauseId) {
+    let ret = await $.get('/Cases/FinishingCauseHasChild', { fId: finishingCauseId, now: Date.now() });
+    return ret;
 }
 
 function SendToDialogCaseCallback(email) {
@@ -572,6 +571,9 @@ $.extend($.fn.dataTableExt.oPagination, {
             var oPaging = oSettings.oInstance.fnPagingInfo();
             var an = oSettings.aanFeatures.p;
             var i, ien, j, sClass, iStart, iEnd, iHalf = Math.floor(iListLength / 2);
+
+            $("#cbxBulkCaseEditAll").prop('checked', false);
+            $('#liBulkCaseEdit').hide();
 
             if (oPaging.iTotalPages < iListLength) {
                 iStart = 1;

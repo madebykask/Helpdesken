@@ -1062,11 +1062,20 @@ namespace DH.Helpdesk.Services.Services
             var extraFields = new ExtraFieldCaseHistory();
             if (caseLog != null && caseLog.FinishingType != null)
             {
-                var fc = _finishingCauseService.GetFinishingTypeName(caseLog.FinishingType.Value);
-                extraFields.ClosingReason = fc;
-            }
+                //This because it was not translated if Merged case
+                if (!string.IsNullOrEmpty(caseLog.FinishingTypeName))
+                    extraFields.ClosingReason = caseLog.FinishingTypeName;
+                else
+                {
+                    var fc = _finishingCauseService.GetFinishingTypeName(caseLog.FinishingType.Value);
 
-            if (parentCase != null)
+                    extraFields.ClosingReason = fc;
+                }
+                
+            }
+            //Check if it is a merged case
+            var mergeParent = GetMergedParentInfo(cases.Id);
+            if (parentCase != null && mergeParent == null)
             {
                 this.AddChildCase(cases.Id, parentCase.Id, out errors);
             }
@@ -1756,8 +1765,12 @@ namespace DH.Helpdesk.Services.Services
             ret.Add(new Field { Key = "[#15]", StringValue = wg != null ? c.Workinggroup.WorkingGroupName : string.Empty });
             ret.Add(new Field { Key = "[#13]", StringValue = wg != null ? c.Workinggroup.EMail : string.Empty });
             var admin = c.Performer_User_Id.HasValue ? _userRepository.GetUserName(c.Performer_User_Id.Value) : null;
+            var adminFields = c.Performer_User_Id.HasValue ? _userRepository.GetUserInfo(c.Performer_User_Id.Value) : null;
             ret.Add(new Field { Key = "[#6]", StringValue = admin != null ? admin.FirstName : string.Empty });
             ret.Add(new Field { Key = "[#7]", StringValue = admin != null ? admin.LastName : string.Empty });
+            ret.Add(new Field { Key = "[#70]", StringValue = admin != null ? adminFields.Phone : string.Empty });
+            ret.Add(new Field { Key = "[#71]", StringValue = admin != null ? adminFields.CellPhone : string.Empty });
+            ret.Add(new Field { Key = "[#72]", StringValue = admin != null ? adminFields.Email : string.Empty });
             var priority = c.Priority_Id.HasValue ? _priorityService.GetPriority(c.Priority_Id.Value) : null;
             ret.Add(new Field { Key = "[#12]", StringValue = priority != null ? priority.Name : string.Empty });
             ret.Add(new Field { Key = "[#20]", StringValue = priority != null ? priority.Description : string.Empty });
@@ -1901,15 +1914,26 @@ namespace DH.Helpdesk.Services.Services
                     var url = "<br><a href='" + site + "'>" + site + "</a>";
                     ret.Add(new Field { Key = "[#MP99]", StringValue = url });
                 }
-                // selfservice site
+                // selfservice site link to merge parent
                 if (cms != null)
                 {
+                    var mergeParentHistoryId = _caseHistoryRepository.GetCaseHistoryByCaseId(mergeParent.Id).Last().Id;
+                    var emailLog = new EmailLog(mergeParentHistoryId, 18, cms.HelpdeskMailFromAdress,
+                        _emailService.GetMailMessageId(cms.HelpdeskMailFromAdress));
+                    emailLog.SendTime = DateTime.Now;
+                    emailLog.CreatedDate = DateTime.Now;
+                    emailLog.ChangedDate = DateTime.Now;
+                    emailLog.SendStatus = 0;
+                    _emailLogRepository.Add(emailLog);
+                    _emailLogRepository.Commit();
+
                     if (emailLogGuid == string.Empty)
                         emailLogGuid = " >> *" + stateHelper.ToString() + "*";
 
-                    var site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + emailLogGuid;
+                    var site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + emailLog.EmailLogGUID;
                     var url = "<br><a href='" + site + "'>" + site + "</a>";
                     ret.Add(new Field { Key = "[#MP98]", StringValue = url });
+                    ret.Add(new Field { Key = "[#MP98Link]", StringValue = site });
                 }
             }
             

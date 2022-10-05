@@ -8306,19 +8306,34 @@ If not exists (select * from tblTextTranslation where text_id = 2128 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2128, 2, 'User has permission to merge cases')
 GO
 
-If not exists (select * from tbltext where id = 2129)
-	insert into tbltext (id, TextString) VALUES (2129, 'Koppla till huvudärende med annan kund')
-GO
-If not exists (select * from tblTextTranslation where text_id = 2129 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2129, 2, 'Connect to parent with another customer')
-GO
-
 If not exists (select * from tbltext where id = 2130)
 	insert into tbltext (id, TextString) VALUES (2130, 'Inget att uppdatera')
 GO
 If not exists (select * from tblTextTranslation where text_id = 2130 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2130, 2, 'Nothing to update')
 GO
+
+If not exists (select * from tbltext where id = 2131)
+	insert into tbltext (id, TextString) VALUES (2131, 'Redigera valda ärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2131 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2131, 2, 'Edit selected cases')
+GO
+
+If not exists (select * from tbltext where id = 2132)
+	insert into tbltext (id, TextString) VALUES (2132, 'Ärendet har underärende som ej är avslutade')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2132 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2132, 2, 'The case has sub-cases that are not closed')
+GO
+
+If not exists (select * from tbltext where id = 2133)
+	insert into tbltext (id, TextString) VALUES (2133, 'Koppla till huvudärende med annan kund')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2133 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2133, 2, 'Connect to parent with another customer')
+GO
+
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)

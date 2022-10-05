@@ -140,7 +140,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             const string DEFAULT_TIMEZONE_ID = "Central Europe Standard Time";
             var model = this.CustomerInputViewModel(new Customer() { TimeZoneId = DEFAULT_TIMEZONE_ID, Status = 1 });
-
             return this.View(model);
         }
 
@@ -357,6 +356,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             customerToSave.OrderPermission = this.returnOrderPermissionForSave(id, vmodel);
             customerToSave.CommunicateWithNotifier = vmodel.Customer.CommunicateWithNotifier;
+            customerToSave.CommunicateWithPerformer = vmodel.Customer.CommunicateWithPerformer;
             customerToSave.Status = vmodel.Active ? 1 : 0;
 
             var b = this.TryUpdateModel(customerToSave, "customer");
@@ -424,6 +424,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             {
                 customer.Language_Id = SessionFacade.CurrentLanguageId;
                 customer.CommunicateWithNotifier = 1;
+                customer.CommunicateWithPerformer = 1;
             }
 
             #region Generals
@@ -474,6 +475,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Value = "1",
                 Selected = false
             });
+            
+            List<SelectListItem> cn2 = new List<SelectListItem>();
+            cn2.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Nej", Enums.TranslationSource.TextTranslation),
+                Value = "0",
+            });
+            cn2.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Ja", Enums.TranslationSource.TextTranslation),
+                Value = "1",
+            });
 
             var userFirstLastNameSelectList =
                 new SelectList(
@@ -518,6 +531,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 MinimumPasswordLength = sl,
                 PasswordHistory = sli,
                 CWNSelect = cn,
+                CWPSelect = cn2,
                 Regions = this._regionService.GetRegions(customer.Id),
                 Setting = settings,
                 Customers = this._customerService.GetAllCustomers().Select(x => new SelectListItem
@@ -777,7 +791,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 HelpdeskEmail = customerEmail,
                 Language_Id = customerToCopy.Language_Id,
                 TimeZoneId = customerToCopy.TimeZoneId,
-                Status = customerToCopy.Status
+                Status = customerToCopy.Status,
+                CommunicateWithNotifier = customerToCopy.CommunicateWithNotifier,
+                CommunicateWithPerformer = customerToCopy.CommunicateWithPerformer,
             };
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -1230,7 +1246,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                         //Id = id,
                         MailID = mailTemplateToCopy.MailID,
                         Customer_Id = newCustomerToSave.Id,
-                        SendMethod = mailTemplateToCopy.SendMethod
+                        SendMethod = mailTemplateToCopy.SendMethod,
+                        IsStandard = mailTemplateToCopy.IsStandard, 
                     };
 
                     this._mailTemplateService.SaveMailTemplate(mailTemplateToSave, out errors);

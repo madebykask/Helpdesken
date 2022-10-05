@@ -78,7 +78,7 @@
                                             @Translation.GetCoreTextTranslation("Handläggare")
                                         }
 
-                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == (int) GlobalEnums.MailTemplates.ClosedCase)
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == (int)GlobalEnums.MailTemplates.ClosedCase)
                                         {
                                             @Translation.GetCoreTextTranslation("Ärendet avslutat")
                                         }
@@ -133,6 +133,10 @@
                                         {
                                             @Translation.GetCoreTextTranslation("Påminnelse")
                                             @Translation.GetCoreTextTranslation("Enkät")
+                                        }
+                                        @if (Model.MailTemplateLanguage.MailTemplate.MailID == 18)
+                                        {
+                                            @Translation.GetCoreTextTranslation("Sammanfogat ärende")
                                         }
                                         @if (Model.MailTemplateLanguage.MailTemplate_Id == 40)
                                         {
@@ -206,158 +210,164 @@
                         }
                         else
                         {
-                            <tr>
-                                <td>
-                                    @Translation.GetCoreTextTranslation("E-post mall")
-                                </td>
-                                @if (Model.MailTemplateLanguage.MailTemplateName == "" || Model.MailTemplateLanguage.MailTemplateName == null)
+                        <tr>
+                            <td>
+                                @Translation.GetCoreTextTranslation("E-post mall")
+                            </td>
+                            @if (Model.MailTemplateLanguage.MailTemplateName == "" || Model.MailTemplateLanguage.MailTemplateName == null)
+                            {
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 1)
                                 {
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 1)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Nytt ärende")
-                                        </td>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Nytt ärende")
+                                    </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 2)
+                                {
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Tilldelat ärende") @Translation.GetCoreTextTranslation("Handläggare")
+                                    </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == (int)GlobalEnums.MailTemplates.ClosedCase)
+                                {
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Ärendet avslutat")
+                                    </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 4)
+                                {
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Informera anmälaren om åtgärden")
+                                    </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 5)
+                                {
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Skicka intern loggpost till")
+                                    </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 6)
+                                {
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Enkät")
+                                    </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 7)
+                                {
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Tilldelat ärende") @Translation.GetCoreTextTranslation("Driftgrupp")
+                                    </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 9)
+                                {
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Bevakningsdatum inträffar")
+                                    </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 10)
+                                {
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Anmälaren uppdaterat ärende")
+                                    </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 11)
+                                {
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("SMS") @Translation.GetCoreTextTranslation("Tilldelat ärende")
+                                    </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 12)
+                                {
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Skicka mail när planerat åtgärdsdatum inträffar")
+                                    </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 13)
+                                {
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Prioritet")
+                                    </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 14)
+                                {
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("SMS") @Translation.GetCoreTextTranslation("Ärendet avslutat")
+                                    </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 15)
+                                {
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Anmälaren aktiverat ärende")
+                                    </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 16)
+                                {
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Påminnelse") @Translation.GetCoreTextTranslation("Enkät")
+                                    </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 18)
+                                {
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Sammanfogat ärende")
+                                     </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 60)
+                                {
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Driftlogg")
+                                    </td>
                                     }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 2)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Tilldelat ärende") @Translation.GetCoreTextTranslation("Handläggare")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == (int) GlobalEnums.MailTemplates.ClosedCase)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Ärendet avslutat")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 4)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Informera anmälaren om åtgärden")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 5)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Skicka intern loggpost till")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 6)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Enkät")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 7)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Tilldelat ärende") @Translation.GetCoreTextTranslation("Driftgrupp")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 9)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Bevakningsdatum inträffar")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 10)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Anmälaren uppdaterat ärende")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 11)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("SMS") @Translation.GetCoreTextTranslation("Tilldelat ärende")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 12)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Skicka mail när planerat åtgärdsdatum inträffar")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 13)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Prioritet")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 14)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("SMS") @Translation.GetCoreTextTranslation("Ärendet avslutat")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 15)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Anmälaren aktiverat ärende")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 16)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Påminnelse") @Translation.GetCoreTextTranslation("Enkät")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 60)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Driftlogg")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 50)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Tilldelad ändring")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 51)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Skicka loggpost till")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 52)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("CAB")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 53)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("PIR")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 54)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Statusändring")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID == 55)
-                                    {
-                                        <td>
-                                            @Translation.GetCoreTextTranslation("Ändring")
-                                        </td>
-                                    }
-                                    if (Model.MailTemplateLanguage.MailTemplate.MailID >= 99)
-                                    {
-                                        <td>
-                                            @Html.TextBoxFor(model => model.MailTemplateLanguage.MailTemplateName, new {maxlength = "50",})
-                                        </td>
-                                    }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 50)
+                                {
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Tilldelad ändring")
+                                </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 51)
+                                {
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Skicka loggpost till")
+                                </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 52)
+                                {
+                                <td>
+                                    @Translation.GetCoreTextTranslation("CAB")
+                                </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 53)
+                                {
+                                <td>
+                                    @Translation.GetCoreTextTranslation("PIR")
+                                </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 54)
+                                {
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Statusändring")
+                                </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 55)
+                                {
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Ändring")
+                                </td>
+                                }
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID >= 99)
+                                {
+                                <td>
+                                    @Html.TextBoxFor(model => model.MailTemplateLanguage.MailTemplateName, new { maxlength = "50", })
+                                </td>
+                                }
                                 }
                                 else
                                 {
-                                    <td>
-                                        @Html.TextBoxFor(model => model.MailTemplateLanguage.MailTemplateName, new {maxlength = "50",})
-                                    </td>
+                                <td>
+                                    @Html.TextBoxFor(model => model.MailTemplateLanguage.MailTemplateName, new { maxlength = "50", })
+                                </td>
                                 }
-                            </tr>
+                                </tr>
                             <tr>
                                 <td>
                                     @Translation.GetCoreTextTranslation("Ämne")
@@ -472,6 +482,9 @@
 
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Extralabel = "Förnamn", EMailIdentifier = "[#6]" });
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Extralabel = "Efternamn", EMailIdentifier = "[#7]" });
+                                @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Extralabel = "Telefon", EMailIdentifier = "[#70]" });
+                                @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Extralabel = "Mobil", EMailIdentifier = "[#71]" });
+                                @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Extralabel = "E-post", EMailIdentifier = "[#72]" });
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.Priority_Id.ToString() });
                                 <tr>
                                     <td>
@@ -555,7 +568,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            @Translation.GetCoreTextTranslation("Registrerat datum")
+                                            @Translation.GetCoreTextTranslation("Registreringsdatum")
                                         </td>
                                         <td>
                                             [#MP16]
@@ -563,7 +576,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            @Translation.GetCoreTextTranslation("Registrerat av")
+                                            @Translation.GetCoreTextTranslation("Registrerad av")
                                         </td>
                                         <td>
                                             [#MP29]
@@ -571,7 +584,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            @Translation.GetCoreTextTranslation("Länk till Självservice")
+                                            @Translation.GetCoreTextTranslation("Hyperlänk") @Translation.GetCoreTextTranslation("till") @Translation.GetCoreTextTranslation("Självservice")
                                         </td>
                                         <td>
                                             [#MP98]

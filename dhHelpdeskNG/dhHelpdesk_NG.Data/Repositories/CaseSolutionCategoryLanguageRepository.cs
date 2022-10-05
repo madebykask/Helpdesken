@@ -12,6 +12,7 @@ namespace DH.Helpdesk.Dal.Repositories
         CaseSolutionCategoryLanguageEntity GetCaseSolutionCategoryTranslation(int categoryId, int languageId);
         void UpdateOtherLanguageCaseSolutionCategory(CaseSolutionCategoryLanguageEntity caseSolutionCategoryLang);
         IEnumerable<CaseSolutionCategory> GetTranslatedCategoryList(int languageId, int customerId);
+        void DeleteCategoryTranslation(int categoryId);
     }
 
     public class CaseSolutionCategoryLanguageRepository : RepositoryBase<CaseSolutionCategoryLanguageEntity>, ICaseSolutionCategoryLanguageRepository
@@ -21,7 +22,14 @@ namespace DH.Helpdesk.Dal.Repositories
             : base(databaseFactory)
         {
         }
-
+        public void DeleteCategoryTranslation(int categoryId)
+        {
+            var categoryTranslation = this.DataContext.CaseSolutionCategoryLanguages.Where(x => x.Category_Id == categoryId).ToList();
+            foreach (var item in categoryTranslation)
+            {
+                this.Delete(item);
+            }
+        }
         public CaseSolutionCategoryLanguageEntity GetCaseSolutionCategoryTranslation(int categoryId, int languageId)
         {
             var lang = this.DataContext.CaseSolutionCategoryLanguages.Where(c => c.Category_Id == categoryId && c.Language_Id == languageId).FirstOrDefault();

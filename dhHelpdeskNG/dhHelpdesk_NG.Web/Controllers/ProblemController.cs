@@ -371,6 +371,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var logDto = new NewProblemLogDto(
+                
                 SessionFacade.CurrentUser.Id,
                 log.LogText,
                 showInCaseLog,
@@ -442,13 +443,15 @@ namespace DH.Helpdesk.Web.Controllers
 
                     var caseLog = new CaseLog
                     {
+                        LogGuid = Guid.NewGuid(),
                         CaseHistoryId = caseHistoryId,
                         CaseId = c.Id,
+                        TextInternal = log.InternNotering ? log.LogText : "",
+                        TextExternal = log.ExternNotering ? log.LogText : "",
                         UserId = SessionFacade.CurrentUser.Id,
                         FinishingDate = log.FinishConnectedCases ? (log.FinishingDate.HasValue ? log.FinishingDate : DateTime.Now) : null,
                         FinishingType = log.FinishConnectedCases ? log.FinishingCauseId : null,
                     };
-
                     IDictionary<string, string> errors;
                     int logId = _logService.SaveLog(caseLog, 0, out errors);
                 }
@@ -478,6 +481,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                     var caseLog = new CaseLog
                     {
+                        LogGuid = Guid.NewGuid(),
                         CaseId = c.Id,
                         FinishingDate = log.FinishConnectedCases ? (log.FinishingDate.HasValue ? log.FinishingDate : DateTime.Now) : null,
                         FinishingType = log.FinishConnectedCases ? log.FinishingCauseId : null,

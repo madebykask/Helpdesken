@@ -15,7 +15,7 @@ export class ClosingReasonsService extends HttpApiServiceBase {
     }
 
     getClosingReasons(customerId?: number) {
-      const params = isNaN(customerId) ? {} : {cid: customerId};
+      const params = isNaN(customerId) ? {} : {cid: customerId, excludeMergedCause: true};
         return this.getJson(this.buildResourseUrl('/api/closingreasons/options', params, isNaN(params.cid)))
             .pipe(
                 take(1),

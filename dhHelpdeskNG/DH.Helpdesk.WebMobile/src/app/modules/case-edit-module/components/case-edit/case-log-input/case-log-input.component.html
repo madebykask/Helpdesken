@@ -11,6 +11,7 @@
   <div class="bordered switch">
     <mbsc-switch #sendMailToNotifierControl 
                  [disabled]="isSendMailToNotifierDisabled"
+                 [(ngModel)]="isSendMailToNotifierChecked"
                  [formControlName]="caseFieldsNames.Log_SendMailToNotifier"
                  (change)="onSendExternalEmailsCheckChanged()"
                  [options]="switchOptions">
@@ -44,6 +45,7 @@
   <div class="bordered switch">
     <mbsc-switch #sendMailToPerformerControl 
                 [disabled]="isPerformerNullOrCurrentUser"
+                [(ngModel)]="isSendMailToPerformerChecked"
                  [formControlName]="caseFieldsNames.Log_SendMailToPerformer"
                  (change)="onSendInternalEmailsCheckChanged()"
                  [options]="switchOptions">

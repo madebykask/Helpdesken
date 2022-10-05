@@ -16,6 +16,7 @@
 
         $("#case_connect_to_parent_single_btn").on("click", function () {
             $("#tomerge").val('false');
+            $("#dontSendMailToNotifier").val('false');
             var $src = $(this);
             var $target = $("#divConnectParentToParentSingle");
             $target.attr("data-src", $src.attr("data-src"));

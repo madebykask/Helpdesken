@@ -37,7 +37,8 @@ namespace DH.Helpdesk.Dal.Mappers.Problems
                            ChangedDate = entity.ChangedDate,
                            LogText = entity.LogText,
                            CreatedDate = entity.CreatedDate,
-                           ShowOnCase = entity.ShowOnCase
+                           ShowOnCase = entity.ShowOnCase,
+                           FinnishConnectedCases = entity.FinishConnectedCases
                        };
         }
     }

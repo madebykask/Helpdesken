@@ -207,9 +207,12 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
                 CurrentLanguageId = SessionFacade.CurrentLanguageId,
                 HasError = SessionFacade.LastError != null && !string.IsNullOrEmpty(SessionFacade.LastError.Message)
             };
+
             var lang = SessionFacade.CurrentLanguageId;
-            if (lang == SessionFacade.CurrentCustomer.Language_Id)
+            if (SessionFacade.CurrentCustomer != null && lang == SessionFacade.CurrentCustomer.Language_Id)
+            {
                 lang = 0;
+            }
             if (!model.HasError && !model.HideMenu && model.CurrentCustomer != null && model.CurrentCustomer.ShowCaseOnExternalPage != 0)
                 model.CaseTemplatesGroups = GetCaseTemplateTreeModel(pCustomerId, model.CurrentCustomer.GroupCaseTemplates != 0, lang);
             else

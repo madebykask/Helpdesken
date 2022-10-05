@@ -13,5 +13,7 @@ namespace DH.Helpdesk.SCCM.Entities
 
         public long ResourceID { get; set; }
 
+        public string LastLogonUserName { get; set; }
+
     }
 }

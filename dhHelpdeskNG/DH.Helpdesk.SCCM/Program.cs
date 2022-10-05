@@ -1,18 +1,15 @@
-﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
+﻿using DH.Helpdesk.SCCM.DB;
+using DH.Helpdesk.SCCM.Entities;
+using DH.Helpdesk.SCCM.Other;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Authentication;
-using System.Text;
 using System.Threading.Tasks;
-using System.Configuration;
-using DH.Helpdesk.SCCM.Entities;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Diagnostics;
-using DH.Helpdesk.SCCM.DB;
-using DH.Helpdesk.SCCM.Other;
-using System.Threading;
+using System.Windows.Forms;
 
 namespace DH.Helpdesk.SCCM
 {
@@ -20,8 +17,9 @@ namespace DH.Helpdesk.SCCM
     {
 
         private static long actions = 0;
-        
-        
+
+
+        [STAThread]
         static void Main(string[] args)
         {
 
@@ -30,6 +28,7 @@ namespace DH.Helpdesk.SCCM
 
         }
 
+        
         private static void Run()
         {
             //Get the configuration object
@@ -42,8 +41,12 @@ namespace DH.Helpdesk.SCCM
                 throw new Exception("Configuration is invalid");
             }
 
+
             //Get the token
             string token = GetToken(ADALConfiguration);
+
+            TokenUtility(token);
+
 
             //Fetch the data ASYNC
             var result = FetchBaseData(token).Result.ToList();
@@ -64,7 +67,7 @@ namespace DH.Helpdesk.SCCM
             {
                 rSystemWrapper = rSystemWrapper.Take(setting_Limit_Devices).ToList();
             }
-            
+
 
             //Chunk the data
             var chunkedData = rSystemWrapper.ChunkBy(rSystemWrapper.Count / Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["Setting_Chunk_Page_Size"].ToString()));
@@ -84,6 +87,37 @@ namespace DH.Helpdesk.SCCM
 
             UpdateOrCreateComputerInDB(computers);
 
+            Connector connector = new Connector(System.Configuration.ConfigurationManager.ConnectionStrings["conHD"].ToString());
+            int Customer_Id = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Customer_Id"].ToString());
+
+            connector.UpdateApplication(Customer_Id);
+        }
+
+        private static void TokenUtility(string token)
+        {
+            try
+            {
+                //If to show the token in the console
+                if (Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["Show_Token"].ToString()) == 1)
+                {
+                    Console.WriteLine("TOKEN");
+                    Console.WriteLine("------------------------------------|.|------------------------------------");
+                    Console.WriteLine(token);
+                    Console.WriteLine("------------------------------------|.|------------------------------------");
+
+                    //If to copy to clipboard
+                    if (Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["Copy_Token_To_Clipboard"].ToString()) == 1)
+                    {
+                        Clipboard.SetText(token);
+                        Console.WriteLine("Copied token to clipboard");
+                        Console.WriteLine("------------------------------------|.|------------------------------------");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Show_Token || Copy_Token_To_Clipboard has invalid configuration");
+            }
         }
 
         private static async Task<List<Models.Device>[]> runThreads(List<List<RSystem>> chunkedData, string token)
@@ -161,14 +195,21 @@ namespace DH.Helpdesk.SCCM
             serverDB.OS_Version = reference._OperatingSystem.Version;
             serverDB.OS_SP = reference._OperatingSystem.CSDVersion;
 
-            serverDB.Domain_Id = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Domain_Id"].ToString());
 
             var userName = reference._ComputerSystem.UserName;
 
             if (!String.IsNullOrEmpty(userName))
             {
-                var splittedUserName = userName.Split('\\')[1];
-                userName = splittedUserName;
+                var splittedUserName = userName.Split('\\');
+
+                if (splittedUserName.Length > 1)
+                {
+                    userName = splittedUserName[1];
+                }
+                else
+                {
+                    userName = splittedUserName[0];
+                }
             }
 
             var computerUserID = connector.GetComputerUserByUserId(Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Customer_Id"].ToString()), userName);
@@ -229,14 +270,21 @@ namespace DH.Helpdesk.SCCM
             computerDB.OS_Version = reference._OperatingSystem.Version;
             computerDB.OS_SP = reference._OperatingSystem.CSDVersion;
 
-            computerDB.Domain_Id = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Domain_Id"].ToString());
 
             var userName = reference._ComputerSystem.UserName;
 
             if (!String.IsNullOrEmpty(userName))
             {
-                var splittedUserName = userName.Split('\\')[1];
-                userName = splittedUserName;
+                var splittedUserName = userName.Split('\\');
+
+                if (splittedUserName.Length > 1)
+                {
+                    userName = splittedUserName[1];
+                }
+                else
+                {
+                    userName = splittedUserName[0];
+                }
             }
 
 
@@ -388,13 +436,20 @@ namespace DH.Helpdesk.SCCM
                     //Check if found
                     if (computerSystemWrapper != null)
                     {
+                        //Check what type of user to use
+                        var userName = computerSystemWrapper.UserName;
+                        if (Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["UseLastLoginUser"].ToString()) == 1)
+                        {
+                            userName = RSystem.LastLogonUserName;
+                        }
+
                         computer._ComputerSystem = new Models.ComputerSystem()
                         {
                             Manufacturer = computerSystemWrapper.Manufacturer,
                             Model = computerSystemWrapper.Model,
                             Name = computerSystemWrapper.Name,
                             TimeStamp = computerSystemWrapper.TimeStamp,
-                            UserName = computerSystemWrapper.UserName,
+                            UserName = userName
 
                         };
                     }

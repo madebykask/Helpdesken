@@ -9,7 +9,7 @@ import { BehaviorSubject, Subject, from } from 'rxjs';
 import { CaseProgressFilter } from 'src/app/modules/case-overview-module/models/cases-overview/enums';
 import { CasesOverviewFilter } from 'src/app/modules/case-overview-module/models/cases-overview/cases-overview-filter.model';
 import { CasesOverviewService } from 'src/app/modules/case-overview-module/services/cases-overview';
-import { CustomerApiService } from 'src/app/services/api/customer-api.service';
+import { CustomerApiService } from 'src/app/services/api/customer/customer-api.service';
 import { LocalStorageService } from 'src/app/services/local-storage';
 import { CaseOverviewConstants } from 'src/app/modules/shared-module/constants';
 import { untilDestroyed } from 'ngx-take-until-destroy';

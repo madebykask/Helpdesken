@@ -103,9 +103,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 if(SessionFacade.CurrentUser == null)
                 {
                     if (_authenticationService.SignIn(ctx))
-                    {
+                    {    
                         //If user clicked a link not logged in
-                        if(ctx.Request.Path != "/")
+                        if (ctx.Request.Path != "/")
                         {
                             filterContext.Result = new RedirectResult(ctx.Request.Path);
                         }
@@ -174,7 +174,15 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                             _authenticationService.ClearLoginSession(ctx);
 
                             //redirect to forms login page if user cannot be found in the database by identity user name
-                            var loginUrl = _authenticationService.GetSiteLoginPageUrl(); // specific for each auth mode (win, forms, mixed, sso)
+                            //Add redirect to prefferred page
+                            string requestedUrl = "~" + ctx.Request.Path;
+                            var redirectUrl = HttpUtility.UrlEncode(requestedUrl);
+                            var loginUrl = "~/Login/Login";
+                            if (!string.IsNullOrEmpty(requestedUrl) && requestedUrl != "~/")
+                            {
+                                loginUrl = loginUrl + "?returnUrl=" + redirectUrl;
+                            }
+
                             _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Redirecting to login page: {loginUrl}");
                             OnError(filterContext, loginUrl);
                         }
@@ -203,7 +211,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                                 return;
                             }
                         }
-                        
+
                     }
 
                 }

@@ -26,6 +26,8 @@ namespace DH.Helpdesk.BusinessData.Models.Problem.Output
         /// </summary>
         public int ProblemId { get; set; }
 
+        public int FinnishConnectedCases { get; set; }
+
         /// <summary>
         /// Gets or sets the changed date.
         /// </summary>
