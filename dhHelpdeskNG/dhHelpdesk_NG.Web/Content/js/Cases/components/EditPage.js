@@ -1055,9 +1055,9 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
 EditPage.prototype.doTotalValidationAndSave = function (submitUrl) {
     var self = this;
 
-    var finishingType = parseInt(document.getElementById("CaseLog_FinishingType").value);
+    var finishingType = parseInt(document.getElementById("CaseLog_FinishingType"));
 
-    if (isNaN(finishingType)) {
+    if (isNaN(finishingType.value)) {
         finishingType = 0;
     }
 
