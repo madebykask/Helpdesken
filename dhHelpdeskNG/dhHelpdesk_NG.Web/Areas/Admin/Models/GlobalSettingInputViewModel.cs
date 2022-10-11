@@ -5,7 +5,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
-
+    using DH.Helpdesk.BusinessData.Enums.BusinessRules;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Infrastructure;
@@ -64,6 +64,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
             ClosedOnly = true;
             ReplaceEmails = true;
             Fields = new List<SelectListItem>();
+            CaseTypes = new List<SelectListItem>();
+            GDPRType = new List<SelectListItem>();
         }
 
         public bool IsAvailable { get; set; }
@@ -86,6 +88,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         public bool RemoveCaseAttachments { get; set; }
         public bool RemoveLogAttachments { get; set; }
         public bool RemoveFileViewLogs { get; set; }
+
+        public int SelectedGDPRType { get; set; }
+        public List<SelectListItem> GDPRType { get; set; }
     }
 
     public class GlobalSettingInputViewModel : BaseTabInputViewModel

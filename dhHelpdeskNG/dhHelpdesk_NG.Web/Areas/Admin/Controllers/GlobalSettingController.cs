@@ -36,6 +36,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Attributes;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.BusinessData.Enums.BusinessRules;
 
     public class GlobalSettingController : BaseController
     {
@@ -53,6 +54,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IGDPRTasksService _gdprTasksService;
         private readonly IFileViewLogService _fileViewLogService;
         private readonly IDepartmentService _departmentsService;
+        private readonly ICaseTypeService _caseTypeService;
 
         public GlobalSettingController(
             IGlobalSettingService globalSettingService,
@@ -69,7 +71,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             IGDPRTasksService gdprTasksService,
             IUserContext userContext,
             IFileViewLogService fileViewLogService,
-            IDepartmentService departmentsService)
+            IDepartmentService departmentsService,
+            ICaseTypeService caseTypeService)
             : base(masterDataService)
         {
             _gdprTasksService = gdprTasksService;
@@ -86,6 +89,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             _gdprOperationsService = gdprOperationsService;
             _fileViewLogService = fileViewLogService;
             _departmentsService = departmentsService;
+            _caseTypeService = caseTypeService;
         }
         [ValidateInput(false)]
         public ActionResult Index(int texttypeid, string textSearch, int compareMethod)
@@ -1247,8 +1251,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             {
                 IsAvailable = true,
                 Customers = availableCustomers,
-                Favorites = favorites.ToSelectList(new SelectListItem() { Value = "0", Text = Translation.GetCoreTextTranslation("Skapa ny") })
+                Favorites = favorites.ToSelectList(new SelectListItem() { Value = "0", Text = Translation.GetCoreTextTranslation("Skapa ny") }),
             };
+            var gdprTypes = Enum.GetValues(typeof(GDPRType)).Cast<GDPRType>().Select(x => new SelectListItem
+            {
+                Value = ((int)x).ToString(),
+                Text = Translation.GetCoreTextTranslation(x.ToString())
+            }).ToList();
+
+            model.GDPRType = gdprTypes;
+            
             return model;
         }
 
@@ -1521,6 +1533,29 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     {
                         Value = f.Name,
                         Text = FormatFieldLabel(f.Name, f.Label, customerId.Value)
+                    })
+                    .OrderBy(f => f.Text)
+                    .ToList();
+
+                return Json(new { success = true, data });
+            }
+
+            return Json(new { success = false });
+        }
+        [HttpPost]
+        public ActionResult GetCustomerCaseTypes(int? customerId)
+        {
+            if (customerId.HasValue && customerId > 0)
+            {
+
+                var caseTypes = _caseTypeService.GetAllCaseTypes(customerId.Value, false, true).ToList();
+                var caseTypesInRow = _caseTypeService.GetChildrenInRow(caseTypes).ToList();
+
+                var data =
+                    caseTypesInRow.Select(f => new SelectListItem
+                    {
+                        Value = f.Id.ToString(),
+                        Text = f.Name
                     })
                     .OrderBy(f => f.Text)
                     .ToList();

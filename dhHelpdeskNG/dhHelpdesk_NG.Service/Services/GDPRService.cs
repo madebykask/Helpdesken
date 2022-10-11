@@ -175,6 +175,7 @@ namespace DH.Helpdesk.Services.Services
                         ClosedOnly = operationParams.ClosedOnly,
                         ReplaceEmails = operationParams.ReplaceEmails,
                         Fields = operationParams.FieldsNames,
+                        //CaseTypes = operationParams.CaseTypes,
                         RemoveCaseAttachments = operationParams.RemoveCaseAttachments,
                         RemoveLogAttachments = operationParams.RemoveLogAttachments,
                         ExecutedDate = item.CreatedDate

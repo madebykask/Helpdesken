@@ -21,6 +21,15 @@
                     </tr>
                     <tr>
                         <td class="span3">
+                            @Translation.GetCoreTextTranslation("Typ")<span class="mandatorystar"> * </span>
+                        </td>
+                        <td class="span9">
+                            @Html.DropDownListFor(m => m.SelectedGDPRType, Model.GDPRType,
+                                    @Translation.GetCoreTextTranslation("Välj") + " " + @Translation.GetCoreTextTranslation("typ"), new { id = "gdprTypeSelect", @class = "chosen-single-select" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
                             @Translation.GetCoreTextTranslation("Kund")<span class="mandatorystar"> * </span>
                         </td>
                         <td class="span9">
@@ -93,7 +102,7 @@
                                     placeholder = Translation.GetCoreTextTranslation("Välj en eller flera"),
                                     style = "width: 300px"
                                 })
-                            <i id="fieldsLoader" class="gif-loader" style="display:none">&nbsp;</i>
+                            <i id="caseTypesLoader" class="gif-loader" style="display:none">&nbsp;</i>
                         </td>
                     </tr>
                     <tr>
@@ -271,12 +280,14 @@
         });
 
         var settings = {
+
             dateformat: '@System.Threading.Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
             urls: {
                 DataPrivacyAction: '@Url.Action("DataPrivacy")',
                 LoadFavoriteDataAction: '@Url.Action("LoadDataPrivacyFavorite")',
                 SaveFavoritesAction: '@Url.Action("SaveDataPrivacyFavorites")',
                 GetCustomerCaseFieldsAction: '@Url.Action("GetCustomerCaseFields")',
+                GetCustomerCaseTypesAction: '@Url.Action("GetCustomerCaseTypes")',
                 DeleteFavoriteAction: '@Url.Action("DeleteDataPrivacyFavorite")',
                 GetTaskProgressAction: '@Url.Action("GetTaskProgress", "GDPRProgress")',
                 GetRunningDataPrivacyTasksAction: '@Url.Action("GetRunningDataPrivacyTasks")'
@@ -289,6 +300,7 @@
                 favoritesUnlockWarning: '@Translation.GetForJS("Favoriten körs och kan därför ej ändras")',
 
                 //validation messages
+                SelectedGDPRType: '@Translation.GetForJS("Typ") @Translation.GetForJS("måste anges")',
                 SelectedCustomerIdRequired: '@Translation.GetForJS("Kund") @Translation.GetForJS("måste anges")',
                 FieldsNamesRequired: '@Translation.GetForJS("Fält") @Translation.GetForJS("måste anges")',
                 RegisterDateFromRequired: '@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("måste anges")',
@@ -298,7 +310,6 @@
             },
             confirmDialog: confirmationDialog
         };
-
         window.dataPrivacyForm.init(settings);
     });
 </script>
