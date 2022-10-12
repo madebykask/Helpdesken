@@ -116,7 +116,9 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
                 ReplaceDatesWith = favoriteData.ReplaceDatesWith,
                 RemoveCaseAttachments = favoriteData.RemoveCaseAttachments,
                 RemoveLogAttachments = favoriteData.RemoveLogAttachments,
-                RemoveFileViewLogs = favoriteData.RemoveFileViewLogs
+                RemoveFileViewLogs = favoriteData.RemoveFileViewLogs,
+                CaseTypes = favoriteData.CaseTypes?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                GDPRType = favoriteData.GDPRType
             };
 
             return dpp;

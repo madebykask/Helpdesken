@@ -24,4 +24,9 @@ namespace DH.Helpdesk.BusinessData.Enums.BusinessRules
         ShowMessage = 0,
         SendEmail   = 1
     }
+    public enum GDPRType
+    {
+        Anonymization = 0,
+        Deletion = 1
+    }
 }

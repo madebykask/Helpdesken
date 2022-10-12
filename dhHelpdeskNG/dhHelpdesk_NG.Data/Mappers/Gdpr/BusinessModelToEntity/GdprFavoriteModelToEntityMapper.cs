@@ -28,6 +28,9 @@ namespace DH.Helpdesk.Dal.Mappers.Gdpr.BusinessModelToEntity
             entity.RemoveLogAttachments = model.RemoveLogAttachments;
             entity.RemoveFileViewLogs = model.RemoveFileViewLogs;
             entity.ReplaceEmails = model.ReplaceEmails;
+            entity.CaseTypes =
+                model.CaseTypes != null && model.CaseTypes.Any() ? string.Join(",", model.CaseTypes) : "";
+            entity.GDPRType = (int)model.GDPRType;
         }
     }
 }

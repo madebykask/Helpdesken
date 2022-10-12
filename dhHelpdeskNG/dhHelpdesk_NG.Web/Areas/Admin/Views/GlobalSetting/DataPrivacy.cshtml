@@ -21,10 +21,18 @@
                     </tr>
                     <tr>
                         <td class="span3">
+                            @Translation.GetCoreTextTranslation("Typ")<span class="mandatorystar"> * </span>
+                        </td>
+                        <td class="span9">
+                            @Html.DropDownListFor(m => m.SelectedGDPRType, Model.GDPRType, string.Empty, new { id = "gdprTypeSelect", @class = "chosen-single-select" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
                             @Translation.GetCoreTextTranslation("Kund")<span class="mandatorystar"> * </span>
                         </td>
                         <td class="span9">
-                            @Html.DropDownListFor(m => m.SelectedCustomerId, Model.Customers, string.Empty, new {id = "customerSelect", @class= "chosen-single-select" })
+                            @Html.DropDownListFor(m => m.SelectedCustomerId, Model.Customers, string.Empty, new { id = "customerSelect", @class = "chosen-single-select" })
                         </td>
                     </tr>
                     <tr>
@@ -32,7 +40,7 @@
                             @Translation.GetCoreTextTranslation("Bevarandeperiod")
                         </td>
                         <td class="span9">
-                            @Html.TextBoxFor(m => m.RetentionPeriod, new { id = "retentionPeriod", maxlength="4", @class="inputw50" })
+                            @Html.TextBoxFor(m => m.RetentionPeriod, new { id = "retentionPeriod", maxlength = "4", @class = "inputw50" })
                             @Translation.GetCoreTextTranslation("dagar")
                             <div id="retentionDaysError"></div>
                         </td>
@@ -49,8 +57,8 @@
                             @Translation.GetCoreTextTranslation("Registreringsdatum")<span class="mandatorystar"> * </span>
                         </td>
                         <td class="span9">
-                            @Html.EditorFor(m => m.RegisterDateFrom, "DatePicker", new {id = "regCaseFrom", type = "text" })
-                            @Html.EditorFor(m => m.RegisterDateTo, "DatePicker", new {id = "regCaseTo", type = "text" })
+                            @Html.EditorFor(m => m.RegisterDateFrom, "DatePicker", new { id = "regCaseFrom", type = "text" })
+                            @Html.EditorFor(m => m.RegisterDateTo, "DatePicker", new { id = "regCaseTo", type = "text" })
                             <div id="datesErrorLabel"></div>
                         </td>
                     </tr>
@@ -81,6 +89,23 @@
                     </tr>
                     <tr>
                         <td class="span3">
+                            @Translation.GetCoreTextTranslation("Ärendetyp")<span class="mandatorystar"> * </span>
+                        </td>
+                        <td class="span9">
+                            @Html.DropDownListFor(m => m.CaseTypeNames, Model.CaseTypes,
+                                new
+                                {
+                                    id = "lstFilterCaseTypes",
+                                    multiple = "multiple",
+                                    @class = "chosen-select",
+                                    placeholder = Translation.GetCoreTextTranslation("Välj en eller flera"),
+                                    style = "width: 300px"
+                                })
+                            <i id="caseTypesLoader" class="gif-loader" style="display:none">&nbsp;</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
                         </td>
                         <td class="span9">
                             @Html.CheckBoxFor(m => m.ReplaceEmails) @Translation.GetCoreTextTranslation("Ta bort e-mail adresser i ärendelogg och historik")
@@ -99,7 +124,7 @@
                             @Translation.GetCoreTextTranslation("Ersätt datum med")
                         </td>
                         <td class="span9">
-                            @Html.EditorFor(m => m.ReplaceDatesWith, "DatePicker", new {id = "replacedDate"})
+                            @Html.EditorFor(m => m.ReplaceDatesWith, "DatePicker", new { id = "replacedDate" })
                         </td>
                     </tr>
                     <tr>
@@ -254,12 +279,14 @@
         });
 
         var settings = {
+
             dateformat: '@System.Threading.Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
             urls: {
                 DataPrivacyAction: '@Url.Action("DataPrivacy")',
                 LoadFavoriteDataAction: '@Url.Action("LoadDataPrivacyFavorite")',
                 SaveFavoritesAction: '@Url.Action("SaveDataPrivacyFavorites")',
                 GetCustomerCaseFieldsAction: '@Url.Action("GetCustomerCaseFields")',
+                GetCustomerCaseTypesAction: '@Url.Action("GetCustomerCaseTypes")',
                 DeleteFavoriteAction: '@Url.Action("DeleteDataPrivacyFavorite")',
                 GetTaskProgressAction: '@Url.Action("GetTaskProgress", "GDPRProgress")',
                 GetRunningDataPrivacyTasksAction: '@Url.Action("GetRunningDataPrivacyTasks")'
@@ -272,6 +299,7 @@
                 favoritesUnlockWarning: '@Translation.GetForJS("Favoriten körs och kan därför ej ändras")',
 
                 //validation messages
+                SelectedGDPRType: '@Translation.GetForJS("Typ") @Translation.GetForJS("måste anges")',
                 SelectedCustomerIdRequired: '@Translation.GetForJS("Kund") @Translation.GetForJS("måste anges")',
                 FieldsNamesRequired: '@Translation.GetForJS("Fält") @Translation.GetForJS("måste anges")',
                 RegisterDateFromRequired: '@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("måste anges")',
@@ -281,7 +309,6 @@
             },
             confirmDialog: confirmationDialog
         };
-
         window.dataPrivacyForm.init(settings);
     });
 </script>

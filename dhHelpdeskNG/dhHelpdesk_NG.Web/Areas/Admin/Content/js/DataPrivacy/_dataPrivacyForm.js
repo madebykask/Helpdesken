@@ -16,6 +16,7 @@ window.dataPrivacyForm =
         // constants and Ids
         this.loaders = {
             fieldsLoader: $('#fieldsLoader'),
+            caseTypesLoader: $('#caseTypesLoader'),
             favoritesLoader: $('#favoritesLoader'),
             inProcessLoader: $('#inProcessLoader'),
             saveFavoritesLoader: $('#saveFavoritesLoader')
@@ -28,6 +29,7 @@ window.dataPrivacyForm =
         this.btnLock$ = form$.find("#btnLock");
         this.btnUnLock$ = form$.find("#btnUnLock");
         this.customerSelect$ = form$.find("#customerSelect");
+        this.gdprTypeSelect$ = form$.find("#gdprTypeSelect");
         this.favoritesSelect$ = form$.find("#favoritesSelect");
         this.registerDateFrom$ = form$.find("#RegisterDateFrom");
         this.registerDateTo$ = form$.find("#RegisterDateTo");
@@ -35,6 +37,7 @@ window.dataPrivacyForm =
         this.calculateRegistrationDate$ = form$.find("#CalculateRegistrationDate");
         this.retentionPeriod$ = form$.find("#retentionPeriod");
         this.filterFields$ = form$.find("#lstFilterFields");
+        this.caseTypes$ = form$.find("#lstFilterCaseTypes");
         this.closedOnly$ = form$.find("#ClosedOnly");
         this.replaceDataWith$ = form$.find("#ReplaceDataWith");
         this.replaceDatesWith$ = form$.find("#ReplaceDatesWith");
@@ -54,7 +57,9 @@ window.dataPrivacyForm =
             privacyRunBtn: true,
             favoritesSelect: true,
             customerSelect: true,
+            gdprTypeSelect: true,
             lstFilterFields: true,
+            lstFilterCaseTypes: true,
             CalculateRegistrationDate: false
         };
 
@@ -104,6 +109,7 @@ window.dataPrivacyForm =
 
             //required to notify chosen to update its state
             this.filterFields$.trigger("chosen:updated");
+            this.caseTypes$.trigger("chosen:updated");
         };
 
         this.saveControlsState = function () {
@@ -179,15 +185,19 @@ window.dataPrivacyForm =
         }
 
         this.getFilterData = function () {
-
             var fields = [];
+            var caseTypes = [];
             this.filterFields$.find("option:selected").each(function () {
                 fields.push($(this).val());
             });
+            this.caseTypes$.find("option:selected").each(function () { caseTypes.push($(this).val()); });
+            
             return {
                 fields: fields,
+                caseTypes: caseTypes,
                 selectedFavoriteId: this.getSelectedFavoriteId(),
                 selectedCustomerId: this.customerSelect$.val(),
+                selectedGDPRType: this.gdprTypeSelect$.val(),
                 retentionPeriod: this.retentionPeriod$.val() || "0",
                 calculateRegistrationDate: this.calculateRegistrationDate$.prop("checked"),
                 registerDateFrom: this.registerDateFrom$.val(),
@@ -260,6 +270,9 @@ window.dataPrivacyForm =
                     },
                     "ReplaceDataWith": {
                         maxlength: self.translations.MaxLength.replace('{0}', '15')
+                    },
+                    "SelectedGDPRType": {
+                        required: self.translations.SelectedGDPRType
                     }
                 }
             });
@@ -324,6 +337,9 @@ window.dataPrivacyForm =
             var self = this;
 
             return {
+                "SelectedGDPRType": {
+                    required: true
+                },
                 "SelectedCustomerId": {
                     required: true
                 },
@@ -408,8 +424,9 @@ window.dataPrivacyForm =
                 var numberOfInvalids = this.validator$.numberOfInvalids();
                 this.enableControl(this.btnFavorite$, numberOfInvalids === 0);
             }
-        };
-
+    };
+    
+        //Fields
         this.loadCustomerFields = function (customerId) {
             var self = this;
             if (customerId) {
@@ -453,6 +470,51 @@ window.dataPrivacyForm =
             self.filterFields$.trigger("chosen:updated");
         }
 
+        //New - CaseTypes
+    this.loadCustomerCaseTypes = function (customerId) {
+            var self = this;
+            if (customerId) {
+                this.blockUI(true, this.loaders.caseTypesLoader);
+                self.caseTypes$.empty();
+               
+                this.execLoadCustomerCaseTypesRequest(customerId)
+                    .done(function (response) {
+                        self.blockUI(false);
+                        if (response.success) {
+                            self.populateCustomerCaseTypes(response.data);
+                        }
+                    })
+                    .fail(function () {
+                        self.blockUI(false);
+                    });
+            } else {
+                self.caseTypes$.empty();
+                self.refreshChosenControls(self.caseTypes$);
+            }
+        };
+
+        this.execLoadCustomerCaseTypesRequest = function (customerId) {
+            var jqXhr = $.ajax({
+                url: self.urls.GetCustomerCaseTypesAction,
+                type: "POST",
+                data: $.param({ customerId: customerId }),
+                dataType: "json"
+            });
+            return jqXhr;
+        };
+
+        this.populateCustomerCaseTypes = function (items) {
+            var self = this;
+            this.caseTypes$.empty();
+            $.each(items,
+                function (idx, obj) {
+                    self.caseTypes$.append(
+                        '<option value="' + obj.Value + '">' + obj.Text + '</option>');
+                });
+            self.caseTypes$.trigger("chosen:updated");
+        }
+
+            //End new
 
         this.runDataPrivacy = function () {
             var self = this;
@@ -475,11 +537,13 @@ window.dataPrivacyForm =
             var inputData = {
                 SelectedFavoriteId: filter.selectedFavoriteId,
                 SelectedCustomerId: filter.selectedCustomerId,
+                SelectedGDPRType: filter.selectedGDPRType,
                 CalculateRegistrationDate: filter.calculateRegistrationDate,
                 RegisterDateFrom: filter.registerDateFrom,
                 RegisterDateTo: filter.registerDateTo,
                 ClosedOnly: filter.closedOnly,
                 FieldsNames: filter.fields,
+                CaseTypeNames: filter.caseTypes,
                 ReplaceDataWith: filter.replaceDataWith,
                 ReplaceDatesWith: filter.replaceDatesWith,
                 RemoveCaseAttachments: filter.removeCaseAttachments,
@@ -615,6 +679,7 @@ window.dataPrivacyForm =
         this.resetFormFields = function () {
             var self = this;
             self.customerSelect$.val(null);
+            self.gdprTypeSelect$.val(null);
             self.filterFields$.empty();
 
             self.enableControl(this.registerDateTo$, true);
@@ -745,6 +810,22 @@ window.dataPrivacyForm =
                     defer.resolve(); //notify all processing is complete
                 });
 
+            this.execLoadCustomerCaseTypesRequest(customerId)
+                .done(function (response) {
+                    if (response.success) {
+                        self.populateCustomerCaseTypes(response.data);
+                    }
+
+                    //set case fields
+                    if (data.CaseTypeNames.length) {
+                        self.caseTypes$.val(data.CaseTypeNames);
+                        self.refreshChosenControls(self.caseTypes$);
+                    }
+                })
+                .always(function () {
+                    defer.resolve(); //notify all processing is complete
+                });
+
             return defer;
         };
 
@@ -779,17 +860,20 @@ window.dataPrivacyForm =
 
                 var favoriteId = this.getSelectedFavoriteId();
                 var filter = this.getFilterData();
-
+                console.log(filter);
                 var inputData = {
                     Id: favoriteId,
                     Name: name || '',
                     CustomerId: filter.selectedCustomerId,
+                    GDPRType: filter.selectedGDPRType,
+                    SelectedGDPRType: filter.selectedGDPRType,
                     RetentionPeriod: filter.retentionPeriod,
                     CalculateRegistrationDate: filter.calculateRegistrationDate,
                     RegisterDateFrom: filter.registerDateFrom,
                     RegisterDateTo: filter.registerDateTo,
                     ClosedOnly: filter.closedOnly,
                     FieldsNames: filter.fields,
+                    CaseTypes: filter.caseTypes,
                     ReplaceDataWith: filter.replaceDataWith,
                     ReplaceDatesWith: filter.replaceDatesWith,
                     RemoveCaseAttachments: filter.removeCaseAttachments,
@@ -958,7 +1042,13 @@ window.dataPrivacyForm =
 
                 _self.customerSelect$.on('change', function () {
                     var customerId = $(this).val();
+                    console.log(customerId);
                     _self.loadCustomerFields(customerId);
+                    _self.loadCustomerCaseTypes(customerId);
+                });
+                _self.gdprTypeSelect$.on('change', function () {
+                    var typeId = $(this).val();
+                    console.log(typeId);
                 });
 
                 _self.btnFavorite$.on('click', function () {
