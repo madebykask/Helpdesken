@@ -15,6 +15,24 @@ IF COL_LENGTH('dbo.tblSettings','SelfServiceURL') IS NULL
 	End
 
 Go
+
+RAISERROR ('Add Column GDPRType to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPRDataPrivacyFavorite','GDPRType') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblGDPRDataPrivacyFavorite
+		ADD GDPRType int not Null default 0
+	End
+
+Go
+
+RAISERROR ('Add Column CaseTypes to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPRDataPrivacyFavorite','CaseTypes') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblGDPRDataPrivacyFavorite
+		ADD CaseTypes nvarchar(256) Null
+	End
+
+Go
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.57'
 GO
