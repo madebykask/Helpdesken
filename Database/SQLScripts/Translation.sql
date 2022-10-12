@@ -8348,6 +8348,12 @@ If not exists (select * from tblTextTranslation where text_id = 2135 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2135, 2, 'Deletion')
 GO
 
+If not exists (select * from tbltext where id = 2136)
+	insert into tbltext (id, TextString) VALUES (2136, 'Kategori som används går inte att ta bort')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2136 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2136, 2, 'Category in use can not be deleted')
+GO
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
