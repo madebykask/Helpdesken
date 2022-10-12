@@ -1258,7 +1258,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Value = ((int)x).ToString(),
                 Text = Translation.GetCoreTextTranslation(x.ToString())
             }).ToList();
-
+           
             model.GDPRType = gdprTypes;
             
             return model;
