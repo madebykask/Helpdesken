@@ -1253,12 +1253,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Customers = availableCustomers,
                 Favorites = favorites.ToSelectList(new SelectListItem() { Value = "0", Text = Translation.GetCoreTextTranslation("Skapa ny") }),
             };
+
             var gdprTypes = Enum.GetValues(typeof(GDPRType)).Cast<GDPRType>().Select(x => new SelectListItem
             {
                 Value = ((int)x).ToString(),
                 Text = Translation.GetCoreTextTranslation(x.ToString())
             }).ToList();
-           
+
             model.GDPRType = gdprTypes;
             
             return model;

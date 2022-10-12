@@ -26,7 +26,9 @@ namespace DH.Helpdesk.BusinessData.Enums.BusinessRules
     }
     public enum GDPRType
     {
-        Anonymization = 0,
-        Deletion = 1
+        //Anonymization = 0,
+        //Deletion = 1
+        Avpersonifiering = 1,
+        Radering = 2
     }
 }
