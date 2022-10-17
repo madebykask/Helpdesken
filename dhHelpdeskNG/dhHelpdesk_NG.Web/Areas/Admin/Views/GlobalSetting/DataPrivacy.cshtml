@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row">
         <div class="span12">
-            @using (Html.BeginForm(null, null, null, FormMethod.Post, new {id = "privacyForm", @action = "", texttypeid = 0, compareMethod = 1 }))
+            @using (Html.BeginForm(null, null, null, FormMethod.Post, new { id = "privacyForm", @action = "", texttypeid = 0, compareMethod = 1 }))
             {
                 <table class="tableform" id="privacyForm">
                     <tr>
@@ -64,27 +64,12 @@
                     </tr>
                     <tr>
                         <td class="span3">
-                            @Translation.GetCoreTextTranslation("Status")
+                            @Translation.GetCoreTextTranslation("Avslutsdatum")<span class="mandatorystar"> * </span>
                         </td>
                         <td class="span9">
-                            @Html.CheckBoxFor(m => m.ClosedOnly) @Translation.GetCoreTextTranslation("Endast avslutade ärenden")
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Fält")<span class="mandatorystar"> * </span>
-                        </td>
-                        <td class="span9">
-                            @Html.DropDownListFor(m => m.FieldsNames, Model.Fields,
-                                new
-                                {
-                                    id = "lstFilterFields",
-                                    multiple = "multiple",
-                                    @class = "chosen-select",
-                                    placeholder = Translation.GetCoreTextTranslation("Välj en eller flera"),
-                                    style = "width: 300px"
-                                })
-                            <i id="fieldsLoader" class="gif-loader" style="display:none">&nbsp;</i>
+                            @Html.EditorFor(m => m.FinishedDateFrom, "DatePicker", new { id = "finishedDateFrom", type = "text" })
+                            @Html.EditorFor(m => m.FinishedDateTo, "DatePicker", new { id = "finishedDateTo", type = "text" })
+                            <div id="finishedDatesErrorLabel"></div>
                         </td>
                     </tr>
                     <tr>
@@ -106,12 +91,37 @@
                     </tr>
                     <tr>
                         <td class="span3">
+                            @Translation.GetCoreTextTranslation("Status")
+                        </td>
+                        <td class="span9">
+                            @Html.CheckBoxFor(m => m.ClosedOnly) @Translation.GetCoreTextTranslation("Endast avslutade ärenden")
+                        </td>
+                    </tr>
+                    <tr id="fieldsRow1">
+                        <td class="span3">
+                            @Translation.GetCoreTextTranslation("Fält")<span class="mandatorystar"> * </span>
+                        </td>
+                        <td class="span9">
+                            @Html.DropDownListFor(m => m.FieldsNames, Model.Fields,
+                                new
+                                {
+                                    id = "lstFilterFields",
+                                    multiple = "multiple",
+                                    @class = "chosen-select",
+                                    placeholder = Translation.GetCoreTextTranslation("Välj en eller flera"),
+                                    style = "width: 300px"
+                                })
+                            <i id="fieldsLoader" class="gif-loader" style="display:none">&nbsp;</i>
+                        </td>
+                    </tr>
+                    <tr id="fieldsRow2">
+                        <td class="span3">
                         </td>
                         <td class="span9">
                             @Html.CheckBoxFor(m => m.ReplaceEmails) @Translation.GetCoreTextTranslation("Ta bort e-mail adresser i ärendelogg och historik")
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="fieldsRow3">
                         <td class="span3">
                             @Translation.GetCoreTextTranslation("Ersätt data med")
                         </td>
@@ -119,7 +129,7 @@
                             @Html.EditorFor(m => m.ReplaceDataWith)
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="fieldsRow4">
                         <td class="span3">
                             @Translation.GetCoreTextTranslation("Ersätt datum med")
                         </td>
@@ -127,7 +137,7 @@
                             @Html.EditorFor(m => m.ReplaceDatesWith, "DatePicker", new { id = "replacedDate" })
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="fieldsRow5">
                         <td class="span3">
                             @Translation.GetCoreTextTranslation("Bifogade filer")
                         </td>
@@ -135,33 +145,34 @@
                             @Html.CheckBoxFor(m => m.RemoveCaseAttachments) @Translation.GetCoreTextTranslation("Ta bort bifogade filer i ärenden")
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="fieldsRow6">
                         <td class="span3">
                         </td>
                         <td class="span9">
                             @Html.CheckBoxFor(m => m.RemoveLogAttachments) @Translation.GetCoreTextTranslation("Ta bort bifogade filer i ärendelogg")
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="fieldsRow7">
                         <td class="span3">
                         </td>
                         <td class="span9">
                             @Html.CheckBoxFor(m => m.RemoveFileViewLogs) @Translation.GetCoreTextTranslation("Ta bort relaterade poster i filåtkomstlogg")
                         </td>
                     </tr>
-                    <tr>
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Spara/uppdatera")
-                        </td>
-                        <td class="span9">
-                            <button class="btn btn-small" id="btnFavorite" type="button">
-                                <i class="icon-star"></i> @Translation.GetCoreTextTranslation("Favorit")
-                            </button>
-                            <i id="saveFavoritesLoader" class="gif-loader" style="display:none">&nbsp;</i>
-                        </td>
-                    </tr>
-                </table>
-            }
+
+            <tr>
+                <td class="span3">
+                    @Translation.GetCoreTextTranslation("Spara/uppdatera")
+                </td>
+                <td class="span9">
+                    <button class="btn btn-small" id="btnFavorite" type="button">
+                        <i class="icon-star"></i> @Translation.GetCoreTextTranslation("Favorit")
+                    </button>
+                    <i id="saveFavoritesLoader" class="gif-loader" style="display:none">&nbsp;</i>
+                </td>
+            </tr>
+            </table>
+        }
         </div>
     </div>
 </div>
@@ -258,7 +269,7 @@
     };
 
     // JQuery load
-    $(function() {
+    $(function () {
         //disable datepicker on disabled controls
         $("#regCaseFrom, #regCaseTo, #replacedDate").datepicker().on('show', function (e) {
             var input = $(e.target).find('input');
@@ -276,6 +287,22 @@
             if ((event.which < 48 || event.which > 57)) {
                 event.preventDefault();
             }
+        });
+
+        //If type is Deletion Fields and more should not be visible or mandatory 
+        $("#gdprTypeSelect").on("change", function (e) {
+            var $rows = $("#fieldsRow1, #fieldsRow2, #fieldsRow3, #fieldsRow4, #fieldsRow5, #fieldsRow6, #fieldsRow7");
+            if ($("#gdprTypeSelect").val() == "2") {
+                
+                if ($rows.is(':visible')) { $rows.hide() };
+                $("#lstFilterFields").val("Empty");
+
+            }
+            else {
+                if ($rows.is(':hidden')) { $rows.show() };
+            }
+            
+            
         });
 
         var settings = {

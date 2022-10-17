@@ -76,6 +76,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         public int? RetentionPeriod { get; set; }
         public DateTime? RegisterDateFrom { get; set; }
         public DateTime? RegisterDateTo { get; set; }
+
+        public DateTime? FinishedDateFrom { get; set; }
+        public DateTime? FinishedDateTo { get; set; }
+        
         public bool ClosedOnly { get; set; }
         public bool CalculateRegistrationDate { get; set; }
         public List<SelectListItem> Fields { get; set; }        

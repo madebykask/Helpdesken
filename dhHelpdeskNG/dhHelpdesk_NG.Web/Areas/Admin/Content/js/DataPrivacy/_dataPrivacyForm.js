@@ -34,6 +34,9 @@ window.dataPrivacyForm =
         this.registerDateFrom$ = form$.find("#RegisterDateFrom");
         this.registerDateTo$ = form$.find("#RegisterDateTo");
 
+        this.finishedDateFrom$ = form$.find("#FinishedDateFrom");
+        this.finishedDateTo$ = form$.find("#FinishedDateTo");
+
         this.calculateRegistrationDate$ = form$.find("#CalculateRegistrationDate");
         this.retentionPeriod$ = form$.find("#retentionPeriod");
         this.filterFields$ = form$.find("#lstFilterFields");
@@ -202,6 +205,8 @@ window.dataPrivacyForm =
                 calculateRegistrationDate: this.calculateRegistrationDate$.prop("checked"),
                 registerDateFrom: this.registerDateFrom$.val(),
                 registerDateTo: this.registerDateTo$.val(),
+                finishedDateFrom: this.finishedDateFrom$.val(),
+                finishedDateTo: this.finishedDateTo$.val(),
                 closedOnly: $("#ClosedOnly").prop("checked"),
                 replaceDataWith: $("#ReplaceDataWith").val(),
                 replaceDatesWith: $("#ReplaceDatesWith").val(),
@@ -318,6 +323,10 @@ window.dataPrivacyForm =
             }
             return true;
         };
+        this.validateFields = function (value, element, param) {
+            
+            return true;
+        };
 
         this.validateRetentionPeriodDate = function (value, element, param) {
             var dateTo = _self.getSelectedDate(_self.registerDateTo$);
@@ -335,7 +344,13 @@ window.dataPrivacyForm =
 
         this.getRules = function () {
             var self = this;
-
+            var isFieldsRequired = function () {
+                if (self.gdprTypeSelect$.val() == "1")
+                    return true;
+                else {
+                    return false;
+                }
+            }
             return {
                 "SelectedGDPRType": {
                     required: true
@@ -344,8 +359,8 @@ window.dataPrivacyForm =
                     required: true
                 },
                 "FieldsNames": {
-                    required: true,
-                },
+                    required: isFieldsRequired,
+                 },
                 "RegisterDateFrom": {
                     required: true,
                     checkDateRange: function () {
@@ -541,6 +556,8 @@ window.dataPrivacyForm =
                 CalculateRegistrationDate: filter.calculateRegistrationDate,
                 RegisterDateFrom: filter.registerDateFrom,
                 RegisterDateTo: filter.registerDateTo,
+                FinishedDateFrom: filter.finishedDateFrom,
+                FinishedDateTo: filter.finishedDateTo,
                 ClosedOnly: filter.closedOnly,
                 FieldsNames: filter.fields,
                 CaseTypeNames: filter.caseTypes,
@@ -817,7 +834,7 @@ window.dataPrivacyForm =
                     }
 
                     //set case fields
-                    if (data.CaseTypeNames.length) {
+                    if (data.CaseTypeNames != 'undefined') {
                         self.caseTypes$.val(data.CaseTypeNames);
                         self.refreshChosenControls(self.caseTypes$);
                     }
@@ -871,6 +888,8 @@ window.dataPrivacyForm =
                     CalculateRegistrationDate: filter.calculateRegistrationDate,
                     RegisterDateFrom: filter.registerDateFrom,
                     RegisterDateTo: filter.registerDateTo,
+                    FinishedDateFrom: filter.finishedDateFrom,
+                    FinishedDateTo: filter.finishedDateTo,
                     ClosedOnly: filter.closedOnly,
                     FieldsNames: filter.fields,
                     CaseTypes: filter.caseTypes,

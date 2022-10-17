@@ -23,5 +23,8 @@ namespace DH.Helpdesk.BusinessData.Models.Gdpr
         public bool RemoveFileViewLogs { get; set; }
         public List<string> CaseTypes { get; set; }
         public int GDPRType { get; set; }
+
+        public DateTime? FinishedDateFrom { get; set; }
+        public DateTime? FinishedDateTo { get; set; }
     }
 }
