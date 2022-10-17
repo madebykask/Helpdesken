@@ -10,15 +10,15 @@
         {
             this.HasKey(it => new { it.MergedParentId, it.MergedChildId });
             this.Property(it => it.MergedParentId).HasColumnName("MergedParent_Id");
-            this.HasOptional(x => x.Case)
-                .WithMany()
-                .HasForeignKey(x => x.MergedParentId)
-                .WillCascadeOnDelete(false);
+            //this.HasOptional(x => x.Case)
+            //    .WithMany()
+            //    .HasForeignKey(x => x.MergedParentId)
+            //    .WillCascadeOnDelete(false);
 
-            this.HasOptional(x => x.Case)
-                .WithMany()
-                .HasForeignKey(x => x.MergedParentId)
-                .WillCascadeOnDelete(false);
+            //this.HasOptional(x => x.Case)
+            //    .WithMany()
+            //    .HasForeignKey(x => x.MergedParentId)
+            //    .WillCascadeOnDelete(false);
 
             this.Property(it => it.MergedChildId).HasColumnName("MergedChild_Id");
             this.ToTable("tblMergedCases");
