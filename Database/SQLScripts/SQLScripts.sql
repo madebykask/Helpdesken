@@ -34,20 +34,20 @@ IF COL_LENGTH('dbo.tblGDPRDataPrivacyFavorite','CaseTypes') IS NULL
 
 Go
 
-RAISERROR ('Add Column GDPRType to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblGDPRDataPrivacyFavorite','GDPRType') IS NULL
+RAISERROR ('Add Column FinishedDateFrom to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPRDataPrivacyFavorite','FinishedDateFrom') IS NULL
 	BEGIN	 
 		ALTER TABLE [dbo].tblGDPRDataPrivacyFavorite
-		ADD GDPRType int not Null default 0
+		ADD FinishedDateFrom datetime null
 	End
 
 Go
 
-RAISERROR ('Add Column CaseTypes to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblGDPRDataPrivacyFavorite','CaseTypes') IS NULL
+RAISERROR ('Add Column FinishedDateTo to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPRDataPrivacyFavorite','FinishedDateTo') IS NULL
 	BEGIN	 
 		ALTER TABLE [dbo].tblGDPRDataPrivacyFavorite
-		ADD CaseTypes nvarchar(256) Null
+		ADD FinishedDateTo datetime null
 	End
 
 Go
