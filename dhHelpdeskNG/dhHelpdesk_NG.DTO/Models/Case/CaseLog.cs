@@ -26,6 +26,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public bool SendMailAboutCaseToNotifier { get; set; }
         public bool SendMailAboutCaseToPerformer { get; set; }
         public bool AutoCheckPerformerCheckbox { get; set; }
+        public bool AutoCheckNotifyerCheckbox { get; set; }
         public bool SendMailAboutLog { get; set; }
         public DateTime LogDate { get; set; }
         public int LogType { get; set; }

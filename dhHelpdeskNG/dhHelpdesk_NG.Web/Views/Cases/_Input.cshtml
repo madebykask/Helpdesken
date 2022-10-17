@@ -369,11 +369,11 @@
                                                     <div>
                                                         @if (!Model.IsReadOnly(CaseSolutionFields.Email))
                                                         {
-                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @onclick = "setSessionVariable()" })
+                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new {id = "dontSendMailToNotifier" })
                                                         }
                                                         else
                                                         {
-                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled" })
+                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled" , id = "dontSendMailToNotifier" })
                                                         }
                                                         @Translation.GetCoreTextTranslation("Skicka mail till anmälaren")
                                                         @*</label>*@
@@ -2471,15 +2471,8 @@
         $("#emailsTo").text(email);
         e.preventDefault();
     });
-    function setSessionVariable() {
-        var sendEmail = document.getElementById('CaseMailSetting_DontSendMailToNotifier');
-        if (sendEmail.checked) {
-            $("#dontSendMailToNotifier").val('false');
-        } else {
-            $("#dontSendMailToNotifier").val('true');
-        }
-        e.preventDefault();
-    }
+
+
 </script>
 
 <script>
@@ -2507,7 +2500,20 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
         callbacks: {
             onChange: function (contents, $editable) {
                 $('.summernoteinternal').val($('.summernoteinternal').summernote('isEmpty') ? "" : contents);
+                var $txtInformPerformer = $('#txtInformPerformer');
+                $($txtInformPerformer).css('display', 'none');
+                if (this.value.length) {
 
+                    $($txtInformPerformer).css('display', 'inline');
+                    //Check if we should tick checkbox from hidden
+                    var auto = $('#autoCheckPerformerCheckbox').val();
+                    if (auto == 'True') {
+                        $('#CaseLog_SendMailAboutCaseToPerformer:not(:disabled)').attr('checked', 'checked');
+                    }
+                }
+                else {
+                    $('#CaseLog_SendMailAboutCaseToPerformer:not(:disabled)').removeAttr('checked');
+                }
                 validator.element($('.summernoteinternal'));
             }
         }
@@ -2526,6 +2532,30 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
 
                 $('.summernoteexternal').val($('.summernoteexternal').summernote('isEmpty') ? "" : contents);
 
+                var $initiatorEmail = $('#case__PersonsEmail')
+                //Check if we should tick checkbox from hidden
+                var auto = $('#autoCheckNotifyerCheckbox').val();
+                var sendEmail = $('#dontSendMailToNotifier').attr('checked');
+
+                if (this.value.length) {
+                    if (auto == 'True' && sendEmail == 'checked') {
+                        $('#sendMailToNotifyer:not(:disabled)').attr('checked', 'checked');
+                    }
+                    var to = $initiatorEmail.val();
+                    var extras = $("#extraEmailsInput").val().replaceAll(";", " ").replaceAll(to, "");
+                    if (to != '') {
+                        $("#emailsTo").html(to);
+                        $("#emailsTo").css('display', 'inline');
+                        $("#emailsToTitle").css('display', 'inline');
+                    }
+                    if (extras != '') {
+                        $('#extraEmailsInputShow').text(extras);
+                        $('#extraEmailsInputShow').show();
+                        $("#ccTitle").show();
+                    }
+
+
+                }
                 validator.element($('.summernoteexternal'));
 
             }

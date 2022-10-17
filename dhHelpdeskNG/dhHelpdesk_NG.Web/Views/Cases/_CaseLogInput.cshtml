@@ -129,15 +129,17 @@
                 </td>
                 <td>
                     <div class="checkbox commun case-external-email">
+                        @Html.HiddenFor(model => model.CaseLog.AutoCheckNotifyerCheckbox, new { id = "autoCheckNotifyerCheckbox", @readonly = "true" })
+
                         @if (Model.Disable_SendMailAboutCaseToNotifier || Model.EditMode == AccessMode.ReadOnly)
                         {
                             @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
-                                new { @disabled = "disabled", InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
+                                new { @disabled = "disabled", InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool(), id = "sendMailToNotifyer" })
                         }
                         else
                         {
                             @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
-                                new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
+                                new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool(), id="sendMailToNotifyer" })
                         }
                         <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span><br />
                         <span id="emailsToTitle" style="display: none;">
@@ -176,7 +178,7 @@ Model.EnableTwoAttachments))
                         @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote) && !readonlyMode)
                         {
                             <div id="textInternalOuter" style="width: 100%; height:100%; min-width: 320px; min-height: 200px">
-                                @Html.TextAreaFor(model => Model.CaseLog.TextInternal, new { @class = "summernoteinternal" })
+                                @Html.TextAreaFor(model => Model.CaseLog.TextInternal, new { @class = "summernoteinternal" , id = "CaseLog_TextInternal" })
                             </div>
                         }
                         else

@@ -1953,6 +1953,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m.CustomerSettings.ModuleCaseInvoice = Convert.ToBoolean(caseCustomerSettings.ModuleCaseInvoice); // TODO FIX
                 Customer cus = _customerService.GetCustomer(m.case_.Customer_Id);
                 m.CaseLog.AutoCheckPerformerCheckbox = cus.CommunicateWithPerformer.ToBool();
+                m.CaseLog.AutoCheckNotifyerCheckbox = cus.CommunicateWithNotifier.ToBool();
 #pragma warning restore 0618
                 #region ConnectToParentModel
 
