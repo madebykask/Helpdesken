@@ -101,6 +101,54 @@ BEGIN
 END
 GO
 
+RAISERROR ('Add Foreign Key Customer_Id to tblCaseFilterFavorite', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblCaseFilterFavorite_tblCustomer]') 
+AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+BEGIN
+    ALTER TABLE [dbo].[tblCaseFilterFavorite] WITH CHECK ADD CONSTRAINT [FK_tblCaseFilterFavorite_tblCustomer] FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
+END
+GO
+
+RAISERROR ('Add Foreign Key Customer_Id to tblBR_Rules', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblBR_Rules_tblCustomer]') 
+AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+BEGIN
+    ALTER TABLE [dbo].[tblBR_Rules] WITH CHECK ADD CONSTRAINT [FK_tblBR_Rules_tblCustomer] FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
+END
+GO
+
+RAISERROR ('Delete from tblMergedCases Child where there no longer is a connected case', 10, 1) WITH NOWAIT
+DELETE mcc
+FROM tblMergedCases AS mcc
+LEFT JOIN tblcase AS c
+	ON mcc.MergedChild_Id = c.Id
+WHERE c.Id IS NULL
+GO
+
+RAISERROR ('Delete from tblMergedCases Parent where there no longer is a connected case', 10, 1) WITH NOWAIT
+DELETE mcp
+FROM tblMergedCases AS mcp
+LEFT JOIN tblcase AS c
+	ON mcp.MergedParent_Id = c.Id
+WHERE c.Id IS NULL
+GO
+
+RAISERROR ('Add Foreign Key Case_Id to tblMergedCases MergedParent_Id', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblMergedCases_tblCase_Parent]') 
+AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+BEGIN
+    ALTER TABLE [dbo].[tblMergedCases] WITH CHECK ADD CONSTRAINT [FK_tblMergedCases_tblCase_Parent] FOREIGN KEY([MergedParent_Id]) REFERENCES [dbo].[tblCase] ([Id])
+END
+GO
+
+RAISERROR ('Add Foreign Key Case_Id to tblMergedCases MergedChild_Id', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblMergedCases_tblCase_Child]') 
+AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+BEGIN
+    ALTER TABLE [dbo].[tblMergedCases] WITH CHECK ADD CONSTRAINT [FK_tblMergedCases_tblCase_Child] FOREIGN KEY([MergedChild_Id]) REFERENCES [dbo].[tblCase] ([Id])
+END
+GO
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.57'
 GO
