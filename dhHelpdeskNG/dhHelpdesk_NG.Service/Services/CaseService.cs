@@ -53,6 +53,7 @@ namespace DH.Helpdesk.Services.Services
     using Utils;
     using DH.Helpdesk.BusinessData.Models.User;
     using DH.Helpdesk.BusinessData.Models.Case.MergedCase;
+    using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
 
     public partial class CaseService : ICaseService
     {
@@ -432,138 +433,41 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
-            this.DeleteChildCasesFor(id);
-
-            DeleteExtendedCase(id);
-
-            //delete CaseIsAbout
-            this.DeleteCaseIsAboutFor(id);
-
-            // delete form field values
-            var ffv = _formFieldValueRepository.GetFormFieldValuesByCaseId(id);
-            if (ffv != null)
-            {
-                foreach (var v in ffv)
-                {
-                    _formFieldValueRepository.Delete(v);
-                }
-                _formFieldValueRepository.Commit();
-            }
-
-            // delete log files
-            var logFiles = _logFileRepository.GetLogFilesByCaseId(id, true);
-
-            if (logFiles != null)
-            {
-                foreach (var f in logFiles)
-                {
-                    _filesStorage.DeleteFile(f.GetFolderPrefix(), f.Log_Id, basePath, f.FileName);
-                    _logFileRepository.Delete(f);
-                }
-                _logFileRepository.Commit();
-            }
-
-            // delete logs
-            var logs = _logRepository.GetCaseLogs(id).ToList();
-
-            // delete Mail2tickets with log
-            foreach (var l in logs)
-            {
-                _mail2TicketRepository.DeleteByLogId(l.Id);
-            }
-            _mail2TicketRepository.Commit();
-
-            //foreach (var l in logs)
-            //{
-            //    _emailLogAttemptRepository.DeleteLogAttempts(l.Id);
-            //    _emailLogRepository.DeleteByLogId(l.Id);
-            //}
-            //_emailLogRepository.Commit();
-
-            // delete email logs
-            var elogs = _emailLogRepository.GetEmailLogsByCaseId(id);
-            if (elogs != null)
-            {
-                foreach (var l in elogs)
-                {
-                    if (l.EmailLogAttempts != null && l.EmailLogAttempts.Any())
-                        _emailLogAttemptRepository.DeleteLogAttempts(l.Id);
-
-                    _emailLogRepository.Delete(l);
-                }
-                _emailLogRepository.Commit();
-            }
-
-            foreach (var l in logs)
-            {
-                _logRepository.Delete(l);
-            }
-            _logRepository.Commit();
-
-            //Delete Mail2Tickets by caseId
-            _mail2TicketRepository.DeleteByCaseId(id);
-            _mail2TicketRepository.Commit();
-
-            // delete caseHistory
-            var caseHistories = _caseHistoryRepository.GetCaseHistoryByCaseId(id);
-            if (caseHistories != null)
-            {
-                foreach (var h in caseHistories)
-                {
-                    _caseHistoryRepository.Delete(h);
-                }
-            }
-
-            _caseHistoryRepository.Commit();
-
-            //delete case lock
-            _caseLockService.UnlockCaseByCaseId(id);
-
-            // delete case files
-            var caseFiles = _caseFileRepository.GetCaseFilesByCaseId(id);
             var c = _caseRepository.GetById(id);
+            var caseList = new List<Case>() { c };
+            var caseFiles = _caseFileRepository.GetCaseFilesByCaseList(caseList);
+            var logFiles = _logFileRepository.GetLogFilesByCaseList(caseList, true);
 
-            if (caseFiles != null)
-            {
-                foreach (var f in caseFiles)
-                {
-                    var intCaseNumber = decimal.ToInt32(c.CaseNumber);
-                    _filesStorage.DeleteFile(ModuleName.Cases, intCaseNumber, basePath, f.FileName);
-                    _caseFileRepository.Delete(f);
-                }
-                _caseFileRepository.Commit();
+
+            var caseConcreteRepository = new CaseConcreteRepository();
+            int[] caseId = { id };
+            
+            if(caseConcreteRepository.DeleteCases(caseId))
+            {                
+                DeleteFilesInFolders(caseList, caseFiles, logFiles, basePath);
             }
 
-            // delete File View Log
-            _caseFileRepository.DeleteFileViewLogs(id);
-            _caseFileRepository.Commit();
-
-            // delete Invoice
-            _invoiceArticleService.DeleteCaseInvoices(id);
-
-            // delete contract log
-            var contractLog = _contractLogRepository.getContractLogByCaseId(id);
-            if (contractLog != null)
-                _contractLogRepository.Delete(contractLog);
-
-            //delete FollowUp
-            _caseFollowUpService.DeleteFollowUp(id);
-            _caseExtraFollowersService.DeleteByCase(id);
-
-            if (c.CaseSectionExtendedCaseDatas != null && c.CaseSectionExtendedCaseDatas.Any())
-            {
-                c.CaseSectionExtendedCaseDatas.Clear();
-                DeletetblCase_tblCaseSection_ExtendedCaseData(id);
-            }
             ret = c.CaseGUID;
-
-            // delete caseQuestionnaireCircular
-            _circularService.DeleteConnectedCase(id);
-
-            DeleteCaseById(id);
 
             return ret;
         }
+
+        public void DeleteCases(int[] ids, string basePath, int? parentCaseId)
+        {
+            var caseList = _caseRepository.GetCasesByCaseIds(ids);
+            var caseFiles = _caseFileRepository.GetCaseFilesByCaseList(caseList);
+            var logFiles = _logFileRepository.GetLogFilesByCaseList(caseList, true);
+
+            //TODO Validering parentchild relation och merged cases
+
+            var caseConcreteRepository = new CaseConcreteRepository();
+
+            if (caseConcreteRepository.DeleteCases(ids))
+            {
+                DeleteFilesInFolders(caseList, caseFiles, logFiles, basePath);
+            }
+        }
+        
         public void DeleteExCaseWhenCaseMove(int id)
         {
             DeleteExtendedCase(id);
@@ -834,7 +738,7 @@ namespace DH.Helpdesk.Services.Services
             var c = _caseRepository.GetDetachedCaseById(copyFromCaseid);
             if (c.IsAbout == null)
             {
-                
+
             }
             if (c == null)
             {
@@ -1071,7 +975,7 @@ namespace DH.Helpdesk.Services.Services
 
                     extraFields.ClosingReason = fc;
                 }
-                
+
             }
             //Check if it is a merged case
             var mergeParent = GetMergedParentInfo(cases.Id);
@@ -1721,7 +1625,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     lastUserName = user.GetFullName();
                 }
-                   
+
             }
             else
             {
@@ -1877,7 +1781,7 @@ namespace DH.Helpdesk.Services.Services
             }
 
             //Merge Parent
-            if(mergeParent != null)
+            if (mergeParent != null)
             {
                 userLocal_RegTime = TimeZoneInfo.ConvertTimeFromUtc(mergeParent.RegTime, userTimeZone);
                 ret.Add(new Field { Key = "[#MP1]", StringValue = mergeParent.CaseNumber.ToString() });
@@ -1936,7 +1840,7 @@ namespace DH.Helpdesk.Services.Services
                     ret.Add(new Field { Key = "[#MP98Link]", StringValue = site });
                 }
             }
-            
+
 
             return ret;
         }
@@ -2197,6 +2101,36 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
+        }
+
+        private void DeleteFilesInFolders(List<Case> cases, List<CaseFile> caseFiles, List<LogFile> logFiles, string basePath)
+        {
+            foreach (var c in cases)
+            {
+                var _caseFiles = caseFiles.Where(x => x.Case_Id == c.Id);
+
+                if (_caseFiles != null)
+                {
+                    foreach (var f in _caseFiles)
+                    {
+                        var intCaseNumber = decimal.ToInt32(c.CaseNumber);
+                        _filesStorage.DeleteFile(ModuleName.Cases, intCaseNumber, basePath, f.FileName);
+                        //_caseFileRepository.Delete(f);
+                    }
+                    //_caseFileRepository.Commit();
+                }
+
+                // delete log files
+                if (logFiles != null)
+                {
+                    foreach (var f in logFiles)
+                    {
+                        _filesStorage.DeleteFile(f.GetFolderPrefix(), f.Log_Id, basePath, f.FileName);
+                        //_logFileRepository.Delete(f);
+                    }
+                    //_logFileRepository.Commit();
+                }
+            }
         }
 
         #endregion
