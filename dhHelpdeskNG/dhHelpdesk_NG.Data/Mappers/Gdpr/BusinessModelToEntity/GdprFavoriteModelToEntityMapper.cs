@@ -33,6 +33,8 @@ namespace DH.Helpdesk.Dal.Mappers.Gdpr.BusinessModelToEntity
             entity.GDPRType = (int)model.GDPRType;
             entity.FinishedDateFrom = model.FinishedDateFrom;
             entity.FinishedDateTo = model.FinishedDateTo;
+            entity.ProductAreas =
+                model.ProductAreas != null && model.ProductAreas.Any() ? string.Join(",", model.ProductAreas) : "";
         }
     }
 }

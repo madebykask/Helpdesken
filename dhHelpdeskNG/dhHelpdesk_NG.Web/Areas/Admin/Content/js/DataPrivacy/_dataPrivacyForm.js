@@ -17,6 +17,7 @@ window.dataPrivacyForm =
         this.loaders = {
             fieldsLoader: $('#fieldsLoader'),
             caseTypesLoader: $('#caseTypesLoader'),
+            productAreasLoader: $('#productAreasLoader'),
             favoritesLoader: $('#favoritesLoader'),
             inProcessLoader: $('#inProcessLoader'),
             saveFavoritesLoader: $('#saveFavoritesLoader')
@@ -41,6 +42,7 @@ window.dataPrivacyForm =
         this.retentionPeriod$ = form$.find("#retentionPeriod");
         this.filterFields$ = form$.find("#lstFilterFields");
         this.caseTypes$ = form$.find("#lstFilterCaseTypes");
+        this.productAreas$ = form$.find("#lstFilterProductAreas");
         this.closedOnly$ = form$.find("#ClosedOnly");
         this.replaceDataWith$ = form$.find("#ReplaceDataWith");
         this.replaceDatesWith$ = form$.find("#ReplaceDatesWith");
@@ -63,6 +65,7 @@ window.dataPrivacyForm =
             gdprTypeSelect: true,
             lstFilterFields: true,
             lstFilterCaseTypes: true,
+            lstFilterProductAreas: true,
             CalculateRegistrationDate: false
         };
 
@@ -190,14 +193,17 @@ window.dataPrivacyForm =
         this.getFilterData = function () {
             var fields = [];
             var caseTypes = [];
+            var productAreas = [];
             this.filterFields$.find("option:selected").each(function () {
                 fields.push($(this).val());
             });
             this.caseTypes$.find("option:selected").each(function () { caseTypes.push($(this).val()); });
+            this.productAreas$.find("option:selected").each(function () { productAreas.push($(this).val()); });
             
             return {
                 fields: fields,
                 caseTypes: caseTypes,
+                productAreas: productAreas,
                 selectedFavoriteId: this.getSelectedFavoriteId(),
                 selectedCustomerId: this.customerSelect$.val(),
                 selectedGDPRType: this.gdprTypeSelect$.val(),
@@ -486,7 +492,7 @@ window.dataPrivacyForm =
         }
 
         //New - CaseTypes
-    this.loadCustomerCaseTypes = function (customerId) {
+        this.loadCustomerCaseTypes = function (customerId) {
             var self = this;
             if (customerId) {
                 this.blockUI(true, this.loaders.caseTypesLoader);
@@ -529,7 +535,49 @@ window.dataPrivacyForm =
             self.caseTypes$.trigger("chosen:updated");
         }
 
-            //End new
+        //New - ProductAreas
+        this.loadCustomerProductAreas = function (customerId) {
+            var self = this;
+            if (customerId) {
+                this.blockUI(true, this.loaders.productAreasLoader);
+                self.productAreas$.empty();
+                //Todo
+                this.execLoadCustomerProductAreasRequest(customerId)
+                    .done(function (response) {
+                        self.blockUI(false);
+                        if (response.success) {
+                            self.populateCustomerProductAreas(response.data);
+                        }
+                    })
+                    .fail(function () {
+                        self.blockUI(false);
+                    });
+            } else {
+                self.productAreas$.empty();
+                self.refreshChosenControls(self.productAreas$);
+            }
+        };
+
+        this.execLoadCustomerProductAreasRequest = function (customerId) {
+            var jqXhr = $.ajax({
+                url: self.urls.GetCustomerProductAreasAction,
+                type: "POST",
+                data: $.param({ customerId: customerId }),
+                dataType: "json"
+            });
+            return jqXhr;
+        };
+
+        this.populateCustomerProductAreas = function (items) {
+            var self = this;
+            this.productAreas$.empty();
+            $.each(items,
+                function (idx, obj) {
+                    self.productAreas$.append(
+                        '<option value="' + obj.Value + '">' + obj.Text + '</option>');
+                });
+            self.productAreas$.trigger("chosen:updated");
+        }
 
         this.runDataPrivacy = function () {
             var self = this;
@@ -561,6 +609,7 @@ window.dataPrivacyForm =
                 ClosedOnly: filter.closedOnly,
                 FieldsNames: filter.fields,
                 CaseTypeNames: filter.caseTypes,
+                ProductAreaNames: filter.productAreas,
                 ReplaceDataWith: filter.replaceDataWith,
                 ReplaceDatesWith: filter.replaceDatesWith,
                 RemoveCaseAttachments: filter.removeCaseAttachments,
@@ -893,6 +942,7 @@ window.dataPrivacyForm =
                     ClosedOnly: filter.closedOnly,
                     FieldsNames: filter.fields,
                     CaseTypes: filter.caseTypes,
+                    ProductAreas: filter.productAreas,
                     ReplaceDataWith: filter.replaceDataWith,
                     ReplaceDatesWith: filter.replaceDatesWith,
                     RemoveCaseAttachments: filter.removeCaseAttachments,
@@ -1061,13 +1111,12 @@ window.dataPrivacyForm =
 
                 _self.customerSelect$.on('change', function () {
                     var customerId = $(this).val();
-                    console.log(customerId);
                     _self.loadCustomerFields(customerId);
                     _self.loadCustomerCaseTypes(customerId);
+                    _self.loadCustomerProductAreas(customerId);
                 });
                 _self.gdprTypeSelect$.on('change', function () {
                     var typeId = $(this).val();
-                    console.log(typeId);
                 });
 
                 _self.btnFavorite$.on('click', function () {

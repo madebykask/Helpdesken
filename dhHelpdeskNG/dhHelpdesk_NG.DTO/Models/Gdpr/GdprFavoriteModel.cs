@@ -26,5 +26,7 @@ namespace DH.Helpdesk.BusinessData.Models.Gdpr
 
         public DateTime? FinishedDateFrom { get; set; }
         public DateTime? FinishedDateTo { get; set; }
+        public List<string> ProductAreas { get; set; }
+
     }
 }

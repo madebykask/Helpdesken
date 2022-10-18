@@ -55,6 +55,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IFileViewLogService _fileViewLogService;
         private readonly IDepartmentService _departmentsService;
         private readonly ICaseTypeService _caseTypeService;
+        private readonly IProductAreaService _productAreaService;
+
 
         public GlobalSettingController(
             IGlobalSettingService globalSettingService,
@@ -72,7 +74,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             IUserContext userContext,
             IFileViewLogService fileViewLogService,
             IDepartmentService departmentsService,
-            ICaseTypeService caseTypeService)
+            ICaseTypeService caseTypeService,
+            IProductAreaService productAreaService)
             : base(masterDataService)
         {
             _gdprTasksService = gdprTasksService;
@@ -90,6 +93,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             _fileViewLogService = fileViewLogService;
             _departmentsService = departmentsService;
             _caseTypeService = caseTypeService;
+            _productAreaService = productAreaService;
         }
         [ValidateInput(false)]
         public ActionResult Index(int texttypeid, string textSearch, int compareMethod)
@@ -1566,7 +1570,29 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             return Json(new { success = false });
         }
+        [HttpPost]
+        public ActionResult GetCustomerProductAreas(int? customerId)
+        {
+            if (customerId.HasValue && customerId > 0)
+            {
 
+                var productAreas = _productAreaService.GetTopProductAreasWithChilds(customerId.Value, false);
+                var productAreasInRow = _productAreaService.GetChildrenInRow(productAreas).ToList();
+
+                var data =
+                    productAreasInRow.Select(f => new SelectListItem
+                    {
+                        Value = f.Id.ToString(),
+                        Text = f.Name
+                    })
+                    .OrderBy(f => f.Text)
+                    .ToList();
+
+                return Json(new { success = true, data });
+            }
+
+            return Json(new { success = false });
+        }
         private string FormatFieldLabel(string fieldName, string label, int customerId)
         {
             if (string.IsNullOrEmpty(label) && FieldSettingsUiNames.Names.ContainsKey(fieldName))

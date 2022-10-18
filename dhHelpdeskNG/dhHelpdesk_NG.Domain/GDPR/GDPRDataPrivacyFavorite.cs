@@ -29,5 +29,7 @@ namespace DH.Helpdesk.Domain.GDPR
 
         public DateTime? FinishedDateFrom { get; set; }
         public DateTime? FinishedDateTo { get; set; }
+
+        public string ProductAreas { get; set; }
     }
 }

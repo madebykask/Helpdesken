@@ -34,7 +34,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.GDPR
             this.Property(x => x.CaseTypes).IsOptional();
             this.Property(x => x.FinishedDateFrom).IsOptional();
             this.Property(x => x.FinishedDateTo).IsOptional();
-
+            this.Property(x => x.ProductAreas).IsOptional();
 
             this.ToTable("tblGDPRDataPrivacyFavorite");
         }

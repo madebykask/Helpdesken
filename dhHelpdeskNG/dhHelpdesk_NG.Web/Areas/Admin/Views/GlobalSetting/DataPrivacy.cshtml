@@ -91,87 +91,106 @@
                     </tr>
                     <tr>
                         <td class="span3">
+                            @Translation.GetCoreTextTranslation("Produktområde")<span class="mandatorystar"> * </span>
+                        </td>
+                        <td class="span9">
+                            @Html.DropDownListFor(m => m.ProductAreaNames, Model.ProductAreas,
+                                new
+                                {
+                                    id = "lstFilterProductAreas",
+                                    multiple = "multiple",
+                                    @class = "chosen-select",
+                                    placeholder = Translation.GetCoreTextTranslation("Välj en eller flera"),
+                                    style = "width: 300px"
+                                })
+                            <i id="productAreasLoader" class="gif-loader" style="display:none">&nbsp;</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
                             @Translation.GetCoreTextTranslation("Status")
                         </td>
                         <td class="span9">
                             @Html.CheckBoxFor(m => m.ClosedOnly) @Translation.GetCoreTextTranslation("Endast avslutade ärenden")
                         </td>
                     </tr>
-                    <tr id="fieldsRow1">
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Fält")<span class="mandatorystar"> * </span>
-                        </td>
-                        <td class="span9">
-                            @Html.DropDownListFor(m => m.FieldsNames, Model.Fields,
-                                new
-                                {
-                                    id = "lstFilterFields",
-                                    multiple = "multiple",
-                                    @class = "chosen-select",
-                                    placeholder = Translation.GetCoreTextTranslation("Välj en eller flera"),
-                                    style = "width: 300px"
-                                })
-                            <i id="fieldsLoader" class="gif-loader" style="display:none">&nbsp;</i>
-                        </td>
-                    </tr>
-                    <tr id="fieldsRow2">
-                        <td class="span3">
-                        </td>
-                        <td class="span9">
-                            @Html.CheckBoxFor(m => m.ReplaceEmails) @Translation.GetCoreTextTranslation("Ta bort e-mail adresser i ärendelogg och historik")
-                        </td>
-                    </tr>
-                    <tr id="fieldsRow3">
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Ersätt data med")
-                        </td>
-                        <td class="span9">
-                            @Html.EditorFor(m => m.ReplaceDataWith)
-                        </td>
-                    </tr>
-                    <tr id="fieldsRow4">
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Ersätt datum med")
-                        </td>
-                        <td class="span9">
-                            @Html.EditorFor(m => m.ReplaceDatesWith, "DatePicker", new { id = "replacedDate" })
-                        </td>
-                    </tr>
-                    <tr id="fieldsRow5">
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Bifogade filer")
-                        </td>
-                        <td class="span9">
-                            @Html.CheckBoxFor(m => m.RemoveCaseAttachments) @Translation.GetCoreTextTranslation("Ta bort bifogade filer i ärenden")
-                        </td>
-                    </tr>
-                    <tr id="fieldsRow6">
-                        <td class="span3">
-                        </td>
-                        <td class="span9">
-                            @Html.CheckBoxFor(m => m.RemoveLogAttachments) @Translation.GetCoreTextTranslation("Ta bort bifogade filer i ärendelogg")
-                        </td>
-                    </tr>
-                    <tr id="fieldsRow7">
-                        <td class="span3">
-                        </td>
-                        <td class="span9">
-                            @Html.CheckBoxFor(m => m.RemoveFileViewLogs) @Translation.GetCoreTextTranslation("Ta bort relaterade poster i filåtkomstlogg")
-                        </td>
-                    </tr>
+                    <tbody id="hideMeIfDeletion">
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Fält")<span class="mandatorystar"> * </span>
+                            </td>
+                            <td class="span9">
+                                @Html.DropDownListFor(m => m.FieldsNames, Model.Fields,
+                                    new
+                                    {
+                                        id = "lstFilterFields",
+                                        multiple = "multiple",
+                                        @class = "chosen-select",
+                                        placeholder = Translation.GetCoreTextTranslation("Välj en eller flera"),
+                                        style = "width: 300px"
+                                    })
+                                <i id="fieldsLoader" class="gif-loader" style="display:none">&nbsp;</i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="span3">
+                            </td>
+                            <td class="span9">
+                                @Html.CheckBoxFor(m => m.ReplaceEmails) @Translation.GetCoreTextTranslation("Ta bort e-mail adresser i ärendelogg och historik")
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Ersätt data med")
+                            </td>
+                            <td class="span9">
+                                @Html.EditorFor(m => m.ReplaceDataWith)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Ersätt datum med")
+                            </td>
+                            <td class="span9">
+                                @Html.EditorFor(m => m.ReplaceDatesWith, "DatePicker", new { id = "replacedDate" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="span3">
+                                @Translation.GetCoreTextTranslation("Bifogade filer")
+                            </td>
+                            <td class="span9">
+                                @Html.CheckBoxFor(m => m.RemoveCaseAttachments) @Translation.GetCoreTextTranslation("Ta bort bifogade filer i ärenden")
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="span3">
+                            </td>
+                            <td class="span9">
+                                @Html.CheckBoxFor(m => m.RemoveLogAttachments) @Translation.GetCoreTextTranslation("Ta bort bifogade filer i ärendelogg")
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="span3">
+                            </td>
+                            <td class="span9">
+                                @Html.CheckBoxFor(m => m.RemoveFileViewLogs) @Translation.GetCoreTextTranslation("Ta bort relaterade poster i filåtkomstlogg")
+                            </td>
+                        </tr>
+                    </tbody>
 
-            <tr>
-                <td class="span3">
-                    @Translation.GetCoreTextTranslation("Spara/uppdatera")
-                </td>
-                <td class="span9">
-                    <button class="btn btn-small" id="btnFavorite" type="button">
-                        <i class="icon-star"></i> @Translation.GetCoreTextTranslation("Favorit")
-                    </button>
-                    <i id="saveFavoritesLoader" class="gif-loader" style="display:none">&nbsp;</i>
-                </td>
-            </tr>
-            </table>
+                    <tr>
+                        <td class="span3">
+                            @Translation.GetCoreTextTranslation("Spara/uppdatera")
+                        </td>
+                        <td class="span9">
+                            <button class="btn btn-small" id="btnFavorite" type="button">
+                                <i class="icon-star"></i> @Translation.GetCoreTextTranslation("Favorit")
+                            </button>
+                            <i id="saveFavoritesLoader" class="gif-loader" style="display:none">&nbsp;</i>
+                        </td>
+                    </tr>
+                </table>
         }
         </div>
     </div>
@@ -289,20 +308,19 @@
             }
         });
 
-        //If type is Deletion Fields and more should not be visible or mandatory 
+        //If type is Deletion Fields and more should not be visible or mandatory
         $("#gdprTypeSelect").on("change", function (e) {
-            var $rows = $("#fieldsRow1, #fieldsRow2, #fieldsRow3, #fieldsRow4, #fieldsRow5, #fieldsRow6, #fieldsRow7");
+            var $rows = $("#hideMeIfDeletion");
             if ($("#gdprTypeSelect").val() == "2") {
-                
+
                 if ($rows.is(':visible')) { $rows.hide() };
                 $("#lstFilterFields").val("Empty");
-
             }
             else {
                 if ($rows.is(':hidden')) { $rows.show() };
             }
-            
-            
+
+
         });
 
         var settings = {
@@ -313,6 +331,7 @@
                 LoadFavoriteDataAction: '@Url.Action("LoadDataPrivacyFavorite")',
                 SaveFavoritesAction: '@Url.Action("SaveDataPrivacyFavorites")',
                 GetCustomerCaseFieldsAction: '@Url.Action("GetCustomerCaseFields")',
+                GetCustomerProductAreasAction: '@Url.Action("GetCustomerProductAreas")',
                 GetCustomerCaseTypesAction: '@Url.Action("GetCustomerCaseTypes")',
                 DeleteFavoriteAction: '@Url.Action("DeleteDataPrivacyFavorite")',
                 GetTaskProgressAction: '@Url.Action("GetTaskProgress", "GDPRProgress")',

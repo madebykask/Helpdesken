@@ -28,8 +28,9 @@ namespace DH.Helpdesk.Dal.Mappers.Gdpr.EntityToBusinessModel
                 RemoveFileViewLogs = entity.RemoveFileViewLogs,
                 ReplaceEmails = entity.ReplaceEmails,
                 CaseTypes = ConvertToList(entity.CaseTypes),
-                GDPRType = entity.GDPRType
-                
+                GDPRType = entity.GDPRType,
+                ProductAreas = ConvertToList(entity.ProductAreas),
+
             };
 
             return model;

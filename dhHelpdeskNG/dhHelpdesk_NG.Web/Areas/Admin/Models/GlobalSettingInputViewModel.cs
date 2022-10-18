@@ -65,6 +65,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
             ReplaceEmails = true;
             Fields = new List<SelectListItem>();
             CaseTypes = new List<SelectListItem>();
+            ProductAreas = new List<SelectListItem>();
             GDPRType = new List<SelectListItem>();
         }
 
@@ -86,6 +87,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         public List<string> FieldsNames { get; set; }
         public List<SelectListItem> CaseTypes { get; set; }
         public List<string> CaseTypeNames { get; set; }
+        public List<SelectListItem> ProductAreas { get; set; }
+        public List<string> ProductAreaNames { get; set; }
         public bool ReplaceEmails { get; set; }
         public string ReplaceDataWith { get; set; }
         public DateTime? ReplaceDatesWith { get; set; }
