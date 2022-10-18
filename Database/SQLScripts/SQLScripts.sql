@@ -20,7 +20,7 @@ RAISERROR ('Add Column GDPRType to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWA
 IF COL_LENGTH('dbo.tblGDPRDataPrivacyFavorite','GDPRType') IS NULL
 	BEGIN	 
 		ALTER TABLE [dbo].tblGDPRDataPrivacyFavorite
-		ADD GDPRType int not Null default 0
+		ADD GDPRType int not Null default 1
 	End
 
 Go
