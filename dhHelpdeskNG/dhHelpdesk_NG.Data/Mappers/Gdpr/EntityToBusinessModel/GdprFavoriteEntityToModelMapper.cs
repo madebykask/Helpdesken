@@ -30,6 +30,8 @@ namespace DH.Helpdesk.Dal.Mappers.Gdpr.EntityToBusinessModel
                 CaseTypes = ConvertToList(entity.CaseTypes),
                 GDPRType = entity.GDPRType,
                 ProductAreas = ConvertToList(entity.ProductAreas),
+                FinishedDateFrom = entity.FinishedDateFrom,
+                FinishedDateTo = entity.FinishedDateTo,
 
             };
 
