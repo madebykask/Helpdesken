@@ -149,6 +149,15 @@ BEGIN
 END
 GO
 
+RAISERROR ('Add Column ProductAreas to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPRDataPrivacyFavorite','ProductAreas') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblGDPRDataPrivacyFavorite
+		ADD ProductAreas nvarchar(256) Null
+	End
+
+Go
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.57'
 GO
