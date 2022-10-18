@@ -830,16 +830,24 @@ window.dataPrivacyForm =
         this.populateFormFields = function (data) {
             var self = this;
             var customerId = data.CustomerId;
-
+            var gdprType = data.GDPRType;
             self.customerSelect$.val(customerId);
+            self.gdprTypeSelect$.val(gdprType);
 
             //date range
             this.setDatepickerEndDate(self.registerDateFrom$, new Date());
             this.setDatepickerEndDate(self.registerDateTo$, new Date());
 
+            this.setDatepickerEndDate(self.finishedDateFrom$, new Date());
+            this.setDatepickerEndDate(self.finishedDateTo$, new Date());
+            debugger;
             //date range
             self.setDatepickerDate(registerDateFrom$, data.RegisterDateFrom);
             self.setDatepickerDate(registerDateTo$, data.RegisterDateTo);
+
+            self.setDatepickerDate(finishedDateFrom$, data.FinishedDateFrom);
+            self.setDatepickerDate(finishedDateTo$, data.FinishedDateTo);
+
             self.retentionPeriod$.val(data.RetentionPeriod == "0" ? '' : data.RetentionPeriod);
             self.calculateRegistrationDate$.prop('checked', data.CalculateRegistrationDate);
             if (data.CalculateRegistrationDate) {
@@ -876,16 +884,29 @@ window.dataPrivacyForm =
                     defer.resolve(); //notify all processing is complete
                 });
 
-            this.execLoadCustomerCaseTypesRequest(customerId)
+                this.execLoadCustomerCaseTypesRequest(customerId)
+                    .done(function (response) {
+                        if (response.success) {
+                            self.populateCustomerCaseTypes(response.data);
+                        }
+                        //set case fields
+                        if (data.CaseTypes.length) {
+                            self.caseTypes$.val(data.CaseTypes);
+                            self.refreshChosenControls(self.caseTypes$);
+                        }
+                    })
+                .always(function () {
+                    defer.resolve(); //notify all processing is complete
+                });
+
+                this.execLoadCustomerProductAreasRequest(customerId)
                 .done(function (response) {
                     if (response.success) {
-                        self.populateCustomerCaseTypes(response.data);
+                        self.populateCustomerProductAreas(response.data);
                     }
-
-                    //set case fields
-                    if (data.CaseTypeNames != 'undefined') {
-                        self.caseTypes$.val(data.CaseTypeNames);
-                        self.refreshChosenControls(self.caseTypes$);
+                    if (data.ProductAreas.length) {
+                        self.productAreas$.val(data.ProductAreas);
+                        self.refreshChosenControls(self.productAreas$);
                     }
                 })
                 .always(function () {
