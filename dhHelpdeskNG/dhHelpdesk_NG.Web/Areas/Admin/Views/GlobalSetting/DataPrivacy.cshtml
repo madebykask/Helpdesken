@@ -74,7 +74,7 @@
                     </tr>
                     <tr>
                         <td class="span3">
-                            @Translation.GetCoreTextTranslation("Ärendetyp")<span class="mandatorystar"> * </span>
+                            @Translation.GetCoreTextTranslation("Ärendetyp")<span class="mandatorystar"> </span>
                         </td>
                         <td class="span9">
                             @Html.DropDownListFor(m => m.CaseTypeNames, Model.CaseTypes,
@@ -91,7 +91,7 @@
                     </tr>
                     <tr>
                         <td class="span3">
-                            @Translation.GetCoreTextTranslation("Produktområde")<span class="mandatorystar"> * </span>
+                            @Translation.GetCoreTextTranslation("Produktområde")<span class="mandatorystar">  </span>
                         </td>
                         <td class="span9">
                             @Html.DropDownListFor(m => m.ProductAreaNames, Model.ProductAreas,
@@ -348,8 +348,10 @@
                 SelectedGDPRType: '@Translation.GetForJS("Typ") @Translation.GetForJS("måste anges")',
                 SelectedCustomerIdRequired: '@Translation.GetForJS("Kund") @Translation.GetForJS("måste anges")',
                 FieldsNamesRequired: '@Translation.GetForJS("Fält") @Translation.GetForJS("måste anges")',
-                RegisterDateFromRequired: '@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("måste anges")',
-                RegisterDateToRequired: '@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("måste anges")',
+                RegisterDateFromRequired: '@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("eller") @Translation.GetForJS("Avslutsdatum") @Translation.GetForJS("måste anges")',
+                RegisterDateToRequired:  '@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("eller") @Translation.GetForJS("Avslutsdatum") @Translation.GetForJS("måste anges")',
+                FinishedDateFromRequired:'@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("eller") @Translation.GetForJS("Avslutsdatum") @Translation.GetForJS("måste anges")',
+                FinishedDateToRequired: '@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("eller") @Translation.GetForJS("Avslutsdatum") @Translation.GetForJS("måste anges")',
                 InvalidDateRange: '@Translation.GetForJS("Valt datumintervall är ogiltigt")',
                 MaxLength: '@Translation.GetForJS("Ange högst {0} tecken")'
             },
