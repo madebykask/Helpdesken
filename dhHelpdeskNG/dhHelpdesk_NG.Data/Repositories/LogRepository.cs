@@ -102,6 +102,7 @@ namespace DH.Helpdesk.Dal.Repositories
         void ClearExistingAttachedFiles(int caseId);
         void AddExistLogFiles(IEnumerable<LogFile> logExFiles);
         FileContentModel GetCaseFileContentByIdAndFileName(int caseId, string basePath, string fileName);
+        List<LogFile> GetLogFilesByCaseList(List<Case> caseList, bool includeInternal);
     }
 
     public class LogFileRepository : RepositoryBase<LogFile>, ILogFileRepository
@@ -245,6 +246,16 @@ namespace DH.Helpdesk.Dal.Repositories
         public void AddExistLogFiles(IEnumerable<LogFile> logExFiles)
         {
             DataContext.LogFiles.AddRange(logExFiles);
+        }
+
+        public List<LogFile> GetLogFilesByCaseList(List<Case> caseList, bool includeInternal)
+        {
+            var caseFiles = (from d in DataContext.Logs.AsEnumerable()
+                            join c in caseList
+                            on d.Case_Id equals c.Id
+                            select d).SelectMany(l => l.LogFiles);
+
+            return caseFiles.Where(f => includeInternal || (f.LogType == LogFileType.External && !string.IsNullOrEmpty(f.Log.Text_External))).ToList();
         }
     }
 

@@ -18,6 +18,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
         string GetCaseFilePath(int caseId, int fileId, string basePath);
         List<string> FindFileNamesByCaseId(int caseid);
         List<CaseFile> GetCaseFilesByCaseId(int caseid);
+        List<CaseFile> GetCaseFilesByCaseList(List<Case> cases);
         CaseFileContent GetCaseFileContent(int caseId, int fileId, string basePath);
         FileContentModel GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
         bool FileExists(int caseId, string fileName);
@@ -233,6 +234,13 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
             {
                 this.DataContext.FileViewLogs.Remove(fileViewLogEntity);
             }
+        }
+
+        public List<CaseFile> GetCaseFilesByCaseList(List<Case> cases)
+        {
+            return (from f in this.DataContext.CaseFiles.AsEnumerable()
+                    where cases.Select((o) => o.Id).Contains(f.Case_Id)
+                    select f).ToList();
         }
     }
 }
