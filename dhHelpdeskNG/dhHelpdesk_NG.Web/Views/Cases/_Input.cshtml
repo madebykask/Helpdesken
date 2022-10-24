@@ -2494,7 +2494,7 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
         dialogsFade: true,
         tabsize: 1,
         fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82'],
-        toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['fontsize', ['fontsize']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
+        toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
         disableResizeImage: true,
         disableResizeEditor: true,
         callbacks: {
@@ -2516,6 +2516,16 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
                 }
                 validator.element($('.summernoteinternal'));
             }
+                //onBlur: function (e) {
+                //    var p = e.target.parentNode.parentNode
+                //    if (!(e.relatedTarget && $.contains(p, e.relatedTarget))) {
+                //        $(this).parent().children('.note-editor').children('.note-toolbar').css("display", "none");;
+                //        console.log("onBlur");
+                //    }
+                //},
+                //onFocus: function (e) {
+                //    $(this).parent().children('.note-editor').children('.note-toolbar').css("display", "block");
+                //}
         }
     }
 
@@ -2524,7 +2534,7 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
         dialogsFade: true,
         tabsize: 1,
         fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82'],
-        toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['fontsize', ['fontsize']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
+        toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
         disableResizeImage: true,
         disableResizeEditor: true,
         callbacks: {
@@ -2567,7 +2577,7 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
         dialogsFade: true,
         tabsize: 1,
         fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82'],
-        toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['fontname', ['fontname']], ['fontsize', ['fontsize']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
+        toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
         disableResizeImage: true,
         disableResizeEditor: false,
         height: @descriptionSize * 25,
