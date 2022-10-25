@@ -369,11 +369,11 @@
                                                     <div>
                                                         @if (!Model.IsReadOnly(CaseSolutionFields.Email))
                                                         {
-                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new {id = "dontSendMailToNotifier" })
+                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new {id = "dontSendMailToNotifier", onchange= "changeAutocheckNotifier()" })
                                                         }
                                                         else
                                                         {
-                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled" , id = "dontSendMailToNotifier" })
+                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled" , id = "dontSendMailToNotifier", onchange = "changeAutocheckNotifier()" })
                                                         }
                                                         @Translation.GetCoreTextTranslation("Skicka mail till anmälaren")
                                                         @*</label>*@
@@ -2472,6 +2472,16 @@
         e.preventDefault();
     });
 
+    function changeAutocheckNotifier() {
+        var auto = $('#autoCheckNotifyerCheckbox').val();
+        if (auto == 'True') {
+            $('#autoCheckNotifyerCheckbox').val('False')
+        }
+        else {
+            $('#autoCheckNotifyerCheckbox').val('True')
+        }
+    }
+
 
 </script>
 
@@ -2516,16 +2526,7 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
                 }
                 validator.element($('.summernoteinternal'));
             }
-                //onBlur: function (e) {
-                //    var p = e.target.parentNode.parentNode
-                //    if (!(e.relatedTarget && $.contains(p, e.relatedTarget))) {
-                //        $(this).parent().children('.note-editor').children('.note-toolbar').css("display", "none");;
-                //        console.log("onBlur");
-                //    }
-                //},
-                //onFocus: function (e) {
-                //    $(this).parent().children('.note-editor').children('.note-toolbar').css("display", "block");
-                //}
+
         }
     }
 
@@ -2545,10 +2546,9 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
                 var $initiatorEmail = $('#case__PersonsEmail')
                 //Check if we should tick checkbox from hidden
                 var auto = $('#autoCheckNotifyerCheckbox').val();
-                var sendEmail = $('#dontSendMailToNotifier').attr('checked');
 
                 if (this.value.length) {
-                    if (auto == 'True' && sendEmail == 'checked') {
+                    if (auto == 'True') {
                         $('#sendMailToNotifyer:not(:disabled)').attr('checked', 'checked');
                     }
                     var to = $initiatorEmail.val();
