@@ -628,40 +628,68 @@ window.dataPrivacyForm =
             var self = this;
             var isValid = this.form$.valid();
             if (isValid) {
-                this.confirmationDialog.showConfirmation(
-                    this.translations.dataPrivacyConfirmation,
-                    function () {
-                        self.execDataPrivacyRequest();
-                    },
-                    function () {
+
+                var filter = this.getFilterData();
+
+                var inputData = {
+                    SelectedFavoriteId: filter.selectedFavoriteId,
+                    SelectedCustomerId: filter.selectedCustomerId,
+                    SelectedGDPRType: filter.selectedGDPRType,
+                    CalculateRegistrationDate: filter.calculateRegistrationDate,
+                    RegisterDateFrom: filter.registerDateFrom,
+                    RegisterDateTo: filter.registerDateTo,
+                    FinishedDateFrom: filter.finishedDateFrom,
+                    FinishedDateTo: filter.finishedDateTo,
+                    ClosedOnly: filter.closedOnly,
+                    FieldsNames: filter.fields,
+                    CaseTypeNames: filter.caseTypes,
+                    ProductAreaNames: filter.productAreas,
+                    ReplaceDataWith: filter.replaceDataWith,
+                    ReplaceDatesWith: filter.replaceDatesWith,
+                    RemoveCaseAttachments: filter.removeCaseAttachments,
+                    RemoveLogAttachments: filter.removeLogAttachments,
+                    RemoveFileViewLogs: filter.removeFileViewLogs,
+                    ReplaceEmails: filter.replaceEmails
+                };
+
+                if (inputData.SelectedGDPRType === "2") {
+                    $.ajax({
+                        url: self.urls.DataPrivacyGetAffectedCasesAction,
+                        type: "POST",
+                        data: $.param(inputData),
+                        dataType: "json"
+                    }).done(function (result) {
+                        console.log(inputData)
+                        console.log(result)
+                        if (result.count !== null) {
+                            if (result.count > 0) {
+                                self.confirmationDialog.showConfirmation(
+                                    self.translations.dataPrivacyDeletionConfirmation.replace('{0}', result.count),
+                                    function () {
+                                        //self.execDataPrivacyRequest(inputData);
+                                    },
+                                    function () { }
+                                );
+                            }
+                        }
                     });
+                }
+                else {
+                    this.confirmationDialog.showConfirmation(
+                        this.translations.dataPrivacyConfirmation,
+                        function () {
+                            //self.execDataPrivacyRequest(inputData);
+                        },
+                        function () {
+                        });
+                }                   
+            }
+            else {
+                window.ShowToastMessage("Operation has failed.", "error");
             }
         };
 
-        this.execDataPrivacyRequest = function () {
-
-            var filter = this.getFilterData();
-
-            var inputData = {
-                SelectedFavoriteId: filter.selectedFavoriteId,
-                SelectedCustomerId: filter.selectedCustomerId,
-                SelectedGDPRType: filter.selectedGDPRType,
-                CalculateRegistrationDate: filter.calculateRegistrationDate,
-                RegisterDateFrom: filter.registerDateFrom,
-                RegisterDateTo: filter.registerDateTo,
-                FinishedDateFrom: filter.finishedDateFrom,
-                FinishedDateTo: filter.finishedDateTo,
-                ClosedOnly: filter.closedOnly,
-                FieldsNames: filter.fields,
-                CaseTypeNames: filter.caseTypes,
-                ProductAreaNames: filter.productAreas,
-                ReplaceDataWith: filter.replaceDataWith,
-                ReplaceDatesWith: filter.replaceDatesWith,
-                RemoveCaseAttachments: filter.removeCaseAttachments,
-                RemoveLogAttachments: filter.removeLogAttachments,
-                RemoveFileViewLogs: filter.removeFileViewLogs,
-                ReplaceEmails: filter.replaceEmails
-            };
+        this.execDataPrivacyRequest = function (inputData) {
 
             $.ajax({
                 url: self.urls.DataPrivacyAction,

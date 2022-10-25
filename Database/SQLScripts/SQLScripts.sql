@@ -176,6 +176,39 @@ BEGIN
 	BEGIN TRAN	
 		BEGIN TRY
 
+			DELETE lu
+			FROM tblLink_tblUsers AS lu
+			INNER JOIN dbo.tblLink AS l
+				ON lu.Link_Id = l.Id
+			INNER JOIN dbo.tblCaseSolution  AS cs 
+				ON l.CaseSolution_Id= cs.Id
+			INNER JOIN dbo.tblChange AS ch
+				ON cs.Change_Id = ch.Id
+			INNER JOIN @Cases AS c
+				ON ch.SourceCase_Id = c.Id;
+
+			DELETE lw
+			FROM tblLink_tblWorkingGroup AS lw
+			INNER JOIN tblLink AS l	
+				ON lw.Link_Id = l.Id
+			INNER JOIN dbo.tblCaseSolution AS cs
+				ON l.CaseSolution_Id = cs.Id
+			INNER JOIN tblChange AS ch
+				ON cs.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				ON ch.SourceCase_Id = c.Id;
+
+			DELETE cl
+			FROM tblChangeLog AS cl
+			INNER JOIN dbo.tblChangeEMailLog AS cel
+				ON cl.ChangeEMailLog_Id = cel.Id
+			INNER JOIN dbo.tblChangeHistory AS chh
+				ON cel.ChangeHistory_Id = chh.Id
+			INNER JOIN dbo.tblChange AS ch
+				on chh.Change_Id = ch.Id
+			INNER JOIN @Cases AS c
+				on ch.SourceCase_Id = c.Id;
+
 			DELETE tpr 
 			FROM tblParentChildCaseRelations AS tpr
 			INNER JOIN @Cases AS c
@@ -191,10 +224,94 @@ BEGIN
 			INNER JOIN @Cases AS c
 				ON c.Id = tca.Case_Id;
 
-			DELETE tfv
-			FROM tblFormFieldValue AS tfv
+			DELETE cq
+			FROM tblCaseQuestion AS cq
+			INNER JOIN dbo.tblCaseQuestionCategory  AS cqc
+				on cq.CaseQuestionCategory_Id = cqc.Id
+			INNER JOIN dbo.tblCaseQuestionHeader AS cqh
+				on cqc.CaseQuestionHeader_Id = cqh.Id
 			INNER JOIN @Cases AS c
-				ON c.Id = tfv.Case_Id;
+				on cqh.Case_Id = c.Id;
+
+			DELETE cqc
+			FROM tblCaseQuestionCategory AS cqc
+			INNER JOIN dbo.tblCaseQuestionHeader AS cqh
+				on cqc.CaseQuestionHeader_Id = cqh.Id
+			INNER JOIN @Cases AS c
+				on cqh.Case_Id = c.Id; 
+ 
+ 			DELETE cqh
+			FROM tblCaseQuestionHeader AS cqh
+			INNER JOIN @Cases AS c 
+				ON cqh.Case_Id = c.Id;
+			
+ 			DELETE lfe
+			FROM tblLogFileExisting AS lfe
+			INNER JOIN dbo.tblLog AS l
+				ON lfe.Log_Id = l.Id
+			INNER JOIN @Cases AS c 
+				ON l.Case_Id = c.Id;
+
+			DELETE cd
+			FROM tblChange_tblDepartment AS cd
+			INNER JOIN dbo.tblChange AS ch
+				ON cd.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				ON ch.SourceCase_Id = c.Id;
+ 
+			DELETE ccg
+			FROM tblChange_tblChangeGroup AS ccg
+			INNER JOIN tblChange AS ch
+				ON ccg.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				ON ch.SourceCase_Id = c.Id; 
+	 
+	 		DELETE cir
+			FROM tblCaseInvoiceRow AS cir
+			INNER JOIN tblInvoiceRow AS ir 
+				ON cir.InvoiceRow_Id = ir.Id
+			INNER JOIN @Cases AS c
+				ON ir.Case_Id = c.Id;	
+
+			DELETE ih
+			FROM tblInvoiceHeader AS ih
+			INNER JOIN tblInvoiceRow AS ir
+				ON ir.InvoiceHeader_Id = ih.Id
+			INNER JOIN @Cases AS c
+				ON ir.Case_Id = c.Id;
+
+			DELETE ir
+			FROM tblInvoiceRow AS ir
+			INNER JOIN @Cases AS c
+				ON ir.Case_Id = c.Id;
+	
+			DELETE cc
+			FROM tblChangeCouncil AS cc
+			INNER JOIN tblChange AS ch
+				ON cc.Change_Id = ch.Id
+			INNER JOIN @Cases AS c
+				ON ch.SourceCase_Id = c.Id;
+
+			DELETE cc
+			FROM tblChangeContact AS cc
+			INNER JOIN dbo.tblChange AS ch
+				ON cc.Change_Id = ch.Id
+			INNER JOIN @Cases AS c
+				ON ch.SourceCase_Id = c.Id; 
+
+			DELETE cch
+			FROM tblChange_tblChange AS cch
+			INNER JOIN dbo.tblChange AS ch
+				ON cch.RelatedChange_Id = ch.Id
+			INNER JOIN @Cases AS c
+				ON ch.SourceCase_Id = c.Id;	
+
+			DELETE cf
+			FROM tblChangeFile AS cf
+			INNER JOIN dbo.tblChange AS ch
+				ON cf.Change_Id = ch.Id
+			INNER JOIN @Cases AS c
+				ON ch.SourceCase_Id = c.Id; 
 
 			SELECT tl.Id, tl.Case_Id 
 			INTO #TmpLogs
@@ -305,7 +422,75 @@ BEGIN
 				ON t.Id = ci.Id;
 
 			DROP TABLE #TmpCaseInvoice;
+				
+			DELETE csc
+			FROM tblCaseSolutionSchedule AS csc
+			INNER JOIN tblCaseSolution AS cs
+				ON csc.CaseSolution_Id = cs.Id
+			INNER JOIN dbo.tblChange AS ch
+				ON cs.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				ON ch.SourceCase_Id = c.Id;
+	
+			DELETE csf 
+			FROM tblCaseSolutionFieldSettings  csf
+			INNER JOIN tblCaseSolution AS cs
+				ON csf.CaseSolution_Id = cs.Id
+			INNER JOIN tblChange AS ch
+				ON cs.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				ON ch.SourceCase_Id = c.Id;
+ 
+ 			DELETE l
+			FROM dbo.tblLink AS l
+			INNER JOIN tblCaseSolution AS cs
+				ON l.CaseSolution_Id = cs.Id
+			INNER JOIN dbo.tblChange AS ch
+				ON cs.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				ON ch.SourceCase_Id = c.Id;
 
+			DELETE cse
+			FROM tblCaseSolution_tblCaseSection_ExtendedCaseForm AS cse
+			INNER JOIN dbo.tblCaseSolution AS cs
+				on cse.tblCaseSolutionID = cs.Id
+			INNER JOIN dbo.tblChange AS ch
+				on cs.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				on ch.SourceCase_Id = c.Id;
+
+			DELETE cse
+			FROM tblCaseSolution_ExtendedCaseForms AS cse
+			INNER JOIN dbo.tblCaseSolution AS cs 
+				ON cse.CaseSolution_Id = cs.Id
+			INNER JOIN dbo.tblChange AS ch
+				ON cs.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				ON ch.SourceCase_Id = c.Id;
+
+			DELETE csc
+			FROM tblCaseSolutionCondition AS csc
+			INNER JOIN tblCaseSolution AS cs 
+				ON csc.CaseSolution_Id=cs.Id
+			INNER JOIN tblChange AS ch
+				ON cs.Change_Id=ch.Id
+			INNER JOIN @Cases AS c
+				ON ch.SourceCase_Id = c.Id; 
+
+			DELETE cscl
+			FROM tblCaseSolutionConditionLog AS cscl
+			INNER JOIN dbo.tblCaseSolution AS cs
+				ON cscl.CaseSolution_Id = cs.Id
+			INNER JOIN dbo.tblChange AS ch
+				ON cs.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				ON ch.SourceCase_Id = c.Id;
+  
+			DELETE ch
+			FROM tblChange AS ch
+			INNER JOIN @Cases AS c
+				ON ch.SourceCase_Id = c.Id;
+ 
 			DELETE cl
 			FROM tblContractLog AS cl
 			INNER JOIN  @Cases AS c
@@ -370,7 +555,19 @@ BEGIN
 			FROM tblFormFieldValueHistory AS vh
 			INNER JOIN @Cases AS c
 				ON c.Id = vh.Case_Id;	
-			 
+
+			delete vh
+			from tblFormFieldValueHistory AS vh
+			INNER JOIN tblFormFieldValue AS fv 
+				ON fv.Case_Id = vh.FormField_Id
+			INNER JOIN @Cases AS c 
+				ON fv.Case_Id = c.Id;
+
+			DELETE tfv
+			FROM tblFormFieldValue AS tfv
+			INNER JOIN @Cases AS c
+				ON c.Id = tfv.Case_Id;
+			
 			DELETE cs
 			FROM tblCaseStatistics AS cs
 			INNER JOIN @Cases AS c
