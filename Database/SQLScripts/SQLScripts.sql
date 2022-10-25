@@ -404,6 +404,25 @@ BEGIN
 END	
 
 GO
+
+RAISERROR ('Add Column AnonymizationPermission to tblGDPRDataPrivacyAccess', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPRDataPrivacyAccess','AnonymizationPermission') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblGDPRDataPrivacyAccess
+		ADD AnonymizationPermission int not null default 1 
+	End
+
+Go
+
+RAISERROR ('Add Column DeletionPermission to tblGDPRDataPrivacyAccess', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPRDataPrivacyAccess','DeletionPermission') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblGDPRDataPrivacyAccess
+		ADD DeletionPermission int not null default 0 
+	End
+
+Go
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.57'
 GO
