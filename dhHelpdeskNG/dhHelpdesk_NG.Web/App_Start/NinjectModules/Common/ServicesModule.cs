@@ -166,7 +166,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             Bind<ICaseDocumentService>().To<CaseDocumentService>();
 
             Bind<IConditionService>().To<ConditionService>();
-            Bind<IGDPROperationsService, IGDPRDataPrivacyAccessService, IGDPRFavoritesService>().To<GDPRService>();
+            Bind<IGDPROperationsService, IGDPRDataPrivacyAccessService, IGDPRFavoritesService, IGDPRDataPrivacyCasesService>().To<GDPRService>();
             Bind<IGDPRTasksService>().To<GDPRTasksService>();
 
             // Survey service

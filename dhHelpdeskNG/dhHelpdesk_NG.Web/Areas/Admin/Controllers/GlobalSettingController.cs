@@ -37,6 +37,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
     using DH.Helpdesk.Web.Infrastructure.Attributes;
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.BusinessData.Enums.BusinessRules;
+    using DH.Helpdesk.Services.BusinessLogic.Gdpr;
+    using DH.Helpdesk.Dal.NewInfrastructure.Concrete;
 
     public class GlobalSettingController : BaseController
     {
@@ -50,6 +52,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IGDPRDataPrivacyAccessService _gdprDataPrivacyAccessService;
         private readonly IGDPROperationsService _gdprOperationsService;
         private readonly IGDPRFavoritesService _gdprFavoritesService;
+        private readonly IGDPRDataPrivacyCasesService _gdprPrivacyCasesService;
         private readonly IUserContext _userContext;
         private readonly IGDPRTasksService _gdprTasksService;
         private readonly IFileViewLogService _fileViewLogService;
@@ -75,7 +78,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             IFileViewLogService fileViewLogService,
             IDepartmentService departmentsService,
             ICaseTypeService caseTypeService,
-            IProductAreaService productAreaService)
+            IProductAreaService productAreaService,
+            IGDPRDataPrivacyCasesService gdprPrivacyCasesService)
             : base(masterDataService)
         {
             _gdprTasksService = gdprTasksService;
@@ -94,6 +98,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             _departmentsService = departmentsService;
             _caseTypeService = caseTypeService;
             _productAreaService = productAreaService;
+            _gdprPrivacyCasesService = gdprPrivacyCasesService;
         }
         [ValidateInput(false)]
         public ActionResult Index(int texttypeid, string textSearch, int compareMethod)
@@ -1279,6 +1284,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 return Json(new { count = taskIds.Length, ids = taskIds }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { count = 0 }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [GdprAccess]
+        public JsonResult GetDataPrivacyAffectedCases(DataPrivacyParameters p)
+        {
+            var totalCount = _gdprPrivacyCasesService.GetCasesCount(p.SelectedCustomerId, p);
+            return Json(new { count = totalCount }, JsonRequestBehavior.AllowGet);
         }
 
         [ChildActionOnly]

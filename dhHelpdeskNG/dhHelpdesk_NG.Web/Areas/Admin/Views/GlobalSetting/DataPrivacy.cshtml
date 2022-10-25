@@ -328,6 +328,7 @@
             dateformat: '@System.Threading.Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
             urls: {
                 DataPrivacyAction: '@Url.Action("DataPrivacy")',
+                DataPrivacyGetAffectedCasesAction: '@Url.Action("GetDataPrivacyAffectedCases")',
                 LoadFavoriteDataAction: '@Url.Action("LoadDataPrivacyFavorite")',
                 SaveFavoritesAction: '@Url.Action("SaveDataPrivacyFavorites")',
                 GetCustomerCaseFieldsAction: '@Url.Action("GetCustomerCaseFields")',
@@ -340,6 +341,7 @@
             translations:
             {
                 dataPrivacyConfirmation: '@Translation.GetForJS("Är du säker på att du vill ersätta informationen i utvalda ärenden?")',
+                dataPrivacyDeletionConfirmation: '@Translation.GetForJS("{0} ärenden kommer att raderas")' +'.<br>' + '@Translation.GetForJS("Är du säker på att du vill radera dessa ärenden")' + '?',
                 operationSuccessMessage: '@Translation.GetForJS("Klar")',
                 createNewFavorite: '@Translation.GetForJS("Skapa ny")',
                 favoritesUnlockWarning: '@Translation.GetForJS("Favoriten körs och kan därför ej ändras")',

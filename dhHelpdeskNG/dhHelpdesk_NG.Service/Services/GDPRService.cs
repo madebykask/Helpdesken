@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Gdpr;
+using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Serializers;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.NewInfrastructure;
+using DH.Helpdesk.Dal.NewInfrastructure.Concrete;
 using DH.Helpdesk.Dal.Repositories.GDPR;
+using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.GDPR;
 
 namespace DH.Helpdesk.Services.Services
@@ -26,6 +29,13 @@ namespace DH.Helpdesk.Services.Services
         GDPRDataPrivacyAccess GetByUserId(int userId);
     }
 
+    public interface IGDPRDataPrivacyCasesService
+    {
+        int GetCasesCount(int customerId, DataPrivacyParameters p);
+
+        IQueryable<Case> GetCasesQuery(int customerId, DataPrivacyParameters p, IUnitOfWork uow);
+    }
+
     public interface IGDPRFavoritesService
     {
         IDictionary<int, string> ListFavorites();
@@ -34,7 +44,7 @@ namespace DH.Helpdesk.Services.Services
         void DeleteFavorite(int favoriteId);
     }
 
-    public class GDPRService : IGDPROperationsService, IGDPRDataPrivacyAccessService, IGDPRFavoritesService
+    public class GDPRService : IGDPROperationsService, IGDPRDataPrivacyAccessService, IGDPRFavoritesService, IGDPRDataPrivacyCasesService
     {
         private readonly IGDPRDataPrivacyAccessRepository _privacyAccessRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
@@ -191,6 +201,77 @@ namespace DH.Helpdesk.Services.Services
         {
             _gdprOperationsAuditRespository.Update(auditData);
             _gdprOperationsAuditRespository.Commit();
+        }
+
+        public int GetCasesCount(int customerId, DataPrivacyParameters p)
+        {
+            var sqlTimeout = 300;
+            using (var uow = _unitOfWorkFactory.Create(sqlTimeout))
+            {
+                uow.AutoDetectChangesEnabled = false;
+                var casesQueryable = GetCasesQuery(customerId, p, uow);
+                return casesQueryable.Count();
+            }
+        }
+
+        public IQueryable<Case> GetCasesQuery(int customerId, DataPrivacyParameters p, IUnitOfWork uow)
+        {
+            var caseRepository = uow.GetRepository<Case>();
+            var casesQueryable = caseRepository.GetAll()
+                .IncludePath(c => c.CaseHistories)
+                .IncludePath(c => c.CaseExtendedCaseDatas.Select(ec => ec.ExtendedCaseData.ExtendedCaseValues))
+                .IncludePath(c => c.CaseExtendedCaseDatas.Select(ec => ec.ExtendedCaseForm))
+                .IncludePath(c => c.CaseSectionExtendedCaseDatas.Select(esc => esc.ExtendedCaseData.ExtendedCaseValues))
+                .Where(x => x.Customer_Id == customerId);
+
+            if (p.RemoveCaseAttachments)
+            {
+                casesQueryable = casesQueryable.IncludePath(x => x.CaseFiles);
+            }
+
+            if (p.RemoveLogAttachments)
+            {
+                casesQueryable = casesQueryable.IncludePath(x => x.Logs.Select(f => f.LogFiles));
+            }
+            
+            if (p.FieldsNames != null)
+            {
+                if(p.FieldsNames.Contains("tblLog.Text_External") ||
+                p.FieldsNames.Contains("tblLog.Text_Internal") ||
+                p.FieldsNames.Contains(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()))
+                {
+                    casesQueryable = casesQueryable.IncludePath(x => x.Logs.Select(f => f.LogFiles));
+                }
+                if (p.FieldsNames.Contains(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()))
+                {
+                    casesQueryable = casesQueryable.IncludePath(x => x.CaseFollowers);
+                }
+            }
+            
+            if (p.ReplaceEmails)
+            {
+                casesQueryable = casesQueryable.IncludePath(x => x.Mail2Tickets);
+                casesQueryable = casesQueryable.IncludePath(x => x.CaseHistories.Select(y => y.Emaillogs));
+            }
+
+            if (p.ClosedOnly)
+                casesQueryable = casesQueryable.Where(x => x.FinishingDate.HasValue);
+
+            if (p.RegisterDateFrom.HasValue)
+            {
+                p.RegisterDateFrom = p.RegisterDateFrom.Value.Date;
+                casesQueryable = casesQueryable.Where(x => x.RegTime >= p.RegisterDateFrom.Value);
+            }
+
+            if (p.RegisterDateTo.HasValue)
+            {
+                //fix date
+                p.RegisterDateTo = p.RegisterDateTo.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+                casesQueryable = casesQueryable.Where(x => x.RegTime <= p.RegisterDateTo.Value);
+            }
+
+            casesQueryable = casesQueryable.OrderBy(x => x.Id);
+            return casesQueryable;
         }
 
         #endregion

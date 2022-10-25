@@ -44,9 +44,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
         private readonly IJsonSerializeService _jsonSerializeService;
         private readonly IDataPrivacyTaskProgress _taskProgress;
         private readonly ISettingsLogic _settingsLogic;
-
+        private readonly IGDPRDataPrivacyCasesService _gDPRDataPrivacyCasesService;
         const int sqlTimeout = 300; //seconds
-
+        
         #region CaseFileEntity
 
         private class CaseFileEntity
@@ -97,7 +97,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             IJsonSerializeService jsonSerializeService,
             IDataPrivacyTaskProgress taskProgress,
             IUnitOfWorkFactory unitOfWorkFactory,
-            ISettingsLogic settingsLogic)
+            ISettingsLogic settingsLogic,
+            IGDPRDataPrivacyCasesService gDPRDataPrivacyCasesService)
         {
             _jsonSerializeService = jsonSerializeService;
             _taskProgress = taskProgress;
@@ -107,6 +108,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             _globalSettingRepository = globalSettingRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
             _settingsLogic = settingsLogic;
+            _gDPRDataPrivacyCasesService = gDPRDataPrivacyCasesService;
         }
 
         #endregion
@@ -120,7 +122,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 
             try
             {
-                var totalCount = GetCasesCount(customerId, p);
+                var totalCount = _gDPRDataPrivacyCasesService.GetCasesCount(customerId, p);
                 var fetchNext = totalCount > 0;
                 var step = 0;
 
@@ -141,7 +143,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                         uow.AutoDetectChangesEnabled = false;
                         
                         //GET query
-                        var casesQueryable = GetCasesQuery(customerId, p, uow);
+                        var casesQueryable = _gDPRDataPrivacyCasesService.GetCasesQuery(customerId, p, uow);
 
                         //fetch next cases
                         var cases = casesQueryable.Skip(processed).Take(take).ToList();
@@ -200,70 +202,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                 SaveFailedOperationAudit(customerId, userId, p, errMsg);
                 throw;
             }
-        }
-
-        private int GetCasesCount(int customerId, DataPrivacyParameters p)
-        {
-            using (var uow = _unitOfWorkFactory.Create(sqlTimeout))
-            {
-                uow.AutoDetectChangesEnabled = false;
-                var casesQueryable = GetCasesQuery(customerId, p, uow);
-                return casesQueryable.Count();
-            }
-        }
-
-        private IQueryable<Case> GetCasesQuery(int customerId, DataPrivacyParameters p, IUnitOfWork uow)
-        {
-            var caseRepository = uow.GetRepository<Case>();
-            var casesQueryable = caseRepository.GetAll()
-                .IncludePath(c => c.CaseHistories)
-                .IncludePath(c => c.CaseExtendedCaseDatas.Select(ec => ec.ExtendedCaseData.ExtendedCaseValues))
-                .IncludePath(c => c.CaseExtendedCaseDatas.Select(ec => ec.ExtendedCaseForm))
-                .IncludePath(c => c.CaseSectionExtendedCaseDatas.Select(esc => esc.ExtendedCaseData.ExtendedCaseValues))
-                .Where(x => x.Customer_Id == customerId);
-
-            if (p.RemoveCaseAttachments)
-            {
-                casesQueryable = casesQueryable.IncludePath(x => x.CaseFiles);
-            }
-
-            if (p.RemoveLogAttachments || p.FieldsNames.Contains("tblLog.Text_External") ||
-                p.FieldsNames.Contains("tblLog.Text_Internal") ||
-                p.FieldsNames.Contains(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()))
-            {
-                casesQueryable = casesQueryable.IncludePath(x => x.Logs.Select(f => f.LogFiles));
-            }
-
-            if (p.FieldsNames.Contains(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()))
-            {
-                casesQueryable = casesQueryable.IncludePath(x => x.CaseFollowers);
-            }
-
-            if (p.ReplaceEmails)
-            {
-                casesQueryable = casesQueryable.IncludePath(x => x.Mail2Tickets);
-                casesQueryable = casesQueryable.IncludePath(x => x.CaseHistories.Select(y => y.Emaillogs));
-            }
-
-            if (p.ClosedOnly)
-                casesQueryable = casesQueryable.Where(x => x.FinishingDate.HasValue);
-
-            if (p.RegisterDateFrom.HasValue)
-            {
-                p.RegisterDateFrom = p.RegisterDateFrom.Value.Date;
-                casesQueryable = casesQueryable.Where(x => x.RegTime >= p.RegisterDateFrom.Value);
-            }
-
-            if (p.RegisterDateTo.HasValue)
-            {
-                //fix date
-                p.RegisterDateTo = p.RegisterDateTo.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
-                casesQueryable = casesQueryable.Where(x => x.RegTime <= p.RegisterDateTo.Value);
-            }
-
-            casesQueryable = casesQueryable.OrderBy(x => x.Id);
-            return casesQueryable;
-        }
+        }     
 
         private void UpdateProgress(int taskId, int pos, int totalCount)
         {
