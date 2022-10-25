@@ -1262,12 +1262,32 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Customers = availableCustomers,
                 Favorites = favorites.ToSelectList(new SelectListItem() { Value = "0", Text = Translation.GetCoreTextTranslation("Skapa ny") }),
             };
-
-            var gdprTypes = Enum.GetValues(typeof(GDPRType)).Cast<GDPRType>().Select(x => new SelectListItem
+            var gdprTypes = new List<SelectListItem>();
+            if (userAccess.DeletionPermission == 1 && userAccess.AnonymizationPermission == 1)
             {
-                Value = ((int)x).ToString(),
-                Text = Translation.GetCoreTextTranslation(x.ToString())
-            }).ToList();
+                gdprTypes = Enum.GetValues(typeof(GDPRType)).Cast<GDPRType>().Select(x => new SelectListItem
+                {
+                    Value = ((int)x).ToString(),
+                    Text = Translation.GetCoreTextTranslation(x.ToString())
+                }).ToList();
+            }
+            else if (userAccess.DeletionPermission == 1)
+            {
+                gdprTypes = Enum.GetValues(typeof(GDPRType)).Cast<GDPRType>().Select(x => new SelectListItem
+                {
+                    Value = ((int)x).ToString(),
+                    Text = Translation.GetCoreTextTranslation(x.ToString()),
+                    Selected = x == GDPRType.Radering
+                }).Where(x => x.Text == Translation.GetCoreTextTranslation("Radering")).ToList();
+            }
+            else if (userAccess.AnonymizationPermission == 1)
+            {
+                gdprTypes = Enum.GetValues(typeof(GDPRType)).Cast<GDPRType>().Select(x => new SelectListItem
+                {
+                    Value = ((int)x).ToString(),
+                    Text = Translation.GetCoreTextTranslation(x.ToString())
+                }).Where(x => x.Text == Translation.GetCoreTextTranslation("Avpersonifiering")).ToList();
+            }
 
             model.GDPRType = gdprTypes;
             

@@ -11,6 +11,8 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.GDPR
             this.HasKey(x => x.Id);
             this.Property(x => x.User_Id).IsOptional();
             this.Property(x => x.CreatedDate).IsRequired();
+            this.Property(x => x.AnonymizationPermission).IsRequired();
+            this.Property(x => x.DeletionPermission).IsRequired();
 
             this.HasOptional(x => x.User)
                 .WithMany()
