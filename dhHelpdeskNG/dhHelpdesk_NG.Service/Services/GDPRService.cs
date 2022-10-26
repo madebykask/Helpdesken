@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Services.Services
     public interface IGDPROperationsService
     {
         IDictionary<int, string> GetOperationAuditCustomers();
+        IDictionary<int, string> ListFavorites(GDPRDataPrivacyAccess privacyAccess);
         IList<GdprOperationsAuditOverview> ListGdprOperationsAuditItems(int? customerId, bool successOnly = true);
     }
 
@@ -38,7 +39,7 @@ namespace DH.Helpdesk.Services.Services
 
     public interface IGDPRFavoritesService
     {
-        IDictionary<int, string> ListFavorites();
+        IDictionary<int, string> ListFavorites(GDPRDataPrivacyAccess privacyAccess);
         GdprFavoriteModel GetFavorite(int id);
         int SaveFavorite(GdprFavoriteModel model, int? userId);
         void DeleteFavorite(int favoriteId);
@@ -85,9 +86,9 @@ namespace DH.Helpdesk.Services.Services
 
         #endregion
 
-        public IDictionary<int, string> ListFavorites()
+        public IDictionary<int, string> ListFavorites(GDPRDataPrivacyAccess privacyAccess)
         {
-            var favorites = _gdprFavoritesRepository.ListFavorites();
+            var favorites = _gdprFavoritesRepository.ListFavorites(privacyAccess);
             return favorites;
         }
 

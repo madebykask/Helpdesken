@@ -1199,7 +1199,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         private object GetDataPrivacyFavorites()
         {
-            var favorites = _gdprFavoritesService.ListFavorites();
+            //Checking permissions for Deletion/Anonymization
+            var dataPrivacyAccess = _gdprDataPrivacyAccessService.GetByUserId(SessionFacade.CurrentUser.Id);
+            var favorites = _gdprFavoritesService.ListFavorites(dataPrivacyAccess);
             var items = favorites.ToSelectList().Select(x => new
             {
                 value = x.Value,
@@ -1254,7 +1256,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Text = x.Customer.Name
             }).ToList();
 
-            var favorites = _gdprFavoritesService.ListFavorites();
+            var favorites = _gdprFavoritesService.ListFavorites(userAccess);
 
             var model = new DataPrivacyModel
             {
@@ -1262,6 +1264,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Customers = availableCustomers,
                 Favorites = favorites.ToSelectList(new SelectListItem() { Value = "0", Text = Translation.GetCoreTextTranslation("Skapa ny") }),
             };
+            
+            //Check permissions for Deletion and/or Anonymization
             var gdprTypes = new List<SelectListItem>();
             if (userAccess.DeletionPermission == 1 && userAccess.AnonymizationPermission == 1)
             {
@@ -1277,8 +1281,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 {
                     Value = ((int)x).ToString(),
                     Text = Translation.GetCoreTextTranslation(x.ToString()),
-                    Selected = x == GDPRType.Radering
                 }).Where(x => x.Text == Translation.GetCoreTextTranslation("Radering")).ToList();
+                model.SelectedGDPRType = (int)GDPRType.Radering;
             }
             else if (userAccess.AnonymizationPermission == 1)
             {
@@ -1287,6 +1291,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Value = ((int)x).ToString(),
                     Text = Translation.GetCoreTextTranslation(x.ToString())
                 }).Where(x => x.Text == Translation.GetCoreTextTranslation("Avpersonifiering")).ToList();
+                model.SelectedGDPRType = (int)GDPRType.Avpersonifiering;
             }
 
             model.GDPRType = gdprTypes;

@@ -1221,6 +1221,10 @@ window.dataPrivacyForm =
 
         return {
             init: function (settings) {
+                
+                if (_self.gdprTypeSelect$.val() == "2") {
+                    _self.hideMeIfDeletion.hide();
+                }
                 _self.dateformat = settings.dateformat;
                 _self.urls = settings.urls;
                 _self.confirmationDialog = settings.confirmDialog;

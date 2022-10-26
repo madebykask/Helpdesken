@@ -24,7 +24,7 @@
                             @Translation.GetCoreTextTranslation("Typ")<span class="mandatorystar"> * </span>
                         </td>
                         <td class="span9">
-                            @Html.DropDownListFor(m => m.SelectedGDPRType, Model.GDPRType, string.Empty, new { id = "gdprTypeSelect", @class = "chosen-single-select" })
+                            @Html.DropDownListFor(m => m.SelectedGDPRType, Model.GDPRType, string.Empty, new { id = "gdprTypeSelect" ,  @class = "chosen-single-select" })
                         </td>
                     </tr>
                     <tr>
