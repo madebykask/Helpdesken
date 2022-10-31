@@ -652,41 +652,31 @@ window.dataPrivacyForm =
                     ReplaceEmails: filter.replaceEmails
                 };
 
-                if (inputData.SelectedGDPRType === "2") {
-                    $.ajax({
-                        url: self.urls.DataPrivacyGetAffectedCasesAction,
-                        type: "POST",
-                        data: $.param(inputData),
-                        dataType: "json"
-                    }).done(function (result) {
-                        console.log(inputData)
-                        console.log(result)
-                        if (result.count !== null) {
-                            if (result.count > 0) {
-                                self.confirmationDialog.showConfirmation(
-                                    self.translations.dataPrivacyDeletionConfirmation.replace('{0}', result.count),
-                                    function () {
-                                        //self.execDataPrivacyRequest(inputData);
-                                    },
-                                    function () { }
-                                );
-                            }
-                        }
-                    });
-                }
-                else {
-                    this.confirmationDialog.showConfirmation(
-                        this.translations.dataPrivacyConfirmation,
-                        function () {
-                            //self.execDataPrivacyRequest(inputData);
-                        },
-                        function () {
-                        });
-                }                   
-            }
+
+                $.ajax({
+                    url: self.urls.DataPrivacyGetAffectedCasesAction,
+                    type: "POST",
+                    data: $.param(inputData),
+                    dataType: "json"
+                }).done(function (result) {
+                    console.log(inputData)
+                    if (result.count !== null) {
+                        if (result.count > 0) {
+                            self.confirmationDialog.showConfirmation(
+                                inputData.SelectedGDPRType === "2" ? self.translations.dataPrivacyDeletionConfirmation.replace('{0}', result.count) : self.translations.dataPrivacyConfirmation.replace('{0}', result.count),
+                                function () {
+                                    self.execDataPrivacyRequest(inputData);
+                                },
+                                function () { }
+                            );
+                        }                        
+                    }
+                });
+            }           
             else {
                 window.ShowToastMessage("Operation has failed.", "error");
             }
+
         };
 
         this.execDataPrivacyRequest = function (inputData) {
