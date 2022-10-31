@@ -54,7 +54,7 @@
                     </tr>
                     <tr>
                         <td class="span3">
-                            @Translation.GetCoreTextTranslation("Registreringsdatum")<span class="mandatorystar"> * </span>
+                            @Translation.GetCoreTextTranslation("Registreringsdatum")<span class="mandatorystar"> </span>
                         </td>
                         <td class="span9">
                             @Html.EditorFor(m => m.RegisterDateFrom, "DatePicker", new { id = "regCaseFrom", type = "text" })
@@ -64,7 +64,7 @@
                     </tr>
                     <tr>
                         <td class="span3">
-                            @Translation.GetCoreTextTranslation("Avslutsdatum")<span class="mandatorystar"> * </span>
+                            @Translation.GetCoreTextTranslation("Avslutsdatum")<span class="mandatorystar"> </span>
                         </td>
                         <td class="span9">
                             @Html.EditorFor(m => m.FinishedDateFrom, "DatePicker", new { id = "finishedDateFrom", type = "text" })
