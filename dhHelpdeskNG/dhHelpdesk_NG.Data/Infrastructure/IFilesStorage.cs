@@ -1,4 +1,6 @@
 ﻿using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.Domain;
+using System.Collections.Generic;
 
 namespace DH.Helpdesk.Dal.Infrastructure
 {
@@ -17,5 +19,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
         void MoveDirectory(string topic, string entityId, string sourceBasePath, string targetBasePath);
 
         string GetCaseFilePath(string topic, int entityId, string basePath, string fileName);
+
+        void DeleteFilesInFolders(List<Case> cases, List<CaseFile> caseFiles, List<LogFile> logFiles, string basePath);
     }
 }

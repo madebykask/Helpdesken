@@ -65,6 +65,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         private readonly IRegionService _regionService;
         private readonly IOUService _oUService;
         private readonly IConditionService _conditionService;
+        private readonly ICaseDeletionService _caseDeletionService;
         private IBusinessModelToEntityMapper<CaseModel, Case> _caseModelToEntityMapper;
 
         public UniversalCaseService(ICaseRepository caseRepository,
@@ -818,7 +819,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 {
                     //delete base case
                     if (baseCaseId > 0)
-                        _caseService.Delete(baseCaseId, "", null);
+                        _caseDeletionService.Delete(baseCaseId, "", null);
                 }
             }
 

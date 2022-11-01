@@ -192,6 +192,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IFeatureToggleService _featureToggleService;
         private readonly IFileViewLogService _fileViewLogService;
         private readonly IFilesStorage _filesStorage;
+        private readonly ICaseDeletionService _caseDeletionService;
 
         #endregion
 
@@ -277,7 +278,8 @@ namespace DH.Helpdesk.Web.Controllers
             IUserEmailsSearchService userEmailsSearchService,
             IFeatureToggleService featureToggleService,
             IFileViewLogService fileViewLogService,
-            IFilesStorage filesStorage)
+            IFilesStorage filesStorage,
+            ICaseDeletionService caseDeletionService)
             : base(masterDataService)
         {
             _caseProcessor = caseProcessor;
@@ -355,7 +357,7 @@ namespace DH.Helpdesk.Web.Controllers
             _featureToggleService = featureToggleService;
             _fileViewLogService = fileViewLogService;
             _filesStorage = filesStorage;
-
+            _caseDeletionService = caseDeletionService;
 
             _advancedSearchBehavior = new AdvancedSearchBehavior(caseFieldSettingService,
                 caseSearchService,
@@ -1638,7 +1640,7 @@ namespace DH.Helpdesk.Web.Controllers
             )
         {
             var basePath = _masterDataService.GetFilePath(customerId);
-            var caseGuid = _caseService.Delete(caseId, basePath, parentCaseId);  //TODO ÄNDRA DENNA DELETE
+            var caseGuid = _caseDeletionService.Delete(caseId, basePath, parentCaseId);  //TODO ÄNDRA DENNA DELETE
             _userTemporaryFilesStorage.ResetCacheForObject(caseGuid.ToString());
             if (parentCaseId.HasValue)
             {

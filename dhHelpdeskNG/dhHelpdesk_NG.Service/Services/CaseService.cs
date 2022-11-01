@@ -411,63 +411,6 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        public Guid Delete(int id, string basePath, int? parentCaseId)
-        {
-
-            Guid ret = Guid.Empty;
-
-            if (parentCaseId.HasValue)
-            {
-                using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
-                {
-                    var relationsRepo = uow.GetRepository<ParentChildRelation>();
-                    var relation = relationsRepo.GetAll().FirstOrDefault(it => it.DescendantId == id);
-                    if (relation == null || relation.AncestorId != parentCaseId.Value)
-                    {
-                        throw new ArgumentException(string.Format("bad parentCaseId \"{0}\" for case id \"{1}\"", parentCaseId.Value, id));
-                    }
-
-                    relationsRepo.Delete(relation);
-                    uow.Save();
-                    //@TODO: make a record in parent history
-                }
-            }
-
-            var c = _caseRepository.GetById(id);
-            var caseList = new List<Case>() { c };
-            var caseFiles = _caseFileRepository.GetCaseFilesByCaseList(caseList);
-            var logFiles = _logFileRepository.GetLogFilesByCaseList(caseList, true);
-
-
-            var caseConcreteRepository = new CaseConcreteRepository();
-            int[] caseId = { id };
-            
-            if(caseConcreteRepository.DeleteCases(caseId))
-            {                
-                DeleteFilesInFolders(caseList, caseFiles, logFiles, basePath);
-            }
-
-            ret = c.CaseGUID;
-
-            return ret;
-        }
-
-        public void DeleteCases(int[] ids, string basePath, int? parentCaseId)
-        {
-            var caseList = _caseRepository.GetCasesByCaseIds(ids);
-            var caseFiles = _caseFileRepository.GetCaseFilesByCaseList(caseList);
-            var logFiles = _logFileRepository.GetLogFilesByCaseList(caseList, true);
-
-            //TODO Validering parentchild relation och merged cases
-
-            var caseConcreteRepository = new CaseConcreteRepository();
-
-            if (caseConcreteRepository.DeleteCases(ids))
-            {
-                DeleteFilesInFolders(caseList, caseFiles, logFiles, basePath);
-            }
-        }
-        
         public void DeleteExCaseWhenCaseMove(int id)
         {
             DeleteExtendedCase(id);
@@ -2101,37 +2044,7 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
-        }
-
-        private void DeleteFilesInFolders(List<Case> cases, List<CaseFile> caseFiles, List<LogFile> logFiles, string basePath)
-        {
-            foreach (var c in cases)
-            {
-                var _caseFiles = caseFiles.Where(x => x.Case_Id == c.Id);
-
-                if (_caseFiles != null)
-                {
-                    foreach (var f in _caseFiles)
-                    {
-                        var intCaseNumber = decimal.ToInt32(c.CaseNumber);
-                        _filesStorage.DeleteFile(ModuleName.Cases, intCaseNumber, basePath, f.FileName);
-                        //_caseFileRepository.Delete(f);
-                    }
-                    //_caseFileRepository.Commit();
-                }
-
-                // delete log files
-                if (logFiles != null)
-                {
-                    foreach (var f in logFiles)
-                    {
-                        _filesStorage.DeleteFile(f.GetFolderPrefix(), f.Log_Id, basePath, f.FileName);
-                        //_logFileRepository.Delete(f);
-                    }
-                    //_logFileRepository.Commit();
-                }
-            }
-        }
+        }        
 
         #endregion
     }

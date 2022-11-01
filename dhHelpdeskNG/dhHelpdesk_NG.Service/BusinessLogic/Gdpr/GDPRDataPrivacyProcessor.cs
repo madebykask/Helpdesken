@@ -20,7 +20,9 @@ using DH.Helpdesk.Domain.Cases;
 using DH.Helpdesk.Domain.ExtendedCaseEntity;
 using DH.Helpdesk.Domain.GDPR;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
+using DH.Helpdesk.Services.Infrastructure;
 using DH.Helpdesk.Services.Services;
+
 using log4net;
 using File = DH.Helpdesk.BusinessData.Models.Orders.Order.OrderEditFields.File;
 using IUnitOfWork = DH.Helpdesk.Dal.NewInfrastructure.IUnitOfWork;
@@ -45,6 +47,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
         private readonly IDataPrivacyTaskProgress _taskProgress;
         private readonly ISettingsLogic _settingsLogic;
         private readonly IGDPRDataPrivacyCasesService _gDPRDataPrivacyCasesService;
+        private readonly ICaseDeletionService _caseDeletionService;
         const int sqlTimeout = 300; //seconds
         
         #region CaseFileEntity
@@ -98,7 +101,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             IDataPrivacyTaskProgress taskProgress,
             IUnitOfWorkFactory unitOfWorkFactory,
             ISettingsLogic settingsLogic,
-            IGDPRDataPrivacyCasesService gDPRDataPrivacyCasesService)
+            IGDPRDataPrivacyCasesService gDPRDataPrivacyCasesService,
+            ICaseDeletionService caseDeletionService)
         {
             _jsonSerializeService = jsonSerializeService;
             _taskProgress = taskProgress;
@@ -109,6 +113,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             _unitOfWorkFactory = unitOfWorkFactory;
             _settingsLogic = settingsLogic;
             _gDPRDataPrivacyCasesService = gDPRDataPrivacyCasesService;
+            _caseDeletionService = caseDeletionService;
         }
 
         #endregion
@@ -147,36 +152,51 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 
                         //fetch next cases
                         var cases = casesQueryable.Skip(processed).Take(take).ToList();
-
+                        
                         if (cases.Any())
                         {
                             _log.Debug($"{cases.Count} cases will be processed. TaskId: {p.TaskId}.");
 
                             var pos = 1;
                             //var count = cases.Count;
-                            p.ReplaceDataWith = p.ReplaceDataWith ?? string.Empty;
 
-                            foreach (var c in cases)
+                            if (p.GDPRType == 2) //Deletion
                             {
-                                ProcessReplaceCasesData(c, p, uow, filesToDelete);
-                                ProcessReplaceCasesHistoryData(c, p);
-                                ProcessExtededCaseData(c, p, uow);
-
-                                UpdateProgress(p.TaskId, processed + pos, totalCount);
-                                pos++;
+                                foreach (var c in cases)
+                                {
+                                    int[] caseId = { c.Id };
+                                    
+                                    _caseDeletionService.DeleteCases(caseId, customerId, null);
+                                    pos++;
+                                }
+                                _log.Debug($"{cases.Count} cases has been deleted. TaskId: {p.TaskId}.");
                             }
+                            else //Anonymization
+                            {
+                                p.ReplaceDataWith = p.ReplaceDataWith ?? string.Empty;
 
-                            _log.Debug($"{cases.Count} cases has been processed. TaskId: {p.TaskId}.");
-                            ProccessFormPlusCaseData(cases.Select(c => c.Id).ToList(), uow);
+                                foreach (var c in cases)
+                                {
+                                    ProcessReplaceCasesData(c, p, uow, filesToDelete);
+                                    ProcessReplaceCasesHistoryData(c, p);
+                                    ProcessExtededCaseData(c, p, uow);
 
-                            _log.Debug($"Saving cases changes. TaskId: {p.TaskId}.");
-                            uow.DetectChanges();
-                            uow.Save();
+                                    UpdateProgress(p.TaskId, processed + pos, totalCount);
+                                    pos++;
+                                }
 
-                            _log.Debug($"Cases changes have been saved sucessfully. TaskId: {p.TaskId}.");
+                                _log.Debug($"{cases.Count} cases has been processed. TaskId: {p.TaskId}.");
+                                ProccessFormPlusCaseData(cases.Select(c => c.Id).ToList(), uow);
 
-                            _log.Debug($"Deleting cases files.");
-                            DeleteCaseFiles(customerId, filesToDelete);
+                                _log.Debug($"Saving cases changes. TaskId: {p.TaskId}.");
+                                uow.DetectChanges();
+                                uow.Save();
+
+                                _log.Debug($"Cases changes have been saved sucessfully. TaskId: {p.TaskId}.");
+
+                                _log.Debug($"Deleting cases files.");
+                                DeleteCaseFiles(customerId, filesToDelete);
+                            }
                         }
 
                         casesIds = cases.Select(c => c.Id).ToList();
