@@ -337,11 +337,21 @@ Public Class CaseData
         Try
             sSQL = "UPDATE tblCase SET FinishingDate=getutcdate() WHERE Id=" & objCase.Id
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
+
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Sub
+
+    Public Sub updateCaseDescription(ByVal objBody As String, ByVal id As Integer)
+        Dim sSQL As String
+
+        Try
+            sSQL = "UPDATE tblCase SET Description='" & objBody & "' where Id=" & id
+
+            executeSQL(gsConnectionString, sSQL)
+
         Catch ex As Exception
             Throw ex
         End Try

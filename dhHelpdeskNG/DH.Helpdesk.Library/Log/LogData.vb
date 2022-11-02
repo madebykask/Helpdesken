@@ -149,7 +149,7 @@ Public Class LogData
             Dim iLogType = If(bIsInternal, 1, 0)
 
             ' Skapa nytt arende
-            sSQL = "INSERT INTO tblLogFile(Log_Id, FileName, LogType) " & _
+            sSQL = "INSERT INTO tblLogFile(Log_Id, FileName, LogType) " &
                    "VALUES (@logId, @fileName, @logType)"
 
             'If giDBType = 0 Then
@@ -162,6 +162,30 @@ Public Class LogData
             'Else
             '    executeSQLOracle(gsConnectionString, sSQL)
             'End If
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Sub
+    Public Sub updateInternalLogNote(ByVal iLog_Id As Integer, ByVal objBody As String)
+        Dim sSQL As String
+
+        Try
+            sSQL = "UPDATE tblLog SET Text_Internal='" & objBody & "' where Id=" & iLog_Id
+
+            executeSQL(gsConnectionString, sSQL)
+
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Sub
+    Public Sub updateExternalLogNote(ByVal iLog_Id As Integer, ByVal objBody As String)
+        Dim sSQL As String
+
+        Try
+            sSQL = "UPDATE tblLog SET Text_External='" & objBody & "' where Id=" & iLog_Id
+
+            executeSQL(gsConnectionString, sSQL)
+
         Catch ex As Exception
             Throw ex
         End Try
