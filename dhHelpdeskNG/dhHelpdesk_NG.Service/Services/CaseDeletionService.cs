@@ -63,22 +63,22 @@ namespace DH.Helpdesk.Services.Services
     {
         public bool DeletionCompleted { get; set; }
         public IList<decimal> CaseNumbersToExclude { get; set; }
-        public IList<int> ProcessedCaseIds { get;  set; }
+        public IList<int> ProcessedCaseIds { get; set; }
     }
-    
+
     public class CaseDeletionService : ICaseDeletionService
     {
         private readonly ICaseRepository _caseRepository;
         private readonly ICaseFileRepository _caseFileRepository;
-       
+
         private readonly ILogRepository _logRepository;
         private readonly ILogFileRepository _logFileRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IFilesStorage _filesStorage;
         private readonly IMasterDataService _masterDataService;
-       
 
-#pragma warning disable 0618       
+
+#pragma warning disable 0618
 
         public CaseDeletionService(
             ICaseRepository caseRepository,
@@ -97,27 +97,31 @@ namespace DH.Helpdesk.Services.Services
             _filesStorage = filesStorage;
             _masterDataService = masterDataService;
         }
-        
+
         public DeletionStatus DeleteCases(List<int> ids, int customerId, int? parentCaseId)
         {
             var deletionCompleted = false;
             var caseList = _caseRepository.GetCasesByCaseIds(ids.ToArray<int>());
             List<decimal> caseNumbersToExclude = new List<decimal>();
             var caseFiles = _caseFileRepository.GetCaseFilesByCaseList(caseList);
-            var logFiles = _logFileRepository.GetLogFilesByCaseList(caseList, true);           
+            var logFiles = _logFileRepository.GetLogFilesByCaseList(caseList, true);
 
             var basePath = _masterDataService.GetFilePath(customerId);
             var caseConcreteRepository = new CaseConcreteRepository();
             var idsToExclude = ValidateParentChildDeletion(ids);
-            
+
             if (idsToExclude != null)
             {
-                caseList = caseList.Where(x => !idsToExclude.Contains(x.Id)).ToList();
-                caseList.Where(x => !idsToExclude.Contains(x.Id)).ForEach(c => caseNumbersToExclude.Add(c.CaseNumber));
-                ids = ids.Where(x=> !idsToExclude.Contains(x)).ToList();
+                if (idsToExclude.Count() > 0)
+                {
+                    caseList.Where(x => idsToExclude.Contains(x.Id)).ForEach(c => caseNumbersToExclude.Add(c.CaseNumber));
+                    caseList = caseList.Where(x => !idsToExclude.Contains(x.Id)).ToList();                    
+                    ids = ids.Where(x => !idsToExclude.Contains(x)).ToList();
+                }
             }
+            
             if (caseConcreteRepository.DeleteCases(ids))
-            {                
+            {
                 _filesStorage.DeleteFilesInFolders(caseList, caseFiles, logFiles, basePath);
             }
 
