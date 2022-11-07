@@ -1322,7 +1322,8 @@ Module DH_Helpdesk_Mail
         Dim task As Task(Of AuthenticationResult) = app.AcquireTokenForClient(ewsScopes).ExecuteAsync()
         Dim result As AuthenticationResult = Await task
 
-        Dim service As ExchangeService = New ExchangeService()
+        'Dim service As ExchangeService = New ExchangeService()
+        Dim service As ExchangeService = getExchangeService()
         ' TODO: Port? Maybe not
         service.Url = New Uri(server)
         service.Credentials = New OAuthCredentials(result.AccessToken)
@@ -1353,6 +1354,16 @@ Module DH_Helpdesk_Mail
     End Function
 
 
+
+    Private Function getCorrectTimeZone() As TimeZoneInfo
+        Return TimeZoneInfo.CreateCustomTimeZone("Time zone to workaround a bug", TimeZoneInfo.Local.BaseUtcOffset, "Time zone to workaround a bug", "Time zone to workaround a bug")
+    End Function
+
+    Private Function getExchangeService() As ExchangeService
+        Dim service = New ExchangeService(ExchangeVersion.Exchange2010_SP2, getCorrectTimeZone())
+        Return service
+    End Function
+
     Private Async Function ReadEwsFolderAsync(objCustomer As Customer, server As String, port As Integer, userName As String, emailFolder As String, emailArchiveFolder As String,
                                               applicationId As String, clientSecret As String, tenantId As String, temppath As String) As Task(Of List(Of MailMessage))
         'emailFolder = "Inkorg/M2T_test"
@@ -1363,7 +1374,9 @@ Module DH_Helpdesk_Mail
         Dim task As Task(Of AuthenticationResult) = app.AcquireTokenForClient(ewsScopes).ExecuteAsync()
         Dim result As AuthenticationResult = Await task
 
-        Dim service As ExchangeService = New ExchangeService()
+
+        'Dim service As ExchangeService = New ExchangeService()
+        Dim service As ExchangeService = getExchangeService()
         ' TODO: Port? Maybe not
         service.Url = New Uri(server)
         service.Credentials = New OAuthCredentials(result.AccessToken)
