@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     {
         private readonly string _connectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
         
-        public bool DeleteCases(int[] caseIds)
+        public bool DeleteCases(List<int> caseIds)
         {
             bool ret = false;
 
