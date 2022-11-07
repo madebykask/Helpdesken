@@ -2111,7 +2111,7 @@ Module DH_Helpdesk_Mail
                     'objHeaderFile.Close()
 
                 End If
-                End If
+            End If
 
         Catch ex As Exception
             LogError("Error createHtmlFileFromMail MediaType: " & sMediaType & ", " & ex.Message.ToString, objCustomer)
