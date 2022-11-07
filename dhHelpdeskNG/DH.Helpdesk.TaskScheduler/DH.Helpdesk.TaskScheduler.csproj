@@ -129,6 +129,10 @@
     <Compile Include="Enums\FieldLenght.cs" />
     <Compile Include="Helpers\PropertyHelper.cs" />
     <Compile Include="Infrastructure\Configuration\ApplicationSettingsProvider.cs" />
+    <Compile Include="Infrastructure\Context\UserContext.cs" />
+    <Compile Include="Infrastructure\Context\WorkContext.cs" />
+    <Compile Include="Infrastructure\Translate\Translation.cs" />
+    <Compile Include="Infrastructure\Translate\Translator.cs" />
     <Compile Include="Jobs\DailReport\DailyReportJobInitializer.cs" />
     <Compile Include="Jobs\Gdpr\GdprDataPrivacyJob.cs" />
     <Compile Include="Jobs\Gdpr\GdprJobInitializer.cs" />

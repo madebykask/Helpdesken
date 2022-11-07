@@ -1,7 +1,11 @@
 ﻿using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Dal.Infrastructure.Extensions;
+using DH.Helpdesk.Domain;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 
 namespace DH.Helpdesk.Dal.Infrastructure.Concrete
 {
@@ -129,6 +133,36 @@ namespace DH.Helpdesk.Dal.Infrastructure.Concrete
                     if (!Directory.Exists(targetDirPath))
                         Directory.CreateDirectory(targetDirPath);
                     File.Move(file, destFile);
+                }
+            }
+        }
+
+        public void DeleteFilesInFolders(List<Case> cases, List<CaseFile> caseFiles, List<LogFile> logFiles, string basePath)
+        {
+            foreach (var c in cases)
+            {
+                var _caseFiles = caseFiles.Where(x => x.Case_Id == c.Id);
+
+                if (_caseFiles != null)
+                {
+                    foreach (var f in _caseFiles)
+                    {
+                        var intCaseNumber = decimal.ToInt32(c.CaseNumber);
+                        this.DeleteFile(ModuleName.Cases, intCaseNumber, basePath, f.FileName);
+                        //_caseFileRepository.Delete(f);
+                    }
+                    //_caseFileRepository.Commit();
+                }
+
+                // delete log files
+                if (logFiles != null)
+                {
+                    foreach (var f in logFiles)
+                    {
+                        this.DeleteFile(f.GetFolderPrefix(), f.Log_Id, basePath, f.FileName);
+                        //_logFileRepository.Delete(f);
+                    }
+                    //_logFileRepository.Commit();
                 }
             }
         }

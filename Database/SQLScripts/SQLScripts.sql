@@ -620,6 +620,15 @@ IF COL_LENGTH('dbo.tblGDPRDataPrivacyAccess','DeletionPermission') IS NULL
 
 Go
 
+RAISERROR ('Add Column ErrorResult to tblGDPROperationsAudit', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPROperationsAudit','ErrorResult') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblGDPROperationsAudit
+		ADD ErrorResult NVARCHAR(MAX) NULL
+	End
+
+Go
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.57'
 GO

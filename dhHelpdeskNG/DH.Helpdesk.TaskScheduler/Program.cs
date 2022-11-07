@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using DH.Helpdesk.TaskScheduler.DI;
@@ -15,6 +16,7 @@ namespace DH.Helpdesk.TaskScheduler
         /// </summary>
         static void Main()
         {
+            //Debugger.Launch();
             var modules = new List<NinjectModule>
             {
                 new InfrastructureModule(),

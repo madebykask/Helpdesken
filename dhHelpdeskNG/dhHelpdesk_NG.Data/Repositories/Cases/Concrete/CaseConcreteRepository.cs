@@ -25,10 +25,12 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
             DataTable casesTable = new DataTable();
             casesTable.Columns.Add(new DataColumn("Id", typeof(int)));
-            
+
             // populate DataTable from your List here
             foreach (var id in caseIds)
+            {
                 casesTable.Rows.Add(id);
+            }
 
             using (var connection = new SqlConnection(_connectionString))
             {

@@ -314,6 +314,7 @@ namespace DH.Helpdesk.SelfService
 			kernel.Bind<IMasterDataService>().To<MasterDataService>();            
             kernel.Bind<ISettingService>().To<SettingService>();
             kernel.Bind<ICaseService>().To<CaseService>();
+            kernel.Bind<ICaseDeletionService>().To<CaseDeletionService>();
             kernel.Bind<ILogService>().To<LogService>();
             kernel.Bind<ICustomerService>().To<CustomerService>();            
             kernel.Bind<ICaseFieldSettingService>().To<CaseFieldSettingService>();            

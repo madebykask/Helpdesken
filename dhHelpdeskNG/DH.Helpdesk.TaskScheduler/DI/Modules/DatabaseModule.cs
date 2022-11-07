@@ -1,5 +1,6 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Case.Input;
 using DH.Helpdesk.BusinessData.Models.Customer;
+using DH.Helpdesk.BusinessData.Models.Gdpr;
 using DH.Helpdesk.Dal.DbQueryExecutor;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Notifiers;
@@ -7,6 +8,7 @@ using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Notifiers.Concrete;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.Mappers.Cases.BusinessModelToEntity;
 using DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel;
+using DH.Helpdesk.Dal.Mappers.Gdpr.EntityToBusinessModel;
 using DH.Helpdesk.Dal.NewInfrastructure;
 using DH.Helpdesk.Dal.NewInfrastructure.Concrete;
 using DH.Helpdesk.Dal.Repositories;
@@ -16,6 +18,7 @@ using DH.Helpdesk.Dal.Repositories.Notifiers;
 using DH.Helpdesk.Dal.Repositories.Notifiers.Concrete;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.Computers;
+using DH.Helpdesk.Domain.GDPR;
 using DH.Helpdesk.Services.BusinessLogic.Gdpr;
 using Ninject.Modules;
 using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
@@ -66,6 +69,10 @@ namespace DH.Helpdesk.TaskScheduler.DI.Modules
         {
             Bind<IEntityToBusinessModelMapper<Setting, CustomerSettings>>()
                 .To<CustomerSettingsToBusinessModelMapper>()
+                .InSingletonScope();
+
+            Bind<IEntityToBusinessModelMapper<GDPRDataPrivacyFavorite, GdprFavoriteModel>>()
+                .To<GdprFavoriteEntityToModelMapper>()
                 .InSingletonScope();
 
             Bind<IBusinessModelToEntityMapper<CaseNotifier, ComputerUser>>()
