@@ -1158,7 +1158,22 @@ namespace DH.Helpdesk.Web.Controllers
                 foreach (var col in gridSettings.columnDefs)
                 {
                     var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);
-                    jsRow.Add(col.name, searchCol != null ? outputFormatter.FormatField(searchCol) : string.Empty);
+                    if (searchCol != null)
+                    {
+                        if (searchCol.Key == "Description")
+                        {
+                            jsRow.Add(col.name, outputFormatter.StripHTML(searchCol.StringValue));
+                        }
+                        else
+                        {
+                            jsRow.Add(col.name, outputFormatter.FormatField(searchCol));
+                        }
+                    }
+                    else
+                    {
+                        jsRow.Add(col.name, string.Empty);
+                    }
+
                 }
 
                 data.Add(jsRow);

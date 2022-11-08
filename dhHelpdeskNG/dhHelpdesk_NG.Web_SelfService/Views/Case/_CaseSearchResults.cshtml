@@ -110,7 +110,7 @@
                                             {
                                                 if (c.Key == "Description")
                                                 {
-                                                    <a href="@Url.Action("Index", "case", new { id = caseInfo.Id, area ="" })">@Html.Raw(c.StringValue.HTMLToTableCell())</a>
+                                                    <a href="@Url.Action("Index", "case", new { id = caseInfo.Id, area ="" })">@Html.Raw(c.StringValue.StripHTML())</a>
                                                 }
                                                 else
                                                 {
@@ -124,7 +124,7 @@
 
                                                 if (c.Key == "Description")
                                                 {
-                                                    <a href="@Url.Action("Index", "case", new { id = caseInfo.Id, area ="" })">@Html.Raw(c.StringValue.HTMLToTableCell())</a>
+                                                    <a href="@Url.Action("Index", "case", new { id = caseInfo.Id, area ="" })">@Html.Raw(c.StringValue.StripHTML())</a>
                                                 }
                                                 else
                                                 {

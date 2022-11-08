@@ -54,13 +54,12 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
 
     summerNoteConfig = {
       height: '200px',
-      toolbar: [
-          ['misc', ['undo', 'redo']],
-          ['style', ['bold', 'italic', 'underline', 'clear']],
-          ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
-          ['fontsize', ['fontname', 'fontsize', 'color']],
-          ['para', ['style', 'ul', 'ol', 'paragraph', 'height']]
-      ],
+      toolbar:[['style', ['bold', 'italic', 'underline', 'clear']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
+      popover: {
+        image: [ 
+            ['remove', ['removeMedia']],
+        ],
+    },
       fontNames: ['Helvetica', 'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Roboto', 'Times'],
       airMode: false,
     }

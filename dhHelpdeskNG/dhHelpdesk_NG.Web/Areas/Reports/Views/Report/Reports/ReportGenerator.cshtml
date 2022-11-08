@@ -40,7 +40,7 @@
 
                     if (value.FieldName == "Description" || value.FieldName == "tblLog.Text_Internal" || value.FieldName == "tblLog.Text_External")
                     {
-                        <td class="tdpointer">@Html.Raw(value.Value.GetDisplayValue().HTMLToTableCell())</td>
+                        <td class="tdpointer">@Html.Raw(value.Value.GetDisplayValue().StripHTML())</td>
                     }
                     else
                     {
