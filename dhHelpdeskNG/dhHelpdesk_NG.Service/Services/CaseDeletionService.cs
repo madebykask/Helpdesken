@@ -57,20 +57,28 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Dal.Infrastructure.Concrete;
     using DH.Helpdesk.Dal.NewInfrastructure.Concrete;
     using LinqLib.Operators;
+    using System.Text;
+
+    public class DeletionStatus
+    {
+        public bool DeletionCompleted { get; set; }
+        public IList<decimal> CaseNumbersToExclude { get; set; }
+        public IList<int> ProcessedCaseIds { get; set; }
+    }
 
     public class CaseDeletionService : ICaseDeletionService
     {
         private readonly ICaseRepository _caseRepository;
         private readonly ICaseFileRepository _caseFileRepository;
-       
+
         private readonly ILogRepository _logRepository;
         private readonly ILogFileRepository _logFileRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IFilesStorage _filesStorage;
         private readonly IMasterDataService _masterDataService;
-       
 
-#pragma warning disable 0618       
+
+#pragma warning disable 0618
 
         public CaseDeletionService(
             ICaseRepository caseRepository,
@@ -89,34 +97,49 @@ namespace DH.Helpdesk.Services.Services
             _filesStorage = filesStorage;
             _masterDataService = masterDataService;
         }
-        
-        public void DeleteCases(int[] ids, int customerId, int? parentCaseId)
+
+        public DeletionStatus DeleteCases(List<int> ids, int customerId, int? parentCaseId)
         {
-            var caseList = _caseRepository.GetCasesByCaseIds(ids);
+            var deletionCompleted = false;
+            var caseList = _caseRepository.GetCasesByCaseIds(ids.ToArray<int>());
+            List<decimal> caseNumbersToExclude = new List<decimal>();
             var caseFiles = _caseFileRepository.GetCaseFilesByCaseList(caseList);
-            var logFiles = _logFileRepository.GetLogFilesByCaseList(caseList, true);           
+            var logFiles = _logFileRepository.GetLogFilesByCaseList(caseList, true);
 
             var basePath = _masterDataService.GetFilePath(customerId);
             var caseConcreteRepository = new CaseConcreteRepository();
             var idsToExclude = ValidateParentChildDeletion(ids);
-            
+
             if (idsToExclude != null)
             {
-                caseList = caseList.Where(x => !idsToExclude.Contains(x.Id)).ToList();
-                ids = ids.Where(x=> !idsToExclude.Contains(x)).ToArray();
+                if (idsToExclude.Count() > 0)
+                {
+                    caseList.Where(x => idsToExclude.Contains(x.Id)).ForEach(c => caseNumbersToExclude.Add(c.CaseNumber));
+                    caseList = caseList.Where(x => !idsToExclude.Contains(x.Id)).ToList();                    
+                    ids = ids.Where(x => !idsToExclude.Contains(x)).ToList();
+                }
             }
+            
             if (caseConcreteRepository.DeleteCases(ids))
             {
                 _filesStorage.DeleteFilesInFolders(caseList, caseFiles, logFiles, basePath);
             }
+
+            deletionCompleted = true;
+
+            return new DeletionStatus
+            {
+                DeletionCompleted = deletionCompleted,
+                ProcessedCaseIds = ids.ToList(),
+                CaseNumbersToExclude = caseNumbersToExclude
+            };
         }
 
-        private int[] ValidateParentChildDeletion(int[] ids)
+        private List<int> ValidateParentChildDeletion(List<int> ids)
         {
-            int[] idsToExclude = null;
+            List<int> idsToExclude = new List<int>();
             foreach (var id in ids)
             {
-                int index = 0;
                 var childrenCases = _caseRepository.GetChildCasesFor(id);
 
                 if (childrenCases != null)
@@ -124,8 +147,7 @@ namespace DH.Helpdesk.Services.Services
                     var childrenNotIncludedForDeletion = childrenCases.Where(x => !ids.Contains(x.Id));
                     if (childrenNotIncludedForDeletion.Any())
                     {
-                        idsToExclude[index] = id;
-                        index++;
+                        idsToExclude.Add(id);
                         //string errorMsg = Translation.Get("Ärendet har underärende som ej är avslutade");
                         //throw new Exception(errorMsg);
                     }
@@ -164,7 +186,7 @@ namespace DH.Helpdesk.Services.Services
 
 
             var caseConcreteRepository = new CaseConcreteRepository();
-            int[] caseId = { id };
+            List<int> caseId = new List<int>() { id };
 
             if (caseConcreteRepository.DeleteCases(caseId))
             {

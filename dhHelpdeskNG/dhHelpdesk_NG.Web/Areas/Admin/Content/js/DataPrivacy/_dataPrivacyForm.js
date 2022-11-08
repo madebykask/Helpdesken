@@ -659,7 +659,7 @@ window.dataPrivacyForm =
                     data: $.param(inputData),
                     dataType: "json"
                 }).done(function (result) {
-                    console.log(inputData)
+                    //console.log(inputData)
                     if (result.count !== null) {
                         if (result.count > 0) {
                             self.confirmationDialog.showConfirmation(
