@@ -297,7 +297,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
                     var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);
                     if (searchCol != null)
                     {
-                        jsRow.Add(col.name, outputFormatter.FormatField(searchCol));
+                        if (searchCol.Key == "Description")
+                        {
+                            jsRow.Add(col.name, outputFormatter.StripHTML(searchCol.StringValue));
+                        }
+                        else
+                        {
+                            jsRow.Add(col.name, outputFormatter.FormatField(searchCol));
+                        }
                     }
                     else
                     {

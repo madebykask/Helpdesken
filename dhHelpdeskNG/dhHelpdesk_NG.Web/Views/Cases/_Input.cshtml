@@ -2505,6 +2505,11 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
         tabsize: 1,
         fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82'],
         toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
+        popover: {
+            image: [
+                ['remove', ['removeMedia']],
+            ],
+        },
         disableResizeImage: true,
         disableResizeEditor: true,
         callbacks: {
@@ -2536,6 +2541,11 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
         tabsize: 1,
         fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82'],
         toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
+        popover: {
+            image: [
+                ['remove', ['removeMedia']],
+            ],
+        },
         disableResizeImage: true,
         disableResizeEditor: true,
         callbacks: {
@@ -2581,6 +2591,11 @@ var descriptionSize = Model.caseFieldSettings.getFieldSize(GlobalEnums.Translati
         disableResizeImage: true,
         disableResizeEditor: false,
         height: @descriptionSize * 25,
+        popover: {
+            image: [ 
+                ['remove', ['removeMedia']],
+            ],
+        },
         callbacks: {
             onChange: function (contents, $editable) {
 

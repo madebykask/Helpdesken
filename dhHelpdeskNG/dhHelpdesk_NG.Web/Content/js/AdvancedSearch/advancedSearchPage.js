@@ -606,18 +606,18 @@ window.advancedSearchPage =
             cellValue = isNullOrUndefined(cellValue) ? '&nbsp;' : cellValue.toString(); 
 
 
-            if (colSetting.field == "Description") {
-                cellValue = $("<p/>").html(cellValue).text();
+            //if (colSetting.field == "Description") {
+            //    cellValue = $("<p/>").html(cellValue).text();
 
-                //Remove the width elements
-                $(cellValue).find('*').each(function () {
+            //    //Remove the width elements
+            //    $(cellValue).find('*').each(function () {
 
-                    console.log($(this).css('width'))
+            //        console.log($(this).css('width'))
 
-                    $(this).css('width', '');
-                });
+            //        $(this).css('width', '');
+            //    });
 
-            }
+            //}
             
             
             if (colSetting.isExpandable) {
