@@ -68,6 +68,24 @@
             else
                 return "|||||||||||";
         }
+        public static string StripHTML(this string input)
+        {
+            if (input == null)
+            {
+                return string.Empty;
+            }
+            input.Replace("<br>", " ");
+            input.Replace("<br />", " ");
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(input);
+            var output = "";
+            foreach (HtmlNode node in doc.DocumentNode.ChildNodes)
+            {
+                output += node.InnerText;
+            }
+            output = output.Replace("<", "").Replace(">", "").Replace("/", "").Replace("\\", "");
+            return output;
+        }
 
         public static string HTMLToTableCell(this string input)
         {
