@@ -35,6 +35,7 @@ import { TabNames } from '../../constants/tab-names';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { isNumeric } from 'rxjs/internal/util/isNumeric';
 import { PerfomersService } from 'src/app/services/case-organization/perfomers-service';
+import { ExtendedCaseValidateFormData } from 'src/app/models/extendedCase/extendedCaseValidateForm.model';
 
 
 @Component({
@@ -264,6 +265,14 @@ export class CaseEditComponent {
 
   saveCase(reload: boolean = false) {
 
+    let finishingType = 0;    
+
+    if (!isNaN(this.form.getValue(CaseFieldsNames.ClosingReason))
+        && this.form.getValue(CaseFieldsNames.ClosingReason) !== null
+        && this.form.getValue(CaseFieldsNames.ClosingReason) !== undefined) {
+      finishingType = this.form.getValue(CaseFieldsNames.ClosingReason);
+    }
+
     if (!this.canSave) { return; }
     if (this.caseData.extendedCaseData != null && !this.isEcLoaded) {
       return;
@@ -274,8 +283,9 @@ export class CaseEditComponent {
 
         this.isExtendedCaseInvalid = !isEcValid;
         this.form.submit();
+        
         if (this.form.valid && isEcValid) {
-          return this.saveExtendedCase(false).pipe(
+          return this.saveExtendedCase(false, finishingType).pipe(
             take(1),
             switchMap((isEcSaved: boolean) => {
               if (isEcSaved) {
@@ -321,7 +331,7 @@ export class CaseEditComponent {
       }
     });
     this.syncExtendedCaseValues();
-    this.validateExtendedCase(false);
+    this.validateExtendedCase(false, finishingType);
   }
 
   cleanTempFiles(caseId: number) {
@@ -442,12 +452,12 @@ export class CaseEditComponent {
     }
   }
 
-  private saveExtendedCase(isOnNext: boolean) {
+  private saveExtendedCase(isOnNext: boolean, finishingType = 0) {
     if (this.caseData.extendedCaseData == null) {
       return EMPTY.pipe(defaultIfEmpty(true));
     }
-
-    this.extendedCase.nativeElement.saveForm = isOnNext;
+    let validateFormdata: ExtendedCaseValidateFormData = {state: isOnNext, finishingType: finishingType};
+    this.extendedCase.nativeElement.saveForm = validateFormdata;
     return this.extendedCaseSaveObserver;
   }
 
@@ -545,13 +555,18 @@ export class CaseEditComponent {
       }
     }
   }
+  // var finishingType = parseInt(document.getElementById("CaseLog_FinishingType").value);
 
+  // if (isNaN(finishingType)) {
+  //     finishingType = 0;
+  // }
 
-  private validateExtendedCase(isOnNext: boolean) {
+  private validateExtendedCase(isOnNext: boolean, finishingType = 0) {
     if (this.caseData.extendedCaseData == null) {
       this.extendedCaseValidation$.next(true);
     } else {
-      this.extendedCase.nativeElement.validateForm = isOnNext;
+      let validateFormdata: ExtendedCaseValidateFormData = {state: isOnNext, finishingType: finishingType};
+      this.extendedCase.nativeElement.validateForm = validateFormdata;
     }
   }
 
