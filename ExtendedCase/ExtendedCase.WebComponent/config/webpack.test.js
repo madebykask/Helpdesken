@@ -12,7 +12,7 @@ let CONSTANTS = {
   VERSION: JSON.stringify(packageJSON.version),
   MODE: 'prod',
   BASEURL: 'ExtendedCase',
-  BASEAPIURL: 'extendedcase-api'
+  BASEAPIURL: 'ExtendedCaseApi'
 }
 
 const outputDir = Helpers.root('dist');
