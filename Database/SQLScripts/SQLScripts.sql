@@ -271,12 +271,16 @@ BEGIN
 			INNER JOIN tblInvoiceRow AS ir 
 				ON cir.InvoiceRow_Id = ir.Id
 			INNER JOIN @Cases AS c
-				ON ir.Case_Id = c.Id;	
+				ON ir.Case_Id = c.Id;
+			
+			DELETE cir
+			FROM tblCaseInvoiceRow AS cir
+			INNER JOIN @Cases AS c
+				ON cir.Case_Id = c.Id;			
 
-			DELETE ih
-			FROM tblInvoiceHeader AS ih
-			INNER JOIN tblInvoiceRow AS ir
-				ON ir.InvoiceHeader_Id = ih.Id
+			SELECT ir.Id, ir.Case_Id, ir.InvoiceHeader_Id
+			INTO #tmpInvoiceRow
+			FROM tblInvoiceRow AS ir
 			INNER JOIN @Cases AS c
 				ON ir.Case_Id = c.Id;
 
@@ -284,7 +288,16 @@ BEGIN
 			FROM tblInvoiceRow AS ir
 			INNER JOIN @Cases AS c
 				ON ir.Case_Id = c.Id;
-	
+
+			DELETE ih
+			FROM tblInvoiceHeader AS ih
+			INNER JOIN #tmpInvoiceRow AS ir
+				ON ir.InvoiceHeader_Id = ih.Id
+			INNER JOIN @Cases AS c
+				ON ir.Case_Id = c.Id;
+			
+			DROP TABLE #tmpInvoiceRow;
+
 			DELETE cc
 			FROM tblChangeCouncil AS cc
 			INNER JOIN tblChange AS ch
