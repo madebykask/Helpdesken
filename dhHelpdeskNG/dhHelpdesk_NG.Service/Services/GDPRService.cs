@@ -225,6 +225,21 @@ namespace DH.Helpdesk.Services.Services
                 .IncludePath(c => c.CaseSectionExtendedCaseDatas.Select(esc => esc.ExtendedCaseData.ExtendedCaseValues))
                 .Where(x => x.Customer_Id == customerId);
 
+            if (p.CaseTypes != null)
+            {
+                if (p.CaseTypes.Any())
+                {
+                    casesQueryable = casesQueryable.Where(c => p.CaseTypes.Contains(c.CaseType_Id.ToString()));
+                }
+            }
+            if (p.ProductAreas != null)
+            {
+                if (p.ProductAreas.Any())
+                {
+                    casesQueryable = casesQueryable.Where(c => p.ProductAreas.Contains(c.ProductArea_Id.ToString()));
+                }
+            }
+
             if (p.RemoveCaseAttachments)
             {
                 casesQueryable = casesQueryable.IncludePath(x => x.CaseFiles);
@@ -269,6 +284,19 @@ namespace DH.Helpdesk.Services.Services
                 //fix date
                 p.RegisterDateTo = p.RegisterDateTo.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
                 casesQueryable = casesQueryable.Where(x => x.RegTime <= p.RegisterDateTo.Value);
+            }
+
+            if (p.FinishedDateFrom.HasValue)
+            {
+                p.FinishedDateFrom = p.FinishedDateFrom.Value.Date;
+                casesQueryable = casesQueryable.Where(x => x.FinishingDate >= p.FinishedDateFrom.Value);
+            }
+
+            if (p.FinishedDateTo.HasValue)
+            {
+                //fix date
+                p.FinishedDateTo = p.FinishedDateTo.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+                casesQueryable = casesQueryable.Where(x => x.FinishingDate <= p.FinishedDateTo.Value);
             }
 
             casesQueryable = casesQueryable.OrderBy(x => x.Id);
