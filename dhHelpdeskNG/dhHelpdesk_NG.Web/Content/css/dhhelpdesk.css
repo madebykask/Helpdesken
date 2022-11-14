@@ -4,11 +4,11 @@ body {
     background: #f2f7fe;
     min-width: 1350px !important;
 }
-
 a, a:hover, a:focus {
     color: #333333;
     text-decoration: none;
 }
+
 /** recover bootstrap styles for links inside toastmessage dialgue */
 .toast-container a,
 .alert a {
@@ -46,6 +46,10 @@ a, a:hover, a:focus {
 
 .textred {
     color: red !important;
+}
+.textblue {
+    color: #0088cc;
+    text-decoration: none;
 }
 
     .textred td a {

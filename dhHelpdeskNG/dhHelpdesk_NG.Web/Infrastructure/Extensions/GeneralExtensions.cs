@@ -129,12 +129,22 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             {
                 foreach (HtmlNode singlea in a)
                 {
-                    
-
                     string style = singlea.Attributes["style"].Value;
                     string newStyle = CleanWidth(style);
                     singlea.Attributes["style"].Value = newStyle;
-                    
+                                       
+                }
+            }
+
+            HtmlNodeCollection a2 = doc.DocumentNode.SelectNodes("//a");
+            if (a2 != null)
+            {
+                foreach (HtmlNode singlea in a2)
+                {
+                    if (singlea.Attributes["href"].Value != null)
+                    {
+                        singlea.Attributes.Add("class", "textblue");
+                    }
                 }
             }
 
