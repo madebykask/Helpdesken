@@ -574,8 +574,15 @@ window.dataPrivacyForm =
             this.caseTypes$.empty();
             $.each(items,
                 function (idx, obj) {
-                    self.caseTypes$.append(
-                        '<option value="' + obj.Value + '">' + obj.Text + '</option>');
+                    if (obj.Disabled) {
+                        self.caseTypes$.append(
+                            '<option value="' + obj.Value + '" class="DisabledChosen">' + obj.Text + '</option>');
+                    }
+                    else {
+                        self.caseTypes$.append(
+                            '<option value="' + obj.Value + '">' + obj.Text + '</option>');
+                    }
+                    
                 });
             self.caseTypes$.trigger("chosen:updated");
         }
@@ -618,8 +625,14 @@ window.dataPrivacyForm =
             this.productAreas$.empty();
             $.each(items,
                 function (idx, obj) {
-                    self.productAreas$.append(
-                        '<option value="' + obj.Value + '">' + obj.Text + '</option>');
+                    if (obj.Disabled) {
+                        self.productAreas$.append(
+                            '<option value="' + obj.Value + '" class="DisabledChosen">' + obj.Text + '</option>');
+                    }
+                    else {
+                        self.productAreas$.append(
+                            '<option value="' + obj.Value + '">' + obj.Text + '</option>');
+                    }
                 });
             self.productAreas$.trigger("chosen:updated");
         }

@@ -1598,7 +1598,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     caseTypesInRow.Select(f => new SelectListItem
                     {
                         Value = f.Id.ToString(),
-                        Text = f.Name
+                        Text = f.Name,
+                        Disabled = f.IsActive != 1
                     })
                     .OrderBy(f => f.Text)
                     .ToList();
@@ -1621,7 +1622,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     productAreasInRow.Select(f => new SelectListItem
                     {
                         Value = f.Id.ToString(),
-                        Text = f.Name
+                        Text = f.Name,
+                        Disabled = f.IsActive != 1
                     })
                     .OrderBy(f => f.Text)
                     .ToList();
