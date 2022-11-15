@@ -200,7 +200,7 @@ window.dataPrivacyForm =
             });
             this.caseTypes$.find("option:selected").each(function () { caseTypes.push($(this).val()); });
             this.productAreas$.find("option:selected").each(function () { productAreas.push($(this).val()); });
-            
+
             return {
                 fields: fields,
                 caseTypes: caseTypes,
@@ -655,7 +655,9 @@ window.dataPrivacyForm =
                     FinishedDateTo: filter.finishedDateTo,
                     ClosedOnly: filter.closedOnly,
                     FieldsNames: filter.fields,
+                    CaseTypes: filter.caseTypes,
                     CaseTypeNames: filter.caseTypes,
+                    ProductAreas: filter.productAreas,
                     ProductAreaNames: filter.productAreas,
                     ReplaceDataWith: filter.replaceDataWith,
                     ReplaceDatesWith: filter.replaceDatesWith,
@@ -665,25 +667,27 @@ window.dataPrivacyForm =
                     ReplaceEmails: filter.replaceEmails
                 };
 
-
                 $.ajax({
                     url: self.urls.DataPrivacyGetAffectedCasesAction,
                     type: "POST",
                     data: $.param(inputData),
                     dataType: "json"
                 }).done(function (result) {
-                    //console.log(inputData)
+                    
                     if (result.count !== null) {
-                        if (result.count > 0) {
+                        {
                             self.confirmationDialog.showConfirmation(
                                 inputData.SelectedGDPRType === "2" ? self.translations.dataPrivacyDeletionConfirmation.replace('{0}', result.count) : self.translations.dataPrivacyConfirmation.replace('{0}', result.count),
                                 function () {
-                                    self.execDataPrivacyRequest(inputData);
+                                    if (result.count > 0) {
+                                        self.execDataPrivacyRequest(inputData);
+                                    }
                                 },
                                 function () { }
                             );
-                        }                        
+                        }
                     }
+                    
                 });
             }           
             else {

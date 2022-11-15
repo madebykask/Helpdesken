@@ -109,6 +109,8 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
                 RetentionPeriod = favoriteData.RetentionPeriod,
                 RegisterDateTo = favoriteData.RegisterDateTo,
                 RegisterDateFrom = favoriteData.RegisterDateFrom,
+                FinishedDateTo = favoriteData.FinishedDateTo,
+                FinishedDateFrom = favoriteData.FinishedDateFrom,
                 ClosedOnly = favoriteData.ClosedOnly,
                 ReplaceEmails  = favoriteData.ReplaceEmails,
                 FieldsNames = favoriteData.FieldsNames?.Split(new [] {','}, StringSplitOptions.RemoveEmptyEntries).ToList(),
@@ -118,6 +120,7 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
                 RemoveLogAttachments = favoriteData.RemoveLogAttachments,
                 RemoveFileViewLogs = favoriteData.RemoveFileViewLogs,
                 CaseTypes = favoriteData.CaseTypes?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                ProductAreas = favoriteData.ProductAreas?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
                 GDPRType = favoriteData.GDPRType
             };
 
