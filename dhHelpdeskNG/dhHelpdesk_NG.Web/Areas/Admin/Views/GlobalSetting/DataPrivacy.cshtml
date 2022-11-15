@@ -301,6 +301,18 @@
             }
         });
 
+        //disable datepicker on disabled controls
+        $("#finishedDateFrom, #finishedDateTo, #replacedDate").datepicker().on('show', function (e) {
+            var input = $(e.target).find('input');
+            if (input && input.length) {
+                if (input.prop('readonly') || input.prop('disabled')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(this).datepicker('hide');
+                }
+            }
+        });
+
         $("#retentionPeriod").on("keypress keyup blur", function (event) {
             $(this).val($(this).val().replace(/[^\d].+/, ""));
             if ((event.which < 48 || event.which > 57)) {
