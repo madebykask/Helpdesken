@@ -64,7 +64,7 @@
                 return string.Empty;
             }
 
-            return value.Replace("<br/>", Environment.NewLine);
+            return value.Replace("<br/>", Environment.NewLine).Replace("&nbsp;", " ");  
         }
     }
 }
