@@ -1315,6 +1315,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [GdprAccess]
         public JsonResult GetDataPrivacyAffectedCases(DataPrivacyParameters p)
         {
+            p = _gdprFavoritesService.CreateParameters(p.SelectedFavoriteId ?? 0 );
+
             var totalCount = _gdprPrivacyCasesService.GetCasesCount(p.SelectedCustomerId, p);
             return Json(new { count = totalCount }, JsonRequestBehavior.AllowGet);
         }
@@ -1648,6 +1650,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
             return string.IsNullOrEmpty(label) ? fieldName : label;
-        }
+        }       
     }
 }

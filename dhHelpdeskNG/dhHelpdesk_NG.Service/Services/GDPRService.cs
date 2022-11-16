@@ -43,6 +43,7 @@ namespace DH.Helpdesk.Services.Services
         GdprFavoriteModel GetFavorite(int id);
         int SaveFavorite(GdprFavoriteModel model, int? userId);
         void DeleteFavorite(int favoriteId);
+        DataPrivacyParameters CreateParameters(int favoriteId);
     }
 
     public class GDPRService : IGDPROperationsService, IGDPRDataPrivacyAccessService, IGDPRFavoritesService, IGDPRDataPrivacyCasesService
@@ -133,6 +134,36 @@ namespace DH.Helpdesk.Services.Services
             }
 
             return res;
+        }
+        
+        public DataPrivacyParameters CreateParameters(int favoriteId)
+        {
+            var favoriteData = _gdprFavoritesRepository.GetById(favoriteId);
+
+            var dpp = new DataPrivacyParameters()
+            {
+                TaskId = 0,
+                SelectedCustomerId = favoriteData.CustomerId,
+                SelectedFavoriteId = favoriteId,
+                RetentionPeriod = favoriteData.RetentionPeriod,
+                RegisterDateTo = favoriteData.RegisterDateTo,
+                RegisterDateFrom = favoriteData.RegisterDateFrom,
+                FinishedDateTo = favoriteData.FinishedDateTo,
+                FinishedDateFrom = favoriteData.FinishedDateFrom,
+                ClosedOnly = favoriteData.ClosedOnly,
+                ReplaceEmails = favoriteData.ReplaceEmails,
+                FieldsNames = favoriteData.FieldsNames?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                ReplaceDataWith = favoriteData.ReplaceDataWith,
+                ReplaceDatesWith = favoriteData.ReplaceDatesWith,
+                RemoveCaseAttachments = favoriteData.RemoveCaseAttachments,
+                RemoveLogAttachments = favoriteData.RemoveLogAttachments,
+                RemoveFileViewLogs = favoriteData.RemoveFileViewLogs,
+                CaseTypes = favoriteData.CaseTypes?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                ProductAreas = favoriteData.ProductAreas?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                GDPRType = favoriteData.GDPRType
+            };
+
+            return dpp;
         }
 
         private DataPrivacyParameters DeserializeOperationParameters(string data)

@@ -250,12 +250,16 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public List<LogFile> GetLogFilesByCaseList(List<Case> caseList, bool includeInternal)
         {
-            var caseFiles = (from d in DataContext.Logs.AsEnumerable()
-                            join c in caseList
-                            on d.Case_Id equals c.Id
-                            select d).SelectMany(l => l.LogFiles);
-
-            return caseFiles.Where(f => includeInternal || (f.LogType == LogFileType.External && !string.IsNullOrEmpty(f.Log.Text_External))).ToList();
+            var logFiles = (from d in DataContext.Logs.AsEnumerable()
+                              join c in caseList
+                              on d.Case_Id equals c.Id
+                              select d).ToList()
+                            .SelectMany(l => l.LogFiles);
+                            
+                            
+            var caseFiles = logFiles.Where(f => includeInternal || (f.LogType == LogFileType.External && !string.IsNullOrEmpty(f.Log.Text_External)))
+                            .ToList();
+            return caseFiles;
         }
     }
 
