@@ -28,6 +28,7 @@
 
 <link href="~/Content/css/summernote.css" rel="stylesheet" />
 <script src="~/Content/summernote-0.8.18/summernote.js"></script>
+<script src="~/Content/summernote-0.8.18/lang/summernote-sv-SE.js"></script>
 
 @Html.Hidden("CaseId", Model.CasePreview.Id)
 @Html.Hidden("caseLog_languageId", SessionFacade.CurrentLanguageId)
@@ -608,9 +609,12 @@
 }
 
 <script>
-
+    @{
+        var langChosen = SessionFacade.CurrentLanguageId == 1 ? "sv-SE" : "en-US";
+    }
     if (typeof summerNoteCommentConfig != 'undefined') {
         let summerNoteCommentConfig = {
+            lang: '@langChosen',
             placeholder: '',
             dialogsFade: true,
             tabsize: 1,
@@ -627,10 +631,10 @@
                     //validator.element($('.summernotedesc'));
                 }
             }
-        } 
+        }
     }
 
-    
+
 
     //Init summernote
     $(document).ready(function () {
