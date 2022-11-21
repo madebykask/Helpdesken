@@ -256,7 +256,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         MailId = t.MailId,
                         EmailAddress = t.EmailAddress ?? "",
                         CcEmailAddress = t.Cc ?? "",
-                        ResponseMessage = t.ResponseMessage ?? null
+                        ResponseMessage = t.ResponseMessage ?? null,
+                        Body = t.Body ?? null
                     }).ToList()
                 };
         }

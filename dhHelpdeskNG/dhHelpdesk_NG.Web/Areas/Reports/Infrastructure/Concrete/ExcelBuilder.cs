@@ -135,7 +135,15 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.Concrete
                             HtmlDocument mainDoc = new HtmlDocument();
                             string htmlString = value.Value.GetDisplayValue();
                             mainDoc.LoadHtml(htmlString);
-                            string cleanText = mainDoc.DocumentNode.InnerText;
+                            string cleanText;
+                            if (mainDoc.DocumentNode.InnerText.Length > 255)
+                            {
+                                cleanText = mainDoc.DocumentNode.InnerText.Substring(0, 255);
+                            }
+                            else
+                            {
+                                cleanText = mainDoc.DocumentNode.InnerText;
+                            }
 
                             placeHolder = cleanText.PrepareForExcel();
                         }
