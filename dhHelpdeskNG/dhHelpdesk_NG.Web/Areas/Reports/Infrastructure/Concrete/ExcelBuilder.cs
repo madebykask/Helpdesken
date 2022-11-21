@@ -133,12 +133,12 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.Concrete
                         {
                             //Clear HTML
                             HtmlDocument mainDoc = new HtmlDocument();
-                            string htmlString = value.Value.GetDisplayValue();
+                            string htmlString = value.Value.GetDisplayValue().Replace("&gt;", ">").Replace("&lt;", "<");
                             mainDoc.LoadHtml(htmlString);
                             string cleanText;
-                            if (mainDoc.DocumentNode.InnerText.Length > 255)
+                            if (mainDoc.DocumentNode.InnerText.Length > 4000)
                             {
-                                cleanText = mainDoc.DocumentNode.InnerText.Substring(0, 255);
+                                cleanText = mainDoc.DocumentNode.InnerText.Substring(0, 4000);
                             }
                             else
                             {

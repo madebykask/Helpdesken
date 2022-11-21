@@ -141,7 +141,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             {
                 foreach (HtmlNode singlea in a2)
                 {
-                    if (singlea.Attributes["href"].Value != null)
+                    if (singlea.Attributes["href"]!= null)
                     {
                         singlea.Attributes.Add("class", "textblue");
                     }
