@@ -173,7 +173,7 @@ CREATE PROCEDURE [dbo].[sp_DeleteCases]
 AS
 BEGIN
 
-	BEGIN TRAN	
+BEGIN TRAN	
 		BEGIN TRY
 
 			DELETE lu
@@ -278,26 +278,6 @@ BEGIN
 			INNER JOIN @Cases AS c
 				ON cir.Case_Id = c.Id;			
 
-			SELECT ir.Id, ir.Case_Id, ir.InvoiceHeader_Id
-			INTO #tmpInvoiceRow
-			FROM tblInvoiceRow AS ir
-			INNER JOIN @Cases AS c
-				ON ir.Case_Id = c.Id;
-
-			DELETE ir
-			FROM tblInvoiceRow AS ir
-			INNER JOIN @Cases AS c
-				ON ir.Case_Id = c.Id;
-
-			DELETE ih
-			FROM tblInvoiceHeader AS ih
-			INNER JOIN #tmpInvoiceRow AS ir
-				ON ir.InvoiceHeader_Id = ih.Id
-			INNER JOIN @Cases AS c
-				ON ir.Case_Id = c.Id;
-			
-			DROP TABLE #tmpInvoiceRow;
-
 			DELETE cc
 			FROM tblChangeCouncil AS cc
 			INNER JOIN tblChange AS ch
@@ -382,6 +362,25 @@ BEGIN
 
 			DROP TABLE #TmpLogs;
 
+			SELECT ir.Id, ir.Case_Id, ir.InvoiceHeader_Id
+			INTO #tmpInvoiceRow
+			FROM tblInvoiceRow AS ir
+			INNER JOIN @Cases AS c
+				ON ir.Case_Id = c.Id;
+
+			DELETE ir
+			FROM tblInvoiceRow AS ir
+			INNER JOIN @Cases AS c
+				ON ir.Case_Id = c.Id;
+
+			DELETE ih
+			FROM tblInvoiceHeader AS ih
+			INNER JOIN #tmpInvoiceRow AS ir
+				ON ir.InvoiceHeader_Id = ih.Id
+			INNER JOIN @Cases AS c
+				ON ir.Case_Id = c.Id;
+			
+			DROP TABLE #tmpInvoiceRow;
 			DELETE ch
 			FROM tblCaseHistory AS ch
 			INNER JOIN #TmpCaseHistory AS t
