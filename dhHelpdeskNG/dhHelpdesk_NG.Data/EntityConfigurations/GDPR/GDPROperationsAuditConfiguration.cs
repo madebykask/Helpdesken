@@ -25,7 +25,8 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.GDPR
             this.Property(x => x.Operation).IsRequired().HasMaxLength(50); 
             this.Property(x => x.Parameters).IsOptional();
             this.Property(x => x.Result).IsOptional();
-            this.Property(x => x.ErrorResult).IsOptional();
+            this.Property(x => x.ErrorResultCaseNumbers).IsOptional();
+            this.Property(x => x.ResultCaseNumbers).IsOptional();
             this.Property(x => x.Application).IsRequired().HasMaxLength(50);
             this.Property(x => x.Success).IsRequired();
             this.Property(x => x.Error).IsOptional();

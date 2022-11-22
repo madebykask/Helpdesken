@@ -122,9 +122,11 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
         public void Process(int customerId, int userId, DataPrivacyParameters p, int batchSize)
         {
             var processedCasesIds = new List<int>();
+            var processedCaseNumbers = new List<decimal>();
             var caseNumbersToExclude = new List<decimal>();
             var filesToDelete = new List<CaseFileEntity>();
             var deletionStatus = new DeletionStatus();
+            string errorMessage = String.Empty;
 
             _log.Debug($"GDPR process has been called. CustomerId: {customerId}, FavoriteId: {p.SelectedFavoriteId}, TaskId: {p.TaskId}");
 
@@ -172,7 +174,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                                     if (caseId != null)
                                     {
                                         deletionStatus = _caseDeletionService.DeleteCases(caseId, customerId, null);
+                                        errorMessage += string.IsNullOrEmpty(deletionStatus.ErrorMessage) ? String.Empty : deletionStatus.ErrorMessage + "//";
                                         caseNumbersToExclude.AddRange(deletionStatus.CaseNumbersToExclude);
+                                        processedCaseNumbers.AddRange(deletionStatus.ProcessedCaseNumbers);
                                         casesIds.AddRange(deletionStatus.ProcessedCaseIds.ToList());
                                     }
                                     UpdateProgress(p.TaskId, processed + pos, totalCount);
@@ -216,13 +220,13 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                     processedCasesIds.AddRange(casesIds);
 
                     //save step audit
-                    SaveStepSuccessOperationAudit(customerId, userId, p, new DataPrivacyResult { CaseIdsResult = processedCasesIds, CaseNumbersErrorResult = caseNumbersToExclude }, step);
+                    SaveStepSuccessOperationAudit(customerId, userId, p, new DataPrivacyResult { CaseIdsResult = processedCasesIds, CaseNumbersErrorResult = caseNumbersToExclude, CaseNumbersResult = processedCaseNumbers, ErrorMessage = errorMessage }, step);
 
                     if (processedCasesIds.Distinct().Count() + caseNumbersToExclude.Distinct().Count() >= totalCount)
                         fetchNext = false;
                 }
 
-                SaveSuccessOperationAudit(customerId, userId, p, new DataPrivacyResult { CaseIdsResult = processedCasesIds, CaseNumbersErrorResult = caseNumbersToExclude });
+                SaveSuccessOperationAudit(customerId, userId, p, new DataPrivacyResult { CaseIdsResult = processedCasesIds, CaseNumbersErrorResult = caseNumbersToExclude, CaseNumbersResult = processedCaseNumbers, ErrorMessage = errorMessage });
 
                 _log.Debug($"Processing has been completed successfully. TaskId: {p.TaskId}.");
             }
@@ -846,7 +850,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                 Application = ApplicationType.Helpdesk.ToString(),
                 CreatedDate = DateTime.UtcNow,
                 Result = result.CaseIdsResult.Any() ? string.Join(",", result.CaseIdsResult.ToArray()) : null,
-                ErrorResult = result.CaseNumbersErrorResult.Any() ? string.Join(",", result.CaseNumbersErrorResult.ToArray()) : null,
+                ErrorResultCaseNumbers = result.CaseNumbersErrorResult.Any() ? string.Join(",", result.CaseNumbersErrorResult.ToArray()) : null,
+                ResultCaseNumbers = result.CaseNumbersResult.Any() ? string.Join(",", result.CaseNumbersResult.ToArray()) : null,
+                Error = result.ErrorMessage,
                 Success = true
             };
 
