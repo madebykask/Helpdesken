@@ -198,7 +198,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
                     Charge = y.Charge,
                     Material = y.EquipmentPrice,
                     Price = y.Price,
-                    Text = y.TextInternal,
+                    Text = y.TextInternal.StripHTML().Replace("&nbsp;", " ").Length > 200 ? y.TextInternal.StripHTML().Replace("&nbsp;", " ").Substring(0, 200) : y.TextInternal.StripHTML().Replace("&nbsp;", " "),
                     Overtime = y.Overtime,
                     WorkingTime = y.WorkingTime,
                     OvertimeHourRate = x.OvertimeHourRate,
