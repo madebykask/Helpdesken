@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Mime;
 using System.Text;
+using System.Text.RegularExpressions;
 using DH.Helpdesk.Dal.DbContext;
 using DH.Helpdesk.Domain;
 using log4net;
@@ -97,6 +100,8 @@ namespace DH.Helpdesk.EmailEngine.Library
                         From = new MailAddress(email.From)
                     };
 
+                    AlternateView alterView = ContentToAlternateView(mailMessage.Body);
+                    mailMessage.AlternateViews.Add(alterView);
 
                     if (!string.IsNullOrWhiteSpace(email.Cc))
                     {
@@ -211,7 +216,44 @@ namespace DH.Helpdesk.EmailEngine.Library
 
             return setting;
         }
+        private static AlternateView ContentToAlternateView(string content)
+        {
+            Stream Base64ToImageStream(string base64String)
+            {
+                byte[] imageBytes = Convert.FromBase64String(base64String);
+                MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
+                return ms;
+            }
 
+            var imgCount = 0;
+            List<LinkedResource> resourceCollection = new List<LinkedResource>();
+            foreach (Match m in Regex.Matches(content, @"<img([\s\S]+?)src\s?=\s?['""](?<srcAttr>[^'""]+?)['""]([\s\S]+?)\/?>"))
+            {
+                imgCount++;
+                var srcAttribute = m.Groups["srcAttr"].Value;
+                string type = Regex.Match(srcAttribute, ":(?<type>.*?);base64,").Groups["type"].Value;
+                string base64 = Regex.Match(srcAttribute, "base64,(?<base64>.*?)$").Groups["base64"].Value;
+
+                //ignore replacement when match normal <img> tag
+                if (String.IsNullOrEmpty(type) || String.IsNullOrEmpty(base64)) continue;
+
+                content = content.Replace(srcAttribute, "cid:" + imgCount);
+
+                var tempResource = new LinkedResource(Base64ToImageStream(base64), new ContentType(type))
+                {
+                    ContentId = imgCount.ToString()
+                };
+                resourceCollection.Add(tempResource);
+            }
+
+            AlternateView alternateView = AlternateView.CreateAlternateViewFromString(content, null, MediaTypeNames.Text.Html);
+            foreach (var item in resourceCollection)
+            {
+                alternateView.LinkedResources.Add(item);
+            }
+
+            return alternateView;
+        }
         #region IDisposable
 
         public void Dispose()
