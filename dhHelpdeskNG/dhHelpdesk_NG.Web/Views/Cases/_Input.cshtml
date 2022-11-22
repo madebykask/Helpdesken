@@ -2536,6 +2536,11 @@
                     $('#CaseLog_SendMailAboutCaseToPerformer:not(:disabled)').removeAttr('checked');
                 }
                 validator.element($('.summernoteinternal'));
+            },
+            onPaste: function (e) {
+                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                e.preventDefault();
+                document.execCommand('insertText', false, bufferText);
             }
 
         }
@@ -2585,6 +2590,11 @@
                 } 
                 validator.element($('.summernoteexternal'));
 
+            },
+            onPaste: function (e) {
+                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                e.preventDefault();
+                document.execCommand('insertText', false, bufferText);
             }
         }
     }
@@ -2610,6 +2620,11 @@
                 $('.summernotedesc').val($('.summernotedesc').summernote('isEmpty') ? "" : contents);
 
                 validator.element($('.summernotedesc'));
+            },
+            onPaste: function (e) {
+                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                e.preventDefault();
+                document.execCommand('insertText', false, bufferText);
             }
         }
     }
