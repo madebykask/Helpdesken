@@ -239,11 +239,7 @@
                 {
                     <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription)">
                         <td>
-                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription, "Avslutsbeskrivning")
-                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()).Required == 1)
-                            {
-                                <span class="mandatorystar">*</span>
-                            }
+                            @Translation.GetCoreTextTranslation("Avslutsbeskrivning")
                         </td>
                         <td>
                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription) && !readonlyMode)
