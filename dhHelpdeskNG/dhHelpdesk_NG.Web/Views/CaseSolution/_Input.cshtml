@@ -2725,11 +2725,17 @@
 
     $(document).ready(function () {
         //TODO - Default Language
-        var defaultLanguage = document.getElementById('customerDefaultLanguage').value;
-        console.log("Default lang: " +defaultLanguage);
-        if (document.getElementById('languageList').value != defaultLanguage) {
-            DisableControls();
+        var defaultLanguage = document.getElementById('customerDefaultLanguage').value;     
+        var langList = document.getElementById('languageList');
+        console.log("Default lang: " + defaultLanguage);
+        if (langList) {
+            if (document.getElementById('languageList').value != defaultLanguage) {
+                DisableControls();
+            }
         }
+        //if (document.getElementById('languageList').value != defaultLanguage) {
+        //    DisableControls();
+        //}
         if (document.getElementById('Casesolution_ShowInsideCase').checked)
         {
             if(document.getElementById('ConnectTo').value==0  && document.getElementById('ConnectTo').value!='')
@@ -2772,7 +2778,6 @@
             $('#overWritePopUp').bootstrapSwitch('disabled', true);
             $('#updateNotifierInformation').bootstrapSwitch('disabled', true);
             $('#contactBeforeAction').bootstrapSwitch('disabled', true);
-
             //const inputs = document.querySelectorAll('input.switchcheckbox');
             //inputs.forEach(input => input.bootstrapSwitch('disabled', true));
         })
