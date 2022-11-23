@@ -10,7 +10,8 @@ namespace DH.Helpdesk.Domain.GDPR
         public string Operation { get; set; }
         public string Parameters { get; set; }
         public string Result { get; set; }
-        public string ErrorResult { get; set; }        
+        public string ErrorResultCaseNumbers { get; set; }        
+        public string ResultCaseNumbers { get; set; }        
         public string Application { get; set; }
         public bool Success { get; set; }
         public string Error { get; set; }

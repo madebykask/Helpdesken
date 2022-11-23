@@ -252,6 +252,11 @@ BEGIN TRAN
 			INNER JOIN @Cases AS c 
 				ON l.Case_Id = c.Id;
 
+			DELETE lfe
+			FROM tblLogFileExisting AS lfe
+			INNER JOIN @Cases AS c 
+				ON lfe.Case_Id = c.Id;
+
 			DELETE cd
 			FROM tblChange_tblDepartment AS cd
 			INNER JOIN dbo.tblChange AS ch
@@ -584,7 +589,12 @@ BEGIN TRAN
 			FROM tblCaseStatistics AS cs
 			INNER JOIN @Cases AS c
 				ON c.Id = cs.Case_Id;			 
-
+			
+			DELETE cr
+			FROM tblChecklistRow as cr
+			INNER JOIN @Cases AS c
+				ON c.Id = cr.Case_Id;
+				
 			DELETE tc
 			FROM tblCase AS tc
 			INNER JOIN  @Cases AS c
@@ -632,15 +642,23 @@ IF COL_LENGTH('dbo.tblGDPRDataPrivacyAccess','DeletionPermission') IS NULL
 
 Go
 
-RAISERROR ('Add Column ErrorResult to tblGDPROperationsAudit', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblGDPROperationsAudit','ErrorResult') IS NULL
+RAISERROR ('Add Column ErrorResultCaseNumbers to tblGDPROperationsAudit', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPROperationsAudit','ErrorResultCaseNumbers') IS NULL
 	BEGIN	 
 		ALTER TABLE [dbo].tblGDPROperationsAudit
-		ADD ErrorResult NVARCHAR(MAX) NULL
+		ADD ErrorResultCaseNumbers NVARCHAR(MAX) NULL
 	End
 
 Go
 
+RAISERROR ('Add Column ResultCaseNumbers to tblGDPROperationsAudit', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPROperationsAudit','ResultCaseNumbers') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblGDPROperationsAudit
+		ADD ResultCaseNumbers NVARCHAR(MAX) NULL
+	End
+
+Go
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.57'
 GO

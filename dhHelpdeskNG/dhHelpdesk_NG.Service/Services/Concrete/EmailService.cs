@@ -17,6 +17,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
     using System.Threading;
     using System.Globalization;
     using System.Net;
+    using System.Net.Mime;
+    using System.IO;
 
     public sealed class EmailService : IEmailService
     {
@@ -68,8 +70,11 @@ namespace DH.Helpdesk.Services.Services.Concrete
                     {
                         Subject = mail.Subject,
                         Body = mail.Body,
-                        IsBodyHtml = true
+                        IsBodyHtml = true,
                     };
+
+                    AlternateView alterView = ContentToAlternateView(mail.Body);
+                    mailMessage.AlternateViews.Add(alterView);
                     smtpClient.Send(mailMessage);
                     res = new EmailResponse(sendTime, emailsettings.Response.ResponseMessage + " | " + EMAIL_SEND_MESSAGE, emailsettings.Response.NumberOfTry);
                 }
@@ -120,7 +125,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 emailType);
         }
 
-        //sends case email
+        //sends case email from Helpdesk
         public EmailResponse SendEmail(
             string from,
             string to,
@@ -146,7 +151,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
             Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
-
+            //Todo - check Gmail/Images
             try
             {
                 string smtpServer = emailsettings.SmtpSettings.Server;
@@ -168,11 +173,13 @@ namespace DH.Helpdesk.Services.Services.Concrete
                         }
 
                         _smtpClient.EnableSsl = emailsettings.SmtpSettings.IsSecured;
-
+                        
                         var msg = GetMailMessage(from, to, cc, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType, siteSelfServiceMergeParent);
 
                         if (msg.To.Count > 0 || msg.Bcc.Count > 0 || msg.CC.Count > 0)
                         {
+                            AlternateView alterView = ContentToAlternateView(msg.Body);
+                            msg.AlternateViews.Add(alterView);
                             _smtpClient.Send(msg);
                             res = new EmailResponse(sendTime, emailsettings.Response.ResponseMessage + " | " + EMAIL_SEND_MESSAGE, res.NumberOfTry);
                         }
@@ -218,13 +225,15 @@ namespace DH.Helpdesk.Services.Services.Concrete
             List<MailFile> files = null,
             string siteSelfService = "",
             string siteHelpdesk = "",
-            EmailType emailType = EmailType.ToMail,
+            EmailType emailType = EmailType.ToMail, 
              string siteSelfServiceMergeParent = "")
         {
+
             return emailsettings.BatchEmail
                 ? EnqueueEmail(el, from, to, cc, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType, siteSelfServiceMergeParent)
                 : SendEmail(from, to, cc, subject, body, fields, emailsettings, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType, siteSelfServiceMergeParent);
         }
+
 
         private MailMessage GetMailMessage(
             string from,
@@ -575,6 +584,44 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 }
 
             return ret;
+        }
+        private static AlternateView ContentToAlternateView(string content)
+        {
+            Stream Base64ToImageStream(string base64String)
+            {
+                byte[] imageBytes = Convert.FromBase64String(base64String);
+                MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
+                return ms;
+            }
+            
+            var imgCount = 0;
+            List<LinkedResource> resourceCollection = new List<LinkedResource>();
+            foreach (Match m in Regex.Matches(content, @"<img([\s\S]+?)src\s?=\s?['""](?<srcAttr>[^'""]+?)['""]([\s\S]+?)\/?>"))
+            {
+                imgCount++;
+                var srcAttribute = m.Groups["srcAttr"].Value;
+                string type = Regex.Match(srcAttribute, ":(?<type>.*?);base64,").Groups["type"].Value;
+                string base64 = Regex.Match(srcAttribute, "base64,(?<base64>.*?)$").Groups["base64"].Value;
+
+                //ignore replacement when match normal <img> tag
+                if (String.IsNullOrEmpty(type) || String.IsNullOrEmpty(base64)) continue;
+
+                content = content.Replace(srcAttribute, "cid:" + imgCount);
+
+                var tempResource = new LinkedResource(Base64ToImageStream(base64), new ContentType(type))
+                {
+                    ContentId = imgCount.ToString()
+                };
+                resourceCollection.Add(tempResource);
+            }
+
+            AlternateView alternateView = AlternateView.CreateAlternateViewFromString(content, null, MediaTypeNames.Text.Html);
+            foreach (var item in resourceCollection)
+            {
+                alternateView.LinkedResources.Add(item);
+            }
+
+            return alternateView;
         }
 
     }

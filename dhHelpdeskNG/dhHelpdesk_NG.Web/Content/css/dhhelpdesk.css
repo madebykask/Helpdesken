@@ -1861,6 +1861,7 @@ table th.thpointer {
         overflow-wrap: break-word;
         word-wrap: break-word;
         line-height: 13px;
+        overflow: hidden !important;
     }
 
         .table-cases td select, .table-cases th select, .table-cases td input[type="text"], .table-cases th input[type="text"] {

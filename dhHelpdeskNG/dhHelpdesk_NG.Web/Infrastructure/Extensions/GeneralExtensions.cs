@@ -86,8 +86,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             {
                 return string.Empty;
             }
-            input.Replace("<br>", " ");
-            input.Replace("<br />", " ");
+            input.Replace("<br>", "&nbsp;");
+            input.Replace("<br />", "&nbsp;");
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(input);
             var output = "";
@@ -111,6 +111,24 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(input);
 
+            HtmlNodeCollection tables = doc.DocumentNode.SelectNodes("//table[@style]");
+            if (tables != null)
+            {
+                foreach (HtmlNode table in tables)
+                {
+                    table.Attributes["style"].Remove();
+                    table.Attributes["width"].Value = "300px";
+
+                }
+            }
+            HtmlNodeCollection trs = doc.DocumentNode.SelectNodes("//tr[@style]");
+            if (trs != null)
+            {
+                foreach (HtmlNode tr in trs)
+                {
+                    tr.Attributes["style"].Remove();
+                }
+            }
 
             HtmlNodeCollection divs = doc.DocumentNode.SelectNodes("//div[@style]");
             if (divs != null)
@@ -136,6 +154,15 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 }
             }
 
+            HtmlNodeCollection h = doc.DocumentNode.SelectNodes("//h[@style]");
+            if (h != null)
+            {
+                foreach (HtmlNode singleh in h)
+                {
+                    singleh.Attributes["style"].Remove();
+
+                }
+            }
             HtmlNodeCollection a2 = doc.DocumentNode.SelectNodes("//a");
             if (a2 != null)
             {
@@ -153,8 +180,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             {
                 foreach (HtmlNode img in imgs)
                 {
-
-
                     string style = img.Attributes["style"].Value;
                     string newStyle = CleanWidth(style);
                     img.Attributes["style"].Remove();
