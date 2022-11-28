@@ -1727,24 +1727,11 @@ EditPage.prototype.init = function (p) {
             const className = classPreffix + maxTdRows;
             let isRowAllVisible = false;
             const tds = row$.find('td');
-            //const externalCellRowsCount = Math.ceil(($(tds[2]).find('a>div>div').height() || 1) / lineHeight);
-            //const internalCellRowsCount = Math.ceil(($(tds[3]).find('a>div>div').height() || 1) / lineHeight);
-            //const filesCellRowsCount = Math.ceil(($(tds[5]).find('>div>div').height() || 1) / lineHeight);
-            const externalCellRowsCount = Math.ceil(($(tds[3]).find('a>div>div').height() || 1) / lineHeight);
-            const internalCellRowsCount = Math.ceil(($(tds[4]).find('a>div>div').height() || 1) / lineHeight);
-            const filesCellRowsCount = Math.ceil(($(tds[6]).find('>div>div').height() || 1) / lineHeight);
-            //if (externalCellRowsCount > maxTdRows) {
-            //    $(tds[2]).find('.row-all').show();
-            //    isRowAllVisible = true;
-            //}
-            //if (internalCellRowsCount > maxTdRows) {
-            //    $(tds[3]).find('.row-all').show();
-            //    isRowAllVisible = true;
-            //}
-            //if (filesCellRowsCount > maxTdRows) {
-            //    $(tds[5]).find('.row-all').show();
-            //    isRowAllVisible = true;
-            //}
+
+            const externalCellRowsCount = Math.ceil(($(tds[3]).find("div[name='divTextExternal']").height() || 1) / lineHeight);
+            const internalCellRowsCount = Math.ceil(($(tds[4]).find("div[name='divTextInternal']").height() || 1) / lineHeight);
+            const filesCellRowsCount = Math.ceil(($(tds[6]).find("div[name='divLogNoteFiles']").height() || 1) / lineHeight);
+
             if (externalCellRowsCount > maxTdRows) {
                 $(tds[3]).find('.row-all').show();
                 isRowAllVisible = true;
@@ -1765,7 +1752,7 @@ EditPage.prototype.init = function (p) {
                         currRow$.toggleClass(className);
                     });
             } else {
-                row$.removeClass(className);
+                //row$.removeClass(className);
             }
         });
 
@@ -1775,19 +1762,34 @@ EditPage.prototype.init = function (p) {
             const more$ = logTab$.find('.all.more');
             const less$ = logTab$.find('.all.less');
             const toggleRows = function () {
-                more$.is(':visible')
-                    ? table$.find('tr:gt(' + maxRows + ')').hide()
-                    : table$.find('tr:gt(' + maxRows + ')').show();
+                /*console.log(table$.find('tr.less3'))*/
+                if (more$.is(':visible')) {
+                    table$.find('tr.less3:gt(' + (maxRows - 2) + ')').hide()
+                    rows$.each((i, row) => {
+                        let r$ = $(row);
+
+                        r$.removeClass("less-ignoreheight");
+                    });
+                }
+
+                else {
+                    table$.find('tr.less3:gt(' + (maxRows - 2) + ')').show();
+                    rows$.each((i, row) => {
+                        let r$ = $(row);
+
+                        r$.addClass("less-ignoreheight");
+                    });
+                }
             }
             toggleRows();
             more$.add(less$).on('click', function (e) {
                 e.preventDefault();
+
                 more$.toggle();
                 less$.toggle();
                 toggleRows();
             });
         }
-        //$("#logtab .caselog tr td:eq(14) a div div")[0].getClientRects().length
     }
 
     self.$watchDateChangers.on('change', function (d, source) {

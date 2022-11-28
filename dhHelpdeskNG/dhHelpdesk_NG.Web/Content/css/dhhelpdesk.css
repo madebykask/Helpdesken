@@ -4301,6 +4301,12 @@ div.chosen-container.chosen-container-single.error {
     overflow: hidden;
 }
 
+.caselog tr.less-ignoreheight > td > a > div,
+.caselog tr.less-ignoreheight > td > div {
+    height: 100% !important;
+    overflow: auto !important;
+}
+
 .caselog tr.less3 .row-all::before,
 .caselog tr.less7 .row-all::before {
     content: '>>'
