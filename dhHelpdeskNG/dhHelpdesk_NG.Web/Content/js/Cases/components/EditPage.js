@@ -1612,6 +1612,7 @@ EditPage.prototype.unlockCaseById = function (caseId, url) {
     console.log("Unlocking");
     $.post(p.unlockCaseByCaseIdUrl, $.param({ caseId: caseId }), function (data) {
         if (data !== "Success") {
+            console.log(data);
             ShowToastMessage(p.caseUnlockErrorMessage, "Error");
         }
         if (url) {
@@ -1769,6 +1770,7 @@ EditPage.prototype.init = function (p) {
                         let r$ = $(row);
                         if (i > 2) {
                             r$.hide();
+                            r$.removeClass("less-ignoreheight");
                         }
                         else {
                             let td$ = r$.find("div[name='divTextExternal']");
@@ -1782,8 +1784,9 @@ EditPage.prototype.init = function (p) {
                                 r$.addClass("less3")
                             }
                             r$.show();
+                            
+                            r$.removeClass("less-ignoreheight");
                         }
-                        r$.removeClass("less-ignoreheight");
                     });
                 }
 

@@ -65,7 +65,7 @@
                                 @{ var isExternalLogVisible = Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote) == string.Empty; }
                                 @if (isExternalLogVisible)
                                 {
-                                    <td class="wordbreak" style="width: 25%; max-width: 300px;">
+                                    <td class="wordbreak" style="width: 25%; max-width: 300px; overflow-y: hidden !important; overflow-x: auto !important;">
                                         <a>
                                             @*href="@GetLogLink(r)"*@
                                             <div style="display:block;">
