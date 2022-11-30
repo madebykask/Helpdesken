@@ -602,7 +602,7 @@ namespace DH.Helpdesk.WebApi.Logic.Case
             if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Description,
                 currentCase?.Id, caseTemplateSettings))
                 AddReadOnlyOption(field.Options);
-            AddMaxLengthOption(field.Options, 10000);
+            //AddMaxLengthOption(field.Options, 10000);
             model.Fields.Add(field);
 
             field = GetField(currentCase != null ? currentCase.Miscellaneous : template?.Miscellaneous, customerId,
