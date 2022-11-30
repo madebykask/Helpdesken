@@ -50,36 +50,36 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
         private readonly IGDPRDataPrivacyCasesService _gDPRDataPrivacyCasesService;
         private readonly ICaseDeletionService _caseDeletionService;
         const int sqlTimeout = 300; //seconds
-        
+
         #region CaseFileEntity
 
         private class CaseFileEntity
         {
-			#region ctor()
+            #region ctor()
 
-			public CaseFileEntity(int caseId, string caseNumber, string fileName)
+            public CaseFileEntity(int caseId, string caseNumber, string fileName)
                 : this(caseId, caseNumber, 0, fileName, LogFileType.External)
             {
             }
 
-			public CaseFileEntity(int caseId, string caseNumber, int logId, string fileName, LogFileType logType = LogFileType.External)
-			{
-				CaseId = caseId;
-				CaseNumber = caseNumber;
-				LogId = logId;
-				FileName = fileName;
-				LogType = logType;
-			}
+            public CaseFileEntity(int caseId, string caseNumber, int logId, string fileName, LogFileType logType = LogFileType.External)
+            {
+                CaseId = caseId;
+                CaseNumber = caseNumber;
+                LogId = logId;
+                FileName = fileName;
+                LogType = logType;
+            }
 
-			#endregion
+            #endregion
 
-			public int CaseId { get; private set; }
+            public int CaseId { get; private set; }
             public string CaseNumber { get; private set; }
             public int LogId { get; private set; }
             public string FileName { get; private set; }
-			public LogFileType LogType { get; private set; }
+            public LogFileType LogType { get; private set; }
 
-			public int GetCaseNumberOrId()
+            public int GetCaseNumberOrId()
             {
                 int res;
                 if (int.TryParse(CaseNumber, out res))
@@ -116,9 +116,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             _gDPRDataPrivacyCasesService = gDPRDataPrivacyCasesService;
             _caseDeletionService = caseDeletionService;
         }
-        
+
         #endregion
-        
+
         public void Process(int customerId, int userId, DataPrivacyParameters p, int batchSize)
         {
             var processedCasesIds = new List<int>();
@@ -135,7 +135,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                 var totalCount = _gDPRDataPrivacyCasesService.GetCasesCount(customerId, p);
                 var fetchNext = totalCount > 0;
                 var step = 0;
-
                 _log.Debug($"Total cases found to process: {totalCount}. TaskId: {p.TaskId}.");
 
                 while (fetchNext)
@@ -147,42 +146,58 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                     _log.Debug($"Step {step}. Fetching next {take} cases. Skip: {processed}. TaskId: {p.TaskId}.");
 
                     var casesIds = new List<int>();
+                    var batchProcessedCaseIds = new List<int>();
+                    var batchProcessedCaseNumbers = new List<decimal>();
+                    var batchCaseNumbersToExclude = new List<decimal>();
+                    var batchErrorMessage = String.Empty;
 
                     using (var uow = _unitOfWorkFactory.Create(sqlTimeout))
                     {
                         uow.AutoDetectChangesEnabled = false;
-                        
+
                         //GET query
                         var casesQueryable = _gDPRDataPrivacyCasesService.GetCasesQuery(customerId, p, uow);
 
+                        List<Case> cases = new List<Case>();
                         //fetch next cases
-                        var cases = casesQueryable.Skip(processed).Take(take).ToList();
-                        
+                        if (p.GDPRType == 2)
+                        {
+                            cases = casesQueryable.Take(take).ToList();
+                        }
+                        else
+                        {
+                            cases = casesQueryable.Skip(processed).Take(take).ToList();
+                        }
+
+                        //cases.RemoveAll(c => caseNumbersToExclude.Contains(c.CaseNumber));
+
                         if (cases.Any())
                         {
                             _log.Debug($"{cases.Count} cases will be processed. TaskId: {p.TaskId}.");
 
                             var pos = 1;
-                            //var count = cases.Count;
 
                             if (p.GDPRType == 2) //Deletion
                             {
+                                casesIds = cases.Select(c => c.Id).ToList();
                                 foreach (var c in cases)
                                 {
                                     List<int> caseId = new List<int>() { c.Id };
 
                                     if (caseId != null)
                                     {
+
                                         deletionStatus = _caseDeletionService.DeleteCases(caseId, customerId, null);
                                         errorMessage += string.IsNullOrEmpty(deletionStatus.ErrorMessage) ? String.Empty : deletionStatus.ErrorMessage + "//";
-                                        caseNumbersToExclude.AddRange(deletionStatus.CaseNumbersToExclude);
-                                        processedCaseNumbers.AddRange(deletionStatus.ProcessedCaseNumbers);
-                                        casesIds.AddRange(deletionStatus.ProcessedCaseIds.ToList());
+                                        batchErrorMessage += string.IsNullOrEmpty(deletionStatus.ErrorMessage) ? String.Empty : deletionStatus.ErrorMessage + "//";
+                                        batchCaseNumbersToExclude.AddRange(deletionStatus.CaseNumbersToExclude);
+                                        batchProcessedCaseNumbers.AddRange(deletionStatus.ProcessedCaseNumbers);
+                                        batchProcessedCaseIds.AddRange(deletionStatus.ProcessedCaseIds.ToList());
                                     }
                                     UpdateProgress(p.TaskId, processed + pos, totalCount);
                                     pos++;
-                                }                               
-                               
+                                }
+
                                 _log.Debug($"{cases.Count} cases have been deleted. TaskId: {p.TaskId}.");
                             }
                             else //Anonymization
@@ -212,20 +227,30 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                                 DeleteCaseFiles(customerId, filesToDelete);
 
                                 casesIds = cases.Select(c => c.Id).ToList();
+                                batchProcessedCaseIds = cases.Select(c => c.Id).ToList();
                             }
-                        }                        
+                        }
+                        else
+                        {
+                            fetchNext = false;
+                        }
                     }
+
 
                     //save processed cases
                     processedCasesIds.AddRange(casesIds);
+                    processedCaseNumbers.AddRange(batchProcessedCaseNumbers);
+                    caseNumbersToExclude.AddRange(batchCaseNumbersToExclude);
 
                     //save step audit
-                    SaveStepSuccessOperationAudit(customerId, userId, p, new DataPrivacyResult { CaseIdsResult = processedCasesIds, CaseNumbersErrorResult = caseNumbersToExclude, CaseNumbersResult = processedCaseNumbers, ErrorMessage = errorMessage }, step);
+                    SaveStepSuccessOperationAudit(customerId, userId, p, new DataPrivacyResult { CaseIdsResult = batchProcessedCaseIds, CaseNumbersErrorResult = batchCaseNumbersToExclude, CaseNumbersResult = batchProcessedCaseNumbers, ErrorMessage = batchErrorMessage }, step);
 
-                    if (processedCasesIds.Distinct().Count() + caseNumbersToExclude.Distinct().Count() >= totalCount)
+                    if (processedCasesIds.Count() >= totalCount)
+                    {
                         fetchNext = false;
-                }
+                    }
 
+                }
                 SaveSuccessOperationAudit(customerId, userId, p, new DataPrivacyResult { CaseIdsResult = processedCasesIds, CaseNumbersErrorResult = caseNumbersToExclude, CaseNumbersResult = processedCaseNumbers, ErrorMessage = errorMessage });
 
                 _log.Debug($"Processing has been completed successfully. TaskId: {p.TaskId}.");
@@ -236,7 +261,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                 SaveFailedOperationAudit(customerId, userId, p, errMsg);
                 throw;
             }
-        }     
+        }
 
         private void UpdateProgress(int taskId, int pos, int totalCount)
         {
@@ -277,7 +302,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             //delete log files
             foreach (var fileEntity in logFiles)
             {
-                _log.Debug($"Deleting fileEntity { fileEntity.FileName }: {fileEntity.LogType}.");
+                _log.Debug($"Deleting fileEntity {fileEntity.FileName}: {fileEntity.LogType}.");
                 try
                 {
                     this._filesStorage.DeleteFile(

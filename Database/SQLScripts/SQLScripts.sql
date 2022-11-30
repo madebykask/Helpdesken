@@ -359,24 +359,43 @@ BEGIN TRAN
 			FROM tblEmailLog AS el
 			INNER JOIN #TmpCaseHistory AS ch
 				ON ch.Id = el.CaseHistory_Id;
-		
-			DELETE tl
-			FROM tblLog AS tl
-			INNER JOIN #TmpLogs As l
-				ON l.Id = tl.Id;
 
-			DROP TABLE #TmpLogs;
+			DELETE el
+			FROM tblEmailLog AS el
+			INNER JOIN #TmpLogs As l
+				ON l.Id = el.Log_Id;
+	
+			DELETE ir
+			FROM tblInvoiceRow AS ir
+			INNER JOIN @Cases AS c
+				ON ir.Case_Id = c.Id;
 
 			SELECT ir.Id, ir.Case_Id, ir.InvoiceHeader_Id
 			INTO #tmpInvoiceRow
 			FROM tblInvoiceRow AS ir
 			INNER JOIN @Cases AS c
 				ON ir.Case_Id = c.Id;
-
+			
 			DELETE ir
 			FROM tblInvoiceRow AS ir
+			INNER JOIN tblInvoiceHeader AS ih
+				ON ir.InvoiceHeader_Id = ih.Id
+			INNER JOIN #tmpInvoiceRow AS tir
+				ON tir.InvoiceHeader_Id = ih.Id
 			INNER JOIN @Cases AS c
-				ON ir.Case_Id = c.Id;
+				ON tir.Case_Id = c.Id;
+
+			DELETE tl
+			FROM tblLog AS tl
+			INNER JOIN #tmpInvoiceRow as r
+				ON r.Id = tl.InvoiceRow_Id;
+
+			DELETE tl
+			FROM tblLog AS tl
+			INNER JOIN #TmpLogs As l
+				ON l.Id = tl.Id;
+
+			DROP TABLE #TmpLogs;
 
 			DELETE ih
 			FROM tblInvoiceHeader AS ih
@@ -605,7 +624,6 @@ BEGIN TRAN
 
 	BEGIN CATCH
 
-	 IF @@TRANCOUNT > 0
 		ROLLBACK TRAN
 
 		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
