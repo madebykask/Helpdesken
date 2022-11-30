@@ -174,7 +174,7 @@ AS
 BEGIN
 
 BEGIN TRAN	
-		BEGIN TRY
+	BEGIN TRY
 
 			DELETE lu
 			FROM tblLink_tblUsers AS lu
@@ -311,7 +311,7 @@ BEGIN TRAN
 			INNER JOIN @Cases AS c
 				ON ch.SourceCase_Id = c.Id; 
 
-			SELECT tl.Id, tl.Case_Id 
+			SELECT tl.Id, tl.Case_Id, tl.InvoiceRow_Id 
 			INTO #TmpLogs
 			FROM tblLog AS tl 
 			INNER JOIN @Cases AS c
@@ -360,24 +360,18 @@ BEGIN TRAN
 			INNER JOIN #TmpCaseHistory AS ch
 				ON ch.Id = el.CaseHistory_Id;
 
-			DELETE el
-			FROM tblEmailLog AS el
-			INNER JOIN #TmpLogs As l
-				ON l.Id = el.Log_Id;
-	
-			DELETE ir
-			FROM tblInvoiceRow AS ir
-			INNER JOIN @Cases AS c
-				ON ir.Case_Id = c.Id;
-
 			SELECT ir.Id, ir.Case_Id, ir.InvoiceHeader_Id
 			INTO #tmpInvoiceRow
 			FROM tblInvoiceRow AS ir
 			INNER JOIN @Cases AS c
 				ON ir.Case_Id = c.Id;
-			
-			DELETE ir
-			FROM tblInvoiceRow AS ir
+
+			DELETE el 
+			FROM tblEMailLog AS el
+			INNER JOIN tblLog AS tl
+				ON el.Log_Id = tl.Id
+			INNER JOIN tblInvoiceRow AS ir
+				ON tl.InvoiceRow_Id = ir.Id
 			INNER JOIN tblInvoiceHeader AS ih
 				ON ir.InvoiceHeader_Id = ih.Id
 			INNER JOIN #tmpInvoiceRow AS tir
@@ -385,6 +379,29 @@ BEGIN TRAN
 			INNER JOIN @Cases AS c
 				ON tir.Case_Id = c.Id;
 
+			DELETE el
+			FROM tblEmailLog AS el
+			INNER JOIN #TmpLogs As l
+				ON l.Id = el.Log_Id;
+				
+			DELETE tl
+			FROM tblLog AS tl
+			INNER JOIN tblInvoiceRow AS ir
+				ON ir.Id = tl.InvoiceRow_Id
+			INNER JOIN @Cases AS c
+				ON ir.Case_Id = c.Id;
+
+			DELETE tl
+			FROM tblLog AS tl
+			INNER JOIN tblInvoiceRow AS ir
+				ON tl.InvoiceRow_Id = ir.Id
+			INNER JOIN tblInvoiceHeader AS ih
+				ON ir.InvoiceHeader_Id = ih.Id
+			INNER JOIN #tmpInvoiceRow AS tir
+				ON tir.InvoiceHeader_Id = ih.Id
+			INNER JOIN @Cases AS c
+				ON tir.Case_Id = c.Id;
+			
 			DELETE tl
 			FROM tblLog AS tl
 			INNER JOIN #tmpInvoiceRow as r
@@ -394,6 +411,20 @@ BEGIN TRAN
 			FROM tblLog AS tl
 			INNER JOIN #TmpLogs As l
 				ON l.Id = tl.Id;
+
+			DELETE ir
+			FROM tblInvoiceRow AS ir
+			INNER JOIN @Cases AS c
+				ON ir.Case_Id = c.Id;
+
+			DELETE ir
+			FROM tblInvoiceRow AS ir
+			INNER JOIN tblInvoiceHeader AS ih
+				ON ir.InvoiceHeader_Id = ih.Id
+			INNER JOIN #tmpInvoiceRow AS tir
+				ON tir.InvoiceHeader_Id = ih.Id
+			INNER JOIN @Cases AS c
+				ON tir.Case_Id = c.Id;
 
 			DROP TABLE #TmpLogs;
 
