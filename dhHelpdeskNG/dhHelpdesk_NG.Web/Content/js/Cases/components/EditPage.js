@@ -1714,8 +1714,8 @@ EditPage.prototype.init = function (p) {
     const logTab$ = $('#logtab');
     if (logTab$.length > 0) {
         const maxRows = 3;
-        const table$ = logTab$.find('.caselog');
-        const rows$ = table$.find('tr:gt(0)');
+        const table$ = logTab$.find("table[name='caseLogTable']");
+        const rows$ = table$.find("tr[name='caseLogRow']");
 
         // process rows height
         const lineHeight = 20;
@@ -1734,7 +1734,7 @@ EditPage.prototype.init = function (p) {
 
             if (externalCellRowsCount > maxTdRows) {
                 $(tds[3]).find('.row-all').show();
-                isRowAllVisible = true;
+                isRowAllVisible = true; 
             }
             if (internalCellRowsCount > maxTdRows) {
                 $(tds[4]).find('.row-all').show();
@@ -1752,23 +1752,41 @@ EditPage.prototype.init = function (p) {
                         currRow$.toggleClass(className);
                     });
             } else {
-                //row$.removeClass(className);
+                row$.removeClass(className);
             }
         });
 
         // process table height
-        const logTabsRowsCount = rows$.length;
-        if (logTabsRowsCount > maxRows) {
+        const logRowsCount = rows$.length;
+        if (logRowsCount > maxRows) {
             const more$ = logTab$.find('.all.more');
             const less$ = logTab$.find('.all.less');
             const toggleRows = function () {
-                /*console.log(table$.find('tr.less3'))*/
                 if (more$.is(':visible')) {
-                    table$.find('tr.less3:gt(' + (maxRows - 2) + ')').hide()
+                    
+                    table$.find('tr.less3:gt(' + (maxRows - 2) + ')').hide();
                     rows$.each((i, row) => {
                         let r$ = $(row);
 
-                        r$.removeClass("less-ignoreheight");
+                        if (i > 2) {
+                            r$.hide();
+                            r$.removeClass("less-ignoreheight");
+                        }
+                        else {
+                            let td$ = r$.find("div[name='divTextExternal']");
+                            if (td$.width() > 300) {
+                                r$.find('td').addClass("scrollMe");
+                            }
+                            if (i == 0 && r$.height() > 140) {
+                                r$.addClass("less7");
+                            }
+                            if (i != 0  && r$.height() > 60) {
+                                r$.addClass("less3")
+                            }
+                            r$.show();
+                            
+                            r$.removeClass("less-ignoreheight");
+                        }
                     });
                 }
 
@@ -1776,19 +1794,20 @@ EditPage.prototype.init = function (p) {
                     table$.find('tr.less3:gt(' + (maxRows - 2) + ')').show();
                     rows$.each((i, row) => {
                         let r$ = $(row);
-
-                        r$.addClass("less-ignoreheight");
+                        r$.show();
+                        r$.removeClass("less3");
+                        r$.removeClass("less7");
                     });
                 }
             }
             toggleRows();
             more$.add(less$).on('click', function (e) {
                 e.preventDefault();
-
                 more$.toggle();
                 less$.toggle();
                 toggleRows();
             });
+
         }
     }
 

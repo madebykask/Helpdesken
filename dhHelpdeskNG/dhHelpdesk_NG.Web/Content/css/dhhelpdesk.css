@@ -4288,7 +4288,9 @@ div.chosen-container.chosen-container-single.error {
     color: #0088cc;
     text-decoration: none;
 }
-
+.scrollMe {
+    overflow-x: auto !important;
+}
 .caselog tr.less3 > td > a > div,
 .caselog tr.less3 > td > div {
     height: 60px;
