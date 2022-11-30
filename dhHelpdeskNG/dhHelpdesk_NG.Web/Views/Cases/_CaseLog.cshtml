@@ -8,7 +8,7 @@
 @if (Model != null && Model.Logs != null)
 {
     <div class="tab-pane tab-pane-border active" id="logtab">
-        <table class="table table-striped table-bordered table-hover caselog">
+        <table class="table table-striped table-bordered table-hover caselog" name="caseLogTable">
             @if (Model.Logs.Any())
             {
                 <thead>
@@ -34,7 +34,7 @@
                         {
 
 
-                            <tr id="@r.Id" class='@(r.Id == Model.Logs.First().Id ? "less7" : "less3")'>
+                            <tr id="@r.Id" class='@(r.Id == Model.Logs.First().Id ? "less7" : "less3")' name="caseLogRow">
 
                                 @* Edit  *@
                                 <td>

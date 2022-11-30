@@ -1714,8 +1714,8 @@ EditPage.prototype.init = function (p) {
     const logTab$ = $('#logtab');
     if (logTab$.length > 0) {
         const maxRows = 3;
-        const table$ = logTab$.find('.caselog');
-        const rows$ = table$.find('tr:gt(0)');
+        const table$ = logTab$.find("table[name='caseLogTable']");
+        const rows$ = table$.find("tr[name='caseLogRow']");
 
         // process rows height
         const lineHeight = 20;
@@ -1758,7 +1758,6 @@ EditPage.prototype.init = function (p) {
 
         // process table height
         const logRowsCount = rows$.length;
-       
         if (logRowsCount > maxRows) {
             const more$ = logTab$.find('.all.more');
             const less$ = logTab$.find('.all.less');
@@ -1768,6 +1767,7 @@ EditPage.prototype.init = function (p) {
                     table$.find('tr.less3:gt(' + (maxRows - 2) + ')').hide();
                     rows$.each((i, row) => {
                         let r$ = $(row);
+
                         if (i > 2) {
                             r$.hide();
                             r$.removeClass("less-ignoreheight");
