@@ -1740,7 +1740,7 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = 'User with read access only' WHERE Text_Id=1209 AND Language_Id=2;
 GO
 
-UPDATE tblTextTranslation Set TextTranslation = 'Inform initiator as standard' WHERE Text_Id=1213 AND Language_Id=2;
+UPDATE tblTextTranslation Set TextTranslation = 'Inform initiator as default' WHERE Text_Id=1213 AND Language_Id=2;
 GO
 
 UPDATE tblTextTranslation Set TextTranslation = 'Log in' WHERE Text_Id=1215 AND Language_Id=2;
@@ -8375,6 +8375,13 @@ If not exists (select * from tbltext where id = 2139)
 GO
 If not exists (select * from tblTextTranslation where text_id = 2139 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2139, 2, '{0} records will be affected')
+GO
+
+If not exists (select * from tbltext where id = 2140)
+	insert into tbltext (id, TextString) VALUES (2140, 'Informera HandläggareX som standard')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2140 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2140, 2, 'Inform administrator as default')
 GO
 
 -- Generate id sequence for customer generated IDs
