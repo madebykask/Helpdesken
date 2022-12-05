@@ -32,6 +32,7 @@ namespace DH.Helpdesk.Services.Services
 
     public interface IGDPRDataPrivacyCasesService
     {
+        IList<int> GetCaseParents(int customerId, DataPrivacyParameters p, IUnitOfWork uow);
         int GetCasesCount(int customerId, DataPrivacyParameters p);
 
         IQueryable<Case> GetCasesQuery(int customerId, DataPrivacyParameters p, IUnitOfWork uow);
@@ -332,6 +333,21 @@ namespace DH.Helpdesk.Services.Services
 
             casesQueryable = casesQueryable.OrderBy(x => x.Id);
             return casesQueryable;
+        }
+
+        public IList<int> GetCaseParents(int customerId, DataPrivacyParameters p, IUnitOfWork uow)
+        {
+
+            var casesQuery = GetCasesQuery(customerId, p, uow);
+
+            var parentChildRepository = uow.GetRepository<ParentChildRelation>();
+
+            var res = from pc in parentChildRepository.GetAll()
+                      join c in casesQuery
+                      on pc.AncestorId equals c.Id
+                      select pc;
+
+            return res.Select(c=> c.AncestorId).ToList();
         }
 
         #endregion
