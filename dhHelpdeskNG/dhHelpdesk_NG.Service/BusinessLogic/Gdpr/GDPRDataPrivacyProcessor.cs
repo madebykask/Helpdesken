@@ -136,6 +136,12 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                 var fetchNext = totalCount > 0;
                 var step = 0;
                 _log.Debug($"Total cases found to process: {totalCount}. TaskId: {p.TaskId}.");
+                IList<int> parentIds = new List<int>();
+
+                using (var uow = _unitOfWorkFactory.Create(sqlTimeout))
+                {
+                    parentIds = _gDPRDataPrivacyCasesService.GetCaseParents(customerId, p, uow);
+                }
 
                 while (fetchNext)
                 {
@@ -156,7 +162,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                         uow.AutoDetectChangesEnabled = false;
 
                         //GET query
-                        var casesQueryable = _gDPRDataPrivacyCasesService.GetCasesQuery(customerId, p, uow);
+                        var casesQueryable = _gDPRDataPrivacyCasesService.GetCasesQuery(customerId, p, uow).OrderBy(c => parentIds.Contains(c.Id) ? 1 : 0);
 
                         List<Case> cases = new List<Case>();
                         //fetch next cases
@@ -251,6 +257,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                     }
 
                 }
+
+                caseNumbersToExclude = caseNumbersToExclude.Except(processedCaseNumbers).ToList();
                 SaveSuccessOperationAudit(customerId, userId, p, new DataPrivacyResult { CaseIdsResult = processedCasesIds, CaseNumbersErrorResult = caseNumbersToExclude, CaseNumbersResult = processedCaseNumbers, ErrorMessage = errorMessage });
 
                 _log.Debug($"Processing has been completed successfully. TaskId: {p.TaskId}.");
