@@ -4342,7 +4342,9 @@ div.chosen-container.chosen-container-single.error {
     left: 50% !important;
     bottom: auto !important;
 }
-
+.note-editable {
+    overflow-x: hidden !important;
+}
 .note-input{
     padding: 0 !important
 }
