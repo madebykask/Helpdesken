@@ -405,7 +405,7 @@
                         <label class="col-md-3">
                             @Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
                         </label>
-                        <div class="col-md-9">
+                        <div class="col-md-9" style="overflow-x:auto;">
                             @Model.CasePreview.Description.ForHtmlView()
                         </div>
                     </div>
