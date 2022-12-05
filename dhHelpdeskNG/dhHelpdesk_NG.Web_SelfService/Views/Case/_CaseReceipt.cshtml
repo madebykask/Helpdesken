@@ -612,8 +612,7 @@
     @{
         var langChosen = SessionFacade.CurrentLanguageId == 1 ? "sv-SE" : "en-US";
     }
-    if (typeof summerNoteCommentConfig != 'undefined') {
-        let summerNoteCommentConfig = {
+   let summerNoteCommentConfig = {
             lang: '@langChosen',
             placeholder: '',
             dialogsFade: true,
@@ -637,7 +636,6 @@
                 }
             }
         }
-    }
 
 
 

@@ -1303,6 +1303,11 @@ div .multitext i {
     margin-bottom: 5px !important;
 }
 
+    .note-toolbar {
+    background-color: #fafafa !important;
+    border: 1px solid #fafafa !important;
+}
+
     .note-editor.error {
         border: 1px solid #ff0000 !important;
         background-color: #ffeeee !important;
