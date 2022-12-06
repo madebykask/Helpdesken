@@ -708,6 +708,15 @@ IF COL_LENGTH('dbo.tblGDPROperationsAudit','ResultCaseNumbers') IS NULL
 	End
 
 Go
+
+RAISERROR ('Add Column CommunicateWithPerformer to tblCustomer', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCustomer','CommunicateWithPerformer') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblCustomer
+		ADD CommunicateWithPerformer int not null default 1
+	End
+
+Go
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.57'
 GO
