@@ -300,6 +300,7 @@ Module DH_Helpdesk_Mail
         Dim sRet_SendMail As String = ""
         Dim sSendTime As DateTime
         Dim sPriorityEMailList As String = ""
+        Dim isHtml As Boolean = False
 
         Try
             gsConnectionString = sConnectionstring
@@ -698,8 +699,9 @@ Module DH_Helpdesk_Mail
                                 If message.HasBodyText = True Then
                                     sBodyText = Replace(message.BodyText.ToString(), Chr(10), vbCrLf, 1, -1, CompareMethod.Text)
                                 ElseIf message.HasBodyHtml = True Then
-                                    sBodyText = message.BodyHtml.ToString()
-                                    sBodyText = convertHTMLtoText(sBodyText)
+                                    sBodyText = getInnerHtml(message.BodyHtml)
+                                    'sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp", sBodyText)
+                                    isHtml = True
                                 End If
 
                                 '//hämta användare baserat på userid/reportedBy
@@ -819,7 +821,7 @@ Module DH_Helpdesk_Mail
 
                                     'dhal i CaseHistory skall orginal från adressen hamna i CreatedByUser 
                                     'iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, objCase.Persons_EMail.ToString)
-                                    iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, sFromEMailAddress)
+
 
                                     ' save caseisabout
                                     If fieldsToUpdate.Count > 0 Then
@@ -834,7 +836,7 @@ Module DH_Helpdesk_Mail
                                     LogToFile("Create Case:" & objCase.Casenumber & ", Attachments:" & message.Attachments.Count, iPop3DebugLevel)
 
                                     'Save 
-                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
+                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber, sBodyText)
                                     Dim sPDFFileName As String = CreatePdfFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
 
                                     If Not IsNullOrEmpty(sPDFFileName) Then
@@ -846,20 +848,24 @@ Module DH_Helpdesk_Mail
 
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
                                         'iHTMLFile = 1
-
+                                        Dim fileReader As String
+                                        fileReader = My.Computer.FileSystem.ReadAllText(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html\" & sHTMLFileName,
+                                           System.Text.Encoding.UTF32)
+                                        'New case - Update description
+                                        objCaseData.updateCaseDescription(fileReader, objCase.Id)
                                         ' Lägg in i databasen
                                         'objCaseData.saveFileInfo(objCase.Id, "html/" & sHTMLFileName)
 
+                                        'Todo - check this
                                         DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html", True)
+                                        'DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
                                     End If
 
-
+                                    iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, sFromEMailAddress)
 
                                     'Attached files processing for Case
                                     Dim caseFiles As List(Of String) = ProcessMessageAttachments(message, iHTMLFile, objCustomer, objCase.Casenumber.ToString(), Nothing, iPop3DebugLevel, objGlobalSettings)
                                     If (caseFiles IsNot Nothing AndAlso caseFiles.Any()) Then
-
-
 
                                         For Each caseFilePath As String In caseFiles
                                             Dim sFileName As String = Path.GetFileName(caseFilePath)
@@ -1049,20 +1055,10 @@ Module DH_Helpdesk_Mail
                                     ' Spara svaret som en loggpost på aktuellt ärende
                                     ' Ta endast med svaret
                                     sBodyText = extractAnswerFromBody(sBodyText, objCustomer.EMailAnswerSeparator)
-
+                                    'sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp", sBodyText)
                                     ' Markera ärendet som oläst
                                     objCaseData.markCaseUnread(objCase)
 
-                                    'If objCase.Casenumber = "19851" Then
-                                    '    Dim sff As String
-                                    '    sff = ""
-                                    'End If
-                                    ' Uppdatera ärendet och aktivera om det är avslutat
-
-                                    'If objCase.Casenumber = "19965" Or objCase.Casenumber = "19964" Then
-                                    '    Dim g As String
-                                    '    g = ""
-                                    'End If
                                     caseismerged = objCaseData.checkIfCaseIsMerged(objCase.Id)
 
                                     dFinDate = objCase.FinishingDate
@@ -1124,7 +1120,6 @@ Module DH_Helpdesk_Mail
                                     ' Save Logs (Logga händelsen)
                                     If isInternalLogUsed Then
                                         ' Save as Internal Log (Lägg in som intern loggpost)
-
                                         iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
 
                                     Else
@@ -1137,7 +1132,8 @@ Module DH_Helpdesk_Mail
                                     Dim bIsInternalLogFile = isInternalLogUsed AndAlso isTwoAttachmentsActive ' Mark file as internal only 2attachments is enabled
                                     Dim logSubFolderPrefix = If(bIsInternalLogFile, "LL", "L") ' LL - Internal log subfolder, L - external log subfolder
 
-                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
+                                    'Creating htmlfile to use for pdf-creating
+                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber, "")
                                     Dim sPDFFileName As String = CreatePdfFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
 
                                     If Not IsNullOrEmpty(sPDFFileName) Then
@@ -1148,13 +1144,23 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
-                                        'iHTMLFile = 1
 
-                                        ' Lägg in i databasen
-                                        'objCaseData.saveFileInfo(objCase.Id, "html/" & sHTMLFileName)
+                                        Dim sHTMLFileNameBodyText As String = CreateHtmlFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber & "_body", sBodyText)
+                                        Dim fileReader As String
 
+                                        fileReader = My.Computer.FileSystem.ReadAllText(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html\" & sHTMLFileNameBodyText, System.Text.Encoding.UTF32)
+                                        'fileReader = getInnerHtml(fileReader)
+                                        If isInternalLogUsed Then
+                                            'Update internal Note
+                                            objLogData.updateInternalLogNote(iLog_Id, fileReader)
+                                        Else
+                                            'Update external Note
+                                            objLogData.updateExternalLogNote(iLog_Id, fileReader)
+                                        End If
                                         DeleteFilesInsideFolder(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html", True)
+                                        'DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
                                     End If
+
 
                                     ' Process attached log files 
                                     Dim logFiles As List(Of String) = ProcessMessageAttachments(message, iHTMLFile, objCustomer, iLog_Id.ToString(), logSubFolderPrefix, iPop3DebugLevel, objGlobalSettings)
@@ -1217,29 +1223,29 @@ Module DH_Helpdesk_Mail
                                             objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, MailTemplates.ClosedCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
 
                                         End If
-                                    ElseIf casefinsihed = True And caseisactivated = True Then
-                                        objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.CaseIsActivated, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                                        'ElseIf casefinsihed = True And caseisactivated = True Then
+                                        '    objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.CaseIsActivated, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
-                                        If Not objMailTemplate Is Nothing Then
-                                            Dim objMail As New Mail
-                                            Dim objLog As New Log
+                                        '    If Not objMailTemplate Is Nothing Then
+                                        '        Dim objMail As New Mail
+                                        '        Dim objLog As New Log
 
-                                            ' Set appropriate log text property
-                                            objLog.Text_External = If(Not isInternalLogUsed, sBodyText, String.Empty)
-                                            objLog.Text_Internal = If(isInternalLogUsed, sBodyText, String.Empty)
+                                        '        ' Set appropriate log text property
+                                        '        objLog.Text_External = If(Not isInternalLogUsed, sBodyText, String.Empty)
+                                        '        objLog.Text_Internal = If(isInternalLogUsed, sBodyText, String.Empty)
 
-                                            sMessageId = createMessageId(objCustomer.HelpdeskEMail)
-                                            sSendTime = Date.Now()
+                                        '        sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+                                        '        sSendTime = Date.Now()
 
-                                            Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+                                        '        Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
-                                            sRet_SendMail =
-                                            objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings,
-                                                             sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
+                                        '        sRet_SendMail =
+                                        '        objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings,
+                                        '                         sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
 
-                                            objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, MailTemplates.ClosedCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                        '        objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, MailTemplates.ClosedCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
 
-                                        End If
+                                        '    End If
                                     End If
                                 End If
 
@@ -1322,7 +1328,8 @@ Module DH_Helpdesk_Mail
         Dim task As Task(Of AuthenticationResult) = app.AcquireTokenForClient(ewsScopes).ExecuteAsync()
         Dim result As AuthenticationResult = Await task
 
-        Dim service As ExchangeService = New ExchangeService()
+        'Dim service As ExchangeService = New ExchangeService()
+        Dim service As ExchangeService = getExchangeService()
         ' TODO: Port? Maybe not
         service.Url = New Uri(server)
         service.Credentials = New OAuthCredentials(result.AccessToken)
@@ -1353,6 +1360,16 @@ Module DH_Helpdesk_Mail
     End Function
 
 
+
+    Private Function getCorrectTimeZone() As TimeZoneInfo
+        Return TimeZoneInfo.CreateCustomTimeZone("Time zone to workaround a bug", TimeZoneInfo.Local.BaseUtcOffset, "Time zone to workaround a bug", "Time zone to workaround a bug")
+    End Function
+
+    Private Function getExchangeService() As ExchangeService
+        Dim service = New ExchangeService(ExchangeVersion.Exchange2010_SP2, getCorrectTimeZone())
+        Return service
+    End Function
+
     Private Async Function ReadEwsFolderAsync(objCustomer As Customer, server As String, port As Integer, userName As String, emailFolder As String, emailArchiveFolder As String,
                                               applicationId As String, clientSecret As String, tenantId As String, temppath As String) As Task(Of List(Of MailMessage))
         'emailFolder = "Inkorg/M2T_test"
@@ -1363,7 +1380,9 @@ Module DH_Helpdesk_Mail
         Dim task As Task(Of AuthenticationResult) = app.AcquireTokenForClient(ewsScopes).ExecuteAsync()
         Dim result As AuthenticationResult = Await task
 
-        Dim service As ExchangeService = New ExchangeService()
+
+        'Dim service As ExchangeService = New ExchangeService()
+        Dim service As ExchangeService = getExchangeService()
         ' TODO: Port? Maybe not
         service.Url = New Uri(server)
         service.Credentials = New OAuthCredentials(result.AccessToken)
@@ -1913,9 +1932,81 @@ Module DH_Helpdesk_Mail
 
     End Function
 
+    Private Function CreateBase64Images(objCustomer As Customer, ByVal message As MailMessage,
+                                            ByVal sFolder As String, ByVal smallBody As String) As String
+
+        Dim sBodyHtml As String = ""
+        Dim sFileName As String = ""
+        Dim sMediaType As String = ""
+        Dim sContentId As String = ""
+        Dim sContentLocation As String = ""
+        Dim iFileCount As Integer = 0
+        Dim sFileExtension As String = ""
+
+        Try
+            If Not message Is Nothing Then
+
+                If message.HasBodyHtml Then
+
+                    sBodyHtml = message.BodyHtml
+                    If Not IsNullOrEmpty(smallBody) Then
+                        sBodyHtml = smallBody
+                    End If
+
+                    If Directory.Exists(sFolder) = False Then
+                        Directory.CreateDirectory(sFolder)
+                    End If
+                    ' Kontrollera om det finns några resurser
+                    Dim resCol As LinkedResourceCollection = message.Resources
+
+                    For k As Integer = 0 To resCol.Count - 1
+                        Dim res As LinkedResource = resCol(k)
+
+                        sMediaType = res.MediaType
+
+                        If sMediaType.Contains("image") Then
+
+                            If Not res.ContentId Is Nothing Then
+                                ' Byt ut cid: i htmlbody
+                                sContentId = res.ContentId.ToString
+                                sContentId = sContentId.Replace("<", "")
+                                sContentId = sContentId.Replace(">", "")
+
+                                sContentId = "cid:" & sContentId
+
+                                sFileExtension = sMediaType.Replace("image/", "")
+                                iFileCount = iFileCount + 1
+
+                                sContentLocation = sFolder & "\" & iFileCount & "." & sFileExtension
+                                res.Save(sFolder & "\" & iFileCount & "." & sFileExtension)
+                                Dim imgHref As String = ""
+                                Dim bData As Byte()
+                                Dim br As BinaryReader = New BinaryReader(System.IO.File.OpenRead(sContentLocation))
+                                bData = br.ReadBytes(br.BaseStream.Length)
+                                Dim base64String As String = Convert.ToBase64String(bData, 0, bData.Length)
+                                imgHref = "data:image/png;base64," & base64String
+                                br.Close()
+                                sBodyHtml = sBodyHtml.Replace(sContentId, imgHref)
+                            End If
+                        End If
+                    Next
+
+                End If
+            End If
+
+        Catch ex As Exception
+            LogError("Error createBase&4Images MediaType: " & sMediaType & ", " & ex.Message.ToString, objCustomer)
+
+            'Rethrow
+            Throw
+        End Try
+
+        Return sBodyHtml
+    End Function
+
     Private Function CreateHtmlFileFromMail(objCustomer As Customer, ByVal message As MailMessage,
                                             ByVal sFolder As String,
-                                            ByVal sCaseNumber As String) As String
+                                            ByVal sCaseNumber As String, ByVal smallBody As String) As String
 
         Dim sBodyHtml As String = ""
         Dim sFileName As String = ""
@@ -1949,6 +2040,11 @@ Module DH_Helpdesk_Mail
                 If message.HasBodyHtml Then
 
                     sBodyHtml = message.BodyHtml
+                    If Not IsNullOrEmpty(smallBody) Then
+                        sBodyHtml = smallBody
+                    End If
+                    'Dim apa As String = "/<body[^>]*>((.|[\n\r])*)<\/body>/im"
+
                     sBodyHtml = Regex.Replace(sBodyHtml, "<base.*?>", "")
 
                     If Directory.Exists(sFolder) = False Then
@@ -1983,11 +2079,26 @@ Module DH_Helpdesk_Mail
                                 sFileExtension = sMediaType.Replace("image/", "")
                                 iFileCount = iFileCount + 1
 
-                                'sContentLocation = res.ContentLocation.ToString
-                                ' Spara filen
+                                sContentLocation = sFolder & "\html\" & iFileCount & "." & sFileExtension
                                 res.Save(sFolder & "\html\" & iFileCount & "." & sFileExtension)
+                                Dim imgHref As String = ""
+                                Dim bData As Byte()
+                                Dim br As BinaryReader = New BinaryReader(System.IO.File.OpenRead(sContentLocation))
+                                bData = br.ReadBytes(br.BaseStream.Length)
+                                Dim base64String As String = Convert.ToBase64String(bData, 0, bData.Length)
+                                imgHref = "data:image/png;base64," & base64String
 
-                                sBodyHtml = sBodyHtml.Replace(sContentId, iFileCount & "." & sFileExtension)
+                                'If smallBody Is Nothing Then
+                                '    Dim bData As Byte()
+                                '    Dim br As BinaryReader = New BinaryReader(System.IO.File.OpenRead(sContentLocation))
+                                '    bData = br.ReadBytes(br.BaseStream.Length)
+                                '    Dim base64String As String = Convert.ToBase64String(bData, 0, bData.Length)
+                                '    imgHref = "data:image/png;base64," & base64String
+                                'Else
+                                '    imgHref = "file:\\\" & sContentLocation
+                                'End If
+                                br.Close()
+                                sBodyHtml = sBodyHtml.Replace(sContentId, imgHref)
                             Else
                                 sFileExtension = sMediaType.Replace("image/", "")
                                 iFileCount = iFileCount + 1
@@ -1996,7 +2107,7 @@ Module DH_Helpdesk_Mail
                                 res.Save(sFolder & "\html\" & iFileCount & "." & sFileExtension)
 
                                 sContentLocation = IIf(String.IsNullOrWhiteSpace(res.ContentLocation), String.Empty, res.ContentLocation)
-                                sBodyHtml = sBodyHtml.Replace(sContentLocation, iFileCount & "." & sFileExtension)
+                                'sBodyHtml = sBodyHtml.Replace(sContentLocation, iFileCount & "." & sFileExtension)
                             End If
                         End If
                     Next
@@ -2291,6 +2402,31 @@ Module DH_Helpdesk_Mail
             Return sHTML
         End Try
     End Function
+
+    Private Function getInnerHtml(ByVal sHTML As String) As String
+        Dim startTime As DateTime
+        Dim MyWebBrowser As New WebBrowser
+
+        startTime = DateTime.Now()
+
+        MyWebBrowser.DocumentText = sHTML
+
+        MyWebBrowser.ScriptErrorsSuppressed = True
+
+        While (MyWebBrowser.ReadyState <> WebBrowserReadyState.Complete Or MyWebBrowser.IsBusy = True) And DateDiff(DateInterval.Second, startTime, DateTime.Now()) < 10
+            Application.DoEvents()
+        End While
+        Dim htmlText As String = ""
+        Try
+            htmlText = MyWebBrowser.Document.Body.InnerHtml
+        Catch ex As Exception
+            htmlText = sHTML
+        End Try
+        htmlText = Replace(htmlText, vbCrLf, "")
+        htmlText = htmlText.Replace("'", "''")
+        Return htmlText
+    End Function
+
     Private Function isBlockedRecipient(sEMail As String, sBlockedEMailRecipents As String) As Boolean
         isBlockedRecipient = False
 

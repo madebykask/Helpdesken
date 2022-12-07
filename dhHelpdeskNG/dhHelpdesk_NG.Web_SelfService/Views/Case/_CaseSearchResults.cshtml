@@ -68,7 +68,7 @@
                                 <td>
                                     @if (c.FieldType == FieldTypes.Date)
                                     {
-                                                        <!-- date -->
+                                        <!-- date -->
                                         if (string.IsNullOrEmpty(dynamicUrl))
                                         {
                                             <a href="@Url.Action("Index", "case", new { id = caseInfo.Id , area ="" })"> @Html.DisplayFor(m => c.DateTimeValue, "Date") </a>
@@ -80,7 +80,7 @@
                                     }
                                     else if (c.FieldType == FieldTypes.Time)
                                     {
-                                                        <!-- dateTime -->
+                                        <!-- dateTime -->
                                         if (string.IsNullOrEmpty(dynamicUrl))
                                         {
                                             <a href="@Url.Action("Index", "case", new { id = caseInfo.Id, area ="" })">@Html.DisplayFor(m => c.DateTimeValue, "DateAndTime")</a>
@@ -94,7 +94,7 @@
                                     {
                                         if (c.TranslateThis)
                                         {
-                                                            <!-- string -->
+                                            <!-- string -->
                                             if (string.IsNullOrEmpty(dynamicUrl))
                                             {
                                                 <a href="@Url.Action("Index", "case", new { id = caseInfo.Id, area ="" })">@Translation.Get(c.StringValue, Enums.TranslationSource.TextTranslation)</a>
@@ -108,11 +108,30 @@
                                         {
                                             if (string.IsNullOrEmpty(dynamicUrl))
                                             {
-                                                <a href="@Url.Action("Index", "case", new { id = caseInfo.Id, area ="" })">@c.StringValue</a>
+                                                if (c.Key == "Description")
+                                                {
+                                                    <a href="@Url.Action("Index", "case", new { id = caseInfo.Id, area ="" })">@Html.Raw(c.StringValue.StripHTML())</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("Index", "case", new { id = caseInfo.Id, area ="" })">@c.StringValue</a>
+                                                }
+
+
                                             }
                                             else
                                             {
-                                                <a href="@Url.Content(dynamicUrl.SetUrlParameters(caseInfo.Id))">@c.StringValue</a>
+
+                                                if (c.Key == "Description")
+                                                {
+                                                    <a href="@Url.Action("Index", "case", new { id = caseInfo.Id, area ="" })">@Html.Raw(c.StringValue.StripHTML())</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Content(dynamicUrl.SetUrlParameters(caseInfo.Id))">@c.StringValue</a>
+                                                }
+
+
                                             }
                                         }
                                     }

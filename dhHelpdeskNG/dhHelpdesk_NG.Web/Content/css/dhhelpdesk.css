@@ -4,11 +4,11 @@ body {
     background: #f2f7fe;
     min-width: 1350px !important;
 }
-
 a, a:hover, a:focus {
     color: #333333;
     text-decoration: none;
 }
+
 /** recover bootstrap styles for links inside toastmessage dialgue */
 .toast-container a,
 .alert a {
@@ -46,6 +46,10 @@ a, a:hover, a:focus {
 
 .textred {
     color: red !important;
+}
+.textblue {
+    color: #0088cc;
+    text-decoration: none;
 }
 
     .textred td a {
@@ -954,6 +958,12 @@ input[type=text].error, select.error, textarea.error, .btn-group.error .btn {
     background-color: #ffeeee;
 }
 
+.note-editor.error {
+    border: 1px solid #ff0000 !important;
+    background-color: #ffeeee !important;
+}
+
+
 
 a.error, input[type='button'].error .btn {
     border: 1px solid #ff0000;
@@ -1851,6 +1861,7 @@ table th.thpointer {
         overflow-wrap: break-word;
         word-wrap: break-word;
         line-height: 13px;
+        overflow: hidden !important;
     }
 
         .table-cases td select, .table-cases th select, .table-cases td input[type="text"], .table-cases th input[type="text"] {
@@ -1951,6 +1962,12 @@ input[type="checkbox"],
 td .btn-group {
     margin-bottom: 5px;
 }
+
+/***********************************SUMMER NOTE FIX***************************/
+.note-btn-group .btn-group {
+    margin-bottom: 0px !important;
+}
+
 
 td.td-bottom-multiselect .btn-group {
     margin-bottom: 5px;
@@ -2918,7 +2935,6 @@ body.login {
 }
 
 
-
 .infop {
     margin: 20px;
     padding: 30px 0;
@@ -3596,7 +3612,13 @@ div.DTFC_LeftFootWrapper table {
     border: 1px solid #dddddd;
 }
 
-
+/***SUMMER NOTE******/
+.note-editor.note-frame {
+    padding: 0px !important;
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+}
 
 .panel-heading {
     padding: 10px 15px;
@@ -3795,7 +3817,7 @@ div.modal-body.max-height-70-percent {
 
 .case-usersearch-textarea {
     height: 25px;
-    width: 40%;
+    width: 30%;
     position: absolute;
 }
 
@@ -4266,7 +4288,9 @@ div.chosen-container.chosen-container-single.error {
     color: #0088cc;
     text-decoration: none;
 }
-
+.scrollMe {
+    overflow-x: auto !important;
+}
 .caselog tr.less3 > td > a > div,
 .caselog tr.less3 > td > div {
     height: 60px;
@@ -4277,6 +4301,12 @@ div.chosen-container.chosen-container-single.error {
 .caselog tr.less7 > td > div {
     height: 140px;
     overflow: hidden;
+}
+
+.caselog tr.less-ignoreheight > td > a > div,
+.caselog tr.less-ignoreheight > td > div {
+    height: 100% !important;
+    overflow: auto !important;
 }
 
 .caselog tr.less3 .row-all::before,
@@ -4290,4 +4320,35 @@ div.chosen-container.chosen-container-single.error {
 
 .caselog .log-files a {
     margin-bottom: 10px;
+}
+
+.summernote-desc-flex-container {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    -ms-box-orient: horizontal;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -moz-flex;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+
+.note-modal {
+    z-index: 99999 !important;
+    left: 50% !important;
+    bottom: auto !important;
+}
+/*.note-editable {
+    overflow-x: hidden !important;
+}*/
+.note-input{
+    padding: 0 !important
+}
+
+.note-editor.note-frame {
+    margin-bottom: 5px !important;
 }

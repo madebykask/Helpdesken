@@ -21,14 +21,14 @@ namespace DH.Helpdesk.WebApi
 
             var container = WebApiConfig.ConfigDiContainer(config);
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
-            
+
             //register cors for owin components (auth provider) only 
             app.UseCors(new CorsOptions
             {
                 PolicyProvider = new CorsPolicyProvider()
                 {
                     PolicyResolver = request =>
-                        (request.Path.Value ?? string.Empty).Equals("/token", StringComparison.OrdinalIgnoreCase) 
+                        (request.Path.Value ?? string.Empty).Equals("/token", StringComparison.OrdinalIgnoreCase)
                             ? Task.FromResult(new CorsPolicy
                             {
                                 AllowAnyHeader = true,
@@ -44,7 +44,6 @@ namespace DH.Helpdesk.WebApi
             RegisterMiddlewareComponents(container, app);
 
             app.UseAutofacWebApi(config);
-
             ConfigureAuth(app, config.DependencyResolver);
 
             WebApiConfig.InitLogging();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DH.Helpdesk.BusinessData.Enums.BusinessRules;
+using System;
 using System.Collections.Generic;
 
 namespace DH.Helpdesk.BusinessData.Models.Gdpr
@@ -20,5 +21,12 @@ namespace DH.Helpdesk.BusinessData.Models.Gdpr
         public bool RemoveCaseAttachments { get; set; }
         public bool RemoveLogAttachments { get; set; }
         public bool RemoveFileViewLogs { get; set; }
+        public List<string> CaseTypes { get; set; }
+        public int GDPRType { get; set; }
+
+        public DateTime? FinishedDateFrom { get; set; }
+        public DateTime? FinishedDateTo { get; set; }
+        public List<string> ProductAreas { get; set; }
+
     }
 }

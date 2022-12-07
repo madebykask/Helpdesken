@@ -12,7 +12,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.Concrete
     using DH.Helpdesk.Web.Areas.Reports.Models.Reports;
     using DH.Helpdesk.Web.Areas.Reports.Models.Reports.ReportGenerator;
     using DH.Helpdesk.Web.Infrastructure;
-
+    using HtmlAgilityPack;
     using OfficeOpenXml;
 
     public sealed class ExcelBuilder : IExcelBuilder
@@ -126,11 +126,34 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.Concrete
                     row++;
                     foreach (var value in c.FieldValues)
                     {
+
+                        var placeHolder = value.Value.GetDisplayValue().PrepareForExcel();
+
+                        if (value.FieldName == "Description" || value.FieldName == "tblLog.Text_Internal" || value.FieldName == "tblLog.Text_External")
+                        {
+                            //Clear HTML
+                            HtmlDocument mainDoc = new HtmlDocument();
+                            string htmlString = value.Value.GetDisplayValue().Replace("&gt;", ">").Replace("&lt;", "<");
+                            mainDoc.LoadHtml(htmlString);
+                            string cleanText;
+                            if (mainDoc.DocumentNode.InnerText.Length > 4000)
+                            {
+                                cleanText = mainDoc.DocumentNode.InnerText.Substring(0, 4000);
+                            }
+                            else
+                            {
+                                cleanText = mainDoc.DocumentNode.InnerText;
+                            }
+
+                            placeHolder = cleanText.PrepareForExcel();
+                        }
+            
+
                         var tempValue = value.Value as TimeDisplayValue;
                         ws.SetValue(row, column,
                             tempValue != null
                                 ? tempValue.Value.ToString().PrepareForExcel()
-                                : value.Value.GetDisplayValue().PrepareForExcel());
+                                : placeHolder);
                         column++;
                     }
                 }

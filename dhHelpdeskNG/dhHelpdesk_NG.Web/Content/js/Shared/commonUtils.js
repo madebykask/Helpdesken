@@ -61,3 +61,5 @@ CommonUtils.generateRandomKey = function () {
 
     return s4() + '-' + s4() + '-' + s4();
 };
+
+

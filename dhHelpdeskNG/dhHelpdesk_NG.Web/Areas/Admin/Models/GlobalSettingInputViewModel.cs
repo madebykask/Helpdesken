@@ -5,7 +5,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
-
+    using DH.Helpdesk.BusinessData.Enums.BusinessRules;
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Web.Infrastructure;
@@ -64,6 +64,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
             ClosedOnly = true;
             ReplaceEmails = true;
             Fields = new List<SelectListItem>();
+            CaseTypes = new List<SelectListItem>();
+            ProductAreas = new List<SelectListItem>();
+            GDPRType = new List<SelectListItem>();
         }
 
         public bool IsAvailable { get; set; }
@@ -74,16 +77,27 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         public int? RetentionPeriod { get; set; }
         public DateTime? RegisterDateFrom { get; set; }
         public DateTime? RegisterDateTo { get; set; }
+
+        public DateTime? FinishedDateFrom { get; set; }
+        public DateTime? FinishedDateTo { get; set; }
+        
         public bool ClosedOnly { get; set; }
         public bool CalculateRegistrationDate { get; set; }
-        public List<SelectListItem> Fields { get; set; }
+        public List<SelectListItem> Fields { get; set; }        
         public List<string> FieldsNames { get; set; }
+        public List<SelectListItem> CaseTypes { get; set; }
+        public List<string> CaseTypeNames { get; set; }
+        public List<SelectListItem> ProductAreas { get; set; }
+        public List<string> ProductAreaNames { get; set; }
         public bool ReplaceEmails { get; set; }
         public string ReplaceDataWith { get; set; }
         public DateTime? ReplaceDatesWith { get; set; }
         public bool RemoveCaseAttachments { get; set; }
         public bool RemoveLogAttachments { get; set; }
         public bool RemoveFileViewLogs { get; set; }
+
+        public int SelectedGDPRType { get; set; }
+        public List<SelectListItem> GDPRType { get; set; }
     }
 
     public class GlobalSettingInputViewModel : BaseTabInputViewModel

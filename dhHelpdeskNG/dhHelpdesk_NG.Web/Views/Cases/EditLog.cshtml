@@ -1,6 +1,9 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
 @using DH.Helpdesk.Web.Common.Enums.Case
 
+<link href="~/Content/css/summernote.css" rel="stylesheet" />
+<script src="~/Content/summernote-0.8.18/summernote.js"></script>
+
 @if (Model != null)
 {
     ViewData.Add("readonlyLog", !Model.newLog);
@@ -76,3 +79,121 @@
         };
     </script>
 }
+
+<script>
+
+    //Declare height
+    let height = 100;
+
+
+    let summerNoteInternalConfig = {
+        placeholder: '',
+        dialogsFade: true,
+        tabsize: 1,
+        fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82'],
+        toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
+        popover: {
+            image: [
+                ['remove', ['removeMedia']],
+            ],
+        },
+        disableResizeImage: true,
+        disableResizeEditor: true,
+        callbacks: {
+            onChange: function (contents, $editable) {
+                $('.summernoteinternal').val($('.summernoteinternal').summernote('isEmpty') ? "" : contents);
+
+                validator.element($('.summernoteinternal'));
+            },
+            onPaste: function (e) {
+                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                e.preventDefault();
+                document.execCommand('insertText', false, bufferText);
+            }
+        }
+    }
+
+    let summerNoteExternalConfig = {
+        placeholder: '',
+        dialogsFade: true,
+        tabsize: 1,
+        fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82'],
+        toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
+        popover: {
+            image: [
+                ['remove', ['removeMedia']],
+            ],
+        },
+        disableResizeImage: true,
+        disableResizeEditor: true,
+        callbacks: {
+            onChange: function (contents, $editable) {
+
+                $('.summernoteexternal').val($('.summernoteexternal').summernote('isEmpty') ? "" : contents);
+
+                validator.element($('.summernoteexternal'));
+
+            },
+            onPaste: function (e) {
+                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                e.preventDefault();
+                document.execCommand('insertText', false, bufferText);
+            }
+        }
+    }
+
+
+    //Init summernote
+    $(document).ready(function () {
+
+
+        $('.summernoteinternal').summernote(summerNoteInternalConfig)
+        $('.summernoteexternal').summernote(summerNoteExternalConfig)
+
+
+
+        function sizeChanged(element) {
+
+            let elementId = "#" + element[0].target.id;
+
+            let toolBarHeight = $(elementId + ' .note-toolbar')[0].offsetHeight;
+            let footerHeight = $(elementId + ' .note-resizebar')[0].offsetHeight;
+            let padding = 53;
+
+            //Rescale summernote
+            $(elementId + ' .note-editable').height(element[0].target.offsetHeight - toolBarHeight - footerHeight - padding);
+
+        }
+
+        //Set default true height
+        $('textExternalOuter.note-editable').height(height);
+        $('textInternalOuter.note-editable').height(height);
+
+        //Trigger resize
+        if (typeof textExternalOuter != 'undefined') {
+            new ResizeObserver(sizeChanged).observe(textExternalOuter)
+        }
+        if (typeof textInternalOuter != 'undefined') {
+            new ResizeObserver(sizeChanged).observe(textInternalOuter)
+        }
+
+
+        //Loop all .summernote to try to find the disabled ones
+        $(".summernoteinternal").each(function () {
+
+            if (this.readOnly) {
+                $("#" + this.id).summernote("disable");
+            }
+
+        });
+
+        $(".summernoteexternal").each(function () {
+
+            if (this.readOnly) {
+                $("#" + this.id).summernote("disable");
+            }
+
+        });
+
+    });
+</script>

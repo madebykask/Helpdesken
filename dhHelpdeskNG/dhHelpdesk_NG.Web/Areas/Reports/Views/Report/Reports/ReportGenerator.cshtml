@@ -33,9 +33,21 @@
         @foreach (var c in Model.Cases)
         {
             <tr onclick=" window.location.href = '@Url.Action("Edit", "Cases", new RouteValueDictionary { { "id", c.Id }, { "backURL" , "/Reports/Report"}, { "area", String.Empty } })' ">
-                @foreach(var value in c.FieldValues)
+                @foreach (var value in c.FieldValues)
                 {
-                    <td class="tdpointer"> @Html.AttributeEncode(value.Value.GetDisplayValue()).ForHtmlView() </td>
+
+
+
+                    if (value.FieldName == "Description" || value.FieldName == "tblLog.Text_Internal" || value.FieldName == "tblLog.Text_External")
+                    {
+                        <td class="tdpointer">@Html.Raw(value.Value.GetDisplayValue().StripHTML())</td>
+                    }
+                    else
+                    {
+                        <td class="tdpointer"> @Html.AttributeEncode(value.Value.GetDisplayValue()).ForHtmlView() </td>
+                    }
+
+
                 }
             </tr>
         }

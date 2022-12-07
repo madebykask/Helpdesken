@@ -53,9 +53,10 @@ namespace DH.Helpdesk.Services.Services
 
         CustomerDetails GetCustomerDetails(int id);
         Task<CustomerDetails> GetCustomerDetailsAsync(int id);
-
+        Task<CustomerEmailSettings> GetCustomerEmailSettingsAsync(int id);
         ItemOverview GetItemOverview(int customerId);
         CaseDefaultsInfo GetCustomerDefaults(int customerId);
+        Task<int> GetCommunicateWithNotifier(int cid);
     }
 
     public class CustomerService : ICustomerService
@@ -698,6 +699,24 @@ namespace DH.Helpdesk.Services.Services
                 });
         }
 
+        public Task<CustomerEmailSettings> GetCustomerEmailSettingsAsync(int id)
+        {
+            var customerEmailSettings = GetCustomerEmailSettingsQueryable(id).SingleOrDefaultAsync();
+            return customerEmailSettings;        
+        }
+
+        private IQueryable<CustomerEmailSettings> GetCustomerEmailSettingsQueryable(int id)
+        {
+            return _customerRepository.GetMany(c => c.Id == id && c.Status == 1).AsQueryable()
+                .Select(c => new CustomerEmailSettings()
+                {
+                    CustomerId = c.Id,
+                    CommunicateWithNotifier = c.CommunicateWithNotifier,
+                    CommunicateWithPerformer = c.CommunicateWithPerformer
+                });
+        }
+
+
         public CaseDefaultsInfo GetCustomerDefaults(int customerId)
         {
             return _customerRepository.GetCustomerDefaults(customerId);
@@ -778,6 +797,12 @@ namespace DH.Helpdesk.Services.Services
                 res.AddRange(allowCaseMoveCustomers);
 
             return res.OrderBy(x => x.Name).ToList();
+        }
+
+        public async Task<int> GetCommunicateWithNotifier(int customerId)
+        {
+            var customer = await GetCustomerAsync(customerId);
+            return customer.CommunicateWithNotifier;
         }
 
         public void Commit()

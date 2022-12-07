@@ -34,7 +34,7 @@
                 </thead>
                 <tr id="tr_WorkingGroup" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup)">
                     <td>
-                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, "Driftgrupp")
+                        @Translation.GetCoreTextTranslation("Driftgrupp")
                     </td>
                     <td>
                         @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup))
@@ -69,7 +69,7 @@
 
                 <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator)">
                     <td>
-                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Performer_User_Id, "Handläggare")
+                        @Translation.GetCoreTextTranslation("Handläggare")
                     </td>
                     <td>
                         @*@if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))*@
@@ -106,62 +106,62 @@
 
                     }
                     @*else
-                        {
-                            <td>
-                                <a href="#" id="performerSearch" data-field="administrator" style="" title="" class="btn disabled"><i class="icon-search"></i></a>
-                            </td>
-                        }*@
+            {
+                <td>
+                    <a href="#" id="performerSearch" data-field="administrator" style="" title="" class="btn disabled"><i class="icon-search"></i></a>
+                </td>
+            }*@
                 </tr>
                 @*<tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Priority_Id, CaseSolutionFields.Priority)">
-                        <td>
-                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Priority_Id, "Prioritet")
-                        </td>
-                        <td>
-                            @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Priority_Id, CaseSolutionFields.Priority))
+            <td>
+               @Translation.GetCoreTextTranslation("Prioritet")
+            </td>
+            <td>
+                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Priority_Id, CaseSolutionFields.Priority))
+                {
+                    <select id="case__Priority_Id" @Model.case_.Id.HtmlReadOnlyFlag(Model.customerUserSetting.PriorityPermission) name="case_.Priority_Id">
+                        <option value="">&nbsp;</option>
+                        @if (Model.priorities != null)
+                        {
+                            foreach (var e in Model.priorities.Where(e => e.IsActive == 1 || Model.case_.Priority_Id == e.Id))
                             {
-                                <select id="case__Priority_Id" @Model.case_.Id.HtmlReadOnlyFlag(Model.customerUserSetting.PriorityPermission) name="case_.Priority_Id">
-                                    <option value="">&nbsp;</option>
-                                    @if (Model.priorities != null)
-                                    {
-                                        foreach (var e in Model.priorities.Where(e => e.IsActive == 1 || Model.case_.Priority_Id == e.Id))
-                                        {
-                                            <option value="@e.Id" data-sla="@e.SolutionTime" @e.Id.IdIsSelected(Model.case_.Priority_Id.ToString())>@Translation.GetMasterDataTranslation(e.Name)</option>
-                                        }
-                                    }
-                                </select>
-                                if (Model.customerUserSetting.PriorityPermission == 0)
-                                {
-                                    var priority = Model.case_.Priority_Id.HasValue ? Model.priorities.SingleOrDefault(x => x.Id == Model.case_.Priority_Id) : null;
-                                    if (priority == null)
-                                    {
-                                        @Html.HiddenFor(m => m.case_.Priority_Id, new { @class = "sla-value", data_sla = "" })
-                                    }
-                                    else
-                                    {
-                                        @Html.HiddenFor(x => x.case_.Priority_Id, new { @class = "sla-value", data_sla = priority.SolutionTime })
-                                    }
-                                }
+                                <option value="@e.Id" data-sla="@e.SolutionTime" @e.Id.IdIsSelected(Model.case_.Priority_Id.ToString())>@Translation.GetMasterDataTranslation(e.Name)</option>
                             }
-                            else
-                            {
-                                var priority = Model.case_.Priority_Id.HasValue ? Model.priorities.SingleOrDefault(x => x.Id == Model.case_.Priority_Id) : null;
-                                if (priority == null)
-                                {
-                                    <input type="text" value="" readonly="readonly" id="priority_Name" />
-                                    @Html.HiddenFor(m => Model.case_.Priority_Id, new { @class = "sla-value", data_sla = "" })
-                                }
-                                else
-                                {
-                                    @Html.TextBoxFor(m => priority.Name, new { @readonly = true })
-                                    @Html.HiddenFor(x => x.case_.Priority_Id, new { @class = "sla-value", data_sla = priority.SolutionTime })
-                                }
-                            }
-                        </td>
-                    </tr>*@
+                        }
+                    </select>
+                    if (Model.customerUserSetting.PriorityPermission == 0)
+                    {
+                        var priority = Model.case_.Priority_Id.HasValue ? Model.priorities.SingleOrDefault(x => x.Id == Model.case_.Priority_Id) : null;
+                        if (priority == null)
+                        {
+                            @Html.HiddenFor(m => m.case_.Priority_Id, new { @class = "sla-value", data_sla = "" })
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(x => x.case_.Priority_Id, new { @class = "sla-value", data_sla = priority.SolutionTime })
+                        }
+                    }
+                }
+                else
+                {
+                    var priority = Model.case_.Priority_Id.HasValue ? Model.priorities.SingleOrDefault(x => x.Id == Model.case_.Priority_Id) : null;
+                    if (priority == null)
+                    {
+                        <input type="text" value="" readonly="readonly" id="priority_Name" />
+                        @Html.HiddenFor(m => Model.case_.Priority_Id, new { @class = "sla-value", data_sla = "" })
+                    }
+                    else
+                    {
+                        @Html.TextBoxFor(m => priority.Name, new { @readonly = true })
+                        @Html.HiddenFor(x => x.case_.Priority_Id, new { @class = "sla-value", data_sla = priority.SolutionTime })
+                    }
+                }
+            </td>
+        </tr>*@
 
                 <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.StateSecondary_Id, CaseSolutionFields.StateSecondary)">
                     <td>
-                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.StateSecondary_Id, "Understatus")
+                        @Translation.GetCoreTextTranslation("Understatus")
                     </td>
                     <td>
                         @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.StateSecondary_Id, CaseSolutionFields.StateSecondary))
@@ -195,14 +195,14 @@
                         }
                     </td>
                 </tr>
-                
+
                 @if (Model.CustomerSettings.ModuleProblem == true)
                 {
                     if (Model.problems.Any())
                     {
                         <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Problem, CaseSolutionFields.Problem)">
                             <td>
-                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Problem, "Problem")
+                                @Translation.GetCoreTextTranslation("Problem")
                             </td>
                             <td>
                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Problem, CaseSolutionFields.Problem))
@@ -239,11 +239,7 @@
                 {
                     <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription)">
                         <td>
-                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDescription, "Avslutsbeskrivning")
-                            @if (Model.caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()).Required == 1)
-                            {
-                                <span class="mandatorystar">*</span>
-                            }
+                            @Translation.GetCoreTextTranslation("Avslutsbeskrivning")
                         </td>
                         <td>
                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription) && !readonlyMode)
@@ -261,7 +257,7 @@
                 {
                     <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause)">
                         <td>
-                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ClosingReason, "Avslutsorsak")
+                            @Translation.GetCoreTextTranslation("Avslutsorsak")
                         </td>
                         <td>
                             <div id="divFinishingType" class="btn-group dropdown-menu-parent">
@@ -278,7 +274,7 @@
                                 <button id="btnFinishingTypeLst" class="btn dropdown-toggle" data-toggle="dropdown" @disabled>
                                     <span class="caret"></span>
                                 </button>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu subddMenu parentddMenu">
                                     <li><a href="#">@Translation.Get("--")</a></li>
                                     @Html.FinishingCauseDropdownButtonString(Model.finishingCauses)
                                 </ul>
@@ -288,7 +284,7 @@
                     </tr>
                     <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)">
                         <td>
-                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.FinishingDate, "Avslutsdatum")
+                            @Translation.GetCoreTextTranslation("Avslutsdatum")
                         </td>
                         <td>
                             @if (!(Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate, CaseSolutionFields.FinishingDate)

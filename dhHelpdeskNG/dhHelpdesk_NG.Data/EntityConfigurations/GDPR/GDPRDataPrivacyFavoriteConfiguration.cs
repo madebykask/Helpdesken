@@ -25,11 +25,16 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.GDPR
             this.Property(x => x.RemoveLogAttachments).IsRequired();
             this.Property(x => x.RemoveFileViewLogs).IsRequired();
             this.Property(x => x.ReplaceEmails).IsRequired();
-
+            
             this.Property(x => x.CreatedDate).IsOptional();
             this.Property(x => x.CreatedByUser_Id).IsOptional();
             this.Property(x => x.ChangedDate).IsOptional();
             this.Property(x => x.ChangedByUser_Id).IsOptional();
+            this.Property(x => x.GDPRType).IsRequired();
+            this.Property(x => x.CaseTypes).IsOptional();
+            this.Property(x => x.FinishedDateFrom).IsOptional();
+            this.Property(x => x.FinishedDateTo).IsOptional();
+            this.Property(x => x.ProductAreas).IsOptional();
 
             this.ToTable("tblGDPRDataPrivacyFavorite");
         }

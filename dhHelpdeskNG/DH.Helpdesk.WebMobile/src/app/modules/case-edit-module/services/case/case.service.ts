@@ -12,6 +12,7 @@ import { CaseLogModel, CaseHistoryModel } from '../../models/case/case-actions-a
 import { CaseActionsDataService } from './case-actions-data.service';
 import { CaseHistoryApiService } from '../api/case/case-history-api.service';
 import { CaseModelBuilder } from '../../models/case/case-model-builder';
+import { CustomerApiService } from 'src/app/services/api/customer/customer-api.service';
 
 @Injectable({ providedIn: 'root' })
 export class CaseService {
@@ -21,6 +22,7 @@ export class CaseService {
     private batchCaseOptionsService: BundleCaseOptionsService,
     private caseActionsDataService: CaseActionsDataService,
     private caseLogApiService: CaseLogApiService,
+    private customerApiService: CustomerApiService,
     private caseHistoryApiService: CaseHistoryApiService,
     private caseApiService: CaseApiService) {
   }
@@ -30,6 +32,7 @@ export class CaseService {
       .pipe(
         map((caseData: any) => {
           const model = this.caseModelBuilder.createCaseEditInputModel(caseData);
+           this.customerApiService.loadCustomerEmailSettings(model.customerId).subscribe(res => { model.customerEmailSettings = res });
           return model;
         }));
   }
@@ -39,6 +42,7 @@ export class CaseService {
       .pipe(
         map((caseData: any) => {
           const model = this.caseModelBuilder.createCaseEditInputModel(caseData);
+          this.customerApiService.loadCustomerEmailSettings(model.customerId).subscribe(res => { model.customerEmailSettings = res });
           return model;
         }));
   }

@@ -1740,7 +1740,7 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = 'User with read access only' WHERE Text_Id=1209 AND Language_Id=2;
 GO
 
-UPDATE tblTextTranslation Set TextTranslation = 'Inform initiator as standard' WHERE Text_Id=1213 AND Language_Id=2;
+UPDATE tblTextTranslation Set TextTranslation = 'Inform initiator as default' WHERE Text_Id=1213 AND Language_Id=2;
 GO
 
 UPDATE tblTextTranslation Set TextTranslation = 'Log in' WHERE Text_Id=1215 AND Language_Id=2;
@@ -8334,6 +8334,55 @@ If not exists (select * from tblTextTranslation where text_id = 2133 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2133, 2, 'Connect to parent with another customer')
 GO
 
+If not exists (select * from tbltext where id = 2134)
+	insert into tbltext (id, TextString) VALUES (2134, 'Avpersonifiering')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2134 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2134, 2, 'Anonymization')
+GO
+
+If not exists (select * from tbltext where id = 2135)
+	insert into tbltext (id, TextString) VALUES (2135, 'Radering')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2135 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2135, 2, 'Deletion')
+GO
+
+If not exists (select * from tbltext where id = 2136)
+	insert into tbltext (id, TextString) VALUES (2136, 'Kategori som används går inte att ta bort')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2136 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2136, 2, 'Category in use can not be deleted')
+GO
+
+
+If not exists (select * from tbltext where id = 2137)
+	insert into tbltext (id, TextString) VALUES (2137, '{0} ärenden kommer att raderas')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2137 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2137, 2, '{0} records will be deleted')
+GO
+
+If not exists (select * from tbltext where id = 2138)
+	insert into tbltext (id, TextString) VALUES (2138, 'Är du säker på att du vill radera dessa ärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2138 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2138, 2, 'Are you sure you want to delete these cases')
+GO
+
+If not exists (select * from tbltext where id = 2139)
+	insert into tbltext (id, TextString) VALUES (2139, '{0} ärenden kommer att påverkas')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2139 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2139, 2, '{0} records will be affected')
+GO
+
+If not exists (select * from tbltext where id = 2140)
+	insert into tbltext (id, TextString) VALUES (2140, 'Informera HandläggareX som standard')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2140 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2140, 2, 'Inform administrator as default')
+GO
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)

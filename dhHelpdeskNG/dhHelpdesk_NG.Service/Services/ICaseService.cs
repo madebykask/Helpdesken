@@ -109,8 +109,6 @@ namespace DH.Helpdesk.Services.Services
         IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
         void Commit();
 
-        Guid Delete(int id, string basePath, int? parentCaseId);
-
         void DeleteExCaseWhenCaseMove(int id);
 
         /// <summary>

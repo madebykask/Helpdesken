@@ -9,6 +9,8 @@ using Field = DH.Helpdesk.Domain.Field;
 using System.Collections.Generic;
 using System.Web;
 using DH.Helpdesk.Common.Constants;
+using System.Text.RegularExpressions;
+using HtmlAgilityPack;
 
 namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
 {
@@ -65,6 +67,27 @@ namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
             }
         }
 
+        public string StripHTML(string input)
+        {
+            if (input == null)
+            {
+                return string.Empty;
+            }
+            input.Replace("<br>", " ");
+            input.Replace("<br />", " ");
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(input);
+            var output = "";
+            foreach (HtmlNode node in doc.DocumentNode.ChildNodes)
+            {
+                output += node.InnerText;
+            }
+
+            output = output.Replace("<", "").Replace(">", "").Replace("/", "").Replace("\\", "");
+            return output;
+
+        }
+
         public string FormatNullableDate(DateTime? input, bool isDateTime = false)
         {
             if (input.HasValue)
@@ -110,7 +133,6 @@ namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
                     content = Translation.GetCoreTextTranslation(content);
                 }
             }
-            
             if (!string.IsNullOrEmpty(content))
             {
                 content = HttpUtility.HtmlEncode(content).Replace(Environment.NewLine, "<br/>").Replace("\n", "<br/>");

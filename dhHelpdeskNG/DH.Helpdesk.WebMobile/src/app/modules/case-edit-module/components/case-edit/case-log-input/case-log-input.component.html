@@ -3,14 +3,15 @@
   <!-- External Log fields --> 
 <ng-container *ngIf="isExternalLogFieldVisible">
   <div class="bordered">
-    <case-textarea-control 
+    <case-summernote-control
         [field]="caseFieldsNames.Log_ExternalText" 
-        [form]="form"></case-textarea-control>
+        [form]="form"></case-summernote-control>
   </div>
 
   <div class="bordered switch">
     <mbsc-switch #sendMailToNotifierControl 
                  [disabled]="isSendMailToNotifierDisabled"
+                 [(ngModel)]="isSendMailToNotifierChecked"
                  [formControlName]="caseFieldsNames.Log_SendMailToNotifier"
                  (change)="onSendExternalEmailsCheckChanged()"
                  [options]="switchOptions">
@@ -38,12 +39,13 @@
   <!-- Internal Log fields -->
 <ng-container *ngIf="isInternalLogFieldVisible">
   <div class="bordered">
-    <case-textarea-control [field]="caseFieldsNames.Log_InternalText" [form]="form"></case-textarea-control>
+    <case-summernote-control [field]="caseFieldsNames.Log_InternalText" [form]="form"></case-summernote-control>
   </div>
 
   <div class="bordered switch">
     <mbsc-switch #sendMailToPerformerControl 
                 [disabled]="isPerformerNullOrCurrentUser"
+                [(ngModel)]="isSendMailToPerformerChecked"
                  [formControlName]="caseFieldsNames.Log_SendMailToPerformer"
                  (change)="onSendInternalEmailsCheckChanged()"
                  [options]="switchOptions">

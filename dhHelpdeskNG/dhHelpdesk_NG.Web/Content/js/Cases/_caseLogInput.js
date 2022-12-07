@@ -40,43 +40,44 @@ function LogInitForm() {
         }
     });
 
-    $($caseLogTextExternal).bind('input propertychange', function () {
-        var informNotifier = $('#CaseLog_SendMailAboutCaseToNotifier');
+    //$($caseLogTextExternal).bind('input propertychange', function () {
+    //    var informNotifier = $('#CaseLog_SendMailAboutCaseToNotifier');
   
-        informNotifier.removeAttr('checked');
-        if (this.value.length) {
-            $('#CaseLog_SendMailAboutCaseToNotifier:not(:disabled)').attr('checked', 'checked');
-            var to = $initiatorEmail.val();
-            var extras = $("#extraEmailsInput").val().replaceAll(";", " ").replaceAll(to, "");
-            if (to != '') {
-                $("#emailsTo").html(to);
-                $("#emailsTo").css('display', 'inline');
-                $("#emailsToTitle").css('display', 'inline');
-            }
-            if (extras != '') {
-                $('#extraEmailsInputShow').text(extras);
-                $('#extraEmailsInputShow').show();
-                $("#ccTitle").show();
-            }
+    //    informNotifier.removeAttr('checked');
+    //    if (this.value.length) {
+    //        $('#CaseLog_SendMailAboutCaseToNotifier:not(:disabled)').attr('checked', 'checked');
+    //        var to = $initiatorEmail.val();
+    //        var extras = $("#extraEmailsInput").val().replaceAll(";", " ").replaceAll(to, "");
+    //        if (to != '') {
+    //            $("#emailsTo").html(to);
+    //            $("#emailsTo").css('display', 'inline');
+    //            $("#emailsToTitle").css('display', 'inline');
+    //        }
+    //        if (extras != '') {
+    //            $('#extraEmailsInputShow').text(extras);
+    //            $('#extraEmailsInputShow').show();
+    //            $("#ccTitle").show();
+    //        }
              
 
-        }
-    });
+    //    }
+    //});
 
-    $($caseLogTextInternal).bind('input propertychange', function () {
-        var informPerformer = $('#CaseLog_SendMailAboutCaseToPerformer');
-        informPerformer.removeAttr('checked');
+    //$($caseLogTextInternal).bind('input propertychange', function () {      
+    //    $($txtInformPerformer).css('display', 'none');
+    //    $('#CaseLog_TextInternal').prop('required', false);
+    //    if (this.value.length || (hasCaseLogTextInternalEmailsTo || hasCaseLogTextInternalEmailsCc)) {
 
-        $($txtInformPerformer).css('display', 'none');
-        $('#CaseLog_TextInternal').prop('required', false);
-        if (this.value.length || (hasCaseLogTextInternalEmailsTo || hasCaseLogTextInternalEmailsCc)) {
-
-            $($txtInformPerformer).css('display', 'inline');
-            $('#CaseLog_TextInternal').prop('required', true);
-            
-            $('#CaseLog_SendMailAboutCaseToPerformer:not(:disabled)').attr('checked', 'checked');
-        }
-    });
+    //        $($txtInformPerformer).css('display', 'inline');
+    //        $('#CaseLog_TextInternal').prop('required', true);
+    //        //Check customerProp from hidden
+    //        var auto = $('#autoCheckPerformerCheckbox').val();
+    //        //var checked = $('#CaseLog_SendMailAboutCaseToPerformer').prop('checked');
+    //        if (auto == 'True') {
+    //            $('#CaseLog_SendMailAboutCaseToPerformer:not(:disabled)').attr('checked', 'checked');
+    //        } 
+    //    }
+    //});
 
     $('#CaseLog_SendMailAboutCaseToPerformer').on('change', function (e) {
         if (e.currentTarget.checked) {

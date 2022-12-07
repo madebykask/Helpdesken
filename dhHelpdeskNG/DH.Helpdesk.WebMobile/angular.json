@@ -36,6 +36,7 @@
               "src/manifest.json",
               "src/manifest.json.template",
               "src/pipe_change_variables.ps1",
+              "src/_app_offline.htm",
               {
                 "glob": "**/*",
                 "input": "src/content/icons",
@@ -49,10 +50,13 @@
             ],
             "styles": [
               "src/content/styles/mobiscroll.scss",
-              "src/content/styles/styles.scss"
+              "src/content/styles/styles.scss",
+			  "node_modules/summernote/dist/summernote-lite.min.css"
             ],
             "scripts": [
-              "src/content/scripts/scripts.js"
+              "src/content/scripts/scripts.js",
+			  "node_modules/jquery/dist/jquery.min.js",
+			  "node_modules/summernote/dist/summernote-lite.min.js"
             ]
           },
           "configurations": {
@@ -124,7 +128,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/manifest.json"
+              "src/manifest.json",
+              "src/_app_offline.htm"
             ]
           }
         },

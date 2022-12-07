@@ -280,6 +280,26 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
             return ret;
         }
 
+        public static string DisplayRegardingInfo(this NewCaseModel model)
+        {
+            var ret = "display:none";
+
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()))
+                return string.Empty;
+            if (IsJsFieldVisible(model, GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()))
+                return string.Empty;
+
+            return ret;
+        }
+
         public static string DisplayCaseInfo(this NewCaseModel model)
         {
             var ret = "display:none";

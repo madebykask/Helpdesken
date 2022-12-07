@@ -6,6 +6,7 @@
 @using DH.Helpdesk.Common.Extensions.Boolean
 @using System.Configuration;
 @using DH.Helpdesk.Common.Enums;
+@using DH.Helpdesk.SelfService.Infrastructure.Extensions.HtmlHelperExtensions;
 
 @model DH.Helpdesk.SelfService.Models.Case.NewCaseModel
 
@@ -20,7 +21,8 @@
 }
 
 @functions
-{ private MvcHtmlString CaseFieldCaption(GlobalEnums.TranslationCaseFields field, bool withManadatory = true)
+{
+    private MvcHtmlString CaseFieldCaption(GlobalEnums.TranslationCaseFields field, bool withManadatory = true)
     {
         return Html.CaseFieldCaption(
             Model.CaseFieldSettings,
@@ -29,7 +31,10 @@
             Model.NewCase.Customer_Id,
             SessionFacade.CurrentLanguageId,
             withManadatory);
-    } }
+    }
+}
+<link href="~/Content/css/summernote.css" rel="stylesheet" />
+<script src="~/Content/summernote-0.8.18/summernote.js"></script>
 
 <script type="text/javascript">
     window.appOptions = '@Html.Raw(jsSerializer.Serialize(Model.JsApplicationOptions))';
@@ -60,15 +65,15 @@
 
     @if (Model.FileUploadWhiteList != null)
     {
-    foreach (var fileExtension in Model.FileUploadWhiteList)
-    {
+        foreach (var fileExtension in Model.FileUploadWhiteList)
+        {
         @:window.appParameters.fileUploadWhiteList.push('@fileExtension');
         }
-        }
+    }
         else
-        {
+    {
             @:window.appParameters.fileUploadWhiteList = null;
-        }
+    }
 
     var workflowsBehaviorParams = {
         isExtendedCase: false,
@@ -80,7 +85,7 @@
     };
 
     window.parameters = {
-        emailNotValid: '@Translation.GetForJS("Email address is not valid.")',
+    emailNotValid: '@Translation.GetForJS("Email address is not valid.")',
         emailAlreadyAdded: '@Translation.GetForJS("Same email already added.")',
         initGroup: '@Translation.GetForJS("User")',
         closeBtn: '@Html.Raw(Translation.GetForJS("Close"))',
@@ -94,9 +99,9 @@
     <link href="@Url.Content("~/Content/css/case-mobile.css")" rel="stylesheet" type="text/css" />
 }
 
-@if (Model.ShowCaseActionsPanelOnTop)
+    @if (Model.ShowCaseActionsPanelOnTop)
 {
-    @Html.Partial("_CaseControlPanel", Model.CreateCaseControlsPanelModel())}
+        @Html.Partial("_CaseControlPanel", Model.CreateCaseControlsPanelModel())}
 
 <div class="container-fluid dh-container">
     @if (!string.IsNullOrEmpty(Model.Information))
@@ -124,7 +129,7 @@
 
                 @using (Html.BeginForm("NewCase", "case", null, FormMethod.Post, new { id = "newCaseForm" }))
                 {
-                    @Html.HiddenFor(l => Model.NewCase.RegLanguage_Id)
+        @Html.HiddenFor(l => Model.NewCase.RegLanguage_Id)
                     @Html.HiddenFor(k => Model.CaseFileKey)
                     @Html.HiddenFor(model => model.NewCase.Id)
                     @Html.HiddenFor(model => model.NewCase.CaseGUID)
@@ -189,7 +194,7 @@
                     @Html.Hidden("case_languageId", Model.CurrentLanguageId)
 
                     @Html.HiddenFor(model => model.SelectedWorkflowStep) <!-- User Information--> if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.UserInformation))
-                    {
+        {
                         <h4 style="@Model.DisplayUserInfo()">@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.Initiator, CaseSectionsEnglish.InitiatorHeader)</h4>
                         <div class="row">
                             <div class="col-md-3 dh-col">
@@ -284,21 +289,21 @@
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Regions != null)
                                                     {
-                                                        foreach (var e in Model.Regions.Where(e => e.IsActive != 0))
-                                                        {
+        foreach (var e in Model.Regions.Where(e => e.IsActive != 0))
+        {
                                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Region_Id.ToString())> @e.Name </option>
                                                         }
-                                                    }
+    }
                                                 </select>
                                             </div>
                                         </div>
                                     }
                                     else
-                                    {
-                                        @Html.HiddenFor(model => model.NewCase.Region_Id)
+    {
+        @Html.HiddenFor(model => model.NewCase.Region_Id)
                                     }
 
-                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Department_Id.ToString()))
+    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Department_Id.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Department_Id.ToString()">
                                             <label class="col-md-3">
@@ -309,21 +314,21 @@
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Departments != null)
                                                     {
-                                                        foreach (var e in Model.Departments.Where(e => e.IsActive != 0))
-                                                        {
+        foreach (var e in Model.Departments.Where(e => e.IsActive != 0))
+        {
                                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Department_Id.ToString())>@e.DepartmentName </option>
                                                         }
-                                                    }
+    }
                                                 </select>
                                             </div>
                                         </div>
                                     }
                                     else
-                                    {
-                                        @Html.HiddenFor(model => model.NewCase.Department_Id)
+    {
+        @Html.HiddenFor(model => model.NewCase.Department_Id)
                                     }
 
-                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.OU_Id.ToString()))
+    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.OU_Id.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.OU_Id.ToString()">
                                             <label class="col-md-3">
@@ -334,11 +339,11 @@
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.OrganizationUnits != null)
                                                     {
-                                                        foreach (var e in Model.OrganizationUnits.Where(e => e.IsActive != 0))
-                                                        {
+        foreach (var e in Model.OrganizationUnits.Where(e => e.IsActive != 0))
+        {
                                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.OU_Id.ToString())> @e.Name </option>
                                                         }
-                                                    }
+    }
                                                 </select>
                                             </div>
                                         </div>
@@ -369,11 +374,11 @@
                                         </div>
                                     }
                                     else
-                                    {
-                                        @Html.HiddenFor(model => model.NewCase.Place)
+    {
+        @Html.HiddenFor(model => model.NewCase.Place)
                                     }
 
-                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.UserCode.ToString()))
+    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.UserCode.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.UserCode.ToString()">
                                             <label class="col-md-3">
@@ -385,16 +390,107 @@
                                         </div>
                                     }
                                     else
-                                    {
-                                        @Html.HiddenFor(model => model.NewCase.UserCode)
+    {
+        @Html.HiddenFor(model => model.NewCase.UserCode)
                                     }
                                 </div>
                             </div>
                         </div>
-                    } 
-                    <!-- Computer Information --> 
+                    }
+
+                    <!-- Regarding -->
+                    if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseRegarding))
+    {
+                        <h4 style="@Model.DisplayRegardingInfo()">@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.Regarding, CaseSectionsEnglish.RegardingHeader)</h4>
+                        <div class="row">
+                            <div class="col-md-3 dh-col">
+                                <div class="container form-horizontal">
+
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()))
+                                    {
+        if (Model.ComputerUserCategories.Any())
+        {
+                                            <div class="form-group row @GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()">
+                                                <label class="col-md-3">@CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id)</label>
+                                                <div class="col-md-9">
+                                                    <select id="IsAboutCategory" name="IsAboutCategory" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()">
+                                                        <option value="">&nbsp;</option>
+                                                        @if (Model.ComputerUserCategories != null)
+                                                        {
+        foreach (var e in GeneralExtensions.BuildComputerCategoriesSelectList(Model.ComputerUserCategories, Model, true))
+        {
+                                                                <option value="@e.Value" @(e.Selected ? "selected" : "")>@e.Text</option>
+                                                            }
+    }
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()))
+                                    {
+                                        <div class="form-group row @GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()">
+                                            <label class="col-md-3">
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy)
+                                            </label>
+                                            <div class="col-md-9">
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_ReportedBy, new { id = "IsAbout_ReportedBy", @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString() })
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()))
+                                    {
+                                        <div class="form-group row @GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()">
+                                            <label class="col-md-3">
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name)
+                                            </label>
+                                            <div class="col-md-9">
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsName, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString() })
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()))
+                                    {
+                                        <div class="form-group row @GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()">
+                                            <label class="col-md-3">
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail)
+                                            </label>
+                                            <div class="col-md-9">
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsEmail, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString() })
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()))
+                                    {
+                                        <div class="form-group row @GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()">
+                                            <label class="col-md-3">
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone)
+                                            </label>
+                                            <div class="col-md-9">
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsPhone, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString() })
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()))
+                                    {
+                                        <div class="form-group row @GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()">
+                                            <label class="col-md-3">
+                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone)
+                                            </label>
+                                            <div class="col-md-9">
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsCellPhone, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString() })
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Computer Information -->
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.ComputerInformation))
-                    {
+    {
                         <h4 style="@Model.DisplayComputerInfo()">@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.ComputerInfo, CaseSectionsEnglish.ComputerInfoHeader)</h4>
                         <div class="row">
                             <div class="col-md-3 dh-col">
@@ -432,7 +528,7 @@
                                 </div>
                             </div>
                         </div>
-                    } 
+                    }
                     <!-- Case Info Fields -->
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseInfo))
                     {
@@ -460,11 +556,11 @@
                                         </div>
                                     }
                                     else
-                                    {
-                                        <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()"/>
+    {
+                                        <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()" />
                                     }
 
-                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()))
+    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()">
                                             <label class="col-md-3">@CaseFieldCaption(GlobalEnums.TranslationCaseFields.ProductArea_Id)</label>
@@ -478,7 +574,7 @@
                                                     {
                                                         <input type="hidden" id="isMandatory" value="true" /> }
                                                     else
-                                                    {
+    {
                                                         <input type="hidden" id="isMandatory" value="false" />}
                                                     <ul class="dropdown-menu">
                                                         <li><a href="#" value="">@Translation.Get("--")</a></li>
@@ -492,11 +588,11 @@
 
                                     }
                                     else
-                                    {
-                                        @Html.HiddenFor(model => model.NewCase.ProductArea_Id)
+    {
+        @Html.HiddenFor(model => model.NewCase.ProductArea_Id)
                                     }
 
-                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.System_Id.ToString()))
+    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.System_Id.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.System_Id.ToString()">
                                             <label class="col-md-3">@CaseFieldCaption(GlobalEnums.TranslationCaseFields.System_Id)</label>
@@ -505,11 +601,11 @@
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Systems != null)
                                                     {
-                                                        foreach (var e in Model.Systems)
-                                                        {
+        foreach (var e in Model.Systems)
+        {
                                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.System_Id.ToString())>@e.SystemName</option>
                                                         }
-                                                    }
+    }
                                                 </select>
                                             </div>
                                         </div>
@@ -524,7 +620,7 @@
                                                 {
                                                     <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar">*</span> }
                                                 else
-                                                {
+    {
                                                     <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar" style="display: none"></span>}
                                             </label>
                                             <div class="col-md-9">
@@ -532,17 +628,17 @@
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Urgencies != null)
                                                     {
-                                                        foreach (var e in Model.Urgencies)
-                                                        {
+        foreach (var e in Model.Urgencies)
+        {
                                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Urgency_Id.ToString())>@e.Name</option>
                                                         }
-                                                    }
+    }
                                                 </select>
                                             </div>
                                         </div>
                                     }
                                     else
-                                    {
+    {
                                         <div id="relatedFieldBlock-@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="form-group row @GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" style="display: none">
                                             <label class="col-md-3">
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Urgency_Id, false)
@@ -550,7 +646,7 @@
                                                 {
                                                     <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar">*</span> }
                                                 else
-                                                {
+    {
                                                     <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()" class="mandatorystar" style="display: none"></span>}
                                             </label>
                                             <div class="col-md-9">
@@ -558,11 +654,11 @@
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Urgencies != null)
                                                     {
-                                                        foreach (var e in Model.Urgencies)
-                                                        {
+        foreach (var e in Model.Urgencies)
+        {
                                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Urgency_Id.ToString())>@e.Name</option>
                                                         }
-                                                    }
+    }
                                                 </select>
                                             </div>
                                         </div>
@@ -577,7 +673,7 @@
                                                 {
                                                     <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar">*</span> }
                                                 else
-                                                {
+    {
                                                     <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar" style="display: none"></span>}
                                             </label>
                                             <div class="col-md-9">
@@ -585,17 +681,17 @@
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Impacts != null)
                                                     {
-                                                        foreach (var e in Model.Impacts)
-                                                        {
+        foreach (var e in Model.Impacts)
+        {
                                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Impact_Id.ToString())>@e.Name</option>
                                                         }
-                                                    }
+    }
                                                 </select>
 
                                             </div>
                                         </div> }
                                     else
-                                    {
+    {
                                         <div id="relatedFieldBlock-@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="form-group row @GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" style='display: none'>
                                             <label class="col-md-3">
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Impact_Id, false)
@@ -603,7 +699,7 @@
                                                 {
                                                     <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar">*</span> }
                                                 else
-                                                {
+    {
                                                     <span id="mandatory_sign_@GlobalEnums.TranslationCaseFields.Impact_Id.ToString()" class="mandatorystar" style="display: none"></span>}
                                             </label>
                                             <div class="col-md-9">
@@ -611,11 +707,11 @@
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Impacts != null)
                                                     {
-                                                        foreach (var e in Model.Impacts)
-                                                        {
+        foreach (var e in Model.Impacts)
+        {
                                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Impact_Id.ToString())>@e.Name</option>
                                                         }
-                                                    }
+    }
                                                 </select>
                                             </div>
                                         </div>
@@ -690,11 +786,11 @@
                                         </div>
                                     }
                                     else
-                                    {
-                                        @Html.HiddenFor(model => model.NewCase.ReferenceNumber)
+    {
+        @Html.HiddenFor(model => model.NewCase.ReferenceNumber)
                                     }
 
-                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Caption.ToString()))
+    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Caption.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Caption.ToString()">
                                             <label class="col-md-3">
@@ -713,7 +809,9 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Description)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextAreaFor(d => Model.NewCase.Description, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Description.ToString() })
+
+                                                @Html.TextAreaFor(d => Model.NewCase.Description, new { @class = "hasAttribute summernotedesc", standardName = GlobalEnums.TranslationCaseFields.Description.ToString() })
+
                                             </div>
                                         </div>
                                     }
@@ -738,11 +836,11 @@
                                                     <option value="">&nbsp;</option>
                                                     @if (Model.Priorities != null)
                                                     {
-                                                        foreach (var e in Model.Priorities.Where(c => c.IsActive == 1))
-                                                        {
+        foreach (var e in Model.Priorities.Where(c => c.IsActive == 1))
+        {
                                                             <option value="@e.Id" @e.Id.IdIsSelected(Model.NewCase.Priority_Id.ToString())>@e.Name</option>
                                                         }
-                                                    }
+    }
                                                 </select>
                                             </div>
                                         </div>
@@ -777,10 +875,10 @@
 
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.AgreedDate.ToString()))
                                     {
-                                        var AgreedDateIsReadOnly = Model.JsFieldSettings.Where(x => x.FieldName == "AgreedDate").FirstOrDefault().IsReadonly;
-                                        var htmlAttrs = new Dictionary<string, object>();
-                                        htmlAttrs.Add("class", "hasAttribute");
-                                        htmlAttrs.Add("standardName", GlobalEnums.TranslationCaseFields.AgreedDate.ToString());
+        var AgreedDateIsReadOnly = Model.JsFieldSettings.Where(x => x.FieldName == "AgreedDate").FirstOrDefault().IsReadonly;
+        var htmlAttrs = new Dictionary<string, object>();
+        htmlAttrs.Add("class", "hasAttribute");
+        htmlAttrs.Add("standardName", GlobalEnums.TranslationCaseFields.AgreedDate.ToString());
 
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.AgreedDate.ToString()">
                                             <label class="col-md-3">
@@ -791,10 +889,10 @@
                                                 @*@Html.DisplayFor(a => _agreeDate)*@
                                                 @if (AgreedDateIsReadOnly)
                                                 {
-                                                    @Html.EditorFor(m => Model.NewCase.AgreedDate, "DatePicker", new { id = "AgreedDate", disabled = "disabled", inputAttributes = htmlAttrs }) }
+        @Html.EditorFor(m => Model.NewCase.AgreedDate, "DatePicker", new { id = "AgreedDate", disabled = "disabled", inputAttributes = htmlAttrs }) }
                                                 else
-                                                {
-                                                    @Html.EditorFor(m => Model.NewCase.AgreedDate, "DatePicker", new { id = "AgreedDate", inputAttributes = htmlAttrs })}
+    {
+        @Html.EditorFor(m => Model.NewCase.AgreedDate, "DatePicker", new { id = "AgreedDate", inputAttributes = htmlAttrs })}
                                             </div>
                                         </div>
                                     }
@@ -812,11 +910,11 @@
                                         </div>
                                     }
                                     else
-                                    {
-                                        @Html.HiddenFor(model => model.NewCase.Available)
+    {
+        @Html.HiddenFor(model => model.NewCase.Available)
                                     }
 
-                                    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Cost.ToString()))
+    @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Cost.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Cost.ToString()">
                                             <label class="col-md-3">
@@ -839,12 +937,12 @@
                                                                 <option value="">&nbsp;</option>
                                                                 @if (Model.Currencies != null)
                                                                 {
-                                                                    foreach (var e in Model.Currencies)
-                                                                    {
-                                                                        var selected = Model.NewCase.Currency == @e.Code ? "selected" : "";
+        foreach (var e in Model.Currencies)
+        {
+            var selected = Model.NewCase.Currency == @e.Code ? "selected" : "";
                                                                         <option value="@e.Code" @selected> @e.Code</option>
                                                                     }
-                                                                }
+    }
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -855,7 +953,7 @@
 
                                     @if (Model.AttachmentPlacement == 0 & Model.FieldSettings.Any(f => f.Name.Equals(GlobalEnums.TranslationCaseFields.Filename.ToString())))
                                     {
-                                        @Html.Partial("_FilesAttachButtons", new ViewDataDictionary(ViewData)
+        @Html.Partial("_FilesAttachButtons", new ViewDataDictionary(ViewData)
                                         {
                                             {"fieldCaption", CaseFieldCaption(GlobalEnums.TranslationCaseFields.Filename, false) },
                                             {"hasFiles", Model.NewCase.CaseFiles != null && Model.NewCase.CaseFiles.Any()}
@@ -871,7 +969,7 @@
 
                     if (Model.NewCase.Id == 0 && (recaptchaSiteKey != "" || recaptchaSiteKey != null))
                     {
-                        <div id="cap1" class="g-recaptcha" data-sitekey=@recaptchaSiteKey></div>                      
+                        <div id="cap1" class="g-recaptcha" data-sitekey=@recaptchaSiteKey></div>
                     }
 
                 }
@@ -884,7 +982,7 @@
                 <div class="container-fluid dh-container">
                     @Html.Partial("_FilesAttachButtons", new ViewDataDictionary(ViewData)
                         {
-                            {"fieldCaption", null }, 
+                            {"fieldCaption", null },
                             {"hasFiles", Model.NewCase.CaseFiles != null && Model.NewCase.CaseFiles.Any()}
                         })
                 </div>
@@ -931,7 +1029,7 @@
     {
         <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
     }
-        <script type="text/javascript">
+    <script type="text/javascript">
 
         var requiredText = '@Translation.GetForJS("must be specified")';
         var recaptchaMessage = '@Translation.GetForJS("Check the captcha")';
@@ -946,8 +1044,16 @@
         var $selectListStep = null;
         var $buttonsToDisable = null;
 
+        let validator = null;
+
         var captchaChecker = function () { };
         var recaptcha_widget;
+
+        $(document).ready(function () {
+            $("#IsAbout_ReportedBy").typeahead(GetComputerUserSearchOptionsForIsAbout());
+            $('.summernotedesc').summernote(summerNoteDescConfig)
+        });
+
         var onloadCallback = function () {
             if ($('#cap1').length) {
                 recaptcha_widget = grecaptcha.render('cap1', {
@@ -961,8 +1067,6 @@
             }
 
         };
-
-
 
         $(function() {
             $mainForm = $("#newCaseForm");
@@ -1112,8 +1216,8 @@
             // alternative: run this method before unobstrusive parse
             $mainForm.data("unobtrusiveValidation", null);
             $mainForm.data("validator", null);
-            $mainForm.validate({
-                ignore: "",
+            validator = $mainForm.validate({
+                ignore: ".note-editor *",
                 rules: {
                     "NewCase.ReportedBy": {
                         required: FieldIsRequired(
@@ -1450,7 +1554,40 @@
                         if (validator.errorMap.hasOwnProperty(prop))
                             console.log(prop, ":", validator.errorMap[prop]);
                     }
-                }
+                },
+                errorPlacement: function (error, element) {
+                    if (element.hasClass("summernotedesc")) {
+                        
+                        error.insertAfter(element.siblings(".note-editor"));
+                        
+                    } else {
+                        
+                        error.insertAfter(element);
+
+                    }
+                },
+                highlight: function (element, errorClass, validClass) {
+
+
+                    if ($(element).hasClass("summernotedesc")) {
+
+                        $(element).siblings(".note-editor").addClass("error")
+
+                    } else {
+
+                        $(element).addClass("error");
+                    }
+                },
+                unhighlight: function (element, errorClass, validClass) {
+
+                    if ($(element).hasClass("summernotedesc")) {
+
+                        $(element).siblings(".note-editor").removeClass("error")
+
+                    } else {
+                        $(element).removeClass("error");
+                    }
+                },
             });
 
         }
@@ -1463,7 +1600,195 @@
             }
             return ret;
         }
-        </script>
+
+    let summerNoteDescConfig = {
+        placeholder: '',
+        dialogsFade: true,
+        tabsize: 1,
+        fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82'],
+        toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
+        disableResizeImage: true,
+        disableResizeEditor: false,
+        height: 100,
+        callbacks: {
+            onChange: function (contents, $editable) {
+
+                $('.summernotedesc').val($('.summernotedesc').summernote('isEmpty') ? "" : contents);
+
+                validator.element($('.summernotedesc'));
+            },
+            onPaste: function (e) {
+                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
+                e.preventDefault();
+                document.execCommand('insertText', false, bufferText);
+            }
+        }
     }
+
+    function GetComputerUserSearchOptionsForIsAbout() {
+
+        var delayFunc = CommonUtils.createDelayFunc();
+
+        var options = {
+            items: 20,
+            minLength: 2,
+            source: function (query, process) {
+                lastIsAboutSearchKey = generateRandomKey();
+
+                delayFunc(function () {
+
+                    var categoryID = null;
+                    var isAboutCategory = $('#IsAboutCategory');
+                    if (isAboutCategory.length > 0)
+                        categoryID = isAboutCategory.val();
+
+                    $.ajax({
+                        url: '@Url.Action("Search_User", "CaseSearch")',
+                        type: 'post',
+                        data: { query: query, customerId: @SessionFacade.CurrentCustomerID, searchKey: lastIsAboutSearchKey, categoryID: categoryID },
+                        dataType: 'json',
+                        success: function (result) {
+                            if (result.searchKey != lastIsAboutSearchKey)
+                                return;
+
+                            var resultList = jQuery.map(result.result, function (item) {
+                                var aItem = {
+                                    id: item.Id
+                                    , num: item.UserId
+                                    , name: item.FirstName + ' ' + item.SurName
+                                    , email: item.Email
+                                    , place: item.Location
+                                    , phone: item.Phone
+                                    , usercode: item.UserCode
+                                    , cellphone: item.CellPhone
+                                    , regionid: item.Region_Id
+                                    , regionname: item.RegionName
+                                    , departmentid: item.Department_Id
+                                    , departmentname: item.DepartmentName
+                                    , ouid: item.OU_Id
+                                    , ouname: item.OUName
+                                    , name_family: item.SurName + ' ' + item.FirstName
+                                    , customername: item.CustomerName
+                                    , costcentre: item.CostCentre
+                                    , isReadOnly: item.IsReadOnly
+                                    , categoryID: item.CategoryID
+                                    , categoryName: item.CategoryName
+
+                                };
+                                return JSON.stringify(aItem);
+                            });
+                            if (resultList.length === 0) {
+                                var noRes = {
+                                    name: window.parameters.noResultLabel,
+                                    isNoResult: true
+                                }
+                                resultList.push(JSON.stringify(noRes));
+                            }
+
+                            return process(resultList);
+                        }
+                    });
+                },
+                    300);
+            },
+
+            matcher: function (obj) {
+                var item = JSON.parse(obj);
+                if (~item.isNoResult) {
+                    return 1;
+                }
+                //console.log(JSON.stringify(item));
+                return ~item.name.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.name_family.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.email.toLowerCase().indexOf(this.query.toLowerCase())
+                    || ~item.usercode.toLowerCase().indexOf(this.query.toLowerCase());
+            },
+
+            sorter: function (items) {
+                var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
+                while (aItem = items.shift()) {
+                    var item = JSON.parse(aItem);
+                    if (!item.isNoResult) {
+                        if (!item.num
+                            .toLowerCase()
+                            .indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                        else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
+                        else caseInsensitive.push(JSON.stringify(item));
+                    } else caseInsensitive.push(JSON.stringify(item));
+                }
+
+                return beginswith.concat(caseSensitive, caseInsensitive);
+            },
+
+            highlighter: function (obj) {
+                var item = JSON.parse(obj);
+                if (item.isNoResult) {
+                    return item.name;
+                }
+                var orgQuery = this.query;
+                if (item.departmentname == null)
+                    item.departmentname = ""
+                var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
+                var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
+                var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
+
+                if (result.toLowerCase().indexOf(orgQuery.toLowerCase()) > -1)
+                    return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                        return '<strong>' + match + '</strong>';
+                    });
+                else
+                    return resultBy_NameFamily.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+                        return '<strong>' + match + '</strong>';
+                    });
+
+            },
+
+            updater: function (obj) {
+                var item = JSON.parse(obj);
+                if (!item.isNoResult) {
+                    var regardingSectionType = 1;
+
+                    $('#IsAbout_ReportedBy').val(item.num);
+
+                    // Raise event about UserId changed.
+                    $(document).trigger("OnUserIdChanged", [item.num, regardingSectionType]);
+
+
+                    // Case Is About
+                    if (item.name != "" && item.name != null)
+                        $('#NewCase_IsAbout_PersonsName').val(item.name);
+
+                    if (item.email != null)
+                        $('#NewCase_IsAbout_PersonsEmail').val(item.email);
+
+                    if (item.phone != null)
+                        $('#NewCase_IsAbout_PersonsPhone').val(item.phone);
+
+                    if (item.cellphone != null)
+                        $('#NewCase_IsAbout_PersonsCellPhone').val(item.cellphone);
+
+                    //loadExtendedCaseSectionIfExist(item.categoryID, regardingSectionType);
+
+                    return item.num;
+                }
+                return this.query;
+            }
+        };
+
+        return options;
+    }
+
+    function generateRandomKey() {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
+        }
+        return s4() + '-' + s4() + '-' + s4();
+    }
+</script>
+}
 
 

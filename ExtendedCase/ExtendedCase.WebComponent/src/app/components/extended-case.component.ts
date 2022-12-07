@@ -10,6 +10,7 @@ import { FieldValueModel } from '../models/form-data.model';
     If ShadowDow or Native is used - remove :host ::ng-deep from bootstrap scss */
   encapsulation: ViewEncapsulation.Emulated
 })
+  
 export class ExtendedCaseComponent {
 
   // events
@@ -54,10 +55,10 @@ export class ExtendedCaseComponent {
   }
 
   @Input()
-  set saveForm(state: boolean | null) {
-    console.log('>>> saveForm: %s', state);
+  set saveForm(validateFormData: IValidateFormData) {
+    console.log('>>> saveForm: %s', validateFormData.state);
     this.ngZone.run(() => {
-      this.doSaveForm(state);
+      this.doSaveForm(validateFormData.state, validateFormData.finishingType);
     });
   }
 
@@ -70,10 +71,10 @@ export class ExtendedCaseComponent {
   }
 
   @Input()
-  set validateForm(state: boolean | null) {
-    console.log('>>> validateForm: %s', state);
+  set validateForm(validateFormData: IValidateFormData) {
+    console.log('>>> validateForm: %s', validateFormData.state);
     this.ngZone.run(() => {
-      this.doValidate(state);
+      this.doValidate(validateFormData.state, validateFormData.finishingType);
     });
   }
 
@@ -114,8 +115,8 @@ export class ExtendedCaseComponent {
       );
   }
 
-  private doSaveForm(state: boolean | null) {
-    this.exCaseCmp.save(state)
+  private doSaveForm(state: boolean | null, finishingType = 0) {
+    this.exCaseCmp.save(state, finishingType)
       .then((res: any) => {
         let exCaseGuid = 'unknown';
         if ('extendedCaseGuid' in res) {
@@ -130,8 +131,8 @@ export class ExtendedCaseComponent {
       });
   }
 
-  private doValidate(state: boolean | null) {
-    const res = this.exCaseCmp.validate(state);
+  private doValidate(state: boolean | null, finishingType = 0) {
+    const res = this.exCaseCmp.validate(state, finishingType);
     this._validationResult = res;
     this.validationComplete.emit({ data: res });
   }
@@ -165,3 +166,8 @@ export class ExtendedCaseComponent {
   }
 
 }
+
+interface IValidateFormData {
+  state: boolean | null;
+  finishingType?: number;
+  }

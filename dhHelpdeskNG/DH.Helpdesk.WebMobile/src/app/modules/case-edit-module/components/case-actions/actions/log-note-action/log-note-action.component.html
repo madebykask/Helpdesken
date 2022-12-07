@@ -1,33 +1,34 @@
 <div *ngIf="data">
-  <div #collapsible="collapsible" collapsible *ngIf="data.text && data.text.length"
-      [collapsedEl]="short" [expandedEl]="full">
-      <div #short>
-          <span class="{{ getActionIcon() }}"></span>
-          <span #tr="truncate" truncate="10" class="logNoteText">{{ data.text }}</span>
+  <div #collapsible="collapsible" collapsible *ngIf="data.text && data.text.length" [collapsedEl]="short"
+    [expandedEl]="full">
+    <div #short>
+      <span class="{{ getActionIcon() }}"></span>
+      <span #tr="truncate" truncate="10" class="logNoteText" [innerHTML]="logFileContent()"></span>
+    </div>
+    <div #full>
+      <div>
+        <span class="{{ getActionIcon() }}"></span>
+        <span class="logNoteText" [innerHTML]="logFileContent()"></span>
       </div>
-      <div #full>
-          <div>
-              <span class="{{ getActionIcon() }}"></span>
-              <span class="logNoteText">{{ data.text }}</span>
-          </div>
-          <div class="emailsRow" *ngIf="!hasM2T && data.emails.length > 0">
-            <span class="action-icon mbsc-ic mbsc-ic-fa-envelope-o"></span>
-            <div class="emails">{{ data.emails.join('; ') }}</div>
-          </div>
+      <div class="emailsRow" *ngIf="!hasM2T && data.emails.length > 0">
+        <span class="action-icon mbsc-ic mbsc-ic-fa-envelope-o"></span>
+        <div class="emails">{{ data.emails.join('; ') }}</div>
       </div>
-      <div *ngIf="tr.canTruncate || data.emails.length">
-        <div [hidden]="collapsible.isCollapsed">
-            <a #collapseBtn class="less" href="javascript:;" (click)="collapsible.collapse()">&lt;&lt;</a>
-        </div>
-        <div [hidden]="!collapsible.isCollapsed">
-            <a #expandBtn class="more" href="javascript:;" (click)="collapsible.expand()">&gt;&gt;</a>
-        </div>
+    </div>
+    <div *ngIf="tr.canTruncate || data.emails.length">
+      <div [hidden]="collapsible.isCollapsed">
+        <a #collapseBtn class="less" href="javascript:;" (click)="collapsible.collapse()">&lt;&lt;</a>
       </div>
-      
+      <div [hidden]="!collapsible.isCollapsed">
+        <a #expandBtn class="more" href="javascript:;" (click)="collapsible.expand()">&gt;&gt;</a>
+      </div>
+    </div>
+
   </div>
   <ul *ngIf="data.files && data.files.length" class="files">
-      <li *ngFor="let file of data.files"><span>
-      <i [ngClass]="{ 'mbsc-ic': true, 'mbsc-ic-fa-file-o': file.logType == logFileType.External, 'mbsc-ic-fa-file': file.logType == logFileType.Internal }"></i>
-       <a (click)="downloadLogFile(file)">{{ file.fileName }}</a></span></li>
+    <li *ngFor="let file of data.files"><span>
+        <i
+          [ngClass]="{ 'mbsc-ic': true, 'mbsc-ic-fa-file-o': file.logType == logFileType.External, 'mbsc-ic-fa-file': file.logType == logFileType.Internal }"></i>
+        <a (click)="downloadLogFile(file)">{{ file.fileName }}</a></span></li>
   </ul>
 </div>

@@ -26,8 +26,13 @@ namespace DH.Helpdesk.Dal.Mappers.Gdpr.EntityToBusinessModel
                 RemoveCaseAttachments = entity.RemoveCaseAttachments,
                 RemoveLogAttachments = entity.RemoveLogAttachments,
                 RemoveFileViewLogs = entity.RemoveFileViewLogs,
-                ReplaceEmails = entity.ReplaceEmails
-                
+                ReplaceEmails = entity.ReplaceEmails,
+                CaseTypes = ConvertToList(entity.CaseTypes),
+                GDPRType = entity.GDPRType,
+                ProductAreas = ConvertToList(entity.ProductAreas),
+                FinishedDateFrom = entity.FinishedDateFrom,
+                FinishedDateTo = entity.FinishedDateTo,
+
             };
 
             return model;

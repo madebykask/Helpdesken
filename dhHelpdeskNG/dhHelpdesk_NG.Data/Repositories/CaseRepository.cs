@@ -79,6 +79,7 @@ namespace DH.Helpdesk.Dal.Repositories
         List<Case> GetTop100CasesToTest();
         Case GetCaseQuickOpen(UserOverview user, Expression<Func<Case, bool>> casePermissionFilter, string searchFor);
         int GetCaseCustomerId(int caseId);
+        List<Case> GetCasesByCaseIds(int[] caseIds);
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -151,6 +152,13 @@ namespace DH.Helpdesk.Dal.Repositories
                         };
 
             return query.Distinct().ToList();
+        }
+
+        public List<Case> GetCasesByCaseIds(int[] caseIds)
+        {
+            return (from f in this.DataContext.Cases
+                         where caseIds.Contains(f.Id)
+                         select f).ToList();
         }
 
         public IList<Case> GetProjectCases(int customerId, int projectId)

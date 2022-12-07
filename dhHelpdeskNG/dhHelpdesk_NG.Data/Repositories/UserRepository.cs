@@ -285,7 +285,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     SurName = x.SurName,
                     AllocateCaseMail = x.AllocateCaseMail,
                     AllocateCaseSMS = x.AllocateCaseSMS,
-                    CellPhone = x.CellPhone
+                    CellPhone = x.CellPhone,
+                    Phone = x.Phone,
                 })
                 .FirstOrDefault();
 

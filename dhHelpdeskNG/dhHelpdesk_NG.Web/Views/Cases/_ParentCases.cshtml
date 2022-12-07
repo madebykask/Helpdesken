@@ -22,9 +22,10 @@
             $target.modal("show");
             LoadConnectToParent(pageSettings);
         });
+
         $("#merge_case_to_parent").on("click", function () {
-            var sendEmail = document.getElementById('CaseMailSetting_DontSendMailToNotifier');
-            if (sendEmail.checked) {
+            var sendEmail = $("#autoCheckNotifyerCheckbox").val();
+            if (sendEmail == "True") {
                 $("#dontSendMailToNotifier").val('false');
             } else {
                 $("#dontSendMailToNotifier").val('true');

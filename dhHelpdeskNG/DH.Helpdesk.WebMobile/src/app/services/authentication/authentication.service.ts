@@ -61,7 +61,7 @@ export class AuthenticationService {
                 user.authData.access_token = data.access_token;
                 user.authData.expires_in = Number(data.expires_in);
                 user.authData.recievedAt = new Date();
-                this.localStorageService.setCurrentUser(user);
+                this.localStorageService.setCurrentUser(user);                
                 this.commService.publish(Channels.UserLoggedIn, user);
                 return true;
             }),

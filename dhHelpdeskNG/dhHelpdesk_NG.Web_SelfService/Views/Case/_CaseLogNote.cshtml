@@ -1,5 +1,6 @@
 ﻿@using DH.Helpdesk.SelfService.Models.Case
 @using DH.Helpdesk.Web.Common.Extensions
+@using DH.Helpdesk.SelfService.Infrastructure.Helpers;
 @model CaseLogsModel
 
 @functions
@@ -20,8 +21,11 @@
 
     MvcHtmlString FormatLogText(CaseLogModel logItem)
     {
-        var logText = GetLogText(logItem).AddCharacterInParts(70, Environment.NewLine, Environment.NewLine);
-        var formatted = MvcHtmlString.Create(Html.Encode(logText).Replace(Environment.NewLine, "<br />").Replace("\n", "<br />"));
+        var logText = GetLogText(logItem);
+
+
+
+        var formatted = MvcHtmlString.Create(logText);
         return formatted;
     }
 }
@@ -35,8 +39,8 @@
             <div class="list-arrow"></div>
             <p>@GetLogUser(logModel) | @Html.DisplayFor(l => regDate)</p>
             @*<p>@Html.Raw(FormatLogText(logItem))</p>*@
-            <p>@FormatLogText(logModel)</p>
-            <p>
+            <div style="overflow-x: auto;">
+                @Html.Raw(WebMethodsExtensions.HTMLToTableCell(GetLogText(logModel)))
                 @if (logModel.Files != null)
                 {
                     foreach (var f in logModel.Files)
@@ -48,7 +52,7 @@
                         <br />
                     }
                 }
-            </p>
+            </div>
         </div>
     }
 }

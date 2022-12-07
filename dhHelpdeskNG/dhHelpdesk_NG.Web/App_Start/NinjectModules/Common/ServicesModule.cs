@@ -61,6 +61,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             Bind<ICalendarService>().To<CalendarService>();
             Bind<ICaseFieldSettingService>().To<CaseFieldSettingService>();
             Bind<ICaseService>().To<CaseService>();
+            Bind<ICaseDeletionService>().To<CaseDeletionService>();
             Bind<ICaseSettingsService>().To<CaseSettingsService>();
             Bind<ICaseSolutionService>().To<CaseSolutionService>();
             Bind<ICaseFileService>().To<CaseFileService>();
@@ -166,7 +167,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             Bind<ICaseDocumentService>().To<CaseDocumentService>();
 
             Bind<IConditionService>().To<ConditionService>();
-            Bind<IGDPROperationsService, IGDPRDataPrivacyAccessService, IGDPRFavoritesService>().To<GDPRService>();
+            Bind<IGDPROperationsService, IGDPRDataPrivacyAccessService, IGDPRFavoritesService, IGDPRDataPrivacyCasesService>().To<GDPRService>();
             Bind<IGDPRTasksService>().To<GDPRTasksService>();
 
             // Survey service

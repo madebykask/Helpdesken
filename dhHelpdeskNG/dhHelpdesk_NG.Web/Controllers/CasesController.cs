@@ -192,6 +192,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IFeatureToggleService _featureToggleService;
         private readonly IFileViewLogService _fileViewLogService;
         private readonly IFilesStorage _filesStorage;
+        private readonly ICaseDeletionService _caseDeletionService;
 
         #endregion
 
@@ -277,7 +278,8 @@ namespace DH.Helpdesk.Web.Controllers
             IUserEmailsSearchService userEmailsSearchService,
             IFeatureToggleService featureToggleService,
             IFileViewLogService fileViewLogService,
-            IFilesStorage filesStorage)
+            IFilesStorage filesStorage,
+            ICaseDeletionService caseDeletionService)
             : base(masterDataService)
         {
             _caseProcessor = caseProcessor;
@@ -355,7 +357,7 @@ namespace DH.Helpdesk.Web.Controllers
             _featureToggleService = featureToggleService;
             _fileViewLogService = fileViewLogService;
             _filesStorage = filesStorage;
-
+            _caseDeletionService = caseDeletionService;
 
             _advancedSearchBehavior = new AdvancedSearchBehavior(caseFieldSettingService,
                 caseSearchService,
@@ -935,7 +937,7 @@ namespace DH.Helpdesk.Web.Controllers
                 recordsTotal = searchResult.Count,
                 recordsFiltered = searchResult.Count,
                 processDuration = duration
-            });
+            }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -1156,7 +1158,22 @@ namespace DH.Helpdesk.Web.Controllers
                 foreach (var col in gridSettings.columnDefs)
                 {
                     var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);
-                    jsRow.Add(col.name, searchCol != null ? outputFormatter.FormatField(searchCol) : string.Empty);
+                    if (searchCol != null)
+                    {
+                        if (searchCol.Key == "Description")
+                        {
+                            jsRow.Add(col.name, outputFormatter.StripHTML(searchCol.StringValue));
+                        }
+                        else
+                        {
+                            jsRow.Add(col.name, outputFormatter.FormatField(searchCol));
+                        }
+                    }
+                    else
+                    {
+                        jsRow.Add(col.name, string.Empty);
+                    }
+
                 }
 
                 data.Add(jsRow);
@@ -1363,7 +1380,7 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         //string errorMsg = Translation.GetCoreTextTranslation("Låst");
 
-                        string errorMsg = Translation.GetCoreTextTranslation("Nätverksförbindelsen bröts. Användare <name> har låst ärendet.");
+                        string errorMsg = Translation.GetCoreTextTranslation("OBS! Detta ärende är öppnat av") + " <name>.";
                         errorMsg = errorMsg.Replace("<name>", caseLockViewModel.User.FirstName + " " + caseLockViewModel.User.SurName);
                         throw new Exception(errorMsg);
                     }
@@ -1637,7 +1654,7 @@ namespace DH.Helpdesk.Web.Controllers
             )
         {
             var basePath = _masterDataService.GetFilePath(customerId);
-            var caseGuid = _caseService.Delete(caseId, basePath, parentCaseId);
+            var caseGuid = _caseDeletionService.Delete(caseId, basePath, parentCaseId);  //TODO ÄNDRA DENNA DELETE
             _userTemporaryFilesStorage.ResetCacheForObject(caseGuid.ToString());
             if (parentCaseId.HasValue)
             {
@@ -1649,6 +1666,28 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
             return string.IsNullOrEmpty(backUrl) ? this.Redirect(Url.Action("index", "cases", new { customerId = customerId })) : this.Redirect(backUrl);
+        }
+
+        [HttpPost]
+        public JsonResult DeleteMultipleCases(
+            List<Case> cases,
+            int customerId
+        )
+        {
+            var basePath = _masterDataService.GetFilePath(customerId);
+            //Validation and exclusion then continue
+
+            //Deletion
+
+            //Deletion of files
+
+            //Present result and errors
+
+
+            //_caseService.DeleteMultipleCases(cases, basePath, parentCaseId);
+            //_userTemporaryFilesStorage.ResetCacheForObject(caseGuid.ToString());
+
+            return null;
         }
 
         //TODO: REVIEW 
@@ -1860,6 +1899,7 @@ namespace DH.Helpdesk.Web.Controllers
                 m = this.GetCaseInputViewModel(userId, customerId, id, caseLockViewModel, caseFieldSettings, redirectFrom, backUrl, null, null, updateState);
 
                 m.NumberOfCustomers = _masterDataService.GetCustomers(userId).Count;
+                
 
                 m.ActiveTab = (!string.IsNullOrEmpty(caseLockViewModel.ActiveTab) ? caseLockViewModel.ActiveTab : activeTab);
 #pragma warning disable 0618
@@ -1937,7 +1977,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.ParantPath_OU = ParentPathDefaultValue;
 
                 }
-
+                
                 var caseCustomerSettings = GetCustomerSettings(m.case_.Customer_Id);
                 var moduleCaseInvoice = caseCustomerSettings.ModuleCaseInvoice;
                 if (moduleCaseInvoice == 1)
@@ -1949,7 +1989,9 @@ namespace DH.Helpdesk.Web.Controllers
 
                 m.CustomerSettings = _workContext.Customer.Settings; //current customer settings
                 m.CustomerSettings.ModuleCaseInvoice = Convert.ToBoolean(caseCustomerSettings.ModuleCaseInvoice); // TODO FIX
-
+                Customer cus = _customerService.GetCustomer(m.case_.Customer_Id);
+                m.CaseLog.AutoCheckPerformerCheckbox = cus.CommunicateWithPerformer.ToBool();
+                m.CaseLog.AutoCheckNotifyerCheckbox = cus.CommunicateWithNotifier.ToBool();
 #pragma warning restore 0618
                 #region ConnectToParentModel
 
@@ -2131,6 +2173,7 @@ namespace DH.Helpdesk.Web.Controllers
 #pragma warning restore 0618
 
                     m.CaseLog.SendMailAboutCaseToNotifier = !string.IsNullOrEmpty(m.CaseLog.TextExternal);// customer.CommunicateWithNotifier.ToBool();
+                    
 
                     // check state secondary info
                     m.Disable_SendMailAboutCaseToNotifier = false;
@@ -3963,7 +4006,8 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                     else
                     {
-                        caseLog.FinishingDate = DateTime.SpecifyKind(caseLog.FinishingDate.Value, DateTimeKind.Local).ToUniversalTime();
+                        //Manually set
+                        caseLog.FinishingDate = caseLog.FinishingDate.Value.AddHours(8);
                     }
                 }
 

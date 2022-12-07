@@ -725,6 +725,10 @@ a.error, input[type=¨button].error .btn {
     background-color: #438eb9;
 }
 
+.modal-backdrop, .modal-backdrop.in {
+    display: none;
+}
+
 .mapText {
     color: #fff;
     /*white-space: nowrap;*/
@@ -818,7 +822,7 @@ a.error, input[type=¨button].error .btn {
 
 .siteCom .theMap {
     width: 100%;
-    height: 100%;
+    height: 95%;
     color: #fff;
     margin-top: -180px;
     overflow: auto;
@@ -1292,3 +1296,19 @@ div .multitext i {
     resize: both;
     word-break: break-word;
 }
+
+/*SUMMERNOTE*/
+
+.note-editor {
+    margin-bottom: 5px !important;
+}
+
+    .note-toolbar {
+    background-color: #fafafa !important;
+    border: 1px solid #fafafa !important;
+}
+
+    .note-editor.error {
+        border: 1px solid #ff0000 !important;
+        background-color: #ffeeee !important;
+    }

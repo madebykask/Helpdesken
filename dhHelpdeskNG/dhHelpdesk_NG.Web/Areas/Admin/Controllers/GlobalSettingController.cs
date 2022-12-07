@@ -36,6 +36,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
     using DH.Helpdesk.Web.Infrastructure;
     using DH.Helpdesk.Web.Infrastructure.Attributes;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.BusinessData.Enums.BusinessRules;
+    using DH.Helpdesk.Services.BusinessLogic.Gdpr;
+    using DH.Helpdesk.Dal.NewInfrastructure.Concrete;
 
     public class GlobalSettingController : BaseController
     {
@@ -49,10 +52,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IGDPRDataPrivacyAccessService _gdprDataPrivacyAccessService;
         private readonly IGDPROperationsService _gdprOperationsService;
         private readonly IGDPRFavoritesService _gdprFavoritesService;
+        private readonly IGDPRDataPrivacyCasesService _gdprPrivacyCasesService;
         private readonly IUserContext _userContext;
         private readonly IGDPRTasksService _gdprTasksService;
         private readonly IFileViewLogService _fileViewLogService;
         private readonly IDepartmentService _departmentsService;
+        private readonly ICaseTypeService _caseTypeService;
+        private readonly IProductAreaService _productAreaService;
+
 
         public GlobalSettingController(
             IGlobalSettingService globalSettingService,
@@ -69,7 +76,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             IGDPRTasksService gdprTasksService,
             IUserContext userContext,
             IFileViewLogService fileViewLogService,
-            IDepartmentService departmentsService)
+            IDepartmentService departmentsService,
+            ICaseTypeService caseTypeService,
+            IProductAreaService productAreaService,
+            IGDPRDataPrivacyCasesService gdprPrivacyCasesService)
             : base(masterDataService)
         {
             _gdprTasksService = gdprTasksService;
@@ -86,6 +96,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             _gdprOperationsService = gdprOperationsService;
             _fileViewLogService = fileViewLogService;
             _departmentsService = departmentsService;
+            _caseTypeService = caseTypeService;
+            _productAreaService = productAreaService;
+            _gdprPrivacyCasesService = gdprPrivacyCasesService;
         }
         [ValidateInput(false)]
         public ActionResult Index(int texttypeid, string textSearch, int compareMethod)
@@ -1186,7 +1199,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         private object GetDataPrivacyFavorites()
         {
-            var favorites = _gdprFavoritesService.ListFavorites();
+            //Checking permissions for Deletion/Anonymization
+            var dataPrivacyAccess = _gdprDataPrivacyAccessService.GetByUserId(SessionFacade.CurrentUser.Id);
+            var favorites = _gdprFavoritesService.ListFavorites(dataPrivacyAccess);
             var items = favorites.ToSelectList().Select(x => new
             {
                 value = x.Value,
@@ -1241,14 +1256,46 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Text = x.Customer.Name
             }).ToList();
 
-            var favorites = _gdprFavoritesService.ListFavorites();
+            var favorites = _gdprFavoritesService.ListFavorites(userAccess);
 
             var model = new DataPrivacyModel
             {
                 IsAvailable = true,
                 Customers = availableCustomers,
-                Favorites = favorites.ToSelectList(new SelectListItem() { Value = "0", Text = Translation.GetCoreTextTranslation("Skapa ny") })
+                Favorites = favorites.ToSelectList(new SelectListItem() { Value = "0", Text = Translation.GetCoreTextTranslation("Skapa ny") }),
             };
+            
+            //Check permissions for Deletion and/or Anonymization
+            var gdprTypes = new List<SelectListItem>();
+            if (userAccess.DeletionPermission == 1 && userAccess.AnonymizationPermission == 1)
+            {
+                gdprTypes = Enum.GetValues(typeof(GDPRType)).Cast<GDPRType>().Select(x => new SelectListItem
+                {
+                    Value = ((int)x).ToString(),
+                    Text = Translation.GetCoreTextTranslation(x.ToString())
+                }).ToList();
+            }
+            else if (userAccess.DeletionPermission == 1)
+            {
+                gdprTypes = Enum.GetValues(typeof(GDPRType)).Cast<GDPRType>().Select(x => new SelectListItem
+                {
+                    Value = ((int)x).ToString(),
+                    Text = Translation.GetCoreTextTranslation(x.ToString()),
+                }).Where(x => x.Text == Translation.GetCoreTextTranslation("Radering")).ToList();
+                model.SelectedGDPRType = (int)GDPRType.Radering;
+            }
+            else if (userAccess.AnonymizationPermission == 1)
+            {
+                gdprTypes = Enum.GetValues(typeof(GDPRType)).Cast<GDPRType>().Select(x => new SelectListItem
+                {
+                    Value = ((int)x).ToString(),
+                    Text = Translation.GetCoreTextTranslation(x.ToString())
+                }).Where(x => x.Text == Translation.GetCoreTextTranslation("Avpersonifiering")).ToList();
+                model.SelectedGDPRType = (int)GDPRType.Avpersonifiering;
+            }
+
+            model.GDPRType = gdprTypes;
+            
             return model;
         }
 
@@ -1262,6 +1309,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 return Json(new { count = taskIds.Length, ids = taskIds }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { count = 0 }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [GdprAccess]
+        public JsonResult GetDataPrivacyAffectedCases(DataPrivacyParameters p)
+        {
+            p = _gdprFavoritesService.CreateParameters(p.SelectedFavoriteId ?? 0 );
+
+            var totalCount = _gdprPrivacyCasesService.GetCasesCount(p.SelectedCustomerId, p);
+            return Json(new { count = totalCount }, JsonRequestBehavior.AllowGet);
         }
 
         [ChildActionOnly]
@@ -1515,7 +1572,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                 // add additional fields
                 fields.AddRange(additionalFields);
-
+                //Todo - add fields from customer - CaseType & ProductArea
                 var data =
                     fields.Select(f => new SelectListItem
                     {
@@ -1530,7 +1587,54 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             return Json(new { success = false });
         }
+        [HttpPost]
+        public ActionResult GetCustomerCaseTypes(int? customerId)
+        {
+            if (customerId.HasValue && customerId > 0)
+            {
 
+                var caseTypes = _caseTypeService.GetAllCaseTypes(customerId.Value, false, true).ToList();
+                var caseTypesInRow = _caseTypeService.GetChildrenInRow(caseTypes).ToList();
+
+                var data =
+                    caseTypesInRow.Select(f => new SelectListItem
+                    {
+                        Value = f.Id.ToString(),
+                        Text = f.Name,
+                        Disabled = f.IsActive != 1
+                    })
+                    .OrderBy(f => f.Text)
+                    .ToList();
+
+                return Json(new { success = true, data });
+            }
+
+            return Json(new { success = false });
+        }
+        [HttpPost]
+        public ActionResult GetCustomerProductAreas(int? customerId)
+        {
+            if (customerId.HasValue && customerId > 0)
+            {
+
+                var productAreas = _productAreaService.GetTopProductAreasWithChilds(customerId.Value, false);
+                var productAreasInRow = _productAreaService.GetChildrenInRow(productAreas).ToList();
+
+                var data =
+                    productAreasInRow.Select(f => new SelectListItem
+                    {
+                        Value = f.Id.ToString(),
+                        Text = f.Name,
+                        Disabled = f.IsActive != 1
+                    })
+                    .OrderBy(f => f.Text)
+                    .ToList();
+
+                return Json(new { success = true, data });
+            }
+
+            return Json(new { success = false });
+        }
         private string FormatFieldLabel(string fieldName, string label, int customerId)
         {
             if (string.IsNullOrEmpty(label) && FieldSettingsUiNames.Names.ContainsKey(fieldName))
@@ -1546,6 +1650,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
             return string.IsNullOrEmpty(label) ? fieldName : label;
-        }
+        }       
     }
 }

@@ -11,6 +11,9 @@ namespace DH.Helpdesk.BusinessData.Models.Gdpr
         public bool CalculateRegistrationDate { get; set; }
         public DateTime? RegisterDateFrom { get; set; }
         public DateTime? RegisterDateTo { get; set; }
+        public DateTime? FinishedDateFrom { get; set; }
+        public DateTime? FinishedDateTo { get; set; }
+
         public bool ClosedOnly { get; set; }
         public bool ReplaceEmails { get; set; }
         public List<string> FieldsNames { get; set; }
@@ -20,5 +23,8 @@ namespace DH.Helpdesk.BusinessData.Models.Gdpr
         public bool RemoveLogAttachments { get; set; }
         public int TaskId { get; set; }
         public bool RemoveFileViewLogs { get; set; }
+        public List<string> CaseTypes { get; set; }
+        public List<string> ProductAreas { get; set; }
+        public int GDPRType { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿--update DB from 5.3.55 to 5.3.56 version
-
-
+﻿--update DB from 5.3.56 to 5.3.57 version
 RAISERROR ('Add Column SiteURL to tblSettings', 10, 1) WITH NOWAIT
 IF COL_LENGTH('dbo.tblSettings','SiteURL') IS NULL
 	BEGIN	 
@@ -15,848 +13,710 @@ IF COL_LENGTH('dbo.tblSettings','SelfServiceURL') IS NULL
 		ALTER TABLE [dbo].tblSettings
 		ADD SelfServiceURL nvarchar(100) Null
 	End
+
 Go
 
-RAISERROR ('Create table tblMergedCases', 10, 1) WITH NOWAIT
-IF(OBJECT_ID('tblMergedCases', 'U') IS NULL)
-Begin
-CREATE TABLE [dbo].[tblMergedCases](
-	[MergedParent_Id] [int] NOT NULL,
-	[MergedChild_Id] [int] NOT NULL
- CONSTRAINT [PK_tblMergedCases] PRIMARY KEY CLUSTERED 
-(
-	[MergedParent_Id] ASC,
-	[MergedChild_Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-END
-GO
-
-RAISERROR ('Add Column Merged to tblFinishingCause', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblFinishingCause','Merged') IS NULL
+RAISERROR ('Add Column GDPRType to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPRDataPrivacyFavorite','GDPRType') IS NULL
 	BEGIN	 
-		ALTER TABLE [dbo].[tblFinishingCause]
-		ADD Merged bit not null default 0
+		ALTER TABLE [dbo].tblGDPRDataPrivacyFavorite
+		ADD GDPRType int not Null default 1
 	End
-Go
-
--- To add mandatory 'Merged case' in Finishing causes for all Customers
-insert into [dbo].[tblFinishingCause] (
-    [Customer_Id]
-      ,[FinishingCause]
-      ,[FinishingCauseGUID]
-      ,[Merged]
-
-)
-
-select distinct Id, 'Sammanfogat ärende' , newid(), 1
-from tblCustomer
-where id not in 
-(
-    select distinct customer_id from tblFinishingCause where merged=1
-
-)
 
 Go
 
-RAISERROR ('Add Column MergeCasePermission to tblUsers', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblUsers','MergeCasePermission') IS NULL
+RAISERROR ('Add Column CaseTypes to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPRDataPrivacyFavorite','CaseTypes') IS NULL
 	BEGIN	 
-		ALTER TABLE [dbo].[tblUsers]
-		ADD MergeCasePermission int null default 0
+		ALTER TABLE [dbo].tblGDPRDataPrivacyFavorite
+		ADD CaseTypes nvarchar(256) Null
 	End
+
 Go
 
--- Decided that all users should have this set on
-UPDATE [dbo].[tblUsers]
-SET MergeCasePermission = 1;
-GO
-
---New mailtemplate for Merged Cases
-If not exists (select * from tblMailTemplate where MailID = 18 and Customer_Id is null)
-	insert into tblMailTemplate (MailID, IsStandard, SendMethod) Values(18, 1, 0)
-GO
-
-Declare @mailID int
-Set @mailID = (Select Id from tblMailTemplate where MailID = 18 and Customer_Id is null)
-
-If not exists (select * from tblMailTemplate_tblLanguage where MailTemplate_Id = @mailID and Language_Id = 1)
-	Insert into tblMailTemplate_tblLanguage (MailTemplate_Id, Language_Id, MailTemplateName, Subject, Body) Values(@mailID, 1, 'Sammanfogat ärende', 'DH Helpdesk Avslutat ärende - [#1]: [#4]', 'Hej [#3]
-Ditt ärende [#1] har blivit sammanfogat med [#MP1] skapat av [#MP3].
-Om du vill tillföra något till ärendet, tveka inte att svara på detta mejl. Ditt svar kommer att tillskrivas det sammanfogade ärendet.
-
-[#MP98]Se ärendeinformation[/#MP98]
-
-<strong>Ärendeinformation:</strong><br><table><tr valign="top"><td>Registreringsdatum:</td><td>[#MP16]</td></tr><tr valign="top"><td>Rubrik:</td><td>[#MP4]</td></tr><tr valign="top"><td>Beskrivning:</td><td>[#MP5]</td></tr></table>
-
-Vänliga hälsningar')
-
-
-If not exists (select * from tblMailTemplate_tblLanguage where MailTemplate_Id = @mailID and Language_Id = 2)
-	Insert into tblMailTemplate_tblLanguage (MailTemplate_Id, Language_Id, MailTemplateName, Subject, Body) Values(@mailID, 2, 'Merged Case', 'DH Helpdesk Closed case - [#1]: [#4]', 'Hello [#3]
-Your case [#1] has been merged to another similar case [#MP1] created by [#MP3].
-If you want to add something on the subject, do not hesitate to reply to this email, your imput will be moved to the merged case.
-[#MP98]View case details[/#MP98]
-
-<strong>Case information:</strong><br><table><tr valign="top"><td>Registration date:</td><td>[#MP16]</td></tr><tr valign="top"><td>Subject:</td><td>[#MP4]</td></tr><tr valign="top"><td>Description:</td><td>[#MP5]</td></tr></table>
-
-Best Regards')
-GO
-
---Insert the new template for all customers..
-
-insert into tblMailTemplate (MailID, Customer_Id, isStandard, SendMethod)
-select 18, Id, 1, 0 from tblCustomer where Id not in(select Customer_Id from tblMailTemplate where MailID = 18 and Customer_Id is not null)
-
-GO
-
---Insert mailtemplates for all customers
-
-insert into tblMailTemplate_tblLanguage ([MailTemplate_Id]
-      ,[Language_Id]
-      ,[MailTemplateName]
-      ,[Subject]
-      ,[Body])
-
-
-
-SELECT        dbo.tblMailTemplate.Id, dbo.tblMailTemplate_tblLanguage.Language_Id, dbo.tblMailTemplate_tblLanguage.MailTemplateName, dbo.tblMailTemplate_tblLanguage.Subject, dbo.tblMailTemplate_tblLanguage.Body
-FROM            dbo.tblMailTemplate INNER JOIN
-                         dbo.tblMailTemplate AS tblMailTemplate_1 ON dbo.tblMailTemplate.MailID = tblMailTemplate_1.MailID INNER JOIN
-                         dbo.tblMailTemplate_tblLanguage ON tblMailTemplate_1.Id = dbo.tblMailTemplate_tblLanguage.MailTemplate_Id
-WHERE        (dbo.tblMailTemplate.MailID = 18) AND (dbo.tblMailTemplate.Customer_Id IS NOT NULL) AND (tblMailTemplate_1.Customer_Id IS NULL)
-
-AND  dbo.tblMailTemplate.Id not in (select MailTemplate_Id from tblmailtemplate_tbllanguage)
-
-GO
-
-
-RAISERROR ('Alter tblCase.ReportedBy from 80 nvarchar to 200 nvarchar', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblCase','ReportedBy') IS NOT NULL
+RAISERROR ('Add Column FinishedDateFrom to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPRDataPrivacyFavorite','FinishedDateFrom') IS NULL
 	BEGIN	 
-		ALTER TABLE [dbo].[tblCase]
-		ALTER COLUMN ReportedBy nvarchar(200) NULL
+		ALTER TABLE [dbo].tblGDPRDataPrivacyFavorite
+		ADD FinishedDateFrom datetime null
 	End
+
 Go
 
-RAISERROR ('Alter tblCaseHistory.ReportedBy from 80 nvarchar to 200 nvarchar', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblCaseHistory','ReportedBy') IS NOT NULL
+RAISERROR ('Add Column FinishedDateTo to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPRDataPrivacyFavorite','FinishedDateTo') IS NULL
 	BEGIN	 
-		ALTER TABLE [dbo].[tblCaseHistory]
-		ALTER COLUMN ReportedBy nvarchar(200) NULL
+		ALTER TABLE [dbo].tblGDPRDataPrivacyFavorite
+		ADD FinishedDateTo datetime null
 	End
+
 Go
 
-RAISERROR ('Alter ReportedBy in ECT_Get_MailById from 80 nvarchar to 200 nvarchar', 10, 1) WITH NOWAIT
-IF(OBJECT_ID('[dbo].[ECT_Get_MailById]', 'P') IS NOT NULL) 
-DROP PROCEDURE [dbo].[ECT_Get_MailById]
-GO
-
-CREATE PROCEDURE [dbo].[ECT_Get_MailById]  
- (  
-  @MailTemplate_Id int,  
-  @Case_Id int,  
-  @Language_Id int  
- )  
-AS  
-BEGIN  
- SET NOCOUNT ON;  
-  
- DECLARE @MailId int  
- DECLARE @Customer_Id int  
- DECLARE @MailTemplateSubject nvarchar(200)  
-    DECLARE @MailTemplateBody nvarchar(4000)  
-      
- DECLARE @ReportedBy nvarchar(200)  
- DECLARE @Persons_Name nvarchar(50)  
- DECLARE @Persons_EMail nvarchar(100)  
- DECLARE @Persons_Phone nvarchar(40)  
- DECLARE @Persons_CellPhone nvarchar(30)  
-  
- DECLARE @CaseNumber nvarchar(20)  
- DECLARE @RegTime nvarchar(20)  
- DECLARE @ChangedBy nvarchar(100)  
- DECLARE @CustomerName nvarchar(50)  
- DECLARE @Place nvarchar(100)  
- DECLARE @InventoryNumber nvarchar(20)  
- DECLARE @CaseType nvarchar(50)  
- DECLARE @Category nvarchar(50)  
- DECLARE @Caption nvarchar(60)  
- DECLARE @Description nvarchar(1000)  
- DECLARE @Miscellaneous nvarchar(1000)  
- DECLARE @Available nvarchar(100)  
- DECLARE @WorkingGroup nvarchar(50)  
- DECLARE @WorkingGroupEMail nvarchar(200)  
- DECLARE @AdministratorFirstName nvarchar(20)  
- DECLARE @AdministratorSurName nvarchar(30)  
- DECLARE @PriorityName nvarchar(30)  
- DECLARE @PriorityDescription nvarchar(200)  
- DECLARE @WatchDate nvarchar(20)  
-  
- SELECT @MailId=MailId, @Customer_Id=Customer_Id, @MailTemplateSubject=Subject, @MailTemplateBody=Body   
- FROM tblMailTemplate  
-  INNER JOIN tblMailTemplate_tblLanguage ON tblMailTemplate.Id=tblMailTemplate_tblLanguage.MailTemplate_Id  
- WHERE MailTemplate_Id=@MailTemplate_Id AND Language_Id=@Language_Id  
-  
- SELECT   
-  @ReportedBy=tblCase.ReportedBy,  
-  @Persons_Name=tblCase.Persons_Name,  
-  @Persons_EMail=tblCase.Persons_EMail,  
-  @Persons_Phone=tblCase.Persons_Phone,  
-  @Persons_CellPhone=tblCase.Persons_CellPhone,   
-  @Place=tblCase.Place,   
-  @CaseNumber=tblCase.CaseNumber,  
-  @RegTime=tblCase.RegTime,  
-  @ChangedBy=ISNULL(tblUsers.FirstName, '') + ' ' + ISNULL(tblUsers.SurName, ''),  
-  @CustomerName=tblCustomer.Name,  
-  @InventoryNumber=tblCase.InventoryNumber,  
-  @CaseType=tblCaseType.CaseType,  
-  @Category=ISNULL(tblCategory.Category, ''),  
-  @Caption=tblCase.Caption,  
-  @Description=tblCase.Description,  
-  @Miscellaneous=tblCase.Miscellaneous,  
-  @Available=tblCase.Available,  
-  @WorkingGroup=ISNULL(tblWorkingGroup.WorkingGroup, ''),  
-  @WorkingGroupEMail=ISNULL(tblWorkingGroup.WorkingGroupEMail, ''),  
-  @AdministratorFirstName=ISNULL(tblUsers2.FirstName, ''),  
-  @AdministratorSurName=ISNULL(tblUsers2.SurName, ''),  
-  @PriorityName=ISNULL(tblPriority.PriorityName, ''),  
-  @PriorityDescription=ISNULL(tblPriority.PriorityDescription, ''),  
-  @WatchDate=ISNULL(tblCase.WatchDate, '')  
- FROM tblCase  
-  INNER JOIN tblCustomer ON tblCase.Customer_Id=tblCustomer.Id  
-  LEFT JOIN tblUsers ON tblCase.ChangeByUser_Id = tblUsers.Id  
-  LEFT JOIN tblUsers tblUsers2 ON tblCase.Performer_User_Id = tblUsers2.Id  
-  INNER JOIN tblCaseType ON tblCase.Casetype_Id=tblCaseType.Id  
-  LEFT JOIN tblCategory ON tblCase.Category_Id = tblCategory.Id  
-  LEFT JOIN tblWorkingGroup ON tblCase.WorkingGroup_Id = tblWorkingGroup.Id  
-  LEFT JOIN tblPriority ON tblCase.Priority_Id = tblPriority.Id  
- WHERE tblCase.Id=@Case_Id  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#1]',  @Casenumber)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#1]',  @Casenumber)  
-   
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#16]',  @RegTime)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#16]',  @RegTime)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#22]',  @ChangedBy)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#22]',  @ChangedBy)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#27]',  @ReportedBy)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#27]',  @ReportedBy)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#3]',  @Persons_Name)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#3]',  @Persons_Name)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#8]',  @Persons_EMail)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#8]',  @Persons_EMail)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#9]',  @Persons_Phone)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#9]',  @Persons_Phone)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#18]',  @Persons_CellPhone)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#18]',  @Persons_CellPhone)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#2]',  @CustomerName)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#2]',  @CustomerName)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#24]',  @Place)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#24]',  @Place)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#17]',  @InventoryNumber)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#17]',  @InventoryNumber)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#25]',  @CaseType)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#25]',  @CaseType)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#4]',  @Caption)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#4]',  @Caption)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#5]',  @Description)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#5]',  @Description)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#23]',  @Miscellaneous)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#23]',  @Miscellaneous)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#19]',  @Available)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#19]',  @Available)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#15]',  @WorkingGroup)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#15]',  @WorkingGroup)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#13]',  @WorkingGroupEMail)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#13]',  @WorkingGroupEMail)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#6]',  @AdministratorFirstName)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#6]',  @AdministratorFirstName)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#7]',  @AdministratorSurName)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#7]',  @AdministratorSurName)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#12]',  @PriorityName)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#12]',  @PriorityName)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#20]',  @PriorityDescription)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#20]',  @PriorityDescription)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#21]',  @WatchDate)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#21]',  @WatchDate)  
-  
- SELECT @MailId AS MailId, @Customer_Id AS Customer_Id, @MailTemplate_Id AS Id, @MailTemplateSubject AS Subject, @MailTemplateBody AS Body  
-END  
-GO
-
-RAISERROR ('Alter ReportedBy in ECT_Get_MailByMailId from 80 nvarchar to 200 nvarchar', 10, 1) WITH NOWAIT
-IF(OBJECT_ID('[dbo].[ECT_Get_MailByMailId]', 'P') IS NOT NULL) 
-DROP PROCEDURE [dbo].[ECT_Get_MailByMailId]
-GO
-
-CREATE PROCEDURE [dbo].[ECT_Get_MailByMailId]  
- (  
-  @MailId int,  
-  @Customer_Id int,  
-  @Language_Id int,  
-  @Case_Id int  
- )  
-AS  
-BEGIN  
- SET NOCOUNT ON;  
-  
- DECLARE @MailTemplate_Id int  
- DECLARE @MailTemplateSubject nvarchar(200)  
-    DECLARE @MailTemplateBody nvarchar(4000)  
-      
- DECLARE @ReportedBy nvarchar(200)  
- DECLARE @Persons_Name nvarchar(50)  
- DECLARE @Persons_EMail nvarchar(100)  
- DECLARE @Persons_Phone nvarchar(40)  
- DECLARE @Persons_CellPhone nvarchar(30)  
-  
- DECLARE @CaseGUID uniqueidentifier  
- DECLARE @CaseNumber nvarchar(20)  
- DECLARE @RegTime nvarchar(20)  
- DECLARE @ChangedBy nvarchar(100)  
- DECLARE @CustomerName nvarchar(50)  
- DECLARE @Place nvarchar(100)  
- DECLARE @InventoryNumber nvarchar(20)  
- DECLARE @CaseType nvarchar(50)  
- DECLARE @Category nvarchar(50)  
- DECLARE @Caption nvarchar(60)  
- DECLARE @Description nvarchar(1000)  
- DECLARE @Miscellaneous nvarchar(1000)  
- DECLARE @Available nvarchar(100)  
- DECLARE @WorkingGroup nvarchar(50)  
- DECLARE @WorkingGroupEMail nvarchar(200)  
- DECLARE @AdministratorFirstName nvarchar(20)  
- DECLARE @AdministratorSurName nvarchar(30)  
- DECLARE @PriorityName nvarchar(30)  
- DECLARE @PriorityDescription nvarchar(200)  
- DECLARE @WatchDate nvarchar(20)  
- DECLARE @SiteURL nvarchar(100)  
- DECLARE @SelfServiceURL nvarchar(100)  
- DECLARE @Version int  
- DECLARE @Link nvarchar(500)  
- DECLARE @LinkSelfService nvarchar(500)  
- DECLARE @ServerPort int  
- DECLARE @Protocol nvarchar(10)  
-  
- SELECT @ServerPort = ServerPort FROM tblGlobalSettings  
- SELECT @SiteURL = SiteURL, @SelfServiceURL = SelfServiceURL FROM tblSettings WHERE Customer_Id=@Customer_Id  
-  
- if @SiteURL IS NULL  
-  begin  
-   SELECT @SiteURL = ServerName FROM tblGlobalSettings  
-   SET @Version = 4  
-  end  
- else  
-  begin  
-   SET @Version = 5  
-  end  
-  
- if @SelfServiceURL IS NULL  
-  begin  
-   SELECT @SelfServiceURL = ServerName FROM tblGlobalSettings  
-  end  
-  
- if CHARINDEX(@SiteURL, 'http') = 0  
-  begin  
-   if @ServerPort = 443  
-    SET @SiteURL = 'https://' + @SiteURL  
-   else  
-    SET @SiteURL = 'http://' + @SiteURL  
-  end   
-  
- if CHARINDEX(@SelfServiceURL, 'http') = 0  
-  begin  
-   if @ServerPort = 443  
-    SET @SelfServiceURL = 'https://' + @SelfServiceURL  
-   else  
-    SET @SelfServiceURL = 'http://' + @SelfServiceURL  
-  end   
-  
- SELECT @MailTemplate_Id=MailTemplate_Id, @MailTemplateSubject=Subject, @MailTemplateBody=Body   
- FROM tblMailTemplate  
-  INNER JOIN tblMailTemplate_tblLanguage ON tblMailTemplate.Id=tblMailTemplate_tblLanguage.MailTemplate_Id  
- WHERE MailId=@MailId AND Language_Id=@Language_Id AND Customer_Id=@Customer_Id  
-  
- SELECT   
-  @CaseGUID=tblCase.CaseGUID,  
-  @ReportedBy=ISNULL(tblCase.ReportedBy, ''),  
-  @Persons_Name=tblCase.Persons_Name,  
-  @Persons_EMail=tblCase.Persons_EMail,  
-  @Persons_Phone=tblCase.Persons_Phone,  
-  @Persons_CellPhone=tblCase.Persons_CellPhone,   
-  @Place=tblCase.Place,   
-  @CaseNumber=tblCase.CaseNumber,  
-  @RegTime=tblCase.RegTime,  
-  @ChangedBy=ISNULL(tblUsers.FirstName, '') + ' ' + ISNULL(tblUsers.SurName, ''),  
-  @CustomerName=tblCustomer.Name,  
-  @InventoryNumber=tblCase.InventoryNumber,  
-  @CaseType=tblCaseType.CaseType,  
-  @Category=ISNULL(tblCategory.Category, ''),  
-  @Caption=tblCase.Caption,  
-  @Description=tblCase.Description,  
-  @Miscellaneous=tblCase.Miscellaneous,  
-  @Available=tblCase.Available,  
-  @WorkingGroup=ISNULL(tblWorkingGroup.WorkingGroup, ''),  
-  @WorkingGroupEMail=ISNULL(tblWorkingGroup.WorkingGroupEMail, ''),  
-  @AdministratorFirstName=ISNULL(tblUsers2.FirstName, ''),  
-  @AdministratorSurName=ISNULL(tblUsers2.SurName, ''),  
-  @PriorityName=ISNULL(tblPriority.PriorityName, ''),  
-  @PriorityDescription=ISNULL(tblPriority.PriorityDescription, ''),  
-  @WatchDate=ISNULL(tblCase.WatchDate, '')  
- FROM tblCase  
-  INNER JOIN tblCustomer ON tblCase.Customer_Id=tblCustomer.Id  
-  LEFT JOIN tblUsers ON tblCase.ChangeByUser_Id = tblUsers.Id  
-  LEFT JOIN tblUsers tblUsers2 ON tblCase.Performer_User_Id = tblUsers2.Id  
-  INNER JOIN tblCaseType ON tblCase.Casetype_Id=tblCaseType.Id  
-  LEFT JOIN tblCategory ON tblCase.Category_Id = tblCategory.Id  
-  LEFT JOIN tblWorkingGroup ON tblCase.WorkingGroup_Id = tblWorkingGroup.Id  
-  LEFT JOIN tblPriority ON tblCase.Priority_Id = tblPriority.Id  
- WHERE tblCase.Id=@Case_Id  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#1]',  @Casenumber)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#1]',  @Casenumber)  
-   
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#16]',  @RegTime)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#16]',  @RegTime)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#22]',  @ChangedBy)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#22]',  @ChangedBy)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#27]',  @ReportedBy)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#27]',  @ReportedBy)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#3]',  @Persons_Name)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#3]',  @Persons_Name)  
-  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#8]',  @Persons_EMail)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#8]',  @Persons_EMail)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#9]',  @Persons_Phone)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#9]',  @Persons_Phone)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#18]',  @Persons_CellPhone)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#18]',  @Persons_CellPhone)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#2]',  @CustomerName)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#2]',  @CustomerName)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#24]',  @Place)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#24]',  @Place)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#17]',  @InventoryNumber)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#17]',  @InventoryNumber)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#25]',  @CaseType)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#25]',  @CaseType)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#4]',  @Caption)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#4]',  @Caption)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#5]',  @Description)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#5]',  @Description)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#23]',  @Miscellaneous)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#23]',  @Miscellaneous)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#19]',  @Available)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#19]',  @Available)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#15]',  @WorkingGroup)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#15]',  @WorkingGroup)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#13]',  @WorkingGroupEMail)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#13]',  @WorkingGroupEMail)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#6]',  @AdministratorFirstName)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#6]',  @AdministratorFirstName)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#7]',  @AdministratorSurName)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#7]',  @AdministratorSurName)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#12]',  @PriorityName)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#12]',  @PriorityName)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#20]',  @PriorityDescription)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#20]',  @PriorityDescription)  
-  
- SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#21]',  @WatchDate)  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#21]',  @WatchDate)  
-  
- if @Version = 5  
-  SET @Link = '<br><a href="' + @SiteURL + '/cases/edit/' + convert(varchar(50),@Case_Id) + '">' + @SiteURL + '/cases/edit/' + convert(varchar(50),@Case_Id) + '</a>'  
-    else  
-        SET @Link = '<br><a href="' + @SiteURL + '/Default.asp?GUID=' + convert(varchar(50),@CaseGUID) + '">' + @SiteURL + '/Default.asp?GUID=' + convert(varchar(50),@CaseGUID) + '</a>'  
-       
- --print @MailTemplateBody  
-  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#99]',  @Link)  
-  
-    if @Version = 5  
-  SET @LinkSelfService = '<br><a href="' + @SelfServiceURL + '/case/index/' + convert(varchar(50),@CaseGUID) + '">' + @SelfServiceURL + '/case/index/' + convert(varchar(50),@CaseGUID) + '</a>'  
-    else  
-  SET @LinkSelfService = '<br><a href="' + @SelfServiceURL + '/CI.asp?Id=' + convert(varchar(50),@CaseGUID) + '>' + @SelfServiceURL + '/CI.asp?Id=' + convert(varchar(50),@CaseGUID) + '</a>'  
-  
- SET @MailTemplateBody = replace(@MailTemplateBody, '[#98]',  @LinkSelfService)  
-  
- SELECT @MailId AS MailId, @Customer_Id AS Customer_Id, @MailTemplate_Id AS Id, @MailTemplateSubject AS Subject, @MailTemplateBody AS Body  
-END  
-GO
-
-
-RAISERROR ('Alter ReportedBy in Mail2License_getMailById from 80 nvarchar to 200 nvarchar', 10, 1) WITH NOWAIT
-IF(OBJECT_ID('[dbo].[Mail2License_getMailById]', 'P') IS NOT NULL) 
-DROP PROCEDURE [dbo].[Mail2License_getMailById]
-GO
-
-CREATE PROCEDURE [dbo].[Mail2License_getMailById]  
- (  
-  @MailId int,  
-  @Customer_Id int,  
-  @Language_Id int,  
-  @Case_Id int  
- )  
-AS  
-BEGIN  
- SET NOCOUNT ON;  
-  
- if @Case_Id = 0   
-  begin  
-   SELECT tblMailTemplate.Id, tblMailTemplate.MailId, tblMailTemplate_tblLanguage.Subject, tblMailTemplate_tblLanguage.Body  
-   FROM tblMailTemplate  
-    INNER JOIN tblMailTemplate_tblLanguage ON tblMailTemplate.Id=tblMailTemplate_tblLanguage.MailTemplate_Id AND tblMailTemplate_tblLanguage.Language_Id=@Language_Id  
-   WHERE tblMailTemplate.MailId=@MailId AND Language_Id=@Language_Id  
-  end  
- else  
-  begin  
-   DECLARE @MailTemplate_Id int  
-   DECLARE @MailTemplateSubject nvarchar(200)  
-   DECLARE @MailTemplateBody nvarchar(4000)  
-      
-   DECLARE @ReportedBy nvarchar(200)  
-   DECLARE @Persons_Name nvarchar(50)  
-   DECLARE @Persons_EMail nvarchar(100)  
-   DECLARE @Persons_Phone nvarchar(40)  
-   DECLARE @Persons_CellPhone nvarchar(30)  
-  
-   DECLARE @CaseNumber nvarchar(20)  
-   DECLARE @RegTime nvarchar(20)  
-   DECLARE @ChangedBy nvarchar(100)  
-   DECLARE @CustomerName nvarchar(50)  
-   DECLARE @Place nvarchar(100)  
-   DECLARE @InventoryNumber nvarchar(20)  
-   DECLARE @CaseType nvarchar(50)  
-   DECLARE @Category nvarchar(50)  
-   DECLARE @Caption nvarchar(60)  
-   DECLARE @Description nvarchar(1000)  
-   DECLARE @Miscellaneous nvarchar(1000)  
-   DECLARE @Available nvarchar(100)  
-   DECLARE @WorkingGroup nvarchar(50)  
-   DECLARE @WorkingGroupEMail nvarchar(200)  
-   DECLARE @AdministratorFirstName nvarchar(20)  
-   DECLARE @AdministratorSurName nvarchar(30)  
-   DECLARE @PriorityName nvarchar(30)  
-   DECLARE @PriorityDescription nvarchar(200)  
-   DECLARE @WatchDate nvarchar(20)  
-  
-   SELECT @MailTemplate_Id=MailTemplate_Id, @MailTemplateSubject=Subject, @MailTemplateBody=Body   
-   FROM tblMailTemplate  
-    INNER JOIN tblMailTemplate_tblLanguage ON tblMailTemplate.Id=tblMailTemplate_tblLanguage.MailTemplate_Id  
-   WHERE MailId=@MailId AND Language_Id=@Language_Id AND Customer_Id=@Customer_Id  
-  
-   SELECT   
-    @ReportedBy=tblCase.ReportedBy,  
-    @Persons_Name=tblCase.Persons_Name,  
-    @Persons_EMail=tblCase.Persons_EMail,  
-    @Persons_Phone=tblCase.Persons_Phone,  
-    @Persons_CellPhone=tblCase.Persons_CellPhone,   
-    @Place=tblCase.Place,   
-    @CaseNumber=tblCase.CaseNumber,  
-    @RegTime=tblCase.RegTime,  
-    @ChangedBy=ISNULL(tblUsers.FirstName, '') + ' ' + ISNULL(tblUsers.SurName, ''),  
-    @CustomerName=tblCustomer.Name,  
-    @InventoryNumber=tblCase.InventoryNumber,  
-    @CaseType=tblCaseType.CaseType,  
-    @Category=ISNULL(tblCategory.Category, ''),  
-    @Caption=tblCase.Caption,  
-    @Description=tblCase.Description,  
-    @Miscellaneous=tblCase.Miscellaneous,  
-    @Available=tblCase.Available,  
-    @WorkingGroup=ISNULL(tblWorkingGroup.WorkingGroup, ''),  
-    @WorkingGroupEMail=ISNULL(tblWorkingGroup.WorkingGroupEMail, ''),  
-    @AdministratorFirstName=ISNULL(tblUsers2.FirstName, ''),  
-    @AdministratorSurName=ISNULL(tblUsers2.SurName, ''),  
-    @PriorityName=ISNULL(tblPriority.PriorityName, ''),  
-    @PriorityDescription=ISNULL(tblPriority.PriorityDescription, ''),  
-    @WatchDate=ISNULL(tblCase.WatchDate, '')  
-   FROM tblCase  
-    INNER JOIN tblCustomer ON tblCase.Customer_Id=tblCustomer.Id  
-    LEFT JOIN tblUsers ON tblCase.ChangeByUser_Id = tblUsers.Id  
-    LEFT JOIN tblUsers tblUsers2 ON tblCase.Performer_User_Id = tblUsers2.Id  
-    INNER JOIN tblCaseType ON tblCase.Casetype_Id=tblCaseType.Id  
-    LEFT JOIN tblCategory ON tblCase.Category_Id = tblCategory.Id  
-    LEFT JOIN tblWorkingGroup ON tblCase.WorkingGroup_Id = tblWorkingGroup.Id  
-    LEFT JOIN tblPriority ON tblCase.Priority_Id = tblPriority.Id  
-   WHERE tblCase.Id=@Case_Id  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#1]',  @Casenumber)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#1]',  @Casenumber)  
-   
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#16]',  @RegTime)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#16]',  @RegTime)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#22]',  @ChangedBy)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#22]',  @ChangedBy)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#27]',  @ReportedBy)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#27]',  @ReportedBy)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#3]',  @Persons_Name)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#3]',  @Persons_Name)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#8]',  @Persons_EMail)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#8]',  @Persons_EMail)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#9]',  @Persons_Phone)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#9]',  @Persons_Phone)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#18]',  @Persons_CellPhone)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#18]',  @Persons_CellPhone)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#2]',  @CustomerName)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#2]',  @CustomerName)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#24]',  @Place)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#24]',  @Place)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#17]',  @InventoryNumber)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#17]',  @InventoryNumber)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#25]',  @CaseType)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#25]',  @CaseType)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#4]',  @Caption)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#4]',  @Caption)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#5]',  @Description)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#5]',  @Description)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#23]',  @Miscellaneous)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#23]',  @Miscellaneous)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#19]',  @Available)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#19]',  @Available)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#15]',  @WorkingGroup)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#15]',  @WorkingGroup)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#13]',  @WorkingGroupEMail)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#13]',  @WorkingGroupEMail)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#6]',  @AdministratorFirstName)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#6]',  @AdministratorFirstName)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#7]',  @AdministratorSurName)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#7]',  @AdministratorSurName)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#12]',  @PriorityName)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#12]',  @PriorityName)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#20]',  @PriorityDescription)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#20]',  @PriorityDescription)  
-  
-   SET @MailTemplateSubject = replace(@MailTemplateSubject, '[#21]',  @WatchDate)  
-   SET @MailTemplateBody = replace(@MailTemplateBody, '[#21]',  @WatchDate)  
-  
-   SELECT @MailId AS MailId, @Customer_Id AS Customer_Id, @MailTemplate_Id AS Id, @MailTemplateSubject AS Subject, @MailTemplateBody AS Body  
-  end  
-END
-GO
-
-RAISERROR ('Alter ReportedBy in Mail2License_saveCase from 80 nvarchar to 200 nvarchar', 10, 1) WITH NOWAIT
-IF(OBJECT_ID('[dbo].[Mail2License_saveCase]', 'P') IS NOT NULL) 
-DROP PROCEDURE [dbo].[Mail2License_saveCase]
-GO
-
--- select * from tblLanguage where LanguageId = 'PL'  
-  
-CREATE PROCEDURE [dbo].[Mail2License_saveCase]  
- (  
-  @Customer_Id int  
-  , @ReportedBy nvarchar(200)  
-  , @Persons_Name nvarchar(50)  
-  , @Persons_EMail nvarchar(100)  
-  , @CaseType_Id int  
-  , @Caption nvarchar(100)  
-  , @Description ntext = ''  
-  , @Status_Id int = null  
-  , @Performer_User_Id int = 0  
-  , @InventoryNumber nvarchar(20) = ''  
-  
- )  
-AS  
-BEGIN  
- SET NOCOUNT ON;  
-  
- INSERT INTO tblCase(  
-  Customer_Id  
-  , ReportedBy  
-  , Persons_Name  
-  , Persons_EMail  
-  , CaseType_Id  
-  , Caption  
-  , Description  
-  , Status_Id  
-  , Performer_User_Id  
-  , InventoryNumber)  
- VALUES(  
-  @Customer_Id  
-  , @ReportedBy  
-  , @Persons_Name  
-  , @Persons_EMail  
-  , @CaseType_Id  
-  , @Caption  
-  , @Description  
-  , @Status_Id  
-  , @Performer_User_Id  
-  , @InventoryNumber)  
-  
- select CONVERT(int, @@IDENTITY)  
-      
-END
-GO
-
-IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 1 AND Property = 'Section.InitiatorInfo')
-BEGIN	 
-INSERT INTO [dbo].[ExtendedCaseTranslations]
-           ([LanguageId]
-           ,[Property]
-           ,[Text])
-     VALUES
-           (1
-           ,'Section.InitiatorInfo'
-           ,'Anmälarinfo')
-		   END
-GO
-
-IF NOT EXISTS(SELECT 1 FROM ExtendedCaseTranslations WHERE LanguageId = 2 AND Property = 'Section.InitiatorInfo')
-BEGIN	 
-INSERT INTO [dbo].[ExtendedCaseTranslations]
-           ([LanguageId]
-           ,[Property]
-           ,[Text])
-     VALUES
-           (2
-           ,'Section.InitiatorInfo'
-           ,'Initiator info')
-		   END
-GO
-
-RAISERROR ('Alter tblComputerUsers.UserId from 50 nvarchar to 200 nvarchar', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblComputerUsers','UserId') IS NOT NULL
-	BEGIN	 
-		ALTER TABLE [dbo].[tblComputerUsers]
-		ALTER COLUMN UserId nvarchar(200) NULL
-	End
-Go
-
-RAISERROR ('Recreated SearchCasesFTS Fulltext index on tblCase', 10, 1) WITH NOWAIT
-IF EXISTS (SELECT 1 
-			FROM sys.objects AS t 
-			INNER JOIN sys.fulltext_indexes AS fi 
-				ON t.[object_id] = fi.[object_id] 
-			INNER JOIN sys.fulltext_catalogs AS c 
-				ON fi.fulltext_catalog_id = c.fulltext_catalog_id
-			INNER JOIN sys.indexes AS i
-				ON fi.unique_index_id = i.index_id AND fi.[object_id] = i.[object_id]
-			 WHERE c.[name] = 'SearchCasesFTS' AND i.[name] = 'PK_tblCase'
-		)
+RAISERROR ('Add Foreign Key Customer_Id to tblRegistrationSourceCustomer', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblRegistrationSourceCustomer_tblCustomer]') 
+AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
 BEGIN
-	DROP FULLTEXT INDEX ON dbo.tblCase;
+    ALTER TABLE [dbo].[tblRegistrationSourceCustomer] WITH CHECK ADD CONSTRAINT [FK_tblRegistrationSourceCustomer_tblCustomer] FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
 END
 GO
 
-CREATE FULLTEXT INDEX ON dbo.tblCase
-  (   
-	Place Language 1033,   
-	Persons_Name Language 1033,   
-	Persons_EMail Language 1033,
-	Caption Language 1033,	  
-	Persons_Phone Language 1033,
-	[Description] Language 1033,
-	Miscellaneous Language 1033,
-	ReportedBy Language 1033,
-	InventoryNumber Language 1033,
-	Available Language 1033,
-	Persons_CellPhone Language 1033,
-	InventoryType Language 1033,
-	InventoryLocation Language 1033,
-	InvoiceNumber Language 1033,
-	UserCode Language 1033,
-	ReferenceNumber Language 1033,
-	VerifiedDescription Language 1033,
-	RegUserName Language 1033,
-	CostCentre Language 1033
-  )  
-  KEY INDEX PK_tblCase  
-  ON SearchCasesFTS
-          WITH STOPLIST = SYSTEM, CHANGE_TRACKING AUTO;  
-GO  
-
-RAISERROR ('Recreated SearchCasesFTS Fulltext index on tblCaseIsAbout', 10, 1) WITH NOWAIT
-IF EXISTS (SELECT 1 
-			FROM sys.objects AS t 
-			INNER JOIN sys.fulltext_indexes AS fi 
-				ON t.[object_id] = fi.[object_id] 
-			INNER JOIN sys.fulltext_catalogs AS c 
-				ON fi.fulltext_catalog_id = c.fulltext_catalog_id
-			INNER JOIN sys.indexes AS i
-				ON fi.unique_index_id = i.index_id AND fi.[object_id] = i.[object_id]
-			 WHERE c.[name] = 'SearchCasesFTS' AND i.[name] = 'PK_tblCaseIsAbout'
-		)
+RAISERROR ('Add Foreign Key Case_Id to tblMail2TicketCase', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblMail2TicketCase_tblCase]') 
+AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
 BEGIN
-	DROP FULLTEXT INDEX ON dbo.tblCaseIsAbout;
+    ALTER TABLE [dbo].[tblMail2TicketCase] WITH CHECK ADD CONSTRAINT [FK_tblMail2TicketCase_tblCase] FOREIGN KEY([Case_Id]) REFERENCES [dbo].[tblCase] ([Id])
 END
 GO
 
-CREATE FULLTEXT INDEX ON dbo.tblCaseIsAbout
-  (   
-	CostCentre Language 1033,
-	Person_CellPhone Language 1033,
-	Person_Email Language 1033,
-	Person_Name Language 1033,
-	Person_Phone Language 1033,
-	Place Language 1033,
-	ReportedBy Language 1033,
-	UserCode Language 1033
-  )  
-  KEY INDEX PK_tblCaseIsAbout  
-  ON SearchCasesFTS
-          WITH STOPLIST = SYSTEM, CHANGE_TRACKING AUTO;  
-GO  
+RAISERROR ('Add Foreign Key Case_Id to tblLocalAdmin', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblLocalAdmin_tblCase]') 
+AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+BEGIN
+    ALTER TABLE [dbo].[tblLocalAdmin] WITH CHECK ADD CONSTRAINT [FK_tblLocalAdmin_tblCase] FOREIGN KEY([Case_Id]) REFERENCES [dbo].[tblCase] ([Id])
+END
+GO
 
+RAISERROR ('Add Foreign Key Case_Id to tblFormFieldValueHistory', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblFormFieldValueHistory_tblCase]') 
+AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+BEGIN
+    ALTER TABLE [dbo].[tblFormFieldValueHistory] WITH CHECK ADD CONSTRAINT [FK_tblFormFieldValueHistory_tblCase] FOREIGN KEY([Case_Id]) REFERENCES [dbo].[tblCase] ([Id])
+END
+GO
+
+RAISERROR ('Delete from tblCaseStatistics where there no longer is a connected case', 10, 1) WITH NOWAIT
+DELETE cs
+FROM [dbo].[tblCaseStatistics] AS cs
+LEFT JOIN tblCase as c
+	on cs.Case_Id = c.Id
+WHERE c.Id IS NULL
+GO
+
+
+RAISERROR ('Add Foreign Key Case_Id to tblCaseStatistics', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblCaseStatistics_tblCase]') 
+AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+BEGIN
+    ALTER TABLE [dbo].[tblCaseStatistics] WITH CHECK ADD CONSTRAINT [FK_tblCaseStatistics_tblCase] FOREIGN KEY([Case_Id]) REFERENCES [dbo].[tblCase] ([Id])
+END
+GO
+
+RAISERROR ('Add Foreign Key Customer_Id to tblCaseFilterFavorite', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblCaseFilterFavorite_tblCustomer]') 
+AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+BEGIN
+    ALTER TABLE [dbo].[tblCaseFilterFavorite] WITH CHECK ADD CONSTRAINT [FK_tblCaseFilterFavorite_tblCustomer] FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
+END
+GO
+
+RAISERROR ('Add Foreign Key Customer_Id to tblBR_Rules', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblBR_Rules_tblCustomer]') 
+AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+BEGIN
+    ALTER TABLE [dbo].[tblBR_Rules] WITH CHECK ADD CONSTRAINT [FK_tblBR_Rules_tblCustomer] FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
+END
+GO
+
+RAISERROR ('Delete from tblMergedCases Child where there no longer is a connected case', 10, 1) WITH NOWAIT
+DELETE mcc
+FROM tblMergedCases AS mcc
+LEFT JOIN tblcase AS c
+	ON mcc.MergedChild_Id = c.Id
+WHERE c.Id IS NULL
+GO
+
+RAISERROR ('Delete from tblMergedCases Parent where there no longer is a connected case', 10, 1) WITH NOWAIT
+DELETE mcp
+FROM tblMergedCases AS mcp
+LEFT JOIN tblcase AS c
+	ON mcp.MergedParent_Id = c.Id
+WHERE c.Id IS NULL
+GO
+
+RAISERROR ('Add Foreign Key Case_Id to tblMergedCases MergedParent_Id', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblMergedCases_tblCase_Parent]') 
+AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+BEGIN
+    ALTER TABLE [dbo].[tblMergedCases] WITH CHECK ADD CONSTRAINT [FK_tblMergedCases_tblCase_Parent] FOREIGN KEY([MergedParent_Id]) REFERENCES [dbo].[tblCase] ([Id])
+END
+GO
+
+RAISERROR ('Add Foreign Key Case_Id to tblMergedCases MergedChild_Id', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblMergedCases_tblCase_Child]') 
+AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+BEGIN
+    ALTER TABLE [dbo].[tblMergedCases] WITH CHECK ADD CONSTRAINT [FK_tblMergedCases_tblCase_Child] FOREIGN KEY([MergedChild_Id]) REFERENCES [dbo].[tblCase] ([Id])
+END
+GO
+
+RAISERROR ('Add Column ProductAreas to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPRDataPrivacyFavorite','ProductAreas') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblGDPRDataPrivacyFavorite
+		ADD ProductAreas nvarchar(256) Null
+	End
+
+Go
+
+RAISERROR ('Create SQL type IdsList', 10, 1) WITH NOWAIT
+IF TYPE_ID(N'IdsList') IS NULL
+CREATE TYPE IdsList AS TABLE ( Id INT );
+GO
+
+RAISERROR ('Create SQL Procedure [dbo].[sp_DeleteCases]', 10, 1) WITH NOWAIT
+IF(OBJECT_ID('[dbo].[sp_DeleteCases]', 'P') IS NOT NULL)
+DROP PROCEDURE sp_DeleteCases
+GO
+
+CREATE PROCEDURE [dbo].[sp_DeleteCases] 
+	@Cases IdsList READONLY
+AS
+BEGIN
+
+BEGIN TRAN	
+	BEGIN TRY
+
+			DELETE lu
+			FROM tblLink_tblUsers AS lu
+			INNER JOIN dbo.tblLink AS l
+				ON lu.Link_Id = l.Id
+			INNER JOIN dbo.tblCaseSolution  AS cs 
+				ON l.CaseSolution_Id= cs.Id
+			INNER JOIN dbo.tblChange AS ch
+				ON cs.Change_Id = ch.Id
+			INNER JOIN @Cases AS c
+				ON ch.SourceCase_Id = c.Id;
+
+			DELETE lw
+			FROM tblLink_tblWorkingGroup AS lw
+			INNER JOIN tblLink AS l	
+				ON lw.Link_Id = l.Id
+			INNER JOIN dbo.tblCaseSolution AS cs
+				ON l.CaseSolution_Id = cs.Id
+			INNER JOIN tblChange AS ch
+				ON cs.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				ON ch.SourceCase_Id = c.Id;
+
+			DELETE cl
+			FROM tblChangeLog AS cl
+			INNER JOIN dbo.tblChangeEMailLog AS cel
+				ON cl.ChangeEMailLog_Id = cel.Id
+			INNER JOIN dbo.tblChangeHistory AS chh
+				ON cel.ChangeHistory_Id = chh.Id
+			INNER JOIN dbo.tblChange AS ch
+				on chh.Change_Id = ch.Id
+			INNER JOIN @Cases AS c
+				on ch.SourceCase_Id = c.Id;
+
+			DELETE tpr 
+			FROM tblParentChildCaseRelations AS tpr
+			INNER JOIN @Cases AS c
+				ON c.Id = tpr.Ancestor_Id;
+
+			DELETE tec
+			FROM tblCase_ExtendedCaseData AS tec
+			INNER JOIN @Cases AS c
+				ON c.Id = tec.Case_Id;
+
+			DELETE tca
+			FROM tblCaseIsAbout AS tca
+			INNER JOIN @Cases AS c
+				ON c.Id = tca.Case_Id;
+
+			DELETE cq
+			FROM tblCaseQuestion AS cq
+			INNER JOIN dbo.tblCaseQuestionCategory  AS cqc
+				on cq.CaseQuestionCategory_Id = cqc.Id
+			INNER JOIN dbo.tblCaseQuestionHeader AS cqh
+				on cqc.CaseQuestionHeader_Id = cqh.Id
+			INNER JOIN @Cases AS c
+				on cqh.Case_Id = c.Id;
+
+			DELETE cqc
+			FROM tblCaseQuestionCategory AS cqc
+			INNER JOIN dbo.tblCaseQuestionHeader AS cqh
+				on cqc.CaseQuestionHeader_Id = cqh.Id
+			INNER JOIN @Cases AS c
+				on cqh.Case_Id = c.Id; 
+ 
+ 			DELETE cqh
+			FROM tblCaseQuestionHeader AS cqh
+			INNER JOIN @Cases AS c 
+				ON cqh.Case_Id = c.Id;
+			
+ 			DELETE lfe
+			FROM tblLogFileExisting AS lfe
+			INNER JOIN dbo.tblLog AS l
+				ON lfe.Log_Id = l.Id
+			INNER JOIN @Cases AS c 
+				ON l.Case_Id = c.Id;
+
+			DELETE lfe
+			FROM tblLogFileExisting AS lfe
+			INNER JOIN @Cases AS c 
+				ON lfe.Case_Id = c.Id;
+
+			DELETE cd
+			FROM tblChange_tblDepartment AS cd
+			INNER JOIN dbo.tblChange AS ch
+				ON cd.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				ON ch.SourceCase_Id = c.Id;
+ 
+			DELETE ccg
+			FROM tblChange_tblChangeGroup AS ccg
+			INNER JOIN tblChange AS ch
+				ON ccg.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				ON ch.SourceCase_Id = c.Id; 
+	 
+	 		DELETE cir
+			FROM tblCaseInvoiceRow AS cir
+			INNER JOIN tblInvoiceRow AS ir 
+				ON cir.InvoiceRow_Id = ir.Id
+			INNER JOIN @Cases AS c
+				ON ir.Case_Id = c.Id;
+			
+			DELETE cir
+			FROM tblCaseInvoiceRow AS cir
+			INNER JOIN @Cases AS c
+				ON cir.Case_Id = c.Id;			
+
+			DELETE cc
+			FROM tblChangeCouncil AS cc
+			INNER JOIN tblChange AS ch
+				ON cc.Change_Id = ch.Id
+			INNER JOIN @Cases AS c
+				ON ch.SourceCase_Id = c.Id;
+
+			DELETE cc
+			FROM tblChangeContact AS cc
+			INNER JOIN dbo.tblChange AS ch
+				ON cc.Change_Id = ch.Id
+			INNER JOIN @Cases AS c
+				ON ch.SourceCase_Id = c.Id; 
+
+			DELETE cch
+			FROM tblChange_tblChange AS cch
+			INNER JOIN dbo.tblChange AS ch
+				ON cch.RelatedChange_Id = ch.Id
+			INNER JOIN @Cases AS c
+				ON ch.SourceCase_Id = c.Id;	
+
+			DELETE cf
+			FROM tblChangeFile AS cf
+			INNER JOIN dbo.tblChange AS ch
+				ON cf.Change_Id = ch.Id
+			INNER JOIN @Cases AS c
+				ON ch.SourceCase_Id = c.Id; 
+
+			SELECT tl.Id, tl.Case_Id, tl.InvoiceRow_Id 
+			INTO #TmpLogs
+			FROM tblLog AS tl 
+			INNER JOIN @Cases AS c
+				ON c.Id = tl.Case_Id;
+
+			DELETE lf
+			FROM tblLogFile AS lf
+			INNER JOIN #TmpLogs AS tmp
+				ON tmp.Id = lf.Log_Id;
+
+			DELETE m2t
+			FROM tblMail2Ticket AS m2t
+			INNER JOIN #TmpLogs AS tmp
+				ON tmp.Id = m2t.Log_Id;
+
+			DELETE m2tc
+			FROM tblMail2TicketCase AS m2tc
+			INNER JOIN #TmpLogs AS tmp
+				ON tmp.Id = m2tc.Case_Id;
+
+			DELETE m2t
+			FROM tblMail2Ticket AS m2t
+			INNER JOIN @Cases AS c
+				ON c.Id = m2t.Case_Id;
+
+			DELETE ela
+			FROM tblEmailLogAttempts AS ela
+			INNER JOIN #TmpLogs AS tmp
+				ON tmp.Id = ela.EmailLog_Id;
+
+			SELECT ch.Id, ch.Case_Id
+			INTO #TmpCaseHistory
+			FROM tblCaseHistory AS ch
+			INNER JOIN @Cases AS c
+				ON ch.Case_Id = c.Id;
+
+			DELETE ela
+			FROM tblEmailLogAttempts AS ela
+			INNER JOIN tblEmailLog AS el
+				ON ela.EmailLog_Id = el.Id
+			INNER JOIN #TmpCaseHistory AS ch
+				ON ch.Id = el.CaseHistory_Id;
+							   
+			DELETE el
+			FROM tblEmailLog AS el
+			INNER JOIN #TmpCaseHistory AS ch
+				ON ch.Id = el.CaseHistory_Id;
+
+			SELECT ir.Id, ir.Case_Id, ir.InvoiceHeader_Id
+			INTO #tmpInvoiceRow
+			FROM tblInvoiceRow AS ir
+			INNER JOIN @Cases AS c
+				ON ir.Case_Id = c.Id;
+
+			DELETE el 
+			FROM tblEMailLog AS el
+			INNER JOIN tblLog AS tl
+				ON el.Log_Id = tl.Id
+			INNER JOIN tblInvoiceRow AS ir
+				ON tl.InvoiceRow_Id = ir.Id
+			INNER JOIN tblInvoiceHeader AS ih
+				ON ir.InvoiceHeader_Id = ih.Id
+			INNER JOIN #tmpInvoiceRow AS tir
+				ON tir.InvoiceHeader_Id = ih.Id
+			INNER JOIN @Cases AS c
+				ON tir.Case_Id = c.Id;
+
+			DELETE el
+			FROM tblEmailLog AS el
+			INNER JOIN #TmpLogs As l
+				ON l.Id = el.Log_Id;
+				
+			DELETE tl
+			FROM tblLog AS tl
+			INNER JOIN tblInvoiceRow AS ir
+				ON ir.Id = tl.InvoiceRow_Id
+			INNER JOIN @Cases AS c
+				ON ir.Case_Id = c.Id;
+
+			DELETE tl
+			FROM tblLog AS tl
+			INNER JOIN tblInvoiceRow AS ir
+				ON tl.InvoiceRow_Id = ir.Id
+			INNER JOIN tblInvoiceHeader AS ih
+				ON ir.InvoiceHeader_Id = ih.Id
+			INNER JOIN #tmpInvoiceRow AS tir
+				ON tir.InvoiceHeader_Id = ih.Id
+			INNER JOIN @Cases AS c
+				ON tir.Case_Id = c.Id;
+			
+			DELETE tl
+			FROM tblLog AS tl
+			INNER JOIN #tmpInvoiceRow as r
+				ON r.Id = tl.InvoiceRow_Id;
+
+			DELETE tl
+			FROM tblLog AS tl
+			INNER JOIN #TmpLogs As l
+				ON l.Id = tl.Id;
+
+			DELETE ir
+			FROM tblInvoiceRow AS ir
+			INNER JOIN @Cases AS c
+				ON ir.Case_Id = c.Id;
+
+			DELETE ir
+			FROM tblInvoiceRow AS ir
+			INNER JOIN tblInvoiceHeader AS ih
+				ON ir.InvoiceHeader_Id = ih.Id
+			INNER JOIN #tmpInvoiceRow AS tir
+				ON tir.InvoiceHeader_Id = ih.Id
+			INNER JOIN @Cases AS c
+				ON tir.Case_Id = c.Id;
+
+			DROP TABLE #TmpLogs;
+
+			DELETE ih
+			FROM tblInvoiceHeader AS ih
+			INNER JOIN #tmpInvoiceRow AS ir
+				ON ir.InvoiceHeader_Id = ih.Id
+			INNER JOIN @Cases AS c
+				ON ir.Case_Id = c.Id;
+			
+			DROP TABLE #tmpInvoiceRow;
+			DELETE ch
+			FROM tblCaseHistory AS ch
+			INNER JOIN #TmpCaseHistory AS t
+				ON t.Id = ch.Id;
+
+			DROP TABLE #TmpCaseHistory;
+
+			DELETE cl
+			FROM tblCaseLock AS cl
+			INNER JOIN  @Cases AS c
+				ON c.Id = cl.Case_Id;
+
+			DELETE cf
+			FROM tblCaseFile AS cf
+			INNER JOIN  @Cases AS c
+				ON c.Id = cf.Case_Id;
+
+			DELETE fvl
+			FROM tblFileViewLog AS fvl
+			INNER JOIN  @Cases AS c
+				ON c.Id = fvl.Case_Id;
+
+			SELECT ci.Id
+			INTO #TmpCaseInvoice
+			FROM tblCaseInvoice AS ci
+			INNER JOIN  @Cases AS c
+				ON c.Id = ci.CaseId;
+			
+			DELETE cia
+			FROM tblCaseInvoiceArticle AS cia
+			INNER JOIN tblCaseInvoiceOrder AS cio
+				ON cio.Id = cia.OrderId
+			INNER JOIN #TmpCaseInvoice AS t
+				ON t.Id = cio.InvoiceId;
+
+			DELETE cof
+			FROM tblCaseInvoiceOrderFile AS cof
+			INNER JOIN tblCaseInvoiceOrder AS cio
+				ON cio.Id = cof.OrderId
+			INNER JOIN #TmpCaseInvoice AS t
+				ON t.Id = cio.InvoiceId;
+		
+			DELETE cio
+			FROM tblCaseInvoiceOrder AS cio
+			INNER JOIN #TmpCaseInvoice AS t
+				ON t.Id = cio.InvoiceId;
+
+			DELETE ci
+			FROM tblCaseInvoice AS ci
+			INNER JOIN #TmpCaseInvoice AS t
+				ON t.Id = ci.Id;
+
+			DROP TABLE #TmpCaseInvoice;
+				
+			DELETE csc
+			FROM tblCaseSolutionSchedule AS csc
+			INNER JOIN tblCaseSolution AS cs
+				ON csc.CaseSolution_Id = cs.Id
+			INNER JOIN dbo.tblChange AS ch
+				ON cs.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				ON ch.SourceCase_Id = c.Id;
+	
+			DELETE csf 
+			FROM tblCaseSolutionFieldSettings  csf
+			INNER JOIN tblCaseSolution AS cs
+				ON csf.CaseSolution_Id = cs.Id
+			INNER JOIN tblChange AS ch
+				ON cs.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				ON ch.SourceCase_Id = c.Id;
+ 
+ 			DELETE l
+			FROM dbo.tblLink AS l
+			INNER JOIN tblCaseSolution AS cs
+				ON l.CaseSolution_Id = cs.Id
+			INNER JOIN dbo.tblChange AS ch
+				ON cs.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				ON ch.SourceCase_Id = c.Id;
+
+			DELETE cse
+			FROM tblCaseSolution_tblCaseSection_ExtendedCaseForm AS cse
+			INNER JOIN dbo.tblCaseSolution AS cs
+				on cse.tblCaseSolutionID = cs.Id
+			INNER JOIN dbo.tblChange AS ch
+				on cs.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				on ch.SourceCase_Id = c.Id;
+
+			DELETE cse
+			FROM tblCaseSolution_ExtendedCaseForms AS cse
+			INNER JOIN dbo.tblCaseSolution AS cs 
+				ON cse.CaseSolution_Id = cs.Id
+			INNER JOIN dbo.tblChange AS ch
+				ON cs.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				ON ch.SourceCase_Id = c.Id;
+
+			DELETE csc
+			FROM tblCaseSolutionCondition AS csc
+			INNER JOIN tblCaseSolution AS cs 
+				ON csc.CaseSolution_Id=cs.Id
+			INNER JOIN tblChange AS ch
+				ON cs.Change_Id=ch.Id
+			INNER JOIN @Cases AS c
+				ON ch.SourceCase_Id = c.Id; 
+
+			DELETE cscl
+			FROM tblCaseSolutionConditionLog AS cscl
+			INNER JOIN dbo.tblCaseSolution AS cs
+				ON cscl.CaseSolution_Id = cs.Id
+			INNER JOIN dbo.tblChange AS ch
+				ON cs.Change_Id = ch.Id
+			INNER JOIN @Cases AS c 
+				ON ch.SourceCase_Id = c.Id;
+  
+			DELETE ch
+			FROM tblChange AS ch
+			INNER JOIN @Cases AS c
+				ON ch.SourceCase_Id = c.Id;
+ 
+			DELETE cl
+			FROM tblContractLog AS cl
+			INNER JOIN  @Cases AS c
+				ON c.Id = cl.Case_Id;
+		
+			DELETE flu
+			FROM tblCaseFollowUps AS flu
+			INNER JOIN  @Cases AS c
+				ON c.Id = flu.Case_Id;
+
+			DELETE ef
+			FROM tblCaseExtraFollowers AS ef
+			INNER JOIN  @Cases AS c
+				ON c.Id = ef.Case_Id;
+	
+			DELETE tecd
+			FROM tblCase_tblCaseSection_ExtendedCaseData AS tecd
+			INNER JOIN  @Cases AS c
+				ON c.Id = tecd.Case_Id;
+
+			SELECT cp.Id
+			INTO #TmpQuestionnaireCircularPart
+			FROM tblQuestionnaireCircularPart AS cp
+			INNER JOIN  @Cases AS c
+				ON c.Id = cp.Case_Id;
+
+			DELETE qqr
+			FROM tblQuestionnaireResult AS qr			
+			INNER JOIN #TmpQuestionnaireCircularPart AS cp
+				ON qr.QuestionnaireCircularPartic_Id = cp.Id
+			INNER JOIN tblQuestionnaireQuestionResult AS qqr
+				ON qqr.QuestionnaireResult_Id = qr.Id;
+
+			DELETE qr
+			FROM tblQuestionnaireResult AS qr			
+			INNER JOIN #TmpQuestionnaireCircularPart AS cp
+				ON qr.QuestionnaireCircularPartic_Id = cp.Id;
+
+			DELETE cp
+			FROM tblQuestionnaireCircularPart AS cp
+			INNER JOIN #TmpQuestionnaireCircularPart AS t
+				ON t.Id = cp.Id;
+
+			DROP TABLE #TmpQuestionnaireCircularPart;
+
+			DELETE mc
+			FROM tblMergedCases AS mc
+			INNER JOIN  @Cases AS c
+				ON c.Id = mc.MergedChild_Id OR c.Id = mc.MergedParent_Id;
+
+			DELETE lp 
+			FROM tblLogProgram AS lp
+			INNER JOIN @Cases AS c
+				ON c.Id = lp.Case_Id;
+			
+			DELETE la 
+			FROM tblLocalAdmin AS la
+			INNER JOIN @Cases AS c
+				ON c.Id = la.Case_Id;		
+			
+			DELETE vh
+			FROM tblFormFieldValueHistory AS vh
+			INNER JOIN @Cases AS c
+				ON c.Id = vh.Case_Id;	
+
+			delete vh
+			from tblFormFieldValueHistory AS vh
+			INNER JOIN tblFormFieldValue AS fv 
+				ON fv.Case_Id = vh.FormField_Id
+			INNER JOIN @Cases AS c 
+				ON fv.Case_Id = c.Id;
+
+			DELETE tfv
+			FROM tblFormFieldValue AS tfv
+			INNER JOIN @Cases AS c
+				ON c.Id = tfv.Case_Id;
+			
+			DELETE cs
+			FROM tblCaseStatistics AS cs
+			INNER JOIN @Cases AS c
+				ON c.Id = cs.Case_Id;			 
+			
+			DELETE cr
+			FROM tblChecklistRow as cr
+			INNER JOIN @Cases AS c
+				ON c.Id = cr.Case_Id;
+				
+			DELETE tc
+			FROM tblCase AS tc
+			INNER JOIN  @Cases AS c
+				ON tc.Id = c.Id;
+	
+		COMMIT TRAN;
+	END TRY
+
+	BEGIN CATCH
+
+		ROLLBACK TRAN
+
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
+		DECLARE @ErrorSeverity INT = ERROR_SEVERITY()
+		DECLARE @ErrorState INT = ERROR_STATE()
+
+		-- Use RAISERROR inside the CATCH block to return error  
+		-- information about the original error that caused  
+		-- execution to jump to the CATCH block.  
+		RAISERROR (@ErrorMessage, -- Message text.  
+				   @ErrorSeverity, -- Severity.  
+				   @ErrorState -- State.  
+				   );
+	END CATCH
+END	
+
+GO
+
+RAISERROR ('Add Column AnonymizationPermission to tblGDPRDataPrivacyAccess', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPRDataPrivacyAccess','AnonymizationPermission') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblGDPRDataPrivacyAccess
+		ADD AnonymizationPermission int not null default 1 
+	End
+
+Go
+
+RAISERROR ('Add Column DeletionPermission to tblGDPRDataPrivacyAccess', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPRDataPrivacyAccess','DeletionPermission') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblGDPRDataPrivacyAccess
+		ADD DeletionPermission int not null default 0 
+	End
+
+Go
+
+RAISERROR ('Add Column ErrorResultCaseNumbers to tblGDPROperationsAudit', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPROperationsAudit','ErrorResultCaseNumbers') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblGDPROperationsAudit
+		ADD ErrorResultCaseNumbers NVARCHAR(MAX) NULL
+	End
+
+Go
+
+RAISERROR ('Add Column ResultCaseNumbers to tblGDPROperationsAudit', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblGDPROperationsAudit','ResultCaseNumbers') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblGDPROperationsAudit
+		ADD ResultCaseNumbers NVARCHAR(MAX) NULL
+	End
+
+Go
+
+RAISERROR ('Add Column CommunicateWithPerformer to tblCustomer', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCustomer','CommunicateWithPerformer') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].tblCustomer
+		ADD CommunicateWithPerformer int not null default 1
+	End
+
+Go
   -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.56'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.57'
 GO

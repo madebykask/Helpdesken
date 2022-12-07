@@ -24,5 +24,12 @@ namespace DH.Helpdesk.Domain.GDPR
         public int? CreatedByUser_Id { get; set; }
         public DateTime? ChangedDate { get; set; }
         public int? ChangedByUser_Id  { get; set; }
+        public int GDPRType { get; set; }
+        public string CaseTypes { get; set; }
+
+        public DateTime? FinishedDateFrom { get; set; }
+        public DateTime? FinishedDateTo { get; set; }
+
+        public string ProductAreas { get; set; }
     }
 }
