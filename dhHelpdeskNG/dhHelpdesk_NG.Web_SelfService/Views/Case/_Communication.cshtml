@@ -97,7 +97,7 @@
     @{ 
         var langChosen = SessionFacade.CurrentLanguageId == 1 ? "sv-SE" : "en-US";
     }
-    let summerNoteCommentConfig = {
+    let summerNoteCommentConfigChat = {
         lang: '@langChosen',
         placeholder: '',
         dialogsFade: true,
@@ -107,12 +107,6 @@
         disableResizeImage: true,
         disableResizeEditor: false,
         callbacks: {
-            onChange: function (contents, $editable) {
-
-                //$('.summernotedesc').val($('.summernotedesc').summernote('isEmpty') ? "" : contents);
-
-                //validator.element($('.summernotedesc'));
-            },
             onPaste: function (e) {
                 var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
                 e.preventDefault();
@@ -124,8 +118,15 @@
     //Init summernote
     $(document).ready(function () {
 
-        $('.summernotecomment').summernote(summerNoteCommentConfig)
+        $('.summernotecomment').summernote(summerNoteCommentConfigChat)
+
+        $('form').each(function () {
+            if ($(this).data('validator'))
+                $(this).data('validator').settings.ignore = ".note-editor *";
+        });
 
     });
+
+    
 
 </script>
