@@ -208,6 +208,12 @@ Imports System.Text.RegularExpressions
                 Return "[#28]"
             Case "REGUSER"
                 Return "[#29]"
+            Case "PERFORMER_PHONE"
+                Return "[#70]"
+            Case "PERFORMER_CELLPHONE"
+                Return "[#71]"
+            Case "PERFORMER_EMAIL"
+                Return "[#72]"
             Case Else
                 Return ""
         End Select

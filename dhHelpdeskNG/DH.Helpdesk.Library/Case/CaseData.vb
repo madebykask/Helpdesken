@@ -726,6 +726,7 @@ Public Class CaseData
                        "tblCase.Project_Id, tblCase.System_Id, tblCase.Urgency_Id, tblCase.Impact_Id, tblCase.Supplier_Id, tblCase.SMS, tblCase.VerifiedDescription, tblCase.SolutionRate, " &
                        "tblCase.InventoryType, tblCase.InventoryLocation, tblCase.Cost, tblCase.OtherCost, tblCase.Currency, tblCase.ContactBeforeAction, tblCase.Change_Id, tblCase.Problem_Id, " &
                        "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, tblUsers.FirstName AS PerformerFirstName, tblUsers.SurName AS PerformerSurName, tblUsers.EMail AS PerformerEMail, " &
+                       "tblUsers.Phone As PerformerPhone, tblUsers.Cellphone As PerformerCellPhone, " &
                        "u2.FirstName AS RegUserFirstName, u2.SurName AS RegUserSurName, tblCase.WorkingGroup_Id, tblCase.PlanDate, tblCase.CausingPartId, tblCase.AgreedDate, tblCase.Verified, " &
                        "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName, tblPriority.PriorityDescription, " &
                        "tblWorkingGroup.WorkingGroup AS PerformerWorkingGroup, tblWorkingGroup.Id AS PerformerWorkingGroup_Id, tblWorkingGroup.AllocateCaseMail AS PerformerWorkingGroupAllocateCaseMail, " &
@@ -871,7 +872,7 @@ Public Class CaseData
                         "tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " &
                         "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name As CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
                         "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, " &
-                        "tblUsers.FirstName As PerformerFirstName, tblUsers.SurName As PerformerSurName, tblUsers.EMail As PerformerEMail, " &
+                        "tblUsers.FirstName As PerformerFirstName, tblUsers.SurName As PerformerSurName, tblUsers.EMail As PerformerEMail, tblUsers.Phone As PerformerPhone, tblUsers.Cellphone As PerformerCellPhone, " &
                         "u2.FirstName As RegUserFirstName, u2.SurName As RegUserSurName, tblCase.WorkingGroup_Id," &
                         "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName,  tblPriority.PriorityDescription, " &
                         "tblCase.Project_Id, tblCase.System_Id, tblCase.Urgency_Id, tblCase.Impact_Id, tblCase.Supplier_Id, tblCase.SMS, tblCase.VerifiedDescription, " &

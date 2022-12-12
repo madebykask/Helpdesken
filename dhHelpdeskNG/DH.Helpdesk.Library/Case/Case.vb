@@ -39,6 +39,8 @@ Imports System.Data
     Private msPerformerFirstName As String
     Private msPerformerSurName As String
     Private msPerformerEMail As String
+    Private msPerformerPhone As String
+    Private msPerformerCellPhone As String
     Private miRegLanguage_Id As Integer
     Private msCaseWorkingGroup As String
     Private msPerformerWorkingGroup As String
@@ -237,6 +239,18 @@ Imports System.Data
             msPerformerEMail = ""
         Else
             msPerformerEMail = dr("PerformerEMail")
+        End If
+
+        If IsDBNull(dr("PerformerPhone")) Then
+            msPerformerPhone = ""
+        Else
+            msPerformerPhone = dr("PerformerPhone")
+        End If
+
+        If IsDBNull(dr("PerformerCellphone")) Then
+            msPerformerCellPhone = ""
+        Else
+            msPerformerCellPhone = dr("PerformerCellphone")
         End If
 
         If IsDBNull(dr("ReportedBy")) Then
@@ -1035,6 +1049,24 @@ Imports System.Data
         End Get
         Set(ByVal Value As String)
             msPerformerEMail = Value
+        End Set
+    End Property
+
+    Public Property PerformerPhone() As String
+        Get
+            Return msPerformerPhone
+        End Get
+        Set(ByVal Value As String)
+            msPerformerPhone = Value
+        End Set
+    End Property
+
+    Public Property PerformerCellPhone() As String
+        Get
+            Return msPerformerCellPhone
+        End Get
+        Set(ByVal Value As String)
+            msPerformerCellPhone = Value
         End Set
     End Property
 
