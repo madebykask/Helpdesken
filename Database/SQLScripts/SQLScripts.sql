@@ -1044,41 +1044,6 @@ IF COL_LENGTH('dbo.tblCustomer','CommunicateWithPerformer') IS NULL
 
 Go
 
-RAISERROR ('Add Administrator data to tblMailTemplateIdentifier', 10, 1) WITH NOWAIT
-IF(OBJECT_ID('[dbo].[tblMailTemplateIdentifier]', 'U') IS NOT NULL)
-  BEGIN
-
-	IF NOT EXISTS (SELECT 1 FROM tblMailTemplateIdentifier WHERE IdentifierCode = '[#70]')
-	BEGIN
-		INSERT INTO [dbo].[tblMailTemplateIdentifier]
-			([IdentifierName]
-			,[IdentifierCode]
-			,[Source]
-			,[SortOrder])
-		VALUES ('Performer_Phone', '[#70]', 0, 408)
-	END
-
-	IF NOT EXISTS (SELECT 1 FROM tblMailTemplateIdentifier WHERE IdentifierCode = '[#71]')
-	BEGIN
-		INSERT INTO [dbo].[tblMailTemplateIdentifier]
-			([IdentifierName]
-			,[IdentifierCode]
-			,[Source]
-			,[SortOrder])
-		VALUES ('Performer_CellPhone','[#71]', 0, 409)
-	END
-
-	IF NOT EXISTS (SELECT 1 FROM tblMailTemplateIdentifier WHERE IdentifierCode = '[#72]')
-	BEGIN
-		INSERT INTO [dbo].[tblMailTemplateIdentifier]
-			([IdentifierName]
-			,[IdentifierCode]
-			,[Source]
-			,[SortOrder])
-		VALUES ('Performer_Email', '[#72]', 0, 410)
-	END	
-  END
-GO
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.57'
 GO
