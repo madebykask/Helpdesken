@@ -368,6 +368,7 @@
                                                 </td>
                                                 <td style="@Model.GetFieldStyle(CaseSolutionFields.Email)">
                                                     <div>
+
                                                         @if (!Model.IsReadOnly(CaseSolutionFields.Email))
                                                         {
                                                             @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new {id = "dontSendMailToNotifier", onchange= "changeAutocheckNotifier()" })
@@ -381,7 +382,7 @@
 
                                                         @if (Model.Languages != null && Model.Languages.Count() > 1 && Model.case_.Id == 0)
                                                         {
-                                                            <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
+                                                            <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" style="width:140px;">
                                                                 @foreach (var e in Model.Languages)
                                                                 {
                                                                     <option value="@e.Id" @e.Id.IdIsSelected(SessionFacade.CurrentLanguageId.ToString())>@Translation.GetCoreTextTranslation(e.Name)</option>
@@ -392,12 +393,12 @@
                                                         {
                                                             if (Model.Languages != null && Model.Languages.Count() > 1 && !Model.IsReadOnly(CaseSolutionFields.Email))
                                                             {
-                                                                <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
-                                                                    @foreach (var e in Model.Languages)
-                                                                    {
-                                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString())>@Translation.GetCoreTextTranslation(e.Name)</option>
-                                                                    }
-                                                                </select>
+                                                            <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" style="width:140px;">
+                                                                @foreach (var e in Model.Languages)
+                                                                {
+                                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString())>@Translation.GetCoreTextTranslation(e.Name)</option>
+                                                                }
+                                                            </select>
                                                             }
                                                             else
                                                             {
@@ -2497,6 +2498,10 @@
     }
     var langChosen = SessionFacade.CurrentLanguageCode == "SV" ? "sv-SE" : "en-US";
 
+    var emailReadOnly = Model.IsReadOnly(CaseSolutionFields.Email);
+    var hasLanguages = Model.Languages != null && Model.Languages.Count() > 1;
+    var newCase = Model.case_.Id == 0;
+
 }
 
 
@@ -2587,7 +2592,7 @@
                     }
 
 
-                } 
+                }
                 validator.element($('.summernoteexternal'));
 
             },
@@ -2632,6 +2637,9 @@
     //Init summernote
     $(document).ready(function () {
 
+        if (('@emailReadOnly' === 'False' && '@hasLanguages' === 'True') || ('@hasLanguages' === 'True' && '@newCase' === 'True')) {
+            $("#case__RegLanguage_Id").css('display', 'inline');
+        }
 
         $('.summernoteinternal').summernote(summerNoteInternalConfig)
         $('.summernoteexternal').summernote(summerNoteExternalConfig)
