@@ -176,6 +176,17 @@ Public Class Mail
             sSubject = Replace(sSubject, getMailTemplateIdentifier("RegUser"), objCase.RegUserName)
             sBody = Replace(sBody, getMailTemplateIdentifier("RegUser"), objCase.RegUserName)
 
+            '[#70]
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("Performer_Phone"), objCase.PerformerPhone)
+            sBody = Replace(sBody, getMailTemplateIdentifier("Performer_Phone"), objCase.PerformerPhone)
+
+            '[#71]
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("Performer_CellPhone"), objCase.PerformerCellPhone)
+            sBody = Replace(sBody, getMailTemplateIdentifier("Performer_CellPhone"), objCase.PerformerCellPhone)
+
+            '[#72]
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("Performer_Email"), objCase.PerformerEMail)
+            sBody = Replace(sBody, getMailTemplateIdentifier("Performer_Email"), objCase.PerformerEMail)
 
             If objGlobalSettings.ServerPort = 443 Then
                 sProtocol = "https"
