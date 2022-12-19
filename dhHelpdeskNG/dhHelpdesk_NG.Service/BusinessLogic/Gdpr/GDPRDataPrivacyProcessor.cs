@@ -175,7 +175,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                             cases = casesQueryable.Skip(processed).Take(take).ToList();
                         }
 
-                        //cases.RemoveAll(c => caseNumbersToExclude.Contains(c.CaseNumber));
+                        cases.RemoveAll(c => caseNumbersToExclude.Contains(c.CaseNumber));
 
                         if (cases.Any())
                         {
