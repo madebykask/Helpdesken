@@ -103,26 +103,27 @@ namespace DH.Helpdesk.Services.Services
         public DeletionStatus DeleteCases(List<int> ids, int customerId, int? parentCaseId)
         {
             var deletionCompleted = false;
+            List<Case> caseList = null;
             try
             {
-                var caseList = _caseRepository.GetCasesByCaseIds(ids.ToArray<int>());
+                caseList = _caseRepository.GetCasesByCaseIds(ids.ToArray<int>());
                 List<decimal> caseNumbersToExclude = new List<decimal>();
                 var caseFiles = _caseFileRepository.GetCaseFilesByCaseList(caseList);
                 var logFiles = _logFileRepository.GetLogFilesByCaseList(caseList, true);
 
                 var basePath = _masterDataService.GetFilePath(customerId);
                 var caseConcreteRepository = new CaseConcreteRepository();
-                var idsToExclude = ValidateParentChildDeletion(ids);
+                //var idsToExclude = ValidateParentChildDeletion(ids);
 
-                if (idsToExclude != null)
-                {
-                    if (idsToExclude.Count() > 0)
-                    {
-                        caseList.Where(x => idsToExclude.Contains(x.Id)).ForEach(c => caseNumbersToExclude.Add(c.CaseNumber));
-                        caseList = caseList.Where(x => !idsToExclude.Contains(x.Id)).ToList();
-                        ids = ids.Where(x => !idsToExclude.Contains(x)).ToList();
-                    }
-                }
+                //if (idsToExclude != null)
+                //{
+                //    if (idsToExclude.Count() > 0)
+                //    {
+                //        caseList.Where(x => idsToExclude.Contains(x.Id)).ForEach(c => caseNumbersToExclude.Add(c.CaseNumber));
+                //        caseList = caseList.Where(x => !idsToExclude.Contains(x.Id)).ToList();
+                //        ids = ids.Where(x => !idsToExclude.Contains(x)).ToList();
+                //    }
+                //}
 
                 if (caseConcreteRepository.DeleteCases(ids))
                 {
@@ -146,7 +147,7 @@ namespace DH.Helpdesk.Services.Services
                     DeletionCompleted = deletionCompleted,
                     ProcessedCaseIds = new List<int>(),
                     ProcessedCaseNumbers = new List<decimal>(),
-                    CaseNumbersToExclude = ids.Select(x => (decimal)x).ToList(),
+                    CaseNumbersToExclude = caseList == null ? ids.Select(x => (decimal)x).ToList() : caseList.Select(x => x.CaseNumber).ToList(),
                     ErrorMessage = ex.Message
                 };
             }

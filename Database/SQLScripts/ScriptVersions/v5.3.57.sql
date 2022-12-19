@@ -268,6 +268,14 @@ BEGIN TRAN
 				DELETE tpr 
 				FROM tblParentChildCaseRelations AS tpr
 				INNER JOIN @Cases AS c
+					ON c.Id = tpr.Descendant_Id;
+			END
+
+		IF (OBJECT_ID ('tblParentChildCaseRelations', 'U') IS NOT NULL)
+			BEGIN
+				DELETE tpr 
+				FROM tblParentChildCaseRelations AS tpr
+				INNER JOIN @Cases AS c
 					ON c.Id = tpr.Ancestor_Id;
 			END
 
