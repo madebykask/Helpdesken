@@ -13,6 +13,7 @@
 @using DH.Helpdesk.Common.Extensions.Boolean
 @using DH.Helpdesk.Web.Common.Enums.Case
 @using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
 
 @Html.Partial("~/Views/Cases/_CaseValidation.cshtml", Model)
 @Scripts.Render("~/bundles/cases/_input")
@@ -371,11 +372,11 @@
 
                                                         @if (!Model.IsReadOnly(CaseSolutionFields.Email))
                                                         {
-                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new {id = "dontSendMailToNotifier", onchange= "changeAutocheckNotifier()" })
+                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { id = "dontSendMailToNotifier", onchange = "changeAutocheckNotifier()" })
                                                         }
                                                         else
                                                         {
-                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled" , id = "dontSendMailToNotifier", onchange = "changeAutocheckNotifier()" })
+                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled", id = "dontSendMailToNotifier", onchange = "changeAutocheckNotifier()" })
                                                         }
                                                         @Translation.GetCoreTextTranslation("Skicka mail till anmälaren")
                                                         @*</label>*@
@@ -393,12 +394,12 @@
                                                         {
                                                             if (Model.Languages != null && Model.Languages.Count() > 1 && !Model.IsReadOnly(CaseSolutionFields.Email))
                                                             {
-                                                            <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" style="width:140px;">
-                                                                @foreach (var e in Model.Languages)
-                                                                {
-                                                                    <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString())>@Translation.GetCoreTextTranslation(e.Name)</option>
-                                                                }
-                                                            </select>
+                                                                <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" style="width:140px;">
+                                                                    @foreach (var e in Model.Languages)
+                                                                    {
+                                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString())>@Translation.GetCoreTextTranslation(e.Name)</option>
+                                                                    }
+                                                                </select>
                                                             }
                                                             else
                                                             {
@@ -1433,32 +1434,40 @@
                                                 }
                                             </td>
                                             <td colspan="3">
+                                                <span id="caseDescriptionEdit"
+                                                      rel="tooltip"
+                                                      class="icon-edit"
+                                                      title="@Translation.GetCoreTextTranslation("Redigera")"></span>
+                                                <div id="showDescriptionEdit" style="display:none">
+                                                    <div class="summernote-desc-flex-container" style="align-items:center">
 
-                                                <div class="summernote-desc-flex-container" style="align-items:center">
+                                                        @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
+                                                        {
+                                                            <div id="textDescriptionOuter" style="width: 648px;">
+                                                                @Html.TextAreaFor(model => model.case_.Description, new { @class = "case-description summernotedesc" })
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div id="textDescriptionOuter" style="width: 648px; visibility: hidden">
+                                                                @Html.TextAreaFor(model => model.case_.Description, new { @class = "case-description summernotedesc", @readonly = true })
+                                                            </div>
+                                                        }
+                                                        <span id="caseDescriptionPreview"
+                                                              rel="tooltip"
+                                                              class="icon-circle-arrow-up cursor-pointer"
+                                                              title="@Translation.GetCoreTextTranslation("Förhandsgranska")"
+                                                              style="@(string.IsNullOrEmpty(Model.case_.Description) ? "visibility: hidden" : "")"></span>
 
-                                                    @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
-                                                    {
-                                                        <div id="textDescriptionOuter" style="width: 648px">
-                                                            @Html.TextAreaFor(model => model.case_.Description, new { @class = "case-description summernotedesc" })
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div id="textDescriptionOuter" style="width: 648px">
-                                                            @Html.TextAreaFor(model => model.case_.Description, new { @class = "case-description summernotedesc", @readonly = true })
-                                                        </div>
-                                                    }
-                                                    <span id="caseDescriptionPreview"
-                                                          rel="tooltip"
-                                                          class="icon-circle-arrow-up cursor-pointer"
-                                                          title="@Translation.GetCoreTextTranslation("Förhandsgranska")"
-                                                          style="@(string.IsNullOrEmpty(Model.case_.Description) ? "visibility: hidden" : "")"></span>
-
+                                                    </div>
+                                                </div>
+                                                <div id="showDescriptionFlat">
+                                                    <div style="width: 648px">
+                                                        @Html.Raw(Model.case_.Description.ForHtmlView())
+                                                    </div>
                                                 </div>
 
                                             </td>
-
-
                                         </tr>
                                         <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Miscellaneous, CaseSolutionFields.Miscellaneous)">
                                             <td>
@@ -2645,7 +2654,11 @@
         $('.summernoteexternal').summernote(summerNoteExternalConfig)
         $('.summernotedesc').summernote(summerNoteDescConfig)
 
-
+        $("#caseDescriptionEdit").on('click', function (e) {
+            $('#showDescriptionEdit').toggle();
+            $('#showDescriptionFlat').toggle();
+        });
+       
 
         function sizeChanged(element) {
 
@@ -2698,6 +2711,7 @@
             }
 
         });
+
     });
 </script>
 
