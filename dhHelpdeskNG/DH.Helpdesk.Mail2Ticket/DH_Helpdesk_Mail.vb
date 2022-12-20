@@ -27,6 +27,7 @@ Imports Microsoft.VisualBasic
 Imports Rebex
 Imports Winnovative
 Imports System.Threading
+Imports HtmlAgilityPack
 
 Module DH_Helpdesk_Mail
     Private Const InboxMailFolderName As String = "Inbox"
@@ -851,6 +852,7 @@ Module DH_Helpdesk_Mail
                                         Dim fileReader As String
                                         fileReader = My.Computer.FileSystem.ReadAllText(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html\" & sHTMLFileName,
                                            System.Text.Encoding.UTF32)
+                                        fileReader = CleanStyles(fileReader)
                                         'New case - Update description
                                         objCaseData.updateCaseDescription(fileReader, objCase.Id)
                                         ' Lägg in i databasen
@@ -858,7 +860,7 @@ Module DH_Helpdesk_Mail
 
                                         'Todo - check this
                                         DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html", True)
-                                        'DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
+
                                     End If
 
                                     iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, sFromEMailAddress)
@@ -2428,19 +2430,30 @@ Module DH_Helpdesk_Mail
     End Function
 
     Private Function isBlockedRecipient(sEMail As String, sBlockedEMailRecipents As String) As Boolean
+        ' Return False if sEMail or sBlockedEMailRecipients are empty or contain invalid characters
+        If String.IsNullOrWhiteSpace(sEMail) Or String.IsNullOrWhiteSpace(sBlockedEMailRecipents) Then
+            Return False
+        End If
+        ' Split sBlockedEMailRecipients into an array of strings using the semicolon as a delimiter
+        Dim aEMails() As String = sBlockedEMailRecipents.Split(";")
+        If aEMails.Length = 0 Then
+            Return False
+        End If
+
         isBlockedRecipient = False
 
         If sBlockedEMailRecipents = "" Then
             isBlockedRecipient = False
         Else
-            Dim aEMails() As String = sBlockedEMailRecipents.Split(";")
-
             For i As Integer = 0 To aEMails.Length - 1
-                If InStr(sEMail, aEMails(i).ToString, CompareMethod.Text) <> 0 Then
+                If aEMails(i).ToString <> "" Then
+                    If InStr(sEMail, aEMails(i).ToString, CompareMethod.Text) <> 0 Then
 
-                    isBlockedRecipient = True
-                    Exit For
+                        isBlockedRecipient = True
+                        Exit For
+                    End If
                 End If
+
             Next
         End If
     End Function
@@ -2652,6 +2665,34 @@ Module DH_Helpdesk_Mail
 
 
     End Sub
+
+    Public Function CleanStyles(ByVal input As String) As String
+        If String.IsNullOrEmpty(input) Then
+            Return input
+        End If
+
+        Dim doc As HtmlAgilityPack.HtmlDocument = New HtmlAgilityPack.HtmlDocument()
+        doc.LoadHtml(input)
+
+
+        Dim imgs As HtmlNodeCollection = doc.DocumentNode.SelectNodes("//img")
+
+        If imgs IsNot Nothing Then
+
+            For Each img As HtmlNode In imgs
+                If img.Attributes("style") IsNot Nothing Then
+                    img.Attributes("style").Remove()
+                End If
+                If img.Attributes("id") IsNot Nothing Then
+                    img.Attributes("id").Remove()
+                End If
+            Next
+        End If
+
+        Dim allNodes As HtmlNode = doc.DocumentNode
+        Dim ret = allNodes.InnerHtml
+        Return ret
+    End Function
 
     Private Function ReturnProductArea(customerid As Integer, value As String) As ProductArea
         Dim ret As ProductArea = Nothing
