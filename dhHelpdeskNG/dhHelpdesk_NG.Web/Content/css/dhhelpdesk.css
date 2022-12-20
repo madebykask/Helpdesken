@@ -4352,3 +4352,12 @@ div.chosen-container.chosen-container-single.error {
 .note-editor.note-frame {
     margin-bottom: 5px !important;
 }
+
+.showDescriptionFlat {
+    width: 648px;
+    height: 566px;
+    overflow-x: auto !important;
+    overflow-y: scroll;
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+}

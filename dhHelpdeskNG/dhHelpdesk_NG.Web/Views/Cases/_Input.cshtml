@@ -1434,38 +1434,47 @@
                                                 }
                                             </td>
                                             <td colspan="3">
-                                                <span id="caseDescriptionEdit"
-                                                      rel="tooltip"
-                                                      class="icon-edit"
-                                                      title="@Translation.GetCoreTextTranslation("Redigera")"></span>
-                                                <div id="showDescriptionEdit" style="display:none">
-                                                    <div class="summernote-desc-flex-container" style="align-items:center">
-
-                                                        @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
-                                                        {
-                                                            <div id="textDescriptionOuter" style="width: 648px;">
-                                                                @Html.TextAreaFor(model => model.case_.Description, new { @class = "case-description summernotedesc" })
-                                                            </div>
-                                                        }
-                                                        else
-                                                        {
-                                                            <div id="textDescriptionOuter" style="width: 648px; visibility: hidden">
-                                                                @Html.TextAreaFor(model => model.case_.Description, new { @class = "case-description summernotedesc", @readonly = true })
-                                                            </div>
-                                                        }
-                                                        <span id="caseDescriptionPreview"
+                                                @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description) && Model.case_.Id == 0)
+                                                {
+                                                    <div id="textDescriptionOuter" style="width: 648px;">
+                                                        @Html.TextAreaFor(model => model.case_.Description, new { @class = "case-description summernotedesc" })
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
+                                                    {
+                                                        <span id="caseDescriptionEdit"
                                                               rel="tooltip"
-                                                              class="icon-circle-arrow-up cursor-pointer"
-                                                              title="@Translation.GetCoreTextTranslation("Förhandsgranska")"
-                                                              style="@(string.IsNullOrEmpty(Model.case_.Description) ? "visibility: hidden" : "")"></span>
+                                                              class="icon-edit"
+                                                              title="@Translation.GetCoreTextTranslation("Redigera")"></span>
+                                                        <div id="showDescriptionEdit" style="display:none">
+                                                            <div class="summernote-desc-flex-container" style="align-items:center">
 
-                                                    </div>
-                                                </div>
-                                                <div id="showDescriptionFlat">
-                                                    <div style="width: 648px">
-                                                        @Html.Raw(Model.case_.Description.ForHtmlView())
-                                                    </div>
-                                                </div>
+                                                                <div id="textDescriptionOuter" style="width: 648px;">
+                                                                    @Html.TextAreaFor(model => model.case_.Description, new { @class = "case-description summernotedesc" })
+                                                                </div>
+                                                                <span id="caseDescriptionPreview"
+                                                                      rel="tooltip"
+                                                                      class="icon-circle-arrow-up cursor-pointer"
+                                                                      title="@Translation.GetCoreTextTranslation("Förhandsgranska")"
+                                                                      style="@(string.IsNullOrEmpty(Model.case_.Description) ? "visibility: hidden" : "")"></span>
+
+                                                            </div>
+                                                        </div>
+                                                        <div id="showDescriptionFlat" style=" padding-bottom: 4px;">
+                                                            <div class="showDescriptionFlat">
+                                                                @Html.Raw(Model.case_.Description.ForHtmlView())
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div id="textDescriptionOuter" style="width: 648px; visibility: hidden">
+                                                            @Html.TextAreaFor(model => model.case_.Description, new { @class = "case-description summernotedesc", @readonly = true })
+                                                        </div>
+                                                    }
+                                                }
 
                                             </td>
                                         </tr>
@@ -1578,16 +1587,16 @@
                                                                     <option value="">&nbsp;</option>
                                                                     @if (Model.currencies != null)
                                                                     {
-                                                                        foreach (var e in Model.currencies)
-                                                                        {
+                                                    foreach (var e in Model.currencies)
+                                                    {
                                                                             <option value="@e.Code" @e.Code.ValueIsSelected(Model.case_.Currency)>@e.Code</option>
                                                                         }
-                                                                    }
+                                                }
                                                                 </select>
                                                             </td>
                                                         }
                                                         else
-                                                        {
+                                                {
                                                             <td>
                                                                 @Translation.GetCoreTextTranslation("Artikelkostnad")<br />
                                                                 @Html.TextBoxFor(model => model.case_.Cost, new { maxlength = "7", Class = "inputw50 cost-field", @readonly = true })
