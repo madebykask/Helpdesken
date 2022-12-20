@@ -168,14 +168,14 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                         //fetch next cases
                         if (p.GDPRType == 2)
                         {
-                            cases = casesQueryable.Take(take).ToList();
+                            cases = casesQueryable.OrderBy(x => parentIds.Contains(x.Id) ? 1 : 0).Take(batchSize).ToList();
                         }
                         else
                         {
                             cases = casesQueryable.Skip(processed).Take(take).ToList();
                         }
 
-                        //cases.RemoveAll(c => caseNumbersToExclude.Contains(c.CaseNumber));
+                        cases.RemoveAll(c => caseNumbersToExclude.Contains(c.CaseNumber));
 
                         if (cases.Any())
                         {
@@ -186,7 +186,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                             if (p.GDPRType == 2) //Deletion
                             {
                                 casesIds = cases.Select(c => c.Id).ToList();
-                                foreach (var c in cases)
+                                foreach (var c in cases.OrderBy(x => parentIds.Contains(x.Id) ? 1 : 0))
                                 {
                                     List<int> caseId = new List<int>() { c.Id };
 
@@ -277,7 +277,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             step = step == 0 ? 10 : step;
             if (pos % step == 0)
             {
-                var progress = Math.Ceiling(((float)pos / (float)totalCount) * 100);
+                var percentProgress = Math.Ceiling(((float)pos / (float)totalCount) * 100);
+                var progress =  percentProgress > 100 ? 100 : percentProgress;
+
                 _taskProgress.Update(taskId, Convert.ToInt32(progress));
             }
         }
