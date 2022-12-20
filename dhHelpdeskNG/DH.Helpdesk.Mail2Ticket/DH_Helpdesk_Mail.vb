@@ -2479,8 +2479,14 @@ Module DH_Helpdesk_Mail
                         Dim toPos As Integer
 
                         ' försök först hitta en sluttag
-                        Dim endTag As String = "/" & d.Value
-                        toPos = mailMessage.IndexOf(endTag, fromPos)
+                        Dim endTag As String
+                        endTag = "<o:"
+                        toPos = mailMessage.ToLower().IndexOf(endTag, fromPos)
+
+                        If (toPos < 1) Then
+                            endTag = "</"
+                            toPos = mailMessage.IndexOf(endTag, fromPos)
+                        End If
 
                         If (toPos < 1) Then
                             ' använd enter om den inte hittas
