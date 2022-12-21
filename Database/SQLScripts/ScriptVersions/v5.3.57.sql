@@ -63,6 +63,17 @@ BEGIN
 END
 GO
 
+RAISERROR ('Delete from tblMail2TicketCase where there no longer is a connected case', 10, 1) WITH NOWAIT
+IF (OBJECT_ID ('tblMail2TicketCase', 'U') IS NOT NULL)
+BEGIN
+	DELETE mtc
+	FROM [dbo].tblMail2TicketCase AS mtc
+	LEFT JOIN tblCase as c
+		on mtc.Case_Id = c.Id
+	WHERE c.Id IS NULL
+END
+GO
+
 RAISERROR ('Add Foreign Key Case_Id to tblMail2TicketCase', 10, 1) WITH NOWAIT
 IF (OBJECT_ID ('tblMail2TicketCase', 'U') IS NOT NULL)
 BEGIN
@@ -74,6 +85,17 @@ BEGIN
 END
 GO
 
+RAISERROR ('Delete from tblLocalAdmin where there no longer is a connected case', 10, 1) WITH NOWAIT
+IF (OBJECT_ID ('tblLocalAdmin', 'U') IS NOT NULL)
+BEGIN
+	DELETE la
+	FROM [dbo].tblLocalAdmin AS la
+	LEFT JOIN tblCase as c
+		on la.Case_Id = c.Id
+	WHERE c.Id IS NULL
+END
+GO
+
 RAISERROR ('Add Foreign Key Case_Id to tblLocalAdmin', 10, 1) WITH NOWAIT
 IF (OBJECT_ID ('tblLocalAdmin', 'U') IS NOT NULL)
 BEGIN
@@ -82,6 +104,18 @@ BEGIN
 	BEGIN
 		ALTER TABLE [dbo].[tblLocalAdmin] WITH CHECK ADD CONSTRAINT [FK_tblLocalAdmin_tblCase] FOREIGN KEY([Case_Id]) REFERENCES [dbo].[tblCase] ([Id])
 	END
+END
+GO
+
+
+RAISERROR ('Delete from tblFormFieldValueHistory where there no longer is a connected case', 10, 1) WITH NOWAIT
+IF (OBJECT_ID ('tblFormFieldValueHistory', 'U') IS NOT NULL)
+BEGIN
+	DELETE fvh
+	FROM [dbo].[tblFormFieldValueHistory] AS fvh
+	LEFT JOIN tblCase as c
+		on fvh.Case_Id = c.Id
+	WHERE c.Id IS NULL
 END
 GO
 
