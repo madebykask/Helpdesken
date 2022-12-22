@@ -329,9 +329,16 @@ namespace DH.Helpdesk.SCCM
             computerDB.IPAddress = ipAdress;
             computerDB.MACAddress = macAdress;
 
-            computerDB.SoundCard = reference._SoundDevice.Name;
+            if (reference._SoundDevice != null)
+            {
+                computerDB.SoundCard = reference._SoundDevice.Name;
+            }
 
-            computerDB.VideoCard = reference._VideoControllerData.Name;
+            if (reference._VideoControllerData != null)
+            {
+                computerDB.VideoCard = reference._VideoControllerData.Name;
+            }
+            
 
             foreach (var program in reference._Programs)
             {
@@ -385,6 +392,7 @@ namespace DH.Helpdesk.SCCM
                 {
 
                     actions++;
+
                     Console.WriteLine("Thread: " + thread + " - " + RSystem.ResourceID + " Action: " + actions);
 
                     //Fetch additioan data for each computer
@@ -542,12 +550,15 @@ namespace DH.Helpdesk.SCCM
   
                         foreach (var networkAdapterWrapperSingle in networkAdapterWrapper)
                         {
-                            computer._NetworkAdapter.Add(new Models.NetworkAdapter()
+                            if (networkAdapterWrapperSingle != null)
                             {
+                                computer._NetworkAdapter.Add(new Models.NetworkAdapter()
+                                {
 
-                                Name = networkAdapterWrapperSingle.Name,
+                                    Name = networkAdapterWrapperSingle.Name,
 
-                            });
+                                });
+                            }
                         }
                     }
 
@@ -558,15 +569,17 @@ namespace DH.Helpdesk.SCCM
 
                         foreach (var networkAdapterConfigurationWrapperSingle in networkAdapterConfigurationWrapper)
                         {
-                            computer._NetworkAdapterConfiguration.Add(new Models.NetworkAdapterConfiguration()
+                            if (networkAdapterConfigurationWrapperSingle != null)
                             {
+                                computer._NetworkAdapterConfiguration.Add(new Models.NetworkAdapterConfiguration()
+                                {
 
-                                IPAddress = networkAdapterConfigurationWrapperSingle.IPAddress,
-                                MacAddress = networkAdapterConfigurationWrapperSingle.MacAddress,
+                                    IPAddress = networkAdapterConfigurationWrapperSingle.IPAddress,
+                                    MacAddress = networkAdapterConfigurationWrapperSingle.MacAddress,
 
-                            });
+                                });
+                            }
                         }
-
                     }
 
                     //Check if found
@@ -587,17 +600,18 @@ namespace DH.Helpdesk.SCCM
 
                         foreach (var programsWrapperSingle in programsWrapper)
                         {
-                            computer._Programs.Add(new Models.Programs()
+                            if (programsWrapperSingle != null)
                             {
+                                computer._Programs.Add(new Models.Programs()
+                                {
 
-                                DisplayName = programsWrapperSingle.DisplayName,
-                                Publisher = programsWrapperSingle.Publisher,
-                                Version = programsWrapperSingle.Version,
+                                    DisplayName = programsWrapperSingle.DisplayName,
+                                    Publisher = programsWrapperSingle.Publisher,
+                                    Version = programsWrapperSingle.Version,
 
-                            });
+                                });
+                            }
                         }
-
-
                     }
 
                     //Check if found
@@ -607,17 +621,20 @@ namespace DH.Helpdesk.SCCM
 
                         foreach (var logicalDiskWrapperSingle in logicalDiskWrapper)
                         {
-                            computer._LogicalDisk.Add(new Models.LogicalDisk()
+                            if (logicalDiskWrapperSingle != null)
                             {
+                                computer._LogicalDisk.Add(new Models.LogicalDisk()
+                                {
 
-                                DeviceId = logicalDiskWrapperSingle.DeviceId,
-                                DriveType = logicalDiskWrapperSingle.DriveType,
-                                FileSystem = logicalDiskWrapperSingle.FileSystem,
-                                FreeSpace = logicalDiskWrapperSingle.FreeSpace,
-                                Name = logicalDiskWrapperSingle.Name,
-                                Size = logicalDiskWrapperSingle.Size,
+                                    DeviceId = logicalDiskWrapperSingle.DeviceId,
+                                    DriveType = logicalDiskWrapperSingle.DriveType,
+                                    FileSystem = logicalDiskWrapperSingle.FileSystem,
+                                    FreeSpace = logicalDiskWrapperSingle.FreeSpace,
+                                    Name = logicalDiskWrapperSingle.Name,
+                                    Size = logicalDiskWrapperSingle.Size,
 
-                            });
+                                });
+                            }
                         }
 
                     }
