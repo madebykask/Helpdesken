@@ -116,9 +116,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             {
                 foreach (HtmlNode table in tables)
                 {
-                    table.Attributes["style"].Remove();
-                    table.Attributes["width"].Value = "300px";
-
+                    if(table.Attributes["style"] != null)
+                    {
+                        table.Attributes["style"].Remove();
+                    }
+                    if(table.Attributes["width"] != null)
+                    {
+                        table.Attributes["width"].Remove();
+                    }
                 }
             }
             HtmlNodeCollection trs = doc.DocumentNode.SelectNodes("//tr[@style]");
@@ -126,7 +131,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             {
                 foreach (HtmlNode tr in trs)
                 {
-                    tr.Attributes["style"].Remove();
+                    if (tr.Attributes["style"] != null)
+                    {
+                        tr.Attributes["style"].Remove();
+                    }
                 }
             }
 
@@ -159,8 +167,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             {
                 foreach (HtmlNode singleh in h)
                 {
-                    singleh.Attributes["style"].Remove();
-
+                    if(singleh.Attributes["style"] != null)
+                    {
+                        singleh.Attributes["style"].Remove();
+                    }                   
                 }
             }
             HtmlNodeCollection a2 = doc.DocumentNode.SelectNodes("//a");
