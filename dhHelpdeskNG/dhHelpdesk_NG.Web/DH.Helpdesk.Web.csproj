@@ -4138,9 +4138,6 @@
     <Content Include="Views\Cases\_MergedCases.cshtml" />
     <Content Include="Views\Cases\_ParentCasesSingle.cshtml" />
     <Content Include="Views\Cases\_SearchSimple.cshtml" />
-    <None Include="Web.config">
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="Web.config.windows.template">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -4149,13 +4146,6 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
     <Content Include="Content\js\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Content\js\jquery.validate.unobtrusive.min.js" />
     <Content Include="Content\js\MicrosoftAjax.js" />
@@ -4442,6 +4432,19 @@
     <Content Include="Views\Cases\_CaseLogInputFilesAttachment.cshtml" />
     <Content Include="Views\Cases\_CaseAttachExistFileList.cshtml" />
     <Content Include="Views\Cases\_Documents.cshtml" />
+    <Content Include="Web.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.DhDev.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Template_Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">
