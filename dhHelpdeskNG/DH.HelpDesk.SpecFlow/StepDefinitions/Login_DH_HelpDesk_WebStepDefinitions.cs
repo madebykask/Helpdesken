@@ -1,7 +1,8 @@
 using DH.HelpDesk.SpecFlow.Drivers;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
+using OpenQA.Selenium.Support.UI;
 using System;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -18,14 +19,14 @@ namespace DH.HelpDesk.SpecFlow.StepDefinitions
         {
             _scenarioContext = scenarioContext;
         }
-        
+
         [Given(@"I launch the DH\.HelpDesk\.Web application")]
         public void GivenILaunchTheDH_HelpDesk_WebApplication(Table table)
         {
             dynamic data = table.CreateDynamicInstance();
 
-            driver = _scenarioContext.Get<SeleniumDriver>("SeleniumDriver").Setup((string)data.OS, (string)data.BrowserVersion, (string)data.Build, (string)data.Browser);
-            driver.Url = "https://dev-helpdesk-internal.dhsolutions.se/";
+            driver = _scenarioContext.Get<SeleniumDriver>("SeleniumDriver").Setup((string)data.OS, (string)data.BrowserVersion, (string)data.Browser);
+            driver.Url = "https://localhost:447/";
         }
 
         [When(@"I enter the following details")]
@@ -40,13 +41,80 @@ namespace DH.HelpDesk.SpecFlow.StepDefinitions
         public void WhenIClickLoginButton()
         {
             driver.FindElement(By.Id("btnLogin")).Click();
-            Thread.Sleep(5000);
+            //Thread.Sleep(5000);
         }
 
-        [Then(@"I should be able to see the Case Summary pages")]
-        public void ThenIShouldBeAbleToSeeTheCaseSummaryPages()
+        [Then(@"I should be able to see the Administrator button")]
+        public void ThenIShouldBeAbleToSeeTheAdministratorButton()
         {
-            Assert.That(1==1, Is.True);
+            try
+            {
+                var el = driver.FindElements(By.Id("btnAdminStart"));
+
+                Assert.IsTrue(el.Count > 0);
+
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
         }
+
+
+        [Given(@"I login as the an admin user")]
+        public void GivenILoginAsTheAnAdminUser(Table table)
+        {
+            GivenILaunchTheDH_HelpDesk_WebApplication(table);
+            WhenIEnterTheFollowingDetails(table);
+            WhenIClickLoginButton();
+        }
+
+        [Given(@"I give the following user the following starting page")]
+        public void GivenIGiveTheFollowingUserTheFollowingStartingPage(Table table)
+        {
+            driver.FindElement(By.Id("userMenuList")).Click();
+
+            driver.FindElement(By.Id("btnAdminStart")).Click();
+
+            driver.SwitchTo().Window(driver.WindowHandles.Last());
+
+            driver.FindElement(By.Id("btnAdminUsers")).Click();
+
+            var userLnk = driver.FindElements(By.ClassName("userIdUsersAdminLnk")).Where(x => x.Text == "DS").FirstOrDefault();
+
+            if (userLnk != null)
+            {
+                userLnk.Click();
+            }
+
+            var optionLnk = driver.FindElements(By.CssSelector("a[href='#subfragment-5']")).FirstOrDefault();
+
+            if (optionLnk != null)
+            {
+                optionLnk.Click();
+            }
+
+            driver.SwitchTo().Window(driver.WindowHandles.FirstOrDefault());
+            var i = 8;
+        }
+
+        [Given(@"I logout from the admin user")]
+        public void GivenILogoutFromTheAdminUser(Table table)
+        {
+            throw new PendingStepException();
+        }
+
+        [When(@"I login as the user")]
+        public void WhenILoginAsTheUser(Table table)
+        {
+            throw new PendingStepException();
+        }
+
+        [Then(@"I should be able to see the Case Summary page")]
+        public void ThenIShouldBeAbleToSeeTheCaseSummaryPage()
+        {
+            throw new PendingStepException();
+        }
+
     }
 }

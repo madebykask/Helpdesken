@@ -74,21 +74,19 @@ namespace DH.HelpDesk.SpecFlow.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("As a user I should be able to login to DH HelpDesk.Web using all supported browse" +
-            "rs and user name and password")]
-        [NUnit.Framework.TestCaseAttribute("Firefox", "108.0.1462.54", "WIN11", "Chrome build", null)]
-        [NUnit.Framework.TestCaseAttribute("Microsoft Edge", "108.0.1462.54", "WIN11", "Chrome build", null)]
-        [NUnit.Framework.TestCaseAttribute("Chrome", "108.0.1462.54", "WIN11", "Chrome build", null)]
-        public void AsAUserIShouldBeAbleToLoginToDHHelpDesk_WebUsingAllSupportedBrowsersAndUserNameAndPassword(string browser, string browserVersion, string oS, string build, string[] exampleTags)
+        [NUnit.Framework.DescriptionAttribute("As an admin user I should be able to login to DH HelpDesk.Web using all supported" +
+            " browsers and user name and password")]
+        [NUnit.Framework.TestCaseAttribute("Microsoft Edge", ".", "WIN11", null)]
+        [NUnit.Framework.TestCaseAttribute("Chrome", ".", "WIN11", null)]
+        public void AsAnAdminUserIShouldBeAbleToLoginToDHHelpDesk_WebUsingAllSupportedBrowsersAndUserNameAndPassword(string browser, string browserVersion, string oS, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("Browser", browser);
             argumentsOfScenario.Add("BrowserVersion", browserVersion);
             argumentsOfScenario.Add("OS", oS);
-            argumentsOfScenario.Add("Build", build);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("As a user I should be able to login to DH HelpDesk.Web using all supported browse" +
-                    "rs and user name and password", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("As an admin user I should be able to login to DH HelpDesk.Web using all supported" +
+                    " browsers and user name and password", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 4
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -102,13 +100,11 @@ this.ScenarioInitialize(scenarioInfo);
                 TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
                             "Browser",
                             "BrowserVersion",
-                            "OS",
-                            "Build"});
+                            "OS"});
                 table1.AddRow(new string[] {
                             string.Format("{0}", browser),
                             string.Format("{0}", browserVersion),
-                            string.Format("{0}", oS),
-                            string.Format("{0}", build)});
+                            string.Format("{0}", oS)});
 #line 5
  testRunner.Given("I launch the DH.HelpDesk.Web application", ((string)(null)), table1, "Given ");
 #line hidden
@@ -116,7 +112,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "Username",
                             "Password"});
                 table2.AddRow(new string[] {
-                            "ds",
+                            "ds44",
                             "ds"});
 #line 8
  testRunner.When("I enter the following details", ((string)(null)), table2, "When ");
@@ -125,7 +121,71 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And("I click login button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 12
- testRunner.Then("I should be able to see the Case Summary pages", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("I should be able to see the Administrator button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("As a user I should be able to login to a case summary starting page")]
+        public void AsAUserIShouldBeAbleToLoginToACaseSummaryStartingPage()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("As a user I should be able to login to a case summary starting page", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 21
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+                TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Browser",
+                            "Username",
+                            "Password",
+                            "BrowserVersion",
+                            "OS"});
+                table3.AddRow(new string[] {
+                            "Chrome",
+                            "ds",
+                            "ds",
+                            ".",
+                            "Win11"});
+#line 22
+ testRunner.Given("I login as the an admin user", ((string)(null)), table3, "Given ");
+#line hidden
+                TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Username",
+                            "Starting Page"});
+                table4.AddRow(new string[] {
+                            "ds",
+                            "Case Summary"});
+#line 25
+ testRunner.And("I give the following user the following starting page", ((string)(null)), table4, "And ");
+#line hidden
+                TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Username"});
+                table5.AddRow(new string[] {
+                            "ds"});
+#line 28
+ testRunner.And("I logout from the admin user", ((string)(null)), table5, "And ");
+#line hidden
+                TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Username",
+                            "Password"});
+                table6.AddRow(new string[] {
+                            "ds2",
+                            "ds2"});
+#line 31
+ testRunner.When("I login as the user", ((string)(null)), table6, "When ");
+#line hidden
+#line 34
+ testRunner.Then("I should be able to see the Case Summary page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

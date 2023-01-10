@@ -318,7 +318,7 @@
 
 
                         <li class="light-blue">
-                            <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                            <a data-toggle="dropdown" href="#" class="dropdown-toggle" id="userMenuList">
                                 <i class="icon-user icon-white"></i>
                                 @if (SessionFacade.CurrentCustomer != null)
                                 {
@@ -382,7 +382,7 @@
                                 @if (model.IsCustomerOrSystemAdministrator())
                                 {
                                     <li>
-                                        <a href="@Url.Action("index", "start", new { area = "admin" })" target="_blank">
+                                        <a href="@Url.Action("index", "start", new { area = "admin" })" id="btnAdminStart" target="_blank">
                                             <i class="icon-wrench"></i>
                                             @Translation.Get("Administration")
                                         </a>

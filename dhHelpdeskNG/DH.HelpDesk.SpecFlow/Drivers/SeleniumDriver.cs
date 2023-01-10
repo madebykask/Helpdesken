@@ -19,7 +19,7 @@ namespace DH.HelpDesk.SpecFlow.Drivers
 
         public SeleniumDriver(ScenarioContext scenarioContext) => _scenarioContext = scenarioContext;
 
-        public IWebDriver Setup(string os, string version, string build, string browserName)
+        public IWebDriver Setup(string os, string version, string browserName)
         {
             dynamic capability = GetBrowserOptions(browserName);
 
@@ -27,7 +27,7 @@ namespace DH.HelpDesk.SpecFlow.Drivers
             capability.AddAdditionalOption("platform", os);
             capability.AddAdditionalOption("version", version);
             capability.AddAdditionalOption("name", browserName);
-            capability.AddAdditionalOption("build", build);
+            //capability.AddAdditionalOption("build", build);
 
 
             _driver = new RemoteWebDriver(new Uri("http://localhost:4444/wd/hub"), capability.ToCapabilities(), TimeSpan.FromSeconds(60));

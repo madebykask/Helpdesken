@@ -77,7 +77,7 @@
         {
             <tr>
                 <td>
-                    <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.UserID)</a>
+                    <a class="userIdUsersAdminLnk" href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.UserID)</a>
                 </td>
                 <td>
                     <a href="@Url.Action("edit", "users", new { id = item.Id })">@Html.DisplayFor(modelItem => item.FirstName)</a>
