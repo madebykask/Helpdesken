@@ -669,6 +669,7 @@ var ApplyTemplate = function (data, doOverwrite) {
     if (!isNullOrEmpty(data.Description)) {
         val = data.Description || '';
         el = $("#case__Description");
+        console.log(el.val());
         SetValueIfElVisible(el, val, cfg);
     }
     if (!isNullOrEmpty(data.Miscellaneous)) {
@@ -1161,7 +1162,6 @@ function LoadTemplate(id) {
 function GetTemplateData(id) {
 
     var data = { 'id': id, myTime: Date.now };
-
     return $.get('/CaseSolution/GetTemplate', data, function (caseTemplate) {
 
             finalActionId = caseTemplate["SaveAndClose"];
