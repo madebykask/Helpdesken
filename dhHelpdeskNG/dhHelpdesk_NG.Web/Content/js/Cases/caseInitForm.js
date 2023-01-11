@@ -897,11 +897,12 @@ function CaseInitForm(opt) {
     var options = opt || { twoAttacmentsMode: false, fileUploadWhiteList: null };
     var twoAttachmentsMode = opt.twoAttacmentsMode; 
 
-    $('#CaseLog_TextExternal').focus(function () {
+
+    $("#CaseLog_TextExternal").on("summernote.focus", function (e) {
         CaseWriteTextToLogNote('');
     });
 
-    $('#CaseLog_TextInternal').focus(function () {
+    $("#CaseLog_TextInternal").on("summernote.focus", function (e) {
         CaseWriteTextToLogNote('internal');
     });
 
@@ -1378,9 +1379,11 @@ function CaseInitForm(opt) {
         if (writeTextToExternalNote == "") {
             field = "#CaseLog_TextExternal";
         }
-
+        
         if (txt.length > 1) {
-            $(field).val($(field).val() + txt);
+            let htmlContent = $(field).summernote('code');
+            htmlContent = htmlContent + text;
+            $(field).summernote('code', htmlContent);
             $(field).focus();
             $(field).trigger("propertychange");
 
