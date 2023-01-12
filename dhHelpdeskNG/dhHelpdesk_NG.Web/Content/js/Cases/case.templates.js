@@ -668,8 +668,10 @@ var ApplyTemplate = function (data, doOverwrite) {
     }
     if (!isNullOrEmpty(data.Description)) {
         val = data.Description || '';
-        el = $("#case__Description");
-        SetValueIfElVisible(el, val, cfg);
+        if (val !== '') {
+            $(".summernotedesc").summernote("code", val);
+            $("#spanDesc").text(val);
+        }
     }
     if (!isNullOrEmpty(data.Miscellaneous)) {
         val = data.Miscellaneous || '';
@@ -684,13 +686,15 @@ var ApplyTemplate = function (data, doOverwrite) {
     }
     if (!isNullOrEmpty(data.Text_External)) {
         val = data.Text_External || '';
-        el = $("#CaseLog_TextExternal");
-        SetValueIfElVisible(el, val, cfg);
+        if (val !== '') {
+            $(".summernoteexternal").summernote("code", val);
+        }
     }
     if (!isNullOrEmpty(data.Text_Internal)) {
         val = data.Text_Internal || '';
-        el = $("#CaseLog_TextInternal");
-        SetValueIfElVisible(el, val, cfg);
+        if (val !== '') {
+            $(".summernoteinternal").summernote("code", val);
+        }
     }
     if (!isNullOrEmpty(data.FinishingCause_Id)) {
         val = data.FinishingCause_Id || '';

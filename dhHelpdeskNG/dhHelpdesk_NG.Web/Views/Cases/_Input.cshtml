@@ -1463,9 +1463,7 @@
                                                             </div>
                                                         </div>
                                                         <div id="showDescriptionFlat" style=" padding-bottom: 4px;">
-                                                            <div class="showDescriptionFlat">
-                                                                @Html.Raw(Model.case_.Description.ForHtmlView())
-                                                            </div>
+                                                            <div class="showDescriptionFlat" id="spanDesc"> @Html.Raw(Model.case_.Description.ForHtmlView())</div>
                                                         </div>
                                                     }
                                                     else
