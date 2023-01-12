@@ -1229,21 +1229,27 @@ function CaseInitForm(opt) {
     }
 
     $('#case__Priority_Id').change(function () {
+        debugger
         var isInheritingMode = $('#CaseTemplate_ExternalLogNote').val();
         if (isInheritingMode === 'True') {
             $('#CaseTemplate_ExternalLogNote').val('');
             return;
         }
 
-        var textExternalLogNote = $('#CaseLog_TextExternal').val();
+        if ($('#CaseLog_TextExternal').summernote('isEmpty')) {
+            $("#CaseLog_TextExternal").html('');
+        }
+
+        var textExternalLogNote = $('#CaseLog_TextExternal').html();
   
-        $.post('/Cases/ChangePriority/', { 'id': $(this).val(), 'textExternalLogNote': textExternalLogNote }, function (data) {
+            $.post('/Cases/ChangePriority/', { 'id': $(this).val(), 'textExternalLogNote': textExternalLogNote }, function (data) {
             const $txtExternal = $('#CaseLog_TextExternal');
-            if (data.ExternalLogText != null && data.ExternalLogText !== '') {
-                $txtExternal.val(data.ExternalLogText);
+                if (data.ExternalLogText != null && data.ExternalLogText !== '') {
+                    console.log(data.ExternalLogText)
+                $txtExternal.summernote("code", data.ExternalLogText);
                 $txtExternal.trigger('propertychange');
             } else {
-                $txtExternal.val('');
+                $txtExternal.html();
                 $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
             }
         }, 'json');
@@ -1381,7 +1387,11 @@ function CaseInitForm(opt) {
         }
         
         if (txt.length > 1) {
-            let htmlContent = $(field).summernote('code');
+            if ($(field).summernote('isEmpty')) {
+                $(field).html('');
+            }
+
+            let htmlContent = $(field).html();;
             htmlContent = htmlContent + text;
             $(field).summernote('code', htmlContent);
             $(field).focus();
@@ -1519,12 +1529,21 @@ function CaseInitForm(opt) {
 
     $('#AddFAQ').click(function (e) {
         e.preventDefault();
-
+  
         var question = $('#case__Caption').val();
-        var answer = $('#CaseLog_TextExternal').val();
-        var internalanswer = $('#CaseLog_TextInternal').val();
-        var win = window.open('/Faq/NewFAQPopup?question=' + question + '&answer=' + answer + '&internalanswer=' + internalanswer, '_blank', 'left=100,top=100,width=700,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
+        var answer = $('#CaseLog_TextExternal').summernote('code');
+        var internalanswer = $('#CaseLog_TextInternal').summernote('code');
+
+        console.log(answer)
+
+        var win = window.open('/Faq/NewFAQPopup?question=' + question + '&answer=' + stripHtml(answer) + '&internalanswer=' + stripHtml(internalanswer), '_blank', 'left=100,top=100,width=700,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
     });
+
+    function stripHtml(html) {
+        let tmp = document.createElement("DIV");
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || "";
+    }
 
     if (!Date.now) {
         Date.now = function () { return new Date().getTime(); };
