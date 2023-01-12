@@ -600,7 +600,7 @@
                                 let dataType = formData.tabs[t].sections[s].controls[c].type;
                                 let isRequired = false;
                                 let isRequiredSelfService = false;
-                                //debugger
+
                                 if (formData.tabs[t].sections[s].controls[c].validators) {
                                     let requiredObj = formData.tabs[t].sections[s].controls[c].validators.onSave[0];
                                     if (requiredObj.type == "required") {
