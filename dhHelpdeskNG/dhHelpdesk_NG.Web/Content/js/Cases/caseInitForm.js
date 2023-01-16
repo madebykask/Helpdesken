@@ -1377,9 +1377,8 @@ function CaseInitForm(opt) {
     });
 
     function addTextToLog(text) {
-
-        var txt = text.replace(/\n/g, "<br />");
-        txt = txt.replace("/&/g", "&amp");
+        
+        var txt = "<p>" + text.replace(/\n/g, "</p><p>").replace("/&/g", "&amp") + "</p>";
         var writeTextToExternalNote = $("#WriteTextToExternalNote").val();
         var field = "#CaseLog_TextInternal";
 
@@ -1388,13 +1387,13 @@ function CaseInitForm(opt) {
         }
         
         if (txt.length > 1) {
-            if ($(field).summernote('isEmpty')) {
+            if ($($(field).summernote('code')).text() == "") {
                 $(field).html('');
             }
 
-            let htmlContent = $(field).html();;
+            let htmlContent = $(field).summernote('code');
             htmlContent = htmlContent + txt;
-            $(field).summernote('code', htmlContent);
+            $(field).summernote('code', htmlContent.replace("<p><br></p>", ""));
             $(field).focus();
             $(field).trigger("propertychange");
 
