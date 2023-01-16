@@ -701,7 +701,7 @@ Module DH_Helpdesk_Mail
                                     sBodyText = Replace(message.BodyText.ToString(), Chr(10), vbCrLf, 1, -1, CompareMethod.Text)
                                 ElseIf message.HasBodyHtml = True Then
                                     sBodyText = getInnerHtml(message.BodyHtml)
-                                    'sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp", sBodyText)
+                                    sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp", sBodyText)
                                     isHtml = True
                                 End If
 
@@ -848,18 +848,20 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
+                                        'Bortkommenterat nedan - blev fel encoding 20230116 - Katta
                                         'iHTMLFile = 1
-                                        Dim fileReader As String
-                                        fileReader = My.Computer.FileSystem.ReadAllText(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html\" & sHTMLFileName,
-                                           System.Text.Encoding.UTF32)
-                                        fileReader = CleanStyles(fileReader)
-                                        'New case - Update description
-                                        objCaseData.updateCaseDescription(fileReader, objCase.Id)
+                                        'Dim fileReader As String
+                                        'fileReader = My.Computer.FileSystem.ReadAllText(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html\" & sHTMLFileName,
+                                        '   System.Text.Encoding.UTF8)
+                                        'fileReader = CleanStyles(fileReader)
+                                        ''New case - Update description
+                                        'objCaseData.updateCaseDescription(fileReader, objCase.Id)
                                         ' Lägg in i databasen
                                         'objCaseData.saveFileInfo(objCase.Id, "html/" & sHTMLFileName)
 
                                         'Todo - check this
                                         DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html", True)
+                                        DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
 
                                     End If
 
@@ -1146,21 +1148,21 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
+                                        'Borttaget 20230116 - Katta
+                                        'Dim sHTMLFileNameBodyText As String = CreateHtmlFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber & "_body", sBodyText)
+                                        'Dim fileReader As String
 
-                                        Dim sHTMLFileNameBodyText As String = CreateHtmlFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber & "_body", sBodyText)
-                                        Dim fileReader As String
-
-                                        fileReader = My.Computer.FileSystem.ReadAllText(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html\" & sHTMLFileNameBodyText, System.Text.Encoding.UTF32)
-                                        'fileReader = getInnerHtml(fileReader)
-                                        If isInternalLogUsed Then
-                                            'Update internal Note
-                                            objLogData.updateInternalLogNote(iLog_Id, fileReader)
-                                        Else
-                                            'Update external Note
-                                            objLogData.updateExternalLogNote(iLog_Id, fileReader)
-                                        End If
+                                        'fileReader = My.Computer.FileSystem.ReadAllText(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html\" & sHTMLFileNameBodyText, System.Text.Encoding.UTF32)
+                                        ''fileReader = getInnerHtml(fileReader)
+                                        'If isInternalLogUsed Then
+                                        '    'Update internal Note
+                                        '    objLogData.updateInternalLogNote(iLog_Id, fileReader)
+                                        'Else
+                                        '    'Update external Note
+                                        '    objLogData.updateExternalLogNote(iLog_Id, fileReader)
+                                        'End If
                                         DeleteFilesInsideFolder(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html", True)
-                                        'DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
+                                        DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
                                     End If
 
 
@@ -2117,7 +2119,7 @@ Module DH_Helpdesk_Mail
                     Dim objFile As StreamWriter
                     'Dim objHeaderFile As StreamWriter
 
-                    objFile = New StreamWriter(sFolder & "\html\" & sFileName, False, UnicodeEncoding.Unicode)
+                    objFile = New StreamWriter(sFolder & "\html\" & sFileName, False, UnicodeEncoding.UTF8)
                     objFile.Write(sBodyHtml)
                     objFile.Close()
 
@@ -2387,6 +2389,7 @@ Module DH_Helpdesk_Mail
     Private Function convertHTMLtoText(ByVal sHTML As String) As String
         Dim startTime As DateTime
         Dim MyWebBrowser As New WebBrowser
+        sHTML = Encoding.UTF8.GetString(Encoding.Default.GetBytes(sHTML))
 
         startTime = DateTime.Now()
 
