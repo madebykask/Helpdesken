@@ -1434,6 +1434,7 @@
                                                 }
                                             </td>
                                             <td colspan="3">
+                                                @*New case*@
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description) && Model.case_.Id == 0)
                                                 {
                                                     <div id="textDescriptionOuter" style="width: 648px;">
@@ -1442,13 +1443,14 @@
                                                 }
                                                 else
                                                 {
+                                                    //Existing case and editable
                                                     if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
                                                     {
-                                                        <span id="caseDescriptionEdit"
+                                                        @*<span id="caseDescriptionEdit"
                                                               rel="tooltip"
                                                               class="icon-edit"
-                                                              title="@Translation.GetCoreTextTranslation("Ändra")"></span>
-                                                        <div id="showDescriptionEdit" style="display:none">
+                                                              title="@Translation.GetCoreTextTranslation("Ändra")"></span>*@
+                                                        <div id="showDescriptionEdit">
                                                             <div class="summernote-desc-flex-container" style="align-items:center">
 
                                                                 <div id="textDescriptionOuter" style="width: 648px;">
@@ -1462,12 +1464,13 @@
 
                                                             </div>
                                                         </div>
-                                                        <div id="showDescriptionFlat" style=" padding-bottom: 4px;">
+                                                        @*<div id="showDescriptionFlat" style=" padding-bottom: 4px;">
                                                             <div class="showDescriptionFlat" id="spanDesc"> @Html.Raw(Model.case_.Description.ForHtmlView())</div>
-                                                        </div>
+                                                        </div>*@
                                                     }
                                                     else
                                                     {
+                                                        //Read only
                                                         <div id="textDescriptionOuter" style="width: 648px;">
                                                             @Html.TextAreaFor(model => model.case_.Description, new { @class = "case-description summernotedesc", @readonly = true })
                                                         </div>
@@ -1585,16 +1588,16 @@
                                                                     <option value="">&nbsp;</option>
                                                                     @if (Model.currencies != null)
                                                                     {
-                                                    foreach (var e in Model.currencies)
-                                                    {
+                                                                        foreach (var e in Model.currencies)
+                                                                        {
                                                                             <option value="@e.Code" @e.Code.ValueIsSelected(Model.case_.Currency)>@e.Code</option>
                                                                         }
-                                                }
+                                                                    }
                                                                 </select>
                                                             </td>
                                                         }
                                                         else
-                                                {
+                                                        {
                                                             <td>
                                                                 @Translation.GetCoreTextTranslation("Artikelkostnad")<br />
                                                                 @Html.TextBoxFor(model => model.case_.Cost, new { maxlength = "7", Class = "inputw50 cost-field", @readonly = true })
@@ -2660,12 +2663,12 @@
         $('.summernoteinternal').summernote(summerNoteInternalConfig)
         $('.summernoteexternal').summernote(summerNoteExternalConfig)
         $('.summernotedesc').summernote(summerNoteDescConfig)
-
+        
         $("#caseDescriptionEdit").on('click', function (e) {
             $('#showDescriptionEdit').toggle();
             $('#showDescriptionFlat').toggle();
         });
-       
+
 
         function sizeChanged(element) {
 
