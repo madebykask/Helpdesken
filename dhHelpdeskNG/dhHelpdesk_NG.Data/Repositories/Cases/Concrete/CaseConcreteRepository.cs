@@ -34,20 +34,29 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     casesTable.Rows.Add(id);
                 }
 
-                using (var connection = new SqlConnection(_connectionString))
+                SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(_connectionString)
+                {
+                    ConnectTimeout = 4000,
+                    AsynchronousProcessing = true
+                };
+
+
+                using (var connection = new SqlConnection(connectionStringBuilder.ConnectionString))
                 {
                     if (connection.State == ConnectionState.Closed)
                     {
                         connection.Open();
                     }
-                    using (var command = new SqlCommand { Connection = connection, CommandType = CommandType.StoredProcedure, CommandTimeout = 0 })
+
+                    using (var command = new SqlCommand { Connection = connection, CommandType = CommandType.StoredProcedure })
                     {
                         SqlParameter param = command.Parameters.AddWithValue("@Cases", casesTable);
                         param.SqlDbType = SqlDbType.Structured;
                         param.TypeName = "dbo.IdsList";
                         //param.Direction = ParameterDirection.Output;
                         command.CommandText = "sp_DeleteCases";
-                        var rowsAffected = command.ExecuteNonQuery();
+                        var result = command.BeginExecuteNonQuery(null, command);
+                        var rowsAffected = command.EndExecuteNonQuery(result);
                         if (rowsAffected > 0)
                         {
                             ret = true;
