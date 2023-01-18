@@ -4356,8 +4356,10 @@ div.chosen-container.chosen-container-single.error {
 .showDescriptionFlat {
     width: 648px;
     height: 566px;
+    z-index: -10;
     overflow-x: auto !important;
-    overflow-y: scroll;
+    overflow-y: scroll !important;
+/*    overflow: hidden !important;*/
     border: 1px solid #cccccc;
     border-radius: 3px;
 }
