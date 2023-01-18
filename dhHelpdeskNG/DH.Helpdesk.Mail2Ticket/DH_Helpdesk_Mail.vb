@@ -2690,6 +2690,12 @@ Module DH_Helpdesk_Mail
                 If img.Attributes("id") IsNot Nothing Then
                     img.Attributes("id").Remove()
                 End If
+                If img.Attributes("width") IsNot Nothing Then
+                    If img.Attributes("width").Value > 500 Then
+                        'set it to 500
+                        img.Attributes("width").Value = "500"
+                    End If
+                End If
             Next
         End If
 
