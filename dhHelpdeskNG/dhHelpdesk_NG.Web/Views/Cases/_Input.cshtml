@@ -1446,11 +1446,11 @@
                                                     //Existing case and editable
                                                     if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
                                                     {
-                                                        <span id="caseDescriptionEdit"
+                                                        @*<span id="caseDescriptionEdit"
                                                               rel="tooltip"
                                                               class="icon-edit"
-                                                              title="@Translation.GetCoreTextTranslation("Ändra")"></span>
-                                                        <div id="showDescriptionEdit" style="display:none">
+                                                              title="@Translation.GetCoreTextTranslation("Ändra")"></span>*@
+                                                        <div id="showDescriptionEdit">
                                                             <div class="summernote-desc-flex-container" style="align-items:center">
 
                                                                 <div id="textDescriptionOuter" style="width: 648px;">
@@ -1464,9 +1464,9 @@
 
                                                             </div>
                                                         </div>
-                                                        <div id="showDescriptionFlat" style=" padding-bottom: 4px;">
+                                                        @*<div id="showDescriptionFlat" style=" padding-bottom: 4px;">
                                                             <div class="showDescriptionFlat" id="spanDesc"> @Html.Raw(Model.case_.Description.ForHtmlView())</div>
-                                                        </div>
+                                                        </div>*@
                                                     }
                                                     else
                                                     {
