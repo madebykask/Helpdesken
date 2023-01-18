@@ -701,6 +701,7 @@ Module DH_Helpdesk_Mail
                                     sBodyText = Replace(message.BodyText.ToString(), Chr(10), vbCrLf, 1, -1, CompareMethod.Text)
                                 ElseIf message.HasBodyHtml = True Then
                                     sBodyText = getInnerHtml(message.BodyHtml)
+                                    sBodyText = CleanStyles(message.BodyHtml)
                                     sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp", sBodyText)
                                     isHtml = True
                                 End If
@@ -2688,6 +2689,31 @@ Module DH_Helpdesk_Mail
                 End If
                 If img.Attributes("id") IsNot Nothing Then
                     img.Attributes("id").Remove()
+                End If
+            Next
+        End If
+
+        Dim par As HtmlNodeCollection = doc.DocumentNode.SelectNodes("//p")
+
+        If par IsNot Nothing Then
+
+            For Each p As HtmlNode In par
+                If p.Attributes("class") IsNot Nothing Then
+                    p.Attributes("class").Remove()
+                End If
+            Next
+        End If
+
+        Dim div As HtmlNodeCollection = doc.DocumentNode.SelectNodes("//div")
+
+        If div IsNot Nothing Then
+
+            For Each d As HtmlNode In div
+                If d.Attributes("class") IsNot Nothing Then
+                    d.Attributes("class").Remove()
+                End If
+                If d.Attributes("style") IsNot Nothing Then
+                    d.Attributes("style").Remove()
                 End If
             Next
         End If
