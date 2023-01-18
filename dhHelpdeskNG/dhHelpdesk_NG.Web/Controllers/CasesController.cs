@@ -1655,7 +1655,7 @@ namespace DH.Helpdesk.Web.Controllers
             )
         {
             var basePath = _masterDataService.GetFilePath(customerId);
-            var caseGuid = _caseDeletionService.Delete(caseId, basePath, parentCaseId);  //TODO ÄNDRA DENNA DELETE
+            var caseGuid = _caseDeletionService.Delete(caseId, basePath, parentCaseId);
             _userTemporaryFilesStorage.ResetCacheForObject(caseGuid.ToString());
             if (parentCaseId.HasValue)
             {
@@ -1667,28 +1667,6 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
             return string.IsNullOrEmpty(backUrl) ? this.Redirect(Url.Action("index", "cases", new { customerId = customerId })) : this.Redirect(backUrl);
-        }
-
-        [HttpPost]
-        public JsonResult DeleteMultipleCases(
-            List<Case> cases,
-            int customerId
-        )
-        {
-            var basePath = _masterDataService.GetFilePath(customerId);
-            //Validation and exclusion then continue
-
-            //Deletion
-
-            //Deletion of files
-
-            //Present result and errors
-
-
-            //_caseService.DeleteMultipleCases(cases, basePath, parentCaseId);
-            //_userTemporaryFilesStorage.ResetCacheForObject(caseGuid.ToString());
-
-            return null;
         }
 
         //TODO: REVIEW 
