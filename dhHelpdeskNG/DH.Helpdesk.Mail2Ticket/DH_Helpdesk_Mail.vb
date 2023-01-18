@@ -1152,7 +1152,7 @@ Module DH_Helpdesk_Mail
                                         'Dim sHTMLFileNameBodyText As String = CreateHtmlFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber & "_body", sBodyText)
                                         'Dim fileReader As String
 
-                                        'fileReader = My.Computer.FileSystem.ReadAllText(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html\" & sHTMLFileNameBodyText, System.Text.Encoding.UTF32)
+                                        'fileReader = My.Computer.FileSystem.ReadAllText(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html\" & sHTMLFileName, System.Text.Encoding.UTF8)
                                         ''fileReader = getInnerHtml(fileReader)
                                         'If isInternalLogUsed Then
                                         '    'Update internal Note
