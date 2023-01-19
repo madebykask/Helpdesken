@@ -1,3 +1,4 @@
+using DH.Helpdesk.Web.Infrastructure;
 using DH.HelpDesk.SpecFlow.Drivers;
 using NUnit.Framework;
 using OpenQA.Selenium;
@@ -94,26 +95,54 @@ namespace DH.HelpDesk.SpecFlow.StepDefinitions
                 optionLnk.Click();
             }
 
+
+            var startPageSelect = driver.FindElement(By.Id("User_StartPage"));
+
+            var selectElement = new SelectElement(startPageSelect);
+
+            selectElement.SelectByText("Ärendeöversikt");
+
+            if (driver.FindElements(By.Id("btnSave")).Count > 0)
+            {
+                driver.FindElement(By.Id("btnSave")).Click();
+            }
+
+            driver.FindElement(By.Id("drpUserAdmin")).Click();
+
+            driver.FindElement(By.Id("btnUserAdminClose")).Click();
+
             driver.SwitchTo().Window(driver.WindowHandles.FirstOrDefault());
-            var i = 8;
         }
 
         [Given(@"I logout from the admin user")]
         public void GivenILogoutFromTheAdminUser(Table table)
         {
-            throw new PendingStepException();
+            driver.FindElement(By.Id("userMenuList")).Click();
+
+            driver.FindElement(By.Id("btnUserLogout")).Click();
         }
 
         [When(@"I login as the user")]
         public void WhenILoginAsTheUser(Table table)
         {
-            throw new PendingStepException();
+            WhenIEnterTheFollowingDetails(table);
+            WhenIClickLoginButton();
         }
 
         [Then(@"I should be able to see the Case Summary page")]
         public void ThenIShouldBeAbleToSeeTheCaseSummaryPage()
         {
-            throw new PendingStepException();
+            try
+            {
+                var el = driver.FindElements(By.ClassName("case-overview"));
+
+                Assert.IsTrue(el.Count > 0);
+
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
         }
 
     }

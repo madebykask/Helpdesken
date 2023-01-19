@@ -28,7 +28,7 @@ Scenario: As a user I should be able to login to a case summary starting page
 	And I logout from the admin user 
 		|Username |
 		| ds |
-	When I login as the user
+	 When  I login as the user
 		| Username | Password |
-		| ds2      | ds2     |
+		| ds      | ds     |
 	Then I should be able to see the Case Summary page

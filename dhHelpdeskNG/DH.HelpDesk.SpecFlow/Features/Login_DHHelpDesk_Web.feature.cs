@@ -112,7 +112,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "Username",
                             "Password"});
                 table2.AddRow(new string[] {
-                            "ds44",
+                            "ds",
                             "ds"});
 #line 8
  testRunner.When("I enter the following details", ((string)(null)), table2, "When ");
@@ -179,10 +179,10 @@ this.ScenarioInitialize(scenarioInfo);
                             "Username",
                             "Password"});
                 table6.AddRow(new string[] {
-                            "ds2",
-                            "ds2"});
+                            "ds",
+                            "ds"});
 #line 31
- testRunner.When("I login as the user", ((string)(null)), table6, "When ");
+  testRunner.When("I login as the user", ((string)(null)), table6, "When ");
 #line hidden
 #line 34
  testRunner.Then("I should be able to see the Case Summary page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
