@@ -1190,13 +1190,13 @@ RAISERROR ('DROP Foreign Key Customer_Id to tblBR_Rules', 10, 1) WITH NOWAIT
 		GO
 
 RAISERROR ('CREATE PROCEDURE sp_GetLogFilesByCaseIds', 10, 1) WITH NOWAIT
-IF(OBJECT_ID('sp_GetLogFilesByCaseIds', 'P') IS NOT NULL)
+IF(OBJECT_ID('[dbo].[sp_GetLogFilesByCaseIds]', 'P') IS NOT NULL)
 BEGIN
-	DROP PROCEDURE sp_GetLogFilesByCaseIds;
+	DROP PROCEDURE [dbo].[sp_GetLogFilesByCaseIds];
 END
 GO
 
-CREATE PROCEDURE sp_GetLogFilesByCaseIds
+CREATE PROCEDURE [dbo].[sp_GetLogFilesByCaseIds]
 (
 	@CaseIds IdsList READONLY
 )
@@ -1204,7 +1204,8 @@ CREATE PROCEDURE sp_GetLogFilesByCaseIds
 AS
 BEGIN
 	;WITH CTE AS (
-		SELECT l.Text_External, l.Text_Internal, lf.*
+		SELECT l.Text_External, l.Text_Internal, lf.Log_Id, lf.[FileName], 
+				lf.CreatedDate, lf.ParentLog_Id, lf.IsCaseFile, lf.LogType, lf.ParentLogType
 		FROM tblLog as l
 		INNER JOIN @CaseIds as c
 			on c.Id = l.Case_Id
@@ -1217,7 +1218,7 @@ END
 GO
 
 RAISERROR ('CREATE PROCEDURE sp_GetCaseFilesByCaseIds', 10, 1) WITH NOWAIT
-IF(OBJECT_ID('sp_GetCaseFilesByCaseIds', 'P') IS NOT NULL)
+IF(OBJECT_ID('[dbo].[sp_GetCaseFilesByCaseIds]', 'P') IS NOT NULL)
 BEGIN
 	DROP PROCEDURE [dbo].[sp_GetCaseFilesByCaseIds]
 END
