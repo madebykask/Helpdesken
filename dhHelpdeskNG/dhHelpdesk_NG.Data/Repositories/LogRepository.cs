@@ -10,6 +10,9 @@ using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Extensions;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -102,7 +105,7 @@ namespace DH.Helpdesk.Dal.Repositories
         void ClearExistingAttachedFiles(int caseId);
         void AddExistLogFiles(IEnumerable<LogFile> logExFiles);
         FileContentModel GetCaseFileContentByIdAndFileName(int caseId, string basePath, string fileName);
-        List<LogFile> GetLogFilesByCaseList(List<Case> caseList, bool includeInternal);
+        List<LogFile> GetLogFilesByCaseList(List<int> caseIds, bool includeInternal);
     }
 
     public class LogFileRepository : RepositoryBase<LogFile>, ILogFileRepository
@@ -248,19 +251,101 @@ namespace DH.Helpdesk.Dal.Repositories
             DataContext.LogFiles.AddRange(logExFiles);
         }
 
-        public List<LogFile> GetLogFilesByCaseList(List<Case> caseList, bool includeInternal)
+        public List<LogFile> GetLogFilesByCaseList(List<int> caseIds, bool includeInternal)
         {
-            var logFiles = (from d in DataContext.Logs.AsEnumerable()
-                              join c in caseList
-                              on d.Case_Id equals c.Id
-                              select d).ToList()
-                            .SelectMany(l => l.LogFiles);
-                            
-                            
-            var caseFiles = logFiles.Where(f => includeInternal || (f.LogType == LogFileType.External && !string.IsNullOrEmpty(f.Log.Text_External)))
-                            .ToList();
-            return caseFiles;
-        }
+        
+
+            string _connectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+
+            List<LogFile> logFiles = new List<LogFile>();
+
+            if (caseIds.Count() > 0)
+            {
+                DataTable casesTable = new DataTable();
+                casesTable.Columns.Add(new DataColumn("Id", typeof(int)));
+
+                // populate DataTable from your List here
+                foreach (var id in caseIds)
+                {
+                    casesTable.Rows.Add(id);
+                }
+
+                SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(_connectionString)
+                {
+                    ConnectTimeout = 4000,
+                    AsynchronousProcessing = true
+                };
+
+
+                using (var connection = new SqlConnection(connectionStringBuilder.ConnectionString))
+                {
+                    if (connection.State == ConnectionState.Closed)
+                    {
+                        connection.Open();
+                    }
+
+                    using (var command = new SqlCommand { Connection = connection, CommandType = CommandType.StoredProcedure })
+                    {
+                        SqlParameter param = command.Parameters.AddWithValue("@CaseIds", casesTable);
+                        param.SqlDbType = SqlDbType.Structured;
+                        param.TypeName = "dbo.IdsList";
+                        //param.Direction = ParameterDirection.Output;
+                        command.CommandText = "sp_GetLogFilesByCaseIds";
+                        var result = command.BeginExecuteReader(null, command);
+
+                        using (SqlDataReader reader = command.EndExecuteReader(result))
+                        {
+                            while (reader.Read())
+                            {
+                                int logId, logType, parentLogIdInt, parentLogTypeInt;
+                                bool isCaseFileBool;
+                                
+                                Int32.TryParse(reader["Log_Id"].ToString(), out logId);
+                                Int32.TryParse(reader["LogType"].ToString(), out logType);
+                                
+                                int? parentLogId =  Int32.TryParse(reader["ParentLog_Id"].ToString(), out parentLogIdInt) ? (int?)parentLogIdInt : null;                                    
+                                bool? isCaseFile = bool.TryParse(reader["IsCaseFile"].ToString(), out isCaseFileBool) ? (bool?)isCaseFileBool : null;
+                                LogFileType? parentLogTypeEnum;
+
+                                if (Int32.TryParse(reader["ParentLogType"].ToString(), out parentLogTypeInt))
+                                {
+                                    parentLogTypeEnum = (LogFileType)parentLogTypeInt;
+                                }
+                                else
+                                { 
+                                    parentLogTypeEnum = null;
+                                }
+
+                                logFiles.Add(new LogFile()
+                                {
+                                    Log_Id = logId,
+                                    FileName = Convert.ToString(reader["FileName"].ToString()),
+                                    CreatedDate = Convert.ToDateTime(reader["CreatedDate"].ToString()),
+                                    ParentLog_Id = parentLogId,
+                                    IsCaseFile = isCaseFile,
+                                    LogType = (LogFileType)(logType),
+                                    ParentLogType = parentLogTypeEnum
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            return logFiles;
+}
+
+
+        //var logFiles = (from d in DataContext.Logs.AsEnumerable()
+        //                join c in caseList
+        //                on d.Case_Id equals c.Id
+        //                select d).ToList()
+        //                .SelectMany(l => l.LogFiles);
+
+
+        //var caseFiles = logFiles.Where(f => includeInternal || (f.LogType == LogFileType.External && !string.IsNullOrEmpty(f.Log.Text_External)))
+        //                .ToList();
+        //    return caseFiles;
+        
     }
 
     #endregion

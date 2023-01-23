@@ -108,8 +108,8 @@ namespace DH.Helpdesk.Services.Services
             {
                 caseList = _caseRepository.GetCasesByCaseIds(ids.ToArray<int>());
                 List<decimal> caseNumbersToExclude = new List<decimal>();
-                var caseFiles = _caseFileRepository.GetCaseFilesByCaseList(caseList);
-                var logFiles = _logFileRepository.GetLogFilesByCaseList(caseList, true);
+                var caseFiles = _caseFileRepository.GetCaseFilesByCaseList(ids);
+                var logFiles = _logFileRepository.GetLogFilesByCaseList(ids, true);
 
                 var basePath = _masterDataService.GetFilePath(customerId);
                 var caseConcreteRepository = new CaseConcreteRepository();
@@ -200,8 +200,8 @@ namespace DH.Helpdesk.Services.Services
 
             var c = _caseRepository.GetById(id);
             var caseList = new List<Case>() { c };
-            var caseFiles = _caseFileRepository.GetCaseFilesByCaseList(caseList);
-            var logFiles = _logFileRepository.GetLogFilesByCaseList(caseList, true);
+            var caseFiles = _caseFileRepository.GetCaseFilesByCaseList(new List<int> { id });
+            var logFiles = _logFileRepository.GetLogFilesByCaseList(new List<int> { id }, true);
 
 
             var caseConcreteRepository = new CaseConcreteRepository();
