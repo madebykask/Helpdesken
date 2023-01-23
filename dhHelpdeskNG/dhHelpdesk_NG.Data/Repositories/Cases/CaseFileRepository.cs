@@ -12,13 +12,17 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 	using DH.Helpdesk.Domain;
 	using System;
 	using BusinessData.Models;
+    using DH.Helpdesk.Common.Enums.Logs;
+    using System.Configuration;
+    using System.Data.SqlClient;
+    using System.Data;
 
 	public interface ICaseFileRepository : IRepository<CaseFile>
     {
         string GetCaseFilePath(int caseId, int fileId, string basePath);
         List<string> FindFileNamesByCaseId(int caseid);
         List<CaseFile> GetCaseFilesByCaseId(int caseid);
-        List<CaseFile> GetCaseFilesByCaseList(List<Case> cases);
+        List<CaseFile> GetCaseFilesByCaseList(List<int> caseIds);
         CaseFileContent GetCaseFileContent(int caseId, int fileId, string basePath);
         FileContentModel GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
         bool FileExists(int caseId, string fileName);
@@ -236,11 +240,77 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
             }
         }
 
-        public List<CaseFile> GetCaseFilesByCaseList(List<Case> cases)
+        public List<CaseFile> GetCaseFilesByCaseList(List<int> caseIds)
         {
-            return (from f in this.DataContext.CaseFiles.AsEnumerable()
-                    where cases.Select((o) => o.Id).Contains(f.Case_Id)
-                    select f).ToList();
+            string _connectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+
+            List<CaseFile> caseFiles = new List<CaseFile>();
+
+            if (caseIds.Count() > 0)
+            {
+                DataTable casesTable = new DataTable();
+                casesTable.Columns.Add(new DataColumn("Id", typeof(int)));
+
+                // populate DataTable from your List here
+                foreach (var id in caseIds)
+                {
+                    casesTable.Rows.Add(id);
+                }
+
+                SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(_connectionString)
+                {
+                    ConnectTimeout = 4000,
+                    AsynchronousProcessing = true
+                };
+
+
+                using (var connection = new SqlConnection(connectionStringBuilder.ConnectionString))
+                {
+                    if (connection.State == ConnectionState.Closed)
+                    {
+                        connection.Open();
+                    }
+
+                    using (var command = new SqlCommand { Connection = connection, CommandType = CommandType.StoredProcedure })
+                    {
+                        SqlParameter param = command.Parameters.AddWithValue("@CaseIds", casesTable);
+                        param.SqlDbType = SqlDbType.Structured;
+                        param.TypeName = "dbo.IdsList";
+                        //param.Direction = ParameterDirection.Output;
+                        command.CommandText = "sp_GetCaseFilesByCaseIds";
+                        var result = command.BeginExecuteReader(null, command);
+
+                        using (SqlDataReader reader = command.EndExecuteReader(result))
+                        {
+                            while (reader.Read())
+                            {
+                                int id, caseId, userIdInt;
+
+                                Int32.TryParse(reader["Id"].ToString(), out id);
+                                Int32.TryParse(reader["Case_Id"].ToString(), out caseId);
+
+                                int? userId = Int32.TryParse(reader["UserId"].ToString(), out userIdInt) ? (int?)userIdInt : null;
+
+                                caseFiles.Add(new CaseFile()
+                                {
+                                    Id = id,
+                                    Case_Id = caseId,
+                                    FileName = Convert.ToString(reader["FileName"].ToString()),
+                                    CreatedDate = Convert.ToDateTime(reader["CreatedDate"].ToString()),
+                                    UserId = userId
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            return caseFiles;
+
+
+
+            //return (from f in this.DataContext.CaseFiles.AsEnumerable()
+            //        where cases.Select((o) => o.Id).Contains(f.Case_Id)
+            //        select f).ToList();
         }
     }
 }
