@@ -28,6 +28,9 @@ Imports Rebex
 Imports Winnovative
 Imports System.Threading
 Imports HtmlAgilityPack
+Imports System.Drawing
+Imports System.Drawing.Drawing2D
+Imports System.Drawing.Imaging
 
 Module DH_Helpdesk_Mail
     Private Const InboxMailFolderName As String = "Inbox"
@@ -849,18 +852,7 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
-                                        'Bortkommenterat nedan - blev fel encoding 20230116 - Katta
-                                        'iHTMLFile = 1
-                                        'Dim fileReader As String
-                                        'fileReader = My.Computer.FileSystem.ReadAllText(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html\" & sHTMLFileName,
-                                        '   System.Text.Encoding.UTF8)
-                                        'fileReader = CleanStyles(fileReader)
-                                        ''New case - Update description
-                                        'objCaseData.updateCaseDescription(fileReader, objCase.Id)
-                                        ' Lägg in i databasen
-                                        'objCaseData.saveFileInfo(objCase.Id, "html/" & sHTMLFileName)
 
-                                        'Todo - check this
                                         DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html", True)
                                         DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
 
@@ -1060,7 +1052,6 @@ Module DH_Helpdesk_Mail
                                     ' Spara svaret som en loggpost på aktuellt ärende
                                     ' Ta endast med svaret
                                     sBodyText = extractAnswerFromBody(sBodyText, objCustomer.EMailAnswerSeparator)
-                                    'sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp", sBodyText)
                                     ' Markera ärendet som oläst
                                     objCaseData.markCaseUnread(objCase)
 
@@ -1149,19 +1140,7 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
-                                        'Borttaget 20230116 - Katta
-                                        'Dim sHTMLFileNameBodyText As String = CreateHtmlFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber & "_body", sBodyText)
-                                        'Dim fileReader As String
 
-                                        'fileReader = My.Computer.FileSystem.ReadAllText(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html\" & sHTMLFileName, System.Text.Encoding.UTF8)
-                                        ''fileReader = getInnerHtml(fileReader)
-                                        'If isInternalLogUsed Then
-                                        '    'Update internal Note
-                                        '    objLogData.updateInternalLogNote(iLog_Id, fileReader)
-                                        'Else
-                                        '    'Update external Note
-                                        '    objLogData.updateExternalLogNote(iLog_Id, fileReader)
-                                        'End If
                                         DeleteFilesInsideFolder(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html", True)
                                         DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
                                     End If
@@ -1983,10 +1962,12 @@ Module DH_Helpdesk_Mail
                                 iFileCount = iFileCount + 1
 
                                 sContentLocation = sFolder & "\" & iFileCount & "." & sFileExtension
-                                res.Save(sFolder & "\" & iFileCount & "." & sFileExtension)
+                                res.Save(sContentLocation)
+
                                 Dim imgHref As String = ""
                                 Dim bData As Byte()
-                                Dim br As BinaryReader = New BinaryReader(System.IO.File.OpenRead(sContentLocation))
+                                Dim newImagePath = ResizeImage(sContentLocation, sFolder, iFileCount, sFileExtension)
+                                Dim br As BinaryReader = New BinaryReader(System.IO.File.OpenRead(newImagePath))
                                 bData = br.ReadBytes(br.BaseStream.Length)
                                 Dim base64String As String = Convert.ToBase64String(bData, 0, bData.Length)
                                 imgHref = "data:image/png;base64," & base64String
@@ -2690,12 +2671,7 @@ Module DH_Helpdesk_Mail
                 If img.Attributes("id") IsNot Nothing Then
                     img.Attributes("id").Remove()
                 End If
-                If img.Attributes("width") IsNot Nothing Then
-                    If img.Attributes("width").Value > 500 Then
-                        'set it to 500
-                        img.Attributes("width").Value = "500"
-                    End If
-                End If
+
             Next
         End If
 
@@ -2751,6 +2727,53 @@ Module DH_Helpdesk_Mail
         Return ret
 
     End Function
+    Private Function ResizeImage(contentLocation As String, folder As String, iFileCount As Integer, fileExtension As String) As String
+
+
+        ' Load the original image
+        Dim originalImage As Bitmap = New Bitmap(contentLocation)
+
+        ' Set the maximum width or height
+        Dim maxWidth As Integer = 500
+        Dim maxHeight As Integer = 500
+
+        Dim newWidth As Integer = originalImage.Width
+        Dim newHeight As Integer = originalImage.Height
+
+        ' Get the aspect ratio of the original image
+        Dim aspectRatio As Single = originalImage.Width / originalImage.Height
+
+        ' Calculate the new width and height while maintaining the aspect ratio
+        If originalImage.Width > originalImage.Height And originalImage.Width > maxWidth Then
+            ' Landscape image
+            newWidth = maxWidth
+            newHeight = CInt(maxWidth / aspectRatio)
+        Else
+            If originalImage.Height > maxHeight Then
+                ' Portrait image
+                newWidth = CInt(maxHeight * aspectRatio)
+                newHeight = maxHeight
+            End If
+        End If
+
+
+        ' Create a new Bitmap object with the new width and height
+        Dim newImage As New Bitmap(originalImage, newWidth, newHeight)
+
+        ' Create a Graphics object for the new image
+        Dim graphics As Graphics = Graphics.FromImage(newImage)
+
+        ' Set the interpolation mode to high quality
+        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic
+
+        ' Draw the original image on the new image using the specified width and height
+        graphics.DrawImage(originalImage, 0, 0, newWidth, newHeight)
+
+        Dim newFilePath As String = folder & "\" & iFileCount & "_small" & "." & fileExtension
+        newImage.Save(newFilePath)
+        Return newFilePath
+    End Function
+
 
 End Module
 
