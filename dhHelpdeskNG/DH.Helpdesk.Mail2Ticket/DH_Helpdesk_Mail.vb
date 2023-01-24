@@ -2733,28 +2733,14 @@ Module DH_Helpdesk_Mail
         ' Load the original image
         Dim originalImage As Bitmap = New Bitmap(contentLocation)
 
-        ' Set the maximum width or height
-        Dim maxWidth As Integer = 500
-        Dim maxHeight As Integer = 500
-
-        Dim newWidth As Integer = originalImage.Width
+        Dim newWidth As Integer = 500
         Dim newHeight As Integer = originalImage.Height
-
-        ' Get the aspect ratio of the original image
-        Dim aspectRatio As Single = originalImage.Width / originalImage.Height
-
-        ' Calculate the new width and height while maintaining the aspect ratio
-        If originalImage.Width > originalImage.Height And originalImage.Width > maxWidth Then
-            ' Landscape image
-            newWidth = maxWidth
-            newHeight = CInt(maxWidth / aspectRatio)
+        If originalImage.Width > newWidth Then
+            newHeight = CInt(originalImage.Height / (originalImage.Width / newWidth))
         Else
-            If originalImage.Height > maxHeight Then
-                ' Portrait image
-                newWidth = CInt(maxHeight * aspectRatio)
-                newHeight = maxHeight
-            End If
+            newWidth = originalImage.Width
         End If
+
 
 
         ' Create a new Bitmap object with the new width and height
