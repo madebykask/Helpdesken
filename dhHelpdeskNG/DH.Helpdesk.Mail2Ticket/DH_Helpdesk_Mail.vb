@@ -674,7 +674,7 @@ Module DH_Helpdesk_Mail
                                 ElseIf message.HasBodyHtml = True Then
                                     sBodyText = getInnerHtml(message.BodyHtml)
                                     sBodyText = CleanStyles(sBodyText)
-                                    sBodyTextToHtml = CleanStyles(sBodyText)
+                                    'sBodyTextToHtml = CleanStyles(sBodyText)
                                     sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp", sBodyText)
                                     isHtml = True
                                 End If
@@ -811,7 +811,7 @@ Module DH_Helpdesk_Mail
                                     LogToFile("Create Case:" & objCase.Casenumber & ", Attachments:" & message.Attachments.Count, iPop3DebugLevel)
 
                                     'Save 
-                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber, sBodyTextToHtml)
+                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber, "")
                                     Dim sPDFFileName As String = CreatePdfFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
 
                                     If Not IsNullOrEmpty(sPDFFileName) Then
@@ -1099,7 +1099,7 @@ Module DH_Helpdesk_Mail
                                     Dim logSubFolderPrefix = If(bIsInternalLogFile, "LL", "L") ' LL - Internal log subfolder, L - external log subfolder
 
                                     'Creating htmlfile to use for pdf-creating
-                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber, message.BodyHtml)
+                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber, "")
                                     Dim sPDFFileName As String = CreatePdfFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
 
                                     If Not IsNullOrEmpty(sPDFFileName) Then
@@ -2044,15 +2044,6 @@ Module DH_Helpdesk_Mail
                                 Dim base64String As String = Convert.ToBase64String(bData, 0, bData.Length)
                                 imgHref = "data:image/png;base64," & base64String
 
-                                'If smallBody Is Nothing Then
-                                '    Dim bData As Byte()
-                                '    Dim br As BinaryReader = New BinaryReader(System.IO.File.OpenRead(sContentLocation))
-                                '    bData = br.ReadBytes(br.BaseStream.Length)
-                                '    Dim base64String As String = Convert.ToBase64String(bData, 0, bData.Length)
-                                '    imgHref = "data:image/png;base64," & base64String
-                                'Else
-                                '    imgHref = "file:\\\" & sContentLocation
-                                'End If
                                 br.Close()
                                 sBodyHtml = sBodyHtml.Replace(sContentId, imgHref)
                             Else
@@ -2706,7 +2697,7 @@ Module DH_Helpdesk_Mail
         Dim newWidth As Integer = 500
         Dim newHeight As Integer = originalImage.Height
         If originalImage.Width > newWidth Then
-            newHeight = CInt(originalImage.Height / (originalImage.Width / newWidth))
+            newHeight = originalImage.Height * newWidth / originalImage.Width
         Else
             newWidth = originalImage.Width
         End If
