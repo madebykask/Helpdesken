@@ -33,7 +33,6 @@ a, a:hover, a:focus {
     *background-repeat: repeat-x;
     *filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffe6e6e6',GradientType=0);
     *border: 1px solid #cccccc;
-    text-decoration: none !important;
 }
 
 /********************TEXT WEIGHT AND COLORS************************************************/
@@ -51,6 +50,10 @@ a, a:hover, a:focus {
 .textblue {
     color: #0088cc;
     text-decoration: none;
+}
+.textwhite {
+    color: #ffffff;
+    font-weight: bold;
 }
 
     .textred td a {
