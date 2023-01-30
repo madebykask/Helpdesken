@@ -5,15 +5,15 @@ body {
     min-width: 1350px !important;
 }
 a, a:hover, a:focus {
-    color: #333333 !important;
-    text-decoration: none !important;
+    color: #333333;
+    text-decoration: none;
 }
 
 /** recover bootstrap styles for links inside toastmessage dialgue */
 .toast-container a,
 .alert a {
     color: #0088cc;
-    text-decoration: none !important;
+    text-decoration: none;
 }
 
     .toast-container a:hover,
@@ -51,14 +51,10 @@ a, a:hover, a:focus {
     color: #0088cc;
     text-decoration: none;
 }
-.textwhite {
-    color: #ffffff;
-    font-weight: bold;
-}
 
-    .textred td a {
-        color: red !important;
-    }
+.textred td a {
+    color: red !important;
+}
 
 .textgreen {
     color: #0ca759 !important;
