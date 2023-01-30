@@ -289,6 +289,7 @@ Module DH_Helpdesk_Mail
         Dim sNewCaseToEmailAddress As String = ""
         Dim sSubject As String
         Dim sBodyText As String = ""
+        Dim sBodyTextToHtml As String = ""
         'Dim j As Integer
         Dim iLog_Id As Integer
         Dim iCaseNumber As Integer
@@ -422,20 +423,6 @@ Module DH_Helpdesk_Mail
                                 End Try
                             Next
 
-
-                            'Dim task As Task(Of List(Of MailMessage)) = ReadEwsFolderAsync(objCustomer, objCustomer.POP3Server,
-                            '                                                          objCustomer.POP3Port,
-                            '                                                          objCustomer.POP3UserName,
-                            '                                                          objCustomer.EMailFolder,
-                            '                                                          objCustomer.EMailFolderArchive,
-                            '                                                          objCustomer.EwsApplicationId,
-                            '                                                          objCustomer.EwsClientSecret,
-                            '                                                          objCustomer.EwsTenantId,
-                            '                                                          objCustomer.PhysicalFilePath)
-
-                            'task.Wait()
-
-                            'mails = task.Result
                             iListCount = mails.Count()
                         Else
                             eMailConnectionType = MailConnectionType.Imap
@@ -461,24 +448,6 @@ Module DH_Helpdesk_Mail
                             End If
 
 
-
-                            'If objCustomer.MailServerProtocol = 0 Then
-                            '    ' Inget stöd för POP3 längre
-
-                            'ElseIf objCustomer.MailServerProtocol = 1 Then
-                            '    IMAPclient = New Imap()
-
-                            '    If objCustomer.POP3DebugLevel > 0 Then
-                            '        objLogFile.WriteLine(Now() & ", Connecting to " & objCustomer.POP3Server & ":" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName)
-                            '    End If
-
-                            '    If objCustomer.POP3Port = 993 Then
-                            '        IMAPclient.Connect(objCustomer.POP3Server.ToString(), objCustomer.POP3Port, Nothing, ImapSecurity.Implicit)
-                            '    Else
-                            '        IMAPclient.Connect(objCustomer.POP3Server, objCustomer.POP3Port)
-                            '    End If
-
-                            'End If
 
                             If IsNullOrEmpty(objCustomer.POP3UserName) Or IsNullOrEmpty(objCustomer.POP3Password) Then
                                 LogError("Missing UserName Or Password", objCustomer)
@@ -705,6 +674,7 @@ Module DH_Helpdesk_Mail
                                 ElseIf message.HasBodyHtml = True Then
                                     sBodyText = getInnerHtml(message.BodyHtml)
                                     sBodyText = CleanStyles(sBodyText)
+                                    sBodyTextToHtml = CleanStyles(sBodyText)
                                     sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp", sBodyText)
                                     isHtml = True
                                 End If
@@ -841,7 +811,7 @@ Module DH_Helpdesk_Mail
                                     LogToFile("Create Case:" & objCase.Casenumber & ", Attachments:" & message.Attachments.Count, iPop3DebugLevel)
 
                                     'Save 
-                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber, sBodyText)
+                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber, sBodyTextToHtml)
                                     Dim sPDFFileName As String = CreatePdfFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
 
                                     If Not IsNullOrEmpty(sPDFFileName) Then
@@ -1129,7 +1099,7 @@ Module DH_Helpdesk_Mail
                                     Dim logSubFolderPrefix = If(bIsInternalLogFile, "LL", "L") ' LL - Internal log subfolder, L - external log subfolder
 
                                     'Creating htmlfile to use for pdf-creating
-                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber, "")
+                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber, message.BodyHtml)
                                     Dim sPDFFileName As String = CreatePdfFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
 
                                     If Not IsNullOrEmpty(sPDFFileName) Then
