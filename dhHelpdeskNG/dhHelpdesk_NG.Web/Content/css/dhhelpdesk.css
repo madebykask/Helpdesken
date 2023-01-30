@@ -5,15 +5,15 @@ body {
     min-width: 1350px !important;
 }
 a, a:hover, a:focus {
-    color: #333333;
-    text-decoration: none;
+    color: #333333 !important;
+    text-decoration: none !important;
 }
 
 /** recover bootstrap styles for links inside toastmessage dialgue */
 .toast-container a,
 .alert a {
     color: #0088cc;
-    text-decoration: none;
+    text-decoration: none !important;
 }
 
     .toast-container a:hover,
@@ -33,6 +33,7 @@ a, a:hover, a:focus {
     *background-repeat: repeat-x;
     *filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffe6e6e6',GradientType=0);
     *border: 1px solid #cccccc;
+    text-decoration: none !important;
 }
 
 /********************TEXT WEIGHT AND COLORS************************************************/
