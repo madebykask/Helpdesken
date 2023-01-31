@@ -673,8 +673,7 @@ Module DH_Helpdesk_Mail
                                     sBodyText = Replace(message.BodyText.ToString(), Chr(10), vbCrLf, 1, -1, CompareMethod.Text)
                                 ElseIf message.HasBodyHtml = True Then
                                     sBodyText = getInnerHtml(message.BodyHtml)
-                                    sBodyText = CleanStyles(sBodyText)
-                                    'sBodyTextToHtml = CleanStyles(sBodyText)
+                                    'sBodyText = CleanStyles(sBodyText)
                                     sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp", sBodyText)
                                     isHtml = True
                                 End If
