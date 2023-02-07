@@ -2701,8 +2701,14 @@ Module DH_Helpdesk_Mail
             newWidth = originalImage.Width
         End If
 
+        'Hängslen och byxor
+        If newHeight = 0 Then
+            newHeight = 1
+        End If
 
-
+        If newWidth = 0 Then
+            newWidth = 1
+        End If
         ' Create a new Bitmap object with the new width and height
         Dim newImage As New Bitmap(originalImage, newWidth, newHeight)
 
