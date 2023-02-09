@@ -60,16 +60,6 @@ Module DH_Helpdesk_Mail
 
     Public Sub Main()
 
-        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a case123456 that is created 220101", "Case#")
-        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a case that is created 220101", "Case#")
-        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a case 220101 dfgldsfg", "Case #")
-        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a case 220101", "Case#")
-        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a case", "Case#")
-        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a 220101", "Case#")
-        'Dim iCaseNumber As Integer = extractCaseNumberFromSubject("Need help with a Ärende:12345 that is created 220101", "Ärende: #")
-
-
-
         Dim secureConnectionString As String = GetAppSettingValue("SecureConnectionString")
         If (Not IsNullOrEmpty(secureConnectionString) AndAlso secureConnectionString.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase)) Then
             Dim fileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location)
@@ -121,31 +111,7 @@ Module DH_Helpdesk_Mail
 
 #End Region
 
-        'NOTE: USE Command Line Arguements in Project Properties under Debug tab instead of hardcoding values
-        '      Example: 5,Data Source=DHUTVSQL2; Initial Catalog=DH_Support; User Id=sa; Password=;Network Library=dbmssocn;,,,,1
 
-        'msDeniedHtmlBodyString = GetConfigVal("DeniedHtmlBodyString").ToString()
-
-        'ReDim aArguments(2)
-        'aArguments(0) = "5"
-        'aArguments(1) = "Data Source=ITSEELM-NT2014.ikea.com; Initial Catalog=ITSQL0099; User Id=dhsschr; Password=dhsschr321!;Network Library=dbmssocn"
-
-        'aArguments(1) = "Data Source=IK2T4021.wmikea.com; Initial Catalog=CHSBTPRE; User Id=IKEARetail_DH_Helpdesk; Password=kgk270;Network Library=dbmssocn"
-
-        'aArguments(1) = "Data Source=Ik2p4042.wmikea.com; Initial Catalog=CHSBT; User Id=CHSBT_appl_user; Password=Sperl25#;Network Library=dbmssocn"
-
-        'aArguments(1) = "Data Source=10.230.6.81; Initial Catalog=PTSQL0036; User Id=DHBSCHR; Password=dhbschr123;Network Library=dbmssocn"
-        'aArguments(1) = "Data Source=PPSEELM-NT2002.ikeadt.com; Initial Catalog=PPSQL0049; User Id=DBA_PPECHS; Password=Ikea!6712;Network Library=dbmssocn"
-        'aArguments(1) = "Data Source=DHWEBSQL1; Initial Catalog=DH_Helpdesk; User Id=sa; Password=sa4semlor;Network Library=dbmssocn;"
-        'aArguments(1) = "Data Source=ITSEELM-NT2017.ikea.com; Initial Catalog=DHSEHR; User Id=dhsehr; Password=chs456;Network Library=dbmssocn"
-        'aArguments(1) = "Data Source=ITSEELM-NT2014.ikea.com; Initial Catalog=ITSQL0098;User Id=dhsefm; Password=dhsefm321!;Network Library=dbmssocn"
-        'aArguments(1) = "Data Source=ITSEELM-NT2014.ikea.com; Initial Catalog=ITSQL0112; User Id=dhbscfin; Password=dhbscfin321!;Network Library=dbmssocn"
-        'aArguments(1) = "Data Source=DHUTVSQL2; Initial Catalog=DH_Support; User Id=sa; Password=;Network Library=dbmssocn;"
-        'aArguments(1) = "Data Source=PTPSEELM-NT2008.ikeadt.com;Initial Catalog=PTSQL0036;User Id=DBA_PTECHS;Password=Ikea!6712;Network Library=dbmssocn"
-        'aArguments(1) = "Data Source=DHUTVSQL3; Initial Catalog=dhHelpdeskNG_Test_Preconal; User Id=dhHelpdesk_Test_Preconal; Password=kgk277;Network Library=dbmssocn;"
-        'aArguments(2) = "c:\temp"
-        'aArguments(3) = "datahalland"
-        'aArguments(4) = ";"
         If aArguments IsNot Nothing Then
             If (aArguments.Length > 0) Then
                 workingModeArg = GetCmdArg(aArguments, 0, workingModeArg)
@@ -216,7 +182,7 @@ Module DH_Helpdesk_Mail
                     Next
                 End If
             Catch ex As Exception
-
+                LogError(ex.ToString(), Nothing)
             End Try
 
         End Try
@@ -673,8 +639,13 @@ Module DH_Helpdesk_Mail
                                     sBodyText = Replace(message.BodyText.ToString(), Chr(10), vbCrLf, 1, -1, CompareMethod.Text)
                                 ElseIf message.HasBodyHtml = True Then
                                     sBodyText = getInnerHtml(message.BodyHtml)
-                                    sBodyText = CleanStyles(sBodyText)
-                                    sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp", sBodyText)
+                                    Try
+                                        sBodyText = CleanStyles(sBodyText)
+                                        sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp", sBodyText)
+                                    Catch ex As Exception
+                                        LogError(ex.ToString(), Nothing)
+                                    End Try
+
                                     isHtml = True
                                 End If
 
@@ -810,8 +781,15 @@ Module DH_Helpdesk_Mail
                                     LogToFile("Create Case:" & objCase.Casenumber & ", Attachments:" & message.Attachments.Count, iPop3DebugLevel)
 
                                     'Save 
-                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber, "")
-                                    Dim sPDFFileName As String = CreatePdfFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
+                                    Dim sHTMLFileName As String = ""
+                                    Dim sPDFFileName As String = ""
+                                    Try
+                                        sHTMLFileName = CreateHtmlFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber, "")
+                                        sPDFFileName = CreatePdfFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
+                                    Catch ex As Exception
+                                        LogError(ex.InnerException.Message, Nothing)
+                                    End Try
+
 
                                     If Not IsNullOrEmpty(sPDFFileName) Then
                                         iHTMLFile = 1
@@ -1103,8 +1081,15 @@ Module DH_Helpdesk_Mail
                                     Dim logSubFolderPrefix = If(bIsInternalLogFile, "LL", "L") ' LL - Internal log subfolder, L - external log subfolder
 
                                     'Creating htmlfile to use for pdf-creating
-                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber, "")
-                                    Dim sPDFFileName As String = CreatePdfFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
+                                    Dim sHTMLFileName As String = ""
+                                    Dim sPDFFileName As String = ""
+                                    Try
+                                        sHTMLFileName = CreateHtmlFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber, "")
+                                        sPDFFileName = CreatePdfFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
+                                    Catch ex As Exception
+                                        LogError(ex.InnerException.Message, Nothing)
+                                    End Try
+
 
                                     If Not IsNullOrEmpty(sPDFFileName) Then
                                         iHTMLFile = 1
@@ -2209,7 +2194,7 @@ Module DH_Helpdesk_Mail
                 Try
                     Directory.Delete(sub_folder_path, also_delete_sub_folders)
                 Catch ex As Exception
-
+                    LogError(ex.Message.ToString, Nothing)
                 End Try
 
             Next
@@ -2217,7 +2202,7 @@ Module DH_Helpdesk_Mail
             Try
                 Directory.Delete(target_folder_path, also_delete_sub_folders)
             Catch ex As Exception
-
+                LogError(ex.Message.ToString, Nothing)
             End Try
         End If
 
@@ -2614,7 +2599,7 @@ Module DH_Helpdesk_Mail
                 End Try
             End If
         Catch ex As Exception
-
+            LogError(ex.Message.ToString, Nothing)
         End Try
 
 
