@@ -821,14 +821,9 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
-                                        Try
-                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html", True)
-                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
 
-                                        Catch ex As Exception
-                                            LogError(ex.InnerException.Message, Nothing)
-                                        End Try
-
+                                        DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html", True)
+                                        DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
 
                                     End If
 
@@ -1114,13 +1109,9 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
-                                        Try
-                                            DeleteFilesInsideFolder(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html", True)
-                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
-                                        Catch ex As Exception
-                                            LogError(ex.InnerException.Message, Nothing)
-                                        End Try
 
+                                        DeleteFilesInsideFolder(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html", True)
+                                        DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
                                     End If
 
 
@@ -2193,7 +2184,7 @@ Module DH_Helpdesk_Mail
             Try
                 File.Delete(file_path)
             Catch ex As Exception
-                LogError(ex.Message.ToString, Nothing)
+
             End Try
 
         Next
