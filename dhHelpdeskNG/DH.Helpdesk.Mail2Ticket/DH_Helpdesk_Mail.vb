@@ -669,13 +669,28 @@ Module DH_Helpdesk_Mail
 
                                 objComputerUser = objComputerUserData.getComputerUserByEMail(sFromEMailAddress, objCustomer.Id)
 
-                                If message.HasBodyText = True Then
-                                    sBodyText = Replace(message.BodyText.ToString(), Chr(10), vbCrLf, 1, -1, CompareMethod.Text)
-                                ElseIf message.HasBodyHtml = True Then
+                                If message.HasBodyHtml = True Then
+                                    LogToFile("HasBodyHtml ", 1)
                                     sBodyText = getInnerHtml(message.BodyHtml)
-                                    sBodyText = CleanStyles(sBodyText)
-                                    sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp", sBodyText)
+                                    Try
+                                        sBodyText = CleanStyles(sBodyText)
+                                    Catch ex As Exception
+                                        LogError("Error Cleanstyles " & ex.ToString(), Nothing)
+                                    End Try
+                                    Try
+
+                                        sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp\", sBodyText)
+                                    Catch ex As Exception
+                                        LogError("Error CreateBase64Images " & ex.ToString(), Nothing)
+                                    End Try
+
                                     isHtml = True
+                                End If
+
+                                If message.HasBodyText = True And message.HasBodyHtml = False Then
+                                    LogToFile("HasBodyText only", 1)
+                                    sBodyText = Replace(message.BodyText.ToString(), Chr(10), vbCrLf, 1, -1, CompareMethod.Text)
+
                                 End If
 
                                 '//hämta användare baserat på userid/reportedBy
