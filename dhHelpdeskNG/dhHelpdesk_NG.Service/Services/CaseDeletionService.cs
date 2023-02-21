@@ -58,6 +58,7 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Dal.NewInfrastructure.Concrete;
     using LinqLib.Operators;
     using System.Text;
+    using System.Data.SqlClient;
 
     public class DeletionStatus
     {
@@ -129,7 +130,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     _filesStorage.DeleteFilesInFolders(caseList, caseFiles, logFiles, basePath);
                 }
-
+                
                 deletionCompleted = true;
 
                 return new DeletionStatus
@@ -140,8 +141,19 @@ namespace DH.Helpdesk.Services.Services
                     CaseNumbersToExclude = caseNumbersToExclude
                 };
             }
+
             catch (Exception ex)
             {
+                if (ex is SqlException)
+                {
+                    var sqlEx = ex as SqlException;
+                    if (sqlEx.Number == -2)
+                    {
+                        //Timeout exception
+                        throw;
+                    }
+                }
+
                 return new DeletionStatus
                 {
                     DeletionCompleted = deletionCompleted,
