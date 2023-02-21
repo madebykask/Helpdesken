@@ -343,11 +343,11 @@ Model.EnableTwoAttachments))
 
                         @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription) && !readonlyMode)
                         {
-                            @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "300", style = "min-width: 460px; min-height: 100px;" })
+                            @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "200", style = "min-width: 460px; min-height: 100px;" })
                         }
                         else
                         {
-                            @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "300", style="min-width: 460px; min-height: 100px;" })
+                            @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "200", style="min-width: 460px; min-height: 100px;" })
                         }
                     </td>
                 </tr>
