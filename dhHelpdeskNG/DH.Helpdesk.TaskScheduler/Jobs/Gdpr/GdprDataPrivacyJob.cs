@@ -68,7 +68,7 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
                 try
                 {
                     _log.Debug($"Executing data privacy operation. TaskId: {taskId}");
-                    _dataPrivacyProcessor.Process(taskInfo.CustomerId, taskInfo.UserId, parameters, _settings.GDPRBatchSize);
+                    _dataPrivacyProcessor.Process(taskInfo.CustomerId, taskInfo.UserId, parameters, _settings.GDPRBatchSize, _settings.GDPRDeletionTimeoutSeconds);
                     _log.Debug($"Data privacy operation has completed successfully. TaskId: {taskId})");
                 }
                 catch (Exception e)
