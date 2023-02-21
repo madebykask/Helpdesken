@@ -107,7 +107,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             {
                 return input;
             }
-            
+            input = input.Replace("\r\n", "<br />").Replace("\n\r", "<br />");
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(input);
 
