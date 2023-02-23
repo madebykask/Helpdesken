@@ -80,6 +80,7 @@ namespace DH.Helpdesk.Dal.Repositories
         Case GetCaseQuickOpen(UserOverview user, Expression<Func<Case, bool>> casePermissionFilter, string searchFor);
         int GetCaseCustomerId(int caseId);
         List<Case> GetCasesByCaseIds(int[] caseIds);
+        IList<Case> GetCustomerCasesForWebpart(int customerId);
     }
 
     public class CaseRepository : RepositoryBase<Case>, ICaseRepository
@@ -164,6 +165,12 @@ namespace DH.Helpdesk.Dal.Repositories
         public IList<Case> GetProjectCases(int customerId, int projectId)
         {
             var cases = this.DataContext.Cases.Where(c => c.Customer_Id == customerId && c.Project_Id == projectId).ToList();
+            return cases;
+        }
+
+        public IList<Case> GetCustomerCasesForWebpart(int customerId)
+        {
+            var cases = this.DataContext.Cases.Where(c => c.Customer_Id == customerId).ToList();
             return cases;
         }
 

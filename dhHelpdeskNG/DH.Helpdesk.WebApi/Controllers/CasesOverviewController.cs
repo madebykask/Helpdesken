@@ -27,6 +27,11 @@ using DH.Helpdesk.WebApi.Models.Output;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Services.Utils;
 using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.WebApi.Models;
+using Microsoft.IdentityModel.Protocols;
+using System.Configuration;
+using System.Runtime.InteropServices.WindowsRuntime;
+using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -88,7 +93,46 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             return res;
         }
+        /// <summary>
+        /// Method to get all cases for a specific user customer.
+        /// </summary>
+        /// <param name="cid"></param>
+        /// <param name="customerEmail"></param>
+        /// <param name="secretKey"></param>
+        /// <returns></returns>
+       
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("webpart")]
+        public CaseOverviewWebpartModel GetCasesToSharepoint(int cid, string customerEmail, string secretKey)
+        {
+            //int cid, string customerEmail, string secretKey
 
+            try
+            {
+                var secretAppKey = ConfigurationManager.AppSettings["SharePointSecretKey"];
+                User user = _userSerivice.GetUserByEmail(customerEmail);
+                if (user != null && secretKey == secretAppKey)
+                {
+                    var columns = _caseSettingService.GetCaseSettings(cid, user.Id);
+                    var cases = _caseService.GetCustomerCasesForWebpart(1);
+                    var model = new CaseOverviewWebpartModel(cases, columns);
+                    return model;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            
+
+        }
+           
         /// <summary>
         /// List of filtered cases.
         /// Contains data only for case overview.
@@ -100,6 +144,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         public async Task<SearchResult<CaseSearchResult>> Search([FromBody]SearchOverviewFilterInputModel input, int? cid = null)
         {
 			SearchResult<CaseSearchResult> searchResult = null;
+            
 			if (input.CustomersIds.Count == 1) // TODO: fix? 
 			{
 				var userGroupId = User.Identity.GetGroupId();

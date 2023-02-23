@@ -171,5 +171,6 @@ namespace DH.Helpdesk.Services.Services
         Task<Case> GetDetachedCaseByIdAsync(int id);
         void HandleSendMailAboutCaseToPerformer(CustomerUserInfo performerUser, int currentUserId, CaseLog caseLog);
         void SendMergedCaseEmail(Case mergedCase, Case mergeParent, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, IList<string> ccEmailList);
+        IList<Case> GetCustomerCasesForWebpart(int customerId);
     }
 }
