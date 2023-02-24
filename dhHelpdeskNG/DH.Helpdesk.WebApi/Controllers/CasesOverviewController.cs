@@ -104,19 +104,19 @@ namespace DH.Helpdesk.WebApi.Controllers
         [HttpGet]
         [AllowAnonymous]
         [Route("webpart")]
-        public CaseOverviewWebpartModel GetCasesToSharepoint(int cid, string customerEmail, string secretKey)
+        public CaseOverviewWebpartModel GetCasesToSharepoint(int cid, string customerEmail, string secretKey, int rowCount)
         {
-            //int cid, string customerEmail, string secretKey
-
+            
             try
             {
                 var secretAppKey = ConfigurationManager.AppSettings["SharePointSecretKey"];
-                User user = _userSerivice.GetUserByEmail(customerEmail);
+                User user = _userSerivice.GetUserByEmail("katarina.ask@dhsolutions.se");
                 if (user != null && secretKey == secretAppKey)
                 {
-                    var columns = _caseSettingService.GetCaseSettings(cid, user.Id);
-                    var cases = _caseService.GetCustomerCasesForWebpart(1);
-                    var model = new CaseOverviewWebpartModel(cases, columns);
+                    //var columns = _caseSettingService.GetCaseSettings(cid, user.Id);
+                    //Todo - Kolla med TAN om bara MyCases ska visas
+                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(true, user.Id, cid, "", ((0) * (0)), (rowCount), null, false);
+                    var model = new CaseOverviewWebpartModel(customerCases  );
                     return model;
                 }
                 else
