@@ -109,8 +109,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         [Route("webpart")]
         public CaseOverviewWebpartModel GetCasesToSharepoint(string customerEmail, int rowCount = 10)
         {
-            string[]  customerIdForWebpart = ConfigurationManager.AppSettings["ExpectedCustomerIds"].Split(',');
-            int[] customerIdForWebpartInt = new int[customerIdForWebpart.Length];
+            string[]  customerIdForWebpart = ConfigurationManager.AppSettings["ExpectedSharePointCustomerIds"].Split(',');
             try
             {
                 User user = _userSerivice.GetUserByEmail(customerEmail);
