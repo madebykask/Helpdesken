@@ -32,6 +32,7 @@ using Microsoft.IdentityModel.Protocols;
 using System.Configuration;
 using System.Runtime.InteropServices.WindowsRuntime;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
+using System.Web.Http.Description;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -103,20 +104,20 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <returns></returns>
 
         [HttpGet]
-        [AllowAnonymous]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [SecretKeyHeader]
         [Route("webpart")]
-        public CaseOverviewWebpartModel GetCasesToSharepoint(int cid, string customerEmail, string secretKey, int rowCount)
+        public CaseOverviewWebpartModel GetCasesToSharepoint(string customerEmail, int rowCount = 10)
         {
-            
+            string[]  customerIdForWebpart = ConfigurationManager.AppSettings["ExpectedCustomerIds"].Split(',');
+            int[] customerIdForWebpartInt = new int[customerIdForWebpart.Length];
             try
             {
-                var secretAppKey = ConfigurationManager.AppSettings["SharePointSecretKey"];
                 User user = _userSerivice.GetUserByEmail(customerEmail);
-                if (user != null && secretKey == secretAppKey)
+                //
+                if (user != null && customerIdForWebpart.Contains(user.Customer_Id.ToString()))
                 {
-                    //var columns = _caseSettingService.GetCaseSettings(cid, user.Id);
-                    //Todo - Kolla med TAN om bara MyCases ska visas
-                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(false, user.Id, cid, "", ((0) * (0)), (rowCount), "CaseNumber", false);
+                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(false, user.Id, user.Customer_Id, "", ((0) * (0)), (rowCount), "CaseNumber", false);
                     var model = new CaseOverviewWebpartModel(customerCases  );
                     return model;
                 }

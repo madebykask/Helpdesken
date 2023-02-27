@@ -50,7 +50,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Filters
         {
             var res = base.IgnoreRequest(actionContext);
 
-            if (res || CheckAttribute<SkipCustomerAuthorization>(actionContext))
+            if (res || CheckAttribute<SkipCustomerAuthorization>(actionContext) || CheckAttribute<SecretKeyHeaderAttribute>(actionContext))
                 return true;
 
             return false;
