@@ -97,9 +97,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <summary>
         /// Method to get all cases for a specific user customer.
         /// </summary>
-        /// <param name="cid"></param>
         /// <param name="customerEmail"></param>
-        /// <param name="secretKey"></param>
         /// <param name="rowCount"></param>
         /// <returns></returns>
 
