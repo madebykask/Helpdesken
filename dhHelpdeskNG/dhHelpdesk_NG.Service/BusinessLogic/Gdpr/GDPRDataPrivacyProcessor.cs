@@ -32,7 +32,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 {
     public interface IGDPRDataPrivacyProcessor
     {
-        void Process(int customerId, int userId, DataPrivacyParameters p, int batchSize);
+        void Process(int customerId, int userId, DataPrivacyParameters p, int batchSize, int jobTimeout);
     }
 
     public class GDPRDataPrivacyProcessor : IGDPRDataPrivacyProcessor
@@ -119,7 +119,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 
         #endregion
 
-        public void Process(int customerId, int userId, DataPrivacyParameters p, int batchSize)
+        public void Process(int customerId, int userId, DataPrivacyParameters p, int batchSize, int jobTimeout)
         {
             var processedCasesIds = new List<int>();
             var processedCaseNumbers = new List<decimal>();
@@ -193,7 +193,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                                     if (caseId != null)
                                     {
 
-                                        deletionStatus = _caseDeletionService.DeleteCases(caseId, customerId, null);
+                                        deletionStatus = _caseDeletionService.DeleteCases(caseId, customerId, null, jobTimeout);
                                         errorMessage += string.IsNullOrEmpty(deletionStatus.ErrorMessage) ? String.Empty : deletionStatus.ErrorMessage + "//";
                                         batchErrorMessage += string.IsNullOrEmpty(deletionStatus.ErrorMessage) ? String.Empty : deletionStatus.ErrorMessage + "//";
                                         batchCaseNumbersToExclude.AddRange(deletionStatus.CaseNumbersToExclude);
