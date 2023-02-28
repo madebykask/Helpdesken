@@ -46,6 +46,7 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
             if (jobDataMap.ContainsKey(DataMapKey))
             {
                 var taskId = Convert.ToInt32(jobDataMap[DataMapKey]);
+                Program.ProcessedTaskId = taskId;
                 var taskInfo = _gdprTasksService.GetById(taskId);
 
                 _log.Debug($"Starting data privacy job. TaskId: {taskId}");
