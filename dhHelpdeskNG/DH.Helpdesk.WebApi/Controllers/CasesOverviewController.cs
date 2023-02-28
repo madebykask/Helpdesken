@@ -99,9 +99,8 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <param name="cid"></param>
         /// <param name="customerEmail"></param>
         /// <param name="secretKey"></param>
-        /// <param name="rowCount"></param>
         /// <returns></returns>
-
+       
         [HttpGet]
         [AllowAnonymous]
         [Route("webpart")]
@@ -116,7 +115,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     //var columns = _caseSettingService.GetCaseSettings(cid, user.Id);
                     //Todo - Kolla med TAN om bara MyCases ska visas
-                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(false, user.Id, cid, "", ((0) * (0)), (rowCount), "CaseNumber", false);
+                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(true, user.Id, cid, "", ((0) * (0)), (rowCount), null, false);
                     var model = new CaseOverviewWebpartModel(customerCases  );
                     return model;
                 }
