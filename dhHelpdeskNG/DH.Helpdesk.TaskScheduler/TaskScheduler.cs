@@ -46,7 +46,7 @@ namespace DH.Helpdesk.TaskScheduler
             _logger.InfoFormat("Starting service {0}", ServiceName);
 
             //Debugger.Launch();
-
+            
             var initializers = _diContainer.GetAll<IJobInitializer>();
             foreach (var initializer in initializers)
             {
@@ -57,12 +57,12 @@ namespace DH.Helpdesk.TaskScheduler
                 _sched.Start();
                 
         }
-
+        
         protected override void OnStop()
         {
             try
             {
-                _sched?.Shutdown();
+                _sched.Shutdown();
                 _logger.Debug($"Stopping data privacy job.");
                 if (Program.ProcessedTaskId > 0)
                 {
@@ -80,7 +80,7 @@ namespace DH.Helpdesk.TaskScheduler
 
                         _logger.Debug($"Data privacy job for taskId: {Program.ProcessedTaskId} has been stopped before finishing");
                         _gdprTasksService.UpdateTask(taskInfo);
-                        Environment.Exit(0);                        
+                        Environment.Exit(1);
                     }
                 }
             }
