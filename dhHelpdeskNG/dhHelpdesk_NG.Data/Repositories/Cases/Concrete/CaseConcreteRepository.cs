@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     {
         private readonly string _connectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
 
-        public bool DeleteCases(List<int> caseIds, int jobTimeout = 0)
+        public bool DeleteCases(List<int> caseIds)
         {
             bool ret = false;
 
@@ -55,10 +55,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                         param.TypeName = "dbo.IdsList";
                         //param.Direction = ParameterDirection.Output;
                         command.CommandText = "sp_DeleteCases";
-                        if (jobTimeout > 0)
-                        {
-                            command.CommandTimeout = jobTimeout;
-                        }
+                        command.CommandTimeout = 180;
                         try
                         {
                             //var result = command.BeginExecuteNonQuery(null, command);

@@ -7,7 +7,6 @@ namespace DH.Helpdesk.TaskScheduler.Infrastructure.Configuration
     {
         bool IsGDPRTasksEnabled { get; }
         int GDPRBatchSize { get; }
-        int GDPRDeletionTimeoutSeconds { get; }
     }
 
     internal interface IApplicationSettings  : IGDPRJobSettings
@@ -76,17 +75,7 @@ namespace DH.Helpdesk.TaskScheduler.Infrastructure.Configuration
                 var batchSize = GetInt32(val);
                 return batchSize > 0 ? batchSize : 5000;    
             }
-        }        
-        
-        public int GDPRDeletionTimeoutSeconds
-        {
-            get
-            {
-                var val = Config.AppSettings.Settings["GDPRDeletionTimeoutSeconds"]?.Value;
-                return GetInt32(val);
-            }
         }
-        
 
         #endregion
 

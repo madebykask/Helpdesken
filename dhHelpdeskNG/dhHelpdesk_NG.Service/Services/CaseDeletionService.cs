@@ -101,7 +101,7 @@ namespace DH.Helpdesk.Services.Services
             _masterDataService = masterDataService;
         }
 
-        public DeletionStatus DeleteCases(List<int> ids, int customerId, int? parentCaseId, int jobTimeout)
+        public DeletionStatus DeleteCases(List<int> ids, int customerId, int? parentCaseId)
         {
             var deletionCompleted = false;
             List<Case> caseList = null;
@@ -126,7 +126,7 @@ namespace DH.Helpdesk.Services.Services
                 //    }
                 //}
 
-                if (caseConcreteRepository.DeleteCases(ids, jobTimeout))
+                if (caseConcreteRepository.DeleteCases(ids))
                 {
                     _filesStorage.DeleteFilesInFolders(caseList, caseFiles, logFiles, basePath);
                 }

@@ -18,7 +18,6 @@
     <add key="InitiatorImport" value="#{UseInitiatorImport}" />
     <add key="GDPRTasks" value="#{UseGDPRTasks}" />
     <add key="GDPRBatchSize" value="#{GDPRBatchSize}" />
-	<add key="GDPRDeletionTimeoutSeconds" value="#{GDPRDeletionTimeout}"/>
   </appSettings>
   <connectionStrings>
     <!-- Dev -->

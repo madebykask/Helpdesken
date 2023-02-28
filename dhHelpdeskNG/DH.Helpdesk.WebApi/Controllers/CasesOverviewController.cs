@@ -32,7 +32,6 @@ using Microsoft.IdentityModel.Protocols;
 using System.Configuration;
 using System.Runtime.InteropServices.WindowsRuntime;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
-using System.Web.Http.Description;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -97,24 +96,26 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <summary>
         /// Method to get all cases for a specific user customer.
         /// </summary>
+        /// <param name="cid"></param>
         /// <param name="customerEmail"></param>
-        /// <param name="rowCount"></param>
+        /// <param name="secretKey"></param>
         /// <returns></returns>
-
+       
         [HttpGet]
-        [ApiExplorerSettings(IgnoreApi = true)]
-        [SecretKeyHeader]
+        [AllowAnonymous]
         [Route("webpart")]
-        public CaseOverviewWebpartModel GetCasesToSharepoint(string customerEmail, int rowCount = 10)
+        public CaseOverviewWebpartModel GetCasesToSharepoint(int cid, string customerEmail, string secretKey, int rowCount)
         {
-            string[]  customerIdForWebpart = ConfigurationManager.AppSettings["ExpectedSharePointCustomerIds"].Split(',');
+            
             try
             {
-                User user = _userSerivice.GetUserByEmail(customerEmail);
-                //
-                if (user != null && customerIdForWebpart.Contains(user.Customer_Id.ToString()))
+                var secretAppKey = ConfigurationManager.AppSettings["SharePointSecretKey"];
+                User user = _userSerivice.GetUserByEmail("katarina.ask@dhsolutions.se");
+                if (user != null && secretKey == secretAppKey)
                 {
-                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(false, user.Id, user.Customer_Id, "", ((0) * (0)), (rowCount), "CaseNumber", false);
+                    //var columns = _caseSettingService.GetCaseSettings(cid, user.Id);
+                    //Todo - Kolla med TAN om bara MyCases ska visas
+                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(true, user.Id, cid, "", ((0) * (0)), (rowCount), null, false);
                     var model = new CaseOverviewWebpartModel(customerCases  );
                     return model;
                 }
