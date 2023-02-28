@@ -24,7 +24,8 @@ namespace DH.Helpdesk.Web.Common.Extensions
         {
             if (string.IsNullOrEmpty(value))
                 return "";
-            return Regex.Replace(value, @"<[^>]*>", "").Replace("&nbsp;", "\u0020");
+
+            return Regex.Replace(value, @"<[^>]*>", "");
         }
 
         public static IEnumerable<String> SplitInParts(this String s, Int32 partLength)
