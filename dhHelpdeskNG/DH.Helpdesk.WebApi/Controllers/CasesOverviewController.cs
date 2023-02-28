@@ -111,7 +111,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             try
             {
                 var secretAppKey = ConfigurationManager.AppSettings["SharePointSecretKey"];
-                User user = _userSerivice.GetUserByEmail(customerEmail);
+                User user = _userSerivice.GetUserByEmail("katarina.ask@dhsolutions.se");
                 if (user != null && secretKey == secretAppKey)
                 {
                     //var columns = _caseSettingService.GetCaseSettings(cid, user.Id);
