@@ -93,45 +93,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             return res;
         }
-        /// <summary>
-        /// Method to get all cases for a specific user customer.
-        /// </summary>
-        /// <param name="cid"></param>
-        /// <param name="customerEmail"></param>
-        /// <param name="secretKey"></param>
-        /// <returns></returns>
        
-        //[HttpGet]
-        //[AllowAnonymous]
-        //[Route("webpart")]
-        //public CaseOverviewWebpartModel GetCasesToSharepoint(int cid, string customerEmail, string secretKey, int rowCount)
-        //{
-            
-        //    try
-        //    {
-        //        var secretAppKey = ConfigurationManager.AppSettings["SharePointSecretKey"];
-        //        User user = _userSerivice.GetUserByEmail("katarina.ask@dhsolutions.se");
-        //        if (user != null && secretKey == secretAppKey)
-        //        {
-        //            //var columns = _caseSettingService.GetCaseSettings(cid, user.Id);
-        //            //Todo - Kolla med TAN om bara MyCases ska visas
-        //            var customerCases = _caseSearchService.SearchActiveCustomerUserCases(true, user.Id, cid, "", ((0) * (0)), (rowCount), null, false);
-        //            var model = new CaseOverviewWebpartModel(customerCases  );
-        //            return model;
-        //        }
-        //        else
-        //        {
-        //            return null;
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return null;
-        //    }
-            
-
-        //}
            
         /// <summary>
         /// List of filtered cases.
