@@ -1229,6 +1229,7 @@ function CaseInitForm(opt) {
 
     $('#case__Priority_Id').change(function () {
 
+        
         var isInheritingMode = $('#CaseTemplate_ExternalLogNote').val();
         if (isInheritingMode === 'True') {
             $('#CaseTemplate_ExternalLogNote').val('');
@@ -1241,6 +1242,7 @@ function CaseInitForm(opt) {
 
         var textExternalLogNote = $('#CaseLog_TextExternal').html();
 
+  
         $.post('/Cases/ChangePriority/', { 'id': $(this).val(), 'textExternalLogNote': textExternalLogNote }, function (data) {
             const $txtExternal = $('#CaseLog_TextExternal');
             if (data.ExternalLogText != null && data.ExternalLogText !== '') {
@@ -1377,6 +1379,7 @@ function CaseInitForm(opt) {
 
     function addTextToLog(text) {
 
+        
         var txt = "<p>" + text.replace(/\n/g, "</p><p>").replace("/&/g", "&amp") + "</p>";
         var writeTextToExternalNote = $("#WriteTextToExternalNote").val();
         var field = "#CaseLog_TextInternal";
@@ -1384,7 +1387,7 @@ function CaseInitForm(opt) {
         if (writeTextToExternalNote == "") {
             field = "#CaseLog_TextExternal";
         }
-
+        
         if (txt.length > 1) {
             if ($($(field).summernote('code')).text() == "") {
                 $(field).html('');
@@ -1527,11 +1530,12 @@ function CaseInitForm(opt) {
 
     $('#AddFAQ').click(function (e) {
         e.preventDefault();
-
+  
         var question = $('#case__Caption').val();
         var answer = $('#CaseLog_TextExternal').summernote('code');
         var internalanswer = $('#CaseLog_TextInternal').summernote('code');
 
+  
         var win = window.open('/Faq/NewFAQPopup?question=' + question + '&answer=' + stripHtml(answer) + '&internalanswer=' + stripHtml(internalanswer), '_blank', 'left=100,top=100,width=700,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
     });
 

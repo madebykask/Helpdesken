@@ -12,10 +12,7 @@ export const environment = {
 };
 
 export const config = {
-    // apiUrl: 'http://dhutvas3.datahalland.se:8049',
-    //apiUrl: 'http://localhost:8049',
-    apiUrl: 'https://localhost:447/api',
-    //apiUrl: 'http://192.168.1.102:8049',
+    apiUrl: 'https://localhost:449/api',
     clientId: 'hd',
     version: '#{AssemblyInfo.ProductVersion}',
     internalVersion: '#{AssemblyInfo.FileVersion}',
@@ -24,7 +21,7 @@ export const config = {
     microsoftClientId: "f263307c-2182-44c0-9c28-1b8e88c00a7b",
     microsoftTenant: "a1f945cf-f91f-4b88-a250-a58e3dd50140",
     microsoftAuthority: "https://login.microsoftonline.com",
-    microsoftRedirectUri: "https://localhost:447/mobile/",
+    microsoftRedirectUri: "https://localhost:449/mobile/",
     microsoftDefaultAuthority : "https://login.microsoftonline.com/common/login"
 };
  

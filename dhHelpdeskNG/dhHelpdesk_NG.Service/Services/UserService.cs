@@ -196,6 +196,7 @@ namespace DH.Helpdesk.Services.Services
         bool VerifyUserCasePermissions(UserOverview user, int caseId);
         Expression<Func<Case, bool>> GetCasePermissionFilter(UserOverview user, int customerId);
         string GetUserEmail(int id);
+        User GetUserByEmail(string emailAddress);
     }
 
     public class UserService : IUserService
@@ -274,7 +275,10 @@ namespace DH.Helpdesk.Services.Services
         }
 #pragma warning restore 0618
 
-
+        public User GetUserByEmail(string emailAddress)
+        {
+            return this._userRepository.GetUserByEmail(emailAddress);
+        }
         public bool UserHasActiveCase(int customerId, int userId, List<int> workingGroups)
         {
             return _userRepository.UserHasActiveCase(customerId, userId, workingGroups);

@@ -77,13 +77,13 @@
                             </ul>
                         </li>
                         <li class="light-blue">
-                            <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                            <a data-toggle="dropdown" href="#" class="dropdown-toggle" id="drpUserAdmin">
                                 <i class="icon-user icon-white"></i>@SessionFacade.CurrentUser.FirstName @SessionFacade.CurrentUser.SurName
                                 <i class="icon-chevron-down icon-white"></i>
                             </a>
                             <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                                 <li>
-                                    <a href="javascript:Close_AdminWindow();">
+                                    <a href="javascript:Close_AdminWindow();" id="btnUserAdminClose">
                                         <i class="icon-off"></i>
                                         @Translation.Get("Stäng", Enums.TranslationSource.TextTranslation) @Translation.Get("Administration", Enums.TranslationSource.TextTranslation)
                                     </a>

@@ -52,49 +52,83 @@ IF COL_LENGTH('dbo.tblGDPRDataPrivacyFavorite','FinishedDateTo') IS NULL
 
 Go
 
-RAISERROR ('Add Foreign Key Customer_Id to tblRegistrationSourceCustomer', 10, 1) WITH NOWAIT
-IF (OBJECT_ID ('tblRegistrationSourceCustomer', 'U') IS NOT NULL)
-BEGIN
-	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblRegistrationSourceCustomer_tblCustomer]') 
-	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
-	BEGIN
-		ALTER TABLE [dbo].[tblRegistrationSourceCustomer] WITH CHECK ADD CONSTRAINT [FK_tblRegistrationSourceCustomer_tblCustomer] FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
-	END
-END
-GO
+--RAISERROR ('Add Foreign Key Customer_Id to tblRegistrationSourceCustomer', 10, 1) WITH NOWAIT
+--IF (OBJECT_ID ('tblRegistrationSourceCustomer', 'U') IS NOT NULL)
+--BEGIN
+--	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblRegistrationSourceCustomer_tblCustomer]') 
+--	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+--	BEGIN
+--		ALTER TABLE [dbo].[tblRegistrationSourceCustomer] WITH CHECK ADD CONSTRAINT [FK_tblRegistrationSourceCustomer_tblCustomer] FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
+--	END
+--END
+--GO
 
-RAISERROR ('Add Foreign Key Case_Id to tblMail2TicketCase', 10, 1) WITH NOWAIT
+RAISERROR ('Delete from tblMail2TicketCase where there no longer is a connected case', 10, 1) WITH NOWAIT
 IF (OBJECT_ID ('tblMail2TicketCase', 'U') IS NOT NULL)
 BEGIN
-	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblMail2TicketCase_tblCase]') 
-	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
-	BEGIN
-		ALTER TABLE [dbo].[tblMail2TicketCase] WITH CHECK ADD CONSTRAINT [FK_tblMail2TicketCase_tblCase] FOREIGN KEY([Case_Id]) REFERENCES [dbo].[tblCase] ([Id])
-	END
+	DELETE mtc
+	FROM [dbo].tblMail2TicketCase AS mtc
+	LEFT JOIN tblCase as c
+		on mtc.Case_Id = c.Id
+	WHERE c.Id IS NULL
 END
 GO
 
-RAISERROR ('Add Foreign Key Case_Id to tblLocalAdmin', 10, 1) WITH NOWAIT
+--RAISERROR ('Add Foreign Key Case_Id to tblMail2TicketCase', 10, 1) WITH NOWAIT
+--IF (OBJECT_ID ('tblMail2TicketCase', 'U') IS NOT NULL)
+--BEGIN
+--	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblMail2TicketCase_tblCase]') 
+--	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+--	BEGIN
+--		ALTER TABLE [dbo].[tblMail2TicketCase] WITH CHECK ADD CONSTRAINT [FK_tblMail2TicketCase_tblCase] FOREIGN KEY([Case_Id]) REFERENCES [dbo].[tblCase] ([Id])
+--	END
+--END
+--GO
+
+RAISERROR ('Delete from tblLocalAdmin where there no longer is a connected case', 10, 1) WITH NOWAIT
 IF (OBJECT_ID ('tblLocalAdmin', 'U') IS NOT NULL)
 BEGIN
-	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblLocalAdmin_tblCase]') 
-	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
-	BEGIN
-		ALTER TABLE [dbo].[tblLocalAdmin] WITH CHECK ADD CONSTRAINT [FK_tblLocalAdmin_tblCase] FOREIGN KEY([Case_Id]) REFERENCES [dbo].[tblCase] ([Id])
-	END
+	DELETE la
+	FROM [dbo].tblLocalAdmin AS la
+	LEFT JOIN tblCase as c
+		on la.Case_Id = c.Id
+	WHERE c.Id IS NULL
 END
 GO
 
-RAISERROR ('Add Foreign Key Case_Id to tblFormFieldValueHistory', 10, 1) WITH NOWAIT
+--RAISERROR ('Add Foreign Key Case_Id to tblLocalAdmin', 10, 1) WITH NOWAIT
+--IF (OBJECT_ID ('tblLocalAdmin', 'U') IS NOT NULL)
+--BEGIN
+--	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblLocalAdmin_tblCase]') 
+--	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+--	BEGIN
+--		ALTER TABLE [dbo].[tblLocalAdmin] WITH CHECK ADD CONSTRAINT [FK_tblLocalAdmin_tblCase] FOREIGN KEY([Case_Id]) REFERENCES [dbo].[tblCase] ([Id])
+--	END
+--END
+--GO
+
+
+RAISERROR ('Delete from tblFormFieldValueHistory where there no longer is a connected case', 10, 1) WITH NOWAIT
 IF (OBJECT_ID ('tblFormFieldValueHistory', 'U') IS NOT NULL)
 BEGIN
-	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblFormFieldValueHistory_tblCase]') 
-	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
-	BEGIN
-		ALTER TABLE [dbo].[tblFormFieldValueHistory] WITH CHECK ADD CONSTRAINT [FK_tblFormFieldValueHistory_tblCase] FOREIGN KEY([Case_Id]) REFERENCES [dbo].[tblCase] ([Id])
-	END
+	DELETE fvh
+	FROM [dbo].[tblFormFieldValueHistory] AS fvh
+	LEFT JOIN tblCase as c
+		on fvh.Case_Id = c.Id
+	WHERE c.Id IS NULL
 END
 GO
+
+--RAISERROR ('Add Foreign Key Case_Id to tblFormFieldValueHistory', 10, 1) WITH NOWAIT
+--IF (OBJECT_ID ('tblFormFieldValueHistory', 'U') IS NOT NULL)
+--BEGIN
+--	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblFormFieldValueHistory_tblCase]') 
+--	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+--	BEGIN
+--		ALTER TABLE [dbo].[tblFormFieldValueHistory] WITH CHECK ADD CONSTRAINT [FK_tblFormFieldValueHistory_tblCase] FOREIGN KEY([Case_Id]) REFERENCES [dbo].[tblCase] ([Id])
+--	END
+--END
+--GO
 
 RAISERROR ('Delete from tblCaseStatistics where there no longer is a connected case', 10, 1) WITH NOWAIT
 IF (OBJECT_ID ('tblCaseStatistics', 'U') IS NOT NULL)
@@ -108,38 +142,38 @@ END
 GO
 
 
-RAISERROR ('Add Foreign Key Case_Id to tblCaseStatistics', 10, 1) WITH NOWAIT
-IF (OBJECT_ID ('tblCaseStatistics', 'U') IS NOT NULL)
-BEGIN
-	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblCaseStatistics_tblCase]') 
-	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
-	BEGIN
-		ALTER TABLE [dbo].[tblCaseStatistics] WITH CHECK ADD CONSTRAINT [FK_tblCaseStatistics_tblCase] FOREIGN KEY([Case_Id]) REFERENCES [dbo].[tblCase] ([Id])
-	END
-END
-GO
+--RAISERROR ('Add Foreign Key Case_Id to tblCaseStatistics', 10, 1) WITH NOWAIT
+--IF (OBJECT_ID ('tblCaseStatistics', 'U') IS NOT NULL)
+--BEGIN
+--	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblCaseStatistics_tblCase]') 
+--	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+--	BEGIN
+--		ALTER TABLE [dbo].[tblCaseStatistics] WITH CHECK ADD CONSTRAINT [FK_tblCaseStatistics_tblCase] FOREIGN KEY([Case_Id]) REFERENCES [dbo].[tblCase] ([Id])
+--	END
+--END
+--GO
 
-RAISERROR ('Add Foreign Key Customer_Id to tblCaseFilterFavorite', 10, 1) WITH NOWAIT
-IF (OBJECT_ID ('tblCaseFilterFavorite', 'U') IS NOT NULL)
-BEGIN
-	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblCaseFilterFavorite_tblCustomer]') 
-	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
-	BEGIN
-		ALTER TABLE [dbo].[tblCaseFilterFavorite] WITH CHECK ADD CONSTRAINT [FK_tblCaseFilterFavorite_tblCustomer] FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
-	END
-END
-GO
+--RAISERROR ('Add Foreign Key Customer_Id to tblCaseFilterFavorite', 10, 1) WITH NOWAIT
+--IF (OBJECT_ID ('tblCaseFilterFavorite', 'U') IS NOT NULL)
+--BEGIN
+--	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblCaseFilterFavorite_tblCustomer]') 
+--	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+--	BEGIN
+--		ALTER TABLE [dbo].[tblCaseFilterFavorite] WITH CHECK ADD CONSTRAINT [FK_tblCaseFilterFavorite_tblCustomer] FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
+--	END
+--END
+--GO
 
-RAISERROR ('Add Foreign Key Customer_Id to tblBR_Rules', 10, 1) WITH NOWAIT
-IF (OBJECT_ID ('tblBR_Rules', 'U') IS NOT NULL)
-BEGIN
-	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblBR_Rules_tblCustomer]') 
-	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
-	BEGIN
-		ALTER TABLE [dbo].[tblBR_Rules] WITH CHECK ADD CONSTRAINT [FK_tblBR_Rules_tblCustomer] FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
-	END
-END
-GO
+--RAISERROR ('Add Foreign Key Customer_Id to tblBR_Rules', 10, 1) WITH NOWAIT
+--IF (OBJECT_ID ('tblBR_Rules', 'U') IS NOT NULL)
+--BEGIN
+--	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblBR_Rules_tblCustomer]') 
+--	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+--	BEGIN
+--		ALTER TABLE [dbo].[tblBR_Rules] WITH CHECK ADD CONSTRAINT [FK_tblBR_Rules_tblCustomer] FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
+--	END
+--END
+--GO
 
 RAISERROR ('Delete from tblMergedCases Child where there no longer is a connected case', 10, 1) WITH NOWAIT
 IF (OBJECT_ID ('tblMergedCases', 'U') IS NOT NULL)
@@ -163,27 +197,27 @@ BEGIN
 END
 GO
 
-RAISERROR ('Add Foreign Key Case_Id to tblMergedCases MergedParent_Id', 10, 1) WITH NOWAIT
-IF (OBJECT_ID ('tblMergedCases', 'U') IS NOT NULL)
-BEGIN
-	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblMergedCases_tblCase_Parent]') 
-	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
-	BEGIN
-		ALTER TABLE [dbo].[tblMergedCases] WITH CHECK ADD CONSTRAINT [FK_tblMergedCases_tblCase_Parent] FOREIGN KEY([MergedParent_Id]) REFERENCES [dbo].[tblCase] ([Id])
-	END
-END
-GO
+--RAISERROR ('Add Foreign Key Case_Id to tblMergedCases MergedParent_Id', 10, 1) WITH NOWAIT
+--IF (OBJECT_ID ('tblMergedCases', 'U') IS NOT NULL)
+--BEGIN
+--	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblMergedCases_tblCase_Parent]') 
+--	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+--	BEGIN
+--		ALTER TABLE [dbo].[tblMergedCases] WITH CHECK ADD CONSTRAINT [FK_tblMergedCases_tblCase_Parent] FOREIGN KEY([MergedParent_Id]) REFERENCES [dbo].[tblCase] ([Id])
+--	END
+--END
+--GO
 
-RAISERROR ('Add Foreign Key Case_Id to tblMergedCases MergedChild_Id', 10, 1) WITH NOWAIT
-IF (OBJECT_ID ('tblMergedCases', 'U') IS NOT NULL)
-BEGIN
-	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblMergedCases_tblCase_Child]') 
-	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
-	BEGIN
-		ALTER TABLE [dbo].[tblMergedCases] WITH CHECK ADD CONSTRAINT [FK_tblMergedCases_tblCase_Child] FOREIGN KEY([MergedChild_Id]) REFERENCES [dbo].[tblCase] ([Id])
-	END
-END
-GO
+--RAISERROR ('Add Foreign Key Case_Id to tblMergedCases MergedChild_Id', 10, 1) WITH NOWAIT
+--IF (OBJECT_ID ('tblMergedCases', 'U') IS NOT NULL)
+--BEGIN
+--	IF NOT EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblMergedCases_tblCase_Child]') 
+--	AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+--	BEGIN
+--		ALTER TABLE [dbo].[tblMergedCases] WITH CHECK ADD CONSTRAINT [FK_tblMergedCases_tblCase_Child] FOREIGN KEY([MergedChild_Id]) REFERENCES [dbo].[tblCase] ([Id])
+--	END
+--END
+--GO
 
 RAISERROR ('Add Column ProductAreas to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
 IF COL_LENGTH('dbo.tblGDPRDataPrivacyFavorite','ProductAreas') IS NULL
@@ -1051,6 +1085,163 @@ IF COL_LENGTH('dbo.tblCustomer','CommunicateWithPerformer') IS NULL
 	End
 
 Go
+
+
+--HF 3
+RAISERROR ('DROP Foreign Key Case_Id to tblMail2TicketCase', 10, 1) WITH NOWAIT
+	IF (OBJECT_ID ('tblMail2TicketCase', 'U') IS NOT NULL)
+		BEGIN
+			IF EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblMail2TicketCase_tblCase]') 
+			AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+			BEGIN
+				ALTER TABLE [dbo].[tblMail2TicketCase] DROP CONSTRAINT [FK_tblMail2TicketCase_tblCase]
+			END
+		END
+		GO
+
+RAISERROR ('DROP Foreign Key Case_Id to tblLocalAdmin', 10, 1) WITH NOWAIT
+		IF (OBJECT_ID ('tblLocalAdmin', 'U') IS NOT NULL)
+		BEGIN
+			IF EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblLocalAdmin_tblCase]') 
+			AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+			BEGIN
+				ALTER TABLE [dbo].[tblLocalAdmin] DROP CONSTRAINT [FK_tblLocalAdmin_tblCase] 
+			END
+		END
+		GO
+
+RAISERROR ('DROP Foreign Key Case_Id to tblFormFieldValueHistory', 10, 1) WITH NOWAIT
+		IF (OBJECT_ID ('tblFormFieldValueHistory', 'U') IS NOT NULL)
+		BEGIN
+			IF EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblFormFieldValueHistory_tblCase]') 
+			AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+			BEGIN
+				ALTER TABLE [dbo].[tblFormFieldValueHistory] DROP CONSTRAINT [FK_tblFormFieldValueHistory_tblCase]
+			END
+		END
+		GO
+
+RAISERROR ('DROP Foreign Key Case_Id to tblCaseStatistics', 10, 1) WITH NOWAIT
+		IF (OBJECT_ID ('tblCaseStatistics', 'U') IS NOT NULL)
+		BEGIN
+			IF EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblCaseStatistics_tblCase]') 
+			AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+			BEGIN
+				ALTER TABLE [dbo].[tblCaseStatistics] DROP CONSTRAINT [FK_tblCaseStatistics_tblCase]
+			END
+		END
+		GO
+
+RAISERROR ('DROP Foreign Key Parent_Id to tblMergedCases', 10, 1) WITH NOWAIT
+		IF (OBJECT_ID ('tblMergedCases', 'U') IS NOT NULL)
+		BEGIN
+			IF EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblMergedCases_tblCase_Parent]') 
+			AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+			BEGIN
+				ALTER TABLE [dbo].[tblMergedCases]  DROP CONSTRAINT [FK_tblMergedCases_tblCase_Parent] 
+			END
+		END
+		GO
+
+RAISERROR ('DROP Foreign Key Child_Id to tblMergedCases', 10, 1) WITH NOWAIT
+		IF (OBJECT_ID ('tblMergedCases', 'U') IS NOT NULL)
+		BEGIN
+			IF EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblMergedCases_tblCase_Child]') 
+			AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+			BEGIN
+				ALTER TABLE [dbo].[tblMergedCases] DROP CONSTRAINT [FK_tblMergedCases_tblCase_Child]
+			END
+		END
+		GO
+		   
+
+
+RAISERROR ('DROP Foreign Key Customer_Id to tblRegistrationSourceCustomer', 10, 1) WITH NOWAIT
+		IF (OBJECT_ID ('tblRegistrationSourceCustomer', 'U') IS NOT NULL)
+		BEGIN
+			IF EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblRegistrationSourceCustomer_tblCustomer]') 
+			AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+			BEGIN
+				ALTER TABLE [dbo].[tblRegistrationSourceCustomer] DROP CONSTRAINT [FK_tblRegistrationSourceCustomer_tblCustomer]
+			END
+		END
+		GO
+
+RAISERROR ('DROP Foreign Key Customer_Id to tblCaseFilterFavorite', 10, 1) WITH NOWAIT
+		IF (OBJECT_ID ('tblCaseFilterFavorite', 'U') IS NOT NULL)
+		BEGIN
+			IF EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblCaseFilterFavorite_tblCustomer]') 
+			AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+			BEGIN
+				ALTER TABLE [dbo].tblCaseFilterFavorite DROP CONSTRAINT [FK_tblCaseFilterFavorite_tblCustomer]
+			END
+		END
+		GO
+
+RAISERROR ('DROP Foreign Key Customer_Id to tblBR_Rules', 10, 1) WITH NOWAIT
+		IF (OBJECT_ID ('tblBR_Rules', 'U') IS NOT NULL)
+		BEGIN
+			IF EXISTS (SELECT * FROM sys.objects o WHERE o.object_id = object_id(N'[dbo].[FK_tblBR_Rules_tblCustomer]') 
+			AND OBJECTPROPERTY(o.object_id, N'IsForeignKey') = 1)
+			BEGIN
+				ALTER TABLE [dbo].tblBR_Rules DROP CONSTRAINT [FK_tblBR_Rules_tblCustomer]
+			END
+		END
+		GO
+
+RAISERROR ('CREATE PROCEDURE sp_GetLogFilesByCaseIds', 10, 1) WITH NOWAIT
+IF(OBJECT_ID('[dbo].[sp_GetLogFilesByCaseIds]', 'P') IS NOT NULL)
+BEGIN
+	DROP PROCEDURE [dbo].[sp_GetLogFilesByCaseIds];
+END
+GO
+
+CREATE PROCEDURE [dbo].[sp_GetLogFilesByCaseIds]
+(
+	@CaseIds IdsList READONLY
+)
+
+AS
+BEGIN
+	;WITH CTE AS (
+		SELECT l.Text_External, l.Text_Internal, lf.Log_Id, lf.[FileName], 
+				lf.CreatedDate, lf.ParentLog_Id, lf.IsCaseFile, lf.LogType, lf.ParentLogType
+		FROM tblLog as l
+		INNER JOIN @CaseIds as c
+			on c.Id = l.Case_Id
+		INNER JOIN tblLogFile as lf
+			ON l.Id = lf.Log_Id
+	)
+	SELECT Log_Id, [FileName], CreatedDate, ParentLog_Id, IsCaseFile, LogType, ParentLogType
+	FROM CTE AS l
+END
+GO
+
+RAISERROR ('CREATE PROCEDURE sp_GetCaseFilesByCaseIds', 10, 1) WITH NOWAIT
+IF(OBJECT_ID('[dbo].[sp_GetCaseFilesByCaseIds]', 'P') IS NOT NULL)
+BEGIN
+	DROP PROCEDURE [dbo].[sp_GetCaseFilesByCaseIds]
+END
+GO
+CREATE PROCEDURE [dbo].[sp_GetCaseFilesByCaseIds]
+(
+	@CaseIds IdsList READONLY
+)
+
+AS
+BEGIN
+
+	SELECT cf.Id, cf.Case_Id, cf.[FileName], cf.CreatedDate, cf.UserId
+	FROM tblCaseFile as cf
+	INNER JOIN @CaseIds as c
+		on c.Id = cf.Case_Id;
+END
+GO
+
+
+
+-- END HF 3
+
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.57'
 GO

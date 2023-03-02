@@ -25,11 +25,9 @@ obj/
 _ReSharper*/
 *.DotSettings
 [Tt]est[Rr]esult*
-dhHelpdeskNG/dhHelpdesk_NG.Web/Web.config
 dhHelpdeskNG/dhHelpdesk_NG.Web/App_Data/Uploaded Files/Reports/
 dhHelpdeskNG/dhHelpdesk_NG.Web/log4net.config
 dhHelpdeskNG/packages/*
-dhHelpdeskNG/dhHelpdesk_NG.Web_SelfService/Web.config
 dhHelpdeskNG/.vs/config/applicationhost.config
 
 dhHelpdeskNG/dhHelpdesk_NG.Web/Logs/
@@ -50,5 +48,3 @@ dhHelpdeskMobile/.vs/
 /ExtendedCase/ExtendedCase.Database/ExtendedCase.Database.dbmdl
 /dhHelpdeskNG/UpgradeLog2.htm
 /dhHelpdeskNG/DH.Helpdesk.WebApi/Properties/PublishProfiles/FolderProfile1.pubxml
-dhHelpdeskNG/DH.Helpdesk.WebApi/Web.config
-dhHelpdeskNG/DH.Helpdesk.WebApi/Web.config

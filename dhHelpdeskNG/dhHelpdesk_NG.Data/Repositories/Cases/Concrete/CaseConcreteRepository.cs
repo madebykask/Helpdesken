@@ -18,8 +18,8 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
     public class CaseConcreteRepository
     {
         private readonly string _connectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
-        
-        public bool DeleteCases(List<int> caseIds)
+
+        public bool DeleteCases(List<int> caseIds, int jobTimeout = 0)
         {
             bool ret = false;
 
@@ -34,32 +34,55 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     casesTable.Rows.Add(id);
                 }
 
-                SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(_connectionString)
-                {
-                    ConnectTimeout = 4000,
-                    AsynchronousProcessing = true
-                };
+                //SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder(_connectionString)
+                //{
+                //    ConnectTimeout = 4000,
+                //    AsynchronousProcessing = true
+                //};
 
 
-                using (var connection = new SqlConnection(connectionStringBuilder.ConnectionString))
+                using (var connection = new SqlConnection(_connectionString))
                 {
                     if (connection.State == ConnectionState.Closed)
                     {
                         connection.Open();
                     }
 
-                    using (var command = new SqlCommand { Connection = connection, CommandType = CommandType.StoredProcedure })
+                    using (var command = new SqlCommand { Connection = connection, CommandType = CommandType.StoredProcedure})
                     {
                         SqlParameter param = command.Parameters.AddWithValue("@Cases", casesTable);
                         param.SqlDbType = SqlDbType.Structured;
                         param.TypeName = "dbo.IdsList";
                         //param.Direction = ParameterDirection.Output;
                         command.CommandText = "sp_DeleteCases";
-                        var result = command.BeginExecuteNonQuery(null, command);
-                        var rowsAffected = command.EndExecuteNonQuery(result);
-                        if (rowsAffected > 0)
+                        if (jobTimeout > 0)
                         {
-                            ret = true;
+                            command.CommandTimeout = jobTimeout;
+                        }
+                        try
+                        {
+                            //var result = command.BeginExecuteNonQuery(null, command);
+                            //var rowsAffected = command.EndExecuteNonQuery(result);
+                            var result = command.ExecuteNonQuery();
+                            
+                            if (result > 0)
+                            {
+                                ret = true;
+                            }
+                        }
+                        catch (SqlException ex)
+                        {
+                            throw ex;
+                        }
+
+                        catch (Exception ex)
+                        {
+                            throw ex;
+                        }
+
+                        finally
+                        {
+                            connection.Close();
                         }
                     }
                 }

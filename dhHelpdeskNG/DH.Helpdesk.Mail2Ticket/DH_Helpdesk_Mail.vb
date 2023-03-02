@@ -635,18 +635,28 @@ Module DH_Helpdesk_Mail
 
                                 objComputerUser = objComputerUserData.getComputerUserByEMail(sFromEMailAddress, objCustomer.Id)
 
-                                If message.HasBodyText = True Then
-                                    sBodyText = Replace(message.BodyText.ToString(), Chr(10), vbCrLf, 1, -1, CompareMethod.Text)
-                                ElseIf message.HasBodyHtml = True Then
+                                If message.HasBodyHtml = True Then
+                                    LogToFile("HasBodyHtml ", 1)
                                     sBodyText = getInnerHtml(message.BodyHtml)
                                     Try
                                         sBodyText = CleanStyles(sBodyText)
-                                        sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp", sBodyText)
                                     Catch ex As Exception
-                                        LogError(ex.ToString(), Nothing)
+                                        LogError("Error Cleanstyles " & ex.ToString(), Nothing)
+                                    End Try
+                                    Try
+
+                                        sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp\", sBodyText)
+                                    Catch ex As Exception
+                                        LogError("Error CreateBase64Images " & ex.ToString(), Nothing)
                                     End Try
 
                                     isHtml = True
+                                End If
+
+                                If message.HasBodyText = True And message.HasBodyHtml = False Then
+                                    LogToFile("HasBodyText only", 1)
+                                    sBodyText = Replace(message.BodyText.ToString(), Chr(10), vbCrLf, 1, -1, CompareMethod.Text)
+
                                 End If
 
                                 '//hämta användare baserat på userid/reportedBy
@@ -781,15 +791,8 @@ Module DH_Helpdesk_Mail
                                     LogToFile("Create Case:" & objCase.Casenumber & ", Attachments:" & message.Attachments.Count, iPop3DebugLevel)
 
                                     'Save 
-                                    Dim sHTMLFileName As String = ""
-                                    Dim sPDFFileName As String = ""
-                                    Try
-                                        sHTMLFileName = CreateHtmlFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber, "")
-                                        sPDFFileName = CreatePdfFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
-                                    Catch ex As Exception
-                                        LogError(ex.InnerException.Message, Nothing)
-                                    End Try
-
+                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber, "")
+                                    Dim sPDFFileName As String = CreatePdfFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
 
                                     If Not IsNullOrEmpty(sPDFFileName) Then
                                         iHTMLFile = 1
@@ -799,14 +802,9 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
-                                        Try
-                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html", True)
-                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
 
-                                        Catch ex As Exception
-                                            LogError(ex.InnerException.Message, Nothing)
-                                        End Try
-
+                                        DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html", True)
+                                        DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
 
                                     End If
 
@@ -1099,13 +1097,9 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
-                                        Try
-                                            DeleteFilesInsideFolder(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html", True)
-                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
-                                        Catch ex As Exception
-                                            LogError(ex.InnerException.Message, Nothing)
-                                        End Try
 
+                                        DeleteFilesInsideFolder(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html", True)
+                                        DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
                                     End If
 
 

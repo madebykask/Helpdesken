@@ -244,11 +244,11 @@
                         <td>
                             @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDescription, CaseSolutionFields.FinishingDescription) && !readonlyMode)
                             {
-                                @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "300" })
+                                @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "200" })
                             }
                             else
                             {
-                                @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "300", @readonly = true })
+                                @Html.TextAreaFor(model => model.case_.FinishingDescription, new { maxlength = "200", @readonly = true })
                             }
                         </td>
                     </tr>

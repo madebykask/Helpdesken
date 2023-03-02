@@ -1165,7 +1165,6 @@ function LoadTemplate(id) {
 function GetTemplateData(id) {
 
     var data = { 'id': id, myTime: Date.now };
-
     return $.get('/CaseSolution/GetTemplate', data, function (caseTemplate) {
 
             finalActionId = caseTemplate["SaveAndClose"];

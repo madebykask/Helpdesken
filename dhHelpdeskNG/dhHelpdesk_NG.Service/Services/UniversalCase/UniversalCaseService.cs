@@ -86,6 +86,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                                     IRegionService regionService,
                                     IOUService oUService,
                                     IConditionService conditionService,
+                                    ICaseDeletionService caseDeletionService,
                                     IBusinessModelToEntityMapper<CaseModel, Case> caseModelToEntityMapper
             )
         {
@@ -108,6 +109,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             _oUService = oUService;
             _conditionService = conditionService;
             _caseModelToEntityMapper = caseModelToEntityMapper;
+            _caseDeletionService = caseDeletionService;
         }
 
         public CaseModel GetCase(int id)
@@ -819,7 +821,10 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 {
                     //delete base case
                     if (baseCaseId > 0)
-                        _caseDeletionService.Delete(baseCaseId, "", null);
+                        if (_caseDeletionService != null)
+                        {
+                            _caseDeletionService.Delete(baseCaseId, "", null);
+                        }
                 }
             }
 
