@@ -669,14 +669,28 @@ Module DH_Helpdesk_Mail
 
                                 objComputerUser = objComputerUserData.getComputerUserByEMail(sFromEMailAddress, objCustomer.Id)
 
-                                If message.HasBodyText = True Then
-                                    sBodyText = Replace(message.BodyText.ToString(), Chr(10), vbCrLf, 1, -1, CompareMethod.Text)
-                                ElseIf message.HasBodyHtml = True Then
+                                If message.HasBodyHtml = True Then
+                                    LogToFile("HasBodyHtml ", 1)
                                     sBodyText = getInnerHtml(message.BodyHtml)
-                                    sBodyText = CleanStyles(sBodyText)
-                                    'sBodyTextToHtml = CleanStyles(sBodyText)
-                                    sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp", sBodyText)
+                                    Try
+                                        sBodyText = CleanStyles(sBodyText)
+                                    Catch ex As Exception
+                                        LogError("Error Cleanstyles " & ex.ToString(), Nothing)
+                                    End Try
+                                    Try
+
+                                        sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp\", sBodyText)
+                                    Catch ex As Exception
+                                        LogError("Error CreateBase64Images " & ex.ToString(), Nothing)
+                                    End Try
+
                                     isHtml = True
+                                End If
+
+                                If message.HasBodyText = True And message.HasBodyHtml = False Then
+                                    LogToFile("HasBodyText only", 1)
+                                    sBodyText = Replace(message.BodyText.ToString(), Chr(10), vbCrLf, 1, -1, CompareMethod.Text)
+
                                 End If
 
                                 '//hämta användare baserat på userid/reportedBy
@@ -2702,8 +2716,14 @@ Module DH_Helpdesk_Mail
             newWidth = originalImage.Width
         End If
 
+        'Hängslen och byxor
+        If newHeight = 0 Then
+            newHeight = 1
+        End If
 
-
+        If newWidth = 0 Then
+            newWidth = 1
+        End If
         ' Create a new Bitmap object with the new width and height
         Dim newImage As New Bitmap(originalImage, newWidth, newHeight)
 

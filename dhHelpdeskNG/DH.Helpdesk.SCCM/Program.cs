@@ -11,10 +11,16 @@ using System.Security.Authentication;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+[assembly: log4net.Config.XmlConfigurator(Watch = true)]
+
 namespace DH.Helpdesk.SCCM
 {
     internal class Program
     {
+
+        static readonly log4net.ILog log =
+            log4net.LogManager.GetLogger
+            (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private static long actions = 0;
 
@@ -22,10 +28,13 @@ namespace DH.Helpdesk.SCCM
         [STAThread]
         static void Main(string[] args)
         {
-
+            log.Info("-----------------------------------------");
+            log.Info("-----------------------------------------");
+            log.Info("Main started");
+            
             Run();
-
-
+            
+            log.Info("Main stopped");
         }
 
         
@@ -34,7 +43,7 @@ namespace DH.Helpdesk.SCCM
             //Get the configuration object
             ADALConfiguration ADALConfiguration = GetConfiguration();
 
-
+            log.Info("Application is running");
             //Check if the configuration is valid
             if (!ADALConfiguration.ValidConfiguration())
             {
@@ -42,6 +51,7 @@ namespace DH.Helpdesk.SCCM
             }
 
 
+            log.Info("Acquiring token");
             //Get the token
             string token = GetToken(ADALConfiguration);
 
@@ -49,6 +59,7 @@ namespace DH.Helpdesk.SCCM
 
 
             //Fetch the data ASYNC
+            log.Info("Fetch the data ASYNC");
             var result = FetchBaseData(token).Result.ToList();
 
             //Check if fetch was ok
@@ -70,13 +81,16 @@ namespace DH.Helpdesk.SCCM
 
 
             //Chunk the data
+            log.Info("Chunk the data");
             var chunkedData = rSystemWrapper.ChunkBy(rSystemWrapper.Count / Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["Setting_Chunk_Page_Size"].ToString()));
 
             //Run all the threads
+            log.Info("Run all the threads");
             var threadResult = runThreads(chunkedData, token).Result;
 
 
             //Combine the thread result
+            log.Info("Combine the thread result");
             List<Models.Device> computers = new List<Models.Device>();
             foreach (var SingleThread in threadResult)
             {
@@ -85,12 +99,16 @@ namespace DH.Helpdesk.SCCM
 
             var test = computers;
 
+            log.Info("UpdateOrCreateComputerInDB");
             UpdateOrCreateComputerInDB(computers);
 
             Connector connector = new Connector(System.Configuration.ConfigurationManager.ConnectionStrings["conHD"].ToString());
             int Customer_Id = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["DB_Customer_Id"].ToString());
 
+            log.Info("UpdateApplication");
             connector.UpdateApplication(Customer_Id);
+
+            log.Info("Application has stopped running");
         }
 
         private static void TokenUtility(string token)
@@ -116,7 +134,9 @@ namespace DH.Helpdesk.SCCM
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Show_Token || Copy_Token_To_Clipboard has invalid configuration");
+                var errorMsg = "Show_Token || Copy_Token_To_Clipboard has invalid configuration";
+                log.Error(errorMsg);
+                Console.WriteLine(errorMsg);
             }
         }
 
@@ -127,7 +147,9 @@ namespace DH.Helpdesk.SCCM
             var threadIndex = 1;
             foreach (var data in chunkedData)
             {
-                Console.WriteLine("Init thread " + threadIndex);
+                var info = "Init thread " + threadIndex;
+                Console.WriteLine(info);
+                log.Info(info);
 
                 Models.CustomThreadObject customThreadObject = new Models.CustomThreadObject(data, threadIndex, token);
 
@@ -392,8 +414,10 @@ namespace DH.Helpdesk.SCCM
                 {
 
                     actions++;
+                    var info = "Thread: " + thread + " - " + RSystem.ResourceID + " Action: " + actions;
 
-                    Console.WriteLine("Thread: " + thread + " - " + RSystem.ResourceID + " Action: " + actions);
+                    log.Info(info);
+                    Console.WriteLine(info);
 
                     //Fetch additioan data for each computer
                     var computerAdditionalData = FetchAdditionalData(token, RSystem.ResourceID).Result.ToList();
@@ -402,7 +426,9 @@ namespace DH.Helpdesk.SCCM
                     //Error check
                     if (!FetchIsOK(computerAdditionalData))
                     {
-                        throw new Exception("Additional Fetch was not ok");
+                        var errorMsg = "Additional Fetch was not ok";
+                        log.Error(errorMsg);
+                        throw new Exception(errorMsg);
                     }
 
 
@@ -797,19 +823,24 @@ namespace DH.Helpdesk.SCCM
             }
             catch (AuthenticationException ex)
             {
-                Console.WriteLine("Acquiring a token failed with the following error: {0}", ex.Message);
+                var errorMsg = $"Acquiring a token failed with the following error: {ex.Message}";
+                log.Error(errorMsg);
+                Console.WriteLine(errorMsg);
+                
                 if (ex.InnerException != null)
                 {
-
-                    Console.WriteLine("Error detail: {0}", ex.InnerException.Message);
+                    var innerExMsg = $"Error detail: {ex.InnerException.Message}";
+                    log.Error(innerExMsg);
+                    Console.WriteLine(innerExMsg);
                 }
             }
             catch (Exception ex)
             {
                 if (ex.InnerException != null)
                 {
-
-                    Console.WriteLine("Error detail: {0}", ex.InnerException.Message);
+                    var innerExMsg = $"Error detail: {ex.InnerException.Message}";
+                    log.Error(innerExMsg);
+                    Console.WriteLine(innerExMsg);
                 }
             }
 
@@ -822,7 +853,9 @@ namespace DH.Helpdesk.SCCM
             }
             else
             {
-                throw new Exception("Acquiring a token failed");
+                var errorMsg = "Acquiring a token failed";
+                log.Error(errorMsg);
+                throw new Exception(errorMsg);
             }
 
         }

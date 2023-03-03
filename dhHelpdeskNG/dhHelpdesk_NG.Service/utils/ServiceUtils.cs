@@ -33,8 +33,16 @@ namespace DH.Helpdesk.Services.utils
             {
                 if (string.Compare(valueToRetun, prop.Name, true) == 0)
                 {
-                    ret = prop.GetValue(myObject, null).ToString();
-                    break; 
+                    try
+                    {
+                        ret = prop.GetValue(myObject, null).ToString();
+                        break;
+                    }
+                    catch
+                    {
+                        ret = string.Empty;
+                        break;
+                    }
                 }
             }
 

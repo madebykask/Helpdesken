@@ -27,6 +27,11 @@ using DH.Helpdesk.WebApi.Models.Output;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Services.Utils;
 using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.WebApi.Models;
+using Microsoft.IdentityModel.Protocols;
+using System.Configuration;
+using System.Runtime.InteropServices.WindowsRuntime;
+using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -88,7 +93,8 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             return res;
         }
-
+       
+           
         /// <summary>
         /// List of filtered cases.
         /// Contains data only for case overview.
@@ -100,6 +106,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         public async Task<SearchResult<CaseSearchResult>> Search([FromBody]SearchOverviewFilterInputModel input, int? cid = null)
         {
 			SearchResult<CaseSearchResult> searchResult = null;
+            
 			if (input.CustomersIds.Count == 1) // TODO: fix? 
 			{
 				var userGroupId = User.Identity.GetGroupId();

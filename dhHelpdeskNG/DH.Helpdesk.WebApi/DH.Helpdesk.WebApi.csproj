@@ -380,6 +380,7 @@
     <Compile Include="Infrastructure\Translate\Translator.cs" />
     <Compile Include="Infrastructure\Translate\Translation.cs" />
     <Compile Include="Models\CaseLockInputModel.cs" />
+    <Compile Include="Models\CaseOverviewWebpartModel.cs" />
     <Compile Include="Models\CaseUnLockInputModel.cs" />
     <Compile Include="Models\Case\CaseSolutionModel.cs" />
     <Compile Include="Models\Case\CaseSolutionOverview.cs" />

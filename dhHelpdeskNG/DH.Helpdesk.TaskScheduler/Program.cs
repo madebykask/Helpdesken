@@ -11,6 +11,8 @@ namespace DH.Helpdesk.TaskScheduler
 {
     static class Program
     {
+
+        public static int ProcessedTaskId = 0;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>

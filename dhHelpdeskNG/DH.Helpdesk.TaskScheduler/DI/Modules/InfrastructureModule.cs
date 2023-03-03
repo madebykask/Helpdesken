@@ -1,6 +1,7 @@
 ﻿using DH.Helpdesk.Common.Serializers;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.Infrastructure.Concrete;
+using DH.Helpdesk.Dal.Repositories.GDPR;
 using DH.Helpdesk.TaskScheduler.Infrastructure.Configuration;
 using Ninject.Modules;
 

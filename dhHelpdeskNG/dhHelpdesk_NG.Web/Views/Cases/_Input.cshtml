@@ -2598,7 +2598,14 @@
                         $('#sendMailToNotifyer:not(:disabled)').attr('checked', 'checked');
                     }
                     var to = $initiatorEmail.val();
-                    var extras = $("#extraEmailsInput").val().replaceAll(";", " ").replaceAll(to, "");
+                    var extras = ''
+
+                    if ($("#extraEmailsInput")) {
+                        if ($("#extraEmailsInput").val()) {
+                            extras = $("#extraEmailsInput").val().replaceAll(";", " ").replaceAll(to, "");
+                        }
+                    }
+                    
                     if (to != '') {
                         $("#emailsTo").html(to);
                         $("#emailsTo").css('display', 'inline');
@@ -2660,10 +2667,10 @@
             $("#case__RegLanguage_Id").css('display', 'inline');
         }
 
-        $('.summernoteinternal').summernote(summerNoteInternalConfig)
-        $('.summernoteexternal').summernote(summerNoteExternalConfig)
-        $('.summernotedesc').summernote(summerNoteDescConfig)
-        
+        $('.summernoteinternal').summernote(summerNoteInternalConfig);
+        $('.summernoteexternal').summernote(summerNoteExternalConfig);
+        $('.summernotedesc').summernote(summerNoteDescConfig);
+
         $("#caseDescriptionEdit").on('click', function (e) {
             $('#showDescriptionEdit').toggle();
             $('#showDescriptionFlat').toggle();
@@ -2714,7 +2721,9 @@
         });
 
         $(".summernotedesc").each(function () {
-
+            var textarea = $("#" + this.id).summernote();
+            var desc = textarea.summernote('code').replace(/\r\n|\r|\n/g, "<br />");
+            textarea.summernote('code', desc);
             if (this.readOnly) {
 
                 $("#" + this.id).summernote("disable");

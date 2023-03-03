@@ -789,7 +789,6 @@ namespace DH.Helpdesk.Services.Services
                          x.Deleted == 0)
                  .ToList();
         }
-
         public void UpdateFollowUpDate(int caseId, DateTime? time)
         {
             _caseRepository.UpdateFollowUpDate(caseId, time);

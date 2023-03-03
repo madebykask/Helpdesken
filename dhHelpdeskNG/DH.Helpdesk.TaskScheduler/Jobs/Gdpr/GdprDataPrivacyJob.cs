@@ -46,6 +46,7 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
             if (jobDataMap.ContainsKey(DataMapKey))
             {
                 var taskId = Convert.ToInt32(jobDataMap[DataMapKey]);
+                Program.ProcessedTaskId = taskId;
                 var taskInfo = _gdprTasksService.GetById(taskId);
 
                 _log.Debug($"Starting data privacy job. TaskId: {taskId}");
@@ -68,7 +69,7 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
                 try
                 {
                     _log.Debug($"Executing data privacy operation. TaskId: {taskId}");
-                    _dataPrivacyProcessor.Process(taskInfo.CustomerId, taskInfo.UserId, parameters, _settings.GDPRBatchSize);
+                    _dataPrivacyProcessor.Process(taskInfo.CustomerId, taskInfo.UserId, parameters, _settings.GDPRBatchSize, _settings.GDPRDeletionTimeoutSeconds);
                     _log.Debug($"Data privacy operation has completed successfully. TaskId: {taskId})");
                 }
                 catch (Exception e)
