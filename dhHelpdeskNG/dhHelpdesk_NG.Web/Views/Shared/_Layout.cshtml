@@ -16,7 +16,7 @@
     <meta content="html/text; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <title>@(GlobalSetting != null ? GlobalSetting.ApplicationName : "")</title>
+    <title>@(GlobalSetting != null ? GlobalSetting.ApplicationName + ViewBag.Title : "")</title>
     <script type="text/javascript">
         var trans_yes = '@Translation.GetForJS("Ja", Enums.TranslationSource.TextTranslation)';
         var trans_no = '@Translation.GetForJS("Nej", Enums.TranslationSource.TextTranslation)';
