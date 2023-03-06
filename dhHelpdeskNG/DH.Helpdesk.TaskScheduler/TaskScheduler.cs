@@ -62,7 +62,7 @@ namespace DH.Helpdesk.TaskScheduler
         {
             try
             {
-                _sched.Shutdown();
+                _sched?.Shutdown();
                 _logger.Debug($"Stopping data privacy job.");
                 if (Program.ProcessedTaskId > 0)
                 {
