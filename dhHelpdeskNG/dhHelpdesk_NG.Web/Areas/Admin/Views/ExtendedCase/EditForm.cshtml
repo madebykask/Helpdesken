@@ -945,7 +945,7 @@
                 let translation = {};
                 translation.Languageid = sTranslations[s].getAttribute('data-dhhelpdesk-langid');
                 translation.Property = idSection;
-                translation.Text = sTranslations[s].value;
+                translation.Text = sTranslations[s].value.replaceAll('"', '\\\"');
                 translation.ControlType = sTranslations[s].getAttribute('data-dhhelpdesk-controlType');
                 translation.TranslationId = sTranslations[s].getAttribute('data-dhhelpdesk-id');
                 fieldTranslations.push(translation);
@@ -1023,7 +1023,7 @@
                             let translation = {};
                             translation.LanguageId = fTranslation.getAttribute('data-dhhelpdesk-langId');
                             translation.Property = idFileUploadText;
-                            translation.Text = fTranslation.value;
+                            translation.Text = fTranslation.value.replaceAll('"', '\\\"');;
                             translation.ControlType = fTranslation.getAttribute('data-dhhelpdesk-controlType');
                             translation.TranslationId = fieldTextTranslations[t].getAttribute('data-dhhelpdesk-id');
                             fieldTranslations.push(translation);
@@ -1072,7 +1072,7 @@
 
                                 translation.LanguageId = options[p].getAttribute('data-dhhelpdesk-langId');
                                 translation.Property = idOption;
-                                translation.Text = options[p].value;
+                                translation.Text = options[p].value.replaceAll('"', '\\\"');;
                                 translation.ControlType = options[p].getAttribute('data-dhhelpdesk-controlType');
                                 translation.TranslationId = options[p].getAttribute('data-dhhelpdesk-id');
                                 fieldTranslations.push(translation);
@@ -1113,12 +1113,12 @@
                                     }
                                 }
 
-                                translation.Text = contentSummerNote;
+                                translation.Text = contentSummerNote.replaceAll('"', '\\\"');;
                                 translation.ControlType = controlType;
                             }
                             else {
                                 lTranslation = fieldLabelTranslations[f].querySelector('.labelName');
-                                translation.Text = lTranslation.value;
+                                translation.Text = lTranslation.value.replaceAll('"', '\\\"');;
                                 translation.ControlType = lTranslation.getAttribute('data-dhhelpdesk-controlType');
                                 translation.TranslationId = lTranslation.getAttribute('data-dhhelpdesk-id');
                             }
@@ -1158,7 +1158,7 @@
                 let translation = {};
                 translation.Languageid = tabTranslations[t].getAttribute('data-dhhelpdesk-langid');
                 translation.Property = tabId;
-                translation.Text = tabTranslations[t].value;
+                translation.Text = tabTranslations[t].value.replaceAll('"', '\\\"');;
                 translation.ControlType = tabTranslations[t].getAttribute('data-dhhelpdesk-controlType');
                 translation.TranslationId = tabTranslations[t].getAttribute('data-dhhelpdesk-id');
                 fieldTranslations.push(translation);
@@ -1185,6 +1185,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
+                console.log(dataToSend)
                 if (data.result == true) {
                     if (typeof (getUrlVars()["extendedCaseFormId"]) == "undefined") {
                         let url = "EditForm?extendedCaseFormId=" + data.formId + "&languageId=" + currentLanguageId;
