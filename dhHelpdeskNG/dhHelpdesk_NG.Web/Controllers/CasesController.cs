@@ -1848,7 +1848,9 @@ namespace DH.Helpdesk.Web.Controllers
             CaseInputViewModel m = null;
             var c = _caseService.GetCaseById(id);
             int caseNumber = Convert.ToInt32(c.CaseNumber);
-            string caseDescription = c.Caption.Substring(0,10);
+
+            int maxIndex = c.Caption.Length < 10 ? c.Caption.Length : 10;
+            string caseDescription = c.Caption.Substring(0, maxIndex);
             //ViewBag.Title = " " + caseNumber;
             ViewBag.Title = " " + caseNumber + " " + caseDescription;
 
