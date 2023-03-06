@@ -1846,9 +1846,11 @@ namespace DH.Helpdesk.Web.Controllers
             string activeTab = "")
         {
             CaseInputViewModel m = null;
-            //var c = _caseService.GetCaseBasic(id);
-            //int caseNumber = Convert.ToInt32(c.CaseNumber);
+            var c = _caseService.GetCaseById(id);
+            int caseNumber = Convert.ToInt32(c.CaseNumber);
+            string caseDescription = c.Caption.Substring(0,10);
             //ViewBag.Title = " " + caseNumber;
+            ViewBag.Title = " " + caseNumber + " " + caseDescription;
 
             if (!_caseService.IsCaseExist(id))
             {
