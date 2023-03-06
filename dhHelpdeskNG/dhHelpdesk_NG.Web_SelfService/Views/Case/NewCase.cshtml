@@ -218,7 +218,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ReportedBy)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(model => model.NewCase.ReportedBy, new { maxlength = "200", autocomplete = "Off", @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ReportedBy.ToString() })
+                                                @Html.TextBoxFor(model => model.NewCase.ReportedBy, new { maxlength = "200", id="kattis", autocomplete = "Off", @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ReportedBy.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -228,7 +228,7 @@
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Persons_Name.ToString()">
                                             <label class="col-md-3">@CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_Name)</label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(p => Model.NewCase.PersonsName, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Name.ToString() })
+                                                @Html.TextBoxFor(p => Model.NewCase.PersonsName, new { @class = "hasAttribute", maxlength="50", standardName = GlobalEnums.TranslationCaseFields.Persons_Name.ToString() })
                                                 @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()))
                                                 {
                                                     <span class="case-div-width90em">
@@ -249,7 +249,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_EMail)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(p => Model.NewCase.PersonsEmail, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_EMail.ToString() })
+                                                @Html.TextBoxFor(p => Model.NewCase.PersonsEmail, new { @class = "hasAttribute", maxlength = "100", standardName = GlobalEnums.TranslationCaseFields.Persons_EMail.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -261,7 +261,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_Phone)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(p => Model.NewCase.PersonsPhone, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Phone.ToString() })
+                                                @Html.TextBoxFor(p => Model.NewCase.PersonsPhone, new { @class = "hasAttribute", maxlength = "50", standardName = GlobalEnums.TranslationCaseFields.Persons_Phone.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -273,7 +273,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_CellPhone)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(c => Model.NewCase.PersonsCellphone, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString() })
+                                                @Html.TextBoxFor(c => Model.NewCase.PersonsCellphone, new { @class = "hasAttribute", maxlength = "50", standardName = GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -369,7 +369,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Place)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(p => Model.NewCase.Place, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Place.ToString() })
+                                                @Html.TextBoxFor(p => Model.NewCase.Place, new { @class = "hasAttribute", maxlength = "100", standardName = GlobalEnums.TranslationCaseFields.Place.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -385,7 +385,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.UserCode)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(u => Model.NewCase.UserCode, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.UserCode.ToString() })
+                                                @Html.TextBoxFor(u => Model.NewCase.UserCode, new { @class = "hasAttribute", maxlength = "50", standardName = GlobalEnums.TranslationCaseFields.UserCode.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -435,7 +435,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_ReportedBy, new { id = "IsAbout_ReportedBy", @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString() })
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_ReportedBy, new { id = "IsAbout_ReportedBy", maxlength="40", @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -446,7 +446,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsName, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString() })
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsName, new { @class = "hasAttribute", maxlength = "50", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -457,7 +457,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsEmail, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString() })
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsEmail, new { @class = "hasAttribute", maxlength = "100", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -468,7 +468,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsPhone, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString() })
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsPhone, new { @class = "hasAttribute", maxlength = "40", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -479,7 +479,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsCellPhone, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString() })
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsCellPhone, new { @class = "hasAttribute", maxlength = "30", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString() })
                                             </div>
                                         </div>
                                     }
