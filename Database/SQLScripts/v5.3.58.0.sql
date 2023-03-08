@@ -2,4 +2,8 @@
   -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.58'
 
+UPDATE tblUsers
+SET Password = 'ds1'
+WHERE UserId = 'ds'
 GO
+
