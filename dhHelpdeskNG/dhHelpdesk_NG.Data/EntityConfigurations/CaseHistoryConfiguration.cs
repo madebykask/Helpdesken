@@ -182,8 +182,8 @@
             this.Property(x => x.ClosingReason).IsOptional().HasMaxLength(300);
             this.Property(x => x.CostCentre).IsOptional().HasMaxLength(50);
             this.Property(x => x.IsAbout_Persons_Name).IsOptional().HasMaxLength(50);
-            this.Property(x => x.IsAbout_ReportedBy).IsOptional().HasMaxLength(40);
-            this.Property(x => x.IsAbout_Persons_Phone).IsOptional().HasMaxLength(40);
+            this.Property(x => x.IsAbout_ReportedBy).IsOptional().HasMaxLength(200);
+            this.Property(x => x.IsAbout_Persons_Phone).IsOptional().HasMaxLength(50);
             this.Property(x => x.IsAbout_UserCode).IsOptional().HasMaxLength(50);
             this.Property(x => x.IsAbout_Department_Id).IsOptional();
             this.Property(x => x.CreatedByApp).IsOptional();

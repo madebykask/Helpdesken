@@ -435,7 +435,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_ReportedBy, new { id = "IsAbout_ReportedBy", maxlength="40", @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString() })
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_ReportedBy, new { id = "IsAbout_ReportedBy", maxlength="200", @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -468,7 +468,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsPhone, new { @class = "hasAttribute", maxlength = "40", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString() })
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsPhone, new { @class = "hasAttribute", maxlength = "50", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -479,7 +479,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsCellPhone, new { @class = "hasAttribute", maxlength = "30", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString() })
+                                                @Html.TextBoxFor(i => Model.NewCase.IsAbout_PersonsCellPhone, new { @class = "hasAttribute", maxlength = "50", standardName = GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString() })
                                             </div>
                                         </div>
                                     }
@@ -1626,7 +1626,6 @@
     }
 
     function GetComputerUserSearchOptionsForIsAbout() {
-
         var delayFunc = CommonUtils.createDelayFunc();
 
         var options = {
