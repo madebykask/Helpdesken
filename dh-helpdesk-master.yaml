@@ -1,7 +1,7 @@
 trigger:
 - Master
 
-name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(patch).$(Build.SourceVersion)
+name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(release.versionRevision).$(Build.SourceVersion)
 
 pool:
   vmImage: 'windows-latest'
@@ -12,7 +12,6 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   group: build-variables
-  patch: $[counter(format('{0}.{1}', variables['release.versionMajor'], variables['release.versionMinor'], variables['release.versionSubMinor']), 0)]
 
 steps:
 - task: CmdLine@2
@@ -28,8 +27,8 @@ steps:
     targetType: 'inline'
     script: |
       Write-Host "##vso[task.setvariable variable=myVar;]foo"
-      Write-Host "##vso[task.setvariable variable=ProjectBuildNumber;]$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(patch).$(SourceVersionShort)"
-      Write-Host "##vso[build.updatebuildnumber]$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(patch).$(SourceVersionShort)"
+      Write-Host "##vso[task.setvariable variable=ProjectBuildNumber;]$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(release.versionRevision).$(SourceVersionShort)"
+      Write-Host "##vso[build.updatebuildnumber]$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(release.versionRevision).$(SourceVersionShort)"
 
 
 - task: NuGetToolInstaller@1
@@ -48,8 +47,8 @@ steps:
     InsertAttributes: false
     FileEncoding: 'auto'
     WriteBOM: false
-    InformationalVersion: '$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(patch).$(SourceVersionShort)'
-    FileVersionNumber: '$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(patch).$(SourceVersionShort)'
+    InformationalVersion: '$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(release.versionRevision).$(SourceVersionShort)'
+    FileVersionNumber: '$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(release.versionRevision).$(SourceVersionShort)'
     LogLevel: 'verbose'
     FailOnWarning: false
     DisableTelemetry: false
