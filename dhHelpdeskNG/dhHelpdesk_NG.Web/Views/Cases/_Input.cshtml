@@ -372,7 +372,7 @@
 
                                                         @if (!Model.IsReadOnly(CaseSolutionFields.Email))
                                                         {
-                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { id = "dontSendMailToNotifier", onchange = "changeAutocheckNotifier()" })
+                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { id = "dontSendMailToNotifier" })
                                                         }
                                                         else
                                                         {
@@ -2493,17 +2493,6 @@
         e.preventDefault();
     });
 
-    function changeAutocheckNotifier() {
-        var auto = $('#autoCheckNotifyerCheckbox').val();
-        if (auto == 'True') {
-            $('#autoCheckNotifyerCheckbox').val('False')
-        }
-        else {
-            $('#autoCheckNotifyerCheckbox').val('True')
-        }
-    }
-
-
 </script>
 
 <script>
@@ -2590,13 +2579,11 @@
                 $('.summernoteexternal').val($('.summernoteexternal').summernote('isEmpty') ? "" : contents);
 
                 var $initiatorEmail = $('#case__PersonsEmail')
-                //Check if we should tick checkbox from hidden
-                var auto = $('#autoCheckNotifyerCheckbox').val();
 
                 if (this.value.length) {
-                    if (auto == 'True') {
-                        $('#sendMailToNotifyer:not(:disabled)').attr('checked', 'checked');
-                    }
+
+                    $('#sendMailToNotifyer:not(:disabled)').attr('checked', 'checked');
+
                     var to = $initiatorEmail.val();
                     var extras = ''
 
