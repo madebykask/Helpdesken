@@ -2592,7 +2592,7 @@
                             extras = $("#extraEmailsInput").val().replaceAll(";", " ").replaceAll(to, "");
                         }
                     }
-                    
+
                     if (to != '') {
                         $("#emailsTo").html(to);
                         $("#emailsTo").css('display', 'inline');
@@ -2606,6 +2606,10 @@
 
 
                 }
+                else {
+                    $('#sendMailToNotifyer:not(:disabled)').prop('checked', false);
+                }
+
                 validator.element($('.summernoteexternal'));
 
             },
