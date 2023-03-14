@@ -372,11 +372,11 @@
 
                                                         @if (!Model.IsReadOnly(CaseSolutionFields.Email))
                                                         {
-                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { id = "dontSendMailToNotifier" })
+                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { id = "sendMailToNotifier" })
                                                         }
                                                         else
                                                         {
-                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled", id = "dontSendMailToNotifier", onchange = "changeAutocheckNotifier()" })
+                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled", id = "sendMailToNotifier" })
                                                         }
                                                         @Translation.GetCoreTextTranslation("Skicka mail till anmälaren")
                                                         @*</label>*@

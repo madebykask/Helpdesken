@@ -1269,9 +1269,9 @@ namespace DH.Helpdesk.Web.Controllers
                 return new HttpNotFoundResult("No case solution found...");
             }
 
-            //Todo - check this!
+            //Todo - check this 
             // This strange logic I took from Edit() action
-            caseSolution.NoMailToNotifier = caseSolution.NoMailToNotifier == 0 ? 1 : 0;
+            caseSolution.NoMailToNotifier = caseSolution.NoMailToNotifier;
 
             // Check CaseType is Active
             if (caseSolution.CaseType_Id.HasValue)
