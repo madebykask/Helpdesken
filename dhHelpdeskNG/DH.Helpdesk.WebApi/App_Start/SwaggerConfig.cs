@@ -36,7 +36,7 @@ namespace DH.Helpdesk.WebApi
                         //
                         c.SingleApiVersion("v1", "DH.Helpdesk.WebApi")
                             .Description(
-                                "This is a list of all available controllers and actions. Remember it is a beta. Everything can change.");
+                                "This is a list of all available controllers and actions.");
                         //.TermsOfService("Some terms")
                         //.Contact(cc => cc
                         //    .Name("Some contact")
