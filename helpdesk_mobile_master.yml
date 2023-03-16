@@ -1,0 +1,39 @@
+# Node.js with Angular
+# Build a Node.js project that uses Angular.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+trigger:
+- Master
+name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Rev:r)
+
+pool:
+  vmImage: 'windows-latest'
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.18.1'
+- script: |
+    npm install -g @angular/cli@8.3.29
+  workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
+  displayName: 'npm install cli'
+- script: 
+    npm install
+  workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
+  displayName: 'npm install'
+- script: 
+    npm run build_prod --verbose
+  workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
+  displayName: 'ng build prod'
+# - script: |
+#     node ./node_modules/@angular/cli/bin/ng build
+#   displayName: 'ng build prod'
+#   workingDirectory: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile'
+- task: CopyFiles@2
+  displayName: 'Copy Files'
+  inputs:
+    Contents: '$(System.DefaultWorkingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile/wwwroot/build/**' 
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/dhHelpdeskNG/DH.Helpdesk.WebMobile/wwwroot/build'
+    ArtifactName: 'Helpdesk_Mobile'

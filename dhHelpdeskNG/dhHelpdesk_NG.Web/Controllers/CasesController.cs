@@ -1106,9 +1106,9 @@ namespace DH.Helpdesk.Web.Controllers
             var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
 
             var casesLocks = _caseLockService.GetLockedCasesToOverView(ids, globalSettings, this.DefaultCaseLockBufferTime).ToList();
-            
+
             var workinggroupsForUserAndCustomer = _userService
-                                .GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
+                                    .GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
 
             foreach (var searchRow in caseSearchResults)
             {
@@ -1147,7 +1147,7 @@ namespace DH.Helpdesk.Web.Controllers
                         var cc = _caseService.GetCaseById(caseId);
                         var accessMode = CalcEditMode(searchRow.ExtendedSearchInfo.CustomerId, SessionFacade.CurrentUser.Id, cc);
 
-                        if (!wg.IsMemberOfGroup && wg.WorkingGroup_Id > 0
+                        if (!wg.IsMemberOfGroup && wg.WorkingGroup_Id > 0 
                             && accessMode != AccessMode.FullAccess)
                         {
                             jsRow.Add("isNotMemberOfGroup", true);
@@ -1270,7 +1270,6 @@ namespace DH.Helpdesk.Web.Controllers
         /// <param name="extendValue"></param>
         /// <param name="caseId"></param>
         /// <returns>empty string if success. Name of user who locked the case if not</returns>
-        /// 
         public JsonResult ReExtendCaseLock(string lockGuid, int extendValue, int caseId)
         {
             var isExtended = _caseLockService.ReExtendLockCase(new Guid(lockGuid), extendValue);

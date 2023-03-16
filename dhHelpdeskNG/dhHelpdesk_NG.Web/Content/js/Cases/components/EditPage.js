@@ -794,7 +794,6 @@ EditPage.prototype.reExtendCaseLock = function () {
 
     $.post(p.caseLockExtender, data, function (data) {
         if (data && data.length) {
-            console.log("Data has length: " + data);
             var caseLockedWarning$ = $('#caseLockedWarning');
             caseLockedWarning$.off('show.bs.modal').on('show.bs.modal',
                 function () {

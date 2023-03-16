@@ -38,7 +38,7 @@ function SetFocusToReportedByOnCase() {
 $(document).ready(function () {
 
     $('#AddNotifier')[0].prevState = $('#AddNotifier').is(':visible');
-    
+
     var initiatorId = $('#InitiatorCategory').val();
     if (initiatorId) {
         var initiatorCategory = window.parameters.computerUserCategories[initiatorId];
@@ -77,9 +77,9 @@ function GetComputerSearchOptions() {
                     var resultList = jQuery.map(result, function (item) {
                         var aItem = {
                             id: item.Id
-                                , num: item.Name
-                                , location: item.Location
-                                , computertype: item.TypeDescription
+                            , num: item.Name
+                            , location: item.Location
+                            , computertype: item.TypeDescription
                             , ctype: item.TypeName
                         };
                         return JSON.stringify(aItem);
@@ -113,7 +113,7 @@ function GetComputerSearchOptions() {
         highlighter: function (obj) {
             var item = JSON.parse(obj);
             var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
-            var result =item.ctype + ": " + item.num + ' - ' + item.location + ' - ' + (item.computertype == null ? ' ' : item.computertype);
+            var result = item.ctype + ": " + item.num + ' - ' + item.location + ' - ' + (item.computertype == null ? ' ' : item.computertype);
 
             return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
                 return '<strong>' + match + '</strong>';
@@ -141,7 +141,7 @@ function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedO
 
     //$publicOUControlName.val(''); // breaks validation on case save
     $publicReadOnlyOUName.val('');
-    
+
     $.get(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
 
         var selectedItem = null;
@@ -171,10 +171,10 @@ function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedO
     });
 }
 
-function refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat, selectedOrganizationUnitId) {    
+function refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat, selectedOrganizationUnitId) {
     $(publicIsAboutOUControlName).val('');
     $(publicIsAboutReadOnlyOUName).val('');
-    var ctlOption = publicIsAboutOUControlName + ' option';    
+    var ctlOption = publicIsAboutOUControlName + ' option';
     $.get(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
         $(ctlOption).remove();
         $(publicIsAboutOUControlName).append('<option value="">&nbsp;</option>');
@@ -199,19 +199,19 @@ function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentI
     var $publicDepartmentControlName = $(publicDepartmentControlName);
     var $publicReadOnlyDepartmentName = $(publicReadOnlyDepartmentName);
 
-    $publicDepartmentControlName.val(''); 
+    $publicDepartmentControlName.val('');
     $publicReadOnlyDepartmentName.val('');
-    
+
     $publicDepartmentControlName.prop('disabled', true);
     $(publicOUControlName).prop('disabled', true);
 
     $.get(publicChangeRegion, { 'id': regionId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
-        
+
         // Don't disable the dropdown only disable non selected options
         if (IsInitiatorCategoryReadOnly()) {
             $publicDepartmentControlName.removeAttr('disabled');
         }
-        
+
         var options = '<option value="">&nbsp;</option>';
         var selectedItem = null;
 
@@ -245,7 +245,7 @@ function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentI
     });
 }
 
-function refreshIsAboutDepartment(regionId, departmentFilterFormat, selectedDepartmentId, selectedOU) {    
+function refreshIsAboutDepartment(regionId, departmentFilterFormat, selectedDepartmentId, selectedOU) {
     $(publicIsAboutDepartmentControlName).val('');
     $(publicIsAboutReadOnlyDepartmentName).val('');
     var ctlOption = publicIsAboutDepartmentControlName + ' option';
@@ -331,8 +331,8 @@ function IsRegardingCategoryReadOnly() {
 function generateRandomKey() {
     function s4() {
         return Math.floor((1 + Math.random()) * 0x10000)
-          .toString(16)
-          .substring(1);
+            .toString(16)
+            .substring(1);
     }
     return s4() + '-' + s4() + '-' + s4();
 }
@@ -358,16 +358,16 @@ var readOnlyExpressions = {
 }
 
 
-function GetComputerUserSearchOptions() {   
+function GetComputerUserSearchOptions() {
 
     var delayFunc = CommonUtils.createDelayFunc();
-    
+
     var options = {
         items: 20,
         minLength: 2,
         source: function (query, process) {
             lastInitiatorSearchKey = generateRandomKey();
-            delayFunc(function() {
+            delayFunc(function () {
                 //console.log('GetComputerUserSearchOptions: running ajax request');
 
                 var categoryID = null;
@@ -381,32 +381,32 @@ function GetComputerUserSearchOptions() {
                     data: { query: query, customerId: $('#case__Customer_Id').val(), searchKey: lastInitiatorSearchKey, categoryID: categoryID },
                     dataType: 'json',
                     success: function (result) {
-                        if (result.searchKey != lastInitiatorSearchKey) {                            
+                        if (result.searchKey != lastInitiatorSearchKey) {
                             return;
                         }
 
                         var resultList = jQuery.map(result.result, function (item) {
                             var aItem = {
                                 id: item.Id
-                                        , num: item.UserId                                   
-                                        , name: item.FirstName + ' ' + item.SurName
-                                        , email: item.Email
-                                        , place: item.Location
-                                        , phone: item.Phone
-                                        , usercode: item.UserCode
-                                        , cellphone: item.CellPhone
-                                        , regionid: item.Region_Id
-                                        , regionname: item.RegionName
-                                        , departmentid: item.Department_Id
-                                        , departmentname: item.DepartmentName
-                                        , ouid: item.OU_Id
-                                        , ouname: item.OUName
-                                        , name_family: item.SurName + ' ' + item.FirstName
-                                        , customername: item.CustomerName
-                                        , costcentre: item.CostCentre
-                                        , isReadOnly: item.IsReadOnly
-                                        , categoryID: item.CategoryID
-                                        , categoryName: item.CategoryName
+                                , num: item.UserId
+                                , name: item.FirstName + ' ' + item.SurName
+                                , email: item.Email
+                                , place: item.Location
+                                , phone: item.Phone
+                                , usercode: item.UserCode
+                                , cellphone: item.CellPhone
+                                , regionid: item.Region_Id
+                                , regionname: item.RegionName
+                                , departmentid: item.Department_Id
+                                , departmentname: item.DepartmentName
+                                , ouid: item.OU_Id
+                                , ouname: item.OUName
+                                , name_family: item.SurName + ' ' + item.FirstName
+                                , customername: item.CustomerName
+                                , costcentre: item.CostCentre
+                                , isReadOnly: item.IsReadOnly
+                                , categoryID: item.CategoryID
+                                , categoryName: item.CategoryName
                             };
                             return JSON.stringify(aItem);
                         });
@@ -417,14 +417,14 @@ function GetComputerUserSearchOptions() {
                             }
                             resultList.push(JSON.stringify(noRes));
                         }
-                    
+
                         process(resultList);
                     }
                 });
             }, 300);
         },
 
-        matcher: function (obj) {            
+        matcher: function (obj) {
             var item = JSON.parse(obj);
             if (~item.isNoResult) {
                 return 1;
@@ -435,22 +435,22 @@ function GetComputerUserSearchOptions() {
                 || ~item.num.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.phone.toLowerCase().indexOf(this.query.toLowerCase())
                 || ~item.email.toLowerCase().indexOf(this.query.toLowerCase())
-                || ~item.usercode.toLowerCase().indexOf(this.query.toLowerCase());                
+                || ~item.usercode.toLowerCase().indexOf(this.query.toLowerCase());
         },
 
         sorter: function (items) {
             var beginswith = [], caseSensitive = [], caseInsensitive = [], item;
-                while (aItem = items.shift()) {
-                    var item = JSON.parse(aItem);
-                    if (!item.isNoResult) {
-                        if (!item.num
-                            .toLowerCase()
-                            .indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
-                        else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
-                        else caseInsensitive.push(JSON.stringify(item));
-                    }
+            while (aItem = items.shift()) {
+                var item = JSON.parse(aItem);
+                if (!item.isNoResult) {
+                    if (!item.num
+                        .toLowerCase()
+                        .indexOf(this.query.toLowerCase())) beginswith.push(JSON.stringify(item));
+                    else if (~item.num.indexOf(this.query)) caseSensitive.push(JSON.stringify(item));
                     else caseInsensitive.push(JSON.stringify(item));
                 }
+                else caseInsensitive.push(JSON.stringify(item));
+            }
             return beginswith.concat(caseSensitive, caseInsensitive);
         },
 
@@ -465,8 +465,8 @@ function GetComputerUserSearchOptions() {
             var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&');
             var result = item.name + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
             var resultBy_NameFamily = item.name_family + ' - ' + item.num + ' - ' + item.phone + ' - ' + item.email + ' - ' + item.departmentname + ' - ' + item.usercode;
-                     
-            if (result.toLowerCase().indexOf(orgQuery.toLowerCase()) > -1)               
+
+            if (result.toLowerCase().indexOf(orgQuery.toLowerCase()) > -1)
                 return result.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
                     return '<strong>' + match + '</strong>';
                 });
@@ -474,7 +474,7 @@ function GetComputerUserSearchOptions() {
                 return resultBy_NameFamily.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
                     return '<strong>' + match + '</strong>';
                 });
-           
+
         },
 
         updater: function (obj) {
@@ -523,7 +523,7 @@ function GetComputerUserSearchOptions() {
                     $('#case__Region_Id').val(item.regionid);
                     $('#RegionName').val(item.regionname);
                 }
-                
+
                 if (item.regionid != "" &&
                     item.regionid != null &&
                     item.departmentid != "" &&
@@ -542,7 +542,7 @@ function GetComputerUserSearchOptions() {
                 if (item.id != null) {
                     setPcNumber(item.id);
                 }
-                    
+
 
                 return item.num;
             }
@@ -559,7 +559,7 @@ function initExtendedComputerUserSections() {
 }
 
 function loadExtendedCaseSectionIfExist(categoryId, sectionType) {
-    
+
     var inputData = {
         categoryID: categoryId,
         caseSectionType: sectionType // 0 - Initiator, 1 - Regarding
@@ -624,11 +624,11 @@ function getExtendedCaseSectionIFrameOptions() {
         sizeHeight: true,
         checkOrigin: false,
         enablePublicMethods: true,
-        resizedCallback: function(messageData) {
+        resizedCallback: function (messageData) {
             //console.log('>>>iFrame sesize callback called.!');
         },
         bodyMargin: '0 0 0 0',
-        closedCallback: function (id) {},
+        closedCallback: function (id) { },
         heightCalculationMethod: 'grow'
     };
     return iframeOptions;
@@ -687,8 +687,8 @@ function GetComputerUserSearchOptionsForIsAbout() {
 
                 var categoryID = null;
                 var isAboutCategory = $('#IsAboutCategory');
-                    if (isAboutCategory.length > 0)
-                        categoryID = isAboutCategory.val();
+                if (isAboutCategory.length > 0)
+                    categoryID = isAboutCategory.val();
 
                 $.ajax({
                     url: '/cases/search_user',
@@ -702,25 +702,25 @@ function GetComputerUserSearchOptionsForIsAbout() {
                         var resultList = jQuery.map(result.result, function (item) {
                             var aItem = {
                                 id: item.Id
-                                        , num: item.UserId
-                                        , name: item.FirstName + ' ' + item.SurName
-                                        , email: item.Email
-                                        , place: item.Location
-                                        , phone: item.Phone
-                                        , usercode: item.UserCode
-                                        , cellphone: item.CellPhone
-                                        , regionid: item.Region_Id
-                                        , regionname: item.RegionName
-                                        , departmentid: item.Department_Id
-                                        , departmentname: item.DepartmentName
-                                        , ouid: item.OU_Id
-                                        , ouname: item.OUName
-                                        , name_family: item.SurName + ' ' + item.FirstName
-                                        , customername: item.CustomerName
-                                        , costcentre: item.CostCentre
-                                        , isReadOnly: item.IsReadOnly
-                                        , categoryID: item.CategoryID
-                                        , categoryName: item.CategoryName
+                                , num: item.UserId
+                                , name: item.FirstName + ' ' + item.SurName
+                                , email: item.Email
+                                , place: item.Location
+                                , phone: item.Phone
+                                , usercode: item.UserCode
+                                , cellphone: item.CellPhone
+                                , regionid: item.Region_Id
+                                , regionname: item.RegionName
+                                , departmentid: item.Department_Id
+                                , departmentname: item.DepartmentName
+                                , ouid: item.OU_Id
+                                , ouname: item.OUName
+                                , name_family: item.SurName + ' ' + item.FirstName
+                                , customername: item.CustomerName
+                                , costcentre: item.CostCentre
+                                , isReadOnly: item.IsReadOnly
+                                , categoryID: item.CategoryID
+                                , categoryName: item.CategoryName
 
                             };
                             return JSON.stringify(aItem);
@@ -737,7 +737,7 @@ function GetComputerUserSearchOptionsForIsAbout() {
                     }
                 });
             },
-            300);
+                300);
         },
 
         matcher: function (obj) {
@@ -856,7 +856,7 @@ function GetComputerUserSearchOptionsForIsAbout() {
                 /*if (item.categoryID != null){
                     window.page.loadExtendedInitiator();
                 }*/
-                
+
                 loadExtendedCaseSectionIfExist(item.categoryID, regardingSectionType);
 
                 return item.num;
@@ -868,24 +868,23 @@ function GetComputerUserSearchOptionsForIsAbout() {
     return options;
 }
 
-function setPcNumber(userId)
-{       
+function setPcNumber(userId) {
     $.ajax({
         url: '/cases/Search_PcNumber',
         type: 'post',
         data: { userId: userId, customerId: $('#case__Customer_Id').val() },
         dataType: 'json',
         success: function (result) {
-            if (result != null){
-            if (result.Name != null || result.Name != "")
-                $('#case__InventoryNumber').val(result.Name);
+            if (result != null) {
+                if (result.Name != null || result.Name != "")
+                    $('#case__InventoryNumber').val(result.Name);
                 $('#case__InventoryType').val(result.TypeDescription);
                 $('#case__InventoryLocation').val(result.Location);
                 $("#ShowInventoryBtn").show();
             }
-        }        
+        }
     });
- 
+
 }
 
 /**
@@ -895,7 +894,7 @@ function CaseInitForm(opt) {
 
     var self = this;
     var options = opt || { twoAttacmentsMode: false, fileUploadWhiteList: null };
-    var twoAttachmentsMode = opt.twoAttacmentsMode; 
+    var twoAttachmentsMode = opt.twoAttacmentsMode;
 
 
     $("#CaseLog_TextExternal").on("summernote.focus", function (e) {
@@ -907,7 +906,7 @@ function CaseInitForm(opt) {
     });
 
     $('#case__ReportedBy').typeahead(GetComputerUserSearchOptions());
-    
+
     $('#case__InventoryNumber').typeahead(GetComputerSearchOptions());
     $('#case__IsAbout_ReportedBy').typeahead(GetComputerUserSearchOptionsForIsAbout());
 
@@ -926,14 +925,14 @@ function CaseInitForm(opt) {
         if (templateDep_Id != undefined && templateDep_Id != "") {
             var templateOU_Id = $("#CaseTemplate_OU_Id").val();
             $("#CaseTemplate_OU_Id").val('');
-            if (templateOU_Id != undefined && templateOU_Id != "") 
+            if (templateOU_Id != undefined && templateOU_Id != "")
                 refreshDepartment(regionId, departmentFilterFormat, templateDep_Id, templateOU_Id);
             else
                 refreshDepartment(regionId, departmentFilterFormat, templateDep_Id);
-        } else {  
+        } else {
             refreshDepartment(regionId, departmentFilterFormat);
         }
-        
+
     });
 
     $('#case__IsAbout_Region_Id').change(function () {
@@ -951,9 +950,9 @@ function CaseInitForm(opt) {
                 refreshIsAboutDepartment(regionId, departmentFilterFormat, templateDep_Id);
         } else {
             refreshIsAboutDepartment(regionId, departmentFilterFormat);
-        }        
+        }
     });
-    
+
     $(publicDepartmentControlName).change(function () {
         // Remove after implementing http://redmine.fastdev.se/issues/10995        
         var departmentId = $(this).val();
@@ -966,9 +965,9 @@ function CaseInitForm(opt) {
         var templateOU_Id = $("#CaseTemplate_OU_Id").val();
         $("#CaseTemplate_OU_Id").val('');
 
-        if (templateOU_Id != undefined && templateOU_Id != "") 
-            refreshOrganizationUnit(departmentId, departmentFilterFormat, templateOU_Id);                
-        else 
+        if (templateOU_Id != undefined && templateOU_Id != "")
+            refreshOrganizationUnit(departmentId, departmentFilterFormat, templateOU_Id);
+        else
             refreshOrganizationUnit(departmentId, departmentFilterFormat);
     });
 
@@ -990,7 +989,7 @@ function CaseInitForm(opt) {
         if (templateOU_Id != undefined && templateOU_Id != "")
             refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat, templateOU_Id);
         else
-            refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat);        
+            refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat);
     });
 
     function showInvoice(departmentId, ouId) {
@@ -1009,7 +1008,7 @@ function CaseInitForm(opt) {
                 _parameters.departmentInvoiceMandatory = data.ChargeMandatory;
                 _parameters.showInvoiceTime = data.ShowInvoiceTime;
                 _parameters.showInvoiceOvertime = data.ShowInvoiceOvertime;
-                
+
                 if (data.Charge) {
                     $(invoiceSelector).show();
                 }
@@ -1044,7 +1043,7 @@ function CaseInitForm(opt) {
             $('#AddNotifier').hide();
         }
         else {
-          //  $('#case__Region_Id').find('option').removeAttr('disabled');
+            //  $('#case__Region_Id').find('option').removeAttr('disabled');
             readOnlySection('initiator', false);
             if ($('#AddNotifier')[0].prevState) {
                 $('#AddNotifier').show();
@@ -1066,8 +1065,8 @@ function CaseInitForm(opt) {
         }
     });
 
-    
-    $('#case__Status_Id').change(function (e) {        
+
+    $('#case__Status_Id').change(function (e) {
         console.log('>>> CaseStatus changed event.');
         var templateStateSecondartId = $('#CaseTemplate_StateSecondary_Id').val() || '';
         var templateWgId = $('#CaseTemplate_WorkingGroup_Id').val() || '';
@@ -1105,10 +1104,10 @@ function CaseInitForm(opt) {
                 //set performer only if it was not set by case template before
                 var $performerId = $('#Performer_Id');
                 var performerUserId = Number(res.UserId);
-                
+
                 if (!isNaN(performerUserId) && performerUserId > 0 && templatePerformerId === '') {
                     var exists = $performerId.find('option[value=' + res.UserId + ']').length > 0;
-                    if (!exists) 
+                    if (!exists)
                         $performerId.append("<option value='" + res.UserId + "'>" + res.UserName + "</option>");
                     $performerId.val(res.UserId);
                 }
@@ -1119,13 +1118,13 @@ function CaseInitForm(opt) {
                 }
             }
         })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
-                console.warn('Case type (id=%s) not found.', caseTypeId);
-                ShowToastMessage('CaseType not found', 'warning', false);
-            }
-        });
-        
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                    console.warn('Case type (id=%s) not found.', caseTypeId);
+                    ShowToastMessage('CaseType not found', 'warning', false);
+                }
+            });
+
         resetProductareaByCaseType(caseTypeId);
     });
 
@@ -1201,8 +1200,8 @@ function CaseInitForm(opt) {
         var regardingSectionType = 1;
         resetExtendedCaseSection(regardingSectionType);
     }
-    
-    function onProductAreaChanged(sender) {        
+
+    function onProductAreaChanged(sender) {
         var me = sender;
         var val = $(me).attr('value');
         var curCaseId = $('#case__Id').val();
@@ -1229,6 +1228,7 @@ function CaseInitForm(opt) {
     }
 
     $('#case__Priority_Id').change(function () {
+
         
         var isInheritingMode = $('#CaseTemplate_ExternalLogNote').val();
         if (isInheritingMode === 'True') {
@@ -1241,6 +1241,7 @@ function CaseInitForm(opt) {
         }
 
         var textExternalLogNote = $('#CaseLog_TextExternal').html();
+
   
         $.post('/Cases/ChangePriority/', { 'id': $(this).val(), 'textExternalLogNote': textExternalLogNote }, function (data) {
             const $txtExternal = $('#CaseLog_TextExternal');
@@ -1278,24 +1279,24 @@ function CaseInitForm(opt) {
             $.post('/Cases/ChangeFinishingType/', { 'id': $(this).val() }, 'json')
                 .done(function (data) {
                     if (data) {
-                       
+
                         var child = $('#FinishingCauseHasChild').val(data.HasChild);
                         $('#FinishingCauseHasChild').val(data.HasChild);
 
                     }
                 });
-        }  
+        }
     });
     // Product Area change
     $('#case__ProductArea_Id').change(function (e) {
         console.log('>>> ProductArea changed event.');
-        $("#ProductAreaHasChild").val(0);        
+        $("#ProductAreaHasChild").val(0);
         document.getElementById("divProductArea").classList.remove("error");
 
         var templateWgId = $('#CaseTemplate_WorkingGroup_Id').val() || '';
         var templatePriorityId = $('#CaseTemplate_Priority_Id').val() || '';
 
-        if ($(this).val() > 0 ) {
+        if ($(this).val() > 0) {
             $.post('/Cases/ChangeProductArea/', { 'id': $(this).val() }, 'json')
                 .done(function (data) {
                     if (data) {
@@ -1315,19 +1316,19 @@ function CaseInitForm(opt) {
                                 $casePriorityId.attr('data-sla', data.SLA);
                                 $casePriorityId.change();
                             }
-                            
+
                             if ($priorityName.length && data.PriorityName) {
                                 $priorityName.val(data.PriorityName);
                             }
                         }
-                    
+
                         if (priorityId > 0)
                             $('.sla-value').eq(0).val(data.Priority_Id);
                         $('#ProductAreaHasChild').val(data.HasChild);
-                        
+
                     }
                 });
-        }        
+        }
     });
 
     function changeWorkingGroupValue(newWorkingGroupId, newWorkingGroupName, srcName) {
@@ -1362,10 +1363,10 @@ function CaseInitForm(opt) {
         if (source !== 'case__StateSecondary_Id') {
             //set state secondary
             SelectValueInOtherDropdownOnChange($(this).val(),
-                    '/Cases/ChangeWorkingGroupSetStateSecondary/',
-                    '#case__StateSecondary_Id',
-                    '.readonlySubstate')
-                .done(function() {
+                '/Cases/ChangeWorkingGroupSetStateSecondary/',
+                '#case__StateSecondary_Id',
+                '.readonlySubstate')
+                .done(function () {
                     $('#case__StateSecondary_Id').trigger('change', 'case__WorkingGroup_Id');
                 });
         }
@@ -1377,6 +1378,7 @@ function CaseInitForm(opt) {
     });
 
     function addTextToLog(text) {
+
         
         var txt = "<p>" + text.replace(/\n/g, "</p><p>").replace("/&/g", "&amp") + "</p>";
         var writeTextToExternalNote = $("#WriteTextToExternalNote").val();
@@ -1403,7 +1405,7 @@ function CaseInitForm(opt) {
         $("#standardtextDropdownMenu").click();
     }
 
-    $("#standardtextDropdownMenu").click(function() {
+    $("#standardtextDropdownMenu").click(function () {
         $("#standardTextAccordion").accordion("activate", false);
     });
 
@@ -1430,7 +1432,7 @@ function CaseInitForm(opt) {
     initDynamicDropDownsKeysBehaviour();
 
     //todo: check CaseTemplae
-    $("ul.dropdown-menu li a").click(function(e) {
+    $("ul.dropdown-menu li a").click(function (e) {
         //var toggler = $(this).parents("ul.dropdown-menu").prevAll("button.dropdown-toggle[data-toggle=dropdown]");
         var toggler = $(this).closest(".btn-group.open").find("button.dropdown-toggle[data-toggle=dropdown]");
         if (toggler.length) {
@@ -1471,8 +1473,7 @@ function CaseInitForm(opt) {
     resetProductareaByCaseType($('#case__CaseType_Id').val());
 
     /*Show|hide invocie time on initiating*/
-    if ($(publicDepartmentControlName) != undefined)
-    {
+    if ($(publicDepartmentControlName) != undefined) {
         var depId = $(publicDepartmentControlName).val();
         var ouId = null;
         if ($(publicOUControlName) != undefined)
@@ -1517,11 +1518,11 @@ function CaseInitForm(opt) {
             params += "&organizationUnitId=" + $(publicOUControlName).val();
         if ($("#case__CostCentre").val() != '')
             params += "&costcentre=" + $("#case__CostCentre").val();
-                        
-         var userCategory = $("#InitiatorCategory").val() || '';
-         if (userCategory != ''){
-            params += "&userCategory=" + userCategory; 
-         }
+
+        var userCategory = $("#InitiatorCategory").val() || '';
+        if (userCategory != '') {
+            params += "&userCategory=" + userCategory;
+        }
 
         var win = window.open('/Notifiers/NewNotifierPopup' + params, '_blank', 'left=100,top=100,width=990,height=480,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
 
@@ -1533,6 +1534,7 @@ function CaseInitForm(opt) {
         var question = $('#case__Caption').val();
         var answer = $('#CaseLog_TextExternal').summernote('code');
         var internalanswer = $('#CaseLog_TextInternal').summernote('code');
+
   
         var win = window.open('/Faq/NewFAQPopup?question=' + question + '&answer=' + stripHtml(answer) + '&internalanswer=' + stripHtml(internalanswer), '_blank', 'left=100,top=100,width=700,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
     });
@@ -1549,7 +1551,7 @@ function CaseInitForm(opt) {
     }
 
     var getCaseFiles = function () {
-        $.get('/Cases/Files', { id: $('#CaseKey').val(), savedFiles: $('#SavedFiles').val(),  now: Date.now() }, function (data) {
+        $.get('/Cases/Files', { id: $('#CaseKey').val(), savedFiles: $('#SavedFiles').val(), now: Date.now() }, function (data) {
             $('#divCaseFiles').html(data);
             // Raise event about rendering of uploaded file
             $(document).trigger("OnUploadedCaseFileRendered", []);
@@ -1567,8 +1569,8 @@ function CaseInitForm(opt) {
         $.get('/Cases/LogFiles', $.param(params), function (data) {
             var $divOutput = isInternal === true ? $('div.internalLog-files') : $('div.externalLog-files');
             $divOutput.html(data);
-            $(document).trigger("OnUploadedCaseLogFileRendered", []); 
-            
+            $(document).trigger("OnUploadedCaseLogFileRendered", []);
+
             bindDeleteLogFileBehaviorToDeleteButtons(isInternal);
         });
     };
@@ -1602,8 +1604,7 @@ function CaseInitForm(opt) {
     }
 
     var invalidFileExtensionText = opt.invalidFileExtensionText;
-    var isFileInWhiteList = function(filename, whiteList)
-    {
+    var isFileInWhiteList = function (filename, whiteList) {
         if (filename.indexOf('.') !== -1) {
             var extension = filename.split('.').reverse()[0].toLowerCase();
             if (whiteList.indexOf(extension) >= 0)
@@ -1618,7 +1619,7 @@ function CaseInitForm(opt) {
 
     //////////////////////////////////////////////////////////////////////////
     //////// Attachments /////////////////////////////////////////////////////
-    
+
     ////////  Clipboard File Upload //////////////////////////////////////////
 
     var clipboardFileUpload = null;
@@ -1638,7 +1639,7 @@ function CaseInitForm(opt) {
     $("a.uploadLogFileFromClipboardBtn").on('click', function (e) {
 
         const isInternal = $(this).data('logtype') === 'internalLog';
-        
+
         var opt = {
             fileKey: $('#LogKey').val(),
             refreshCallback: function () { getLogFiles(isInternal); },
@@ -1667,11 +1668,11 @@ function CaseInitForm(opt) {
             }
         }
     });
-   
+
     PluploadTranslation($('#CurLanguageId').val());
 
     var newFileName = "";
-    
+
     // case files upload
     $('#upload_files_popup').on('show', function () {
         _plupload = $('#file_uploader').pluploadQueue({
@@ -1707,7 +1708,7 @@ function CaseInitForm(opt) {
 
                 FilesAdded: function (up, files) {
                     if (opt.fileUploadWhiteList != null) {
-                        var whiteList = opt.fileUploadWhiteList; 
+                        var whiteList = opt.fileUploadWhiteList;
 
                         files.forEach(function (e) {
                             if (!isFileInWhiteList(e.name, whiteList)) {
@@ -1769,7 +1770,7 @@ function CaseInitForm(opt) {
                 UploadFile: function (up, file) {
                     //log('[UploadFile]', file);
                     const $logFileNames = isInternalLog ? $('#LogFileNamesInternal') : $('#LogFileNames');
-                    var strFiles = $logFileNames.val(); 
+                    var strFiles = $logFileNames.val();
                     var allFileNames = strFiles.split('|');
 
                     var fn = file.name;
@@ -1812,7 +1813,7 @@ function CaseInitForm(opt) {
 
                 FilesAdded: function (up, files) {
                     if (opt.fileUploadWhiteList != null) {
-                        var whiteList = opt.fileUploadWhiteList; 
+                        var whiteList = opt.fileUploadWhiteList;
 
                         files.forEach(function (e) {
                             if (!isFileInWhiteList(e.name, whiteList)) {

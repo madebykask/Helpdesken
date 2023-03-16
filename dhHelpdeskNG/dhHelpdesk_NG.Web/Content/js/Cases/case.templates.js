@@ -342,7 +342,6 @@ function SaveTemplateValue(ctrlId, data, fieldName) {
 var ApplyTemplate = function (data, doOverwrite) {
 
     changeCaseButtonsState(false);
-
     var dateFormat = data['dateFormat'];
     $('#CaseTemplate_ExternalLogNote').val('True');
 
@@ -454,11 +453,22 @@ var ApplyTemplate = function (data, doOverwrite) {
         el = $("#UpdateNotifierInformation");
         SetBootstrapSwitchIfElVisible(el, val);
     }
-
+    
     if (!isNullOrEmpty(data.NoMailToNotifier)) {
         val = data.NoMailToNotifier || false;
-        el = $("#CaseMailSetting_DontSendMailToNotifier");
-        SetCheckboxValueIfElVisible(el, val);
+        var $el = $("#sendMailToNotifier");
+        
+        $("#dontSendMailToNotifier").val(val);
+        if (val) {
+            $("#autoCheckNotifyerCheckbox").val('false');
+            $("#sendMailToNotifier").prop('checked', false);
+            $el.trigger('change');
+        }
+        else {
+            $("#autoCheckNotifyerCheckbox").val('true');
+            $("#sendMailToNotifier").prop('checked', true);
+            $el.trigger('change');
+        }
     }
 
     if (!isNullOrEmpty(data.IsAbout_PersonsName)) {

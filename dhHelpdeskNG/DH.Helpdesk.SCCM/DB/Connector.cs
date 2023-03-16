@@ -436,7 +436,6 @@ namespace DH.Helpdesk.SCCM.DB
             }
         }
 
-
         public void UpdateApplication(int Customer_Id)
         {
 

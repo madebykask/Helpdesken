@@ -23,17 +23,17 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// List of Finishing causes
         /// </summary>
         /// <param name="cid"></param>
-        /// <param name="excludeMergedCause"></param>>
+        /// <param name="excludeMergedCause"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("options")]
         public async Task<IEnumerable<FinishingCauseOverview>> Get(int cid, bool excludeMergedCause = false)
         {
             var closingReasons = await _finishingCauseService.GetFinishingCausesWithChildsAsync(cid);
-
-            if (excludeMergedCause)
+            
+            if(excludeMergedCause)
             {
-                closingReasons.Remove(closingReasons.SingleOrDefault(x => x.Merged));
+                closingReasons.Remove(closingReasons.SingleOrDefault(x=> x.Merged));
             }
             return closingReasons;
         }

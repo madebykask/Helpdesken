@@ -145,7 +145,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     ValidIssuer = authority,
 
                     ValidateAudience = true,
-                    ValidateIssuer = true,
+                    ValidateIssuer = false,
                     IssuerSigningKeys = config.SigningKeys,
                     ValidateLifetime = true
                 };
