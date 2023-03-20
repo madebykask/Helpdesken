@@ -283,8 +283,10 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="Controllers\CaseFavoritesController.cs" />
     <Compile Include="Controllers\CaseLogFilesController.cs" />
+    <Compile Include="Controllers\WebpartController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\StatusesController.cs" />
+    <Compile Include="Infrastructure\Attributes\SecretKeyHeaderAttribute.cs" />
     <Compile Include="Infrastructure\Owin\LogRequestMiddleware.cs" />
     <Compile Include="Logic\Case\CaseFieldsCreator.cs" />
     <Compile Include="Controllers\CaseHistoryController.cs" />
@@ -391,6 +393,7 @@
     <Compile Include="Models\MicrosoftUserModel.cs" />
     <Compile Include="Models\Output\CaseSectionOutputModel.cs" />
     <Compile Include="Models\Output\CaseSortFieldModel.cs" />
+    <Compile Include="Models\Output\CasesResult.cs" />
     <Compile Include="Models\Output\FavoriteFilterField.cs" />
     <Compile Include="Models\Output\NotifierData.cs" />
     <Compile Include="Models\Output\NotifierSearchItem.cs" />
@@ -483,7 +486,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>13086</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:8049/</IISUrl>
+          <IISUrl>http://localhost:8080/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

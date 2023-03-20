@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System.Configuration;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Web.Http;
@@ -6,7 +8,7 @@ using System.Web.Http.Controllers;
 
 namespace DH.Helpdesk.WebApi.Infrastructure.Attributes
 {
-    public class AuthorizeApiAttribute: AuthorizeAttribute
+    public class AuthorizeApiAttribute : AuthorizeAttribute
     {
         protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)
         {
@@ -28,14 +30,40 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Attributes
             }
             else
             {
-                //TODO: Add messages for no permisssions, roles
-                actionContext.Response = new AuthenticationFailureMessage("unauthorized", actionContext.Request,
-                    new
+                if (actionContext.ControllerContext.Request.Headers.Contains("webpartsecretkey"))
+                {
+                    //Get the value of key sekretAppKey from header
+                    var keyfromRequest = actionContext.ControllerContext.Request.Headers
+                    .GetValues("webpartsecretkey")
+                    .FirstOrDefault();
+                    var _expectedSecretKey = ConfigurationManager.AppSettings["WebpartSecretKey"];
+                    if (keyfromRequest == _expectedSecretKey)
                     {
-                        
-                        error = "invalid_request",
-                        error_message = "The Token is invalid"
-                    });
+                        return;
+                    }
+                    else
+                    {
+                        actionContext.Response = new AuthenticationFailureMessage("unauthorized", actionContext.Request,
+                            new
+                            {
+                                error = "invalid_request",
+                                error_message = "The Secret Key is invalid"
+                            });
+
+                    }
+                }
+                else
+                {
+                    //TODO: Add messages for no permisssions, roles
+                    actionContext.Response = new AuthenticationFailureMessage("unauthorized", actionContext.Request,
+                        new
+                        {
+
+                            error = "invalid_request",
+                            error_message = "The Token is invalid"
+                        });
+                }
+
             }
         }
     }
@@ -47,9 +75,9 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Attributes
         {
             MediaTypeFormatter jsonFormatter = new JsonMediaTypeFormatter();
 
-            Content = new ObjectContent<object>(responseMessage, jsonFormatter);            
+            Content = new ObjectContent<object>(responseMessage, jsonFormatter);
             RequestMessage = request;
-            ReasonPhrase = reasonPhrase;            
+            ReasonPhrase = reasonPhrase;
         }
     }
 
