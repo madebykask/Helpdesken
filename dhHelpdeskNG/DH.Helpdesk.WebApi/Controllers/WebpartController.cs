@@ -83,7 +83,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <param name="caseFieldsToReturn">Lorem Ipsum</param>
         /// <param name="limit">The maximum number of objects to return. Default: 20. Minimum: 1. Maximum: 20.</param>
         /// <param name="offset">The index of the first object to return. Default: 0 (i.e., the first object). Use with limit to get the next set of objects.</param>
-        public CasesResult Cases([FromUri]int customerId, [FromUri] int languageId, [FromUri]string email, [FromUri]string stateSecondaryIds, [FromUri]string orderByCaseField, [FromUri]string caseFieldsToReturn, [FromUri] int? limit, [FromUri] int? offset)
+        public CasesResult Cases([FromUri]int customerId, [FromUri] int languageId, [FromUri]string email, [FromUri]string orderByCaseField, [FromUri]string caseFieldsToReturn, [FromUri] int? limit, [FromUri] int? offset)
         {
 
             ////#12364 - Paginering
@@ -114,7 +114,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 //
                 if (user != null && acceptedCustomerIds.Contains(customerId.ToString()))
                 {
-                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(myCases, user.Id, customerId, "", ((0) * (0)), ((limit.HasValue ? limit.Value: 20) ), orderByCaseField, (!orderByCaseField.ToLower().Contains("desc")));
+                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(myCases, user.Id, customerId, "", ((offset.HasValue ? offset.Value : 0), ((limit.HasValue ? limit.Value: 20) ), orderByCaseField, (!orderByCaseField.ToLower().Contains("desc")));
                     var model = new CasesResult(customerCases, caseFieldsToReturn);
 
 
