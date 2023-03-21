@@ -114,7 +114,11 @@ namespace DH.Helpdesk.WebApi.Controllers
                 //
                 if (user != null && acceptedCustomerIds.Contains(customerId.ToString()))
                 {
-                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(myCases, user.Id, customerId, "", ((offset.HasValue ? offset.Value : 0), ((limit.HasValue ? limit.Value: 20) ), orderByCaseField, (!orderByCaseField.ToLower().Contains("desc")));
+
+                    int from = (offset.HasValue ? offset.Value : 0);
+                    int count = (limit.HasValue ? limit.Value : 20);
+
+                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(myCases, user.Id, customerId, "", from, count, orderByCaseField, (!orderByCaseField.ToLower().Contains("desc")));
                     var model = new CasesResult(customerCases, caseFieldsToReturn);
 
 
