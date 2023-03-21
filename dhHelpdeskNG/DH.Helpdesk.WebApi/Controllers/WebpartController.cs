@@ -32,7 +32,7 @@ using Microsoft.IdentityModel.Protocols;
 using System.Configuration;
 using System.Runtime.InteropServices.WindowsRuntime;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
-using static DH.Helpdesk.WebApi.Models.CaseOverviewWebpartModel;
+
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -75,33 +75,61 @@ namespace DH.Helpdesk.WebApi.Controllers
         //#12144 - Ta emot secret key "header" jämför med "WebpartSecretKey"
         [WebpartSecretKeyHeader]
         [Route("cases")]
-        public CasesResult Cases([FromUri]int customerId, [FromUri]string email, [FromUri]string stateSecondaryIds, [FromUri]string orderByCaseField, [FromUri]string caseFieldsToReturn)
+        /// <param name="customerId">Lorem Ipsum</param>
+        /// <param name="languageId">Lorem Ipsum</param>
+        /// <param name="email">Lorem Ipsum</param>
+        /// <param name="stateSecondaryIds">Lorem Ipsum</param>
+        /// <param name="orderByCaseField">Lorem Ipsum</param>
+        /// <param name="caseFieldsToReturn">Lorem Ipsum</param>
+        /// <param name="limit">The maximum number of objects to return. Default: 20. Minimum: 1. Maximum: 20.</param>
+        /// <param name="offset">The index of the first object to return. Default: 0 (i.e., the first object). Use with limit to get the next set of objects.</param>
+        public CasesResult Cases([FromUri]int customerId, [FromUri] int languageId, [FromUri]string email, [FromUri]string stateSecondaryIds, [FromUri]string orderByCaseField, [FromUri]string caseFieldsToReturn, [FromUri] int? limit, [FromUri] int? offset)
         {
-            //#12144 Jag ska bara kunna se mina egna case (de som jag är assignade till) = email kopplat till performer_userId
-            //Hämta PerformerUserId baserat på emailadressen
 
-            //Har PerformerUserId tillgång till customerId som skickas in?
+            ////#12364 - Paginering
 
+            //endast de kunder som har igång webpart
+            string[]  acceptedCustomerIds = ConfigurationManager.AppSettings["WebpartAcceptedCustomerIds"].Split(',');
 
-            //#12364 - Paginering
-
+            //#12144 Jag ska bara kunna se mina egna case (de som jag är assignade till)
+            bool myCases = true;
 
             //#12363
             //caseFieldsToReturn (Dessa kommer vi att skicka in)
-            //Persons_Name
-            //RegTime
-            //Caption
+            //Persons_Name = InitiatorName ?
+            //RegTime = RegistrationDate
+            //Caption = c.Subject
+            //WatchDate WatchDate
+            //ReportedBy ?
+
+
             //Performer_User_Id
-            //WatchDate
-            //ReportedBy
             //CaseId
             //CaseNumber
 
-            //Hämta kolumnerna i den ordningen som användaren har valt
+            try
+            {
+                //Hämta PerformerUserId baserat på emailadressen
+                DH.Helpdesk.Domain.User user = _userSerivice.GetUserByEmail(email);
+                //
+                if (user != null && acceptedCustomerIds.Contains(customerId.ToString()))
+                {
+                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(myCases, user.Id, customerId, "", ((0) * (0)), ((limit.HasValue ? limit.Value: 20) ), orderByCaseField, (!orderByCaseField.ToLower().Contains("desc")));
+                    var model = new CasesResult(customerCases, caseFieldsToReturn);
 
-            var casesResult = new CasesResult();
 
-            return casesResult;
+                    return model;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }
