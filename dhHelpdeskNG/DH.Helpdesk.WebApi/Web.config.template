@@ -23,7 +23,7 @@
 		<add key="MicrosoftTenant" value="#{MicrosoftTenantApi}"/>
 		<add key="MicrosoftAuthority" value="#{MicrosoftAuthorityApi}"/>
 		<add key="WebpartSecretKey" value="#{WebpartSecretKey}"/>
-		<add key="WebpartSecretKey" value="#{WebpartAcceptedCustomerIds}"/>
+		<add key="WebpartAcceptedCustomerIds" value="#{WebpartAcceptedCustomerIds}"/>
 	</appSettings>
 
 	<connectionStrings>
