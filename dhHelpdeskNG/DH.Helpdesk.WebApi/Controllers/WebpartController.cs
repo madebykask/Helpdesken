@@ -32,6 +32,7 @@ using Microsoft.IdentityModel.Protocols;
 using System.Configuration;
 using System.Runtime.InteropServices.WindowsRuntime;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
+using System.Security.Cryptography;
 
 
 namespace DH.Helpdesk.WebApi.Controllers
@@ -101,11 +102,20 @@ namespace DH.Helpdesk.WebApi.Controllers
             //Caption = c.Subject
             //WatchDate WatchDate
             //ReportedBy ?
-
-
             //Performer_User_Id
             //CaseId
             //CaseNumber
+
+            //#12385 - skicka in 
+            //Id,
+            //CaseNumber,
+            //Subject,
+            //RegistrationDate,
+            //WatchDate,
+            //InitiatorName,
+            //PerformerName
+
+
 
             try
             {
@@ -117,10 +127,15 @@ namespace DH.Helpdesk.WebApi.Controllers
 
                     int from = (offset.HasValue ? offset.Value : 0);
                     int count = (limit.HasValue ? limit.Value : 20);
-
+                    
                     var customerCases = _caseSearchService.SearchActiveCustomerUserCases(myCases, user.Id, customerId, "", from, count, orderByCaseField, (!orderByCaseField.ToLower().Contains("desc")));
+
                     var model = new CasesResult(customerCases, caseFieldsToReturn);
 
+                    foreach (var c in model.Columns)
+                    {
+                        c.Name = _caseTranslationService.GetCaseTranslation(GetColumnNameForTranslation(c.Name), languageId, customerId);
+                    }
 
                     return model;
                 }
@@ -134,6 +149,24 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 return null;
             }
+        }
+
+        public string GetColumnNameForTranslation(string columnName)
+        {
+            switch (columnName)
+            {
+                case "InitiatorName":
+                    return "Persons_Name";
+                case "RegistrationDate":
+                    return "RegTime";
+                case "Subject":
+                    return "Caption";
+                case "PerformerName":
+                    return "Performer_User_Id";
+                default:
+                    return columnName;
+            }
+
         }
     }
 }

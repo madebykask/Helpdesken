@@ -44,8 +44,9 @@ namespace DH.Helpdesk.WebApi.Models.Output
                             MaxWidth = 200,
                             IsResizable = true
                         });
+                        i++;
                     }
-                    i++;
+                    
                 }
 
                 int keyCounter = 1;
