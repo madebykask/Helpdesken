@@ -2,7 +2,7 @@
 @using DH.Helpdesk.BusinessData.Enums.Users
 @model DH.Helpdesk.Web.Models.HomeIndexViewModel
 @{
-    //ViewBag.Title = "Helpdesk start page"; -> Kommenterat ut tillsvidare då detta annars visas på fliken på startsidan
+    ViewBag.Title = "";
     var showStatisticsWidget = Model.UserModules.Any(u => (Module)u.Module_Id == Module.Statistics && u.isVisible);
 }
 

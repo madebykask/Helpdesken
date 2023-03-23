@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.OperationLogCategoryInputViewModel
 @{
-    ViewBag.Title = "New";
+    ViewBag.Title = "";
 }
 @using (Html.BeginForm("new", "operationlogcategory", new { id = Model.OperationLogCategory.Id, area = "admin" }, FormMethod.Post, new { id = "target" }))
 {

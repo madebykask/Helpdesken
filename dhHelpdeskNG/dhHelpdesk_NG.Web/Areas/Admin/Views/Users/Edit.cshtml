@@ -1,6 +1,6 @@
 ﻿@model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "";
     var isCopyRequest = Request.QueryString["copy"] == "1";
     var requestParams =
         isCopyRequest ? (object) new { id = Model.User.Id, copy = 1 } : new { id = Model.User.Id };

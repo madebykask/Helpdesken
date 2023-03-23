@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Domain.ChecklistService
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "";
 }
 @using (Html.BeginForm("edit", "checklistservice", new { id = Model.Id, area = "admin" }, FormMethod.Post, new { id = "target" }))
 {

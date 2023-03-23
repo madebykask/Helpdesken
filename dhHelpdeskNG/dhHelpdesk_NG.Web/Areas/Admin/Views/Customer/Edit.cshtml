@@ -2,7 +2,7 @@
 @using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.CustomerInputViewModel
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "";
 }
 @using (Html.BeginForm("edit", "customer", new { id = Model.Customer.Id }, FormMethod.Post, new { id = "target" }))
 {

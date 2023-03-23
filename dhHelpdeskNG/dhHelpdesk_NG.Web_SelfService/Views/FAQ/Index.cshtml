@@ -4,7 +4,7 @@
 @model FAQIndexViewModel
 
 @{
-    ViewBag.Title = "FAQ";
+    ViewBag.Title = "";
     var treeViewStr = Model.FAQCategories.ConvertToHtml();
     var faqCategoriesTreeView = new MvcHtmlString(treeViewStr);    
     var jsSerializer = new JavaScriptSerializer();    

@@ -2,7 +2,8 @@
 @model DH.Helpdesk.Web.Models.Notifiers.InputModel
 
 @{
-    ViewBag.Title = @Translation.Get("Ny anmälare", Enums.TranslationSource.TextTranslation);
+    //ViewBag.Title = @Translation.Get("Ny anmälare", Enums.TranslationSource.TextTranslation);
+    ViewBag.Title = "";
 }
 
 @using (Html.BeginForm("NewNotifier", "Notifiers", FormMethod.Post, new { id = "target" }))

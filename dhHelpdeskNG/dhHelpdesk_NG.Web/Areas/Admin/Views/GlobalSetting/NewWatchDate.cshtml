@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.GlobalSettingWatchDateViewModel
 @{
-    ViewBag.Title = "New WatchDate";
+    ViewBag.Title = "";
     string newwdc = Request.QueryString["newwdc"];         
 }
 @using (Html.BeginForm("newwatchdate", "globalsetting", new { id = Model.WatchDateCalendar.Id, texttypeid = 0, textSearch = string.Empty, compareMethod = 1 }, FormMethod.Post, new { id = "target" }))

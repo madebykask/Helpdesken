@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.ChangeCategoryInputViewModel
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "";
 }
 @using (Html.BeginForm("edit", "changecategory", new { id = Model.ChangeCategory.Id, customerId = Model.ChangeCategory.Customer_Id }, FormMethod.Post, new { id = "target" }))
 {

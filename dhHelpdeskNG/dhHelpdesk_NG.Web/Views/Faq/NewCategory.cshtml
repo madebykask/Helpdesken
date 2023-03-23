@@ -4,7 +4,8 @@
 @model DH.Helpdesk.Web.Models.Faq.Output.NewCategoryModel
 
 @{
-    this.ViewBag.Title = @Translation.Get("FAQ Kategori", Enums.TranslationSource.TextTranslation);
+    //this.ViewBag.Title = @Translation.Get("FAQ Kategori", Enums.TranslationSource.TextTranslation);
+    ViewBag.Title = "";
 }
 
 @using (this.Html.BeginForm("NewCategory", "Faq", FormMethod.Post, new { id = "target" }))
