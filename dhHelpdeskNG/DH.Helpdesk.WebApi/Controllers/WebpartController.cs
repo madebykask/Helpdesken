@@ -134,7 +134,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
                     foreach (var c in model.Columns)
                     {
-                        c.Name = _caseTranslationService.GetCaseTranslation(GetColumnNameForTranslation(c.Name), languageId, customerId);
+                        c.Name = _caseTranslationService.GetCaseTranslation(GetTranslatedColumnName(c.Name), languageId, customerId);
                     }
 
                     return model;
@@ -150,8 +150,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 return null;
             }
         }
-
-        public string GetColumnNameForTranslation(string columnName)
+        
+        private string GetTranslatedColumnName(string columnName)
         {
             switch (columnName)
             {
