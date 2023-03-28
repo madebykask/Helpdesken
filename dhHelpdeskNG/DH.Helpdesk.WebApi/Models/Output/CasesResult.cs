@@ -35,16 +35,23 @@ namespace DH.Helpdesk.WebApi.Models.Output
                 {
                     if (caseFieldsToReturn.IsNotNullOrEmpty() && caseFieldsToReturn.ToLower().Contains(prop.ToLower()))
                     {
-                        Columns.Add(new CaseField
-                        {
-                            Key = "column" + i.ToString(),
-                            Name = prop,
-                            FieldName =  "column" + i.ToString(),
-                            MinWidth = 100,
-                            MaxWidth = 200,
-                            IsResizable = true
-                        });
+                        //if (prop.ToLower() != "id")
+                        //{
+
+                            Columns.Add(new CaseField
+                            {
+                                Key = "column" + i.ToString(),
+                                Name = prop,
+                                FieldName = "column" + i.ToString(),
+                                Identifier = prop,
+                                IsResizable = true
+                            });
+
+                          
+                        //}
+
                         i++;
+
                     }
                     
                 }
@@ -54,6 +61,7 @@ namespace DH.Helpdesk.WebApi.Models.Output
                 {
                     dynamic item = new ExpandoObject();
                     ((IDictionary<string, object>)item)["key"] = keyCounter;
+                    ((IDictionary<string, object>)item)["id"] = customerCase.Id;
                     int columnCounter = 1;
 
                     foreach (var prop in propertyNames)
@@ -92,14 +100,18 @@ namespace DH.Helpdesk.WebApi.Models.Output
         [JsonPropertyName("fieldName")]
         public string FieldName { get; set; }
 
-        [JsonPropertyName("minWidth")]
-        public int MinWidth { get; set; } = 100;
+        //[JsonPropertyName("minWidth")]
+        //public int MinWidth { get; set; } = 100;
 
-        [JsonPropertyName("maxWidth")]
-        public int MaxWidth { get; set; } = 200;
+        //[JsonPropertyName("maxWidth")]
+        //public int MaxWidth { get; set; } = 200;
 
         [JsonPropertyName("isResizable")]
         public bool IsResizable { get; set; } = true;
+
+
+        [JsonPropertyName("isVisible")]
+        public bool IsVisible { get; set; } = true;
 
     }
 

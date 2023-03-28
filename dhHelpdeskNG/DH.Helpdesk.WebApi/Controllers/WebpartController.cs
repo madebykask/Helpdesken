@@ -134,7 +134,13 @@ namespace DH.Helpdesk.WebApi.Controllers
 
                     foreach (var c in model.Columns)
                     {
+                        c.Identifier = c.Name;
                         c.Name = _caseTranslationService.GetCaseTranslation(GetTranslatedColumnName(c.Name), languageId, customerId);
+                        
+                        if (c.Identifier == "Id")
+                        {
+                            c.IsVisible = false;
+                        }
                     }
 
                     return model;
