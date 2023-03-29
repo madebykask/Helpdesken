@@ -133,7 +133,7 @@ Module DH_Helpdesk_Mail
         End If
 
         If Not IsNullOrEmpty(logIdentifierArg) Then
-            gsInternalLogIdentifier = logIdentifierArg.ToString.Trim
+            gsInternalLogIdentifier = logIdentifierArg.ToString().Trim()
         End If
 
         If Not IsNullOrEmpty(productAreaSepArg) Then
@@ -164,7 +164,7 @@ Module DH_Helpdesk_Mail
             ReadMailBox(sConnectionstring, workingMode)
 
         Catch ex As Exception
-            LogError(ex.ToString(), Nothing)
+            LogError("Error ReadMailBox " & ex.ToString(), Nothing)
         Finally
             closeLogFiles()
             Try
@@ -182,7 +182,7 @@ Module DH_Helpdesk_Mail
                     Next
                 End If
             Catch ex As Exception
-                LogError(ex.ToString(), Nothing)
+                LogError("Error deleting logfiles " & ex.ToString(), Nothing)
             End Try
 
         End Try
@@ -221,7 +221,7 @@ Module DH_Helpdesk_Mail
             LogToFile("app.config connection string is protected={0}", section.SectionInformation.IsProtected)
 
         Catch ex As Exception
-            LogError(ex.ToString(), Nothing)
+            LogError("Error ToggleConfigEncryption " & ex.ToString(), Nothing)
         End Try
     End Sub
 
@@ -324,6 +324,7 @@ Module DH_Helpdesk_Mail
                     LogToFile("M2T for " & objCustomer.Name & ", Nr: " & iCustomerCount & "(" & customers.Count & "), appVersion: " & CurrentAssemblyInfo.Version, iPop3DebugLevel)
 
                     Dim mails As List(Of MailMessage) = Nothing
+                    ' Denna try fångar exception
                     Try
                         ' hämta inställningar om e-post texten ska översättas till fält på ärendet
                         Dim fieldsToUpdate As Dictionary(Of String, String)
@@ -380,7 +381,7 @@ Module DH_Helpdesk_Mail
                                 Catch ex As Exception
                                     icount = icount + 1
                                     If icount = maxAttempt Then
-                                        'LogError("Error readMailBox: " & ex.Message.ToString, Nothing)
+                                        'LogError("Error readMailBox: " & ex.Message.ToString(), Nothing)
                                         'rethrow
                                         Throw
                                     End If
@@ -526,10 +527,10 @@ Module DH_Helpdesk_Mail
 
                                 Dim uniqueMessageId As String = ""
                                 If message.MessageId IsNot Nothing Then
-                                    uniqueMessageId = message.MessageId.ToString
+                                    uniqueMessageId = message.MessageId.ToString()
                                 End If
 
-                                LogToFile("Read Mail From " & message.From.ToString & ", To " & message.To.ToString & ", MessageID: " & uniqueMessageId & ", HasBodyText: " & message.HasBodyText & ", " & message.HasBodyHtml & ", IsSigned: " & message.IsSigned & ", Silent: " & message.Silent, iPop3DebugLevel)
+                                LogToFile("Read Mail From " & message.From.ToString() & ", To " & message.To.ToString() & ", MessageID: " & uniqueMessageId & ", HasBodyText: " & message.HasBodyText & ", HasBodyHtml: " & message.HasBodyHtml & ", IsSigned: " & message.IsSigned & ", Silent: " & message.Silent, iPop3DebugLevel)
 
                                 sFromEMailAddress = parseEMailAddress(message.From.ToString())
                                 sToEMailAddress = parseEMailAddress(message.To.ToString())
@@ -597,7 +598,7 @@ Module DH_Helpdesk_Mail
                                 Else
                                     'old logic 
                                     If message.InReplyTo.Count > 0 Then
-                                        Dim replyToId As String = message.InReplyTo(0).ToString
+                                        Dim replyToId As String = message.InReplyTo(0).ToString()
                                         LogToFile(Now() & ", Reply From: " & replyToId, iPop3DebugLevel)
 
                                         LogToFile(Now() & ", getCaseByMessageID. InReplyTo: " & replyToId, iPop3DebugLevel)
@@ -770,12 +771,12 @@ Module DH_Helpdesk_Mail
                                     Try
                                         objCase = objCaseData.createCase(objCase)
                                     Catch ex As Exception
-                                        LogError("Error creating Case in database: " & ex.Message.ToString, objCustomer)
+                                        LogError("Error creating Case in database: " & ex.Message.ToString(), objCustomer)
                                         Continue For
                                     End Try
 
                                     'dhal i CaseHistory skall orginal från adressen hamna i CreatedByUser 
-                                    'iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, objCase.Persons_EMail.ToString)
+                                    'iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, objCase.Persons_EMail.ToString())
 
 
                                     ' save caseisabout
@@ -791,8 +792,15 @@ Module DH_Helpdesk_Mail
                                     LogToFile("Create Case:" & objCase.Casenumber & ", Attachments:" & message.Attachments.Count, iPop3DebugLevel)
 
                                     'Save 
-                                    Dim sHTMLFileName As String = CreateHtmlFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber, "")
-                                    Dim sPDFFileName As String = CreatePdfFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
+                                    Dim sHTMLFileName As String = ""
+                                    Dim sPDFFileName As String = ""
+                                    Try
+                                        sHTMLFileName = CreateHtmlFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber, "")
+                                        sPDFFileName = CreatePdfFileFromMail(objCustomer, message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
+                                    Catch ex As Exception
+                                        LogError("Error creating Html / pdf " & ex.Message, Nothing)
+                                    End Try
+
 
                                     If Not IsNullOrEmpty(sPDFFileName) Then
                                         iHTMLFile = 1
@@ -801,12 +809,12 @@ Module DH_Helpdesk_Mail
                                         objCaseData.saveFileInfo(objCase.Id, "Mail/" & sPDFFileName)
                                     End If
 
-                                    If Not IsNullOrEmpty(sHTMLFileName) Then
 
-                                        DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html", True)
-                                        DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
 
-                                    End If
+
+
+
+
 
                                     iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, sFromEMailAddress)
 
@@ -834,7 +842,7 @@ Module DH_Helpdesk_Mail
 
                                     If isBlockedRecipient(newcaseEmailTo, objCustomer.BlockedEmailRecipients) = False Then
                                         If isValidRecipient(newcaseEmailTo, objCustomer.AllowedEMailRecipients) = True Then
-                                            If objCustomer.EMailRegistrationMailID <> 0 And bOrder = False And (message.From.ToString <> message.To.ToString) Then
+                                            If objCustomer.EMailRegistrationMailID <> 0 And bOrder = False And (message.From.ToString() <> message.To.ToString()) Then
                                                 'If Len(objCase.Persons_EMail) > 6 Then  (objCase.Persons_EMail can be empty) #65030
                                                 objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.NewCase, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
@@ -844,7 +852,7 @@ Module DH_Helpdesk_Mail
                                                     sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                                     sSendTime = Date.Now()
 
-                                                    Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+                                                    Dim sEMailLogGUID As String = Guid.NewGuid().ToString()
                                                     'helpdesk case 58782, #65030
                                                     'Dim newcaseEmailTo As String = objCase.Persons_EMail
                                                     'If objCustomer.NewCaseMailTo = 1 Then
@@ -860,10 +868,10 @@ Module DH_Helpdesk_Mail
                                                 'End If  #65030
                                             End If
                                         Else
-                                            LogToFile("readMailBox, isValidRecipient " & objCase.Persons_EMail & ", " & objCustomer.AllowedEMailRecipients, iPop3DebugLevel)
+                                            LogToFile("readMailBox, isValidRecipient false" & objCase.Persons_EMail & ", " & objCustomer.AllowedEMailRecipients, iPop3DebugLevel)
                                         End If
                                     Else
-                                        LogToFile("readMailBox, isBlockedRecipient " & objCase.Persons_EMail & ", " & objCustomer.BlockedEmailRecipients, iPop3DebugLevel)
+                                        LogToFile("readMailBox, isBlockedRecipient true" & objCase.Persons_EMail & ", " & objCustomer.BlockedEmailRecipients, iPop3DebugLevel)
                                     End If
 
                                     If objCustomer.EMailRegistrationMailID <> 0 And objCustomer.NewCaseEMailList <> "" Then
@@ -878,7 +886,7 @@ Module DH_Helpdesk_Mail
                                                 sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                                 sSendTime = Date.Now()
 
-                                                Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+                                                Dim sEMailLogGUID As String = Guid.NewGuid().ToString()
 
                                                 sRet_SendMail =
                                                 objMail.sendMail(objCase, Nothing, objCustomer, vNewCaseEmailList(index), objMailTemplate, objGlobalSettings,
@@ -903,8 +911,9 @@ Module DH_Helpdesk_Mail
                                                     sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                                     sSendTime = Date.Now()
 
-                                                    Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
+
+                                                    Dim sEMailLogGUID As String = Guid.NewGuid().ToString()
                                                     sRet_SendMail =
                                                     objMail.sendMail(objCase, Nothing, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId,
                                                                      sEMailLogGUID, sConnectionstring)
@@ -960,7 +969,7 @@ Module DH_Helpdesk_Mail
                                                     sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                                     sSendTime = Date.Now()
 
-                                                    Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+                                                    Dim sEMailLogGUID As String = Guid.NewGuid().ToString()
 
                                                     sRet_SendMail =
                                                     objMail.sendMail(objCase, Nothing, objCustomer, recipient, objMailTemplate, objGlobalSettings,
@@ -985,7 +994,7 @@ Module DH_Helpdesk_Mail
                                                 sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                                 sSendTime = Date.Now()
 
-                                                Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+                                                Dim sEMailLogGUID As String = Guid.NewGuid().ToString()
 
                                                 sRet_SendMail =
                                                     objMail.sendMail(objCase, Nothing, objCustomer, vPriorityEmailList(index), objMailTemplate, objGlobalSettings,
@@ -996,6 +1005,15 @@ Module DH_Helpdesk_Mail
                                             Next
 
                                         End If
+                                    End If
+                                    If Not IsNullOrEmpty(sHTMLFileName) Then
+                                        Try
+                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html", True)
+                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
+
+                                        Catch ex As Exception
+                                            LogError("Error deleting files: " & ex.Message, Nothing)
+                                        End Try
                                     End If
                                 Else ' Existing case 
 
@@ -1085,7 +1103,7 @@ Module DH_Helpdesk_Mail
                                         sHTMLFileName = CreateHtmlFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber, "")
                                         sPDFFileName = CreatePdfFileFromMail(objCustomer, message, Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id), objCase.Casenumber)
                                     Catch ex As Exception
-                                        LogError(ex.InnerException.Message, Nothing)
+                                        LogError("Error creating Html / pdf " & ex.Message, Nothing)
                                     End Try
 
 
@@ -1097,9 +1115,15 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
+                                        Try
+                                            DeleteFilesInsideFolder(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html", True)
+                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
+                                        Catch ex As Exception
+                                            LogError("Error deleting files: " & ex.Message, Nothing)
+                                        End Try
 
-                                        DeleteFilesInsideFolder(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html", True)
-                                        DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
+
+
                                     End If
 
 
@@ -1132,7 +1156,7 @@ Module DH_Helpdesk_Mail
                                                 sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                                 sSendTime = Date.Now()
 
-                                                Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+                                                Dim sEMailLogGUID As String = Guid.NewGuid().ToString()
 
                                                 sRet_SendMail =
                                                 objMail.sendMail(objCase, objLog, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings,
@@ -1155,7 +1179,7 @@ Module DH_Helpdesk_Mail
                                             sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                             sSendTime = Date.Now()
 
-                                            Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+                                            Dim sEMailLogGUID As String = Guid.NewGuid().ToString()
 
                                             sRet_SendMail =
                                             objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings,
@@ -1178,7 +1202,7 @@ Module DH_Helpdesk_Mail
                                         '        sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                         '        sSendTime = Date.Now()
 
-                                        '        Dim sEMailLogGUID As String = Guid.NewGuid().ToString
+                                        '        Dim sEMailLogGUID As String = Guid.NewGuid().ToString()
 
                                         '        sRet_SendMail =
                                         '        objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings,
@@ -1229,8 +1253,10 @@ Module DH_Helpdesk_Mail
                         End If
 
 
+
                     Catch ex As Exception
-                        LogError("Error readMailBox." & objCustomer.POP3UserName & "  Error: " & ex.ToString(), objCustomer)
+                        LogError("Error readMailBox." & objCustomer.POP3UserName & "  Error: " & ex.ToString() & " Error message: " & ex.Message, objCustomer)
+                        Continue For
                     Finally
 
                         If objCustomer.MailServerProtocol = 0 Then
@@ -1253,9 +1279,9 @@ Module DH_Helpdesk_Mail
             Next
 
         Catch ex As Exception
-            LogError("Error readMailBox: " & ex.Message.ToString, Nothing)
+            LogError("Error readMailBox: " & ex.Message.ToString(), Nothing)
             'rethrow
-            Throw
+            'Throw
         End Try
     End Function
 
@@ -1899,49 +1925,64 @@ Module DH_Helpdesk_Mail
                     End If
                     ' Kontrollera om det finns några resurser
                     Dim resCol As LinkedResourceCollection = message.Resources
+                    If Not resCol Is Nothing Then
+                        For k As Integer = 0 To resCol.Count - 1
+                            Dim res As LinkedResource = resCol(k)
 
-                    For k As Integer = 0 To resCol.Count - 1
-                        Dim res As LinkedResource = resCol(k)
 
-                        sMediaType = res.MediaType
 
-                        If sMediaType.Contains("image") Then
 
-                            If Not res.ContentId Is Nothing Then
-                                ' Byt ut cid: i htmlbody
-                                sContentId = res.ContentId.ToString
-                                sContentId = sContentId.Replace("<", "")
-                                sContentId = sContentId.Replace(">", "")
 
-                                sContentId = "cid:" & sContentId
+                            sMediaType = res.MediaType
+                            LogToFile("Image mediaType: " & sMediaType, 1)
+                            If sMediaType.Contains("image") Then
 
-                                sFileExtension = sMediaType.Replace("image/", "")
-                                iFileCount = iFileCount + 1
 
-                                sContentLocation = sFolder & "\" & iFileCount & "." & sFileExtension
-                                res.Save(sContentLocation)
 
-                                Dim imgHref As String = ""
-                                Dim bData As Byte()
-                                Dim newImagePath = ResizeImage(sContentLocation, sFolder, iFileCount, sFileExtension)
-                                Dim br As BinaryReader = New BinaryReader(System.IO.File.OpenRead(newImagePath))
-                                bData = br.ReadBytes(br.BaseStream.Length)
-                                Dim base64String As String = Convert.ToBase64String(bData, 0, bData.Length)
-                                imgHref = "data:image/png;base64," & base64String
-                                br.Close()
-                                sBodyHtml = sBodyHtml.Replace(sContentId, imgHref)
+                                If Not res.ContentId Is Nothing Then
+                                    ' Byt ut cid: i htmlbody
+                                    LogToFile("ContentId: " & res.ContentId.ToString(), 1)
+                                    sContentId = res.ContentId.ToString()
+                                    sContentId = sContentId.Replace("<", "")
+                                    sContentId = sContentId.Replace(">", "")
+                                    sContentId = sContentId.Replace("[", "")
+                                    sContentId = sContentId.Replace("]", "")
+
+                                    sContentId = "cid:" & sContentId
+
+
+                                    sFileExtension = sMediaType.Replace("image/", "")
+                                    iFileCount = iFileCount + 1
+
+                                    sContentLocation = sFolder & iFileCount & "." & sFileExtension
+                                    res.Save(sContentLocation)
+                                    LogToFile("Saved file: " & sContentLocation, 1)
+                                    Dim imgHref As String = ""
+                                    Dim bData As Byte()
+                                    Dim newImagePath = ResizeImage(sContentLocation, sFolder, iFileCount, sFileExtension)
+                                    LogToFile("Rezised image file: " & newImagePath, 1)
+                                    Dim br As BinaryReader = New BinaryReader(System.IO.File.OpenRead(newImagePath))
+                                    bData = br.ReadBytes(br.BaseStream.Length)
+                                    Dim base64String As String = Convert.ToBase64String(bData, 0, bData.Length)
+                                    imgHref = "data:image/png;base64," & base64String
+                                    br.Close()
+                                    sBodyHtml = sBodyHtml.Replace(sContentId, imgHref)
+                                    LogToFile("Created Base64 images for case: " & sFolder, 1)
+                                End If
                             End If
-                        End If
-                    Next
+                        Next
+                    End If
+
+
 
                 End If
             End If
 
         Catch ex As Exception
-            LogError("Error createBase&4Images MediaType: " & sMediaType & ", " & ex.Message.ToString, objCustomer)
+            LogError("Error createBase&4Images MediaType: " & sMediaType & ", " & ex.Message.ToString(), objCustomer)
 
             'Rethrow
-            Throw
+            'Throw
         End Try
 
         Return sBodyHtml
@@ -1962,23 +2003,23 @@ Module DH_Helpdesk_Mail
         Try
             If Not message Is Nothing Then
 
-                'Dim from As String = message.From.ToString
-                'Dim fromEmail As String = parseEMailAddress(message.From.ToString())
-                'Dim sent As String = message.Date.ToString
-                'Dim reciepent As String = message.To.ToString
-                'Dim reciepentEmail As String = parseEMailAddress(message.To.ToString())
-                'Dim Cc As String = message.CC.ToString
-                'Dim subject As String = message.Subject
-                'Dim mh As MimeHeaderCollection = message.Headers
 
 
-                'Dim headerHtml As String = "<!DOCTYPE html><html><body style=" & "font-family: 'Times New Roman'; font-size: 18px" & ">" &
-                '                            "<p><strong>From:</strong> " & from & "&#60;" & fromEmail & "&#62;" & "</p>" &
-                '                            "<p><strong>Sent:</strong> " & sent & "</p>" &
-                '                            "<p><strong>To:</strong> " & reciepent & "&#60;" & reciepentEmail & "&#62;" & "</p>" &
-                '                            "<p><strong>Cc:</strong> " & Cc & "</p>" &
-                '                            "<p><strong>Subject:</strong> " & subject & "</p>" &
-                '                           "</body></html>"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 If message.HasBodyHtml Then
 
@@ -2003,48 +2044,65 @@ Module DH_Helpdesk_Mail
 
                     ' Kontrollera om det finns några resurser
                     Dim resCol As LinkedResourceCollection = message.Resources
+                    If Not resCol Is Nothing Then
 
-                    For k As Integer = 0 To resCol.Count - 1
-                        Dim res As LinkedResource = resCol(k)
 
-                        sMediaType = res.MediaType
 
-                        If sMediaType.Contains("image") Then
 
-                            If Not res.ContentId Is Nothing Then
-                                ' Byt ut cid: i htmlbody
-                                sContentId = res.ContentId.ToString
-                                sContentId = sContentId.Replace("<", "")
-                                sContentId = sContentId.Replace(">", "")
+                        For k As Integer = 0 To resCol.Count - 1
+                            Dim res As LinkedResource = resCol(k)
 
-                                sContentId = "cid:" & sContentId
+                            sMediaType = res.MediaType
 
-                                sFileExtension = sMediaType.Replace("image/", "")
-                                iFileCount = iFileCount + 1
+                            If sMediaType.Contains("image") Then
 
-                                sContentLocation = sFolder & "\html\" & iFileCount & "." & sFileExtension
-                                res.Save(sFolder & "\html\" & iFileCount & "." & sFileExtension)
-                                Dim imgHref As String = ""
-                                Dim bData As Byte()
-                                Dim br As BinaryReader = New BinaryReader(System.IO.File.OpenRead(sContentLocation))
-                                bData = br.ReadBytes(br.BaseStream.Length)
-                                Dim base64String As String = Convert.ToBase64String(bData, 0, bData.Length)
-                                imgHref = "data:image/png;base64," & base64String
 
-                                br.Close()
-                                sBodyHtml = sBodyHtml.Replace(sContentId, imgHref)
-                            Else
-                                sFileExtension = sMediaType.Replace("image/", "")
-                                iFileCount = iFileCount + 1
 
-                                ' Spara filen
-                                res.Save(sFolder & "\html\" & iFileCount & "." & sFileExtension)
 
-                                sContentLocation = IIf(String.IsNullOrWhiteSpace(res.ContentLocation), String.Empty, res.ContentLocation)
-                                'sBodyHtml = sBodyHtml.Replace(sContentLocation, iFileCount & "." & sFileExtension)
+
+                                If Not res.ContentId Is Nothing Then
+                                    ' Byt ut cid: i htmlbody
+                                    sContentId = res.ContentId.ToString()
+                                    sContentId = sContentId.Replace("<", "")
+                                    sContentId = sContentId.Replace(">", "")
+
+                                    sContentId = "cid:" & sContentId
+
+
+                                    sFileExtension = sMediaType.Replace("image/", "")
+                                    iFileCount = iFileCount + 1
+
+
+
+
+
+
+
+                                    sContentLocation = sFolder & "\html\" & iFileCount & "." & sFileExtension
+                                    res.Save(sFolder & "\html\" & iFileCount & "." & sFileExtension)
+                                    Dim imgHref As String = ""
+                                    Dim bData As Byte()
+                                    Dim br As BinaryReader = New BinaryReader(System.IO.File.OpenRead(sContentLocation))
+                                    bData = br.ReadBytes(br.BaseStream.Length)
+                                    Dim base64String As String = Convert.ToBase64String(bData, 0, bData.Length)
+                                    imgHref = "data:image/png;base64," & base64String
+
+                                    br.Close()
+                                    sBodyHtml = sBodyHtml.Replace(sContentId, imgHref)
+                                Else
+                                    sFileExtension = sMediaType.Replace("image/", "")
+                                    iFileCount = iFileCount + 1
+
+                                    ' Spara filen
+                                    res.Save(sFolder & "\html\" & iFileCount & "." & sFileExtension)
+
+                                    sContentLocation = IIf(String.IsNullOrWhiteSpace(res.ContentLocation), String.Empty, res.ContentLocation)
+                                    'sBodyHtml = sBodyHtml.Replace(sContentLocation, iFileCount & "." & sFileExtension)
+                                End If
                             End If
-                        End If
-                    Next
+                        Next
+                    End If
+
 
                     Dim objFile As StreamWriter
                     'Dim objHeaderFile As StreamWriter
@@ -2053,18 +2111,18 @@ Module DH_Helpdesk_Mail
                     objFile.Write(sBodyHtml)
                     objFile.Close()
 
-                    'objHeaderFile = New StreamWriter(sFolder & "\html\" & "HeaderFile.htm", False, System.Text.UnicodeEncoding.Unicode)
-                    'objHeaderFile.Write(headerHtml)
-                    'objHeaderFile.Close()
+
+
+
 
                 End If
             End If
 
         Catch ex As Exception
-            LogError("Error createHtmlFileFromMail MediaType: " & sMediaType & ", " & ex.Message.ToString, objCustomer)
+            LogError("Error createHtmlFileFromMail MediaType: " & sMediaType & ", " & ex.Message.ToString(), objCustomer)
 
             'Rethrow
-            Throw
+            'Throw New Exception
         End Try
 
         Return sFileName
@@ -2152,10 +2210,10 @@ Module DH_Helpdesk_Mail
             End If
 
         Catch ex As Exception
-            LogError("Error createPDFFileFromMail MediaType: " & sMediaType & ", " & ex.Message.ToString, objCustomer)
+            LogError("Error createPDFFileFromMail MediaType: " & sMediaType & ", " & ex.Message.ToString(), objCustomer)
 
             'Rethrow
-            Throw
+            'Throw
         End Try
 
         'delete html Directory htm file
@@ -2172,7 +2230,7 @@ Module DH_Helpdesk_Mail
             Try
                 File.Delete(file_path)
             Catch ex As Exception
-                LogError(ex.Message.ToString, Nothing)
+                LogError("Delete file error" & ex.Message.ToString(), Nothing)
             End Try
 
         Next
@@ -2188,7 +2246,7 @@ Module DH_Helpdesk_Mail
                 Try
                     Directory.Delete(sub_folder_path, also_delete_sub_folders)
                 Catch ex As Exception
-                    LogError(ex.Message.ToString, Nothing)
+                    LogError(ex.Message.ToString(), Nothing)
                 End Try
 
             Next
@@ -2196,7 +2254,7 @@ Module DH_Helpdesk_Mail
             Try
                 Directory.Delete(target_folder_path, also_delete_sub_folders)
             Catch ex As Exception
-                LogError(ex.Message.ToString, Nothing)
+                LogError(ex.Message.ToString(), Nothing)
             End Try
         End If
 
@@ -2379,8 +2437,8 @@ Module DH_Helpdesk_Mail
             isBlockedRecipient = False
         Else
             For i As Integer = 0 To aEMails.Length - 1
-                If aEMails(i).ToString <> "" Then
-                    If InStr(sEMail, aEMails(i).ToString, CompareMethod.Text) <> 0 Then
+                If aEMails(i).ToString() <> "" Then
+                    If InStr(sEMail, aEMails(i).ToString(), CompareMethod.Text) <> 0 Then
 
                         isBlockedRecipient = True
                         Exit For
@@ -2400,7 +2458,7 @@ Module DH_Helpdesk_Mail
             Dim aEMails() As String = sAllowedEMailRecipents.Split(";")
 
             For i As Integer = 0 To aEMails.Length - 1
-                If InStr(sEMail, aEMails(i).ToString, CompareMethod.Text) <> 0 Then
+                If InStr(sEMail, aEMails(i).ToString(), CompareMethod.Text) <> 0 Then
 
                     isValidRecipient = True
                     Exit For
@@ -2593,7 +2651,7 @@ Module DH_Helpdesk_Mail
                 End Try
             End If
         Catch ex As Exception
-            LogError(ex.Message.ToString, Nothing)
+            LogError("Error in SendErrorMail" & ex.Message.ToString(), Nothing)
         End Try
 
 
@@ -2629,6 +2687,7 @@ Module DH_Helpdesk_Mail
 
             For Each p As HtmlNode In par
                 If p.Attributes("class") IsNot Nothing Then
+
                     p.Attributes("class").Remove()
                 End If
             Next
