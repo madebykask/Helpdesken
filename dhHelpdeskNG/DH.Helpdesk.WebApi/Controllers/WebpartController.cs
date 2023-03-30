@@ -127,8 +127,11 @@ namespace DH.Helpdesk.WebApi.Controllers
 
                     int from = (offset.HasValue ? offset.Value : 0);
                     int count = (limit.HasValue ? limit.Value : 20);
-                    
-                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(myCases, user.Id, customerId, "", from, count, orderByCaseField, (!orderByCaseField.ToLower().Contains("desc")));
+
+                    bool orderByAscending = orderByCaseField.ToLower().Contains("desc") ? false : true;
+                    orderByCaseField = orderByCaseField.Replace(" desc", "");
+                    orderByCaseField = orderByCaseField.Replace("desc", "");
+                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(myCases, user.Id, customerId, "", from, count, orderByCaseField, orderByAscending);
 
                     var model = new CasesResult(customerCases, caseFieldsToReturn);
 

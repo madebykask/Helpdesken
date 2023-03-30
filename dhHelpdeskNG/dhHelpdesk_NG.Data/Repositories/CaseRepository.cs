@@ -631,6 +631,13 @@ namespace DH.Helpdesk.Dal.Repositories
 					case "WorkingGroup_Id":
 						entities = orderbyAscending ? entities.OrderBy(o => o.WorkingGroupId) : entities.OrderByDescending(o => o.WorkingGroupId);
 						break;
+                    case "RegistrationDate":
+                        entities = orderbyAscending ? entities.OrderBy(o => o.RegistrationDate) : entities.OrderByDescending(o => o.RegistrationDate);
+                        break;
+                    case "RegTime":
+                        entities = orderbyAscending ? entities.OrderBy(o => o.RegTime) : entities.OrderByDescending(o => o.RegTime);
+                        break;
+
                     default:
                         //added to avoid "The method 'Skip' is only supported for sorted input in LINQ to Entities. The method 'OrderBy' must be called before the method 'Skip'." error.
                         entities = entities.OrderBy(o => o.PerformerId);
