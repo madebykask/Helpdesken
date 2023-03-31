@@ -189,6 +189,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                             if (p.GDPRType == 2) //Deletion
                             {
                                 casesIds = cases.Select(c => c.Id).ToList();
+                                
                                 //Cases som är en parent tar vi bort sist
                                 foreach (var c in cases.OrderBy(x => parentIds.Contains(x.Id) ? 1 : 0))
                                 {
@@ -213,14 +214,19 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                             }
                             else //Anonymization
                             {
+                                //UpdateOperationAuditInner 
                                 p.ReplaceDataWith = p.ReplaceDataWith ?? string.Empty;
-
+                                
                                 foreach (var c in cases)
                                 {
+                                    var caseNumber = cases.Where(x => x.Id == c.Id).Select(x => x.CaseNumber).FirstOrDefault();
                                     ProcessReplaceCasesData(c, p, uow, filesToDelete);
                                     ProcessReplaceCasesHistoryData(c, p);
                                     ProcessExtededCaseData(c, p, uow);
 
+                                    batchProcessedCaseNumbers.Add(Convert.ToDecimal(caseNumber));
+                                    batchProcessedCaseIds.Add(c.Id);
+                                    UpdateOperationAuditInner(auditId, null, batchProcessedCaseNumbers, batchProcessedCaseIds);
                                     UpdateProgress(p.TaskId, processed + pos, totalCount);
                                     pos++;
                                 }
@@ -911,12 +917,15 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             _gdprOperationsAuditRespository.Commit();
             return audiData.Id;
         }
-
+        
         private void UpdateOperationAuditInner(int auditId,List<decimal> batchCaseNumbersToExclude, List<decimal> batchProcessedCaseNumbers, List<int> batchProcessedCaseIds)
         {
             var gdprAudit = _gdprOperationsAuditRespository.Get(auditId);
             gdprAudit.Result = batchProcessedCaseIds.Any() ? string.Join(",", batchProcessedCaseIds.ToArray()) : null;
-            gdprAudit.ErrorResultCaseNumbers = batchCaseNumbersToExclude.Any() ? string.Join(",", batchCaseNumbersToExclude.ToArray()) : null;
+            if(batchCaseNumbersToExclude != null)
+            {
+                gdprAudit.ErrorResultCaseNumbers = batchCaseNumbersToExclude.Any() ? string.Join(",", batchCaseNumbersToExclude.ToArray()) : null;
+            }
             gdprAudit.ResultCaseNumbers = batchProcessedCaseNumbers.Any() ? string.Join(",", batchProcessedCaseNumbers.ToArray()) : null;
 
             _gdprOperationsAuditRespository.Update(gdprAudit);
