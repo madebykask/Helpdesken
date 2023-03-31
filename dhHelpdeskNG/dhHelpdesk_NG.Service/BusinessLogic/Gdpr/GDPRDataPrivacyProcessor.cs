@@ -135,6 +135,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                 var totalCount = _gDPRDataPrivacyCasesService.GetCasesCount(customerId, p);
                 var fetchNext = totalCount > 0;
                 var step = 0;
+                
                 _log.Debug($"Total cases found to process: {totalCount}. TaskId: {p.TaskId}.");
                 IList<int> parentIds = new List<int>();
 
@@ -145,6 +146,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 
                 while (fetchNext)
                 {
+                    var auditId = 0;
                     step++;
                     var processed = processedCasesIds.Count;
                     var take = processed + batchSize > totalCount ? totalCount - processed : batchSize;
@@ -180,12 +182,14 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                         if (cases.Any())
                         {
                             _log.Debug($"{cases.Count} cases will be processed. TaskId: {p.TaskId}.");
-
+                            //Spara vilka cases som ska processas
                             var pos = 1;
+                            auditId = SaveStepSuccessOperationAudit(customerId, userId, p, new DataPrivacyResult { CaseIdsResult = batchProcessedCaseIds, CaseNumbersErrorResult = batchCaseNumbersToExclude, CaseNumbersResult = batchProcessedCaseNumbers, ErrorMessage = batchErrorMessage }, step);
 
                             if (p.GDPRType == 2) //Deletion
                             {
                                 casesIds = cases.Select(c => c.Id).ToList();
+                                //Cases som är en parent tar vi bort sist
                                 foreach (var c in cases.OrderBy(x => parentIds.Contains(x.Id) ? 1 : 0))
                                 {
                                     List<int> caseId = new List<int>() { c.Id };
@@ -200,6 +204,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                                         batchProcessedCaseNumbers.AddRange(deletionStatus.ProcessedCaseNumbers);
                                         batchProcessedCaseIds.AddRange(deletionStatus.ProcessedCaseIds.ToList());
                                     }
+                                    UpdateOperationAuditInner(auditId, batchCaseNumbersToExclude, batchProcessedCaseNumbers, batchProcessedCaseIds);
                                     UpdateProgress(p.TaskId, processed + pos, totalCount);
                                     pos++;
                                 }
@@ -248,8 +253,11 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                     processedCaseNumbers.AddRange(batchProcessedCaseNumbers);
                     caseNumbersToExclude.AddRange(batchCaseNumbersToExclude);
 
-                    //save step audit
-                    SaveStepSuccessOperationAudit(customerId, userId, p, new DataPrivacyResult { CaseIdsResult = batchProcessedCaseIds, CaseNumbersErrorResult = batchCaseNumbersToExclude, CaseNumbersResult = batchProcessedCaseNumbers, ErrorMessage = batchErrorMessage }, step);
+                    //save step audit success
+                    if (auditId > 0)
+                    {
+                        UpdateStepSuccessOperationAudit(auditId, true);
+                    }
 
                     if (processedCasesIds.Count() >= totalCount)
                     {
@@ -269,6 +277,14 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                 SaveFailedOperationAudit(customerId, userId, p, errMsg);
                 throw;
             }
+        }
+        
+        private void UpdateStepSuccessOperationAudit(int auditId, bool success)
+        {
+            var gdprAudit = _gdprOperationsAuditRespository.Get(auditId);
+            gdprAudit.Success = success;
+            _gdprOperationsAuditRespository.Update(gdprAudit);
+            _gdprOperationsAuditRespository.Commit();
         }
 
         private void UpdateProgress(int taskId, int pos, int totalCount)
@@ -861,20 +877,20 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
         #endregion
 
         #region Audit Methods
-
+        
         private void SaveSuccessOperationAudit(int customerId, int userId, DataPrivacyParameters dataPrivacyParameters, DataPrivacyResult result)
         {
             var operationName = GDPROperations.DataPrivacy.ToString();
-            SaveSuccessOperationAuditInner(customerId, userId, operationName, dataPrivacyParameters, result);
+            SaveSuccessOperationAuditInner(customerId, userId, operationName, dataPrivacyParameters, result, true);
         }
 
-        private void SaveStepSuccessOperationAudit(int customerId, int userId, DataPrivacyParameters dataPrivacyParameters, DataPrivacyResult result, int step)
+        private int SaveStepSuccessOperationAudit(int customerId, int userId, DataPrivacyParameters dataPrivacyParameters, DataPrivacyResult result, int step)
         {
             var operationName = $"{GDPROperations.DataPrivacy}_{step}";
-            SaveSuccessOperationAuditInner(customerId, userId, operationName, dataPrivacyParameters, result);
+            return SaveSuccessOperationAuditInner(customerId, userId, operationName, dataPrivacyParameters, result);
         }
-
-        private void SaveSuccessOperationAuditInner(int customerId, int userId, string operationName, DataPrivacyParameters dataPrivacyParameters, DataPrivacyResult result)
+        
+        private int SaveSuccessOperationAuditInner(int customerId, int userId, string operationName, DataPrivacyParameters dataPrivacyParameters, DataPrivacyResult result, bool success = false)
         {
             var audiData = new GDPROperationsAudit()
             {
@@ -888,10 +904,22 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                 ErrorResultCaseNumbers = result.CaseNumbersErrorResult.Any() ? string.Join(",", result.CaseNumbersErrorResult.ToArray()) : null,
                 ResultCaseNumbers = result.CaseNumbersResult.Any() ? string.Join(",", result.CaseNumbersResult.ToArray()) : null,
                 Error = result.ErrorMessage,
-                Success = true
+                Success = success
             };
 
             _gdprOperationsAuditRespository.Add(audiData);
+            _gdprOperationsAuditRespository.Commit();
+            return audiData.Id;
+        }
+
+        private void UpdateOperationAuditInner(int auditId,List<decimal> batchCaseNumbersToExclude, List<decimal> batchProcessedCaseNumbers, List<int> batchProcessedCaseIds)
+        {
+            var gdprAudit = _gdprOperationsAuditRespository.Get(auditId);
+            gdprAudit.Result = batchProcessedCaseIds.Any() ? string.Join(",", batchProcessedCaseIds.ToArray()) : null;
+            gdprAudit.ErrorResultCaseNumbers = batchCaseNumbersToExclude.Any() ? string.Join(",", batchCaseNumbersToExclude.ToArray()) : null;
+            gdprAudit.ResultCaseNumbers = batchProcessedCaseNumbers.Any() ? string.Join(",", batchProcessedCaseNumbers.ToArray()) : null;
+
+            _gdprOperationsAuditRespository.Update(gdprAudit);
             _gdprOperationsAuditRespository.Commit();
         }
 
