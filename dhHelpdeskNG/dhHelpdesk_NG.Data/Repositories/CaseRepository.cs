@@ -595,6 +595,7 @@ namespace DH.Helpdesk.Dal.Repositories
 							   SolutionTime = cs.Priority != null ? cs.Priority.SolutionTime : (int?)null,
 							   ExternalTime = cs.ExternalTime,
                                DepartmentName = cs.Department != null ? cs.Department.DepartmentName : null,
+                               PersonsPhone = cs.PersonsPhone 
 						   }; 
 
             // filter on customer
@@ -675,8 +676,9 @@ namespace DH.Helpdesk.Dal.Repositories
 					IncludeInCaseStatistics = c.IncludeInCaseStatistics,
 					CustomerID = c.CustomerId,
 					SolutionTime = c.SolutionTime,
-					ExternalTime = c.ExternalTime
-				});
+					ExternalTime = c.ExternalTime,
+                    PersonsPhone = c.PersonsPhone
+                });
 		}
 
 		public IList<int> GetCasesIdsByType(int caseTypeId)

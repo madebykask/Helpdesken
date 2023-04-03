@@ -33,6 +33,8 @@ namespace DH.Helpdesk.WebApi.Models.Output
                 string[] propertyNames = Array.ConvertAll(propertyInfos, p => p.Name);
                 foreach (var prop in propertyNames)
                 {
+
+
                     if (caseFieldsToReturn.IsNotNullOrEmpty() && caseFieldsToReturn.ToLower().Contains(prop.ToLower()))
                     {
                         //if (prop.ToLower() != "id")
@@ -109,9 +111,14 @@ namespace DH.Helpdesk.WebApi.Models.Output
         [JsonPropertyName("isResizable")]
         public bool IsResizable { get; set; } = true;
 
-
         [JsonPropertyName("isVisible")]
         public bool IsVisible { get; set; } = true;
+
+        [JsonPropertyName("isHref")]
+        public bool IsHref { get; set; }
+
+        [JsonPropertyName("hrefType")]
+        public string HrefType { get; set; }
 
     }
 

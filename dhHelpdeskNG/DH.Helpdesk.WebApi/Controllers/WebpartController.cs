@@ -135,6 +135,8 @@ namespace DH.Helpdesk.WebApi.Controllers
 
                     var model = new CasesResult(customerCases, caseFieldsToReturn);
 
+                   
+
                     foreach (var c in model.Columns)
                     {
                         c.Identifier = c.Name;
@@ -144,6 +146,13 @@ namespace DH.Helpdesk.WebApi.Controllers
                         {
                             c.IsVisible = false;
                         }
+
+                        if ((c.Identifier.ToLower().Contains("phone")))
+                        {
+                            c.IsHref = true;
+                            c.HrefType = "tel:";
+                        }
+
                     }
 
                     return model;
