@@ -70,7 +70,7 @@
                                             @*href="@GetLogLink(r)"*@
                                             <div style="display:block;">
                                                 <div style="display: inline;" name="divTextExternal">
-                                                    @Html.Raw(r.TextExternal.HTMLToTableCell())
+                                                    @Html.Raw(r.TextExternal.HTMLToTableCell().Replace("<img ", "<img class='image-link'"))
                                                 </div>
                                             </div>
                                         </a>
@@ -86,7 +86,7 @@
                                             @*href="@GetLogLink(r)"*@
                                             <div style="display:block;">
                                                 <div style="display: inline;" name="divTextInternal">
-                                                    @Html.Raw(r.TextInternal.HTMLToTableCell())
+                                                    @Html.Raw(r.TextInternal.HTMLToTableCell().Replace("<img ", "<img class='image-link'"))
                                                 </div>
                                             </div>
                                         </a>

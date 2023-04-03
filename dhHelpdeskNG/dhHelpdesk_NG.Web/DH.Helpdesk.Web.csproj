@@ -1358,6 +1358,9 @@
     <Content Include="Content\js\tinymce\themes\modern\theme.min.js" />
     <Content Include="Content\js\tinymce\tinymce.initiate.js" />
     <Content Include="Content\js\tinymce\tinymce.min.js" />
+    <Content Include="Content\magnific-popup\jquery.magnific-popup.js" />
+    <Content Include="Content\magnific-popup\jquery.magnific-popup.min.js" />
+    <Content Include="Content\magnific-popup\magnific-popup.css" />
     <Content Include="Content\summernote-0.8.18\font\summernote.eot" />
     <Content Include="Content\summernote-0.8.18\font\summernote.ttf" />
     <Content Include="Content\summernote-0.8.18\font\summernote.woff" />
