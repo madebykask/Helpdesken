@@ -18,6 +18,7 @@ namespace DH.Helpdesk.Services.Services
         void UpdateTask(GDPRTask task);
 
         void UpdateTaskStatus(int taskId, GDPRTaskStatus status);
+        GDPRTask GetLatestTask();
     }
 
     public class GDPRTasksService : IGDPRTasksService
@@ -38,6 +39,12 @@ namespace DH.Helpdesk.Services.Services
         public GDPRTask GetById(int taskId)
         {
             var task = _taskRepository.GetById(taskId);
+            return task;
+        }
+
+        public GDPRTask GetLatestTask()
+        {
+            var task = _taskRepository.GetAll().OrderByDescending(x => x.Id).FirstOrDefault();
             return task;
         }
 

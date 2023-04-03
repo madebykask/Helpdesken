@@ -54,8 +54,37 @@ namespace DH.Helpdesk.TaskScheduler
             }
 
             if (_sched.GetJobGroupNames().Count > 0)
+            {
                 _sched.Start();
+            }
+
+            try
+            {
+
+                IGDPRTasksService _gdprTasksService = new GDPRTasksService(_gdprTasksRepository);
+
+                var taskInfo = _gdprTasksService.GetLatestTask();
+
+                if (taskInfo.Status != GDPRTaskStatus.Complete)
+                {
+                    var errorMsg = $"Data privacy job for taskId: {taskInfo.Id} has stopped abnormally";
+                    taskInfo.Error = errorMsg;
+                    taskInfo.Progress = 0;
+                    taskInfo.EndedAt = DateTime.UtcNow;
+                    taskInfo.Success = false;
+                    taskInfo.Status = GDPRTaskStatus.Complete;
+
+                    _logger.Debug(errorMsg);
+                    _gdprTasksService.UpdateTask(taskInfo);
+                }
                 
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.InnerException);//TODO: Add more information
+                throw;
+            }
+
         }
         
         protected override void OnStop()
