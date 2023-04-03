@@ -181,6 +181,10 @@ namespace DH.Helpdesk.WebApi.Controllers
                     return "Caption";
                 case "PerformerName":
                     return "Performer_User_Id";
+                case "PersonsPhone":
+                    return "Persons_Phone";
+
+                    
                 default:
                     return columnName;
             }
