@@ -2607,7 +2607,6 @@ Module DH_Helpdesk_Mail
         Dim doc As HtmlAgilityPack.HtmlDocument = New HtmlAgilityPack.HtmlDocument()
         doc.LoadHtml(input)
 
-
         Dim imgs As HtmlNodeCollection = doc.DocumentNode.SelectNodes("//img")
 
         If imgs IsNot Nothing Then
@@ -2619,6 +2618,7 @@ Module DH_Helpdesk_Mail
                 If img.Attributes("id") IsNot Nothing Then
                     img.Attributes("id").Remove()
                 End If
+
 
             Next
         End If
@@ -2647,6 +2647,19 @@ Module DH_Helpdesk_Mail
                 End If
             Next
         End If
+
+        Dim scriptTags As IEnumerable(Of HtmlNode) = doc.DocumentNode.Descendants("script")
+
+        For Each scriptTag As HtmlNode In scriptTags.ToList()
+            scriptTag.Remove()
+        Next
+
+        Dim baseTags As IEnumerable(Of HtmlNode) = doc.DocumentNode.Descendants("base")
+
+        For Each base As HtmlNode In baseTags.ToList()
+            base.Remove()
+        Next
+
 
         Dim allNodes As HtmlNode = doc.DocumentNode
         Dim ret = allNodes.InnerHtml
