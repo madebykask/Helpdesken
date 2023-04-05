@@ -2696,7 +2696,8 @@
 
         //Loop all .summernote to try to find the disabled ones
         $(".summernoteinternal").each(function () {
-
+            var textarea = $("#" + this.id).summernote();
+            replaceLinebreakes(textarea);
             if (this.readOnly) {
                 $("#" + this.id).summernote("disable");
             }
@@ -2704,7 +2705,8 @@
         });
 
         $(".summernoteexternal").each(function () {
-
+            var textarea = $("#" + this.id).summernote();
+            replaceLinebreakes(textarea);
             if (this.readOnly) {
                 $("#" + this.id).summernote("disable");
             }
@@ -2713,14 +2715,18 @@
 
         $(".summernotedesc").each(function () {
             var textarea = $("#" + this.id).summernote();
-            var desc = textarea.summernote('code').replace(/\r\n|\r|\n/g, "<br />");
-            textarea.summernote('code', desc);
+            replaceLinebreakes(textarea);
             if (this.readOnly) {
 
                 $("#" + this.id).summernote("disable");
             }
 
         });
+
+        function replaceLinebreakes(textarea) {
+            var text = textarea.summernote('code').replace(/\r\n|\r|\n/g, "<br />");
+            textarea.summernote('code', text);
+        }
 
     });
 </script>
