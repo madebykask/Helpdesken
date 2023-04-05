@@ -2666,6 +2666,20 @@ Module DH_Helpdesk_Mail
             base.Remove()
         Next
 
+        Dim nodesToRemove As HtmlAgilityPack.HtmlNodeCollection = doc.DocumentNode.SelectNodes("//comment()[starts-with(normalize-space(.),'<?xml:')]")
+        If nodesToRemove IsNot Nothing Then
+            For Each node As HtmlAgilityPack.HtmlNode In nodesToRemove
+                node.Remove()
+            Next
+        End If
+        'Todo - Check this out
+        Dim xmlTagsToRemove As HtmlAgilityPack.HtmlNodeCollection = doc.DocumentNode.SelectNodes("//comment()[starts-with(normalize-space(.),'<!--?xml:')]")
+        If xmlTagsToRemove IsNot Nothing Then
+            For Each node As HtmlAgilityPack.HtmlNode In xmlTagsToRemove
+                node.Remove()
+            Next
+        End If
+
         Dim allNodes As HtmlNode = doc.DocumentNode
         Dim ret = allNodes.InnerHtml
         Return ret
