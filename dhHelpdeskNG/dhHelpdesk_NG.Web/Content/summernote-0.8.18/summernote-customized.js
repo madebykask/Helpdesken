@@ -21,7 +21,7 @@
 
     $.extend(true, $.summernote.lang, {
         'en-US': { /* US English(Default Language) */
-            examplePlugin: {
+            imgZoomPlugin: {
                 exampleText: 'Popup image',
                 dialogTitle: 'Popup image',
                 okButton: 'OK'
@@ -30,7 +30,7 @@
     });
 
     $.extend($.summernote.options, {
-        examplePlugin: {
+        imgZoomPlugin: {
             icon: '<i class="icon-zoom-in"></i>',
             tooltip: 'Popup image'
         }
@@ -42,7 +42,7 @@
         /**
          *  @param {Object} context - context object has status of editor.
          */
-        'examplePlugin': function (context) {
+        'imgZoomPlugin': function (context) {
 
             var self = this,
 
@@ -62,16 +62,16 @@
                 // lang holds the Language Information from Summernote and what we extended above.
                 lang = options.langInfo;
 
-            context.memo('button.examplePlugin', function () {
+            context.memo('button.imgZoomPlugin', function () {
 
                 // Here we create a button
                 var button = ui.button({
 
                     // icon for button
-                    contents: options.examplePlugin.icon,
+                    contents: options.imgZoomPlugin.icon,
 
                     // tooltip for button
-                    tooltip: lang.examplePlugin.tooltip,
+                    tooltip: lang.imgZoomPlugin.tooltip,
 
                     // Keep button from being disabled when in CodeView
                     codeviewKeepButton: true,
@@ -86,7 +86,7 @@
                             },
                         });
 
-                    //context.invoke('examplePlugin.show');
+                    //context.invoke('imgZoomPlugin.show');
                     }
                 });
                 return button.render();
@@ -94,10 +94,6 @@
 
             //// This events will be attached when editor is initialized.
             this.events = {
-
-                'examplePlugin.show': function (we, e) {
-                    console.log('testing testing')
-                },
                 // This will be called after modules are initialized.
                 'summernote.init': function (we, e) {
                     console.log('summernote initialized', we, e);

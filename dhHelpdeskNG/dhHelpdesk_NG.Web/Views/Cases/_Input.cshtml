@@ -2534,6 +2534,7 @@
         toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
         popover: {
             image: [
+                ['custom', ['imgZoomPlugin']],
                 ['remove', ['removeMedia']]
             ],
         },
@@ -2576,7 +2577,8 @@
         toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
         popover: {
             image: [
-                ['remove', ['removeMedia']],
+                ['custom', ['imgZoomPlugin']],
+                ['remove', ['removeMedia']]
             ],
         },
         disableResizeImage: true,
@@ -2641,7 +2643,7 @@
         height: @descriptionSize * 25,
         popover: {
             image: [
-                ['custom', ['examplePlugin']],
+                ['custom', ['imgZoomPlugin']],
                 ['remove', ['removeMedia']]
             ],
         },
