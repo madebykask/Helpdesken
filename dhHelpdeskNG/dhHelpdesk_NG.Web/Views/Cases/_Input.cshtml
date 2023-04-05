@@ -25,12 +25,12 @@
 <link href="~/Content/css/summernote.css" rel="stylesheet" />
 <script src="~/Content/summernote-0.8.18/summernote.js"></script>
 <script src="~/Content/summernote-0.8.18/lang/summernote-sv-SE.js"></script>
+<script src="~/Content/summernote-0.8.18/summernote-customized.js"></script>
 <!-- Magnific Popup core CSS file -->
 <link rel="stylesheet" href="~/Content/magnific-popup/magnific-popup.css">
 
 <!-- jQuery 1.7.2+ or Zepto.js 1.0+ -->
 <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
-
 <!-- Magnific Popup core JS file -->
 <script src="~/Content/magnific-popup/jquery.magnific-popup.js"></script>
 
@@ -2534,7 +2534,7 @@
         toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
         popover: {
             image: [
-                ['remove', ['removeMedia']],
+                ['remove', ['removeMedia']]
             ],
         },
         disableResizeImage: true,
@@ -2641,12 +2641,12 @@
         height: @descriptionSize * 25,
         popover: {
             image: [
-                ['remove', ['removeMedia']],
+                ['custom', ['examplePlugin']],
+                ['remove', ['removeMedia']]
             ],
         },
         callbacks: {
             onChange: function (contents, $editable) {
-
                 $('.summernotedesc').val($('.summernotedesc').summernote('isEmpty') ? "" : contents);
 
                 validator.element($('.summernotedesc'));
@@ -2672,7 +2672,6 @@
                 }
             }
         });
-
 
         if (('@emailReadOnly' === 'False' && '@hasLanguages' === 'True') || ('@hasLanguages' === 'True' && '@newCase' === 'True')) {
             $("#case__RegLanguage_Id").css('display', 'inline');
