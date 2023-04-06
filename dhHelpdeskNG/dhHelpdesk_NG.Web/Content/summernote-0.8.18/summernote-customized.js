@@ -92,17 +92,17 @@
                 return button.render();
             });
 
-            //// This events will be attached when editor is initialized.
-            this.events = {
-                // This will be called after modules are initialized.
-                'summernote.init': function (we, e) {
-                    console.log('summernote initialized', we, e);
-                },
-                // This will be called when user releases a key on editable.
-                'summernote.keyup': function (we, e) {
-                    console.log('summernote keyup', we, e);
-                }
-            };
+            ////// This events will be attached when editor is initialized.
+            //this.events = {
+            //    // This will be called after modules are initialized.
+            //    'summernote.init': function (we, e) {
+            //        console.log('summernote initialized', we, e);
+            //    },
+            //    // This will be called when user releases a key on editable.
+            //    'summernote.keyup': function (we, e) {
+            //        console.log('summernote keyup', we, e);
+            //    }
+            //};
 
             // This methods will be called when editor is destroyed by $('..').summernote('destroy');
             // You should remove elements on `initialize`.

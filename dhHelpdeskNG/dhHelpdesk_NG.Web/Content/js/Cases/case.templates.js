@@ -679,7 +679,7 @@ var ApplyTemplate = function (data, doOverwrite) {
     if (!isNullOrEmpty(data.Description)) {
         val = data.Description || '';
         if (val !== '') {
-            $(".summernotedesc").summernote("code", val);
+            $(".summernotedesc").summernote("code", val.replace(/\r\n|\r|\n/g, "<br />"));
             $("#spanDesc").text(val);
         }
     }
@@ -697,13 +697,13 @@ var ApplyTemplate = function (data, doOverwrite) {
     if (!isNullOrEmpty(data.Text_External)) {
         val = data.Text_External || '';
         if (val !== '') {
-            $(".summernoteexternal").summernote("code", val);
+            $(".summernoteexternal").summernote("code", val.replace(/\r\n|\r|\n/g, "<br />"));
         }
     }
     if (!isNullOrEmpty(data.Text_Internal)) {
         val = data.Text_Internal || '';
         if (val !== '') {
-            $(".summernoteinternal").summernote("code", val);
+            $(".summernoteinternal").summernote("code", val.replace(/\r\n|\r|\n/g, "<br />"));
         }
     }
     if (!isNullOrEmpty(data.FinishingCause_Id)) {
@@ -1133,7 +1133,7 @@ function IsValueApplicableFor(templateFieldId, val) {
 }
 
 function LoadTemplate(id) {
-    
+    debugger
     var caseInvoiceIsActive = false;
     var curCaseId = $('#case__Id').val();
     if ($('#CustomerSettings_ModuleCaseInvoice') != undefined)
