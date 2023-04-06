@@ -40,7 +40,7 @@
             <p>@GetLogUser(logModel) | @Html.DisplayFor(l => regDate)</p>
             @*<p>@Html.Raw(FormatLogText(logItem))</p>*@
             <div style="overflow-x: auto;">
-                @Html.Raw(WebMethodsExtensions.HTMLToTableCell(GetLogText(logModel)))
+                @Html.Raw(WebMethodsExtensions.HTMLToTableCell(GetLogText(logModel)).Replace("\r\n", "<br />"))
                 @if (logModel.Files != null)
                 {
                     foreach (var f in logModel.Files)
