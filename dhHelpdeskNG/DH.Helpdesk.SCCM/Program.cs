@@ -713,6 +713,7 @@ namespace DH.Helpdesk.SCCM
             {
                 if (restResponse.StatusCode != System.Net.HttpStatusCode.OK)
                 {
+                    log.Error($"Error Exception: {restResponse.ErrorException}! Status Code: {restResponse.StatusCode}! Response Status: {restResponse.ResponseStatus}! ErrorMessage: {restResponse.ErrorMessage}!");
                     return false;
                 }
             }
