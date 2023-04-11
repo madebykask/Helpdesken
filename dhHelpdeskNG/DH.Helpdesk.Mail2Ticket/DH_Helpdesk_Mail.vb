@@ -2464,40 +2464,42 @@ Module DH_Helpdesk_Mail
         For Each d As KeyValuePair(Of String, String) In fields
 
             If Not IsNullOrEmpty(d.Value) Then
+                Dim fieldValue As String = StripTags(d.Value)
+                fieldValue = System.Web.HttpUtility.HtmlDecode(fieldValue)
                 Select Case d.Key.ToLower
                     Case "reportedby"
-                        c.ReportedBy = Left(d.Value, 200)
+                        c.ReportedBy = Left(fieldValue, 200)
                     Case "persons_name"
-                        c.Persons_Name = Left(d.Value, 50)
+                        c.Persons_Name = Left(fieldValue, 50)
                     Case "persons_email"
-                        c.Persons_EMail = Left(d.Value, 100)
+                        c.Persons_EMail = Left(fieldValue, 100)
                     Case "persons_phone"
-                        c.Persons_Phone = Left(d.Value, 50)
+                        c.Persons_Phone = Left(fieldValue, 50)
                     Case "persons_cellphone"
-                        c.Persons_CellPhone = Left(d.Value, 50)
+                        c.Persons_CellPhone = Left(fieldValue, 50)
                     Case "place"
-                        c.Place = Left(d.Value, 100)
+                        c.Place = Left(fieldValue, 100)
                     Case "description"
                         c.Description = d.Value
                     Case "miscellaneous"
-                        c.Miscellaneous = Left(d.Value, 1000)
+                        c.Miscellaneous = Left(fieldValue, 1000)
                     Case "available"
-                        c.Available = Left(d.Value, 100)
+                        c.Available = Left(fieldValue, 100)
                     Case "invoicenumber"
-                        c.InvoiceNumber = Left(d.Value, 50)
+                        c.InvoiceNumber = Left(fieldValue, 50)
                     Case "referencenumber"
-                        c.ReferenceNumber = Left(d.Value, 200)
+                        c.ReferenceNumber = Left(fieldValue, 200)
                     Case "usercode"
-                        c.UserCode = Left(d.Value, 20)
+                        c.UserCode = Left(fieldValue, 20)
                     Case "inventorynumber"
-                        c.InventoryNumber = Left(d.Value, 20)
+                        c.InventoryNumber = Left(fieldValue, 20)
                     Case "inventorylocation"
                         ' TODO
                     Case "department_id"
                         If departments IsNot Nothing Then
                             If departments.Count > 0 Then
                                 For Each dp As Department In departments
-                                    If ReturnStringForCompare(dp.Department) = ReturnStringForCompare(d.Value) Then
+                                    If ReturnStringForCompare(dp.Department) = ReturnStringForCompare(fieldValue) Then
                                         c.Department_Id = dp.Id
                                         If dp.Region_Id > 0 Then
                                             c.Region_Id = dp.Region_Id
@@ -2511,7 +2513,7 @@ Module DH_Helpdesk_Mail
                         If priorities IsNot Nothing Then
                             If priorities.Count > 0 Then
                                 For Each p As Priority In priorities
-                                    If ReturnStringForCompare(p.Name) = ReturnStringForCompare(d.Value) Then
+                                    If ReturnStringForCompare(p.Name) = ReturnStringForCompare(fieldValue) Then
                                         c.Priority_Id = p.Id
                                         Exit For
                                     End If
@@ -2519,7 +2521,7 @@ Module DH_Helpdesk_Mail
                             End If
                         End If
                     Case "productarea_id"
-                        Dim pa As ProductArea = ReturnProductArea(customerid, d.Value)
+                        Dim pa As ProductArea = ReturnProductArea(customerid, fieldValue)
                         If pa IsNot Nothing Then
                             c.ProductArea_Id = pa.Id
                             If pa.Priority_Id <> 0 Then
@@ -2539,7 +2541,15 @@ Module DH_Helpdesk_Mail
         Return ret
 
     End Function
+    Private Function StripTags(ByVal inputString As String) As String
+        Dim ret As String = inputString
 
+        If Not IsNullOrEmpty(inputString) Then
+            ret = Regex.Replace(inputString, "<.*", "")
+        End If
+
+        Return ret
+    End Function
     Private Function GetValueFromEmailtext(fields As Dictionary(Of String, String), key As String) As String
         Dim ret As String = String.Empty
 
@@ -2687,6 +2697,7 @@ Module DH_Helpdesk_Mail
 
     Private Function ReturnProductArea(customerid As Integer, value As String) As ProductArea
         Dim ret As ProductArea = Nothing
+
         Dim areas As String() = Split(value, gsProductAreaSeperator)
         Dim parentid As Integer = 0
         Dim pa As New ProductAreaData()
