@@ -101,7 +101,14 @@ export class CaseTemplateService {
     // using mapping to keep required order
     Object.keys(mapping).forEach(key => {
       if (workflowData[key] != null && workflowData[key] != '') {
-        this.setValueIfVisible(mapping[key], workflowData[key].replace(/\r\n|\r|\n/g, "<br />"), form);
+        let value = workflowData[key];
+        if(mapping[key] == CaseFieldsNames.Description || 
+            mapping[key] == CaseFieldsNames.Log_ExternalText ||
+            mapping[key] == CaseFieldsNames.Log_InternalText) {
+              value = workflowData[key].replace(/\r\n|\r|\n/g, "<br />");
+            }
+
+        this.setValueIfVisible(mapping[key], value, form);
       }
     });
 
