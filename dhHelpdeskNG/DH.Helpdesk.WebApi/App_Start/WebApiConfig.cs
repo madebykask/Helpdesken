@@ -34,6 +34,7 @@ namespace DH.Helpdesk.WebApi
             //filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
             //filters.Add(new ApiExceptionFilter()); // Using Autofac implementation of ApiExceptionFilter
+            filters.Add(new WebpartSecretKeyHeaderAttribute());
             filters.Add(new ModelValidationApiActionFilter());
             filters.Add(new AuthorizeApiAttribute());
             //filters.Add(new CustomerAccessAuthorizationFilter()); //replaced with AutoFac registration

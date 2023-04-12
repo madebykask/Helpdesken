@@ -595,6 +595,7 @@ namespace DH.Helpdesk.Dal.Repositories
 							   SolutionTime = cs.Priority != null ? cs.Priority.SolutionTime : (int?)null,
 							   ExternalTime = cs.ExternalTime,
                                DepartmentName = cs.Department != null ? cs.Department.DepartmentName : null,
+                               PersonsPhone = cs.PersonsPhone 
 						   }; 
 
             // filter on customer
@@ -631,6 +632,13 @@ namespace DH.Helpdesk.Dal.Repositories
 					case "WorkingGroup_Id":
 						entities = orderbyAscending ? entities.OrderBy(o => o.WorkingGroupId) : entities.OrderByDescending(o => o.WorkingGroupId);
 						break;
+                    case "RegistrationDate":
+                        entities = orderbyAscending ? entities.OrderBy(o => o.RegistrationDate) : entities.OrderByDescending(o => o.RegistrationDate);
+                        break;
+                    case "RegTime":
+                        entities = orderbyAscending ? entities.OrderBy(o => o.RegTime) : entities.OrderByDescending(o => o.RegTime);
+                        break;
+
                     default:
                         //added to avoid "The method 'Skip' is only supported for sorted input in LINQ to Entities. The method 'OrderBy' must be called before the method 'Skip'." error.
                         entities = entities.OrderBy(o => o.PerformerId);
@@ -668,8 +676,9 @@ namespace DH.Helpdesk.Dal.Repositories
 					IncludeInCaseStatistics = c.IncludeInCaseStatistics,
 					CustomerID = c.CustomerId,
 					SolutionTime = c.SolutionTime,
-					ExternalTime = c.ExternalTime
-				});
+					ExternalTime = c.ExternalTime,
+                    PersonsPhone = c.PersonsPhone
+                });
 		}
 
 		public IList<int> GetCasesIdsByType(int caseTypeId)

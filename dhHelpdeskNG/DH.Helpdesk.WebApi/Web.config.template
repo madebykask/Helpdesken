@@ -22,7 +22,8 @@
 		<add key="MicrosoftClientId" value="#{MicrosoftClientIdApi}"/>
 		<add key="MicrosoftTenant" value="#{MicrosoftTenantApi}"/>
 		<add key="MicrosoftAuthority" value="#{MicrosoftAuthorityApi}"/>
-		<add key="SharePointSecretKey" value=""/>
+		<add key="WebpartSecretKey" value="#{WebpartSecretKey}"/>
+		<add key="WebpartAcceptedCustomerIds" value="#{WebpartAcceptedCustomerIds}"/>
 	</appSettings>
 
 	<connectionStrings>

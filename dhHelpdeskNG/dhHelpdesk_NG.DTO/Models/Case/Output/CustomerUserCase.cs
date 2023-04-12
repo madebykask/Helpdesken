@@ -69,5 +69,8 @@
 
 		public int? SolutionTime { get; set; }
 		public int ExternalTime { get; internal set; }
-	}
+
+        public string PersonsPhone { get; set; }
+
+    }
 }
