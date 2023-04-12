@@ -1864,6 +1864,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();
             //Get User Email from logged in user
             var user = _computerService.GetComputerUserByUserID(curUser);
+            //Här smäller det
             criteria.PersonEmail = user.Email;
 
 
