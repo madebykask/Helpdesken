@@ -101,7 +101,7 @@ export class CaseTemplateService {
     // using mapping to keep required order
     Object.keys(mapping).forEach(key => {
       if (workflowData[key] != null && workflowData[key] != '') {
-        this.setValueIfVisible(mapping[key], workflowData[key], form);
+        this.setValueIfVisible(mapping[key], workflowData[key].replace(/\r\n|\r|\n/g, "<br />"), form);
       }
     });
 
