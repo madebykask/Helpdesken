@@ -18,6 +18,12 @@ namespace DH.Helpdesk.WebApi
         public void Configuration(IAppBuilder app)
         {
             var config = new HttpConfiguration();
+            var isDebugMode = false;
+
+            if (ConfigurationManager.AppSettings["DebugMode"] != null)
+            {
+                isDebugMode = bool.TryParse(ConfigurationManager.AppSettings["DebugMode"], out isDebugMode);
+            }
 
             var container = WebApiConfig.ConfigDiContainer(config);
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
@@ -28,7 +34,7 @@ namespace DH.Helpdesk.WebApi
                 PolicyProvider = new CorsPolicyProvider()
                 {
                     PolicyResolver = request =>
-                        (request.Path.Value ?? string.Empty).Equals("/token", StringComparison.OrdinalIgnoreCase)
+                        (request.Path.Value ?? string.Empty).Equals("/token", StringComparison.OrdinalIgnoreCase) || isDebugMode
                             ? Task.FromResult(new CorsPolicy
                             {
                                 AllowAnyHeader = true,
