@@ -1,4 +1,6 @@
-﻿using System.Web.Http;
+﻿using System.Configuration;
+using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Filters;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using DH.Helpdesk.WebApi.Infrastructure.Config;
@@ -23,8 +25,23 @@ namespace DH.Helpdesk.WebApi
             
             //use cors for web api
             config.SetCorsPolicyProviderFactory(new WebApiCorsPolicyProviderFactory());
-            config.EnableCors();
 
+            var isDebugMode = false;
+
+            if (ConfigurationManager.AppSettings["DebugMode"] != null)
+            {
+                bool.TryParse(ConfigurationManager.AppSettings["DebugMode"], out isDebugMode);
+            }
+
+            if (isDebugMode)
+            {
+                config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
+            }
+
+            else
+            {
+                config.EnableCors();
+            }
             // make all web-api requests to be sent over https
             //config.MessageHandlers.Add(new EnforceHttpsHandler());
         }
