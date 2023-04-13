@@ -663,6 +663,7 @@ Module DH_Helpdesk_Mail
                                 Dim fields As New Dictionary(Of String, String)
                                 If fieldsToUpdate.Count > 0 Then
                                     fields = GetParsedMailBody(fieldsToUpdate, sBodyText)
+                                    'Fix
                                     Dim strUserId As String = GetValueFromEmailtext(fields, "reportedby")
                                     If Not IsNullOrEmpty(strUserId) Then
                                         objComputerUser = objComputerUserData.getComputerUserByUserId(strUserId, objCustomer.Id)
@@ -2464,8 +2465,10 @@ Module DH_Helpdesk_Mail
         For Each d As KeyValuePair(Of String, String) In fields
 
             If Not IsNullOrEmpty(d.Value) Then
-                Dim fieldValue As String = StripTags(d.Value)
-                fieldValue = System.Web.HttpUtility.HtmlDecode(fieldValue)
+                Dim fieldValue As String = GetValueFromKeyValuePair(fields, d.Key)
+
+                fieldValue = System.Web.HttpUtility.HtmlDecode(fieldValue).Trim()
+
                 Select Case d.Key.ToLower
                     Case "reportedby"
                         c.ReportedBy = Left(fieldValue, 200)
@@ -2542,13 +2545,12 @@ Module DH_Helpdesk_Mail
 
     End Function
     Private Function StripTags(ByVal inputString As String) As String
-        Dim ret As String = inputString
+        Dim result As String = System.Text.RegularExpressions.Regex.Replace(inputString, "(?i)<(?!br)[^>]*>", "") ' Remove all HTML tags except <br>
 
-        If Not IsNullOrEmpty(inputString) Then
-            ret = Regex.Replace(inputString, "<.*", "")
-        End If
+        result = result.Split({"<br>"}, StringSplitOptions.None)(0).Trim()
+        result = result.Split({"<br />"}, StringSplitOptions.None)(0).Trim()
 
-        Return ret
+        Return result
     End Function
     Private Function GetValueFromEmailtext(fields As Dictionary(Of String, String), key As String) As String
         Dim ret As String = String.Empty
@@ -2558,6 +2560,24 @@ Module DH_Helpdesk_Mail
                 If Not IsNullOrEmpty(d.Value) Then
                     If d.Key.ToLower = key.ToLower() Then
                         ret = d.Value.Trim()
+                        Exit For
+                    End If
+                End If
+            Next
+        End If
+
+        Return ret
+
+    End Function
+
+    Private Function GetValueFromKeyValuePair(fields As Dictionary(Of String, String), key As String) As String
+        Dim ret As String = String.Empty
+
+        If fields IsNot Nothing Then
+            For Each d As KeyValuePair(Of String, String) In fields
+                If Not IsNullOrEmpty(d.Value) Then
+                    If d.Key.ToLower = key.ToLower() Then
+                        ret = StripTags(d.Value.Trim())
                         Exit For
                     End If
                 End If
