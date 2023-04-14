@@ -1862,11 +1862,28 @@ namespace DH.Helpdesk.SelfService.Controllers
                 return false;
 
             var criteria = _caseControllerBehavior.GetCaseOverviewCriteria();
-            //Get User Email from logged in user
-            var user = _computerService.GetComputerUserByUserID(curUser);
-            //Här smäller det
-            criteria.PersonEmail = user.Email;
-
+            if (String.IsNullOrEmpty(criteria.PersonEmail))
+            {
+                //Get User Email from logged in user if exists in tblComputerUsers
+                var user = _computerService.GetComputerUserByUserID(curUser);
+                if (user != null && !string.IsNullOrEmpty(user.Email))
+                {
+                    criteria.PersonEmail = user.Email;
+                }
+                else //If no computeruser - seach in tblUsers
+                {
+                    var hdUser = _userService.GetUserByLogin(curUser, SessionFacade.CurrentCustomerID);
+                    if (hdUser != null && !string.IsNullOrEmpty(hdUser.Email))
+                    {
+                        criteria.PersonEmail = hdUser.Email;
+                    }
+                    else
+                    {
+                        criteria.PersonEmail = "";
+                    }
+                }
+            }
+            
 
             /*User creator*/
             if (criteria.MyCasesRegistrator && !string.IsNullOrEmpty(criteria.UserId) && !string.IsNullOrEmpty(currentCase.RegUserId))
