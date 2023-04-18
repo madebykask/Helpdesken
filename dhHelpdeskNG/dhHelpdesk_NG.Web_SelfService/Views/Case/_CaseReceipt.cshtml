@@ -191,395 +191,479 @@
     </div>
 }
 <!-- User Information Fields -->
-
-@if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.ComputerInformation))
+@if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseRegarding))
 {
-    <h4>@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.ComputerInfo, CaseSectionsEnglish.ComputerInfoHeader) </h4>
+    <h4>@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.ComputerInfo, CaseSectionsEnglish.RegardingHeader) </h4>
     <div class="row">
         <div class="col-md-3 dh-col">
             <div class="container form-horizontal">
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()))
                 {
                     <div class="form-group row">
                         <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
                         </label>
                         <div class="col-md-9">
-                            @Model.CasePreview.InventoryNumber
+                            @Model.CasePreview.IsAbout_ReportedBy
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()))
                 {
                     <div class="form-group row">
                         <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
                         </label>
                         <div class="col-md-9">
-                            @Model.CasePreview.InventoryType
+                            @Model.CasePreview.IsAbout_PersonsName
                         </div>
                     </div>
                 }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()))
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()))
                 {
                     <div class="form-group row">
                         <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
                         </label>
                         <div class="col-md-9">
-                            @Model.CasePreview.InventoryLocation
+                            @Model.CasePreview.IsAbout_PersonsEmail
+                        </div>
+                    </div>
+                }
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()))
+                {
+                    <div class="form-group row">
+                        <label class="col-md-3">
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                        </label>
+                        <div class="col-md-9">
+                            @Model.CasePreview.IsAbout_PersonsPhone
+                        </div>
+                    </div>
+                }
+                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()))
+                {
+                    <div class="form-group row">
+                        <label class="col-md-3">
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                        </label>
+                        <div class="col-md-9">
+                            @Model.CasePreview.IsAbout_PersonsCellPhone
                         </div>
                     </div>
                 }
             </div>
-        </div>
-    </div>
-}
-<!-- Computer Information Fields -->
-@if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseInfo))
-{
-    <h4>@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.CaseInfo, CaseSectionsEnglish.CaseInfoHeader) </h4>
-    <div class="row">
-        <div class="col-md-3 dh-col">
-            <div class="container form-horizontal">
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.CaseNumber.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @Model.CasePreview.CaseNumber
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.RegTime.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @{var _regDate = Model.CasePreview.RegTime.ToLocalTime();}
-                            @Html.DisplayFor(r => _regDate)
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ChangeTime.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.ChangeTime.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @{var _changeDate = Model.CasePreview.ChangeTime.ToLocalTime();}
-                            @Html.DisplayFor(c => _changeDate)
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @Model.CasePreview.CaseType.Name
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @if (Model.CasePreview.ProductArea != null)
-                            {
-                                @Model.CasePreview.ProductArea.Name
-                            }
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.System_Id.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @Model.Systems.Where(s => s.Id == Model.CasePreview.System_Id).Select(s => s.SystemName).FirstOrDefault()
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @if (Model.CasePreview.Urgency != null)
-                            {
-                                @Model.CasePreview.Urgency.Name
-                            }
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @if (Model.CasePreview.Impact != null)
-                            {
-                                @Model.CasePreview.Impact.Name
-                            }
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Category_Id.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @if (Model.CasePreview.Category != null)
-                            {
-                                @Model.CasePreview.Category.Name
-                            }
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @Model.Suppliers.Where(s => s.Id == Model.CasePreview.Supplier_Id).Select(s => s.Name).FirstOrDefault()
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @Model.CasePreview.InvoiceNumber
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @Model.CasePreview.ReferenceNumber
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Caption.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @Model.CasePreview.Caption
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Description.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9" style="overflow-x:auto;">
-                            @Model.CasePreview.Description.ForHtmlView()
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @Model.CasePreview.Miscellaneous
-                        </div>
-                    </div>
-                }
-                @*@if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()))
-                    {
-                        <div class="form-group row">
-                            <label class="col-md-3">
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                            </label>
-                            <div class="col-md-9">
-                                @if (Model.CasePreview.Priority != null)
-                                {
-                                    @Model.CasePreview.Priority.Name
-                                }
-                            </div>
-                        </div>
-                    }*@
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @Model.CasePreview.ContactBeforeAction
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.SMS.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.SMS.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @Model.CasePreview.SMS
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.AgreedDate.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @{var _agreeDate = Model.CasePreview.AgreedDate.HasValue ? Model.CasePreview.AgreedDate.Value.ToShortDateString() : string.Empty;}
-                            @Html.DisplayFor(a => _agreeDate)
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Available.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            @Model.CasePreview.Available
-                        </div>
-                    </div>
-                }
-                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Cost.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">
-                            @Translation.Get(GlobalEnums.TranslationCaseFields.Cost.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
-                        </label>
-                        <div class="col-md-9">
-                            <table class="table table-striped table-bordered table-hover">
-                                <tr>
-                                    <td>
-                                        @Translation.Get("Item Cost")<br />
-                                        @Model.CasePreview.Cost
-                                    </td>
-                                    <td>
-                                        @Translation.Get("Additional Cost")<br />
-                                        @Model.CasePreview.OtherCost
-                                    </td>
-                                    <td>
-                                        @Translation.Get("Currency")<br />
-                                        @Model.CasePreview.Currency
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                }
-                @if (ViewBag.AttachmentPlacement == 0 && Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
-                {
-                    <div class="form-group row">
-                        <label class="col-md-3">@Translation.Get(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)</label>
-                        <div class="col-md-6">
-                            <table id="case_files_table" class="table table-striped">
-                                @if (Model.CasePreview.CaseFiles != null)
-                                {
-                                    foreach (var file in Model.CasePreview.CaseFiles)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @{ //<a style="color:blue" href="@Url.Action("DownloadFile",  new { @id = Model.CasePreview.Id, fileName = file.FileName })"><i class="icon-file"></i>@file.FileName</a>
-                                                }
-                                                <a style="color:blue" href="@this.Url.Action("DownloadFile", "CaseFiles", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
-                                            </td>
-                                        </tr>
-                                    }
-                                }
-                            </table>
-                        </div>
-                    </div>
-                }
             </div>
         </div>
-    </div>
+
 }
 
-<!-- /Case Info Fields -->
-
-
-@if (!Model.IsFinished && Model.ApplicationType == ApplicationType.SelfService && !Model.ShowCommunicationForSelfService)
-{
-    <div id="logNotesSection">
-        <h4>@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.Communication, CaseSectionsEnglish.CommunicationHeader) </h4>
-        <div class="row">
-            <div class="col-md-3 dh-col">
-                <div class="container form-horizontal">
-                    <div class="container-fluid">
-                        <div class="form-group row">
-                            <label class="col-md-3">@Translation.Get("Add comment")</label>
-                            <div class="col-md-9">
-                                <textarea id="logNote" class="col-md-12 summernotecomment" style="margin-bottom: 10px;"></textarea>
-                            </div>
-                        </div>
-                        @if (Model.CaseLogsModel.IsAttachmentsAllowed)
-                        {
-                            <div class="form-group row">
-                                <label class="col-md-3">@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Filename.ToString(), @SessionFacade.CurrentCustomerID)</label>
-                                <div class="col-md-9">
+                @if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.ComputerInformation))
+                {
+                    <h4>@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.ComputerInfo, CaseSectionsEnglish.ComputerInfoHeader) </h4>
+                    <div class="row">
+                        <div class="col-md-3 dh-col">
+                            <div class="container form-horizontal">
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()))
+                                {
                                     <div class="form-group row">
-                                        <div class="col-md-5">
-                                            <a id="btnUploadFile" href="#Log_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Add")</a>
-                                            <a id="addLogFileFromClipboard" href="#upload_clipboard_file_popup" role="button" class="btn btn-default">@Translation.Get("Add from clipboard")</a>
-                                            <table id="LogFile_table" class="table table-striped table-condensed logFiles" style="margin-top: 10px">
-                                                <tbody>
-                                                    @if (Model.LogFilesModel == null)
-                                                    {
-                                                        <div id="no_uploaded_files_label"></div>
-                                                    }
-                                                </tbody>
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Model.CasePreview.InventoryNumber
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Model.CasePreview.InventoryType
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Model.CasePreview.InventoryLocation
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+                <!-- Computer Information Fields -->
+                @if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseInfo))
+                {
+                    <h4>@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.CaseInfo, CaseSectionsEnglish.CaseInfoHeader) </h4>
+                    <div class="row">
+                        <div class="col-md-3 dh-col">
+                            <div class="container form-horizontal">
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.CaseNumber.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Model.CasePreview.CaseNumber
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.RegTime.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @{var _regDate = Model.CasePreview.RegTime.ToLocalTime();}
+                                            @Html.DisplayFor(r => _regDate)
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ChangeTime.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.ChangeTime.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @{var _changeDate = Model.CasePreview.ChangeTime.ToLocalTime();}
+                                            @Html.DisplayFor(c => _changeDate)
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Model.CasePreview.CaseType.Name
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @if (Model.CasePreview.ProductArea != null)
+                                            {
+                                                @Model.CasePreview.ProductArea.Name
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.System_Id.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.System_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Model.Systems.Where(s => s.Id == Model.CasePreview.System_Id).Select(s => s.SystemName).FirstOrDefault()
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @if (Model.CasePreview.Urgency != null)
+                                            {
+                                                @Model.CasePreview.Urgency.Name
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Impact_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @if (Model.CasePreview.Impact != null)
+                                            {
+                                                @Model.CasePreview.Impact.Name
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Category_Id.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Category_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @if (Model.CasePreview.Category != null)
+                                            {
+                                                @Model.CasePreview.Category.Name
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Model.Suppliers.Where(s => s.Id == Model.CasePreview.Supplier_Id).Select(s => s.Name).FirstOrDefault()
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Model.CasePreview.InvoiceNumber
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Model.CasePreview.ReferenceNumber
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Caption.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Model.CasePreview.Caption
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Description.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9" style="overflow-x:auto;">
+                                            @Model.CasePreview.Description.ForHtmlView()
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Model.CasePreview.Miscellaneous
+                                        </div>
+                                    </div>
+                                }
+                                @*@if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()))
+                                    {
+                                        <div class="form-group row">
+                                            <label class="col-md-3">
+                                                @Translation.Get(GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                            </label>
+                                            <div class="col-md-9">
+                                                @if (Model.CasePreview.Priority != null)
+                                                {
+                                                    @Model.CasePreview.Priority.Name
+                                                }
+                                            </div>
+                                        </div>
+                                    }*@
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Model.CasePreview.ContactBeforeAction
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.SMS.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.SMS.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Model.CasePreview.SMS
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.AgreedDate.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.AgreedDate.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @{var _agreeDate = Model.CasePreview.AgreedDate.HasValue ? Model.CasePreview.AgreedDate.Value.ToShortDateString() : string.Empty;}
+                                            @Html.DisplayFor(a => _agreeDate)
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Available.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Available.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            @Model.CasePreview.Available
+                                        </div>
+                                    </div>
+                                }
+                                @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Cost.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">
+                                            @Translation.Get(GlobalEnums.TranslationCaseFields.Cost.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
+                                        </label>
+                                        <div class="col-md-9">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <tr>
+                                                    <td>
+                                                        @Translation.Get("Item Cost")<br />
+                                                        @Model.CasePreview.Cost
+                                                    </td>
+                                                    <td>
+                                                        @Translation.Get("Additional Cost")<br />
+                                                        @Model.CasePreview.OtherCost
+                                                    </td>
+                                                    <td>
+                                                        @Translation.Get("Currency")<br />
+                                                        @Model.CasePreview.Currency
+                                                    </td>
+                                                </tr>
                                             </table>
+                                        </div>
+                                    </div>
+                                }
+                                @if (ViewBag.AttachmentPlacement == 0 && Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-3">@Translation.Get(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)</label>
+                                        <div class="col-md-6">
+                                            <table id="case_files_table" class="table table-striped">
+                                                @if (Model.CasePreview.CaseFiles != null)
+                                                {
+                                                    foreach (var file in Model.CasePreview.CaseFiles)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                @{ //<a style="color:blue" href="@Url.Action("DownloadFile",  new { @id = Model.CasePreview.Id, fileName = file.FileName })"><i class="icon-file"></i>@file.FileName</a>
+                                                                }
+                                                                <a style="color:blue" href="@this.Url.Action("DownloadFile", "CaseFiles", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </table>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <!-- /Case Info Fields -->
+
+
+                @if (!Model.IsFinished && Model.ApplicationType == ApplicationType.SelfService && !Model.ShowCommunicationForSelfService)
+                {
+                    <div id="logNotesSection">
+                        <h4>@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.Communication, CaseSectionsEnglish.CommunicationHeader) </h4>
+                        <div class="row">
+                            <div class="col-md-3 dh-col">
+                                <div class="container form-horizontal">
+                                    <div class="container-fluid">
+                                        <div class="form-group row">
+                                            <label class="col-md-3">@Translation.Get("Add comment")</label>
+                                            <div class="col-md-9">
+                                                <textarea id="logNote" class="col-md-12 summernotecomment" style="margin-bottom: 10px;"></textarea>
+                                            </div>
+                                        </div>
+                                        @if (Model.CaseLogsModel.IsAttachmentsAllowed)
+                                        {
+                                            <div class="form-group row">
+                                                <label class="col-md-3">@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Filename.ToString(), @SessionFacade.CurrentCustomerID)</label>
+                                                <div class="col-md-9">
+                                                    <div class="form-group row">
+                                                        <div class="col-md-5">
+                                                            <a id="btnUploadFile" href="#Log_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Add")</a>
+                                                            <a id="addLogFileFromClipboard" href="#upload_clipboard_file_popup" role="button" class="btn btn-default">@Translation.Get("Add from clipboard")</a>
+                                                            <table id="LogFile_table" class="table table-striped table-condensed logFiles" style="margin-top: 10px">
+                                                                <tbody>
+                                                                    @if (Model.LogFilesModel == null)
+                                                                    {
+                                                                        <div id="no_uploaded_files_label"></div>
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        <button id="btnSendLog" class="btn btn-success" data-src="casesection">@Translation.Get("Send")</button>
+                                        <i id="sendLogIndicator" style="display:none" class="gif-loader">&nbsp;</i>
+                                        <hr />
+                                    </div>
+                                    <div class="container-fluid">
+                                        <div class="form-group row">
+                                            <div class="col-md-3"></div>
+                                            <div class="col-md-8">
+                                                <div id="CaseLogPartial" class="onpage com-list">
+                                                    @Html.Partial("_CaseLogNote", Model.CaseLogsModel)
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        }
-                        <button id="btnSendLog" class="btn btn-success" data-src="casesection">@Translation.Get("Send")</button>
-                        <i id="sendLogIndicator" style="display:none" class="gif-loader">&nbsp;</i>
-                        <hr />
+                        </div>
                     </div>
+                }
+
+                @if (Model.IsFinished)
+                {
+                    <h4>@Translation.Get("Communicate") </h4>
                     <div class="container-fluid">
-                        <div class="form-group row">
-                            <div class="col-md-3"></div>
+                        <div class="row">
                             <div class="col-md-8">
                                 <div id="CaseLogPartial" class="onpage com-list">
                                     @Html.Partial("_CaseLogNote", Model.CaseLogsModel)
@@ -587,28 +671,10 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-}
+                    @Html.Partial("ModalDialogs/_CaseLogNotePopup")
+                }
 
-@if (Model.IsFinished)
-{
-    <h4>@Translation.Get("Communicate") </h4>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-8">
-                <div id="CaseLogPartial" class="onpage com-list">
-                    @Html.Partial("_CaseLogNote", Model.CaseLogsModel)
-                </div>
-            </div>
-        </div>
-    </div>
-    @Html.Partial("ModalDialogs/_CaseLogNotePopup")
-}
-
-<script>
+                <script>
     @{
         var langChosen = SessionFacade.CurrentLanguageId == 1 ? "sv-SE" : "en-US";
     }
@@ -642,6 +708,6 @@
 
     });
 
-</script>
+                </script>
 
 
