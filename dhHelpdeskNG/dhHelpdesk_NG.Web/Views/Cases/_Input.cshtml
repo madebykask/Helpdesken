@@ -2653,17 +2653,11 @@
 
                 validator.element($('.summernotedesc'));
             },
-
             onPaste: function (e) {
-                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('text/html');
-                // Remove inline styles - works
-                var cleanText = bufferText.replace(/ style=("|\')(?!.*?\b(base)\b.*?)(.*?)("|\')/gi, '').replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '').replace(/<link\b[^<]*(?:(?!>)[^<]*)*>/gi, '');
-                // Paste the cleaned content
-                document.execCommand('insertHTML', false, cleanText);
-                // Prevent the original paste event from firing
+                var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
                 e.preventDefault();
+                document.execCommand('insertText', false, bufferText);
             }
-
         }
     }
 
