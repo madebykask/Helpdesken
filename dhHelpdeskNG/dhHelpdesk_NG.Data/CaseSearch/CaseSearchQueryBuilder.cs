@@ -440,6 +440,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 columns.Add("tblCase.LeadTime");
                 columns.Add("tblCase.Status_Id as aggregate_Status");
                 columns.Add("tblCase.StateSecondary_Id as aggregate_SubStatus");
+                columns.Add("tblCaseHistory.ClosingReason as ClosingReason");
 
                 columns.Add(string.Format("'0' as [{0}]", CaseSearchConstants.TimeLeftColumn.SafeForSqlInject()));
                 columns.Add("tblStateSecondary.IncludeInCaseStatistics");
@@ -734,6 +735,7 @@ namespace DH.Helpdesk.Dal.Repositories
             tables.Add("left outer join tblUsers as tblUsers3 on tblCase.CaseResponsibleUser_Id = tblUsers3.Id ");
             tables.Add("left outer join tblProblem on tblCase.Problem_Id = tblProblem.Id ");
             tables.Add("left outer join tblUsers as tblUsers4 on tblProblem.ResponsibleUser_Id = tblUsers4.Id ");
+            tables.Add("left outer join tblCaseHistory on tblCaseHistory.Case_Id = tblCase.Id ");
 
             if (caseSettings.ContainsKey(GlobalEnums.TranslationCaseFields.CausingPart.ToString()))
             {
