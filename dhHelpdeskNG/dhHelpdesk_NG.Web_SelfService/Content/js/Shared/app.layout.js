@@ -119,7 +119,7 @@ function SaveExternalMessage() {
         ShowToastMessage('Comment text is empty!', "warning", false);
     } else {
         $.get(SaveMessageUrl, { caseId: window.CaseId, note: note, myTime: Date.now() }, function (_CaseLogNoteMarkup) {            
-            $('#CaseLogPartial').html(_CaseLogNoteMarkup.replace(/\r\n|\r|\n/g, "<br />"));
+            $('#CaseLogPartial').html(replaceLinebreaksInString(_CaseLogNoteMarkup));
             $('#myNote').val('');
         });
     }

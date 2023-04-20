@@ -211,7 +211,7 @@ $(function () {
                                     window.location.href = caseDetailsUrl.indexOf(caseId) >= 0 ? caseDetailsUrl : (caseDetailsUrl + '/' + caseId);
                            }
                             else {
-                                self._elements.logNotesDiv.html(res.replace(/\r\n|\r|\n/g, "<br />"));
+                                self._elements.logNotesDiv.html(replaceLinebreaksInString(res));
                                 self._elements.logNoteInput.val('');
                                 self.reloadLogFiles();
                                 changeState.call(self, false);

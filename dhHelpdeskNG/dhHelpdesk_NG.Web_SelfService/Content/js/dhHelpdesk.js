@@ -64,6 +64,10 @@ function today() {
     return today;
 }
 
+function replaceLinebreaksInString(input) {
+    return input.replace(/\r\n|\r|\n/g, "<br style='display: block;content: \"\";margin-top: 0;'/>");
+}
+
 // Cose window or tab
 function close_window() {
     //if (confirm("WARNING TEXT XXXXXXX TRANSLATE")) {

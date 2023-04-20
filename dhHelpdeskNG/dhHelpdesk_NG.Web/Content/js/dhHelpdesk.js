@@ -94,6 +94,10 @@ function getNow() {
     return res;
 }
 
+function replaceLinebreaksInString(input) {
+    return input.replace(/\r\n|\r|\n/g, "<br />");
+}
+
 // Cose window or tab
 function close_window() {
     //if (confirm("WARNING TEXT XXXXXXX TRANSLATE")) {

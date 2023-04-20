@@ -678,7 +678,7 @@ var ApplyTemplate = function (data, doOverwrite) {
     if (!isNullOrEmpty(data.Description)) {
         val = data.Description || '';
         if (val !== '' && doOverwrite) {
-            $(".summernotedesc").summernote("code", val.replace(/\r\n|\r|\n/g, "<br />"));
+            $(".summernotedesc").summernote("code", replaceLinebreaksInString(val));
             $("#spanDesc").text(val);
         }
     }
@@ -696,13 +696,13 @@ var ApplyTemplate = function (data, doOverwrite) {
     if (!isNullOrEmpty(data.Text_External)) {
         val = data.Text_External || '';
         if (val !== '' && doOverwrite) {
-            $(".summernoteexternal").summernote("code", val.replace(/\r\n|\r|\n/g, "<br />"));
+            $(".summernoteexternal").summernote("code", replaceLinebreaksInString(val));
         }
     }
     if (!isNullOrEmpty(data.Text_Internal)) {
         val = data.Text_Internal || '';
         if (val !== '' && doOverwrite) {
-            $(".summernoteinternal").summernote("code", val.replace(/\r\n|\r|\n/g, "<br />"));
+            $(".summernoteinternal").summernote("code", replaceLinebreaksInString(val));
         }
     }
     if (!isNullOrEmpty(data.FinishingCause_Id)) {
