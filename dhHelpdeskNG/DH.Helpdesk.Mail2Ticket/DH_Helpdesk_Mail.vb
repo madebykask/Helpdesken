@@ -318,6 +318,15 @@ Module DH_Helpdesk_Mail
                 If objCustomer.PhysicalFilePath = "" Then
                     objCustomer.PhysicalFilePath = objGlobalSettings.AttachedFileFolder
                 End If
+                'Make sure to empty temp-folder.
+                Try
+                    Dim di As DirectoryInfo = New DirectoryInfo(objCustomer.PhysicalFilePath & "\temp")
+                    For Each fi As FileInfo In di.GetFiles()
+                        fi.Delete()
+                    Next
+                Catch ex As Exception
+
+                End Try
 
                 If Not IsNullOrEmpty(objCustomer.POP3Server) AndAlso Not IsNullOrEmpty(objCustomer.POP3UserName) Then
 
@@ -1005,7 +1014,7 @@ Module DH_Helpdesk_Mail
                                             DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
 
                                         Catch ex As Exception
-                                            LogError("Error deleting files: " & ex.Message, Nothing)
+                                            ' LogError("Error deleting files: " & ex.Message, Nothing)
                                         End Try
                                     End If
                                 Else ' Existing case 
@@ -1112,7 +1121,7 @@ Module DH_Helpdesk_Mail
                                             DeleteFilesInsideFolder(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html", True)
                                             DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
                                         Catch ex As Exception
-                                            LogError("Error deleting files: " & ex.Message, Nothing)
+                                            'LogError("Error deleting files: " & ex.Message, Nothing)
                                         End Try
 
                                     End If
@@ -1270,6 +1279,7 @@ Module DH_Helpdesk_Mail
             Next
 
         Catch ex As Exception
+            'Shall we keep this?
             LogError("Error readMailBox: " & ex.Message.ToString(), Nothing)
             'rethrow
             'Throw
@@ -2178,7 +2188,7 @@ Module DH_Helpdesk_Mail
             Try
                 File.Delete(file_path)
             Catch ex As Exception
-                LogError("Delete file error" & ex.Message.ToString(), Nothing)
+                'LogError("Delete file error" & ex.Message.ToString(), Nothing)
             End Try
 
         Next
@@ -2194,7 +2204,7 @@ Module DH_Helpdesk_Mail
                 Try
                     Directory.Delete(sub_folder_path, also_delete_sub_folders)
                 Catch ex As Exception
-                    LogError(ex.Message.ToString(), Nothing)
+                    'LogError(ex.Message.ToString(), Nothing)
                 End Try
 
             Next
@@ -2202,7 +2212,7 @@ Module DH_Helpdesk_Mail
             Try
                 Directory.Delete(target_folder_path, also_delete_sub_folders)
             Catch ex As Exception
-                LogError(ex.Message.ToString(), Nothing)
+                'LogError(ex.Message.ToString(), Nothing)
             End Try
         End If
 
