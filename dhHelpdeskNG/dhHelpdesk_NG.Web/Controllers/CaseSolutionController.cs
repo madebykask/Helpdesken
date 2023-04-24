@@ -1318,11 +1318,11 @@ namespace DH.Helpdesk.Web.Controllers
                 extendedCases = GetExtendedCases(id, 0).ToList();
             }
 
-            var desc = caseSolution.Description.Replace("\r\n", "<br style='display: block; margin: 10px 0;'/>");
+            var desc = caseSolution.Description.Replace("\r\n", "<br />");
             caseSolution.Description = desc;
-            var textExt = caseSolution.Text_External.Replace("\r\n", "<br style='display: block; margin: 10px 0;'/>");
+            var textExt = caseSolution.Text_External.Replace("\r\n", "<br />");
             caseSolution.Text_External = textExt;
-            var textInt = caseSolution.Text_Internal.Replace("\r\n", "<br style='display: block; margin: 10px 0;'/>");
+            var textInt = caseSolution.Text_Internal.Replace("\r\n", "<br />");
             caseSolution.Text_Internal = textInt;
 
             return this.Json(

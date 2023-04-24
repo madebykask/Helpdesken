@@ -17,7 +17,6 @@
 
 @Html.Partial("~/Views/Cases/_CaseValidation.cshtml", Model)
 @Scripts.Render("~/bundles/cases/_input")
-@Scripts.Render("~/bundles/dhhelpdesk")
 @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseSolutionFields.AddFollowersBtn) && Model.caseFieldSettings.IsFieldVisible(GlobalEnums.TranslationCaseFields.AddFollowersBtn))
 {
     @Scripts.Render(BundleConfig.ScriptNames.UserSearchCommon)
@@ -2745,7 +2744,7 @@
         });
 
         function replaceLinebreakesInTextArea(textarea) {
-            var text = replaceLinebreaksInString(textarea.summernote('code'));
+            var text = textarea.summernote('code').replace(/\r\n|\r|\n/g, "<br />");
             textarea.summernote('code', text);
         }
     });

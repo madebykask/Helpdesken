@@ -65,7 +65,7 @@ function today() {
 }
 
 function replaceLinebreaksInString(input) {
-    return input.replace(/\r\n|\r|\n/g, "<br style='display: block;content: \"\";margin-top: 0;'/>");
+    return input.replace(/\r\n|\r|\n/g, "<br />");
 }
 
 // Cose window or tab
