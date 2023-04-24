@@ -63,19 +63,23 @@ namespace DH.Helpdesk.TaskScheduler
 
                 IGDPRTasksService _gdprTasksService = new GDPRTasksService(_gdprTasksRepository);
 
-                var taskInfo = _gdprTasksService.GetLatestTask();
+                var incompleteTasks = _gdprTasksService.GetRunningTasks();
 
-                if (taskInfo.Status != GDPRTaskStatus.Complete)
+                foreach (var taskInfo in incompleteTasks)
                 {
-                    var errorMsg = $"Data privacy job for taskId: {taskInfo.Id} has stopped abnormally";
-                    taskInfo.Error = errorMsg;
-                    taskInfo.Progress = 0;
-                    taskInfo.EndedAt = DateTime.UtcNow;
-                    taskInfo.Success = false;
-                    taskInfo.Status = GDPRTaskStatus.Complete;
 
-                    _logger.Debug(errorMsg);
-                    _gdprTasksService.UpdateTask(taskInfo);
+                    if (taskInfo.Status != GDPRTaskStatus.Complete)
+                    {
+                        var errorMsg = $"Data privacy job for taskId: {taskInfo.Id} has stopped abnormally";
+                        taskInfo.Error = errorMsg;
+                        taskInfo.Progress = 0;
+                        taskInfo.EndedAt = DateTime.UtcNow;
+                        taskInfo.Success = false;
+                        taskInfo.Status = GDPRTaskStatus.Complete;
+
+                        _logger.Debug(errorMsg);
+                        _gdprTasksService.UpdateTask(taskInfo);
+                    }
                 }
                 
             }
