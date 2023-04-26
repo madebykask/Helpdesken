@@ -174,6 +174,18 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 caseTemplate.Name = _caseSolutionService.GetCaseSolutionTranslation(templateId.Value, langId).CaseSolutionName;
             }
+            if(!String.IsNullOrEmpty(caseTemplate.Description))
+            {
+                caseTemplate.Description = caseTemplate.Description.Replace("\r\n", "<br />");
+            }
+            if (!String.IsNullOrEmpty(caseTemplate.Text_External))
+            {
+                caseTemplate.Text_External = caseTemplate.Text_External.Replace("\r\n", "<br />");
+            }
+            if (!String.IsNullOrEmpty(caseTemplate.Text_Internal))
+            {
+                caseTemplate.Text_Internal = caseTemplate.Text_Internal.Replace("\r\n", "<br />");
+            }
 
             var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(cid);
             var caseTemplateSettings = _caseSolutionSettingService.GetCaseSolutionSettingOverviews(templateId.Value);
