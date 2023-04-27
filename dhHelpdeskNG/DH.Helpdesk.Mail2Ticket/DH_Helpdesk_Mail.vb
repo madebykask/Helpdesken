@@ -650,13 +650,13 @@ Module DH_Helpdesk_Mail
                                     Try
                                         sBodyText = CleanStyles(sBodyText)
                                     Catch ex As Exception
-                                        LogError("Error Cleanstyles " & ex.ToString(), Nothing)
+                                        'LogError("Error Cleanstyles " & ex.ToString(), Nothing)
                                     End Try
                                     Try
 
                                         sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp\", sBodyText)
                                     Catch ex As Exception
-                                        LogError("Error CreateBase64Images " & ex.ToString(), Nothing)
+                                        'LogError("Error CreateBase64Images " & ex.ToString(), Nothing)
                                     End Try
 
                                     isHtml = True
@@ -2442,7 +2442,7 @@ Module DH_Helpdesk_Mail
 
                         ' försök först hitta en sluttag
                         Dim endTag As String
-                        endTag = "<o:"
+                        endTag = "<"
                         toPos = mailMessage.ToLower().IndexOf(endTag, fromPos)
 
                         If (toPos < 1) Then
