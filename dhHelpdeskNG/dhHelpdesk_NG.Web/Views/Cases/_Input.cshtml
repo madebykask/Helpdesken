@@ -2667,13 +2667,23 @@
         //Magnific Popup
         $('.image-link').magnificPopup({
             type: 'image',
-            //gallery: { enabled: true },
             callbacks: {
                 elementParse: function (item) {
                     item.src = item.el.attr('src');
-                }
+                },
+                imageLoadComplete: changeImgSize
             }
         });
+
+        function changeImgSize() {
+            var img = this.content.find('img');
+            var imgHeight = img[0].height;
+
+            if (imgHeight > screen.height - 300) {
+
+                $('.mfp-content').css({'margin-top': '3%', 'max-width': '70%' });
+            }
+        }
 
         if (('@emailReadOnly' === 'False' && '@hasLanguages' === 'True') || ('@hasLanguages' === 'True' && '@newCase' === 'True')) {
             $("#case__RegLanguage_Id").css('display', 'inline');
