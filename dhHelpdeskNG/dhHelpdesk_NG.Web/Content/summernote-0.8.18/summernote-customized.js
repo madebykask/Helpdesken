@@ -84,6 +84,9 @@
                             items: {
                                 src: $img[0].src
                             },
+                            callbacks: {
+                            imageLoadComplete: changeImgSize
+                        }
                         });
 
                     //context.invoke('imgZoomPlugin.show');
@@ -91,6 +94,17 @@
                 });
                 return button.render();
             });
+
+            function changeImgSize() {
+
+                var img = this.content.find('img');
+                var imgHeight = img[0].height;
+
+                if (imgHeight > screen.height - 300) {
+
+                    $('.mfp-content').css({ 'margin-top': '3%', 'max-width': '70%' });
+                }
+            }
 
             ////// This events will be attached when editor is initialized.
             //this.events = {
