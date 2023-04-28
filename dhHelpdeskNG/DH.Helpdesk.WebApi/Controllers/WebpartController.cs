@@ -33,6 +33,7 @@ using System.Configuration;
 using System.Runtime.InteropServices.WindowsRuntime;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using System.Security.Cryptography;
+using Autofac.Builder;
 
 
 namespace DH.Helpdesk.WebApi.Controllers
@@ -86,6 +87,15 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <param name="offset">The index of the first object to return. Default: 0 (i.e., the first object). Use with limit to get the next set of objects.</param>
         public CasesResult Cases([FromUri]int customerId, [FromUri] int languageId, [FromUri]string email, [FromUri]string orderByCaseField, [FromUri]string caseFieldsToReturn, [FromUri] int? limit, [FromUri] int? offset)
         {
+            if (string.IsNullOrEmpty(caseFieldsToReturn))
+            {
+                caseFieldsToReturn = "RegistrationDate, DepartmentName, InitiatorName, Subject";
+            }
+
+            if (string.IsNullOrEmpty(orderByCaseField))
+            {
+                orderByCaseField = "RegistrationDate desc";
+            }
 
             ////#12364 - Paginering
 
