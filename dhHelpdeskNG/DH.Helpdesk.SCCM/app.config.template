@@ -93,8 +93,12 @@
 		resulting in worse performance. This value should be set according to SPECS of the CPU.-->
 		<add key="Setting_Chunk_Page_Size" value="4"/>
 
-		<!--This is used to debugging purposes only, set to 0 in production. Else, dont fetch data for all of the devices-->
+		<!--Only fetch data for X number of devices-->
 		<add key="Setting_Limit_Devices" value="#{Setting_Limit_Devices}"/>
+
+		<!--If set to true, will take the value from Setting_Limit_Devices and only process this amount of devices.
+		What devices that is included is at random. Eventually every device is proccesed-->
+		<add key="Setting_Auto_Mower" value="true" />
 
 	</appSettings>
 	

@@ -75,8 +75,18 @@ namespace DH.Helpdesk.SCCM
             //Parse the data
             var rSystemWrapper = JsonConvert.DeserializeObject<GenericValueWrapper<RSystem>>(result[0].Content).value;
 
-            //Limit the data for debugging purposes
+            //Limit the data
             var setting_Limit_Devices = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["Setting_Limit_Devices"].ToString());
+
+            //Check if to take random
+            var setting_auto_mower = System.Configuration.ConfigurationManager.AppSettings["Setting_Auto_Mower"].ToString();
+
+            // Shuffle and take random elements if setting_auto_mower is true
+            if (setting_auto_mower == "true")
+            {
+                var random = new Random();
+                rSystemWrapper = rSystemWrapper.OrderBy(x => random.Next()).ToList();
+            }
 
             if (setting_Limit_Devices != 0)
             {
