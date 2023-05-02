@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model IList<DH.Helpdesk.Domain.Division>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "";
 }
 <div class="menuContent">
     @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("division", Enums.TranslationSource.TextTranslation), "new")

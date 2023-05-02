@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.RegistrationSourceInputViewModel
 @{
-    ViewBag.Title = "New";
+    ViewBag.Title = "";
 }
 @using (Html.BeginForm("new", "registrationsourcecustomer", new { id = Model.RegistrationSourceCustomer.Id, area = "admin" }, FormMethod.Post, new { id = "target" }))
 {

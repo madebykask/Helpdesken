@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.DepartmentInputViewModel
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "";
 }
 @using (Html.BeginForm("edit", "department", new { id = Model.Department.Id, area = "admin" }, FormMethod.Post, new { id = "target" }))
 {

@@ -131,9 +131,10 @@
 
 @{
     Layout = "../Shared/_PopupLayout.cshtml";
-    ViewBag.Title = Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation);
+    //ViewBag.Title = Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation);
+    ViewBag.Title = "";
     var err = (string)ViewData["Err"];
-    
+
 }
 
 <div class="faq">

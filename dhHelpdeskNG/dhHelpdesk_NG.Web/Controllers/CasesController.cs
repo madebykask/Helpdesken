@@ -1755,6 +1755,7 @@ namespace DH.Helpdesk.Web.Controllers
            int? templateistrue)
         {
             CaseInputViewModel m = null;
+            ViewBag.Title = " " + Translation.GetCoreTextTranslation("Nytt ärende");
             if (!customerId.HasValue)
             {
                 if (SessionFacade.CurrentCustomer == null)
@@ -1844,6 +1845,12 @@ namespace DH.Helpdesk.Web.Controllers
             string activeTab = "")
         {
             CaseInputViewModel m = null;
+            var c = _caseService.GetCaseById(id);
+            int caseNumber = Convert.ToInt32(c.CaseNumber);
+
+            int maxIndex = c.Caption.Length < 10 ? c.Caption.Length : 10;
+            string caseDescription = c.Caption.Substring(0, maxIndex);
+            ViewBag.Title = " " + caseNumber + " " + caseDescription;
 
             if (!_caseService.IsCaseExist(id))
             {

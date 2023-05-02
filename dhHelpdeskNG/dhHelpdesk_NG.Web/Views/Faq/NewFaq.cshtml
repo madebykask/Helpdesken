@@ -36,8 +36,8 @@
 
 
 @{
-    this.ViewBag.Title = Translation.GetCoreTextTranslation("Ny FAQ");
-
+    //this.ViewBag.Title = Translation.GetCoreTextTranslation("Ny FAQ");
+    ViewBag.Title = "";
 }
 
 @using (this.Html.BeginForm("NewFaq", "Faq", FormMethod.Post, new { id = "target" }))

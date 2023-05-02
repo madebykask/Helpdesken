@@ -3,7 +3,7 @@
 ﻿﻿
 @model DH.Helpdesk.BusinessData.Models.Case.ExtendedCaseFormsForCustomer
 @{
-    ViewBag.Title = "Extended Case Forms";
+    ViewBag.Title = "";
 }
 @using (Html.BeginForm("New", "ExtendedCase", new { customerId = Model.Customer.Id, languageId = Model.LanguageId, area = "admin" }, FormMethod.Post, new { id = "target" }))
 {

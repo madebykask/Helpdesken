@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.GlobalSettingTextTranslationViewModel
 @{
-    ViewBag.Title = "New Translation";    
+    ViewBag.Title = "";    
 }
 @using (Html.BeginForm("newtranslation", "globalsetting", new { id = Model.Text.Id, texttypeid = Model.Text.Type }, FormMethod.Post, new { id = "target" }))
 {

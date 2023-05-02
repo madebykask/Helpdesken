@@ -311,7 +311,7 @@ var overwriteWarning = {
             });
             $(me.dlg).find('button.btn-cancel').on('click', function () {
                 me.dlg.modal('hide');
-                window.ApplyTemplate(me.caseTemplateData);
+                window.ApplyTemplate(me.caseTemplateData, false);
             });
         }
 
@@ -340,7 +340,6 @@ function SaveTemplateValue(ctrlId, data, fieldName) {
 }
 
 var ApplyTemplate = function (data, doOverwrite) {
-
     changeCaseButtonsState(false);
     var dateFormat = data['dateFormat'];
     $('#CaseTemplate_ExternalLogNote').val('True');
@@ -569,7 +568,7 @@ var ApplyTemplate = function (data, doOverwrite) {
     if (!isNullOrEmpty(data.CaseWorkingGroup_Id)) {
         val = data.CaseWorkingGroup_Id || '';
         el = $("#case__WorkingGroup_Id");
-        $("#case__WorkingGroup_Id").val("");
+        //$("#case__WorkingGroup_Id").val("");
         //#13311(redmine) Case template_list of administrators doesn't narrows depending on the choice of working group
         //cfg['doNotTriggerEvent'] = true;
         $('#Performer_Id').one('applyValue', function () {
@@ -678,8 +677,8 @@ var ApplyTemplate = function (data, doOverwrite) {
     }
     if (!isNullOrEmpty(data.Description)) {
         val = data.Description || '';
-        if (val !== '') {
-            $(".summernotedesc").summernote("code", val);
+        if (val !== '' && doOverwrite) {
+            $(".summernotedesc").summernote("code", replaceLinebreaksInString(val));
             $("#spanDesc").text(val);
         }
     }
@@ -696,14 +695,14 @@ var ApplyTemplate = function (data, doOverwrite) {
     }
     if (!isNullOrEmpty(data.Text_External)) {
         val = data.Text_External || '';
-        if (val !== '') {
-            $(".summernoteexternal").summernote("code", val);
+        if (val !== '' && doOverwrite) {
+            $(".summernoteexternal").summernote("code", replaceLinebreaksInString(val));
         }
     }
     if (!isNullOrEmpty(data.Text_Internal)) {
         val = data.Text_Internal || '';
-        if (val !== '') {
-            $(".summernoteinternal").summernote("code", val);
+        if (val !== '' && doOverwrite) {
+            $(".summernoteinternal").summernote("code", replaceLinebreaksInString(val));
         }
     }
     if (!isNullOrEmpty(data.FinishingCause_Id)) {
@@ -1133,7 +1132,7 @@ function IsValueApplicableFor(templateFieldId, val) {
 }
 
 function LoadTemplate(id) {
-    
+
     var caseInvoiceIsActive = false;
     var curCaseId = $('#case__Id').val();
     if ($('#CustomerSettings_ModuleCaseInvoice') != undefined)
@@ -1195,8 +1194,9 @@ function GetTemplateData(id) {
             }
 
             var overwriteDirectly = caseTemplate["OverWritePopUp"];            
-            if (overwriteDirectly != undefined && overwriteDirectly !== 0)
+            if (overwriteDirectly != undefined && overwriteDirectly !== 0) {
                 window.ApplyTemplate(caseTemplate, true);
+            } 
             else {
                 if (showOverwriteWarning) {
                     window.overwriteWarning.show(caseTemplate);

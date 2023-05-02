@@ -22,7 +22,8 @@
 </script>
 
 @{
-    ViewBag.Title = @Translation.Get("Changes", Enums.TranslationSource.TextTranslation);
+    //ViewBag.Title = @Translation.Get("Changes", Enums.TranslationSource.TextTranslation);
+    ViewBag.Title = "";
 
     var changesTabClass = Model.ActiveTab == TabName.Changes ? "active" : null;
     var settingsTabClass = Model.ActiveTab == TabName.Settings ? "active" : null;

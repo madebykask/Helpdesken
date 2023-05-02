@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.ChangePriorityInputViewModel
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "";
 }
 @using (Html.BeginForm("edit", "changepriority", new { id = Model.ChangePriority.Id, customerId = Model.ChangePriority.Customer_Id }, FormMethod.Post, new { id = "target" }))
 {

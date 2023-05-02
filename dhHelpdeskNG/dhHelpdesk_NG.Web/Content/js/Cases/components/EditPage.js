@@ -1937,8 +1937,9 @@ EditPage.prototype.init = function (p) {
 
     self.$descriptionDialog.click(function () {
         var description = self.$caseDescriptionEl
-            .attr("value")
-            .replace(/\r\n|\r|\n/g, "<br />");
+            .attr("value");
+
+        description = replaceLinebreaksInString(description);
 
         var d = $(document.createElement("div"))
             .html(description)

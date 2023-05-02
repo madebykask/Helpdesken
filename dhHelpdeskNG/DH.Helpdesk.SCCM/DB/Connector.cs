@@ -14,6 +14,9 @@ namespace DH.Helpdesk.SCCM.DB
     public class Connector
     {
 
+        static readonly log4net.ILog log =
+    log4net.LogManager.GetLogger
+    (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly string ConnectionString;
 
@@ -38,13 +41,14 @@ namespace DH.Helpdesk.SCCM.DB
 
                     command.CommandText = "SELECT TOP 1 * FROM tblComputer where Customer_Id = " + customerID + " AND UPPER(ComputerName) = '" + computer._ComputerSystem.Name.ToUpper() + "'";
 
-                    connection.Open();
-
-                    var reader = command.ExecuteReader();
-
-
                     try
                     {
+                        connection.Open();
+                    
+
+                        var reader = command.ExecuteReader();
+
+
                         while (reader.Read())
                         {
 
@@ -59,9 +63,8 @@ namespace DH.Helpdesk.SCCM.DB
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex);
+                        log.Error(ex);
                     }
-
-
 
                 }
             }
@@ -82,13 +85,13 @@ namespace DH.Helpdesk.SCCM.DB
 
                     command.CommandText = "SELECT TOP 1 * FROM tblServer where Customer_Id = " + customerID + " AND UPPER(ServerName) = " + computer._ComputerSystem.Name.ToUpper();
 
-                    connection.Open();
-
-                    var reader = command.ExecuteReader();
-
-
                     try
                     {
+                        connection.Open();
+
+                        var reader = command.ExecuteReader();
+
+
                         while (reader.Read())
                         {
                             res = new ServerDB();
@@ -102,6 +105,7 @@ namespace DH.Helpdesk.SCCM.DB
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex);
+                        log.Error(ex);
                     }
 
 
@@ -205,13 +209,13 @@ namespace DH.Helpdesk.SCCM.DB
 
                     command.CommandText = "SELECT TOP 1 tblComputerUsers.*, tblDepartment.Region_Id FROM tblComputerUsers LEFT JOIN tblDepartment ON tblComputerUsers.Department_Id=tblDepartment.Id WHERE tblComputerUsers.Customer_Id=" + customerID + " AND  LOWER(tblComputerUsers.UserId) = '" + username.ToLower() + "'";
 
-                    connection.Open();
-
-                    var reader = command.ExecuteReader();
-
-
                     try
                     {
+                        connection.Open();
+
+                        var reader = command.ExecuteReader();
+
+
                         while (reader.Read())
                         {
                             result = Convert.ToInt32(reader["Id"].ToString());
@@ -220,6 +224,7 @@ namespace DH.Helpdesk.SCCM.DB
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex);
+                        log.Error(ex);
                     }
 
 
@@ -312,6 +317,7 @@ namespace DH.Helpdesk.SCCM.DB
                 }
                 catch (Exception)
                 {
+                    log.Error(new System.InvalidOperationException(s));
                     throw new System.InvalidOperationException(s);
 
                 }
@@ -430,6 +436,7 @@ namespace DH.Helpdesk.SCCM.DB
                 }
                 catch (Exception)
                 {
+                    log.Error(new System.InvalidOperationException(s));
                     throw new System.InvalidOperationException(s);
 
                 }
@@ -466,6 +473,7 @@ namespace DH.Helpdesk.SCCM.DB
                 }
                 catch
                 {
+                    log.Error(new System.InvalidOperationException(s));
                     throw new System.InvalidOperationException(s);
 
                 }

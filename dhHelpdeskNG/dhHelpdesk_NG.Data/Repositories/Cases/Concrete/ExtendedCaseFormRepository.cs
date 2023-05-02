@@ -380,7 +380,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     foreach (var t in translations.Where(x => x.ControlType != "Section" && StringHelper.GetCleanString(x.Property) == cleanControlName))
                     {
 
-                        var text = c.valueBinding != null ? t.Text.Replace(@"""", String.Empty) : (t.Text ?? "");
+                        var text = (c.valueBinding != null && c.type != "html") ? t.Text.Replace(@"""", String.Empty) : (t.Text ?? "");
 
                         if (t.TranslationId != 0)
                         {

@@ -25,6 +25,14 @@
 <link href="~/Content/css/summernote.css" rel="stylesheet" />
 <script src="~/Content/summernote-0.8.18/summernote.js"></script>
 <script src="~/Content/summernote-0.8.18/lang/summernote-sv-SE.js"></script>
+<script src="~/Content/summernote-0.8.18/summernote-customized.js"></script>
+<!-- Magnific Popup core CSS file -->
+<link rel="stylesheet" href="~/Content/magnific-popup/magnific-popup.css">
+
+<!-- jQuery 1.7.2+ or Zepto.js 1.0+ -->
+<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+<!-- Magnific Popup core JS file -->
+<script src="~/Content/magnific-popup/jquery.magnific-popup.js"></script>
 
 @if (Model.case_ != null)
 {
@@ -641,11 +649,11 @@
 
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy, CaseSolutionFields.IsAbout_ReportedBy))
                                                 {
-                                                    @Html.TextBoxFor(model => model.case_.IsAbout.ReportedBy, new { maxlength = "40", autocomplete = "Off", data_field = "userId" })
+                                                    @Html.TextBoxFor(model => model.case_.IsAbout.ReportedBy, new { maxlength = "200", autocomplete = "Off", data_field = "userId" })
                                                 }
                                                 else
                                                 {
-                                                    @Html.TextBoxFor(model => model.case_.IsAbout.ReportedBy, new { maxlength = "40", autocomplete = "Off", @readonly = true, data_field = "userId" })
+                                                    @Html.TextBoxFor(model => model.case_.IsAbout.ReportedBy, new { maxlength = "200", autocomplete = "Off", @readonly = true, data_field = "userId" })
                                                 }
                                             </td>
                                         </tr>
@@ -687,11 +695,11 @@
                                             <td class="span4">
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone, CaseSolutionFields.IsAbout_PersonsPhone))
                                                 {
-                                                    @Html.TextBoxFor(model => model.case_.IsAbout.Person_Phone, new { maxlength = "40" })
+                                                    @Html.TextBoxFor(model => model.case_.IsAbout.Person_Phone, new { maxlength = "50" })
                                                 }
                                                 else
                                                 {
-                                                    @Html.TextBoxFor(model => model.case_.IsAbout.Person_Phone, new { maxlength = "40", @readonly = "readonly" })
+                                                    @Html.TextBoxFor(model => model.case_.IsAbout.Person_Phone, new { maxlength = "50", @readonly = "readonly" })
                                                 }
                                             </td>
                                         </tr>
@@ -702,11 +710,11 @@
                                             <td class="span4">
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone, CaseSolutionFields.IsAbout_PersonsCellPhone))
                                                 {
-                                                    @Html.TextBoxFor(model => model.case_.IsAbout.Person_Cellphone, new { maxlength = "30" })
+                                                    @Html.TextBoxFor(model => model.case_.IsAbout.Person_Cellphone, new { maxlength = "50" })
                                                 }
                                                 else
                                                 {
-                                                    @Html.TextBoxFor(model => model.case_.IsAbout.Person_Cellphone, new { maxlength = "30", @readonly = "readonly" })
+                                                    @Html.TextBoxFor(model => model.case_.IsAbout.Person_Cellphone, new { maxlength = "50", @readonly = "readonly" })
                                                 }
                                             </td>
                                         </tr>
@@ -1447,9 +1455,9 @@
                                                     if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Description, CaseSolutionFields.Description))
                                                     {
                                                         @*<span id="caseDescriptionEdit"
-                                                              rel="tooltip"
-                                                              class="icon-edit"
-                                                              title="@Translation.GetCoreTextTranslation("Ändra")"></span>*@
+                                                            rel="tooltip"
+                                                            class="icon-edit"
+                                                            title="@Translation.GetCoreTextTranslation("Ändra")"></span>*@
                                                         <div id="showDescriptionEdit">
                                                             <div class="summernote-desc-flex-container" style="align-items:center">
 
@@ -1465,8 +1473,8 @@
                                                             </div>
                                                         </div>
                                                         @*<div id="showDescriptionFlat" style=" padding-bottom: 4px;">
-                                                            <div class="showDescriptionFlat" id="spanDesc"> @Html.Raw(Model.case_.Description.ForHtmlView())</div>
-                                                        </div>*@
+                                                                <div class="showDescriptionFlat" id="spanDesc"> @Html.Raw(Model.case_.Description.ForHtmlView())</div>
+                                                            </div>*@
                                                     }
                                                     else
                                                     {
@@ -2526,7 +2534,8 @@
         toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
         popover: {
             image: [
-                ['remove', ['removeMedia']],
+                //['custom', ['imgZoomPlugin']],
+                ['remove', ['removeMedia']]
             ],
         },
         disableResizeImage: true,
@@ -2568,7 +2577,8 @@
         toolbar: [['style', ['bold', 'italic', 'underline', 'clear']], ['color', ['color']], ['para', ['ul', 'ol']], ['insert', ['link', 'picture']]],
         popover: {
             image: [
-                ['remove', ['removeMedia']],
+                //['custom', ['imgZoomPlugin']],
+                ['remove', ['removeMedia']]
             ],
         },
         disableResizeImage: true,
@@ -2633,12 +2643,12 @@
         height: @descriptionSize * 25,
         popover: {
             image: [
-                ['remove', ['removeMedia']],
+                //['custom', ['imgZoomPlugin']],
+                ['remove', ['removeMedia']]
             ],
         },
         callbacks: {
             onChange: function (contents, $editable) {
-
                 $('.summernotedesc').val($('.summernotedesc').summernote('isEmpty') ? "" : contents);
 
                 validator.element($('.summernotedesc'));
@@ -2654,10 +2664,31 @@
     //Init summernote
     $(document).ready(function () {
 
+        //Magnific Popup
+        $('.image-link').magnificPopup({
+            type: 'image',
+            callbacks: {
+                elementParse: function (item) {
+                    item.src = item.el.attr('src');
+                },
+                imageLoadComplete: changeImgSize
+            }
+        });
+
+        function changeImgSize() {
+            var img = this.content.find('img');
+            var imgHeight = img[0].height;
+
+            if (imgHeight > screen.height - 300) {
+
+                $('.mfp-content').css({'margin-top': '3%', 'max-width': '70%' });
+            }
+        }
+
         if (('@emailReadOnly' === 'False' && '@hasLanguages' === 'True') || ('@hasLanguages' === 'True' && '@newCase' === 'True')) {
             $("#case__RegLanguage_Id").css('display', 'inline');
         }
-        
+
         $('.summernoteinternal').summernote(summerNoteInternalConfig);
         $('.summernoteexternal').summernote(summerNoteExternalConfig);
         $('.summernotedesc').summernote(summerNoteDescConfig);
@@ -2666,7 +2697,6 @@
             $('#showDescriptionEdit').toggle();
             $('#showDescriptionFlat').toggle();
         });
-
 
         function sizeChanged(element) {
 
@@ -2697,7 +2727,7 @@
         //Loop all .summernote to try to find the disabled ones
         $(".summernoteinternal").each(function () {
             var textarea = $("#" + this.id).summernote();
-            replaceLinebreakes(textarea);
+            replaceLinebreakesInTextArea(textarea);
             if (this.readOnly) {
                 $("#" + this.id).summernote("disable");
             }
@@ -2706,7 +2736,7 @@
 
         $(".summernoteexternal").each(function () {
             var textarea = $("#" + this.id).summernote();
-            replaceLinebreakes(textarea);
+            replaceLinebreakesInTextArea(textarea);
             if (this.readOnly) {
                 $("#" + this.id).summernote("disable");
             }
@@ -2715,7 +2745,7 @@
 
         $(".summernotedesc").each(function () {
             var textarea = $("#" + this.id).summernote();
-            replaceLinebreakes(textarea);
+            replaceLinebreakesInTextArea(textarea);
             if (this.readOnly) {
 
                 $("#" + this.id).summernote("disable");
@@ -2723,11 +2753,10 @@
 
         });
 
-        function replaceLinebreakes(textarea) {
+        function replaceLinebreakesInTextArea(textarea) {
             var text = textarea.summernote('code').replace(/\r\n|\r|\n/g, "<br />");
             textarea.summernote('code', text);
         }
-
     });
 </script>
 

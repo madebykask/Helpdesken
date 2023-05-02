@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.EmailGroupInputViewModel
 @{              
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "";
 }
 @using (Html.BeginForm("edit", "emailgroup", new { id = Model.EmailGroup.Id, area = "admin" }, FormMethod.Post, new { id = "target" }))
 {
