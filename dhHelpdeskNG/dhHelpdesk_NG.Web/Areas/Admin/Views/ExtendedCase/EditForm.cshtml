@@ -942,11 +942,10 @@
 
             //Add translations for the different sections
             for (s = 0; s < sTranslations.length; s++) {
-                //console.log("Loop 1")
                 let translation = {};
                 translation.Languageid = sTranslations[s].getAttribute('data-dhhelpdesk-langid');
                 translation.Property = idSection;
-                translation.Text = sTranslations[s].value.replaceAll('\\', '\\\\ ').replaceAll('"', "'''''");
+                translation.Text = sTranslations[s].value.replaceAll('\\', '\\\\ ').replaceAll('"', '\\\"');
                 translation.ControlType = sTranslations[s].getAttribute('data-dhhelpdesk-controlType');
                 translation.TranslationId = sTranslations[s].getAttribute('data-dhhelpdesk-id');
                 fieldTranslations.push(translation);
@@ -1020,12 +1019,11 @@
                         let idFileUploadText = fieldTextTranslations[0].querySelector('.labelName').value;
 
                         for (let t = 0; t < fieldTextTranslations.length; t++) {
-                            //console.log("Loop 2")
                             let fTranslation = fieldTextTranslations[t].querySelector('.labelName');
                             let translation = {};
                             translation.LanguageId = fTranslation.getAttribute('data-dhhelpdesk-langId');
                             translation.Property = idFileUploadText;
-                            translation.Text = fTranslation.value.replaceAll('\\', '\\\\ ').replaceAll('"', "'''''");
+                            translation.Text = fTranslation.value.replaceAll('\\', '\\\\ ').replaceAll('"', '\\\"');
                             translation.ControlType = fTranslation.getAttribute('data-dhhelpdesk-controlType');
                             translation.TranslationId = fieldTextTranslations[t].getAttribute('data-dhhelpdesk-id');
                             fieldTranslations.push(translation);
@@ -1054,7 +1052,6 @@
                         }
 
                         for (let c = 0; c < listItemCount; c++) {
-                            //console.log("Loop 3")
                             let optionsList = [...optionElms].filter(item => item.getAttribute('data-dhhelpdesk-listid') == c + 1);
                             let options = [];
 
@@ -1075,7 +1072,7 @@
 
                                 translation.LanguageId = options[p].getAttribute('data-dhhelpdesk-langId');
                                 translation.Property = idOption;
-                                translation.Text = options[p].value.replaceAll('\\', '\\\\ ').replaceAll('"', "'''''");
+                                translation.Text = options[p].value.replaceAll('\\', '\\\\ ').replaceAll('"', '\\\"');
                                 translation.ControlType = options[p].getAttribute('data-dhhelpdesk-controlType');
                                 translation.TranslationId = options[p].getAttribute('data-dhhelpdesk-id');
                                 fieldTranslations.push(translation);
@@ -1115,14 +1112,13 @@
                                         }
                                     }
                                 }
-                                //console.log("Loop 4")
-                                translation.Text = contentSummerNote.replaceAll('\\', '\\\\ ').replaceAll('"', "'''''");
+
+                                translation.Text = contentSummerNote.replaceAll('\\', '\\\\ ').replaceAll('"', '\\\"');
                                 translation.ControlType = controlType;
                             }
                             else {
-                                //console.log("Loop 5")
                                 lTranslation = fieldLabelTranslations[f].querySelector('.labelName');
-                                translation.Text = lTranslation.value.replaceAll('\\', '\\\\ ').replaceAll('"', "'''''");
+                                translation.Text = lTranslation.value.replaceAll('\\', '\\\\ ').replaceAll('"', '\\\"');
                                 translation.ControlType = lTranslation.getAttribute('data-dhhelpdesk-controlType');
                                 translation.TranslationId = lTranslation.getAttribute('data-dhhelpdesk-id');
                             }
@@ -1158,12 +1154,11 @@
                 sections: items
             }
 
-        for (let t = 0; t < tabTranslations.length; t++) {
-                //console.log("loop 6")
+            for (let t = 0; t < tabTranslations.length; t++) {
                 let translation = {};
                 translation.Languageid = tabTranslations[t].getAttribute('data-dhhelpdesk-langid');
                 translation.Property = tabId;
-                translation.Text = tabTranslations[t].value.replaceAll('\\', '\\\\ ').replaceAll('"', "'''''");
+                translation.Text = tabTranslations[t].value.replaceAll('\\', '\\\\ ').replaceAll('"', '\\\"');
                 translation.ControlType = tabTranslations[t].getAttribute('data-dhhelpdesk-controlType');
                 translation.TranslationId = tabTranslations[t].getAttribute('data-dhhelpdesk-id');
                 fieldTranslations.push(translation);
