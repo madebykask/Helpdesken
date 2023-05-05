@@ -1972,7 +1972,7 @@ Module DH_Helpdesk_Mail
             End If
 
         Catch ex As Exception
-            'LogError("Error createBase&4Images MediaType: " & sMediaType & ", " & ex.Message.ToString(), objCustomer)
+            LogError("Error createBase&4Images MediaType: " & sMediaType & ", " & ex.Message.ToString(), objCustomer)
 
             'Rethrow
             'Throw
