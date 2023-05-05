@@ -164,7 +164,7 @@ Module DH_Helpdesk_Mail
             ReadMailBox(sConnectionstring, workingMode)
 
         Catch ex As Exception
-            LogError("Error ReadMailBox " & ex.ToString(), Nothing)
+            LogError("Error ReadMailBox " & workingModeArg & " " & ex.StackTrace() & " " & ex.ToString(), Nothing)
         Finally
             closeLogFiles()
             Try
