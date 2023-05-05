@@ -162,7 +162,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 ActiveLanguages = _languageService.GetActiveLanguages().Where(x => x.IsActive == 1).OrderBy(x => x.Id).ToList(),
                 ExtendedCaseFormInCases = _extendedCaseService.ExtendedCaseFormInCases(extendedCaseFormId)
             };
-
+            //
             string metaData = viewModel.ExtendedCaseForm.MetaData.Replace("function(m) { return ", "").Replace("\";}", "\"");
 
             var firstIndex = metaData.IndexOf("\"tabs\":[{\"id\":\"") + "\"tabs\":[{\"id\":\"".Length;
@@ -176,6 +176,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                                         @"""function(m) { if (m.formInfo.applicationType == selfservice) return true; }""");
             viewModel.FormFields = JsonConvert.DeserializeObject<ExtendedCaseFormJsonModel>(metaData);
             viewModel.FieldTranslations = _languageService.GetExtendedCaseTranslations(viewModel.FormFields, languageId, initialTranslations);
+            foreach(var text in viewModel.FieldTranslations)
+            {
+                if (!String.IsNullOrEmpty(text.TranslationText))
+                {
+                    text.TranslationText = text.TranslationText.Replace("'''''", "\"");
+                }
+            }
             return View("EditForm", viewModel);
         }
 
