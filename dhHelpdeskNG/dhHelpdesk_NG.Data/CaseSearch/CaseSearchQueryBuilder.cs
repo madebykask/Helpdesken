@@ -343,7 +343,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 if (searchFilter.MaxTextCharacters > 0)
                     columns.Add(string.Format("Cast(tblCase.[Description] as Nvarchar({0})) as [Description] ", searchFilter.MaxTextCharacters));
                 else
-                    columns.Add("Cast(tblCase.[Description] as Nvarchar(Max)) as [Description] ");
+                    columns.Add("Cast(tblCase.[Description] as Nvarchar(4000)) as [Description] ");
 
                 columns.Add("tblCase.Miscellaneous");
                 columns.Add("tblCase.[Status] ");
