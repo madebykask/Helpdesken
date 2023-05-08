@@ -161,7 +161,7 @@ Module DH_Helpdesk_Mail
                 workingModeArg, logConnectionString, logFolderArg, logIdentifierArg, productAreaSepArg, bEnableNewEmailProcessing), 1)
 
             'start processing
-            ReadMailBox(sConnectionstring, workingMode)
+            ReadMailBox(sConnectionstring, workingMode, workingModeArg)
 
         Catch ex As Exception
             LogError("Error ReadMailBox " & workingModeArg & " " & ex.StackTrace() & " " & ex.ToString(), Nothing)
@@ -231,7 +231,7 @@ Module DH_Helpdesk_Mail
     End Function
 
 
-    Public Function ReadMailBox(ByVal sConnectionstring As String, ByVal iSyncType As SyncType) As Integer
+    Public Function ReadMailBox(ByVal sConnectionstring As String, ByVal iSyncType As SyncType, ByVal workingModeArg As String) As Integer
         Dim objGlobalSettingsData As New GlobalSettingsData
         Dim objGlobalSettings As GlobalSettings
         Dim objCustomerData As New CustomerData
@@ -320,7 +320,7 @@ Module DH_Helpdesk_Mail
                 End If
                 'Make sure to empty temp-folder.
                 Try
-                    Dim di As DirectoryInfo = New DirectoryInfo(objCustomer.PhysicalFilePath & "\temp")
+                    Dim di As DirectoryInfo = New DirectoryInfo(objCustomer.PhysicalFilePath & "\temp" & workingModeArg)
                     For Each fi As FileInfo In di.GetFiles()
                         fi.Delete()
                     Next
@@ -654,7 +654,7 @@ Module DH_Helpdesk_Mail
                                     End Try
                                     Try
 
-                                        sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp\", sBodyText)
+                                        sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp" & workingModeArg & "\", sBodyText)
                                     Catch ex As Exception
                                         'LogError("Error CreateBase64Images " & ex.ToString(), Nothing)
                                     End Try
@@ -1011,7 +1011,7 @@ Module DH_Helpdesk_Mail
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
                                         Try
                                             DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html", True)
-                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
+                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp" & workingModeArg, True)
 
                                         Catch ex As Exception
                                             ' LogError("Error deleting files: " & ex.Message, Nothing)
@@ -1119,7 +1119,7 @@ Module DH_Helpdesk_Mail
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
                                         Try
                                             DeleteFilesInsideFolder(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html", True)
-                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp", True)
+                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp" & workingModeArg, True)
                                         Catch ex As Exception
                                             'LogError("Error deleting files: " & ex.Message, Nothing)
                                         End Try
