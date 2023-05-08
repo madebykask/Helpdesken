@@ -457,11 +457,9 @@ export class ExtendedCaseElementComponent {
     private processFormMetaDataResponse(response: FormMetaDataResponse): boolean {
         try {
             this.formData.ExtendedCaseFormId = response.Id;
-            //const correctedMetadata = response.MetaData.replace(/[\\]+/ig, '\\\\'); // eval removes single backslash(\) symbol, duplicate to avoid it
-            //const metaData = eval(`(${correctedMetadata})`);
+            const correctedMetadata = response.MetaData.replace(/[\\]+/ig, '\\\\'); // eval removes single backslash(\) symbol, duplicate to avoid it
+            const metaData = eval(`(${correctedMetadata})`);
             this.logService.debug('Metadata has been parsed.');
-
-            const metaData = response.MetaData;
 
             this.setupSettings(metaData);
             this.setupModels(metaData);
