@@ -32,6 +32,7 @@ Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
 
+
 Module DH_Helpdesk_Mail
     Private Const InboxMailFolderName As String = "Inbox"
     'Dim msDeniedHtmlBodyString As String
@@ -55,7 +56,7 @@ Module DH_Helpdesk_Mail
     End Enum
 
     Dim eMailConnectionType As MailConnectionType
-
+    Dim tempFolder = "\temp"
 
 
     Public Sub Main()
@@ -127,6 +128,8 @@ Module DH_Helpdesk_Mail
         Dim workingMode = If(workingModeArg = "5", SyncType.SyncByWorkingGroup, SyncType.SyncByCustomer)
         ' For testing purposes only
         ' Dim workingMode = SyncType.SyncByWorkingGroup
+
+        tempFolder = tempFolder & workingModeArg
 
         If Not IsNullOrEmpty(logFolderArg) Then
             gsLogPath = logFolderArg
@@ -320,7 +323,7 @@ Module DH_Helpdesk_Mail
                 End If
                 'Make sure to empty temp-folder.
                 Try
-                    Dim di As DirectoryInfo = New DirectoryInfo(objCustomer.PhysicalFilePath & "\temp" & workingModeArg)
+                    Dim di As DirectoryInfo = New DirectoryInfo(objCustomer.PhysicalFilePath & tempFolder)
                     For Each fi As FileInfo In di.GetFiles()
                         fi.Delete()
                     Next
@@ -654,7 +657,7 @@ Module DH_Helpdesk_Mail
                                     End Try
                                     Try
 
-                                        sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\temp" & workingModeArg & "\", sBodyText)
+                                        sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & tempFolder & "\", sBodyText)
                                     Catch ex As Exception
                                         'LogError("Error CreateBase64Images " & ex.ToString(), Nothing)
                                     End Try
@@ -1011,7 +1014,7 @@ Module DH_Helpdesk_Mail
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
                                         Try
                                             DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\html", True)
-                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp" & workingModeArg, True)
+                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & tempFolder, True)
 
                                         Catch ex As Exception
                                             ' LogError("Error deleting files: " & ex.Message, Nothing)
@@ -1119,7 +1122,7 @@ Module DH_Helpdesk_Mail
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
                                         Try
                                             DeleteFilesInsideFolder(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html", True)
-                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & "\temp" & workingModeArg, True)
+                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & tempFolder, True)
                                         Catch ex As Exception
                                             'LogError("Error deleting files: " & ex.Message, Nothing)
                                         End Try
