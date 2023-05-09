@@ -50,8 +50,8 @@ steps:
     InsertAttributes: false
     FileEncoding: 'auto'
     WriteBOM: false
-    InformationalVersion: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(patch).$(SourceVersionShort)'
-    FileVersionNumber: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(patch).$(SourceVersionShort)'
+    InformationalVersion: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(SourceVersionShort)'
+    FileVersionNumber: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(SourceVersionShort)'
     LogLevel: 'verbose'
     FailOnWarning: false
     DisableTelemetry: false
