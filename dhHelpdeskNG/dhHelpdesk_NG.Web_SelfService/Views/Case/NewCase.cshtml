@@ -1068,20 +1068,6 @@
 
         };
 
-        $(".summernotedesc").each(function () {
-            var textarea = $("#" + this.id).summernote();
-            replaceLinebreakesInTextArea(textarea);
-            if (this.readOnly) {
-
-                $("#" + this.id).summernote("disable");
-            }
-
-        });
-
-        function replaceLinebreakesInTextArea(textarea) {
-            var text = textarea.summernote('code').replace(/\r\n|\r|\n/g, "<br />");
-            textarea.summernote('code', text);
-        }
 
         $(function() {
             $mainForm = $("#newCaseForm");

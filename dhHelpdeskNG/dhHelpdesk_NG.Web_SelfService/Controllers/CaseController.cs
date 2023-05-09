@@ -413,11 +413,12 @@ namespace DH.Helpdesk.SelfService.Controllers
                     {
                         LogType = 0,
                         LogGuid = Guid.NewGuid(),
-                        TextExternal = caseTemplate.Text_External,
-                        TextInternal = caseTemplate.Text_Internal,
+                        TextExternal = caseTemplate.Text_External.Replace("\r\n", "<br />"),
+                        TextInternal = caseTemplate.Text_Internal.Replace("\r\n", "<br />"),
                         FinishingType = caseTemplate.FinishingCause_Id
                     };
                 }
+                model.NewCase.Description = caseTemplate.Description.Replace("\r\n", "<br />");
             }
 
             #endregion // Load Case Template
