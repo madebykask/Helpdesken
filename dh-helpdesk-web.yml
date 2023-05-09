@@ -3,7 +3,7 @@ trigger:
     include:
     - Release-*
 
-name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(patch).$(Build.SourceVersion)
+name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(Build.SourceVersion)
 
 pool:
   vmImage: 'windows-latest'
