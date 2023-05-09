@@ -218,7 +218,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ReportedBy)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(model => model.NewCase.ReportedBy, new { maxlength = "200", id="kattis", autocomplete = "Off", @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ReportedBy.ToString() })
+                                                @Html.TextBoxFor(model => model.NewCase.ReportedBy, new { maxlength = "200", autocomplete = "Off", @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.ReportedBy.ToString() })
                                             </div>
                                         </div>
                                     }
