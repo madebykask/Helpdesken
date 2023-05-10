@@ -32,6 +32,8 @@
 
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
+            this.Property(t => t.IncludeLogText_External).IsRequired();
+
             this.ToTable("tblMailTemplate");
         }
     }

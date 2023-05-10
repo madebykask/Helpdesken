@@ -35,6 +35,7 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
                         AccountActivity_Id = m.AccountActivity_Id,
                         MailID = m.MailID,
                         IsStandard = m.IsStandard,
+                        IncludeLogText_External = m.IncludeLogText_External,
                         Language_Id = l.Language_Id,
                         Name = l.MailTemplateName,
                         Subject = l.Subject,
@@ -111,6 +112,7 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
                              IsStandard = mt.IsStandard,
                              MailId = mt.MailID,
                              OrderTypeId = mt.OrderType_Id,
+                             IncludeLogText_External = mt.IncludeLogText_External,
                              TemplateLanguage = new CustomMailTemplateLanguage
                              {
                                  Subject = mt_l.Subject,
@@ -173,6 +175,7 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
                                 IsStandard = gr.Key.IsStandard,
                                 MailId = gr.Key.MailID,
                                 OrderTypeId = gr.Key.OrderType_Id,
+                                IncludeLogText_External = gr.Key.IncludeLogText_External,
                                 TemplateLanguages = gr.Select(o => 
                                     new CustomMailTemplateLanguage
                                     {

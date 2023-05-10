@@ -13,6 +13,8 @@
 
         public int IsStandard { get; set; }
 
+        public bool IncludeLogText_External { get; set; }
+
         public int? OrderTypeId { get; set; }
 
         public List<CustomMailTemplateLanguage> TemplateLanguages { get; set; }     

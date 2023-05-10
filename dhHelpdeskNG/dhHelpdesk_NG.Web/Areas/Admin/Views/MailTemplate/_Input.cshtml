@@ -30,24 +30,30 @@
                                GlobalEnums.MailTemplates.ReminderTo
                            };
                          }
-                        <tr>
-                            <td class="span3">
-                                @Translation.GetCoreTextTranslation("Skicka metod")
-                            </td>
-                            <td>
-                                @if (mailTemplatesHasSendMethod.Contains((GlobalEnums.MailTemplates) Model.MailTemplateLanguage.MailTemplate.MailID) ||
-                                     Model.MailTemplateLanguage.MailTemplate.MailID > 100 || Model.MailTemplateLanguage.MailTemplate.MailID == 18)
-                                {
-                                    @Html.DropDownListFor(model => model.MailTemplateLanguage.MailTemplate.SendMethod, Model.SendMethods,
-                                        new {id = "sendMethod" })
-                                }
-                                else
-                                {
-                                    @Html.DropDownListFor(model => model.MailTemplateLanguage.MailTemplate.SendMethod, Model.SendMethods,
-                                        new {id = "sendMethod", @disabled = ""})
-                                }
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="span3">
+                                    @Translation.GetCoreTextTranslation("Skicka metod")
+                                </td>
+                                <td>
+                                    @if (mailTemplatesHasSendMethod.Contains((GlobalEnums.MailTemplates)Model.MailTemplateLanguage.MailTemplate.MailID) ||
+                                         Model.MailTemplateLanguage.MailTemplate.MailID > 100 || Model.MailTemplateLanguage.MailTemplate.MailID == 18)
+                                    {
+                                        @Html.DropDownListFor(model => model.MailTemplateLanguage.MailTemplate.SendMethod, Model.SendMethods,
+                                            new { id = "sendMethod" })
+                                    }
+                                    else
+                                    {
+                                        @Html.DropDownListFor(model => model.MailTemplateLanguage.MailTemplate.SendMethod, Model.SendMethods,
+                                            new { id = "sendMethod", @disabled = "" })
+                                    }
+                                </td>
+                                <td>
+                                    @Translation.GetCoreTextTranslation("Inkludera full historik")
+                                </td>
+                                <td>
+                                    @Html.CheckBoxFor(model => model.MailTemplate.IncludeLogText_External, new {id = "includeLogText_External" })
+                                </td>
+                            </tr>
                         <tr>
                             <td class="span3">
                                 @Translation.GetCoreTextTranslation("Språk")

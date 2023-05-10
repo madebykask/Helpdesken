@@ -27,6 +27,8 @@ namespace DH.Helpdesk.Domain.MailTemplates
         public Guid MailTemplateGUID { get; set; }
         public EmailSendMethod SendMethod { get; set; }
 
+        public bool IncludeLogText_External { get; set; }
+
         public int? OrderType_Id { get; set; }
 
         public virtual OrderType OrderType { get; set; }
