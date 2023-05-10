@@ -593,8 +593,13 @@ GO
 
 
 -- Add scripts to 5.3.58.1 here
-
-
+RAISERROR ('Add Column IncludeLogText_External to tblMailTemplate', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblMailTemplate','IncludeLogText_External') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblMailTemplate]
+		ADD IncludeLogText_External bit not null default 0
+	End
+Go
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.58.1'
 GO
