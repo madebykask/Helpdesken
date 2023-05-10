@@ -30,8 +30,8 @@ steps:
     targetType: 'inline'
     script: |
       Write-Host "##vso[task.setvariable variable=myVar;]foo"
-      Write-Host "##vso[task.setvariable variable=ProjectBuildNumber;]$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(patch).$(SourceVersionShort)"
-      Write-Host "##vso[build.updatebuildnumber]$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(patch).$(SourceVersionShort)"
+      Write-Host "##vso[task.setvariable variable=ProjectBuildNumber;]$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(SourceVersionShort)"
+      Write-Host "##vso[build.updatebuildnumber]$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(SourceVersionShort)"
 
 
 - task: NuGetToolInstaller@1
