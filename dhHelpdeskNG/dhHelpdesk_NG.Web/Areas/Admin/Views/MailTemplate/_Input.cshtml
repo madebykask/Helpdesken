@@ -46,13 +46,8 @@
                                         @Html.DropDownListFor(model => model.MailTemplateLanguage.MailTemplate.SendMethod, Model.SendMethods,
                                             new { id = "sendMethod", @disabled = "" })
                                     }
-                                </td>
-                                <td>
-                                    @Translation.GetCoreTextTranslation("Inkludera full historik")
-                                </td>
-                                <td>
-                                    @Html.CheckBoxFor(model => model.MailTemplate.IncludeLogText_External, new {id = "includeLogText_External" })
-                                </td>
+                                    &nbsp;@Html.CheckBoxFor(model => model.MailTemplateLanguage.MailTemplate.IncludeLogText_External) @Translation.GetCoreTextTranslation("Inkludera full historik")
+                                  </td>
                             </tr>
                         <tr>
                             <td class="span3">

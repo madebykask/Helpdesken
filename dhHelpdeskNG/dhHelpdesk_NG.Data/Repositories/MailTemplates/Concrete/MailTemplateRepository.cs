@@ -87,7 +87,8 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
                 IsStandard = mailTemplateEntities.IsStandard,
                 MailId = mailTemplateEntities.MailID,
                 OrderTypeId = mailTemplateEntities.OrderType_Id,
-                TemplateLanguages = templateLanguages
+                TemplateLanguages = templateLanguages,
+                IncludeLogText_External = mailTemplateEntities.IncludeLogText_External,
             };
 
             res = mailTemplate;
