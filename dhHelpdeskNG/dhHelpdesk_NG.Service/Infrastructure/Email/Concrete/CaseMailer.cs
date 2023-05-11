@@ -30,6 +30,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
         private readonly IEmailSendingSettingsProvider _emailSendingSettingsProvider;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
 		private readonly IGlobalSettingService _globalSettingService;
+        private readonly ILogService _logService;
 
         public CaseMailer(
             IEmailLogRepository emailLogRepository,
@@ -40,7 +41,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             ISettingService settingService,
             IEmailSendingSettingsProvider emailSendingSettingsProvider,
             ICaseExtraFollowersService caseExtraFollowersService,
-			IGlobalSettingService globalSettingService)
+			IGlobalSettingService globalSettingService,
+            ILogService logService)
         {
             _emailLogRepository = emailLogRepository;
             _emailService = emailService;
@@ -51,6 +53,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             _emailSendingSettingsProvider = emailSendingSettingsProvider;
             _caseExtraFollowersService = caseExtraFollowersService;
 			_globalSettingService = globalSettingService;
+            _logService = logService;
         }
 
         public void InformNotifierIfNeeded(
@@ -82,11 +85,16 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                                 newCase.Customer_Id,
                                                 newCase.RegLanguage_Id,
                                                 (int)GlobalEnums.MailTemplates.InformNotifier);
+
             if (template == null)
             {
                 return;
             }
-
+            string extraBody = "";
+            if (template.MailTemplate.IncludeLogText_External)
+            {
+                extraBody = GetExternalLogTextHistory(newCase, helpdeskMailFromAdress, log);
+            }
             var customerSetting = _settingService.GetCustomerSetting(newCase.Customer_Id);
 
             var smtpInfo = 
@@ -167,7 +175,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                 eLog.Value.EmailAddress,
                                 eLog.Value.Cc,
                                 template.Subject,
-                                template.Body,
+                                template.Body + extraBody,
                                 fields,
                                 mailSetting,
                                 eLog.Value.MessageId,
@@ -185,6 +193,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                         _emailLogRepository.Commit();
                     }
                 }
+
             }
             //}
         }
@@ -434,6 +443,33 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                    ccReciepients.Contains(eLog.EmailAddress)
                 ? EmailType.CcMail
                 : EmailType.ToMail;
+        }
+
+        private string GetExternalLogTextHistory(Case newCase, string helpdeskMailFromAdress, CaseLog log)
+        {
+            string extraBody = "";
+            var oldLogs = _logService.GetLogsByCaseId(newCase.Id).Where(x => x.Case_Id == log.CaseId && x.Id != log.Id).OrderByDescending(z => z.Id).ToList();
+            if (oldLogs.Any())
+            {
+                foreach (var post in oldLogs)
+                {
+                    //check if external lognote is not empty
+                    if (post.Text_External != null && post.Text_External.Replace("<p><br></p>", "") != "")
+                    {
+                        //Get the user that should not be the same as the performer..                        
+                        User regUser = post.User_Id != null ? _userService.GetUser((int)post.User_Id) : new User();
+                        string userEmailToShow = (regUser.Id == newCase.Performer_User_Id) ? helpdeskMailFromAdress : regUser.Email;
+
+                        extraBody += "<br /><hr>";
+                        extraBody += "<table><tr>";
+                        extraBody += "<td valign='top' width='150'><font face=\"verdana\" size=\"2\">" + post.LogDate.ToString("g") + "</font></td>";
+                        extraBody += "<td valign='top' width='250'><font face=\"verdana\" size=\"2\">" + userEmailToShow + "</font></td>";
+                        extraBody += "<td valign='top'><font face=\"verdana\" size=\"2\">" + post.Text_External + "</font></td>";
+                        extraBody += "</tr></table>";
+                    }
+                }
+            }
+            return extraBody;
         }
     }
 }
