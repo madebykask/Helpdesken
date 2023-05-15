@@ -41,5 +41,6 @@ namespace DH.Helpdesk.Services.Infrastructure.Email
                 List<MailFile> files,
                 string absoluterUrl,
                 MailSenders mailSenders);
+        string GetExternalLogTextHistory(Case newCase, string helpdeskMailFromAdress, CaseLog log);
     }
 }

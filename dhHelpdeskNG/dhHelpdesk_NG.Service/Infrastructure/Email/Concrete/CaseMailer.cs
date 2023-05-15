@@ -215,7 +215,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             {
                 return;
             }
-
+            //Todo - check this
             var template = 
                 _mailTemplateService.GetMailTemplateForCustomerAndLanguage(newCase.Customer_Id, newCase.RegLanguage_Id, (int)GlobalEnums.MailTemplates.InformNotifier);
 
@@ -445,7 +445,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                 : EmailType.ToMail;
         }
 
-        private string GetExternalLogTextHistory(Case newCase, string helpdeskMailFromAdress, CaseLog log)
+        public string GetExternalLogTextHistory(Case newCase, string helpdeskMailFromAdress, CaseLog log)
         {
             string extraBody = "";
             var oldLogs = _logService.GetLogsByCaseId(newCase.Id).Where(x => x.Case_Id == log.CaseId && x.Id != log.Id).OrderByDescending(z => z.Id).ToList();

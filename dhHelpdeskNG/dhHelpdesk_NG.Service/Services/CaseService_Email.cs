@@ -845,6 +845,11 @@ namespace DH.Helpdesk.Services.Services
                     }
 
                     var body = mailTpl.Body;
+                    if (mailTemplateId == (int)GlobalEnums.MailTemplates.ClosedCase && mailTpl.MailTemplate.IncludeLogText_External)
+                    {
+                        body += _caseMailer.GetExternalLogTextHistory(case_, senderEmail, log);
+                    }
+
                     //exclude admin specific fields (fieldTemplate.ExcludeAdministrators) or those provided with filterFieldsEmails
                     // var applyFeedbackFilter = mailTpl.MailTemplate.SendMethod == EmailSendMethod.SeparateEmails;
                     var applyFeedbackFilter = true;
