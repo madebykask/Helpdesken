@@ -35,6 +35,7 @@
         private readonly IMasterDataService _masterDataService;
 
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly IOUService _ouService;
 
         public InvoiceArticleService(
                 IInvoiceArticleUnitRepository invoiceArticleUnitRepository,
@@ -46,7 +47,8 @@
                 ICaseFileService caseFileService,
                 IDepartmentService departmentService,
                 IMasterDataService masterDataService,
-                IUnitOfWorkFactory unitOfWorkFactory)
+                IUnitOfWorkFactory unitOfWorkFactory,
+                IOUService oUService)
         {
             _invoiceArticleUnitRepository = invoiceArticleUnitRepository;
             _invoiceArticleRepository = invoiceArticleRepository;
@@ -58,6 +60,7 @@
             _departmentService = departmentService;
             _masterDataService = masterDataService;
             _unitOfWorkFactory = unitOfWorkFactory;
+            _ouService = oUService;
         }
 
         public InvoiceArticleUnit[] GetUnits(int customerId)
@@ -361,7 +364,21 @@
                 if (originalOrder != null)
                     originalOrderSeq = GetSequenceNumber(caseId, originalOrder);
             }
-
+            string ouName = "";
+            if(order.OU_Id.HasValue)
+            {
+                var oU = _ouService.GetOU((int)order.OU_Id);
+                if (oU.Parent_OU_Id.HasValue)
+                {
+                    var ouParent = _ouService.GetOU((int)oU.Parent_OU_Id);
+                    ouName = ouParent.Name + " - " + oU.Name;
+                }
+                else
+                {
+                    ouName = oU.Name;
+                }
+                
+            }
             var salesHeader = new SalesDocSalesHeader();
             salesHeader.CompanyNo = settings.Issuer;
             salesHeader.DocTemplate = settings.DocTemplate;
@@ -370,7 +387,7 @@
             salesHeader.Date = order.InvoiceDate.HasValue ? order.InvoiceDate.Value.ToShortDateString() : string.Empty;
             salesHeader.DueDate = order.InvoiceDate.HasValue ? order.InvoiceDate.Value.ToShortDateString() : string.Empty;
             salesHeader.OurReference = settings.OurReference.QautationFix();
-            salesHeader.YourReference2 = YourReferenceRow(order.CostCentre, order.Persons_Name.QautationFix());
+            salesHeader.YourReference2 = YourReferenceRow(order.CostCentre, order.Persons_Name.QautationFix(), ouName);
             salesHeader.OrderNo = OrderNoRow(caseNumber, settings.OrderNoPrefix, curOrderSeq, originalOrderSeq);
             salesHeader.CurrencyCode = settings.Currency;
             salesHeader.JobNo = order.Project_Id.HasValue? GetJobNo(order.Project_Id.Value) : string.Empty;
@@ -467,7 +484,7 @@
                 return orders.Count() + 1;
         }
 
-        private string YourReferenceRow(string costCentre, string referenceName)
+        private string YourReferenceRow(string costCentre, string referenceName, string ouName)
         {
             var reference = costCentre;
             reference += "/";
@@ -477,6 +494,10 @@
 
             var truncatedToNLength = new string(referenceName.Take((41 - reference.Length)).ToArray());
             reference += truncatedToNLength;
+            if(!String.IsNullOrEmpty(ouName))
+            {
+                reference += "/" + ouName;
+            }
             return reference;
         }
 
