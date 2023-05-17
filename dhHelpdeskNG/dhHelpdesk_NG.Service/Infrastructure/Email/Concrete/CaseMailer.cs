@@ -464,6 +464,11 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                         //Get the user that not should be the same as the performer. If so, replacing with helpdesk-email.                       
                         User regUser = post.User_Id != null ? _userService.GetUser((int)post.User_Id) : new User();
                         string userEmailToShow = (regUser.Id == newCase.Performer_User_Id) ? helpdeskMailFromAdress : regUser.Email;
+                        //From M2T the Logpost User_Id is Null, and therefore we use RegUser
+                        if(String.IsNullOrEmpty(userEmailToShow) && !String.IsNullOrEmpty(post.RegUser))
+                        {
+                            userEmailToShow = post.RegUser;
+                        }
 
                         extraBody += "<br /><hr>";
                         extraBody += "<div id=\"externalLogNotesHistory\">";
