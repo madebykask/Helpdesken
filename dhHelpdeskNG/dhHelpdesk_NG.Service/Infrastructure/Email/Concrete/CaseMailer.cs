@@ -444,7 +444,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                 ? EmailType.CcMail
                 : EmailType.ToMail;
         }
-
+        
         public string GetExternalLogTextHistory(Case newCase, string helpdeskMailFromAdress, CaseLog log)
         {
             string extraBody = "";
@@ -453,19 +453,28 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             {
                 foreach (var post in oldLogs)
                 {
-                    //check if external lognote is not empty
+                    //checking if external lognote is not empty
                     if (post.Text_External != null && post.Text_External.Replace("<p><br></p>", "") != "")
                     {
-                        //Get the user that should not be the same as the performer..                        
+                        if(post.Text_External.EndsWith("<div><p><b>"))
+                        {
+                            post.Text_External = post.Text_External.Replace("<div><p><b>", "");
+                        }
+                        post.Text_External = post.Text_External.Replace("<p><br></p>", "").Replace("<p>\r\n</p>", "").Replace("<o:p>&nbsp;</o:p>", "");
+                        //Get the user that not should be the same as the performer. If so, replacing with helpdesk-email.                       
                         User regUser = post.User_Id != null ? _userService.GetUser((int)post.User_Id) : new User();
                         string userEmailToShow = (regUser.Id == newCase.Performer_User_Id) ? helpdeskMailFromAdress : regUser.Email;
+                        //From M2T the Logpost User_Id is Null, and therefore we use RegUser
+                        if(String.IsNullOrEmpty(userEmailToShow) && !String.IsNullOrEmpty(post.RegUser))
+                        {
+                            userEmailToShow = post.RegUser;
+                        }
 
                         extraBody += "<br /><hr>";
-                        extraBody += "<table><tr>";
-                        extraBody += "<td valign='top' width='150'><font face=\"verdana\" size=\"2\">" + post.LogDate.ToString("g") + "</font></td>";
-                        extraBody += "<td valign='top' width='250'><font face=\"verdana\" size=\"2\">" + userEmailToShow + "</font></td>";
-                        extraBody += "<td valign='top'><font face=\"verdana\" size=\"2\">" + post.Text_External + "</font></td>";
-                        extraBody += "</tr></table>";
+                        extraBody += "<div id=\"externalLogNotesHistory\">";
+                        extraBody += "<font face=\"verdana\" size=\"2\"><strong>" + post.LogDate.ToString("g") +"</strong>";
+                        extraBody += "<br />" + userEmailToShow ;                       
+                        extraBody += "<br />" + post.Text_External + "</font></div>";
                     }
                 }
             }
