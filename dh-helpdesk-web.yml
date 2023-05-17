@@ -17,33 +17,6 @@ variables:
   patch: $[counter(format('{0}.{1}', variables['development.versionMajor'], variables['development.versionMinor'], variables['development.versionSubMinor']), 0)]
 
 steps:
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      $url = "https://dev.azure.com/dhsolutionsab/Dh-DHHelpdesk/_apis/distributedtask/variablegroups/24?api-version=5.0-preview.1"
-      Write-Host $url
-      
-      function CreateJsonBody
-      {
-      
-          $value = @"
-      
-      {"id":24,"type":"Vsts","name":"build-variables","variables":{"tessanTestar":{"isSecret":false,"value":"0930"}}}
-      
-      "@
-      
-       return $value
-      }
-      
-      $json = CreateJsonBody
-      
-      
-      $pipeline = Invoke-RestMethod -Uri $url -Method Put -Body $json -ContentType "application/json" -Headers @{
-          Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"
-      }
-      
-      Write-Host "New Variable Value:" $pipeline.variables.tessanTestar.value
 - task: CmdLine@2
   inputs:
     script: |
