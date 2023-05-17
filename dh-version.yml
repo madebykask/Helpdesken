@@ -1,0 +1,41 @@
+trigger:
+  tags:
+    include:
+    - Release-*
+
+name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(Build.SourceVersion)
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/DH.Helpdesk.sln'
+  solutionExtCaseApi: '**/ExtendedCase/ExtendedCase.Api.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  group: build-variables
+  patch: $[counter(format('{0}.{1}', variables['development.versionMajor'], variables['development.versionMinor'], variables['development.versionSubMinor']), 0)]
+  token: 'kkd2szyqmr5xvuwybvfpm3l3u2oqsyiftc46mrw3wudn6sja7b4a'
+  VariableGroupId: '24'
+
+
+steps:
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: 'echo $(Build.SourceVersionMessage)'
+    
+    
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      $url = "$($env:SYSTEM_TEAMFOUNDATIONCOLLECTIONURI)$env:SYSTEM_TEAMPROJECTID/_apis/distributedtask/variablegroups/$(VariableGroupId)?api-version=6.0-preview.1"
+      $header = @{
+        "Authorization" = "Bearer $(System.AccessToken)"
+      }
+      $def = Invoke-RestMethod -Uri $url -Headers $header
+
+      $def.variables.tessanTestar.value = "NewValue"
+      $body = @($def) | ConvertTo-Json -Depth 100 -Compress
+      $def = Invoke-RestMethod -Method 'Put' -Uri $url -ContentType 'application/json' -Headers $header -Body $body
