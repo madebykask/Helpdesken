@@ -48,9 +48,8 @@
                                     }
                                     @if (Model.MailTemplateLanguage.MailTemplate.MailID == 4 || Model.MailTemplateLanguage.MailTemplate.MailID == 3)
                                     {
-                                        @Html.CheckBoxFor(model => model.MailTemplateLanguage.MailTemplate.IncludeLogText_External) @Translation.GetCoreTextTranslation("Inkludera full historik")
+                                        @Html.CheckBoxFor(model => model.MailTemplateLanguage.MailTemplate.IncludeLogText_External, new { style = "margin:5px;" }) @Translation.GetCoreTextTranslation("Inkludera full historik")
                                     }
-
                                 </td>
                             </tr>
                         <tr>
