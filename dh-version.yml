@@ -17,15 +17,18 @@ variables:
   patch: $[counter(format('{0}.{1}', variables['development.versionMajor'], variables['development.versionMinor'], variables['development.versionSubMinor']), 0)]
   token: 'kkd2szyqmr5xvuwybvfpm3l3u2oqsyiftc46mrw3wudn6sja7b4a'
 
+
 steps:
   - script: |
+      newValue="This is the updated value"
+      group_id = 24
 
-      echo $(System.AccessToken) | az devops login
-      az pipelines variable-group variable update --group-id 24 \
-        --name "tessanTestar" \
-        --value "1234" \
-        --org "https://dev.azure.com/dhsolutionsab" \
-        --project "Dh-DHHelpdesk"
+      echo $SYSTEM_ACCESSTOKEN | az devops login
+      az pipelines variable-group variable update --group-id $(group_id) \
+        --name NAME_OF_THE_VARIABLE \
+        --value "${newValue}" \
+        --org https://dev.azure.com/dhsolutionsab \
+        --project Dh-DHHelpdesk
     displayName: 'Update variable inside a variable group'
     env:
       SYSTEM_ACCESSTOKEN: $(System.AccessToken)
