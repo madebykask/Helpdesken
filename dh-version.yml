@@ -19,7 +19,6 @@ variables:
 
 steps:
   - script: |
-      newValue="This is the updated value"
 
       echo $(System.AccessToken) | az devops login
       az pipelines variable-group variable update --group-id 24 \
