@@ -600,6 +600,15 @@ IF COL_LENGTH('dbo.tblMailTemplate','IncludeLogText_External') IS NULL
 		ADD IncludeLogText_External bit not null default 0
 	End
 Go
+
+RAISERROR ('Alter tblDepartment.SearchKey from 200 nvarchar to 400 nvarchar', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblDepartment','SearchKey') IS NOT NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblDepartment]
+		ALTER COLUMN SearchKey nvarchar(400) NULL
+	End
+Go
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.58.1'
 GO
