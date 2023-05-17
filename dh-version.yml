@@ -17,22 +17,6 @@ variables:
   patch: $[counter(format('{0}.{1}', variables['development.versionMajor'], variables['development.versionMinor'], variables['development.versionSubMinor']), 0)]
 
 steps:
-- task: CmdLine@2
-  inputs:
-    script: |
-      echo $(Build.SourceVersion)
-      set sourceVersion=$(Build.SourceVersion)
-      set sourceVersionSubstring=%sourceVersion:~0,7%
-      echo %sourceVersionSubstring%
-      echo ##vso[task.setvariable variable=SourceVersionShort]%sourceVersionSubstring%
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      Write-Host "##vso[task.setvariable variable=myVar;]foo"
-      Write-Host "##vso[task.setvariable variable=ProjectBuildNumber;]$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(SourceVersionShort)"
-      Write-Host "##vso[build.updatebuildnumber]$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(SourceVersionShort)"
-
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
@@ -60,7 +44,7 @@ steps:
             
             
             $pipeline = Invoke-RestMethod -Uri $url -Method Put -Body $json -ContentType "application/json" -Headers @{
-                Authorization = "Bearer $env:SYSTEM_ACCESSTOKEN"
+                Authorization = "Bearer kkd2szyqmr5xvuwybvfpm3l3u2oqsyiftc46mrw3wudn6sja7b4a"
             }
             
             Write-Host "New Variable Value:" $pipeline.variables.tessanTestar.value
