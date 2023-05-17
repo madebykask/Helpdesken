@@ -46,7 +46,7 @@
             this.Property(x => x.DepartmentName).IsRequired().HasMaxLength(200).HasColumnName("Department");
             this.Property(x => x.Path).IsRequired().HasMaxLength(1000).HasColumnName("NDSPath");
             this.Property(x => x.Region_Id).IsOptional();
-            this.Property(x => x.SearchKey).IsRequired().HasMaxLength(200);
+            this.Property(x => x.SearchKey).IsRequired().HasMaxLength(400);
             this.Property(x => x.ShowInvoice).IsRequired();
             this.Property(x => x.SyncChangedDate).IsOptional();
             //Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
