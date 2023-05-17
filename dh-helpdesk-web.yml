@@ -21,7 +21,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $url = "$(https://dev.azure.com/dhsolutionsab/Dh-DHHelpdesk/_apis/distributedtask/variablegroups/24?api-version=5.0-preview.1"
+      $url = "https://dev.azure.com/dhsolutionsab/Dh-DHHelpdesk/_apis/distributedtask/variablegroups/24?api-version=5.0-preview.1"
       Write-Host $url
       
       function CreateJsonBody
