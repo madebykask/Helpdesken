@@ -16,19 +16,20 @@ variables:
   group: build-variables
   patch: $[counter(format('{0}.{1}', variables['development.versionMajor'], variables['development.versionMinor'], variables['development.versionSubMinor']), 0)]
   token: 'kkd2szyqmr5xvuwybvfpm3l3u2oqsyiftc46mrw3wudn6sja7b4a'
+  VariableGroupId: '24'
 
 
 steps:
-  - script: |
-      newValue="This is the updated value"
-      group_id = 24
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      $url = "$($env:SYSTEM_TEAMFOUNDATIONCOLLECTIONURI)$env:SYSTEM_TEAMPROJECTID/_apis/distributedtask/variablegroups/$(VariableGroupId)?api-version=6.0-preview.1"
+      $header = @{
+        "Authorization" = "Bearer $(System.AccessToken)"
+      }
+      $def = Invoke-RestMethod -Uri $url -Headers $header
 
-      echo $SYSTEM_ACCESSTOKEN | az devops login
-      az pipelines variable-group variable update --group-id $(group_id) \
-        --name NAME_OF_THE_VARIABLE \
-        --value "${newValue}" \
-        --org https://dev.azure.com/dhsolutionsab \
-        --project Dh-DHHelpdesk
-    displayName: 'Update variable inside a variable group'
-    env:
-      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+      $def.variables.tessanTestar.value = "NewValue"
+      $body = @($def) | ConvertTo-Json -Depth 100 -Compress
+      $def = Invoke-RestMethod -Method 'Put' -Uri $url -ContentType 'application/json' -Headers $header -Body $body
