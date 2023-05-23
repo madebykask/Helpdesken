@@ -2754,7 +2754,7 @@
         });
 
         function replaceLinebreakesInTextArea(textarea) {
-            var text = textarea.summernote('code').replace(/\r\n|\r|\n/g, "<br />");
+            var text = textarea.summernote('code').replace(/\r\n|\r|\n/g, "<br />").replace("<p><br></p>","");
             textarea.summernote('code', text);
         }
     });
