@@ -67,8 +67,10 @@
                             }
                             else
                             {
-                                val = row.FieldValue.AddCharacterInParts(50, Environment.NewLine, Environment.NewLine);
-                            } 
+                                val = row.FieldValue.Replace(Environment.NewLine, tempNewLine).RemoveAllUnnecessaryTags().Replace(tempNewLine, Environment.NewLine);
+                                //I dont really understand this below... KASK 20230523
+                                //val = row.FieldValue.AddCharacterInParts(50, Environment.NewLine, Environment.NewLine);
+                            }
 
                             if (row.LineType == ReportLineTypes.Group)
                             {
@@ -104,7 +106,7 @@
                                 else
                                 {
                                     <td style="width:80%; word-wrap: break-word;line-height:10px;" class="@row.LineType">
-                                        <p> @val.Replace(Environment.NewLine, tempNewLine).RemoveHtmlTags().Replace(tempNewLine, Environment.NewLine).ForHtmlView()</p>
+                                        <p> @val.ForHtmlView()</p>
                                     </td>
                                 }
                             </tr>

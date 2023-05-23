@@ -114,7 +114,10 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         var row = new ReportDataModel(int.Parse(r.ItemArray[0].ToString()), r.ItemArray[1].ToString(), r.ItemArray[2].ToString(),
                                                       r.ItemArray[3].ToString(), int.Parse(r.ItemArray[4].ToString()), r.ItemArray[5].ToString());
-                        reportDataModel.Add(row);
+                        if(row.FieldValue != "<p><br></p>")
+                        {
+                            reportDataModel.Add(row);
+                        }
                     }
                 }
 

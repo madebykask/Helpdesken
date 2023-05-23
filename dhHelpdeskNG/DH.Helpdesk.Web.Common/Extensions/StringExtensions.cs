@@ -27,6 +27,12 @@ namespace DH.Helpdesk.Web.Common.Extensions
 
             return Regex.Replace(value, @"<[^>]*>", "").Replace("&nbsp;", "\u0020");
         }
+        public static string RemoveAllUnnecessaryTags(this string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return "";
+            return Regex.Replace(value, @"<(?!\/?(p|br)(?=>|\s.*>))\/?.*?>", "");
+        }
 
         public static IEnumerable<String> SplitInParts(this String s, Int32 partLength)
         {

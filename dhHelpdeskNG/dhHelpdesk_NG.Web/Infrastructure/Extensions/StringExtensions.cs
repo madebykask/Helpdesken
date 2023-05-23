@@ -384,7 +384,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             {
                 return MvcHtmlString.Create(str);
             }
-            return MvcHtmlString.Create(str.Replace(Environment.NewLine, "<br />").Replace("\n","<br />"));
+            return MvcHtmlString.Create(str.Replace(Environment.NewLine, "<br />").Replace("\r\n","<br />"));
         }
 
         public static int[] GetIntValues(this string str)
