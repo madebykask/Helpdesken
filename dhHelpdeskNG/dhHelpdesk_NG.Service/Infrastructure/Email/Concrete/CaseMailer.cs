@@ -31,6 +31,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
 		private readonly IGlobalSettingService _globalSettingService;
         private readonly ILogService _logService;
+        private readonly ICustomerService _customerService;
 
         public CaseMailer(
             IEmailLogRepository emailLogRepository,
@@ -42,7 +43,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             IEmailSendingSettingsProvider emailSendingSettingsProvider,
             ICaseExtraFollowersService caseExtraFollowersService,
 			IGlobalSettingService globalSettingService,
-            ILogService logService)
+            ILogService logService,
+            ICustomerService customerService)
         {
             _emailLogRepository = emailLogRepository;
             _emailService = emailService;
@@ -54,6 +56,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             _caseExtraFollowersService = caseExtraFollowersService;
 			_globalSettingService = globalSettingService;
             _logService = logService;
+            _customerService = customerService;
         }
 
         public void InformNotifierIfNeeded(
@@ -469,10 +472,15 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                         {
                             userEmailToShow = post.RegUser;
                         }
+                        var curCustomer = _customerService.GetCustomer(newCase.Customer_Id);
+                        var customerTimeZone = TimeZoneInfo.FindSystemTimeZoneById(curCustomer.TimeZoneId);
+
+                        //Get corrected date and time for the customer
+                        var correctedDate = TimeZoneInfo.ConvertTimeFromUtc(post.LogDate, customerTimeZone);
 
                         extraBody += "<br /><hr>";
                         extraBody += "<div id=\"externalLogNotesHistory\">";
-                        extraBody += "<font face=\"verdana\" size=\"2\"><strong>" + post.LogDate.ToString("g") +"</strong>";
+                        extraBody += "<font face=\"verdana\" size=\"2\"><strong>" + correctedDate.ToString("g") +"</strong>";
                         extraBody += "<br />" + userEmailToShow ;                       
                         extraBody += "<br />" + post.Text_External + "</font></div>";
                     }
