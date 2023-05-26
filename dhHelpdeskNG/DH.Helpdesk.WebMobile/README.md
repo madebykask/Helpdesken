@@ -1,6 +1,6 @@
 # DH Helpdesk Mobile Web
 
-# First install node.js version 10.18.1
+# First install node.js version 14.17.3
 # run npm i
 # run npm install -g @angular/cli
 # run command npm run ng build
