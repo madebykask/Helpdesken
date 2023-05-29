@@ -237,7 +237,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
             mailTemplate.SendMethod = mailTemplateLanguage?.MailTemplate?.SendMethod ?? EmailSendMethod.SeparateEmails;
-            mailTemplate.IncludeLogText_External = mailTemplateLanguage.MailTemplate?.IncludeLogText_External ?? false;  
+            mailTemplate.IncludeLogText_External = mailTemplateLanguage?.MailTemplate?.IncludeLogText_External ?? false;  
             var update = true;
 
             var mailtemplatelanguageToSave = ordertypeId != null ?
