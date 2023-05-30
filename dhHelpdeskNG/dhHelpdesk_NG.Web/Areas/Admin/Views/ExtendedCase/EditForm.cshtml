@@ -827,6 +827,7 @@
                 });
 
                 if (requiredNotFilled > 0) {
+                    /*console.log("requiredNotFilled: " +requiredNotFilled);*/
                     ShowToastMessage('@Html.Raw(Translation.GetForJS(Translation.Get("Alla texter måste vara ifyllda på språket ", Enums.TranslationSource.TextTranslation)))' + defaultLanguage.LanguageId, "error");
                     return;
                 }
@@ -945,6 +946,7 @@
                 let translation = {};
                 translation.Languageid = sTranslations[s].getAttribute('data-dhhelpdesk-langid');
                 translation.Property = idSection;
+                /*console.log("949: "+ sTranslations[s].value);*/
                 translation.Text = sTranslations[s].value.replaceAll('\\', '\\\\ ').replaceAll('"', '\\\"');
                 translation.ControlType = sTranslations[s].getAttribute('data-dhhelpdesk-controlType');
                 translation.TranslationId = sTranslations[s].getAttribute('data-dhhelpdesk-id');
@@ -1023,6 +1025,7 @@
                             let translation = {};
                             translation.LanguageId = fTranslation.getAttribute('data-dhhelpdesk-langId');
                             translation.Property = idFileUploadText;
+                            /*console.log("1028: " + fTranslation.value);*/
                             translation.Text = fTranslation.value.replaceAll('\\', '\\\\ ').replaceAll('"', '\\\"');
                             translation.ControlType = fTranslation.getAttribute('data-dhhelpdesk-controlType');
                             translation.TranslationId = fieldTextTranslations[t].getAttribute('data-dhhelpdesk-id');
@@ -1072,6 +1075,7 @@
 
                                 translation.LanguageId = options[p].getAttribute('data-dhhelpdesk-langId');
                                 translation.Property = idOption;
+                               /* console.log("1078: " + options[p].value);*/
                                 translation.Text = options[p].value.replaceAll('\\', '\\\\ ').replaceAll('"', '\\\"');
                                 translation.ControlType = options[p].getAttribute('data-dhhelpdesk-controlType');
                                 translation.TranslationId = options[p].getAttribute('data-dhhelpdesk-id');
@@ -1112,12 +1116,13 @@
                                         }
                                     }
                                 }
-
-                                translation.Text = contentSummerNote.replaceAll('\\', '\\\\ ').replaceAll('"', '\\\"');
+                                /*console.log("1119: " + contentSummerNote);*/
+                                translation.Text = contentSummerNote.replaceAll('\\', '\\\\ ').replaceAll('"', '');
                                 translation.ControlType = controlType;
                             }
                             else {
                                 lTranslation = fieldLabelTranslations[f].querySelector('.labelName');
+                                /*console.log("1125: " + lTranslation.value);*/
                                 translation.Text = lTranslation.value.replaceAll('\\', '\\\\ ').replaceAll('"', '\\\"');
                                 translation.ControlType = lTranslation.getAttribute('data-dhhelpdesk-controlType');
                                 translation.TranslationId = lTranslation.getAttribute('data-dhhelpdesk-id');
@@ -1158,6 +1163,7 @@
                 let translation = {};
                 translation.Languageid = tabTranslations[t].getAttribute('data-dhhelpdesk-langid');
                 translation.Property = tabId;
+               /* console.log("1166: " + tabTranslations[t].value);*/
                 translation.Text = tabTranslations[t].value.replaceAll('\\', '\\\\ ').replaceAll('"', '\\\"');
                 translation.ControlType = tabTranslations[t].getAttribute('data-dhhelpdesk-controlType');
                 translation.TranslationId = tabTranslations[t].getAttribute('data-dhhelpdesk-id');
