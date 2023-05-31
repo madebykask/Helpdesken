@@ -1,6 +1,7 @@
 ﻿@using System.Globalization
 @using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Web.Infrastructure
+@using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Faq.Output.EditingFaqModel
            
@@ -57,7 +58,7 @@
                     <td>
                         @Translation.GetCoreTextTranslation("Fråga")
                         <span class="mandatorystar">*</span>
-                    </td>
+                    </td>   
                     <td>
                         @Html.TextBoxFor(m => m.Question)
                         @Html.ValidationMessageFor(m => m.Question)
@@ -69,7 +70,7 @@
                         <span class="mandatorystar">*</span>
                     </td>
                     <td class="pb5">
-                        @Html.TextAreaFor(m => m.Answer, new { style = "height:250px;", @class = "richtexteditor" })
+                        @Html.TextAreaFor(m => m.Answer, new { style = "height:250px;", @class = "richtexteditor" , id="faqAnswer"})
 @*                        @Html.TextAreaFor(m => m.Answer, new {style = "height: 250px;"})*@
                         @Html.ValidationMessageFor(m => m.Answer)
                     </td>
@@ -79,7 +80,7 @@
                         @Translation.GetCoreTextTranslation("Internt svar")
                     </td>
                     <td>
-                        @Html.TextAreaFor(m => m.InternalAnswer, new {style = "height: 250px;"})
+                        @Html.TextAreaFor(m => m.InternalAnswer, new {style = "height: 250px;",id = "faqInternalAnswer" })
                         @Html.ValidationMessageFor(m => m.InternalAnswer)
                     </td>
                 </tr>
@@ -255,6 +256,7 @@
 </div>
 
 <script type="text/javascript">
+
     $(function() {
         $("#languageList").change(function() {
             var selectedItem = $(this).val();

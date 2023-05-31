@@ -16,11 +16,21 @@
     }
 
     $(document).ready(function () {
+        FixLinebreaksInFAQAnswer();
         FAQInitForm();        
     });
 
+    function FixLinebreaksInFAQAnswer() {
+        var textareaExternal = $("#faqAnswer");
+        var textareaInternal = $("#faqInternalAnswer");
+
+        var internal = $("#faqInternalAnswer").val().replace("|", "\n\r");
+        var external = $("#faqAnswer").val().replace("|", "\n\r");
+        textareaExternal.val(external);
+        textareaInternal.val(internal);
+    }
     function FAQInitForm() {
-        
+
         var getFAQFiles = function () {
             $.get('/FAQ/Files', { faqId: $('#FAQKey').val(), now: Date.now() }, function (data) {
                 $('#divFAQFiles').html(data);

@@ -267,6 +267,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ViewResult EditFaq(int id, int languageId, bool showDetails = false)
         {
             var faq = _faqService.GetFaqById(id, languageId);
+            faq.Answer = faq.Answer.Replace("\r\n", "<br>");
             if (faq == null)
             {
                 throw new HttpException((int)HttpStatusCode.NotFound, null);

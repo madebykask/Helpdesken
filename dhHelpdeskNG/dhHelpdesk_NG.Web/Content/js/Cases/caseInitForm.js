@@ -1530,19 +1530,18 @@ function CaseInitForm(opt) {
 
     $('#AddFAQ').click(function (e) {
         e.preventDefault();
-  
         var question = $('#case__Caption').val();
         var answer = $('#CaseLog_TextExternal').summernote('code');
         var internalanswer = $('#CaseLog_TextInternal').summernote('code');
-
-  
-        var win = window.open('/Faq/NewFAQPopup?question=' + question + '&answer=' + stripHtml(answer) + '&internalanswer=' + stripHtml(internalanswer), '_blank', 'left=100,top=100,width=700,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
+        answer = stripHtml(answer);
+        internalanswer = stripHtml(internalanswer);
+        var win = window.open('/Faq/NewFAQPopup?question=' + question + '&answer=' + answer + '&internalanswer=' + internalanswer, '_blank', 'left=100,top=100,width=700,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
     });
 
     function stripHtml(html) {
-        //let tmp = document.createElement("DIV");
-        //tmp.innerHTML = html;
-        //return tmp.textContent || tmp.innerText || "";
+        //Special Summernote and cant send html tags in query string //KA 20230531
+        html = html.replace("</p><p>", "</p><br><p>");
+        html = html.replace("<br>", "|");
         return html.replace(/<[^>]+>/g, "");
     }
 
