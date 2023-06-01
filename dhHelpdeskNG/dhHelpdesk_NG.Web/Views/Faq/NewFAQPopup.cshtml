@@ -24,8 +24,9 @@
         var textareaExternal = $("#faqAnswer");
         var textareaInternal = $("#faqInternalAnswer");
 
-        var internal = $("#faqInternalAnswer").val().replace("|", "\n\r");
-        var external = $("#faqAnswer").val().replace("|", "\n\r");
+        var internal = $("#faqInternalAnswer").val().replace(/\|/g, "\r\n");
+        var external = $("#faqAnswer").val().replace(/\|/g, "\r\n");
+
         textareaExternal.val(external);
         textareaInternal.val(internal);
     }

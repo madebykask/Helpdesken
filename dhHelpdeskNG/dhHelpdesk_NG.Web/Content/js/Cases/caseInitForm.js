@@ -1530,18 +1530,21 @@ function CaseInitForm(opt) {
 
     $('#AddFAQ').click(function (e) {
         e.preventDefault();
+
         var question = $('#case__Caption').val();
         var answer = $('#CaseLog_TextExternal').summernote('code');
         var internalanswer = $('#CaseLog_TextInternal').summernote('code');
+
         answer = stripHtml(answer);
         internalanswer = stripHtml(internalanswer);
         var win = window.open('/Faq/NewFAQPopup?question=' + question + '&answer=' + answer + '&internalanswer=' + internalanswer, '_blank', 'left=100,top=100,width=700,height=700,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
     });
 
     function stripHtml(html) {
-        //Special Summernote and cant send html tags in query string //KA 20230531
-        html = html.replace("</p><p>", "</p><br><p>");
-        html = html.replace("<br>", "|");
+        //Special from Summernote. Cant send html tags in query string but want to keep linebreaks //KA 20230601
+        html = html.replace(/<\/p><p>/g, "<br>");
+        html = html.replace(/<br>/g, "|");
+       
         return html.replace(/<[^>]+>/g, "");
     }
 
