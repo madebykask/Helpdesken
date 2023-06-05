@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
+using DH.Helpdesk.Services.Infrastructure.Email;
+using DH.Helpdesk.Services.Infrastructure.Email.Concrete;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.Services.Services.Cases;
@@ -39,6 +41,7 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<WorkingGroupService>().As<IWorkingGroupService>();
             builder.RegisterType<MailTemplateService>().As<IMailTemplateService>();
             builder.RegisterType<EmailService>().As<IEmailService>();
+            builder.RegisterType<CaseMailer>().As<ICaseMailer>();
             builder.RegisterType<FeedbackTemplateService>().As<IFeedbackTemplateService>();
             builder.RegisterType<InvoiceArticleService>().As<IInvoiceArticleService>();
             builder.RegisterType<SurveyService>().As<ISurveyService>();
