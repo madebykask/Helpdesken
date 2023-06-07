@@ -674,6 +674,14 @@ IF COL_LENGTH('dbo.tblSettings','SharePointTenantId') IS NULL
 	End
 Go
 
+RAISERROR ('Add Column SharePointScope to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','SharePointScope') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD SharePointScope nvarchar(200) null
+	End
+Go
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.58.1'
 GO
