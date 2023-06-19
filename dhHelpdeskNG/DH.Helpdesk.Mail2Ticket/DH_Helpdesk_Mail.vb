@@ -1679,7 +1679,7 @@ Module DH_Helpdesk_Mail
             If Directory.Exists(saveDirPath) = False Then
                 Directory.CreateDirectory(saveDirPath)
             End If
-
+            Dim i As Integer = 1
             'Save to temp dir
             For Each msgAttachment As Rebex.Mail.Attachment In message.Attachments
                 Dim sFileNameTemp As String = msgAttachment.FileName
@@ -1689,7 +1689,13 @@ Module DH_Helpdesk_Mail
                 Dim extension As String = Path.GetExtension(sFileNameTemp).Replace(".", "").ToLower()
                 If (IsExtensionInWhiteList(extension, whiteList)) Then
                     ' save temp file
+
                     Dim sTempFilePath = Path.Combine(tempDirPath, sFileNameTemp)
+                    If File.Exists(sTempFilePath) = True Then
+                        sFileNameTemp = Path.GetFileNameWithoutExtension(sTempFilePath) + "_" + Convert.ToString(i) + "." + extension
+                        sTempFilePath = Path.Combine(sTempFilePath, sFileNameTemp)
+                        i += 1
+                    End If
                     msgAttachment.Save(sTempFilePath)
                 Else
                     deniedFiles.Add(sFileNameTemp)
@@ -1717,9 +1723,11 @@ Module DH_Helpdesk_Mail
                 Directory.CreateDirectory(saveDirPath)
             End If
 
+            Dim i As Integer = 1
             'Save to temp dir
             For Each msgAttachment As Rebex.Mail.Attachment In message.Attachments
                 Dim sFileName As String = msgAttachment.FileName
+
                 sFileName = sFileName.Replace(":", "")
                 sFileName = URLDecode(sFileName)
 
@@ -1727,6 +1735,11 @@ Module DH_Helpdesk_Mail
                 If (IsExtensionInWhiteList(extension, whiteList)) Then
 
                     Dim sFilePath = Path.Combine(saveDirPath, sFileName)
+                    If File.Exists(sFilePath) = True Then
+                        sFileName = Path.GetFileNameWithoutExtension(sFilePath) + "_" + Convert.ToString(i) + "." + extension
+                        sFilePath = Path.Combine(saveDirPath, sFileName)
+                        i += 1
+                    End If
                     LogToFile("Attached file path: " & sFilePath, iPop3DebugLevel)
                     msgAttachment.Save(sFilePath)
 
