@@ -2358,27 +2358,17 @@ Module DH_Helpdesk_Mail
     End Function
 
     Private Function getInnerHtml(ByVal sHTML As String) As String
-        Dim startTime As DateTime
-        Dim MyWebBrowser As New WebBrowser
+        Dim doc As New HtmlAgilityPack.HtmlDocument()
+        doc.LoadHtml(sHTML)
 
-        startTime = DateTime.Now()
+        Dim bodyNode As HtmlNode = doc.DocumentNode.SelectSingleNode("//body")
+        If bodyNode IsNot Nothing Then
+            Return bodyNode.InnerHtml.Replace(vbCrLf, "").Replace("'", "''")
 
-        MyWebBrowser.DocumentText = sHTML
+        Else
+            Return sHTML.Replace(vbCrLf, "").Replace("'", "''")
+        End If
 
-        MyWebBrowser.ScriptErrorsSuppressed = True
-
-        While (MyWebBrowser.ReadyState <> WebBrowserReadyState.Complete Or MyWebBrowser.IsBusy = True) And DateDiff(DateInterval.Second, startTime, DateTime.Now()) < 10
-            Application.DoEvents()
-        End While
-        Dim htmlText As String = ""
-        Try
-            htmlText = MyWebBrowser.Document.Body.InnerHtml
-        Catch ex As Exception
-            htmlText = sHTML
-        End Try
-        htmlText = Replace(htmlText, vbCrLf, "")
-        htmlText = htmlText.Replace("'", "''")
-        Return htmlText
     End Function
 
     Private Function isBlockedRecipient(sEMail As String, sBlockedEMailRecipents As String) As Boolean
