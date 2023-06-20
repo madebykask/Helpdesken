@@ -441,7 +441,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
 		public IQueryable<CustomerUserCase> GetActiveCustomerUserCases(bool myCases, int currentUserId, int? customerId, string freeTextSearch, int from, int count, string orderby = null, bool orderbyAscending = true, bool searchInternalLog = false)
 		{
-			var workingGroupsIds = (from wgsu in this.DataContext.UserWorkingGroups
+
+            var workingGroupsIds = (from wgsu in this.DataContext.UserWorkingGroups
 									where wgsu.User_Id == currentUserId
 									select wgsu.WorkingGroup_Id)
 									.ToList();
