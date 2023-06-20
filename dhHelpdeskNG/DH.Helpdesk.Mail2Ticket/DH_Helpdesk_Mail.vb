@@ -1693,7 +1693,7 @@ Module DH_Helpdesk_Mail
                     Dim sTempFilePath = Path.Combine(tempDirPath, sFileNameTemp)
                     If File.Exists(sTempFilePath) = True Then
                         sFileNameTemp = Path.GetFileNameWithoutExtension(sTempFilePath) + "_" + Convert.ToString(i) + "." + extension
-                        sTempFilePath = Path.Combine(sTempFilePath, sFileNameTemp)
+                        sTempFilePath = Path.Combine(tempDirPath, sFileNameTemp)
                         i += 1
                     End If
                     msgAttachment.Save(sTempFilePath)
