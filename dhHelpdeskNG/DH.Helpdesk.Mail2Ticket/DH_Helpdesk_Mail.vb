@@ -2376,10 +2376,12 @@ Module DH_Helpdesk_Mail
 
         Dim bodyNode As HtmlNode = doc.DocumentNode.SelectSingleNode("//body")
         If bodyNode IsNot Nothing Then
-            Return bodyNode.InnerHtml.Replace(vbCrLf, "").Replace("'", "''")
+            'Return bodyNode.InnerHtml.Replace(vbCrLf, "").Replace("'", "''")
+            Return bodyNode.InnerHtml
 
         Else
-            Return sHTML.Replace(vbCrLf, "").Replace("'", "''")
+            'Return sHTML.Replace(vbCrLf, "").Replace("'", "''")
+            Return sHTML
         End If
 
     End Function
@@ -2697,6 +2699,27 @@ Module DH_Helpdesk_Mail
                 If d.Attributes("style") IsNot Nothing Then
                     d.Attributes("style").Remove()
                 End If
+            Next
+        End If
+
+        Dim form As HtmlNodeCollection = doc.DocumentNode.SelectNodes("//form")
+        If form IsNot Nothing Then
+            For Each f As HtmlNode In form
+                f.Remove()
+            Next
+        End If
+
+        Dim inputTags As HtmlNodeCollection = doc.DocumentNode.SelectNodes("//input")
+        If inputTags IsNot Nothing Then
+            For Each i As HtmlNode In inputTags
+                i.Remove()
+            Next
+        End If
+
+        Dim buttons As HtmlNodeCollection = doc.DocumentNode.SelectNodes("//button")
+        If buttons IsNot Nothing Then
+            For Each b As HtmlNode In buttons
+                b.Remove()
             Next
         End If
 
