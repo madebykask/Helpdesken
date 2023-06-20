@@ -141,7 +141,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     bool orderByAscending = orderByCaseField.ToLower().Contains("desc") ? false : true;
                     orderByCaseField = orderByCaseField.Replace(" desc", "");
                     orderByCaseField = orderByCaseField.Replace("desc", "");
-                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(myCases, user.Id, customerId, "", from, count, orderByCaseField, orderByAscending);
+                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(false, user.Id, customerId, "", from, count, orderByCaseField, orderByAscending);
 
                     var model = new CasesResult(customerCases, caseFieldsToReturn);
 
@@ -178,7 +178,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 return null;
             }
         }
-        
+
         private string GetTranslatedColumnName(string columnName)
         {
             switch (columnName)
