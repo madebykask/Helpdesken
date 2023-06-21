@@ -85,7 +85,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <param name="caseFieldsToReturn">Lorem Ipsum</param>
         /// <param name="limit">The maximum number of objects to return. Default: 20. Minimum: 1. Maximum: 20.</param>
         /// <param name="offset">The index of the first object to return. Default: 0 (i.e., the first object). Use with limit to get the next set of objects.</param>
-        public CasesResult Cases([FromUri]int customerId, [FromUri] int languageId, [FromUri]string email, [FromUri]string orderByCaseField, [FromUri]string caseFieldsToReturn, [FromUri] int? limit, [FromUri] int? offset)
+        public CasesResult Cases([FromUri]int customerId, [FromUri] int languageId, [FromUri]string email, [FromUri]string orderByCaseField, [FromUri]string caseFieldsToReturn, [FromUri] int? limit, [FromUri] int? offset, [FromUri] bool myCases = false)
         {
             if (string.IsNullOrEmpty(caseFieldsToReturn))
             {
@@ -101,9 +101,6 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             //endast de kunder som har igång webpart
             string[]  acceptedCustomerIds = ConfigurationManager.AppSettings["WebpartAcceptedCustomerIds"].Split(',');
-
-            //#12144 Jag ska bara kunna se mina egna case (de som jag är assignade till)
-            bool myCases = true;
 
             //#12363
             //caseFieldsToReturn (Dessa kommer vi att skicka in)
@@ -141,7 +138,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     bool orderByAscending = orderByCaseField.ToLower().Contains("desc") ? false : true;
                     orderByCaseField = orderByCaseField.Replace(" desc", "");
                     orderByCaseField = orderByCaseField.Replace("desc", "");
-                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(false, user.Id, customerId, "", from, count, orderByCaseField, orderByAscending);
+                    var customerCases = _caseSearchService.SearchActiveCustomerUserCases(myCases, user.Id, customerId, "", from, count, orderByCaseField, orderByAscending);
 
                     var model = new CasesResult(customerCases, caseFieldsToReturn);
 
