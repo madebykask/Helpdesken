@@ -60,7 +60,8 @@ Module DH_Helpdesk_Mail
 
 
     Public Sub Main()
-
+        Dim processId As Integer = Process.GetCurrentProcess().Id
+        tempFolder = tempFolder & processId.ToString()
         Dim secureConnectionString As String = GetAppSettingValue("SecureConnectionString")
         If (Not IsNullOrEmpty(secureConnectionString) AndAlso secureConnectionString.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase)) Then
             Dim fileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location)
@@ -128,8 +129,6 @@ Module DH_Helpdesk_Mail
         Dim workingMode = If(workingModeArg = "5", SyncType.SyncByWorkingGroup, SyncType.SyncByCustomer)
         ' For testing purposes only
         ' Dim workingMode = SyncType.SyncByWorkingGroup
-
-        tempFolder = tempFolder & workingModeArg
 
         If Not IsNullOrEmpty(logFolderArg) Then
             gsLogPath = logFolderArg
@@ -1666,7 +1665,7 @@ Module DH_Helpdesk_Mail
 
         Dim whiteList As List(Of String) = GetFileUploadWhiteList(globalSettings)
 
-        Dim tempDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, "Temp", objectId)
+        Dim tempDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, tempFolder, objectId)
         Dim saveDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, If(IsNullOrEmpty(prefix), objectId, prefix & objectId))
 
         If message.Attachments.Count > 6 - iHtmlFile Then
