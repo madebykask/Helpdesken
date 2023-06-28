@@ -64,10 +64,19 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Helpers
                 foreach (HtmlNode table in tables)
                 {
                     table.Attributes["style"].Remove();
-                    table.Attributes["width"].Value = "300px";
 
                 }
             }
+
+            HtmlNodeCollection tableWidths = doc.DocumentNode.SelectNodes("//table[@width]");
+            if (tables != null)
+            {
+                foreach (HtmlNode table in tableWidths)
+                {
+                    table.Attributes["width"].Value = "300px";
+                }
+            }
+
             HtmlNodeCollection trs = doc.DocumentNode.SelectNodes("//tr[@style]");
             if (trs != null)
             {
