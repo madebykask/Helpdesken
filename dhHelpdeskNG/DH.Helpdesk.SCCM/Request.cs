@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using log4net.Core;
+using RestSharp;
 using RestSharp.Authenticators.OAuth2;
 using System;
 using System.Collections.Generic;
@@ -11,12 +12,14 @@ namespace DH.Helpdesk.SCCM
 {
     public class Request
     {
+
         private string BaseURL { get; } = System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Base"].ToString();
 
         private RestClient client;
 
         public Request(string Token)
         {
+
             //Do not accept an empty BaseURL
             if (String.IsNullOrEmpty(BaseURL))
             {
@@ -35,11 +38,19 @@ namespace DH.Helpdesk.SCCM
         
         public Task<RestResponse> Get(string endPath) {
 
-            var request = new RestRequest(endPath, Method.Get);
-            
-            Task<RestResponse> t = client.ExecuteAsync(request);
+            try
+            {
 
-            return t;       
+                var request = new RestRequest(endPath, Method.Get);
+
+                Task<RestResponse> t = client.ExecuteAsync(request);
+
+                return t;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
 
         }
