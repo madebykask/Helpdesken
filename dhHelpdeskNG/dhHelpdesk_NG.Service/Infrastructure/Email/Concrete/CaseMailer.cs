@@ -460,7 +460,9 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                 var curCustomer = _customerService.GetCustomer(newCase.Customer_Id);
                 var customerTimeZone = TimeZoneInfo.FindSystemTimeZoneById(curCustomer.TimeZoneId);
                 var correctedDate = new DateTime();
+                
                 var emailLogs = _emailLogRepository.GetEmailLogsByCaseId(newCase.Id).OrderByDescending(z => z.Id).ToList();
+                var firstEmail = emailLogs.Where(x => x.MailId == 1).FirstOrDefault().From;
                 var oldLogs = _logService.GetLogsByCaseId(newCase.Id).Where(x => x.Case_Id == log.CaseId && x.Id != log.Id).OrderByDescending(z => z.Id).ToList();
                 if (oldLogs.Any())
                 {
@@ -502,12 +504,19 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                     }
                     //Plus Extra body with Description from Case
                     //*Reported by is descided by this rule:
-                    //1.User_ID
+                    //1.User_ID - But never show personal emails, instead look for the first email in emaillogs with mailId 1
                     //2.RegUserName
                     //3.RegUserID
                     if (newCase.User_Id != null)
                     {
-                        userEmailToShow = _userService.GetUser((int)newCase.User_Id).Email;
+                        if(!String.IsNullOrEmpty(firstEmail))
+                        {
+                            userEmailToShow = firstEmail;
+                        }
+                        else
+                        {
+                            userEmailToShow = "";
+                        }
                     }
                     else if (!String.IsNullOrEmpty(newCase.RegUserName))
                     {
@@ -520,7 +529,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                     }
                     else
                     {
-                        userEmailToShow = helpdeskMailFromAdress;
+                        userEmailToShow = "";
                     }
 
                     correctedDate = TimeZoneInfo.ConvertTimeFromUtc(newCase.RegTime, customerTimeZone);
