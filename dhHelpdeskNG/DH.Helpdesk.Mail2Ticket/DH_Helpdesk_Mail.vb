@@ -422,9 +422,8 @@ Module DH_Helpdesk_Mail
                             If objCustomer.POP3Port = 993 Then
                                 IMAPclient.Connect(objCustomer.POP3Server.ToString(), SslMode.Implicit)
                             Else
-                                'Added last argument for SSL SslMode.Explicit 20230622 for Osby - //Katta - Reverted 20230628
-                                'IMAPclient.Connect(objCustomer.POP3Server, objCustomer.POP3Port, SslMode.Explicit)
-                                IMAPclient.Connect(objCustomer.POP3Server, objCustomer.POP3Port)
+                                'Added last argument for SSL SslMode.Explicit 20230622 for Osby 
+                                IMAPclient.Connect(objCustomer.POP3Server, objCustomer.POP3Port, SslMode.Explicit)
                             End If
 
 
