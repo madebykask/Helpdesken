@@ -460,9 +460,24 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                 var curCustomer = _customerService.GetCustomer(newCase.Customer_Id);
                 var customerTimeZone = TimeZoneInfo.FindSystemTimeZoneById(curCustomer.TimeZoneId);
                 var correctedDate = new DateTime();
-                
+                var firstEmail = "";
                 var emailLogs = _emailLogRepository.GetEmailLogsByCaseId(newCase.Id).OrderByDescending(z => z.Id).ToList();
-                var firstEmail = emailLogs.Where(x => x.MailId == 1).FirstOrDefault().From;
+                if(emailLogs.Any())
+                {
+                    try
+                    {
+                        firstEmail = emailLogs.Where(x => x.MailId == 1).FirstOrDefault().From;
+                    }
+                    catch
+                    {
+                        firstEmail = "";
+                    }
+                    
+                }
+                else
+                {
+                    firstEmail = "";
+                }
                 var oldLogs = _logService.GetLogsByCaseId(newCase.Id).Where(x => x.Case_Id == log.CaseId && x.Id != log.Id).OrderByDescending(z => z.Id).ToList();
                 if (oldLogs.Any())
                 {
@@ -502,44 +517,12 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                             extraBody += "<br />" + post.Text_External + "</font></div>";
                         }
                     }
-                    //Plus Extra body with Description from Case
-                    //*Reported by is descided by this rule:
-                    //1.User_ID - But never show personal emails, instead look for the first email in emaillogs with mailId 1
-                    //2.RegUserName
-                    //3.RegUserID
-                    if (newCase.User_Id != null)
-                    {
-                        if(!String.IsNullOrEmpty(firstEmail))
-                        {
-                            userEmailToShow = firstEmail;
-                        }
-                        else
-                        {
-                            userEmailToShow = "";
-                        }
-                    }
-                    else if (!String.IsNullOrEmpty(newCase.RegUserName))
-                    {
-                        userEmailToShow = newCase.RegUserName;
-                    }
-                    else if (newCase.RegUserId != null)
-                    {
-                        //Check this
-                        userEmailToShow = newCase.RegUserId;
-                    }
-                    else
-                    {
-                        userEmailToShow = "";
-                    }
+                    extraBody += GetDescription(newCase, extraBody, out userEmailToShow, customerTimeZone, out correctedDate, firstEmail);
 
-                    correctedDate = TimeZoneInfo.ConvertTimeFromUtc(newCase.RegTime, customerTimeZone);
-                    var description = newCase.Description.Replace("<p><br></p>", "").Replace("<p>\r\n</p>", "").Replace("<o:p>&nbsp;</o:p>", "");
-                    extraBody += "<br /><hr>";
-                    extraBody += "<div id=\"externalLogNotesDescription\">";
-                    extraBody += "<font face=\"verdana\" size=\"2\"><strong>" + correctedDate.ToString("g") + "</strong>";
-                    extraBody += "<br />" + userEmailToShow;
-                    extraBody += "<br />" + description + "</font></div>";
-
+                }
+                else
+                {
+                    extraBody += GetDescription(newCase, extraBody, out userEmailToShow, customerTimeZone, out correctedDate, firstEmail);
                 }
                 return extraBody;
 
@@ -549,6 +532,48 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                 //Add to error log?
                 return extraBody;
             }
+        }
+
+        private static string GetDescription(Case newCase, string extraBody, out string userEmailToShow, TimeZoneInfo customerTimeZone, out DateTime correctedDate, string firstEmail)
+        {
+            //Plus Extra body with Description from Case
+            //*Reported by is descided by this rule:
+            //1.User_ID - But never show personal emails, instead look for the first email in emaillogs with mailId 1
+            //2.RegUserName
+            //3.RegUserID
+            if (newCase.User_Id != null)
+            {
+                if (!String.IsNullOrEmpty(firstEmail))
+                {
+                    userEmailToShow = firstEmail;
+                }
+                else
+                {
+                    userEmailToShow = "";
+                }
+            }
+            else if (!String.IsNullOrEmpty(newCase.RegUserName))
+            {
+                userEmailToShow = newCase.RegUserName;
+            }
+            else if (newCase.RegUserId != null)
+            {
+                //Check this
+                userEmailToShow = newCase.RegUserId;
+            }
+            else
+            {
+                userEmailToShow = "";
+            }
+
+            correctedDate = TimeZoneInfo.ConvertTimeFromUtc(newCase.RegTime, customerTimeZone);
+            var description = newCase.Description.Replace("<p><br></p>", "").Replace("<p>\r\n</p>", "").Replace("<o:p>&nbsp;</o:p>", "");
+            extraBody += "<br /><hr>";
+            extraBody += "<div id=\"externalLogNotesDescription\">";
+            extraBody += "<font face=\"verdana\" size=\"2\"><strong>" + correctedDate.ToString("g") + "</strong>";
+            extraBody += "<br />" + userEmailToShow;
+            extraBody += "<br />" + description + "</font></div>";
+            return extraBody;
         }
     }
 }
