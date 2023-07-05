@@ -464,15 +464,15 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                 var emailLogs = _emailLogRepository.GetEmailLogsByCaseId(newCase.Id).OrderByDescending(z => z.Id).ToList();
                 if(emailLogs.Any())
                 {
-                    try
+                    if (!String.IsNullOrEmpty(emailLogs.Where(x => x.MailId == 1).FirstOrDefault()?.From))
                     {
                         firstEmail = emailLogs.Where(x => x.MailId == 1).FirstOrDefault().From;
                     }
-                    catch
+                    else
                     {
                         firstEmail = "";
                     }
-                    
+
                 }
                 else
                 {
