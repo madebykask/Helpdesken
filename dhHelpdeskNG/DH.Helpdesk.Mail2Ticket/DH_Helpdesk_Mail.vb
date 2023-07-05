@@ -60,7 +60,8 @@ Module DH_Helpdesk_Mail
 
 
     Public Sub Main()
-
+        Dim processId As Integer = Process.GetCurrentProcess().Id
+        tempFolder = tempFolder & processId.ToString()
         Dim secureConnectionString As String = GetAppSettingValue("SecureConnectionString")
         If (Not IsNullOrEmpty(secureConnectionString) AndAlso secureConnectionString.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase)) Then
             Dim fileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location)
@@ -128,8 +129,6 @@ Module DH_Helpdesk_Mail
         Dim workingMode = If(workingModeArg = "5", SyncType.SyncByWorkingGroup, SyncType.SyncByCustomer)
         ' For testing purposes only
         ' Dim workingMode = SyncType.SyncByWorkingGroup
-
-        tempFolder = tempFolder & workingModeArg
 
         If Not IsNullOrEmpty(logFolderArg) Then
             gsLogPath = logFolderArg
@@ -423,7 +422,8 @@ Module DH_Helpdesk_Mail
                             If objCustomer.POP3Port = 993 Then
                                 IMAPclient.Connect(objCustomer.POP3Server.ToString(), SslMode.Implicit)
                             Else
-                                IMAPclient.Connect(objCustomer.POP3Server, objCustomer.POP3Port)
+                                'Added last argument for SSL SslMode.Explicit 20230622 for Osby 
+                                IMAPclient.Connect(objCustomer.POP3Server, objCustomer.POP3Port, SslMode.Explicit)
                             End If
 
 
@@ -1666,7 +1666,7 @@ Module DH_Helpdesk_Mail
 
         Dim whiteList As List(Of String) = GetFileUploadWhiteList(globalSettings)
 
-        Dim tempDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, "Temp", objectId)
+        Dim tempDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, tempFolder, objectId)
         Dim saveDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, If(IsNullOrEmpty(prefix), objectId, prefix & objectId))
 
         If message.Attachments.Count > 6 - iHtmlFile Then
@@ -1679,7 +1679,7 @@ Module DH_Helpdesk_Mail
             If Directory.Exists(saveDirPath) = False Then
                 Directory.CreateDirectory(saveDirPath)
             End If
-
+            Dim i As Integer = 1
             'Save to temp dir
             For Each msgAttachment As Rebex.Mail.Attachment In message.Attachments
                 Dim sFileNameTemp As String = msgAttachment.FileName
@@ -1689,7 +1689,13 @@ Module DH_Helpdesk_Mail
                 Dim extension As String = Path.GetExtension(sFileNameTemp).Replace(".", "").ToLower()
                 If (IsExtensionInWhiteList(extension, whiteList)) Then
                     ' save temp file
+
                     Dim sTempFilePath = Path.Combine(tempDirPath, sFileNameTemp)
+                    If File.Exists(sTempFilePath) = True Then
+                        sFileNameTemp = Path.GetFileNameWithoutExtension(sTempFilePath) + "_" + Convert.ToString(i) + "." + extension
+                        sTempFilePath = Path.Combine(tempDirPath, sFileNameTemp)
+                        i += 1
+                    End If
                     msgAttachment.Save(sTempFilePath)
                 Else
                     deniedFiles.Add(sFileNameTemp)
@@ -1717,9 +1723,11 @@ Module DH_Helpdesk_Mail
                 Directory.CreateDirectory(saveDirPath)
             End If
 
+            Dim i As Integer = 1
             'Save to temp dir
             For Each msgAttachment As Rebex.Mail.Attachment In message.Attachments
                 Dim sFileName As String = msgAttachment.FileName
+
                 sFileName = sFileName.Replace(":", "")
                 sFileName = URLDecode(sFileName)
 
@@ -1727,6 +1735,11 @@ Module DH_Helpdesk_Mail
                 If (IsExtensionInWhiteList(extension, whiteList)) Then
 
                     Dim sFilePath = Path.Combine(saveDirPath, sFileName)
+                    If File.Exists(sFilePath) = True Then
+                        sFileName = Path.GetFileNameWithoutExtension(sFilePath) + "_" + Convert.ToString(i) + "." + extension
+                        sFilePath = Path.Combine(saveDirPath, sFileName)
+                        i += 1
+                    End If
                     LogToFile("Attached file path: " & sFilePath, iPop3DebugLevel)
                     msgAttachment.Save(sFilePath)
 
@@ -2358,27 +2371,19 @@ Module DH_Helpdesk_Mail
     End Function
 
     Private Function getInnerHtml(ByVal sHTML As String) As String
-        Dim startTime As DateTime
-        Dim MyWebBrowser As New WebBrowser
+        Dim doc As New HtmlAgilityPack.HtmlDocument()
+        doc.LoadHtml(sHTML)
 
-        startTime = DateTime.Now()
+        Dim bodyNode As HtmlNode = doc.DocumentNode.SelectSingleNode("//body")
+        If bodyNode IsNot Nothing Then
+            'Return bodyNode.InnerHtml.Replace(vbCrLf, "").Replace("'", "''")
+            Return bodyNode.InnerHtml
 
-        MyWebBrowser.DocumentText = sHTML
+        Else
+            'Return sHTML.Replace(vbCrLf, "").Replace("'", "''")
+            Return sHTML
+        End If
 
-        MyWebBrowser.ScriptErrorsSuppressed = True
-
-        While (MyWebBrowser.ReadyState <> WebBrowserReadyState.Complete Or MyWebBrowser.IsBusy = True) And DateDiff(DateInterval.Second, startTime, DateTime.Now()) < 10
-            Application.DoEvents()
-        End While
-        Dim htmlText As String = ""
-        Try
-            htmlText = MyWebBrowser.Document.Body.InnerHtml
-        Catch ex As Exception
-            htmlText = sHTML
-        End Try
-        htmlText = Replace(htmlText, vbCrLf, "")
-        htmlText = htmlText.Replace("'", "''")
-        Return htmlText
     End Function
 
     Private Function isBlockedRecipient(sEMail As String, sBlockedEMailRecipents As String) As Boolean
@@ -2694,6 +2699,27 @@ Module DH_Helpdesk_Mail
                 If d.Attributes("style") IsNot Nothing Then
                     d.Attributes("style").Remove()
                 End If
+            Next
+        End If
+
+        Dim form As HtmlNodeCollection = doc.DocumentNode.SelectNodes("//form")
+        If form IsNot Nothing Then
+            For Each f As HtmlNode In form
+                f.Remove()
+            Next
+        End If
+
+        Dim inputTags As HtmlNodeCollection = doc.DocumentNode.SelectNodes("//input")
+        If inputTags IsNot Nothing Then
+            For Each i As HtmlNode In inputTags
+                i.Remove()
+            Next
+        End If
+
+        Dim buttons As HtmlNodeCollection = doc.DocumentNode.SelectNodes("//button")
+        If buttons IsNot Nothing Then
+            For Each b As HtmlNode In buttons
+                b.Remove()
             Next
         End If
 

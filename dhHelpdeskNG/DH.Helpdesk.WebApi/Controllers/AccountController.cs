@@ -35,6 +35,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         {
             _masterDataService = masterDataService;
         }
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<HttpResponseMessage> Login([FromBody] LoginUserInputModel model)
