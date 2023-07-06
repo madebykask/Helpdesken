@@ -1,5 +1,6 @@
 ﻿using log4net.Core;
 using RestSharp;
+using RestSharp.Authenticators;
 using RestSharp.Authenticators.OAuth2;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,11 @@ namespace DH.Helpdesk.SCCM
 {
     public class Request
     {
+
+        static readonly log4net.ILog log =
+    log4net.LogManager.GetLogger
+    (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 
         private string BaseURL { get; } = System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Base"].ToString();
 
@@ -29,9 +35,18 @@ namespace DH.Helpdesk.SCCM
 
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-            //Setup the client
-            client = new RestClient(BaseURL);
-            client.Authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(Token, "Bearer");
+            var authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(Token, "Bearer");
+
+            var options = new RestClientOptions(BaseURL)
+            {
+                Authenticator = authenticator
+            };
+
+            var localClient = new RestClient(options);
+
+            client = localClient;
+
+
 
             //Declare the token
             this.Token = Token;
@@ -46,7 +61,13 @@ namespace DH.Helpdesk.SCCM
 
                 System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
+                log.Info($"baseurl: {BaseURL}");
+                log.Info($"Attempting GET request to: {endPath}");
+
+
                 var request = new RestRequest(endPath, Method.Get);
+
+                log.Info($"Executing GET request...");
 
                 Task<RestResponse> t = client.ExecuteAsync(request);
 
@@ -54,7 +75,17 @@ namespace DH.Helpdesk.SCCM
             }
             catch (Exception ex)
             {
-                throw ex;
+                log.Error($"Exception occurred in GET request to: {endPath}");
+                log.Error($"Exception Message: {ex.Message}");
+                log.Error($"Exception StackTrace: {ex.StackTrace}");
+
+                if (ex.InnerException != null)
+                {
+                    log.Error($"Inner Exception Message: {ex.InnerException.Message}");
+                    log.Error($"Inner Exception StackTrace: {ex.InnerException.StackTrace}");
+                }
+
+                throw;
             }
 
 

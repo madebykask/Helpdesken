@@ -15,6 +15,7 @@ using DH.Helpdesk.SCCM.Other;
 using System.Threading;
 using System.Windows.Forms;
 using System.Net;
+using RestSharp;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
@@ -64,23 +65,24 @@ namespace DH.Helpdesk.SCCM
 
             TokenUtility(token);
 
-            log.Info(token);
-
 
             try
             {
                 //Fetch the data ASYNC
                 log.Info("Fetch the data ASYNC");
-                var result = FetchBaseData(token).Result.ToList();
+                var result = FetchBaseData(token).Result;
 
                 //Check if fetch was ok
-                if (!FetchIsOK(result))
+                var resultList = new List<RestResponse>();
+                resultList.Add(result);
+                
+                if (!FetchIsOK(resultList))
                 {
                     throw new Exception("Fetch was not ok");
                 }
 
                 //Parse the data
-                var rSystemWrapper = JsonConvert.DeserializeObject<GenericValueWrapper<RSystem>>(result[0].Content).value;
+                var rSystemWrapper = JsonConvert.DeserializeObject<GenericValueWrapper<RSystem>>(result.Content).value;
 
                 //Limit the data
                 var setting_Limit_Devices = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["Setting_Limit_Devices"].ToString());
@@ -134,7 +136,7 @@ namespace DH.Helpdesk.SCCM
             catch (Exception ex)
             {
                 log.Info(ex.StackTrace);
-                throw ex;
+                throw;
             }
             
 
@@ -196,7 +198,7 @@ namespace DH.Helpdesk.SCCM
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
             
 
@@ -719,7 +721,7 @@ namespace DH.Helpdesk.SCCM
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
             
 
@@ -790,20 +792,43 @@ namespace DH.Helpdesk.SCCM
             return true;
         }
 
-        private static async Task<IEnumerable<RestSharp.RestResponse>> FetchBaseData(string token)
+        private static async Task<RestSharp.RestResponse> FetchBaseData(string token)
         {
             try
             {
                 //Fetch everything
                 Task<RestSharp.RestResponse> RSystemWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString());
 
-                var result = await Task.WhenAll(RSystemWrapper);
+                var result = await RSystemWrapper;
+
+                log.Info($"Fetch completed. Result Status: {result.ResponseStatus}");
+                log.Info($"Result Content: {result.Content}");
+
+                // Log error details if the response indicates a failure
+                if (result.ResponseStatus != ResponseStatus.Completed)
+                {
+                    log.Error($"Error occurred while fetching. Status: {result.ResponseStatus}");
+
+                    if (result.ErrorException != null)
+                    {
+                        log.Error($"Error Message: {result.ErrorException.Message}");
+                        log.Error($"Error StackTrace: {result.ErrorException.StackTrace}");
+
+                        if (result.ErrorException.InnerException != null)
+                        {
+                            log.Error($"Inner Error Message: {result.ErrorException.InnerException.Message}");
+                            log.Error($"Inner Error StackTrace: {result.ErrorException.InnerException.StackTrace}");
+                        }
+                    }
+                }
+
+
 
                 return result;
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
 
 
@@ -849,7 +874,7 @@ namespace DH.Helpdesk.SCCM
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
             
             
@@ -868,7 +893,7 @@ namespace DH.Helpdesk.SCCM
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
 
         }
