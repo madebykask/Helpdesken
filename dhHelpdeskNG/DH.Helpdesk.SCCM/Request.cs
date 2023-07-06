@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +27,8 @@ namespace DH.Helpdesk.SCCM
                 throw new Exception("BaseURL is not valid");
             }
 
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             //Setup the client
             client = new RestClient(BaseURL);
             client.Authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(Token, "Bearer");
@@ -40,6 +43,8 @@ namespace DH.Helpdesk.SCCM
 
             try
             {
+
+                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
                 var request = new RestRequest(endPath, Method.Get);
 

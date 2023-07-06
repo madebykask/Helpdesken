@@ -45,6 +45,8 @@ namespace DH.Helpdesk.SCCM
         
         private static void Run()
         {
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             //Get the configuration object
             ADALConfiguration ADALConfiguration = GetConfiguration();
 
@@ -61,8 +63,10 @@ namespace DH.Helpdesk.SCCM
             string token = GetToken(ADALConfiguration);
 
             TokenUtility(token);
-   
-            
+
+            log.Info(token);
+
+
             try
             {
                 //Fetch the data ASYNC
@@ -831,7 +835,6 @@ namespace DH.Helpdesk.SCCM
             //Get all devices
             try
             {
-                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
                 Request request = new Request(token);
                 var response = request.Get(endPath);
