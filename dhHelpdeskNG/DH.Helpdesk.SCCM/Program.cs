@@ -14,6 +14,7 @@ using DH.Helpdesk.SCCM.DB;
 using DH.Helpdesk.SCCM.Other;
 using System.Threading;
 using System.Windows.Forms;
+using System.Net;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
@@ -830,6 +831,8 @@ namespace DH.Helpdesk.SCCM
             //Get all devices
             try
             {
+                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
                 Request request = new Request(token);
                 var response = request.Get(endPath);
 
