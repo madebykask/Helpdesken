@@ -16,6 +16,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Net;
 using RestSharp;
+using System.Net.Http;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
@@ -44,7 +45,7 @@ namespace DH.Helpdesk.SCCM
         }
 
         
-        private static void Run()
+        private async static void Run()
         {
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
@@ -73,7 +74,7 @@ namespace DH.Helpdesk.SCCM
                 var result = FetchBaseData(token).Result;
 
                 //Check if fetch was ok
-                var resultList = new List<RestResponse>();
+                var resultList = new List<HttpResponseMessage>();
                 resultList.Add(result);
                 
                 if (!FetchIsOK(resultList))
@@ -82,7 +83,7 @@ namespace DH.Helpdesk.SCCM
                 }
 
                 //Parse the data
-                var rSystemWrapper = JsonConvert.DeserializeObject<GenericValueWrapper<RSystem>>(result.Content).value;
+                var rSystemWrapper = JsonConvert.DeserializeObject<GenericValueWrapper<RSystem>>(await result.Content.ReadAsStringAsync()).value;
 
                 //Limit the data
                 var setting_Limit_Devices = Int32.Parse(System.Configuration.ConfigurationManager.AppSettings["Setting_Limit_Devices"].ToString());
@@ -475,7 +476,7 @@ namespace DH.Helpdesk.SCCM
                         }
 
 
-                        var wrapper = FormWrapper(computerAdditionalData);
+                        var wrapper = FormWrapper(computerAdditionalData).Result;
 
 
                         //Create the object
@@ -729,61 +730,52 @@ namespace DH.Helpdesk.SCCM
         }
 
 
-        private static Wrapper FormWrapper(List<RestSharp.RestResponse> restResponses)
+        private static async Task<Wrapper> FormWrapper(List<HttpResponseMessage> httpResponses)
         {
-
-
             Wrapper wrapper = new Wrapper()
             {
-                ComputerSystem = JsonConvert.DeserializeObject<GenericValueWrapper<ComputerSystem>>(restResponses[0].Content),
-                OperatingSystem = JsonConvert.DeserializeObject<GenericValueWrapper<Entities.OperatingSystem>>(restResponses[1].Content),
-                PCBios = JsonConvert.DeserializeObject<GenericValueWrapper<PCBios>>(restResponses[2].Content),
-                VideoControllerData = JsonConvert.DeserializeObject<GenericValueWrapper<VideoControllerData>>(restResponses[3].Content),
-                X86PCMemory = JsonConvert.DeserializeObject<GenericValueWrapper<X86PCMemory>>(restResponses[4].Content),
-                Enclosure = JsonConvert.DeserializeObject<GenericValueWrapper<Enclosure>>(restResponses[5].Content),
-                Processor = JsonConvert.DeserializeObject<GenericValueWrapper<Processor>>(restResponses[6].Content),
-                NetworkAdapter = JsonConvert.DeserializeObject<GenericValueWrapper<NetworkAdapter>>(restResponses[7].Content),
-                NetworkAdapterConfiguration = JsonConvert.DeserializeObject<GenericValueWrapper<NetworkAdapterConfiguration>>(restResponses[8].Content),
-                SoundDevice = JsonConvert.DeserializeObject<GenericValueWrapper<SoundDevice>>(restResponses[9].Content),
-                Programs = JsonConvert.DeserializeObject<GenericValueWrapper<Programs>>(restResponses[10].Content),
-                LogicalDisk = JsonConvert.DeserializeObject<GenericValueWrapper<LogicalDisk>>(restResponses[11].Content),
+                ComputerSystem = JsonConvert.DeserializeObject<GenericValueWrapper<ComputerSystem>>(await httpResponses[0].Content.ReadAsStringAsync()),
+                OperatingSystem = JsonConvert.DeserializeObject<GenericValueWrapper<Entities.OperatingSystem>>(await httpResponses[1].Content.ReadAsStringAsync()),
+                PCBios = JsonConvert.DeserializeObject<GenericValueWrapper<PCBios>>(await httpResponses[2].Content.ReadAsStringAsync()),
+                VideoControllerData = JsonConvert.DeserializeObject<GenericValueWrapper<VideoControllerData>>(await httpResponses[3].Content.ReadAsStringAsync()),
+                X86PCMemory = JsonConvert.DeserializeObject<GenericValueWrapper<X86PCMemory>>(await httpResponses[4].Content.ReadAsStringAsync()),
+                Enclosure = JsonConvert.DeserializeObject<GenericValueWrapper<Enclosure>>(await httpResponses[5].Content.ReadAsStringAsync()),
+                Processor = JsonConvert.DeserializeObject<GenericValueWrapper<Processor>>(await httpResponses[6].Content.ReadAsStringAsync()),
+                NetworkAdapter = JsonConvert.DeserializeObject<GenericValueWrapper<NetworkAdapter>>(await httpResponses[7].Content.ReadAsStringAsync()),
+                NetworkAdapterConfiguration = JsonConvert.DeserializeObject<GenericValueWrapper<NetworkAdapterConfiguration>>(await httpResponses[8].Content.ReadAsStringAsync()),
+                SoundDevice = JsonConvert.DeserializeObject<GenericValueWrapper<SoundDevice>>(await httpResponses[9].Content.ReadAsStringAsync()),
+                Programs = JsonConvert.DeserializeObject<GenericValueWrapper<Programs>>(await httpResponses[10].Content.ReadAsStringAsync()),
+                LogicalDisk = JsonConvert.DeserializeObject<GenericValueWrapper<LogicalDisk>>(await httpResponses[11].Content.ReadAsStringAsync()),
             };
 
             return wrapper;
-
         }
 
 
-        private static bool FetchIsOK(List<RestSharp.RestResponse> restResponses)
+        private static bool FetchIsOK(List<HttpResponseMessage> httpResponses)
         {
-            foreach (var restResponse in restResponses)
+            foreach (var httpResponse in httpResponses)
             {
-                if (restResponse.StatusCode != System.Net.HttpStatusCode.OK)
+                if (!httpResponse.IsSuccessStatusCode)
                 {
-                    log.Error($"Error Exception: {restResponse.ErrorException}! Status Code: {restResponse.StatusCode}! Response Status: {restResponse.ResponseStatus}! ErrorMessage: {restResponse.ErrorMessage}!");
+                    log.Error($"Status Code: {httpResponse.StatusCode}");
 
                     // Log headers, if any.
-                    if (restResponse.Headers != null)
+                    if (httpResponse.Headers != null)
                     {
-                        log.Error($"Response Headers: {string.Join(", ", restResponse.Headers.Select(h => $"{h.Name}: {h.Value}"))}");
+                        log.Error($"Response Headers: {string.Join(", ", httpResponse.Headers.Select(h => $"{h.Key}: {string.Join(", ", h.Value)}"))}");
                     }
 
                     // Log the request details.
-                    if (restResponse.Request != null)
+                    if (httpResponse.RequestMessage != null)
                     {
-                        log.Error($"Request Resource: {restResponse.Request.Resource}! Request Method: {restResponse.Request.Method}!");
+                        log.Error($"Request Uri: {httpResponse.RequestMessage.RequestUri}! Request Method: {httpResponse.RequestMessage.Method}!");
 
-                        // Log request parameters.
-                        if (restResponse.Request.Parameters != null)
+                        // Log request headers.
+                        if (httpResponse.RequestMessage.Headers != null)
                         {
-                            log.Error($"Request Parameters: {string.Join(", ", restResponse.Request.Parameters.Select(p => $"{p.Name}: {p.Value}"))}");
+                            log.Error($"Request Headers: {string.Join(", ", httpResponse.RequestMessage.Headers.Select(h => $"{h.Key}: {string.Join(", ", h.Value)}"))}");
                         }
-                    }
-
-                    // Log the raw response content.
-                    if (!string.IsNullOrWhiteSpace(restResponse.Content))
-                    {
-                        log.Error($"Response Content: {restResponse.Content}");
                     }
 
                     return false;
@@ -792,76 +784,69 @@ namespace DH.Helpdesk.SCCM
             return true;
         }
 
-        private static async Task<RestSharp.RestResponse> FetchBaseData(string token)
+        private static async Task<HttpResponseMessage> FetchBaseData(string token)
         {
             try
             {
-                //Fetch everything
-                Task<RestSharp.RestResponse> RSystemWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString());
+                // Fetch everything
+                Task<HttpResponseMessage> RSystemWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString());
 
                 var result = await RSystemWrapper;
 
-                log.Info($"Fetch completed. Result Status: {result.ResponseStatus}");
-                log.Info($"Result Content: {result.Content}");
+                log.Info($"Fetch completed. Result Status: {result.StatusCode}");
+                log.Info($"Result Content: {await result.Content.ReadAsStringAsync()}");
 
                 // Log error details if the response indicates a failure
-                if (result.ResponseStatus != ResponseStatus.Completed)
+                if (!result.IsSuccessStatusCode)
                 {
-                    log.Error($"Error occurred while fetching. Status: {result.ResponseStatus}");
-
-                    if (result.ErrorException != null)
-                    {
-                        log.Error($"Error Message: {result.ErrorException.Message}");
-                        log.Error($"Error StackTrace: {result.ErrorException.StackTrace}");
-
-                        if (result.ErrorException.InnerException != null)
-                        {
-                            log.Error($"Inner Error Message: {result.ErrorException.InnerException.Message}");
-                            log.Error($"Inner Error StackTrace: {result.ErrorException.InnerException.StackTrace}");
-                        }
-                    }
+                    log.Error($"Error occurred while fetching. Status: {result.StatusCode}");
                 }
-
-
 
                 return result;
             }
             catch (Exception ex)
             {
+                log.Error($"Error Message: {ex.Message}");
+                log.Error($"Error StackTrace: {ex.StackTrace}");
+
+                if (ex.InnerException != null)
+                {
+                    log.Error($"Inner Error Message: {ex.InnerException.Message}");
+                    log.Error($"Inner Error StackTrace: {ex.InnerException.StackTrace}");
+                }
+
                 throw;
             }
-
-
         }
 
-        private static async Task<IEnumerable<RestSharp.RestResponse>> FetchAdditionalData(string token, long resourceId)
+        private static async Task<IEnumerable<HttpResponseMessage>> FetchAdditionalData(string token, long resourceId)
         {
             try
             {
                 //Fetch everything
-                Task<RestSharp.RestResponse> computerSystemWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Computer_System"].ToString());
+                Task<HttpResponseMessage> computerSystemWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Computer_System"].ToString());
 
-                Task<RestSharp.RestResponse> operatingSystemWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Operating_System"].ToString());
+                Task<HttpResponseMessage> operatingSystemWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Operating_System"].ToString());
 
-                Task<RestSharp.RestResponse> PCBiosWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_PC_BIOS"].ToString());
+                Task<HttpResponseMessage> PCBiosWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_PC_BIOS"].ToString());
 
-                Task<RestSharp.RestResponse> videoControllerDataWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Video_Controller"].ToString());
+                Task<HttpResponseMessage> videoControllerDataWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Video_Controller"].ToString());
 
-                Task<RestSharp.RestResponse> X86PCMemoryWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_X86_PC_Memory"].ToString());
+                Task<HttpResponseMessage> X86PCMemoryWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_X86_PC_Memory"].ToString());
 
-                Task<RestSharp.RestResponse> enclosureWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Enclosure"].ToString());
+                Task<HttpResponseMessage> enclosureWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Enclosure"].ToString());
 
-                Task<RestSharp.RestResponse> processorWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Processor"].ToString());
+                Task<HttpResponseMessage> processorWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Processor"].ToString());
 
-                Task<RestSharp.RestResponse> networkAdapterWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Network_Adapter"].ToString());
+                Task<HttpResponseMessage> networkAdapterWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Network_Adapter"].ToString());
 
-                Task<RestSharp.RestResponse> networkAdapterConfigurationWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Network_Adapter_Configuration"].ToString());
+                Task<HttpResponseMessage> networkAdapterConfigurationWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Network_Adapter_Configuration"].ToString());
 
-                Task<RestSharp.RestResponse> soundDeviceWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Sound_Device"].ToString());
+                Task<HttpResponseMessage> soundDeviceWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Sound_Device"].ToString());
 
-                Task<RestSharp.RestResponse> programsWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Add_Remove_Programs"].ToString());
+                Task<HttpResponseMessage> programsWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Add_Remove_Programs"].ToString());
 
-                Task<RestSharp.RestResponse> logicalDisksWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Logical_Disk"].ToString());
+                Task<HttpResponseMessage> logicalDisksWrapper = FetchDataSingular(token, System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_R_System"].ToString() + "(" + resourceId + ")" + "/" + System.Configuration.ConfigurationManager.AppSettings["SCCM_URL_Logical_Disk"].ToString());
 
                 Stopwatch stopwatch = new Stopwatch();
 
@@ -876,18 +861,16 @@ namespace DH.Helpdesk.SCCM
             {
                 throw;
             }
-            
-            
+
+
         }
 
-        private static Task<RestSharp.RestResponse> FetchDataSingular(string token, string endPath)
+        private static async Task<HttpResponseMessage> FetchDataSingular(string token, string endPath)
         {
-            //Get all devices
             try
             {
-
                 Request request = new Request(token);
-                var response = request.Get(endPath);
+                var response = await request.Get(endPath);
 
                 return response;
             }
@@ -895,7 +878,6 @@ namespace DH.Helpdesk.SCCM
             {
                 throw;
             }
-
         }
 
 
