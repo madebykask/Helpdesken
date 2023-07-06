@@ -759,6 +759,31 @@ namespace DH.Helpdesk.SCCM
                 if (restResponse.StatusCode != System.Net.HttpStatusCode.OK)
                 {
                     log.Error($"Error Exception: {restResponse.ErrorException}! Status Code: {restResponse.StatusCode}! Response Status: {restResponse.ResponseStatus}! ErrorMessage: {restResponse.ErrorMessage}!");
+
+                    // Log headers, if any.
+                    if (restResponse.Headers != null)
+                    {
+                        log.Error($"Response Headers: {string.Join(", ", restResponse.Headers.Select(h => $"{h.Name}: {h.Value}"))}");
+                    }
+
+                    // Log the request details.
+                    if (restResponse.Request != null)
+                    {
+                        log.Error($"Request Resource: {restResponse.Request.Resource}! Request Method: {restResponse.Request.Method}!");
+
+                        // Log request parameters.
+                        if (restResponse.Request.Parameters != null)
+                        {
+                            log.Error($"Request Parameters: {string.Join(", ", restResponse.Request.Parameters.Select(p => $"{p.Name}: {p.Value}"))}");
+                        }
+                    }
+
+                    // Log the raw response content.
+                    if (!string.IsNullOrWhiteSpace(restResponse.Content))
+                    {
+                        log.Error($"Response Content: {restResponse.Content}");
+                    }
+
                     return false;
                 }
             }
