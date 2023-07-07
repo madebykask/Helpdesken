@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace DH.Helpdesk.SCCM
 {
@@ -33,7 +34,6 @@ namespace DH.Helpdesk.SCCM
                 throw new Exception("BaseURL is not valid");
             }
 
-            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             // Initialize a new HttpClient instance
             client = new HttpClient
@@ -45,6 +45,7 @@ namespace DH.Helpdesk.SCCM
             // Set the Authorization header with the token
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
+
             this.Token = token;
         }
 
@@ -54,7 +55,6 @@ namespace DH.Helpdesk.SCCM
         {
             try
             {
-                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
                 log.Info($"baseurl: {BaseURL}");
                 log.Info($"Attempting GET request to: {endPath}");

@@ -17,6 +17,7 @@ using System.Windows.Forms;
 using System.Net;
 using RestSharp;
 using System.Net.Http;
+using System.Web;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
@@ -47,7 +48,6 @@ namespace DH.Helpdesk.SCCM
         
         private async static void Run()
         {
-            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             //Get the configuration object
             ADALConfiguration ADALConfiguration = GetConfiguration();
