@@ -171,7 +171,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 return model;
             }
-
+            //Todo - Ta första bästa kund om det finns flera kunder
             var customersSettings = this.userService.GetUserCustomersSettings(SessionFacade.CurrentUser.Id);
             var currentCustomerSettings = customersSettings.FirstOrDefault(s => s.CustomerId == this.workContext.Customer.CustomerId);
             var bulletinBoardWGRestriction = currentCustomerSettings.BulletinBoardWGRestriction;
