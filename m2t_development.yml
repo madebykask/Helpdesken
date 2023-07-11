@@ -32,6 +32,27 @@ steps:
       Write-Host "##vso[task.setvariable variable=ProjectBuildNumber;]$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(SourceVersionShort)"
       Write-Host "##vso[build.updatebuildnumber]$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(SourceVersionShort)"
 
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: Assembly-Info-NetFramework@2
+  inputs:
+    Path: '$(Build.SourcesDirectory)'
+    FileNames: |
+      **\CommonAssembly\SharedAssemblyInfo.cs
+      **\CommonAssembly\SharedAssemblyInfo.vb
+    InsertAttributes: false
+    FileEncoding: 'auto'
+    WriteBOM: false
+    InformationalVersion: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(SourceVersionShort)'
+    FileVersionNumber: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(SourceVersionShort)'
+    LogLevel: 'verbose'
+    FailOnWarning: false
+    DisableTelemetry: false
+
 - task: MSBuild@1
   displayName: Build DH.Helpdesk.Mail2Ticket
   inputs:
