@@ -21,6 +21,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: 'echo $(Build.SourceVersionMessage)'
+
 # name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(Build.SourceVersion)
 
 # pool:
