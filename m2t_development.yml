@@ -10,7 +10,6 @@ pool:
 
 variables:
   solution: '**/DH.Helpdesk.sln'
-  solutionExtCaseApi: '**/ExtendedCase/ExtendedCase.Api.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   group: build-variables
