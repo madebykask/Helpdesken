@@ -56,12 +56,12 @@ namespace DH.Helpdesk.SCCM
             try
             {
 
-                log.Info($"baseurl: {BaseURL}");
-                log.Info($"Attempting GET request to: {endPath}");
+                //log.Info($"baseurl: {BaseURL}");
+                //log.Info($"Attempting GET request to: {endPath}");
 
                 var response = await client.GetAsync(endPath);
 
-                log.Info($"GET request completed. Result Status: {response.StatusCode}");
+                //log.Info($"GET request completed. Result Status: {response.StatusCode}");
 
                 return response;
             }

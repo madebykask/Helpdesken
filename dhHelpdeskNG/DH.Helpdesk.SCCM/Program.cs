@@ -793,8 +793,8 @@ namespace DH.Helpdesk.SCCM
 
                 var result = await RSystemWrapper;
 
-                log.Info($"Fetch completed. Result Status: {result.StatusCode}");
-                log.Info($"Result Content: {await result.Content.ReadAsStringAsync()}");
+                //log.Info($"Fetch completed. Result Status: {result.StatusCode}");
+                //log.Info($"Result Content: {await result.Content.ReadAsStringAsync()}");
 
                 // Log error details if the response indicates a failure
                 if (!result.IsSuccessStatusCode)
