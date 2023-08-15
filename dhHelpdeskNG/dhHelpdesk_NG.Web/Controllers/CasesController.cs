@@ -1860,7 +1860,16 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (SessionFacade.CurrentUser != null)
             {
-
+                var userDeps = _departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
+                if (userDeps != null && userDeps.Count > 0)
+                {
+                    //Check if the user has access to the case due to restrictions by department
+                    if (!userDeps.Any(x => x.Id == c.Department_Id))
+                    {
+                        return new RedirectResult("~/Error/Unathorized");
+                    }
+                }
+                //Instead of this we use the UserCasePermissions attribute
                 //var isAuthorised = _userService.VerifyUserCasePermissions(SessionFacade.CurrentUser, id);
                 //if(!isAuthorised)
                 //{
