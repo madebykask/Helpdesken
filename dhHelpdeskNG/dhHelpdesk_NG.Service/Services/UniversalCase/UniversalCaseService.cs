@@ -66,6 +66,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         private readonly IOUService _oUService;
         private readonly IConditionService _conditionService;
         private readonly ICaseDeletionService _caseDeletionService;
+        private readonly IStatusService _statusService;
         private IBusinessModelToEntityMapper<CaseModel, Case> _caseModelToEntityMapper;
 
         public UniversalCaseService(ICaseRepository caseRepository,
@@ -87,6 +88,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                                     IOUService oUService,
                                     IConditionService conditionService,
                                     ICaseDeletionService caseDeletionService,
+                                    IStatusService statusService,
                                     IBusinessModelToEntityMapper<CaseModel, Case> caseModelToEntityMapper
             )
         {
@@ -110,6 +112,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             _conditionService = conditionService;
             _caseModelToEntityMapper = caseModelToEntityMapper;
             _caseDeletionService = caseDeletionService;
+            _statusService = statusService;
         }
 
         public CaseModel GetCase(int id)
@@ -182,8 +185,8 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             caseNumber = -1;
 
             var res = new ProcessResult("Save Case Check Split");
-
-            if (caseModel.CaseSolution_Id.HasValue && isNewCase)
+            var status = _statusService.GetStatus(caseModel.Status_Id.Value);
+            if (caseModel.CaseSolution_Id.HasValue && isNewCase && status.Name != "Checklista Draft (Test)")
             {
                 var caseSolution = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id.Value);
 
