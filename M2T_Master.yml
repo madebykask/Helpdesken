@@ -1,0 +1,68 @@
+trigger:
+  tags:
+    include:
+    - Release-*
+
+name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(release.versionRevision).$(Build.SourceVersion)
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/DH.Helpdesk.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  group: build-variables
+  patch: $[counter(format('{0}.{1}', variables['release.versionMajor'], variables['release.versionMinor'], variables['release.versionSubMinor']), 0)]
+
+steps:
+- task: CmdLine@2
+  inputs:
+    script: |
+      echo $(Build.SourceVersion)
+      set sourceVersion=$(Build.SourceVersion)
+      set sourceVersionSubstring=%sourceVersion:~0,7%
+      echo %sourceVersionSubstring%
+      echo ##vso[task.setvariable variable=SourceVersionShort]%sourceVersionSubstring%
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "##vso[task.setvariable variable=myVar;]foo"
+      Write-Host "##vso[task.setvariable variable=ProjectBuildNumber;]$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(release.versionRevision).$(SourceVersionShort)"
+      Write-Host "##vso[build.updatebuildnumber]$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(release.versionRevision).$(SourceVersionShort)"
+
+
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: Assembly-Info-NetFramework@2
+  inputs:
+    Path: '$(Build.SourcesDirectory)'
+    FileNames: |
+      **\CommonAssembly\SharedAssemblyInfo.cs
+      **\CommonAssembly\SharedAssemblyInfo.vb
+    InsertAttributes: false
+    FileEncoding: 'auto'
+    WriteBOM: false
+    InformationalVersion: '$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(release.versionRevision).$(SourceVersionShort)'
+    FileVersionNumber: '$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(release.versionRevision).$(SourceVersionShort)'
+    LogLevel: 'verbose'
+    FailOnWarning: false
+    DisableTelemetry: false
+
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.Mail2Ticket
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.Mail2Ticket/DH.Helpdesk.Mail2Ticket.vbproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Mail2Ticket"'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.Mail2Ticket
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Mail2Ticket' 
+    artifactName: 'DH.Helpdesk-Mail2Ticket'

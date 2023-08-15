@@ -16,6 +16,8 @@ using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Extensions.Lists;
 using DH.Helpdesk.Domain.MailTemplates;
 using DH.Helpdesk.Common.Constants;
+using System.Collections;
+using PostSharp;
 
 namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 {
@@ -451,42 +453,118 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
         public string GetExternalLogTextHistory(Case newCase, string helpdeskMailFromAdress, CaseLog log)
         {
             string extraBody = "";
-            var oldLogs = _logService.GetLogsByCaseId(newCase.Id).Where(x => x.Case_Id == log.CaseId && x.Id != log.Id).OrderByDescending(z => z.Id).ToList();
-            if (oldLogs.Any())
+            try
             {
-                foreach (var post in oldLogs)
+                
+                string userEmailToShow = helpdeskMailFromAdress;
+                var curCustomer = _customerService.GetCustomer(newCase.Customer_Id);
+                var customerTimeZone = TimeZoneInfo.FindSystemTimeZoneById(curCustomer.TimeZoneId);
+                var correctedDate = new DateTime();
+                var firstEmail = "";
+                var emailLogs = _emailLogRepository.GetEmailLogsByCaseId(newCase.Id).OrderByDescending(z => z.Id).ToList();
+                if(emailLogs.Any())
                 {
-                    //checking if external lognote is not empty
-                    if (post.Text_External != null && post.Text_External.Replace("<p><br></p>", "") != "")
+                    if (!String.IsNullOrEmpty(emailLogs.Where(x => x.MailId == 1).FirstOrDefault()?.From))
                     {
-                        if(post.Text_External.EndsWith("<div><p><b>"))
-                        {
-                            post.Text_External = post.Text_External.Replace("<div><p><b>", "");
-                        }
-                        post.Text_External = post.Text_External.Replace("<p><br></p>", "").Replace("<p>\r\n</p>", "").Replace("<o:p>&nbsp;</o:p>", "");
-                        //Get the user that not should be the same as the performer. If so, replacing with helpdesk-email.                       
-                        User regUser = post.User_Id != null ? _userService.GetUser((int)post.User_Id) : new User();
-                        string userEmailToShow = (regUser.Id == newCase.Performer_User_Id) ? helpdeskMailFromAdress : regUser.Email;
-                        //From M2T the Logpost User_Id is Null, and therefore we use RegUser
-                        if(String.IsNullOrEmpty(userEmailToShow) && !String.IsNullOrEmpty(post.RegUser))
-                        {
-                            userEmailToShow = post.RegUser;
-                        }
-                        var curCustomer = _customerService.GetCustomer(newCase.Customer_Id);
-                        var customerTimeZone = TimeZoneInfo.FindSystemTimeZoneById(curCustomer.TimeZoneId);
+                        firstEmail = emailLogs.Where(x => x.MailId == 1).FirstOrDefault().From;
+                    }
+                    else
+                    {
+                        firstEmail = "";
+                    }
 
-                        //Get corrected date and time for the customer
-                        var correctedDate = TimeZoneInfo.ConvertTimeFromUtc(post.LogDate, customerTimeZone);
+                }
+                else
+                {
+                    firstEmail = "";
+                }
+                var oldLogs = _logService.GetLogsByCaseId(newCase.Id).Where(x => x.Case_Id == log.CaseId && x.Id != log.Id).OrderByDescending(z => z.Id).ToList();
+                if (oldLogs.Any())
+                {
+                    foreach (var post in oldLogs)
+                    {
+                        //checking if external lognote is not empty
+                        if (post.Text_External != null && post.Text_External.Replace("<p><br></p>", "") != "")
+                        {
+                            if (post.Text_External.EndsWith("<div><p><b>"))
+                            {
+                                post.Text_External = post.Text_External.Replace("<div><p><b>", "");
+                            }
+                            post.Text_External = post.Text_External.Replace("<p><br></p>", "").Replace("<p>\r\n</p>", "").Replace("<o:p>&nbsp;</o:p>", "");
 
-                        extraBody += "<br /><hr>";
-                        extraBody += "<div id=\"externalLogNotesHistory\">";
-                        extraBody += "<font face=\"verdana\" size=\"2\"><strong>" + correctedDate.ToString("g") +"</strong>";
-                        extraBody += "<br />" + userEmailToShow ;                       
-                        extraBody += "<br />" + post.Text_External + "</font></div>";
+                            //Here i want to see if oldLogs contains an id corresponding LogId in EmailLog
+                            var emailLogExists = emailLogs.FirstOrDefault(x => x.Log_Id != null && x.Log_Id == post.Id);
+
+                            if (!String.IsNullOrEmpty(post.RegUser))
+                            {
+                                userEmailToShow = post.RegUser;
+                            }
+                            else if (emailLogExists != null && !String.IsNullOrEmpty(emailLogExists.From))
+                            {
+                                userEmailToShow = emailLogExists.From;
+                            }
+                            else
+                            {
+                                userEmailToShow = helpdeskMailFromAdress;
+                            }
+                            //Get corrected date and time for the customer
+                            correctedDate = TimeZoneInfo.ConvertTimeFromUtc(post.LogDate, customerTimeZone);
+
+                            extraBody += "<br /><hr>";
+                            extraBody += "<div id=\"externalLogNotesHistory\">";
+                            extraBody += "<font face=\"verdana\" size=\"2\"><strong>" + correctedDate.ToString("g") + "</strong>";
+                            extraBody += "<br />" + userEmailToShow;
+                            extraBody += "<br />" + post.Text_External + "</font></div>";
+                        }
+                    }
+                   
+                }
+                //Plus Extra body with Description from Case
+                //*Reported by is descided by this rule:
+                //1.User_ID - But never show personal emails, instead look for the first email in emaillogs with mailId 1
+                //2.RegUserName
+                //3.RegUserID
+                if (newCase.User_Id != null)
+                {
+                    if (!String.IsNullOrEmpty(firstEmail))
+                    {
+                        userEmailToShow = firstEmail;
+                    }
+                    else
+                    {
+                        userEmailToShow = "";
                     }
                 }
+                else if (!String.IsNullOrEmpty(newCase.RegUserName))
+                {
+                    userEmailToShow = newCase.RegUserName;
+                }
+                else if (newCase.RegUserId != null)
+                {
+                    //Check this
+                    userEmailToShow = newCase.RegUserId;
+                }
+                else
+                {
+                    userEmailToShow = "";
+                }
+
+                correctedDate = TimeZoneInfo.ConvertTimeFromUtc(newCase.RegTime, customerTimeZone);
+                var description = newCase.Description.Replace("<p><br></p>", "").Replace("<p>\r\n</p>", "").Replace("<o:p>&nbsp;</o:p>", "");
+                extraBody += "<br /><hr>";
+                extraBody += "<div id=\"externalLogNotesDescription\">";
+                extraBody += "<font face=\"verdana\" size=\"2\"><strong>" + correctedDate.ToString("g") + "</strong>";
+                extraBody += "<br />" + userEmailToShow;
+                extraBody += "<br />" + description + "</font></div>";
+                return extraBody;
+
             }
-            return extraBody;
+            catch (Exception ex)
+            {
+                //Add to error log?
+                return extraBody;
+            }
         }
+
     }
 }

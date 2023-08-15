@@ -368,16 +368,19 @@
             if(order.OU_Id.HasValue)
             {
                 var oU = _ouService.GetOU((int)order.OU_Id);
-                if (oU.Parent_OU_Id.HasValue)
+                if(oU != null)
                 {
-                    var ouParent = _ouService.GetOU((int)oU.Parent_OU_Id);
-                    ouName = ouParent.Name + " - " + oU.Name;
+                    if (oU.Parent_OU_Id.HasValue)
+                    {
+                        var ouParent = _ouService.GetOU((int)oU.Parent_OU_Id);
+                        ouName = ouParent.Name + " - " + oU.Name;
+                    }
+                    else
+                    {
+                        ouName = oU.Name;
+                    }
                 }
-                else
-                {
-                    ouName = oU.Name;
-                }
-                
+
             }
             var salesHeader = new SalesDocSalesHeader();
             salesHeader.CompanyNo = settings.Issuer;
