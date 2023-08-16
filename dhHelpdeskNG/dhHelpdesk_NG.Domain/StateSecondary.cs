@@ -20,6 +20,7 @@
         public int? AutocloseDays { get; set; }
         public int RecalculateWatchDate { get; set; }
         public Guid StateSecondaryGUID { get; set; }
+        public int? FinishingCause_Id { get; set; }
 
         public string AlternativeStateSecondaryName { get; set; }
         /// <summary>StateSecondaryId is used for communication with Extended Case. This value should be the same in all environments.
@@ -30,6 +31,8 @@
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
 
         public virtual MailTemplateEntity MailTemplate { get; set; }
+
+        public virtual FinishingCause FinishingCause { get; set; }  
 
     }
 }
