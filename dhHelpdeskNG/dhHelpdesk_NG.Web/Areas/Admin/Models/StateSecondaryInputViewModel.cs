@@ -13,5 +13,6 @@
         public IList<SelectListItem> WorkingGroups { get; set; }
         public IList<SelectListItem> MailTemplates { get; set; }
         public IList<SelectListItem> ReminderDays { get; set; }
+        public IList<SelectListItem> AutocloseDays { get; set; }
     }
 }

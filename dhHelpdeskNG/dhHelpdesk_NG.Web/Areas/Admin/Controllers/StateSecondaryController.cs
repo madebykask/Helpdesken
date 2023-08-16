@@ -154,11 +154,23 @@
                 });
             }
 
+            var AutocloseMaxDaysCount = 31;
+            List<SelectListItem> sl2 = new List<SelectListItem>();
+            for (int i = 0; i < AutocloseMaxDaysCount; i++)
+            {
+                sl2.Add(new SelectListItem
+                {
+                    Text = i.ToString(),
+                    Value = i.ToString()
+                });
+            }
+
             var model = new StateSecondaryInputViewModel
             {
                 StateSecondary = statesecondary,
                 Customer = customer,
                 ReminderDays = sl,
+                AutocloseDays = sl2,
                 WorkingGroups = this._workingGroupService.GetWorkingGroups(customer.Id).Select(x => new SelectListItem
                 {
                     Text = x.WorkingGroupName,

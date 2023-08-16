@@ -108,7 +108,7 @@
                                     <td>
                                         @Translation.Get("Avsluta automatiskt efter", Enums.TranslationSource.TextTranslation)
                                         &nbsp;
-                                        @Html.DropDownListFor(model => model.StateSecondary.ReminderDays, Model.ReminderDays, new { style = "width: 60px;" })&nbsp;
+                                        @Html.DropDownListFor(model => model.StateSecondary.AutocloseDays, Model.AutocloseDays, new { style = "width: 60px;" })&nbsp;
                                         &nbsp;
                                         @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
                                     </td>
