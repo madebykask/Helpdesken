@@ -81,10 +81,11 @@
                                     <td>
                                         @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="StateSecondary.NoMailToNotifier" @(Model.StateSecondary.NoMailToNotifier == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="StateSecondary.NoMailToNotifier" value="0" />
-                                        &nbsp;@Translation.Get("Skicka mail med extern notering till anmälaren", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="StateSecondary.NoMailToNotifier" @(Model.StateSecondary.NoMailToNotifier == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="StateSecondary.NoMailToNotifier" value="0" />
+                                            &nbsp;@Translation.Get("Skicka mail med extern notering till anmälaren", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
@@ -94,7 +95,19 @@
                                     </td>
                                     <td>
                                         @Translation.Get("Skicka påminnelse efter", Enums.TranslationSource.TextTranslation)
-                                        &nbsp;        
+                                        &nbsp;
+                                        @Html.DropDownListFor(model => model.StateSecondary.ReminderDays, Model.ReminderDays, new { style = "width: 60px;" })&nbsp;
+                                        &nbsp;
+                                        @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.Get("Auto avslut", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Translation.Get("Avsluta automatiskt efter", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;
                                         @Html.DropDownListFor(model => model.StateSecondary.ReminderDays, Model.ReminderDays, new { style = "width: 60px;" })&nbsp;
                                         &nbsp;
                                         @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
@@ -107,8 +120,8 @@
                                     <td class="span9">
                                         @*@Html.DropDownListFor(model => model.StateSecondary.MailTemplate_Id, Model.MailTemplates, "")*@
                                     </td>
-                                        </tr>
-                                    </table>
+                                </tr>
+                            </table>
                                 </div>
                             </div>
                             <h4>@Translation.Get("Regler", Enums.TranslationSource.TextTranslation)</h4>

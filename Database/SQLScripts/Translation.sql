@@ -8391,6 +8391,20 @@ If not exists (select * from tblTextTranslation where text_id = 2141 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2141, 2, 'Include full history')
 GO
 
+If not exists (select * from tbltext where id = 2142)
+	insert into tbltext (id, TextString) VALUES (2142, 'Auto avslut')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2142 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2142, 2, 'Auto close')
+GO
+
+If not exists (select * from tbltext where id = 2143)
+	insert into tbltext (id, TextString) VALUES (2143, 'Avsluta automatiskt efter')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2143 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2143, 2, 'Automatically close after')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')
