@@ -113,6 +113,26 @@
                                         @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
+                                <tr id="divFinishingTypeOuterContainer">
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Avslutsorsak")
+                                    </td>
+                                    <td>
+                                        <div id="divFinishingType" class="btn-group dropdown-menu-parent">
+                                            <div class="btn" id="divBreadcrumbs_FinishingType">
+                                                @(Model.StateSecondary.FinishingCause_Id == null ? Translation.GetCoreTextTranslation("--") : Model.StateSecondary.FinishingCause.Name)
+                                            </div>
+                                            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu subddMenu parentddMenu" style="z-index:99999999999;">
+                                                <li><a href="#">@Translation.GetCoreTextTranslation("--")</a></li>
+                                                @Html.FinishingCauseDropdownButtonString(Model.FinishingCauses)
+                                            </ul>
+                                            @Html.HiddenFor(model => Model.StateSecondary.FinishingCause_Id)
+                                        </div>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td class="span3">
                                         @*@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)*@
@@ -152,4 +172,32 @@
                 </div>
             </div>
         </div>
+
+<script>
+    $(document).ready(function () {
+        var $finishTypeContainer = $('#divFinishingType');
+        var $finishTypeId = $("input[name='StateSecondary.FinishingCause_Id']");
+        var $finishTypeButton = $('#divBreadcrumbs_FinishingType');
+
+        $finishTypeContainer.find('ul.dropdown-menu li a').click(function (e) {
+            e.preventDefault();
+            var value = $(this).attr('value');
+            var text = $(this).text();
+            $finishTypeId.val(value);
+            $finishTypeButton.text(text);
+
+            console.log(value)
+        });
+
+        $("#StateSecondary_AutocloseDays").change(function () {
+            var autocloseDays = parseInt($(this).val(), 10);
+            if (autocloseDays <= 0) {
+                $("#divFinishingTypeOuterContainer").hide();
+                $finishTypeId.val(undefined);
+            } else {
+                $("#divFinishingTypeOuterContainer").show();
+            }
+        }).trigger("change");
+    });
+</script>
 

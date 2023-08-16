@@ -3,11 +3,13 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.FinishingCause;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
+    using DH.Helpdesk.Web.Infrastructure.Helpers;
 
     public class StateSecondaryController : BaseAdminController
     {
@@ -15,19 +17,22 @@
         private readonly IWorkingGroupService _workingGroupService;
         private readonly ICustomerService _customerService;
         private readonly IMailTemplateService _mailTemplateService;
+        private readonly IFinishingCauseService _finishingCauseService;
 
         public StateSecondaryController(
             IStateSecondaryService stateSecondaryService,
             IWorkingGroupService workingGroupService,
             ICustomerService customerService,
             IMailTemplateService mailTemplateService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            IFinishingCauseService finishingCauseService)
             : base(masterDataService)
         {
             this._stateSecondaryService = stateSecondaryService;
             this._workingGroupService = workingGroupService;
             this._customerService = customerService;
             this._mailTemplateService = mailTemplateService;
+            this._finishingCauseService = finishingCauseService;
         }
 
         public JsonResult SetShowOnlyActiveStateSecondariesInAdmin(bool value)
@@ -165,6 +170,8 @@
                 });
             }
 
+
+
             var model = new StateSecondaryInputViewModel
             {
                 StateSecondary = statesecondary,
@@ -181,6 +188,7 @@
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
+                FinishingCauses = _finishingCauseService.GetFinishingCausesWithChilds(statesecondary.Customer_Id).Where(x => x.Merged == false).ToList()
             };
 
             return model;

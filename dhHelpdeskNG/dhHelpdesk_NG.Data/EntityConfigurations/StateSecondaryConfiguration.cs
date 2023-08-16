@@ -26,6 +26,11 @@
                 .HasForeignKey(x => x.MailTemplate_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.FinishingCause)
+                .WithMany()
+                .HasForeignKey(x => x.FinishingCause_Id)
+                .WillCascadeOnDelete(false);
+
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.IncludeInCaseStatistics).IsRequired();
             this.Property(x => x.IsActive).IsRequired().HasColumnName("Status");
