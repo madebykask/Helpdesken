@@ -498,7 +498,21 @@
                                         [#20]
                                     </td>
                                 </tr>
+
                                 @Html.Action("MailTemplateFieldIdentifierRow", new { customerId = Model.Customer.Id, mailTemplateRowName = GlobalEnums.TranslationCaseFields.WatchDate.ToString() });
+
+                                if (Model.MailTemplateLanguage.MailTemplate.MailID == 17)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Auto avslut") @Translation.GetCoreTextTranslation("Dagar")
+                                        </td>
+                                        <td>
+                                            [#80]
+                                        </td>
+                                    </tr>
+                                }
+
                                 <tr>
                                     <th colspan="2">
                                         @Translation.GetCoreTextTranslation("Ärendelogg")
