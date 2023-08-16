@@ -17,6 +17,7 @@
         public int IsDefault { get; set; }
         public int? MailTemplate_Id { get; set; }
         public int? ReminderDays { get; set; }
+        public int? AutocloseDays { get; set; }
         public int RecalculateWatchDate { get; set; }
         public Guid StateSecondaryGUID { get; set; }
 
