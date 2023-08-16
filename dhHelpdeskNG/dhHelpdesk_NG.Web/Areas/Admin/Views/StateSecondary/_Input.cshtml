@@ -81,10 +81,11 @@
                                     <td>
                                         @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="StateSecondary.NoMailToNotifier" @(Model.StateSecondary.NoMailToNotifier == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="StateSecondary.NoMailToNotifier" value="0" />
-                                        &nbsp;@Translation.Get("Skicka mail med extern notering till anmälaren", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="StateSecondary.NoMailToNotifier" @(Model.StateSecondary.NoMailToNotifier == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="StateSecondary.NoMailToNotifier" value="0" />
+                                            &nbsp;@Translation.Get("Skicka mail med extern notering till anmälaren", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
@@ -94,49 +95,109 @@
                                     </td>
                                     <td>
                                         @Translation.Get("Skicka påminnelse efter", Enums.TranslationSource.TextTranslation)
-                                        &nbsp;        
+                                        &nbsp;
                                         @Html.DropDownListFor(model => model.StateSecondary.ReminderDays, Model.ReminderDays, new { style = "width: 60px;" })&nbsp;
                                         &nbsp;
                                         @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td>
+                                        @Translation.Get("Auto avslut", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        @Translation.Get("Avsluta automatiskt efter", Enums.TranslationSource.TextTranslation)
+                                        &nbsp;
+                                        @Html.DropDownListFor(model => model.StateSecondary.AutocloseDays, Model.AutocloseDays, new { style = "width: 60px;" })&nbsp;
+                                        &nbsp;
+                                        @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                </tr>
+                                <tr id="divFinishingTypeOuterContainer">
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Avslutsorsak")
+                                    </td>
+                                    <td>
+                                        <div id="divFinishingType" class="btn-group dropdown-menu-parent">
+                                            <div class="btn" id="divBreadcrumbs_FinishingType">
+                                                @(Model.StateSecondary.FinishingCause_Id == null ? Translation.GetCoreTextTranslation("--") : Model.StateSecondary.FinishingCause.Name)
+                                            </div>
+                                            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu subddMenu parentddMenu" style="z-index:99999999999;">
+                                                <li><a href="#">@Translation.GetCoreTextTranslation("--")</a></li>
+                                                @Html.FinishingCauseDropdownButtonString(Model.FinishingCauses)
+                                            </ul>
+                                            @Html.HiddenFor(model => Model.StateSecondary.FinishingCause_Id)
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td class="span3">
-                                        @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
+                                        @*@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)*@
                                     </td>
                                     <td class="span9">
-                                        @Html.DropDownListFor(model => model.StateSecondary.MailTemplate_Id, Model.MailTemplates, "")
+                                        @*@Html.DropDownListFor(model => model.StateSecondary.MailTemplate_Id, Model.MailTemplates, "")*@
                                     </td>
                                 </tr>
                             </table>
-                        </div>
-                    </div>
-                    <h4>@Translation.Get("Regler", Enums.TranslationSource.TextTranslation)</h4>
-                    <div class="row">
-                        <div class="span12">
-                            <table class="tableform">
-                                <tr>
-                                    <td class="span3">
-                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td class="span9">
-                                        @Translation.Get("Nedanstående värde ändras när aktuell understatus väljs", Enums.TranslationSource.TextTranslation)<br />
-                                        @Html.DropDownListFor(model => model.StateSecondary.WorkingGroup_Id, Model.WorkingGroups, "")
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="span3">@Translation.GetCoreTextTranslation("Beräkna nytt bevakningsdatum")</td>
-                                    <td><input type="checkbox" name="StateSecondary.RecalculateWatchDate" @(Model.StateSecondary.RecalculateWatchDate == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="StateSecondary.RecalculateWatchDate" value="0" /></td>
-                                </tr>
-                            </table>
-                            @Html.HiddenFor(model => model.StateSecondary.Customer_Id)
-                            @Html.HiddenFor(model => model.StateSecondary.Id)
+                                </div>
+                            </div>
+                            <h4>@Translation.Get("Regler", Enums.TranslationSource.TextTranslation)</h4>
+                            <div class="row">
+                                <div class="span12">
+                                    <table class="tableform">
+                                        <tr>
+                                            <td class="span3">
+                                                @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td class="span9">
+                                                @Translation.Get("Nedanstående värde ändras när aktuell understatus väljs", Enums.TranslationSource.TextTranslation)<br />
+                                                @Html.DropDownListFor(model => model.StateSecondary.WorkingGroup_Id, Model.WorkingGroups, "")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="span3">@Translation.GetCoreTextTranslation("Beräkna nytt bevakningsdatum")</td>
+                                            <td><input type="checkbox" name="StateSecondary.RecalculateWatchDate" @(Model.StateSecondary.RecalculateWatchDate == 1 ? "checked=checked" : "") value="1"/>
+                                                <input type="hidden" name="StateSecondary.RecalculateWatchDate" value="0" /></td>
+                                        </tr>
+                                    </table>
+                                    @Html.HiddenFor(model => model.StateSecondary.Customer_Id)
+                                    @Html.HiddenFor(model => model.StateSecondary.Id)
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+
+<script>
+    $(document).ready(function () {
+        var $finishTypeContainer = $('#divFinishingType');
+        var $finishTypeId = $("input[name='StateSecondary.FinishingCause_Id']");
+        var $finishTypeButton = $('#divBreadcrumbs_FinishingType');
+
+        $finishTypeContainer.find('ul.dropdown-menu li a').click(function (e) {
+            e.preventDefault();
+            var value = $(this).attr('value');
+            var text = $(this).text();
+            $finishTypeId.val(value);
+            $finishTypeButton.text(text);
+
+            console.log(value)
+        });
+
+        $("#StateSecondary_AutocloseDays").change(function () {
+            var autocloseDays = parseInt($(this).val(), 10);
+            if (autocloseDays <= 0) {
+                $("#divFinishingTypeOuterContainer").hide();
+                $finishTypeId.val(undefined);
+            } else {
+                $("#divFinishingTypeOuterContainer").show();
+            }
+        }).trigger("change");
+    });
+</script>
 

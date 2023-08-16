@@ -141,7 +141,7 @@
                             @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
                                 new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool(), id="sendMailToNotifyer" })
                         }
-                        <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span><br />
+                        <div class="lbl" id="informNotifyerSpan">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </div><br />
                         <span id="emailsToTitle" style="display: none;">
                             @Translation.ToTitleCase(@Translation.GetCoreTextTranslation("Till")):
                         </span><span id="emailsTo" style="display: none;"></span><br />
@@ -201,7 +201,7 @@ Model.EnableTwoAttachments))
                                 @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToPerformer,
                                     new { InformPerformerBehavior = Model.InformPerformerBehavior.ToJavaScriptBool() })
 
-                                <span class="lbl case-usersearch-textarea">
+                                <div class="lbl case-usersearch-textarea" id="informPerformer">
                                     @Translation.GetCoreTextTranslation("Informera") @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Performer_User_Id, "Handläggare")
                                     @if (Model.PerformersToSearch != null)
                                     {
@@ -217,7 +217,7 @@ Model.EnableTwoAttachments))
                                             </span>@Html.Raw(")")
                                         </span>
                                     }
-                                </span>
+                                </div>
                             </div>
                             <div>
                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote) && !readonlyMode)
@@ -683,10 +683,16 @@ Model.EnableTwoAttachments))
 
     $(".hidebtn").on("click", function (e) {
         e.preventDefault();
+        $('#sendMailToNotifyer').css('display', 'none');
+        $('#informPerformer').css('display', 'none');
+        $('#informNotifyerSpan').css('display', 'none');
         $(this).parents(".section-block").addClass("hideshow");
     });
     $(".showbtn").on("click", function (e) {
         e.preventDefault();
+        $('#sendMailToNotifyer').css('display', 'inline');
+        $('#informPerformer').css('display', 'inline');
+        $('#informNotifyerSpan').css('display', 'inline');
         $(this).parents(".section-block").removeClass("hideshow");
     });
     //casePersonsEmail
