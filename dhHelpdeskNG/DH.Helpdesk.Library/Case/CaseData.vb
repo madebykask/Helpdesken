@@ -5,7 +5,6 @@ Imports DH.Helpdesk.Dal.Infrastructure
 Imports DH.Helpdesk.Dal.Repositories
 'Imports System.Data.Odbc
 Imports DH.Helpdesk.Library.SharedFunctions
-Imports DH.Helpdesk.Services.Infrastructure
 Imports DH.Helpdesk.Services.Services
 Imports DH.Helpdesk.Services.utils
 
@@ -716,6 +715,14 @@ Public Class CaseData
         End Try
     End Function
 
+    Public Function getCaseAutoClose() As Collection
+        Try
+            Return getCases(iAutoClose:=1)
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Function
+
     Private Function getCaseById(Optional iCaseId As Integer = 0, Optional ByVal sCaseGUID As String = "", Optional ByVal sMessageId As String = "", Optional ByVal iCaseNumber As Integer = 0, Optional ByVal sOrderMessageId As String = "") As CCase
         Dim sSQL As String = ""
         Dim dt As DataTable
@@ -734,7 +741,8 @@ Public Class CaseData
                        "tblCase.RegTime, tblCase.ChangeTime, u3.FirstName AS ChangedName, u3.SurName AS ChangedSurName, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " &
                        "tblCase.CaseSolution_Id,tblCase.FinishingDate, tblCase.FinishingDescription, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
                        "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.WatchDate, tblCase.RegistrationSource, tblCase.RegistrationSourceCustomer_Id, " &
-                       "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, tblCase.Available, tblCase.ReferenceNumber, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics, tblCase.ExternalTime, tblCase.LeadTime " &
+                       "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, tblCase.Available, tblCase.ReferenceNumber, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics, " &
+                       "tblStateSecondary.FinishingCause_Id AS StateSecondary_FinishingCause_Id, tblCase.ExternalTime, tblCase.LeadTime " &
                    "FROM tblCase " &
                        "INNER JOIN tblCustomer ON tblCase.Customer_Id = tblCustomer.Id " &
                        "LEFT OUTER JOIN tblUsers ON tblCase.Performer_user_Id=tblUsers.Id " &
@@ -862,7 +870,7 @@ Public Class CaseData
         End Try
     End Function
 
-    Private Function getCases(Optional ByVal iPerformerUser_Id As Integer = 0, Optional ByVal iPlanDate As Integer = 0, Optional ByVal iApproval As Integer = 0, Optional ByVal iWatchdate As Integer = 0, Optional ByVal iReminder As Integer = 0) As Collection
+    Private Function getCases(Optional ByVal iPerformerUser_Id As Integer = 0, Optional ByVal iPlanDate As Integer = 0, Optional ByVal iApproval As Integer = 0, Optional ByVal iWatchdate As Integer = 0, Optional ByVal iReminder As Integer = 0, Optional ByVal iAutoClose As Integer = 0) As Collection
         Dim colCase As New Collection
         Dim sSQL As String
         Dim dr As DataRow
@@ -884,7 +892,8 @@ Public Class CaseData
                         "tblWorkingGroup_1.WorkingGroup As CaseWorkingGroup, ISNULL(tblWorkingGroup_1.WorkingGroupEMail, '') AS WorkingGroupEMail, tblWorkingGroup_1.AllocateCaseMail AS AllocateCaseMail, " &
                         "tblCase.CaseSolution_Id, tblCase.FinishingDate, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
                         "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.RegistrationSource, tblCase.WatchDate, tblCase.Available, tblCase.ReferenceNumber, " &
-                        "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics, tblCase.ExternalTime, tblCase.LeadTime " &
+                        "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics, " &
+                        "tblStateSecondary.FinishingCause_Id AS StateSecondary_FinishingCause_Id, tblCase.ExternalTime, tblCase.LeadTime " &
                     "FROM tblCase " &
                         "INNER JOIN tblCustomer ON tblCase.Customer_Id = tblCustomer.Id " &
                         "INNER JOIN tblUsers ON tblCase.Performer_user_Id=tblUsers.Id " &
@@ -900,19 +909,24 @@ Public Class CaseData
                         "LEFT JOIN tblDepartment ON tblCase.Department_Id=tblDepartment.Id "
 
             If iPerformerUser_Id <> 0 Then
-                sSQL = sSQL & "WHERE tblCase.FinishingDate IS NULL AND tblCase.Performer_user_Id=" & iPerformerUser_Id
+                sSQL = sSQL & "WHERE tblCase.FinishingDate Is NULL And tblCase.Performer_user_Id=" & iPerformerUser_Id
             ElseIf iPlanDate <> 0 Then
                 sSQL = sSQL & "WHERE " & Call4DateFormat("PlanDate", giDBType) & " = " & convertDateTime(Now.Date, giDBType) &
-                        " AND tblUsers.PlanDateMail = 1 " &
-                        " AND tblCase.FinishingDate IS NULL"
+                        " And tblUsers.PlanDateMail = 1 " &
+                        " And tblCase.FinishingDate Is NULL"
             ElseIf iWatchdate <> 0 Then
-                sSQL = sSQL & "WHERE " & Call4DateFormat("WatchDate", giDBType) & " = " & convertDateTime(Now.Date, giDBType) & " AND tblCase.FinishingDate IS NULL AND tblUsers.WatchDateMail = 1 "
+                sSQL = sSQL & "WHERE " & Call4DateFormat("WatchDate", giDBType) & " = " & convertDateTime(Now.Date, giDBType) & " And tblCase.FinishingDate Is NULL And tblUsers.WatchDateMail = 1 "
             ElseIf iApproval = 1 Then
-                sSQL = sSQL & "WHERE tblCaseType.AutomaticApproveTime <> 0 AND tblCase.ApprovedDate IS NULL AND tblCase.FinishingDate IS NOT NULL "
+                sSQL = sSQL & "WHERE tblCaseType.AutomaticApproveTime <> 0 And tblCase.ApprovedDate Is NULL And tblCase.FinishingDate Is Not NULL "
             ElseIf iReminder = 1 Then
-                sSQL = sSQL & "WHERE tblStateSecondary.ReminderDays <> 0 AND tblCase.FinishingDate IS NULL "
+                sSQL = sSQL & "WHERE tblStateSecondary.ReminderDays <> 0 And tblCase.FinishingDate Is NULL "
 
-                sSQL = sSQL & "AND tblCase.Id IN (SELECT tblcasehistory.Case_Id FROM tblCasehistory INNER JOIN tblStateSecondary ON tblCaseHistory.StateSecondary_Id=tblstatesecondary.Id WHERE tblStateSecondary.Reminderdays <> 0 AND Datediff(d, tblcasehistory.CreatedDate, getdate()) = tblstatesecondary.Reminderdays)"
+                sSQL = sSQL & "And tblCase.Id IN (SELECT tblcasehistory.Case_Id FROM tblCasehistory INNER JOIN tblStateSecondary ON tblCaseHistory.StateSecondary_Id=tblstatesecondary.Id WHERE tblStateSecondary.Reminderdays <> 0 And Datediff(d, tblcasehistory.CreatedDate, getdate()) = tblstatesecondary.Reminderdays)"
+            ElseIf iAutoClose = 1 Then
+                sSQL = sSQL & "WHERE tblStateSecondary.AutocloseDays <> 0 And tblCase.FinishingDate Is NULL "
+
+                sSQL = sSQL & "And tblCase.Id IN (SELECT tblcasehistory.Case_Id FROM tblCasehistory INNER JOIN tblStateSecondary ON tblCaseHistory.StateSecondary_Id=tblstatesecondary.Id WHERE tblStateSecondary.AutocloseDays <> 0 And Datediff(d, tblcasehistory.CreatedDate, getdate()) = tblstatesecondary.AutocloseDays)"
+
             End If
 
             sSQL = sSQL & " ORDER BY tblCustomer.Name, tblCase.CaseNumber"
@@ -1138,6 +1152,32 @@ Public Class CaseData
                 objLogFile.WriteLine(Now() & ", ERROR getCaseHistoryIdByGUID " & ex.Message.ToString & ", " & sSQL)
             End If
 
+            Throw ex
+        End Try
+    End Function
+
+    Public Function getCaseExtraFollowers(iCase_Id As Integer) As List(Of String)
+        Dim sSQL As String
+        Dim dr As DataRow
+        Dim Followers As New List(Of String)()
+
+        Try
+            sSQL = "Select tblCaseExtraFollowers.Follower " &
+                    "FROM tblCaseExtraFollowers " &
+                    "WHERE tblCaseExtraFollowers.Case_Id=" & iCase_Id
+
+            If giLoglevel > 0 Then
+                objLogFile.WriteLine(Now() & ", getCaseExtraFollowers, " & sSQL)
+            End If
+
+            Dim dt As DataTable = getDataTable(gsConnectionString, sSQL)
+
+            For Each dr In dt.Rows
+                Followers.Add(dr("Follower"))
+            Next
+
+            Return Followers
+        Catch ex As Exception
             Throw ex
         End Try
     End Function

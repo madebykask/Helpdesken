@@ -56,6 +56,7 @@ Imports System.Data
     Private miStatus_Id As Integer
     Private miStateSecondary_Id As Integer
     Private msStateSecondary As String
+    Private miStateSecondary_FinishingCause_Id? As Integer
     Private miResetOnExternalUpdate As Integer = 0
     Private mdtWatchDate As DateTime
     Private miRegistrationSource As Integer = 3
@@ -439,6 +440,11 @@ Imports System.Data
         If Not IsDBNull(dr("StateSecondary")) Then
             msStateSecondary = dr("StateSecondary")
         End If
+
+        If Not IsDBNull(dr("StateSecondary_FinishingCause_Id")) Then
+            miStateSecondary_FinishingCause_id = dr("StateSecondary_FinishingCause_Id")
+        End If
+
 
         If Not IsDBNull(dr("ResetOnExternalUpdate")) Then
             miResetOnExternalUpdate = dr("ResetOnExternalUpdate")
@@ -1226,6 +1232,12 @@ Imports System.Data
     Public ReadOnly Property StateSecondary() As String
         Get
             Return msStateSecondary
+        End Get
+    End Property
+
+    Public ReadOnly Property StateSecondary_FinishingCause_Id() As Integer?
+        Get
+            Return miStateSecondary_FinishingCause_Id
         End Get
     End Property
 
