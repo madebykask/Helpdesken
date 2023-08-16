@@ -2386,6 +2386,7 @@ Module DH_Helpdesk_Mail
 
     End Function
 
+
     Private Function isBlockedRecipient(sEMail As String, sBlockedEMailRecipents As String) As Boolean
         ' Return False if sEMail or sBlockedEMailRecipients are empty or contain invalid characters
         If String.IsNullOrWhiteSpace(sEMail) Or String.IsNullOrWhiteSpace(sBlockedEMailRecipents) Then
@@ -2397,22 +2398,16 @@ Module DH_Helpdesk_Mail
             Return False
         End If
 
-        isBlockedRecipient = False
-
-        If sBlockedEMailRecipents = "" Then
-            isBlockedRecipient = False
-        Else
-            For i As Integer = 0 To aEMails.Length - 1
-                If aEMails(i).ToString() <> "" Then
-                    If InStr(sEMail, aEMails(i).ToString(), CompareMethod.Text) <> 0 Then
-
-                        isBlockedRecipient = True
-                        Exit For
-                    End If
+        For Each pattern As String In aEMails
+            If Not String.IsNullOrWhiteSpace(pattern) Then
+                ' Check if sEMail contains the pattern using a case-insensitive comparison
+                If sEMail.IndexOf(pattern, StringComparison.OrdinalIgnoreCase) >= 0 Then
+                    Return True
                 End If
+            End If
+        Next
 
-            Next
-        End If
+        Return False
     End Function
 
     Private Function isValidRecipient(sEMail As String, sAllowedEMailRecipents As String) As Boolean
