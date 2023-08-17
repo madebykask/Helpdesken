@@ -214,6 +214,8 @@ Imports System.Text.RegularExpressions
                 Return "[#71]"
             Case "PERFORMER_EMAIL"
                 Return "[#72]"
+            Case "AUTOCLOSEDAYS"
+                Return "[#80]"
             Case Else
                 Return ""
         End Select
