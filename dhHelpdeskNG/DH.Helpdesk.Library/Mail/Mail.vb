@@ -188,6 +188,10 @@ Public Class Mail
             sSubject = Replace(sSubject, getMailTemplateIdentifier("Performer_Email"), objCase.PerformerEMail)
             sBody = Replace(sBody, getMailTemplateIdentifier("Performer_Email"), objCase.PerformerEMail)
 
+            '[#80]
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("AutoCloseDays"), objCase.AutoCloseDays)
+            sBody = Replace(sBody, getMailTemplateIdentifier("AutoCloseDays"), objCase.AutoCloseDays)
+
             If objGlobalSettings.ServerPort = 443 Then
                 sProtocol = "https"
             Else

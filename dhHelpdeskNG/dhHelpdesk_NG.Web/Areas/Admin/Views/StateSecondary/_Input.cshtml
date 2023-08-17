@@ -94,10 +94,11 @@
                                         @Translation.Get("Påminnelse anmälare", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Translation.Get("Skicka påminnelse efter", Enums.TranslationSource.TextTranslation)
-                                        &nbsp;
-                                        @Html.DropDownListFor(model => model.StateSecondary.ReminderDays, Model.ReminderDays, new { style = "width: 60px;" })&nbsp;
-                                        &nbsp;
+                                        <div style="width: 100%">
+                                            @Translation.Get("Skicka påminnelse efter", Enums.TranslationSource.TextTranslation)
+                                        </div>
+                                        
+                                        @Html.DropDownListFor(model => model.StateSecondary.ReminderDays, Model.ReminderDays, new { style = "width: 60px;" })
                                         @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
@@ -106,10 +107,11 @@
                                         @Translation.Get("Auto avslut", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Translation.Get("Avsluta automatiskt efter", Enums.TranslationSource.TextTranslation)
-                                        &nbsp;
-                                        @Html.DropDownListFor(model => model.StateSecondary.AutocloseDays, Model.AutocloseDays, new { style = "width: 60px;" })&nbsp;
-                                        &nbsp;
+                                        <div style="width: 100%">
+                                            @Translation.Get("Avsluta automatiskt efter", Enums.TranslationSource.TextTranslation)
+                                        </div>
+                                        
+                                        @Html.DropDownListFor(model => model.StateSecondary.AutocloseDays, Model.AutocloseDays, new { style = "width: 60px;" })
                                         @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
