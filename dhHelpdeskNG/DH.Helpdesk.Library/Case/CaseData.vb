@@ -742,7 +742,7 @@ Public Class CaseData
                        "tblCase.CaseSolution_Id,tblCase.FinishingDate, tblCase.FinishingDescription, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
                        "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.WatchDate, tblCase.RegistrationSource, tblCase.RegistrationSourceCustomer_Id, " &
                        "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, tblCase.Available, tblCase.ReferenceNumber, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics, " &
-                       "tblStateSecondary.FinishingCause_Id AS StateSecondary_FinishingCause_Id, tblStateSecondary.AutoCloseDays AS StateSecondary_AutoCloseDays, tblCase.ExternalTime, tblCase.LeadTime " &
+                       "tblStateSecondary.FinishingCause_Id AS StateSecondary_FinishingCause_Id, tblStateSecondary.ReminderDays AS StateSecondary_ReminderDays, tblStateSecondary.AutoCloseDays AS StateSecondary_AutoCloseDays, tblCase.ExternalTime, tblCase.LeadTime " &
                    "FROM tblCase " &
                        "INNER JOIN tblCustomer ON tblCase.Customer_Id = tblCustomer.Id " &
                        "LEFT OUTER JOIN tblUsers ON tblCase.Performer_user_Id=tblUsers.Id " &
@@ -893,7 +893,7 @@ Public Class CaseData
                         "tblCase.CaseSolution_Id, tblCase.FinishingDate, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
                         "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.RegistrationSource, tblCase.WatchDate, tblCase.Available, tblCase.ReferenceNumber, " &
                         "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics, " &
-                        "tblStateSecondary.FinishingCause_Id AS StateSecondary_FinishingCause_Id, tblStateSecondary.AutoCloseDays AS StateSecondary_AutoCloseDays, tblCase.ExternalTime, tblCase.LeadTime " &
+                        "tblStateSecondary.FinishingCause_Id AS StateSecondary_FinishingCause_Id, tblStateSecondary.ReminderDays AS StateSecondary_ReminderDays, tblStateSecondary.AutoCloseDays AS StateSecondary_AutoCloseDays, tblCase.ExternalTime, tblCase.LeadTime " &
                     "FROM tblCase " &
                         "INNER JOIN tblCustomer ON tblCase.Customer_Id = tblCustomer.Id " &
                         "INNER JOIN tblUsers ON tblCase.Performer_user_Id=tblUsers.Id " &

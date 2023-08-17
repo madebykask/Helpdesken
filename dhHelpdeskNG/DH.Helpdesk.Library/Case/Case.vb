@@ -447,7 +447,12 @@ Imports System.Data
         End If
 
         If Not IsDBNull(dr("StateSecondary_AutoCloseDays")) Then
-            miStateSecondary_AutoCloseDays = dr("StateSecondary_AutoCloseDays")
+            If Not IsDBNull(dr("StateSecondary_ReminderDays")) Then
+                miStateSecondary_AutoCloseDays = dr("StateSecondary_AutoCloseDays") - dr("StateSecondary_ReminderDays")
+            Else
+                miStateSecondary_AutoCloseDays = dr("StateSecondary_AutoCloseDays")
+            End If
+
         End If
 
         If Not IsDBNull(dr("ResetOnExternalUpdate")) Then
