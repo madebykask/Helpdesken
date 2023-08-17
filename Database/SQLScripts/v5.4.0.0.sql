@@ -42,6 +42,23 @@ IF COL_LENGTH('dbo.tblGDPRDataPrivacyFavorite','CaseTypes') IS NOT NULL
 		ALTER COLUMN CaseTypes nvarchar(1000) NULL
 	End
 Go
+
+RAISERROR ('Alter tblFAQ.Answer from 2000 nvarchar to 4000 nvarchar', 10, 1) WITH NOWAIT
+IF COL_LENGTH('tblFAQ','Answer') IS NOT NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblFAQ]
+		ALTER COLUMN Answer nvarchar(4000) Not NULL
+	End
+Go
+
+RAISERROR ('Alter tblFAQ.Answer_Internal from 1000 nvarchar to 4000 nvarchar', 10, 1) WITH NOWAIT
+IF COL_LENGTH('tblFAQ','Answer_Internal') IS NOT NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblFAQ]
+		ALTER COLUMN Answer_Internal nvarchar(4000) Not NULL
+	End
+Go
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.4.0.0'
 GO
