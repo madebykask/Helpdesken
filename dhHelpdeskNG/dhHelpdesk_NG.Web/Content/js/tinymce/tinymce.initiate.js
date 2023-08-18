@@ -5,6 +5,7 @@ window.tinymceDefaultOptions = {
     initOnPageLoad: true,
     selector: "textarea.richtexteditor",
     maxLength: 2000,
+    maxLengthFaq: 4000,
     showMaxLimitErrorMessage: true, //custom
     maxLimitErrorMessage: '', //custom
 
@@ -12,29 +13,36 @@ window.tinymceDefaultOptions = {
 
         // on text change handler
         editor.on('change', function (e) {
-
             //save to hidden input 
             this.save();
-                
             //call validator if any
             $("#" + editor.id).valid();
-                
+            var editorId = editor.id;
             var content = this.getContent();
             //strip all html tags
             // var regex = /(<([^>]+)>)/ig; 
             // content = content.replace(regex, "");
-
             var maxLength = this.settings.maxLength;
-
-            if (content.length > maxLength) {
-                if (this.settings.showMaxLimitErrorMessage) {
-                    var msg = this.settings.maxLimitErrorMessage ||
-                        'The text is too long. Field has limitation of ' + this.settings.maxLength + ' characters.';
-                    alert(msg);
+            var maxLengthFaq = this.settings.maxLengthFaq;
+            if (editorId != "faqAnswer") {
+                if (content.length > maxLength) {
+                    if (this.settings.showMaxLimitErrorMessage) {
+                        var msg = this.settings.maxLimitErrorMessage ||
+                            'The text is too long. Field has limitation of ' + this.settings.maxLength + ' characters.';
+                        alert(msg);
+                    }
                 }
-
-
-            };
+            }
+            else {
+                if (content.length > maxLengthFaq) {
+                    if (this.settings.showMaxLimitErrorMessage) {
+                        var msg = this.settings.maxLimitErrorMessage ||
+                            'The text is too long. Field has limitation of ' + this.settings.maxLengthFaq + ' characters.';
+                        alert(msg);
+                    }
+                }
+            }
+            
         });
     },
         
