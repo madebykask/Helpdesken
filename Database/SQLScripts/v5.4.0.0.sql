@@ -59,6 +59,15 @@ IF COL_LENGTH('tblFAQ','Answer_Internal') IS NOT NULL
 	End
 Go
 
+UPDATE [dbo].[tblSettings]
+SET BlockedEmailRecipients = 
+    CASE 
+        WHEN BlockedEmailRecipients IS NULL THEN ';noreply'
+        ELSE CONCAT(BlockedEmailRecipients, ';noreply')
+    END
+WHERE CHARINDEX(';noreply', BlockedEmailRecipients) = 0 OR BlockedEmailRecipients IS NULL;
+Go
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.4.0.0'
 GO
