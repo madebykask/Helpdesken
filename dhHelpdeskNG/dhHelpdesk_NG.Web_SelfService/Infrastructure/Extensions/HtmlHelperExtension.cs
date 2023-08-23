@@ -853,14 +853,14 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
                 var hasChild = pa.SubProductAreas?.Count(s => s.IsActive != 0 && s.ShowOnExternalPage != 0) > 0;
 
                 if (hasChild)
-                    htmlOutput += "<li class='dropdown-submenu'>";
+                    htmlOutput += "<li id='" + pa.Id + "' class='dropdown-submenu DynamicDropDown_Up'>";
                 else
                     htmlOutput += "<li>";
 
                 htmlOutput += "<a href='#' value=" + pa.Id + ">" + pa.Name + "</a>";
                 if (hasChild)
                 {
-                    htmlOutput += "<ul class='dropdown-menu'>";
+                    htmlOutput += "<ul id='subDropDownMenu_"+ pa.Id +"' class='dropdown-menu subddMenu'>";
                     htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.Where(s => s.IsActive != 0 && s.ShowOnExternalPage != 0).OrderBy(s => s.Name).ToList());
                     htmlOutput += "</ul>";
                 }

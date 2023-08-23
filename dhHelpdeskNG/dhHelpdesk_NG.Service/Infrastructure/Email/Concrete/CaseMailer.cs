@@ -18,6 +18,7 @@ using DH.Helpdesk.Domain.MailTemplates;
 using DH.Helpdesk.Common.Constants;
 using System.Collections;
 using PostSharp;
+using LinqLib.Sort;
 
 namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 {
@@ -34,6 +35,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 		private readonly IGlobalSettingService _globalSettingService;
         private readonly ILogService _logService;
         private readonly ICustomerService _customerService;
+        private readonly ICaseHistoryRepository _caseHistoryRepository;
 
         public CaseMailer(
             IEmailLogRepository emailLogRepository,
@@ -46,7 +48,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             ICaseExtraFollowersService caseExtraFollowersService,
 			IGlobalSettingService globalSettingService,
             ILogService logService,
-            ICustomerService customerService)
+            ICustomerService customerService,
+            ICaseHistoryRepository caseHistoryRepository)
         {
             _emailLogRepository = emailLogRepository;
             _emailService = emailService;
@@ -59,6 +62,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 			_globalSettingService = globalSettingService;
             _logService = logService;
             _customerService = customerService;
+            _caseHistoryRepository = caseHistoryRepository;
         }
 
         public void InformNotifierIfNeeded(
@@ -461,23 +465,45 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                 var customerTimeZone = TimeZoneInfo.FindSystemTimeZoneById(curCustomer.TimeZoneId);
                 var correctedDate = new DateTime();
                 var firstEmail = "";
+                
                 var emailLogs = _emailLogRepository.GetEmailLogsByCaseId(newCase.Id).OrderByDescending(z => z.Id).ToList();
-                if(emailLogs.Any())
+                var historyLogs = _caseHistoryRepository.GetCaseHistoryByCaseId(newCase.Id);
+                if(historyLogs.Any())
                 {
-                    if (!String.IsNullOrEmpty(emailLogs.Where(x => x.MailId == 1).FirstOrDefault()?.From))
+                    historyLogs = historyLogs.OrderBy(z => z.Id).ToList();
+                    var historyEmail = historyLogs.FirstOrDefault().PersonsEmail;
+                    if (!String.IsNullOrEmpty(historyEmail))
                     {
-                        firstEmail = emailLogs.Where(x => x.MailId == 1).FirstOrDefault().From;
+                        firstEmail = historyEmail;
                     }
                     else
                     {
                         firstEmail = "";
                     }
-
                 }
                 else
                 {
                     firstEmail = "";
                 }
+
+                //if(emailLogs.Any())
+                //{
+                //    if (!String.IsNullOrEmpty(emailLogs.Where(x => x.MailId == 1).FirstOrDefault()?.From))
+                //    {
+                //        firstEmail = emailLogs.Where(x => x.MailId == 1).FirstOrDefault().From;
+                //    }
+                //    else
+                //    {
+                //        //Ersätta med helpdeskAdress?
+                //        firstEmail = "";
+                //    }
+
+                //}
+                //else
+                //{
+                //    //Ersätta med helpdeskAdress?
+                //    firstEmail = "";
+                //}
                 var oldLogs = _logService.GetLogsByCaseId(newCase.Id).Where(x => x.Case_Id == log.CaseId && x.Id != log.Id).OrderByDescending(z => z.Id).ToList();
                 if (oldLogs.Any())
                 {
@@ -524,37 +550,37 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                 //1.User_ID - But never show personal emails, instead look for the first email in emaillogs with mailId 1
                 //2.RegUserName
                 //3.RegUserID
-                if (newCase.User_Id != null)
-                {
-                    if (!String.IsNullOrEmpty(firstEmail))
-                    {
-                        userEmailToShow = firstEmail;
-                    }
-                    else
-                    {
-                        userEmailToShow = "";
-                    }
-                }
-                else if (!String.IsNullOrEmpty(newCase.RegUserName))
-                {
-                    userEmailToShow = newCase.RegUserName;
-                }
-                else if (newCase.RegUserId != null)
-                {
-                    //Check this
-                    userEmailToShow = newCase.RegUserId;
-                }
-                else
-                {
-                    userEmailToShow = "";
-                }
+                //if (newCase.User_Id != null)
+                //{
+                //    if (!String.IsNullOrEmpty(firstEmail))
+                //    {
+                //        userEmailToShow = firstEmail;
+                //    }
+                //    else
+                //    {
+                //        userEmailToShow = "";
+                //    }
+                //}
+                //else if (!String.IsNullOrEmpty(newCase.RegUserName))
+                //{
+                //    userEmailToShow = newCase.RegUserName;
+                //}
+                //else if (newCase.RegUserId != null)
+                //{
+                //    //Check this
+                //    userEmailToShow = newCase.RegUserId;
+                //}
+                //else
+                //{
+                //    userEmailToShow = "";
+                //}
 
                 correctedDate = TimeZoneInfo.ConvertTimeFromUtc(newCase.RegTime, customerTimeZone);
                 var description = newCase.Description.Replace("<p><br></p>", "").Replace("<p>\r\n</p>", "").Replace("<o:p>&nbsp;</o:p>", "");
                 extraBody += "<br /><hr>";
                 extraBody += "<div id=\"externalLogNotesDescription\">";
                 extraBody += "<font face=\"verdana\" size=\"2\"><strong>" + correctedDate.ToString("g") + "</strong>";
-                extraBody += "<br />" + userEmailToShow;
+                extraBody += "<br />" + firstEmail;
                 extraBody += "<br />" + description + "</font></div>";
                 return extraBody;
 

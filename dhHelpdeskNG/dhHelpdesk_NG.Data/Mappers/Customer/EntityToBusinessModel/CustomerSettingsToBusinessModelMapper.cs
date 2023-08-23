@@ -84,7 +84,8 @@ namespace DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
                            SetUserToAdministrator = entity.SetUserToAdministrator.ToBool(),
                            DefaultAdministratorId = entity.DefaultAdministrator,
                            TimeZoneOffset = entity.TimeZone_offset,
-                           DisableCaseEndDate = entity.DisableCaseEndDate.ToBool()
+                           DisableCaseEndDate = entity.DisableCaseEndDate.ToBool(),
+                           BlockedEmailRecipients = entity.BlockedEmailRecipients,
             };
         }
     }

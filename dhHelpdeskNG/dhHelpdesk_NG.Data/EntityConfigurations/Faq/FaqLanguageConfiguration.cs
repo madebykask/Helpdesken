@@ -13,8 +13,8 @@
             this.Property(fl => fl.FAQ_Id).IsRequired();
             this.Property(fl => fl.Language_Id).IsRequired();
             this.Property(fl => fl.FAQQuery).IsRequired().HasMaxLength(100);
-            this.Property(fl => fl.Answer).IsRequired().HasMaxLength(2000);
-            this.Property(fl => fl.Answer_Internal).IsRequired().HasMaxLength(1000);
+            this.Property(fl => fl.Answer).IsRequired().HasMaxLength(4000);
+            this.Property(fl => fl.Answer_Internal).IsRequired().HasMaxLength(4000);
 
             this.HasRequired(f => f.Faq)
                 .WithMany(f => f.FaqLanguages)

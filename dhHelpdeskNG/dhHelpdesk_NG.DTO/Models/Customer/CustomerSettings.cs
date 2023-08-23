@@ -172,6 +172,7 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
         public int DontConnectUserToWorkingGroup { get; set; }
         public string PhysicalFilePath { get; set; }
         public string VirtualFilePath { get; set; }
+        public string BlockedEmailRecipients { get; set; }
         public int IsUserFirstLastNameRepresentation { get; set; }
         public int DepartmentFilterFormat { get; set; }
         public int DefaultCaseTemplateId { get; set; }
