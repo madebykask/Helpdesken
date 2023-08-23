@@ -875,10 +875,10 @@ Module DH_Helpdesk_Mail
                                                 'End If  #65030
                                             End If
                                         Else
-                                            LogToFile("readMailBox, isValidRecipient false" & objCase.Persons_EMail & ", " & objCustomer.AllowedEMailRecipients, iPop3DebugLevel)
+                                            LogToFile("readMailBox, isValidRecipient false: " & objCase.Persons_EMail & ", " & objCustomer.AllowedEMailRecipients, iPop3DebugLevel)
                                         End If
                                     Else
-                                        LogToFile("readMailBox, isBlockedRecipient true" & objCase.Persons_EMail & ", " & objCustomer.BlockedEmailRecipients, iPop3DebugLevel)
+                                        LogToFile("readMailBox, isBlockedRecipient true: " & objCase.Persons_EMail & ", " & objCustomer.BlockedEmailRecipients, iPop3DebugLevel)
                                     End If
 
                                     If objCustomer.EMailRegistrationMailID <> 0 And objCustomer.NewCaseEMailList <> "" Then
