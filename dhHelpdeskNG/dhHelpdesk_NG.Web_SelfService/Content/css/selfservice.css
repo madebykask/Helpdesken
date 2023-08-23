@@ -1312,3 +1312,38 @@ div .multitext i {
         border: 1px solid #ff0000 !important;
         background-color: #ffeeee !important;
     }
+
+/*END OF SUMMERNOTE*/
+
+/*************************** bootstrap dropdown updated css for product area control***************************/
+.subddMenu {
+    overflow-x: hidden;
+    overflow-y: auto;
+    direction: rtl;
+    text-align: left;
+}
+
+    .subddMenu li {
+        direction: ltr !important;
+    }
+
+.dropdown-menu.modified .dropdown-submenu:hover > .subMenuWrapper > .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu.modified > li,
+.dropdown-menu.modified .dropdown-menu > li {
+    position: static;
+}
+
+    .dropdown-menu.modified > li > .subMenuWrapper,
+    .dropdown-menu.modified .dropdown-menu > li > .subMenuWrapper {
+        position: absolute;
+        z-index: 10;
+        left: 100%;
+    }
+
+        .dropdown-menu.modified > li > .subMenuWrapper > .subddMenu,
+        .dropdown-menu.modified .dropdown-menu > li > .subMenuWrapper > .subddMenu {
+            position: static;
+        }
