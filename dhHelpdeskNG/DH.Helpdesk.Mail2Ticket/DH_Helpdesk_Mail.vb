@@ -1168,7 +1168,7 @@ Module DH_Helpdesk_Mail
                                                 objLogData.createEMailLog(iCaseHistory_Id, objCase.PerformerEMail, MailTemplates.CaseIsUpdated, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             End If
                                         End If
-                                    ElseIf iFinishingCause_Id <> 0 And Len(objCase.Persons_EMail) > 6 Then
+                                    ElseIf iFinishingCause_Id <> 0 And Len(objCase.Persons_EMail) > 6 And Not isBlockedRecipient(objCase.Persons_EMail, objCustomer.BlockedEmailRecipients) Then
                                         objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.ClosedCase, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
                                         If Not objMailTemplate Is Nothing Then
